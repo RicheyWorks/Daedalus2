@@ -159,8 +159,8 @@ for (const width of [320, 256]) check("notebook metadata, text, glyphs and panes
       assert.ok(paints.some(p => p.kind === "text" && p.label === ("MAP: " + prismRoutes[i].landmark.replace(/([a-z])([A-Z])/g, "$1 $2")).toUpperCase()));
       assert.ok(paints.some(p => p.kind === "text" && p.y === 210 && p.label === "UP/DOWN: ROUTE  B: BACK"));
       const confirm = paints.find(p => p.kind === "text" && p.y === 196);
-      if (prismRoutes[i].optional && status.label === "OPEN") assert.equal(confirm.label, "PRESS A TO ENTER.");
-      else assert.equal(confirm, undefined);
+      assert.equal(confirm.label, "PIN: PRESS A");
+      if (prismRoutes[i].optional && status.label === "OPEN") assert.ok(paints.some(p => p.kind === "text" && p.y === 184 && p.label === "ON FOOT: FACE PAD. PRESS A."));
     }
   }
   assert.ok(s.labels.some(p => p.action === "cancel") && s.labels.some(p => p.action === "confirm")); assert.equal(s.storage.writes, 0);
@@ -169,15 +169,15 @@ check("keyboard/touch fallback and sanitized controller prompts stay complete in
   const s = openBook(session()); s.c.W = 256; s.api.menu().ii = 4;
   shardRoutes.forEach(d => s.c.state.beaten.add(d.boss_data.name));
   const plain = s.draw(); assert.ok(plain.some(p => p.kind === "text" && p.y === 210 && p.label === "UP/DOWN: ROUTE  X/ESC OR TAP B: BACK"));
-  assert.ok(plain.some(p => p.kind === "text" && p.y === 196 && p.label === "PRESS Z/SPACE OR TAP A TO ENTER."));
+  assert.ok(plain.some(p => p.kind === "text" && p.y === 196 && p.label === "PIN: PRESS Z/SPACE OR TAP A"));
   s.controller("ABCD1234", "<UNSAFE>"); const labelled = s.draw();
   assert.ok(labelled.some(p => p.kind === "text" && p.y === 210 && p.label === "UP/DOWN: ROUTE  ABCD1234: BACK"));
-  assert.ok(labelled.some(p => p.kind === "text" && p.y === 196 && p.label === "PRESS Z/SPACE OR TAP A TO ENTER."));
+  assert.ok(labelled.some(p => p.kind === "text" && p.y === 196 && p.label === "PIN: PRESS Z/SPACE OR TAP A"));
   assert.ok(labelled.filter(p => p.kind === "text").every(p => p.x + p.w <= 250));
 });
-check("looking, route movement, Confirm and repeated rendering do not travel, spend or save", () => {
+check("looking, route movement and repeated rendering do not travel, spend or save", () => {
   const s = openBook(session()), before = s.resources();
-  for (let i = 0; i < 20; i++) { s.tick("down", "a"); s.draw(); assert.equal(!!s.pressed.a, false); assert.equal(s.api.menu().sub, "journey"); }
+  for (let i = 0; i < 20; i++) { s.tick("down"); s.draw(); assert.equal(s.api.menu().sub, "journey"); }
   assert.equal(s.resources(), before); assert.equal(s.storage.writes, 0); assert.equal(s.storage.reads, 0);
   s.tick("up"); const last = s.api.menu().ii; assert.equal(last, 4); s.tick("down"); assert.equal(s.api.menu().ii, 0);
 });

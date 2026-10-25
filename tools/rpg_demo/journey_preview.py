@@ -64,7 +64,7 @@ def write_preview(destination):
 <label>Canvas width <select id="width"><option>320</option><option>256</option></select></label>
 <canvas id="screen" width="320" height="224" tabindex="0" aria-label="JOURNEY diagnostic canvas"></canvas>
 <p>Keyboard: Up from ITEM selects JOURNEY; Z confirms. Left/Right switches notes/map. Up/Down selects a route. X/Esc returns. Click a scenario to change only this disposable diagnostic state.</p>
-<pre id="view" aria-live="polite"></pre><pre id="labels" aria-label="Canvas text output"></pre><pre id="error" role="alert"></pre>
+<p id="notice" role="status" aria-live="polite"></p><pre id="view" aria-live="polite"></pre><pre id="labels" aria-label="Canvas text output"></pre><pre id="error" role="alert"></pre>
 <script>
 const D = __DATA__, cv = document.getElementById('screen'), g = cv.getContext('2d');
 let W=320,H=224,mode='field',map={kind:'world'},P={x:22,y:9},B=null,PAD=null,bag={},gold=0;
@@ -75,6 +75,7 @@ function text(value,x,y,color='#ffffff'){const s=String(value).toUpperCase();pai
 function win(x,y,w,h){g.fillStyle='#101a32';g.fillRect(x,y,w,h);g.strokeStyle='#6884a5';g.strokeRect(x+1,y+1,w-2,h-2);}
 function cursor(x,y){text('>',x,y,'#ffdf83');}function spr(){}function gauge(){}function tags(){return [];}
 function sfx(){}function clockText(){return'D1 08:00';}function isNight(){return false;}
+function toast(title,detail){document.getElementById('notice').textContent=title+': '+detail;}
 function drawField(){g.fillStyle='#080c20';g.fillRect(0,0,W,H);}function openSettings(){throw Error('Settings is outside this diagnostic');}
 function saveGame(){throw Error('Saving is outside this diagnostic');}
 __HANDLERS__

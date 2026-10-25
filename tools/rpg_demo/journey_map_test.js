@@ -93,7 +93,7 @@ function castleAnchor(s) {
 }
 for (const width of [320, 256]) check("canonical world cells, atlas frame zero, text and markers fit at " + width, () => {
   const s = openMap(session(width)); s.draw(); assertCells(s); cross(s, s.c.P);
-  assert.ok(s.paints.some(p => p.kind === "text" && p.y === 34 && p.label.startsWith("YOU +")));
+  assert.ok(s.paints.some(p => p.kind === "text" && p.y === 34 && p.label.includes("YOU+")));
 });
 check("world and aboard anchors use actual world coordinates without lazy skiff initialization", () => {
   const s = openMap(session()), town = findCell(s.c.D.world, "Town"); s.c.P = { x: town.x, y: town.y + 1 };
@@ -111,7 +111,7 @@ for (const width of [320, 256]) check("town, village, every interior and all dun
     pos: { x: fl.stairs_up.x, y: fl.stairs_up.y }, landmark: d.landmark, label: "INSIDE " + d.name.toUpperCase() })));
   for (const item of cases) { s.c.map = item.map; s.c.P = item.pos; const at = findCell(s.c.D.world, item.landmark); assert.ok(at);
     assert.deepEqual(clone(s.api.journeyAnchor()), { ...at, label: item.label }); s.draw(); cross(s, at);
-    assert.ok(s.paints.some(p => p.kind === "text" && p.y === 34 && p.label.startsWith("ENTRANCE +")));
+    assert.ok(s.paints.some(p => p.kind === "text" && p.y === 34 && p.label.includes("ENTRY+")));
   }
   castleAnchor(s);
 });
@@ -174,10 +174,10 @@ function bothPageEdges(production = source) {
   s.tick("left", "right", "a"); assert.equal(s.api.menu().jp, 1); assert.equal(s.api.menu().ii, selected);
   assert.ok(!s.pressed.left && !s.pressed.right && !s.pressed.a); s.tick(); assert.equal(s.api.menu().jp, 1, "second page edge cannot leak into the next tick"); return s;
 }
-check("both page directions are consumed once and route selection/Confirm never initiates travel", () => {
+check("both page directions are consumed once and route/page navigation never initiates travel", () => {
   const s = bothPageEdges(), before = s.resources(); s.draw(); assert.ok(s.paints.some(p => p.kind === "text" && p.label === "MAP"));
   s.tick("left"); s.draw(); assert.ok(s.paints.some(p => p.kind === "text" && p.label === "JOURNEY"));
-  s.tick("up"); assert.equal(s.api.menu().ii, 4); s.tick("down"); assert.equal(s.api.menu().ii, 0); s.tick("right", "a"); s.tick("a");
+  s.tick("up"); assert.equal(s.api.menu().ii, 4); s.tick("down"); assert.equal(s.api.menu().ii, 0); s.tick("right", "a");
   assert.equal(s.resources(), before); assert.equal(s.calls.travel, 0); assert.equal(s.calls.save, 0); assert.equal(s.calls.lazy, 0);
 });
 for (const key of ["b", "start"]) check(key + " exits either page before simultaneous Confirm and preserves the menu destination", () => {
