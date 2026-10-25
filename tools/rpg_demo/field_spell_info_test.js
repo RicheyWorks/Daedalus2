@@ -21,7 +21,7 @@ const source = [line("const CHARS ="), line("const hit ="), line("function clear
   between("const START_LEVEL =", "/* Recruits:"), between("function recruitsFor(", "function recruitBeaten("),
   line("const atkOf ="), line("const defOf ="), line("const spellOf ="),
   line("const magicShopCaster ="), between("function buy(", "function shopTick("), between("let menu = null;", "function drawEquip("),
-  between("const STATUS =", "/* ---------- bestiary"), between("function spellHint(", "function drawBattle("),
+  between("const STATUS =", "/* ---------- bestiary"), between("function spellHint(", "function drawBattle("), between("function titlePrompt(", "function drawTitle("),
   "this.api = { start: () => { party = buildParty(); }, openMenu, menuTick, drawMenu, drawStatus, fieldSpells, spellHint, buy, recruit, " +
   "roster, party: () => party, reserve: () => reserve, menu: () => menu, chars: CHARS, " +
   "setGold: n => { gold = n; }, shortenFront: n => { reserve = party.slice(n).concat(reserve); party = party.slice(0, n); }, " +
@@ -38,10 +38,10 @@ function session(realm = "prism", productionSource = source) {
   if (realm === "prism") for (const f of fish) gear[f.name] = { name: f.name, effect: f.effect, price: f.price, fish: true };
   const known = new Set(parties[realm].members.flatMap(m => m.spells));
   const c = {
-    D: { party: clone(parties[realm]), gear: clone(gear), menus: clone(menus[realm]), rects: { sprites: {} },
+    D: { realm_key: realm, party: clone(parties[realm]), gear: clone(gear), menus: clone(menus[realm]), rects: { sprites: {} },
       spells: clone(allSpells.filter(s => s.realm === realm && (s.tier <= 2 || known.has(s.name)))),
       ...(realm === "portal" ? { realm_profile: { start_level: 1 } } : {}) },
-    W: realm === "portal" ? 256 : 320, H: 224, map: { kind: "town" }, B: null, pressed,
+    W: realm === "portal" ? 256 : 320, H: 224, PAD: null, map: { kind: "town" }, B: null, pressed,
     state: { beaten: new Set(), seen: {}, fish: {}, quests: {}, ways: new Set(), day: 1, minute: 480, air: null, returnTo: null }, opened: new Set(),
     shop: { kind: "magic", msg: "" }, mode: "field", drawField() {}, spr() {}, gauge() {},
     shardCount: () => 0, clockText: () => "D1 08:00", isNight: () => false,
@@ -80,6 +80,14 @@ function openBook(s, member) {
 }
 function selectedDrawing(s, member, index, battleOnly, target = false) {
   const list = Array.from(s.api.fieldSpells(member)), sp = list[index], m = s.api.menu(); assert.ok(sp);
+  if (target && s.c.D.realm_key === "prism") {
+    s.draw();
+    const heading = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 10); assert.equal(heading.label, sp.name.toUpperCase());
+    assert.ok(s.draws.some(d => d.kind === "text" && d.y === 10 && d.label === sp.mp + " MP"));
+    assert.ok(s.draws.some(d => d.kind === "cursor" && d.x === 12 && d.y === 50 + m.target * 16));
+    assert.equal(s.draws.some(d => d.kind === "window" && d.rect.join() === [20,60,220,112].join()), false);
+    assert.equal(m.ii, index); return heading;
+  }
   const rows = s.draw().filter(d => d.kind === "text" && d.x === 40 && list.some(p => p.name.toUpperCase() === d.label));
   assert.equal(rows.length, Math.min(6, list.length), "existing six-row spell viewport remains bounded");
   assert.ok(rows.every(r => r.y >= 72 && r.y <= 137 && r.y + 8 <= 145));

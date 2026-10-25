@@ -24,7 +24,7 @@ const source = [
   line("function clearActionButtons()"),
   between("const START_LEVEL =", "/* Recruits:"), line("const spellOf ="),
   between("let menu = null;", "function drawStatus()"), between("const STATUS =", "/* ---------- bestiary"),
-  between("function spellHint(", "function drawBattle("),
+  between("function spellHint(", "function drawBattle("), between("function titlePrompt(", "function drawTitle("),
   "this.api = { start: () => { party = buildParty(); }, openMenu, menuTick, drawMenu, fieldItems, fieldSpells, itemLine, " +
   "getParty: () => party, getBag: () => bag, getMenu: () => menu };"
 ].join("\n");
@@ -40,10 +40,10 @@ function session(realm = "prism", productionSource = source) {
   if (realm === "prism") for (const f of fish) gear[f.name] = { name: f.name, effect: f.effect, price: f.price, fish: true };
   const known = new Set(parties[realm].members.flatMap(m => m.spells));
   const c = {
-    D: { party: clone(parties[realm]), gear: clone(gear), menus: clone(menus[realm]),
+    D: { realm_key: realm, party: clone(parties[realm]), gear: clone(gear), menus: clone(menus[realm]),
       spells: clone(spells.filter(s => s.realm === realm && (s.tier <= 2 || known.has(s.name)))),
       ...(realm === "portal" ? { realm_profile: { start_level: 1 } } : {}) },
-    W: realm === "portal" ? 256 : 320, H: 224, map: { kind: "town" }, B: null,
+    W: realm === "portal" ? 256 : 320, H: 224, PAD: null, map: { kind: "town" }, B: null,
     drawField() {}, spr() {}, gauge() {}, shardCount: () => 0, clockText: () => "08:00", isNight: () => false,
     sfx() {}, clamp: (n, low, high) => Math.max(low, Math.min(high, n)), tw: s => String(s).length * 6,
     hit: key => { const found = pressed.has(key); pressed.delete(key); return found; },
@@ -78,6 +78,15 @@ function longCaster(s) {
 }
 function windowShown(s, entries, index, kind = "item", listCursor = true) {
   const draws = s.draw(), names = entries.map(e => kind === "item" ? e.slice(0, 18) : e.name);
+  const menu = s.api.getMenu();
+  if (kind === "magic" && menu.sub === "magic-target" && s.c.D.realm_key === "prism") {
+    assert.ok(draws.some(d => d.kind === "text" && d.x === 12 && d.y === 10 && d.label === entries[index].name.toUpperCase()));
+    assert.ok(draws.some(d => d.kind === "text" && d.y === 10 && d.label === entries[index].mp + " MP"));
+    assert.ok(draws.some(d => d.kind === "cursor" && d.x === 12 && d.y === 50 + menu.target * 16), "full target picker follows the same selected companion");
+    assert.equal(menu.ii, index, "targeting preserves the original spell index");
+    assert.equal(draws.some(d => d.kind === "window" && d.rect.join() === [20,60,220,112].join()), false, "spell popup no longer obscures target rows");
+    return { draws, rows: [], row: undefined };
+  }
   const rows = draws.filter(d => d.kind === "text" && d.x === 40 && names.includes(d.label));
   assert.equal(rows.length, Math.min(6, entries.length), "at most six list rows are visible");
   assert.ok(rows.every(d => d.y >= 72 && d.y <= 137 && d.y + 8 <= 145), "row glyphs and shadows stay above the range cue");
@@ -145,13 +154,13 @@ check("ally targeting, healing cost and layered Back keep their existing policy"
   const target = s.api.getParty()[0], mp = caster.mp; target.hp -= 130; const hp = target.hp, sp = list[0];
   s.tick("a"); assert.equal(m.sub, "magic-target"); windowShown(s, list, 0, "magic", false);
   s.tick("down"); assert.equal(m.target, 1); assert.equal(m.ii, 0);
-  assert.ok(s.draw().some(d => d.kind === "cursor" && d.x === 0 && d.y === 62), "existing party cursor follows the ally target");
+  assert.ok(s.draw().some(d => d.kind === "cursor" && d.x === 12 && d.y === 66), "full picker cursor follows the same ally target");
   s.tick("up"); s.tick("a"); assert.equal(caster.mp, mp - sp.mp);
   assert.equal(target.hp, Math.min(target.max, hp + Math.round(sp.power * 1.5 + caster.st.spr * 3)));
   s.tick("b"); assert.equal(m.sub, "magic"); assert.equal(m.ii, 0); s.tick("b"); assert.equal(m.sub, "magic-who");
   s.tick("b"); assert.equal(m.sub, null); s.tick("b"); assert.equal(s.c.mode, "field");
 });
-check("magic-target retains its long catalog viewport while moving the party cursor", () => {
+check("magic-target retains its long catalog selection while exposing the full party picker", () => {
   const s = session(), caster = s.api.getParty()[1];
   // A mixed real-catalog book stresses target rendering; no new spell-learning policy is added.
   caster.spells = purchasable(s, "enemy").concat(purchasable(s, "ally")).map(sp => sp.name);

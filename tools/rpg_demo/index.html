@@ -1183,9 +1183,10 @@ function menuTick() {
       if (caster.hp <= 0) { sfx("LOCKED"); menu.msg = caster.name.toUpperCase().slice(0, 11) + " IS DOWN. REVIVE FIRST."; return; }
       if (m.hp <= 0) { sfx("LOCKED"); menu.msg = "TOO LATE FOR THAT SPELL."; return; }
       if (caster.mp < sp.mp) { sfx("LOCKED"); menu.msg = "NOT ENOUGH MP."; return; }
-      const amt = Math.round(sp.power * 1.5 + caster.st.spr * 3);
+      const amt = Math.round(sp.power * 1.5 + caster.st.spr * 3), beforeHP = m.hp;
       caster.mp -= sp.mp; m.hp = Math.min(m.max, m.hp + amt); sfx("SPELL"); sfx("HEAL");
-      menu.msg = caster.name.toUpperCase() + " CASTS " + sp.name.toUpperCase() + ". +" + amt + " HP.";
+      const restored = (D.realm_key || "prism") === "prism" ? m.hp - beforeHP : amt;
+      menu.msg = caster.name.toUpperCase() + " CASTS " + sp.name.toUpperCase() + ". +" + restored + " HP.";
     }
     return;
   }
@@ -1304,6 +1305,7 @@ function drawMenu() {
   if (sub === "fish") return drawFishLog();
   if (sub === "journey") return drawJourney();
   if (sub === "order" && (D.realm_key || "prism") === "prism") return drawFormation();
+  if (sub === "magic-target" && (D.realm_key || "prism") === "prism" && menu.spell) return drawFieldSpellTarget();
   if (sub === "equip" || sub === "equip-pick") return drawEquip();
   win(...pw); win(...cw); win(...gw);
   const mark = sub === "item" || sub === "magic-who" ? menu.who : sub === "magic-target" ? menu.target : sub === "order" ? menu.ii : -1;
@@ -1491,6 +1493,38 @@ function drawFloorSketch() {
   if (stairs) text(stairs, W - 12 - tw(stairs), 198, "#ffdf83");
   const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
   text(back + ": BACK", 12, 210, "#fff070");
+}
+function drawFieldSpellTarget() {
+  const r = roster(), caster = r[menu.who], target = r[menu.target], spell = menu.spell, columns = Math.floor((W - 24) / 6);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const number = n => n > 9999 ? "9999+" : String(n), cost = spell.mp + " MP";
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 180, W, H - 180);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 179, W, 1);
+  text(fit(spell.name, columns - cost.length - 1), 12, 10, "#fff070"); text(cost, W - 12 - tw(cost), 10, "#a0c8ff");
+  const mp = " MP " + number(caster.mp) + "/" + number(caster.mmax);
+  text(fit("CASTER " + caster.name, columns - mp.length) + mp, 12, 22);
+  text("UP/DOWN: COMPANION", 12, 34, "#a0a8c0"); const count = (menu.target + 1) + "/" + r.length; text(count, W - 12 - tw(count), 34, "#a0d8f8");
+  r.forEach((member, i) => {
+    const y = 50 + i * 16, front = party.includes(member), color = member.hp <= 0 ? "#f87878" : front ? "#ffffff" : "#a0a8c0";
+    if (i === menu.target) { g.fillStyle = "#243850"; g.fillRect(8, y - 2, W - 16, 15); cursor(12, y); }
+    text(fit(member.name, W < 320 ? 10 : 18), 26, y, color);
+    text(front ? "FRONT" : "RESERVE", W < 320 ? 98 : 146, y, color);
+    const hp = "HP " + number(member.hp) + "/" + number(member.max); text(hp, W - 12 - tw(hp), y, color);
+    gauge(28, y + 9, W - 54, member.hp / member.max, member.hp <= 0 ? "#883c50" : front ? "#58b898" : "#486c98");
+  });
+  let preview;
+  if (caster.hp <= 0) preview = "CASTER IS DOWN. REVIVE FIRST.";
+  else if (target.hp <= 0) preview = "TOO LATE FOR THAT SPELL.";
+  else if (caster.mp < spell.mp) preview = "NOT ENOUGH MP.";
+  else {
+    const after = Math.min(target.max, target.hp + Math.round(spell.power * 1.5 + caster.st.spr * 3));
+    preview = "IF CAST: HP " + number(target.hp) + ">" + number(after) + " +" + number(after - target.hp);
+  }
+  text(preview, 12, 184, preview.startsWith("IF CAST:") ? "#a8e0a0" : "#f8a0a0");
+  if (menu.msg && menu.msg !== "WHO?") text(fit(menu.msg), 12, 196, "#ffffff");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + ": CAST  " + back + ": BACK", 12, 212, "#fff070");
 }
 function formationPreview() {
   const r = roster(), target = r[menu.ii], picked = r[menu.pick], chars = Math.floor((W - 24) / 6);
