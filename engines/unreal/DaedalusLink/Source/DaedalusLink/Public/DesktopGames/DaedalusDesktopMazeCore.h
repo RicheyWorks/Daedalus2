@@ -587,6 +587,7 @@ public:
     };
     ZeldaGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
+        // Preserve the player's optional control preference across same-cabinet retries.
         SessionSeed=Seed; Rng.Seed(Seed); Hero={}; Score=0; Keys=0; KeySpawned=false; Over=false; Won=false;
         Message.clear(); MessageTimer=0; Projectiles.clear(); Collectibles.clear();
         Enemies={{{200,150,EnemyKind::Octorok,1,Rng.Int(60,120)},
@@ -597,8 +598,10 @@ public:
     }
     void Step(const Input& I) override {
         if(Over || Won) { if(maze::RestartPressed(I)) Reset(SessionSeed); return; }
-        // Source attacks are KEYDOWN events and hit immediately, before movement.
-        if(maze::RestartPressed(I) && Hero.Attack()) {
+        if(I.DashPressed) SwordAssist=!SwordAssist;
+        // Default source KEYDOWNs and optional held assistance share the same attack gate and order.
+        const bool Swing=maze::RestartPressed(I) || (SwordAssist && (I.Fire || I.Action || I.Jump));
+        if(Swing && Hero.Attack()) {
             const Rect Attack=Hero.GetAttackRect();
             Vec LastDefeated{Hero.X,Hero.Y};
             for(auto& E:Enemies) if(E.Alive && Attack.Overlaps(E.GetRect())) {
@@ -654,6 +657,7 @@ public:
         return std::any_of(Collectibles.begin(),Collectibles.end(),[](const Collectible& C){return C.Kind==PickupKind::Key;});
     }
     bool IsSwordReady() const { return !Over && !Won && Hero.AttackTimer==0; }
+    bool IsSwordAssistEnabled() const { return SwordAssist; }
     void Render(Frame& Out) const override {
         Out.Clear(800,600,{34,139,34,255});
         Out.AddRect(100,200,600,80,{210,180,140,255}); Out.AddRect(350,100,80,400,{210,180,140,255});
@@ -687,7 +691,7 @@ public:
         if(MessageTimer>0) Out.AddText(330,58,Message,maze::Yellow,18);
         Out.AddText(10,559,"SCORE "+std::to_string(Score)+" | "+CombatText(),White,13);
         Out.AddText(10,582,(Over || Won)?"Run ended. Pad A / Space / Enter / R: replay."
-            :"Move: WASD/arrows/stick/D-pad. Pad A / Space / Enter: sword. R: restart.",White,12);
+            :std::string("Move: keys/stick/hat | Sword: Space/J/pad A/X | Shift/pad Y: toggle assist ")+(SwordAssist?"ON":"OFF")+" | R: restart.",White,12);
         if(Over || Won) {
             Out.AddRect(170,245,470,125,{0,55,0,230});
             Out.AddText(280,270,Won ? "VICTORY!" : "GAME OVER",maze::Yellow,38);
@@ -709,7 +713,7 @@ private:
     std::vector<Collectible> Collectibles;
     std::int64_t Score=0;
     int Keys=0, MessageTimer=0;
-    bool KeySpawned=false, Over=false, Won=false;
+    bool KeySpawned=false, Over=false, Won=false, SwordAssist=false;
     std::string Message;
     std::string ObjectiveText() const {
         const int Living=LivingEnemyCount();
@@ -720,6 +724,7 @@ private:
     std::string CombatText() const {
         if(Over || Won) return "Run ended | Shield decorative";
         std::string Text=Hero.AttackTimer==0?"Sword READY":"Sword wait "+std::to_string(Hero.AttackTimer)+" steps";
+        Text+=SwordAssist?" (hold sword)":" (fresh press)";
         if(Hero.Invincible==1) Text+=" | Hurt grace expires next live step";
         else if(Hero.Invincible>1) Text+=" | Hurt grace timer "+std::to_string(Hero.Invincible);
         return Text+" | Shield decorative";

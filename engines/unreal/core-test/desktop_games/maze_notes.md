@@ -39,6 +39,36 @@ Enter or R/Restart replays a completed/lost run with its original seed. Pad A,
 Space or Enter also triggers Zelda's sword during play. Start keeps its existing
 pause/resume role; no terminal retry binding or simulation rule was added.
 
+### Optional Lanternwild hold-to-swing assist
+
+Live fresh Shift / V / pad Y / LB (DashPressed) toggles hold-to-swing assistance,
+off by default. Enabled, held Fire/Action/Jump sword aliases feed the same one-shot
+Hero.Attack gate and original hit/drop/key block. Attacks remain before movement
+with the same 18-step cooldown, damage, hitboxes and rules. A held modifier never
+repeats the toggle. Turning it off retains fresh sword presses. Toggling consumes
+an ordinary live simulation step without resetting progress, movement, health,
+cooldown or RNG; enemies and timers continue normally. This is an optional native
+control extension, not missing Python parity or an automatic combat/player system.
+
+The preference survives Reset and fresh terminal retry in the same game object;
+a fresh cabinet selection creates a default-off object. Terminal handling stays
+first: held sword inputs and the toggle never replay, and a fresh replay returns
+before attacking. Existing Driver/host pause/restart cleanup discards queued input.
+The existing combat/footer slots show fresh/held behavior and the selected choice;
+there is no new HUD row, game mode or host API. Native control text uses existing
+key mappings; no input adapter, actor, registry or shared builder edit is needed.
+Native controls/focus, footer fit and human timing remain unverified.
+
+`desktop_zelda_sword_assist` / `zelda_sword_assist_test.cpp` passed 127/127 strict
+single-TU MSVC C++17 checks. Assisted held aliases match manual fresh swings at the
+18-step cadence, including complete world/RNG state. A prepared encounter retains
+the four original enemy kinds/HP/timers: real attack-before-movement kills three,
+the next swing defeats the two-HP enemy, then normal movement collects its spawned
+key for victory (19 combat steps plus one collection step). No score/key/victory is
+assigned. Toggles preserve progress/cooldown, readbacks are pure, same-cabinet retry
+preserves preference, and Driver pause/catch-up/restart/new selection clean input.
+No old broad maze or terminal suite was repeated; no native execution is implied.
+
 Snapshots are available through const getters. Internal boundary cases in the
 native tests use a test peer, not an exposed mutable gameplay API. Zelda retains
 four source enemies, at most 128 rocks and 16 collectibles; its actual repaired
