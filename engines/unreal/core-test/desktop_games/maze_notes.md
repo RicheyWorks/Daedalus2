@@ -50,13 +50,43 @@ the shared 4,096-command cap. Animation phases are bounded.
 
 **Dungeon:** exact seven source rows, 40-pixel tiles, starting green 40x40 box at
 `(80,80)`, 5 pixels per frame per digital axis, and X-before-Y movement. The source
-is a movement prototype, with no enemies, score, or win condition; none was
-invented. Repairs: the source's rows have different lengths and `is_wall` can
+is a movement prototype, with no enemies, score, or win condition. The existing
+native Threadlight chapter adds three ordered lanterns and an exit within that
+room; it is an original extension, not source parity. It awards no score or realm
+reward. Repairs: the source's rows have different lengths and `is_wall` can
 index beyond a row/map; missing cells and out-of-range positions are solid.
 Collision checks all corners of the player box rather than only its top-left
 point, preventing overlap with walls. Left-stick movement is an adapter
 enhancement. Rendering missing cells as solid also fills the original blank
 right-hand margin.
+
+### Optional Threadlight trail
+
+Shift / pad Y (also the existing V / LB aliases) toggles a quiet dotted route to
+the lantern marked NEXT, then EXIT after all three are lit. The route starts off;
+reset returns it to off. It never moves the player or lights a target. J/Space or
+pad A/X still performs each interaction; K/Enter or pad B still resets the circuit.
+Toggling alone does not start the clock. Once movement or interaction has started,
+a toggle consumes its ordinary simulation frame. Completion freezes the trail
+with the rest of the chapter until a deliberate reset.
+
+A bounded four-neighbour search uses at most 140 player-sized anchors and checks
+the full 40x40 box. An unaligned position connects safely to its lower grid anchor
+by decreasing X then Y. Dots are drawn behind the hero and lanterns. The guide is
+derived during rendering and has no saved data, RNG, auto-interaction, movement
+rule or world Dungeon dependency. Pac-Man and Zelda remain unchanged.
+
+`desktop_dungeon_trail` / `dungeon_trail_test.cpp` follows the rendered route using
+ordinary movement across all six seed orders, explicitly lights each lantern and
+EXIT, and compares guide-on/off progress. It also covers an unaligned connector,
+wrong-order interaction, render purity, toggling, timer/reset priority, completion
+and Driver pause/held-input edges. This focused portable check does not establish
+native layout, controller or human navigation acceptance.
+
+Strict single-TU MSVC C++17 passed 236/236 checks. The unchanged test compiled
+against the exact prior Maze header at `0b1b95038` passed 14/28, with fourteen
+expected failures; absent paths stop traversal sections early. No fixtures were
+regenerated. The normalized Pac-Man/Zelda suffix remains identical (472 lines).
 
 **Pac-Man:** all 31x28 source map characters and 304 dot coordinates are retained,
 as are the 2.5-pixel player and 2-pixel ghost speeds, buffered directions, digital

@@ -61,12 +61,13 @@ public:
     }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed; Hero={}; Order=Routes[Seed%Routes.size()];
-        Lit={}; LitCount=0; RunFrames=0; Started=false; Complete=false;
+        Lit={}; LitCount=0; RunFrames=0; Started=false; Complete=false; TrailEnabled=false;
         Notice.clear(); NoticeFrames=0;
     }
     void Step(const Input& I) override {
         if(I.ActionPressed) { Reset(SessionSeed); return; }
         if(Complete) return; // A fresh reset is deliberate; held interaction cannot replay.
+        if(I.DashPressed) TrailEnabled=!TrailEnabled;
         if(NoticeFrames>0 && --NoticeFrames==0) Notice.clear();
         auto D=maze::KeyboardDirection(I);
         // Slate already merges hats for ordinary games; direct portable/Blueprint
@@ -95,6 +96,19 @@ public:
         Out.Clear(Columns*Tile,Rows*Tile+64,Black);
         for(int Y=0;Y<Rows;++Y) for(int X=0;X<Columns;++X)
             if(IsWall(X,Y)) Out.AddRect(X*Tile,Y*Tile,Tile,Tile,{100,100,100,255});
+        if(TrailEnabled && !Complete) {
+            const auto Path=TrailPath();
+            const Color Trail{135,180,205,255};
+            if(!Path.empty()) Out.AddCircle(Path[0].X,Path[0].Y,3,Trail);
+            for(std::size_t N=1;N<Path.size();++N) {
+                const Vec A=Path[N-1],B=Path[N];
+                const int Dots=std::max(1,static_cast<int>(std::ceil((std::abs(B.X-A.X)+std::abs(B.Y-A.Y))/10.0)));
+                for(int D=1;D<=Dots;++D) {
+                    const double T=static_cast<double>(D)/Dots;
+                    Out.AddCircle(A.X+(B.X-A.X)*T,A.Y+(B.Y-A.Y)*T,3,Trail);
+                }
+            }
+        }
         Out.AddRect(Hero.X,Hero.Y,Tile,Tile,maze::Green);
         for(int L=0;L<LanternCount;++L) {
             const Vec P=Lanterns[static_cast<std::size_t>(L)];
@@ -109,20 +123,59 @@ public:
         }
         Out.AddRect(Exit.X-16,Exit.Y-16,32,32,LitCount==LanternCount?Color{80,200,255,255}:Color{95,100,120,255});
         Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",Black,12);
-        const std::string Progress=Complete?"Circuit clear in "+std::to_string(RunFrames/60)+"s. K/Enter/B or R: replay."
+        const std::string Progress=Complete?"Circuit clear in "+std::to_string(RunFrames/60)+"s. K/Enter/pad B or R: replay."
             :(LitCount==LanternCount?"Threadlight Passage: exit unsealed. Approach EXIT and light it."
                 :"Threadlight Passage: "+std::to_string(LitCount)+"/3 lit. Next: "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]);
         Out.AddText(12,Rows*Tile+8,Progress,White,16);
-        Out.AddText(12,Rows*Tile+35,Notice.empty()?"Move: arrows/WASD/stick/hat. J/Space or pad A/X: light. K/Enter/B: reset.":Notice,White,14);
+        const std::string Controls=std::string("Move: WASD/arrows/stick/hat. J/Space/pad A/X: light. K/Enter/pad B: reset. Shift/pad Y: trail ")+(TrailEnabled?"ON":"OFF");
+        Out.AddText(12,Rows*Tile+35,Notice.empty()?Controls:Notice,White,14);
     }
     Status GetStatus() const override {
         std::string Text=Complete?"Threadlight circuit complete; Action/R replays."
             :(LitCount==LanternCount?"Exit unlocked; approach EXIT and press Fire/Jump."
                 :"Threadlight "+std::to_string(LitCount)+"/3: seek "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]+"; Fire/Jump lights, Action resets.");
+        if(!Complete) Text+=TrailEnabled?" Trail ON; Shift/pad Y toggles.":" Trail OFF; Shift/pad Y toggles.";
         if(!Notice.empty()) Text+=" "+Notice;
         return {0,1,Complete,Complete,Text}; // Local completion only; no invented score/reward.
     }
 private:
+    std::vector<Vec> TrailPath() const {
+        // The room has only 140 possible player-sized anchors. Each is queued once.
+        constexpr int Count=Columns*Rows;
+        const int StartX=static_cast<int>(std::floor(Hero.X/Tile));
+        const int StartY=static_cast<int>(std::floor(Hero.Y/Tile));
+        const Vec Target=LitCount<LanternCount?Lanterns[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]:Exit;
+        const int GoalX=static_cast<int>(Target.X/Tile),GoalY=static_cast<int>(Target.Y/Tile);
+        if(Collides(Hero.X,Hero.Y) || Collides(StartX*Tile,StartY*Tile) || Collides(GoalX*Tile,GoalY*Tile)) return {};
+        const int Start=StartY*Columns+StartX,Goal=GoalY*Columns+GoalX;
+        std::array<int,Count> Parent{},Queue{};Parent.fill(-1);
+        int Head=0,Tail=0;Queue[static_cast<std::size_t>(Tail++)]=Start;Parent[static_cast<std::size_t>(Start)]=Start;
+        constexpr std::array<maze::Direction,4> Directions{{{1,0},{0,1},{-1,0},{0,-1}}};
+        while(Head<Tail && Parent[static_cast<std::size_t>(Goal)]<0) {
+            const int Node=Queue[static_cast<std::size_t>(Head++)];
+            for(const auto D:Directions) {
+                const int X=Node%Columns+D.X,Y=Node/Columns+D.Y;
+                if(X<0 || X>=Columns || Y<0 || Y>=Rows || Collides(X*Tile,Y*Tile)) continue;
+                const int Next=Y*Columns+X;
+                if(Parent[static_cast<std::size_t>(Next)]>=0) continue;
+                Parent[static_cast<std::size_t>(Next)]=Node;Queue[static_cast<std::size_t>(Tail++)]=Next;
+            }
+        }
+        if(Parent[static_cast<std::size_t>(Goal)]<0) return {};
+        std::array<int,Count> Reverse{};int Length=0;
+        for(int Node=Goal;Node!=Start;Node=Parent[static_cast<std::size_t>(Node)]) Reverse[static_cast<std::size_t>(Length++)]=Node;
+        std::vector<Vec> Path;Path.reserve(static_cast<std::size_t>(Length)+3);
+        Path.push_back({Hero.X+Tile/2.0,Hero.Y+Tile/2.0});
+        const auto Append=[&Path](Vec P) {if(P.X!=Path.back().X || P.Y!=Path.back().Y) Path.push_back(P);};
+        // Decreasing X then Y removes occupied edge cells; it cannot cut a blocked corner.
+        Append({StartX*Tile+Tile/2.0,Hero.Y+Tile/2.0});
+        Append({StartX*Tile+Tile/2.0,StartY*Tile+Tile/2.0});
+        for(int N=Length-1;N>=0;--N) {
+            const int Node=Reverse[static_cast<std::size_t>(N)];
+            Append({(Node%Columns)*Tile+Tile/2.0,(Node/Columns)*Tile+Tile/2.0});
+        }
+        return Path;
+    }
     bool Near(Vec P) const { return Distance(Hero.X+Tile/2.0,Hero.Y+Tile/2.0,P.X,P.Y)<=Tile*0.8; }
     void Say(const std::string& Text) { Notice=Text; NoticeFrames=90; }
     void InteractWithCircuit() {
@@ -150,7 +203,7 @@ private:
     std::array<bool,LanternCount> Lit{};
     int LitCount=0, NoticeFrames=0;
     std::uint64_t RunFrames=0;
-    bool Started=false, Complete=false;
+    bool Started=false, Complete=false, TrailEnabled=false;
     std::string Notice;
 };
 

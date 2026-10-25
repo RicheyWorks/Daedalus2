@@ -210,6 +210,16 @@ Reset, respawn and focus/input cleanup retain the existing lifecycle. The origin
 coasting/thrust rules apply when not braking; Sega and Star behavior is unchanged.
 Native trigger/focus and actual flight feel still require acceptance.
 
+The desktop Dungeon cabinet's existing **Threadlight** chapter has an optional
+dotted trail, toggled with **Shift / pad Y** (V / LB also work). It follows the
+required NEXT lantern and finally EXIT, helping a player learn the room without
+automatically moving or lighting anything. **J/Space / pad A/X** still lights a
+nearby target; **K/Enter / pad B** resets the circuit. The guide starts off, resets
+off, and cannot begin the clock by itself. Movement, seed order, completion and
+progress rules are retained. This is a desktop cabinet feature, separate from
+the world Dungeon realm. Native font/layout, physical input and playtest acceptance
+remain unverified.
+
 ## Evidence stages and acceptance
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,
