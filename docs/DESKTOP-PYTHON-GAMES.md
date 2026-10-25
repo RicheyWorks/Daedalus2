@@ -251,6 +251,12 @@ trajectory. The allowance expires after six decisions and is consumed by a jump;
 accepted damage and new runs clear it. No new controls or mode are needed. Native
 input/feel acceptance remains pending.
 
+Courtyard Clash marks the current automatic throw target with side chevrons and
+its C1/C2/C3 number in the existing readiness line. The nearest living opponent
+is selected by the unchanged throw rule. A muted cue during cooldown is a current
+snapshot; moving players and country supers can change the eventual flight. It
+adds no control or gameplay rule. Native readability/feel acceptance is pending.
+
 ## Evidence stages and acceptance
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,

@@ -45,6 +45,30 @@ bracket, multiplayer or persistent leaderboard feature.
 
 ## Deliberate changes
 
+### Courtyard throw target
+
+Human possession now shows small inward chevrons at the current nearest living
+opponent and names its C1/C2/C3 slot in the existing readiness line. The cue uses
+the same Nearest selector as AimAndThrow, including its stable lower-index ties.
+It follows the actual quantized/airborne drawing position. Ready throws use cyan;
+cooldown snapshots are muted. It is suppressed for nonplaying phases, CPU/loose/
+airborne balls, invalid possession and no living opponent. The title's former
+edition tagline instead teaches the automatic target rule; no extra helper row.
+
+This is a current selection, not a lock or predicted trajectory. Fresh presses
+select before movement; held rethrows can select later in the step. Country supers
+still change throw vectors and friendly hits remain possible. Rendering/status
+do not mutate game data or consume randomness. No controls, AI, physics, charge,
+scoring, tournament or save behavior changes. Football is unchanged.
+
+`desktop_dodge_target` / `dodge_target_test.cpp` passed 233/233 strict single-TU
+MSVC checks: all three holders, stable ties/dead/moving targets, suppression,
+cooldown styling, quantized airborne alignment/layering and actual fresh normal
+throw direction. Extra rendering/status calls preserve paired future state for
+24 steps across all eight countries. No old physics fixtures or full sports suite
+rerun, no engine build/editor/native acceptance. Visibility at native scale and
+human interpretation of a changing target remain unverified.
+
 ### Football target practice
 
 An optional Target practice mode uses the existing movement, directional kick,

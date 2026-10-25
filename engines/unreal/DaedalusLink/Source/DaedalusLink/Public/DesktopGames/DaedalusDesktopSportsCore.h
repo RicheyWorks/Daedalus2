@@ -627,7 +627,7 @@ public:
     void DrawPlayer(Frame& F,const Player& P) const {
         constexpr Color Yellow{255,220,50,255},Red{220,50,50,255};
         if(P.Health<=0) { F.AddCircle(P.X,P.Y,10,{70,70,70,255});F.AddText(P.X-10,P.Y-8,"KO",White,14);return; }
-        const double X=std::trunc(P.X),Y=std::trunc(P.Y)-std::trunc(P.OnGround ? 0 : std::abs(P.JumpVelocity)*0.3);
+        const Vec Picture=PlayerDrawPosition(P);const double X=Picture.X,Y=Picture.Y;
         if(!P.OnGround) { const double R=std::max(4.0,std::trunc(14-std::abs(P.JumpVelocity)*0.8));
             F.AddRect(X-R,P.BaseY+15,R*2,6,{10,40,10,255}); }
         F.AddCircle(X,Y,14,Countries[P.CountryIndex].Tint);sports_detail::Ring(F,X,Y,14,White);
@@ -660,9 +660,18 @@ public:
             F.AddLine(400,40,400,560,White,4);sports_detail::Ring(F,400,300,50,White,3);
             F.AddText(165,50,Countries[Data.SelectedCountry].Name,White,16);
             F.AddText(565,50,Countries[Data.OpponentCountry].Name,White,16);
+            const int Target=HumanThrowTarget();
+            if(Target>=0) {
+                const Vec Aim=PlayerDrawPosition(Data.Players[Target]);
+                const Color Cue=IsHumanThrowReady()?Color{120,225,255,255}:Color{120,145,150,255};
+                F.AddLine(Aim.X-22,Aim.Y-6,Aim.X-18,Aim.Y,Cue,2);
+                F.AddLine(Aim.X-18,Aim.Y,Aim.X-22,Aim.Y+6,Cue,2);
+                F.AddLine(Aim.X+22,Aim.Y-6,Aim.X+18,Aim.Y,Cue,2);
+                F.AddLine(Aim.X+18,Aim.Y,Aim.X+22,Aim.Y+6,Cue,2);
+            }
             for(int N=0;N<6;++N) {
                 const Player& P=Data.Players[N];DrawPlayer(F,P);
-                const double Y=std::trunc(P.Y)-std::trunc(P.OnGround?0:std::abs(P.JumpVelocity)*0.3);
+                const double Y=PlayerDrawPosition(P).Y;
                 F.AddText(P.X-9,Y+(P.Health>0?29:15),std::string(N<3?"P":"C")+std::to_string(N%3+1),White,11);
             }
             const Ball& B=Data.DodgeBall;F.AddCircle(B.X,B.Y,11,B.PowerBall ? Red : B.ThrowColor);
@@ -689,7 +698,7 @@ public:
             F.AddText(125,530,"All three living teammates share your movement and jump.",White,15);
             F.AddText(125,555,"Friendly hits: normal 1 HP, super 2 HP. Host R clears the tournament.",White,14);
         } else if(Data.Mode==Phase::Title) {
-            F.AddText(160,145,"COURTYARD CLASH",Yellow,42);F.AddText(250,205,"TOURNAMENT EDITION",White,24);
+            F.AddText(160,145,"COURTYARD CLASH",Yellow,42);F.AddText(195,205,"Auto-aim: nearest living opponent",White,20);
             F.AddText(190,265,"8 countries - 3 vs 3 - four rounds",White,20);
             F.AddText(150,340,"Space / Enter / pad A: choose country",White,24);
             F.AddText(120,400,"Move ALL 3: WASD/arrows, left stick or hat | Jump: Shift/pad B",White,16);
@@ -708,6 +717,14 @@ public:
         }
     }
 private:
+    static Vec PlayerDrawPosition(const Player& P) {
+        return {std::trunc(P.X),std::trunc(P.Y)-std::trunc(P.OnGround?0:std::abs(P.JumpVelocity)*0.3)};
+    }
+    int HumanThrowTarget() const {
+        if(Data.Mode!=Phase::Playing || Data.DodgeBall.InAir) return -1;
+        const int Owner=HumanBallHolder();
+        return Owner>=0?Nearest(Owner):-1;
+    }
     std::string RosterText(bool Cpu) const {
         const int Start=Cpu?3:0;std::string Text;
         for(int N=0;N<3;++N) Text+=(N?"  ":"")+std::string(Cpu?"C":"P")+std::to_string(N+1)+":"
@@ -730,7 +747,8 @@ private:
             const Player& P=Data.Players[Owner];
             const std::string Ready=IsHumanThrowReady()?"throw READY":(P.ThrowCooldown>0?
                 "throw wait "+std::to_string(P.ThrowCooldown)+" steps":"no living target");
-            return "P"+std::to_string(Owner+1)+": "+Ready+" | charge "+std::to_string(P.Charge)+"/60"
+            const int Target=HumanThrowTarget();
+            return "P"+std::to_string(Owner+1)+": "+Ready+(Target>=0?" -> C"+std::to_string(Target-2):"")+" | charge "+std::to_string(P.Charge)+"/60"
                 +(IsHumanSuperCharged()?" SUPER charged":"; SUPER at 31")+" | held Fire rethrows when ready";
         }
         const Ball& B=Data.DodgeBall;
