@@ -34,7 +34,7 @@ const source = [
   between("function makeMember(", "/* Recruits:"),
   between("const atkOf =", "/* ---------- maps"),
   between("let menu = null;", "function useItem("),
-  between("function drawEquip()", "/* ---------- statuses"),
+  between("function drawEquipmentFitting()", "/* ---------- statuses"),
   "this.api = { makeMember, menuTick, drawEquip, equipCandidates, getMenu: () => menu, setMenu: value => { menu = value; } };"
 ].join("\n");
 function session(productionSource = source) {
@@ -44,7 +44,7 @@ function session(productionSource = source) {
     bag: clone(partyData.start_items), gold: partyData.start_gold, mode: "menu", W: 320, H: 224,
     clamp: (n, low, high) => Math.max(low, Math.min(high, n)),
     hit: key => { const v = pressed.has(key); pressed.delete(key); return v; },
-    sfx() {}, win() {}, tw: s => String(s).length * 6,
+    sfx() {}, win() {}, tw: s => String(s).length * 6, titlePrompt: (_action, fallback) => "PRESS " + fallback,
     g: { fillStyle: "", fillRect() {} },
     text: (label, x, y) => { draws.push({ kind: "text", label: String(label), x, y }); },
     cursor: (x, y) => { draws.push({ kind: "cursor", x, y }); }
@@ -134,11 +134,11 @@ check("a larger future bag scrolls inside the existing candidate window", () => 
   // Synthetic extra armour only stresses list length; no production catalog or stats are changed.
   for (let i = 0; i < 8; i++) { const name = "Test Mail " + i; s.c.GEAR[name] = { defence: i }; s.c.bag[name] = 1; }
   enter(s, 0, "armor"); s.tick("up");
-  const ds = s.draw(), rows = ds.filter(d => d.kind === "text" && d.x === 26 && d.y >= 140);
-  assert.equal(rows.length, 5); assert.equal(rows.at(-1).label, "(TAKE IT OFF)");
-  assert.ok(rows.every(d => d.y <= 196), "five rows leave room for recovery text");
+  const ds = s.draw(), rows = ds.filter(d => d.kind === "text" && d.x === 26 && d.y >= 54 && d.y <= 134);
+  assert.equal(rows.length, 6); assert.equal(rows.at(-1).label, "TAKE OFF");
+  assert.ok(rows.every(d => d.y < 148), "six rows leave room for the range and full selected-item footer");
   assert.ok(ds.some(d => d.kind === "text" && /\/9$/.test(d.label)), "visible range is shown");
-  assert.ok(ds.some(d => d.kind === "cursor" && d.x === 14 && d.y === 196), "selected last choice remains visible");
+  assert.ok(ds.some(d => d.kind === "cursor" && d.x === 14 && d.y === 134), "selected last choice remains visible");
   const before = inventory(s); s.tick("b"); assert.equal(inventory(s), before);
 });
 check("regression detects the former empty-list confirmation path", () => {

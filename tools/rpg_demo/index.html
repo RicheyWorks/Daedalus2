@@ -1914,7 +1914,44 @@ function drawStatus() {
   SLOTS.forEach((s, i) => { text(s.toUpperCase(), 172, 68 + i * 34, "#a0a8c0"); text((m.equip[s] || "-").slice(0, 22), 172, 80 + i * 34); });
   text("< " + (menu.who + 1) + "/" + roster().length + " >", W - 70, H - 16, "#fff070");
 }
+function drawEquipmentFitting() {
+  const m = roster()[menu.who], picking = menu.sub === "equip-pick", slot = picking ? menu.slot : SLOTS[menu.ii];
+  const cands = equipCandidates(m, slot), fitting = cands.filter(c => c !== null).length, selected = picking && Number.isInteger(menu.ci) && menu.ci >= 0 && menu.ci < cands.length ? menu.ci : -1;
+  const pick = selected >= 0 ? cands[selected] : undefined, after = { ...m.equip }; if (pick !== undefined) after[slot] = pick;
+  const split = Math.floor(W / 2) + 8, columns = Math.floor((W - 24) / 6), rightCols = Math.floor((W - split - 24) / 6);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const number = value => value > 9999 ? "9999+" : String(value), qty = value => value > 999 ? "999+" : String(value);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 44); g.fillRect(0, 160, W, H - 160);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 43, W, 1); g.fillRect(split, 44, 1, 116); g.fillRect(0, 159, W, 1);
+  text("EQUIPMENT", 12, 6, "#fff070"); const counter = (menu.who + 1) + "/" + roster().length; text(counter, W - 12 - tw(counter), 6, "#a0d8f8");
+  const role = party.includes(m) ? "FRONT" : "RESERVE"; text(fit(m.name, columns - role.length - 2), 12, 18); text(role, W - 12 - tw(role), 18, "#a0d8f8");
+  const whoHint = picking ? "UP/DOWN: GEAR" : "LEFT/RIGHT: WHO"; text(fit(m.job, columns - whoHint.length - 2), 12, 30, "#a0a8c0"); text(whoHint, W - 12 - tw(whoHint), 30, "#fff070");
+  if (!picking) {
+    SLOTS.forEach((s, i) => { const y = 52 + i * 26; text(s, 22, y, "#a0a8c0"); text(fit(m.equip[s] || "EMPTY", Math.floor((split - 34) / 6)), 22, y + 12); });
+    if (Number.isInteger(menu.ii) && menu.ii >= 0 && menu.ii < SLOTS.length) cursor(10, 52 + menu.ii * 26);
+  } else {
+    const rows = 6, from = clamp(selected - rows + 1, 0, Math.max(0, cands.length - rows));
+    cands.slice(from, from + rows).forEach((c, i) => text(fit(c === null ? "TAKE OFF" : c, Math.floor((split - 38) / 6)), 26, 54 + i * 16));
+    if (selected >= 0) cursor(14, 54 + (selected - from) * 16);
+    const range = cands.length ? (from + 1) + "-" + Math.min(from + rows, cands.length) + "/" + cands.length : "NO FITTING GEAR"; text(range, 12, 148, "#a0a8c0");
+  }
+  text(pick !== undefined ? "PREVIEW" : "TOTALS", split + 12, 52, "#fff070");
+  [["ATK", atkOf(m), atkWith(m, after.weapon)], ["DEF", defOf(m), defWith(m, after)]].forEach(([label, before, value], i) => {
+    text(label + " " + number(before) + (pick !== undefined ? ">" + number(value) : ""), split + 12, 70 + i * 18, pick === undefined || value === before ? "#ffffff" : value > before ? "#78f8a0" : "#f87878");
+  });
+  text("WORN " + String(slot || "").toUpperCase(), split + 12, 112, "#a0a8c0"); text(fit(m.equip[slot] || "EMPTY", rightCols), split + 12, 124);
+  if (pick !== undefined && pick !== null) text("IN BAG " + qty(bag[pick]), split + 12, 142, "#a0d8f8");
+  const focus = picking ? pick : m.equip[slot], gear = GEAR[focus] || {};
+  text(fit(picking && pick === undefined ? "CHOOSE GEAR AGAIN." : picking && pick === null ? "TAKE OFF " + slot : focus || "EMPTY " + slot + " SLOT"), 12, 166);
+  const detail = picking ? pick === null ? "WORN GEAR RETURNS TO THE BAG." : pick === undefined ? "BACK TO THE SLOT TO CHOOSE AGAIN." : (slot === "weapon" ? "ATTACK " + number(gear.attack || 0) : "DEFENCE " + number(gear.defence || 0)) + " / IN BAG " + qty(bag[pick])
+    : cands.length ? fitting + (fitting === 1 ? " FITTING TYPE" : " FITTING TYPES") + (m.equip[slot] ? " / TAKE OFF AVAILABLE" : "") : "NO GEAR IN THE BAG FITS THIS SLOT.";
+  text(detail, 12, 178, "#a0a8c0");
+  if (menu.msg && menu.msg !== "UP/DOWN: CHOOSE. A: EQUIP. B: BACK.") text(fit(menu.msg), 12, 194, "#fff070");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + (picking ? pick === null ? ": TAKE OFF" : ": EQUIP" : ": CHOOSE"), 12, 212, "#fff070"); const leave = back + ": BACK"; text(leave, W - 12 - tw(leave), 212, "#a0d8f8");
+}
 function drawEquip() {
+  if ((D.realm_key || "prism") === "prism") return drawEquipmentFitting();
   const m = roster()[menu.who];
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 36); win(0, 36, 170, 92); win(170, 36, W - 170, 92); win(0, 128, W, H - 128);
