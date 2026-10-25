@@ -127,7 +127,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FDaedalusDesktopArcadeState GetState() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<FDaedalusDesktopArcadeEntry> GetAvailableGames() const;
 	/** Star/Mines: difficulty 0..2. Pong: 0 Match, 1 practice, 2 First to 5.
-	 * Football: 0 Match, 1 practice. Sega: 0 full run, 1 boss rehearsal. Changes start a new run. */
+	 * Football: 0 Match, 1 practice. Sega: 0 full run, 1 boss rehearsal.
+	 * Asteroids: 0 endless, 1 three waves. Changes start a new run. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SetGameOption(int32 Option);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") int32 GetGameOption() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FString GetCabinetId() const { return CabinetId; }

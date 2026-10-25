@@ -28,6 +28,37 @@ Preserved rules include 5-degree digital rotation, 6-degree scaled stick rotatio
 
 Polish changes: one life loss per frame, 60-frame visible respawn protection, bounded rejection sampling/entity population and bounded wave population (32 initial rocks after high levels). Rocks split after the hit pass and consumed bullets cannot damage a second target. Keyboard directions and `Input::PadLeft/PadRight/PadUp/PadDown` remain separate, preserving source additive keyboard-and-D-pad rotation. `Ship::Update(Input, hatX, hatY)` also exposes independent hat values for source actor fixtures. The source's any-button title start is a host menu concern; held face/bumper actions map to fire.
 
+### Optional Driftstone three-wave voyage
+
+Driftstone Patrol (Asteroids) offers **Endless / Three waves** through the existing
+checked mode controls. Option 0 retains the original endless progression. Option
+1 finishes after all rocks in wave three have been destroyed, before spawning
+wave four. The original six/six/seven large rocks and all their splits remain:
+133 rock destructions across the voyage. There is no duration/easier-mode promise.
+
+Flight, brake, firing, UFOs, scoring, life loss and between-wave protection remain
+unchanged. The existing wave-clear rule requires rocks, not surviving UFOs. Lethal
+damage still blocks simultaneous completion. Success freezes the run and shows
+its earned score; it adds no bonus or saved progression. Wave N/3 and the existing
+objective line identify the goal. Restart/fresh result retry retain mode and seed;
+changing mode starts over and the active native mode remains a no-op.
+
+One friend-only AsteroidsTestAccess seam supports bounded real collision/split
+regressions without exposing mutable runtime getters or requiring a fragile pilot
+bot. `desktop_asteroids_voyage` / `asteroids_voyage_test.cpp` covers this slice.
+The previous broad source, braking and replay suites remain separate evidence.
+Native mode focus, terminal input, layout, duration and human play feel are pending.
+
+Strict serial single-TU MSVC C++17 passed 559/559 focused assertions. One bounded
+controlled route performed all 133 actual collision/split hits (19 large, 38 medium,
+76 small) and earned the original 20,900 rock points. Its Endless companion kept
+identical simulation/RNG through precompletion and then spawned wave four's eight
+large rocks. Checks also cover no early finish/bonus, surviving-UFO completion,
+simultaneous lethal/final-rock loss priority, terminal freeze, two representative
+fresh retries, invalid modes, Reset and Driver input/time/pause cleanup. These are
+controlled collision fixtures, not a human pilot or difficulty/duration acceptance.
+No old source, braking, replay suite or old-header proof was repeated.
+
 ## Sega Space Shooter
 
 Preserved player clamping and axis override, power levels 1/2/3 with corresponding normal/double/spread bullets, cooldown 6, basic sine and chaser enemy movement, health 2/4, 100 kill points, 25% powerup chance, power cap 3, speed cap 8, life cap 5 and 60-frame collision invulnerability. The unused enemy shot timers remain timers; no enemy projectile feature was invented.
