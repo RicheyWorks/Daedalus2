@@ -291,6 +291,7 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Match"), 0, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
 				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Rally practice"), 1, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
 				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("First to 5"), 2, TEXT("Changing mode starts over. First to five points wins this short match."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Target rally"), 3, TEXT("Changing mode starts over. Hit three gold windows in order on the return wall; missed rallies keep cleared targets."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
@@ -853,7 +854,9 @@ FText SDaedalusDesktopArcade::ControlText() const
 		? TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Stop inside the gold ring under braking to dock.")
 		: TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Space/J/Z or pad face/bumper: shoot.");
 	else if (Id == TEXT("sega_shooter")) Text += TEXT("Space/J/Z or pad face/bumper: shoot.");
-	else if (Id == TEXT("pong")) Text += TEXT("Move at impact to add spin. Space / pad A or J / pad X: serve early.");
+	else if (Id == TEXT("pong")) Text += Actor && Actor->GetGameOption() == 3
+		? TEXT("Hit the gold wall windows in order. Move at impact to add spin; missed rallies keep cleared targets. Space / pad A or J / pad X: serve early or replay the completed course.")
+		: TEXT("Move at impact to add spin. Space / pad A or J / pad X: serve early.");
 	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or pad A/X: kick. Target practice: move around the ball to aim. During a shot, K/Enter or pad B sets it up again.");
 	else Text += TEXT("J/Z/X: fire/sword, Space/A: jump/confirm, K/B/Enter: action. Source title screens use the cabinet launcher.");
 	return FText::FromString(Text);

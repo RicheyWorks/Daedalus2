@@ -290,6 +290,14 @@ next choice. The stick gesture that opens the picker is consumed. Match movement
 and the existing original-stick-versus-hat charge rules are retained. Native
 hardware and selection layout acceptance remain unverified.
 
+Twinwake Volley's optional **Target rally** adds three ordered gold windows on
+the familiar practice return wall. Move the paddle at contact to change spin and
+experiment with placement. Wrong windows still return the ball, and missed rallies
+keep cleared targets. The third window completes the course; fresh retry retains
+its mode. It uses Rally practice's paddle, speed, spin limit and serve behavior.
+Match, Rally practice and First to 5 remain unchanged. Native controls/layout and
+human aiming difficulty remain unverified.
+
 Glowtrail Chase offers optional **Bonus fruit** beside Classic. After collecting
 76 and 228 dots, a fruit near the maze center offers 100 arcade points for 20 live
 seconds. A second opportunity waits its turn if fruit is already present. Follow

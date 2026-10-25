@@ -47,7 +47,7 @@ void ModesAndServe() {
     Check(G.SetOption(2,730)&&G.GetOption()==2&&G.S.ServeFrames==45&&G.S.LastPoint==0,"First to 5 starts with neutral forty-five-step preparation");
     Check(G.S.PlayerScore==0&&G.S.ComputerScore==0&&!G.GetStatus().Over&&!G.GetStatus().Won,"fresh quick match has clean live score");
     const auto Before=G.S;Frame BeforeFrame;G.Render(BeforeFrame);
-    Check(!G.SetOption(3,99)&&G.GetOption()==2&&SameState(Before,G.S),"invalid option three preserves active quick match");
+    Check(!G.SetOption(4,99)&&G.GetOption()==2&&SameState(Before,G.S),"invalid option four preserves active quick match");
     G.Render(F);Check(SameFrame(F,BeforeFrame),"invalid option also preserves presentation");
     G.S.PlayerScore=3;G.Reset(99);Check(G.GetOption()==2&&SameState(G.S,Quick().S),"Reset retains selected mode and clears match progress");
     Input Down;Down.Down=true;G.Step(Down);
@@ -107,7 +107,7 @@ void DriverLifecycle() {
     D.SetPaused(false);Expected.Step({});Expected.Render(F);
     Check(D.Advance(Driver::StepSeconds)==1&&SameFrame(D.GetFrame(),F),"unpause clears queued input rather than serving or moving");
     const auto Before=D.GetFrame();const auto Ticks=D.Ticks();
-    Check(!D.SetOption(3)&&D.GetOption()==2&&D.Ticks()==Ticks&&SameFrame(Before,D.GetFrame()),"invalid Driver mode preserves active match and accounting");
+    Check(!D.SetOption(4)&&D.GetOption()==2&&D.Ticks()==Ticks&&SameFrame(Before,D.GetFrame()),"invalid Driver mode preserves active match and accounting");
     D.SetPaused(true);D.SetInput(Stale);D.Restart();Expected=Quick();Expected.Render(F);
     Check(D.GetOption()==2&&!D.IsPaused()&&D.Ticks()==0&&SameFrame(D.GetFrame(),F),"native Restart retains First to 5 and restores full preparation");
     Expected.Step({});Expected.Render(F);Check(D.Advance(Driver::StepSeconds)==1&&SameFrame(D.GetFrame(),F),"Restart clears held and fresh input before the next fixed step");
