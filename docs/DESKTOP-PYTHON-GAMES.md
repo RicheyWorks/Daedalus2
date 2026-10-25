@@ -333,6 +333,15 @@ flight, brake, UFO, score and life rules apply; wave N/3 and the result show the
 goal. Restart/fresh retry keeps the mode, and changing modes starts over. Native
 controls/layout, voyage duration and play feel remain unverified.
 
+Driftstone's optional **Flight practice** teaches controlled arrivals with three
+numbered docking beacons. Fly into the gold ring and hold K / left trigger until
+the ship stops to dock. Turning, thrust, coasting, brake and screen wrap use the
+same ship physics. Position and heading carry between goals; a missed approach
+can loop around freely. There are no enemies, clock, shots or score in practice.
+The third dock completes the course; fresh retry retains its mode and seed.
+Endless and Three waves keep their existing rules. Native mode/controls, goal
+readability and human flight learning remain unverified.
+
 Riftwing Vanguard's ordinary ships show two basic/four chaser **health pips**, so
 surviving hits remain visible. The boss retains its separate health bar. Combat
 and scoring rules are unchanged; native cue readability remains unverified.

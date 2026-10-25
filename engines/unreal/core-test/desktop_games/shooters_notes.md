@@ -28,6 +28,38 @@ Preserved rules include 5-degree digital rotation, 6-degree scaled stick rotatio
 
 Polish changes: one life loss per frame, 60-frame visible respawn protection, bounded rejection sampling/entity population and bounded wave population (32 initial rocks after high levels). Rocks split after the hit pass and consumed bullets cannot damage a second target. Keyboard directions and `Input::PadLeft/PadRight/PadUp/PadDown` remain separate, preserving source additive keyboard-and-D-pad rotation. `Ship::Update(Input, hatX, hatY)` also exposes independent hat values for source actor fixtures. The source's any-button title start is a host menu concern; held face/bumper actions map to fire.
 
+### Optional Driftstone flight practice
+
+Option2 / Flight practice offers three sequential docking beacons at (400,180),
+(650,180) and (100,420). The current one has a gold28px ring; completed beacons
+turn green and future ones stay muted. Stop the ship center strictly inside the
+current ring while braking to advance. The same Ship.Update turns/thrusts/coasts,
+applies braking's existing .02 component snap and wraps with its original discarded
+overshoot. Docking requires Braking and both components exactly zero after Update;
+it never creates new stop physics. Position and heading remain between goals.
+Missed approaches are recoverable through ordinary flight; there is no timer.
+
+Practice Reset clears stage and all entities, creates the same seeded stars and
+skips initial rocks. Its Step returns after Ship.Update and goal settlement,
+before firing, UFO timers/collisions and empty-rock wave advancement. Thus no
+combat, score, life loss or waves occur. The third dock sets Won and freezes;
+existing fresh raw retry and host Restart retain mode/seed. Mode0 Endless and
+Mode1 Three waves retain their complete original branches and RNG order. The old
+voyage test's upper invalid option changes from2 to3 because2 is now valid; no
+voyage bulk rerun is implied. The existing checked MakeMode row gains one choice;
+the public actor header change is comment-only, and no host input API is added.
+Native controls/focus, viewport scale and learning/difficulty remain pending.
+
+`desktop_asteroids_flight_practice` / `asteroids_flight_practice_test.cpp` passed
+36/36 strict single-TU MSVC C++17 checks. One bounded public-input route docked all
+three beacons in423 steps; every step matched detached Ship.Update, with no pose
+or stage assignments on that route. Local boundary fixtures retain actual reached
+stage copies. Checks cover order, strict radius/braking/both-zero velocity,
+original discarded-overshoot wrap,360-step no-combat/no-wave/RNG idle, short modes
+0/1 companions, invalid -1/3, pure reads, freeze/retries and Driver cleanup. No old
+brake/voyage/terminal suite or old-header proof was repeated. The voyage test's
+updated invalid-upper-bound literal was source-reviewed only in this slice.
+
 ### Optional Driftstone three-wave voyage
 
 Driftstone Patrol (Asteroids) offers **Endless / Three waves** through the existing

@@ -110,15 +110,17 @@ public:
     std::size_t GetRockCount() const { return Rocks.size(); }
     std::size_t GetUfoCount() const { return Ufos.size(); }
     int GetProtectionFrames() const { return RespawnGrace; }
-    bool IsFireReady() const { return !Over && !Won && Bullets.size()<MaxBullets && Player.Cooldown==0; }
+    bool IsFireReady() const { return Option!=2 && !Over && !Won && Bullets.size()<MaxBullets && Player.Cooldown==0; }
+    int GetDockedBeaconCount() const { return FlightStage; }
     std::size_t EntityCount() const { return Rocks.size()+Bullets.size()+Ufos.size(); }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed;
         Rng.Seed(Seed); Player=Ship{}; Score=0; Lives=3; Level=1; Over=false; Won=false; RespawnGrace=0; UfoTimer=300;
-        Bullets.clear(); Ufos.clear(); Rocks.clear(); shooter_detail::MakeStars(Stars,Rng); CreateRocks(6);
+        Bullets.clear(); Ufos.clear(); Rocks.clear(); shooter_detail::MakeStars(Stars,Rng);
+        FlightStage=0;if(Option!=2) CreateRocks(6);
     }
     bool SetOption(int Value,std::uint32_t Seed) override {
-        if(Value<0 || Value>1) return false;
+        if(Value<0 || Value>2) return false;
         Option=Value;Reset(Seed);return true;
     }
     int GetOption() const override { return Option; }
@@ -132,6 +134,14 @@ public:
     }
     void Step(const Input& I) override {
         if(Over || Won) return;
+        if(Option==2) {
+            Player.Update(I);
+            const Vec Goal=FlightBeacons[static_cast<std::size_t>(FlightStage)];
+            if(Player.Braking && Player.Vx==0 && Player.Vy==0 && Distance(Player.X,Player.Y,Goal.X,Goal.Y)<28) {
+                ++FlightStage;Won=FlightStage==static_cast<int>(FlightBeacons.size());
+            }
+            return; // Empty practice space never enters firing, UFOs or wave progression.
+        }
         if(RespawnGrace>0) --RespawnGrace;
         // Source KEYDOWN/JOYBUTTONDOWN can shoot before ship.update; held fire after.
         if(I.FirePressed) Fire();
@@ -191,6 +201,12 @@ public:
     void Render(Frame& F) const override {
         using namespace shooter_detail;
         F.Clear(); for(const auto& S:Stars) F.AddCircle(S.X,S.Y,1,White);
+        if(Option==2) for(std::size_t N=0;N<FlightBeacons.size();++N) {
+            const Vec Goal=FlightBeacons[N];const int Index=static_cast<int>(N);
+            const Color Tint=Index<FlightStage?Green:(Index==FlightStage?Gold:Color{75,95,125,255});
+            Ellipse(F,Goal.X,Goal.Y,Index==FlightStage?28:16,Index==FlightStage?28:16,Tint);
+            F.AddText(Goal.X-5,Goal.Y-9,std::to_string(Index+1),Tint,16);
+        }
         if(!Over && (RespawnGrace==0 || (RespawnGrace/4)%2!=0)) {
             const double R=Radians(Player.Angle);
             Outline(F,{{Player.X+15*std::cos(R),Player.Y+15*std::sin(R)},
@@ -205,6 +221,7 @@ public:
                 {Player.X-4*std::cos(R+2.2),Player.Y-4*std::sin(R+2.2)},
                 {Player.X-4*std::cos(R-2.2),Player.Y-4*std::sin(R-2.2)},Yellow);
         }
+        if(Option==2) { RenderFlightPractice(F);return; }
         for(const auto& A:Rocks) {
             std::vector<Vec> Points;
             for(int N=0;N<8;++N) { const double R=Radians(A.Angle+N*45); Points.push_back({A.X+A.Radius()*A.Shape[N]*std::cos(R),A.Y+A.Radius()*A.Shape[N]*std::sin(R)}); }
@@ -232,6 +249,9 @@ public:
         }
     }
     Status GetStatus() const override {
+        if(Option==2) return {Score,Lives,false,Won,Won?
+            "Flight practice complete; pad A/Start, Enter/Space or R/Restart to retry":
+            "Flight practice: docked "+std::to_string(FlightStage)+"/3; stop under braking inside the gold ring. Turn / thrust / K-LT brake; edges wrap."};
         if(Won) return {Score,Lives,false,true,"Three-wave voyage complete; pad A/Start, Enter/Space or R/Restart to retry"};
         if(Over) return {Score,Lives,true,false,"Game over at wave "+std::to_string(Level)+"; pad A/Start, Enter/Space or R/Restart to retry"};
         return {Score,Lives,false,false,"Wave "+std::to_string(Level)+(Option==1?"/3 voyage":"")+"; rocks "+std::to_string(GetRockCount())+"; UFOs "+std::to_string(GetUfoCount())+
@@ -241,7 +261,21 @@ private:
     Random Rng; Ship Player; std::vector<Rock> Rocks; std::vector<Bullet> Bullets; std::vector<Ufo> Ufos;
     std::array<shooter_detail::Star,80> Stars{};
     std::uint32_t SessionSeed=730;
-    std::int64_t Score=0; int Lives=3,Level=1,UfoTimer=300,RespawnGrace=0,Option=0; bool Over=false,Won=false;
+    std::int64_t Score=0; int Lives=3,Level=1,UfoTimer=300,RespawnGrace=0,Option=0,FlightStage=0; bool Over=false,Won=false;
+    inline static constexpr std::array<Vec,3> FlightBeacons{{{400,180},{650,180},{100,420}}};
+    void RenderFlightPractice(Frame& F) const {
+        using namespace shooter_detail;
+        F.AddText(30,15,"FLIGHT PRACTICE",White,24);
+        F.AddText(610,15,"DOCKED "+std::to_string(FlightStage)+"/3",Gold,22);
+        F.AddText(30,52,Player.Braking?(Player.Vx==0 && Player.Vy==0?"STOPPED":"BRAKING"):"Find the next gold ring",LightBlue,17);
+        F.AddText(30,548,"Stop under braking inside the GOLD ring. Edges wrap.",White,15);
+        F.AddText(30,572,"Left/Right, stick or hat: turn | Up: thrust | K/LT: brake",White,15);
+        if(Won) {
+            F.AddRect(170,225,460,115,{15,20,35,235});
+            F.AddText(215,248,"DOCKING COMPLETE!",Green,30);
+            F.AddText(185,305,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
+        }
+    }
     std::string ProtectionNote() const {
         // The source-style timer decrements before the next collision pass.
         if(RespawnGrace==1) return "PROTECTION EXPIRES NEXT LIVE STEP";
