@@ -34,7 +34,7 @@ function check(label, fn) {
 function session(realm, productionSource = source) {
   const sounds = [], prompts = [], felled = [];
   const c = {
-    D: { party: clone(parties[realm]), gear: {}, interiors: clone(interiors[realm]), dungeons: [],
+    D: { realm_key: realm, party: clone(parties[realm]), gear: {}, interiors: clone(interiors[realm]), dungeons: [],
       ...(realm === "portal" ? { realm_profile: { start_level: 1 } } : {}) },
     map: { kind: "interior", name: "Inn", cue: "TOWN" }, fade: 0, fadeCb: null,
     cue() {}, sfx: name => sounds.push(name), fell: foes => felled.push(...foes.map(f => f.key)),
