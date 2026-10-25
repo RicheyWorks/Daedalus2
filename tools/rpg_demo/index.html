@@ -1037,7 +1037,92 @@ function fishTick(dt) {
     } else if (f.t > f.fish.window_s) { f.phase = "done"; f.t = 0; f.msg = "IT GOT AWAY."; sfx("MISS"); }
   } else if (f.t > 0.3 && (hit("a") || hit("b"))) endFish();
 }
+function anglerGuideTick() {
+  const confirm = hit("a"), back = hit("b"), left = hit("left"), right = hit("right");
+  if (confirm || back) { hit("up"); hit("down"); menu.sub = null; sfx("TICK"); return; }
+  if (left || right) { hit("up"); hit("down"); menu.fishHelp = !menu.fishHelp; sfx("TICK"); return; }
+  if (menu.fishHelp) { hit("up"); hit("down"); return; }
+  const n = (D.fish || []).length; if (n) menuMove("ii", n);
+}
+function fishFeedingHint(fish) {
+  const all = D.fish || [], day = all.reduce((n, f) => n + f.weight, 0), night = all.reduce((n, f) => n + (f.night_weight || f.weight), 0);
+  const atNight = (fish.night_weight || fish.weight) * day, atDay = fish.weight * night;
+  return atNight > atDay ? "MORE LIKELY AT DUSK/NIGHT." : atNight < atDay ? "MORE LIKELY IN DAYLIGHT." : "BITES BY DAY AND NIGHT.";
+}
+function drawAnglerHelp() {
+  const half = W / 2, width = half - 18;
+  for (const [x, bite] of [[12, false], [half + 6, true]]) {
+    g.fillStyle = "#14283d"; g.fillRect(x, 52, width, 78);
+    text(bite ? "STRIKE" : "WAIT", x + 8, 60, bite ? "#ffdf83" : "#a0d8f8");
+    const cx = Math.round(x + width / 2), y = bite ? 102 : 99;
+    g.fillStyle = "#426d8f"; g.fillRect(x + 8, 100, width - 16, 2);
+    for (let i = 0; i < 3; i++) g.fillRect(x + 12 + i * 25, 107 + (i % 2) * 3, 15, 1);
+    g.fillStyle = "#b6cfdb"; g.fillRect(cx - 14, 80, 1, y - 83); g.fillRect(cx - 14, y - 4, 13, 1);
+    g.fillStyle = "#f04848"; g.fillRect(cx - 2, y - 3, 4, 3); g.fillStyle = "#ffffff"; g.fillRect(cx - 2, y, 4, 2);
+    if (bite) { text("!", cx - 2, 80, "#ffdf83"); g.fillStyle = "#ffcf70"; g.fillRect(x + 12, 120, width - 24, 3); }
+  }
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text("WAIT FOR !, THEN " + confirm + ".", 12, 140);
+  text(back + ": REEL IN / LEAVE CAST", 12, 154, "#a0a8c0");
+  text("CATCHES GO TO YOUR PACK AND LOG.", 12, 168);
+  text("FACE WATER. " + confirm + ": CAST", 12, 182, "#a0d8f8");
+  text("SOME FISH FEED AT DUSK/NIGHT.", 12, 196, "#a0a8c0");
+}
+function drawAnglerGuide() {
+  const all = D.fish || [], selected = clamp(menu.ii, 0, Math.max(0, all.length - 1)), fish = all[selected], columns = Math.floor((W - 24) / 6);
+  const known = all.filter(f => state.fish[f.name] > 0).length, count = "KNOWN " + known + "/" + all.length, help = !!menu.fishHelp;
+  const number = n => n > (W < 320 ? 99 : 9999) ? (W < 320 ? "99+" : "9999+") : String(n || 0);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 50);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 49, W, 1);
+  text("FISH GUIDE", 12, 10, "#fff070"); text(help ? "LEFT/RIGHT: LOG" : "LEFT/RIGHT: HELP", 84, 10, "#a0a8c0"); text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  text(clockText() + (isNight() ? " / DUSK/NIGHT" : " / DAYLIGHT"), 12, 22, isNight() ? "#a0c8ff" : "#fff070");
+  const back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  if (help) {
+    text("FRESH WATER - WINDMERE", 12, 34, "#a0d8f8"); drawAnglerHelp();
+    text("LEFT/RIGHT: LOG " + back + ": BACK", 12, 212, "#fff070"); return;
+  }
+  const rarityX = W < 320 ? 120 : 146, caughtRight = W - (W < 320 ? 42 : 58), packRight = W - 12;
+  text("SPECIES", 24, 38, "#a0a8c0"); text("RARITY", rarityX, 38, "#a0a8c0"); text("CAUGHT", caughtRight - 36, 38, "#a0a8c0"); text("PACK", packRight - 24, 38, "#a0a8c0");
+  const colors = { COMMON: "#c8d0e0", UNCOMMON: "#70e0a0", RARE: "#70b8ff", LEGENDARY: "#ffd060" };
+  all.forEach((f, i) => {
+    const y = 58 + i * 14, caught = state.fish[f.name] || 0, held = itemStock(f.name), total = number(caught), pack = number(held);
+    if (i === selected) { g.fillStyle = "#243850"; g.fillRect(8, y - 2, W - 16, 13); cursor(12, y); }
+    text(caught ? f.name.toUpperCase().slice(0, W < 320 ? 15 : 18) : "???", 24, y, caught ? "#ffffff" : "#6c6c8c");
+    text(f.rarity, rarityX, y, colors[f.rarity] || "#ffffff"); text(total, caughtRight - tw(total), y); text(pack, packRight - tw(pack), y, held ? "#a8e0a0" : "#a0a8c0");
+  });
+  g.fillStyle = "#101a32"; g.fillRect(0, 146, W, H - 146); g.fillStyle = "#4d6c8a"; g.fillRect(0, 145, W, 1);
+  if (fish && state.fish[fish.name] > 0) {
+    wrap(fish.note.toUpperCase().replace(/;/g, ".") + ".", columns).slice(0, 2).forEach((line, i) => text(line, 12, 154 + i * 12));
+    text(("EAT: " + itemLine(fish.name)).slice(0, columns), 12, 178, "#a0d8f8");
+    text(fishFeedingHint(fish), 12, 190, "#a0a8c0");
+  } else {
+    text(fish ? "NOT CAUGHT YET." : "NO FISH RECORDS YET.", 12, 154, "#a0a8c0");
+    text("LEFT/RIGHT OPENS THE FISHING GUIDE.", 12, 178, "#a0d8f8");
+    text("DISCOVER SPECIES AT THE POND.", 12, 190, "#a0a8c0");
+  }
+  text("UP/DOWN: SPECIES " + back + ": BACK", 12, 212, "#fff070");
+}
+function drawFishingHUD(f, baseY) {
+  const top = baseY >= H - 72 ? 4 : H - 58, columns = Math.floor((W - 24) / 6);
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  g.fillStyle = "#101a32"; g.fillRect(4, top, W - 8, 54); g.fillStyle = "#4d6c8a"; g.fillRect(4, top, W - 8, 1); g.fillRect(4, top + 53, W - 8, 1);
+  if (f.phase === "wait") {
+    text("WAIT FOR !", 12, top + 8, "#a0d8f8"); text("STRIKE WHEN ! APPEARS.", 12, top + 20);
+    text(back + ": REEL IN", 12, top + 40, "#fff070");
+  } else if (f.phase === "bite") {
+    text("BITE! " + confirm + ": STRIKE", 12, top + 8, "#ffdf83"); text(back + ": REEL IN", 12, top + 20);
+    text("BITE WINDOW", W - 12 - tw("BITE WINDOW"), top + 20, "#a0a8c0");
+    const left = clamp(1 - f.t / f.fish.window_s, 0, 1); gauge(12, top + 40, W - 24, left, left > 0.35 ? "#58b898" : "#ffcf70");
+  } else {
+    if (f.caught) {
+      text((f.msg.startsWith("NEW!") ? "NEW! " : "") + "CAUGHT " + f.caught.toUpperCase() + "!", 12, top + 8, "#fff070");
+      const held = itemStock(f.caught), pack = held > 9999 ? "9999+" : String(held); text(f.fish.rarity + " / PACK " + pack, 12, top + 20, "#a8e0a0");
+    } else wrap(f.msg, columns).slice(0, 2).forEach((line, i) => text(line, 12, top + 8 + i * 12));
+    text(confirm + "/" + back + ": CONTINUE", 12, top + 40, "#fff070");
+  }
+}
 function drawFishLog() {                                     /* every kind in the table; the uncaught ones keep their secret */
+  if ((D.realm_key || "prism") === "prism") return drawAnglerGuide();
   const all = D.fish || [], i = menu.ii, have = Object.keys(state.fish).length;
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 26); win(0, 26, W, 120); win(0, 146, W, H - 146);
@@ -1064,6 +1149,7 @@ function drawFish() {
   g.strokeStyle = "rgba(255,255,255,0.7)"; g.beginPath(); g.moveTo(Math.round(ox + P.fx + 8), Math.round(oy + P.fy + 4)); g.lineTo(bx, by - 2); g.stroke();
   g.fillStyle = "#f04848"; g.fillRect(bx - 2, by - 3, 4, 3); g.fillStyle = "#ffffff"; g.fillRect(bx - 2, by, 4, 2);
   if (f.phase === "bite") { g.strokeStyle = "rgba(255,255,255,0.6)"; g.beginPath(); g.ellipse(bx, by + 1, 6 + f.t * 10, 2 + f.t * 3, 0, 0, Math.PI * 2); g.stroke(); text("!", bx - 2, by - 16, "#fff070"); }
+  if ((D.realm_key || "prism") === "prism") return drawFishingHUD(f, Math.round(oy + f.y * T + 8));
   win(4, H - 30, W - 8, 26); text(f.msg, 14, H - 20, f.phase === "done" && f.caught ? "#fff070" : "#ffffff");
 }
 
@@ -1133,7 +1219,7 @@ function menuTick() {
       menu.msg = saveGame() ? "YOUR JOURNEY IS WRITTEN DOWN." : "THE JOURNEY COULD NOT BE WRITTEN."; if (menu.msg[0] === "Y") toast("Journey saved", saveSummary());
     }
     else if (c === "BESTIARY") { menu.sub = "bestiary"; menu.ii = 0; }
-    else if (c === "FISH") { menu.sub = "fish"; menu.ii = 0; }
+    else if (c === "FISH") { menu.sub = "fish"; menu.ii = 0; if ((D.realm_key || "prism") === "prism") menu.fishHelp = false; }
     else if (c === "JOURNEY") {
       menu.sub = "journey"; menu.jp = 0;
       const routes = journeyRoutes(), pin = journeyPinned();
@@ -1229,7 +1315,10 @@ function menuTick() {
     }
     return;
   }
-  if (sub === "fish") { const n = (D.fish || []).length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
+  if (sub === "fish") {
+    if ((D.realm_key || "prism") === "prism") return anglerGuideTick();
+    const n = (D.fish || []).length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return;
+  }
   if (sub === "bestiary") { const n = beastList().length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "status") { menuWho(); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "order") {
