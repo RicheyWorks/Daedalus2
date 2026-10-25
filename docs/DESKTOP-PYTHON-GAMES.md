@@ -220,6 +220,16 @@ progress rules are retained. This is a desktop cabinet feature, separate from
 the world Dungeon realm. Native font/layout, physical input and playtest acceptance
 remain unverified.
 
+Football also offers **Target practice** beside its default Match mode. Clear
+three glowing goal pockets by moving around the ball to aim and pressing
+**J/Space / pad A/X** to kick. There is no opponent or running match clock. Misses
+keep cleared targets and set up another ball; **K/Enter / pad B** sets up the same
+target immediately. After three targets, a fresh kick starts another round.
+The mode uses existing ball physics and native checked controls. Changing mode
+or Restart clears session progress; selecting the active mode keeps it. It adds
+no durable score/save or reward. Native layout, controller/focus and play feel
+still require acceptance.
+
 ## Evidence stages and acceptance
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,

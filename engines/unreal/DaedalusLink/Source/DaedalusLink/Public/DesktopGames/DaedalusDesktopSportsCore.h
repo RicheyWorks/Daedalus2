@@ -59,7 +59,15 @@ public:
         Phase Mode=Phase::Title;
     } Data;
     FootballGame() { Reset(730); }
-    void Reset(std::uint32_t) override { Data=State{}; ClearFeedback(); }
+    void Reset(std::uint32_t) override {
+        Data=State{};ClearFeedback();PracticeStage=PracticePhase::Aim;FlightFrames=0;PracticeNotice.clear();
+        if(Option==1) { RackPractice();Data.Mode=Phase::Title; }
+    }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
     static void MovePlayer(Player& P,const Input& I,const Ball& B) {
         // Mirror the existing Slate hat merge for direct portable/Blueprint input.
         // Right/down precedence and the original stick override stay unchanged.
@@ -89,6 +97,7 @@ public:
         B.Vx=D.X*6;B.Vy=D.Y*6;return true;
     }
     void Step(const Input& I) override {
+        if(Option==1) { StepPractice(I);return; }
         if(Data.Mode!=Phase::Playing) {
             if(!(I.FirePressed || I.ActionPressed)) return;
             Data=State{};Data.Mode=Phase::Playing;ClearFeedback();
@@ -120,6 +129,8 @@ public:
         }
     }
     Status GetStatus() const override {
+        if(Option==1) return {Data.HumanScore,0,Data.Mode==Phase::Won,Data.Mode==Phase::Won,
+            "Target practice "+std::to_string(Data.HumanScore)+"/3. "+PracticeText()};
         const bool End=Data.Mode==Phase::Won || Data.Mode==Phase::Lost || Data.Mode==Phase::Draw;
         std::string Text;
         if(Data.Mode==Phase::Title) Text="Football: fresh Fire/Action starts a 90-second match. Move: keys/stick/hat; attack right.";
@@ -133,12 +144,13 @@ public:
         }
         return {Data.HumanScore,0,End,Data.Mode==Phase::Won,Text};
     }
-    bool IsKickReady() const { return Data.Mode==Phase::Playing && Data.Human.KickCooldown==0; }
+    bool IsKickReady() const { return Data.Mode==Phase::Playing && Data.Human.KickCooldown==0 && (Option==0 || PracticeStage==PracticePhase::Aim); }
     int GoalReceiptFramesRemaining() const { return GoalCueFrames; }
     int KickReceiptFramesRemaining() const { return KickCueFrames; }
     GoalScorer GetLastScorer() const { return LastScorer; }
     KickReceipt GetLastKickReceipt() const { return LastKick; }
     void Render(Frame& F) const override {
+        if(Option==1) { RenderPractice(F);return; }
         constexpr Color Green{0,128,0,255},Blue{30,100,255,255},Red{255,50,50,255};
         F.Clear(800,600,Green);
         F.AddRect(0,0,800,34,{0,65,0,255});
@@ -179,6 +191,90 @@ public:
         }
     }
 private:
+    enum class PracticePhase { Aim, Flight, Feedback };
+    inline static constexpr std::array<double,3> PracticeTargets{{300,250,350}};
+    int Option=0,FlightFrames=0;
+    PracticePhase PracticeStage=PracticePhase::Aim;
+    std::string PracticeNotice;
+    double PracticeTarget() const { return PracticeTargets[static_cast<std::size_t>(std::max(0,std::min(2,Data.HumanScore)))]; }
+    const char* PracticePocket() const { return Data.HumanScore==0?"middle":(Data.HumanScore==1?"upper":"lower"); }
+    void RackPractice() {
+        Data.Human=Player{560,300,3.5,false,0};Data.Football=Ball{600,300,0,0};
+        Data.CpuScore=0;Data.Seconds=0;Data.Mode=Phase::Playing;
+        PracticeStage=PracticePhase::Aim;FlightFrames=0;PracticeNotice.clear();ClearFeedback();
+    }
+    void PracticeResult(bool Hit,const char* Notice) {
+        if(Hit) Data.HumanScore=std::min(3,Data.HumanScore+1);
+        PracticeNotice=Notice;PracticeStage=PracticePhase::Feedback;
+        LastScorer=Hit?GoalScorer::Human:GoalScorer::None;GoalCueFrames=60;
+        LastKick=KickReceipt::None;KickCueFrames=0;
+        if(Data.HumanScore==3) Data.Mode=Phase::Won;
+    }
+    void StepPractice(const Input& I) {
+        if(Data.Mode!=Phase::Playing) {
+            if(!(I.FirePressed || I.ActionPressed)) return;
+            Data=State{};RackPractice();return; // One fresh press enters Aim; it never kicks too.
+        }
+        if(I.ActionPressed) { RackPractice();return; }
+        if(PracticeStage==PracticePhase::Feedback) {
+            if(I.FirePressed || (GoalCueFrames>0 && --GoalCueFrames==0)) RackPractice();
+            return;
+        }
+        if(KickCueFrames>0 && --KickCueFrames==0) LastKick=KickReceipt::None;
+        MovePlayer(Data.Human,I,Data.Football);
+        if(PracticeStage==PracticePhase::Aim) {
+            if(I.FirePressed) {
+                LastKick=Kick(Data.Human,Data.Football)?KickReceipt::Accepted:KickReceipt::Cooldown;
+                KickCueFrames=KickReceiptFrames;
+                if(LastKick==KickReceipt::Accepted) { PracticeStage=PracticePhase::Flight;FlightFrames=0; }
+            }
+            return; // Launch velocity is set now; flight physics starts next frame.
+        }
+        UpdateBall(Data.Football);Deflect(Data.Human,Data.Football);++FlightFrames;
+        const bool LeftGoal=Data.Football.X<50 && Data.Football.Y>220 && Data.Football.Y<380;
+        const bool RightGoal=Data.Football.X>750 && Data.Football.Y>220 && Data.Football.Y<380;
+        if(RightGoal) {
+            const bool Hit=std::abs(Data.Football.Y-PracticeTarget())<=22;
+            PracticeResult(Hit,Hit?"Gold pocket hit! Your progress is kept.":"That goal missed the gold pocket. Targets kept; try again.");
+        } else if(LeftGoal) PracticeResult(false,"Aim at the right goal. Targets kept; try again.");
+        else if(std::hypot(Data.Football.Vx,Data.Football.Vy)<=.12) PracticeResult(false,"The ball slowed down. Targets kept; try again.");
+        else if(FlightFrames>=240) PracticeResult(false,"Ready for another shot? Targets kept; try again.");
+    }
+    std::string PracticeText() const {
+        if(Data.Mode==Phase::Title) return "Fresh Fire/Action starts aiming. Hit three gold pockets; no clock or opponent.";
+        if(Data.Mode==Phase::Won) return "All three targets reached! Fresh Fire/Action tries again; R/Restart returns to title.";
+        if(PracticeStage==PracticePhase::Feedback) return PracticeNotice+" Fresh Fire/Action continues without kicking.";
+        if(PracticeStage==PracticePhase::Flight) return "Ball in flight: one kick per shot. Move to nudge it; Action resets this shot and keeps targets.";
+        return std::string("Aim for the ")+PracticePocket()+" gold pocket. Move behind the ball; fresh Fire kicks, Action resets this shot.";
+    }
+    void RenderPractice(Frame& F) const {
+        constexpr Color Green{0,128,0,255},Blue{30,100,255,255},Gold{255,210,70,255},Mint{90,220,160,255},Muted{85,125,100,255};
+        F.Clear(800,600,Green);F.AddRect(0,0,800,48,{0,65,0,255});
+        sports_detail::Ring(F,400,300,60,White,3);F.AddCircle(400,300,8,White);F.AddLine(400,40,400,560,White,3);
+        sports_detail::Outline(F,30,220,20,160,White,4);sports_detail::Outline(F,750,220,20,160,White,4);
+        sports_detail::Outline(F,30,150,120,300,White,3);sports_detail::Outline(F,650,150,120,300,White,3);
+        for(int N=0;N<3;++N) {
+            const double Y=PracticeTargets[static_cast<std::size_t>(N)];
+            const Color Tint=N<Data.HumanScore?Mint:(N==Data.HumanScore?Gold:Muted);
+            F.AddRect(750,Y-22,20,44,Tint);F.AddText(753,Y-8,std::to_string(N+1),Black,12);
+        }
+        if(Data.Mode==Phase::Playing && PracticeStage==PracticePhase::Aim) {
+            const auto D=sports_detail::Unit(Data.Football.X-Data.Human.X,Data.Football.Y-Data.Human.Y);
+            if(D.X!=0 || D.Y!=0) F.AddLine(Data.Football.X,Data.Football.Y,Data.Football.X+D.X*32,Data.Football.Y+D.Y*32,Gold,2);
+        }
+        F.AddCircle(Data.Human.X,Data.Human.Y,12,Blue);sports_detail::Ring(F,Data.Human.X,Data.Human.Y,12,White);
+        F.AddCircle(Data.Football.X,Data.Football.Y,8,White);sports_detail::Ring(F,Data.Football.X,Data.Football.Y,8,Black);
+        F.AddText(24,10,"TARGET PRACTICE",White,24);F.AddText(520,10,"Targets "+std::to_string(Data.HumanScore)+"/3",Gold,24);
+        std::string Caption,Controls;
+        if(Data.Mode==Phase::Title) { Caption="Find your angle. Hit the gold pockets in order.";Controls="Fresh Space/J or pad A/X: start aiming. The short line shows the first kick direction."; }
+        else if(Data.Mode==Phase::Won) { Caption="All three targets reached!";Controls="Space/J/pad A/X or K/Enter/pad B: replay. R/Restart: title."; }
+        else if(PracticeStage==PracticePhase::Feedback) { Caption=PracticeNotice;Controls="Next setup soon. Space/J/pad A/X or K/Enter/pad B: next ball; no kick."; }
+        else if(PracticeStage==PracticePhase::Flight) { Caption="Ball in flight: one kick per shot.";Controls="Move to nudge the ball. K/Enter/pad B resets this shot; targets are kept."; }
+        else { Caption=std::string("Aim at the GOLD ")+PracticePocket()+" pocket.";Controls="Stand behind the ball. The short line shows the first direction, not a full path."; }
+        F.AddText(24,64,Caption,White,18);
+        F.AddText(24,565,"Move: WASD/arrows/stick/hat. Space/J or pad A/X: kick. K/Enter/pad B: reset shot.",White,13);
+        F.AddText(24,583,Controls,White,12);
+    }
     GoalScorer LastScorer=GoalScorer::None;
     KickReceipt LastKick=KickReceipt::None;
     int GoalCueFrames=0,KickCueFrames=0;

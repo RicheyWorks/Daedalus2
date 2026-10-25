@@ -287,8 +287,14 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
 				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::PongVisibility)
-				+ SWrapBox::Slot()[MakePongMode(TEXT("Match"), 0)]
-				+ SWrapBox::Slot()[MakePongMode(TEXT("Rally practice"), 1)]
+				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Match"), 0, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Rally practice"), 1, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::FootballVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("football"), TEXT("Match"), 0, TEXT("Changing mode starts over. Target progress lasts until Restart or a mode change."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("football"), TEXT("Target practice"), 1, TEXT("Changing mode starts over. Target progress lasts until Restart or a mode change."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
@@ -519,19 +525,20 @@ TSharedRef<SWidget> SDaedalusDesktopArcade::MakeAction(const TCHAR* Label, FSimp
 		[SNew(STextBlock).Text(FText::FromString(Label))];
 }
 
-TSharedRef<SWidget> SDaedalusDesktopArcade::MakePongMode(const TCHAR* Label, int32 Option)
+TSharedRef<SWidget> SDaedalusDesktopArcade::MakeMode(const TCHAR* GameId, const TCHAR* Label, int32 Option, const TCHAR* Warning)
 {
+	const FString Id(GameId);
 	return SNew(SCheckBox).IsFocusable(true)
 		.Style(&FCoreStyle::Get().GetWidgetStyle<FCheckBoxStyle>("ToggleButtonCheckbox"))
-		.ToolTipText(FText::FromString(TEXT("Changing mode starts over. Session best lasts until Restart or a mode change.")))
+		.ToolTipText(FText::FromString(Warning))
 		.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && !Actor->GetState().bSavePending; })
-		.IsChecked_Lambda([this, Option]() { const ADaedalusDesktopArcade* Actor = Game.Get();
-			return Actor && Actor->GetSelectedGameId() == TEXT("pong") && Actor->GetGameOption() == Option ? ECheckBoxState::Checked : ECheckBoxState::Unchecked; })
-		.OnCheckStateChanged_Lambda([this, Option](ECheckBoxState State)
+		.IsChecked_Lambda([this, Id, Option]() { const ADaedalusDesktopArcade* Actor = Game.Get();
+			return Actor && Actor->GetSelectedGameId() == Id && Actor->GetGameOption() == Option ? ECheckBoxState::Checked : ECheckBoxState::Unchecked; })
+		.OnCheckStateChanged_Lambda([this, Id, Option](ECheckBoxState State)
 		{
 			if (State != ECheckBoxState::Checked) return;
 			if (ADaedalusDesktopArcade* Actor = Game.Get())
-				if (Actor->GetSelectedGameId() == TEXT("pong") && Actor->GetGameOption() != Option && Actor->SetGameOption(Option)) FocusGame();
+				if (Actor->GetSelectedGameId() == Id && Actor->GetGameOption() != Option && Actor->SetGameOption(Option)) FocusGame();
 		})
 		[SNew(STextBlock).Text(FText::FromString(Label)).Font(DAUI::Font(18))];
 }
@@ -684,6 +691,12 @@ EVisibility SDaedalusDesktopArcade::PongVisibility() const
 	return Actor && Actor->GetSelectedGameId() == TEXT("pong") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
+EVisibility SDaedalusDesktopArcade::FootballVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("football") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
@@ -725,7 +738,7 @@ FText SDaedalusDesktopArcade::ControlText() const
 		? TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Space/J/Z or pad face/bumper: shoot.")
 		: TEXT("Space/J/Z or pad face/bumper: shoot.");
 	else if (Id == TEXT("pong")) Text += TEXT("Move at impact to add spin. Space / pad A or J / pad X: serve early.");
-	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or A/X: kick.");
+	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or pad A/X: kick. Target practice: move around the ball to aim. During a shot, K/Enter or pad B sets it up again.");
 	else Text += TEXT("J/Z/X: fire/sword, Space/A: jump/confirm, K/B/Enter: action. Source title screens use the cabinet launcher.");
 	return FText::FromString(Text);
 }

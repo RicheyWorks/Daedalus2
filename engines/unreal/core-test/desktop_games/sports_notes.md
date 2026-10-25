@@ -45,6 +45,46 @@ bracket, multiplayer or persistent leaderboard feature.
 
 ## Deliberate changes
 
+### Football target practice
+
+An optional Target practice mode uses the existing movement, directional kick,
+ball drag/bounce and human deflection. Match remains the default with its original
+90-second CPU duel. Native checked Match / Target practice controls reuse the
+cabinet's existing SetGameOption path. Selecting the active mode is a no-op;
+changing mode or Restart starts over. Reset retains the selected mode.
+
+Practice places the ball at (600,300) and the player behind it at (560,300), with
+no CPU or running match clock. Move around the ball to aim, then press J/Space
+or pad A/X. The three goal pockets are center, upper, lower; the required pocket
+glows gold and cleared pockets turn mint. One kick launches each attempt. A goal
+within 22 pixels of the required pocket clears it; other goals, own goals and
+settled shots produce a friendly retry without losing cleared targets. Flight
+settles at speed <=0.12 or 240 steps, so a shot that stops short cannot stall.
+The ordinary source goal boundaries remain strict (220 < Y < 380).
+
+Result feedback lasts 60 steps, then sets up the next ball automatically. A fresh
+kick/Action press skips that wait to aiming without kicking. K/Enter or pad B
+also sets up the same target again during a live shot. Clearing all three ends
+the round; a fresh kick/Action starts a clean practice round. Held buttons alone
+cannot replay or repeatedly kick. Progress is session-only, with no persistent
+best, new save format, leaderboard, loss state or invented rewards.
+
+The aim cue shows the initial kick direction; player contact can still deflect
+the ball during flight. This original practice loop is a native extension, not
+a Python parity claim. Dodge Ball remains unchanged. Native mode focus, actual
+font/layout, controller and play feel remain acceptance work.
+
+`desktop_football_practice` / `football_practice_test.cpp` passed 370/370 strict
+single-TU MSVC checks, including only the 74 existing Football source cases from
+`sports_parity.txt`, a real three-pocket route with settled/off-target retries,
+mode/input/pause/reset checks and the default match ending after 5,401 steps.
+The same test with the exact prior Sports header at `66b042f2b` passed 322/352,
+with thirty expected failures; absent practice ends the route section early.
+Dodge Ball's normalized 454-line suffix is unchanged. No fixture regenerated,
+full sports suite, Unreal build, editor or runtime acceptance was performed.
+
+### Source repairs and limits
+
 - **Stalled loose-ball repair:** source side limits `x<=360` / `x>=440` and pickup
   distance `<24` make a stationary ball in `[384,416]` unreachable. Only an
   unowned, nonairborne ball in that strip moves to reachable `x=380` or `420`.
