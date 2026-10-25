@@ -290,6 +290,14 @@ next choice. The stick gesture that opens the picker is consumed. Match movement
 and the existing original-stick-versus-hat charge rules are retained. Native
 hardware and selection layout acceptance remain unverified.
 
+Ironwake Advance offers an optional **Target range** beside its original Full run.
+Three ordered gold panels teach standing, jumping and low shots with the existing
+movement, crouch, platforms, weapons and bullets. The high panel has a generous
+jump-shot window; an edge marker points toward an offscreen goal. No enemies or
+timer interrupt practice, and missed shots can be retried freely. The third hit
+completes the range without score; fresh retry keeps its mode and seed. Full run
+keeps the original enemies, pickups and distance goal. Native acceptance is pending.
+
 Lanternwild Quest offers optional **Shift / pad Y: hold-to-swing assist** (also
 V / LB), initially off. Enable it to hold an existing sword button instead of
 tapping for each swing. It uses the same attack timing and combat rules, keeps

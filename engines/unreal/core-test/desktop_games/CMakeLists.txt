@@ -49,6 +49,7 @@ desktop_test(desktop_ninja_jump ninja_jump_forgiveness_test.cpp platformers_pari
 desktop_test(desktop_ninja_enemy_health ninja_enemy_health_test.cpp "")
 desktop_test(desktop_ninja_terrace_course ninja_terrace_course_test.cpp "")
 desktop_test(desktop_contra_ledge contra_ledge_grace_test.cpp platformers_parity.txt)
+desktop_test(desktop_contra_target_range contra_target_range_test.cpp "")
 desktop_test(desktop_shooters shooters_test.cpp shooters_parity.txt)
 desktop_test(desktop_asteroids_brake asteroids_brake_test.cpp shooters_parity.txt)
 desktop_test(desktop_asteroids_voyage asteroids_voyage_test.cpp "")
