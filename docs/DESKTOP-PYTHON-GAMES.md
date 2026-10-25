@@ -264,6 +264,14 @@ is selected by the unchanged throw rule. A muted cue during cooldown is a curren
 snapshot; moving players and country supers can change the eventual flight. It
 adds no control or gameplay rule. Native readability/feel acceptance is pending.
 
+After Courtyard Clash's fourth round, the **tournament scorecard** declares the
+overall win, opponent win or draw from the existing cumulative match wins. Large
+counts and four-segment bars distinguish your chosen country from all opponents;
+the smaller last-match line preserves who won that match. Earlier-round results
+and all play/scoring rules are retained. A fresh continue press still returns to
+title, and confirming a country starts a new tournament. Native font/layout and
+physical input acceptance remain unverified.
+
 Pong's optional **First to 5** offers a short match beside endless Match and Rally
 practice. The existing match physics and controls apply; the fifth point brings
 a frozen result and a deliberate fresh Space / pad A rematch. Scores sit above

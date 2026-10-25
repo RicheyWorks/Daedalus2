@@ -615,8 +615,11 @@ public:
                 +" | Match wins "+std::to_string(Data.HumanScore)+" - "+std::to_string(Data.CpuScore)
                 +" | YOU "+std::to_string(LivingPlayers())+" alive / "+std::to_string(TeamHealth())+" HP, CPU "
                 +std::to_string(LivingPlayers(true))+" alive / "+std::to_string(TeamHealth(true))+" HP. ";
-            if(End) Text+=(Data.Mode==Phase::Won?"YOU won this match. ":"CPU won this match. ")+ContinueText()
-                +" Host R/Restart clears the tournament.";
+            if(End) {
+                if(Data.Round>=4) Text+=TournamentResultText()+" ";
+                Text+=(Data.Mode==Phase::Won?"YOU won this match. ":"CPU won this match. ")+ContinueText()
+                    +" Host R/Restart clears the tournament.";
+            }
             else Text+=BallReadiness()+" | "+JumpReadiness()
                 +". Move the trio together. Held Space/Z/J/pad A catches and can immediately rethrow; pad X/RB throws on fresh press. "
                 +"Charge: keyboard Up/W or original stick up beyond 0.5; hat movement alone does not charge. "
@@ -706,6 +709,8 @@ public:
             F.AddText(120,470,"Charge: hold keyboard Up/W or stick up; super at charge 31/60",White,16);
             F.AddText(120,505,"Hat moves independently; jumping catches automatically in range.",White,16);
             F.AddText(195,545,"Friendly hits are possible. Host R/Restart clears the session.",White,14);
+        } else if(Data.Round>=4) {
+            RenderTournamentResult(F);
         } else {
             F.AddText(145,230,Data.Mode==Phase::Won ? "YOU WIN THE MATCH!" : "YOU LOSE THE MATCH!",Data.Mode==Phase::Won ? Yellow : Red,40);
             F.AddText(260,285,std::string(Countries[Data.SelectedCountry].Name)+" vs "+Countries[Data.OpponentCountry].Name,White,22);
@@ -717,6 +722,31 @@ public:
         }
     }
 private:
+    std::string TournamentResultText() const {
+        if(Data.HumanScore>Data.CpuScore) return "YOU WIN THE TOURNAMENT!";
+        if(Data.HumanScore<Data.CpuScore) return "OPPONENTS WIN THE TOURNAMENT!";
+        return "TOURNAMENT DRAW";
+    }
+    void RenderTournamentResult(Frame& F) const {
+        constexpr Color Gold{255,220,50,255},Blue{110,170,255,255},Red{255,135,135,255};
+        const Color Result=Data.HumanScore>Data.CpuScore?Gold:(Data.HumanScore<Data.CpuScore?Red:White);
+        F.AddText(80,80,"TOURNAMENT COMPLETE",Gold,36);
+        F.AddText(80,140,TournamentResultText(),Result,32);
+        for(int Team=0;Team<2;++Team) {
+            const double X=Team==0?70:430;
+            const int Wins=Team==0?Data.HumanScore:Data.CpuScore;
+            const Color Tint=Team==0?Blue:Red;
+            F.AddRect(X,225,300,155,{25,35,50,255});
+            F.AddText(X+20,240,Team==0?std::string("YOU / ")+Countries[Data.SelectedCountry].Name:"OPPONENTS",Tint,24);
+            F.AddText(X+20,285,std::to_string(Wins)+" match wins",White,26);
+            for(int N=0;N<4;++N) F.AddRect(X+20+N*60,335,52,12,N<Wins?Tint:Color{65,75,90,255});
+        }
+        F.AddText(80,410,std::string("Last match: ")+Countries[Data.SelectedCountry].Name+" vs "+Countries[Data.OpponentCountry].Name
+            +(Data.Mode==Phase::Won?" - YOU won.":" - CPU won."),White,18);
+        F.AddText(80,460,ContinueText(),White,16);
+        F.AddText(80,495,"Choose a country again for a fresh four-round score.",White,16);
+        F.AddText(80,550,"Space/Enter/A/X/RB/B continues | Host R/Restart clears the tournament",White,14);
+    }
     static Vec PlayerDrawPosition(const Player& P) {
         return {std::trunc(P.X),std::trunc(P.Y)-std::trunc(P.OnGround?0:std::abs(P.JumpVelocity)*0.3)};
     }

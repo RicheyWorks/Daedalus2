@@ -69,6 +69,31 @@ throw direction. Extra rendering/status calls preserve paired future state for
 rerun, no engine build/editor/native acceptance. Visibility at native scale and
 human interpretation of a changing target remain unverified.
 
+### Courtyard tournament finish
+
+After round four, a dedicated scorecard declares the overall tournament win,
+opponent win or draw from the existing cumulative match wins. Each team has a
+large count and a four-segment win bar. The opponent panel represents all four
+opponents, while the smaller last-match line still names the final country and
+match winner. Earlier round results retain their existing match headline.
+
+This fixes the misleading final presentation where a 1-3 tournament could end
+under a large last-match victory headline. Status includes the overall result but
+retains its match-based Over/Won flags. No score, phase, RNG, physics, opponent
+selection, continuation or saved-data behavior changes. A fresh result press still
+returns to title; country confirmation starts a new four-round score.
+
+The focused `desktop_dodge_tournament` / `dodge_tournament_test.cpp` checks actual
+four-round settlement, including opposite final-match/tournament outcomes and a
+2-2 draw, earlier rounds, terminal freeze/pure presentation and clean new play.
+Native font/layout, controller and human acceptance remain pending.
+
+Strict serial single-TU MSVC C++17 passed 145/145 focused checks: 3-1 with a final
+loss, 1-3 with a final win, 2-2 draw and both sweeps, all through actual lethal Step
+settlement; earlier-result headings and match flags, bars, held terminal freeze,
+read purity and paired fresh-country future state. No prior sports bulk or source
+oracle was rerun. This presentation slice leaves gameplay implementations intact.
+
 ### Football target practice
 
 An optional Target practice mode uses the existing movement, directional kick,
