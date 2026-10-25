@@ -1135,7 +1135,7 @@ function menuTick() {
     else if (c === "BESTIARY") { menu.sub = "bestiary"; menu.ii = 0; }
     else if (c === "FISH") { menu.sub = "fish"; menu.ii = 0; }
     else if (c === "JOURNEY") {
-      menu.sub = "journey";
+      menu.sub = "journey"; menu.jp = 0;
       menu.ii = Math.max(0, journeyRoutes().findIndex(d => !state.beaten.has(d.boss_data.name) && (!(d.final || d.optional) || shardCount() >= 3)));
     }
     else if (c === "OPTIONS") { closeMenu(); openSettings(); }
@@ -1351,15 +1351,19 @@ function journeyStatus(d) {
 }
 function journeyTick() {
   if (hit("b") || hit("start")) { clearActionButtons(); menu.sub = null; menu.msg = ""; sfx("TICK"); return; }
+  const left = hit("left"), right = hit("right");
+  if (left || right) { menu.jp = menu.jp === 1 ? 0 : 1; sfx("TICK"); }
   const n = journeyRoutes().length; if (n) menuMove("ii", n);
   hit("a");
 }
 function drawJourney() {
+  if (menu.jp === 1) return drawJourneyMap();
   const routes = journeyRoutes(), selected = clamp(menu.ii, 0, Math.max(0, routes.length - 1));
   const from = clamp(selected - 4, 0, Math.max(0, routes.length - 5)), chars = Math.floor((W - 24) / 6);
   g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 62); win(0, 62, W, 100); win(0, 162, W, H - 162);
   text("JOURNEY", 12, 10, "#fff070");
+  text("LEFT/RIGHT: MAP", 72, 10, "#a0a8c0");
   const count = "SHARDS " + shardCount() + "/3"; text(count, W - 12 - tw(count), 10, "#a0d8f8");
   journeyObjective().forEach((line, i) => text(line.slice(0, chars), 12, 30 + i * 12));
   routes.slice(from, from + 5).forEach((d, i) => {
@@ -1376,6 +1380,56 @@ function drawJourney() {
   }
   const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
   text(("UP/DOWN: ROUTE  " + back + ": BACK").slice(0, chars), 12, H - 14, "#fff070");
+}
+function journeyAnchor() {
+  if (map.kind === "world") return { x: P.x, y: P.y, label: state.air && state.air.aboard ? "ABOARD THE PRISM SKIFF." : "ON THE WORLD MAP." };
+  let landmark = "Town", label = "INSIDE TOWN";
+  if (map.kind === "dungeon") { const d = D.dungeons[map.dungeon]; landmark = d.landmark; label = "INSIDE " + pretty(d.name); }
+  else if (map.kind === "village") { landmark = D.village.landmark; label = "INSIDE " + pretty(D.village.name); }
+  else if (map.kind === "interior") {
+    const opening = (D.interiors[map.name] || {}).opened_by || {};
+    landmark = opening.map === "overworld" ? opening.landmark : "Town"; label = "INSIDE " + pretty(map.name);
+  }
+  const at = find(D.world, landmark);
+  return at ? { x: at[0], y: at[1], label } : null;
+}
+function drawJourneyMap() {
+  const routes = journeyRoutes(), selected = clamp(menu.ii, 0, Math.max(0, routes.length - 1)), d = routes[selected];
+  const height = D.world.length, width = D.world[0].length;
+  const cell = Math.max(1, Math.min(8, Math.floor((W - 32) / width), Math.floor(140 / height)));
+  const x0 = Math.floor((W - width * cell) / 2), y0 = 48 + Math.floor((140 - height * cell) / 2);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 192, W, H - 192);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 192, W, 1);
+  text("MAP", 12, 10, "#fff070"); text("LEFT/RIGHT: NOTES", 60, 10, "#a0a8c0");
+  const count = (selected + 1) + "/" + routes.length; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  const anchor = journeyAnchor(), chars = Math.floor((W - 24) / 6), unlocked = airUnlocked();
+  const dock = find(D.world, "AirshipPad"), skiff = state.air || (dock && { x: dock[0], y: dock[1] });
+  const skiffHere = unlocked && !(state.air && state.air.aboard) && anchor && skiff && anchor.x === skiff.x && anchor.y === skiff.y;
+  text(((anchor ? anchor.label : "WORLD ENTRANCE UNKNOWN.") + (skiffHere ? " SKIFF HERE." : "")).slice(0, chars), 12, 22);
+  text((map.kind === "world" ? "YOU +" : "ENTRANCE +") + "  SKIFF S  WAY O", 12, 34, "#a0d8f8");
+  g.fillStyle = "#86a9bf"; g.fillRect(x0 - 2, y0 - 2, width * cell + 4, height * cell + 4);
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+    const r = D.rects.tiles["wm:" + D.world[y][x] + "#0"];
+    if (r) g.drawImage(IM.tiles, r[0], r[1], 16, 16, x0 + x * cell, y0 + y * cell, cell, cell);
+    else { g.fillStyle = "#243848"; g.fillRect(x0 + x * cell, y0 + y * cell, cell, cell); }
+  }
+  const valid = p => p && Number.isInteger(p.x) && Number.isInteger(p.y) && p.x >= 0 && p.y >= 0 && p.x < width && p.y < height;
+  const mark = (p, glyph, color) => { if (valid(p)) text(glyph, x0 + p.x * cell + Math.floor(cell / 2) - 2, y0 + p.y * cell + Math.floor(cell / 2) - 3, color, "#080c20"); };
+  for (const w of D.waystones || []) if (state.ways.has(w.id)) mark(w, "O", "#d7b5ff");
+  if (unlocked && !(state.air && state.air.aboard)) mark(skiff, "S", "#fff070");
+  const destination = d && find(D.world, d.landmark);
+  if (destination) {
+    const x = x0 + destination[0] * cell, y = y0 + destination[1] * cell;
+    g.fillStyle = "#ffffff"; g.fillRect(x, y, cell, 1); g.fillRect(x, y + cell - 1, cell, 1); g.fillRect(x, y, 1, cell); g.fillRect(x + cell - 1, y, 1, cell);
+  }
+  if (valid(anchor)) {
+    const x = x0 + anchor.x * cell + Math.floor(cell / 2), y = y0 + anchor.y * cell + Math.floor(cell / 2);
+    g.fillStyle = "#ffdf83"; g.fillRect(x - 2, y, 5, 1); g.fillRect(x, y - 2, 1, 5);
+  }
+  if (d) text((d.name + " - " + journeyStatus(d).word).slice(0, chars), 12, 198, "#ffffff");
+  const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
+  text(("UP/DOWN: ROUTE  " + back + ": BACK").slice(0, chars), 12, 210, "#fff070");
 }
 function drawStatus() {
   const m = roster()[menu.who];
