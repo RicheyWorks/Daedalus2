@@ -35,6 +35,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") bool IsWorkshopAlive() const;
     UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") bool IsWorkshopReady() const { return IsWorkshopAlive() && Run.Active() && bAvailable && ViewsReady() && ToolsReady(); }
     UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") bool WasBlueprintStudied(int32 Index) const { return Run.EverCompleted(Index); }
+    /** Frozen current model only; no file/profile/ever-completion mutation. */
+    bool CopyBlueprintSnapshot(int32& OutRule,int32& OutMask) const
+    { if (!IsWorkshopReady()) return false; const int32 Rule=Run.CurrentRule(),Mask=Run.Mask(); OutRule=Rule; OutMask=Mask; return true; }
     UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") bool IsCurrentComplete() const;
     UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") int32 BlueprintIndex() const { return Run.Active()?Run.CurrentRule():-1; }
     FString ControlLabel(EDaedalusBridgeAction Action,int32 Link) const;

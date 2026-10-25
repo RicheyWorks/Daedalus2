@@ -34,6 +34,9 @@ public:
     UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") bool IsWorkshopAlive() const;
     UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") bool IsWorkshopReady() const { return IsWorkshopAlive() && Run.Active() && bAvailable && ViewsReady() && ToolsReady(); }
     UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") bool WasBlueprintStudied(int32 Index) const { return Run.EverCompleted(Index); }
+    /** Frozen current model only; no file/profile/ever-completion mutation. */
+    bool CopyBlueprintSnapshot(int32& OutRule,daedalus::skyline::Grid& OutGrid) const
+    { if (!IsWorkshopReady()) return false; const int32 Rule=Run.CurrentRule(); const auto Grid=Run.Canvas(); OutRule=Rule; OutGrid=Grid; return true; }
     UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") bool IsCurrentComplete() const;
     UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") int32 BlueprintIndex() const { return Run.Active()?Run.CurrentRule():-1; }
     FString ControlLabel(EDaedalusSkylineAction Action,int32 Parameter) const;
