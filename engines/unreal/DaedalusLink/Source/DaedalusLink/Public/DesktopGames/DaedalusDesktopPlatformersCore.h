@@ -696,6 +696,12 @@ public:
         for(const auto& E:Enemies) {
             if(E.Jumper) F.AddCircle(E.X,E.Y,15,{150,50,50,255});
             else { F.AddRect(E.X-10,E.Y-18,20,26,{220,50,50,255}); F.AddCircle(E.X,E.Y-22,7,{200,100,100,255}); }
+            // Ordinary hits already change Health; keep surviving damage visible.
+            const int MaxHealth=E.Jumper?4:2;
+            const double Top=E.Y-(E.Jumper?28:42);
+            F.AddRect(E.X-MaxHealth*4-1,Top,MaxHealth*8+2,9,{20,20,40,255});
+            for(int N=0;N<MaxHealth;++N) F.AddRect(E.X-MaxHealth*4+1+N*8,Top+2,6,5,
+                N<E.Health?Color{255,215,100,255}:Color{70,70,90,255});
         }
         for(const auto& A:Attacks) {
             if(!A.Star) F.AddLine(A.X,A.Y,A.X+A.Direction*20,A.Y,{255,200,50,255},5);

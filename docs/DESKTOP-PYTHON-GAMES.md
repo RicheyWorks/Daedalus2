@@ -244,6 +244,12 @@ need a fresh press. The same Space / pad A controls and jump impulses remain;
 holding Jump does not repeat landing hops. Reset clears the timing state. Native
 controller feel and integration remain unverified.
 
+Shadow Ninja's ordinary enemies show compact **health pips** above their existing
+silhouette: two for walkers, four for jumpers. A surviving hit empties a pip,
+making damage visible without another helper label. Sword, star, spin, scoring
+and movement rules are retained. Native cue size, contrast and play acceptance
+remain unverified.
+
 Glowtrail Chase's matching blue openings in the central passage connect across
 the 560-pixel maze. Movement continues through either opening with its overshoot;
 pursuers can follow, and contact/dot collection remains continuous across the seam.

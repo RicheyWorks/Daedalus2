@@ -105,6 +105,23 @@ Reset and Driver pause/input checks. The six-step window does not pre-empt a
 physical wall arrival. No original fixture regenerated, broad platformer suite,
 repeated replay proof, engine build or native playtest was run for this change.
 
+### Shadow Ninja enemy health cues
+
+Ordinary enemies now carry compact health pips above their existing silhouette:
+two for walkers and four for jumpers, matching the existing spawn health. Gold
+pips empty after a sword, star or spin hit, making surviving damage visible. The
+cue follows each enemy's current position; defeated enemies and their pips leave
+together. There is no new helper label, hit timer, saved field, RNG draw or combat
+rule. Player readiness, boss health, scoring, movement and replay are retained.
+
+`desktop_ninja_enemy_health` / `ninja_enemy_health_test.cpp` passed 58/58 strict
+serial single-TU MSVC C++17 checks: full/partial health, retained silhouettes,
+moving coordinates, actual sword/star/spin damage, lethal removal and scores,
+presentation purity, 24 paired future steps and Reset cleanup. It uses the existing
+test seam. No broad platformer suite or repeated source/replay proof was run for
+this render-only slice. Native cue size, contrast, overlap and human play
+acceptance remain unverified.
+
 ### Other source repairs
 
 - One coherent CONTRA core replaces the concatenated/unreachable script structure. New and restarted sessions share the last revision's two-enemy start and pickup at (620,350), fixing its inconsistent three-enemy restart initializer.
