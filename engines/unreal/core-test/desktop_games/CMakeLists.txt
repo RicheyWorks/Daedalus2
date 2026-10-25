@@ -51,5 +51,6 @@ desktop_test(desktop_asteroids_voyage asteroids_voyage_test.cpp "")
 desktop_test(desktop_shooter_terminal shooter_terminal_test.cpp "")
 desktop_test(desktop_sega_terminal_pickup sega_terminal_pickup_test.cpp "")
 desktop_test(desktop_sega_boss_rehearsal sega_boss_rehearsal_test.cpp "")
+desktop_test(desktop_sega_enemy_health sega_enemy_health_test.cpp "")
 
 desktop_test(desktop_star_terminal_pickup star_terminal_pickup_test.cpp "")

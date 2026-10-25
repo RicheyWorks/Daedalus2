@@ -401,7 +401,14 @@ public:
             F.AddTriangle({Pilot.X-12,Pilot.Y},{Pilot.X-22,Pilot.Y-6},{Pilot.X-22,Pilot.Y+6},{255,200,50,255});
         }
         auto DrawEnemy=[&F](const Enemy& E){ if(E.Chaser) F.AddTriangle({E.X+10,E.Y},{E.X-12,E.Y-10},{E.X-12,E.Y+10},{255,100,100,255}); else { Ellipse(F,E.X,E.Y,12,8,{255,80,80,255},true);F.AddCircle(E.X+5,E.Y,5,{255,150,150,255}); } };
-        for(const auto& E:Enemies) DrawEnemy(E);
+        for(const auto& E:Enemies) {
+            DrawEnemy(E);
+            const int MaxHealth=E.Chaser?4:2;
+            const double Top=E.Y-(E.Chaser?23:21);
+            F.AddRect(E.X-MaxHealth*4-1,Top,MaxHealth*8+2,9,{0,0,40,255});
+            for(int N=0;N<MaxHealth;++N) F.AddRect(E.X-MaxHealth*4+1+N*8,Top+2,6,5,
+                N<E.Health?Color{255,215,100,255}:Color{70,70,90,255});
+        }
         for(const auto& B:Bullets) {F.AddCircle(B.X,B.Y,4,{255,255,100,255});F.AddCircle(B.X,B.Y,2,White);}
         for(const auto& P:Powerups) {
             if(P.Kind==PowerKind::Speed) Polygon(F,{{P.X,P.Y-8},{P.X+8,P.Y},{P.X,P.Y+8},{P.X-8,P.Y}},Green);
