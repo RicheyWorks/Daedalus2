@@ -955,6 +955,34 @@ function drawAirship(ox, oy) {
   g.restore();
   return a.aboard;
 }
+/* Read the current interaction without trying it: actions, travel and lazy skiff setup stay in their original handlers. */
+function fieldInteractionCue() {
+  if ((D.realm_key || "prism") !== "prism" || mode !== "field" || dlg || fade || P.moving > 0 || settingsFramePaused) return "";
+  if (flying()) return (D.world_tiles[at(P.x, P.y)] || {}).airship_lands ? "LAND" : "NO LANDING HERE";
+  if (map.kind === "world" && airUnlocked()) {
+    const dock = state.air ? null : find(D.world, "AirshipPad"), ship = state.air || (dock && { x: dock[0], y: dock[1], aboard: false });
+    if (ship && !ship.aboard && ship.x === P.x && ship.y === P.y) return "BOARD";
+  }
+  const [dx, dy] = DIRS[P.dir], tx = P.x + dx, ty = P.y + dy, t = at(tx, ty);
+  if (map.kind === "world" && t === "AirshipPad" && follyDungeon()) return "EXAMINE";
+  if (npcAt(tx, ty) || (t === "Counter" && npcAt(tx + dx, ty + dy))) return "TALK";
+  if (t === "Chest" || t === "ChestOpen") return t === "ChestOpen" ? "CHECK" : "OPEN";
+  if (t === "BossGate") { const b = (D.dungeons[map.dungeon] || {}).boss_data; return b && !state.beaten.has(b.name) ? "CHALLENGE" : ""; }
+  if (t === "Barrel" || t === "Crate" || t === "Pot") return opened.has(map.kind + tx + "," + ty) ? "CHECK" : "SEARCH";
+  if (t === "Water" && (map.kind === "village" || map.kind === "town") && (D.fish || []).length) return "FISH";
+  if (t === "Fountain") return "DRINK";
+  if (t === "Bookcase") return "READ";
+  if (t === "Throne") return "EXAMINE";
+  return "";
+}
+function drawFieldInteractionCue(oy) {
+  const action = fieldInteractionCue(); if (!action) return;
+  const blocked = action === "NO LANDING HERE", label = blocked ? action : titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, "") + ": " + action;
+  const width = tw(label) + 16, x = Math.floor((W - width) / 2);
+  const focusBottom = oy + Math.max(P.fy, (P.y + DIRS[P.dir][1]) * T) + T, y = focusBottom >= H - 26 ? 6 : H - 22;
+  g.fillStyle = "#080c20"; g.fillRect(x, y, width, 16); g.fillStyle = "#4d6c8a"; g.fillRect(x, y, width, 1); g.fillRect(x, y + 15, width, 1);
+  text(label, x + 8, y + 4, blocked ? "#f87878" : "#fff070");
+}
 function drawField() {
   const gw = map.grid[0].length, gh = map.grid.length;
   const cx = clamp(P.fx + 8 - W / 2, 0, Math.max(0, gw * T - W)), cy = clamp(P.fy + 8 - H / 2, 0, Math.max(0, gh * T - H));
@@ -990,6 +1018,7 @@ function drawField() {
       }
     }
   }
+  drawFieldInteractionCue(oy);
 }
 
 /* ---------- fishing (data.json fish, from data/rpg/prism-fish.json) ----------
