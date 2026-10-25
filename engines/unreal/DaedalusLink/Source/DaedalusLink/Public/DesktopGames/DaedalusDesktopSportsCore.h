@@ -531,6 +531,7 @@ public:
     }
     void Step(const Input& I) override {
         if(!Data.DodgeBall.InAir || Data.DodgeBall.Owner>=0) PassReceiver=-1;
+        const bool Guarding=I.Dash && !I.FirePressed; // A fresh throw retains its complete legacy catch/rethrow ordering.
         const bool Confirm=I.FirePressed || I.ActionPressed;
         const bool AnyButton=Confirm || I.JumpPressed || I.DashPressed;
         const bool UpDown=I.Up || I.PadUp,DownDown=I.Down || I.PadDown;
@@ -581,7 +582,7 @@ public:
         }
         if(B.InAir && !IsTeamPassInFlight()) for(int N=0;N<3;++N) {
             Player& P=Data.Players[N];const double Radius=P.OnGround ? 22 : 35;
-            if(P.Health>0 && !P.HasBall && Distance(B.X,B.Y,P.X,P.Y)<Radius && (!P.OnGround || I.Fire)) {
+            if(P.Health>0 && !P.HasBall && Distance(B.X,B.Y,P.X,P.Y)<Radius && (!P.OnGround || I.Fire || Guarding)) {
                 if(Catch(B,P,N)) { Burst(P.X,P.Y,{255,255,200,255},8,2.5);break; }
             }
         }
@@ -589,7 +590,8 @@ public:
             Player& P=Data.Players[N];
             if(P.Health>0 && !P.HasBall && Rng.Unit()<0.12 && Catch(B,P,N)) {PassReceiver=-1;break;}
         }
-        if(I.Fire) for(int N=0;N<3;++N) if(Data.Players[N].HasBall && Data.Players[N].ThrowCooldown==0) {
+        // Holding the pass/catch control keeps possession; a fresh throw above is still explicit.
+        if(I.Fire && !Guarding) for(int N=0;N<3;++N) if(Data.Players[N].HasBall && Data.Players[N].ThrowCooldown==0) {
             AimAndThrow(N);break;
         }
         for(int N=3;N<6;++N) {
@@ -661,7 +663,7 @@ public:
         const Player& P=Data.Players[Index];
         if(P.Health<=0 || P.HasBall) return 0;
         // Both Step's gate and Catch's radius apply: <22 normal, <18 super,
-        // <34 airborne. Ground catches still require held Fire; airborne is automatic.
+        // <34 airborne. Ground catches require held Fire or Dash; airborne is automatic.
         return !P.OnGround?34.0:(Data.DodgeBall.PowerBall?18.0:22.0);
     }
     Status GetStatus() const override {
@@ -683,7 +685,8 @@ public:
             else Text+=BallReadiness()+" | "+JumpReadiness()
                 +". Move the trio together. Held Space/Z/J/pad A catches and can immediately rethrow; pad X/RB throws on fresh press. "
                 +"Charge: keyboard Up/W or original stick up beyond 0.5; hat movement alone does not charge. "
-                +"Ground catch requires held Fire at <22 normal / <18 super pixels; airborne catch is automatic at <34. Attack throws can hit teammates; V/Y/LB passes are safe.";
+                +"Hold V/Y/LB to catch and keep the ball, even with Fire held. Let go of Fire first, then release and press V/Y/LB again to pass; a fresh Fire press while carrying still throws. "
+                +"Ground catch is <22 normal / <18 super pixels; airborne catch is automatic at <34. Attack throws can hit teammates; V/Y/LB passes are safe.";
         }
         return {Data.HumanScore,LivingPlayers(),End,Data.Mode==Phase::Won,Text};
     }
@@ -752,7 +755,7 @@ public:
             F.AddText(16,25,RosterText(false),White,10);F.AddText(535,25,RosterText(true),White,10);
             F.AddText(12,563,"Move ALL 3: keys/stick/hat | Jump: Shift/pad B | "+JumpReadiness(),White,11);
             F.AddText(12,576,BallReadiness(),IsHumanSuperCharged()?Yellow:White,11);
-            F.AddText(12,589,"Fire: Space/Z/J/A hold catches + rethrows; X/RB fresh throw | Charge: Up/W or stick up; hat alone does not charge",White,11);
+            F.AddText(12,589,"Space/Z/J/A: throw/rethrow | X/RB: fresh throw | Hold V/Y/LB: catch + keep | Charge: W/Up/stick up",White,11);
         } else if(Data.Mode==Phase::CountrySelect) {
             F.AddText(135,65,"CHOOSE YOUR COUNTRY",White,38);
             for(int N=0;N<8;++N) F.AddText(125,135+N*42,std::string(N==Data.SelectedCountry ? "> " : "  ")+Countries[N].Name,Countries[N].Tint,24);
@@ -770,7 +773,7 @@ public:
             F.AddText(190,265,"8 countries - 3 vs 3 - four rounds",White,20);
             F.AddText(150,340,"Space / Enter / pad A: choose country",White,24);
             F.AddText(120,400,"Move ALL 3: WASD/arrows, left stick or hat | Jump: Shift/pad B",White,16);
-            F.AddText(120,435,"Throw/catch: Space/J/A | Fresh throw: X/RB | Pass: V/Y/LB",White,16);
+            F.AddText(120,435,"Throw: Space/J/A or X/RB | V/Y/LB: pass; hold to catch + keep",White,16);
             F.AddText(120,470,"Charge: hold keyboard Up/W or stick up; super at charge 31/60",White,16);
             F.AddText(120,505,"Hat moves independently; jumping catches automatically in range.",White,16);
             F.AddText(195,545,"Friendly hits are possible. Host R/Restart clears the session.",White,14);
@@ -854,9 +857,9 @@ private:
                 +(Teammate>=0?" | pass V/Y -> P"+std::to_string(Teammate+1):" | no living teammate to pass to");
         }
         const Ball& B=Data.DodgeBall;
-        if(B.Owner>=3 && B.Owner<6) return "C"+std::to_string(B.Owner-2)+" holds ball | Ground catch: hold Fire; airborne catch: automatic";
+        if(B.Owner>=3 && B.Owner<6) return "C"+std::to_string(B.Owner-2)+" holds ball | Catch + keep: hold V/Y/LB; airborne catch: automatic";
         if(B.InAir) return std::string(B.PowerBall?"SUPER ball flying (2 HP)":"Normal ball flying (1 HP)")
-            +" | Ground catch: hold Fire (<"+(B.PowerBall?"18":"22")+"px); airborne: automatic (<34px)";
+            +" | Hold V/Y/LB: catch + keep (<"+(B.PowerBall?"18":"22")+"px); airborne: automatic (<34px)";
         return "Loose ball: approach to pick up (<24px) | Friendly hits remain possible";
     }
     std::string JumpReadiness() const {
