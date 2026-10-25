@@ -544,6 +544,9 @@ class ShadowNinjaGame final : public Game {
     platformers::NinjaBoss Boss;
     bool BossActive=false,Over=false,Won=false;
     int SpawnTimer=0,BossPulseCueFrames=0;
+    int Option=0,CourseStage=0;
+    inline static constexpr std::array<Vec,3> CourseLights{{{410,290},{640,210},{765,140}}};
+    inline static constexpr std::array<Vec,3> CourseAnchors{{{175,380},{410,300},{640,220}}};
     std::int64_t Score=0;
     std::uint32_t SessionSeed=730;
     Random Rng; Input Previous;
@@ -556,6 +559,21 @@ class ShadowNinjaGame final : public Game {
         --Player.Health; Player.Invincible=Frames;
         if(Player.Health<=0) { Player.Health=0; Over=true; }
     }
+    void ReturnToTerrace(const Input& I) {
+        const Vec Anchor=CourseAnchors[static_cast<std::size_t>(CourseStage)];
+        Player={};Player.X=Anchor.X;Player.Y=Anchor.Y;
+        Player.JumpWasDown=I.Jump || I.JumpPressed;
+        Attacks.clear();
+    }
+    void StepCourse() {
+        for(auto& A:Attacks) A.Update();
+        Attacks.erase(std::remove_if(Attacks.begin(),Attacks.end(),[](const auto& A){return A.Life<=0;}),Attacks.end());
+        if(!Gold.empty() && Distance(Player.X,Player.Y,Gold.front().X,Gold.front().Y)<20) {
+            platformers::AddScore(Score,50);++CourseStage;
+            if(CourseStage==static_cast<int>(CourseLights.size())) {Gold.clear();Won=true;Over=true;}
+            else Gold.front()=CourseLights[static_cast<std::size_t>(CourseStage)];
+        }
+    }
 public:
     static constexpr std::size_t MaxAttacks=64,MaxEnemies=5;
     static constexpr int BossScoreThreshold=1200,PulseReceiptFrames=8;
@@ -563,9 +581,15 @@ public:
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed;
         Player={}; Attacks.clear(); Enemies.clear(); Gold.clear(); Boss={};
-        BossActive=false; Over=false; Won=false; SpawnTimer=0; BossPulseCueFrames=0; Score=0; Previous={}; Rng.Seed(Seed);
-        for(int I=0;I<5;++I) Gold.push_back({static_cast<double>(Rng.Int(80,700)),static_cast<double>(Rng.Int(200,400))});
+        BossActive=false; Over=false; Won=false; SpawnTimer=0; BossPulseCueFrames=0; Score=0; CourseStage=0; Previous={}; Rng.Seed(Seed);
+        if(Option==1) Gold.push_back(CourseLights.front());
+        else for(int I=0;I<5;++I) Gold.push_back({static_cast<double>(Rng.Int(80,700)),static_cast<double>(Rng.Int(200,400))});
     }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
     bool SourceControllerButton(int Button) override {
         // The host dispatches fresh, non-repeat events separately from held jump/fire.
         if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
@@ -586,7 +610,12 @@ public:
         const int HatX=static_cast<int>(I.PadRight)-static_cast<int>(I.PadLeft);
         const int HatY=static_cast<int>(I.PadUp)-static_cast<int>(I.PadDown);
         Player.Update(I,platformers::NinjaPlatforms(),HatX,HatY);
-        if(Player.Health<=0) { Player.Health=0; Over=true; return; }
+        if(Player.Health<=0) {
+            if(Option==1) ReturnToTerrace(I);
+            else {Player.Health=0;Over=true;}
+            return;
+        }
+        if(Option==1) {StepCourse();return;}
         --SpawnTimer;
         if(SpawnTimer<=0 && Enemies.size()<5) {
             const bool Jumper=Rng.Int(0,1)==1;
@@ -644,6 +673,8 @@ public:
         }
     }
     Status GetStatus() const override {
+        if(Option==1) return {Score,Player.Health,Over,Won,Won?"Terrace climb clear! A/Start, Enter/Space or R/Restart replays."
+            :"Terrace climb: "+std::to_string(CourseStage)+"/3 lights. Jump to the next glow; hold Up at a wall to climb. Pit falls return to the last terrace."};
         std::string Text=Won?"BOSS DEFEATED! A/Start, Enter/Space or R/Restart replays."
             :(Over?"GAME OVER. A/Start, Enter/Space or R/Restart replays.":ReadinessText());
         if(!Over) {
@@ -692,7 +723,10 @@ public:
                 }
             } else if(Player.AttackCooldown>10) F.AddLine(X+Player.Facing*20,Y-10,X+Player.Facing*38,Y-5,{255,200,50,255},4);
         }
-        for(const auto& G:Gold) { F.AddCircle(G.X,G.Y,6,{255,200,50,255}); F.AddCircle(G.X,G.Y,3,{255,255,200,255}); }
+        for(const auto& G:Gold) {
+            if(Option==1) F.AddCircle(G.X,G.Y,13,{120,100,30,255});
+            F.AddCircle(G.X,G.Y,6,{255,200,50,255}); F.AddCircle(G.X,G.Y,3,{255,255,200,255});
+        }
         for(const auto& E:Enemies) {
             if(E.Jumper) F.AddCircle(E.X,E.Y,15,{150,50,50,255});
             else { F.AddRect(E.X-10,E.Y-18,20,26,{220,50,50,255}); F.AddCircle(E.X,E.Y-22,7,{200,100,100,255}); }
@@ -718,20 +752,25 @@ public:
             F.AddRect(Boss.X-40,Boss.Y-70,80,8,{255,0,0,255}); F.AddRect(Boss.X-40,Boss.Y-70,std::max(0.0,80.0*Boss.Health/25),8,{0,255,0,255});
         }
         F.AddText(30,20,"SCORE: "+std::to_string(Score),{255,200,50,255});
-        F.AddText(630,20,"HEALTH: "+std::to_string(Player.Health),{220,50,50,255}); F.AddText(350,20,"LEVEL: 1",{80,150,255,255},16);
+        F.AddText(630,20,Option==1?"PRACTICE":"HEALTH: "+std::to_string(Player.Health),Option==1?Color{90,220,160,255}:Color{220,50,50,255});
+        F.AddText(350,20,Option==1?"LIGHTS: "+std::to_string(CourseStage)+"/3":"LEVEL: 1",{80,150,255,255},16);
         if(!Over) {
-            F.AddText(30,50,ReadinessText(),White,13);
-            if(!BossActive) F.AddText(30,72,"Boss entry: "+std::to_string(Score)+" / "+std::to_string(BossScoreThreshold),{255,200,50,255},14);
-            else if(Boss.IsTelegraphing()) {
-                F.AddText(30,72,"BOSS PULSE IN "+std::to_string(Boss.AttackTimer)+" STEPS: current reach",{255,150,50,255},16);
-                F.AddText(30,94,Boss.InStrikeRange(Player)?"Inside current pulse reach. Contact/enemies can still hurt."
-                    :"Outside current pulse reach. Boss moves before striking; watch contact/enemies.",White,13);
-            } else if(BossPulseCueFrames>0) F.AddText(30,72,"Boss pulse fired (instant strike; hit not implied)",{255,150,50,255},14);
+            if(Option==1) F.AddText(30,50,"Reach the glowing light. Pit falls return you to the last terrace.",White,15);
+            else {
+                F.AddText(30,50,ReadinessText(),White,13);
+                if(!BossActive) F.AddText(30,72,"Boss entry: "+std::to_string(Score)+" / "+std::to_string(BossScoreThreshold),{255,200,50,255},14);
+                else if(Boss.IsTelegraphing()) {
+                    F.AddText(30,72,"BOSS PULSE IN "+std::to_string(Boss.AttackTimer)+" STEPS: current reach",{255,150,50,255},16);
+                    F.AddText(30,94,Boss.InStrikeRange(Player)?"Inside current pulse reach. Contact/enemies can still hurt."
+                        :"Outside current pulse reach. Boss moves before striking; watch contact/enemies.",White,13);
+                } else if(BossPulseCueFrames>0) F.AddText(30,72,"Boss pulse fired (instant strike; hit not implied)",{255,150,50,255},14);
+            }
         }
-        F.AddText(60,575,"Jump: A/Space  Sword: B/X  Star: Y/RB  Spin: LB  Wall: up/down",White,16);
+        F.AddText(60,575,Option==1?"Move: Left/Right, stick or hat   Jump: A/Space   Wall: hold Up"
+            :"Jump: A/Space  Sword: B/X  Star: Y/RB  Spin: LB  Wall: up/down",White,16);
         if(Over) {
             F.AddRect(180,240,440,130,{20,20,40,240});
-            F.AddText(260,270,Won?"BOSS DEFEATED!":"GAME OVER",Won?Color{255,200,50,255}:Color{220,50,50,255},32);
+            F.AddText(Option==1?215:260,270,Won?(Option==1?"TERRACE CLIMB CLEAR!":"BOSS DEFEATED!"):"GAME OVER",Won?Color{255,200,50,255}:Color{220,50,50,255},Option==1?28:32);
             F.AddText(210,325,"A/Start, Enter/Space or R/Restart: fresh run",White,16);
         }
     }

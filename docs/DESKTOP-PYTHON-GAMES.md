@@ -250,6 +250,14 @@ making damage visible without another helper label. Sword, star, spin, scoring
 and movement rules are retained. Native cue size, contrast and play acceptance
 remain unverified.
 
+Shadow Ninja also offers **Terrace climb**, an optional three-light practice route
+through its existing room. Two terrace jumps lead to a wall-climb finish. Pit falls
+return to the last terrace while keeping collected lights; a lower-platform landing
+still uses ordinary movement. The same jump and wall controls apply. The course
+has no enemies or boss, and Adventure keeps its original rules. A fresh result
+retry keeps the mode; changing modes starts over. Native focus/layout and human
+course acceptance remain unverified.
+
 Glowtrail Chase's matching blue openings in the central passage connect across
 the 560-pixel maze. Movement continues through either opening with its overshoot;
 pursuers can follow, and contact/dot collection remains continuous across the seam.
