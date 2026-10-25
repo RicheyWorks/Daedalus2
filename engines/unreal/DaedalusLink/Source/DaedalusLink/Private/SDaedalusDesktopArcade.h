@@ -65,11 +65,13 @@ private:
 	FText LeaderboardText() const;
 	FText MinesweeperDifficultyText() const;
 	EVisibility StarVisibility() const;
+	EVisibility PongVisibility() const;
 	EVisibility MinesweeperVisibility() const;
 	EVisibility LeaderboardVisibility() const;
 	TSharedRef<SWidget> MakeGameRow(TSharedPtr<FString> Item) const;
 	void SelectCatalogChoice(TSharedPtr<FString> Item, ESelectInfo::Type Selection);
 	TSharedRef<SWidget> MakeAction(const TCHAR* Label, FSimpleDelegate Action, bool bReplacesRun = false, bool bFocusable = false);
+	TSharedRef<SWidget> MakePongMode(const TCHAR* Label, int32 Option);
 
 	TWeakObjectPtr<ADaedalusDesktopArcade> Game;
 	FTSTicker::FDelegateHandle CoreTickHandle;

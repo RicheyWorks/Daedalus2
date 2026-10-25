@@ -16,6 +16,7 @@
 #include "Types/NavigationMetaData.h"
 #include "Types/PaintArgs.h"
 #include "Widgets/Input/SButton.h"
+#include "Widgets/Input/SCheckBox.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/Layout/SScrollBox.h"
@@ -285,6 +286,12 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::StatusText).Font(DAUI::Font(13)).AutoWrapText(true).ColorAndOpacity(FLinearColor(0.7f, 0.85f, 1.f))]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::PongVisibility)
+				+ SWrapBox::Slot()[MakePongMode(TEXT("Match"), 0)]
+				+ SWrapBox::Slot()[MakePongMode(TEXT("Rally practice"), 1)]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
 				SNew(SHorizontalBox).Visibility(this, &SDaedalusDesktopArcade::StarVisibility)
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
 				[
@@ -512,6 +519,23 @@ TSharedRef<SWidget> SDaedalusDesktopArcade::MakeAction(const TCHAR* Label, FSimp
 		[SNew(STextBlock).Text(FText::FromString(Label))];
 }
 
+TSharedRef<SWidget> SDaedalusDesktopArcade::MakePongMode(const TCHAR* Label, int32 Option)
+{
+	return SNew(SCheckBox).IsFocusable(true)
+		.Style(&FCoreStyle::Get().GetWidgetStyle<FCheckBoxStyle>("ToggleButtonCheckbox"))
+		.ToolTipText(FText::FromString(TEXT("Changing mode starts over. Session best lasts until Restart or a mode change.")))
+		.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && !Actor->GetState().bSavePending; })
+		.IsChecked_Lambda([this, Option]() { const ADaedalusDesktopArcade* Actor = Game.Get();
+			return Actor && Actor->GetSelectedGameId() == TEXT("pong") && Actor->GetGameOption() == Option ? ECheckBoxState::Checked : ECheckBoxState::Unchecked; })
+		.OnCheckStateChanged_Lambda([this, Option](ECheckBoxState State)
+		{
+			if (State != ECheckBoxState::Checked) return;
+			if (ADaedalusDesktopArcade* Actor = Game.Get())
+				if (Actor->GetSelectedGameId() == TEXT("pong") && Actor->GetGameOption() != Option && Actor->SetGameOption(Option)) FocusGame();
+		})
+		[SNew(STextBlock).Text(FText::FromString(Label)).Font(DAUI::Font(18))];
+}
+
 TSharedRef<SWidget> SDaedalusDesktopArcade::MakeGameRow(TSharedPtr<FString> Item) const
 {
 	FString Label = Item.IsValid() ? *Item : FString();
@@ -654,6 +678,12 @@ FText SDaedalusDesktopArcade::MinesweeperDifficultyText() const
 	return FText::FromString(FString::Printf(TEXT("Current board: %s"), Board));
 }
 
+EVisibility SDaedalusDesktopArcade::PongVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("pong") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
@@ -682,7 +712,9 @@ FText SDaedalusDesktopArcade::ControlText() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	const FString Id = Actor ? Actor->GetSelectedGameId() : FString();
-	FString Text = TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ");
+	FString Text = Id == TEXT("pong")
+		? TEXT("Up/Down, W/S, D-pad or left stick: paddle. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ")
+		: TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ");
 	if (Id == TEXT("minesweeper")) Text += TEXT("F1 / left-stick click: How to play. Mouse left: reveal; right: flag; middle: open around a number when its flags match. J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
 	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: throw press only; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
@@ -691,6 +723,7 @@ FText SDaedalusDesktopArcade::ControlText() const
 	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += Id == TEXT("asteroids")
 		? TEXT("Left/Right: turn; Up: thrust; Space/J/Z or pad face/bumper: shoot.")
 		: TEXT("Space/J/Z or pad face/bumper: shoot.");
+	else if (Id == TEXT("pong")) Text += TEXT("Move at impact to add spin. Space / pad A or J / pad X: serve early.");
 	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or A/X: kick.");
 	else Text += TEXT("J/Z/X: fire/sword, Space/A: jump/confirm, K/B/Enter: action. Source title screens use the cabinet launcher.");
 	return FText::FromString(Text);

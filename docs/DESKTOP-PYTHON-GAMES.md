@@ -191,6 +191,18 @@ does not prove rig compatibility, animation playback, collisions or gameplay. Ex
 limits remain metres, applied scale,
 bottom-center origin, -Y front, blocky/beveled forms and bounded material/triangle budgets.
 
+Pong also offers an optional **Rally practice** mode through two native toggle
+buttons. A larger paddle, slower ball and full-height return wall support a
+player-only rally count and session best. Misses keep the best, reset the rally
+and give a two-second preparation window; Space / pad A can serve early. Every
+five player returns earns a brief celebration without ending play. The counters
+occupy a separate strip above the court. Restart or a mode change starts a new
+session; the best is not persisted. Selecting the active mode does not restart.
+The default **Match** retains its source rules, endless score and original frame.
+Mode selection uses existing SetGameOption, native checked state and focus/input
+cleanup; no new actor API, save format or assets are introduced. Native toggle,
+viewport/focus/controller and difficulty/feel acceptance remains unverified.
+
 ## Evidence stages and acceptance
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,
