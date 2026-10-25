@@ -1218,7 +1218,7 @@ function menuTick() {
       if (map.kind === "dungeon") { sfx("LOCKED"); menu.msg = D.dungeons[map.dungeon].optional ? "THE RATTLING GEARS SCATTER THE INK. SAVE OUTSIDE." : "A WARDEN'S PRESENCE SCATTERS THE INK. SAVE OUTSIDE."; return; }
       menu.msg = saveGame() ? "YOUR JOURNEY IS WRITTEN DOWN." : "THE JOURNEY COULD NOT BE WRITTEN."; if (menu.msg[0] === "Y") toast("Journey saved", saveSummary());
     }
-    else if (c === "BESTIARY") { menu.sub = "bestiary"; menu.ii = 0; }
+    else if (c === "BESTIARY") { menu.sub = "bestiary"; menu.ii = 0; if ((D.realm_key || "prism") === "prism") { menu.bp = 0; menu.bc = 0; } }
     else if (c === "FISH") { menu.sub = "fish"; menu.ii = 0; if ((D.realm_key || "prism") === "prism") menu.fishHelp = false; }
     else if (c === "JOURNEY") {
       menu.sub = "journey"; menu.jp = 0;
@@ -1319,7 +1319,10 @@ function menuTick() {
     if ((D.realm_key || "prism") === "prism") return anglerGuideTick();
     const n = (D.fish || []).length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return;
   }
-  if (sub === "bestiary") { const n = beastList().length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
+  if (sub === "bestiary") {
+    if ((D.realm_key || "prism") === "prism") return bestiaryTick();
+    const n = beastList().length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return;
+  }
   if (sub === "status") { menuWho(); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "order") {
     if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } hit("a"); if ((D.realm_key || "prism") === "prism") hit("start"); sfx("TICK"); return; }
@@ -1925,11 +1928,53 @@ function meet(foes) { foes.forEach(f => { const k = beastKey(f), e = state.seen[
 function fell(foes) { foes.forEach(f => { const e = state.seen[beastKey(f)]; if (e) e.felled++; }); }
 const beastList = () => Object.keys(state.seen).sort((a, b) => (beastInfo(a).lv || 0) - (beastInfo(b).lv || 0) || String(beastInfo(a).name).localeCompare(beastInfo(b).name));
 const BEAST_TOTAL = () => Object.keys(D.foes).length + D.dungeons.filter(d => d.boss_data).length;
+const CONDITION_GUIDE = {
+  poison: ["BITES EACH ROUND. FIELD: EVERY FOUR STEPS, INCLUDING RESERVES. PARTY HP STOPS AT 1.", ""],
+  sleep: ["SKIPS ACTIONS. HIT DAMAGE WAKES. POISON AND BURN TICKS DO NOT.", ""],
+  protect: ["HIT DAMAGE X0.6, EXCEPT POISON AND BURN. DEFEND ALSO REDUCES ENEMY HITS.", ""],
+  haste: ["TURN SPEED X1.5. NO EXTRA ACTIONS OR GUARANTEED FIRST TURN.", "APPLYING SLOW REPLACES IT."],
+  slow: ["TURN SPEED X0.6. NO CHANGE TO ACTION COUNT.", "APPLYING HASTE REPLACES IT."],
+  confuse: ["ATTACKS ANOTHER STANDING ALLY OR FOE. HIT DAMAGE CLEARS IT. TICKS DO NOT.", "NO DIRECT CURE ITEM."],
+  bind: ["SKIPS CHOOSING AND QUEUED ACTIONS.", "NO DIRECT CURE ITEM."],
+  paralyze: ["SKIPS CHOOSING AND QUEUED ACTIONS.", "NO DIRECT CURE ITEM."],
+  blind: ["ORDINARY ATTACKS MISS 50 PERCENT. SPELLS, ITEMS AND SUMMONS IGNORE BLIND.", "NO DIRECT CURE ITEM."],
+  burn: ["BITES EACH ROUND. PARTY HP STOPS AT 1. NO FIELD DAMAGE.", "NO DIRECT CURE ITEM."],
+};
+const conditionList = () => Object.keys(CONDITION_GUIDE).filter(key => STATUS[key]);
+function bestiaryTick() {
+  const confirm = hit("a"), back = hit("b"), left = hit("left"), right = hit("right");
+  if (confirm || back) { hit("up"); hit("down"); clearActionButtons(); menu.sub = null; sfx("TICK"); return; }
+  if (left || right) { menu.bp = menu.bp ? 0 : 1; hit("up"); hit("down"); sfx("TICK"); return; }
+  if (menu.bp) menuMove("bc", conditionList().length);
+  else { const n = beastList().length; if (n) menuMove("ii", n); }
+}
+function drawConditionGuide() {
+  const list = conditionList(), selected = clamp(menu.bc || 0, 0, list.length - 1), key = list[selected], entry = STATUS[key], split = W < 320 ? 104 : 112;
+  const columns = Math.floor((W - split - 24) / 6);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 36); g.fillRect(0, 182, W, H - 182);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 35, W, 1); g.fillRect(0, 181, W, 1); g.fillRect(split, 36, 1, 145);
+  text("CONDITIONS", 12, 10, "#fff070"); const count = (selected + 1) + "/" + list.length; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  text("COMPANION GUIDE / LEFT/RIGHT: FOES", 12, 22, "#a0a8c0");
+  list.forEach((k, i) => { const y = 44 + i * 12; if (i === selected) { g.fillStyle = "#26344c"; g.fillRect(6, y - 2, split - 12, 12); cursor(10, y); } text(STATUS[k].word, 22, y, STATUS[k].color); });
+  text(entry.word + " / " + entry.tag, split + 12, 44, entry.color);
+  const cures = Object.entries(GEAR).filter(([, it]) => ((it.effect || "").match(/cure (\w+)/) || [])[1] === key).map(([name]) => name.toUpperCase());
+  const remedy = cures.length ? cures.join(" OR ") + ": CURE." : CONDITION_GUIDE[key][1];
+  let y = 60;
+  [[ROUNDS[key] ? ROUNDS[key] + " ROUND-END TICKS." : "NO ROUND EXPIRY.", "#a0a8c0"], [CONDITION_GUIDE[key][0], "#ffffff"], [remedy, "#a8e0a0"]].forEach(([paragraph, color]) => {
+    if (paragraph) { wrap(paragraph, columns).forEach(line => { text(line, split + 12, y, color); y += 12; }); y += 4; }
+  });
+  text("TIMERS: FRONT AT ROUND END.", 12, 188, "#a0a8c0");
+  text("AFTER BATTLE: FRONT KEEPS ONLY POISON.", 12, 200, "#a0a8c0");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text("UP/DOWN " + confirm + "/" + back + ": CLOSE", 12, 212, "#fff070");
+}
 function drawBestiary() {
+  if ((D.realm_key || "prism") === "prism" && menu.bp) return drawConditionGuide();
   const list = beastList(), i = menu.ii, k = list[i];
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 26); win(0, 26, 132, H - 26); win(132, 26, W - 132, H - 26);
   text("BESTIARY", 12, 9, "#fff070"); const c = "MET " + list.length + " / " + BEAST_TOTAL(); text(c, W - 10 - tw(c), 9, "#a0a8c0");
+  if ((D.realm_key || "prism") === "prism") text("L/R: HELP", 80, 9, "#a0d8f8");
   if (!list.length) { text("NOTHING MET YET.", 12, 40, "#a0a8c0"); return; }
   const top = clamp(i - 5, 0, Math.max(0, list.length - 12));
   list.slice(top, top + 12).forEach((kk, j) => text(String(beastInfo(kk).name).toUpperCase().slice(0, 13), 22, 36 + j * 15, kk.startsWith("warden:") ? "#fff070" : "#ffffff"));
