@@ -86,7 +86,7 @@ void Motion() {
     G.X=.5;G.Dir={};G.UpdateWithChoices(P,0,1,Dirs);Check(Near(G.X,558.5)&&G.Dir.X==-1,"turn-choice probe agrees with seam commit");
     G.X=559;G.Y=293;G.Dir={1,0};G.UpdateWithChoices(P,0,1,Dirs);Check(Near(G.X,559)&&Near(G.Y,291)&&G.Dir.Y==-1,"blocked corner probes find only a valid row-entry direction");
     G={};G.X=.5;G.Y=290;P.X=550;P.Y=290;G.UpdateWithChoices(P,1,0,Dirs);
-    Check(Near(G.X,2.5)&&G.Dir.X==1,"chase retains raw coordinate choice rather than periodic shortest path");
+    Check(Near(G.X,558.5)&&G.Dir.X==-1,"chase takes the shorter clear passage toward the opposite edge");
     Random A,B,Expected;A.Seed(123);B=A;Expected=A;for(int N=0;N<5;++N) Expected.Next();
     PacmanGame::Ghost Seam,Inside;Seam.X=1;Seam.Y=290;Seam.Dir={-1,0};Inside=Seam;Inside.X=70;
     Seam.Update(P,A);Inside.Update(P,B);const auto Sixth=Expected.Next();

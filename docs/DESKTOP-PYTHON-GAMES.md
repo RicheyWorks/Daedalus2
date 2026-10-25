@@ -258,6 +258,12 @@ without new controls. This native extension preserves the map, all 304 dots and
 existing score/life/power/respawn rules; pinned source fixtures retain their
 original boundary behavior. Native visual/input and chase feel remain unverified.
 
+In Glowtrail's paired passage, chasing pursuers follow the shorter clear route
+through the opposite gate when both actors are in its outer arms. The central
+room's walls still block that shortcut. Frightened steering, ordinary maze pursuit,
+movement speed and random choices retain their existing rules. Native chase feel
+and visual acceptance remain unverified.
+
 Ironwake Advance likewise accepts a jump shortly after stepping off a platform,
 while keeping its existing held-jump landing hops, crouch restriction and jump
 trajectory. The allowance expires after six decisions and is consumed by a jump;

@@ -159,8 +159,8 @@ Only a whole quantized 16x16 collision box fitting row 14 may use the passage.
 Adjacent walls and ordinary out-of-map lookups stay solid. Candidate positions
 are bounded around the seam, so distant invalid test actors cannot fold into the
 maze. Player turn probes, ghost choices and actual movement share that rule.
-Ghost chase still compares ordinary coordinates; no new AI/pathfinding or RNG
-draws are added.
+Ghost chase can use the shorter clear route through opposite outer gates;
+central-compartment pursuit keeps ordinary coordinates. No extra RNG draw is used.
 
 Contact uses the original rectangle overlap plus the translated opposite-edge
 rectangle for eligible actors. Pickups retain their strict 12-pixel Euclidean
@@ -178,14 +178,40 @@ The pinned fixture contents are unchanged; native defaults enable the repaired
 maze and passage. Source-only evidence remains separate from native rendering,
 physical input and human chase/escape acceptance.
 
-`desktop_pacman_tunnel` / `pacman_tunnel_test.cpp` passed 108/108 strict single-TU
-MSVC checks, including the 60 PAC-only pinned source cases in disabled mode.
+When the paired passage was introduced, `desktop_pacman_tunnel` /
+`pacman_tunnel_test.cpp` passed 108/108 strict single-TU MSVC checks, including
+the 60 PAC-only pinned source cases in disabled mode.
 Focused native cases cover two-way overshoot/probes, row/candidate fences,
 quantized seam contact, ordinary off-passage contact, damage/capture/grace,
 strict circular pickup distance and both edge dots once, unchanged RNG call
 counts, dead actors, terminal/reset behavior and presentation/mask order/purity.
 No broad maze suite, repeated full-map traversal, old-header proof, fixture
 regeneration or engine/editor/native playtest ran for this extension.
+
+### Seam-aware pursuit
+
+An unfrightened chasing ghost now chooses the shorter seam displacement when
+both actors fit the passage and both full quantized bodies have a clear horizontal
+approach to the relevant outer edge. Row 14 is partitioned by walls: the center
+room must keep raw pursuit. The approach check derives those walls from the
+existing map, scanning at most 28 cells per side. Half-period ties keep the old
+direction, as do shorter direct routes, off-row/invalid actors and disabled source
+mode. Existing next-position collision checks and two-pixel movement/wrap remain.
+
+Frightened/random steering, chase probability, recovery timing and the five random
+draws per living ghost are retained. There is no pathfinder, new game state, map,
+score/life rule, input or rendering change. The paired-passage test's one deliberate
+raw-pursuit expectation is updated to the new native direction. Pinned fixtures
+are untouched. `desktop_pacman_pursuit` / `pacman_pursuit_test.cpp` targets this
+correction; the prior full tunnel/source suite is separate historical evidence.
+Native chase difficulty, visual continuity and human play acceptance are pending.
+
+Strict serial single-TU MSVC C++17 passed 37/37 focused checks: two-way fractional
+crossing, body/map/row/source-mode fences, ties and short routes, original chase/
+random/fright/dead gates, five-draw accounting and one full-game Step crossing with
+unrelated progress intact. The old tunnel target's one native-pursuit expectation
+was updated; its 60 disabled-mode source cases and broad suite were not rerun.
+No fixture changed, engine build or native playtest was performed.
 
 **Zelda:** source Link spawn `(400,450)`, speed 3.5, six half-hearts, source 0.707
 diagonal scale and two-level stick deadzone, directional attack rectangles,

@@ -253,6 +253,15 @@ public:
     static double WrapTunnelX(double X) {
         return X<0 ? X+Columns*Tile : X>=Columns*Tile ? X-Columns*Tile : X;
     }
+    static bool ClearTunnelApproach(double X,bool Left,bool RepairDoor=true) {
+        // Canonical actors only. Row 14 also contains walls around the center room.
+        const Rect Body=maze::PixelRect(X-8,14*Tile,16,16);
+        for(int Col=0;Col<Columns;++Col) {
+            const bool OnRoute=Left?Col*Tile<=Body.X+15:(Col+1)*Tile>Body.X;
+            if(OnRoute && IsWall(Col,14,RepairDoor)) return false;
+        }
+        return true;
+    }
     static bool Collides(double X,double Y,bool RepairDoor=true,bool UseTunnels=true) {
         const Rect R=maze::PixelRect(X-8,Y-8,16,16);
         const int C0=static_cast<int>(std::floor(R.X/Tile)), C1=static_cast<int>(std::floor((R.X+15)/Tile));
@@ -304,7 +313,13 @@ public:
                 for(const auto D:Dirs) if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor,UseTunnels)) { Dir=D; break; }
             }
             if(!Frightened && ChaseSample<0.6) {
-                const double Dx=TargetPlayer.X-X, Dy=TargetPlayer.Y-Y;
+                double Dx=TargetPlayer.X-X;
+                const double Dy=TargetPlayer.Y-Y;
+                if(UseTunnels && IsTunnelActor(X,Y) && IsTunnelActor(TargetPlayer.X,TargetPlayer.Y)) {
+                    const double Width=Columns*Tile;
+                    if(Dx>Width/2 && ClearTunnelApproach(X,true,RepairDoor) && ClearTunnelApproach(TargetPlayer.X,false,RepairDoor)) Dx-=Width;
+                    else if(Dx<-Width/2 && ClearTunnelApproach(X,false,RepairDoor) && ClearTunnelApproach(TargetPlayer.X,true,RepairDoor)) Dx+=Width;
+                }
                 const maze::Direction D=std::abs(Dx)>std::abs(Dy) ? maze::Direction{Dx>0 ? 1 : -1,0} : maze::Direction{0,Dy>0 ? 1 : -1};
                 if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor,UseTunnels)) Dir=D;
             }
