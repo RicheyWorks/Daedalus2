@@ -331,6 +331,28 @@ public:
 private:
     Random Rng;
     bool UpWasDown=false,DownWasDown=false,CountryStickArmed=false;
+    int PassReceiver=-1;
+    int NextPassTarget(int Owner) const {
+        if(Owner<0 || Owner>=3) return -1;
+        for(int Offset=1;Offset<3;++Offset) {
+            const int Next=(Owner+Offset)%3;
+            if(Data.Players[Next].Health>0) return Next;
+        }
+        return -1;
+    }
+    bool TryHumanPass() {
+        const int Owner=HumanBallHolder();
+        if(Owner<0 || Data.DodgeBall.InAir || Data.Players[Owner].ThrowCooldown>0) return false;
+        const int Target=NextPassTarget(Owner);
+        if(Target<0) return false;
+        Ball Flight=Data.DodgeBall;
+        UpdateBall(Flight,Data.Players); // Attach the valid holder before aiming from the hand.
+        const auto& Receiver=Data.Players[Target];
+        const Vec D=sports_detail::Unit(Receiver.X-Flight.X,Receiver.Y-Flight.Y);
+        if(D.X==0 && D.Y==0) return false; // No flight direction; keep the existing possession intact.
+        if(!Throw(Flight,Data.Players[Owner],D,false)) return false;
+        Data.DodgeBall=Flight;PassReceiver=Target;return true;
+    }
     static bool CountryStickCentered(const Input& I) {
         return std::abs(Axis(I.AxisX))<=0.3 && std::abs(Axis(I.AxisY))<=0.3;
     }
@@ -369,6 +391,7 @@ private:
         const bool Super=ForceSuper || P.Charge>30;
         if(Super) Burst(P.X,P.Y-5,Countries[P.CountryIndex].Tint,14,4);
         CountryThrow(Data.DodgeBall,P,D,Super);
+        if(!P.HasBall) PassReceiver=-1;
     }
     void MoveCpu(int Index) {
         Player& P=Data.Players[Index];Ball& B=Data.DodgeBall;
@@ -397,6 +420,7 @@ public:
     void Reset(std::uint32_t Seed) override {
         Rng.Seed(Seed);Data=State{};Data.Particles.reserve(MaxParticles);
         UpWasDown=DownWasDown=CountryStickArmed=false;
+        PassReceiver=-1;
     }
     static Player MakePlayer(int CountryIndex,int Slot,bool Cpu,int SuperType=1) {
         const int SafeCountry=std::max(0,std::min(7,CountryIndex));
@@ -410,6 +434,7 @@ public:
         P.SuperType=SuperType==2 ? 2 : 1;return P;
     }
     void StartMatch() {
+        PassReceiver=-1;
         for(int N=0;N<3;++N) Data.Players[N]=MakePlayer(Data.SelectedCountry,N,false,Rng.Int(1,2));
         for(int N=0;N<3;++N) Data.Players[N+3]=MakePlayer(Data.OpponentCountry,N,true,Rng.Int(1,2));
         Data.DodgeBall=Ball{};Data.DodgeBall.Owner=1;Data.Players[1].HasBall=true;
@@ -505,6 +530,7 @@ public:
         B.X=B.X<=400 ? 380 : 420;return true;
     }
     void Step(const Input& I) override {
+        if(!Data.DodgeBall.InAir || Data.DodgeBall.Owner>=0) PassReceiver=-1;
         const bool Confirm=I.FirePressed || I.ActionPressed;
         const bool AnyButton=Confirm || I.JumpPressed || I.DashPressed;
         const bool UpDown=I.Up || I.PadUp,DownDown=I.Down || I.PadDown;
@@ -528,8 +554,10 @@ public:
             if(!AnyButton) return;
             if(Data.Round>=4) { Data.Mode=Phase::Title;Data.Round=1;return; }
             ++Data.Round;Data.OpponentCountry=Opponent();StartMatch();
-        } else if(I.FirePressed) {
-            for(int N=0;N<3;++N) if(Data.Players[N].HasBall && Data.Players[N].ThrowCooldown==0) {
+        } else {
+            // Only a step that began Playing can pass. A valid deliberate pass wins a simultaneous throw press.
+            const bool Passed=I.DashPressed && TryHumanPass();
+            if(!Passed && I.FirePressed) for(int N=0;N<3;++N) if(Data.Players[N].HasBall && Data.Players[N].ThrowCooldown==0) {
                 AimAndThrow(N);break;
             }
         }
@@ -539,9 +567,19 @@ public:
             if(P.Cpu) MoveCpu(N);else MoveHuman(P,I);
             BoundAndCooldown(P);
         }
-        Ball& B=Data.DodgeBall;UpdateBall(B,Data.Players);RecoverLooseBall(B);
+        Ball& B=Data.DodgeBall;UpdateBall(B,Data.Players);
+        if(!B.InAir || B.Owner>=0) PassReceiver=-1;
+        RecoverLooseBall(B);
         if(B.Owner<0 && !B.InAir) for(int N=0;N<6;++N) if(Pickup(B,Data.Players[N],N)) break;
-        if(B.InAir) for(int N=0;N<3;++N) {
+        if(IsTeamPassInFlight()) {
+            Player& Receiver=Data.Players[PassReceiver];
+            if(Catch(B,Receiver,PassReceiver)) {
+                PassReceiver=-1;
+                Receiver.ThrowCooldown=std::max(Receiver.ThrowCooldown,14);
+                Burst(Receiver.X,Receiver.Y,{255,255,200,255},8,2.5);
+            }
+        }
+        if(B.InAir && !IsTeamPassInFlight()) for(int N=0;N<3;++N) {
             Player& P=Data.Players[N];const double Radius=P.OnGround ? 22 : 35;
             if(P.Health>0 && !P.HasBall && Distance(B.X,B.Y,P.X,P.Y)<Radius && (!P.OnGround || I.Fire)) {
                 if(Catch(B,P,N)) { Burst(P.X,P.Y,{255,255,200,255},8,2.5);break; }
@@ -549,7 +587,7 @@ public:
         }
         if(B.InAir) for(int N=3;N<6;++N) {
             Player& P=Data.Players[N];
-            if(P.Health>0 && !P.HasBall && Rng.Unit()<0.12 && Catch(B,P,N)) break;
+            if(P.Health>0 && !P.HasBall && Rng.Unit()<0.12 && Catch(B,P,N)) {PassReceiver=-1;break;}
         }
         if(I.Fire) for(int N=0;N<3;++N) if(Data.Players[N].HasBall && Data.Players[N].ThrowCooldown==0) {
             AimAndThrow(N);break;
@@ -562,9 +600,10 @@ public:
         }
         if(B.InAir) for(int N=0;N<6;++N) {
             Player& P=Data.Players[N];
+            if(N<3 && IsTeamPassInFlight()) continue; // Teammate passes never deal friendly damage.
             if(P.Health>0 && Distance(B.X,B.Y,P.X,P.Y)<18) {
                 const bool Power=B.PowerBall;const double X=B.X,Y=B.Y;const Color Tint=B.ThrowColor;
-                if(Hit(B,P)) { Burst(X,Y,Tint,Power ? 15 : 8,4);MatchResult();break; }
+                if(Hit(B,P)) { PassReceiver=-1;Burst(X,Y,Tint,Power ? 15 : 8,4);MatchResult();break; }
             }
         }
         for(Particle& P:Data.Particles) {
@@ -573,8 +612,8 @@ public:
         Data.Particles.erase(std::remove_if(Data.Particles.begin(),Data.Particles.end(),
             [](const Particle& P){return P.Life<=0;}),Data.Particles.end());
     }
-    // Read-only feedback derives from the source state. These helpers never
-    // gate throws, catches, movement, RNG draws or tournament transitions.
+    // Read-only gameplay/feedback state. Selectors match the actual recipients
+    // and never consume randomness.
     int LivingPlayers(bool Cpu=false) const {
         int Count=0;const int Start=Cpu?3:0;
         for(int N=Start;N<Start+3;++N) if(Data.Players[N].Health>0) ++Count;
@@ -588,6 +627,14 @@ public:
     int HumanBallHolder() const {
         const int Owner=Data.DodgeBall.Owner;
         return Owner>=0 && Owner<3 && Data.Players[Owner].Health>0 && Data.Players[Owner].HasBall?Owner:-1;
+    }
+    bool IsTeamPassInFlight() const {
+        return Data.Mode==Phase::Playing && PassReceiver>=0 && PassReceiver<3 && Data.DodgeBall.InAir && Data.DodgeBall.Owner<0;
+    }
+    int HumanPassTarget() const {
+        if(Data.Mode!=Phase::Playing) return -1;
+        if(IsTeamPassInFlight()) return Data.Players[PassReceiver].Health>0?PassReceiver:-1;
+        return Data.DodgeBall.InAir?-1:NextPassTarget(HumanBallHolder());
     }
     bool IsHumanThrowReady() const {
         const int Owner=HumanBallHolder();
@@ -636,7 +683,7 @@ public:
             else Text+=BallReadiness()+" | "+JumpReadiness()
                 +". Move the trio together. Held Space/Z/J/pad A catches and can immediately rethrow; pad X/RB throws on fresh press. "
                 +"Charge: keyboard Up/W or original stick up beyond 0.5; hat movement alone does not charge. "
-                +"Ground catch requires held Fire at <22 normal / <18 super pixels; airborne catch is automatic at <34. Friendly hits remain possible.";
+                +"Ground catch requires held Fire at <22 normal / <18 super pixels; airborne catch is automatic at <34. Attack throws can hit teammates; V/Y/LB passes are safe.";
         }
         return {Data.HumanScore,LivingPlayers(),End,Data.Mode==Phase::Won,Text};
     }
@@ -669,7 +716,7 @@ public:
             sports_detail::Outline(F,X-12,Y+20,24,4,White,1); }
     }
     void Render(Frame& F) const override {
-        constexpr Color Yellow{255,220,50,255},Red{220,50,50,255},Blue{50,100,220,255};
+        constexpr Color Yellow{255,220,50,255},Red{220,50,50,255},Blue{50,100,220,255},PassTint{120,225,255,255};
         F.Clear();
         if(Data.Mode==Phase::Playing) {
             F.AddRect(40,40,720,520,{50,120,50,255});sports_detail::Outline(F,40,40,720,520,White,4);
@@ -685,13 +732,18 @@ public:
                 F.AddLine(Aim.X+22,Aim.Y-6,Aim.X+18,Aim.Y,Cue,2);
                 F.AddLine(Aim.X+18,Aim.Y,Aim.X+22,Aim.Y+6,Cue,2);
             }
+            const int Receiver=HumanPassTarget();
+            if(IsTeamPassInFlight() && Receiver>=0) {
+                const Vec Aim=PlayerDrawPosition(Data.Players[Receiver]);
+                sports_detail::Ring(F,Aim.X,Aim.Y,23,PassTint,2);
+            }
             for(int N=0;N<6;++N) {
                 const Player& P=Data.Players[N];DrawPlayer(F,P);
                 const double Y=PlayerDrawPosition(P).Y;
                 F.AddText(P.X-9,Y+(P.Health>0?29:15),std::string(N<3?"P":"C")+std::to_string(N%3+1),White,11);
             }
             const Ball& B=Data.DodgeBall;F.AddCircle(B.X,B.Y,11,B.PowerBall ? Red : B.ThrowColor);
-            sports_detail::Ring(F,B.X,B.Y,11,B.PowerBall ? Yellow : White,3);
+            sports_detail::Ring(F,B.X,B.Y,11,IsTeamPassInFlight()?PassTint:(B.PowerBall ? Yellow : White),3);
             if(B.PowerBall) F.AddCircle(B.X,B.Y,5,Yellow);
             for(const Particle& P:Data.Particles) F.AddCircle(P.X,P.Y,std::trunc(P.Size),P.Tint);
             F.AddText(16,5,std::string("YOU ")+Countries[Data.SelectedCountry].Name+": "+std::to_string(Data.HumanScore),Blue,18);
@@ -718,7 +770,7 @@ public:
             F.AddText(190,265,"8 countries - 3 vs 3 - four rounds",White,20);
             F.AddText(150,340,"Space / Enter / pad A: choose country",White,24);
             F.AddText(120,400,"Move ALL 3: WASD/arrows, left stick or hat | Jump: Shift/pad B",White,16);
-            F.AddText(120,435,"Throw/catch: Space/Z/J/pad A held | X/RB: fresh throw only",White,16);
+            F.AddText(120,435,"Throw/catch: Space/J/A | Fresh throw: X/RB | Pass: V/Y/LB",White,16);
             F.AddText(120,470,"Charge: hold keyboard Up/W or stick up; super at charge 31/60",White,16);
             F.AddText(120,505,"Hat moves independently; jumping catches automatically in range.",White,16);
             F.AddText(195,545,"Friendly hits are possible. Host R/Restart clears the session.",White,14);
@@ -785,14 +837,21 @@ private:
         return Text[Data.SelectedCountry];
     }
     std::string BallReadiness() const {
+        if(IsTeamPassInFlight()) {
+            const int Receiver=HumanPassTarget();
+            return Receiver>=0?"PASS -> P"+std::to_string(Receiver+1)+" | automatic teammate catch"
+                :"Pass in flight; receiver unavailable. Teammates are safe.";
+        }
         const int Owner=HumanBallHolder();
         if(Owner>=0) {
             const Player& P=Data.Players[Owner];
             const std::string Ready=IsHumanThrowReady()?"throw READY":(P.ThrowCooldown>0?
                 "throw wait "+std::to_string(P.ThrowCooldown)+" steps":"no living target");
             const int Target=HumanThrowTarget();
+            const int Teammate=HumanPassTarget();
             return "P"+std::to_string(Owner+1)+": "+Ready+(Target>=0?" -> C"+std::to_string(Target-2):"")+" | charge "+std::to_string(P.Charge)+"/60"
-                +(IsHumanSuperCharged()?" SUPER charged":"; SUPER at 31")+" | held Fire rethrows when ready";
+                +(IsHumanSuperCharged()?" SUPER charged":"; SUPER at 31")
+                +(Teammate>=0?" | pass V/Y -> P"+std::to_string(Teammate+1):" | no living teammate to pass to");
         }
         const Ball& B=Data.DodgeBall;
         if(B.Owner>=3 && B.Owner<6) return "C"+std::to_string(B.Owner-2)+" holds ball | Ground catch: hold Fire; airborne catch: automatic";

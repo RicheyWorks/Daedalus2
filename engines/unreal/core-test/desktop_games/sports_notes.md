@@ -45,6 +45,39 @@ bracket, multiplayer or persistent leaderboard feature.
 
 ## Deliberate changes
 
+### Courtyard teammate passing
+
+V / pad Y / LB sends a fresh pass to the next living teammate in cyclic P1/P2/P3
+order, skipping knockouts. This changes the holder and its existing roster power/
+speed traits; control still moves the whole team together. The native Dodge-only
+override uses DashPressed and leaves held Dash false, with Shift/B jump and all
+throw/confirm mappings intact. The pass action opens title/continues results via
+the existing DashPressed rules; it does not confirm country selection.
+
+A valid pass from an existing Playing step takes priority over simultaneous fresh
+Fire; a refused pass falls back to the original throw path. Validate possession,
+cooldown and recipient first, then attach a local ball copy through UpdateBall,
+aim from the hand and use the unchanged normal Throw. Zero-length aim is refused
+before mutation. Motion, drag and bounce use the original UpdateBall. There is no
+homing or remote handoff. Only the intended receiver catches automatically; all
+other human catches/hits are skipped during a tagged pass, making it harmless to
+the passing team. CPU interception and damage retain their normal behavior.
+
+The receiver gets at least 14 cooldown steps after movement ticking, so held Fire
+cannot immediately rethrow the same catch. Tags clear before normal rethrows/CPU
+ownership, on hits/stop/round reset and Reset. A receiver that becomes unavailable
+leaves the pass harmless until it stops or changes ownership; a miss uses ordinary
+loose-ball recovery. One private recipient index is added, with read-only feedback.
+The existing readiness line names the recipient and a blue ring marks it in flight.
+No scoring, roster, country, tournament, save or default attack rule is changed.
+
+`desktop_dodge_pass` / `dodge_pass_test.cpp` passed 70/70 strict single-TU MSVC
+C++17 checks: the three-player cycle, KO skipping, zero-aim refusal, post-tick
+catch cooldown, ordinary friendly-hit companion, CPU catch/hit, misses, input
+priority, round cleanup, read purity and Driver pause/catch-up edges. No broad
+sports fixtures or engine build were repeated. Native binding/focus,
+receiver-ring readability and human pass/throw feel remain unverified.
+
 ### Courtyard native How to play
 
 Courtyard now reuses the existing native paused help modal (button / F1 /
