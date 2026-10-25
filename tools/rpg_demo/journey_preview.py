@@ -41,7 +41,8 @@ def write_preview(destination):
     routes = []
     for landmark, name in pins["QUEST"] + pins["OPTIONAL_QUEST"]:
         original = next(d for d in catalog if d["name"] == name)
-        routes.append(dict(name=original["name"], landmark=landmark,
+        routes.append(dict(name=original["name"], landmark=landmark, theme=original["theme"],
+                           floors=[{"grid": floor["grid"]} for floor in original["floors"]],
                            final=name == pins["FINAL"], optional=(landmark, name) in pins["OPTIONAL_QUEST"],
                            boss_data=next(b for b in bosses if b["dungeon"] == name)))
     village = load("prism-village")
@@ -63,7 +64,7 @@ def write_preview(destination):
 <label>Location <select id="location"><option>World</option><option>Town</option><option>Castle</option><option>Inn</option><option>Windmere</option><option>Cinder Forge</option><option>Gearwright's Folly</option></select></label>
 <label>Canvas width <select id="width"><option>320</option><option>256</option></select></label>
 <canvas id="screen" width="320" height="224" tabindex="0" aria-label="JOURNEY diagnostic canvas"></canvas>
-<p>Keyboard: Up from ITEM selects JOURNEY; Z confirms. Left/Right switches notes/map. Up/Down selects a route. X/Esc returns. Click a scenario to change only this disposable diagnostic state.</p>
+<p>Keyboard: Up from ITEM selects JOURNEY; Z confirms. Left/Right switches notes/world map/current floor (inside a dungeon). Up/Down selects a route on notes/world map; Z pins it. The diagnostic dungeon location starts on its first-floor stairs. X/Esc returns. Click a scenario to change only this disposable diagnostic state.</p>
 <p id="notice" role="status" aria-live="polite"></p><pre id="view" aria-live="polite"></pre><pre id="labels" aria-label="Canvas text output"></pre><pre id="error" role="alert"></pre>
 <script>
 const D = __DATA__, cv = document.getElementById('screen'), g = cv.getContext('2d');
@@ -82,7 +83,7 @@ __HANDLERS__
 function render(){paints=[];if(mode==='menu')drawMenu();else{drawField();text('PRESS OPEN FIELD MENU TO RETURN.',12,20);}const anchor=journeyAnchor();document.getElementById('view').textContent=JSON.stringify({mode,sub:menu&&menu.sub,page:menu&&menu.jp,route:menu&&menu.ii,anchor},null,2);document.getElementById('labels').textContent=paints.join('\n');}
 document.getElementById('menu').onclick=()=>{openMenu();render();};
 document.querySelectorAll('[data-stage]').forEach(button=>button.onclick=()=>{const stage=Number(button.dataset.stage);state.beaten=new Set(D.dungeons.slice(0,Math.min(stage,3)).map(d=>d.boss_data.name));if(stage>=4)state.beaten.add(D.dungeons.find(d=>d.final).boss_data.name);if(stage>=5)state.beaten.add(D.dungeons.find(d=>d.optional).boss_data.name);render();});
-document.getElementById('location').onchange=event=>{const name=event.target.value;P={x:1,y:2};map=name==='World'?{kind:'world'}:name==='Town'?{kind:'town'}:name==='Windmere'?{kind:'village'}:['Castle','Inn'].includes(name)?{kind:'interior',name}:{kind:'dungeon',dungeon:D.dungeons.findIndex(d=>d.name===name)};if(name==='World')P={x:22,y:9};render();};
+document.getElementById('location').onchange=event=>{const name=event.target.value;P={x:1,y:2};map=name==='World'?{kind:'world'}:name==='Town'?{kind:'town'}:name==='Windmere'?{kind:'village'}:['Castle','Inn'].includes(name)?{kind:'interior',name}:null;if(!map){const di=D.dungeons.findIndex(d=>d.name===name),d=D.dungeons[di],grid=d.floors[0].grid.map(row=>row.slice());map={kind:'dungeon',dungeon:di,floor:0,grid,key:tile=>'dg:'+d.theme+':'+tile};const entry=find(grid,'StairsUp');if(entry)P={x:entry[0],y:entry[1]};}if(name==='World')P={x:22,y:9};if(menu)menu.jp=0;render();};
 document.getElementById('width').onchange=event=>{W=Number(event.target.value);cv.width=W;render();};
 window.addEventListener('keydown',event=>{if(event.target.tagName==='SELECT'||event.repeat)return;const key=KEYMAP[event.code];if(!key)return;event.preventDefault();pressed[key]=true;if(mode==='menu')menuTick();render();});
 window.addEventListener('error',event=>document.getElementById('error').textContent=event.message);

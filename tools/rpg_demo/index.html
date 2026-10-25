@@ -1367,11 +1367,14 @@ function journeyStatus(d) {
 function journeyTick() {
   if (hit("b") || hit("start")) { clearActionButtons(); menu.sub = null; menu.msg = ""; sfx("TICK"); return; }
   const left = hit("left"), right = hit("right");
-  if (left || right) { menu.jp = menu.jp === 1 ? 0 : 1; sfx("TICK"); }
+  const pages = map.kind === "dungeon" ? 3 : 2;
+  if (left || right) { menu.jp = ((menu.jp || 0) + (right ? 1 : -1) + pages) % pages; sfx("TICK"); }
+  if (menu.jp === 2 && map.kind === "dungeon") { hit("up"); hit("down"); hit("a"); return; }
   const n = journeyRoutes().length; if (n) menuMove("ii", n);
   if (hit("a") && !left && !right) toggleJourneyPin();
 }
 function drawJourney() {
+  if (menu.jp === 2 && map.kind === "dungeon") return drawFloorSketch();
   if (menu.jp === 1) return drawJourneyMap();
   const routes = journeyRoutes(), selected = clamp(menu.ii, 0, Math.max(0, routes.length - 1));
   const pin = journeyPinned();
@@ -1379,7 +1382,7 @@ function drawJourney() {
   g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 62); win(0, 62, W, 100); win(0, 162, W, H - 162);
   text("JOURNEY", 12, 10, "#fff070");
-  text("LEFT/RIGHT: MAP", 72, 10, "#a0a8c0");
+  text(map.kind === "dungeon" ? "LEFT/RIGHT: MAPS" : "LEFT/RIGHT: MAP", 72, 10, "#a0a8c0");
   const count = "SHARDS " + shardCount() + "/3"; text(count, W - 12 - tw(count), 10, "#a0d8f8");
   journeyObjective().forEach((line, i) => text(line.slice(0, chars), 12, 30 + i * 12));
   routes.slice(from, from + 5).forEach((d, i) => {
@@ -1418,7 +1421,7 @@ function drawJourneyMap() {
   g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
   g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 192, W, H - 192);
   g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 192, W, 1);
-  text("MAP", 12, 10, "#fff070"); text("LEFT/RIGHT: NOTES", 60, 10, "#a0a8c0");
+  text("MAP", 12, 10, "#fff070"); text(map.kind === "dungeon" ? "LEFT/RIGHT: PAGES" : "LEFT/RIGHT: NOTES", 60, 10, "#a0a8c0");
   const count = (selected + 1) + "/" + routes.length; text(count, W - 12 - tw(count), 10, "#a0d8f8");
   const anchor = journeyAnchor(), chars = Math.floor((W - 24) / 6), unlocked = airUnlocked(), pin = journeyPinned();
   const dock = find(D.world, "AirshipPad"), skiff = state.air || (dock && { x: dock[0], y: dock[1] });
@@ -1451,6 +1454,43 @@ function drawJourneyMap() {
   if (d) text(((d === pin ? "X " : "") + d.name + " - " + journeyStatus(d).word).slice(0, chars), 12, 198, "#ffffff");
   const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
   text(("UP/DOWN: ROUTE  " + back + ": BACK").slice(0, chars), 12, 210, "#fff070");
+}
+function drawFloorSketch() {
+  const grid = map.grid, height = grid.length, width = grid[0].length, dungeon = D.dungeons[map.dungeon];
+  const cell = Math.max(1, Math.min(8, Math.floor((W - 32) / width), Math.floor(140 / height)));
+  const x0 = Math.floor((W - width * cell) / 2), y0 = 48 + Math.floor((140 - height * cell) / 2), chars = Math.floor((W - 24) / 6);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 192, W, H - 192);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 192, W, 1);
+  text("FLOOR MAP", 12, 10, "#fff070"); text("LEFT/RIGHT: PAGES", 80, 10, "#a0a8c0");
+  const floor = "F" + (map.floor + 1) + "/" + dungeon.floors.length; text(floor, W - 12 - tw(floor), 10, "#a0d8f8");
+  text(dungeon.name.toUpperCase().slice(0, chars), 12, 22);
+  text("YOU+ U " + (map.floor === 0 ? "EXIT" : "UP") + " D DOWN C CHEST G GATE", 12, 34, "#a0d8f8");
+  g.fillStyle = "#86a9bf"; g.fillRect(x0 - 2, y0 - 2, width * cell + 4, height * cell + 4);
+  const marks = [], glyphs = { U: ["101", "101", "101", "101", "111"], D: ["110", "101", "101", "101", "110"], C: ["111", "100", "100", "100", "111"], G: ["111", "100", "101", "101", "111"] };
+  let closed = 0, openedCount = 0;
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+    const tile = grid[y][x], rect = D.rects.tiles[map.key(tile) + "#0"];
+    if (rect) g.drawImage(IM.tiles, rect[0], rect[1], 16, 16, x0 + x * cell, y0 + y * cell, cell, cell);
+    else { g.fillStyle = "#243848"; g.fillRect(x0 + x * cell, y0 + y * cell, cell, cell); }
+    if (tile === "Chest") closed++; else if (tile === "ChestOpen") openedCount++;
+    const glyph = tile === "StairsUp" ? "U" : tile === "StairsDown" ? "D" : tile === "Chest" ? "C" : tile === "BossGate" ? "G" : null;
+    if (glyph) marks.push({ x, y, glyph });
+  }
+  for (const mark of marks) {
+    const x = x0 + mark.x * cell + Math.floor(cell / 2) - 1, y = y0 + mark.y * cell + Math.floor(cell / 2) - 2;
+    g.fillStyle = mark.glyph === "C" ? "#ffcf70" : mark.glyph === "G" ? "#f8a0d0" : "#a0d8f8";
+    glyphs[mark.glyph].forEach((row, gy) => { for (let gx = 0; gx < row.length; gx++) if (row[gx] === "1") g.fillRect(x + gx, y + gy, 1, 1); });
+  }
+  if (Number.isInteger(P.x) && Number.isInteger(P.y) && P.x >= 0 && P.y >= 0 && P.x < width && P.y < height) {
+    const x = x0 + P.x * cell + Math.floor(cell / 2), y = y0 + P.y * cell + Math.floor(cell / 2);
+    g.fillStyle = "#ffdf83"; g.fillRect(x - 2, y, 5, 1); g.fillRect(x, y - 2, 1, 5);
+  }
+  text("CHESTS " + openedCount + "/" + (closed + openedCount) + " OPEN", 12, 198, "#ffffff");
+  const here = grid[P.y] && grid[P.y][P.x], stairs = here === "StairsUp" ? (map.floor === 0 ? "EXIT HERE" : "UP STAIRS HERE") : here === "StairsDown" ? "DOWN STAIRS HERE" : "";
+  if (stairs) text(stairs, W - 12 - tw(stairs), 198, "#ffdf83");
+  const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
+  text(back + ": BACK", 12, 210, "#fff070");
 }
 function formationPreview() {
   const r = roster(), target = r[menu.ii], picked = r[menu.pick], chars = Math.floor((W - 24) / 6);
