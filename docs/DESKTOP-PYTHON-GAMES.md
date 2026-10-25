@@ -203,6 +203,13 @@ Mode selection uses existing SetGameOption, native checked state and focus/input
 cleanup; no new actor API, save format or assets are introduced. Native toggle,
 viewport/focus/controller and difficulty/feel acceptance remains unverified.
 
+Driftstone Patrol also supports **K / left trigger to brake**. Braking slows drift
+to rest and takes priority over thrust; turning and firing remain available. Blue
+ship fins and a live BRAKING cue show the action. Pad B keeps its fire binding.
+Reset, respawn and focus/input cleanup retain the existing lifecycle. The original
+coasting/thrust rules apply when not braking; Sega and Star behavior is unchanged.
+Native trigger/focus and actual flight feel still require acceptance.
+
 ## Evidence stages and acceptance
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,

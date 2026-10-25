@@ -721,7 +721,7 @@ FText SDaedalusDesktopArcade::ControlText() const
 	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
 	else if (Id == TEXT("star_shooter")) Text += TEXT("F1 / left-stick click: How to play. Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Game over: fresh pad A/Start or R/Restart retries. Difficulty buttons start a new run.");
 	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += Id == TEXT("asteroids")
-		? TEXT("Left/Right: turn; Up: thrust; Space/J/Z or pad face/bumper: shoot.")
+		? TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Space/J/Z or pad face/bumper: shoot.")
 		: TEXT("Space/J/Z or pad face/bumper: shoot.");
 	else if (Id == TEXT("pong")) Text += TEXT("Move at impact to add spin. Space / pad A or J / pad X: serve early.");
 	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or A/X: kick.");
@@ -731,7 +731,7 @@ FText SDaedalusDesktopArcade::ControlText() const
 
 void SDaedalusDesktopArcade::ResetHeldInput()
 {
-	HeldKeys.Reset(); PreviousInput = {}; StickX = 0.f; StickY = 0.f; RightTrigger = 0.f;
+	HeldKeys.Reset(); PreviousInput = {}; StickX = 0.f; StickY = 0.f; RightTrigger = 0.f; LeftTrigger = 0.f;
 	if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->ClearArcadeInput();
 }
 
@@ -841,6 +841,12 @@ void SDaedalusDesktopArcade::PushInput(const FKey& PressedKey)
 		auto ExtraFire = [](const FKey& Key) { return Key == EKeys::SpaceBar || Key == EKeys::Gamepad_FaceButton_Bottom || Key == EKeys::Gamepad_FaceButton_Right || Key == EKeys::Gamepad_FaceButton_Top || Key == EKeys::Gamepad_LeftShoulder; };
 		for (const FKey& Key : HeldKeys) Input.Fire |= ExtraFire(Key);
 		bFireEdge |= ExtraFire(PressedKey);
+		if (Id == TEXT("asteroids"))
+		{
+			// B remains a fire button. Only the dedicated brake controls set Action here.
+			Input.Action = Held(EKeys::K) || Held(EKeys::Gamepad_LeftTrigger) || LeftTrigger > 0.5f;
+			bActionEdge = PressedKey == EKeys::K || PressedKey == EKeys::Gamepad_LeftTrigger;
+		}
 	}
 	else if (Id == TEXT("football") || Id == TEXT("star_shooter"))
 	{
@@ -966,6 +972,7 @@ FReply SDaedalusDesktopArcade::OnAnalogValueChanged(const FGeometry& Geometry, c
 	if (Event.GetKey() == EKeys::Gamepad_LeftX) StickX = Value;
 	else if (Event.GetKey() == EKeys::Gamepad_LeftY) StickY = -Value;
 	else if (Event.GetKey() == EKeys::Gamepad_RightTriggerAxis) RightTrigger = FMath::Max(0.f, Value);
+	else if (Event.GetKey() == EKeys::Gamepad_LeftTriggerAxis) LeftTrigger = FMath::Max(0.f, Value);
 	else return FReply::Handled();
 	PushInput();
 	return FReply::Handled();

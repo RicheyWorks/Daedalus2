@@ -55,6 +55,7 @@ public:
         double X=400,Y=300,Angle=-90,Vx=0,Vy=0;
         bool Thrust=false;
         int Cooldown=0;
+        bool Braking=false;
         void Update(const Input& I,int HatX=0,int HatY=0) {
             if(I.Left) Angle-=5;
             if(I.Right) Angle+=5;
@@ -62,9 +63,16 @@ public:
             HatX+=(I.PadRight?1:0)-(I.PadLeft?1:0);
             HatY+=(I.PadUp?1:0)-(I.PadDown?1:0);
             if(HatX<0) Angle-=5;else if(HatX>0) Angle+=5;
-            Thrust=I.Up || shooter_detail::DeadAxis(I.AxisY)<-0.4 || HatY>0;
+            Braking=I.Action || I.ActionPressed;
+            Thrust=!Braking && (I.Up || shooter_detail::DeadAxis(I.AxisY)<-0.4 || HatY>0);
             if(Thrust) { const double R=shooter_detail::Radians(Angle); Vx+=std::cos(R)*0.15; Vy+=std::sin(R)*0.15; }
-            Vx*=0.985; Vy*=0.985; X+=Vx; Y+=Vy;
+            Vx*=0.985; Vy*=0.985;
+            if(Braking) {
+                Vx*=0.8;Vy*=0.8;
+                if(std::abs(Vx)<0.02) Vx=0;
+                if(std::abs(Vy)<0.02) Vy=0;
+            }
+            X+=Vx; Y+=Vy;
             shooter_detail::Wrap(X,800); shooter_detail::Wrap(Y,600);
             if(Cooldown>0) --Cooldown;
             // Keep trig arguments precise through very long sessions; equivalent rotation.
@@ -181,6 +189,11 @@ public:
             Outline(F,{{Player.X+15*std::cos(R),Player.Y+15*std::sin(R)},
                 {Player.X+10*std::cos(R+2.5),Player.Y+10*std::sin(R+2.5)},
                 {Player.X+10*std::cos(R-2.5),Player.Y+10*std::sin(R-2.5)}},White);
+            if(Player.Braking) for(int Side:{-1,1}) {
+                const double Sx=-std::sin(R)*Side*16,Sy=std::cos(R)*Side*16;
+                F.AddLine(Player.X+Sx-8*std::cos(R),Player.Y+Sy-8*std::sin(R),
+                    Player.X+Sx+4*std::cos(R),Player.Y+Sy+4*std::sin(R),LightBlue,3);
+            }
             if(Player.Thrust) F.AddTriangle({Player.X-12*std::cos(R),Player.Y-12*std::sin(R)},
                 {Player.X-4*std::cos(R+2.2),Player.Y-4*std::sin(R+2.2)},
                 {Player.X-4*std::cos(R-2.2),Player.Y-4*std::sin(R-2.2)},Yellow);
@@ -197,11 +210,12 @@ public:
         F.AddText(30,42,"ROCKS: "+std::to_string(GetRockCount())+"   UFOs: "+std::to_string(GetUfoCount()),White,16);
         F.AddText(30,65,"FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
         if(!Over) {
+            if(Player.Braking) F.AddText(420,42,"BRAKING",LightBlue,17);
             F.AddText(420,65,ProtectionNote(),RespawnGrace>0?Cyan:White,15);
             if(RespawnGrace>0) Ellipse(F,Player.X,Player.Y,23,23,Cyan);
         }
         F.AddText(30,548,"Clear all rocks to advance; larger rocks split into two.",White,15);
-        F.AddText(30,572,"Left/Right: turn   Up: thrust   Space/J/Z or pad: hold fire",White,15);
+        F.AddText(30,572,"Left/Right: turn   Up: thrust   K/LT: brake   Space/pad: fire",White,15);
         if(Over) {
             F.AddRect(170,225,460,115,{15,20,35,235});
             F.AddText(285,238,"GAME OVER",Red,40);
@@ -212,7 +226,7 @@ public:
     Status GetStatus() const override {
         if(Over) return {Score,Lives,true,false,"Game over at wave "+std::to_string(Level)+"; pad A/Start, Enter/Space or R/Restart to retry"};
         return {Score,Lives,false,false,"Wave "+std::to_string(Level)+"; rocks "+std::to_string(GetRockCount())+"; UFOs "+std::to_string(GetUfoCount())+
-            "; "+ProtectionNote()+"; fire "+FireNote()+"; turn / thrust / hold fire"};
+            "; "+ProtectionNote()+"; fire "+FireNote()+(Player.Braking?"; BRAKING":"")+"; turn / thrust / K-LT brake / hold fire"};
     }
 private:
     Random Rng; Ship Player; std::vector<Rock> Rocks; std::vector<Bullet> Bullets; std::vector<Ufo> Ufos;

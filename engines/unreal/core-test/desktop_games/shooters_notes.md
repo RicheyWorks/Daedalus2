@@ -121,3 +121,34 @@ renders the menu and resumes on fresh confirmation. The focused target now passe
 110/110 checks. Restoring only the old render condition passed107/110, failing the
 three difficulty-specific final-frame assertions. No other pause or save lifecycle
 code changed; native focus-loss presentation still needs live acceptance.
+
+## Driftstone Patrol brake control
+
+Asteroids adds K / left-trigger braking through the existing Action/ActionPressed
+input. It suppresses thrust while preserving turning, firing, cooldown and wrap.
+After original0.985 coasting drag, braking applies0.8 extra damping and snaps each
+component below0.02 to rest before movement. Releasing returns to original flight
+behavior. Unbraked physics and the other two shooter classes are unchanged.
+
+Two blue ship fins and an active BRAKING cue acknowledge the action without adding
+a menu. Reset/respawn clear it; terminal status and rendering suppress the active
+cue. The native mapper explicitly assigns K/LT only for Asteroids, keeping pad B
+and every existing fire binding intact. Left-trigger state uses the same finite/
+clamped input and lifecycle reset path as the existing right trigger. No actor API,
+portable input fields, save format, original Python script or fixture changes.
+
+The focused target desktop_asteroids_brake runs asteroids_brake_test.cpp with the
+existing shooters_parity.txt: only its81 AST_SHIP source cases plus braking/control
+fixtures, real early-game feedback/fire and a bounded6000-step respawn/result loop.
+It does not execute Sega/Star fixtures or the broad shooter suite. Test execution
+and old-header proof results are recorded in the private campaign handoff; native
+trigger/focus/held-button/viewport/human-flight acceptance remains separate.
+
+Strict single-TU MSVC /W4 /WX /permissive- passed607/607 assertions, including all
+81 unchanged AST_SHIP cases and a real terminal at566 idle steps. The exact
+pre-feature header at d30fb8dc5 passed593/607, with14 expected brake failures.
+Only an isolated header overlay was used; repository sources were not reverted.
+The normalized Sega/Star suffix is identical to that predecessor. One initial
+compile was deferred by the RAM guard before the compiler started; after other
+source work, a fresh guard passed and the check ran once. No engine build or
+broader shooter suite was executed.

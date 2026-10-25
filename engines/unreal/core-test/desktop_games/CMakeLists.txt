@@ -34,6 +34,7 @@ desktop_test(desktop_sports sports_test.cpp sports_parity.txt)
 desktop_test(desktop_platformers platformers_test.cpp platformers_parity.txt)
 desktop_test(desktop_ninja_replay ninja_replay_test.cpp "")
 desktop_test(desktop_shooters shooters_test.cpp shooters_parity.txt)
+desktop_test(desktop_asteroids_brake asteroids_brake_test.cpp shooters_parity.txt)
 desktop_test(desktop_shooter_terminal shooter_terminal_test.cpp "")
 desktop_test(desktop_sega_terminal_pickup sega_terminal_pickup_test.cpp "")
 

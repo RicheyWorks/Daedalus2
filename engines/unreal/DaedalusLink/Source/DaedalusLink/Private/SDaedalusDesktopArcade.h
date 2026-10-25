@@ -90,5 +90,6 @@ private:
 	float StickX = 0.f;
 	float StickY = 0.f;
 	float RightTrigger = 0.f;
+	float LeftTrigger = 0.f;
 	bool bHadFocus = true;
 };
