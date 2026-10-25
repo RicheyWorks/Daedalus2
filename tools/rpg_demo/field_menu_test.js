@@ -79,6 +79,22 @@ function longCaster(s) {
 function windowShown(s, entries, index, kind = "item", listCursor = true) {
   const draws = s.draw(), names = entries.map(e => kind === "item" ? e.slice(0, 18) : e.name);
   const menu = s.api.getMenu();
+  if (kind === "item" && menu.sub === "item" && s.c.D.realm_key === "prism") {
+    const selected = Math.max(0, Math.min(index, entries.length - 1));
+    const rows = draws.filter(d => d.kind === "text" && d.x === 24 && d.y >= 62);
+    assert.equal(rows.length, Math.min(6, entries.length), "at most six list rows are visible");
+    assert.ok(rows.every(d => d.y <= 152 && d.y + 8 <= 160), "row glyphs stay inside the pack viewport");
+    const cursors = draws.filter(d => d.kind === "cursor" && d.x === 12); assert.equal(cursors.length, entries.length ? 1 : 0);
+    const row = cursors.length ? rows.find(d => d.y === cursors[0].y) : undefined;
+    if (entries.length) {
+      assert.ok(row && entries[selected].toUpperCase().startsWith(row.label.replace(/\.\.\.$/, "")), "selected entry remains visible");
+      assert.ok(draws.some(d => d.kind === "text" && d.x === 12 && d.y === 10 && d.label === entries[selected].toUpperCase()), "full selected name stays in the header");
+      assert.ok(draws.some(d => d.kind === "text" && d.y === row.y && d.label === ":" + s.api.getBag()[entries[selected]]));
+    }
+    assert.ok(draws.some(d => d.kind === "cursor" && d.x === Math.floor(s.c.W / 2) + 12 && d.y === 62 + menu.who * 14), "whole-roster cursor stays visible beside the bag");
+    assert.equal(draws.some(d => d.kind === "window" && d.rect.join() === [20,60,220,112].join()), false);
+    return { draws, rows, row };
+  }
   if (kind === "magic" && menu.sub === "magic-target" && s.c.D.realm_key === "prism") {
     assert.ok(draws.some(d => d.kind === "text" && d.x === 12 && d.y === 10 && d.label === entries[index].name.toUpperCase()));
     assert.ok(draws.some(d => d.kind === "text" && d.y === 10 && d.label === entries[index].mp + " MP"));

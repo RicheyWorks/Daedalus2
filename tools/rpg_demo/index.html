@@ -1306,6 +1306,7 @@ function drawMenu() {
   if (sub === "journey") return drawJourney();
   if (sub === "order" && (D.realm_key || "prism") === "prism") return drawFormation();
   if (sub === "magic-target" && (D.realm_key || "prism") === "prism" && menu.spell) return drawFieldSpellTarget();
+  if (sub === "item" && (D.realm_key || "prism") === "prism") return drawFieldPack();
   if (sub === "equip" || sub === "equip-pick") return drawEquip();
   win(...pw); win(...cw); win(...gw);
   const mark = sub === "item" || sub === "magic-who" ? menu.who : sub === "magic-target" ? menu.target : sub === "order" ? menu.ii : -1;
@@ -1493,6 +1494,58 @@ function drawFloorSketch() {
   if (stairs) text(stairs, W - 12 - tw(stairs), 198, "#ffdf83");
   const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
   text(back + ": BACK", 12, 210, "#fff070");
+}
+function fieldItemForecast(name, member) {
+  if (!name) return "NO ITEMS TO USE.";
+  if (!itemStock(name)) return "NO " + name.toUpperCase() + " LEFT.";
+  const effect = (GEAR[name] || {}).effect || "", kind = itemKind(name), number = n => n > 9999 ? "9999+" : String(n);
+  if (kind === "camp") return B || !map || map.kind !== "world" ? "PITCH THE TENT OUT ON THE OPEN ROAD." : "FULL HP/MP. POISON CLEARED.";
+  if (kind === "revive") return member.hp > 0 ? "ALREADY STANDING." : "REVIVE: HP 0>" + number(Math.ceil(member.max / 4)) + ". STATUS CLEARED.";
+  if (kind === "cure") {
+    if (member.hp <= 0) return "TOO LATE FOR THAT.";
+    const key = effect.match(/cure (\w+)/)[1], word = STATUS[key] ? STATUS[key].word : key.toUpperCase();
+    return has(member, key) ? "CLEARS " + word + " STATUS." : "TARGET IS NOT " + word + ".";
+  }
+  if (kind === "heal") {
+    if (member.hp <= 0) return "TOO LATE FOR A TONIC.";
+    const after = Math.min(member.max, member.hp + +effect.match(/heal (\d+)/)[1] * HEAL_X);
+    return "IF USED: HP " + number(member.hp) + ">" + number(after) + " +" + number(after - member.hp);
+  }
+  if (kind === "mp") {
+    const after = Math.min(member.mmax, member.mp + +effect.match(/(\d+)/)[1] * MP_X);
+    return "IF USED: MP " + number(member.mp) + ">" + number(after) + " +" + number(after - member.mp);
+  }
+  return "NOTHING HAPPENS HERE.";
+}
+function drawFieldPack() {
+  const r = roster(), target = r[menu.who], items = fieldItems(), selected = clamp(menu.ii, 0, Math.max(0, items.length - 1)), name = items[selected];
+  const columns = Math.floor((W - 24) / 6), number = n => n > 9999 ? "9999+" : String(n);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const rows = 6, from = clamp(selected - rows + 1, 0, Math.max(0, items.length - rows)), mid = Math.floor(W / 2), quantity = name ? "QTY " + number(bag[name]) : "EMPTY";
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 180, W, H - 180);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 179, W, 1); g.fillRect(mid, 46, 1, 133);
+  text(fit(name || "PACK", columns - quantity.length - 1), 12, 10, "#fff070"); text(quantity, W - 12 - tw(quantity), 10, "#a0d8f8");
+  const pool = itemKind(name) === "mp" ? "MP " + number(target.mp) + "/" + number(target.mmax) : "HP " + number(target.hp) + "/" + number(target.max);
+  const suffix = (party.includes(target) ? " / FRONT " : " / RESERVE ") + pool;
+  text(itemKind(name) === "camp" ? "CAMP: WHOLE PARTY" : fit("TO " + target.name, columns - suffix.length) + suffix, 12, 22);
+  text("UP/DOWN: ITEM  LEFT/RIGHT: WHO", 12, 34, "#a0a8c0");
+  text(items.length ? "BAG " + (selected + 1) + "/" + items.length : "BAG EMPTY", 24, 50, "#a0d8f8");
+  text("PARTY", mid + 12, 50, "#a0d8f8"); text("HP", W - 24, 50, "#a0d8f8");
+  items.slice(from, from + rows).forEach((item, i) => {
+    const y = 62 + i * 18, count = ":" + number(bag[item]), x = mid - 12 - tw(count), limit = Math.floor((x - 30) / 6);
+    text(fit(item, limit), 24, y); text(count, x, y); if (from + i === selected) cursor(12, y);
+  });
+  r.forEach((member, i) => {
+    const y = 62 + i * 14, hp = number(member.hp), x = W - 12 - tw(hp), color = member.hp <= 0 ? "#f87878" : "#ffffff";
+    if (i === menu.who) { g.fillStyle = "#243850"; g.fillRect(mid + 6, y - 2, W - mid - 12, 13); cursor(mid + 12, y); }
+    text(fit(member.name, Math.floor((x - mid - 30) / 6)), mid + 24, y, color); text(hp, x, y, color);
+  });
+  const preview = fieldItemForecast(name, target), refused = /^(NO |NOTHING|TOO LATE|PITCH|ALREADY|TARGET IS NOT)/.test(preview);
+  text(fit(preview), 12, 184, refused ? "#f8a0a0" : "#a8e0a0");
+  if (menu.msg && menu.msg !== "LEFT/RIGHT: WHO.  A: USE.") text(fit(menu.msg), 12, 196);
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + ": USE  " + back + ": BACK", 12, 212, "#fff070");
 }
 function drawFieldSpellTarget() {
   const r = roster(), caster = r[menu.who], target = r[menu.target], spell = menu.spell, columns = Math.floor((W - 24) / 6);
