@@ -1229,6 +1229,7 @@ function menuTick() {
     return;
   }
   if (sub === "journey") return journeyTick();
+  if (sub === "summons" && (D.realm_key || "prism") === "prism") return summonBookTick();
   if (sub === "item") {
     if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); sfx("TICK"); return; }
     const items = fieldItems();
@@ -1239,7 +1240,8 @@ function menuTick() {
     return;
   }
   if (sub === "magic-who") {
-    if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); sfx("TICK"); return; }
+    if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); if ((D.realm_key || "prism") === "prism") hit("start"); sfx("TICK"); return; }
+    if ((D.realm_key || "prism") === "prism" && hit("start")) return openSummonBook();
     menuWho();
     if (hit("a")) {
       const caster = roster()[menu.who];
@@ -1250,7 +1252,8 @@ function menuTick() {
     return;
   }
   if (sub === "magic") {
-    if (hit("b")) { menu.sub = "magic-who"; menu.msg = ""; hit("a"); sfx("TICK"); return; }
+    if (hit("b")) { menu.sub = "magic-who"; menu.msg = ""; hit("a"); if ((D.realm_key || "prism") === "prism") hit("start"); sfx("TICK"); return; }
+    if ((D.realm_key || "prism") === "prism" && hit("start")) return openSummonBook();
     const caster = roster()[menu.who], list = fieldSpells(caster);
     menuMove("ii", list.length);
     if (hit("a")) {
@@ -1396,6 +1399,7 @@ function drawMenu() {
   if (sub === "bestiary") return drawBestiary();
   if (sub === "fish") return drawFishLog();
   if (sub === "journey") return drawJourney();
+  if (sub === "summons" && (D.realm_key || "prism") === "prism") return drawSummonBook();
   if (sub === "order" && (D.realm_key || "prism") === "prism") return drawFormation();
   if (sub === "magic-target" && (D.realm_key || "prism") === "prism" && menu.spell) return drawFieldSpellTarget();
   if ((sub === "magic-who" || sub === "magic") && (D.realm_key || "prism") === "prism") return drawFieldMagicBook();
@@ -1468,6 +1472,48 @@ function drawFieldMagicBook() {
   const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
   text((who ? "LEFT/RIGHT: WHO " : "UP/DOWN: SPELL ") + confirm + (who ? ": BOOK" : ": CHOOSE"), 12, 202, "#fff070");
   text(back + (who ? ": BACK" : ": CASTER"), 12, 214, "#fff070");
+  const summons = titlePrompt("menu", "ENTER").replace(/^PRESS /, "") + ": SUMMONS"; text(summons, W - 12 - tw(summons), 214, "#a0d8f8");
+}
+function openSummonBook() {
+  menu.summonBack = menu.sub; menu.sub = "summons"; menu.si = 0;
+  for (const key of ["up", "down", "left", "right"]) hit(key); clearActionButtons(); sfx("OPEN");
+}
+function summonBookTick() {
+  const confirm = hit("a"), back = hit("b"), start = hit("start");
+  if (confirm || back || start) {
+    for (const key of ["up", "down", "left", "right"]) hit(key); clearActionButtons();
+    menu.sub = menu.summonBack === "magic" ? "magic" : "magic-who"; delete menu.summonBack; sfx("TICK"); return;
+  }
+  const n = mySpirits().length; if (n) menuMove("si", n); else { hit("up"); hit("down"); } hit("left"); hit("right");
+}
+function drawSummonBook() {
+  const spirits = mySpirits(), selected = clamp(menu.si || 0, 0, Math.max(0, spirits.length - 1)), spirit = spirits[selected], caster = roster()[menu.who];
+  const columns = Math.floor((W - 24) / 6), split = W < 320 ? 112 : 128;
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const number = n => n > 9999 ? "9999+" : String(n);
+  const shard = (center, top, color) => { g.fillStyle = color; [12, 28, 44, 60, 76, 60, 44, 28, 12].forEach((width, i) => g.fillRect(center - width / 2, top + i * 8, width, 8)); g.fillStyle = "#f4e8ff"; g.fillRect(center - 1, top + 12, 2, 48); };
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 60); g.fillRect(0, 178, W, H - 178);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 59, W, 1); g.fillRect(0, 177, W, 1);
+  text("SHARD SUMMONS", 12, 10, "#fff070"); const count = "KNOWN " + spirits.length; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  const mp = "MP " + number(caster.mp) + "/" + number(caster.mmax); text(fit(caster.name, columns - mp.length - 1), 12, 22); text(mp, W - 12 - tw(mp), 22, "#a0c8ff");
+  if (spirit) {
+    const cost = spirit.mp + " MP"; text(fit(spirit.name, columns - cost.length - 1), 12, 42, "#fff070"); text(cost, W - 12 - tw(cost), 42, "#a0c8ff");
+    text("SPIRIT " + (selected + 1) + "/" + spirits.length, 12, 66, "#a0a8c0");
+    const from = clamp(selected - 2, 0, Math.max(0, spirits.length - 3));
+    spirits.slice(from, from + 3).forEach((s, i) => { const y = 84 + i * 28; if (from + i === selected) { g.fillStyle = "#26344c"; g.fillRect(6, y - 2, split - 12, 26); cursor(12, y); } text(fit(s.name, Math.floor((split - 36) / 6)), 24, y); text(s.mp + " MP", 24, y + 12, "#a0c8ff"); });
+    g.fillStyle = "#101a32"; g.fillRect(split + 6, 64, W - split - 12, 112);
+    const center = Math.floor((W + split) / 2), color = ({ fire: "#e88058", water: "#689ce0", air: "#88b8bc", earth: "#b0a068", light: "#d8c47c", dark: "#9c78c0" })[spirit.element] || "#9c88df";
+    shard(center, 74, color);
+    const image = "Boss_" + spirit.warden, r = D.rects.sprites[image];
+    if (r) { const scale = Math.min(72 / r[2], 72 / r[3]); spr("sprites", image, center - r[2] * scale / 2, 74 + (72 - r[3] * scale) / 2, 0, null, null, scale); }
+    text(fit((ELEM[spirit.element] || spirit.element) + " / ALL FOES", Math.floor((W - split - 24) / 6)), split + 12, 162, "#a0d8f8");
+  } else {
+    text("NO SPIRITS YET.", 12, 42, "#a0a8c0"); text("WARDEN SHARDS AWAKEN SUMMONS.", 12, 76); text("EARN A SHARD, THEN RETURN HERE.", 12, 92, "#a0a8c0"); shard(Math.floor(W / 2), 100, "#9c88df");
+  }
+  text("BATTLE ONLY / ONCE EACH PER BATTLE", 12, 184, "#a8e0a0");
+  if (spirit) text("UP/DOWN: SPIRIT", 12, 196, "#a0a8c0");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, ""), start = titlePrompt("menu", "ENTER").replace(/^PRESS /, "");
+  text(confirm + "/" + back + "/" + start + ": BACK", 12, 212, "#fff070");
 }
 /* The notebook reads accepted journey state. Looking at a route never awards, travels or saves. */
 function journeyRoutes() { return D.dungeons.filter(d => d.boss_data && d.landmark); }
