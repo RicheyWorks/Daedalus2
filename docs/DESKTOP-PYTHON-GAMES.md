@@ -290,6 +290,13 @@ next choice. The stick gesture that opens the picker is consumed. Match movement
 and the existing original-stick-versus-hat charge rules are retained. Native
 hardware and selection layout acceptance remain unverified.
 
+Lanternwild Quest offers optional **Shift / pad Y: hold-to-swing assist** (also
+V / LB), initially off. Enable it to hold an existing sword button instead of
+tapping for each swing. It uses the same attack timing and combat rules, keeps
+current progress when toggled and remembers the choice on retry. Held buttons
+never replay a finished run; fresh cabinet selection starts with assist off.
+The existing footer shows the choice. Native controls and play feel are pending.
+
 Courtyard Clash supports **V / pad Y / LB: pass** to the next living teammate in
 P1/P2/P3 order, skipping knockouts. The ball travels normally; the blue-ringed
 receiver catches automatically when it comes close, then settles before another throw. Passes
