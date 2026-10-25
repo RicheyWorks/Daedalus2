@@ -54,6 +54,10 @@ public:
     UPROPERTY(BlueprintAssignable, Category="Daedalus|Flipbook") FDaedalusMotifFlipbookView OnViewChanged;
     UFUNCTION(BlueprintPure, Category="Daedalus|Flipbook") int32 FrameCount() const { return Book.Count(); }
     UFUNCTION(BlueprintPure, Category="Daedalus|Flipbook") int32 CurrentFrameNumber() const { return Book.Active()?Book.Index()+1:0; }
+    /** Keep actual captured data even if buttons later fail. No source lookup,
+     * view/artist authority claim, playback mutation or file IO. */
+    bool CopyCapturedBook(daedalus::flipbook::Player& Out) const
+    { if (!Alive() || !Book.Active()) return false; const auto Snapshot=Book; Out=Snapshot; return true; }
 protected:
     virtual void BeginPlay() override;
     virtual void EndPlay(const EEndPlayReason::Type Reason) override;
