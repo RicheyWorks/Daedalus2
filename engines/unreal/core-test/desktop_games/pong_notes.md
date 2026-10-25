@@ -69,3 +69,34 @@ the same test unchanged through a private include overlay. Existing Match suites
 were run once for this change: parity30/30 and moving-paddle spin36/36 (real return
 201, point349). No source fixture was regenerated, no production header reverted,
 and no engine/UHT build, editor, service or broad suite was run.
+
+## Optional First to 5
+
+Mode 2 adds a short match with a clear finish: the first side to five points wins.
+Modes 0 (endless Match) and 1 (Rally practice) retain their rules and presentation.
+The new native checked button uses the existing MakeMode option/focus path.
+Match paddles, AI, ball speed, collision, spin and point/serve rules are reused.
+The opening has the same 45-step preparation used after a match point; existing
+fresh Fire/Jump/Action serves early and launches on the following frame. Paddles
+stay live while preparing.
+
+At the fifth point the whole game state freezes. A fresh Fire/Jump/Action starts
+another First to 5 match; the reset edge cannot also move a paddle or skip its
+preparation. Held controls alone do not replay. Native R/Restart retains the mode
+and uses the established reset/input cleanup. A separate 90-pixel score strip
+above the 600-pixel court gives an 800x690 frame and a clear result overlay.
+
+No persisted result, save format, actor implementation or new input API is added.
+The former invalid-option checks in the practice test now use 3, since 2 is valid;
+the focused quick-match check covers that boundary through both core and Driver.
+Native module/Slate compile, checkbox focus/release, viewport/fonts, physical play
+and difficulty/feel remain acceptance work.
+
+`desktop_pong_quick_match` / `pong_quick_match_test.cpp` passed 151/151 strict
+single-TU MSVC checks: two controlled five-goal rounds through actual Step, result
+freeze/three replay edges, serve timing, score-strip/neutral-opening cues, mode3
+refusal through core/Driver and 80 paired preterminal physics steps against Match.
+Mode0's six-command opening and mode1's layout have focused companions. The two
+updated invalid-option expectations are covered by the new boundary checks; the
+unaffected bulk of the prior practice/parity/spin suites was not repeated.
+No original fixtures, Python sources or save formats changed; no engine/native run.

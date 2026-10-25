@@ -7,6 +7,7 @@ namespace daedalus { namespace desktop {
 class PongGame final : public Game {
     int Option=0;
     bool Practice() const { return Option==1; }
+    bool QuickMatch() const { return Option==2; }
 public:
     struct State {
         double PlayerY=250, ComputerY=250, BallX=400, BallY=300, BallVX=5, BallVY=3;
@@ -14,13 +15,17 @@ public:
         int ServeFrames=0, ContactFrames=0, PointFrames=0, LastPoint=0, LastContact=0;
         std::uint32_t Rally=0, BestRally=0;
     } S;
-    void Reset(std::uint32_t) override { S=State{};if(Practice()) PrepareServe(0); }
+    void Reset(std::uint32_t) override { S=State{};if(Practice() || QuickMatch()) PrepareServe(0); }
     bool SetOption(int Value,std::uint32_t Seed) override {
-        if(Value<0 || Value>1) return false;
+        if(Value<0 || Value>2) return false;
         Option=Value;Reset(Seed);return true;
     }
     int GetOption() const override { return Option; }
     void Step(const Input& I) override {
+        if(QuickMatchOver()) {
+            if(I.FirePressed || I.JumpPressed || I.ActionPressed) Reset(0);
+            return; // A deliberate rematch cannot also move a paddle or skip its serve.
+        }
         if(S.ContactFrames>0) --S.ContactFrames;
         if(S.PointFrames>0) --S.PointFrames;
         const double PreviousPlayerY=S.PlayerY;
@@ -78,6 +83,13 @@ public:
         }
     }
     Status GetStatus() const override {
+        if(QuickMatch()) {
+            const bool End=QuickMatchOver();
+            std::string Note="First to 5 | YOU "+std::to_string(S.PlayerScore)+" - "+std::to_string(S.ComputerScore)+" CPU";
+            if(End) Note+=(S.PlayerScore>=5?"; you reached 5!":"; CPU reached 5.")+std::string(" Space/pad A or R: play again.");
+            else Note+=S.ServeFrames>0?"; ready - Space/pad A serves early":"; move at impact to add spin";
+            return {S.PlayerScore,0,End,End && S.PlayerScore>=5,Note};
+        }
         if(Practice()) {
             std::string Note="Rally practice; "+std::to_string(S.Rally)+" returns; session best "+std::to_string(S.BestRally);
             Note+=S.ServeFrames>0?"; ready - Space/pad A serves early":"; move at impact to add spin";
@@ -91,6 +103,7 @@ public:
     }
     void Render(Frame& Out) const override {
         if(Practice()) {RenderPractice(Out);return;}
+        if(QuickMatch()) {RenderQuickMatch(Out);return;}
         const Color Flash{100,220,255,255};
         Out.Clear(); Out.AddRect(50,S.PlayerY,10,100,S.ContactFrames>0 && S.LastContact>0?Flash:White);
         Out.AddRect(740,S.ComputerY,10,100,S.ContactFrames>0 && S.LastContact<0?Flash:White);
@@ -109,6 +122,7 @@ public:
         else if(S.PointFrames>0) Out.AddText(320,410,S.LastPoint>0?"Your point":"CPU point",White,20);
     }
 private:
+    bool QuickMatchOver() const { return QuickMatch() && (S.PlayerScore>=5 || S.ComputerScore>=5); }
     void RecordContact(int Side) {
         S.LastContact=Side; S.ContactFrames=8;
         if(S.Rally<std::numeric_limits<std::uint32_t>::max()) {
@@ -143,6 +157,27 @@ private:
         }
         else if(S.PointFrames>0 && S.LastPoint>0)
             Out.AddText(230,370,std::to_string(S.Rally)+" returns! Keep it going.",Gold,22);
+    }
+    void RenderQuickMatch(Frame& Out) const {
+        constexpr double CourtTop=90;
+        constexpr Color Gold{255,200,96,255},Flash{100,220,255,255},Panel{12,24,39,255};
+        Out.Clear(800,690,Panel);Out.AddRect(0,CourtTop,800,600,Black);
+        Out.AddRect(50,S.PlayerY+CourtTop,10,100,S.ContactFrames>0 && S.LastContact>0?Flash:White);
+        Out.AddRect(740,S.ComputerY+CourtTop,10,100,S.ContactFrames>0 && S.LastContact<0?Flash:White);
+        Out.AddCircle(S.BallX,S.BallY+CourtTop,8,White);Out.AddLine(400,CourtTop,400,690,White,2);
+        Out.AddText(210,15,"YOU "+std::to_string(S.PlayerScore),White,30);
+        Out.AddText(480,15,"CPU "+std::to_string(S.ComputerScore),White,30);
+        Out.AddText(350,58,"FIRST TO 5",Gold,16);
+        if(QuickMatchOver()) {
+            Out.AddRect(180,CourtTop+210,440,140,Panel);
+            Out.AddText(240,CourtTop+230,S.PlayerScore>=5?"You reached 5!":"CPU reached 5.",Gold,28);
+            Out.AddText(220,CourtTop+282,"Space/pad A: rematch   R: restart",White,18);
+        } else if(S.ServeFrames>0) {
+            const std::string Ready=S.LastPoint==0?"Ready for the first rally.":
+                (S.LastPoint>0?"Your point. Ready for the next rally.":"CPU point. Ready for the next rally.");
+            Out.AddText(225,CourtTop+280,Ready,White,18);
+            Out.AddText(270,CourtTop+320,"Space/pad A: serve early",Gold,18);
+        }
     }
 };
 }} // daedalus::desktop

@@ -257,6 +257,13 @@ is selected by the unchanged throw rule. A muted cue during cooldown is a curren
 snapshot; moving players and country supers can change the eventual flight. It
 adds no control or gameplay rule. Native readability/feel acceptance is pending.
 
+Pong's optional **First to 5** offers a short match beside endless Match and Rally
+practice. The existing match physics and controls apply; the fifth point brings
+a frozen result and a deliberate fresh Space / pad A rematch. Scores sit above
+the court. R/Restart keeps the selected mode, and choosing an already selected
+mode keeps the current game. No result persistence is added. Native focus/layout
+and human play feel remain unverified.
+
 ## Evidence stages and acceptance
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,

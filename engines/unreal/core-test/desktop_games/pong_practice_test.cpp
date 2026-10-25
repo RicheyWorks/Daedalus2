@@ -67,7 +67,7 @@ void Modes() {
     Check(G.S.Rally==0 && G.S.BestRally==0 && G.S.PlayerScore==0 && G.S.ComputerScore==0,"new practice clears session counts and match points");
     Input Move;Move.Down=true;G.Step(Move);
     const auto Before=G.S;Frame BeforeFrame;G.Render(BeforeFrame);
-    for(int Value:{-1,2,std::numeric_limits<int>::min(),std::numeric_limits<int>::max()}) {
+    for(int Value:{-1,3,std::numeric_limits<int>::min(),std::numeric_limits<int>::max()}) {
         const bool Accepted=Core.SetOption(Value,12);Frame After;G.Render(After);
         Check(!Accepted && Core.GetOption()==1 && SameState(G.S,Before) && SameFrame(After,BeforeFrame),"invalid mode leaves the complete active practice unchanged");
     }
@@ -182,7 +182,7 @@ void DriverModeChange() {
     Check(D.SetOption(1) && !D.IsPaused() && D.Ticks()==0,"explicit mode selection restarts from pause");
     Check(D.Advance(Driver::StepSeconds)==1 && SameFrame(D.GetFrame(),F),"paused mode selection also discards queued actions");
     const auto Before=D.GetFrame();const auto Ticks=D.Ticks();
-    Check(!D.SetOption(2) && D.GetOption()==1 && D.Ticks()==Ticks && SameFrame(Before,D.GetFrame()),"invalid driver mode leaves the current session and frame intact");
+    Check(!D.SetOption(3) && D.GetOption()==1 && D.Ticks()==Ticks && SameFrame(Before,D.GetFrame()),"invalid driver mode leaves the current session and frame intact");
     D.Restart();auto Fresh=Practice();Fresh.Render(F);
     Check(D.GetOption()==1 && !D.IsPaused() && D.Ticks()==0 && SameFrame(D.GetFrame(),F),"driver Restart retains practice but clears this session");
     Check(D.SetOption(0) && D.GetOption()==0 && D.GetFrame().Height==600 && D.GetFrame().Commands.size()==6,"native mode switch can return to unchanged match presentation");
