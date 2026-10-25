@@ -1118,10 +1118,11 @@ const fieldSpells = m => m.spells.map(spellOf).filter(Boolean);
 function menuTick() {
   const sub = menu.sub;
   if (!sub) {
-    menuMove("idx", MENU_CMDS.length);
+    const commands = MENU_CMDS.concat((D.realm_key || "prism") === "prism" ? ["JOURNEY"] : []);
+    menuMove("idx", commands.length);
     if (hit("b") || hit("start")) return closeMenu();
     if (!hit("a")) return;
-    const c = MENU_CMDS[menu.idx]; sfx("PICK"); menu.msg = ""; menu.ii = 0; menu.who = 0;
+    const c = commands[menu.idx]; sfx("PICK"); menu.msg = ""; menu.ii = 0; menu.who = 0;
     if (c === "ITEM") { if (!fieldItems().length) { menu.msg = "THE BAG HOLDS NOTHING TO USE."; return; } menu.sub = "item"; menu.msg = "LEFT/RIGHT: WHO.  A: USE."; }
     else if (c === "MAGIC") { menu.sub = "magic-who"; menu.who = Math.max(0, roster().findIndex(m => m.spells.length)); }
     else if (c === "EQUIP") { menu.sub = "equip"; }
@@ -1133,9 +1134,14 @@ function menuTick() {
     }
     else if (c === "BESTIARY") { menu.sub = "bestiary"; menu.ii = 0; }
     else if (c === "FISH") { menu.sub = "fish"; menu.ii = 0; }
+    else if (c === "JOURNEY") {
+      menu.sub = "journey";
+      menu.ii = Math.max(0, journeyRoutes().findIndex(d => !state.beaten.has(d.boss_data.name) && (!(d.final || d.optional) || shardCount() >= 3)));
+    }
     else if (c === "OPTIONS") { closeMenu(); openSettings(); }
     return;
   }
+  if (sub === "journey") return journeyTick();
   if (sub === "item") {
     if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); sfx("TICK"); return; }
     const items = fieldItems();
@@ -1294,13 +1300,18 @@ function drawMenu() {
   if (sub === "status") return drawStatus();
   if (sub === "bestiary") return drawBestiary();
   if (sub === "fish") return drawFishLog();
+  if (sub === "journey") return drawJourney();
   if (sub === "equip" || sub === "equip-pick") return drawEquip();
   win(...pw); win(...cw); win(...gw);
   const mark = sub === "item" || sub === "magic-who" ? menu.who : sub === "magic-target" ? menu.target : sub === "order" ? menu.ii : -1;
   drawPartyRows(mark);
   if (sub === "order" && menu.pick >= 0) text("*", 2, rowY(menu.pick) + 14, "#fff070");
-  MENU_CMDS.forEach((c, i) => text(c, cw[0] + 18, cw[1] + 10 + i * 16, c === "SAVE" && map.kind === "dungeon" ? "#6c6c8c" : "#ffffff"));
-  if (!sub) cursor(cw[0] + 6, cw[1] + 10 + menu.idx * 16);
+  const commands = MENU_CMDS.concat((D.realm_key || "prism") === "prism" ? ["JOURNEY"] : []);
+  const rows = Math.max(1, Math.floor((cw[3] - 16) / 16));
+  const from = clamp(menu.idx - rows + 1, 0, Math.max(0, commands.length - rows));
+  commands.slice(from, from + rows).forEach((c, i) => text(c, cw[0] + 18, cw[1] + 10 + i * 16, c === "SAVE" && map.kind === "dungeon" ? "#6c6c8c" : "#ffffff"));
+  if (!sub) cursor(cw[0] + 6, cw[1] + 10 + (menu.idx - from) * 16);
+  if (commands.length > rows) text((menu.idx + 1) + "/" + commands.length, cw[0] + 8, cw[1] + cw[3] - 10, "#a0a8c0");
   text("G", gw[0] + 8, gw[1] + 14); text(gold, gw[0] + gw[2] - 10 - tw(gold), gw[1] + 14);
   text("SHARDS", gw[0] + 8, gw[1] + 30); text(shardCount(), gw[0] + gw[2] - 10 - tw(shardCount()), gw[1] + 30);
   text(clockText(), gw[0] + 8, gw[1] + 46, isNight() ? "#90a8ff" : "#fff070");
@@ -1324,6 +1335,47 @@ function drawMenu() {
     if (sel) { const battleOnly = sel.target !== "ally" || !/heal/.test((sel.status || "") + (sel.effect || "")) && sel.power <= 0; text(((battleOnly ? "BATTLE ONLY. " : "") + spellHint(sel)).slice(0, 34), 28, 160, "#a0a8c0"); }
   }
   if (menu.msg) { win(20, H - 34, 220, 26); text(menu.msg.slice(0, 34), 28, H - 25); }
+}
+/* The notebook reads accepted journey state. Looking at a route never awards, travels or saves. */
+function journeyRoutes() { return D.dungeons.filter(d => d.boss_data && d.landmark); }
+function journeyObjective() {
+  const final = D.dungeons.find(d => d.final && d.boss_data), count = shardCount();
+  if (final && state.beaten.has(final.boss_data.name)) return ["THE HEART IS WHOLE AGAIN.", follyDungeon() && !follyCleared() ? "THE WORKS WAIT AT THE AIRSHIP PAD." : "EXPLORE THE ISLES AT YOUR OWN PACE."];
+  return count >= 3 ? ["THE CRYSTAL SHRINE IS OPEN.", "THE SHATTERED HEART AWAITS."] : [count === 2 ? "ONE WARDEN STILL HOLDS A SHARD." : (3 - count) + " WARDENS STILL HOLD SHARDS.", "CHOOSE ANY UNFINISHED SHARD ROUTE."];
+}
+function journeyStatus(d) {
+  const done = state.beaten.has(d.boss_data.name), shard = carriesShard(d);
+  if (done) return { word: shard ? "SHARD" : "CLEARED", color: "#78f8a0", hint: d.optional ? "BRANNOC'S CALIBRATION IS AT THE INN." : "THIS ROUTE IS COMPLETE. EXPLORE ON." };
+  if ((d.final || d.optional) && shardCount() < 3) return { word: "SEALED", color: "#a0a8c0", hint: "GATHER ALL THREE WARDEN SHARDS." };
+  return { word: "OPEN", color: "#fff070", hint: d.optional ? "ON FOOT: FACE THE AIRSHIP PAD." : d.final ? "THE SHARDS HAVE OPENED THE SHRINE." : "DEFEAT THE WARDEN FOR ITS SHARD." };
+}
+function journeyTick() {
+  if (hit("b") || hit("start")) { clearActionButtons(); menu.sub = null; menu.msg = ""; sfx("TICK"); return; }
+  const n = journeyRoutes().length; if (n) menuMove("ii", n);
+  hit("a");
+}
+function drawJourney() {
+  const routes = journeyRoutes(), selected = clamp(menu.ii, 0, Math.max(0, routes.length - 1));
+  const from = clamp(selected - 4, 0, Math.max(0, routes.length - 5)), chars = Math.floor((W - 24) / 6);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  win(0, 0, W, 62); win(0, 62, W, 100); win(0, 162, W, H - 162);
+  text("JOURNEY", 12, 10, "#fff070");
+  const count = "SHARDS " + shardCount() + "/3"; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  journeyObjective().forEach((line, i) => text(line.slice(0, chars), 12, 30 + i * 12));
+  routes.slice(from, from + 5).forEach((d, i) => {
+    const info = journeyStatus(d), y = 72 + i * 18;
+    text(d.name.slice(0, Math.floor((W - 120) / 6)), 24, y, selected === from + i ? "#ffffff" : "#a0a8c0");
+    text(info.word, W - 12 - tw(info.word), y, info.color);
+    if (selected === from + i) cursor(10, y);
+  });
+  const d = routes[selected];
+  if (d) {
+    const info = journeyStatus(d);
+    text(("MAP: " + pretty(d.landmark)).slice(0, chars), 12, 172, "#a0d8f8"); text(info.hint.slice(0, chars), 12, 184);
+    if (d.optional && info.word === "OPEN") text((titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO ENTER.").slice(0, chars), 12, 196);
+  }
+  const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
+  text(("UP/DOWN: ROUTE  " + back + ": BACK").slice(0, chars), 12, H - 14, "#fff070");
 }
 function drawStatus() {
   const m = roster()[menu.who];
