@@ -1302,6 +1302,7 @@ function drawMenu() {
   if (sub === "bestiary") return drawBestiary();
   if (sub === "fish") return drawFishLog();
   if (sub === "journey") return drawJourney();
+  if (sub === "order" && (D.realm_key || "prism") === "prism") return drawFormation();
   if (sub === "equip" || sub === "equip-pick") return drawEquip();
   win(...pw); win(...cw); win(...gw);
   const mark = sub === "item" || sub === "magic-who" ? menu.who : sub === "magic-target" ? menu.target : sub === "order" ? menu.ii : -1;
@@ -1449,6 +1450,59 @@ function drawJourneyMap() {
   if (d) text(((d === pin ? "X " : "") + d.name + " - " + journeyStatus(d).word).slice(0, chars), 12, 198, "#ffffff");
   const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
   text(("UP/DOWN: ROUTE  " + back + ": BACK").slice(0, chars), 12, 210, "#fff070");
+}
+function formationPreview() {
+  const r = roster(), target = r[menu.ii], picked = r[menu.pick], chars = Math.floor((W - 24) / 6);
+  if (!picked || !target) return { text: menu.msg || "CHOOSE TWO TO SWAP.", color: "#a0d8f8" };
+  const after = r.slice(); [after[menu.pick], after[menu.ii]] = [after[menu.ii], after[menu.pick]];
+  const front = after.slice(0, ACTIVE);
+  if (!front.some(m => m.hp > 0)) return { text: "SOMEONE STANDING MUST LEAD.", color: "#f87878" };
+  if (front.length !== party.length) return { text: "FRONT AFTER: " + front.length + " MEMBERS.", color: "#fff070" };
+  if (target === picked) return { text: "KEEP " + target.name.slice(0, chars - 14) + " IN PLACE.", color: "#fff070" };
+  const incoming = front.find(m => !party.includes(m)), outgoing = party.find(m => !front.includes(m));
+  if (incoming && outgoing) { const n = Math.floor((chars - 12) / 2); return { text: "IN: " + incoming.name.slice(0, n) + " / OUT: " + outgoing.name.slice(0, n), color: "#78f8a0" }; }
+  const n = Math.floor((chars - 9) / 2);
+  return { text: "SWAP: " + picked.name.slice(0, n) + " / " + target.name.slice(0, n), color: "#fff070" };
+}
+function drawFormation() {
+  const r = roster(), selected = clamp(menu.ii, 0, r.length - 1), member = r[selected], half = Math.floor(W / 2), chars = Math.floor((W - 24) / 6);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  win(0, 0, W, 32); win(0, 32, half, 122); win(half, 32, W - half, 122);
+  text("FORMATION", 12, 10, "#fff070");
+  const count = party.length + " FRONT / " + reserve.length + " RESERVE"; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  for (const [list, offset, x, label] of [[party, 0, 0, "FRONT / BATTLE"], [reserve, party.length, half, "RESERVE"]]) {
+    text(label, x + 12, 40, "#a0d8f8");
+    const hover = selected - offset, picked = menu.pick - offset;
+    const focus = hover >= 0 && hover < list.length ? hover : picked >= 0 && picked < list.length ? picked : 0;
+    const from = clamp(focus - 3, 0, Math.max(0, list.length - 4));
+    if (list.length > 4) { const range = (from + 1) + "-" + Math.min(from + 4, list.length) + "/" + list.length; text(range, x + half - 12 - tw(range), 40, "#a0a8c0"); }
+    if (!list.length) text("NO RESERVES YET.", x + 12, 70, "#a0a8c0");
+    list.slice(from, from + 4).forEach((m, i) => {
+      const index = offset + from + i, y = 54 + i * 24;
+      if (index === selected) { g.fillStyle = "#203556"; g.fillRect(x + 8, y - 2, half - 16, 22); cursor(x + 10, y); }
+      if (index === menu.pick) text("X", x + 10, y + 10, "#ffdf83");
+      const rect = D.rects.sprites[m.sprite];
+      if (rect) spr("sprites", m.sprite, x + 22, y - 2, 0, null, null, Math.min(20 / rect[2], 20 / rect[3]));
+      const width = Math.floor((half - 60) / 6);
+      text(m.name.slice(0, width), x + 48, y, m.hp > 0 ? "#ffffff" : "#f87878");
+      text(m.job.slice(0, width), x + 48, y + 10, "#a0a8c0");
+    });
+  }
+  g.fillStyle = "#101a32"; g.fillRect(0, 154, W, H - 154);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 154, W, 1);
+  text(member.name.slice(0, Math.max(1, chars - 3 - member.job.length)) + " - " + member.job, 12, 164, "#ffffff");
+  const number = (n, limit) => n > limit ? limit + "+" : String(n);
+  text("HP " + number(member.hp, 9999) + " MP " + number(member.mp, 999) + " ATK " + number(atkOf(member), 999) + " DEF " + number(defOf(member), 999), 12, 176);
+  const spells = member.spells, names = [];
+  for (const name of spells) {
+    const next = names.concat(name), remaining = spells.length - next.length;
+    if (tw("MAGIC: " + next.join(", ") + (remaining ? " +" + remaining : "")) > W - 24) break;
+    names.push(name);
+  }
+  text("MAGIC: " + (names.length ? names.join(", ") + (names.length < spells.length ? " +" + (spells.length - names.length) : "") : spells.length ? spells.length + " KNOWN" : "NONE"), 12, 188, "#a0d8f8");
+  const preview = formationPreview(); text(preview.text.slice(0, chars), 12, 200, preview.color);
+  const confirm = titlePrompt("confirm", "Z/TAP A").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC/TAP B").replace(/^PRESS /, "");
+  text(("UP/DOWN " + confirm + (menu.pick >= 0 ? " SWAP " : " PICK ") + back + " BACK").slice(0, chars), 12, 212, "#fff070");
 }
 function drawStatus() {
   const m = roster()[menu.who];
@@ -2197,7 +2251,7 @@ function beginJourney() {
   goto(townMap(), spawn ? spawn.x : 11, spawn ? spawn.y : 15, "up");
   const token = journeySerial;
   if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => {
-    if (token === journeySerial && mode === "field" && !dlg) say((D.realm_profile && D.realm_profile.intro) || ["WELCOME TO PRISMHEART. WARDENS STIR ACROSS THE ISLE, EACH ONE GROWN AROUND A SHARD OF THE HEART. THE ELDER IN TOWN KNOWS MORE.", titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO TALK. " + titlePrompt("menu", "ENTER OR TAP START") + " FOR MENU. THE ROAD SOUTH LEAVES TOWN."], null, 0);
+    if (token === journeySerial && mode === "field" && !dlg) say((D.realm_profile && D.realm_profile.intro) || ["WELCOME TO PRISMHEART. WARDENS STIR ACROSS THE ISLE, EACH ONE GROWN AROUND A SHARD OF THE HEART. THE ELDER IN TOWN KNOWS MORE.", titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO TALK. " + titlePrompt("menu", "ENTER OR TAP START") + " FOR MENU. THE ROAD SOUTH LEAVES TOWN.", "JOURNEY HAS YOUR MAP AND ROUTE PIN. ORDER PREVIEWS YOUR FRONT LINE. SAVE OUTSIDE DUNGEONS OR REST AT AN INN."], null, 0);
   }, 600);
 }
 function titleTick(dt) {

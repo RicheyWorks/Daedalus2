@@ -44,7 +44,8 @@ function session(options = {}, productionSource = source) {
 }
 function controls(s) {
   const dialog = s.start().reveal(); assert.equal(dialog.pages[0], lore);
-  assert.equal(dialog.pages.length, 2); assert.equal(dialog.then, null); assert.equal(dialog.voice, 0);
+  assert.equal(dialog.pages.length, 3); assert.equal(dialog.then, null); assert.equal(dialog.voice, 0);
+  assert.equal(dialog.pages[2], "JOURNEY HAS YOUR MAP AND ROUTE PIN. ORDER PREVIEWS YOUR FRONT LINE. SAVE OUTSIDE DUNGEONS OR REST AT AN INN.");
   const match = dialog.pages[1].match(/^PRESS ([^.]+) TO TALK\. PRESS ([^.]+) FOR MENU\./);
   assert.ok(match, "the controls page names physical talk and menu options");
   for (const page of dialog.pages) {
