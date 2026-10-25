@@ -217,6 +217,12 @@ ADaedalusGalleryMotifStudio::ADaedalusGalleryMotifStudio()
 
 bool ADaedalusGalleryMotifStudio::IsStudioAlive() const
 { return IsInGameThread() && !bEnding && !IsActorBeingDestroyed() && HasActorBegunPlay() && GetWorld(); }
+bool ADaedalusGalleryMotifStudio::CopyLastKeptSketchId(FString& Out) const
+{
+    if (!IsStudioAlive() || !Draft.Active()) return false;
+    const auto Id=daedalus::motif::CanonicalId(LineageId); if (Id.empty()) return false;
+    Out=DaedalusMotifLocal::Native(Id); return true;
+}
 bool ADaedalusGalleryMotifStudio::ViewsReady() const
 {
     return IsStudioAlive() && IsValid(Canvas) && Canvas->GetOwner()==this && Canvas->IsRegistered() &&

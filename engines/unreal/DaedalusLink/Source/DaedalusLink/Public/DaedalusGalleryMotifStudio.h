@@ -33,6 +33,9 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|MotifStudio") TObjectPtr<UTextRenderComponent> Readout;
     UFUNCTION(BlueprintPure, Category="Daedalus|MotifStudio") bool IsStudioAlive() const;
     UFUNCTION(BlueprintPure, Category="Daedalus|MotifStudio") bool IsDirty() const { return Draft.Active() && Draft.Canvas()!=Baseline; }
+    /** Copy the last kept/loaded local sketch reference, independently of a
+     * changed draft. No IO or claim that its backing file still exists. */
+    bool CopyLastKeptSketchId(FString& Out) const;
     FString ToolPrompt(EDaedalusMotifAction Action, int32 Cell) const;
     FString ToolLabel(EDaedalusMotifAction Action, int32 Cell) const;
     bool Operate(ADaedalusHero* Hero, const AActor* Tool, EDaedalusMotifAction Action, int32 Cell);
