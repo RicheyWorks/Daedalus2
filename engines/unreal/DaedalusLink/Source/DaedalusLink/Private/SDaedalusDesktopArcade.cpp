@@ -303,6 +303,7 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::AsteroidsVisibility)
 				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Endless"), 0, TEXT("Changing mode starts over. Endless keeps the original wave progression."))]
 				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Three waves"), 1, TEXT("Changing mode starts over. Clear all rocks in the first three waves to finish the voyage."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Flight practice"), 2, TEXT("Changing mode starts over. Turn, thrust and brake to dock at three beacons; no enemies or clock."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
@@ -821,9 +822,10 @@ FText SDaedalusDesktopArcade::ControlText() const
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
 	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
 	else if (Id == TEXT("star_shooter")) Text += TEXT("F1 / left-stick click: How to play. Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Game over: fresh pad A/Start or R/Restart retries. Difficulty buttons start a new run.");
-	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += Id == TEXT("asteroids")
-		? TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Space/J/Z or pad face/bumper: shoot.")
-		: TEXT("Space/J/Z or pad face/bumper: shoot.");
+	else if (Id == TEXT("asteroids")) Text += Actor && Actor->GetGameOption() == 2
+		? TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Stop inside the gold ring under braking to dock.")
+		: TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Space/J/Z or pad face/bumper: shoot.");
+	else if (Id == TEXT("sega_shooter")) Text += TEXT("Space/J/Z or pad face/bumper: shoot.");
 	else if (Id == TEXT("pong")) Text += TEXT("Move at impact to add spin. Space / pad A or J / pad X: serve early.");
 	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or pad A/X: kick. Target practice: move around the ball to aim. During a shot, K/Enter or pad B sets it up again.");
 	else Text += TEXT("J/Z/X: fire/sword, Space/A: jump/confirm, K/B/Enter: action. Source title screens use the cabinet launcher.");

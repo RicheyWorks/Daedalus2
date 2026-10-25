@@ -50,7 +50,7 @@ void Modes() {
     const bool Accepted=G.SetOption(1,730);Check(Accepted,"three-wave voyage is selectable");if(!Accepted) return;
     Check(G.GetOption()==1&&Access::Snapshot(G)==Original,"voyage opens with identical original ship rocks timers and random state");
     Frame BeforeFrame;G.Render(BeforeFrame);const auto Before=Access::Snapshot(G);
-    for(int Invalid:{-1,2}) {
+    for(int Invalid:{-1,3}) {
         Check(!G.SetOption(Invalid,99)&&G.GetOption()==1&&Access::Snapshot(G)==Before,"invalid option preserves the complete voyage simulation");
         Frame After;G.Render(After);Check(SameFrame(BeforeFrame,After),"invalid option preserves presentation");
     }
