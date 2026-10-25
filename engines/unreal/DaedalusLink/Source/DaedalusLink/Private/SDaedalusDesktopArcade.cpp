@@ -525,8 +525,8 @@ FText SDaedalusDesktopArcade::GameHelpIntro() const
 		"CONTROLS IN THE GAME"));
 	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT(
 		"YOUR TEAM\nMove and jump all three living teammates together. Approach a loose ball to pick it up. A throw aims at the nearest living opponent; the small brackets and C1/C2/C3 cue show the current target.\n\n"
-		"THROW AND CATCH\nSpace/Z/J or pad A throws. Holding it also catches a nearby incoming ball and can immediately rethrow when ready. Pad X/RB throws only on a fresh press. Shift / pad B jumps; an airborne teammate catches automatically when a ball comes close.\n\n"
-		"PASS THE BALL\nV / pad Y / LB passes to the next living teammate in P1/P2/P3 order, skipping anyone knocked out. The ball travels normally; the receiver catches it automatically when it comes close, then settles briefly before another throw. A missed pass can be picked up when it stops. Passes are safe for your team; opponents can intercept them. A valid pass takes priority if you press pass and throw together.\n\n"
+		"THROW AND CATCH\nSpace/Z/J or pad A throws. Holding it also catches a nearby incoming ball and can immediately rethrow when ready. Hold V / pad Y / LB to catch and keep the ball instead, even if the throw button is held. While carrying, a fresh throw press still throws. Pad X/RB throws only on a fresh press. Shift / pad B jumps; an airborne teammate catches automatically when a ball comes close.\n\n"
+		"PASS THE BALL\nA fresh V / pad Y / LB press while carrying passes to the next living teammate in P1/P2/P3 order, skipping anyone knocked out. After catching with this button held, let go of the throw button first, then release and press V / Y / LB again to pass. Releasing catch-and-keep while throw is held restores automatic rethrow. The ball travels normally; the receiver catches it automatically when it comes close, then settles briefly before another throw. A missed pass can be picked up when it stops. Passes are safe for your team; opponents can intercept them. A valid pass takes priority if you press pass and throw together.\n\n"
 		"CHARGE A SUPER\nWhile carrying the ball, hold W/Up or push the left stick up to build charge, then throw. Charge past halfway for your country's super throw. These inputs also move the team. D-pad Up moves without charging; it can be combined with stick Up to charge. Country supers can change the throw angle.\n\n"
 		"WATCH YOUR TEAM\nAttack throws can hit teammates. Normal hits cost one health; super hits cost two. A teammate with no health sits out for the rest of the match.\n\n"
 		"CONTROLS IN THE GAME"));
@@ -816,7 +816,7 @@ FText SDaedalusDesktopArcade::ControlText() const
 		: TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ");
 	if (Id == TEXT("minesweeper")) Text += TEXT("F1 / left-stick click: How to play. Mouse left: reveal; right: flag; middle: open around a number when its flags match. J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
 	else if (Id == TEXT("dungeon")) Text += TEXT("J/Space or pad A/X: light. Shift or pad Y/LB: trail. K/Enter or pad B: reset the circuit.");
-	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: fresh throw; V/pad Y/LB: pass; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
+	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: fresh throw; V/pad Y/LB: pass, hold to catch + keep; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
 	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
 	else if (Id == TEXT("star_shooter")) Text += TEXT("F1 / left-stick click: How to play. Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Game over: fresh pad A/Start or R/Restart retries. Difficulty buttons start a new run.");
@@ -915,7 +915,7 @@ void SDaedalusDesktopArcade::PushInput(const FKey& PressedKey)
 		auto Action = [](const FKey& Key) { return Key == EKeys::K || Key == EKeys::C || Key == EKeys::Enter; };
 		auto Pass = [](const FKey& Key) { return Key == EKeys::V || Key == EKeys::Gamepad_FaceButton_Top || Key == EKeys::Gamepad_LeftShoulder; };
 		Input.Fire = Input.Jump = Input.Action = Input.Dash = false;
-		for (const FKey& Key : HeldKeys) { Input.Fire |= FireHeld(Key); Input.Jump |= Jump(Key); Input.Action |= Action(Key); }
+		for (const FKey& Key : HeldKeys) { Input.Fire |= FireHeld(Key); Input.Jump |= Jump(Key); Input.Action |= Action(Key); Input.Dash |= Pass(Key); }
 		bFireEdge = FireEdge(PressedKey); bJumpEdge = Jump(PressedKey); bActionEdge = Action(PressedKey); bDashEdge = Pass(PressedKey);
 		// Preserve independent hat fields and the real stick; the core handles hat movement precedence.
 		// The core reads PadUp/PadDown for country selection. Never turn hat-up into keyboard Up: that would wrongly charge throws.

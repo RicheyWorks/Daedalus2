@@ -50,7 +50,7 @@ bracket, multiplayer or persistent leaderboard feature.
 V / pad Y / LB sends a fresh pass to the next living teammate in cyclic P1/P2/P3
 order, skipping knockouts. This changes the holder and its existing roster power/
 speed traits; control still moves the whole team together. The native Dodge-only
-override uses DashPressed and leaves held Dash false, with Shift/B jump and all
+override uses DashPressed for passing and held Dash for catch-and-keep, with Shift/B jump and all
 throw/confirm mappings intact. The pass action opens title/continues results via
 the existing DashPressed rules; it does not confirm country selection.
 
@@ -77,6 +77,32 @@ catch cooldown, ordinary friendly-hit companion, CPU catch/hit, misses, input
 priority, round cleanup, read purity and Driver pause/catch-up edges. No broad
 sports fixtures or engine build were repeated. Native binding/focus,
 receiver-ring readability and human pass/throw feel remain unverified.
+
+### Courtyard catch and keep
+
+Held V / pad Y / LB maps to held Dash in the existing Dodge-only native override.
+It enables the same grounded Catch as held Fire, including strict normal/super
+distance and the original airborne rules. While held it suppresses only the
+automatic held-Fire backup throw, so a catch or loose pickup stays possessed for
+movement, charging or a deliberate pass. It does not send another pass without
+DashPressed. Release and press again to pass; a fresh FirePressed when already
+carrying still takes the existing throw path, unless a valid simultaneous pass
+wins as before. On a fresh FirePressed step, both new guard gates are disabled,
+preserving the complete legacy catch/rethrow ordering (including airborne catches).
+A fresh-only throw with no possession does not queue a later throw.
+Releasing guard with Fire still held restores the ordinary rethrow immediately
+when the existing cooldown permits. No new state, cooldown, radius, physics,
+invulnerability, roster rule, score or default non-guard control path is added.
+Title/selection/result held-only input does not advance; pause/reset clear it via
+the unchanged host/Driver input lifecycle. Help LB scrolling remains intercepted
+before game input. Physical input/focus and catch/charge/pass feel remain pending.
+
+`desktop_dodge_guard` / `dodge_guard_test.cpp` passed 47/47 strict single-TU MSVC
+C++17 checks: normal/super catches, strict radii and KO/airborne companions,
+movement/charge retention, release/repress into a real teammate pass, legacy hit
+and held rethrow, four explicit-Fire ground/air and fresh/held parity cases,
+presentation purity and Driver title/pause/catch-up/reset boundaries. No broad
+sports fixtures or previous completed checks were repeated.
 
 ### Courtyard native How to play
 

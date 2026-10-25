@@ -297,6 +297,13 @@ are harmless to your team and can be intercepted by opponents. Existing attack
 throws retain friendly hits. A valid pass wins a simultaneous pass/throw press;
 holding pass alone does not chain passes. Native controls and play feel are pending.
 
+Holding **V / pad Y / LB** also catches and keeps an incoming ball, using the
+ordinary catch range. It pauses the automatic held-throw rethrow so there is time
+to move, charge or choose a teammate. Let go of throw first, then release and press
+V/Y/LB again to pass; releasing it with throw held restores automatic rethrow. A fresh
+throw press while carrying still throws. Space/Z/J/A alone keeps its original
+catch-and-rethrow behavior. No new defense radius, cooldown or invulnerability.
+
 Courtyard Clash also uses **How to play / F1 / left-stick click** for an on-demand
 guide to shared team movement, nearest-target throws, held catch/rethrow, jumping,
 charging and the four-round flow. The existing native guide pauses play, scrolls
