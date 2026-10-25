@@ -12,7 +12,9 @@ namespace daedalus::motif
     inline constexpr int Side=8,CellCount=64,PaletteCount=8,SymmetryCount=6,HistoryLimit=64;
     using Image=std::array<std::uint8_t,CellCount>;
     enum class Symmetry:std::uint8_t { None,MirrorColumns,MirrorRows,HalfTurn,QuarterTurn,Dihedral };
+    enum class CanvasTransform:std::uint8_t { Clockwise,MirrorColumns,MirrorRows };
     struct Orbit { std::array<int,8> Cells{}; std::size_t Count=0; };
+    struct Selection { std::array<bool,CellCount> Cells{}; std::size_t Count=0; };
     inline bool ValidImage(const Image& Pixels)
     { for (auto Colour:Pixels) if (Colour>=PaletteCount) return false; return true; }
     inline bool IsBlank(const Image& Pixels)
@@ -53,6 +55,39 @@ namespace daedalus::motif
         Out=Candidate; return true;
     }
 
+    /** Select the clicked colour's original four-connected region, then union
+     * the symmetry orbit of every region cell. Copied/painted cells never seed
+     * more region growth. Output stays unchanged for every invalid input. */
+    inline bool FillTargetsFor(const Image& Pixels,int Cell,Symmetry Mode,Selection& Out)
+    {
+        if (!ValidImage(Pixels) || Cell<0 || Cell>=CellCount || static_cast<int>(Mode)>=SymmetryCount) return false;
+        std::array<bool,CellCount> Region{};
+        std::array<int,CellCount> Queue{};
+        int Head=0,Tail=1; Queue[0]=Cell; Region[Cell]=true;
+        while (Head<Tail)
+        {
+            const int At=Queue[Head++],Row=At/Side,Column=At%Side;
+            auto Add=[&](int NextRow,int NextColumn)
+            {
+                if (NextRow<0 || NextRow>=Side || NextColumn<0 || NextColumn>=Side) return;
+                const int Next=NextRow*Side+NextColumn;
+                if (!Region[Next] && Pixels[Next]==Pixels[Cell]) { Region[Next]=true; Queue[Tail++]=Next; }
+            };
+            Add(Row-1,Column); Add(Row+1,Column); Add(Row,Column-1); Add(Row,Column+1);
+        }
+        Selection Candidate;
+        for (int At=0;At<CellCount;++At) if (Region[At])
+        {
+            Orbit Targets; if (!OrbitFor(At,Mode,Targets)) return false;
+            for (std::size_t I=0;I<Targets.Count;++I)
+            {
+                const int Target=Targets.Cells[I];
+                if (!Candidate.Cells[Target]) { Candidate.Cells[Target]=true; ++Candidate.Count; }
+            }
+        }
+        Out=Candidate; return true;
+    }
+
     class Session
     {
     public:
@@ -72,6 +107,26 @@ namespace daedalus::motif
             Orbit Targets; if (!OrbitFor(Cell,Mode,Targets)) return false;
             Image Next=Current;
             for (std::size_t I=0;I<Targets.Count;++I) Next[Targets.Cells[I]]=static_cast<std::uint8_t>(Colour);
+            return Replace(Next);
+        }
+        bool Fill(int Cell,int Colour,Symmetry Mode)
+        {
+            if (!bActive || Colour<0 || Colour>=PaletteCount) return false;
+            Selection Targets; if (!FillTargetsFor(Current,Cell,Mode,Targets)) return false;
+            Image Next=Current;
+            for (int I=0;I<CellCount;++I) if (Targets.Cells[I]) Next[I]=static_cast<std::uint8_t>(Colour);
+            return Replace(Next);
+        }
+        bool Transform(CanvasTransform Kind)
+        {
+            if (!bActive || static_cast<unsigned>(Kind)>static_cast<unsigned>(CanvasTransform::MirrorRows)) return false;
+            Image Next{};
+            for (int Row=0;Row<Side;++Row) for (int Column=0;Column<Side;++Column)
+            {
+                const int TargetRow=Kind==CanvasTransform::Clockwise?Column:Kind==CanvasTransform::MirrorRows?Side-1-Row:Row;
+                const int TargetColumn=Kind==CanvasTransform::Clockwise?Side-1-Row:Kind==CanvasTransform::MirrorColumns?Side-1-Column:Column;
+                Next[TargetRow*Side+TargetColumn]=Current[Row*Side+Column];
+            }
             return Replace(Next);
         }
         bool Replace(const Image& Pixels)

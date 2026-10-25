@@ -23,16 +23,16 @@
 
 namespace DaedalusMotifLocal
 {
-    constexpr int32 ToolCount=72, MaxFiles=128, MaxBytes=512;
+    constexpr int32 ToolCount=76, MaxFiles=128, MaxBytes=512;
     FVector CellCentre(int32 Cell) { return FVector((Cell/8-3.5)*60,-(Cell%8-3.5)*60,0); }
     FVector ToolAt(int32 Index)
-    { return Index<64?CellCentre(Index):FVector(Index<68?350:480,180-120*((Index-64)%4),65); }
+    { return Index<64?CellCentre(Index):FVector(350+130*((Index-64)/4),180-120*((Index-64)%4),65); }
     EDaedalusMotifAction ToolAction(int32 Index)
     { return Index<64?EDaedalusMotifAction::Cell:static_cast<EDaedalusMotifAction>(Index-63); }
     bool ValidAction(EDaedalusMotifAction Action,int32 Cell)
     {
         if (Action==EDaedalusMotifAction::Cell) return Cell>=0 && Cell<64;
-        return Cell==-1 && static_cast<uint8>(Action)>=1 && static_cast<uint8>(Action)<=8;
+        return Cell==-1 && static_cast<uint8>(Action)>=1 && static_cast<uint8>(Action)<=static_cast<uint8>(EDaedalusMotifAction::FlipRows);
     }
     bool LocalReach(const ADaedalusHero* Hero,const AActor* Actor)
     {
@@ -244,11 +244,18 @@ void ADaedalusGalleryMotifStudio::DrawCanvas()
         const FVector At(-210+60*Colour,-300,3); Main.Tile(At,24,DaedalusMotifLocal::Colour(Colour));
         if (Colour==Ink) { Main.Outline(At+FVector(0,0,0.5),26,FLinearColor::White); Main.Outline(At+FVector(0,0,0.7),22,FLinearColor::Black); }
     }
-    daedalus::motif::Orbit Orbit;
-    if (daedalus::motif::OrbitFor(SelectedCell,Mode,Orbit))
-        for (size_t I=0;I<Orbit.Count;++I)
+    daedalus::motif::Selection Targets;
+    if (bFill) daedalus::motif::FillTargetsFor(Draft.Canvas(),SelectedCell,Mode,Targets);
+    else
+    {
+        daedalus::motif::Orbit Orbit;
+        if (daedalus::motif::OrbitFor(SelectedCell,Mode,Orbit))
+            for (size_t I=0;I<Orbit.Count;++I) { Targets.Cells[Orbit.Cells[I]]=true; ++Targets.Count; }
+    }
+    for (int32 Cell=0;Cell<64;++Cell)
+        if (Targets.Cells[Cell])
         {
-            const FVector At=DaedalusMotifLocal::CellCentre(Orbit.Cells[I])+FVector(0,0,4);
+            const FVector At=DaedalusMotifLocal::CellCentre(Cell)+FVector(0,0,4);
             Main.Outline(At,27,FLinearColor::White); Main.Outline(At+FVector(0,0,0.2),25,FLinearColor::Black);
         }
     TArray<FVector> Normals; Normals.Init(FVector::UpVector,Main.Vertices.Num()); TArray<FVector2D> UV; UV.Init(FVector2D::ZeroVector,Main.Vertices.Num()); TArray<FProcMeshTangent> Tangents;
@@ -266,8 +273,8 @@ void ADaedalusGalleryMotifStudio::Refresh()
 {
     if (!IsStudioAlive() || bNotifying) return;
     FString State=IsDirty()?TEXT("DRAFT CHANGED / EXPORT TO KEEP"):!LineageId.empty()?TEXT("DRAFT MATCHES KEPT SKETCH"):TEXT("BLANK DRAFT / EXPORT TO KEEP");
-    FString Text=State+FString::Printf(TEXT("\nInk: %s   /   %s\nUndo %u   Redo %u\nChosen: %s\n"),UTF8_TO_TCHAR(daedalus::motif::ColourName(Ink)),
-        UTF8_TO_TCHAR(daedalus::motif::SymmetryName(Mode)),static_cast<unsigned>(Draft.UndoCount()),static_cast<unsigned>(Draft.RedoCount()),bHasChosen?*ChosenId.Left(8):TEXT("none / use Next sketch"));
+    FString Text=State+FString::Printf(TEXT("\nInk: %s   /   %s\nBrush: %s   /   Undo %u   Redo %u\nChosen: %s\n"),UTF8_TO_TCHAR(daedalus::motif::ColourName(Ink)),
+        UTF8_TO_TCHAR(daedalus::motif::SymmetryName(Mode)),bFill?TEXT("Area fill"):TEXT("Point"),static_cast<unsigned>(Draft.UndoCount()),static_cast<unsigned>(Draft.RedoCount()),bHasChosen?*ChosenId.Left(8):TEXT("none / use Next sketch"));
     Text+=Notice;
     if (ViewsReady()) DrawCanvas();
     if (!IsStudioAlive()) return;
@@ -376,12 +383,22 @@ FString ADaedalusGalleryMotifStudio::ToolPrompt(EDaedalusMotifAction Action,int3
     if (!bAvailable || !ViewsReady() || !ToolsReady()) return TEXT("Studio tools are unavailable. Export can still keep the draft");
     if (Action==EDaedalusMotifAction::Cell)
     {
+        if (bFill)
+        {
+            daedalus::motif::Selection Targets; daedalus::motif::FillTargetsFor(Draft.Canvas(),Cell,Mode,Targets);
+            return FString::Printf(TEXT("E / X: Fill matching area at row %d col %d and its symmetry copies: %u squares / %s. Undo restores one fill."),Cell/8+1,Cell%8+1,
+                static_cast<unsigned>(Targets.Count),UTF8_TO_TCHAR(daedalus::motif::ColourName(Ink)));
+        }
         daedalus::motif::Orbit Orbit; daedalus::motif::OrbitFor(Cell,Mode,Orbit);
         return FString::Printf(TEXT("E / X: Row %d col %d (%s). Paint %s on %u squares / %s"),Cell/8+1,Cell%8+1,
             UTF8_TO_TCHAR(daedalus::motif::ColourName(Draft.Canvas()[Cell])),UTF8_TO_TCHAR(daedalus::motif::ColourName(Ink)),static_cast<unsigned>(Orbit.Count),UTF8_TO_TCHAR(daedalus::motif::SymmetryName(Mode)));
     }
     if (Action==EDaedalusMotifAction::Colour) return TEXT("E / X: Next ink colour; Paper / erase removes ink");
     if (Action==EDaedalusMotifAction::Symmetry) return TEXT("E / X: Next symmetry; palette and symmetry do not change drawing history");
+    if (Action==EDaedalusMotifAction::Brush) return TEXT("E / X: Switch Point / Area fill. Fill uses touching same-colour squares and their symmetry copies; diagonal corners stay separate");
+    if (Action==EDaedalusMotifAction::Rotate) return TEXT("E / X: Rotate the whole draft clockwise 90 degrees; Undo restores it. Kept exports stay unchanged");
+    if (Action==EDaedalusMotifAction::FlipColumns) return TEXT("E / X: Flip the whole draft left / right; Undo restores it. Kept exports stay unchanged");
+    if (Action==EDaedalusMotifAction::FlipRows) return TEXT("E / X: Flip the whole draft near / far; Undo restores it. Kept exports stay unchanged");
     if (Action==EDaedalusMotifAction::Undo) return TEXT("E / X: Undo one drawing edit (latest 64 kept)");
     if (Action==EDaedalusMotifAction::Redo) return TEXT("E / X: Redo one undone drawing edit");
     if (Action==EDaedalusMotifAction::NextSketch) return TEXT("E / X: Browse the next local sketch; preview only, floor draft unchanged");
@@ -405,6 +422,10 @@ FString ADaedalusGalleryMotifStudio::ToolLabel(EDaedalusMotifAction Action,int32
     else if (Action==EDaedalusMotifAction::NextSketch) Text=TEXT("Next sketch\nPreview only");
     else if (Action==EDaedalusMotifAction::SaveLoad) Text=ArmedAction==Action?TEXT("Confirm Save + Load"):TEXT("Save + Load chosen");
     else if (Action==EDaedalusMotifAction::SaveClear) Text=ArmedAction==Action?TEXT("Confirm Save + Clear"):TEXT("Save + Clear");
+    else if (Action==EDaedalusMotifAction::Brush) Text=bFill?TEXT("Brush: Area fill\nSwitch to Point"):TEXT("Brush: Point\nSwitch to Area fill");
+    else if (Action==EDaedalusMotifAction::Rotate) Text=TEXT("Rotate picture\nClockwise 90");
+    else if (Action==EDaedalusMotifAction::FlipColumns) Text=TEXT("Flip picture\nLeft / right");
+    else if (Action==EDaedalusMotifAction::FlipRows) Text=TEXT("Flip picture\nNear / far");
     if (bFeedback && Action==FeedbackAction && Cell==FeedbackCell) Text+=TEXT("\n")+DaedalusMotifLocal::Wrap(Notice,36,3);
     return Text;
 }
@@ -421,15 +442,34 @@ bool ADaedalusGalleryMotifStudio::Operate(ADaedalusHero* Hero,const AActor* Tool
     bool Changed=false;
     if (Action==EDaedalusMotifAction::Cell)
     {
-        SelectedCell=Cell; daedalus::motif::Orbit Orbit; daedalus::motif::OrbitFor(Cell,Mode,Orbit);
-        Changed=Draft.Paint(Cell,Ink,Mode);
-        Notice=Changed?FString::Printf(TEXT("Painted %u squares with %s. Export to keep this draft."),static_cast<unsigned>(Orbit.Count),UTF8_TO_TCHAR(daedalus::motif::ColourName(Ink))):
+        SelectedCell=Cell; size_t Count=0;
+        if (bFill)
+        {
+            daedalus::motif::Selection Targets; daedalus::motif::FillTargetsFor(Draft.Canvas(),Cell,Mode,Targets); Count=Targets.Count;
+            Changed=Draft.Fill(Cell,Ink,Mode);
+        }
+        else
+        {
+            daedalus::motif::Orbit Orbit; daedalus::motif::OrbitFor(Cell,Mode,Orbit); Count=Orbit.Count;
+            Changed=Draft.Paint(Cell,Ink,Mode);
+        }
+        Notice=Changed?FString::Printf(TEXT("%s %u target squares with %s in one edit. Undo restores it; Export to keep."),bFill?TEXT("Filled"):TEXT("Painted"),static_cast<unsigned>(Count),UTF8_TO_TCHAR(daedalus::motif::ColourName(Ink))):
             TEXT("Those squares already have this ink. No drawing edit was added; Redo is kept.");
     }
     else if (Action==EDaedalusMotifAction::Colour)
-    { Ink=(Ink+1)%daedalus::motif::PaletteCount; Notice=TEXT("Ink changed. Palette choices do not use Undo; step onto a square and use E / X to paint."); Changed=true; }
+    { Ink=(Ink+1)%daedalus::motif::PaletteCount; Notice=TEXT("Ink changed. Palette choices do not use Undo; use E / X on a square with the chosen brush."); Changed=true; }
     else if (Action==EDaedalusMotifAction::Symmetry)
-    { Mode=static_cast<daedalus::motif::Symmetry>((static_cast<unsigned>(Mode)+1)%daedalus::motif::SymmetryCount); Notice=TEXT("Symmetry changed. Outlined squares show the next brush orbit; the drawing has not changed."); Changed=true; }
+    { Mode=static_cast<daedalus::motif::Symmetry>((static_cast<unsigned>(Mode)+1)%daedalus::motif::SymmetryCount); Notice=TEXT("Symmetry changed. The next point or filled region is copied through this symmetry. Outlines show its current targets; the picture is unchanged."); Changed=true; }
+    else if (Action==EDaedalusMotifAction::Brush)
+    { bFill=!bFill; Notice=bFill?TEXT("Area fill: touching same-colour squares and their symmetry copies. Diagonal corners are separate. One fill uses one Undo edit."):TEXT("Point brush: paint the selected square and its symmetry copies. Brush choice does not use Undo."); Changed=true; }
+    else if (Action==EDaedalusMotifAction::Rotate || Action==EDaedalusMotifAction::FlipColumns || Action==EDaedalusMotifAction::FlipRows)
+    {
+        const auto Transform=Action==EDaedalusMotifAction::Rotate?daedalus::motif::CanvasTransform::Clockwise:
+            Action==EDaedalusMotifAction::FlipColumns?daedalus::motif::CanvasTransform::MirrorColumns:daedalus::motif::CanvasTransform::MirrorRows;
+        Changed=Draft.Transform(Transform);
+        Notice=Changed?TEXT("The whole draft changed in one edit. Undo restores it. Export creates a new version; all kept sketches stay unchanged."):
+            TEXT("This picture already matches that transformation. No drawing edit was added; Redo is kept.");
+    }
     else if (Action==EDaedalusMotifAction::Undo)
     { Changed=Draft.Undo(); Notice=Changed?TEXT("Drawing edit undone. Export to keep the current picture."):TEXT("There is no earlier drawing edit to undo."); }
     else if (Action==EDaedalusMotifAction::Redo)
@@ -483,7 +523,7 @@ void ADaedalusGalleryMotifStudio::BeginPlay()
     if (GetWorld()->GetNetMode()!=NM_Standalone || !Draft.Begin() || !ViewsReady())
     { bAvailable=false; Notice=TEXT("This local motif studio is unavailable here."); Refresh(); return; }
     Baseline=Draft.Canvas(); TGuardValue<bool> Preparing(bBusy,true); SpawnTools(); if (!IsStudioAlive()) return;
-    Notice=bAvailable?TEXT("Use a floor square to paint its symmetry orbit. Paper erases. Undo / Redo keep 64 drawing edits. Export to keep; there is no autosave."):
+    Notice=bAvailable?TEXT("Point paints squares; Area fill paints a touching colour patch and its symmetry copies. Rotate / Flip reshape the draft. Undo keeps 64 edits. Export to keep; there is no autosave."):
         TEXT("The tool set is incomplete. No sketch was changed; a remaining Export tool can preserve a draft.");
     Refresh();
 }
