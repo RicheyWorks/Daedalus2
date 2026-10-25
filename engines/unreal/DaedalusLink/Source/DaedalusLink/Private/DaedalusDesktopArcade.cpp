@@ -171,6 +171,18 @@ void ADaedalusDesktopArcade::PauseGame(bool bPaused)
 	ResetPresentationInput();
 }
 
+bool ADaedalusDesktopArcade::NewMinesweeperPuzzle()
+{
+	if (bClosing || bCloseScheduled || Session.ActiveId() != "minesweeper" || Session.HasSaveRequest()) return false;
+	if (!Session.NewMinesweeperPuzzle(FGuid::NewGuid().A)) return false;
+	CurrentSeed = static_cast<int32>(Session.GetSeed());
+	bScoreSubmitted = false;
+	RunSaveError.Reset();
+	NextSaveAttemptSeconds = 0.0;
+	ResetPresentationInput();
+	return true;
+}
+
 bool ADaedalusDesktopArcade::SetGameOption(int32 Option)
 {
 	if (Session.HasSaveRequest()) { RunSaveError = TEXT("A Star save is pending; difficulty cannot replace it."); return false; }

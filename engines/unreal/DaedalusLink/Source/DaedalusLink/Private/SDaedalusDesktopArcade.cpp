@@ -330,6 +330,9 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 				[
 					SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(4.f, 4.f))
 					+ SWrapBox::Slot()
+					[MakeAction(TEXT("New puzzle"), FSimpleDelegate::CreateLambda([this]()
+					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->NewMinesweeperPuzzle(); }), true, true)]
+					+ SWrapBox::Slot()
 					[MakeAction(TEXT("9 x 9 / 10 mines"), FSimpleDelegate::CreateLambda([this]()
 					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("minesweeper")) Actor->SetGameOption(0); }), true, true)]
 					+ SWrapBox::Slot()
@@ -340,7 +343,7 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("minesweeper")) Actor->SetGameOption(2); }), true, true)]
 				]
 				+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 4.f, 0.f, 0.f)
-				[SNew(STextBlock).Text(FText::FromString(TEXT("New board replaces the current board. Save board first to keep progress. The saved board stays unchanged."))).AutoWrapText(true)]
+				[SNew(STextBlock).Text(FText::FromString(TEXT("New puzzle and size changes replace this board. Save first to keep progress. The saved board stays unchanged."))).AutoWrapText(true)]
 			]
 			+ SVerticalBox::Slot().FillHeight(1.f)
 			[SNew(DAUI::SGameCanvas).Game(Game)]
@@ -483,7 +486,7 @@ FText SDaedalusDesktopArcade::GameHelpProgress() const
 {
 	if (HelpGameId == TEXT("minesweeper")) return FText::FromString(TEXT(
 		"KEEP YOUR BOARD\nSave board / F5 keeps one local saved board. Continue saved board / F9 replaces the current board with that save, including its flags, selected cell, size, active timer and seed. Continue adds no time spent away. While paused, pad X saves and pad Y continues.\n\n"
-		"Save & Close leaves the cabinet open if writing fails. Plain Close, Restart and New board size buttons keep the saved board unchanged. Save first before starting another board if you want to keep this progress.\n\n"
+		"Save & Close leaves the cabinet open if writing fails. New puzzle chooses a fresh seed at the current size. Restart keeps the current size and seed; choosing a different first cell can change the mine layout. Close, Restart, New puzzle and size changes keep the saved board unchanged. Save first before starting another board if you want to keep this progress.\n\n"
 		"To reach cabinet buttons, return paused, press F2 / right-stick click, then close the catalog list and navigate the controls.\n\n"
 		"AFTER A RESULT\nA mine hit ends the board; revealing every safe cell wins. Return paused keeps the result paused. Then R / Restart retries at the current size and seed. For pad A replay, use P / Start to show the result first, then press pad A freshly. To save the finished board before retrying, return paused and use F5 / pad X."));
 	return FText::FromString(TEXT(
@@ -648,7 +651,7 @@ FText SDaedalusDesktopArcade::MinesweeperDifficultyText() const
 	const int32 Option = Actor->GetState().Option;
 	const TCHAR* Board = Option == 0 ? TEXT("9 x 9 / 10 mines") : Option == 1 ? TEXT("16 x 16 / 40 mines")
 		: Option == 2 ? TEXT("30 x 16 / 99 mines") : TEXT("unavailable");
-	return FText::FromString(FString::Printf(TEXT("Current board: %s. New board:"), Board));
+	return FText::FromString(FString::Printf(TEXT("Current board: %s"), Board));
 }
 
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const

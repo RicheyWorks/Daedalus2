@@ -144,3 +144,31 @@ Underlying cabinet controls and mouse canvas stay disabled while help is open.
 This is native presentation only: no core, actor, timer, save operation or format
 changes. Source review is separate from pending layout/scroll/focus/input and
 save/replay runtime acceptance; no portable rule suite was repeated for UI copy.
+
+## Fresh puzzles and replay
+
+The native New puzzle button requests an unrevealed puzzle at the current size.
+It uses Unreal's existing FGuid seed source and the Driver's existing Restart
+lifecycle. The portable Mines-only transition bounds the candidate to a native
+nonnegative int32 seed and avoids the active RNG stream, including the existing
+zero-seed alias. Extracting Random::InitialState keeps that old mapping unchanged.
+No RNG algorithm, board rules or DGM1 fields change. No save-file write occurs.
+
+Ordinary Restart and terminal replay retain the active seed and size. Planting
+also depends on the first revealed cell, so a matching layout requires the same
+opening cell. Continue remains authoritative for the exact older saved board and
+adopts its seed for subsequent replay. The new action clears old input and time
+debt, and never forwards its activation into a first reveal. Other games refuse it.
+
+The focused C++17 target is desktop_minesweeper_new_puzzle, or compile only
+minesweeper_new_puzzle_test.cpp against the plugin Public directory. Native seed
+generation, reflected API compilation, button layout/focus, mixed input and actual
+save-slot preservation remain native acceptance work. The portable suite tests
+real Driver, rendered targets, board rules and save/resume without engine headers.
+
+Strict single-TU MSVC /W4 /WX /permissive- passed 857/857 checks across 75 seed/
+size combinations, queued input/time debt, actual win/loss and other-game refusal.
+A private old-Restart variant passed 767/857 (90 expected failures); removing only
+the same-stream collision guard passed 836/857 (21 expected failures). Both
+controlled variants exited 1, with repository sources unchanged. No earlier suite,
+Unreal/UHT build, editor or service was run for this feature.

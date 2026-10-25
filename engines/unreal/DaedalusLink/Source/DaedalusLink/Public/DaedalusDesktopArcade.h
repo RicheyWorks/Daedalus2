@@ -120,6 +120,8 @@ public:
 	/** At most eight 1/60-second steps. Invalid/negative delta is ignored; stalled wall time is dropped. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") int32 AdvanceGame(double DeltaSeconds);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void RestartGame();
+	/** Start an unrevealed Minesweeper puzzle with a fresh seed at the current size. Saved board is kept. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool NewMinesweeperPuzzle();
 	/** Star keeps advancing its own pause-menu input; generic games stop within Driver::Advance. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void PauseGame(bool bPaused);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FDaedalusDesktopArcadeState GetState() const;

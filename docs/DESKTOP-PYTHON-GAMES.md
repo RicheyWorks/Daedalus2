@@ -118,6 +118,13 @@ navigation from the cabinet controls. Their rows wrap to the allotted width.
 Source review covers wiring/save preservation; native layout and controller
 traversal across sizes and Continue still require acceptance.
 
+**New puzzle** starts an unrevealed board at the current size with a fresh native
+seed. **Restart**, including result replay, retains the current seed and size;
+the first revealed cell also affects the planted layout. New puzzle leaves the
+saved slot unchanged. Continue can still restore that older board exactly, and
+Restart then follows the restored seed. The New puzzle button uses the existing
+native focus navigation and does not reuse a gameplay pad shortcut.
+
 The native board also accepts **left click to reveal**, **right click to toggle a
 flag**, and **middle click to chord** an open number. Chording keeps the existing
 matching-flag rule; matching flags can still be wrong. Clicks select the rendered

@@ -67,6 +67,14 @@ public:
         if(!Active) return;
         Active->Reset(Seed); Controls={}; PendingSeconds=0; StepCount=0; Paused=false; Refresh();
     }
+    // Explicit fresh puzzle, separate from same-seed Restart. Never writes a saved board.
+    bool NewMinesweeperPuzzle(std::uint32_t SeedCandidate) {
+        if(!Active || Id!="minesweeper" || HasSaveRequest()) return false;
+        // Keep native int32 seed presentation nonnegative. Existing uint32 saves stay readable.
+        std::uint32_t NextSeed=SeedCandidate&0x7fffffffu;
+        if(Random::InitialState(NextSeed)==Random::InitialState(Seed)) NextSeed=(NextSeed+1u)&0x7fffffffu;
+        Seed=NextSeed;Restart();return true;
+    }
     void SetInput(const Input& New) {
         Input Next=New; Next.AxisX=Axis(Next.AxisX); Next.AxisY=Axis(Next.AxisY);
         // An event arriving then releasing before a fixed step still emits one edge.
