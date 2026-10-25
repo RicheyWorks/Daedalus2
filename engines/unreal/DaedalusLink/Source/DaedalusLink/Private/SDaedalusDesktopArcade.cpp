@@ -471,7 +471,8 @@ bool SDaedalusDesktopArcade::CanResumeGameHelp() const
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	if (!bGameHelpOpen || !Actor) return false;
 	const auto State = Actor->GetState();
-	return State.Id == HelpGameId && !State.bSavePending && !State.bOver;
+	// Dodge results continue between rounds; resume the retained scorecard, without confirming it.
+	return State.Id == HelpGameId && !State.bSavePending && (!State.bOver || State.Id == TEXT("dodge_ball"));
 }
 
 FReply SDaedalusDesktopArcade::DismissGameHelp(bool bResume)
@@ -496,13 +497,14 @@ bool SDaedalusDesktopArcade::HasGameHelp() const
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	if (!Actor) return false;
 	const FString Id = Actor->GetSelectedGameId();
-	return Id == TEXT("minesweeper") || Id == TEXT("star_shooter");
+	return Id == TEXT("minesweeper") || Id == TEXT("star_shooter") || Id == TEXT("dodge_ball");
 }
 
 EVisibility SDaedalusDesktopArcade::GameHelpVisibility() const { return HasGameHelp() ? EVisibility::Visible : EVisibility::Collapsed; }
 
 FText SDaedalusDesktopArcade::GameHelpTitle() const
 {
+	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT("Courtyard Clash — How to play"));
 	return FText::FromString(HelpGameId == TEXT("minesweeper") ? TEXT("Minesweeper — How to play") : TEXT("Star Shooter — How to play"));
 }
 
@@ -514,6 +516,12 @@ FText SDaedalusDesktopArcade::GameHelpIntro() const
 		"READ THE NUMBERS\nA number counts mines in the cells touching it, including diagonals: up to eight neighbours. Use nearby numbers together to decide which covered cells are safe.\n\n"
 		"FLAGS AND CHORDING\nFlag a suspected mine; right-click again to remove a flag. A wrongly flagged safe cell must be unflagged and revealed to finish. Mines remaining is the total mine count minus your flags, so it can be negative and does not confirm that your flags are correct.\n\n"
 		"On an open number, a chord reveals the unflagged neighbours when the neighbouring flag count matches that number. A wrong flag can make this hit a mine. You can reveal cells individually instead.\n\n"
+		"CONTROLS IN THE GAME"));
+	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT(
+		"YOUR TEAM\nMove and jump all three living teammates together. Approach a loose ball to pick it up. A throw aims at the nearest living opponent; the small brackets and C1/C2/C3 cue show the current target.\n\n"
+		"THROW AND CATCH\nSpace/Z/J or pad A throws. Holding it also catches a nearby incoming ball and can immediately rethrow when ready. Pad X/RB throws only on a fresh press. Shift / pad B jumps; an airborne teammate catches automatically when a ball comes close.\n\n"
+		"CHARGE A SUPER\nWhile carrying the ball, hold W/Up or push the left stick up to build charge, then throw. Charge past halfway for your country's super throw. These inputs also move the team. D-pad Up moves without charging; it can be combined with stick Up to charge. Country supers can change the throw angle.\n\n"
+		"WATCH YOUR TEAM\nFriendly hits are possible. Normal hits cost one health; super hits cost two. A teammate with no health sits out for the rest of the match.\n\n"
 		"CONTROLS IN THE GAME"));
 	return FText::FromString(TEXT(
 		"YOUR GOAL\nSurvive successive waves and build your score. Keep moving to avoid enemy fire. Bosses arrive on every fifth wave; the run ends when your lives run out.\n\n"
@@ -528,6 +536,10 @@ FText SDaedalusDesktopArcade::GameHelpProgress() const
 		"Save & Close leaves the cabinet open if writing fails. New puzzle chooses a fresh seed at the current size. Restart keeps the current size and seed; choosing a different first cell can change the mine layout. Close, Restart, New puzzle and size changes keep the saved board unchanged. Save first before starting another board if you want to keep this progress.\n\n"
 		"To reach cabinet buttons, return paused, press F2 / right-stick click, then close the catalog list and navigate the controls.\n\n"
 		"AFTER A RESULT\nA mine hit ends the board; revealing every safe cell wins. Return paused keeps the result paused. Then R / Restart retries at the current size and seed. For pad A replay, use P / Start to show the result first, then press pad A freshly. To save the finished board before retrying, return paused and use F5 / pad X."));
+	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT(
+		"FOUR ROUNDS\nChoose a country with keys, D-pad or stick flicks, then confirm. Knock out the other team to win a match. All four matches count toward the tournament result; random opponents can repeat.\n\n"
+		"BETWEEN MATCHES\nA fresh throw, confirm or jump press starts the next round. After round four, the scorecard shows the overall win, loss or draw. Continue returns to the title; confirming a country starts a fresh tournament. R / Restart clears the tournament.\n\n"
+		"RETURN TO PLAY\nHelp pauses this match or result. Resume game returns to the same screen; a result still needs a fresh continuation press. Return paused keeps it paused. F1 / left-stick click opens this guide again."));
 	return FText::FromString(TEXT(
 		"KEEP YOUR RUN\nIn the game, P / Start opens the pause menu. Select Save & Quit with Up/Down, then confirm with Space / pad A or J / pad X. Save warnings appear here too; a pending save keeps Resume unavailable.\n\n"
 		"Continue saved Star run restores your saved score, wave, lives and upgrades. The arena, position and timers start fresh. To reach cabinet buttons, return paused, press F2 / right-stick click, then close the catalog list and navigate the controls. Restart and difficulty buttons start a new run while keeping the previous saved run.\n\n"

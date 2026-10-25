@@ -45,6 +45,27 @@ bracket, multiplayer or persistent leaderboard feature.
 
 ## Deliberate changes
 
+### Courtyard native How to play
+
+Courtyard now reuses the existing native paused help modal (button / F1 /
+left-stick click), rather than adding more court labels. Its own title, intro and
+progress branches explain shared trio movement, nearest target, held catch/rethrow
+versus fresh pad X/RB throw, jump catch, stick/hat charging and four-round results.
+They bypass Star's save instructions. Existing scroll, focus, held-accept repeat
+protection and pending-save notices/fences are retained.
+
+Dodge's Over flag marks a match result within a continuing tournament. Its help
+Resume button therefore permits that retained result, without advancing it;
+another fresh gameplay press performs the existing continuation. Other games'
+terminal-resume restrictions are unchanged. Return paused still leaves play paused.
+No game core, input adapter, actor state/save or new modal framework changed.
+
+This native Slate-only slice receives focused source/control-flow review and
+whitespace checks. Engine compilation, physical help/resume/scroll focus, held
+input isolation and viewport acceptance are deferred to the sole native owner.
+Portable sports or source fixtures cannot establish those native behaviors and
+were not rerun for this slice.
+
 ### Courtyard throw target
 
 Human possession now shows small inward chevrons at the current nearest living

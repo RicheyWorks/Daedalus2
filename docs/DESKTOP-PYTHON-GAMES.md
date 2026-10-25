@@ -282,6 +282,14 @@ next choice. The stick gesture that opens the picker is consumed. Match movement
 and the existing original-stick-versus-hat charge rules are retained. Native
 hardware and selection layout acceptance remain unverified.
 
+Courtyard Clash also uses **How to play / F1 / left-stick click** for an on-demand
+guide to shared team movement, nearest-target throws, held catch/rethrow, jumping,
+charging and the four-round flow. The existing native guide pauses play, scrolls
+with Page Up/Down or LB/RB, and clears held input. **Resume game** returns to the
+same match or result; continuing a result still needs a fresh gameplay press.
+**Return paused** keeps it paused. Native layout, scroll/focus and mixed physical
+input acceptance remain pending.
+
 After Courtyard Clash's fourth round, the **tournament scorecard** declares the
 overall win, opponent win or draw from the existing cumulative match wins. Large
 counts and four-segment bars distinguish your chosen country from all opponents;
