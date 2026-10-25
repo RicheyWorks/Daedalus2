@@ -14,7 +14,7 @@ class USceneComponent;
 class UTextRenderComponent;
 UENUM(BlueprintType)
 // Append new tools so existing placed/Blueprint action ordinals stay stable.
-enum class EDaedalusMotifAction : uint8 { Cell, Colour, Symmetry, Undo, Redo, Export, NextSketch, SaveLoad, SaveClear, Brush, Rotate, FlipColumns, FlipRows };
+enum class EDaedalusMotifAction : uint8 { Cell, Colour, Symmetry, Undo, Redo, Export, NextSketch, SaveLoad, SaveClear, Brush, Rotate, FlipColumns, FlipRows, Palette, PickInk };
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDaedalusMotifViewChanged, ADaedalusGalleryMotifStudio*, Studio);
 
 /** An original local 8x8 motif studio; not the Gallery server frame protocol.
@@ -60,7 +60,7 @@ private:
     EDaedalusMotifAction FeedbackAction=EDaedalusMotifAction::Colour;
     int32 FeedbackCell=-1;
     uint64 Epoch=0;
-    bool bEnding=false, bBusy=false, bNotifying=false, bAvailable=true, bToolsAttempted=false, bFeedback=false, bHasChosen=false, bFill=false;
+    bool bEnding=false, bBusy=false, bNotifying=false, bAvailable=true, bToolsAttempted=false, bFeedback=false, bHasChosen=false, bFill=false, bPicking=false;
     bool ViewsReady() const;
     bool ToolsReady() const;
     void SpawnTools();
