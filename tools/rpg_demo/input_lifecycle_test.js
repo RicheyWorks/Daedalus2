@@ -83,7 +83,7 @@ function session(production = source, options = {}) {
   const tick = (mode, dt) => { stats.ticks[mode] = (stats.ticks[mode] || 0) + 1; c.elapsed += dt || 0; };
   const c = {
     now: 1000, elapsed: 0, mode: "field", dlg: null, fade: 0, fadeCb: null, poisonFlash: 0.2, titleT: 0,
-    nameEntry: { name: "CORIN", t: 0 }, ending: { t: 0.5, saved: true }, goT: 0, titleIdx: 0,
+    nameEntry: { name: "CORIN", t: 0 }, ending: { t: 0.5, saved: true }, goT: 0, goIdx: -1, titleIdx: 0,
     TITLE_ITEMS: ["NEW GAME", "CONTINUE", "OPTIONS"], W: 320, H: 224, T: 16, AIR_SPEED: 2,
     P: { x: 2, y: 1, fx: 16, fy: 16, dir: "right", moving: 0.4, step: 0 },
     DIRS: { right: [1, 0], left: [-1, 0], up: [0, -1], down: [0, 1] },
@@ -111,6 +111,8 @@ function session(production = source, options = {}) {
     menuTick: () => tick("menu", 0), shopTick: () => tick("shop", 0),
     openMenu: () => { c.mode = "menu"; }, endFish: () => { c.mode = "field"; }, pickFish: () => c.fishing.fish,
     doAction: () => { stats.actions++; }, endRound: () => { stats.ticks.round = (stats.ticks.round || 0) + 1; },
+    // This lifecycle fixture has no saved record; recovery/reader integration has its own focused check.
+    readSavedJourney: () => ({ ok: false, kind: "missing" }),
     titleChoose: () => { stats.titleChoices++; }, nameAt: () => [0, 0], neActivate: () => { stats.nameChoices++; },
     neType: () => { stats.nameChoices++; }, neFinish: () => { stats.nameFinishes++; }, neDelete: () => true, neBack() {},
     saveGame: () => { stats.saves++; return true; }, cue() {}, say() {},
@@ -148,7 +150,7 @@ function cleared(s) {
   assert.ok(Object.values(s.edges).every(v => !v)); assert.ok(Object.values(s.ups).every(v => !v));
 }
 function state(s) { return JSON.stringify({ mode: s.c.mode, P: s.c.P, fish: s.c.fishing, B: s.c.B, ending: s.c.ending,
-  goT: s.c.goT, name: s.c.nameEntry, fade: s.c.fade, poison: s.c.poisonFlash, bag: s.c.bag, elapsed: s.c.elapsed }); }
+  goT: s.c.goT, goIdx: s.c.goIdx, name: s.c.nameEntry, fade: s.c.fade, poison: s.c.poisonFlash, bag: s.c.bag, elapsed: s.c.elapsed }); }
 const pauses = {
   blur: { stop: s => s.blur(), resume: s => s.focus() },
   hidden: { stop: s => s.hidden(true), resume: s => s.hidden(false) },

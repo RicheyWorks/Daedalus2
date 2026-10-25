@@ -2449,7 +2449,7 @@ function finishBattle() {
   if (B.endLines && B.endLines.length) { B.msg = B.endLines.shift(); return; }
   const r = B.result, wasBoss = B.boss, prev = B.prevCue, bf = B.foes.find(f => f.boss);
   party.forEach(m => { if (m.status) for (const k of Object.keys(m.status)) if (k !== "poison") delete m.status[k]; });
-  if (r === "lose") { B = null; mode = "gameover"; goT = 0; return; }
+  if (r === "lose") { B = null; mode = "gameover"; goT = 0; goIdx = -1; return; }
   B.phase = "out";
   fade = 1; fadeCb = () => {
     B = null; mode = "field"; cue(prev);
@@ -2695,7 +2695,7 @@ function drawBattle() {
    Settings tabs. The prompt names the button on whatever is plugged in. Tap or click an item to choose it. */
 let SAVE_KEY = "prism.save.v1";
 const TITLE_ITEMS = ["NEW GAME", "CONTINUE", "OPTIONS"];
-let titleT = 0, goT = 0, titleIdx = 0;
+let titleT = 0, goT = 0, titleIdx = 0, goIdx = -1;
 let saveCacheText, saveCacheData, saveCacheResult;
 function readSavedJourney() {
   if (!D || !D.party || typeof PrismJourneySave === "undefined") return { ok: false, kind: "unavailable", reason: "The journey reader has not loaded. Reload the game, then try CONTINUE again." };
@@ -2946,9 +2946,48 @@ function drawEnding() {
 }
 function gameOverTick(dt) {
   goT += dt;
+  if ((D.realm_key || "prism") === "prism") {
+    if (goIdx < 0) goIdx = readSavedJourney().ok ? 0 : 1;
+    if (goT <= 1) { clearActionButtons(); for (const key of ["up", "down", "left", "right"]) hit(key); return; }
+    const back = hit("b"), start = hit("start"), confirm = hit("a"), up = hit("up"), down = hit("down"); hit("left"); hit("right");
+    if (back || start) { clearActionButtons(); mode = "title"; titleT = 0; cue("TITLE"); return; }
+    if (up !== down) { goIdx = 1 - goIdx; sfx("TICK"); }
+    if (confirm) {
+      clearActionButtons();
+      if (goIdx === 0) titleChoose(TITLE_ITEMS.indexOf("CONTINUE"));
+      else { mode = "title"; titleT = 0; cue("TITLE"); }
+    }
+    return;
+  }
   if (goT > 1 && (hit("start") || hit("a"))) { clearActionButtons(); mode = "title"; titleT = 0; cue("TITLE"); }
 }
+function drawDefeatRecovery() {
+  const saved = readSavedJourney(), columns = Math.floor((W - 24) / 6), choice = goIdx < 0 ? saved.ok ? 0 : 1 : goIdx, ready = goT > 1;
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 40); g.fillRect(0, 176, W, H - 176);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 39, W, 1); g.fillRect(0, 175, W, 1);
+  const heading = "THE HEART GOES DARK"; text(heading, Math.floor((W - tw(heading)) / 2), 16, "#f87878");
+  const status = saved.ok ? "SAVED JOURNEY AVAILABLE." : saved.kind === "missing" ? "NO SAVED JOURNEY ON THIS BROWSER." : saved.kind === "invalid" ? "SAVED JOURNEY NEEDS ATTENTION." : "SAVED JOURNEY CANNOT BE READ.";
+  text(status, 12, 52, saved.ok ? "#a8e0a0" : "#fff070");
+  if (saved.ok) {
+    const lead = saved.value.party[0], level = " LV " + (lead.lv > 999 ? "999+" : lead.lv);
+    text("SAVED: " + fit(lead.name, columns - 7 - level.length) + level, 12, 70);
+  } else text("TITLE HAS NEW GAME AND OPTIONS.", 12, 70, "#a0a8c0");
+  ["CONTINUE SAVED JOURNEY", "RETURN TO TITLE"].forEach((label, i) => {
+    const y = 126 + i * 24;
+    if (i === choice) { g.fillStyle = ready ? "#26344c" : "#121d30"; g.fillRect(12, y - 6, W - 24, 20); if (ready) cursor(20, y); }
+    text(label, 36, y, !ready || i === 0 && !saved.ok ? "#808090" : "#ffffff");
+  });
+  if (!ready) text("A MOMENT...", 12, 188, "#a0a8c0");
+  else {
+    text(choice === 0 ? saved.ok ? "LOADS SAVED HP/MP, ITEMS AND TIME." : "CHOOSE CONTINUE FOR DETAILS." : "RETURN TO THE TITLE MENU.", 12, 184, "#a0a8c0");
+    text(choice === 0 && saved.ok ? "STARTS ON FOOT AT THE INN." : "NEW GAME AND OPTIONS ARE THERE.", 12, 196, "#a0a8c0");
+    const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, ""), start = titlePrompt("menu", "ENTER").replace(/^PRESS /, "");
+    text(confirm + ": OK", 12, 212, "#fff070"); const title = back + "/" + start + ": TITLE"; text(title, W - 12 - tw(title), 212, "#a0d8f8");
+  }
+}
 function drawGameOver() {
+  if ((D.realm_key || "prism") === "prism") return drawDefeatRecovery();
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   const s = "THE HEART GOES DARK", a = clamp(goT, 0, 1);
   g.globalAlpha = a; text(s, (W - tw(s)) / 2, 96, "#f87878", "#300010"); text("PRESS START", (W - tw("PRESS START")) / 2, 130, "#c0c0d0"); g.globalAlpha = 1;
