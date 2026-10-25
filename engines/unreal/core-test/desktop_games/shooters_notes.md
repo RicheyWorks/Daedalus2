@@ -65,6 +65,26 @@ Preserved player clamping and axis override, power levels 1/2/3 with correspondi
 
 The canonical source has no `draw_text` implementation and never tests a projectile against its separate boss, making the intended win unreachable. The native rendering contract fixes the text failure; boss bullet and contact collisions are now connected. At 1500 points the 20-HP chaser boss enters and stays in the right-side engagement region instead of drifting permanently off-screen. Defeat awards 500 points and ends in victory. Held fire and keyboard restart through the shared host are usability enhancements. Single-use projectiles and one life loss per frame fix overlapping-hit defects.
 
+### Riftwing ordinary-enemy health cues
+
+Ordinary enemies now show compact health pips above their original silhouettes:
+two for basic ships and four for chasers, matching spawn health. Filled gold pips
+empty after surviving damage. Both rows leave four pixels above the silhouette,
+using the existing health state with no helper label or new timer. The boss keeps
+its separate 20HP bar. The cue follows both Full run and Boss rehearsal enemies;
+combat, scoring, random draws and pickup behavior are unchanged.
+
+`desktop_sega_enemy_health` / `sega_enemy_health_test.cpp` focuses on real hit
+settlement and presentation, using the existing Sega-only friend seam. Native
+cue size, contrast, overlap and human play acceptance remain pending.
+
+Strict serial single-TU MSVC C++17 passed 19/19 focused checks: both moving
+silhouettes, real surviving/lethal shots, original 100-point/drop RNG behavior,
+offscreen cleanup, rehearsal/boss-bar companion and repeated-render/future-state
+purity. No old shooter, rehearsal or replay bulk was rerun. The added rendering
+is bounded to five commands per ordinary enemy (at most 320 across the existing
+64-enemy cap); no gameplay field or timer was added.
+
 ### Optional Riftwing boss rehearsal
 
 Riftwing Vanguard (the Sega core) offers **Full run / Boss rehearsal** through the

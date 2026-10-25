@@ -296,6 +296,10 @@ flight, brake, UFO, score and life rules apply; wave N/3 and the result show the
 goal. Restart/fresh retry keeps the mode, and changing modes starts over. Native
 controls/layout, voyage duration and play feel remain unverified.
 
+Riftwing Vanguard's ordinary ships show two basic/four chaser **health pips**, so
+surviving hits remain visible. The boss retains its separate health bar. Combat
+and scoring rules are unchanged; native cue readability remains unverified.
+
 Riftwing Vanguard offers **Boss rehearsal** beside its default Full run. The same
 20-HP boss arrives immediately, with the normal starting ship and score zero;
 regular enemies still provide pressure. Full run keeps its 1500-point entry.
