@@ -300,6 +300,12 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::AsteroidsVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Endless"), 0, TEXT("Changing mode starts over. Endless keeps the original wave progression."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Three waves"), 1, TEXT("Changing mode starts over. Clear all rocks in the first three waves to finish the voyage."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
 				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::SegaVisibility)
 				+ SWrapBox::Slot()[MakeMode(TEXT("sega_shooter"), TEXT("Full run"), 0, TEXT("Changing mode starts over. Full run reaches the boss at 1500 points."))]
 				+ SWrapBox::Slot()[MakeMode(TEXT("sega_shooter"), TEXT("Boss rehearsal"), 1, TEXT("Changing mode starts over. Rehearsal starts the same boss immediately; regular enemies still arrive."))]
@@ -744,6 +750,12 @@ EVisibility SDaedalusDesktopArcade::SegaVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	return Actor && Actor->GetSelectedGameId() == TEXT("sega_shooter") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+EVisibility SDaedalusDesktopArcade::AsteroidsVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("asteroids") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const

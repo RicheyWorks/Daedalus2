@@ -290,6 +290,12 @@ and all play/scoring rules are retained. A fresh continue press still returns to
 title, and confirming a country starts a new tournament. Native font/layout and
 physical input acceptance remain unverified.
 
+Driftstone Patrol offers **Three waves** beside its original Endless mode. Clear
+every rock and split fragment through wave three to finish the voyage. The same
+flight, brake, UFO, score and life rules apply; wave N/3 and the result show the
+goal. Restart/fresh retry keeps the mode, and changing modes starts over. Native
+controls/layout, voyage duration and play feel remain unverified.
+
 Riftwing Vanguard offers **Boss rehearsal** beside its default Full run. The same
 20-HP boss arrives immediately, with the normal starting ship and score zero;
 regular enemies still provide pressure. Full run keeps its 1500-point entry.
