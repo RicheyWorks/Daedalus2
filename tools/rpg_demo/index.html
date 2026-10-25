@@ -1232,7 +1232,8 @@ function menuTick() {
   if (sub === "bestiary") { const n = beastList().length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "status") { menuWho(); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "order") {
-    if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } hit("a"); sfx("TICK"); return; }
+    if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } hit("a"); if ((D.realm_key || "prism") === "prism") hit("start"); sfx("TICK"); return; }
+    if ((D.realm_key || "prism") === "prism") { const naming = hit("start"); if (naming && menu.pick < 0) { openCallsign(); return; } }
     menuMove("ii", roster().length);
     if (hit("a")) {
       if (menu.pick < 0) { menu.pick = menu.ii; sfx("PICK"); menu.msg = "AND SWAP WITH?"; }
@@ -1458,18 +1459,38 @@ function formationPreview() {
   const front = after.slice(0, ACTIVE);
   if (!front.some(m => m.hp > 0)) return { text: "SOMEONE STANDING MUST LEAD.", color: "#f87878" };
   if (front.length !== party.length) return { text: "FRONT AFTER: " + front.length + " MEMBERS.", color: "#fff070" };
-  if (target === picked) return { text: "KEEP " + target.name.slice(0, chars - 14) + " IN PLACE.", color: "#fff070" };
+  if (target === picked) return { text: "KEEP " + target.name.toUpperCase().slice(0, chars - 14) + " IN PLACE.", color: "#fff070" };
   const incoming = front.find(m => !party.includes(m)), outgoing = party.find(m => !front.includes(m));
-  if (incoming && outgoing) { const n = Math.floor((chars - 12) / 2); return { text: "IN: " + incoming.name.slice(0, n) + " / OUT: " + outgoing.name.slice(0, n), color: "#78f8a0" }; }
+  if (incoming && outgoing) { const n = Math.floor((chars - 12) / 2); return { text: "IN: " + incoming.name.toUpperCase().slice(0, n) + " / OUT: " + outgoing.name.toUpperCase().slice(0, n), color: "#78f8a0" }; }
   const n = Math.floor((chars - 9) / 2);
-  return { text: "SWAP: " + picked.name.slice(0, n) + " / " + target.name.slice(0, n), color: "#fff070" };
+  return { text: "SWAP: " + picked.name.toUpperCase().slice(0, n) + " / " + target.name.toUpperCase().slice(0, n), color: "#fff070" };
+}
+function openCallsign() {
+  if ((D.realm_key || "prism") !== "prism" || !menu || menu.sub !== "order" || menu.pick >= 0) return;
+  clearActionButtons(); for (const k of ["up", "down", "left", "right"]) hit(k);
+  const target = roster()[menu.ii]; if (!target) return;
+  nameEntry = { name: "", r: 0, c: 0, t: 0, target, originalName: target.name, returnMenu: menu, serial: journeySerial };
+  mode = "name"; sfx("OPEN");
+}
+function finishCallsign(commit) {
+  const ne = nameEntry;
+  if (!ne || !ne.target || ne.serial !== journeySerial || !roster().includes(ne.target) || menu !== ne.returnMenu) return;
+  const name = ne.name.trim(), changed = !!(commit && name && (name.charAt(0) + name.slice(1).toLowerCase()) !== ne.target.name);
+  if (changed) ne.target.name = name.charAt(0) + name.slice(1).toLowerCase();
+  menu = ne.returnMenu; nameEntry = null; mode = "menu";
+  clearActionButtons(); for (const k of ["up", "down", "left", "right"]) hit(k);
+  sfx(commit ? "PICK" : "CANCEL");
+  if (changed) { menu.msg = "CALL SIGN UPDATED. SAVE TO KEEP IT."; toast("Call sign changed", "Use field SAVE outside a dungeon or rest at an inn to keep this name."); }
 }
 function drawFormation() {
   const r = roster(), selected = clamp(menu.ii, 0, r.length - 1), member = r[selected], half = Math.floor(W / 2), chars = Math.floor((W - 24) / 6);
   g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
-  win(0, 0, W, 32); win(0, 32, half, 122); win(half, 32, W - half, 122);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 32);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 31, W, 1);
+  win(0, 32, half, 122); win(half, 32, W - half, 122);
   text("FORMATION", 12, 10, "#fff070");
   const count = party.length + " FRONT / " + reserve.length + " RESERVE"; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  text((menu.pick < 0 ? "CALL SIGN: " + titlePrompt("menu", "ENTER OR TAP START") : "X MARKS YOUR FIRST PICK.").slice(0, chars), 12, 22, "#a0a8c0");
   for (const [list, offset, x, label] of [[party, 0, 0, "FRONT / BATTLE"], [reserve, party.length, half, "RESERVE"]]) {
     text(label, x + 12, 40, "#a0d8f8");
     const hover = selected - offset, picked = menu.pick - offset;
@@ -1484,16 +1505,17 @@ function drawFormation() {
       const rect = D.rects.sprites[m.sprite];
       if (rect) spr("sprites", m.sprite, x + 22, y - 2, 0, null, null, Math.min(20 / rect[2], 20 / rect[3]));
       const width = Math.floor((half - 60) / 6);
-      text(m.name.slice(0, width), x + 48, y, m.hp > 0 ? "#ffffff" : "#f87878");
-      text(m.job.slice(0, width), x + 48, y + 10, "#a0a8c0");
+      text(m.name.toUpperCase().slice(0, width), x + 48, y, m.hp > 0 ? "#ffffff" : "#f87878");
+      text(m.job.toUpperCase().slice(0, width), x + 48, y + 10, "#a0a8c0");
     });
   }
   g.fillStyle = "#101a32"; g.fillRect(0, 154, W, H - 154);
   g.fillStyle = "#4d6c8a"; g.fillRect(0, 154, W, 1);
-  text(member.name.slice(0, Math.max(1, chars - 3 - member.job.length)) + " - " + member.job, 12, 164, "#ffffff");
+  const job = member.job.toUpperCase();
+  text(member.name.toUpperCase().slice(0, Math.max(1, chars - 3 - job.length)) + " - " + job, 12, 164, "#ffffff");
   const number = (n, limit) => n > limit ? limit + "+" : String(n);
   text("HP " + number(member.hp, 9999) + " MP " + number(member.mp, 999) + " ATK " + number(atkOf(member), 999) + " DEF " + number(defOf(member), 999), 12, 176);
-  const spells = member.spells, names = [];
+  const spells = member.spells.map(name => name.toUpperCase()), names = [];
   for (const name of spells) {
     const next = names.concat(name), remaining = spells.length - next.length;
     if (tw("MAGIC: " + next.join(", ") + (remaining ? " +" + remaining : "")) > W - 24) break;
@@ -2289,7 +2311,7 @@ let nameEntry = null;
 const NE_X = c => 26 + c * Math.floor((W - 40) / 10), NE_Y = r => 64 + r * 22;
 function neRows() { return D.title.name_entry.grid.length; }
 function neCell(r, c) {                                   /* row neRows() is the bottom bar: columns 0-4 BACK, 5-9 END */
-  if (r === neRows()) return c < 5 ? "BACK" : "END";
+  if (r === neRows()) return c < 5 ? (nameEntry && nameEntry.target ? "CANCEL" : "BACK") : "END";
   const ch = D.title.name_entry.grid[r][c];
   return ch === " " ? (r === 3 && c === 6 ? "SP" : null) : ch;
 }
@@ -2300,13 +2322,15 @@ function neType(ch) {
 }
 function neDelete() { if (nameEntry.name.length) { nameEntry.name = nameEntry.name.slice(0, -1); sfx("TICK"); return true; } return false; }
 function neFinish() {
+  if (nameEntry.target) { finishCallsign(true); return; }
   const nm = nameEntry.name.trim() || party[0].name.toUpperCase();
   party[0].name = nm.charAt(0) + nm.slice(1).toLowerCase(); sfx("PICK"); nameEntry = null; beginJourney();
 }
-function neBack() { nameEntry = null; sfx("CANCEL"); fade = 1; fadeCb = () => { mode = "title"; titleT = 0; }; }
+function neBack() { if (nameEntry && nameEntry.target) { finishCallsign(false); return; } nameEntry = null; sfx("CANCEL"); fade = 1; fadeCb = () => { mode = "title"; titleT = 0; }; }
 function neActivate() {
   const v = neCell(nameEntry.r, nameEntry.c);
-  if (v === "BACK") { if (!neDelete()) neBack(); }
+  if (v === "CANCEL") neBack();
+  else if (v === "BACK") { if (!neDelete()) neBack(); }
   else if (v === "END") neFinish();
   else if (v) neType(v);
 }
@@ -2324,6 +2348,7 @@ function neMove(dr, dc) {
 }
 function nameTick(dt) {
   nameEntry.t += dt;
+  if (nameEntry.target && hit("b")) { neBack(); return; }
   if (hit("up")) neMove(-1, 0);
   if (hit("down")) neMove(1, 0);
   if (hit("left")) neMove(0, -1);
@@ -2333,18 +2358,24 @@ function nameTick(dt) {
   if (nameEntry && hit("start")) { nameEntry.r = neRows(); nameEntry.c = 5; neFinish(); }
 }
 function drawName() {
-  const ne = nameEntry, lead = party[0], H0 = 48, max = D.title.name_entry.max_len;
+  const ne = nameEntry, lead = ne.target || party[0], H0 = 48, max = D.title.name_entry.max_len;
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, H0);
   const r = D.rects.sprites[lead.sprite];
-  if (r) spr("sprites", lead.sprite, 10, 6, 0, null, null, 36 / r[3]);
-  text("NAME YOUR " + lead.job.toUpperCase() + ":", 50, 10, "#fff070");
+  if (r) spr("sprites", lead.sprite, 10, 6, 0, null, null, ne.target ? Math.min(36 / r[2], 36 / r[3]) : 36 / r[3]);
+  text(ne.target ? "CALL SIGN - " + lead.job.toUpperCase() : "NAME YOUR " + lead.job.toUpperCase() + ":", 50, 10, "#fff070");
   const caret = Math.floor(ne.t * 2.5) % 2 && ne.name.length < max ? "_" : " ";
   text(ne.name + caret, 50, 26);
+  if (ne.target) text(("WAS " + ne.originalName).toUpperCase().slice(0, Math.floor((W - 162) / 6)), 150, 26, "#a0a8c0");
   for (let i = 0; i < max; i++) { g.fillStyle = i < ne.name.length ? "#fff070" : "rgba(255,255,255,.35)"; g.fillRect(50 + i * 6, 35, 5, 1); }
   win(0, H0, W, H - H0);
   D.title.name_entry.grid.forEach((row, ri) => { for (let ci = 0; ci < 10; ci++) { const v = neCell(ri, ci); if (v) text(v, NE_X(ci), NE_Y(ri)); } });
-  text("BACK", 26, H - 30); text("END", W - 60, H - 30, "#fff070");
+  text(ne.target ? "CANCEL" : "BACK", 26, H - 30); text("END", W - 60, H - 30, "#fff070");
+  if (ne.target) {
+    const chars = Math.floor((W - 24) / 6), back = titlePrompt("cancel", "ESC OR TAP B").replace(/^PRESS /, "");
+    text((titlePrompt("menu", "ENTER OR TAP START") + " TO FINISH.").slice(0, chars), 12, H - 52, "#a0d8f8");
+    text(("BACKSPACE: DELETE " + back + ": CANCEL").slice(0, chars), 12, H - 16, "#a0a8c0");
+  }
   const cx = ne.r === neRows() ? (ne.c < 5 ? 14 : W - 72) : NE_X(ne.c) - 12, cy = ne.r === neRows() ? H - 30 : NE_Y(ne.r);
   cursor(cx, cy);
 }
@@ -2362,6 +2393,7 @@ window.addEventListener("keydown", e => {                 /* typing straight in 
   if (mode !== "name" || !nameEntry || gameplayInputBlocked() || e.ctrlKey || e.metaKey || e.altKey) return;
   const k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
   const stop = () => { e.preventDefault(); e.stopImmediatePropagation(); };
+  if (k === "Escape" && nameEntry.target) { stop(); neBack(); return; }
   if (k === " ") { stop(); neType("SP"); return; }
   if (k.length === 1 && D.title.name_entry.grid.some(row => row.includes(k))) { stop(); neType(k); return; }
   if (k === "Enter") { stop(); if (!e.repeat) neFinish(); return; }

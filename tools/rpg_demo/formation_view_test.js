@@ -101,11 +101,11 @@ check("first pick has a supported visible X and preview changes nothing",()=>{
   assert.ok(s.draws.some(d=>d.kind==="text"&&d.value==="X"&&d.x===170&&d.y===136)); assert.ok(!s.draws.some(d=>d.kind==="text"&&d.value==="*"));
   preview(s); assert.equal(memberState(s),before);
 });
-check("reserve-in preview matches actual second-Confirm swap",()=>swapCase(0,7,/^IN: Brannoc \/ OUT: Corin$/,"#78f8a0"));
-check("reverse pick order gives the same reserve-in result",()=>swapCase(7,0,/^IN: Brannoc \/ OUT: Corin$/,"#78f8a0"));
-check("front-only reorder preview matches the existing transaction",()=>swapCase(0,1,/^SWAP: Corin \/ Ysolde$/,"#fff070"));
-check("reserve-only reorder preview matches the existing transaction",()=>swapCase(4,7,/^SWAP: Fennick \/ Brannoc$/,"#fff070"));
-check("self pick retains the same four-front roster",()=>swapCase(3,3,/^KEEP Rook IN PLACE\.$/,"#fff070"));
+check("reserve-in preview matches actual second-Confirm swap",()=>swapCase(0,7,/^IN: Brannoc \/ OUT: Corin$/i,"#78f8a0"));
+check("reverse pick order gives the same reserve-in result",()=>swapCase(7,0,/^IN: Brannoc \/ OUT: Corin$/i,"#78f8a0"));
+check("front-only reorder preview matches the existing transaction",()=>swapCase(0,1,/^SWAP: Corin \/ Ysolde$/i,"#fff070"));
+check("reserve-only reorder preview matches the existing transaction",()=>swapCase(4,7,/^SWAP: Fennick \/ Brannoc$/i,"#fff070"));
+check("self pick retains the same four-front roster",()=>swapCase(3,3,/^KEEP Rook IN PLACE\.$/i,"#fff070"));
 check("standing-front refusal is previewed and commit keeps all members/resources",()=>{
   const s=earned(session()).enter(); s.api.party().forEach((m,i)=>{m.hp=i===0?1:0;}); s.api.reserve()[3].hp=0;
   s.api.menu().ii=0;s.tick("a");s.api.menu().ii=7;const before=s.api.roster(),members=memberState(s),saved=progress(s);
@@ -130,10 +130,13 @@ for (const width of [320,256]) check("legacy three-front roster scrolls five res
 });
 for (const width of [320,256]) check("accepted long names/large values and physical help fit at "+width,()=>{
   const s=earned(session(width,"prism",source,{confirm:"ABCDEFGH",cancel:"12345678"})).enter(),m=s.api.party()[0];
-  m.name="L".repeat(64);m.hp=m.max=m.mp=m.mmax=Number.MAX_SAFE_INTEGER;m.st.str=m.st.vit=Number.MAX_SAFE_INTEGER;s.api.menu().ii=0;
-  s.draw();assertBounds(s);assert.equal(textAt(s,176).value,"HP 9999+ MP 999+ ATK 999+ DEF 999+");
-  assert.match(textAt(s,212).value,/ABCDEFGH PICK 12345678 BACK$/);s.tick("a");s.draw();assertBounds(s);assert.match(textAt(s,212).value,/ABCDEFGH SWAP 12345678 BACK$/);
-  s.api.menu().ii=7;s.draw();assertBounds(s);
+  m.hp=m.max=m.mp=m.mmax=Number.MAX_SAFE_INTEGER;m.st.str=m.st.vit=Number.MAX_SAFE_INTEGER;
+  for (const name of ["L".repeat(64), "\u00df".repeat(64)]) {
+    m.name=name;s.api.menu().ii=0;s.api.menu().pick=-1;
+    s.draw();assertBounds(s);assert.equal(textAt(s,176).value,"HP 9999+ MP 999+ ATK 999+ DEF 999+");
+    assert.match(textAt(s,212).value,/ABCDEFGH PICK 12345678 BACK$/);s.tick("a");s.draw();assertBounds(s);assert.match(textAt(s,212).value,/ABCDEFGH SWAP 12345678 BACK$/);
+    s.api.menu().ii=7;s.draw();assertBounds(s);assert.equal(m.name,name,"display clipping never rewrites the accepted name");
+  }
 });
 check("empty reserve, downed portrait and missing sprite are readable",()=>{
   const s=session().enter(),m=s.api.party()[0];m.hp=0;delete s.c.D.rects.sprites[m.sprite];s.draw();assertBounds(s);
