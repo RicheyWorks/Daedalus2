@@ -290,6 +290,13 @@ next choice. The stick gesture that opens the picker is consumed. Match movement
 and the existing original-stick-versus-hat charge rules are retained. Native
 hardware and selection layout acceptance remain unverified.
 
+Courtyard Clash supports **V / pad Y / LB: pass** to the next living teammate in
+P1/P2/P3 order, skipping knockouts. The ball travels normally; the blue-ringed
+receiver catches automatically when it comes close, then settles before another throw. Passes
+are harmless to your team and can be intercepted by opponents. Existing attack
+throws retain friendly hits. A valid pass wins a simultaneous pass/throw press;
+holding pass alone does not chain passes. Native controls and play feel are pending.
+
 Courtyard Clash also uses **How to play / F1 / left-stick click** for an on-demand
 guide to shared team movement, nearest-target throws, held catch/rethrow, jumping,
 charging and the four-round flow. The existing native guide pauses play, scrolls

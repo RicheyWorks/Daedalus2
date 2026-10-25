@@ -40,6 +40,7 @@ desktop_test(desktop_football_practice football_practice_test.cpp sports_parity.
 desktop_test(desktop_dodge_target dodge_target_test.cpp "")
 desktop_test(desktop_dodge_tournament dodge_tournament_test.cpp "")
 desktop_test(desktop_dodge_country_stick dodge_country_stick_test.cpp "")
+desktop_test(desktop_dodge_pass dodge_pass_test.cpp "")
 desktop_test(desktop_platformers platformers_test.cpp platformers_parity.txt)
 desktop_test(desktop_ninja_replay ninja_replay_test.cpp "")
 desktop_test(desktop_ninja_jump ninja_jump_forgiveness_test.cpp platformers_parity.txt)
