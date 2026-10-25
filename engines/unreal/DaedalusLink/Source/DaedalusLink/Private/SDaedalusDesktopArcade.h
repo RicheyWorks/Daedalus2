@@ -70,6 +70,7 @@ private:
 	EVisibility FootballVisibility() const;
 	EVisibility SegaVisibility() const;
 	EVisibility AsteroidsVisibility() const;
+	EVisibility NinjaVisibility() const;
 	EVisibility DungeonVisibility() const;
 	EVisibility MinesweeperVisibility() const;
 	EVisibility LeaderboardVisibility() const;

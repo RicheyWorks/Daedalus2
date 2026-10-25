@@ -312,6 +312,12 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::NinjaVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("shadow_ninja"), TEXT("Adventure"), 0, TEXT("Changing mode starts over. Adventure keeps the original enemies and boss."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("shadow_ninja"), TEXT("Terrace climb"), 1, TEXT("Changing mode starts over. Reach three lights with the existing jumps and wall climb; pit falls return to the last terrace."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
 				SNew(SHorizontalBox).Visibility(this, &SDaedalusDesktopArcade::DungeonVisibility)
 				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
 				[
@@ -768,6 +774,12 @@ EVisibility SDaedalusDesktopArcade::AsteroidsVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	return Actor && Actor->GetSelectedGameId() == TEXT("asteroids") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+EVisibility SDaedalusDesktopArcade::NinjaVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("shadow_ninja") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const

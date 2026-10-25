@@ -105,6 +105,41 @@ Reset and Driver pause/input checks. The six-step window does not pre-empt a
 physical wall arrival. No original fixture regenerated, broad platformer suite,
 repeated replay proof, engine build or native playtest was run for this change.
 
+### Optional Shadow Ninja Terrace climb
+
+The cabinet offers **Adventure / Terrace climb** using the existing checked-mode
+controls. Adventure remains option 0 with its enemies, gold, boss and rules. Option
+1 is an ordered three-light practice route through the same four platforms and
+the same NinjaPlayer movement, jumps and wall climb. Targets are (410,290),
+(640,210), then (765,140): two terrace jumps and a right-wall climb. Only the next
+light is active, with a larger halo; the existing level slot counts lights /3.
+
+Practice has no enemies or boss. Falling below the existing pit boundary restores
+the player to the last supported anchor, preserving collected lights and score.
+Anchors are (175,380), (410,300), then (640,220). Recovery clears transient attacks
+and jump windows and latches held Jump, so it does not create an automatic hop.
+Landing on the lower platform remains ordinary platforming and can be recovered
+with the same controls. Each light earns the existing 50-point gold award; all
+three freeze a course-clear result. No timer, persistent reward or save is added.
+
+Reset/fresh terminal retry retain mode and seed. A mode change starts over while
+selecting the active native mode keeps progress. The practice HUD replaces unused
+combat readiness with one goal row and a short movement/jump/wall footer, rather
+than adding a help modal. Adventure output and random draws retain their rules.
+`desktop_ninja_terrace_course` / `ninja_terrace_course_test.cpp` is the focused
+public-input course, recovery and lifecycle check; prior source/grace/replay bulk
+is separate evidence. Native mode focus, glow/layout and human difficulty/feel are
+unverified.
+
+Strict serial single-TU MSVC C++17 passed 34/34 focused checks. The single public
+movement/jump/wall route completed all three lights in 172 steps, score 150 and
+health five, without setting progress or goals. Retained route states verified all
+three pit anchors, preserved progress, transient/held-jump cleanup and fresh jumps.
+Mode validation/reset, ten-draw Adventure reset and short default companions,
+presentation purity, terminal freeze, two representative retries and Driver input/
+time/pause cleanup passed. No old source, grace, replay or broad platformer suite
+was repeated. Portable scripted completion does not establish native play feel.
+
 ### Shadow Ninja enemy health cues
 
 Ordinary enemies now carry compact health pips above their existing silhouette:
