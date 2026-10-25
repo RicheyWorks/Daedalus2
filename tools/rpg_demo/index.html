@@ -1503,8 +1503,9 @@ function drawFieldMagicBook() {
   text(back + (who ? ": BACK" : ": CASTER"), 12, 214, "#fff070");
   const summons = titlePrompt("menu", "ENTER").replace(/^PRESS /, "") + ": SUMMONS"; text(summons, W - 12 - tw(summons), 214, "#a0d8f8");
 }
+let summonAudition = null; // Audio-clock lifetime survives menu closure; it never gates ordinary battle calls.
 function openSummonBook() {
-  menu.summonBack = menu.sub; menu.sub = "summons"; menu.si = 0;
+  menu.summonBack = menu.sub; menu.sub = "summons"; menu.si = 0; menu.summonNote = "";
   for (const key of ["up", "down", "left", "right"]) hit(key); clearActionButtons(); sfx("OPEN");
 }
 function summonBookTick() {
@@ -1513,7 +1514,14 @@ function summonBookTick() {
     for (const key of ["up", "down", "left", "right"]) hit(key); clearActionButtons();
     menu.sub = menu.summonBack === "magic" ? "magic" : "magic-who"; delete menu.summonBack; sfx("TICK"); return;
   }
-  const n = mySpirits().length; if (n) menuMove("si", n); else { hit("up"); hit("down"); } hit("left"); hit("right");
+  const spirits = mySpirits(), n = spirits.length; if (n) menuMove("si", n); else { hit("up"); hit("down"); } hit("left");
+  if (hit("right") && n) auditionSummon(spirits[clamp(menu.si || 0, 0, n - 1)]);
+}
+function auditionSummon(spirit) {
+  if (!actx || actx.state !== "running") { menu.summonNote = !actx ? "SOUND HAS NOT STARTED." : actx.state === "suspended" ? "SOUND IS PAUSED." : "SOUND IS UNAVAILABLE."; return; }
+  if (summonAudition && summonAudition.context === actx && actx.currentTime < summonAudition.endsAt) return;
+  const played = playChord(spirit);
+  if (played) { summonAudition = Object.assign(played, { warden: spirit.warden }); menu.summonNote = ""; }
 }
 function drawSummonBook() {
   const spirits = mySpirits(), selected = clamp(menu.si || 0, 0, Math.max(0, spirits.length - 1)), spirit = spirits[selected], caster = roster()[menu.who];
@@ -1535,12 +1543,20 @@ function drawSummonBook() {
     shard(center, 74, color);
     const image = "Boss_" + spirit.warden, r = D.rects.sprites[image];
     if (r) { const scale = Math.min(72 / r[2], 72 / r[3]); spr("sprites", image, center - r[2] * scale / 2, 74 + (72 - r[3] * scale) / 2, 0, null, null, scale); }
+    if (summonAudition && summonAudition.context === actx && summonAudition.warden === spirit.warden && actx.state !== "closed" && actx.currentTime < summonAudition.endsAt) {
+      text("CHORD", split + 12, 66, "#fff070");
+      summonAudition.startsAt.forEach((at, i) => { if (actx.currentTime >= at) { const alpha = clamp((summonAudition.endsAt - actx.currentTime) / (summonAudition.endsAt - at), 0, 1); g.fillStyle = "rgba(244,232,255," + alpha.toFixed(3) + ")"; g.fillRect(center - 14 + i * 12, 151, 4, 4); } });
+    }
     text(fit((ELEM[spirit.element] || spirit.element) + " / ALL FOES", Math.floor((W - split - 24) / 6)), split + 12, 162, "#a0d8f8");
   } else {
     text("NO SPIRITS YET.", 12, 42, "#a0a8c0"); text("WARDEN SHARDS AWAKEN SUMMONS.", 12, 76); text("EARN A SHARD, THEN RETURN HERE.", 12, 92, "#a0a8c0"); shard(Math.floor(W / 2), 100, "#9c88df");
   }
   text("BATTLE ONLY / ONCE EACH PER BATTLE", 12, 184, "#a8e0a0");
-  if (spirit) text("UP/DOWN: SPIRIT", 12, 196, "#a0a8c0");
+  if (spirit) {
+    const active = summonAudition && summonAudition.context === actx && actx.state !== "closed" && actx.currentTime < summonAudition.endsAt;
+    const hint = active ? actx.state === "running" ? "UP/DOWN PICK / CHORD PLAYING" : "SOUND IS PAUSED." : menu.summonNote && (!actx || actx.state !== "running") ? menu.summonNote : "UP/DOWN PICK / RIGHT HEAR";
+    text(hint, 12, 196, "#a0a8c0");
+  }
   const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, ""), start = titlePrompt("menu", "ENTER").replace(/^PRESS /, "");
   text(confirm + "/" + back + "/" + start + ": BACK", 12, 212, "#fff070");
 }
@@ -2110,12 +2126,14 @@ function playChord(sp) {                                  /* soft rolled triad: 
   sfx("SUMMON:" + sp.name);
   if (!actx) return;
   const t0 = actx.currentTime, lp = actx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1200; lp.connect(sfxGain);
+  const timeline = { context: actx, startsAt: [], endsAt: t0 };
   for (const n of sp.chord) {
     const o = actx.createOscillator(), gn = actx.createGain(), t = t0 + n.at_ms / 1000;
     o.type = "sine"; o.frequency.value = Math.min(n.hz, PrismSummons.MAX_HZ);
     gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(n.gain, t + 0.04); gn.gain.exponentialRampToValueAtTime(0.0001, t + 1.6);
-    o.connect(gn); gn.connect(lp); o.start(t); o.stop(t + 1.7);
+    o.connect(gn); gn.connect(lp); o.start(t); o.stop(t + 1.7); timeline.startsAt.push(t); timeline.endsAt = Math.max(timeline.endsAt, t + 1.7);
   }
+  return timeline;
 }
 function nextChooser(from) { for (let i = from; i < party.length; i++) if (party[i].hp > 0 && !isHeld(party[i])) return i; return -1; }
 function battleTick(dt) {

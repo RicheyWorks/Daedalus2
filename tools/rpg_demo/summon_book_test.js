@@ -43,7 +43,7 @@ function session(width = 320, realm = "prism") {
   const known = new Set(parties[realm].members.flatMap(m => m.spells));
   const c = { D: { realm_key: realm, party: clone(parties[realm]), gear, dungeons: clone(routes), menus: clone(menus[realm]), rects: { sprites: rects },
       spells: clone(spells.filter(s => s.realm === realm && (known.has(s.name) || s.tier <= 2))), ...(realm === "portal" ? { realm_profile: { start_level: 1 } } : {}) },
-    W: width, H: 224, Math: math, pressed, pressedAt, now: 0, cursorNow: 0, PAD: null, B: null, fade: 0, mode: "field", map: { kind: "town", retained: true }, P: { x: 7, y: 9, dir: "left" },
+    W: width, H: 224, Math: math, pressed, pressedAt, now: 0, cursorNow: 0, PAD: null, B: null, actx: null, fade: 0, mode: "field", map: { kind: "town", retained: true }, P: { x: 7, y: 9, dir: "left" },
     state: { beaten: new Set(), ways: new Set(), seen: {}, fish: {}, quests: {}, day: 1, minute: 600, air: null, returnTo: null, steps: 0, sinceBattle: 0 }, opened: new Set(["retained/chest"]),
     window: { PrismSummons: reference }, PrismSummons: reference, IM: { sprites: "sprite-atlas-peer" }, performance: { now: () => c.cursorNow },
     clamp: (n, lo, hi) => Math.max(lo, Math.min(hi, n)), sfx: x => sounds.push(x), drawField: () => paints.push({ kind: "field" }), shardCount: () => 0, clockText: () => "D1 10:00", isNight: () => false,
@@ -102,7 +102,7 @@ check("opening and every closing button preserve caster/book/spell/feedback whil
 check("Back beats Start and Confirm in both original magic stages without a delayed reference opening", () => {
   for (const stage of ["magic-who", "magic"]) { const s = context(session(), stage), before = s.resources(); s.tick("b", "start", "a", "up", "down", "left", "right"); assert.equal(s.api.menu().sub, stage === "magic" ? "magic-who" : null); edges(s); assert.equal(s.resources(), before); s.tick(); assert.notEqual(s.api.menu().sub, "summons"); }
 });
-check("spirit cursor wraps independently, horizontal input is ignored and the three-row viewport uses earned records", () => {
+check("spirit cursor wraps independently and Left/Right leave selection/resources intact in the audio-free fixture", () => {
   const s = context(session(), "magic"); setEarned(s, table.map(sp => sp.warden)); open(s); const m = s.api.menu(), ii = m.ii, who = m.who, before = s.resources();
   s.tick("up"); assert.equal(m.si, 2); s.tick("down"); assert.equal(m.si, 0); s.tick("down"); assert.equal(m.si, 1); s.tick("left", "right"); assert.equal(m.si, 1); assert.equal(m.ii, ii); assert.equal(m.who, who); assert.equal(s.resources(), before);
   s.draw(); assert.equal(s.paints.filter(p => p.kind === "text" && p.x === 24 && [84, 112, 140].includes(p.y)).length, 3);
