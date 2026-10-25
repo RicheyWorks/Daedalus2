@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include "DaedalusGalleryMotifStudio.h"
+#include "DaedalusGalleryMotifNative.h"
 #include "DaedalusHero.h"
 #include "Components/PointLightComponent.h"
 #include "Components/SceneComponent.h"
@@ -180,6 +181,19 @@ namespace DaedalusMotifLocal
     };
 }
 
+namespace DaedalusMotifNative
+{
+    bool ReadLocalExport(const FString& Id,daedalus::motif::Document& Out,std::string& Bytes,FString& Error)
+    {
+        std::string Raw; daedalus::motif::Document Prepared;
+        if (!DaedalusMotifLocal::Read(Id,Raw,Error)) return false;
+        if (!daedalus::motif::DecodeDocument(Raw,Prepared) || Prepared.Id!=DaedalusMotifLocal::Utf8(Id))
+            return DaedalusMotifLocal::Refuse(Error,TEXT("The chosen file does not match this sketch format and ID. Its bytes and your draft are kept."));
+        Out=Prepared; Bytes=Raw; return true;
+    }
+    FLinearColor PaletteColour(int32 Index) { return DaedalusMotifLocal::Colour(Index); }
+}
+
 ADaedalusGalleryMotifStudio::ADaedalusGalleryMotifStudio()
 {
     PrimaryActorTick.bCanEverTick=false; bReplicates=false; SetActorEnableCollision(false);
@@ -274,11 +288,7 @@ bool ADaedalusGalleryMotifStudio::ExportPrepared(const daedalus::motif::Image& P
 bool ADaedalusGalleryMotifStudio::ReadChosen(daedalus::motif::Document& Out,std::string& Bytes,FString& Error) const
 {
     if (!bHasChosen || !DaedalusMotifLocal::Id(ChosenId)) { Error=TEXT("Choose a saved sketch with Next sketch first. Your draft is unchanged."); return false; }
-    std::string Raw; daedalus::motif::Document Prepared;
-    if (!DaedalusMotifLocal::Read(ChosenId,Raw,Error)) return false;
-    if (!daedalus::motif::DecodeDocument(Raw,Prepared) || Prepared.Id!=DaedalusMotifLocal::Utf8(ChosenId))
-    { Error=TEXT("The chosen file does not match this sketch format and ID. Its bytes and your draft are kept."); return false; }
-    Out=Prepared; Bytes=Raw; return true;
+    return DaedalusMotifNative::ReadLocalExport(ChosenId,Out,Bytes,Error);
 }
 bool ADaedalusGalleryMotifStudio::NextSketch()
 {
