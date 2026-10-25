@@ -2518,13 +2518,17 @@ function drawBattleTarget(split) {
   text(fit(action, columns - price.length) + price, 6, 152, "#fff070");
   text(fit(target.name), 6, 164);
   const charged = (D.realm_key || "prism") === "prism" && B.foes.includes(target) && target.hp > 0 && target.charged;
-  text("TARGET " + (B.target + 1) + "/" + B.list.length + (charged ? " CHARGED" : ""), 6, 174, charged ? "#f8d878" : "#a0a8c0");
+  const stolen = (D.realm_key || "prism") === "prism" && B.foes.includes(target) && target.hp > 0 && target.stolen > 0;
+  const counter = stolen ? (B.target + 1) + "/" + B.list.length + " STOLEN " + (target.stolen > 999 ? "999+" : target.stolen) + "G" : "TARGET " + (B.target + 1) + "/" + B.list.length + (charged ? " CHARGED" : "");
+  text(counter, 6, 174, charged || stolen ? "#f8d878" : "#a0a8c0");
   if (party.includes(target)) {
     const cap = W < 320 ? 999 : 9999, number = n => n > cap ? cap + "+" : String(n);
     text("HP " + number(target.hp) + "/" + number(target.max), 6, 184, target.hp <= 0 ? "#f87878" : "#a8e0a0");
     text("MP " + number(target.mp) + "/" + number(target.mmax), 6, 194, "#a0c8ff");
-  } else if (pending.kind === "magic") {
-    wrap(spellHint(pending.spell), columns).slice(0, 2).forEach((line, i) => text(line, 6, 184 + i * 10, "#a0a8c0"));
+  } else {
+    const facts = pending.kind === "magic" ? wrap(spellHint(pending.spell), columns).slice(0, 2) : [];
+    facts.forEach((line, i) => text(line, 6, 184 + i * 10, "#a0a8c0"));
+    if (stolen && facts.length < 2) text("DEFEAT TO RECLAIM", 6, 184 + facts.length * 10, "#f8d878");
   }
   const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
   text(confirm + ": CHOOSE", 6, 204, "#fff070"); text(back + ": BACK", 6, 214, "#a0a8c0");
@@ -2541,6 +2545,12 @@ function drawChargeBadge(foe, stacked) {
   const x = Math.round(clamp(foe.x + foe.size / 2 - 24, 0, W - 48)), y = Math.round(foe.y + foe.size - (stacked ? 18 : 7));
   g.fillStyle = "#101526"; g.fillRect(x, y, 48, 9); g.fillStyle = "#f8d878"; g.fillRect(x, y, 1, 9);
   text("CHARGED", x + 3, y + 1, "#f8d878", null);
+}
+function drawStolenBadge(foe, stacked) {
+  if ((D.realm_key || "prism") !== "prism" || foe.hp <= 0 || !(foe.stolen > 0)) return;
+  const x = Math.round(clamp(foe.x + foe.size / 2 - 24, 0, W - 48)), y = Math.round(foe.y + foe.size - 7 - stacked * 11);
+  g.fillStyle = "#101526"; g.fillRect(x, y, 48, 9); g.fillStyle = "#f8d878"; g.fillRect(x, y, 1, 9);
+  text("STOLEN", x + 3, y + 1, "#f8d878", null);
 }
 function battlePoint(target) {
   if (B.foes.includes(target)) return { x: target.x + target.size / 2, y: target.y + target.size / 2 };
@@ -2634,6 +2644,7 @@ function drawBattle() {
     const ft = f.hp > 0 ? tags(f) : [];
     if (ft.length) statusPill(ft[Math.floor(B.t / 1.2) % ft.length], f.x + f.size / 2 - 12, f.y + f.size - 7);
     drawChargeBadge(f, ft.length > 0);
+    drawStolenBadge(f, (ft.length ? 1 : 0) + (f.charged ? 1 : 0));
   }
   for (const p of B.pops) text(p.txt, Math.round(p.x - tw(p.txt) / 2), Math.round(p.y - p.t * 18), p.color, "#000000");
   win(0, 144, split, 80); win(split, 144, W - split, 80);
