@@ -290,6 +290,13 @@ next choice. The stick gesture that opens the picker is consumed. Match movement
 and the existing original-stick-versus-hat charge rules are retained. Native
 hardware and selection layout acceptance remain unverified.
 
+Threadlight's optional **Switchback** room adds staggered passages to navigate
+with the same lantern, exit and trail rules. Original room stays the default;
+each room offers the existing six lantern orders. Changing rooms starts over,
+and Next circuit keeps the selected room while advancing the order. The current
+room appears in the existing progress line. No reward or world-Dungeon dependency
+is added. Native room controls, navigation clarity and play feel are pending.
+
 Twinwake Volley's optional **Target rally** adds three ordered gold windows on
 the familiar practice return wall. Move the paddle at contact to change spin and
 experiment with placement. Wrong windows still return the ball, and missed rallies

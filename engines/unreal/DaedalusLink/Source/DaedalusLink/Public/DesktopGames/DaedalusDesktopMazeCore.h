@@ -36,6 +36,11 @@ public:
         "#.................#", "#.........####....#", "#.................#",
         "####################"
     }};
+    inline static constexpr std::array<const char*,Rows> SwitchbackMap{{
+        "####################", "#..................#", "#..##########.####.#",
+        "#..................#", "########.#########.#", "#..................#",
+        "####################"
+    }};
     struct Player { double X=80, Y=80; };
     enum class CircuitStage { Lanterns, ExitUnlocked, Complete };
     static constexpr int LanternCount=3;
@@ -53,24 +58,30 @@ public:
         return CircuitNumber(Seed)%static_cast<std::uint32_t>(Routes.size());
     }
     inline static constexpr Vec Exit{60,220};
-    static bool IsWall(int Col,int Row) {
+    static bool IsWall(int Col,int Row,int Room=0) {
         // Ragged source rows and all out-of-map coordinates are solid.
+        const auto& Layout=Room==1?SwitchbackMap:Map;
         return Row<0 || Row>=Rows || Col<0 || Col>=Columns ||
-            Col>=static_cast<int>(std::strlen(Map[static_cast<std::size_t>(Row)])) ||
-            Map[static_cast<std::size_t>(Row)][Col]=='#';
+            Col>=static_cast<int>(std::strlen(Layout[static_cast<std::size_t>(Row)])) ||
+            Layout[static_cast<std::size_t>(Row)][Col]=='#';
     }
-    static bool Collides(double X,double Y) {
+    static bool Collides(double X,double Y,int Room=0) {
         const int Left=static_cast<int>(std::floor(X/Tile));
         const int Right=static_cast<int>(std::floor((X+Tile-0.001)/Tile));
         const int Top=static_cast<int>(std::floor(Y/Tile));
         const int Bottom=static_cast<int>(std::floor((Y+Tile-0.001)/Tile));
-        return IsWall(Left,Top)||IsWall(Right,Top)||IsWall(Left,Bottom)||IsWall(Right,Bottom);
+        return IsWall(Left,Top,Room)||IsWall(Right,Top,Room)||IsWall(Left,Bottom,Room)||IsWall(Right,Bottom,Room);
     }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed; Hero={}; Order=Routes[Seed%Routes.size()];
         Lit={}; LitCount=0; RunFrames=0; Started=false; Complete=false; TrailEnabled=false;
         Notice.clear(); NoticeFrames=0;
     }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
     void Step(const Input& I) override {
         if(I.ActionPressed) { Reset(SessionSeed); return; }
         if(Complete) return; // A fresh reset is deliberate; held interaction cannot replay.
@@ -86,8 +97,8 @@ public:
         const double Y=std::abs(Axis(I.AxisY))>0.2 ? Axis(I.AxisY) : static_cast<double>(D.Y);
         const double Dx=X*5, Dy=Y*5;
         const Player Before=Hero;
-        if(!Collides(Hero.X+Dx,Hero.Y)) Hero.X+=Dx;
-        if(!Collides(Hero.X,Hero.Y+Dy)) Hero.Y+=Dy;
+        if(!Collides(Hero.X+Dx,Hero.Y,Option)) Hero.X+=Dx;
+        if(!Collides(Hero.X,Hero.Y+Dy,Option)) Hero.Y+=Dy;
         const bool Interact=I.FirePressed || I.JumpPressed;
         Started=Started || Hero.X!=Before.X || Hero.Y!=Before.Y || Interact;
         if(Started && RunFrames<std::numeric_limits<std::uint64_t>::max()) ++RunFrames;
@@ -100,9 +111,12 @@ public:
         return Complete?CircuitStage::Complete:(LitCount==LanternCount?CircuitStage::ExitUnlocked:CircuitStage::Lanterns);
     }
     void Render(Frame& Out) const override {
-        Out.Clear(Columns*Tile,Rows*Tile+64,Black);
+        Out.Clear(Columns*Tile,Rows*Tile+64,Option==1?Color{10,24,32,255}:Black);
         for(int Y=0;Y<Rows;++Y) for(int X=0;X<Columns;++X)
-            if(IsWall(X,Y)) Out.AddRect(X*Tile,Y*Tile,Tile,Tile,{100,100,100,255});
+            if(IsWall(X,Y,Option)) {
+                Out.AddRect(X*Tile,Y*Tile,Tile,Tile,Option==1?Color{110,83,55,255}:Color{100,100,100,255});
+                if(Option==1) Out.AddRect(X*Tile,Y*Tile,Tile,6,{160,125,72,255});
+            }
         if(TrailEnabled && !Complete) {
             const auto Path=TrailPath();
             const Color Trail{135,180,205,255};
@@ -130,7 +144,7 @@ public:
         }
         Out.AddRect(Exit.X-16,Exit.Y-16,32,32,LitCount==LanternCount?Color{80,200,255,255}:Color{95,100,120,255});
         Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",Black,12);
-        const std::string Circuit="Circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size());
+        const std::string Circuit=std::string(Option==1?"Switchback | ":"")+"Circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size());
         const std::string Progress=Circuit+(Complete?" clear in "+std::to_string(RunFrames/60)+"s. K/Enter/pad B or R: replay."
             :(LitCount==LanternCount?": exit unsealed. Approach EXIT and light it."
                 :": "+std::to_string(LitCount)+"/3 lit. Next: "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]));
@@ -139,7 +153,7 @@ public:
         Out.AddText(12,Rows*Tile+35,Notice.empty()?Controls:Notice,White,14);
     }
     Status GetStatus() const override {
-        std::string Text="Threadlight circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size())+": ";
+        std::string Text=std::string(Option==1?"Threadlight Switchback circuit ":"Threadlight circuit ")+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size())+": ";
         Text+=Complete?"complete; Action/R replays."
             :(LitCount==LanternCount?"Exit unlocked; approach EXIT and press Fire/Jump."
                 :std::to_string(LitCount)+"/3: seek "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]+"; Fire/Jump lights, Action resets.");
@@ -155,7 +169,7 @@ private:
         const int StartY=static_cast<int>(std::floor(Hero.Y/Tile));
         const Vec Target=LitCount<LanternCount?Lanterns[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]:Exit;
         const int GoalX=static_cast<int>(Target.X/Tile),GoalY=static_cast<int>(Target.Y/Tile);
-        if(Collides(Hero.X,Hero.Y) || Collides(StartX*Tile,StartY*Tile) || Collides(GoalX*Tile,GoalY*Tile)) return {};
+        if(Collides(Hero.X,Hero.Y,Option) || Collides(StartX*Tile,StartY*Tile,Option) || Collides(GoalX*Tile,GoalY*Tile,Option)) return {};
         const int Start=StartY*Columns+StartX,Goal=GoalY*Columns+GoalX;
         std::array<int,Count> Parent{},Queue{};Parent.fill(-1);
         int Head=0,Tail=0;Queue[static_cast<std::size_t>(Tail++)]=Start;Parent[static_cast<std::size_t>(Start)]=Start;
@@ -164,7 +178,7 @@ private:
             const int Node=Queue[static_cast<std::size_t>(Head++)];
             for(const auto D:Directions) {
                 const int X=Node%Columns+D.X,Y=Node/Columns+D.Y;
-                if(X<0 || X>=Columns || Y<0 || Y>=Rows || Collides(X*Tile,Y*Tile)) continue;
+                if(X<0 || X>=Columns || Y<0 || Y>=Rows || Collides(X*Tile,Y*Tile,Option)) continue;
                 const int Next=Y*Columns+X;
                 if(Parent[static_cast<std::size_t>(Next)]>=0) continue;
                 Parent[static_cast<std::size_t>(Next)]=Node;Queue[static_cast<std::size_t>(Tail++)]=Next;
@@ -210,7 +224,7 @@ private:
     std::uint32_t SessionSeed=0;
     std::array<int,LanternCount> Order{{0,1,2}};
     std::array<bool,LanternCount> Lit{};
-    int LitCount=0, NoticeFrames=0;
+    int LitCount=0, NoticeFrames=0,Option=0;
     std::uint64_t RunFrames=0;
     bool Started=false, Complete=false, TrailEnabled=false;
     std::string Notice;

@@ -143,6 +143,37 @@ against the exact prior Maze header at `0b1b95038` passed 14/28, with fourteen
 expected failures; absent paths stop traversal sections early. No fixtures were
 regenerated. The normalized Pac-Man/Zelda suffix remains identical (472 lines).
 
+### Threadlight Switchback room
+
+Mode0 keeps the original map and static IsWall/Collides default behavior. Optional
+mode1 selects a separately authored20x7 Switchback map with staggered upper/lower
+passages, warm wall caps and a dark floor. It uses the same40px body/spawn(80,80),
+5px X-before-Y movement, three existing lantern/exit anchors, six orders, near
+interaction, clock, notices and140-anchor dotted trail engine. Selected-room
+collision feeds both movement axes, rendering and every trail query; no mutable
+shared map or parallel pathfinder is introduced. The room name reuses progress/
+status text. All original constants and mode0 drawing remain unchanged.
+
+Reset keeps the room and clears current lights/time/trail/notices. Room choice
+uses existing checked MakeMode controls beside Next circuit in a wrapping row.
+Next circuit captures the room before StartGame creates a fresh engine, then
+restores Switchback through the existing option API; the Original path needs no
+extra reset. A failed restoration reports that the next circuit started without
+claiming the old circuit was kept. No actor implementation, new input/host API,
+seed encoding or world-Dungeon/save/builder changes. Canonical circuit seeds and
+their six-order wrap stay unchanged. Native room/next-circuit focus, scale and
+human route learning remain unverified.
+
+`desktop_dungeon_switchback` / `dungeon_switchback_test.cpp` passed 146/146 strict
+single-TU MSVC C++17 checks. All six new-room orders complete through real rendered-
+trail inputs and explicit interactions, paired with guide-off play:2360 total
+movement/interaction steps. No route pose/light/progress assignments. New-room
+140-anchor BFS checks full-body connectivity; tests cover20-column walls/spawn,
+selected-map collision/rendering, wrong/early interactions preserving progress,
+real unaligned connector safety, completion/reset priority, pure reads and Driver
+room/seed/circuit cleanup. Host-style Select then option restore is emulated,
+not claimed as native execution. No Original-room traversal or old suite repeated.
+
 **Pac-Man:** all 31x28 source map characters and 304 dot coordinates are retained,
 as are the 2.5-pixel player and 2-pixel ghost speeds, buffered directions, digital
 direction precedence, dominant-axis stick directions, mouth cycle, four ghost
