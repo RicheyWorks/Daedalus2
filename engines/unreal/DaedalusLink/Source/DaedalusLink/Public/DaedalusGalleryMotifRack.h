@@ -2,6 +2,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "DaedalusOrrery.h"
+#include "DaedalusGalleryMotifCore.h"
 #include "DaedalusGalleryMotifRack.generated.h"
 
 class ADaedalusGalleryMotifRack;
@@ -29,6 +30,9 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|MotifRack") TObjectPtr<UTextRenderComponent> Readout;
     UPROPERTY(BlueprintAssignable, Category="Daedalus|MotifRack") FDaedalusMotifRackViewChanged OnViewChanged;
     UFUNCTION(BlueprintPure, Category="Daedalus|MotifRack") int32 PreparedCount() const { return PreparedIds.Num(); }
+    /** All prepared captured documents in rack order. No IO, skipping or ownership
+     * transfer; Out/Count stay unchanged on failure, Error gives a local recovery cue. */
+    bool CopyCapturedFrames(std::array<daedalus::motif::Document,4>& Out,int32& Count,FString& Error) const;
 protected:
     virtual void BeginPlay() override;
     virtual void EndPlay(const EEndPlayReason::Type Reason) override;

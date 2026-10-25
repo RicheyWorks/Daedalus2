@@ -99,6 +99,23 @@ bool ADaedalusGalleryMotifRack::ObservePrepared() const
         { Unavailable(TEXT("A prepared frame moved, changed or became unavailable. Its slot stays reserved; use a new rack.")); return false; }
     return true;
 }
+bool ADaedalusGalleryMotifRack::CopyCapturedFrames(std::array<daedalus::motif::Document,4>& Out,int32& Count,FString& Error) const
+{
+    if (!Alive() || !ViewsReady() || !ObservePrepared())
+    { Error=TEXT("The source rack is unavailable. Existing studies and files are kept."); return false; }
+    if (Studies.IsEmpty()) { Error=TEXT("Prepare and capture at least two rack studies first."); return false; }
+    const uint64 Before=Epoch; std::array<daedalus::motif::Document,4> Prepared{};
+    for (int32 I=0;I<Studies.Num();++I)
+    {
+        if (!Studies[I]->CopyCapturedSketch(Prepared[static_cast<size_t>(I)]))
+        { Error=FString::Printf(TEXT("Rack study %d needs a ready captured copy. Use E / X at that study first."),I+1); return false; }
+        if (FString(UTF8_TO_TCHAR(Prepared[static_cast<size_t>(I)].Id.c_str()))!=PreparedIds[I])
+        { Error=FString::Printf(TEXT("Rack study %d captured a different identity. Originals stay; use a new rack."),I+1); return false; }
+    }
+    if (!Alive() || Epoch!=Before || !ObservePrepared())
+    { Error=TEXT("The source rack changed before copying. No preview was replaced."); return false; }
+    Out=Prepared; Count=Studies.Num(); Error.Empty(); return true;
+}
 void ADaedalusGalleryMotifRack::Refresh()
 {
     if (!Alive() || bNotifying) return;
