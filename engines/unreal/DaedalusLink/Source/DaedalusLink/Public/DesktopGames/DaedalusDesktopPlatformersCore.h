@@ -104,6 +104,10 @@ struct NinjaPlayer {
     bool OnGround=true; int Facing=1,AttackCooldown=0,Health=5,Invincible=0;
     bool DoubleJump=false; int Spinning=0,SpinCooldown=0;
     bool OnWall=false; int WallDir=0; bool JumpWasDown=false;
+    // Six fixed steps (100ms): a slightly late ledge press or early landing tap.
+    // Append state so existing aggregate initializers retain their field order.
+    static constexpr int JumpForgivenessFrames=6;
+    int GroundGraceFrames=0,JumpBufferFrames=0;
     template<class Platforms>
     void Update(const Input& I,const Platforms& P,double HatX=0,double HatY=0) {
         double Dx=0;
@@ -118,9 +122,17 @@ struct NinjaPlayer {
         const bool JumpDown=I.Jump || I.JumpPressed;
         const bool JumpPressed=I.JumpPressed || (JumpDown && !JumpWasDown);
         JumpWasDown=JumpDown;
+        const bool WasGrounded=OnGround;
+        if(WasGrounded) GroundGraceFrames=JumpForgivenessFrames;
+        if(JumpPressed) JumpBufferFrames=JumpForgivenessFrames;
+        bool Jumped=false;
         VY=std::min(VY+.6,12.0);
-        if(JumpPressed && OnGround) { VY=-11; OnGround=false; DoubleJump=true; }
-        else if(JumpPressed && !OnGround && DoubleJump) { VY=-9; DoubleJump=false; }
+        // Keep the original physical wall jump's movement/priority on arrival.
+        const bool ReachesWall=X+VX<=35 || X+VX>=765;
+        if(JumpBufferFrames>0 && (OnGround || (GroundGraceFrames>0 && !ReachesWall))) {
+            VY=-11; OnGround=false; DoubleJump=true; Jumped=true;
+        }
+        else if(JumpPressed && !OnGround && DoubleJump) { VY=-9; DoubleJump=false; Jumped=true; }
         const double OldY=Y; X+=VX; Y+=VY; X=Clamp(X,30,770);
         OnGround=false;
         for(const auto& Platform:P) {
@@ -131,12 +143,24 @@ struct NinjaPlayer {
                 Y=Platform.Y; VY=0; OnGround=true; DoubleJump=false; break;
             }
         }
+        if(OnGround && JumpBufferFrames>0 && !Jumped) {
+            // A consumed air jump stays immediate. Only an otherwise unavailable
+            // press waits for landing, then begins the normal ground-jump motion.
+            VY=-11; Y+=VY; OnGround=false; DoubleJump=true; Jumped=true;
+        }
         OnWall=false;
         if(!OnGround && (X<=35 || X>=765)) {
             OnWall=true; WallDir=X<=35?-1:1; VY=std::min(VY,1.0); DoubleJump=true;
             if(I.Up || Sy<-.3 || HatY>0) Y-=3;
             if(I.Down || Sy>.3 || HatY<0) Y+=3;
-            if(JumpPressed) { VX=-WallDir*7; VY=-10; OnWall=false; X-=WallDir*10; }
+            // Queued landing taps must not become delayed wall/air actions.
+            if(JumpPressed) { VX=-WallDir*7; VY=-10; OnWall=false; X-=WallDir*10; Jumped=true; }
+        }
+        if(Jumped || OnWall) GroundGraceFrames=JumpBufferFrames=0;
+        else {
+            if(OnGround) GroundGraceFrames=JumpForgivenessFrames;
+            else if(!WasGrounded && GroundGraceFrames>0) --GroundGraceFrames;
+            if(JumpBufferFrames>0) --JumpBufferFrames;
         }
         if(Y>540) Health=0;
         if(AttackCooldown>0) --AttackCooldown;
@@ -696,7 +720,7 @@ public:
     }
 private:
     std::string ReadinessText() const {
-        const std::string Jump=Player.OnWall?"wall jump":(Player.OnGround?"ground jump":(Player.DoubleJump?"air jump ready":"air jump used"));
+        const std::string Jump=Player.OnWall?"wall jump":(Player.OnGround || Player.GroundGraceFrames>0?"ground jump":(Player.DoubleJump?"air jump ready":"air jump used"));
         const std::string Spin=Player.Spinning>0?"spinning":(Player.SpinCooldown>0?"spin wait "+std::to_string(Player.SpinCooldown)
             :(!Player.OnGround?"spin needs ground":"spin ready"));
         const std::string AttackState=Attacks.size()>=MaxAttacks?"attacks full":(Player.AttackCooldown>0?"sword/star wait "+std::to_string(Player.AttackCooldown):"sword/star ready");

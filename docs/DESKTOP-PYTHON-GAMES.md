@@ -230,6 +230,13 @@ or Restart clears session progress; selecting the active mode keeps it. It adds
 no durable score/save or reward. Native layout, controller/focus and play feel
 still require acceptance.
 
+Shadow Ninja gives jump presses a small timing allowance: about 100 ms after
+leaving a ledge, or before landing when the air jump is already used. Early taps
+wait for a ground jump; available double jumps remain immediate. Wall jumps still
+need a fresh press. The same Space / pad A controls and jump impulses remain;
+holding Jump does not repeat landing hops. Reset clears the timing state. Native
+controller feel and integration remain unverified.
+
 ## Evidence stages and acceptance
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,
