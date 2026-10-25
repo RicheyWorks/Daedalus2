@@ -220,6 +220,8 @@ class PacmanGame final : public Game {
 public:
     static constexpr int Tile=20, Columns=28, Rows=31;
     static constexpr int RespawnGraceFrames=90; // Native rule extension after a nonterminal death.
+    static constexpr int FruitLifetimeFrames=1200,FruitPoints=100;
+    inline static constexpr Vec FruitSpot{270,350};
     inline static constexpr std::array<const char*,Rows> Map{{
         "############################", "#............##............#",
         "#.####.#####.##.#####.####.#", "#.####.#####.##.#####.####.#",
@@ -366,9 +368,21 @@ public:
                  {290,290,{}, {0,255,255,255}}, {330,290,{}, {255,165,0,255}}}};
         const std::array<maze::Direction,4> Dirs{{{1,0},{-1,0},{0,1},{0,-1}}};
         for(auto& G:Ghosts) G.Dir=Dirs[static_cast<std::size_t>(Rng.Int(0,3))];
+        FruitFrames=FruitIssued=FruitCollected=0;FruitPending=false;
     }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
+    bool IsFruitActive() const { return Option==1 && !Over && !Won && FruitFrames>0; }
+    int FruitFramesRemaining() const { return IsFruitActive()?FruitFrames:0; }
+    int FruitsCollected() const { return FruitCollected; }
     void Step(const Input& I) override {
         if(Over || Won) { if(maze::RestartPressed(I)) Reset(SessionSeed); return; }
+        const bool FruitIdleAtStart=FruitFrames==0;
+        const int LivesAtStart=Lives;
+        if(Option==1 && FruitFrames>0) --FruitFrames;
         // Snapshot before ticking: a new 90-step guard protects exactly the next
         // 90 live collision steps. Movement, pellets, frightened captures and RNG stay live.
         const bool ProtectedThisStep=RespawnFrames>0;
@@ -392,6 +406,7 @@ public:
         if(!Over && Remaining==0) { Won=true; ++Level; }
         if(std::all_of(Ghosts.begin(),Ghosts.end(),[](const Ghost& G){return !G.Alive;}))
             for(auto& G:Ghosts) { G.Alive=true; G.X=290; G.Y=290; }
+        if(Option==1) UpdateFruit(FruitIdleAtStart,Lives==LivesAtStart);
     }
     const Player& GetPlayer() const { return Hero; }
     const std::array<Ghost,4>& GetGhosts() const { return Ghosts; }
@@ -431,6 +446,13 @@ public:
             Out.AddRect(Side==0 ? X : X+4,14*Tile+2,2,16,Gate);
         }
         for(const auto& P:Pellets) if(P.Alive) Out.AddCircle(P.X,P.Y,P.Power ? 6 : 3,White);
+        if(IsFruitActive()) {
+            const double X=FruitSpot.X,Y=FruitSpot.Y;
+            Out.AddCircle(X,Y,11,{95,50,40,255});
+            Out.AddCircle(X-3,Y+1,7,{255,120,85,255});Out.AddCircle(X+3,Y+1,7,{255,95,100,255});
+            Out.AddTriangle({X,Y-5},{X+8,Y-12},{X+4,Y-4},{75,215,100,255});
+            Out.AddCircle(X-4,Y-2,2,White);
+        }
         const bool ShowGrace=RespawnFrames>0 && !Over && !Won;
         const double Angle=Hero.Dir.X<0 ? 3.141592653589793 : Hero.Dir.Y<0 ? -1.5707963267948966 : Hero.Dir.Y>0 ? 1.5707963267948966 : 0;
         const double Mouth=(30+std::abs(std::sin(Hero.Mouth/5.0)*25))*3.141592653589793/180;
@@ -460,7 +482,8 @@ public:
             }
         }
         Out.AddRect(Columns*Tile,0,800-Columns*Tile,Rows*Tile,Black);
-        Out.AddText(10,630,"SCORE "+std::to_string(Score)+"  LIVES "+std::to_string(Lives)+"  LEVEL "+std::to_string(Level));
+        const std::string Footer="SCORE "+std::to_string(Score)+"  LIVES "+std::to_string(Lives)+"  LEVEL "+std::to_string(Level);
+        Out.AddText(10,630,Footer+(Option==1?"  |  "+FruitNote():""),White,Option==1?17:20);
         Out.AddText(580,136,"GLOWTRAIL",maze::Yellow,22);
         Out.AddText(580,162,"CHASE",maze::Yellow,22);
         Out.AddText(580,190,"Move: arrows / WASD / stick",White,14);
@@ -491,6 +514,7 @@ public:
             if(Window.Frightened>0) Text+=" First recovery: "+std::to_string(Window.Seconds())+"s"+(Window.Frames<=60?" (final second).":".");
             if(RespawnFrames>0) Text+=" Respawn grace: "+std::to_string(RespawnFrames)+" steps.";
         }
+        if(Option==1) Text+=" "+FruitNote()+".";
         return {Score,Lives,Over,Won,Text};
     }
 private:
@@ -503,6 +527,29 @@ private:
     std::int64_t Score=0;
     int Lives=3, Remaining=0, Level=1, RespawnFrames=0;
     bool Over=false, Won=false;
+    int Option=0,FruitFrames=0,FruitIssued=0,FruitCollected=0;
+    bool FruitPending=false;
+    inline static constexpr std::array<int,2> FruitMilestones{{76,228}};
+    void UpdateFruit(bool IdleAtStart,bool MayCollect) {
+        if(Over || Won) return; // Dot-clear/death results settle before optional fruit.
+        const int Eaten=static_cast<int>(Pellets.size())-Remaining;
+        if(FruitIssued<static_cast<int>(FruitMilestones.size()) && Eaten>=FruitMilestones[static_cast<std::size_t>(FruitIssued)]) {
+            ++FruitIssued;FruitPending=true;
+        }
+        if(IdleAtStart && FruitFrames==0 && FruitPending) { FruitFrames=FruitLifetimeFrames;FruitPending=false; }
+        if(MayCollect && IsFruitActive() && Distance(Hero.X,Hero.Y,FruitSpot.X,FruitSpot.Y)<12) {
+            Score+=FruitPoints;FruitFrames=0;++FruitCollected;
+        }
+    }
+    std::string FruitNote() const {
+        const std::string Count="FRUIT "+std::to_string(FruitCollected)+"/2";
+        if(Over || Won) return Count;
+        if(IsFruitActive()) return Count+" "+std::to_string(FruitPoints)+"pt / "+std::to_string((FruitFrames+59)/60)+"s"+(FruitPending?" +1 queued":"");
+        if(FruitPending) return Count+" queued";
+        if(FruitIssued<static_cast<int>(FruitMilestones.size()))
+            return Count+" in "+std::to_string(FruitMilestones[static_cast<std::size_t>(FruitIssued)]-(static_cast<int>(Pellets.size())-Remaining))+" dots";
+        return Count;
+    }
 };
 
 class ZeldaGame final : public Game {

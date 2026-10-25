@@ -177,6 +177,45 @@ Python's seeded random stream or call-consumption order. Ghost respawn retains
 the source's frightened-state behavior; it is not presented as original arcade
 AI or ghost behavior.
 
+### Optional Glowtrail bonus fruit
+
+Classic mode0 remains the default. Mode1 / Bonus fruit adds a timed optional
+detour at the existing open dot center(270,350), row17/column13. Two one-shot
+milestones,76 and228 eaten of the original304 dots, offer one fruit worth100 local
+arcade points for1200 live60Hz steps. There is one active fruit and at most one
+pending opportunity; the second never replaces the first or shortens its timer.
+Issuing advances the milestone index, so expiry/death cannot respawn it repeatedly.
+
+Live Step snapshots fruit-idle and lives, then decrements the old timer. The exact
+original movement, pellet, ghost-contact, win and group-respawn order remains.
+After that, a live bonus helper issues at most one milestone, spawns pending fruit
+only when idle at step entry, then collects within strict12px only if no life was
+lost. Spawn starts at1200; first decrement is next step. Expiry or collection can
+start a queued successor only on a later step. Nonterminal loss retains the fruit/
+pending opportunity and its live clock; protected/frightened contact is not damage.
+Death or dot-clear results settle before fruit, hiding it/countdown and freezing
+the retained state. Fruit never delays all-dot victory. Reset clears fruit state
+and keeps mode/seed. No movement, power, tunnel, ghost RNG or source reward changes
+occur in Classic; bonus adds only the two explicit optional100-point pickups.
+
+Procedural fruit draws after dots and before actors. The existing footer/status
+shows count, value/time or dots to the next opportunity; bonus footer uses17px to
+fit, Classic retains20px. Native mode choice uses existing MakeMode and a game-only
+visibility function, with active-mode no-op and explicit reset. No actor/input API,
+registry, shared builder, save/realm or new rendering framework is involved.
+Native controls, viewport fit and human routing/time pressure remain unverified.
+
+`desktop_pacman_fruit` / `pacman_fruit_test.cpp` passed 36/36 strict single-TU
+MSVC C++17 checks. A consistent75-dot progress fixture leaves all304 authored
+pellets represented, then real dot76 consumption spawns fruit. A fixed120-step
+public-input corridor route from the untouched normal spawn collects it, earning
+exactly100 plus actual dot points; ghosts are isolated off-map for this route,
+so this does not prove adversarial difficulty. Retained spawned states exercise
+queue/expiry boundaries (only boundary timers shortened), strict12px, protected/
+frightened/damaging contacts, death/last-dot priority, finite milestones, reset/
+replay, Classic world/RNG companions, pure reads and Driver cleanup. No full-board
+traversal, solver, old maze suite or old-header proof was repeated.
+
 ### Glowtrail's paired passage
 
 The two outer openings in row 14 now connect in native play. Walk through either

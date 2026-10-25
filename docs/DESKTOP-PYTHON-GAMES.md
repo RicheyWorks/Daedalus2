@@ -290,6 +290,14 @@ next choice. The stick gesture that opens the picker is consumed. Match movement
 and the existing original-stick-versus-hat charge rules are retained. Native
 hardware and selection layout acceptance remain unverified.
 
+Glowtrail Chase offers optional **Bonus fruit** beside Classic. After collecting
+76 and 228 dots, a fruit near the maze center offers 100 arcade points for 20 live
+seconds. A second opportunity waits its turn if fruit is already present. Follow
+the fruit/countdown in the existing score line; missed fruit never blocks clearing
+the 304 dots. Movement, ghosts, power pellets and Classic rules stay the same.
+New runs clear fruit opportunities, and same-mode retry keeps its seed. Native
+controls/layout and human detour timing remain unverified.
+
 Ironwake Advance offers an optional **Target range** beside its original Full run.
 Three ordered gold panels teach standing, jumping and low shots with the existing
 movement, crouch, platforms, weapons and bullets. The high panel has a generous
