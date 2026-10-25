@@ -332,12 +332,14 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SHorizontalBox).Visibility(this, &SDaedalusDesktopArcade::DungeonVisibility)
-				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::DungeonVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("dungeon"), TEXT("Original room"), 0, TEXT("Changing room starts over. Original room keeps the existing map and six lantern orders."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("dungeon"), TEXT("Switchback"), 1, TEXT("Changing room starts over. Staggered passages form a new room with the same lantern, exit and optional trail rules."))]
+				+ SWrapBox::Slot()
 				[
 					SNew(SButton).IsFocusable(true).ContentPadding(FMargin(10.f, 4.f))
 					.Text(FText::FromString(TEXT("Next circuit")))
-					.ToolTipText(FText::FromString(TEXT("Start the next lantern order, clearing this circuit's progress. Restart replays the current order.")))
+					.ToolTipText(FText::FromString(TEXT("Start the next lantern order in this room, clearing circuit progress. Restart replays the current order.")))
 					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && Actor->GetSelectedGameId() == TEXT("dungeon") && !Actor->GetState().bSavePending; })
 					.OnClicked(this, &SDaedalusDesktopArcade::NextCircuit)
 				]
@@ -675,9 +677,15 @@ FReply SDaedalusDesktopArcade::NextCircuit()
 	{
 		const FDaedalusDesktopArcadeState State = Actor->GetState();
 		if (State.Id != TEXT("dungeon") || State.bSavePending) return FReply::Handled();
+		const int32 Room = Actor->GetGameOption();
 		const std::uint32_t Seed = daedalus::desktop::DungeonGame::NextCircuitSeed(static_cast<std::uint32_t>(State.Seed));
 		if (Actor->StartGame(TEXT("dungeon"), static_cast<int32>(Seed)))
 		{
+			if (Room == 1 && !Actor->SetGameOption(Room))
+			{
+				CatalogError = TEXT("The next circuit started, but Switchback could not be selected.");
+				return FReply::Handled();
+			}
 			CatalogError.Reset();
 			return FocusReply();
 		}
