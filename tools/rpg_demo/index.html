@@ -2517,7 +2517,8 @@ function drawBattleTarget(split) {
   const price = pending.kind === "magic" ? " " + pending.spell.mp + "MP" : "";
   text(fit(action, columns - price.length) + price, 6, 152, "#fff070");
   text(fit(target.name), 6, 164);
-  text("TARGET " + (B.target + 1) + "/" + B.list.length, 6, 174, "#a0a8c0");
+  const charged = (D.realm_key || "prism") === "prism" && B.foes.includes(target) && target.hp > 0 && target.charged;
+  text("TARGET " + (B.target + 1) + "/" + B.list.length + (charged ? " CHARGED" : ""), 6, 174, charged ? "#f8d878" : "#a0a8c0");
   if (party.includes(target)) {
     const cap = W < 320 ? 999 : 9999, number = n => n > cap ? cap + "+" : String(n);
     text("HP " + number(target.hp) + "/" + number(target.max), 6, 184, target.hp <= 0 ? "#f87878" : "#a8e0a0");
@@ -2534,6 +2535,12 @@ function statusPill(key, x, y) {
   g.fillStyle = "#101526"; g.fillRect(x, y, 24, 9);
   g.fillStyle = info.color; g.fillRect(x, y, 1, 9);
   text(info.tag, x + 3, y + 1, info.color, null);
+}
+function drawChargeBadge(foe, stacked) {
+  if ((D.realm_key || "prism") !== "prism" || foe.hp <= 0 || !foe.charged) return;
+  const x = Math.round(clamp(foe.x + foe.size / 2 - 24, 0, W - 48)), y = Math.round(foe.y + foe.size - (stacked ? 18 : 7));
+  g.fillStyle = "#101526"; g.fillRect(x, y, 48, 9); g.fillStyle = "#f8d878"; g.fillRect(x, y, 1, 9);
+  text("CHARGED", x + 3, y + 1, "#f8d878", null);
 }
 function battlePoint(target) {
   if (B.foes.includes(target)) return { x: target.x + target.size / 2, y: target.y + target.size / 2 };
@@ -2626,6 +2633,7 @@ function drawBattle() {
   for (const f of B.foes) {
     const ft = f.hp > 0 ? tags(f) : [];
     if (ft.length) statusPill(ft[Math.floor(B.t / 1.2) % ft.length], f.x + f.size / 2 - 12, f.y + f.size - 7);
+    drawChargeBadge(f, ft.length > 0);
   }
   for (const p of B.pops) text(p.txt, Math.round(p.x - tw(p.txt) / 2), Math.round(p.y - p.t * 18), p.color, "#000000");
   win(0, 144, split, 80); win(split, 144, W - split, 80);
