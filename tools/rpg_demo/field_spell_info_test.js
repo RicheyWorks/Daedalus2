@@ -88,6 +88,21 @@ function selectedDrawing(s, member, index, battleOnly, target = false) {
     assert.equal(s.draws.some(d => d.kind === "window" && d.rect.join() === [20,60,220,112].join()), false);
     assert.equal(m.ii, index); return heading;
   }
+  if (s.c.D.realm_key === "prism") {
+    const half = Math.floor(s.c.W / 2), draws = s.draw(), from = Math.max(0, Math.min(index - 5, list.length - 6)), shown = list.slice(from, from + 6);
+    const rows = draws.filter(d => d.kind === "text" && d.x === half + 24 && d.y >= 62 && d.y <= 137);
+    assert.equal(rows.length, Math.min(6, list.length), "spellbook retains the existing six-row known-spell viewport");
+    assert.deepEqual(rows.map(row => row.label), shown.map(spell => spell.name.toUpperCase()));
+    const selected = rows[index - from]; assert.ok(selected);
+    assert.equal(selected.color, battleOnly || member.mp < sp.mp ? "#6c6c8c" : "#ffffff", "spellbook now also shows MP affordability");
+    const cost = draws.find(d => d.kind === "text" && d.label === sp.mp + " MP" && d.y === selected.y && d.x === s.c.W - 12 - s.c.tw(sp.mp + " MP")); assert.ok(cost); assert.equal(cost.color, selected.color);
+    const hint = draws.find(d => d.kind === "text" && d.x === 12 && d.y === 178); assert.ok(hint); assert.equal(hint.label, s.api.spellHint(sp));
+    assert.ok(hint.x + hint.label.length * 6 <= s.c.W - 12 && hint.y + 8 < 190, "complete spell description fits above the live availability line");
+    const reason = draws.find(d => d.kind === "text" && d.x === 12 && d.y === 190); assert.equal(reason.label, battleOnly ? "BATTLE ONLY. USE MAGIC IN BATTLE." : member.mp < sp.mp ? "NEED " + (sp.mp - member.mp) + " MORE MP." : "CHOOSE A LIVING ALLY TO HEAL.");
+    assert.ok(draws.some(d => d.kind === "cursor" && d.x === half + 12 && d.y === selected.y));
+    assert.ok(draws.some(d => d.kind === "text" && d.x === half + 12 && d.y === 48 && d.label === "SPELLS " + (index + 1) + "/" + list.length));
+    assert.ok(Array.from(hint.label).every(ch => s.api.chars.includes(ch))); assert.equal(m.ii, index); return hint;
+  }
   const rows = s.draw().filter(d => d.kind === "text" && d.x === 40 && list.some(p => p.name.toUpperCase() === d.label));
   assert.equal(rows.length, Math.min(6, list.length), "existing six-row spell viewport remains bounded");
   assert.ok(rows.every(r => r.y >= 72 && r.y <= 137 && r.y + 8 <= 145));
@@ -172,9 +187,9 @@ check("STATUS uses actual membership when fewer than four members are in front",
 });
 check("shared Portal roster STATUS also marks actual membership", () => roles(session("portal")));
 check("controlled old ally-only grey rule is rejected for an ordinary Ward selection", () => {
-  const rowRule = /const ok = [^;\r\n]+(?=; text\(sp\.name)/;
-  assert.ok(rowRule.test(source), "the actual field spell row eligibility expression is present");
-  const legacy = source.replace(rowRule, 'const ok = sp.target === "ally"'); assert.notEqual(legacy, source);
+  const rowRule = /const field = s => [^;\r\n]+;/;
+  assert.ok(rowRule.test(source), "the actual Prism spellbook eligibility expression is present");
+  const legacy = source.replace(rowRule, 'const field = s => s.target === "ally";'); assert.notEqual(legacy, source);
   const s = session("prism", legacy), member = s.api.party()[1], m = openBook(s, member); m.ii = member.spells.indexOf("Ward");
   assert.throws(() => selectedDrawing(s, member, m.ii, true), assert.AssertionError);
 });

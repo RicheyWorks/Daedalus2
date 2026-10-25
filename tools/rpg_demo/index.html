@@ -1395,6 +1395,7 @@ function drawMenu() {
   if (sub === "journey") return drawJourney();
   if (sub === "order" && (D.realm_key || "prism") === "prism") return drawFormation();
   if (sub === "magic-target" && (D.realm_key || "prism") === "prism" && menu.spell) return drawFieldSpellTarget();
+  if ((sub === "magic-who" || sub === "magic") && (D.realm_key || "prism") === "prism") return drawFieldMagicBook();
   if (sub === "item" && (D.realm_key || "prism") === "prism") return drawFieldPack();
   if (sub === "equip" || sub === "equip-pick") return drawEquip();
   win(...pw); win(...cw); win(...gw);
@@ -1430,6 +1431,40 @@ function drawMenu() {
     if (sel) { const battleOnly = sel.target !== "ally" || !/heal/.test((sel.status || "") + (sel.effect || "")) && sel.power <= 0; text(((battleOnly ? "BATTLE ONLY. " : "") + spellHint(sel)).slice(0, 34), 28, 160, "#a0a8c0"); }
   }
   if (menu.msg) { win(20, H - 34, 220, 26); text(menu.msg.slice(0, 34), 28, H - 25); }
+}
+function drawFieldMagicBook() {
+  const r = roster(), caster = r[menu.who], list = fieldSpells(caster), who = menu.sub === "magic-who", half = Math.floor(W / 2), columns = Math.floor((W - 24) / 6);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const number = n => n > 9999 ? "9999+" : String(n);
+  const field = s => !(s.target !== "ally" || !/heal/.test((s.status || "") + (s.effect || "")) && s.power <= 0);
+  const selected = clamp(who ? 0 : menu.ii || 0, 0, Math.max(0, list.length - 1)), from = clamp(selected - 5, 0, Math.max(0, list.length - 6)), sp = list[selected];
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 44); g.fillRect(0, 160, W, H - 160);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 43, W, 1); g.fillRect(0, 159, W, 1); g.fillRect(half, 44, 1, 115);
+  text("MAGIC", 12, 10, "#fff070"); const count = "CASTER " + (menu.who + 1) + "/" + r.length; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  text(fit(caster.name, columns - (caster.hp <= 0 ? 7 : 0)) + (caster.hp <= 0 ? " / DOWN" : ""), 12, 22, caster.hp <= 0 ? "#f87878" : "#ffffff");
+  text(caster.job.toUpperCase() + " / " + (party.includes(caster) ? "FRONT" : "RESERVE"), 12, 34, "#a0a8c0");
+  const mp = "MP " + number(caster.mp) + "/" + number(caster.mmax); text(mp, W - 12 - tw(mp), 34, "#a0c8ff");
+  text("WHO / SPELLS", 12, 48, who ? "#fff070" : "#a0a8c0");
+  text("SPELLS " + (list.length ? selected + 1 : 0) + "/" + list.length, half + 12, 48, who ? "#a0a8c0" : "#fff070");
+  r.forEach((m, i) => {
+    const y = 62 + i * 12, known = String(fieldSpells(m).length), right = half - 12 - tw(known), color = m.hp <= 0 ? "#f87878" : known === "0" ? "#808090" : "#ffffff";
+    if (i === menu.who) { g.fillStyle = "#26344c"; g.fillRect(6, y - 2, half - 12, 12); if (who) cursor(4, y); }
+    text(party.includes(m) ? "F" : "R", 14, y, "#a0a8c0"); text(fit(m.name, Math.floor((right - 34) / 6)), 26, y, color); text(known, right, y, color);
+  });
+  if (!list.length) text("NO KNOWN SPELLS.", half + 12, 62, "#a0a8c0");
+  list.slice(from, from + 6).forEach((s, i) => {
+    const index = from + i, y = 62 + i * 15, cost = s.mp + " MP", color = !field(s) || caster.mp < s.mp ? "#6c6c8c" : "#ffffff";
+    if (index === selected) { g.fillStyle = who ? "#172338" : "#26344c"; g.fillRect(half + 6, y - 2, W - half - 12, 13); if (!who) cursor(half + 12, y); }
+    text(fit(s.name, Math.floor((W - half - 36) / 6) - cost.length - 1), half + 24, y, color); text(cost, W - 12 - tw(cost), y, color);
+  });
+  if (sp) { const cost = sp.mp + " MP"; text(fit(sp.name, columns - cost.length - 1), 12, 166, "#fff070"); text(cost, W - 12 - tw(cost), 166, "#a0c8ff"); text(fit(spellHint(sp)), 12, 178, "#a0d8f8"); }
+  const reason = who ? caster.hp <= 0 ? "DOWN. REVIVE THIS COMPANION FIRST." : !list.length ? "NO SPELLS. CHOOSE ANOTHER COMPANION." : "OPEN THIS COMPANION'S SPELLBOOK."
+    : !sp ? "NO KNOWN SPELLS." : !field(sp) ? "BATTLE ONLY. USE MAGIC IN BATTLE." : caster.mp < sp.mp ? "NEED " + (sp.mp - caster.mp) + " MORE MP." : "CHOOSE A LIVING ALLY TO HEAL.";
+  const available = who ? caster.hp > 0 && list.length > 0 : sp && field(sp) && caster.mp >= sp.mp;
+  text(fit(reason), 12, 190, available ? "#a8e0a0" : "#fff070");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text((who ? "LEFT/RIGHT: WHO " : "UP/DOWN: SPELL ") + confirm + (who ? ": BOOK" : ": CHOOSE"), 12, 202, "#fff070");
+  text(back + (who ? ": BACK" : ": CASTER"), 12, 214, "#fff070");
 }
 /* The notebook reads accepted journey state. Looking at a route never awards, travels or saves. */
 function journeyRoutes() { return D.dungeons.filter(d => d.boss_data && d.landmark); }

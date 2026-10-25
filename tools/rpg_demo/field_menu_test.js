@@ -103,6 +103,18 @@ function windowShown(s, entries, index, kind = "item", listCursor = true) {
     assert.equal(draws.some(d => d.kind === "window" && d.rect.join() === [20,60,220,112].join()), false, "spell popup no longer obscures target rows");
     return { draws, rows: [], row: undefined };
   }
+  if (kind === "magic" && menu.sub === "magic" && s.c.D.realm_key === "prism") {
+    const half = Math.floor(s.c.W / 2), selected = Math.max(0, Math.min(index, entries.length - 1)), from = Math.max(0, Math.min(selected - 5, entries.length - 6));
+    const rows = draws.filter(d => d.kind === "text" && d.x === half + 24 && d.y >= 62);
+    assert.equal(rows.length, Math.min(6, entries.length), "at most six list rows are visible");
+    assert.ok(rows.every(d => d.y <= 137 && d.y + 8 <= 145), "row glyphs remain inside the spellbook viewport");
+    const row = rows[selected - from]; assert.ok(row && entries[selected].name.toUpperCase().startsWith(row.label.replace(/\.\.\.$/, "")), "selected entry remains visible");
+    const cursors = draws.filter(d => d.kind === "cursor" && d.x === half + 12); assert.equal(cursors.length, listCursor ? 1 : 0); if (cursors.length) assert.equal(cursors[0].y, row.y);
+    assert.ok(draws.some(d => d.kind === "text" && d.x === 12 && d.y === 166 && d.label === entries[selected].name.toUpperCase()), "full selected spell remains visible");
+    assert.ok(draws.some(d => d.kind === "text" && d.label === entries[selected].mp + " MP" && d.y === row.y && d.color === row.color));
+    assert.ok(draws.some(d => d.kind === "text" && d.y === 48 && d.x === half + 12 && d.label === "SPELLS " + (selected + 1) + "/" + entries.length));
+    assert.equal(menu.ii, index); return { draws, rows, row };
+  }
   const rows = draws.filter(d => d.kind === "text" && d.x === 40 && names.includes(d.label));
   assert.equal(rows.length, Math.min(6, entries.length), "at most six list rows are visible");
   assert.ok(rows.every(d => d.y >= 72 && d.y <= 137 && d.y + 8 <= 145), "row glyphs and shadows stay above the range cue");
@@ -189,7 +201,9 @@ check("a companion without spells still refuses the spell list", () => {
   const s = session(); s.api.openMenu(); s.tick("down"); s.tick("a"); s.tick("left"); assert.equal(s.api.getMenu().who, 0);
   s.tick("a"); assert.equal(s.api.getMenu().sub, "magic-who"); assert.match(s.api.getMenu().msg, /KNOWS NO SPELLS/);
 });
-const noScroll = source.replaceAll("rows = 6", "rows = Number.MAX_SAFE_INTEGER");
+const noScroll = source.replaceAll("rows = 6", "rows = Number.MAX_SAFE_INTEGER")
+  .replace("from = clamp(selected - 5, 0, Math.max(0, list.length - 6))", "from = 0")
+  .replace("list.slice(from, from + 6).forEach((s, i) => {", "list.slice(from, from + Number.MAX_SAFE_INTEGER).forEach((s, i) => {");
 assert.notEqual(noScroll, source, "the controlled old behavior removes the six-row drawing bound");
 check("the visibility assertion detects the old unbounded item list", () => {
   const s = session("prism", noScroll); fullBag(s); const m = openItems(s); s.tick("up");
