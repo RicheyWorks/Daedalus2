@@ -60,6 +60,31 @@ point, preventing overlap with walls. Left-stick movement is an adapter
 enhancement. Rendering missing cells as solid also fills the original blank
 right-hand margin.
 
+### Selecting Threadlight circuits
+
+The cabinet's focusable **Next circuit** button starts the next of the six existing
+lantern orders, wrapping from circuit 6 to 1. The current circuit number appears in
+the existing progress/status text. Restart and the original Action reset replay the
+selected order. Switching is deliberate, never automatic on completion, and clears
+the current lights, clock and optional trail. This is a desktop-only choice, not a
+world Dungeon quest, save or reward.
+
+`DungeonGame::NextCircuitSeed` converts any uint32 seed to a canonical next-order
+seed in 0..5 rather than incrementing a possibly signed host seed. Slate rechecks
+the active game and pending-save fence, then calls the existing `StartGame` path;
+it returns play focus only after success. The actor's normal seed/input/pause
+lifecycle is reused without new actor API or persistence changes.
+
+`desktop_dungeon_circuit` / `dungeon_circuit_test.cpp` checks the six order choices,
+full-width seeds, changed second lantern after Hall, fresh-circuit reset and
+same-circuit replay via public input/Driver. It does not rerun the trail navigation
+suite or establish native button, controller/focus or play-feel acceptance.
+
+Strict serial single-TU MSVC C++17 passed 181/181 focused checks. The previous
+trail/navigation and source-parity suites were not rerun; movement, lighting,
+completion, timer and reset implementations are unchanged. Native acceptance is
+still pending.
+
 ### Optional Threadlight trail
 
 Shift / pad Y (also the existing V / LB aliases) toggles a quiet dotted route to

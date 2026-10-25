@@ -218,7 +218,14 @@ nearby target; **K/Enter / pad B** resets the circuit. The guide starts off, res
 off, and cannot begin the clock by itself. Movement, seed order, completion and
 progress rules are retained. This is a desktop cabinet feature, separate from
 the world Dungeon realm. Native font/layout, physical input and playtest acceptance
-remain unverified.
+remain pending.
+
+Threadlight's **Next circuit** cabinet button visits all six authored lantern
+orders, wrapping after circuit 6. The existing progress line identifies the current
+circuit. Starting the next order clears the current circuit's lights, clock and
+trail; **Restart / K / Enter / pad B** replays the selected order. Nothing advances
+automatically on completion. This uses the cabinet's existing start-game lifecycle;
+native button navigation, focus and layout acceptance remain unverified.
 
 Football also offers **Target practice** beside its default Match mode. Clear
 three glowing goal pockets by moving around the ball to aim and pressing

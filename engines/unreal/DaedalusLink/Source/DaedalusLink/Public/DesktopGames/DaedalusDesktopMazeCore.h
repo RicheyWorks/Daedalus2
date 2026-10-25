@@ -45,6 +45,13 @@ public:
     inline static constexpr std::array<std::array<int,LanternCount>,6> Routes{{
         {{0,1,2}},{{0,2,1}},{{1,0,2}},{{1,2,0}},{{2,0,1}},{{2,1,0}}
     }};
+    static constexpr std::uint32_t CircuitNumber(std::uint32_t Seed) {
+        return Seed%static_cast<std::uint32_t>(Routes.size())+1;
+    }
+    static constexpr std::uint32_t NextCircuitSeed(std::uint32_t Seed) {
+        // Canonical small seeds avoid signed host-seed overflow and visit every order.
+        return CircuitNumber(Seed)%static_cast<std::uint32_t>(Routes.size());
+    }
     inline static constexpr Vec Exit{60,220};
     static bool IsWall(int Col,int Row) {
         // Ragged source rows and all out-of-map coordinates are solid.
@@ -123,17 +130,19 @@ public:
         }
         Out.AddRect(Exit.X-16,Exit.Y-16,32,32,LitCount==LanternCount?Color{80,200,255,255}:Color{95,100,120,255});
         Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",Black,12);
-        const std::string Progress=Complete?"Circuit clear in "+std::to_string(RunFrames/60)+"s. K/Enter/pad B or R: replay."
-            :(LitCount==LanternCount?"Threadlight Passage: exit unsealed. Approach EXIT and light it."
-                :"Threadlight Passage: "+std::to_string(LitCount)+"/3 lit. Next: "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]);
+        const std::string Circuit="Circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size());
+        const std::string Progress=Circuit+(Complete?" clear in "+std::to_string(RunFrames/60)+"s. K/Enter/pad B or R: replay."
+            :(LitCount==LanternCount?": exit unsealed. Approach EXIT and light it."
+                :": "+std::to_string(LitCount)+"/3 lit. Next: "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]));
         Out.AddText(12,Rows*Tile+8,Progress,White,16);
         const std::string Controls=std::string("Move: WASD/arrows/stick/hat. J/Space/pad A/X: light. K/Enter/pad B: reset. Shift/pad Y: trail ")+(TrailEnabled?"ON":"OFF");
         Out.AddText(12,Rows*Tile+35,Notice.empty()?Controls:Notice,White,14);
     }
     Status GetStatus() const override {
-        std::string Text=Complete?"Threadlight circuit complete; Action/R replays."
+        std::string Text="Threadlight circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size())+": ";
+        Text+=Complete?"complete; Action/R replays."
             :(LitCount==LanternCount?"Exit unlocked; approach EXIT and press Fire/Jump."
-                :"Threadlight "+std::to_string(LitCount)+"/3: seek "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]+"; Fire/Jump lights, Action resets.");
+                :std::to_string(LitCount)+"/3: seek "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]+"; Fire/Jump lights, Action resets.");
         if(!Complete) Text+=TrailEnabled?" Trail ON; Shift/pad Y toggles.":" Trail OFF; Shift/pad Y toggles.";
         if(!Notice.empty()) Text+=" "+Notice;
         return {0,1,Complete,Complete,Text}; // Local completion only; no invented score/reward.

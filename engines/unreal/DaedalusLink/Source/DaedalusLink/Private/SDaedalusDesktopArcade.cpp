@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include "SDaedalusDesktopArcade.h"
 
+#include "DesktopGames/DaedalusDesktopMazeCore.h"
 #include "Engine/GameViewportClient.h"
 #include "Engine/LocalPlayer.h"
 #include "Framework/Application/SlateApplication.h"
@@ -296,6 +297,18 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::FootballVisibility)
 				+ SWrapBox::Slot()[MakeMode(TEXT("football"), TEXT("Match"), 0, TEXT("Changing mode starts over. Target progress lasts until Restart or a mode change."))]
 				+ SWrapBox::Slot()[MakeMode(TEXT("football"), TEXT("Target practice"), 1, TEXT("Changing mode starts over. Target progress lasts until Restart or a mode change."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
+				SNew(SHorizontalBox).Visibility(this, &SDaedalusDesktopArcade::DungeonVisibility)
+				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				[
+					SNew(SButton).IsFocusable(true).ContentPadding(FMargin(10.f, 4.f))
+					.Text(FText::FromString(TEXT("Next circuit")))
+					.ToolTipText(FText::FromString(TEXT("Start the next lantern order, clearing this circuit's progress. Restart replays the current order.")))
+					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && Actor->GetSelectedGameId() == TEXT("dungeon") && !Actor->GetState().bSavePending; })
+					.OnClicked(this, &SDaedalusDesktopArcade::NextCircuit)
+				]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
@@ -611,6 +624,23 @@ FReply SDaedalusDesktopArcade::KeepPlaying()
 	return FReply::Handled();
 }
 
+FReply SDaedalusDesktopArcade::NextCircuit()
+{
+	if (ADaedalusDesktopArcade* Actor = Game.Get())
+	{
+		const FDaedalusDesktopArcadeState State = Actor->GetState();
+		if (State.Id != TEXT("dungeon") || State.bSavePending) return FReply::Handled();
+		const std::uint32_t Seed = daedalus::desktop::DungeonGame::NextCircuitSeed(static_cast<std::uint32_t>(State.Seed));
+		if (Actor->StartGame(TEXT("dungeon"), static_cast<int32>(Seed)))
+		{
+			CatalogError.Reset();
+			return FocusReply();
+		}
+		CatalogError = TEXT("The next circuit could not start. Your current circuit was kept.");
+	}
+	return FReply::Handled();
+}
+
 void SDaedalusDesktopArcade::ResetCatalogChoice()
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
@@ -696,6 +726,12 @@ EVisibility SDaedalusDesktopArcade::FootballVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	return Actor && Actor->GetSelectedGameId() == TEXT("football") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+EVisibility SDaedalusDesktopArcade::DungeonVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("dungeon") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const

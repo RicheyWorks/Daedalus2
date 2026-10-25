@@ -43,6 +43,7 @@ private:
 	FReply BrowseCatalog();
 	FReply SwitchGame();
 	FReply KeepPlaying();
+	FReply NextCircuit();
 	TSharedRef<SWidget> GameHelpPanel();
 	FReply ShowGameHelp();
 	FReply DismissGameHelp(bool bResume);
@@ -67,6 +68,7 @@ private:
 	EVisibility StarVisibility() const;
 	EVisibility PongVisibility() const;
 	EVisibility FootballVisibility() const;
+	EVisibility DungeonVisibility() const;
 	EVisibility MinesweeperVisibility() const;
 	EVisibility LeaderboardVisibility() const;
 	TSharedRef<SWidget> MakeGameRow(TSharedPtr<FString> Item) const;
