@@ -325,7 +325,13 @@ public:
         SessionSeed=Seed;
         Rng.Seed(Seed); Pilot=Player{}; Score=0; SpawnTimer=0; Over=false; Won=false; BossActive=false; Boss=Enemy{};
         Bullets.clear(); Enemies.clear(); Powerups.clear(); shooter_detail::MakeStars(Stars,Rng);
+        if(Option==1) StartBoss();
     }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
     bool SourceControllerButton(int Button) override {
         if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
         return false;
@@ -368,7 +374,7 @@ public:
         if(!Over) {
             for(auto& P:Powerups) if(P.Alive && Distance(Pilot.X,Pilot.Y,P.X,P.Y)<18) {ApplyPower(Pilot,P.Kind);P.Alive=false;}
         }
-        if(Score>=1500 && !BossActive && !Won) { Boss={750,300,1.5,20,60,true,true}; BossActive=true; }
+        if(Score>=1500 && !BossActive && !Won) StartBoss();
         if(BossActive) {
             Boss.Update(Pilot); Boss.X=std::max(600.0,Boss.X);
             if(Boss.Health<=0) { BossActive=false; shooter_detail::AddScore(Score,500); Won=true; }
@@ -396,7 +402,7 @@ public:
         if(BossActive) {DrawEnemy(Boss);F.AddRect(Boss.X-30,Boss.Y-40,60,6,Red);F.AddRect(Boss.X-30,Boss.Y-40,60*Clamp(Boss.Health/20.0,0,1),6,Green);}
         F.AddText(30,20,"SCORE: "+std::to_string(Score)); F.AddText(660,20,"LIVES: "+std::to_string(Pilot.Lives),Red);
         F.AddText(350,20,"POWER: "+std::to_string(Pilot.Power),Yellow,18);
-        F.AddText(30,45,"ENEMIES: "+std::to_string(GetEnemyCount())+"   PICKUPS: "+std::to_string(GetPickupCount()),White,15);
+        F.AddText(30,45,std::string(Option==1?"REHEARSAL | ENEMIES: ":"ENEMIES: ")+std::to_string(GetEnemyCount())+"   PICKUPS: "+std::to_string(GetPickupCount()),White,15);
         F.AddText(420,45,BossNote(),BossActive?Red:Yellow,15);
         F.AddText(30,67,"FIRE: "+FireNote()+"   SHOT: "+ShotName(),IsFireReady()?Green:Yellow,15);
         F.AddText(30,89,"SPEED: "+std::to_string(static_cast<int>(Pilot.Speed))+"/8   "+ProtectionNote(),Cyan,15);
@@ -404,23 +410,27 @@ public:
         F.AddText(30,572,"WASD/arrows, D-pad or stick: move   Space/J/Z/pad: hold fire",White,15);
         if(Over || Won) {
             F.AddRect(145,225,510,120,{15,20,40,235});
-            const std::string Result=Over?(Won?"BOSS DOWN / SHIP LOST":"GAME OVER"):"BOSS DEFEATED!";
+            const std::string Result=Over?(Won?"BOSS DOWN / SHIP LOST":(Option==1?"REHEARSAL ENDED":"GAME OVER"))
+                :(Option==1?"REHEARSAL COMPLETE!":"BOSS DEFEATED!");
             F.AddText(175,238,Result,Over?Red:Green,30);
             F.AddText(175,285,"Final score: "+std::to_string(Score),White,20);
             F.AddText(175,315,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
         }
     }
     Status GetStatus() const override {
-        if(Over || Won) return {Score,Pilot.Lives,Over,Won,(Over?(Won?"Boss defeated; ship lost":"Game over"):"Boss defeated")+
+        const std::string Mode=Option==1?"Boss rehearsal; ":"";
+        if(Over || Won) return {Score,Pilot.Lives,Over,Won,Mode+(Over?(Won?"Boss defeated; ship lost":"Game over"):"Boss defeated")+
             std::string("; final score ")+std::to_string(Score)+"; pad A/Start, Enter/Space or R/Restart to retry"};
-        return {Score,Pilot.Lives,false,false,BossNote()+"; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+
+        return {Score,Pilot.Lives,false,false,Mode+BossNote()+"; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+
             "; "+ShotName()+"; speed "+std::to_string(static_cast<int>(Pilot.Speed))+"/8; "+ProtectionNote()+"; fire "+FireNote()};
     }
 private:
     Random Rng; Player Pilot; Enemy Boss; std::vector<Bullet> Bullets; std::vector<Enemy> Enemies; std::vector<Powerup> Powerups;
     std::uint32_t SessionSeed=730;
+    int Option=0;
     std::array<shooter_detail::Star,80> Stars{};
     std::int64_t Score=0; int SpawnTimer=0; bool Over=false,Won=false,BossActive=false;
+    void StartBoss() { Boss={750,300,1.5,20,60,true,true};BossActive=true; }
     static const char* PickupName(PowerKind Kind) { return Kind==PowerKind::Power?"POWER":(Kind==PowerKind::Speed?"SPEED":"LIFE"); }
     std::string ShotName() const { return Pilot.Power==1?"NORMAL":(Pilot.Power==2?"DOUBLE":"SPREAD"); }
     std::string ProtectionNote() const {

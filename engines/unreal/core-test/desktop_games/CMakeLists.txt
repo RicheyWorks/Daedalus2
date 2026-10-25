@@ -47,5 +47,6 @@ desktop_test(desktop_shooters shooters_test.cpp shooters_parity.txt)
 desktop_test(desktop_asteroids_brake asteroids_brake_test.cpp shooters_parity.txt)
 desktop_test(desktop_shooter_terminal shooter_terminal_test.cpp "")
 desktop_test(desktop_sega_terminal_pickup sega_terminal_pickup_test.cpp "")
+desktop_test(desktop_sega_boss_rehearsal sega_boss_rehearsal_test.cpp "")
 
 desktop_test(desktop_star_terminal_pickup star_terminal_pickup_test.cpp "")

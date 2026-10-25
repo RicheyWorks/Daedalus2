@@ -278,6 +278,13 @@ and all play/scoring rules are retained. A fresh continue press still returns to
 title, and confirming a country starts a new tournament. Native font/layout and
 physical input acceptance remain unverified.
 
+Riftwing Vanguard offers **Boss rehearsal** beside its default Full run. The same
+20-HP boss arrives immediately, with the normal starting ship and score zero;
+regular enemies still provide pressure. Full run keeps its 1500-point entry.
+Rehearsal has clear mode/result cues and retains the usual shooting, pickups,
+damage and earned score rules. Restart or a fresh result retry keeps the mode;
+changing modes starts over. Native controls/layout and play feel remain unverified.
+
 Pong's optional **First to 5** offers a short match beside endless Match and Rally
 practice. The existing match physics and controls apply; the fifth point brings
 a frozen result and a deliberate fresh Space / pad A rematch. Scores sit above
