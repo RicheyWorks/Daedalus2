@@ -32,6 +32,8 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|Skyline") TObjectPtr<UProceduralMeshComponent> Model;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|Skyline") TObjectPtr<UTextRenderComponent> Readout;
     UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") bool IsWorkshopAlive() const;
+    UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") bool IsWorkshopReady() const { return IsWorkshopAlive() && Run.Active() && bAvailable && ViewsReady() && ToolsReady(); }
+    UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") bool WasBlueprintStudied(int32 Index) const { return Run.EverCompleted(Index); }
     UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") bool IsCurrentComplete() const;
     UFUNCTION(BlueprintPure, Category="Daedalus|Skyline") int32 BlueprintIndex() const { return Run.Active()?Run.CurrentRule():-1; }
     FString ControlLabel(EDaedalusSkylineAction Action,int32 Parameter) const;

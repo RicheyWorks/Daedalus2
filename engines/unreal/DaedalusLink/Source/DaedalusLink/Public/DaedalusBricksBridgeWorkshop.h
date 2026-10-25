@@ -33,6 +33,8 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|BridgeWorkshop") TObjectPtr<UProceduralMeshComponent> Diagram;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|BridgeWorkshop") TObjectPtr<UTextRenderComponent> Readout;
     UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") bool IsWorkshopAlive() const;
+    UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") bool IsWorkshopReady() const { return IsWorkshopAlive() && Run.Active() && bAvailable && ViewsReady() && ToolsReady(); }
+    UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") bool WasBlueprintStudied(int32 Index) const { return Run.EverCompleted(Index); }
     UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") bool IsCurrentComplete() const;
     UFUNCTION(BlueprintPure, Category="Daedalus|BridgeWorkshop") int32 BlueprintIndex() const { return Run.Active()?Run.CurrentRule():-1; }
     FString ControlLabel(EDaedalusBridgeAction Action,int32 Link) const;
