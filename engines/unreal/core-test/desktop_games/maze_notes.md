@@ -113,13 +113,54 @@ The source has defects that prevent its advertised loop:
 - Restart now recreates dots and pellets; the source removes them from globals
   permanently. End-screen keyboard restart is repaired. A stacked collision
   consumes at most one life in a frame, and defeat cannot be overwritten by a
-  simultaneous win. There is no new tunnel-warp mechanic.
+  simultaneous win. The source view retains its blocked outer boundary; native
+  play's paired passage is described below.
 
 Ghost direction choices are injected in source fixture cases. Runtime uses the
 common portable RNG, with uniform direction shuffling, and does not reproduce
 Python's seeded random stream or call-consumption order. Ghost respawn retains
 the source's frightened-state behavior; it is not presented as original arcade
 AI or ghost behavior.
+
+### Glowtrail's paired passage
+
+The two outer openings in row 14 now connect in native play. Walk through either
+matching blue gate to emerge on the other side. Player and living pursuers use
+the same 560-pixel maze period and keep movement overshoot; the 800-pixel frame
+and sidebar at X580 are separate presentation space. No new action or mode is
+needed. This is an original native extension, not source replay equivalence.
+
+Only a whole quantized 16x16 collision box fitting row 14 may use the passage.
+Adjacent walls and ordinary out-of-map lookups stay solid. Candidate positions
+are bounded around the seam, so distant invalid test actors cannot fold into the
+maze. Player turn probes, ghost choices and actual movement share that rule.
+Ghost chase still compares ordinary coordinates; no new AI/pathfinding or RNG
+draws are added.
+
+Contact uses the original rectangle overlap plus the translated opposite-edge
+rectangle for eligible actors. Pickups retain their strict 12-pixel Euclidean
+radius with periodic horizontal distance in the passage. Map characters, all
+304 dots, scores, lives, power/grace timers, one-lethal-hit settlement, respawn,
+completion and seeded replay rules remain intact. Dead ghosts remain stationary.
+
+Matching gate brackets render behind dots and actors; mirrored silhouettes make
+the crossing continuous. The existing canvas clips the frame's left boundary.
+A black gutter mask follows all actors and precedes the sidebar, clipping right
+overflow with existing draw commands. No new native renderer, art or asset needed.
+
+Pure-source helper calls explicitly disable both RepairDoor and UseTunnels.
+The pinned fixture contents are unchanged; native defaults enable the repaired
+maze and passage. Source-only evidence remains separate from native rendering,
+physical input and human chase/escape acceptance.
+
+`desktop_pacman_tunnel` / `pacman_tunnel_test.cpp` passed 108/108 strict single-TU
+MSVC checks, including the 60 PAC-only pinned source cases in disabled mode.
+Focused native cases cover two-way overshoot/probes, row/candidate fences,
+quantized seam contact, ordinary off-passage contact, damage/capture/grace,
+strict circular pickup distance and both edge dots once, unchanged RNG call
+counts, dead actors, terminal/reset behavior and presentation/mask order/purity.
+No broad maze suite, repeated full-map traversal, old-header proof, fixture
+regeneration or engine/editor/native playtest ran for this extension.
 
 **Zelda:** source Link spawn `(400,450)`, speed 3.5, six half-hearts, source 0.707
 diagonal scale and two-level stick deadzone, directional attack rectangles,

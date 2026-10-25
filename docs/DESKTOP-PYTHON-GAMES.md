@@ -237,6 +237,14 @@ need a fresh press. The same Space / pad A controls and jump impulses remain;
 holding Jump does not repeat landing hops. Reset clears the timing state. Native
 controller feel and integration remain unverified.
 
+Glowtrail Chase's matching blue openings in the central passage connect across
+the 560-pixel maze. Movement continues through either opening with its overshoot;
+pursuers can follow, and contact/dot collection remains continuous across the seam.
+Other walls stay solid. Mirrored silhouettes and gate marks explain the route
+without new controls. This native extension preserves the map, all 304 dots and
+existing score/life/power/respawn rules; pinned source fixtures retain their
+original boundary behavior. Native visual/input and chase feel remain unverified.
+
 ## Evidence stages and acceptance
 
 The inventory and actual source hashes are recorded; native tests, source oracle cases,

@@ -233,12 +233,26 @@ public:
         if(Row<0 || Row>=Rows || Col<0 || Col>=Columns) return true;
         return !(RepairDoor && Row==14 && Col==9) && Map[static_cast<std::size_t>(Row)][Col]=='#';
     }
-    static bool Collides(double X,double Y,bool RepairDoor=true) {
+    static bool IsTunnelBody(double X,double Y) {
+        if(!(X>=-8 && X<=Columns*Tile+8)) return false;
+        const Rect R=maze::PixelRect(X-8,Y-8,16,16);
+        return R.Y>=14*Tile && R.Y+15<15*Tile;
+    }
+    static bool IsTunnelActor(double X,double Y) {
+        return X>=0 && X<Columns*Tile && IsTunnelBody(X,Y);
+    }
+    static double WrapTunnelX(double X) {
+        return X<0 ? X+Columns*Tile : X>=Columns*Tile ? X-Columns*Tile : X;
+    }
+    static bool Collides(double X,double Y,bool RepairDoor=true,bool UseTunnels=true) {
         const Rect R=maze::PixelRect(X-8,Y-8,16,16);
         const int C0=static_cast<int>(std::floor(R.X/Tile)), C1=static_cast<int>(std::floor((R.X+15)/Tile));
         const int R0=static_cast<int>(std::floor(R.Y/Tile)), R1=static_cast<int>(std::floor((R.Y+15)/Tile));
-        for(int Row=R0;Row<=R1;++Row) for(int Col=C0;Col<=C1;++Col)
-            if(IsWall(Col,Row,RepairDoor)) return true;
+        const bool Wrap=UseTunnels && IsTunnelBody(X,Y);
+        for(int Row=R0;Row<=R1;++Row) for(int Col=C0;Col<=C1;++Col) {
+            const int WallCol=Wrap ? (Col+Columns)%Columns : Col;
+            if(IsWall(WallCol,Row,RepairDoor)) return true;
+        }
         return false;
     }
     struct Player {
@@ -246,7 +260,7 @@ public:
         maze::Direction Dir, Next;
         int Mouth=0;
         Rect GetRect() const { return maze::PixelRect(X-8,Y-8,16,16); }
-        void Update(const Input& I,bool RepairDoor=true) {
+        void Update(const Input& I,bool RepairDoor=true,bool UseTunnels=true) {
             // Match the cabinet's digital merge for direct portable/Blueprint Pad input.
             if(I.Left || I.PadLeft) Next={-1,0};
             if(I.Right || I.PadRight) Next={1,0};
@@ -255,12 +269,15 @@ public:
             const double Sx=Axis(I.AxisX), Sy=Axis(I.AxisY);
             if(std::abs(Sx)>0.3 || std::abs(Sy)>0.3)
                 Next=std::abs(Sx)>std::abs(Sy) ? maze::Direction{Sx>0 ? 1 : -1,0} : maze::Direction{0,Sy>0 ? 1 : -1};
-            if(!Collides(X+Next.X*2.5,Y+Next.Y*2.5,RepairDoor)) Dir=Next;
+            if(!Collides(X+Next.X*2.5,Y+Next.Y*2.5,RepairDoor,UseTunnels)) Dir=Next;
             const double Nx=X+Dir.X*2.5, Ny=Y+Dir.Y*2.5;
-            if(!Collides(Nx,Ny,RepairDoor)) { X=Nx; Y=Ny; }
+            if(!Collides(Nx,Ny,RepairDoor,UseTunnels)) {
+                X=UseTunnels && IsTunnelBody(Nx,Ny) ? WrapTunnelX(Nx) : Nx; Y=Ny;
+            }
             // Source slide branches only vary a zero component; retain no movement on obstruction.
             Mouth=(Mouth+1)%20;
-            X=Clamp(X,10,Columns*Tile-10); Y=Clamp(Y,10,Rows*Tile-10);
+            if(!UseTunnels || !IsTunnelActor(X,Y)) X=Clamp(X,10,Columns*Tile-10);
+            Y=Clamp(Y,10,Rows*Tile-10);
         }
     };
     struct Ghost {
@@ -271,18 +288,21 @@ public:
         int FrightenedTimer=0;
         Rect GetRect() const { return maze::PixelRect(X-8,Y-8,16,16); }
         void UpdateWithChoices(const Player& TargetPlayer,double TurnSample,double ChaseSample,
-                const std::array<maze::Direction,4>& Dirs,bool RepairDoor=true) {
+                const std::array<maze::Direction,4>& Dirs,bool RepairDoor=true,bool UseTunnels=true) {
             if(!Alive) return;
             if(Frightened && --FrightenedTimer<=0) Frightened=false;
-            if(TurnSample<0.05 || Collides(X+Dir.X*2,Y+Dir.Y*2,RepairDoor)) {
-                for(const auto D:Dirs) if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor)) { Dir=D; break; }
+            if(TurnSample<0.05 || Collides(X+Dir.X*2,Y+Dir.Y*2,RepairDoor,UseTunnels)) {
+                for(const auto D:Dirs) if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor,UseTunnels)) { Dir=D; break; }
             }
             if(!Frightened && ChaseSample<0.6) {
                 const double Dx=TargetPlayer.X-X, Dy=TargetPlayer.Y-Y;
                 const maze::Direction D=std::abs(Dx)>std::abs(Dy) ? maze::Direction{Dx>0 ? 1 : -1,0} : maze::Direction{0,Dy>0 ? 1 : -1};
-                if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor)) Dir=D;
+                if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor,UseTunnels)) Dir=D;
             }
-            if(!Collides(X+Dir.X*2,Y+Dir.Y*2,RepairDoor)) { X+=Dir.X*2; Y+=Dir.Y*2; }
+            const double Nx=X+Dir.X*2, Ny=Y+Dir.Y*2;
+            if(!Collides(Nx,Ny,RepairDoor,UseTunnels)) {
+                X=UseTunnels && IsTunnelBody(Nx,Ny) ? WrapTunnelX(Nx) : Nx; Y=Ny;
+            }
         }
         void Update(const Player& TargetPlayer,Random& RandomStream) {
             if(!Alive) return;
@@ -293,6 +313,22 @@ public:
         }
     };
     struct Pellet { double X=0, Y=0; bool Power=false, Alive=true; };
+    static double DistanceToPellet(const Player& P,const Pellet& Dot) {
+        if(!IsTunnelActor(P.X,P.Y) || Dot.Y!=14*Tile+Tile/2 || Dot.X<0 || Dot.X>=Columns*Tile)
+            return Distance(P.X,P.Y,Dot.X,Dot.Y);
+        const double Dx=std::abs(P.X-Dot.X), Dy=P.Y-Dot.Y;
+        const double WrappedDx=std::min(Dx,Columns*Tile-Dx);
+        return std::sqrt(WrappedDx*WrappedDx+Dy*Dy);
+    }
+    static bool TouchesGhost(const Player& P,const Ghost& G) {
+        const Rect A=P.GetRect(); Rect B=G.GetRect();
+        if(A.Overlaps(B)) return true;
+        if(!IsTunnelActor(P.X,P.Y) || !IsTunnelActor(G.X,G.Y)) return false;
+        B.X+=Columns*Tile;
+        if(A.Overlaps(B)) return true;
+        B.X-=2*Columns*Tile;
+        return A.Overlaps(B);
+    }
     PacmanGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed; Rng.Seed(Seed); Hero={}; Score=0; Lives=3; Over=false; Won=false; Level=1; RespawnFrames=0;
@@ -315,11 +351,11 @@ public:
         if(ProtectedThisStep) --RespawnFrames;
         Hero.Update(I);
         for(auto& G:Ghosts) G.Update(Hero,Rng);
-        for(auto& P:Pellets) if(P.Alive && Distance(Hero.X,Hero.Y,P.X,P.Y)<12) {
+        for(auto& P:Pellets) if(P.Alive && DistanceToPellet(Hero,P)<12) {
             P.Alive=false; --Remaining; Score+=P.Power ? 50 : 10;
             if(P.Power) for(auto& G:Ghosts) { G.Frightened=true; G.FrightenedTimer=300; }
         }
-        for(auto& G:Ghosts) if(G.Alive && Hero.GetRect().Overlaps(G.GetRect())) {
+        for(auto& G:Ghosts) if(G.Alive && TouchesGhost(Hero,G)) {
             if(G.Frightened) { G.Alive=false; Score+=200; }
             else if(!ProtectedThisStep) {
                 --Lives;
@@ -364,19 +400,42 @@ public:
         Out.Clear(800,660,Black);
         for(int Row=0;Row<Rows;++Row) for(int Col=0;Col<Columns;++Col)
             if(IsWall(Col,Row)) Out.AddRect(Col*Tile,Row*Tile,Tile,Tile,maze::Wall);
+        const Color Gate{80,200,255,255};
+        for(int Side=0;Side<2;++Side) {
+            const double X=Side==0 ? 1 : Columns*Tile-7;
+            Out.AddRect(X,14*Tile+2,6,2,Gate); Out.AddRect(X,15*Tile-4,6,2,Gate);
+            Out.AddRect(Side==0 ? X : X+4,14*Tile+2,2,16,Gate);
+        }
         for(const auto& P:Pellets) if(P.Alive) Out.AddCircle(P.X,P.Y,P.Power ? 6 : 3,White);
-        if(RespawnFrames>0 && !Over && !Won) Out.AddCircle(Hero.X,Hero.Y,14,{80,200,255,255});
-        Out.AddCircle(Hero.X,Hero.Y,10,maze::Yellow);
+        const bool ShowGrace=RespawnFrames>0 && !Over && !Won;
         const double Angle=Hero.Dir.X<0 ? 3.141592653589793 : Hero.Dir.Y<0 ? -1.5707963267948966 : Hero.Dir.Y>0 ? 1.5707963267948966 : 0;
         const double Mouth=(30+std::abs(std::sin(Hero.Mouth/5.0)*25))*3.141592653589793/180;
-        Out.AddTriangle({Hero.X,Hero.Y},{Hero.X+10*std::cos(Angle-Mouth),Hero.Y+10*std::sin(Angle-Mouth)},
-            {Hero.X+10*std::cos(Angle+Mouth),Hero.Y+10*std::sin(Angle+Mouth)},Black);
+        const auto DrawHero=[&](double X) {
+            if(ShowGrace) Out.AddCircle(X,Hero.Y,14,{80,200,255,255});
+            Out.AddCircle(X,Hero.Y,10,maze::Yellow);
+            Out.AddTriangle({X,Hero.Y},{X+10*std::cos(Angle-Mouth),Hero.Y+10*std::sin(Angle-Mouth)},
+                {X+10*std::cos(Angle+Mouth),Hero.Y+10*std::sin(Angle+Mouth)},Black);
+        };
+        DrawHero(Hero.X);
+        if(IsTunnelActor(Hero.X,Hero.Y)) {
+            const double Extent=ShowGrace ? 14 : 10;
+            if(Hero.X<Extent) DrawHero(Hero.X+Columns*Tile);
+            else if(Hero.X+Extent>Columns*Tile) DrawHero(Hero.X-Columns*Tile);
+        }
         for(const auto& G:Ghosts) if(G.Alive) {
             const Color C=G.Frightened ? Color{0,0,200,255} : G.Tint;
-            Out.AddCircle(G.X,G.Y,9,C); Out.AddRect(G.X-9,G.Y,18,8,C);
-            Out.AddCircle(G.X-4,G.Y-3,3,White); Out.AddCircle(G.X+4,G.Y-3,3,White);
-            Out.AddCircle(G.X-4,G.Y-3,1,Black); Out.AddCircle(G.X+4,G.Y-3,1,Black);
+            const auto DrawGhost=[&](double X) {
+                Out.AddCircle(X,G.Y,9,C); Out.AddRect(X-9,G.Y,18,8,C);
+                Out.AddCircle(X-4,G.Y-3,3,White); Out.AddCircle(X+4,G.Y-3,3,White);
+                Out.AddCircle(X-4,G.Y-3,1,Black); Out.AddCircle(X+4,G.Y-3,1,Black);
+            };
+            DrawGhost(G.X);
+            if(IsTunnelActor(G.X,G.Y)) {
+                if(G.X<9) DrawGhost(G.X+Columns*Tile);
+                else if(G.X+9>Columns*Tile) DrawGhost(G.X-Columns*Tile);
+            }
         }
+        Out.AddRect(Columns*Tile,0,800-Columns*Tile,Rows*Tile,Black);
         Out.AddText(10,630,"SCORE "+std::to_string(Score)+"  LIVES "+std::to_string(Lives)+"  LEVEL "+std::to_string(Level));
         Out.AddText(580,136,"GLOWTRAIL",maze::Yellow,22);
         Out.AddText(580,162,"CHASE",maze::Yellow,22);
