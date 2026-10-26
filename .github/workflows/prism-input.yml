@@ -10,10 +10,23 @@ on:
       - 'tools/rpg_demo/input_transition_test.js'
       - 'tools/rpg_demo/dialog_input_test.js'
       - 'tools/rpg_demo/name_entry_key_test.js'
+      - 'tools/rpg_demo/battle_cancel_test.js'
+      - 'tools/rpg_demo/battle_plan_test.js'
+      - 'tools/rpg_demo/held_action_test.js'
+      - 'tools/rpg_demo/confused_action_test.js'
+      - 'tools/rpg_demo/build_demo.py'
+      - 'tools/rpg_demo/summons.js'
       - 'data/rpg/party.json'
       - 'data/rpg/interiors.json'
       - 'data/rpg/prism-village.json'
       - 'data/rpg/title.json'
+      - 'data/rpg/spells.json'
+      - 'data/rpg/prism-bosses.json'
+      - 'data/rpg/prism-bestiary.json'
+      - 'data/rpg/prism-encounters.json'
+      - 'data/rpg/portal-bestiary.json'
+      - 'data/rpg/portal-encounters.json'
+      - 'data/rpg/dungeons.json'
       - '.github/workflows/prism-input.yml'
 permissions:
   contents: read
@@ -36,3 +49,11 @@ jobs:
         run: node --max-old-space-size=128 tools/rpg_demo/dialog_input_test.js
       - name: Name entry keyboard and title transitions
         run: node --max-old-space-size=128 tools/rpg_demo/name_entry_key_test.js
+      - name: Battle command cancellation and input priority
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_cancel_test.js
+      - name: Battle planning chooser and target previews
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_plan_test.js
+      - name: Held battle actions and status guards
+        run: node --max-old-space-size=128 tools/rpg_demo/held_action_test.js
+      - name: Confused battle action resolution
+        run: node --max-old-space-size=128 tools/rpg_demo/confused_action_test.js
