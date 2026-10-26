@@ -146,7 +146,8 @@ void Circuit(std::uint32_t Seed) {
     const auto Complete=Guided;Frame Result;Guided.Render(Result);Check(Dots(Result).empty(),"completed chapter no longer draws an active route");
     Input Held;Held.Up=Held.Right=Held.Fire=Held.Jump=Held.Action=Held.Dash=true;
     Held.FirePressed=Held.JumpPressed=Held.DashPressed=true;
-    for(int N=0;N<8;++N) Guided.Step(Held);Frame Frozen;Guided.Render(Frozen);
+    for(int N=0;N<8;++N) Guided.Step(Held);
+    Frame Frozen;Guided.Render(Frozen);
     Check(SamePlay(Guided,Complete) && Guided.GetStatus().Note==Complete.GetStatus().Note && SameFrame(Result,Frozen),"completion freezes toggle movement and interaction until an explicit reset");
     Input Reset;Reset.ActionPressed=Reset.DashPressed=true;Guided.Step(Reset);Dungeon Fresh;Fresh.Reset(Seed);Frame A,B;Guided.Render(A);Fresh.Render(B);
     Check(SamePlay(Guided,Fresh) && SameFrame(A,B) && Dots(A).empty(),"completed reset retains the original seed order and returns trail to off");

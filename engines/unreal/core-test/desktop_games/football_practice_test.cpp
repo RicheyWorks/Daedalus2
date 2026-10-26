@@ -119,7 +119,8 @@ void KickFlightAndRerack() {
     Check(!G.IsKickReady() && NoteHas(G,"flight") && G.KickReceiptFramesRemaining()==Football::KickReceiptFrames,"accepted kick enters a distinct one-shot Flight state");
     ExpectedBall=G.Data.Football;Football::UpdateBall(ExpectedBall);G.Step(Fire());
     Check(SameBall(G.Data.Football,ExpectedBall) && G.Data.Human.KickCooldown==11,"next fixed frame begins physics and ignores a remote repeat kick");
-    for(int N=0;N<11;++N) G.Step(Fire());Frame F;G.Render(F);
+    for(int N=0;N<11;++N) G.Step(Fire());
+    Frame F;G.Render(F);
     Check(G.Data.Human.KickCooldown==0 && !G.IsKickReady() && NoteHas(G,"flight") && !HasText(F,"Kick READY"),"Flight stays one-shot after cooldown even under fresh repeated kick presses");
     Check(SamePlayer(G.Data.Cpu,Cpu) && G.Data.Seconds==Clock && G.Data.CpuScore==0,"practice never advances CPU or a match clock");
     G=Flight(1);Input Both=Fire();Both.ActionPressed=true;Both.Right=true;G.Step(Both);

@@ -76,7 +76,8 @@ void GraceWindow() {
     Check(P.VY>0&&!P.OnGround,"seventh decision cannot revive expired grace");
     Input Crouch;Crouch.Down=true;Crouch.Jump=true;P=WalkedOff();P.Update(Crouch,LandingPad,0);
     Check(P.Crouching&&P.VY>0,"crouching blocks a late jump even while grace is warm");
-    for(int N=0;N<5;++N) P.Update(Crouch,LandingPad,0);P.Update(Tap(),LandingPad,0);
+    for(int N=0;N<5;++N) P.Update(Crouch,LandingPad,0);
+    P.Update(Tap(),LandingPad,0);
     Check(!P.Crouching&&P.VY>0,"crouching decisions expire grace rather than saving it until release");
     P=WalkedOff();Input Held;Held.Jump=true;P.Update(Held,LandingPad,0);
     Check(Close(P.VY,-12.4),"source held jump is accepted during grace without a new edge");
@@ -102,7 +103,8 @@ void DamageAndReadiness() {
     G.Reset(730);auto& P=platformers::TestAccess::PlayerOf(G);P=WalkedOff();P.Invincible=10;
     platformers::TestAccess::Hurt(G);
     Check(P.Lives==3&&P.Invincible==10&&CanLateJump(P),"invincible rejected Hurt preserves real grace and life");
-    for(int N=0;N<6;++N) P.Update({},LandingPad,0);G.Render(F);
+    for(int N=0;N<6;++N) P.Update({},LandingPad,0);
+    G.Render(F);
     Check(HasText(F,"JUMP: airborne"),"expired grace uses ordinary airborne readiness");
 }
 void Lifecycle() {

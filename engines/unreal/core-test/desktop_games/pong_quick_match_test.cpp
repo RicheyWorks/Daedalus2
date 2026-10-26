@@ -52,7 +52,8 @@ void ModesAndServe() {
     G.S.PlayerScore=3;G.Reset(99);Check(G.GetOption()==2&&SameState(G.S,Quick().S),"Reset retains selected mode and clears match progress");
     Input Down;Down.Down=true;G.Step(Down);
     Check(G.S.PlayerY==256&&G.S.ServeFrames==44&&G.S.BallX==400&&G.S.BallY==300,"paddle stays live while opening ball waits");
-    for(int N=0;N<43;++N) G.Step({});Check(G.S.ServeFrames==1&&G.S.BallX==400,"automatic serve keeps the ball still through step forty-four");
+    for(int N=0;N<43;++N) G.Step({});
+    Check(G.S.ServeFrames==1&&G.S.BallX==400,"automatic serve keeps the ball still through step forty-four");
     G.Step({});Check(G.S.ServeFrames==0&&G.S.BallX==400&&G.S.BallY==300,"forty-fifth preparation step ends without implicit launch");
     G.Step({});Check(G.S.BallX==405&&G.S.BallY==303,"automatic opening launches on the following frame with match velocity");
     for(int Which=0;Which<3;++Which) {

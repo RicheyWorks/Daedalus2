@@ -51,7 +51,8 @@ void SourceNinjaSteps(const char* Filename) {
         if(Preset==1) {
             ShadowNinjaGame G;G.Reset(10);platformers::TestAccess::PlayerOf(G)=P;
             I.PadLeft=V[20]<0;I.PadRight=V[20]>0;I.PadDown=V[21]<0;I.PadUp=V[21]>0;
-            for(int F=0;F<Frames;++F) G.Step(I);P=G.GetPlayer();
+            for(int F=0;F<Frames;++F) G.Step(I);
+            P=G.GetPlayer();
         } else {
             if(Preset==2) Platforms={{100,300,200,12}};
             for(int F=0;F<Frames;++F) P.Update(I,Platforms,V[20],V[21]);
@@ -64,7 +65,8 @@ void SourceNinjaSteps(const char* Filename) {
 }
 void GraceAndImmediateJumps() {
     auto P=WalkedOff();Check(!P.OnGround && !P.DoubleJump && Close(P.X,205),"normal movement leaves a real platform without spending an air jump");
-    for(int N=0;N<5;++N) P.Update({},Floor);P.Update(Tap(),Floor);
+    for(int N=0;N<5;++N) P.Update({},Floor);
+    P.Update(Tap(),Floor);
     Check(P.VY==-11 && !P.OnGround && P.DoubleJump,"sixth decision after walkoff still allows the normal ground jump");
     P.Update({},Floor);P.Update(Tap(),Floor);
     Check(P.VY==-9 && !P.DoubleJump,"successful ledge jump consumes grace so the next fresh jump is the normal air jump");

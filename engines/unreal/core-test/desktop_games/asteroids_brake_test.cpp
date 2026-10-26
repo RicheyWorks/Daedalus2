@@ -59,7 +59,8 @@ Input DecodeInput(double MaskValue,double Ax,double Ay) {
 std::vector<double> Numbers(const std::string& Text) {
     std::istringstream In(Text);std::vector<double> Out;double Value;
     while(In>>Value) {if(!std::isfinite(Value)) throw std::runtime_error("nonfinite fixture value");Out.push_back(Value);}
-    if(!In.eof()) throw std::runtime_error("invalid fixture token");return Out;
+    if(!In.eof()) throw std::runtime_error("invalid fixture token");
+    return Out;
 }
 void SourceShipParity(const char* Filename) {
     std::ifstream File(Filename);Check(static_cast<bool>(File),"existing source fixture file is readable");if(!File) return;

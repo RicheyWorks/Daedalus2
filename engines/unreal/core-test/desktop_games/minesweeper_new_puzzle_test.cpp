@@ -9,7 +9,8 @@ int Checks=0,Failed=0;
 void Check(bool Ok,const char* What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
 std::vector<std::string> Fields(const std::string& Save) {
     std::istringstream In(Save);std::vector<std::string> Out;std::string Part;
-    while(In>>Part) Out.push_back(Part);return Out;
+    while(In>>Part) Out.push_back(Part);
+    return Out;
 }
 int Bits(const std::vector<std::string>& Save,int N) {return Save[9][static_cast<std::size_t>(N)]-'0';}
 bool Click(Driver& D,int N,int Button=0) {
