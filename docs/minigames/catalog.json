@@ -65,6 +65,7 @@
       "option_count": 2,
       "capabilities": [
         "focus_freeze",
+        "hints",
         "options",
         "save_restore"
       ],
@@ -219,6 +220,7 @@
       "option_count": 8,
       "capabilities": [
         "focus_freeze",
+        "hints",
         "options"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
@@ -258,6 +260,7 @@
       "option_count": 2,
       "capabilities": [
         "focus_freeze",
+        "hints",
         "options",
         "save_restore"
       ],
