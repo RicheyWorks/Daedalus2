@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: MIT
+name: Epic source tools
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/unreal_mcp/interchange_test_plan/**'
+      - 'tools/unreal_mcp/convention_audit/**'
+      - 'tools/unreal_mcp/interchange_harness/profiles/**'
+      - '.github/workflows/epic-source-tools.yml'
+permissions:
+  contents: read
+jobs:
+  engine-free:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: Interchange test plan core
+        run: python -m unittest discover -s tools/unreal_mcp/interchange_test_plan -p 'test_*.py' -v
