@@ -10,6 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Driftstone Patrol hints.** A cream hint and a cyan fire cue sit under the fire line. Flight practice uses the same pair to name the gold ring. Controls and the status note are unchanged.
 - **Twinwake Volley hints.** Practice and the first-to-five match show a cream hint and a cyan serve cue. The endless match keeps its six-draw opening and shows the same lines only after a rally, a serve, or a point.
 - **Beacon Sweep hints.** A cream hint and a cyan action cue sit on the dark header, so the next reveal, flag, chord, or replay reads without changing the controls line or the status note.
 - **Dungeon cabinet view.** White corner marks draw after the lanterns and the exit, so the player tile stays visible when it overlaps them. The sealed exit label is white on the gray door, the door keeps a dark frame on the floor, dim lantern numbers are white on the gray glass, each lantern keeps a dark ring on the wall, and original-room walls keep a light top edge so they separate from that glass. Movement and controls are unchanged.

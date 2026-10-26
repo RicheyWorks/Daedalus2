@@ -31,7 +31,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `beacon_sweep` | yes |  | yes |  | yes |  | yes | yes | yes | yes |
 | `twinwake` | yes |  | yes |  |  |  | yes | yes | yes | yes |
 | `dungeon` | yes |  |  |  |  |  | yes | yes | yes | yes |
-| `driftstone` | yes |  | yes | yes |  |  | yes |  |  | yes |
+| `driftstone` | yes |  | yes | yes |  |  | yes | yes | yes | yes |
 | `football` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `glowtrail` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `riftwing` | yes |  | yes | yes |  |  | yes |  |  | yes |

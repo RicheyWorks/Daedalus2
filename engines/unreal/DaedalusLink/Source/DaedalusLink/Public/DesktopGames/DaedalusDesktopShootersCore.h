@@ -215,6 +215,17 @@ public:
             CreateRocks(std::min(4+Level,32)); RespawnGrace=60;
         }
     }
+    std::string HintLine() const {
+        if(Option==2) return Won?"HINT Pad A or R docks again.":"HINT Brake to a stop inside the gold ring.";
+        if(Won) return "HINT Pad A or R starts another voyage.";
+        if(Over) return "HINT Pad A or R tries this run again.";
+        return "HINT Turn, thrust, and hold fire. Rocks split.";
+    }
+    std::string ActionCue() const {
+        if(Over||Won) return "CUE Retry";
+        if(Option==2) return "CUE Dock";
+        return IsFireReady()?"CUE Fire":"CUE Wait";
+    }
     void Render(Frame& F) const override {
         using namespace shooter_detail;
         F.Clear(); for(const auto& S:Stars) F.AddCircle(S.X,S.Y,1,White);
@@ -250,6 +261,8 @@ public:
         F.AddText(355,15,std::string(Option==1?"WAVE: ":"LEVEL: ")+std::to_string(Level)+(Option==1?"/3":""),Yellow,18);
         F.AddText(30,42,"ROCKS: "+std::to_string(GetRockCount())+"   UFOs: "+std::to_string(GetUfoCount()),White,16);
         F.AddText(30,65,"FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
+        F.AddText(30,88,HintLine(),{255,236,180,255},14);
+        F.AddText(560,88,ActionCue(),{120,225,255,255},16);
         if(!Over && !Won) {
             if(Player.Braking) F.AddText(420,42,"BRAKING",LightBlue,17);
             F.AddText(420,65,ProtectionNote(),RespawnGrace>0?Cyan:White,15);
@@ -285,6 +298,8 @@ private:
         F.AddText(30,15,"FLIGHT PRACTICE",White,24);
         F.AddText(610,15,"DOCKED "+std::to_string(FlightStage)+"/3",Gold,22);
         F.AddText(30,52,Player.Braking?(Player.Vx==0 && Player.Vy==0?"STOPPED":"BRAKING"):"Find the next gold ring",LightBlue,17);
+        F.AddText(30,80,HintLine(),{255,236,180,255},14);
+        F.AddText(560,80,ActionCue(),{120,225,255,255},16);
         F.AddText(30,548,"Stop under braking inside the GOLD ring. Edges wrap.",White,15);
         F.AddText(30,572,"Left/Right, stick or hat: turn | Up: thrust | K/LT: brake",White,15);
         if(Won) {

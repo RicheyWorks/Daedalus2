@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Short action chips beside the hint line. The chip names the immediate action
 // and stays out of score, movement, and saved status text.
-// catalog-capability: action_cue: beacon_sweep dungeon dodge_ball lanternwild twinwake
+// catalog-capability: action_cue: beacon_sweep driftstone dungeon dodge_ball lanternwild twinwake
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -46,6 +46,12 @@ void BeaconCues() {
     Input Flag;Flag.ActionPressed=true;G.Step(Flag);
     Check(G.ActionCue()=="CUE Unflag","a flag cues unflag");
 }
+void DriftstoneCues() {
+    DriftstoneGame G;G.Reset(730);
+    Expect(G,"CUE Fire","fresh patrol cues fire");
+    Check(G.SetOption(2,730),"flight practice opens");
+    Expect(G,"CUE Dock","flight practice cues the dock");
+}
 void TwinwakeCues() {
     TwinwakeGame G;
     Check(G.SetOption(1,730),"practice mode opens");
@@ -60,7 +66,7 @@ void LanternwildCues() {
 }
 
 int main() {
-    try { BeaconCues();DungeonCues();DodgeCues();LanternwildCues();TwinwakeCues(); }
+    try { BeaconCues();DriftstoneCues();DungeonCues();DodgeCues();LanternwildCues();TwinwakeCues(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
