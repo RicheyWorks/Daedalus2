@@ -295,6 +295,16 @@ void Swing() {
         if(C.Size==4 && C.Tint.R==200 && C.Tint.G==200 && C.Tint.B==220) Steel=N;
     }
     Check(Shade<Steel && Steel<F.Commands.size(),"the swing keeps a dark edge on the road");
+    std::size_t ShadeTip=F.Commands.size(),GoldTip=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Triangle || C.B.X!=P.X) continue;
+        if(C.A.X==P.X-6 && C.A.Y==P.Y+30 && C.B.Y==P.Y+44
+            && C.Tint.R==48 && C.Tint.G==32 && C.Tint.B==12) ShadeTip=N;
+        if(C.A.X==P.X-4 && C.A.Y==P.Y+32 && C.B.Y==P.Y+40
+            && C.Tint.R==255 && C.Tint.G==215 && C.Tint.B==0) GoldTip=N;
+    }
+    Check(ShadeTip<GoldTip && GoldTip<F.Commands.size(),"the gold tip keeps a dark edge on the road");
 }
 void Toast() {
     ZeldaGame G;
