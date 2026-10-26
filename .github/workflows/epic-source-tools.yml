@@ -7,6 +7,7 @@ on:
       - 'tools/unreal_mcp/interchange_test_plan/**'
       - 'tools/unreal_mcp/convention_audit/**'
       - 'tools/unreal_mcp/interchange_harness/profiles/**'
+      - 'tools/unreal_preflight/rebuild_delta/**'
       - '.github/workflows/epic-source-tools.yml'
 permissions:
   contents: read
@@ -26,3 +27,5 @@ jobs:
         run: python -m unittest discover -s tools/unreal_mcp/interchange_test_plan -p 'test_*.py' -v
       - name: Convention audit core
         run: python -m unittest discover -s tools/unreal_mcp/convention_audit -p 'test_*.py' -v
+      - name: Rebuild delta helper
+        run: python -m unittest discover -s tools/unreal_preflight/rebuild_delta -p 'test_*.py' -v
