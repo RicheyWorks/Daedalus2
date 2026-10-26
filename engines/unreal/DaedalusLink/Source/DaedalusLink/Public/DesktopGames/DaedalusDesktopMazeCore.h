@@ -657,6 +657,13 @@ public:
         AddPickup(250,280,PickupKind::Rupee); AddPickup(500,150,PickupKind::Rupee);
         AddPickup(150,420,PickupKind::Heart); AddPickup(680,280,PickupKind::Rupee);
     }
+    // Option 1 presets held-sword assistance for cabinets that want it on from the start.
+    // Shift/pad Y still toggles it live; option 0 keeps the original fresh-press default.
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;SwordAssist=Value==1;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
     void Step(const Input& I) override {
         if(Over || Won) { if(maze::RestartPressed(I)) Reset(SessionSeed); return; }
         if(I.DashPressed) SwordAssist=!SwordAssist;
@@ -774,6 +781,7 @@ private:
     std::vector<Collectible> Collectibles;
     std::int64_t Score=0;
     int Keys=0, MessageTimer=0;
+    int Option=0;
     bool KeySpawned=false, Over=false, Won=false, SwordAssist=false;
     std::string Message;
     std::string ObjectiveText() const {

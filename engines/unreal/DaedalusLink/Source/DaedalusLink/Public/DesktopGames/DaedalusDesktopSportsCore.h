@@ -331,6 +331,7 @@ public:
 private:
     Random Rng;
     bool UpWasDown=false,DownWasDown=false,CountryStickArmed=false;
+    int Option=0;
     int PassReceiver=-1;
     int NextPassTarget(int Owner) const {
         if(Owner<0 || Owner>=3) return -1;
@@ -421,7 +422,13 @@ public:
         Rng.Seed(Seed);Data=State{};Data.Particles.reserve(MaxParticles);
         UpWasDown=DownWasDown=CountryStickArmed=false;
         PassReceiver=-1;
+        Data.SelectedCountry=Option; // Option presets the country cursor; select still confirms.
     }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>=static_cast<int>(Countries.size())) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
     static Player MakePlayer(int CountryIndex,int Slot,bool Cpu,int SuperType=1) {
         const int SafeCountry=std::max(0,std::min(7,CountryIndex));
         const int SafeSlot=std::max(0,std::min(2,Slot));
