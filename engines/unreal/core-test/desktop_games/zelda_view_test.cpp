@@ -4,6 +4,12 @@
 #include <iostream>
 #include <string>
 
+namespace daedalus { namespace desktop {
+struct MazeTestAccess {
+    static void Toast(ZeldaGame& G) { G.Message="+1 Trinket"; G.MessageTimer=40; }
+};
+}}
+
 using namespace daedalus::desktop;
 namespace {
 int Checks=0,Failed=0;
@@ -201,10 +207,23 @@ void Swing() {
     }
     Check(Shade<Steel && Steel<F.Commands.size(),"the swing keeps a dark edge on the road");
 }
+void Toast() {
+    ZeldaGame G;
+    MazeTestAccess::Toast(G);
+    Frame F;G.Render(F);
+    std::size_t Plate=F.Commands.size(),Line=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind==Shape::Rectangle && C.A.X==280 && C.A.Y==50 && C.B.X==280 && C.B.Y==28
+            && C.Tint.R==8 && C.Tint.G==36 && C.Tint.B==16) Plate=N;
+        if(C.Kind==Shape::Text && C.Label=="+1 Trinket") Line=N;
+    }
+    Check(Plate<Line && Line<F.Commands.size(),"a pickup message sits on a dark plate over the trees");
+}
 }
 
 int main() {
-    try { View();Rupee();Shot();Swing(); }
+    try { View();Rupee();Shot();Swing();Toast(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
