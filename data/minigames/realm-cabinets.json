@@ -1,0 +1,377 @@
+{
+  "schema": "daedalus.minigames.realm_cabinets/v1",
+  "generated_by": "tools/minigames/realm_cabinets.py",
+  "note": "Offsets are metres from each realm's anchor marker; native status per catalog.json.",
+  "realms": [
+    {
+      "realm": "island_hephaestus",
+      "anchor": "arcade_plaza",
+      "layout": "grid",
+      "cabinets": [
+        {
+          "game": "asteroids",
+          "title": "Driftstone Patrol",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            -3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1793651014,
+          "start": "StartGame(\"asteroids\", 1793651014)"
+        },
+        {
+          "game": "sega_shooter",
+          "title": "Riftwing Vanguard",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 235028576,
+          "start": "StartGame(\"sega_shooter\", 235028576)"
+        },
+        {
+          "game": "shadow_ninja",
+          "title": "Shadow Ninja",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1618900431,
+          "start": "StartGame(\"shadow_ninja\", 1618900431)"
+        },
+        {
+          "game": "star_shooter",
+          "title": "Star Shooter",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 2032752024,
+          "start": "StartGame(\"star_shooter\", 2032752024)"
+        },
+        {
+          "game": "contra",
+          "title": "Ironwake Advance",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            2.5,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1867907410,
+          "start": "StartGame(\"contra\", 1867907410)"
+        },
+        {
+          "game": "zelda",
+          "title": "Lanternwild Quest",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            2.5,
+            1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1137613426,
+          "start": "StartGame(\"zelda\", 1137613426)"
+        }
+      ]
+    },
+    {
+      "realm": "island_oddsreaper",
+      "anchor": "arcade_plaza",
+      "layout": "arc",
+      "cabinets": [
+        {
+          "game": "minesweeper",
+          "title": "Minesweeper",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            1.351,
+            -2.104,
+            0.0
+          ],
+          "yaw_deg": 122.704,
+          "seed": 1193700883,
+          "start": "StartGame(\"minesweeper\", 1193700883)"
+        },
+        {
+          "game": "sudoku",
+          "title": "SudokuPro",
+          "host": "ADaedalusJavaArcade",
+          "offset_m": [
+            2.5,
+            0.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1199315078,
+          "game_enum": "EDaedalusJavaGame::Sudoku",
+          "requires": "local Java game service (rules stay in Java)"
+        },
+        {
+          "game": "blackjack",
+          "title": "BlackJackPro",
+          "host": "ADaedalusJavaArcade",
+          "offset_m": [
+            1.351,
+            2.104,
+            0.0
+          ],
+          "yaw_deg": 237.296,
+          "seed": 1765535277,
+          "game_enum": "EDaedalusJavaGame::Blackjack",
+          "requires": "local Java game service (rules stay in Java)"
+        }
+      ]
+    },
+    {
+      "realm": "island_prometheus",
+      "anchor": "arcade_plaza",
+      "layout": "row",
+      "cabinets": [
+        {
+          "game": "pong",
+          "title": "Twinwake Volley",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            -2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 75336563,
+          "start": "StartGame(\"pong\", 75336563)"
+        },
+        {
+          "game": "football",
+          "title": "Football / Soccer",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 736917169,
+          "start": "StartGame(\"football\", 736917169)"
+        },
+        {
+          "game": "dodge_ball",
+          "title": "Courtyard Clash",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1821893436,
+          "start": "StartGame(\"dodge_ball\", 1821893436)"
+        }
+      ]
+    },
+    {
+      "realm": "spawn_overlook",
+      "anchor": "arcade_plaza",
+      "layout": "grid",
+      "cabinets": [
+        {
+          "game": "minesweeper",
+          "title": "Minesweeper",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            -5.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 572993567,
+          "start": "StartGame(\"minesweeper\", 572993567)"
+        },
+        {
+          "game": "pong",
+          "title": "Twinwake Volley",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            -2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 920778370,
+          "start": "StartGame(\"pong\", 920778370)"
+        },
+        {
+          "game": "dungeon",
+          "title": "Dungeon Prototype",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1068771651,
+          "start": "StartGame(\"dungeon\", 1068771651)"
+        },
+        {
+          "game": "asteroids",
+          "title": "Driftstone Patrol",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1169413264,
+          "start": "StartGame(\"asteroids\", 1169413264)"
+        },
+        {
+          "game": "football",
+          "title": "Football / Soccer",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            5.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 830794694,
+          "start": "StartGame(\"football\", 830794694)"
+        },
+        {
+          "game": "pacman",
+          "title": "Glowtrail Chase",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            2.5,
+            -5.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 177470509,
+          "start": "StartGame(\"pacman\", 177470509)"
+        },
+        {
+          "game": "sega_shooter",
+          "title": "Riftwing Vanguard",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            2.5,
+            -2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 323768790,
+          "start": "StartGame(\"sega_shooter\", 323768790)"
+        },
+        {
+          "game": "shadow_ninja",
+          "title": "Shadow Ninja",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            2.5,
+            0.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 2100323449,
+          "start": "StartGame(\"shadow_ninja\", 2100323449)"
+        },
+        {
+          "game": "star_shooter",
+          "title": "Star Shooter",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            2.5,
+            2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1684489262,
+          "start": "StartGame(\"star_shooter\", 1684489262)"
+        },
+        {
+          "game": "dodge_ball",
+          "title": "Courtyard Clash",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            2.5,
+            5.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 39287196,
+          "start": "StartGame(\"dodge_ball\", 39287196)"
+        },
+        {
+          "game": "contra",
+          "title": "Ironwake Advance",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            5.0,
+            -3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 539766360,
+          "start": "StartGame(\"contra\", 539766360)"
+        },
+        {
+          "game": "zelda",
+          "title": "Lanternwild Quest",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            5.0,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1712571089,
+          "start": "StartGame(\"zelda\", 1712571089)"
+        },
+        {
+          "game": "sudoku",
+          "title": "SudokuPro",
+          "host": "ADaedalusJavaArcade",
+          "offset_m": [
+            5.0,
+            1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 2008969840,
+          "game_enum": "EDaedalusJavaGame::Sudoku",
+          "requires": "local Java game service (rules stay in Java)"
+        },
+        {
+          "game": "blackjack",
+          "title": "BlackJackPro",
+          "host": "ADaedalusJavaArcade",
+          "offset_m": [
+            5.0,
+            3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 839565646,
+          "game_enum": "EDaedalusJavaGame::Blackjack",
+          "requires": "local Java game service (rules stay in Java)"
+        }
+      ]
+    }
+  ]
+}
