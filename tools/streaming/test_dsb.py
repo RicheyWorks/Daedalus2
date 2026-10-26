@@ -168,7 +168,7 @@ class MeasureTest(unittest.TestCase):
             data = f.read()
         self.assertEqual(hashlib.sha256(data).hexdigest(), pin["manifest_sha256"])
         self.assertEqual(sum(p["bytes"] for p in json.loads(data)["packets"]), pin["disk_bytes"])
-        self.assertIn("island BlenderBoss x -6000000 y 6000000 ram 40456 disk 16348\n", dsb_manifest.build(ROOT)[0])
+        self.assertIn("island BlenderBoss x -6000000 y 6000000 ram 40456 disk 18460\n", dsb_manifest.build(ROOT)[0])
 
 
 if __name__ == "__main__":
