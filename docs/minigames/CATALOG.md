@@ -10,7 +10,7 @@ batched rebuild under the editor custodian.
 |---|---|---|
 | `minesweeper` | Minesweeper | 5 |
 | `pong` | Twinwake Volley | 6 |
-| `dungeon` | Dungeon Prototype | 5 |
+| `dungeon` | Dungeon Prototype | 6 |
 | `asteroids` | Driftstone Patrol | 4 |
 | `football` | Football / Soccer | 3 |
 | `pacman` | Glowtrail Chase | 7 |

@@ -166,6 +166,7 @@ public:
         }
         Out.AddRect(Exit.X-16,Exit.Y-16,32,32,LitCount==LanternCount?Color{80,200,255,255}:Color{95,100,120,255});
         Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",Black,12);
+        DrawHeroMark(Out);
         const std::string Circuit=std::string(Option==1?"Switchback | ":"")+"Circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size());
         const std::string Progress=Circuit+(Complete?" clear in "+std::to_string(RunFrames/60)+"s. K/Enter/pad B or R: replay."
             :(LitCount==LanternCount?": exit unsealed. Approach EXIT and light it."
@@ -185,6 +186,17 @@ public:
         if(Complete) return "CUE Replay";
         if(LitCount==LanternCount) return "CUE Exit";
         return "CUE Next lantern";
+    }
+    // White corners paint after lanterns and the exit so the player tile stays
+    // readable when it overlaps them. The green body stays underneath.
+    void DrawHeroMark(Frame& Out) const {
+        const double X=Hero.X, Y=Hero.Y;
+        const Color Ink{255,255,255,255};
+        constexpr double Arm=8, Thick=3;
+        Out.AddRect(X,Y,Arm,Thick,Ink); Out.AddRect(X,Y,Thick,Arm,Ink);
+        Out.AddRect(X+Tile-Arm,Y,Arm,Thick,Ink); Out.AddRect(X+Tile-Thick,Y,Thick,Arm,Ink);
+        Out.AddRect(X,Y+Tile-Thick,Arm,Thick,Ink); Out.AddRect(X,Y+Tile-Arm,Thick,Arm,Ink);
+        Out.AddRect(X+Tile-Arm,Y+Tile-Thick,Arm,Thick,Ink); Out.AddRect(X+Tile-Thick,Y+Tile-Arm,Thick,Arm,Ink);
     }
     Status GetStatus() const override {
         std::string Text=std::string(Option==1?"Threadlight Switchback circuit ":"Threadlight circuit ")+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size())+": ";

@@ -59,6 +59,7 @@
         "desktop_dungeon_circuit",
         "desktop_dungeon_switchback",
         "desktop_dungeon_trail",
+        "desktop_dungeon_view",
         "desktop_maze",
         "desktop_maze_saves"
       ],

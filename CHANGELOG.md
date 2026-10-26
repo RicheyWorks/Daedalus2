@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Dungeon cabinet view.** White corner marks draw after the lanterns and the exit, so the player tile stays visible when it overlaps them. Movement and controls are unchanged.
+
 - **Combat and EXP (ADR-037).**
   Zelda II in the realm:
   thrust high or low,
