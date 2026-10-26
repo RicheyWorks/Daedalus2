@@ -72,6 +72,14 @@ void View() {
         if(C.Kind==Shape::Text && C.A.Y==10 && C.Label.rfind("HEALTH",0)==0) Health=N;
     }
     Check(Status<Health && Health<F.Commands.size(),"health and the objective sit on a dark plate over the trees");
+    std::size_t Footer=F.Commands.size(),Score=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind==Shape::Rectangle && C.A.X==0 && C.A.Y==552 && C.B.X==800 && C.B.Y==48
+            && C.Tint.R==8 && C.Tint.G==36 && C.Tint.B==16) Footer=N;
+        if(C.Kind==Shape::Text && C.A.Y==559 && C.Label.rfind("SCORE",0)==0) Score=N;
+    }
+    Check(Footer<Score && Score<F.Commands.size(),"the score sits on a dark plate on the grass");
     const auto& Hero=G.GetPlayer();
     std::size_t Sheath=F.Commands.size(),Blade=F.Commands.size();
     for(std::size_t N=0;N<F.Commands.size();++N) {
