@@ -10,7 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
-- **Gloam Latch.** A 5x5 lamp puzzle. Flipping a lamp also flips its neighbors, and every seed starts from a board that can be darkened. A cream hint and a cyan flip cue sit on the bottom edge.
+- **Gloam Latch.** A lamp puzzle. Option 0 is 5x5 and option 1 is a 3x3 practice board. Flipping a lamp also flips its neighbors, and every seed starts from a board that can be darkened. A cream hint and a cyan flip cue sit on the bottom edge.
 - **Riftwing Vanguard hints.** A cream hint and a cyan fire cue sit under the speed line. Boss rehearsal names the boss in that hint. Controls and the status note are unchanged.
 - **Driftstone Patrol hints.** A cream hint and a cyan fire cue sit under the fire line. Flight practice uses the same pair to name the gold ring. Controls and the status note are unchanged.
 - **Twinwake Volley hints.** Practice and the first-to-five match show a cream hint and a cyan serve cue. The endless match keeps its six-draw opening and shows the same lines only after a rally, a serve, or a point.

@@ -292,11 +292,12 @@
       "portable_tests": [
         "desktop_gloam_latch"
       ],
-      "option_count": 0,
+      "option_count": 2,
       "capabilities": [
         "action_cue",
         "focus_freeze",
         "hints",
+        "options",
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"

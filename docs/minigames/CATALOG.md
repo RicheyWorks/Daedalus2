@@ -41,7 +41,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes | yes |
 | `ironwake` | yes | yes | yes | yes |  |  | yes |  |  | yes |
 | `lanternwild` | yes |  |  |  |  |  | yes | yes | yes | yes |
-| `gloam_latch` |  |  |  | yes |  |  | yes | yes | yes |  |
+| `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes |  |
 
 ## Java cabinets
 

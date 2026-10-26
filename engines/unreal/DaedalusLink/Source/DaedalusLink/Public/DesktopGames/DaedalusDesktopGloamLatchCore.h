@@ -12,32 +12,45 @@ struct GloamLatchTestAccess;
 // seed can be cleared by repeating those same flips.
 class GloamLatchGame final : public Game {
     friend struct GloamLatchTestAccess;
-    static constexpr int N=5;
-    std::array<bool,N*N> Lamp{};
+    static constexpr int MaxN=5;
+    std::array<bool,MaxN*MaxN> Lamp{};
     std::vector<int> Opening;
-    int CursorCell=N*N/2;
+    int Option=0;
+    int Width=5;
+    int CursorCell=12;
     int Moves=0;
     bool Won=false;
     std::uint32_t SessionSeed=730;
     void Flip(int X,int Y) {
-        if(X<0||Y<0||X>=N||Y>=N) return;
-        Lamp[static_cast<std::size_t>(Y*N+X)]=!Lamp[static_cast<std::size_t>(Y*N+X)];
+        if(X<0||Y<0||X>=Width||Y>=Width) return;
+        Lamp[static_cast<std::size_t>(Y*Width+X)]=!Lamp[static_cast<std::size_t>(Y*Width+X)];
     }
     void Press(int Cell) {
-        const int X=Cell%N,Y=Cell/N;
+        const int X=Cell%Width,Y=Cell/Width;
         Flip(X,Y);Flip(X-1,Y);Flip(X+1,Y);Flip(X,Y-1);Flip(X,Y+1);
     }
-    bool Dark() const { for(bool L:Lamp) if(L) return false; return true; }
+    bool Dark() const {
+        for(int Cell=0;Cell<Width*Width;++Cell) if(Lamp[static_cast<std::size_t>(Cell)]) return false;
+        return true;
+    }
     void Deal() {
-        Lamp.fill(false); Opening.clear(); CursorCell=N*N/2; Moves=0; Won=false;
+        Width=Option==1?3:5;
+        Lamp.fill(false); Opening.clear(); CursorCell=Width*Width/2; Moves=0; Won=false;
         Random Rng; Rng.Seed(SessionSeed);
-        for(int I=0;I<8;++I) Opening.push_back(Rng.Int(0,N*N-1));
+        const int Cells=Width*Width;
+        const int Flips=Option==1?4:8;
+        for(int I=0;I<Flips;++I) Opening.push_back(Rng.Int(0,Cells-1));
         for(int Cell:Opening) Press(Cell);
-        if(Dark()) { Opening.push_back(N*N/2); Press(N*N/2); }
+        if(Dark()) { Opening.push_back(Cells/2); Press(Cells/2); }
     }
     std::int64_t Points() const { return Won?std::max<std::int64_t>(0,1000-static_cast<std::int64_t>(Moves)*25):0; }
 public:
     void Reset(std::uint32_t Seed) override { SessionSeed=Seed?Seed:1; Deal(); }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value; SessionSeed=Seed?Seed:1; Deal(); return true;
+    }
+    int GetOption() const override { return Option; }
     bool SourceKeyDown(int Key) override {
         if(Won && (Key==5 || Key==6 || Key==7 || Key==8)) { Deal(); return true; }
         return false;
@@ -47,12 +60,12 @@ public:
             if(I.FirePressed || I.JumpPressed || I.ActionPressed) Deal();
             return;
         }
-        int X=CursorCell%N,Y=CursorCell/N;
+        int X=CursorCell%Width,Y=CursorCell/Width;
         if(I.Left||I.PadLeft) X=std::max(0,X-1);
-        if(I.Right||I.PadRight) X=std::min(N-1,X+1);
+        if(I.Right||I.PadRight) X=std::min(Width-1,X+1);
         if(I.Up||I.PadUp) Y=std::max(0,Y-1);
-        if(I.Down||I.PadDown) Y=std::min(N-1,Y+1);
-        CursorCell=Y*N+X;
+        if(I.Down||I.PadDown) Y=std::min(Width-1,Y+1);
+        CursorCell=Y*Width+X;
         if(!(I.FirePressed||I.JumpPressed||I.ActionPressed)) return;
         Press(CursorCell); ++Moves;
         if(Dark()) Won=true;
@@ -66,8 +79,8 @@ public:
         F.Clear(800,600,{16,18,32,255});
         F.AddText(30,24,"GLOAM LATCH",{255,236,180,255},28);
         F.AddText(30,58,"MOVES: "+std::to_string(Moves),White,18);
-        for(int Y=0;Y<N;++Y) for(int X=0;X<N;++X) {
-            const int Cell=Y*N+X;
+        for(int Y=0;Y<Width;++Y) for(int X=0;X<Width;++X) {
+            const int Cell=Y*Width+X;
             const double Px=180.0+X*88.0,Py=120.0+Y*80.0;
             const bool Lit=Lamp[static_cast<std::size_t>(Cell)];
             F.AddRect(Px-4,Py-4,72,64,Cell==CursorCell?Color{255,236,180,255}:Color{28,32,48,255});
@@ -77,12 +90,13 @@ public:
         F.AddText(620,548,ActionCue(),{120,225,255,255},16);
     }
     Status GetStatus() const override {
-        int Lit=0; for(bool L:Lamp) Lit+=L?1:0;
+        int Lit=0; for(int Cell=0;Cell<Width*Width;++Cell) Lit+=Lamp[static_cast<std::size_t>(Cell)]?1:0;
         if(Won) return {Points(),1,true,true,"All lamps dark; pad A or R retries; moves "+std::to_string(Moves)};
         return {0,1,false,false,"Lit lamps "+std::to_string(Lit)+"; moves "+std::to_string(Moves)};
     }
+    int BoardWidth() const { return Width; }
     int Cursor() const { return CursorCell; }
     int LitCount() const { int NLit=0; for(bool L:Lamp) NLit+=L?1:0; return NLit; }
-    bool LitAt(int Cell) const { return Cell>=0 && Cell<N*N && Lamp[static_cast<std::size_t>(Cell)]; }
+    bool LitAt(int Cell) const { return Cell>=0 && Cell<Width*Width && Lamp[static_cast<std::size_t>(Cell)]; }
 };
 }} // daedalus::desktop
