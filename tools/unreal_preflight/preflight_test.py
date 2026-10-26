@@ -46,6 +46,15 @@ check("P11: banned editor flags flagged on launch lines, not comments",
       [(e[1], e[2]) for e in flags] == [(2, "P11"), (3, "P11")], flags)
 check("P11: commandlet/-game -unattended and clean GUI launch pass",
       preflight.scan([os.path.join(F, "good_flags.ps1")]) == [], preflight.scan([os.path.join(F, "good_flags.ps1")]))
+shadow = preflight.scan([os.path.join(F, "bad_cpp_shadow.h"), os.path.join(F, "bad_cpp_shadow.cpp")])
+check("P12: historic C4458 cases (auto Children in MotifRack, FString Owner in JavaArcade), own and inherited members, [this] lambda, parameter redeclared; a non-this lambda is skipped",
+      sorted((e[1], e[2]) for e in shadow) == [(5, "P12"), (10, "P12"), (11, "P12"), (12, "P12"), (17, "P12"), (19, "P12")], shadow)
+check("P12: the messages name the hidden member",
+      any("ADaedalusGalleryMotifRack::Children" in e[3] for e in shadow) and any("ADaedalusJavaArcade::Owner" in e[3] for e in shadow), shadow)
+good_shadow = preflight.scan([os.path.join(F, "bad_cpp_shadow.h"), os.path.join(F, "good_cpp_shadow.cpp")])
+check("P12: renamed locals, comments, strings, member assignment, the allow marker and free functions pass",
+      good_shadow == [], good_shadow)
+check("P12: a .cpp without its class header is not guessed at", rules("bad_cpp_shadow.cpp") == [], rules("bad_cpp_shadow.cpp"))
 n = sum(results)
 print("%d/%d" % (n, len(results)))
 sys.exit(0 if n == len(results) else 1)
