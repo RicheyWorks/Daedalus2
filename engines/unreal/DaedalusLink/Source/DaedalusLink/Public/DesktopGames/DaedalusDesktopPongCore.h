@@ -16,12 +16,14 @@ public:
     void Step(const Input& I) override {
         if(S.ContactFrames>0) --S.ContactFrames;
         if(S.PointFrames>0) --S.PointFrames;
+        const double PreviousPlayerY=S.PlayerY;
         if((I.Up || I.PadUp) && S.PlayerY>0) S.PlayerY-=6;
         if((I.Down || I.PadDown) && S.PlayerY<500) S.PlayerY+=6;
         const double StickY=Axis(I.AxisY);
         if(std::abs(StickY)>0.2) S.PlayerY+=StickY*8;
         // Polish: keyboard overshoot cannot strand a paddle outside the playfield.
         S.PlayerY=Clamp(S.PlayerY,0,500);
+        const double PaddleDelta=S.PlayerY-PreviousPlayerY;
         // Keep the source's two sequential AI tests, including its near-target quirk.
         if(S.ComputerY+50<S.BallY) S.ComputerY+=4;
         if(S.ComputerY+50>S.BallY) S.ComputerY-=4;
@@ -37,7 +39,13 @@ public:
         // Source constants/collision windows retained. Direction checks deliberately
         // fix repeated flip-flops while a ball remains inside a paddle/wall window.
         if((S.BallY<=0 && S.BallVY<0) || (S.BallY>=590 && S.BallVY>0)) S.BallVY=-S.BallVY;
-        if(S.BallVX<0 && S.BallX>50 && S.BallX<70 && S.BallY>S.PlayerY && S.BallY<S.PlayerY+100) { S.BallVX=-S.BallVX; RecordContact(1); }
+        if(S.BallVX<0 && S.BallX>50 && S.BallX<70 && S.BallY>S.PlayerY && S.BallY<S.PlayerY+100) {
+            S.BallVX=-S.BallVX;
+            // Native play-loop polish: only actual movement at a player return
+            // bends the shot. Neutral hits, CPU returns and serve rules stay intact.
+            if(PaddleDelta!=0) S.BallVY=Clamp(S.BallVY+0.5*PaddleDelta,-7,7);
+            RecordContact(1);
+        }
         if(S.BallVX>0 && S.BallX>730 && S.BallX<750 && S.BallY>S.ComputerY && S.BallY<S.ComputerY+100) { S.BallVX=-S.BallVX; RecordContact(-1); }
         if(S.BallX<0) {
             if(S.ComputerScore<std::numeric_limits<std::int64_t>::max()) ++S.ComputerScore;
@@ -50,6 +58,7 @@ public:
     }
     Status GetStatus() const override {
         std::string Note="CPU "+std::to_string(S.ComputerScore)+"; rally "+std::to_string(S.Rally)+"; best "+std::to_string(S.BestRally);
+        Note+="; move paddle at impact to add spin";
         if(S.ServeFrames>0) Note+="; ready - Fire/Jump/Action serves early";
         else if(S.PointFrames>0) Note+=S.LastPoint>0?"; your point":"; CPU point";
         return {S.PlayerScore,0,false,false,Note}; // Preserve the endless source match.
@@ -62,8 +71,10 @@ public:
         Out.AddText(300,20,std::to_string(S.PlayerScore),White,36);
         Out.AddText(480,20,std::to_string(S.ComputerScore),White,36);
         // Keep the original six-command opening frame; cues appear after real play events.
-        if(S.Rally>0 || S.BestRally>0 || S.ServeFrames>0 || S.PointFrames>0)
+        if(S.Rally>0 || S.BestRally>0 || S.ServeFrames>0 || S.PointFrames>0) {
             Out.AddText(250,70,"Rally "+std::to_string(S.Rally)+"   Best "+std::to_string(S.BestRally),White,18);
+            Out.AddText(250,98,"Move paddle at impact to add spin",White,14);
+        }
         if(S.ServeFrames>0) {
             Out.AddText(220,410,S.LastPoint>0?"Your point. Ready for the next rally.":"CPU point. Ready for the next rally.",White,18);
             Out.AddText(220,442,"J/Space or pad A/X/B: serve early. Paddles stay live.",White,15);

@@ -48,6 +48,24 @@ Polish changes: dead enemies cannot score more than once, consumed bullets hit o
 
 ## Evidence and owner acceptance
 
+The native cabinet accepts a fresh pad A or Start press at Star's game-over result
+to invoke its existing host RestartGame, matching R/Restart. This route is handled
+before Start's ordinary pause mapping and before A enters held gameplay input.
+The host retains difficulty/seed and clears score-submission/input bookkeeping;
+its existing pending-save refusal still applies. Active play and source pause-menu
+controls are unchanged. Terminal help names the physical controls. This Slate/copy
+slice has source review only; controller repeat/focus, pending-save refusal and
+successive native leaderboard acceptance remain unverified. No portable core
+controller reset was added, since it would bypass the host score lifecycle.
+
+Star's existing New run Easy/Medium/Hard buttons also opt into native focus
+navigation. F2/right-stick click enters the catalog; close its list with Back/Escape,
+then navigate the cabinet controls to choose a difficulty with A/Enter. Those
+buttons retain their existing run-replacement/save fence and option callbacks;
+activation returns board focus. Other MakeAction callers keep their prior focus
+behavior. Source review confirms the wiring; exact controller traversal and
+successive difficulty/restart acceptance still require native play.
+
 `shooters_parity.txt` contains 635 executed-source cases across 21 rule categories, with original SHA pins and numeric schemas. The oracle supplies deterministic random fragments; it does not claim Pygame runtime behavior or full-screen script parity. The rectangle stub explicitly models integer construction; real Unreal input, rendering, audio, save integration and live gameplay remain separate verification stages.
 
 Native test results, Daedalus catalog/adapter bindings, UHT/UBT compile evidence and Claude acceptance are reported by the integration owner after final-head validation. Portable native tests alone do not establish an in-game port.
@@ -63,3 +81,43 @@ freeze, fresh-event reset and driver input cleanup. Strict MSVC C++17 passed
 487/487 checks. The same test using the prior shooter header failed 30 retry checks
 as expected. Star's class source remained identical. No engine/native runtime
 integration is inferred from this portable check.
+
+## Sega terminal pickup settlement
+
+Lethal contact now skips pickup consumption, preventing a frozen Game Over with a
+restored life (or post-defeat power/speed benefit). Surviving contacts still collect
+same-step pickups. Boss progression, the explicit BOSS DOWN / SHIP LOST outcome,
+500-point boss reward and actor cleanup retain their existing order. A narrow
+Sega-only friend seam arranges ordinary single-step collision fixtures.
+
+`desktop_sega_terminal_pickup` / `sega_terminal_pickup_test.cpp` passed72/72 strict
+single-TU MSVC C++17 checks. It covers all pickup kinds, enemy/boss contact, cleanup,
+surviving companions, mutual boss/ship defeat, held freeze and seeded retries.
+A controlled always-enabled pickup-loop variant (friend unchanged) passed52/72,
+failing20 post-defeat pickup/life assertions as expected. Asteroids/shared prefix
+and Star class source were compared unchanged. No full shooter suite, engine build,
+editor or native play was run; live controller/balance acceptance remains unverified.
+
+## Star terminal pickup settlement
+
+Lethal projectile, enemy or boss contact now skips same-step Triple/Shield/Speed
+collection. The frozen result retains its loadout at defeat and leaves the nearby
+item unconsumed. Star has no Life pickup; this is a post-defeat upgrade repair.
+Surviving and shield-absorbed hits still collect normally. Existing upgrades,
+scoring, boss/wave order, effect expiry and entity cleanup retain their behavior.
+
+The focused `desktop_star_terminal_pickup` target / `star_terminal_pickup_test.cpp`
+passed102/102 strict single-TU MSVC C++17 checks. Fifteen contact cases use existing
+Bee shot/dive and boss charge primitives, plus terminal freeze and seeded reset at
+all three difficulties. An always-enabled pickup-loop variant with the same test
+friend passed81/102, failing21 post-defeat assertions as expected. This did not run
+the broad shooter suite, engine builds or native acceptance; Slate controller replay
+and real filesystem/leaderboard behavior remain separate pending native checks.
+
+Host pause or focus suspension after Game Over now keeps the result visible.
+Star's pause flag is retained, but its live pause menu is drawn only before defeat;
+the terminal Step cannot execute those menu choices. A live paused companion still
+renders the menu and resumes on fresh confirmation. The focused target now passes
+110/110 checks. Restoring only the old render condition passed107/110, failing the
+three difficulty-specific final-frame assertions. No other pause or save lifecycle
+code changed; native focus-loss presentation still needs live acceptance.

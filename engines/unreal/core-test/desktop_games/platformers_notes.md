@@ -29,6 +29,11 @@ Call one `Step` per 1/60-second simulation step. The Unreal adapter should cap a
 | Dash / DashPressed | No gameplay action | V or LB; ground spin on edge |
 | Reset | Clear score/lives/transients, reproduce seed | Clear health/score/boss/transients, reproduce seed |
 
+Ironwake Advance's completed/lost run accepts a fresh Enter, controller A/Start
+or R/Restart to replay the stored seed. The result screen and status advertise
+these existing bindings; Space starts from the title but is not a terminal retry
+key. The native adapter forwards ordered fresh events and ignores held repeats.
+
 For Shadow Ninja, keyboard directions, stick axes and D-pad directions remain separate. `ShadowNinjaGame::Step` passes `PadRight-PadLeft` and `PadUp-PadDown` into the player's explicit hat parameters. The source's horizontal hat wins over keyboard and stick input, including opposing directions; both D-pad flags cancel to neutral. Vertical wall-climb conditions preserve the source's independent up/down checks, so opposing keyboard/stick/hat climb requests can cancel. The wrapper should retain these independent fields rather than merging D-pad into keyboard directions or clearing stick axes. Controller connection/hotplug and physical mappings belong to the adapter.
 
 CONTRA `SubmitCheatKey(key, titleScreen=false)` accepts `0=up, 1=down, 2=left, 3=right, 4=B, 5=A`. The source sequence U,U,D,D,L,R,L,R,B,A gives +5 lives, capped at 99, and 600 steps of spread in play; passing `titleScreen=true` gives the source's 30-lives title bonus. Normal gameplay feeds digital direction/action/jump edges automatically. A title-screen-specific binding is optional UI work; native `Reset` starts play directly.

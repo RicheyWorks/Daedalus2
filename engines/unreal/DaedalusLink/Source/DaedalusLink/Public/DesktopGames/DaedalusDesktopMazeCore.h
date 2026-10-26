@@ -194,10 +194,11 @@ public:
         int Mouth=0;
         Rect GetRect() const { return maze::PixelRect(X-8,Y-8,16,16); }
         void Update(const Input& I,bool RepairDoor=true) {
-            if(I.Left) Next={-1,0};
-            if(I.Right) Next={1,0};
-            if(I.Up) Next={0,-1};
-            if(I.Down) Next={0,1};
+            // Match the cabinet's digital merge for direct portable/Blueprint Pad input.
+            if(I.Left || I.PadLeft) Next={-1,0};
+            if(I.Right || I.PadRight) Next={1,0};
+            if(I.Up || I.PadUp) Next={0,-1};
+            if(I.Down || I.PadDown) Next={0,1};
             const double Sx=Axis(I.AxisX), Sy=Axis(I.AxisY);
             if(std::abs(Sx)>0.3 || std::abs(Sy)>0.3)
                 Next=std::abs(Sx)>std::abs(Sy) ? maze::Direction{Sx>0 ? 1 : -1,0} : maze::Direction{0,Sy>0 ? 1 : -1};
@@ -288,6 +289,23 @@ public:
     int PowerPelletsLeft() const {
         return static_cast<int>(std::count_if(Pellets.begin(),Pellets.end(),[](const Pellet& P){return P.Alive && P.Power;}));
     }
+    // Presentation only: the shortest living timer marks first recovery, not group safety.
+    struct PowerWindow {
+        int Alive=0,Frightened=0,Frames=0;
+        int Seconds() const { return Frames/60+(Frames%60>0?1:0); }
+    };
+    PowerWindow GetPowerWindow() const {
+        PowerWindow Out;
+        for(const auto& G:Ghosts) if(G.Alive) {
+            ++Out.Alive;
+            if(G.Frightened) {
+                const int Frames=std::max(0,G.FrightenedTimer);
+                if(Out.Frightened==0 || Frames<Out.Frames) Out.Frames=Frames;
+                ++Out.Frightened;
+            }
+        }
+        return Out;
+    }
     void Render(Frame& Out) const override {
         // Source map is 620 pixels tall but its 600-pixel viewport clipped the bottom wall.
         Out.Clear(800,660,Black);
@@ -311,18 +329,32 @@ public:
         Out.AddText(580,162,"CHASE",maze::Yellow,22);
         Out.AddText(580,190,"Move: arrows / WASD / stick",White,14);
         Out.AddText(580,225,"Dots left: "+std::to_string(Remaining),White,16);
-        Out.AddText(580,250,"Power: "+std::to_string(PowerPelletsLeft())+" (300-step fright)",White,13);
-        if(RespawnFrames>0 && !Over && !Won)
-            Out.AddText(580,280,"Respawn grace: "+std::to_string(RespawnFrames)+" steps",{80,200,255,255},14);
+        Out.AddText(580,250,"Power pellets: "+std::to_string(PowerPelletsLeft()),White,14);
+        if(!Over && !Won) {
+            const auto Window=GetPowerWindow();
+            Out.AddText(580,275,"Frightened: "+std::to_string(Window.Frightened)+"/"+std::to_string(Window.Alive)+" alive",White,14);
+            if(Window.Frightened>0) {
+                Out.AddText(580,297,"First recovery: "+std::to_string(Window.Seconds())+"s",White,13);
+                if(Window.Frames<=60) Out.AddText(580,319,"FINAL SECOND",{255,180,80,255},13);
+            }
+            else Out.AddText(580,297,"No active fright window",White,13);
+            if(RespawnFrames>0)
+                Out.AddText(580,345,"Respawn grace: "+std::to_string(RespawnFrames)+" steps",{80,200,255,255},13);
+        }
         if(Over || Won) Out.AddText(580,320,Won ? "YOU WIN!" : "GAME OVER",maze::Yellow,24);
-        if(Over || Won) Out.AddText(580,360,"Fresh Action / Fire / Jump",White,14);
-        if(Over || Won) Out.AddText(580,383,"or host R: replay",White,14);
+        if(Over || Won) Out.AddText(580,360,"Pad A / Space / Enter",White,14);
+        if(Over || Won) Out.AddText(580,383,"or R / Restart: replay",White,14);
     }
     Status GetStatus() const override {
-        std::string Text=Won?"All dots cleared. Fresh Action/Fire/Jump or host R replays."
-            :(Over?"Game over. Fresh Action/Fire/Jump or host R replays."
+        std::string Text=Won?"All dots cleared. Pad A / Space / Enter / R: replay."
+            :(Over?"Game over. Pad A / Space / Enter / R: replay."
                 :"Glowtrail Chase: "+std::to_string(Remaining)+" dots left; "+std::to_string(PowerPelletsLeft())+" power pellets.");
-        if(RespawnFrames>0 && !Over && !Won) Text+=" Respawn grace: "+std::to_string(RespawnFrames)+" steps.";
+        if(!Over && !Won) {
+            const auto Window=GetPowerWindow();
+            Text+=" Frightened "+std::to_string(Window.Frightened)+"/"+std::to_string(Window.Alive)+" alive.";
+            if(Window.Frightened>0) Text+=" First recovery: "+std::to_string(Window.Seconds())+"s"+(Window.Frames<=60?" (final second).":".");
+            if(RespawnFrames>0) Text+=" Respawn grace: "+std::to_string(RespawnFrames)+" steps.";
+        }
         return {Score,Lives,Over,Won,Text};
     }
 private:
@@ -458,6 +490,8 @@ public:
             }
         }
         Projectiles.erase(std::remove_if(Projectiles.begin(),Projectiles.end(),[](const Projectile& P){return !P.Alive;}),Projectiles.end());
+        // Settle lethal projectile damage before a same-step pickup can heal or reward.
+        if(Over) return;
         for(auto It=Collectibles.begin();It!=Collectibles.end();) {
             It->Bob=std::fmod(It->Bob+0.1,6.283185307179586); // bounded animation phase
             if(It->GetRect().Overlaps(Hero.GetRect())) {
@@ -516,17 +550,17 @@ public:
         Out.AddText(10,35,ObjectiveText(),White,15);
         if(MessageTimer>0) Out.AddText(330,58,Message,maze::Yellow,18);
         Out.AddText(10,559,"SCORE "+std::to_string(Score)+" | "+CombatText(),White,13);
-        Out.AddText(10,582,(Over || Won)?"Run ended. Fresh Fire/Action/Jump or host R: replay."
-            :"Move: WASD/arrows/stick/hat. Fresh Fire/Action/Jump: sword. Host R: restart.",White,12);
+        Out.AddText(10,582,(Over || Won)?"Run ended. Pad A / Space / Enter / R: replay."
+            :"Move: WASD/arrows/stick/D-pad. Pad A / Space / Enter: sword. R: restart.",White,12);
         if(Over || Won) {
             Out.AddRect(170,245,470,125,{0,55,0,230});
             Out.AddText(280,270,Won ? "VICTORY!" : "GAME OVER",maze::Yellow,38);
-            Out.AddText(195,325,"Fresh Fire / Action / Jump or host R: replay",White,17);
+            Out.AddText(195,325,"Pad A / Space / Enter / R: replay",White,17);
         }
     }
     Status GetStatus() const override {
-        const std::string Text=Won?"Victory: roster defeated and key collected. Fresh Fire/Action/Jump or host R replays."
-            :(Over?"Defeated. Fresh Fire/Action/Jump or host R replays.":ObjectiveText()+" "+CombatText());
+        const std::string Text=Won?"Victory: roster defeated and key collected. Pad A / Space / Enter / R: replay."
+            :(Over?"Defeated. Pad A / Space / Enter / R: replay.":ObjectiveText()+" "+CombatText());
         return {Score,Hero.Health,Over,Won,Text};
     }
 private:

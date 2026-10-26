@@ -21,13 +21,23 @@ provides bounded procedural draw commands; `GetStatus()` provides score, lives
 or health, terminal flags, and a control note. There are no Unreal types,
 Pygame imports, asset loads, persistence, threads, or unbounded event loops.
 
-Directions use `Left/Right/Up/Down` and sanitized `AxisX/AxisY`. Zelda's sword is
+Directions use `Left/Right/Up/Down`, direct `PadLeft/PadRight/PadUp/PadDown`, and
+sanitized `AxisX/AxisY`. Pac-Man merges direct hats with the existing digital tests,
+retaining right/down last-test precedence and dominant-axis analog override.
+`pacman_input_test.cpp` / target `desktop_pacman_input` checks the direct player
+contract and a bounded 96-frame game/Driver route; no native Blueprint acceptance
+is inferred. Zelda's sword is
 an edge action: `FirePressed`, `ActionPressed`, or `JumpPressed`. The attack
 executes before player movement, matching the source KEYDOWN order, and has the
 source 18-frame cooldown. Pac-Man and Zelda accept one of those press events to
 restart after win or game over; held buttons alone do not restart. Dungeon's
 `ActionPressed` resets its prototype. The Daedalus adapter chooses/starts the
 game instead of reproducing the Python standalone TITLE screen.
+
+Pac-Man and Zelda's cabinet prompts name the physical bindings: pad A, Space,
+Enter or R/Restart replays a completed/lost run with its original seed. Pad A,
+Space or Enter also triggers Zelda's sword during play. Start keeps its existing
+pause/resume role; no terminal retry binding or simulation rule was added.
 
 Snapshots are available through const getters. Internal boundary cases in the
 native tests use a test peer, not an exposed mutable gameplay API. Zelda retains
@@ -158,3 +168,31 @@ action with cooldown-driven attack state; ghost alive/frightened/color states;
 Link health/invincibility flash and enemy alive/hit-flash/kind states. There is
 no skeleton, rig, animation file, art license grant, Blender acceptance, Unreal
 compile result, or live playtest approval supplied by this core port.
+
+## Power-window display
+
+Pacman's sidebar and status show how many living pursuers are frightened and the
+ceiling seconds until the first of them recovers. Dead pursuers are excluded;
+mixed timers use the shortest active timer. A steady final-second cue replaces
+surprise expiry without changing the source 300-step effect, AI or collision rules.
+Terminal results hide live countdowns. Presentation calls do not advance simulation.
+
+`desktop_pacman_power` / `pacman_power_test.cpp` passed 34/34 checks with strict
+single-TU MSVC C++17. It covers mixed/dead states, timer boundaries, a real power
+pickup through 300 active steps, repeated presentation purity and future RNG/state.
+A controlled MAX-instead-of-MIN timer variant failed seven checks as expected.
+This offline evidence does not establish native layout or human playtest acceptance.
+
+## Zelda lethal projectile settlement
+
+After projectile cleanup, a lethal hit now ends the live step before overlapping
+pickups can heal, award trinkets or grant a key. Nonlethal projectile pickups and
+the existing pickup-before-enemy-contact order are preserved. A defeated run cannot
+show positive health from a same-step heart; no collision/AI/reward rule is replaced.
+
+`desktop_zelda_terminal` / `zelda_terminal_test.cpp` passed46/46 strict single-TU
+MSVC checks. Small authored heart/trinket and last-enemy key fixtures use a real
+2.5px rock arrival, plus nonlethal companions, cleanup, terminal freeze and fresh
+replay/reset. The same test against the prior header passed40/46 and failed6
+post-defeat pickup/health assertions as expected. No full maze suite, engine build,
+editor or native gameplay was executed. Portable evidence is not runtime acceptance.

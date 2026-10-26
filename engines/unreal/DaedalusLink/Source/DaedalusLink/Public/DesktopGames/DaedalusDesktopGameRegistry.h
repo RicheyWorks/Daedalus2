@@ -85,6 +85,11 @@ public:
         if(!Active || Paused || !Active->SourceControllerButton(Button)) return false;
         Controls={}; Refresh(); return true;
     }
+    bool SourcePointerButton(double X,double Y,int Button) {
+        if(!Active || IsPaused() || HasSaveRequest() || Button<0 || Button>2 || !std::isfinite(X) || !std::isfinite(Y)
+            || !Active->SourcePointerButton(X,Y,Button)) return false;
+        Controls={};Refresh();return true;
+    }
     void SetPaused(bool Value) { Paused=Active && Active->OwnPause(Value) ? false : Value; Controls={}; PendingSeconds=0; }
     bool IsPaused() const { return Paused || (Active && Active->IsCorePaused()); }
     int Advance(double DeltaSeconds) {
@@ -106,10 +111,12 @@ public:
     const Frame& GetFrame() const { return Picture; }
     Status GetStatus() const { return Active ? Active->GetStatus() : Status{}; }
     const std::string& ActiveId() const { return Id; }
+    std::uint32_t GetSeed() const { return Seed; }
     std::uint64_t Ticks() const { return StepCount; }
     std::string CaptureSave() const { return Active ? Active->SaveState() : std::string{}; }
     bool RestoreSave(const std::string& Text) {
         if(!Active || Text.size()>4096 || !Active->RestoreState(Text,Seed)) return false;
+        Seed=Active->SeedAfterRestore(Seed);
         Controls={};PendingSeconds=0;Paused=false;Refresh();return true;
     }
     bool HasSaveRequest() const { return Active && Active->SavePending(); }

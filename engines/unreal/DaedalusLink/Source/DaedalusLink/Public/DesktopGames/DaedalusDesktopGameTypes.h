@@ -78,10 +78,15 @@ public:
     // Separate controller events: 0 A, 1 Start. True consumes a source action,
     // keeping controller events out of keyboard cheat tracking.
     virtual bool SourceControllerButton(int) { return false; }
+    // Logical canvas coordinates, button 0 left / 1 right / 2 middle. No fixed step.
+    // True consumes one pointer action; hosts discard old held/semantic input.
+    virtual bool SourcePointerButton(double,double,int) { return false; }
     virtual bool OwnPause(bool) { return false; }
     virtual bool IsCorePaused() const { return false; }
     virtual std::string SaveState() const { return {}; }
     virtual bool RestoreState(const std::string&,std::uint32_t) { return false; }
+    // Games with an exact-board save retain the original restart/first-reveal seed.
+    virtual std::uint32_t SeedAfterRestore(std::uint32_t Fallback) const { return Fallback; }
     virtual bool SavePending() const { return false; }
     virtual void ClearSavePending() {}
     virtual bool WantsExit() const { return false; }

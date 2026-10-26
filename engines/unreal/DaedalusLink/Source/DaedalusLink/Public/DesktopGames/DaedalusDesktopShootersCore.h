@@ -257,6 +257,7 @@ private:
 // Source Sega-themed horizontal shooter. No enemy shots exist in the source.
 // Native boss hit/engagement and held fire repair otherwise unreachable victory.
 class SegaShooterGame final : public Game {
+    friend struct SegaTestAccess;
 public:
     struct Bullet { double X=0,Y=0,Vx=10,Vy=0; bool Alive=true; void Update(){X+=Vx;Y+=Vy;} };
     struct Player {
@@ -349,7 +350,10 @@ public:
             for(auto& E:Enemies) if(E.Alive && Distance(Pilot.X,Pilot.Y,E.X,E.Y)<22) { E.Alive=false; Damage(); break; }
             if(Pilot.Invincible==0 && BossActive && Distance(Pilot.X,Pilot.Y,Boss.X,Boss.Y)<22) Damage();
         }
-        for(auto& P:Powerups) if(P.Alive && Distance(Pilot.X,Pilot.Y,P.X,P.Y)<18) {ApplyPower(Pilot,P.Kind);P.Alive=false;}
+        // Defeat blocks pickups; the existing boss outcome still settles below, including a mutual loss.
+        if(!Over) {
+            for(auto& P:Powerups) if(P.Alive && Distance(Pilot.X,Pilot.Y,P.X,P.Y)<18) {ApplyPower(Pilot,P.Kind);P.Alive=false;}
+        }
         if(Score>=1500 && !BossActive && !Won) { Boss={750,300,1.5,20,60,true,true}; BossActive=true; }
         if(BossActive) {
             Boss.Update(Pilot); Boss.X=std::max(600.0,Boss.X);
@@ -430,6 +434,7 @@ private:
 // Latest star_shootergpt1_fixed.py. Difficulty, escort bonuses, dive types and
 // multi-stage bosses are separate explicit rules so the host does not duplicate them.
 class StarShooterGame final : public Game {
+    friend struct StarTerminalTestAccess;
 public:
     enum class Difficulty { Easy=0,Medium=1,Hard=2 };
     struct DifficultyConfig { double EnemySpeed,EnemyHp,ShootDelay,DiveChance,BossHp; int SpawnRate,Lives; };
@@ -696,7 +701,10 @@ public:
         if(Pilot.Invincible==0) for(auto& B:Bullets) if(B.Alive && !B.PlayerOwned && B.Bounds().Overlaps(Pilot.Bounds())) {B.Alive=false;HitPlayer();break;}
         if(Pilot.Invincible==0) for(auto& E:Enemies) if(E.Alive && E.Bounds().Overlaps(Pilot.Bounds())) {E.Alive=false;HitPlayer();break;}
         if(Pilot.Invincible==0 && BossActive && BossActor.State!=BossState::Entering && BossActor.State!=BossState::Returning && BossActor.Bounds().Overlaps(Pilot.Bounds())) HitPlayer();
-        for(auto& P:Powerups) if(P.Alive && P.Bounds().Overlaps(Pilot.Bounds())) {P.Apply(Pilot);P.Alive=false;}
+        // Keep the final loadout at the lethal contact; surviving hits still collect normally.
+        if(!Over) {
+            for(auto& P:Powerups) if(P.Alive && P.Bounds().Overlaps(Pilot.Bounds())) {P.Apply(Pilot);P.Alive=false;}
+        }
         for(auto& P:Effects) {P.X+=P.Dx;P.Y+=P.Dy;--P.Life;}
         for(auto& P:Popups) {P.Y-=0.65;--P.Life;}
         shooter_detail::Remove(Effects,[](const Effect& P){return P.Life<=0;});
@@ -738,9 +746,9 @@ public:
             F.AddRect(170,225,460,120,{15,20,40,235});
             F.AddText(280,238,"GAME OVER",Red,40);
             F.AddText(200,288,"Final score "+std::to_string(Score)+"   Wave "+std::to_string(Wave),White,18);
-            F.AddText(200,318,"Fresh R press or cabinet Restart to retry",Cyan,17);
+            F.AddText(200,318,"Pad A / Start or R / Restart: retry",Cyan,17);
         }
-        if(Paused) {
+        if(Paused && !Over) {
             F.AddRect(200,180,400,250,{15,20,40,235});F.AddText(330,195,"PAUSED",White,32);
             const char* Labels[3]={"Resume","Save & Quit","Quit to Menu"};
             for(int N=0;N<3;++N) F.AddText(265,260+N*45,std::string(PauseSelection==N?"> ":"  ")+Labels[N],PauseSelection==N?Cyan:White,22);
@@ -749,7 +757,7 @@ public:
     }
     Status GetStatus() const override {
         if(QuitRequested) return {Score,std::max(0,Pilot.Lives),Over,false,SaveRequested?"Save & Quit requested; host persistence pending":"Quit requested"};
-        if(Over) return {Score,std::max(0,Pilot.Lives),true,false,"Game over; wave "+std::to_string(Wave)+"; fresh R press or cabinet Restart to retry"};
+        if(Over) return {Score,std::max(0,Pilot.Lives),true,false,"Game over; wave "+std::to_string(Wave)+"; fresh pad A/Start or R/Restart to retry"};
         if(Paused) return {Score,std::max(0,Pilot.Lives),false,false,"Paused: Up/Down select; J/X or Space/A confirm; Shift/Y resume"};
         return {Score,std::max(0,Pilot.Lives),false,false,std::string(DifficultyName(Mode))+"; wave "+std::to_string(Wave)+"; shift in "+std::to_string(GetWaveFramesRemaining())+
             " steps; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+"; "+BossNote()+"; "+

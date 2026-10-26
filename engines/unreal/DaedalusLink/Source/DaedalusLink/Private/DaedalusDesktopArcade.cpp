@@ -63,9 +63,8 @@ void ADaedalusDesktopArcade::BeginPlay()
 	Super::BeginPlay();
 	if (!IsTemplate() && CabinetId.IsEmpty()) CabinetId = FGuid::NewGuid().ToString(EGuidFormats::Digits);
 	EnsureScoresLoaded();
-	const int64 Bytes = IFileManager::Get().FileSize(*SavePath());
-	bHasSavedRun = Bytes > 0 && Bytes <= 4096;
 	if (Session.ActiveId().empty()) StartGame(InitialGameId, InitialSeed);
+	RefreshSavedRun();
 }
 
 void ADaedalusDesktopArcade::OnConstruction(const FTransform& Transform)
@@ -95,6 +94,7 @@ bool ADaedalusDesktopArcade::StartGame(const FString& Id, int32 Seed)
 	RunSaveError.Reset();
 	NextSaveAttemptSeconds = 0.0;
 	EnsureScoresLoaded();
+	RefreshSavedRun();
 	ResetPresentationInput();
 	return true;
 }
@@ -128,6 +128,13 @@ bool ADaedalusDesktopArcade::SubmitArcadeSourceControllerButton(int32 Button)
 {
 	if (bClosing || bCloseScheduled || Button < 0 || Button > 1) return false;
 	return Session.SourceControllerButton(Button);
+}
+
+bool ADaedalusDesktopArcade::SubmitArcadeSourcePointerButton(double X, double Y, int32 Button)
+{
+	if (bClosing || bCloseScheduled || !Session.SourcePointerButton(X, Y, Button)) return false;
+	ResetPresentationInput();
+	return true;
 }
 
 void ADaedalusDesktopArcade::ResetPresentationInput()
@@ -213,12 +220,24 @@ FString ADaedalusDesktopArcade::SaveDirectory()
 	return FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("DaedalusDesktopGames"));
 }
 FString ADaedalusDesktopArcade::SavePath() { return FPaths::Combine(SaveDirectory(), TEXT("star_shooter.dgs")); }
+FString ADaedalusDesktopArcade::MinesweeperSavePath() { return FPaths::Combine(SaveDirectory(), TEXT("minesweeper.dgs")); }
 FString ADaedalusDesktopArcade::ScoresPath() { return FPaths::Combine(SaveDirectory(), TEXT("star_shooter.scores")); }
+
+FString ADaedalusDesktopArcade::SelectedSavePath() const
+{
+	return Session.ActiveId() == "minesweeper" ? MinesweeperSavePath() : SavePath();
+}
+
+void ADaedalusDesktopArcade::RefreshSavedRun()
+{
+	const int64 Bytes = IFileManager::Get().FileSize(*SelectedSavePath());
+	bHasSavedRun = Bytes > 0 && Bytes <= 4096;
+}
 
 bool ADaedalusDesktopArcade::WriteOwnedFile(const FString& Filename, const FString& Text) const
 {
-	// Only these two private filenames can be written. Replace after a complete bounded temp write.
-	if ((Filename != SavePath() && Filename != ScoresPath()) || Text.Len() > 4096) return false;
+	// Only these private filenames can be written. Replace after a complete bounded temp write.
+	if ((Filename != SavePath() && Filename != MinesweeperSavePath() && Filename != ScoresPath()) || Text.Len() > 4096) return false;
 	IFileManager& Files = IFileManager::Get();
 	if (!Files.MakeDirectory(*SaveDirectory(), true)) return false;
 	const FString Temp = Filename + TEXT(".") + FGuid::NewGuid().ToString(EGuidFormats::Digits) + TEXT(".tmp");
@@ -228,26 +247,49 @@ bool ADaedalusDesktopArcade::WriteOwnedFile(const FString& Filename, const FStri
 	return bMoved;
 }
 
+bool ADaedalusDesktopArcade::SaveGame()
+{
+	if (bClosing || bCloseScheduled || Session.ActiveId() != "minesweeper") return false;
+	const std::string Payload = Session.CaptureSave();
+	if (Payload.empty() || Payload.size() > 4096
+		|| !WriteOwnedFile(MinesweeperSavePath(), FString(UTF8_TO_TCHAR(Payload.c_str()))))
+	{
+		RunSaveError = TEXT("Board could not be saved. Your current board and previous save were kept; try Save board again.");
+		RefreshSavedRun();
+		return false;
+	}
+	bHasSavedRun = true;
+	RunSaveError = TEXT("Board saved on this installation. Continue saved board restores it after closing or restarting.");
+	return true;
+}
+
 bool ADaedalusDesktopArcade::ResumeGame()
 {
 	if (Session.HasSaveRequest()) { RunSaveError = TEXT("A Star save is pending; Continue cannot replace it."); return false; }
 	if (bClosing || bCloseScheduled) return false;
-	const int64 Bytes = IFileManager::Get().FileSize(*SavePath());
+	const bool bMinesweeper = Session.ActiveId() == "minesweeper";
+	const FString Filename = SelectedSavePath();
+	RefreshSavedRun();
+	const int64 Bytes = IFileManager::Get().FileSize(*Filename);
 	FString Text;
-	if (Bytes <= 0 || Bytes > 4096 || !FFileHelper::LoadFileToString(Text, *SavePath()))
+	if (Bytes <= 0 || Bytes > 4096 || !FFileHelper::LoadFileToString(Text, *Filename))
 	{
-		RunSaveError = TEXT("No readable native Star save (maximum 4 KB).");
+		RunSaveError = bMinesweeper ? TEXT("No readable saved board (maximum 4 KB). Your current board was kept.")
+			: TEXT("No readable native Star save (maximum 4 KB).");
 		return false;
 	}
 	DD::Driver Candidate;
-	if (!Candidate.Select("star_shooter", static_cast<uint32>(CurrentSeed)) || !Candidate.RestoreSave(TCHAR_TO_UTF8(*Text)))
+	if (!Candidate.Select(bMinesweeper ? "minesweeper" : "star_shooter", static_cast<uint32>(CurrentSeed)) || !Candidate.RestoreSave(TCHAR_TO_UTF8(*Text)))
 	{
-		RunSaveError = TEXT("Native Star save was refused; the current run was kept.");
+		RunSaveError = bMinesweeper ? TEXT("The saved board could not be read. Your current board and the save file were kept.")
+			: TEXT("Native Star save was refused; the current run was kept.");
 		return false;
 	}
 	Session = std::move(Candidate);
+	CurrentSeed = static_cast<int32>(Session.GetSeed());
 	bHasSavedRun = true; bScoreSubmitted = false;
-	RunSaveError.Reset(); NextSaveAttemptSeconds = 0.0;
+	RunSaveError = bMinesweeper ? TEXT("Saved board continued. Flags, revealed cells and active time were restored.") : FString();
+	NextSaveAttemptSeconds = 0.0;
 	ResetPresentationInput();
 	return true;
 }
@@ -381,8 +423,7 @@ bool ADaedalusDesktopArcade::Use(ADaedalusHero* Hero)
 	// A failed Save & Quit survives manual close/reopen. Never reset its pending snapshot.
 	if (Session.WantsExit() && !Session.HasSaveRequest()) RestartGame();
 	// Another cabinet may have saved since this instance began play.
-	const int64 SaveBytes = IFileManager::Get().FileSize(*SavePath());
-	bHasSavedRun = SaveBytes > 0 && SaveBytes <= 4096;
+	RefreshSavedRun();
 	TArray<FDaedalusDesktopArcadeHighScore> LatestScores;
 	if (ReadHighScoreRecords(LatestScores))
 	{
