@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 
 #include "DaedalusSeedSong.h"
+#include "DaedalusHero.h"
 #include "Components/PointLightComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Engine.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "GameFramework/PlayerController.h"
 #include "HAL/IConsoleManager.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
@@ -22,6 +24,7 @@ FString FromUtf8(const std::string& S) { return FString(UTF8_TO_TCHAR(S.c_str())
 // ---------------- gramophone ----------------
 ADaedalusSeedSong::ADaedalusSeedSong()
 {
+	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = false;
 	Tags.Add(TEXT("SeedSong"));
 	Tags.Add(TEXT("Interact_SeedSong"));
@@ -106,36 +109,271 @@ FString ADaedalusSeedSong::Draw(const FString& SpringId)
 	return FString::Printf(TEXT("%s %s %d"), UTF8_TO_TCHAR(daedalus::seedsong::DrawName(D.Outcome)), *DaedalusSeedSongLocal::FromUtf8(D.Item), D.Amount);
 }
 
+FString ADaedalusSeedSong::SpringName(const FString& SpringId) const
+{
+	if (IsReady())
+	{
+		const int32 Index = State->Chapter->Springs.Index(DaedalusSeedSongLocal::ToUtf8(SpringId));
+		if (Index >= 0) { return DaedalusSeedSongLocal::FromUtf8(State->Chapter->Springs.Springs[static_cast<size_t>(Index)].Name); }
+	}
+	return SpringId;
+}
+
 FString ADaedalusSeedSong::Talk()
 {
 	if (!Ensure()) { return FString(); }
 	return DaedalusSeedSongLocal::FromUtf8(State->Chapter->Talk(DaedalusSeedSongLocal::ToUtf8(NextEvent())));
 }
 
-FString ADaedalusSeedSong::Prompt(const ADaedalusHero*) const
+FString ADaedalusSeedSong::Prompt(const ADaedalusHero*) const { return TEXT("Listen at Keeper Oriel's gramophone"); }
+
+bool ADaedalusSeedSong::Use(ADaedalusHero* Hero)
 {
-	const FString Next = NextRecord();
-	if (Next.IsEmpty()) { return TEXT("Talk to the gramophone"); }
-	return KettleHerbs.Num() > 0 ? FString::Printf(TEXT("Mend %s"), *Next) : FString::Printf(TEXT("Listen to %s"), *Next);
+	if (bEndingPlay || !IsValid(Hero) || Hero->GetWorld() != GetWorld() || Hero->IsDialogueOpen()) { return false; }
+	if (ADaedalusHero* Listener = ListeningHero.Get())
+		if (Listener->IsDialogueOpen()) { return false; }
+	StopGuide();
+	if (!Ensure())
+	{
+		Tell(TEXT("The gramophone is silent (no tunes)."));
+		Hero->Speak(TEXT("Keeper Oriel"), TEXT("The gramophone is silent. Try again when its tunes are available."), {});
+		return Hero->IsDialogueOpen();
+	}
+	ListeningHero = Hero;
+	GuideRealm = Hero->RealmNow();
+	GuideHandle = Hero->OnDialogueChoice.AddUObject(this, &ADaedalusSeedSong::OnGuideChoice);
+	ShowGuide(daedalus::seedsong::GuidePage::Home);
+	// A refused overlay must leave no subscription, quest event or spent herbs behind.
+	if (!Hero->IsDialogueOpen()) { StopGuide(); return false; }
+	return true;
 }
 
-bool ADaedalusSeedSong::Use(ADaedalusHero*)
+void ADaedalusSeedSong::Tick(float DeltaSeconds)
 {
-	if (!Ensure()) { Tell(TEXT("The gramophone is silent (no tunes).")); return false; }
+	Super::Tick(DeltaSeconds);
+	if (GuideHandle.IsValid() && (!IsGuideCurrent() || !ListeningHero->IsDialogueOpen())) { StopGuide(); }
+}
+
+void ADaedalusSeedSong::EndPlay(const EEndPlayReason::Type Reason)
+{
+	bEndingPlay = true;
+	StopGuide();
+	Super::EndPlay(Reason);
+}
+
+void ADaedalusSeedSong::StopGuide()
+{
+	if (ADaedalusHero* Hero = ListeningHero.Get())
+		if (GuideHandle.IsValid()) { Hero->OnDialogueChoice.Remove(GuideHandle); }
+	GuideHandle.Reset();
+	ListeningHero.Reset();
+	GuideRealm.Empty();
+	PresentedChoices.clear();
+	PresentedReview = daedalus::seedsong::GuideReview();
+	ReviewedSpring.Reset();
+	ReviewedController.Reset();
+	ReviewedSpringId.Empty();
+	ReviewedSpringPoint = FVector::ZeroVector;
+}
+
+bool ADaedalusSeedSong::IsGuideCurrent() const
+{
+	const ADaedalusHero* Hero = ListeningHero.Get();
+	return !bEndingPlay && Hero && Hero->GetWorld() == GetWorld() && Hero->RealmNow() == GuideRealm;
+}
+
+daedalus::seedsong::GuideReview ADaedalusSeedSong::CurrentReview() const
+{
+	daedalus::seedsong::GuideReview Review;
 	const FString Next = NextRecord();
-	if (Next.IsEmpty() || KettleHerbs.Num() == 0)
+	Review.RecordItem = DaedalusSeedSongLocal::ToUtf8(Next);
+	if (const daedalus::seedsong::Record* R = IsReady() && !Next.IsEmpty()
+		? State->Chapter->Find(Review.RecordItem) : nullptr)
 	{
-		Tell(Talk());
-		if (const daedalus::seedsong::Record* R = Next.IsEmpty() ? nullptr : State->Chapter->Find(DaedalusSeedSongLocal::ToUtf8(Next)))
-		{
-			Tell(DaedalusSeedSongLocal::FromUtf8(daedalus::seedsong::Hint(*R)));
-		}
-		return true;
+		Review.RecordName = R->T->SeedSong;
 	}
-	const FString Outcome = Restore(Next, KettleHerbs);
-	KettleHerbs.Reset();
-	Tell(FString::Printf(TEXT("%s: %s (%d of %d mended, %d springs clean)."), *Next, *Outcome, RestoredCount(), RecordCount(), CleanSprings()));
+	for (const FString& Herb : KettleHerbs) { Review.Herbs.push_back(DaedalusSeedSongLocal::ToUtf8(Herb)); }
+	// Restore, Draw and Talk already allocate an event id. Even an external attempt invalidates an old review.
+	Review.ProgressRevision = Events;
+	return Review;
+}
+
+void ADaedalusSeedSong::ShowGuide(daedalus::seedsong::GuidePage Page, const FString& Line)
+{
+	using namespace daedalus::seedsong;
+	if (!IsGuideCurrent()) { StopGuide(); return; }
+	ADaedalusHero* Hero = ListeningHero.Get();
+	const GuideReview Current = CurrentReview();
+	FString Text = Line;
+	if (Page == GuidePage::Review)
+	{
+		if (Current.CanAttempt())
+		{
+			PresentedReview = Current;
+			if (!Text.IsEmpty()) { Text += TEXT("\n"); }
+			Text += DaedalusSeedSongLocal::FromUtf8(GuideReviewText(PresentedReview));
+		}
+		else { Page = GuidePage::Home; }
+	}
+	if (Page == GuidePage::Home)
+	{
+		if (!Text.IsEmpty()) { Text += TEXT("\n"); }
+		Text += DaedalusSeedSongLocal::FromUtf8(GuideHome(RestoredCount(), RecordCount(), CleanSprings(),
+			!Current.RecordItem.empty(), !Current.Herbs.empty()));
+	}
+	CurrentGuidePage = Page;
+	const bool CanGuideSpring = Page == GuidePage::Spring ? IsSpringReviewCurrent()
+		: Page == GuidePage::Water && LocalGuideController() && NearbyCleanSpring(Hero);
+	PresentedChoices = GuideChoices(Page, !Current.RecordItem.empty(), !Current.Herbs.empty(), CanGuideSpring);
+	TArray<FString> Choices;
+	for (const GuideChoice& Choice : PresentedChoices) { Choices.Add(DaedalusSeedSongLocal::FromUtf8(Choice.Label)); }
+	Hero->Speak(TEXT("Keeper Oriel"), Text, Choices);
+}
+
+bool ADaedalusSeedSong::IsGuidanceSpring(const ADaedalusSeedSpring* Spring) const
+{
+	// Keep the existing one-chapter spring binding and stay within this placed island level. No cross-island
+	// destination, unloaded actor, hidden spring or walking route is inferred from a chapter name alone.
+	return IsReady() && IsValid(Spring) && !Spring->IsActorBeingDestroyed() && !Spring->IsHidden()
+		&& Spring->GetWorld() == GetWorld() && Spring->GetLevel() == GetLevel()
+		&& ADaedalusSeedSong::Find(Spring) == this && !Spring->GetActorLocation().ContainsNaN()
+		&& State->Chapter->Springs.Clean(DaedalusSeedSongLocal::ToUtf8(Spring->SpringId));
+}
+
+ADaedalusSeedSpring* ADaedalusSeedSong::NearbyCleanSpring(const ADaedalusHero* Hero) const
+{
+	using namespace daedalus::seedsong;
+	if (!IsValid(Hero) || Hero->GetWorld() != GetWorld() || Hero->GetActorLocation().ContainsNaN()) { return nullptr; }
+	std::vector<GuideSpringTarget> Candidates;
+	TArray<ADaedalusSeedSpring*> Actors;
+	for (TActorIterator<ADaedalusSeedSpring> It(GetWorld()); It; ++It)
+	{
+		ADaedalusSeedSpring* Spring = *It;
+		if (!IsGuidanceSpring(Spring)) { continue; }
+		Actors.Add(Spring);
+		Candidates.push_back({DaedalusSeedSongLocal::ToUtf8(Spring->SpringId),
+			DaedalusSeedSongLocal::ToUtf8(SpringName(Spring->SpringId)), DaedalusSeedSongLocal::ToUtf8(Spring->GetPathName()),
+			FVector::DistSquared(Hero->GetActorLocation(), Spring->GetActorLocation()), true, true});
+	}
+	const int Index = GuideNearestSpring(Candidates);
+	return Actors.IsValidIndex(Index) ? Actors[Index] : nullptr;
+}
+
+APlayerController* ADaedalusSeedSong::LocalGuideController() const
+{
+	if (!IsGuideCurrent()) { return nullptr; }
+	APlayerController* Controller = Cast<APlayerController>(ListeningHero->GetController());
+	return IsValid(Controller) && Controller->IsLocalController() && Controller->GetPawn() == ListeningHero.Get() ? Controller : nullptr;
+}
+
+void ADaedalusSeedSong::ShowWater(const FString& Notice)
+{
+	using namespace daedalus::seedsong;
+	std::vector<GuideSpring> Springs;
+	if (IsReady())
+		for (const Spring& Source : State->Chapter->Springs.Springs)
+			Springs.push_back({Source.Name, State->Chapter->Springs.Clean(Source.Id)});
+	FString Text = Notice;
+	if (!Text.IsEmpty()) { Text += TEXT("\n"); }
+	Text += DaedalusSeedSongLocal::FromUtf8(GuideWaterText(Springs));
+	if (Notice.IsEmpty() && !NearbyCleanSpring(ListeningHero.Get()))
+		Text += TEXT("\n") + DaedalusSeedSongLocal::FromUtf8(GuideSpringUnavailableText());
+	ShowGuide(GuidePage::Water, Text);
+}
+
+void ADaedalusSeedSong::ReviewSpring(const FString& Notice)
+{
+	using namespace daedalus::seedsong;
+	if (!IsGuideCurrent()) { StopGuide(); return; }
+	ADaedalusSeedSpring* Spring = NearbyCleanSpring(ListeningHero.Get());
+	APlayerController* Controller = LocalGuideController();
+	if (!Spring || !Controller) { ShowWater(DaedalusSeedSongLocal::FromUtf8(GuideSpringUnavailableText())); return; }
+	ReviewedSpring = Spring;
+	ReviewedController = Controller;
+	ReviewedSpringId = Spring->SpringId;
+	ReviewedSpringPoint = Spring->GetActorLocation();
+	FString Text = Notice;
+	if (!Text.IsEmpty()) { Text += TEXT("\n"); }
+	Text += DaedalusSeedSongLocal::FromUtf8(GuideSpringReviewText(DaedalusSeedSongLocal::ToUtf8(SpringName(ReviewedSpringId))));
+	ShowGuide(GuidePage::Spring, Text);
+}
+
+bool ADaedalusSeedSong::IsSpringReviewCurrent() const
+{
+	const ADaedalusSeedSpring* Spring = ReviewedSpring.Get();
+	return CurrentGuidePage == daedalus::seedsong::GuidePage::Spring && IsGuideCurrent() && GuideHandle.IsValid()
+		&& LocalGuideController() && LocalGuideController() == ReviewedController.Get()
+		&& IsGuidanceSpring(Spring) && Spring->SpringId == ReviewedSpringId && Spring->GetActorLocation() == ReviewedSpringPoint;
+}
+
+bool ADaedalusSeedSong::LookAtReviewedSpring()
+{
+	if (!IsSpringReviewCurrent()) { return false; }
+	ADaedalusHero* Hero = ListeningHero.Get();
+	const FVector Point = ReviewedSpringPoint;
+	StopGuide();
+	Hero->AimAt(Point); // existing control rotation only; native choice outcome closes the conversation
 	return true;
+}
+
+void ADaedalusSeedSong::OnGuideChoice(const FString& Speaker, int32 Choice)
+{
+	using namespace daedalus::seedsong;
+	if (!IsGuideCurrent() || !GuideHandle.IsValid()) { StopGuide(); return; }
+	if (Speaker != TEXT("Keeper Oriel")) { return; }
+	const GuideAction Action = GuidePick(PresentedChoices, Choice);
+	if (Action == GuideAction::Leave) { StopGuide(); return; }
+	if (Action == GuideAction::Listen)
+	{
+		// Talk can complete the existing quest's talk step. Opening, reading a clue and returning cannot.
+		ShowGuide(GuidePage::Listen, Talk());
+		return;
+	}
+	if (Action == GuideAction::Water)
+	{
+		ShowWater();
+		return;
+	}
+	if (Action == GuideAction::ReviewSpring)
+	{
+		ReviewSpring();
+		return;
+	}
+	if (Action == GuideAction::LookSpring)
+	{
+		if (!LookAtReviewedSpring()) { ReviewSpring(DaedalusSeedSongLocal::FromUtf8(GuideSpringChangedText())); }
+		return;
+	}
+	if (Action == GuideAction::Clue)
+	{
+		const FString Next = NextRecord();
+		const Record* R = IsReady() && !Next.IsEmpty() ? State->Chapter->Find(DaedalusSeedSongLocal::ToUtf8(Next)) : nullptr;
+		ShowGuide(GuidePage::Clue, R ? DaedalusSeedSongLocal::FromUtf8(Hint(*R)) : TEXT("Every record is mended."));
+		return;
+	}
+	if (Action == GuideAction::Review)
+	{
+		ShowGuide(GuidePage::Review);
+		return;
+	}
+	if (Action == GuideAction::Confirm)
+	{
+		if (CurrentGuidePage != GuidePage::Review || !PresentedReview.CanAttempt()
+			|| !SameReview(PresentedReview, CurrentReview()))
+		{
+			ShowGuide(GuidePage::Review, DaedalusSeedSongLocal::FromUtf8(GuideChanged()));
+			return;
+		}
+		const FString RecordItem = DaedalusSeedSongLocal::FromUtf8(PresentedReview.RecordItem);
+		const TArray<FString> Herbs = KettleHerbs;
+		const FString Outcome = Restore(RecordItem, Herbs);
+		KettleHerbs.Reset(); // preserve the original attempted-mend consumption rule, including failed attempts
+		Tell(FString::Printf(TEXT("%s: %s (%d of %d mended, %d springs clean)."), *RecordItem, *Outcome, RestoredCount(), RecordCount(), CleanSprings()));
+		ShowGuide(GuidePage::Result, DaedalusSeedSongLocal::FromUtf8(GuideResult(DaedalusSeedSongLocal::ToUtf8(Outcome),
+			RestoredCount(), RecordCount(), CleanSprings())));
+		return;
+	}
+	ShowGuide(GuidePage::Home);
 }
 
 ADaedalusSeedSong* ADaedalusSeedSong::Find(const UObject* WorldContext)
@@ -163,7 +401,9 @@ ADaedalusSeedSpring::ADaedalusSeedSpring()
 
 FString ADaedalusSeedSpring::Prompt(const ADaedalusHero*) const
 {
-	return FString::Printf(TEXT("Draw from %s"), *SpringId);
+	const ADaedalusSeedSong* Song = ADaedalusSeedSong::Find(this);
+	const FString Name = Song ? Song->SpringName(SpringId) : SpringId;
+	return FString::Printf(TEXT("Draw from %s"), *Name);
 }
 
 bool ADaedalusSeedSpring::Use(ADaedalusHero*)

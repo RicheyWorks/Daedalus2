@@ -74,6 +74,8 @@ void ADaedalusTwinDoors::BeginPlay()
 
 void ADaedalusTwinDoors::ResetRiddle()
 {
+	StopGuide(); // an answer to an old visible menu must not choose a door in the new riddle
+	++RiddleRevision;
 	Riddle = MakeUnique<daedalus::twindoors::Riddle>(static_cast<int64_t>(Seed), Difficulty);
 	Run = MakeUnique<daedalus::twindoors::Session>(*Riddle);
 	if (!Riddle->Valid()) { UE_LOG(LogTemp, Warning, TEXT("Daedalus twin doors: difficulty %d is not 0 or 1; using %d"), Difficulty, Riddle->GetDifficulty()); }
@@ -103,8 +105,8 @@ bool ADaedalusTwinDoors::Ask(int32 Guard, EDaedalusTwinQuestion Question, int32 
 	HeardDoor = Door;
 	HeardQuestion = DaedalusTwinDoorsLocal::ToCore(Question);
 	const bool bLow = Heard == daedalus::twindoors::Tone::Low;
-	OnBell.Broadcast(Guard, bLow, static_cast<float>(daedalus::twindoors::Hz(Heard)));
 	Tell(FString::Printf(TEXT("%s rings the %s bell (%.3f Hz)."), DaedalusTwinDoorsLocal::GuardName(Guard), bLow ? TEXT("low") : TEXT("high"), daedalus::twindoors::Hz(Heard)));
+	OnBell.Broadcast(Guard, bLow, static_cast<float>(daedalus::twindoors::Hz(Heard)));
 	return true;
 }
 
@@ -116,24 +118,27 @@ bool ADaedalusTwinDoors::Choose(int32 Door)
 	if (S == daedalus::twindoors::Step::AskFirst) { Tell(TEXT("Ask one guard one question first.")); return false; }
 	if (S == daedalus::twindoors::Step::AlreadyChosen) { Tell(bSolved ? TEXT("The archive is already open.") : TEXT("You already chose.")); return false; }
 	if (S != daedalus::twindoors::Step::Ok) { Tell(TEXT("There are only two doors (0 or 1).")); return false; }
-	OnDoorPicked.Broadcast(Door, bOpened);
+	StopGuide(); // Blueprint/console choices invalidate a currently visible conversation too
 	if (bOpened)
 	{
 		bSolved = true;
 		OpenDoor = Door;
 		SwingT = 0.f;
-		Tell(FString::Printf(TEXT("The %s door swings open. The archive opens through reasoning."), DaedalusTwinDoorsLocal::DoorName(Door)));
+		Tell(UTF8_TO_TCHAR(daedalus::twindoors::GuideResult(Door, true).c_str()));
+		OnDoorPicked.Broadcast(Door, true); // listeners observe the applied state and may safely reset it
 		return true;
 	}
-	Tell(FString::Printf(TEXT("The %s door is a wall of bells. The guards change places: a new riddle."), DaedalusTwinDoorsLocal::DoorName(Door)));
+	Tell(UTF8_TO_TCHAR(daedalus::twindoors::GuideResult(Door, false).c_str()));
 	Seed += 1;
 	ResetRiddle();
+	OnDoorPicked.Broadcast(Door, false);
 	return false;
 }
 
 void ADaedalusTwinDoors::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	if (GuideHandle.IsValid() && (!IsGuideCurrent() || !ListeningHero->IsDialogueOpen())) { StopGuide(); }
 	if (OpenDoor < 0 || SwingT >= 1.f) { return; }
 	SwingT = FMath::Min(1.f, SwingT + DeltaSeconds / FMath::Max(0.1f, SwingSeconds));
 	const float Eased = FMath::InterpEaseInOut(0.f, 1.f, SwingT, 2.f);
@@ -141,25 +146,129 @@ void ADaedalusTwinDoors::Tick(float DeltaSeconds)
 	H->SetRelativeRotation(FRotator(0.f, (OpenDoor == 0 ? OpenYawA : OpenYawB) * Eased, 0.f));
 }
 
-int32 ADaedalusTwinDoors::NearestDoor(const ADaedalusHero* Hero) const
+void ADaedalusTwinDoors::EndPlay(const EEndPlayReason::Type Reason)
 {
-	if (!Hero) { return 0; }
-	const FVector P = Hero->GetActorLocation();
-	return FVector::DistSquared(P, DoorA->GetComponentLocation()) <= FVector::DistSquared(P, DoorB->GetComponentLocation()) ? 0 : 1;
+	bEndingPlay = true;
+	StopGuide();
+	Super::EndPlay(Reason);
 }
 
 FString ADaedalusTwinDoors::Prompt(const ADaedalusHero* Hero) const
 {
 	if (bSolved) { return TEXT("The archive is open"); }
-	if (!HasAsked()) { return TEXT("Ask a guard"); }
-	return FString::Printf(TEXT("Open the %s door"), DaedalusTwinDoorsLocal::DoorName(NearestDoor(Hero)));
+	return HasAsked() ? TEXT("Choose a door with the guards") : TEXT("Talk to the guards");
 }
 
 bool ADaedalusTwinDoors::Use(ADaedalusHero* Hero)
 {
-	if (bSolved) { Tell(TEXT("The archive is already open.")); return false; }
-	if (!HasAsked()) { return Ask(AskGuard, AskQuestion, AskDoor); }
-	return Choose(NearestDoor(Hero));
+	if (bEndingPlay || !IsValid(Hero) || Hero->GetWorld() != GetWorld() || Hero->IsDialogueOpen()) { return false; }
+	if (ADaedalusHero* Listener = ListeningHero.Get())
+		if (Listener->IsDialogueOpen()) { return false; }
+	StopGuide();
+	if (bSolved)
+	{
+		Hero->Speak(TEXT("Twin Doors"), TEXT("The archive is already open. Take your time exploring."), {});
+		return Hero->IsDialogueOpen();
+	}
+	if (!Run.IsValid()) { ResetRiddle(); }
+	ListeningHero = Hero;
+	GuideRealm = Hero->RealmNow();
+	GuideRevision = RiddleRevision;
+	GuideHandle = Hero->OnDialogueChoice.AddUObject(this, &ADaedalusTwinDoors::OnGuideChoice);
+	ShowGuide(HasAsked() ? daedalus::twindoors::GuidePage::Doors : daedalus::twindoors::GuidePage::Welcome);
+	// Speak can decline to open over another menu. Opening a conversation spends no question and picks no door.
+	if (!Hero->IsDialogueOpen()) { StopGuide(); return false; }
+	return true;
+}
+
+void ADaedalusTwinDoors::StopGuide()
+{
+	if (ADaedalusHero* Hero = ListeningHero.Get())
+		if (GuideHandle.IsValid()) { Hero->OnDialogueChoice.Remove(GuideHandle); }
+	GuideHandle.Reset();
+	ListeningHero.Reset();
+	GuideRealm.Empty();
+}
+
+bool ADaedalusTwinDoors::IsGuideCurrent() const
+{
+	const ADaedalusHero* Hero = ListeningHero.Get();
+	return !bEndingPlay && Hero && Hero->GetWorld() == GetWorld()
+		&& Hero->RealmNow() == GuideRealm && GuideRevision == RiddleRevision;
+}
+
+void ADaedalusTwinDoors::ShowGuide(daedalus::twindoors::GuidePage Page)
+{
+	using namespace daedalus::twindoors;
+	ADaedalusHero* Hero = ListeningHero.Get();
+	if (!IsGuideCurrent()) { StopGuide(); return; }
+	CurrentGuidePage = Page;
+	std::string Text;
+	if (Page == GuidePage::Welcome)
+	{
+		PresentedQuestion = AskQuestion;
+		PresentedGuard = AskGuard;
+		PresentedDoor = AskDoor;
+		Text = GuideWelcome(DaedalusTwinDoorsLocal::ToCore(PresentedQuestion), PresentedGuard, PresentedDoor);
+	}
+	else if (HasAsked())
+		Text = Page == GuidePage::Clue
+			? GuideClue(Riddle->GetDifficulty(), HeardGuard, HeardQuestion, HeardDoor, Run->HeardTone())
+			: GuideAnswer(HeardQuestion, HeardGuard, HeardDoor, Run->HeardTone());
+	else { StopGuide(); return; }
+	TArray<FString> Choices;
+	for (const GuideChoice& Choice : GuideChoices(Page)) { Choices.Add(UTF8_TO_TCHAR(Choice.Label.c_str())); }
+	Hero->Speak(TEXT("Twin Doors"), UTF8_TO_TCHAR(Text.c_str()), Choices);
+}
+
+void ADaedalusTwinDoors::OnGuideChoice(const FString& Speaker, int32 Choice)
+{
+	using namespace daedalus::twindoors;
+	ADaedalusHero* Hero = ListeningHero.Get();
+	if (!IsGuideCurrent() || !GuideHandle.IsValid()) { StopGuide(); return; }
+	if (Speaker != TEXT("Twin Doors")) { return; }
+	const GuideAction Action = GuidePick(CurrentGuidePage, Choice);
+	if (Action == GuideAction::Leave || bSolved) { StopGuide(); return; }
+	if (Action == GuideAction::Ask)
+	{
+		if (!Ask(PresentedGuard, PresentedQuestion, PresentedDoor))
+		{
+			StopGuide();
+			Hero->Speak(TEXT("Twin Doors"), Line, {});
+			return;
+		}
+		// OnBell listeners may reset the puzzle. ResetRiddle removes this conversation's subscription.
+		if (IsGuideCurrent() && HasAsked() && !bSolved) { ShowGuide(GuidePage::Doors); }
+		return;
+	}
+	if (!HasAsked()) { StopGuide(); return; }
+	if (Action == GuideAction::Left || Action == GuideAction::Right)
+	{
+		// Choose can reset the puzzle. Release the old menu first, and never infer a door from player position.
+		const TWeakObjectPtr<ADaedalusHero> Listener = ListeningHero;
+		const FString Realm = GuideRealm;
+		const uint64 Revision = RiddleRevision;
+		StopGuide();
+		const int32 Door = Action == GuideAction::Left ? 0 : 1;
+		const bool bOpened = Choose(Door);
+		// Synchronous door listeners may end a participant, change realms, or reset again. Do not speak stale results.
+		Hero = Listener.Get();
+		if (!bEndingPlay && Hero && Hero->GetWorld() == GetWorld() && Hero->RealmNow() == Realm
+			&& RiddleRevision == Revision + (bOpened ? 0u : 1u) && bSolved == bOpened
+			&& (bOpened || !HasAsked()))
+		{
+			// A refused external Ask/Choose may overwrite LastLine without invalidating the riddle.
+			Hero->Speak(TEXT("Twin Doors"), UTF8_TO_TCHAR(GuideResult(Door, bOpened).c_str()), {});
+		}
+		return;
+	}
+	if (Action == GuideAction::Repeat)
+	{
+		const Tone Heard = Run->HeardTone();
+		OnBell.Broadcast(HeardGuard, Heard == Tone::Low, static_cast<float>(Hz(Heard)));
+		if (!IsGuideCurrent() || !HasAsked() || bSolved) { StopGuide(); return; }
+	}
+	ShowGuide(Action == GuideAction::Clue ? GuidePage::Clue : GuidePage::Doors);
 }
 
 FString ADaedalusTwinDoors::Wire() const

@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: MIT
 
 #include "DaedalusBrewBench.h"
+#include "DaedalusDesktopArcade.h"
+#include "DaedalusHero.h"
 #include "DaedalusTonicCore.h"
 #include "Components/PointLightComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "GameFramework/PlayerController.h"
 #include "HAL/IConsoleManager.h"
 #include "HAL/PlatformMisc.h"
 #include "HttpModule.h"
@@ -226,6 +229,7 @@ ADaedalusJukebox::ADaedalusJukebox()
 
 FString ADaedalusJukebox::Prompt(const ADaedalusHero*) const
 {
+	if (bOfferActivityMenu) { return TEXT("Open jukebox"); }
 	if (Records.Num() == 0) { return TEXT("The jukebox is empty"); }
 	return FString::Printf(TEXT("Play %s"), *Records[Next % Records.Num()]);
 }
@@ -245,8 +249,9 @@ ADaedalusMelodyBench* ADaedalusJukebox::FindBench() const
 	return Best;
 }
 
-bool ADaedalusJukebox::Use(ADaedalusHero*)
+bool ADaedalusJukebox::Use(ADaedalusHero* Hero)
 {
+	if (bOfferActivityMenu) { return OpenActivityMenu(Hero); }
 	if (Records.Num() == 0) { return false; }
 	Playing = Records[Next % Records.Num()];
 	Next = (Next + 1) % Records.Num();
@@ -257,6 +262,80 @@ bool ADaedalusJukebox::Use(ADaedalusHero*)
 	if (UDaedalusOrrery* O = UDaedalusOrrery::Get(this)) { O->Say(Line); }
 	UE_LOG(LogTemp, Log, TEXT("Daedalus jukebox: %s"), *Line);
 	return true;
+}
+
+bool ADaedalusJukebox::IsActivityMenuCurrent() const
+{
+	const ADaedalusHero* Hero = MenuHero.Get();
+	return !bEndingActivities && bOfferActivityMenu && IsValid(Hero) && Hero->GetWorld() == GetWorld()
+		&& Hero->RealmNow() == MenuRealm && Hero->GetController() && Hero->GetController()->IsLocalController();
+}
+
+void ADaedalusJukebox::StopActivityMenu()
+{
+	if (ADaedalusHero* Hero = MenuHero.Get())
+		if (MenuChoiceHandle.IsValid()) { Hero->OnDialogueChoice.Remove(MenuChoiceHandle); }
+	MenuChoiceHandle.Reset(); MenuHero.Reset(); MenuRealm.Reset();
+	if (UWorld* World = GetWorld()) { World->GetTimerManager().ClearTimer(PendingMinigames); }
+}
+
+void ADaedalusJukebox::ShowActivityMenu(const FString& UnavailableMode)
+{
+	if (!IsActivityMenuCurrent()) { StopActivityMenu(); return; }
+	bUnavailableMenu = !UnavailableMode.IsEmpty();
+	if (bUnavailableMenu)
+	{
+		MenuHero->Speak(TEXT("Jukebox"), UnavailableMode + TEXT(" is not connected in this scene."), {TEXT("Back"), TEXT("Not now")});
+	}
+	else
+	{
+		MenuHero->Speak(TEXT("Jukebox"), TEXT("Choose"), {TEXT("Music"), TEXT("Radio"), TEXT("Minigames"), TEXT("Not now")});
+	}
+}
+
+bool ADaedalusJukebox::OpenActivityMenu(ADaedalusHero* Hero)
+{
+	if (bEndingActivities || !IsValid(Hero) || Hero->GetWorld() != GetWorld() || Hero->IsDialogueOpen()
+		|| !Hero->GetController() || !Hero->GetController()->IsLocalController()) { return false; }
+	StopActivityMenu(); MenuHero = Hero; MenuRealm = Hero->RealmNow();
+	MenuChoiceHandle = Hero->OnDialogueChoice.AddUObject(this, &ADaedalusJukebox::OnActivityChoice);
+	ShowActivityMenu();
+	if (!Hero->IsDialogueOpen()) { StopActivityMenu(); return false; }
+	return true;
+}
+
+void ADaedalusJukebox::OnActivityChoice(const FString& Speaker, int32 Choice)
+{
+	if (Speaker != TEXT("Jukebox")) { return; }
+	if (!IsActivityMenuCurrent() || !MenuChoiceHandle.IsValid()) { StopActivityMenu(); return; }
+	if (bUnavailableMenu)
+	{
+		if (Choice == 0) { ShowActivityMenu(); }
+		else { StopActivityMenu(); }
+		return;
+	}
+	if (Choice == 0 || Choice == 1) { ShowActivityMenu(Choice == 0 ? TEXT("Music") : TEXT("Radio")); return; }
+	if (Choice != 2) { StopActivityMenu(); return; }
+	if (!IsValid(Minigames) || Minigames->GetWorld() != GetWorld()) { ShowActivityMenu(TEXT("Minigames")); return; }
+	const TWeakObjectPtr<ADaedalusHero> Player = MenuHero;
+	const TWeakObjectPtr<ADaedalusDesktopArcade> Games = Minigames;
+	const FString Realm = MenuRealm;
+	StopActivityMenu();
+	// DialogueOutcome tears down its overlay after broadcasting this choice.
+	// Use the existing cabinet on the next tick, after its normal pause/input restore.
+	if (UWorld* World = GetWorld())
+		PendingMinigames = World->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateWeakLambda(this, [this, Player, Games, Realm]()
+		{
+			ADaedalusHero* Hero = Player.Get();
+			if (bEndingActivities || !bOfferActivityMenu || !Hero || Hero->GetWorld() != GetWorld() || Hero->RealmNow() != Realm
+				|| Hero->IsDialogueOpen() || !Games.IsValid() || Games->GetWorld() != GetWorld()) { return; }
+			if (!Games->Use(Hero)) { Hero->Speak(TEXT("Jukebox"), TEXT("Minigames are not available here right now."), {}); }
+		}));
+}
+
+void ADaedalusJukebox::EndPlay(const EEndPlayReason::Type Reason)
+{
+	bEndingActivities = true; StopActivityMenu(); Super::EndPlay(Reason);
 }
 
 // ---------------- console ----------------

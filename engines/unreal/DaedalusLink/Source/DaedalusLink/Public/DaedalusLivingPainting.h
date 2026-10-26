@@ -45,7 +45,9 @@ public:
 
 	/** Mural from a GalleryOps frame: 2x2 cells per wall cube, capped at 12. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Gallery") void SetFromFrame(int64 FrameSeed, int32 FrameW, int32 FrameH);
-	/** Rebuild the mural grey from Seed/Width/Height. Palette and knowledge are kept. */
+	/** Same operation with an explicit result. Refusal preserves the active mural and settings. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Gallery") bool TrySetFromFrame(int64 FrameSeed, int32 FrameW, int32 FrameH);
+	/** Rebuild grey from Seed/Width/Height/CellSize, retaining palette/knowledge. Failure keeps the active mural. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Gallery") bool Rebuild();
 	/** Grind one ingredient (beet, cherry, dawnleaf, cobalt, orange, copper). Returns the PigmentPalette result name. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Gallery") FString Grind(const FString& Ingredient);
@@ -71,6 +73,8 @@ private:
 	void Tell(const FString& Text) const;
 	void Recolour(int32 X, int32 Y);
 	bool NextCell(int32& X, int32& Y) const;
+	bool RebuildLayout(int64 InSeed, int32 InWidth, int32 InHeight, float InCellSize);
+	void RestoreCommittedSettings();
 
 	TUniquePtr<daedalus::gallery::Painting> Mural;
 	daedalus::gallery::Palette Pal;
@@ -79,4 +83,5 @@ private:
 	UPROPERTY(Transient) TArray<TObjectPtr<UStaticMeshComponent>> CellParts;
 	UPROPERTY(Transient) TArray<TObjectPtr<UMaterialInstanceDynamic>> CellMats;
 	bool bAwake = false;
+	float CommittedCellSize = 40.f;
 };

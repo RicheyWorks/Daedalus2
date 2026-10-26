@@ -509,6 +509,7 @@ class ShadowNinjaGame final : public Game {
     bool BossActive=false,Over=false,Won=false;
     int SpawnTimer=0,BossPulseCueFrames=0;
     std::int64_t Score=0;
+    std::uint32_t SessionSeed=730;
     Random Rng; Input Previous;
     void Attack(bool Star) {
         platformers::NinjaAttack A;
@@ -524,9 +525,19 @@ public:
     static constexpr int BossScoreThreshold=1200,PulseReceiptFrames=8;
     ShadowNinjaGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
+        SessionSeed=Seed;
         Player={}; Attacks.clear(); Enemies.clear(); Gold.clear(); Boss={};
         BossActive=false; Over=false; Won=false; SpawnTimer=0; BossPulseCueFrames=0; Score=0; Previous={}; Rng.Seed(Seed);
         for(int I=0;I<5;++I) Gold.push_back({static_cast<double>(Rng.Int(80,700)),static_cast<double>(Rng.Int(200,400))});
+    }
+    bool SourceControllerButton(int Button) override {
+        // The host dispatches fresh, non-repeat events separately from held jump/fire.
+        if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
+        return false;
+    }
+    bool SourceKeyDown(int Key) override {
+        if((Over || Won) && (Key==6 || Key==7)) {Reset(SessionSeed);return true;}
+        return false;
     }
     void Step(const Input& I) override {
         if(Over) return;
@@ -597,8 +608,8 @@ public:
         }
     }
     Status GetStatus() const override {
-        std::string Text=Won?"BOSS DEFEATED! Host R/Restart replays."
-            :(Over?"GAME OVER. Host R/Restart replays.":ReadinessText());
+        std::string Text=Won?"BOSS DEFEATED! A/Start, Enter/Space or R/Restart replays."
+            :(Over?"GAME OVER. A/Start, Enter/Space or R/Restart replays.":ReadinessText());
         if(!Over) {
             if(BossActive && Boss.IsTelegraphing()) Text+=" Boss pulse in "+std::to_string(Boss.AttackTimer)+" steps; current strike range shown.";
             else if(BossActive && BossPulseCueFrames>0) Text+=" Boss pulse fired; contact/enemies remain dangerous.";
@@ -679,7 +690,7 @@ public:
         if(Over) {
             F.AddRect(180,240,440,130,{20,20,40,240});
             F.AddText(260,270,Won?"BOSS DEFEATED!":"GAME OVER",Won?Color{255,200,50,255}:Color{220,50,50,255},32);
-            F.AddText(245,325,"Host R / Restart: fresh run",White,16);
+            F.AddText(210,325,"A/Start, Enter/Space or R/Restart: fresh run",White,16);
         }
     }
 private:
