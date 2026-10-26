@@ -68,6 +68,7 @@
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"football\", Seed)",
       "portable_tests": [
+        "desktop_football_match",
         "desktop_football_practice",
         "desktop_sports"
       ],
@@ -127,6 +128,7 @@
       "start": "StartGame(\"star_shooter\", Seed)",
       "portable_tests": [
         "desktop_shooters",
+        "desktop_star_save_pause",
         "desktop_star_terminal_pickup"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"

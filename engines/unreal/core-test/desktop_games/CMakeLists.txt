@@ -63,3 +63,5 @@ desktop_test(desktop_sega_boss_rehearsal sega_boss_rehearsal_test.cpp "")
 desktop_test(desktop_sega_enemy_health sega_enemy_health_test.cpp "")
 
 desktop_test(desktop_star_terminal_pickup star_terminal_pickup_test.cpp "")
+desktop_test(desktop_football_match football_match_test.cpp "")
+desktop_test(desktop_star_save_pause star_save_pause_test.cpp "")
