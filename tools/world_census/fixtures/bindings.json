@@ -1,0 +1,10 @@
+{
+  "format": "daedalus-world-census-bindings",
+  "version": 1,
+  "worlds": [{
+    "world_id": "alpha",
+    "revision": 12,
+    "realm_id": "synthetic-realm",
+    "assets": [{"name": "ark", "file": "assets/ark.glb", "island_slot": 2}]
+  }]
+}
