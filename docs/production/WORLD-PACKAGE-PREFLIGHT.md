@@ -86,10 +86,24 @@ fetch/native functions. Changed reader signatures fail closed and require
 review. This is a source adapter to the existing interface, not a second
 implementation of the package grammar.
 
-The legacy reader validates `world.glb` envelope/version and node count, plus
-declared asset presence. This preflight does not establish secondary GLB CRC
-or geometry validity, full glTF/material/texture semantics, external URI
-availability, rights, native filesystem path compatibility or import success.
+The preflight completely reads the manifest, primary GLB and each declared
+secondary GLB from the captured archive, evaluating their ZIP CRC and
+decompression errors before any plan output. The existing expansion budget is
+checked before these reads. Errors identify the offending member.
+
+One shared payload boundary wraps the existing pure `glb_summary` for primary
+and secondary GLBs. It checks magic/version/total length, complete aligned
+chunk frames, one initial JSON chunk, optional second BIN chunk and strict
+JSON. Unknown extension chunks stay opaque with their framing checked, as
+required by the [GLB container specification](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#glb-file-format-specification).
+Materials, transforms, source bytes, plan/receipt fields and replay identity
+rules are unchanged. The existing package reader still checks the primary
+node count against the manifest.
+
+This is container admission, not geometry/accessor or shader evaluation.
+Unreferenced archive members are not payload-validated or CRC-read. Full
+glTF/material/texture semantics, external URI availability, rights, native
+filesystem path compatibility and import success remain unverified.
 Package hashes bind exact source bytes, including ZIP metadata; a repackaged
 archive is different evidence even if its extracted contents match.
 
@@ -115,5 +129,7 @@ python -m unittest discover -s tools/world_package/tests -p 'test_*.py' -v
 Synthetic fixtures exercise actual package-reader refusals, exact replay,
 revision conflicts, raw-ID/sanitization collisions, owned asset/material/level
 destinations, strict receipts/schema, input immutability, malformed ZIP/GLB/JSON,
-resource budgets and blocked native/network/top-level execution. CI runs the
+primary/secondary chunk refusal parity, listed-member CRC and decompression
+failures, preserved valid materials/transforms/BIN/extension bytes, resource
+budgets and blocked native/network/top-level execution. CI runs the
 same serial Python 3.10 suite, including when the existing reader changes.
