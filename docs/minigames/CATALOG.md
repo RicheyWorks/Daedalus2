@@ -34,7 +34,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `driftstone` | yes |  | yes | yes |  |  | yes | yes | yes | yes |
 | `football` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `glowtrail` | yes |  | yes |  |  |  | yes |  |  | yes |
-| `riftwing` | yes |  | yes | yes |  |  | yes |  |  | yes |
+| `riftwing` | yes |  | yes | yes |  |  | yes | yes | yes | yes |
 | `emberstep` | yes |  | yes | yes |  |  | yes |  |  | yes |
 | `star_shooter` | yes |  |  |  |  | yes | yes |  |  | yes |
 | `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes | yes |

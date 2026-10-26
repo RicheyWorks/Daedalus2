@@ -10,6 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Riftwing Vanguard hints.** A cream hint and a cyan fire cue sit under the speed line. Boss rehearsal names the boss in that hint. Controls and the status note are unchanged.
 - **Driftstone Patrol hints.** A cream hint and a cyan fire cue sit under the fire line. Flight practice uses the same pair to name the gold ring. Controls and the status note are unchanged.
 - **Twinwake Volley hints.** Practice and the first-to-five match show a cream hint and a cyan serve cue. The endless match keeps its six-draw opening and shows the same lines only after a rally, a serve, or a point.
 - **Beacon Sweep hints.** A cream hint and a cyan action cue sit on the dark header, so the next reveal, flag, chord, or replay reads without changing the controls line or the status note.

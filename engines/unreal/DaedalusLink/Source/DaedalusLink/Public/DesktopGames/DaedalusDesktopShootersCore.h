@@ -473,6 +473,17 @@ public:
         shooter_detail::Remove(Bullets,[](const Bullet& B){return !B.Alive;});
         shooter_detail::Remove(Powerups,[](const Powerup& P){return !P.Alive;});
     }
+    std::string HintLine() const {
+        if(Over&&Won) return "HINT Pad A or R tries the run again.";
+        if(Over) return "HINT Pad A or R tries this run again.";
+        if(Won) return "HINT Pad A or R starts another run.";
+        if(Option==1) return "HINT Rehearse the boss. Hold fire and take pickups.";
+        return "HINT Hold fire. Pickups raise power, speed, and lives.";
+    }
+    std::string ActionCue() const {
+        if(Over||Won) return "CUE Retry";
+        return IsFireReady()?"CUE Fire":"CUE Wait";
+    }
     void Render(Frame& F) const override {
         using namespace shooter_detail;
         F.Clear(800,600,{0,0,40,255}); for(const auto& S:Stars) F.AddCircle(S.X,S.Y,S.Speed,White);
@@ -503,6 +514,8 @@ public:
         F.AddText(420,45,BossNote(),BossActive?Red:Yellow,15);
         F.AddText(30,67,"FIRE: "+FireNote()+"   SHOT: "+ShotName(),IsFireReady()?Green:Yellow,15);
         F.AddText(30,89,"SPEED: "+std::to_string(static_cast<int>(Pilot.Speed))+"/8   "+ProtectionNote(),Cyan,15);
+        F.AddText(30,112,HintLine(),{255,236,180,255},14);
+        F.AddText(560,112,ActionCue(),{120,225,255,255},16);
         F.AddText(30,548,"POWER +1 (max 3)   SPEED +1 (max 8)   LIFE +1 (max 5)",White,15);
         F.AddText(30,572,"WASD/arrows, D-pad or stick: move   Space/J/Z/pad: hold fire",White,15);
         if(Over || Won) {

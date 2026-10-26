@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Accessibility hints for the three cabinets that only had options and focus freeze.
 // The line is drawn on the frame. It does not change score, movement, or saves.
-// catalog-capability: hints: beacon_sweep driftstone dungeon dodge_ball lanternwild twinwake
+// catalog-capability: hints: beacon_sweep driftstone dungeon dodge_ball lanternwild riftwing twinwake
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -59,6 +59,14 @@ void DriftstoneHints() {
     Frame Practice;G.Render(Practice);
     Check(HasText(Practice,G.HintLine()),"flight practice draws the hint");
 }
+void RiftwingHints() {
+    RiftwingGame G;G.Reset(730);
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine()=="HINT Hold fire. Pickups raise power, speed, and lives.","fresh run teaches pickups");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"riftwing hint is on the frame and stays out of status");
+    Check(G.SetOption(1,730) && G.HintLine().find("boss")!=std::string::npos,"rehearsal hint names the boss");
+}
 void TwinwakeHints() {
     TwinwakeGame G;
     Check(G.SetOption(1,730),"practice mode opens");
@@ -82,7 +90,7 @@ void LanternwildHints() {
 }
 
 int main() {
-    try { BeaconHints();DriftstoneHints();DungeonHints();DodgeHints();LanternwildHints();TwinwakeHints(); }
+    try { BeaconHints();DriftstoneHints();DungeonHints();DodgeHints();LanternwildHints();RiftwingHints();TwinwakeHints(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
