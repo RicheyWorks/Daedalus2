@@ -23,8 +23,17 @@ def audit(cast, text, records):
     ids = [r['id'] for r in records]
     if len(ids) != len(set(ids)): raise ValueError('duplicate manifest IDs')
     rows = []
-    names = [line[4:].strip() for line in text.splitlines() if line.startswith('who ')]
-    if not names or len(names) != len(set(names)): raise ValueError('empty or duplicate DCS who list')
+    names = []
+    for line in text.splitlines():
+        # Native DCS trims each line, then splits at the first literal space.
+        key, _, rest = line.strip().partition(' ')
+        if key == 'who':
+            name = rest.strip()
+            if not name: raise ValueError('empty DCS who name')
+            names.append(name)
+    # Native Cast::Find compares supported ASCII role names case-insensitively.
+    if not names or len(names) != len({name.upper() for name in names}):
+        raise ValueError('empty or duplicate DCS who list')
     for who in names:
         want = candidates(cast, who)
         hits = [x for x in want if x in ids]
