@@ -41,8 +41,9 @@ namespace
 
 	UMaterialInterface* GhostMaterial()
 	{
-		static UMaterialInterface* M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
-		return M;
+		static TWeakObjectPtr<UMaterialInterface> M; // weak: a raw static is invisible to GC and can dangle once no component references the asset
+		if (!M.IsValid()) { M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial")); }
+		return M.Get();
 	}
 }
 
