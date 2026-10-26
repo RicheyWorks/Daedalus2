@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Cabinet options for Lanternwild Quest (lanternwild) and Courtyard Clash (dodge_ball).
+// Cabinet options for Lanternwild Quest (lanternwild) and Pebblecourt Rally (dodge_ball).
 // Option 0 must match the original default exactly; other options are presets.
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>

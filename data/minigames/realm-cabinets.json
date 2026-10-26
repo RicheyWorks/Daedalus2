@@ -38,7 +38,7 @@
         },
         {
           "game": "star_shooter",
-          "title": "Star Shooter",
+          "title": "Lumen Barrage",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
@@ -164,7 +164,7 @@
         },
         {
           "game": "dodge_ball",
-          "title": "Courtyard Clash",
+          "title": "Pebblecourt Rally",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
@@ -297,7 +297,7 @@
         },
         {
           "game": "star_shooter",
-          "title": "Star Shooter",
+          "title": "Lumen Barrage",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             2.5,
@@ -311,7 +311,7 @@
         },
         {
           "game": "dodge_ball",
-          "title": "Courtyard Clash",
+          "title": "Pebblecourt Rally",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             2.5,
@@ -530,7 +530,7 @@
         },
         {
           "game": "star_shooter",
-          "title": "Star Shooter",
+          "title": "Lumen Barrage",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             5.0,
@@ -544,7 +544,7 @@
         },
         {
           "game": "dodge_ball",
-          "title": "Courtyard Clash",
+          "title": "Pebblecourt Rally",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             5.0,
@@ -837,7 +837,7 @@
         },
         {
           "game": "dodge_ball",
-          "title": "Courtyard Clash",
+          "title": "Pebblecourt Rally",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
@@ -953,7 +953,7 @@
       "cabinets": [
         {
           "game": "star_shooter",
-          "title": "Star Shooter",
+          "title": "Lumen Barrage",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             1.218,
@@ -1046,7 +1046,7 @@
         },
         {
           "game": "star_shooter",
-          "title": "Star Shooter",
+          "title": "Lumen Barrage",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
@@ -1176,7 +1176,7 @@
         },
         {
           "game": "star_shooter",
-          "title": "Star Shooter",
+          "title": "Lumen Barrage",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             1.351,

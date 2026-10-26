@@ -47,6 +47,11 @@ class Validate(unittest.TestCase):
                      "Beacon Sweep", "Mariner", "Sonics", "Gloam Latch", "Reedbeat"):
             self.assertEqual(cv.trademark_hits(text), [], text)
 
+    def test_high_risk_titles_blocked_legacy_id_allowed(self):
+        for title in ("Star Shooter", "Courtyard Clash"):
+            self.assertTrue(cv.trademark_hits(title), title)
+        self.assertEqual(cv.validate({"games": [game("star_shooter", title="Lumen Barrage")]}, {"star_shooter"}, {}), [])
+
     def test_duplicate_titles(self):
         errs = cv.validate({"games": [game("a", title="Same"), game("b", title="same")]}, {"a", "b"}, {})
         self.assertTrue(any("also used" in e for e in errs))

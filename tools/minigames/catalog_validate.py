@@ -9,7 +9,7 @@ Per desktop game in docs/minigames/catalog.json:
   * the scoreboard capability (proven by scoreboard_test.cpp),
   * a unique title, and no trademarked game, company or character name in id, title,
     summary or how-to line (Java cabinet titles and summaries are checked too).
-The old ids kept in GameAliases for save compatibility are not scanned. Stdlib only.
+Internal ids (star_shooter, dodge_ball) and save file names are not titles and are not scanned; the old ids kept in GameAliases for save compatibility are not scanned. Stdlib only.
 """
 import json
 import pathlib
@@ -35,7 +35,7 @@ TRADEMARKS = [
     "pokemon", "ninja gaiden", "street fighter", "mortal kombat", "frogger", "centipede", "dig dug",
     "q bert", "qbert", "breakout", "arkanoid", "gradius", "r type", "robotron",
     "bomberman", "dragon quest", "dragon warrior", "final fantasy", "hydlide", "atari", "capcom",
-    "konami", "namco", "taito", "square enix", "minecraft", "roblox", "fortnite", "fifa",
+    "konami", "namco", "taito", "square enix", "minecraft", "roblox", "fortnite", "fifa", "star shooter", "clash",
 ]
 
 
@@ -43,6 +43,9 @@ def _pattern(name):
     parts = re.split(r"[ \-_]+", name)
     return re.compile(r"(?<![a-z0-9])" + r"[ \-_]?".join(map(re.escape, parts)) + r"(?![a-z0-9])", re.I)
 
+
+# Internal ids kept after a title-only rename so saves and cabinets stay stable.
+LEGACY_INTERNAL_IDS = {"star_shooter"}  # titled Lumen Barrage since 2026-10-26
 
 PATTERNS = [(t, _pattern(t)) for t in TRADEMARKS]
 
@@ -76,6 +79,8 @@ def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
         else:
             titles[title.lower()] = gid
         for field in ("id", "title", "summary", "how_to_play"):
+            if field == "id" and gid in LEGACY_INTERNAL_IDS:
+                continue
             for hit in trademark_hits(g.get(field, "")):
                 errors.append(f"'{gid}' {field} uses trademarked name '{hit}'; use an original name")
     for j in catalog.get("java_cabinets", []):
