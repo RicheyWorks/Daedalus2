@@ -26,20 +26,20 @@ batched rebuild under the editor custodian.
 Read from each core's overrides, plus behavior proven by a portable test that declares
 `// catalog-capability: <cap>: <ids>` (for games that handle it inside `Step`). A blank cell is a gap.
 
-| id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | save_restore |
-|---|---|---|---|---|---|---|---|---|
-| `minesweeper` | yes |  | yes |  | yes |  | yes | yes |
-| `pong` | yes |  | yes |  |  |  | yes | yes |
-| `dungeon` | yes |  |  |  |  |  | yes | yes |
-| `asteroids` | yes |  | yes | yes |  |  | yes |  |
-| `football` | yes |  | yes |  |  |  | yes | yes |
-| `pacman` | yes |  | yes |  |  |  | yes | yes |
-| `sega_shooter` | yes |  | yes | yes |  |  | yes |  |
-| `shadow_ninja` | yes |  | yes | yes |  |  | yes |  |
-| `star_shooter` | yes |  |  |  |  | yes | yes | yes |
-| `dodge_ball` | yes |  |  |  |  |  | yes |  |
-| `contra` | yes | yes | yes | yes |  |  | yes |  |
-| `zelda` | yes |  |  |  |  |  | yes | yes |
+| id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | hints | save_restore |
+|---|---|---|---|---|---|---|---|---|---|
+| `minesweeper` | yes |  | yes |  | yes |  | yes |  | yes |
+| `pong` | yes |  | yes |  |  |  | yes |  | yes |
+| `dungeon` | yes |  |  |  |  |  | yes | yes | yes |
+| `asteroids` | yes |  | yes | yes |  |  | yes |  |  |
+| `football` | yes |  | yes |  |  |  | yes |  | yes |
+| `pacman` | yes |  | yes |  |  |  | yes |  | yes |
+| `sega_shooter` | yes |  | yes | yes |  |  | yes |  |  |
+| `shadow_ninja` | yes |  | yes | yes |  |  | yes |  |  |
+| `star_shooter` | yes |  |  |  |  | yes | yes |  | yes |
+| `dodge_ball` | yes |  |  |  |  |  | yes | yes |  |
+| `contra` | yes | yes | yes | yes |  |  | yes |  |  |
+| `zelda` | yes |  |  |  |  |  | yes | yes | yes |
 
 ## Java cabinets
 
