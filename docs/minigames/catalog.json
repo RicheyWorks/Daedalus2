@@ -255,7 +255,8 @@
       "portable_tests": [
         "desktop_platformers",
         "desktop_zelda_sword_assist",
-        "desktop_zelda_terminal"
+        "desktop_zelda_terminal",
+        "desktop_zelda_view"
       ],
       "option_count": 2,
       "capabilities": [

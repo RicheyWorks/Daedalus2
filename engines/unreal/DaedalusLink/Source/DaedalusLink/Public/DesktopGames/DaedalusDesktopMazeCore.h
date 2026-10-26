@@ -921,6 +921,8 @@ private:
     }
     static void DrawPlayer(Frame& F,const Player& P) {
         const Color Tunic{50,150,50,255}, Gold{255,215,0,255}, Steel{200,200,220,255};
+        const Color Outline{12,40,12,255};
+        F.AddRect(P.X-10,P.Y-6,20,24,Outline); F.AddCircle(P.X,P.Y-11,9,Outline);
         F.AddRect(P.X-8,P.Y-4,16,20,Tunic); F.AddCircle(P.X,P.Y-11,7,{255,218,185,255});
         F.AddTriangle({P.X-8,P.Y-16},{P.X,P.Y-28},{P.X+8,P.Y-16},Tunic);
         F.AddCircle(P.X-3,P.Y-13,1,Black); F.AddCircle(P.X+3,P.Y-13,1,Black);

@@ -19,7 +19,7 @@ batched rebuild under the editor custodian.
 | `star_shooter` | Star Shooter | 3 |
 | `dodge_ball` | Courtyard Clash | 6 |
 | `contra` | Ironwake Advance | 3 |
-| `zelda` | Lanternwild Quest | 3 |
+| `zelda` | Lanternwild Quest | 4 |
 
 ## Capabilities
 
