@@ -1472,3 +1472,11 @@ jar, failed to compile, and left an old passing surefire report on disk. Rules: 
   passes 22/22.
 - **The rule:** list every input that decides the output before writing a cache key, and make a missing or unnamed
   input a miss.
+
+
+## A cast filename rename may leave its imported object identity unchanged (2026-10-13, Codex)
+Role binding expected LostLetterGhost/GlueWitch, but exported GLB node/skin/rig names still used
+Courier/Alchemist. Create additive alias deliveries with exact metadata renames, verify original
+manifest hashes and prove all binary chunks plus unrelated JSON unchanged. Keep original art.
+The extra Bricks Builder is Hero builder, not an invented thirteenth NPC. Runtime binding still
+requires consumer acceptance; CPU file checks do not establish an imported or playable character.
