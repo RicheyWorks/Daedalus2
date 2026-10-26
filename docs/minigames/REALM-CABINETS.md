@@ -14,5 +14,12 @@ anchor, and a stable `StartGame` seed (crc32 of `realm:game`).
 - Realm builders resolve the anchor in their own map and spawn `ADaedalusDesktopArcade` /
   `ADaedalusJavaArcade` actors from the list. The tool makes no Unreal calls.
 
+- Every realm row in `docs/REALMS.md` (except PROPOSE ONE) must have a spec entry under its derived id:
+  the bold name before any `:` or `(`, minus a leading "The", lower snake case (e.g. The Orrery Reach ->
+  `orrery_reach`). These ids are **unconfirmed** proposals; the output marks them `id_status: unconfirmed`
+  until Richey confirms them. A missing realm fails `--check`.
+- The output is schema-checked (unique realms and games, 3-number offsets, no overlapping cabinets, yaw
+  0..360, seed equals crc32 of `realm:game`, known host) before it is written or compared.
+
 Edit the spec, run `python tools/minigames/realm_cabinets.py`, commit both files. CI runs `--check`
 and the unit tests in `tools/minigames/test_realm_cabinets.py`.

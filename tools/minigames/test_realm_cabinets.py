@@ -152,5 +152,67 @@ class Stability(unittest.TestCase):
             self.assertTrue(all(c["game"] in ids for c in realm["cabinets"]))
 
 
+class RealmsMd(unittest.TestCase):
+    MD = "\n".join([
+        "| Realm | Feels like | Status | x |", "|---|---|---|---|",
+        "| **The Shattered Planet: Sky Islands** | a | LIVE | b |",
+        "| **The Orrery Reach** (domain) | a | LIVE (Unreal) | b |",
+        "| **Space (Phase 2)** | - | NAMED | b |",
+        "| **Your own realm** | any | PROPOSE ONE | b |",
+    ])
+
+    def test_ids_derived_and_propose_skipped(self):
+        self.assertEqual([r["id"] for r in rc.parse_realms_md(self.MD)], ["shattered_planet", "orrery_reach", "space"])
+
+    def test_collision_rejected(self):
+        with self.assertRaises(rc.SpecError):
+            rc.parse_realms_md(self.MD + "\n| **Orrery Reach** | a | LIVE | b |")
+
+    def test_every_md_realm_needs_entry(self):
+        md = rc.parse_realms_md(self.MD)
+        with self.assertRaises(rc.SpecError) as e:
+            rc.build(CATALOG, {"realms": [{"realm": "space"}]}, md)
+        self.assertIn("shattered_planet", str(e.exception))
+
+    def test_md_realms_marked_unconfirmed(self):
+        md = rc.parse_realms_md(self.MD)
+        out = rc.build(CATALOG, {"realms": [{"realm": m["id"]} for m in md] + [{"realm": "extra"}]}, md)
+        status = {r["realm"]: r.get("id_status") for r in out["realms"]}
+        self.assertEqual(status, {"shattered_planet": "unconfirmed", "orrery_reach": "unconfirmed",
+                                  "space": "unconfirmed", "extra": None})
+        self.assertEqual(out["realms"][0]["anchor"], "arcade_plaza")
+
+    def test_deterministic(self):
+        md = rc.parse_realms_md(self.MD)
+        sp = {"realms": [{"realm": m["id"], "layout": "arc"} for m in md]}
+        self.assertEqual(rc.render(rc.build(CATALOG, sp, md)), rc.render(rc.build(CATALOG, sp, md)))
+
+
+class Schema(unittest.TestCase):
+    def good(self):
+        return rc.build(CATALOG, spec())
+
+    def test_good_passes(self):
+        rc.validate(self.good())
+
+    def test_bad_seed_overlap_yaw_host(self):
+        for mutate in (lambda c: c.__setitem__("seed", 1), lambda c: c.__setitem__("yaw_deg", 400),
+                       lambda c: c.__setitem__("host", "X"), lambda c: c.__setitem__("offset_m", [0, 0])):
+            d = self.good(); mutate(d["realms"][0]["cabinets"][0])
+            with self.assertRaises(rc.SpecError):
+                rc.validate(d)
+        d = self.good(); cabs = d["realms"][0]["cabinets"]; cabs[1]["offset_m"] = list(cabs[0]["offset_m"])
+        with self.assertRaises(rc.SpecError):
+            rc.validate(d)
+
+    def test_repo_realms_md_all_covered(self):
+        md = rc.parse_realms_md(rc.REALMS_MD.read_text(encoding="utf-8"))
+        out = json.loads(rc.OUT.read_text(encoding="utf-8"))
+        ids = {r["realm"] for r in out["realms"]}
+        for m in md:
+            self.assertIn(m["id"], ids)
+        rc.validate(out)
+
+
 if __name__ == "__main__":
     unittest.main()

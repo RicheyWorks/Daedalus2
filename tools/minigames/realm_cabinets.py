@@ -14,11 +14,17 @@ A realm may set `options: {game: n}`; n is validated against the catalog's
 option_count and the host applies it with SetGameOption(n) after StartGame.
 Each cabinet carries a stable StartGame seed (crc32 of "realm:game"), so a cabinet
 replays the same run wherever it is rebuilt. Stdlib only; no Unreal calls.
+
+Every realm row in docs/REALMS.md (except "PROPOSE ONE") must have a spec entry under
+its derived id (see realm_id_from_name). Those ids are proposals, not confirmed by
+Richey, so they are marked `id_status: unconfirmed` in the output. The output is
+schema-checked before it is written or compared.
 """
 import fnmatch
 import json
 import math
 import pathlib
+import re
 import sys
 import zlib
 
@@ -26,11 +32,80 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 CATALOG = ROOT / "docs/minigames/catalog.json"
 SPEC = ROOT / "data/minigames/realm-arcades.json"
 OUT = ROOT / "data/minigames/realm-cabinets.json"
+REALMS_MD = ROOT / "docs/REALMS.md"
 LAYOUTS = ("row", "grid", "arc")
 
 
 class SpecError(ValueError):
     pass
+
+
+def realm_id_from_name(name):
+    """'The Orrery Reach' -> 'orrery_reach'; text after ':' or '(' is dropped."""
+    base = re.split(r"[:(]", name, 1)[0].strip()
+    base = re.sub(r"^the\s+", "", base, flags=re.I)
+    slug = re.sub(r"[^a-z0-9]+", "_", base.lower()).strip("_")
+    if not slug:
+        raise SpecError(f"cannot derive a realm id from '{name}'")
+    return slug
+
+
+def parse_realms_md(text):
+    """Realm table rows -> [{'id', 'name', 'status'}] in file order. Skips PROPOSE ONE rows."""
+    out = []
+    for line in text.splitlines():
+        m = re.match(r"\|\s*\*\*([^*]+)\*\*([^|]*)\|[^|]*\|\s*([^|]*?)\s*\|", line)
+        if not m:
+            continue
+        status = m.group(3).strip()
+        if status.upper().startswith("PROPOSE"):
+            continue
+        out.append({"id": realm_id_from_name(m.group(1)), "name": m.group(1).strip(), "status": status})
+    ids = [r["id"] for r in out]
+    dupes = sorted({i for i in ids if ids.count(i) > 1})
+    if dupes:
+        raise SpecError(f"docs/REALMS.md realm names collide on derived ids: {', '.join(dupes)}")
+    return out
+
+
+def validate(data):
+    """Schema check for realm-cabinets.json. Raises SpecError on the first problem."""
+    if data.get("schema") != "daedalus.minigames.realm_cabinets/v1":
+        raise SpecError("schema must be daedalus.minigames.realm_cabinets/v1")
+    if not isinstance(data.get("realms"), list) or not data["realms"]:
+        raise SpecError("realms must be a non-empty list")
+    seen = set()
+    for r in data["realms"]:
+        rid = r.get("realm")
+        if not isinstance(rid, str) or not re.fullmatch(r"[a-z0-9_]+", rid) or rid in seen:
+            raise SpecError(f"bad or duplicate realm id {rid!r}")
+        seen.add(rid)
+        if not isinstance(r.get("anchor"), str) or not r["anchor"] or r.get("layout") not in LAYOUTS:
+            raise SpecError(f"realm '{rid}' needs a string anchor and a known layout")
+        if r.get("id_status", "confirmed") not in ("confirmed", "unconfirmed"):
+            raise SpecError(f"realm '{rid}' id_status must be confirmed or unconfirmed")
+        cabs = r.get("cabinets")
+        if not isinstance(cabs, list) or not cabs:
+            raise SpecError(f"realm '{rid}' has no cabinets")
+        games, spots = set(), set()
+        for c in cabs:
+            g = c.get("game")
+            if not isinstance(g, str) or g in games:
+                raise SpecError(f"realm '{rid}' has a bad or repeated game {g!r}")
+            games.add(g)
+            off = c.get("offset_m")
+            if not (isinstance(off, list) and len(off) == 3 and all(isinstance(v, (int, float)) for v in off)):
+                raise SpecError(f"realm '{rid}' cabinet '{g}' offset_m must be 3 numbers")
+            if tuple(off) in spots:
+                raise SpecError(f"realm '{rid}' cabinet '{g}' overlaps another cabinet")
+            spots.add(tuple(off))
+            if not isinstance(c.get("yaw_deg"), (int, float)) or not 0 <= c["yaw_deg"] < 360:
+                raise SpecError(f"realm '{rid}' cabinet '{g}' yaw_deg must be 0..360")
+            if c.get("seed") != stable_seed(rid, g):
+                raise SpecError(f"realm '{rid}' cabinet '{g}' seed is not crc32('{rid}:{g}')")
+            if c.get("host") not in ("ADaedalusDesktopArcade", "ADaedalusJavaArcade"):
+                raise SpecError(f"realm '{rid}' cabinet '{g}' has unknown host {c.get('host')!r}")
+    return data
 
 
 def stable_seed(realm, game):
@@ -72,7 +147,7 @@ def select(ids, include, exclude):
     return [g for g in chosen if not any(fnmatch.fnmatchcase(g, p) for p in exclude)]
 
 
-def build(catalog, spec):
+def build(catalog, spec, realms_md=None):
     desktop = {g["id"]: g for g in catalog.get("games", [])}
     java = {j["id"]: j for j in catalog.get("java_cabinets", [])}
     known = list(desktop) + [i for i in java if i not in desktop]
@@ -124,12 +199,21 @@ def build(catalog, spec):
                 cab["option"] = options.get(gid, 0)
                 cab["start"] = f'StartGame("{gid}", {cab["seed"]})'
             cabinets.append(cab)
-        realms.append({"realm": rid, "anchor": r.get("anchor", defaults.get("anchor", "arcade_plaza")),
-                       "layout": layout, "cabinets": cabinets})
-    return {"schema": "daedalus.minigames.realm_cabinets/v1",
-            "generated_by": "tools/minigames/realm_cabinets.py",
-            "note": "Offsets are metres from each realm's anchor marker; native status per catalog.json.",
-            "realms": realms}
+        row = {"realm": rid, "anchor": r.get("anchor", defaults.get("anchor", "arcade_plaza")), "layout": layout}
+        if realms_md is not None and rid in {m["id"] for m in realms_md}:
+            row["realms_md_name"] = next(m["name"] for m in realms_md if m["id"] == rid)
+            row["id_status"] = "unconfirmed"
+        row["cabinets"] = cabinets
+        realms.append(row)
+    if realms_md is not None:
+        missing = [m["id"] for m in realms_md if m["id"] not in seen]
+        if missing:
+            raise SpecError("docs/REALMS.md realms with no cabinet entry in realm-arcades.json: " + ", ".join(missing))
+    return validate({"schema": "daedalus.minigames.realm_cabinets/v1",
+                     "generated_by": "tools/minigames/realm_cabinets.py",
+                     "note": ("Offsets are metres from each realm's anchor marker; native status per catalog.json. "
+                              "id_status unconfirmed: realm id derived from docs/REALMS.md, awaiting Richey."),
+                     "realms": realms})
 
 
 def render(data):
@@ -140,7 +224,8 @@ def main(argv):
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
     spec = json.loads(SPEC.read_text(encoding="utf-8"))
     try:
-        text = render(build(catalog, spec))
+        realms_md = parse_realms_md(REALMS_MD.read_text(encoding="utf-8")) if REALMS_MD.exists() else None
+        text = render(build(catalog, spec, realms_md))
     except SpecError as e:
         print("FAIL:", e)
         return 1
