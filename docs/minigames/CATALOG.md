@@ -9,7 +9,7 @@ batched rebuild under the editor custodian.
 | id | title | portable tests |
 |---|---|---|
 | `minesweeper` | Minesweeper | 5 |
-| `pong` | Twinwake Volley | 5 |
+| `pong` | Twinwake Volley | 6 |
 | `dungeon` | Dungeon Prototype | 4 |
 | `asteroids` | Driftstone Patrol | 4 |
 | `football` | Football / Soccer | 3 |
@@ -29,7 +29,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | save_restore |
 |---|---|---|---|---|---|---|---|---|
 | `minesweeper` | yes |  | yes |  | yes |  | yes | yes |
-| `pong` | yes |  | yes |  |  |  | yes |  |
+| `pong` | yes |  | yes |  |  |  | yes | yes |
 | `dungeon` | yes |  |  |  |  |  | yes |  |
 | `asteroids` | yes |  | yes | yes |  |  | yes |  |
 | `football` | yes |  | yes |  |  |  | yes |  |

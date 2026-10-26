@@ -36,6 +36,7 @@
         "desktop_pong",
         "desktop_pong_practice",
         "desktop_pong_quick_match",
+        "desktop_pong_save",
         "desktop_pong_spin",
         "desktop_pong_target_rally"
       ],
@@ -43,7 +44,8 @@
       "capabilities": [
         "focus_freeze",
         "fresh_pad_replay",
-        "options"
+        "options",
+        "save_restore"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },

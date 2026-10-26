@@ -3,6 +3,8 @@
 #include "DaedalusDesktopGameTypes.h"
 #include <array>
 #include <limits>
+#include <sstream>
+#include <string>
 
 namespace daedalus { namespace desktop {
 class PongGame final : public Game {
@@ -24,6 +26,26 @@ public:
         Option=Value;Reset(Seed);return true;
     }
     int GetOption() const override { return Option; }
+    // Checkpoint save: mode, scores and best rally. Restore starts a fresh serve at
+    // that score; ball and paddles are not saved. Finished matches are not saved.
+    std::string SaveState() const override {
+        if(QuickMatchOver() || TargetRallyOver()) return {};
+        return "DPS1 "+std::to_string(Option)+" "+std::to_string(S.PlayerScore)+" "+std::to_string(S.ComputerScore)
+            +" "+std::to_string(S.BestRally);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;
+        long long Mode=-1,Player=-1,Computer=-1,Best=-1;
+        if(!(In>>Version>>Mode>>Player>>Computer>>Best) || Version!="DPS1" || (In>>Extra)) return false;
+        constexpr long long Cap=1000000000LL;
+        if(Mode<0 || Mode>3 || Player<0 || Computer<0 || Best<0 || Player>Cap || Computer>Cap || Best>Cap) return false;
+        if(Mode==2 && (Player>=5 || Computer>=5)) return false;
+        if(Mode==3 && (Player>=static_cast<long long>(TargetWindows.size()) || Computer!=0)) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);
+        S.PlayerScore=Player;S.ComputerScore=Computer;S.BestRally=static_cast<std::uint32_t>(Best);
+        return true;
+    }
     void Step(const Input& I) override {
         if(QuickMatchOver() || TargetRallyOver()) {
             if(I.FirePressed || I.JumpPressed || I.ActionPressed) Reset(0);
