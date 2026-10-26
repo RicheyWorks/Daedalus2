@@ -80,9 +80,34 @@ def parse_java(errors):
     return out
 
 
+CORE_DIR = REG.parent
+# Capability -> overrides that provide it. Realm builders and hosts read these.
+CAPABILITIES = {
+    "options": ("SetOption",),
+    "title_screen": ("EnterTitle",),
+    "fresh_pad_replay": ("SourceControllerButton",),
+    "source_keys": ("SourceKeyDown",),
+    "pointer": ("SourcePointerButton",),
+    "core_pause": ("OwnPause",),
+    "save_restore": ("SaveState", "RestoreState"),
+}
+
+
+def parse_capabilities():
+    """Map game class name -> sorted capability list, from the native cores' overrides."""
+    caps = {}
+    for f in sorted(CORE_DIR.glob("*Core.h")):
+        parts = re.split(r"\nclass (\w+Game)\b", f.read_text(encoding="utf-8"))
+        for i in range(1, len(parts), 2):
+            body = parts[i + 1]
+            got = set(re.findall(r"(\w+)\([^)]*\)\s*(?:const\s*)?override", body))
+            caps[parts[i]] = sorted(k for k, need in CAPABILITIES.items() if all(n in got for n in need))
+    return caps
+
+
 def parse_registry(text):
     entries = re.findall(r'\{"([a-z_]+)","([^"]+)","([^"]*)"\}', text)
-    factories = set(re.findall(r'if\(Id=="([a-z_]+)"\) return std::make_unique<', text))
+    factories = dict(re.findall(r'if\(Id=="([a-z_]+)"\) return std::make_unique<(\w+)>', text))
     return entries, factories
 
 
@@ -101,12 +126,17 @@ def tests_for(gid, cmake):
 
 
 def build():
-    entries, factories = parse_registry(REG.read_text(encoding="utf-8"))
+    entries, factory_map = parse_registry(REG.read_text(encoding="utf-8"))
+    factories = set(factory_map)
+    capmap = parse_capabilities()
     cmake = parse_cmake((TESTS / "CMakeLists.txt").read_text(encoding="utf-8"))
     errors = []
     ids = [e[0] for e in entries]
     for gid in sorted(set(ids) - factories):
         errors.append(f"listed game '{gid}' has no factory")
+    for gid, cls in sorted(factory_map.items()):
+        if cls not in capmap:
+            errors.append(f"factory class '{cls}' for '{gid}' not found in DesktopGames cores")
     for gid in sorted(factories - set(ids)):
         errors.append(f"factory '{gid}' is not listed")
     for f in sorted(p.name for p in TESTS.glob("*_test.cpp")):
@@ -124,6 +154,7 @@ def build():
             "host": "ADaedalusDesktopArcade",
             "start": f'StartGame("{gid}", Seed)',
             "portable_tests": tests,
+            "capabilities": capmap.get(factory_map.get(gid, ""), []),
             "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
         })
     java = parse_java(errors)
@@ -145,6 +176,12 @@ def build():
     ]
     for g in games:
         md.append(f"| `{g['id']}` | {g['title']} | {len(g['portable_tests'])} |")
+    md += ["", "## Capabilities", "",
+           "Read from each core's overrides. A blank cell is a parity gap, not necessarily a bug:",
+           "some games handle replay or pause inside `Step`.", "",
+           "| id | " + " | ".join(CAPABILITIES) + " |", "|---|" + "---|" * len(CAPABILITIES)]
+    for g in games:
+        md.append(f"| `{g['id']}` | " + " | ".join("yes" if c in g["capabilities"] else "" for c in CAPABILITIES) + " |")
     md += ["", "## Java cabinets", "",
            "Hosted by `ADaedalusJavaArcade`; rules stay in the owning Java service. See `docs/java-arcade/README.md`.", "",
            "| id | title | enum | source | portable tests |", "|---|---|---|---|---|"]

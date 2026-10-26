@@ -21,6 +21,26 @@ batched rebuild under the editor custodian.
 | `contra` | Ironwake Advance | 3 |
 | `zelda` | Lanternwild Quest | 3 |
 
+## Capabilities
+
+Read from each core's overrides. A blank cell is a parity gap, not necessarily a bug:
+some games handle replay or pause inside `Step`.
+
+| id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | save_restore |
+|---|---|---|---|---|---|---|---|
+| `minesweeper` | yes |  | yes |  | yes |  | yes |
+| `pong` | yes |  |  |  |  |  |  |
+| `dungeon` | yes |  |  |  |  |  |  |
+| `asteroids` | yes |  | yes | yes |  |  |  |
+| `football` | yes |  |  |  |  |  |  |
+| `pacman` | yes |  |  |  |  |  |  |
+| `sega_shooter` | yes |  | yes | yes |  |  |  |
+| `shadow_ninja` | yes |  | yes | yes |  |  |  |
+| `star_shooter` | yes |  |  |  |  | yes | yes |
+| `dodge_ball` |  |  |  |  |  |  |  |
+| `contra` | yes | yes | yes | yes |  |  |  |
+| `zelda` |  |  |  |  |  |  |  |
+
 ## Java cabinets
 
 Hosted by `ADaedalusJavaArcade`; rules stay in the owning Java service. See `docs/java-arcade/README.md`.

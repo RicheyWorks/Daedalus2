@@ -16,6 +16,12 @@
         "desktop_minesweeper_pointer",
         "desktop_minesweeper_replay"
       ],
+      "capabilities": [
+        "fresh_pad_replay",
+        "options",
+        "pointer",
+        "save_restore"
+      ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
     {
@@ -31,6 +37,9 @@
         "desktop_pong_spin",
         "desktop_pong_target_rally"
       ],
+      "capabilities": [
+        "options"
+      ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
     {
@@ -44,6 +53,9 @@
         "desktop_dungeon_switchback",
         "desktop_dungeon_trail",
         "desktop_maze"
+      ],
+      "capabilities": [
+        "options"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -59,6 +71,11 @@
         "desktop_asteroids_voyage",
         "desktop_shooters"
       ],
+      "capabilities": [
+        "fresh_pad_replay",
+        "options",
+        "source_keys"
+      ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
     {
@@ -71,6 +88,9 @@
         "desktop_football_match",
         "desktop_football_practice",
         "desktop_sports"
+      ],
+      "capabilities": [
+        "options"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -88,6 +108,9 @@
         "desktop_pacman_pursuit",
         "desktop_pacman_tunnel"
       ],
+      "capabilities": [
+        "options"
+      ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
     {
@@ -102,6 +125,11 @@
         "desktop_sega_terminal_pickup",
         "desktop_shooter_terminal",
         "desktop_shooters"
+      ],
+      "capabilities": [
+        "fresh_pad_replay",
+        "options",
+        "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -118,6 +146,11 @@
         "desktop_ninja_terrace_course",
         "desktop_platformers"
       ],
+      "capabilities": [
+        "fresh_pad_replay",
+        "options",
+        "source_keys"
+      ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
     {
@@ -130,6 +163,11 @@
         "desktop_shooters",
         "desktop_star_save_pause",
         "desktop_star_terminal_pickup"
+      ],
+      "capabilities": [
+        "core_pause",
+        "options",
+        "save_restore"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -147,6 +185,7 @@
         "desktop_dodge_tournament",
         "desktop_sports"
       ],
+      "capabilities": [],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
     {
@@ -159,6 +198,12 @@
         "desktop_contra_ledge",
         "desktop_contra_target_range",
         "desktop_platformers"
+      ],
+      "capabilities": [
+        "fresh_pad_replay",
+        "options",
+        "source_keys",
+        "title_screen"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -173,6 +218,7 @@
         "desktop_zelda_sword_assist",
         "desktop_zelda_terminal"
       ],
+      "capabilities": [],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
