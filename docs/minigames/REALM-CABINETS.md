@@ -7,7 +7,9 @@ local offset in metres from the realm's anchor marker (default `arcade_plaza`), 
 anchor, and a stable `StartGame` seed (crc32 of `realm:game`).
 
 - Spec fields per realm: `realm`, `anchor`, `layout` (`row`, `grid`, `arc`), `spacing_m`, `columns`,
-  `radius_m`, `include` / `exclude` (fnmatch patterns over catalog ids), `java` (Java cabinets on/off).
+  `radius_m`, `include` / `exclude` (fnmatch patterns over catalog ids), `java` (Java cabinets on/off),
+  `options` (`{game: n}`; n must be below the game's `option_count` in catalog.json; Java cabinets take none).
+- Each desktop cabinet carries `option` (default 0). Hosts call `SetGameOption(option)` after `StartGame`.
 - Unknown game names, empty selections, duplicate realms and bad layouts fail the build.
 - Realm builders resolve the anchor in their own map and spawn `ADaedalusDesktopArcade` /
   `ADaedalusJavaArcade` actors from the list. The tool makes no Unreal calls.

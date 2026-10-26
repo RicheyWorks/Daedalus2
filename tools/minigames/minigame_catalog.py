@@ -93,6 +93,30 @@ CAPABILITIES = {
 }
 
 
+def parse_option_counts():
+    """Map game class -> number of SetOption values (0 when the game has no options)."""
+    counts = {}
+    for f in sorted(CORE_DIR.glob("*Core.h")):
+        parts = re.split(r"\nclass (\w+Game)\b", f.read_text(encoding="utf-8"))
+        for i in range(1, len(parts), 2):
+            body = parts[i + 1]
+            at = body.find("bool SetOption(")
+            if at < 0:
+                counts[parts[i]] = 0
+                continue
+            m = re.search(r"(?:Value|Option)\s*>\s*(=)?\s*(?:(\d+)|static_cast<int>\((\w+)\.size\(\)\))", body[at:at + 300])
+            if not m:
+                counts[parts[i]] = None
+                continue
+            if m.group(2):
+                n = int(m.group(2))
+                counts[parts[i]] = n if m.group(1) else n + 1
+            else:
+                arr = re.search(r"std::array<\w+,\s*(\d+)>\s*" + m.group(3) + r"\b", body)
+                counts[parts[i]] = int(arr.group(1)) if arr else None
+    return counts
+
+
 def parse_capabilities():
     """Map game class name -> sorted capability list, from the native cores' overrides."""
     caps = {}
@@ -147,6 +171,7 @@ def build():
     entries, factory_map = parse_registry(REG.read_text(encoding="utf-8"))
     factories = set(factory_map)
     capmap = parse_capabilities()
+    optmap = parse_option_counts()
     cmake = parse_cmake((TESTS / "CMakeLists.txt").read_text(encoding="utf-8"))
     verified, errors = parse_verified(cmake)
     ids = [e[0] for e in entries]
@@ -155,6 +180,8 @@ def build():
     for gid in sorted(set(ids) - factories):
         errors.append(f"listed game '{gid}' has no factory")
     for gid, cls in sorted(factory_map.items()):
+        if optmap.get(cls, 0) is None:
+            errors.append(f"could not read the SetOption range for '{gid}' ({cls})")
         if cls not in capmap:
             errors.append(f"factory class '{cls}' for '{gid}' not found in DesktopGames cores")
     for gid in sorted(factories - set(ids)):
@@ -174,6 +201,7 @@ def build():
             "host": "ADaedalusDesktopArcade",
             "start": f'StartGame("{gid}", Seed)',
             "portable_tests": tests,
+            "option_count": optmap.get(factory_map.get(gid, ""), 0) or 0,
             "capabilities": sorted(set(capmap.get(factory_map.get(gid, ""), [])) | verified.get(gid, set())),
             "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
         })

@@ -1,12 +1,54 @@
 {
   "schema": "daedalus.minigames.realm_arcades/v1",
-  "about": "Which realms host arcade cabinets. Patterns match catalog ids (fnmatch). Edit, then run tools/minigames/realm_cabinets.py.",
-  "defaults": {"anchor": "arcade_plaza", "layout": "row", "spacing_m": 2.5, "java": true},
+  "about": "Which realms host arcade cabinets. Patterns match catalog ids (fnmatch). Edit, then run tools/minigames/realm_cabinets.py. 'options' maps a placed desktop game to its SetGameOption value.",
+  "defaults": {
+    "anchor": "arcade_plaza",
+    "layout": "row",
+    "spacing_m": 2.5,
+    "java": true
+  },
   "realms": [
-    {"realm": "island_hephaestus", "layout": "grid", "columns": 4,
-     "include": ["*_shooter", "asteroids", "contra", "shadow_ninja", "zelda"], "java": false},
-    {"realm": "island_oddsreaper", "layout": "arc", "include": ["blackjack", "sudoku", "minesweeper"]},
-    {"realm": "island_prometheus", "layout": "row", "include": ["pong", "football", "dodge_ball"]},
-    {"realm": "spawn_overlook", "layout": "grid", "columns": 5, "include": ["*"]}
+    {
+      "realm": "island_hephaestus",
+      "layout": "grid",
+      "columns": 4,
+      "include": [
+        "*_shooter",
+        "asteroids",
+        "contra",
+        "shadow_ninja",
+        "zelda"
+      ],
+      "java": false,
+      "options": {
+        "zelda": 1
+      }
+    },
+    {
+      "realm": "island_oddsreaper",
+      "layout": "arc",
+      "include": [
+        "blackjack",
+        "sudoku",
+        "minesweeper"
+      ]
+    },
+    {
+      "realm": "island_prometheus",
+      "layout": "row",
+      "include": [
+        "pong",
+        "football",
+        "dodge_ball"
+      ]
+    },
+    {
+      "realm": "spawn_overlook",
+      "layout": "grid",
+      "columns": 5,
+      "include": [
+        "*"
+      ]
+    }
   ]
 }

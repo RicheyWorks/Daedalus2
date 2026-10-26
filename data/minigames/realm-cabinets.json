@@ -19,6 +19,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1793651014,
+          "option": 0,
           "start": "StartGame(\"asteroids\", 1793651014)"
         },
         {
@@ -32,6 +33,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 235028576,
+          "option": 0,
           "start": "StartGame(\"sega_shooter\", 235028576)"
         },
         {
@@ -45,6 +47,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1618900431,
+          "option": 0,
           "start": "StartGame(\"shadow_ninja\", 1618900431)"
         },
         {
@@ -58,6 +61,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 2032752024,
+          "option": 0,
           "start": "StartGame(\"star_shooter\", 2032752024)"
         },
         {
@@ -71,6 +75,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1867907410,
+          "option": 0,
           "start": "StartGame(\"contra\", 1867907410)"
         },
         {
@@ -84,6 +89,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1137613426,
+          "option": 1,
           "start": "StartGame(\"zelda\", 1137613426)"
         }
       ]
@@ -104,6 +110,7 @@
           ],
           "yaw_deg": 122.704,
           "seed": 1193700883,
+          "option": 0,
           "start": "StartGame(\"minesweeper\", 1193700883)"
         },
         {
@@ -152,6 +159,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 75336563,
+          "option": 0,
           "start": "StartGame(\"pong\", 75336563)"
         },
         {
@@ -165,6 +173,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 736917169,
+          "option": 0,
           "start": "StartGame(\"football\", 736917169)"
         },
         {
@@ -178,6 +187,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1821893436,
+          "option": 0,
           "start": "StartGame(\"dodge_ball\", 1821893436)"
         }
       ]
@@ -198,6 +208,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 572993567,
+          "option": 0,
           "start": "StartGame(\"minesweeper\", 572993567)"
         },
         {
@@ -211,6 +222,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 920778370,
+          "option": 0,
           "start": "StartGame(\"pong\", 920778370)"
         },
         {
@@ -224,6 +236,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1068771651,
+          "option": 0,
           "start": "StartGame(\"dungeon\", 1068771651)"
         },
         {
@@ -237,6 +250,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1169413264,
+          "option": 0,
           "start": "StartGame(\"asteroids\", 1169413264)"
         },
         {
@@ -250,6 +264,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 830794694,
+          "option": 0,
           "start": "StartGame(\"football\", 830794694)"
         },
         {
@@ -263,6 +278,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 177470509,
+          "option": 0,
           "start": "StartGame(\"pacman\", 177470509)"
         },
         {
@@ -276,6 +292,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 323768790,
+          "option": 0,
           "start": "StartGame(\"sega_shooter\", 323768790)"
         },
         {
@@ -289,6 +306,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 2100323449,
+          "option": 0,
           "start": "StartGame(\"shadow_ninja\", 2100323449)"
         },
         {
@@ -302,6 +320,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1684489262,
+          "option": 0,
           "start": "StartGame(\"star_shooter\", 1684489262)"
         },
         {
@@ -315,6 +334,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 39287196,
+          "option": 0,
           "start": "StartGame(\"dodge_ball\", 39287196)"
         },
         {
@@ -328,6 +348,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 539766360,
+          "option": 0,
           "start": "StartGame(\"contra\", 539766360)"
         },
         {
@@ -341,6 +362,7 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1712571089,
+          "option": 0,
           "start": "StartGame(\"zelda\", 1712571089)"
         },
         {

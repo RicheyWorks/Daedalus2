@@ -16,6 +16,7 @@
         "desktop_minesweeper_pointer",
         "desktop_minesweeper_replay"
       ],
+      "option_count": 3,
       "capabilities": [
         "fresh_pad_replay",
         "options",
@@ -37,6 +38,7 @@
         "desktop_pong_spin",
         "desktop_pong_target_rally"
       ],
+      "option_count": 4,
       "capabilities": [
         "fresh_pad_replay",
         "options"
@@ -55,6 +57,7 @@
         "desktop_dungeon_trail",
         "desktop_maze"
       ],
+      "option_count": 2,
       "capabilities": [
         "options"
       ],
@@ -72,6 +75,7 @@
         "desktop_asteroids_voyage",
         "desktop_shooters"
       ],
+      "option_count": 3,
       "capabilities": [
         "fresh_pad_replay",
         "options",
@@ -90,6 +94,7 @@
         "desktop_football_practice",
         "desktop_sports"
       ],
+      "option_count": 2,
       "capabilities": [
         "fresh_pad_replay",
         "options"
@@ -110,6 +115,7 @@
         "desktop_pacman_pursuit",
         "desktop_pacman_tunnel"
       ],
+      "option_count": 2,
       "capabilities": [
         "fresh_pad_replay",
         "options"
@@ -129,6 +135,7 @@
         "desktop_shooter_terminal",
         "desktop_shooters"
       ],
+      "option_count": 2,
       "capabilities": [
         "fresh_pad_replay",
         "options",
@@ -149,6 +156,7 @@
         "desktop_ninja_terrace_course",
         "desktop_platformers"
       ],
+      "option_count": 2,
       "capabilities": [
         "fresh_pad_replay",
         "options",
@@ -167,6 +175,7 @@
         "desktop_star_save_pause",
         "desktop_star_terminal_pickup"
       ],
+      "option_count": 3,
       "capabilities": [
         "core_pause",
         "options",
@@ -188,6 +197,7 @@
         "desktop_dodge_tournament",
         "desktop_sports"
       ],
+      "option_count": 8,
       "capabilities": [
         "options"
       ],
@@ -204,6 +214,7 @@
         "desktop_contra_target_range",
         "desktop_platformers"
       ],
+      "option_count": 2,
       "capabilities": [
         "fresh_pad_replay",
         "options",
@@ -223,6 +234,7 @@
         "desktop_zelda_sword_assist",
         "desktop_zelda_terminal"
       ],
+      "option_count": 2,
       "capabilities": [
         "options"
       ],
