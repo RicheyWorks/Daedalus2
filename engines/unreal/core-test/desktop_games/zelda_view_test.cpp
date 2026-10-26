@@ -7,6 +7,7 @@
 namespace daedalus { namespace desktop {
 struct MazeTestAccess {
     static void Toast(ZeldaGame& G) { G.Message="+1 Trinket"; G.MessageTimer=40; }
+    static void DropKey(ZeldaGame& G) { G.AddPickup(400,240,ZeldaGame::PickupKind::Key); }
 };
 }}
 
@@ -220,10 +221,27 @@ void Toast() {
     }
     Check(Plate<Line && Line<F.Commands.size(),"a pickup message sits on a dark plate over the trees");
 }
+void Key() {
+    ZeldaGame G;
+    MazeTestAccess::DropKey(G);
+    Check(!G.GetCollectibles().empty(),"a dropped key is on the board");
+    if(G.GetCollectibles().empty()) return;
+    const auto& K=G.GetCollectibles().back();
+    const double Y=K.Y+std::sin(K.Bob)*3;
+    Frame F;G.Render(F);
+    std::size_t Rim=F.Commands.size(),Bow=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Circle || C.A.X!=K.X || C.A.Y!=Y) continue;
+        if(C.Size==8 && C.Tint.R==24 && C.Tint.G==28 && C.Tint.B==16) Rim=N;
+        if(C.Size==6 && C.Tint.R==255 && C.Tint.G==215 && C.Tint.B==0) Bow=N;
+    }
+    Check(Rim<Bow && Bow<F.Commands.size(),"the key keeps a dark rim on the road");
+}
 }
 
 int main() {
-    try { View();Rupee();Shot();Swing();Toast(); }
+    try { View();Rupee();Shot();Swing();Toast();Key(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
