@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #pragma once
+#include "DaedalusDesktopGloamLatchCore.h"
 #include "DaedalusDesktopTwinwakeCore.h"
 #include "DaedalusDesktopBeaconSweepCore.h"
 #include "DaedalusDesktopMazeCore.h"
@@ -25,7 +26,8 @@ inline const std::vector<Entry>& Catalog() {
         {"star_shooter","Star Shooter","Hold the starlanes through escalating waves. Move: WASD/arrows or left stick; J/X: shoot; P/Start: pause/save menu"},
         {"dodge_ball","Courtyard Clash","Lead three teammates through four courtyard rounds. Move: WASD/arrows or left stick; throw/catch/jump actions"},
         {"ironwake","Ironwake Advance","Run the ironwake route through platforms and enemy fire. Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/pad A: jump"},
-        {"lanternwild","Lanternwild Quest","Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword"}
+        {"lanternwild","Lanternwild Quest","Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword"},
+        {"gloam_latch","Gloam Latch","Darken every lamp. Arrows or stick: move; J/Space or pad A: flip a lamp and its neighbors"}
     };
     return Entries;
 }
@@ -43,6 +45,7 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="dodge_ball") return std::make_unique<DodgeBallGame>();
     if(Id=="ironwake") return std::make_unique<IronwakeGame>();
     if(Id=="lanternwild") return std::make_unique<LanternwildGame>();
+    if(Id=="gloam_latch") return std::make_unique<GloamLatchGame>();
     return nullptr;
 }
 
