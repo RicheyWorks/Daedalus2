@@ -160,7 +160,8 @@ public:
             Out.AddCircle(P.X,P.Y,16,Tint);
             int Number=1;
             for(int N=0;N<LanternCount;++N) if(Order[static_cast<std::size_t>(N)]==L) Number=N+1;
-            Out.AddText(P.X-5,P.Y-10,std::to_string(Number),Black,17);
+            const bool Dim=!Lit[static_cast<std::size_t>(L)] && !Next;
+            Out.AddText(P.X-5,P.Y-10,std::to_string(Number),Dim?White:Black,17);
             if(Lit[static_cast<std::size_t>(L)]) Out.AddText(P.X-14,P.Y+18,"LIT",White,12);
             else if(Next) Out.AddText(P.X-18,P.Y+18,"NEXT",White,12);
         }

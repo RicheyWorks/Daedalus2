@@ -39,6 +39,12 @@ bool ExitLabel(const Dungeon& G,std::uint8_t R,std::uint8_t Gv,std::uint8_t B) {
 void View() {
     Dungeon Fresh;
     Check(ExitLabel(Fresh,255,255,255),"sealed exit label is white on the gray door");
+    Frame Numbers;Fresh.Render(Numbers);int WhiteNumbers=0,BlackNumbers=0;
+    for(const auto& C:Numbers.Commands) if(C.Kind==Shape::Text && C.Label.size()==1 && C.Label[0]>='1' && C.Label[0]<='3') {
+        if(C.Tint.R==255 && C.Tint.G==255 && C.Tint.B==255) ++WhiteNumbers;
+        if(C.Tint.R==0 && C.Tint.G==0 && C.Tint.B==0) ++BlackNumbers;
+    }
+    Check(WhiteNumbers==2 && BlackNumbers==1,"dim lantern numbers are white and the next lantern number stays black");
     MarkOrder(Fresh,"fresh room");
     Input Right;Right.Right=true;Fresh.Step(Right);
     MarkOrder(Fresh,"moved room");
