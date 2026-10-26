@@ -32,8 +32,8 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `pong` | yes |  | yes |  |  |  | yes | yes |
 | `dungeon` | yes |  |  |  |  |  | yes |  |
 | `asteroids` | yes |  | yes | yes |  |  | yes |  |
-| `football` | yes |  | yes |  |  |  | yes |  |
-| `pacman` | yes |  | yes |  |  |  | yes |  |
+| `football` | yes |  | yes |  |  |  | yes | yes |
+| `pacman` | yes |  | yes |  |  |  | yes | yes |
 | `sega_shooter` | yes |  | yes | yes |  |  | yes |  |
 | `shadow_ninja` | yes |  | yes | yes |  |  | yes |  |
 | `star_shooter` | yes |  |  |  |  | yes | yes | yes |

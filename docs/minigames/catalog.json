@@ -104,7 +104,8 @@
       "capabilities": [
         "focus_freeze",
         "fresh_pad_replay",
-        "options"
+        "options",
+        "save_restore"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -126,7 +127,8 @@
       "capabilities": [
         "focus_freeze",
         "fresh_pad_replay",
-        "options"
+        "options",
+        "save_restore"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },

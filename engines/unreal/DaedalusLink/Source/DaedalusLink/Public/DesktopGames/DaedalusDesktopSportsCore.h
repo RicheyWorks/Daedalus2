@@ -2,6 +2,9 @@
 #pragma once
 #include "DaedalusDesktopGameTypes.h"
 #include <array>
+#include <cmath>
+#include <sstream>
+#include <string>
 
 namespace daedalus { namespace desktop {
 namespace sports_detail {
@@ -68,6 +71,26 @@ public:
         Option=Value;Reset(Seed);return true;
     }
     int GetOption() const override { return Option; }
+    // Checkpoint save: mode, scores and whole seconds left. Restore re-racks the
+    // kick-off (ball and players at their spots). Title and finished runs are not saved.
+    std::string SaveState() const override {
+        if(Data.Mode!=Phase::Playing) return {};
+        return "DFS1 "+std::to_string(Option)+" "+std::to_string(Data.HumanScore)+" "+std::to_string(Data.CpuScore)
+            +" "+std::to_string(Option==1?0:static_cast<int>(std::ceil(Data.Seconds)));
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mode=-1,Human=-1,Cpu=-1,Secs=-1;
+        if(!(In>>Version>>Mode>>Human>>Cpu>>Secs) || Version!="DFS1" || (In>>Extra)) return false;
+        if(Mode==0 && (Human<0 || Cpu<0 || Human>999 || Cpu>999 || Secs<1 || Secs>90)) return false;
+        if(Mode==1 && (Human<0 || Human>2 || Cpu!=0 || Secs!=0)) return false;
+        if(Mode!=0 && Mode!=1) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);
+        if(Option==1) RackPractice(); else Data.Mode=Phase::Playing;
+        Data.HumanScore=static_cast<int>(Human);Data.CpuScore=static_cast<int>(Cpu);
+        if(Option==0) Data.Seconds=static_cast<double>(Secs);
+        return true;
+    }
     static void MovePlayer(Player& P,const Input& I,const Ball& B) {
         // Mirror the existing Slate hat merge for direct portable/Blueprint input.
         // Right/down precedence and the original stick override stay unchanged.
