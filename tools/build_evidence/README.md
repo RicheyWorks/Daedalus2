@@ -89,7 +89,7 @@ cooperative single-writer protocol, not protection against a hostile writer or
 a whole-machine power-loss guarantee. Do not bypass inspection by consuming a
 staging receipt.
 
-Limits are fixed: 64 KiB request, 64 roots, 1,024 files, 2,048 inventoried entries,
+Limits are fixed: 64 KiB request, JSON depth 64, 64 roots, 1,024 files, 2,048 inventoried entries,
 depth 16, 8 MiB per input, 32 MiB total input, 16 MiB artifact, 1 MiB retained log,
 64 argv items/16,384 total characters, and 1–60 seconds requested child timeout.
 Reads use 64 KiB chunks. Termination/reaping and pipe drain use bounded waits of
@@ -99,6 +99,12 @@ after the bounded drain is an incomplete observation, never success. These
 limits do not cap the trusted command's CPU, memory, disk writes or descendants,
 and file I/O is not a hard real-time guarantee. Tests use serial disposable
 fixtures only; no native integration is exercised.
+
+Path and handle metadata are each checked for stability using their own before
+and after observations, including `ctime_ns`. Cross-API identity compares device,
+inode, size, mtime, mode and link count; Windows Python 3.12 can expose different
+ctime meanings through those two APIs. Content hashes and both stability checks
+remain required.
 
 Equal endpoint content/metadata does not prove continuous immutability during
 execution. Declared coverage does not discover compiler dependencies. Commit and

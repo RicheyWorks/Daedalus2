@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import time
 from types import SimpleNamespace
 import unittest
 from unittest import mock
@@ -501,11 +502,36 @@ class CaptureTests(unittest.TestCase):
 
     def test_real_child_interruption_is_retained_and_direct_child_reaped(self):
         path, workspace, output, _, _ = self.case("import time; time.sleep(3)")
-        with mock.patch.object(builder.time, "sleep", side_effect=KeyboardInterrupt):
+        # Patch only this wrapper's poll clock, not subprocess's cleanup clock.
+        clock = SimpleNamespace(monotonic=time.monotonic, sleep=mock.Mock(side_effect=KeyboardInterrupt))
+        with mock.patch.object(builder, "time", clock):
             result = builder.capture(path, workspace, output)
         self.failed(output, result, "command_failed")
         self.assertEqual(result["process"]["status"], "interrupted")
         self.assertTrue(result["process"]["child_reaped"])
+
+    def test_path_and_handle_ctime_are_checked_within_their_own_api(self):
+        _, workspace, _, _, _ = self.case()
+        path = workspace / "Source/input.txt"
+        original = builder.os.fstat
+        def stat_with_other_ctime(fd):
+            row = builder._identity(original(fd))
+            row["st_ctime_ns"] += 17
+            return SimpleNamespace(**row)
+        with mock.patch.object(builder.os, "fstat", side_effect=stat_with_other_ctime):
+            pin, _ = builder._file(path, builder.MAX_FILE)
+        self.assertEqual(pin["sha256"], sha256(path.read_bytes()))
+        counter = 0
+        def changing_handle_ctime(fd):
+            nonlocal counter
+            counter += 1
+            row = builder._identity(original(fd))
+            row["st_ctime_ns"] += counter
+            return SimpleNamespace(**row)
+        with mock.patch.object(builder.os, "fstat", side_effect=changing_handle_ctime):
+            with self.assertRaises(ContractError) as error:
+                builder._file(path, builder.MAX_FILE)
+        self.assertEqual(error.exception.code, "input_race")
 
     def test_combined_log_preserves_binary_bytes(self):
         path, workspace, output, _, _ = self.case(BUILD + "; import os; os.write(1,b'\\x00\\xff'); os.write(2,b'\\xfe\\x00')")

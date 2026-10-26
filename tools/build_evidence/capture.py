@@ -62,6 +62,18 @@ def _text(value, label, maximum=4096):
 
 
 def validate_request(value):
+    stack, nodes = [(value, 0)], 0
+    while stack:
+        item, depth = stack.pop()
+        nodes += 1
+        if depth > 64 or nodes > MAX_REQUEST:
+            _fail("request_json", "Request exceeds JSON depth/node limits")
+        if isinstance(item, dict):
+            if any(not isinstance(key, str) for key in item):
+                _fail("request_json", "JSON object keys must be strings")
+            stack.extend((child, depth + 1) for child in item.values())
+        elif isinstance(item, list):
+            stack.extend((child, depth + 1) for child in item)
     try:
         encoded = packet.canonical(value)
     except (TypeError, ValueError, UnicodeError, RecursionError) as exc:
@@ -134,7 +146,13 @@ def _utc():
 
 
 def _identity(value):
-    return {key: getattr(value, key) for key in ("st_dev", "st_ino", "st_size", "st_mtime_ns", "st_ctime_ns")}
+    return {key: getattr(value, key) for key in ("st_dev", "st_ino", "st_size", "st_mtime_ns", "st_ctime_ns", "st_mode", "st_nlink")}
+
+
+def _binding_identity(value):
+    # Windows CPython 3.12.10 uses creation time for path ctime and change
+    # time for handle ctime. Preserve/check each API's own ctime separately.
+    return {key: item for key, item in _identity(value).items() if key != "st_ctime_ns"}
 
 
 def _regular(path):
@@ -155,7 +173,8 @@ def _file(path, limit, copy_to=None):
     target = copy_to.open("xb") if copy_to is not None else None
     try:
         with path.open("rb") as stream:
-            if _identity(os.fstat(stream.fileno())) != _identity(before):
+            handle_before = os.fstat(stream.fileno())
+            if _binding_identity(handle_before) != _binding_identity(before):
                 _fail("input_race", "File identity changed before read: " + str(path))
             while True:
                 raw = stream.read(min(65536, limit - size + 1))
@@ -167,7 +186,7 @@ def _file(path, limit, copy_to=None):
                 digest.update(raw)
                 if target is not None:
                     target.write(raw)
-            if _identity(os.fstat(stream.fileno())) != _identity(before):
+            if _identity(os.fstat(stream.fileno())) != _identity(handle_before):
                 _fail("input_race", "File changed during read: " + str(path))
         if _identity(_regular(path)) != _identity(before):
             _fail("input_race", "File identity changed after read: " + str(path))
@@ -205,11 +224,15 @@ def _scan(workspace, request, copies=None):
         if is_dir:
             if copies is not None:
                 packet._path(copies, name).mkdir(parents=True, exist_ok=True)
-            children = []
+            children, child_names = [], set()
             with os.scandir(path) as iterator:
                 for child in iterator:
                     if entries + len(children) >= MAX_ENTRIES:
                         _fail("input_limit", "Declared closure exceeds entry limit")
+                    packet.relative(name + "/" + child.name)
+                    if child.name.casefold() in child_names:
+                        _fail("case_collision", "Input directory entries collide by case: " + name)
+                    child_names.add(child.name.casefold())
                     children.append(child.name)
             for child in sorted(children):
                 visit(name + "/" + child, category, depth + 1)
@@ -298,7 +321,7 @@ def _run(command, workspace, output, timeout):
                     process.kill()
                 observed["exit_code"] = process.wait(timeout=2)
                 observed["child_reaped"] = True
-            except (OSError, subprocess.TimeoutExpired):
+            except (OSError, subprocess.TimeoutExpired, KeyboardInterrupt):
                 observed["status"] = "child_uncertain"
             if reader is not None:
                 reader.join(timeout=min(2, max(0.01, timeout - (time.monotonic() - started))))

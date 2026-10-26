@@ -33,5 +33,5 @@
     "text": {"type": "string", "minLength": 1, "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f]+$"},
     "path": {"type": "string", "minLength": 1, "maxLength": 220, "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*$"}
   },
-  "$comment": "The stdlib validator additionally requires finite UTF-8 JSON, max64KiB raw/canonical request, nonzero commit, portable nonreserved path components, distinct nonoverlapping case-consistent roots, artifact separation, nonblank strings and max16384 argv characters. Supplied commit/toolchain are declarations, not verified facts. No caller-supplied outcome or timestamps."
+  "$comment": "The stdlib validator additionally requires finite UTF-8 JSON with maxdepth64, max64KiB raw/canonical request, nonzero commit, portable nonreserved path components, distinct nonoverlapping case-consistent roots, artifact separation, nonblank strings and max16384 argv characters. Supplied commit/toolchain are declarations, not verified facts. No caller-supplied outcome or timestamps."
 }
