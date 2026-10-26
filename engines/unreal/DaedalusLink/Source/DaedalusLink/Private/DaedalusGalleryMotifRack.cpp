@@ -290,10 +290,10 @@ void ADaedalusGalleryMotifRack::UnbindStudy(ADaedalusGalleryMotifStudy* Study)
 void ADaedalusGalleryMotifRack::ReleaseStudies()
 {
     if (auto* Original=BoundStudio.Get()) Original->OnEndPlay.RemoveDynamic(this,&ADaedalusGalleryMotifRack::StudioEnded);
-    auto Children=Studies; if (PendingStudy && !Children.Contains(PendingStudy)) Children.Add(PendingStudy);
+    auto StudyActors=Studies; if (PendingStudy && !StudyActors.Contains(PendingStudy)) StudyActors.Add(PendingStudy);
     Studies.Reset(); PendingStudy=nullptr; PreparedIds.Reset(); PreparedTransforms.Reset(); BoundStudio.Reset(); BoundStudioIdentity=nullptr;
-    for (const auto& Study:Children) UnbindStudy(Study);
-    for (const auto& Study:Children) if (IsValid(Study) && !Study->IsActorBeingDestroyed() && Study->GetOwner()==this) Study->Destroy();
+    for (const auto& Study:StudyActors) UnbindStudy(Study);
+    for (const auto& Study:StudyActors) if (IsValid(Study) && !Study->IsActorBeingDestroyed() && Study->GetOwner()==this) Study->Destroy();
 }
 void ADaedalusGalleryMotifRack::EndPlay(const EEndPlayReason::Type Reason)
 { bEnding=true; ++Epoch; ReleaseStudies(); OnViewChanged.Broadcast(this); Super::EndPlay(Reason); }
