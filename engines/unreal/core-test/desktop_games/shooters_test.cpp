@@ -440,7 +440,7 @@ void SerializedHostContract() {
     Check(Receiver.RestoreState("DGS1 0 1 28 1 0 0 0 0 0",10),"serialized valid lower boundaries");
     Check(Receiver.RestoreState("DGS1 1000000000000 1000000 135 99 1 1 1 2 1",10),"serialized valid upper boundaries");
     AsteroidsGame Asteroids;Game& NoPersistence=Asteroids;NoPersistence.Reset(10);
-    Check(NoPersistence.SaveState().empty() && !NoPersistence.RestoreState(Payload,10),"nonpersisted family rejects Star payload");
+    Check(NoPersistence.SaveState().rfind("DAS1 ",0)==0 && !NoPersistence.RestoreState(Payload,10),"asteroids saves its own DAS1 checkpoint and rejects Star payload");
     for (int Option=0;Option<=2;++Option) {
         Check(Receiver.SetOption(Option,84) && Receiver.GetOption()==Option,"host difficulty selection accepts source mode");
         const auto Mode=static_cast<StarGame::Difficulty>(Option);const auto Configuration=StarGame::Config(Mode);

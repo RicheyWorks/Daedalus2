@@ -14,7 +14,7 @@ batched rebuild under the editor custodian.
 | `asteroids` | Driftstone Patrol | 4 |
 | `football` | Football / Soccer | 3 |
 | `pacman` | Glowtrail Chase | 7 |
-| `sega_shooter` | Riftwing Vanguard | 5 |
+| `sega_shooter` | Riftwing Vanguard | 6 |
 | `shadow_ninja` | Shadow Ninja | 5 |
 | `star_shooter` | Star Shooter | 3 |
 | `dodge_ball` | Courtyard Clash | 6 |
@@ -31,10 +31,10 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `minesweeper` | yes |  | yes |  | yes |  | yes |  |  | yes |
 | `pong` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `dungeon` | yes |  |  |  |  |  | yes | yes | yes | yes |
-| `asteroids` | yes |  | yes | yes |  |  | yes |  |  |  |
+| `asteroids` | yes |  | yes | yes |  |  | yes |  |  | yes |
 | `football` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `pacman` | yes |  | yes |  |  |  | yes |  |  | yes |
-| `sega_shooter` | yes |  | yes | yes |  |  | yes |  |  |  |
+| `sega_shooter` | yes |  | yes | yes |  |  | yes |  |  | yes |
 | `shadow_ninja` | yes |  | yes | yes |  |  | yes |  |  |  |
 | `star_shooter` | yes |  |  |  |  | yes | yes |  |  | yes |
 | `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes |  |

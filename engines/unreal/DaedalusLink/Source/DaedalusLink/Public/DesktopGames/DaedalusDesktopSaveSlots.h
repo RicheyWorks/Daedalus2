@@ -12,7 +12,7 @@
 namespace daedalus { namespace desktop {
 enum class SaveStyle { Manual, SourceMenu };
 struct SaveSlot { const char* Id; const char* File; SaveStyle Style; };
-inline constexpr std::array<SaveSlot,7> SaveSlots{{
+inline constexpr std::array<SaveSlot,9> SaveSlots{{
     {"minesweeper","minesweeper.dgs",SaveStyle::Manual},
     {"star_shooter","star_shooter.dgs",SaveStyle::SourceMenu},
     {"pong","pong.dgs",SaveStyle::Manual},
@@ -20,6 +20,8 @@ inline constexpr std::array<SaveSlot,7> SaveSlots{{
     {"pacman","pacman.dgs",SaveStyle::Manual},
     {"dungeon","dungeon.dgs",SaveStyle::Manual},
     {"zelda","zelda.dgs",SaveStyle::Manual},
+    {"asteroids","asteroids.dgs",SaveStyle::Manual},
+    {"sega_shooter","sega_shooter.dgs",SaveStyle::Manual},
 }};
 inline const SaveSlot* FindSaveSlot(const std::string& Id) {
     for(const SaveSlot& Slot:SaveSlots) if(Id==Slot.Id) return &Slot;
