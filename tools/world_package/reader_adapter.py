@@ -17,6 +17,8 @@ import stat
 import struct
 import zipfile
 
+from .glb_payload import PayloadError, validate_glb
+
 MAX_PACKAGE_BYTES = 64 * 1024 * 1024
 MAX_EXPANDED_BYTES = 256 * 1024 * 1024
 MAX_MEMBERS = 4096
@@ -154,19 +156,36 @@ def read_snapshot(zip_path):
                 parts = name.split("/")
                 if any("/".join(parts[:count]) in seen for count in range(1, len(parts))):
                     raise PlanError("ZIP member file/directory prefix collision: " + name)
-            manifest = strict_json(archive.read("manifest.json").decode("utf-8"))
-            glb = archive.read("world.glb")
-            if len(glb) < 20:
-                raise PlanError("world.glb is too short")
-            json_length = struct.unpack_from("<I", glb, 12)[0]
-            if json_length % 4 or json_length > len(glb) - 20:
-                raise PlanError("world.glb JSON chunk length is invalid")
-            gltf = strict_json(glb[20:20 + json_length].decode("utf-8"))
-            if not isinstance(manifest, dict) or not isinstance(gltf, dict):
-                raise PlanError("manifest and glTF JSON must be objects")
-            if not isinstance(gltf.get("nodes", []), list):
-                raise PlanError("glTF nodes must be an array")
+            def read_member(name):
+                try:
+                    # Reading to EOF evaluates CRC and decompressor errors;
+                    # each member is already covered by the expansion budget.
+                    return archive.read(name)
+                except Exception as error:
+                    raise PlanError(name + ": cannot read ZIP member: " + str(error)) from error
+
+            manifest = strict_json(read_member("manifest.json").decode("utf-8"))
+            if not isinstance(manifest, dict):
+                raise PlanError("manifest must be an object")
             reader = _reader()
+            names = archive.namelist()
+            payloads = ["world.glb"]
+            assets = manifest.get("assets", [])
+            if not isinstance(assets, list):
+                raise PlanError("manifest assets must be an array")
+            for asset in assets:
+                if not isinstance(asset, dict):
+                    raise PlanError("each asset must be an object")
+                name = member_path(asset.get("file"))
+                if name not in names or not name.startswith("assets/") or not name.endswith(".glb"):
+                    raise PlanError(name + ": asset.file must name an existing assets/*.glb member")
+                if name not in payloads:
+                    payloads.append(name)
+            for name in payloads:
+                try:
+                    validate_glb(read_member(name), name, reader["glb_summary"], strict_json)
+                except PayloadError as error:
+                    raise PlanError(str(error)) from error
             try:
                 checked, _, names = reader["read_package"](io.BytesIO(data))
             except reader["PackageError"] as error:
