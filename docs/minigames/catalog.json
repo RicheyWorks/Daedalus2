@@ -87,6 +87,7 @@
         "focus_freeze",
         "fresh_pad_replay",
         "options",
+        "save_restore",
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
@@ -145,6 +146,7 @@
         "desktop_sega_boss_rehearsal",
         "desktop_sega_enemy_health",
         "desktop_sega_terminal_pickup",
+        "desktop_shooter_saves",
         "desktop_shooter_terminal",
         "desktop_shooters"
       ],
@@ -153,6 +155,7 @@
         "focus_freeze",
         "fresh_pad_replay",
         "options",
+        "save_restore",
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"

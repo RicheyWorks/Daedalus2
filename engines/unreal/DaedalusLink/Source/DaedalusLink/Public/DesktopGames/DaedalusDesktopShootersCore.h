@@ -124,6 +124,23 @@ public:
         Option=Value;Reset(Seed);return true;
     }
     int GetOption() const override { return Option; }
+    // Checkpoint save: mode, score, lives and level. Restore deals a fresh field for
+    // that level with full ship spacing. Flight practice (option 2) and finished runs are not saved.
+    std::string SaveState() const override {
+        if(Over || Won || Option==2) return {};
+        return "DAS1 "+std::to_string(Option)+" "+std::to_string(Score)+" "+std::to_string(Lives)+" "+std::to_string(Level);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mode=-1,Points=-1,Left=-1,Stage=-1;
+        if(!(In>>Version>>Mode>>Points>>Left>>Stage) || Version!="DAS1" || (In>>Extra)) return false;
+        if(Mode<0 || Mode>1 || Points<0 || Points>1000000000000LL || Left<1 || Left>3 || Stage<1
+            || Stage>(Mode==1?3:1000000)) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);
+        Score=Points;Lives=static_cast<int>(Left);Level=static_cast<int>(Stage);
+        if(Level>1) {Rocks.clear();CreateRocks(std::min(4+Level,32));RespawnGrace=60;}
+        return true;
+    }
     bool SourceControllerButton(int Button) override {
         if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
         return false;
@@ -375,6 +392,21 @@ public:
         Option=Value;Reset(Seed);return true;
     }
     int GetOption() const override { return Option; }
+    // Checkpoint save: mode, score, lives and shot power. Restore starts a fresh
+    // sortie (or a fresh boss rehearsal in option 1). Finished runs are not saved.
+    std::string SaveState() const override {
+        if(Over || Won) return {};
+        return "DSS1 "+std::to_string(Option)+" "+std::to_string(Score)+" "+std::to_string(Pilot.Lives)+" "+std::to_string(Pilot.Power);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mode=-1,Points=-1,Left=-1,Shot=-1;
+        if(!(In>>Version>>Mode>>Points>>Left>>Shot) || Version!="DSS1" || (In>>Extra)) return false;
+        if(Mode<0 || Mode>1 || Points<0 || Points>1000000000000LL || Left<1 || Left>5 || Shot<1 || Shot>3) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);
+        Score=Points;Pilot.Lives=static_cast<int>(Left);Pilot.Power=static_cast<int>(Shot);
+        return true;
+    }
     bool SourceControllerButton(int Button) override {
         if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
         return false;
