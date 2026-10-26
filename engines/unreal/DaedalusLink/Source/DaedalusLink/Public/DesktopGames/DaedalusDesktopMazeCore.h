@@ -137,7 +137,7 @@ public:
         for(int Y=0;Y<Rows;++Y) for(int X=0;X<Columns;++X)
             if(IsWall(X,Y,Option)) {
                 Out.AddRect(X*Tile,Y*Tile,Tile,Tile,Option==1?Color{110,83,55,255}:Color{100,100,100,255});
-                if(Option==1) Out.AddRect(X*Tile,Y*Tile,Tile,6,{160,125,72,255});
+                Out.AddRect(X*Tile,Y*Tile,Tile,6,Option==1?Color{160,125,72,255}:Color{176,176,176,255});
             }
         if(TrailEnabled && !Complete) {
             const auto Path=TrailPath();

@@ -36,9 +36,21 @@ bool ExitLabel(const Dungeon& G,std::uint8_t R,std::uint8_t Gv,std::uint8_t B) {
         if(C.Kind==Shape::Text && C.Label=="EXIT" && C.Tint.R==R && C.Tint.G==Gv && C.Tint.B==B) return true;
     return false;
 }
+bool WallCap(const Dungeon& G,bool Light) {
+    Frame F;G.Render(F);
+    std::size_t Full=F.Commands.size(),Cap=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Rectangle || C.A.X!=0 || C.A.Y!=0) continue;
+        if(C.B.X==Dungeon::Tile && C.B.Y==Dungeon::Tile && C.Tint.R==100 && C.Tint.G==100 && C.Tint.B==100) Full=N;
+        if(C.B.X==Dungeon::Tile && C.B.Y==6 && C.Tint.R==176 && C.Tint.G==176 && C.Tint.B==176) Cap=N;
+    }
+    return Light ? (Full<Cap && Cap<F.Commands.size()) : Cap==F.Commands.size();
+}
 void View() {
     Dungeon Fresh;
     Check(ExitLabel(Fresh,255,255,255),"sealed exit label is white on the gray door");
+    Check(WallCap(Fresh,true),"original room walls keep a light top edge");
     Frame Numbers;Fresh.Render(Numbers);int WhiteNumbers=0,BlackNumbers=0;
     for(const auto& C:Numbers.Commands) if(C.Kind==Shape::Text && C.Label.size()==1 && C.Label[0]>='1' && C.Label[0]<='3') {
         if(C.Tint.R==255 && C.Tint.G==255 && C.Tint.B==255) ++WhiteNumbers;
@@ -50,6 +62,7 @@ void View() {
     MarkOrder(Fresh,"moved room");
     Dungeon Switch;
     Check(Switch.SetOption(1,730),"switchback option");
+    Check(WallCap(Switch,false),"switchback keeps its brown cap instead of the gray edge");
     MarkOrder(Switch,"switchback room");
 }
 }
