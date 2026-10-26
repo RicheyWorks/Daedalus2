@@ -951,7 +951,10 @@ private:
             F.AddCircle(E.X,E.Y-4,5,{220,220,220,255});
         }
         if(E.HitFlash>0) { F.AddLine(E.X-14,E.Y-16,E.X+14,E.Y-16,White,2); F.AddLine(E.X-14,E.Y+16,E.X+14,E.Y+16,White,2); }
-        if(E.Kind==EnemyKind::Moblin) F.AddText(E.X-15,E.Y-33,"HP "+std::to_string(E.Health),White,12);
+        if(E.Kind==EnemyKind::Moblin) {
+            F.AddRect(E.X-18,E.Y-36,40,16,{8,36,16,255});
+            F.AddText(E.X-15,E.Y-33,"HP "+std::to_string(E.Health),White,12);
+        }
     }
     static void DrawPlayer(Frame& F,const Player& P) {
         const Color Tunic{50,150,50,255}, Gold{255,215,0,255}, Steel{200,200,220,255};

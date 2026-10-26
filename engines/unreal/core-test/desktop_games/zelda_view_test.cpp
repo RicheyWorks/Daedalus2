@@ -161,6 +161,14 @@ void View() {
             if(C.Size==7 && C.Tint.R==200 && C.Tint.G==180 && C.Tint.B==150) Face=N;
         }
         Check(FaceRim<Face && Face<F.Commands.size(),"the moblin face keeps a dark rim on the road");
+        std::size_t HpPlate=F.Commands.size(),Hp=F.Commands.size();
+        for(std::size_t N=0;N<F.Commands.size();++N) {
+            const auto& C=F.Commands[N];
+            if(C.Kind==Shape::Rectangle && C.A.X==Moblin->X-18 && C.A.Y==Moblin->Y-36 && C.B.X==40 && C.B.Y==16
+                && C.Tint.R==8 && C.Tint.G==36 && C.Tint.B==16) HpPlate=N;
+            if(C.Kind==Shape::Text && C.Label.rfind("HP ",0)==0 && C.A.X==Moblin->X-15) Hp=N;
+        }
+        Check(HpPlate<Hp && Hp<F.Commands.size(),"the moblin health line sits on a dark plate");
     }
     const ZeldaGame::Enemy* Octo=nullptr;
     for(const auto& E:G.GetEnemies()) if(E.Kind==ZeldaGame::EnemyKind::Octorok && E.Alive && E.X>600) Octo=&E;
