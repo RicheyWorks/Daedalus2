@@ -2,14 +2,21 @@
 // On clean agent stop during viewing autopilot, ask for the next polish slice
 // so the user does not have to type "next".
 
-import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 
-const HOOK_DIR = dirname(fileURLToPath(import.meta.url));
-const REPO = join(HOOK_DIR, "..", "..");
-const STATE_FILE = join(HOOK_DIR, "state", "viewing-autopilot.json");
+const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+function git(args) {
+  try {
+    return execSync("git " + args, { cwd: REPO_ROOT, encoding: "utf8", timeout: 3000, stdio: ["ignore", "pipe", "ignore"] }).trim();
+  } catch {
+    return "";
+  }
+}
+
+const STATE_FILE = join(dirname(fileURLToPath(import.meta.url)), "state", "viewing-autopilot.json");
 
 function readStdin() {
   return new Promise((resolve) => {
@@ -43,31 +50,6 @@ function save(state) {
   writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
 }
 
-function git(args) {
-  try {
-    return execFileSync("git", args, {
-      cwd: REPO,
-      encoding: "utf8",
-      timeout: 4000,
-      windowsHide: true,
-    }).trim();
-  } catch {
-    return null;
-  }
-}
-
-function headAndDirty() {
-  const head = git(["rev-parse", "HEAD"]);
-  const porcelain = git([
-    "status", "--porcelain", "--untracked-files=normal",
-    "--", ".", ":!cue-build", ":!desktop-build", ":!.cursor/hooks", ":!.cursor/rules",
-  ]);
-  const dirty = porcelain == null
-    ? false
-    : porcelain.split(/\r?\n/).some((line) => line.trim().length > 0);
-  return { head, dirty };
-}
-
 const raw = await readStdin();
 const input = asObject(raw);
 const name = String(input.hook_event_name || input.event || "").toLowerCase();
@@ -99,16 +81,14 @@ if (name.includes("stop") && !name.includes("subagent")) {
     console.log("{}");
     process.exit(0);
   }
-  const { head, dirty } = headAndDirty();
-  const headMoved = Boolean(state.lastHead && head && state.lastHead !== head);
-  if (state.lastHead && !headMoved && !dirty) {
-    state.reason = "stopped: no new commit or uncommitted work";
-    state.updatedAt = Date.now();
-    save(state);
+  // Quiet unless something new was committed or there is uncommitted work.
+  const head = git("rev-parse HEAD");
+  const dirty = git("status --porcelain --untracked-files=no").length > 0;
+  if (!dirty && head && head === state.lastHead) {
     console.log("{}");
     process.exit(0);
   }
-  state.lastHead = head || state.lastHead || "";
+  state.lastHead = head;
   state.lastContinueAt = Date.now();
   save(state);
   console.log(JSON.stringify({
