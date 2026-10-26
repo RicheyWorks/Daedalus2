@@ -23,6 +23,27 @@ batched rebuild under the editor custodian.
 | `gloam_latch` | Gloam Latch | 1 |
 | `reedbeat` | Reedbeat | 1 |
 
+## How to play
+
+One original line per game, read from `HowToLine()`.
+
+| id | line |
+|---|---|
+| `beacon_sweep` | HOW Move the mark, then reveal or flag a cell. |
+| `twinwake` | HOW Move the paddle to meet the ball. |
+| `dungeon` | HOW Walk to the NEXT lantern and light it. |
+| `driftstone` | HOW Turn, thrust, and clear the rocks. |
+| `football` | HOW Move the player and kick the ball into the goal. |
+| `glowtrail` | HOW Gather the trail and stay away from the pursuers. |
+| `riftwing` | HOW Hold fire and collect the pickups. |
+| `emberstep` | HOW Jump the terraces and face the sentinel. |
+| `star_shooter` | HOW Hold the lanes and clear each wave. |
+| `dodge_ball` | HOW Lead the team, then throw or catch the ball. |
+| `ironwake` | HOW Run the route, shoot, and jump the gaps. |
+| `lanternwild` | HOW Explore, swing once, and recover the key. |
+| `gloam_latch` | HOW Flip a lamp and its neighbors until the board is dark. |
+| `reedbeat` | HOW Strike while the reed is bright. |
+
 ## Capabilities
 
 Read from each core's overrides, plus behavior proven by a portable test that declares

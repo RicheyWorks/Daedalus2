@@ -226,6 +226,7 @@ public:
         if(Option==2) return "CUE Dock";
         return IsFireReady()?"CUE Fire":"CUE Wait";
     }
+    std::string HowToLine() const override { return "HOW Turn, thrust, and clear the rocks."; }
     void Render(Frame& F) const override {
         using namespace shooter_detail;
         F.Clear(); for(const auto& S:Stars) F.AddCircle(S.X,S.Y,1,White);
@@ -262,6 +263,7 @@ public:
         F.AddText(30,42,"ROCKS: "+std::to_string(GetRockCount())+"   UFOs: "+std::to_string(GetUfoCount()),White,16);
         F.AddText(30,65,"FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
         F.AddText(30,88,HintLine(),{255,236,180,255},14);
+        F.AddText(30,108,HowToLine(),{255,236,180,255},13);
         F.AddText(560,88,ActionCue(),{120,225,255,255},16);
         if(!Over && !Won) {
             if(Player.Braking) F.AddText(420,42,"BRAKING",LightBlue,17);
@@ -299,6 +301,7 @@ private:
         F.AddText(610,15,"DOCKED "+std::to_string(FlightStage)+"/3",Gold,22);
         F.AddText(30,52,Player.Braking?(Player.Vx==0 && Player.Vy==0?"STOPPED":"BRAKING"):"Find the next gold ring",LightBlue,17);
         F.AddText(30,80,HintLine(),{255,236,180,255},14);
+        F.AddText(30,100,HowToLine(),{255,236,180,255},13);
         F.AddText(560,80,ActionCue(),{120,225,255,255},16);
         F.AddText(30,548,"Stop under braking inside the GOLD ring. Edges wrap.",White,15);
         F.AddText(30,572,"Left/Right, stick or hat: turn | Up: thrust | K/LT: brake",White,15);
@@ -484,6 +487,7 @@ public:
         if(Over||Won) return "CUE Retry";
         return IsFireReady()?"CUE Fire":"CUE Wait";
     }
+    std::string HowToLine() const override { return "HOW Hold fire and collect the pickups."; }
     void Render(Frame& F) const override {
         using namespace shooter_detail;
         F.Clear(800,600,{0,0,40,255}); for(const auto& S:Stars) F.AddCircle(S.X,S.Y,S.Speed,White);
@@ -515,6 +519,7 @@ public:
         F.AddText(30,67,"FIRE: "+FireNote()+"   SHOT: "+ShotName(),IsFireReady()?Green:Yellow,15);
         F.AddText(30,89,"SPEED: "+std::to_string(static_cast<int>(Pilot.Speed))+"/8   "+ProtectionNote(),Cyan,15);
         F.AddText(30,112,HintLine(),{255,236,180,255},14);
+        F.AddText(30,134,HowToLine(),{255,236,180,255},13);
         F.AddText(560,112,ActionCue(),{120,225,255,255},16);
         F.AddText(30,548,"POWER +1 (max 3)   SPEED +1 (max 8)   LIFE +1 (max 5)",White,15);
         F.AddText(30,572,"WASD/arrows, D-pad or stick: move   Space/J/Z/pad: hold fire",White,15);
@@ -847,6 +852,7 @@ public:
         shooter_detail::Remove(Bullets,[](const Bullet& B){return !B.Alive;});
         shooter_detail::Remove(Powerups,[](const Powerup& P){return !P.Alive;});
     }
+    std::string HowToLine() const override { return "HOW Hold the lanes and clear each wave."; }
     void Render(Frame& F) const override {
         using namespace shooter_detail;
         F.Clear();for(const auto& S:Stars) F.AddCircle(S.X,S.Y,S.Speed<1.5?1:2,White);
@@ -869,6 +875,7 @@ public:
         F.AddText(15,88,std::string(Pilot.Triple?"TRIPLE":"TWIN")+" SHOT   FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
         F.AddText(420,88,ProtectionNote(),Cyan,15);
         F.AddText(15,110,BossNote(),BossActive?BossActor.Tint:Yellow,15);
+        F.AddText(15,132,HowToLine(),{255,236,180,255},13);
         F.AddText(15,548,"Move: WASD/arrows, D-pad or stick   Hold Space/J/X/RT: fire   P/Start: pause",White,14);
         F.AddText(15,572,DifficultyName(Mode),Mode==Difficulty::Easy?Green:(Mode==Difficulty::Medium?Yellow:Red),17);
         double BadgeX=135;

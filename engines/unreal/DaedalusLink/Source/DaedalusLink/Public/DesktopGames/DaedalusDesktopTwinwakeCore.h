@@ -155,6 +155,7 @@ public:
         if(S.ServeFrames>0) return "CUE Serve";
         return "CUE Spin";
     }
+    std::string HowToLine() const override { return "HOW Move the paddle to meet the ball."; }
     void Render(Frame& Out) const override {
         if(Practice()) {RenderPractice(Out);return;}
         if(QuickMatch()) {RenderQuickMatch(Out);return;}
@@ -169,6 +170,7 @@ public:
             Out.AddText(250,70,"Rally "+std::to_string(S.Rally)+"   Best "+std::to_string(S.BestRally),White,18);
             Out.AddText(250,98,"Move paddle at impact to add spin",White,14);
             Out.AddText(250,122,HintLine(),{255,236,180,255},14);
+            Out.AddText(250,146,HowToLine(),{255,236,180,255},14);
             Out.AddText(560,122,ActionCue(),{120,225,255,255},16);
         }
         if(S.ServeFrames>0) {
@@ -215,6 +217,7 @@ private:
         Out.AddText(430,50,ShowTargetHit?"Window "+std::to_string(S.PlayerScore)+" cleared":"Session best "+std::to_string(S.BestRally),Gold,24);
         Out.AddText(24,91,TargetRally()?"Hit the GOLD window. Move at impact to add spin; cleared targets stay.":"Move at impact to bend the ball.",Quiet,16);
         Out.AddText(24,104,HintLine(),{255,236,180,255},12);
+        Out.AddText(24,122,HowToLine(),{255,236,180,255},12);
         Out.AddText(620,104,ActionCue(),{120,225,255,255},14);
         if(TargetRallyOver()) {
             Out.AddRect(180,330,440,140,{12,24,39,245});

@@ -172,6 +172,7 @@ public:
     int KickReceiptFramesRemaining() const { return KickCueFrames; }
     GoalScorer GetLastScorer() const { return LastScorer; }
     KickReceipt GetLastKickReceipt() const { return LastKick; }
+    std::string HowToLine() const override { return "HOW Move the player and kick the ball into the goal."; }
     void Render(Frame& F) const override {
         if(Option==1) { RenderPractice(F);return; }
         constexpr Color Green{0,128,0,255},Blue{30,100,255,255},Red{255,50,50,255};
@@ -205,6 +206,7 @@ public:
             F.AddText(150,380,"Move: WASD/arrows/stick/hat. Attack the RIGHT goal.",White,17);
             F.AddText(190,410,"Kick: Space/J/Z/X or pad A/X; fresh press.",White,17);
             F.AddText(185,445,"90 seconds. Source kicks work from any distance.",White,17);
+            F.AddText(150,475,HowToLine(),{255,236,180,255},16);
         } else {
             F.AddText(255,230,ResultText(),White,42);
             F.AddText(260,310,"Final score: "+std::to_string(Data.HumanScore)+" - "+std::to_string(Data.CpuScore),White,26);
@@ -785,6 +787,7 @@ public:
         if(P.HasBall && P.Charge>5) { F.AddRect(X-12,Y+20,std::trunc(P.Charge/60.0*24),4,Yellow);
             sports_detail::Outline(F,X-12,Y+20,24,4,White,1); }
     }
+    std::string HowToLine() const override { return "HOW Lead the team, then throw or catch the ball."; }
     void Render(Frame& F) const override {
         constexpr Color Yellow{255,220,50,255},Red{220,50,50,255},Blue{50,100,220,255},PassTint{120,225,255,255};
         F.Clear();
@@ -857,6 +860,7 @@ public:
         }
         const double HintY=Data.Mode==Phase::Playing?36.0:578.0;
         F.AddText(16,HintY,HintLine(),Color{255,236,180,255},12);
+        F.AddText(16,Data.Mode==Phase::Playing?20.0:8.0,HowToLine(),{255,236,180,255},12);
         F.AddText(560,HintY,ActionCue(),Color{120,225,255,255},12);
     }
 private:
