@@ -846,6 +846,8 @@ public:
                 Out.AddTriangle({X,Y-8},{X-5,Y},{X+5,Y},{50,200,100,255});
                 Out.AddTriangle({X,Y+8},{X-5,Y},{X+5,Y},{30,150,70,255});
             } else if(C.Kind==PickupKind::Heart) {
+                Out.AddCircle(X-4,Y-3,7,{80,12,16,255}); Out.AddCircle(X+4,Y-3,7,{80,12,16,255});
+                Out.AddTriangle({X-11,Y-2},{X+11,Y-2},{X,Y+10},{80,12,16,255});
                 Out.AddCircle(X-4,Y-3,5,{255,50,50,255}); Out.AddCircle(X+4,Y-3,5,{255,50,50,255});
                 Out.AddTriangle({X-9,Y-2},{X+9,Y-2},{X,Y+8},{255,50,50,255});
             } else {

@@ -177,6 +177,23 @@ void Rupee() {
     }
     Check(Edge<GemTop && GemTop<F.Commands.size(),"trinket keeps a dark edge on the grass");
 }
+void Heart() {
+    ZeldaGame G;
+    const ZeldaGame::Collectible* Beat=nullptr;
+    for(const auto& C:G.GetCollectibles()) if(C.Kind==ZeldaGame::PickupKind::Heart) { Beat=&C; break; }
+    Check(Beat!=nullptr,"a heart is on the fresh board");
+    if(!Beat) return;
+    const double Y=Beat->Y+std::sin(Beat->Bob)*3;
+    Frame F;G.Render(F);
+    std::size_t Rim=F.Commands.size(),Lobe=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Circle || C.A.X!=Beat->X-4 || C.A.Y!=Y-3) continue;
+        if(C.Size==7 && C.Tint.R==80 && C.Tint.G==12 && C.Tint.B==16) Rim=N;
+        if(C.Size==5 && C.Tint.R==255 && C.Tint.G==50 && C.Tint.B==50) Lobe=N;
+    }
+    Check(Rim<Lobe && Lobe<F.Commands.size(),"the heart keeps a dark edge on the grass");
+}
 void Shot() {
     ZeldaGame G;
     for(int N=0;N<160 && G.GetProjectiles().empty();++N) G.Step({});
@@ -241,7 +258,7 @@ void Key() {
 }
 
 int main() {
-    try { View();Rupee();Shot();Swing();Toast();Key(); }
+    try { View();Rupee();Heart();Shot();Swing();Toast();Key(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
