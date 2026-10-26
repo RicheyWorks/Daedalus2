@@ -282,6 +282,24 @@
         "save_restore"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "gloam_latch",
+      "title": "Gloam Latch",
+      "summary": "Darken every lamp. Arrows or stick: move; J/Space or pad A: flip a lamp and its neighbors",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"gloam_latch\", Seed)",
+      "portable_tests": [
+        "desktop_gloam_latch"
+      ],
+      "option_count": 0,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "hints",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [

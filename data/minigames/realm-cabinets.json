@@ -329,7 +329,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             5.0,
-            -3.75,
+            -5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -343,7 +343,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             5.0,
-            -1.25,
+            -2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -352,12 +352,26 @@
           "start": "StartGame(\"lanternwild\", 797810235)"
         },
         {
+          "game": "gloam_latch",
+          "title": "Gloam Latch",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            5.0,
+            0.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1204673192,
+          "option": 0,
+          "start": "StartGame(\"gloam_latch\", 1204673192)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             5.0,
-            1.25,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -371,7 +385,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             5.0,
-            3.75,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,

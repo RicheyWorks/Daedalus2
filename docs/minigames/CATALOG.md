@@ -20,6 +20,7 @@ batched rebuild under the editor custodian.
 | `dodge_ball` | Courtyard Clash | 6 |
 | `ironwake` | Ironwake Advance | 3 |
 | `lanternwild` | Lanternwild Quest | 4 |
+| `gloam_latch` | Gloam Latch | 1 |
 
 ## Capabilities
 
@@ -40,6 +41,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes | yes |
 | `ironwake` | yes | yes | yes | yes |  |  | yes |  |  | yes |
 | `lanternwild` | yes |  |  |  |  |  | yes | yes | yes | yes |
+| `gloam_latch` |  |  |  | yes |  |  | yes | yes | yes |  |
 
 ## Java cabinets
 
