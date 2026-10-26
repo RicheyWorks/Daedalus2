@@ -179,8 +179,10 @@ public:
         const std::string Controls=std::string("Move: WASD/arrows/stick/hat. J/Space/pad A/X: light. K/Enter/pad B: reset. Shift/pad Y: trail ")+(TrailEnabled?"ON":"OFF");
         Out.AddText(12,Rows*Tile+35,Notice.empty()?Controls:Notice,White,14);
         Out.AddText(12,Rows*Tile+54,HintLine(),Color{255,236,180,255},14);
+        Out.AddText(12,Rows*Tile+72,HowToLine(),Color{255,236,180,255},13);
         Out.AddText(520,Rows*Tile+54,ActionCue(),Color{120,225,255,255},14);
     }
+    std::string HowToLine() const override { return "HOW Walk to the NEXT lantern and light it."; }
     std::string HintLine() const {
         if(Complete) return "HINT Action or R replays this circuit.";
         if(LitCount==LanternCount) return "HINT Walk to the cyan EXIT and press Fire or Jump.";
@@ -513,6 +515,7 @@ public:
         }
         return Out;
     }
+    std::string HowToLine() const override { return "HOW Gather the trail and stay away from the pursuers."; }
     void Render(Frame& Out) const override {
         // Source map is 620 pixels tall but its 600-pixel viewport clipped the bottom wall.
         Out.Clear(800,660,Black);
@@ -573,6 +576,7 @@ public:
         Out.AddText(580,136,"GLOWTRAIL",maze::Yellow,22);
         Out.AddText(580,162,"CHASE",maze::Yellow,22);
         Out.AddText(580,190,"Move: arrows / WASD / stick",White,14);
+        Out.AddText(580,208,HowToLine(),{255,236,180,255},12);
         Out.AddText(580,225,"Dots left: "+std::to_string(Remaining),White,16);
         Out.AddText(580,250,"Power pellets: "+std::to_string(PowerPelletsLeft()),White,14);
         if(!Over && !Won) {
@@ -816,6 +820,7 @@ public:
         Score=Points;Hero.Health=static_cast<int>(Life);Hero.Glints=static_cast<int>(Trinkets);SwordAssist=Assist==1;
         return true;
     }
+    std::string HowToLine() const override { return "HOW Explore, swing once, and recover the key."; }
     void Render(Frame& Out) const override {
         Out.Clear(800,600,{34,139,34,255});
         Out.AddRect(96,196,608,88,{120,86,48,255}); Out.AddRect(346,96,88,408,{120,86,48,255});
@@ -876,6 +881,7 @@ public:
         }
         Out.AddRect(0,70,800,26,{8,36,16,255});
         Out.AddText(10,78,HintLine(),Color{255,236,180,255},14);
+        Out.AddText(10,100,HowToLine(),Color{255,236,180,255},13);
         Out.AddText(520,78,ActionCue(),Color{120,225,255,255},14);
     }
     std::string HintLine() const {

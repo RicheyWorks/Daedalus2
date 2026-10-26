@@ -75,6 +75,7 @@ public:
                   :"HINT Flip a lamp and its neighbors until the board is dark.";
     }
     std::string ActionCue() const { return Won?"CUE Retry":"CUE Flip"; }
+    std::string HowToLine() const override { return "HOW Flip a lamp and its neighbors until the board is dark."; }
     void Render(Frame& F) const override {
         F.Clear(800,600,{16,18,32,255});
         F.AddText(30,24,"GLOAM LATCH",{255,236,180,255},28);
@@ -87,6 +88,7 @@ public:
             F.AddRect(Px,Py,64,56,Lit?Color{255,196,70,255}:Color{36,42,64,255});
         }
         F.AddText(30,548,HintLine(),{255,236,180,255},16);
+        F.AddText(30,528,HowToLine(),{255,236,180,255},14);
         F.AddText(620,548,ActionCue(),{120,225,255,255},16);
     }
     Status GetStatus() const override {

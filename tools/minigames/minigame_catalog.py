@@ -152,6 +152,17 @@ def parse_verified(cmake):
     return verified, errors
 
 
+def parse_howto():
+    """Map game class -> the single HowToLine return string."""
+    found = {}
+    for f in sorted(CORE_DIR.glob("*Core.h")):
+        parts = re.split(r"\nclass (\w+Game)\b", f.read_text(encoding="utf-8"))
+        for i in range(1, len(parts), 2):
+            m = re.search(r'std::string HowToLine\(\) const override \{\s*return "([^"]*)";', parts[i + 1])
+            found[parts[i]] = m.group(1) if m else None
+    return found
+
+
 def parse_registry(text):
     entries = re.findall(r'\{"([a-z_]+)","([^"]+)","([^"]*)"\}', text)
     factories = dict(re.findall(r'if\(Id=="([a-z_]+)"\) return std::make_unique<(\w+)>', text))
@@ -177,6 +188,7 @@ def build():
     factories = set(factory_map)
     capmap = parse_capabilities()
     optmap = parse_option_counts()
+    howto = parse_howto()
     cmake = parse_cmake((TESTS / "CMakeLists.txt").read_text(encoding="utf-8"))
     verified, errors = parse_verified(cmake)
     ids = [e[0] for e in entries]
@@ -199,10 +211,15 @@ def build():
         tests = tests_for(gid, cmake)
         if not tests:
             errors.append(f"game '{gid}' has no portable test")
+        cls = factory_map.get(gid, "")
+        line = howto.get(cls)
+        if not line:
+            errors.append(f"game '{gid}' has no HowToLine")
         games.append({
             "id": gid,
             "title": title,
             "summary": blurb,
+            "how_to_play": line or "",
             "host": "ADaedalusDesktopArcade",
             "start": f'StartGame("{gid}", Seed)',
             "portable_tests": tests,
@@ -236,6 +253,11 @@ def build():
     ]
     for g in games:
         md.append(f"| `{g['id']}` | {g['title']} | {len(g['portable_tests'])} |")
+    md += ["", "## How to play", "",
+           "One original line per game, read from `HowToLine()`.", "",
+           "| id | line |", "|---|---|"]
+    for g in games:
+        md.append(f"| `{g['id']}` | {g['how_to_play']} |")
     md += ["", "## Capabilities", "",
            "Read from each core's overrides, plus behavior proven by a portable test that declares",
            "`// catalog-capability: <cap>: <ids>` (for games that handle it inside `Step`). A blank cell is a gap.", "",

@@ -7,6 +7,7 @@
       "id": "beacon_sweep",
       "title": "Beacon Sweep",
       "summary": "Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord",
+      "how_to_play": "HOW Move the mark, then reveal or flag a cell.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"beacon_sweep\", Seed)",
       "portable_tests": [
@@ -33,6 +34,7 @@
       "id": "twinwake",
       "title": "Twinwake Volley",
       "summary": "A fast duel across the twinwake court. Up/Down or left stick: paddle",
+      "how_to_play": "HOW Move the paddle to meet the ball.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"twinwake\", Seed)",
       "portable_tests": [
@@ -59,6 +61,7 @@
       "id": "dungeon",
       "title": "Dungeon Prototype",
       "summary": "Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick; Shift/pad Y: trail",
+      "how_to_play": "HOW Walk to the NEXT lantern and light it.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"dungeon\", Seed)",
       "portable_tests": [
@@ -84,6 +87,7 @@
       "id": "driftstone",
       "title": "Driftstone Patrol",
       "summary": "Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot",
+      "how_to_play": "HOW Turn, thrust, and clear the rocks.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"driftstone\", Seed)",
       "portable_tests": [
@@ -109,6 +113,7 @@
       "id": "football",
       "title": "Football / Soccer",
       "summary": "A ninety-second duel on the Daedalus pitch. Move: WASD/arrows or left stick; J/X: kick",
+      "how_to_play": "HOW Move the player and kick the ball into the goal.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"football\", Seed)",
       "portable_tests": [
@@ -130,6 +135,7 @@
       "id": "glowtrail",
       "title": "Glowtrail Chase",
       "summary": "Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick",
+      "how_to_play": "HOW Gather the trail and stay away from the pursuers.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"glowtrail\", Seed)",
       "portable_tests": [
@@ -156,6 +162,7 @@
       "id": "riftwing",
       "title": "Riftwing Vanguard",
       "summary": "Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot",
+      "how_to_play": "HOW Hold fire and collect the pickups.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"riftwing\", Seed)",
       "portable_tests": [
@@ -183,6 +190,7 @@
       "id": "emberstep",
       "title": "Emberstep Ascent",
       "summary": "Scale the ember terraces and face the sentinel. Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb",
+      "how_to_play": "HOW Jump the terraces and face the sentinel.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"emberstep\", Seed)",
       "portable_tests": [
@@ -207,6 +215,7 @@
       "id": "star_shooter",
       "title": "Star Shooter",
       "summary": "Hold the starlanes through escalating waves. Move: WASD/arrows or left stick; J/X: shoot; P/Start: pause/save menu",
+      "how_to_play": "HOW Hold the lanes and clear each wave.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"star_shooter\", Seed)",
       "portable_tests": [
@@ -228,6 +237,7 @@
       "id": "dodge_ball",
       "title": "Courtyard Clash",
       "summary": "Lead three teammates through four courtyard rounds. Move: WASD/arrows or left stick; throw/catch/jump actions",
+      "how_to_play": "HOW Lead the team, then throw or catch the ball.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"dodge_ball\", Seed)",
       "portable_tests": [
@@ -253,6 +263,7 @@
       "id": "ironwake",
       "title": "Ironwake Advance",
       "summary": "Run the ironwake route through platforms and enemy fire. Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/pad A: jump",
+      "how_to_play": "HOW Run the route, shoot, and jump the gaps.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"ironwake\", Seed)",
       "portable_tests": [
@@ -276,6 +287,7 @@
       "id": "lanternwild",
       "title": "Lanternwild Quest",
       "summary": "Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword",
+      "how_to_play": "HOW Explore, swing once, and recover the key.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"lanternwild\", Seed)",
       "portable_tests": [
@@ -299,6 +311,7 @@
       "id": "gloam_latch",
       "title": "Gloam Latch",
       "summary": "Darken every lamp. Arrows or stick: move; J/Space or pad A: flip a lamp and its neighbors",
+      "how_to_play": "HOW Flip a lamp and its neighbors until the board is dark.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"gloam_latch\", Seed)",
       "portable_tests": [
@@ -319,6 +332,7 @@
       "id": "reedbeat",
       "title": "Reedbeat",
       "summary": "Strike the reed when it glows. J/Space or pad A: strike",
+      "how_to_play": "HOW Strike while the reed is bright.",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"reedbeat\", Seed)",
       "portable_tests": [

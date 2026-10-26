@@ -92,6 +92,7 @@ public:
     virtual bool WantsExit() const { return false; }
     virtual bool SetOption(int,std::uint32_t) { return false; }
     virtual int GetOption() const { return -1; }
+    virtual std::string HowToLine() const { return {}; }
 };
 // Portable random stream is deliberately different from Python random. Parity
 // tests inject fixed source cases; this stream makes native sessions replayable.
