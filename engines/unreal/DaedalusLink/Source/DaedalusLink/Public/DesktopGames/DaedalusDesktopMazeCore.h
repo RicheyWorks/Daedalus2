@@ -913,6 +913,7 @@ private:
             F.AddCircle(E.X-4,E.Y-2,3,White); F.AddCircle(E.X+4,E.Y-2,3,White);
             F.AddCircle(E.X-4,E.Y-2,1,Black); F.AddCircle(E.X+4,E.Y-2,1,Black);
         } else if(E.Kind==EnemyKind::Moblin) {
+            F.AddRect(E.X-12,E.Y-14,24,28,{16,36,16,255});
             F.AddRect(E.X-10,E.Y-12,20,24,{80,120,80,255}); F.AddCircle(E.X,E.Y-12,7,{200,180,150,255});
             F.AddTriangle({E.X-12,E.Y-8},{E.X-18,E.Y},{E.X-12,E.Y+8},{255,200,50,255});
         } else {

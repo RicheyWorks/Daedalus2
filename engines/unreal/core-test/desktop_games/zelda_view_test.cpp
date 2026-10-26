@@ -44,6 +44,21 @@ void View() {
         if(C.A.Y==55 && C.Tint.R==0 && C.Tint.G==100 && C.Tint.B==0) Canopy=N;
     }
     Check(Edge<Canopy && Canopy<F.Commands.size(),"tree canopy keeps a light edge on the grass");
+    const ZeldaGame::Enemy* Moblin=nullptr;
+    for(const auto& E:G.GetEnemies()) if(E.Kind==ZeldaGame::EnemyKind::Moblin && E.Alive) Moblin=&E;
+    Check(Moblin!=nullptr,"a living moblin is on the fresh board");
+    if(Moblin) {
+        std::size_t Shade=F.Commands.size(),Coat=F.Commands.size();
+        for(std::size_t N=0;N<F.Commands.size();++N) {
+            const auto& C=F.Commands[N];
+            if(C.Kind!=Shape::Rectangle) continue;
+            if(C.A.X==Moblin->X-12 && C.A.Y==Moblin->Y-14 && C.B.X==24 && C.B.Y==28
+                && C.Tint.R==16 && C.Tint.G==36 && C.Tint.B==16) Shade=N;
+            if(C.A.X==Moblin->X-10 && C.A.Y==Moblin->Y-12 && C.B.X==20 && C.B.Y==24
+                && C.Tint.R==80 && C.Tint.G==120 && C.Tint.B==80) Coat=N;
+        }
+        Check(Shade<Coat && Coat<F.Commands.size(),"moblin keeps a dark body behind the green tunic");
+    }
 }
 }
 
