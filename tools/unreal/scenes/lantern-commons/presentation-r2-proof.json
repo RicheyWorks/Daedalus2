@@ -1,0 +1,341 @@
+{
+  "schema": "daedalus.lantern-presentation-native-proof.v1",
+  "engine": "Unreal Engine 5.8.4",
+  "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+  "scope": "Owned presentation pass, actual three-leg route/E interaction, saved map reload and normal stop; no original source changes.",
+  "composition": {
+    "actor_count": 141,
+    "paired_willow_assemblies": 32,
+    "paired_willows_added": 15,
+    "meadow_patches_added": 12,
+    "landmarks": [
+      "Shade Grove",
+      "Stone Overlook",
+      "Lantern Chart garden"
+    ],
+    "spacious_ground_metres": [
+      104,
+      105
+    ]
+  },
+  "save_reload": {
+    "saved_reloaded": true,
+    "actor_count": 141,
+    "floor_instances": 273,
+    "ground_metres": [
+      104,
+      105
+    ],
+    "ground_traces": [
+      {
+        "x": -5000,
+        "y": -5000,
+        "ground_z": 20.000028610229492
+      },
+      {
+        "x": -5000,
+        "y": 5000,
+        "ground_z": 20.000028610229492
+      },
+      {
+        "x": 5000,
+        "y": -5000,
+        "ground_z": 20.000028610229492
+      },
+      {
+        "x": 5000,
+        "y": 5000,
+        "ground_z": 20.000028610229492
+      },
+      {
+        "x": -600,
+        "y": 0,
+        "ground_z": 20.000028610229492
+      },
+      {
+        "x": 400,
+        "y": 400,
+        "ground_z": 20.000028610229492
+      },
+      {
+        "x": 1500,
+        "y": -400,
+        "ground_z": 20.000028610229492
+      },
+      {
+        "x": 2650,
+        "y": 400,
+        "ground_z": 23.750025033950806
+      }
+    ],
+    "lights": [
+      {
+        "actor": "CourtyardSun",
+        "mobility": "<ComponentMobility.MOVABLE: 2>"
+      },
+      {
+        "actor": "CourtyardSky",
+        "mobility": "<ComponentMobility.MOVABLE: 2>"
+      },
+      {
+        "actor": "CommonsLanternDestinationLight",
+        "mobility": "<ComponentMobility.MOVABLE: 2>"
+      },
+      {
+        "actor": "LanternChartWithFeedback",
+        "mobility": "<ComponentMobility.MOVABLE: 2>"
+      }
+    ],
+    "goal_class": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback.BP_LanternChartFeedback_C",
+    "dirty": {
+      "maps": [],
+      "content": []
+    },
+    "lighting_interaction_dump_requested": true
+  },
+  "actual_route": [
+    {
+      "index": 0,
+      "from": [
+        -600.0,
+        0.0,
+        114.1500015258789
+      ],
+      "target": [
+        400,
+        400
+      ],
+      "duration": 1.7119737868106166,
+      "start_game": 2.7845618091523647,
+      "to": [
+        366.64811491256364,
+        386.65922859547885,
+        117.1499981880188
+      ],
+      "target_error_cm": 35.921086015782556,
+      "travelled_cm": 1041.111875411122,
+      "control": "pos=367,387,117 yaw=22 pitch=-5 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+    },
+    {
+      "index": 1,
+      "from": [
+        366.64811491256364,
+        386.65922859547885,
+        117.1499981880188
+      ],
+      "target": [
+        1500,
+        -400
+      ],
+      "duration": 2.177474405789709,
+      "start_game": 10.295217208564281,
+      "to": [
+        1470.0122932459556,
+        -379.1855144742381,
+        117.14999723434448
+      ],
+      "target_error_cm": 36.50349797031393,
+      "travelled_cm": 1343.1048657930035,
+      "control": "pos=1470,-379,117 yaw=-35 pitch=-5 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+    },
+    {
+      "index": 2,
+      "from": [
+        1470.0122932459556,
+        -379.1855144742381,
+        117.14999723434448
+      ],
+      "target": [
+        2650,
+        400
+      ],
+      "duration": 2.2304417651383024,
+      "start_game": 18.020056009292603,
+      "to": [
+        2619.3707044635385,
+        379.77441079450415,
+        117.89999628067017
+      ],
+      "target_error_cm": 36.704607391571066,
+      "travelled_cm": 1377.3325399483383,
+      "control": "pos=2619,380,118 yaw=33 pitch=-5 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+    }
+  ],
+  "actual_pickup": {
+    "chart_removed": true,
+    "elapsed_game_seconds": 2.61344850435853,
+    "messages_duration_seconds": 18.0,
+    "hero_control": "pos=2619,380,118 yaw=34 pitch=-3 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0",
+    "route_metres": 37.61549281152464,
+    "peaceful": true,
+    "foes": 0,
+    "screenshot_requested": true
+  },
+  "feedback": {
+    "blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback",
+    "native_event": "ReceiveDestroyed",
+    "native_node": "Development|PrintString",
+    "configured_duration_seconds": 18,
+    "actual_E_trigger_and_log": true,
+    "persistent_capture_elapsed_seconds": 2.61344850435853,
+    "pixel_readability_accepted": false,
+    "shipping_support": false,
+    "limit": "Development-only native PrintString feedback; production UMG/HUD acceptance is not claimed."
+  },
+  "lighting": {
+    "all_scene_lights_movable": true,
+    "lights_unbuilt": 0,
+    "primitives_unbuilt": 0,
+    "bakes": 0,
+    "project_setting_changes": 0
+  },
+  "selected_engine_log": [
+    "[2026.10.23-00.23.26:757][255]Lights with unbuilt interactions: 0",
+    "[2026.10.23-00.23.26:757][255]Primitives with unbuilt interactions: 0",
+    "[2026.10.23-00.26.42:142][388]LogBlueprintUserMessages: [BP_LanternChartFeedback_C_0] LANTERN CHART COLLECTED!  Great exploring - keep roaming the Commons.",
+    "[2026.10.23-00.26.42:510][388]LogCore: Display: Tracing Screenshot \"gameplay-success-immediate\" taken with size: 2560 x 1392",
+    "[2026.10.23-00.26.45:000][653]LogCore: Display: Tracing Screenshot \"gameplay-success-persistent\" taken with size: 2560 x 1392"
+  ],
+  "post_play": {
+    "Play_stopped": true,
+    "encounters_restored": 1,
+    "dirty": {
+      "maps": [],
+      "content": []
+    },
+    "floor_instances": 273,
+    "actor_count": 141,
+    "ground_metres": [
+      104,
+      105
+    ],
+    "route": [
+      {
+        "index": 0,
+        "from": [
+          -600.0,
+          0.0,
+          114.1500015258789
+        ],
+        "target": [
+          400,
+          400
+        ],
+        "duration": 1.7119737868106166,
+        "start_game": 2.7845618091523647,
+        "to": [
+          366.64811491256364,
+          386.65922859547885,
+          117.1499981880188
+        ],
+        "target_error_cm": 35.921086015782556,
+        "travelled_cm": 1041.111875411122,
+        "control": "pos=367,387,117 yaw=22 pitch=-5 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+      },
+      {
+        "index": 1,
+        "from": [
+          366.64811491256364,
+          386.65922859547885,
+          117.1499981880188
+        ],
+        "target": [
+          1500,
+          -400
+        ],
+        "duration": 2.177474405789709,
+        "start_game": 10.295217208564281,
+        "to": [
+          1470.0122932459556,
+          -379.1855144742381,
+          117.14999723434448
+        ],
+        "target_error_cm": 36.50349797031393,
+        "travelled_cm": 1343.1048657930035,
+        "control": "pos=1470,-379,117 yaw=-35 pitch=-5 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+      },
+      {
+        "index": 2,
+        "from": [
+          1470.0122932459556,
+          -379.1855144742381,
+          117.14999723434448
+        ],
+        "target": [
+          2650,
+          400
+        ],
+        "duration": 2.2304417651383024,
+        "start_game": 18.020056009292603,
+        "to": [
+          2619.3707044635385,
+          379.77441079450415,
+          117.89999628067017
+        ],
+        "target_error_cm": 36.704607391571066,
+        "travelled_cm": 1377.3325399483383,
+        "control": "pos=2619,380,118 yaw=33 pitch=-5 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+      }
+    ],
+    "saved_scene": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard",
+    "original_material_saves": 0
+  },
+  "normal_compute_released": true,
+  "protected_original_files_unchanged": true,
+  "saved_original_materials_unchanged": true,
+  "current_progress_not_rolled_back": true,
+  "images": [
+    {
+      "path": "images/presentation-r2/before-player.png",
+      "bytes": 2524451,
+      "sha256": "69664c56c3559b19d0c302b51064f09262279d0eb55a76280451be09daed721c",
+      "pixel_review": "pending independent review; local reader avoided after transport closure"
+    },
+    {
+      "path": "images/presentation-r2/before-overview.png",
+      "bytes": 1314120,
+      "sha256": "c1ac8246a9c43911a08f938aefa01235a7d14e1a02101a2ea4ea3aaf28fbf76f",
+      "pixel_review": "pending independent review; local reader avoided after transport closure"
+    },
+    {
+      "path": "images/presentation-r2/before-route.png",
+      "bytes": 2671168,
+      "sha256": "daf100b309e3ca8c75d80a8c2f787ca909911afd6e35ad034f0bc03e5dda96e5",
+      "pixel_review": "pending independent review; local reader avoided after transport closure"
+    },
+    {
+      "path": "images/presentation-r2/after-player.png",
+      "bytes": 2381891,
+      "sha256": "afa4e6e59110ca9dfd63eb5b1ce21eea55786626d0ed74d78a66f1b930d5334e",
+      "pixel_review": "pending independent review; local reader avoided after transport closure"
+    },
+    {
+      "path": "images/presentation-r2/after-overview.png",
+      "bytes": 1315744,
+      "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5",
+      "pixel_review": "pending independent review; local reader avoided after transport closure"
+    },
+    {
+      "path": "images/presentation-r2/after-route.png",
+      "bytes": 2546560,
+      "sha256": "7056edaf0cfd3e5011f5eb2089e0c86a312f82fdb8b7ebe492b4a39c92a5b78d",
+      "pixel_review": "pending independent review; local reader avoided after transport closure"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-immediate.png",
+      "bytes": 2729999,
+      "sha256": "04a6955dacec980138fa22836b5f8e4b1eb972fda534737ecf4c41343c20cb52",
+      "pixel_review": "pending independent review; local reader avoided after transport closure"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-persistent.png",
+      "bytes": 2583021,
+      "sha256": "df396ca7ccc7f833efe796ae63202b4270da993323e77678a263d0e97fef2c9a",
+      "pixel_review": "pending independent review; local reader avoided after transport closure"
+    }
+  ],
+  "pixel_review_pending": true,
+  "reference_quality_bar_met": false,
+  "production_ready": false,
+  "transport": "After-route local image reading returned exec-server transport closed. Same PID/start time and retained phase were reconciled with read-only native state before Play. No composition or Blueprint creation replay."
+}

@@ -1,6 +1,6 @@
 # Source-executed platformer parity fixtures v2; no source imports/full-main/display/audio.
-# Contra SHA256 2e845d67754fc81feeea881b7c6d3068a60042c3371e9f8fdeae5a8616d09107; latest definitions after line 582 only.
-# Shadow Ninja SHA256 83dd921b95043a2723b61513d84471adbfaede29dd18744367835fbc3aa03e36; platform_fixed revision only.
+# Ironwake SHA256 2e845d67754fc81feeea881b7c6d3068a60042c3371e9f8fdeae5a8616d09107; latest definitions after line 582 only.
+# Emberstep Ascent SHA256 83dd921b95043a2723b61513d84471adbfaede29dd18744367835fbc3aa03e36; platform_fixed revision only.
 # Rect provider: integer truncation toward zero and strict edge exclusion audited against pygame-ce rect.c/base.c and https://pyga.me/docs/ref/rect.html. Installed Pygame version not executed or established.
 # CSTATE=x y vy facing ground crouch lives score cooldown rate spread timer invincible (13)
 # NSTATE=x y vx vy ground facing attack health invincible doublejump spinning spinCooldown wall wallDir jumpWasDown (15)
@@ -19,12 +19,12 @@
 # NSREWARD label hp expectedScore expectedEnemyCount; fixed Ninja(400,450) spinning5, Enemy(420,450), initial score0.
 # NPICKUP label expectedScore expectedGoldCount; fixed Ninja(400,450), one gold(400,450), initial score0.
 # CPICKUP label rapidBool expectedSpread expectedTimer expectedRate; fixed Player(100,480), PowerUp(110,490), no initial modifiers.
-# Contra keymask bits=1left 2right 4down 8jump; Ninja bits=1left 2right 4up 8down 16jump.
-# Contra preset0=[];preset1=[(300,420,120,20),(500,320,80,20),(650,440,100,20),(900,380,150,20),(1100,300,60,20)];preset2=[(100,400,100,20)]
+# Ironwake keymask bits=1left 2right 4down 8jump; Ninja bits=1left 2right 4up 8down 16jump.
+# Ironwake preset0=[];preset1=[(300,420,120,20),(500,320,80,20),(650,440,100,20),(900,380,150,20),(1100,300,60,20)];preset2=[(100,400,100,20)]
 # Ninja preset0=[];preset1=[(100,380,150),(350,300,120),(550,220,180),(200,480,400)];preset2=[(100,300,200)]
-# Expected methods: Contra Player.__init__/get_rect/update/shoot (663-774), Bullet.__init__/update (813-823), Enemy.__init__/update (833-875), controller accessors(633-639).
+# Expected methods: Ironwake Player.__init__/get_rect/update/shoot (663-774), Bullet.__init__/update (813-823), Enemy.__init__/update (833-875), controller accessors(633-639).
 # Expected methods: Ninja.__init__/update/attack/throw_star/spin_attack (120-264), Sword.__init__/update (301-309), NinjaStar.__init__/update (317-328), Enemy.__init__/update (344-363), Boss.__init__/update (376-396), controller accessors(69-103).
-# Reward fragments: Contra enemy loop1104-1132/powerup loop1146-1156 and PowerUp.__init__/update904-911; Ninja attacks loop553-566/spin branch569-575/collectibles loop540-544. Explosion provider is a no-op; each list has at most one initial item.
+# Reward fragments: Ironwake enemy loop1104-1132/powerup loop1146-1156 and PowerUp.__init__/update904-911; Ninja attacks loop553-566/spin branch569-575/collectibles loop540-544. Explosion provider is a no-op; each list has at most one initial item.
 # Omits complete main-loop orchestration/spawning/cheats/reset/events and controller trigger gating; no render/audio/controller-device/Unreal/package claims. Source quirks preserved in selected methods. Final-clamp repairs intentionally not in parity rows.
 CSTEP initial_gravity 100 480 0 1 0 0 3 0 0 8 0 0 0 1 0 0 0 0 0 0 0 100 472 0 1 1 0 3 0 0 8 0 0 0
 CSTEP initial_lands 100 480 0 1 0 0 3 0 0 8 0 0 0 12 0 0 0 0 0 0 0 100 472 0 1 1 0 3 0 0 8 0 0 0

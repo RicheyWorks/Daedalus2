@@ -11,20 +11,20 @@ using namespace daedalus::desktop;
 using namespace daedalus::desktop::platformers;
 namespace daedalus { namespace desktop { namespace platformers {
 struct TestAccess {
-    static ContraPlayer& PlayerOf(ContraGame& G) { return G.Player; }
-    static void ContraEncounter(ContraGame& G,const ContraEnemy& E,const ContraBullet& B) {
+    static IronwakePlayer& PlayerOf(IronwakeGame& G) { return G.Player; }
+    static void IronwakeEncounter(IronwakeGame& G,const IronwakeEnemy& E,const IronwakeBullet& B) {
         G.Enemies={E}; G.Bullets={B}; G.EnemyBullets.clear(); G.Powerups.clear();
     }
-    static void ContraPickup(ContraGame& G,bool Rapid) {
+    static void IronwakePickup(IronwakeGame& G,bool Rapid) {
         G.Enemies.clear(); G.Bullets.clear(); G.EnemyBullets.clear();
         G.Powerups={{G.Player.X,G.Player.Y,0,Rapid}};
     }
-    static NinjaPlayer& PlayerOf(ShadowNinjaGame& G) { return G.Player; }
-    static void NinjaEncounter(ShadowNinjaGame& G,const NinjaEnemy& E,const NinjaAttack& A) {
+    static NinjaPlayer& PlayerOf(EmberstepGame& G) { return G.Player; }
+    static void NinjaEncounter(EmberstepGame& G,const NinjaEnemy& E,const NinjaAttack& A) {
         G.Enemies={E}; G.Attacks={A}; G.Gold.clear(); G.SpawnTimer=100;
     }
-    static void NinjaGold(ShadowNinjaGame& G) { G.Gold={{G.Player.X,G.Player.Y}}; G.SpawnTimer=100; }
-    static void NinjaBossEncounter(ShadowNinjaGame& G) {
+    static void NinjaGold(EmberstepGame& G) { G.Gold={{G.Player.X,G.Player.Y}}; G.SpawnTimer=100; }
+    static void NinjaBossEncounter(EmberstepGame& G) {
         G.BossActive=true; G.Boss={500,380,0,1,40};
         G.Attacks={{491,375,1,50,true,0}}; G.Enemies.clear(); G.Gold.clear(); G.SpawnTimer=100;
         G.Player.X=175; G.Player.Y=380; G.Player.Invincible=100;
@@ -61,18 +61,18 @@ struct Row {
     int I() { return static_cast<int>(D()); }
     bool B() { return I()!=0; }
 };
-ContraPlayer ReadContra(Row& R) {
-    ContraPlayer P; P.X=R.D();P.Y=R.D();P.VY=R.D();P.FacingRight=R.B();P.OnGround=R.B();P.Crouching=R.B();
+IronwakePlayer ReadIronwake(Row& R) {
+    IronwakePlayer P; P.X=R.D();P.Y=R.D();P.VY=R.D();P.FacingRight=R.B();P.OnGround=R.B();P.Crouching=R.B();
     P.Lives=R.I();P.Score=static_cast<std::int64_t>(R.D());P.Cooldown=R.I();P.FireRate=R.I();P.Spread=R.B();P.SpreadTimer=R.I();P.Invincible=R.I(); return P;
 }
-void Compare(const ContraPlayer& P,Row& R) {
+void Compare(const IronwakePlayer& P,Row& R) {
     Near(P.X,R.D(),"x");Near(P.Y,R.D(),"y");Near(P.VY,R.D(),"vy");Near(P.FacingRight,R.D(),"facing");Near(P.OnGround,R.D(),"ground");Near(P.Crouching,R.D(),"crouch");
     Near(P.Lives,R.D(),"lives");Near(static_cast<double>(P.Score),R.D(),"score");Near(P.Cooldown,R.D(),"cooldown");Near(P.FireRate,R.D(),"fire rate");Near(P.Spread,R.D(),"spread");Near(P.SpreadTimer,R.D(),"spread timer");Near(P.Invincible,R.D(),"invincible");
 }
-ContraBullet ReadBullet(Row& R) { ContraBullet B;B.X=R.D();B.Y=R.D();B.VX=R.D();B.VY=R.D();B.Life=R.I();return B; }
-void Compare(const ContraBullet& B,Row& R) { Near(B.X,R.D(),"bullet x");Near(B.Y,R.D(),"bullet y");Near(B.VX,R.D(),"bullet vx");Near(B.VY,R.D(),"bullet vy");Near(B.Life,R.D(),"bullet life"); }
-ContraEnemy ReadContraEnemy(Row& R) { ContraEnemy E;E.X=R.D();E.Y=R.D();E.VX=R.D();E.Health=R.I();E.ShootTimer=R.I();E.Kind=R.I();return E; }
-void Compare(const ContraEnemy& E,Row& R) { Near(E.X,R.D(),"enemy x");Near(E.Y,R.D(),"enemy y");Near(E.VX,R.D(),"enemy vx");Near(E.Health,R.D(),"enemy hp");Near(E.ShootTimer,R.D(),"enemy timer");Near(E.Kind,R.D(),"enemy kind"); }
+IronwakeBullet ReadBullet(Row& R) { IronwakeBullet B;B.X=R.D();B.Y=R.D();B.VX=R.D();B.VY=R.D();B.Life=R.I();return B; }
+void Compare(const IronwakeBullet& B,Row& R) { Near(B.X,R.D(),"bullet x");Near(B.Y,R.D(),"bullet y");Near(B.VX,R.D(),"bullet vx");Near(B.VY,R.D(),"bullet vy");Near(B.Life,R.D(),"bullet life"); }
+IronwakeEnemy ReadIronwakeEnemy(Row& R) { IronwakeEnemy E;E.X=R.D();E.Y=R.D();E.VX=R.D();E.Health=R.I();E.ShootTimer=R.I();E.Kind=R.I();return E; }
+void Compare(const IronwakeEnemy& E,Row& R) { Near(E.X,R.D(),"enemy x");Near(E.Y,R.D(),"enemy y");Near(E.VX,R.D(),"enemy vx");Near(E.Health,R.D(),"enemy hp");Near(E.ShootTimer,R.D(),"enemy timer");Near(E.Kind,R.D(),"enemy kind"); }
 NinjaPlayer ReadNinja(Row& R) {
     NinjaPlayer P;P.X=R.D();P.Y=R.D();P.VX=R.D();P.VY=R.D();P.OnGround=R.B();P.Facing=R.I();P.AttackCooldown=R.I();P.Health=R.I();P.Invincible=R.I();
     P.DoubleJump=R.B();P.Spinning=R.I();P.SpinCooldown=R.I();P.OnWall=R.B();P.WallDir=R.I();P.JumpWasDown=R.B();return P;
@@ -91,11 +91,11 @@ void Compare(const NinjaBoss& B,Row& R) { Near(B.X,R.D(),"boss x");Near(B.Y,R.D(
 void RunFixture(const std::string& Line) {
     Row R(Line);std::string Tag,Label;R.S>>Tag>>Label;Context=Tag+" "+Label;++Fixtures;
     if(Tag=="CSTEP") {
-        auto P=ReadContra(R);const int Frames=R.I(),Preset=R.I();const double Camera=R.D();const int K=R.I();Input I;
+        auto P=ReadIronwake(R);const int Frames=R.I(),Preset=R.I();const double Camera=R.D();const int K=R.I();Input I;
         I.Left=(K&1)!=0;I.Right=(K&2)!=0;I.Down=(K&4)!=0;I.Jump=(K&8)!=0;I.AxisX=R.D();I.AxisY=R.D();I.Down=R.B()||I.Down;I.Jump=R.B()||I.Jump;
         std::vector<Rect> Plats;
         if(Preset==1) {
-            Plats.assign(ContraPlatforms().begin(),ContraPlatforms().end());
+            Plats.assign(IronwakePlatforms().begin(),IronwakePlatforms().end());
         } else if(Preset==2) {
             Plats={{100,400,100,20}};
         }
@@ -104,7 +104,7 @@ void RunFixture(const std::string& Line) {
         }
         Compare(P,R);
     } else if(Tag=="CSHOT") {
-        auto P=ReadContra(R);std::vector<ContraBullet> B;P.Shoot(B);Near(P.Cooldown,R.D(),"cooldown");const int Count=R.I();Near(static_cast<double>(B.size()),Count,"count");
+        auto P=ReadIronwake(R);std::vector<IronwakeBullet> B;P.Shoot(B);Near(P.Cooldown,R.D(),"cooldown");const int Count=R.I();Near(static_cast<double>(B.size()),Count,"count");
         for(int J=0;J<3;++J) {
             if(J<Count) {
                 Compare(B[static_cast<std::size_t>(J)],R);
@@ -121,7 +121,7 @@ void RunFixture(const std::string& Line) {
         }
         Compare(B,R);
     } else if(Tag=="CENEMY") {
-        auto E=ReadContraEnemy(R);const int Frames=R.I();ContraPlayer P;P.X=R.D();const double RandomValue=R.D();const int RandomInt=R.I();std::vector<ContraBullet> B;
+        auto E=ReadIronwakeEnemy(R);const int Frames=R.I();IronwakePlayer P;P.X=R.D();const double RandomValue=R.D();const int RandomInt=R.I();std::vector<IronwakeBullet> B;
         for(int F=0;F<Frames;++F) {
             E.Update(P,B,RandomValue<.02,RandomInt);
         }
@@ -144,7 +144,7 @@ void RunFixture(const std::string& Line) {
         if(Preset==1) {
             // Exercise the actual Game adapter for canonical-platform cases;
             // a pure-player test alone would miss a dropped D-pad binding.
-            ShadowNinjaGame G;G.Reset(10);TestAccess::PlayerOf(G)=P;
+            EmberstepGame G;G.Reset(10);TestAccess::PlayerOf(G)=P;
             I.PadLeft=HatX<0;I.PadRight=HatX>0;I.PadDown=HatY<0;I.PadUp=HatY>0;
             for(int F=0;F<Frames;++F) {
                 G.Step(I);
@@ -187,22 +187,22 @@ void RunFixture(const std::string& Line) {
         Compare(B,R);
         Near(P.X,R.D(),"player x");Near(P.Y,R.D(),"player y");Near(P.Health,R.D(),"player health");Near(P.Invincible,R.D(),"player invincible");
     } else if(Tag=="CREWARD") {
-        ContraGame G;G.Reset(10);ContraEnemy E;E.Kind=R.I();E.Health=R.I();E.X=200;E.Y=470;E.VX=0;E.ShootTimer=80;
-        const double BX=R.D(),BY=R.D();TestAccess::ContraEncounter(G,E,{BX,BY,0,0,60});G.Step({});
+        IronwakeGame G;G.Reset(10);IronwakeEnemy E;E.Kind=R.I();E.Health=R.I();E.X=200;E.Y=470;E.VX=0;E.ShootTimer=80;
+        const double BX=R.D(),BY=R.D();TestAccess::IronwakeEncounter(G,E,{BX,BY,0,0,60});G.Step({});
         Near(static_cast<double>(G.GetStatus().Score),R.D(),"score");Near(static_cast<double>(G.EnemyCount()),R.D(),"enemies");Near(static_cast<double>(G.BulletCount()),R.D(),"bullets");
     } else if(Tag=="NREWARD") {
-        ShadowNinjaGame G;G.Reset(10);const bool Star=R.B();NinjaEnemy E;E.X=400;E.Y=450;E.VX=0;E.Health=R.I();
+        EmberstepGame G;G.Reset(10);const bool Star=R.B();NinjaEnemy E;E.X=400;E.Y=450;E.VX=0;E.Health=R.I();
         TestAccess::NinjaEncounter(G,E,{Star?391.0:397.0,450,1,Star?50:12,Star,0});G.Step({});
         Near(static_cast<double>(G.GetStatus().Score),R.D(),"score");Near(static_cast<double>(G.EnemyCount()),R.D(),"enemies");Near(static_cast<double>(G.AttackCount()),R.D(),"attacks");
     } else if(Tag=="NSREWARD") {
-        ShadowNinjaGame G;G.Reset(10);auto& P=TestAccess::PlayerOf(G);P.X=400;P.Y=450;P.Spinning=5;
+        EmberstepGame G;G.Reset(10);auto& P=TestAccess::PlayerOf(G);P.X=400;P.Y=450;P.Spinning=5;
         NinjaEnemy E;E.X=420;E.Y=450;E.VX=0;E.Health=R.I();TestAccess::NinjaEncounter(G,E,{0,0,1,0,false,0});G.Step({});
         Near(static_cast<double>(G.GetStatus().Score),R.D(),"score");Near(static_cast<double>(G.EnemyCount()),R.D(),"enemies");
     } else if(Tag=="NPICKUP") {
-        ShadowNinjaGame G;G.Reset(10);auto& P=TestAccess::PlayerOf(G);P.X=400;P.Y=450;TestAccess::NinjaGold(G);G.Step({});
+        EmberstepGame G;G.Reset(10);auto& P=TestAccess::PlayerOf(G);P.X=400;P.Y=450;TestAccess::NinjaGold(G);G.Step({});
         Near(static_cast<double>(G.GetStatus().Score),R.D(),"score");Near(static_cast<double>(G.GoldCount()),R.D(),"gold");
     } else if(Tag=="CPICKUP") {
-        ContraGame G;G.Reset(10);const bool Rapid=R.B();TestAccess::ContraPickup(G,Rapid);G.Step({});
+        IronwakeGame G;G.Reset(10);const bool Rapid=R.B();TestAccess::IronwakePickup(G,Rapid);G.Step({});
         Near(G.GetPlayer().Spread,R.D(),"spread");Near(G.GetPlayer().SpreadTimer,R.D(),"timer");Near(G.GetPlayer().FireRate,R.D(),"rate");
     } else {
         throw std::runtime_error("Unknown fixture: "+Tag);
@@ -210,16 +210,16 @@ void RunFixture(const std::string& Line) {
     std::string Extra;Check(!(R.S>>Extra),"no trailing fixture fields");
 }
 void Integration() {
-    Context="CONTRA integration";ContraGame C;Input I;Frame F;
+    Context="IRONWAKE integration";IronwakeGame C;Input I;Frame F;
     Check(C.EnemyCount()==2,"latest start has two enemies");
     Check(C.GetPlayer().Lives==3 && C.GetPlayer().Score==0,"initial lives and score");
-    ContraEnemy E;E.X=200;E.Y=470;E.VX=0;E.ShootTimer=80;
-    TestAccess::ContraEncounter(C,E,{188,480,12,0,60});C.Step({});
+    IronwakeEnemy E;E.X=200;E.Y=470;E.VX=0;E.ShootTimer=80;
+    TestAccess::IronwakeEncounter(C,E,{188,480,12,0,60});C.Step({});
     Check(C.GetStatus().Score==100,"grunt hit pays 100 once");C.Step({});Check(C.GetStatus().Score==100,"dead enemy cannot pay twice");
-    C.Reset(10);E.Kind=2;E.Health=2;TestAccess::ContraEncounter(C,E,{188,480,12,0,60});C.Step({});Check(C.GetStatus().Score==0,"boss survives one bullet");
-    E.Health=1;TestAccess::ContraEncounter(C,E,{188,480,12,0,60});C.Step({});Check(C.GetStatus().Score==500,"boss kill pays 500");
-    C.Reset(10);TestAccess::ContraPickup(C,false);C.Step({});Check(C.GetPlayer().Spread && C.GetPlayer().SpreadTimer==900,"spread pickup lasts 900 steps");
-    TestAccess::ContraPickup(C,true);C.Step({});Check(C.GetPlayer().FireRate==4,"rapid pickup halves cooldown");
+    C.Reset(10);E.Kind=2;E.Health=2;TestAccess::IronwakeEncounter(C,E,{188,480,12,0,60});C.Step({});Check(C.GetStatus().Score==0,"boss survives one bullet");
+    E.Health=1;TestAccess::IronwakeEncounter(C,E,{188,480,12,0,60});C.Step({});Check(C.GetStatus().Score==500,"boss kill pays 500");
+    C.Reset(10);TestAccess::IronwakePickup(C,false);C.Step({});Check(C.GetPlayer().Spread && C.GetPlayer().SpreadTimer==900,"spread pickup lasts 900 steps");
+    TestAccess::IronwakePickup(C,true);C.Step({});Check(C.GetPlayer().FireRate==4,"rapid pickup halves cooldown");
     C.Reset(10);
     for(int Key:{0,0,1,1,2,3,2,3,4,5}) {
         C.SubmitCheatKey(Key);
@@ -236,10 +236,10 @@ void Integration() {
         C.Step(I);
     }
     Near(C.GetPlayer().X,StoppedX,"won game stops");
-    C.Reset(10);CP.Lives=1;CP.Invincible=0;E={CP.X,CP.Y,0,1,100,0};TestAccess::ContraEncounter(C,E,{0,0,0,0,0});C.Step({});Check(C.GetStatus().Over && !C.GetStatus().Won,"death terminates session");
+    C.Reset(10);CP.Lives=1;CP.Invincible=0;E={CP.X,CP.Y,0,1,100,0};TestAccess::IronwakeEncounter(C,E,{0,0,0,0,0});C.Step({});Check(C.GetStatus().Over && !C.GetStatus().Won,"death terminates session");
     C.Reset(10);Check(!C.GetStatus().Over && C.GetStatus().Score==0 && C.GetPlayer().Lives==3,"restart clears terminal state");
 
-    Context="Shadow Ninja integration";ShadowNinjaGame N;
+    Context="Emberstep Ascent integration";EmberstepGame N;
     Check(N.GetPlayer().OnGround && N.GetPlayer().X==175 && N.GetPlayer().Y==380,"latest safe platform start");
     Check(N.GoldCount()==5 && N.GetPlayer().Health==5,"initial gold and health");
     I={};I.Jump=true;N.Step(I);Near(N.GetPlayer().Y,369,"first jump");N.Step(I);Check(N.GetPlayer().DoubleJump,"held jump does not consume double jump");
@@ -265,20 +265,20 @@ void Integration() {
     NP.X=770;NP.Y=100;NP.Spinning=5;NP.Facing=1;N.Step({});Check(N.GetPlayer().X<=770,"spin cannot escape arena");
     NP.X=30;NP.Y=-100;I={};I.Up=true;N.Step(I);Check(N.GetPlayer().Y>= -100,"wall climb bounded above arena");
 
-    Context="bounded replay and frame validation";Random R;R.Seed(135);ContraGame C2;ShadowNinjaGame N2;
+    Context="bounded replay and frame validation";Random R;R.Seed(135);IronwakeGame C2;EmberstepGame N2;
     C.Reset(17);C2.Reset(17);N.Reset(17);N2.Reset(17);
     for(int K=0;K<20000;++K) {
         I={};const int Bits=R.Int(0,255);I.Left=(Bits&1)!=0;I.Right=(Bits&2)!=0;I.Up=(Bits&4)!=0;I.Down=(Bits&8)!=0;
         I.Fire=(Bits&16)!=0;I.Jump=(Bits&32)!=0;I.Action=(Bits&64)!=0;I.Dash=(Bits&128)!=0;
         I.AxisX=R.Between(-1,1);I.AxisY=R.Between(-1,1);C.Step(I);C2.Step(I);N.Step(I);N2.Step(I);
         if(K%200==0) {
-            Check(C.BulletCount()<=192 && C.EnemyCount()<=6 && C.ParticleCount()<=160,"CONTRA entity bounds");
+            Check(C.BulletCount()<=192 && C.EnemyCount()<=6 && C.ParticleCount()<=160,"IRONWAKE entity bounds");
             Check(N.AttackCount()<=64 && N.EnemyCount()<=5 && N.GoldCount()<=5,"Ninja entity bounds");
-            Check(C.GetPlayer().X==C2.GetPlayer().X && C.GetStatus().Score==C2.GetStatus().Score && C.EnemyCount()==C2.EnemyCount(),"CONTRA deterministic replay");
+            Check(C.GetPlayer().X==C2.GetPlayer().X && C.GetStatus().Score==C2.GetStatus().Score && C.EnemyCount()==C2.EnemyCount(),"IRONWAKE deterministic replay");
             Check(N.GetPlayer().X==N2.GetPlayer().X && N.GetStatus().Score==N2.GetStatus().Score && N.EnemyCount()==N2.EnemyCount(),"Ninja deterministic replay");
-            C.Render(F);Check(F.Commands.size()<Frame::MaxCommands,"CONTRA bounded render");
+            C.Render(F);Check(F.Commands.size()<Frame::MaxCommands,"IRONWAKE bounded render");
             for(const auto& D:F.Commands) {
-                Check(std::isfinite(D.A.X)&&std::isfinite(D.A.Y)&&std::isfinite(D.B.X)&&std::isfinite(D.B.Y),"CONTRA finite geometry");
+                Check(std::isfinite(D.A.X)&&std::isfinite(D.A.Y)&&std::isfinite(D.B.X)&&std::isfinite(D.B.Y),"IRONWAKE finite geometry");
             }
             N.Render(F);Check(F.Commands.size()<Frame::MaxCommands,"Ninja bounded render");
             for(const auto& D:F.Commands) {

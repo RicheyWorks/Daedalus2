@@ -194,7 +194,7 @@
       return st;
     }
     /* Sticks: radial center dead zone with rescale (no cross-shaped dead zone, diagonals stay diagonal), a max input
-       threshold, and an optional axial dead zone, per stick, from the Controller tab (Halo Infinite's three). */
+       threshold, and an optional axial dead zone, per stick, from the Controller tab (a modern console game's three). */
     const setting = (id, d) => (opt.settings && opt.settings.loaded() ? opt.settings.get(id) : d);
     function shapeStick(ax, kx, ky, side) {
       const dz = setting(side + "Deadzone", opt.deadzone * 100) / 100, mx = Math.max(dz + 0.01, setting(side + "MaxInput", 100) / 100);

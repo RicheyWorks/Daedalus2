@@ -1,0 +1,442 @@
+{
+  "schema": "daedalus.epic-integration-scoped-runtime-evidence.v1",
+  "tested_source_checkpoint": "dbda99d1db7fc64fb30d53ae00840bd8b6422ea7",
+  "engine": "UE 5.8.3-58210709+++UE5+Release-5.8",
+  "overall_acceptance": "PARTIAL_VALIDATION_CLASS_COVERAGE",
+  "production_ui_accepted": false,
+  "all_epic_products_integrated": false,
+  "official_mcp_http_transport_live_tested": false,
+  "offline_tests": {
+    "passed": 50,
+    "native_calls": 0,
+    "receipt": {
+      "retained_local_receipt": "OfflineIntegrationR1/terminal.json",
+      "sha256": "fba91e6f57b4e760c8955a0a52726ace26cafb2ddcd09c10ca20ba8f569057b7",
+      "bytes": 2062
+    }
+  },
+  "native_builds": {
+    "initial": {
+      "exit_code": 0,
+      "elapsed_seconds": 274.6032471,
+      "receipt": {
+        "retained_local_receipt": "NativeBuildR1/build-terminal.json",
+        "sha256": "354784a5e2533d7dc8f75fc70add4c9b38156c15ce2623cdb145d404805d2b6e",
+        "bytes": 406
+      }
+    },
+    "focused_repair": {
+      "exit_code": 0,
+      "elapsed_seconds": 9.647706400006427,
+      "receipt": {
+        "retained_local_receipt": "RecoveryBuildR3/build-terminal.json",
+        "sha256": "eed2d12515d64c75c541529cdb5418e40c6d35a03a30039277bdaf066140ff91",
+        "bytes": 464
+      }
+    },
+    "canonical_staged_header_sha256": "8bde83421c0c7c0c1913cf6c9a9c6614e089ca78b84479a3b5e8ab9d869edfe7"
+  },
+  "blueprint": {
+    "object": "/Game/CodexToolEvaluation/EpicIntegrationR1/BP_CompileReceipt.BP_CompileReceipt",
+    "value": 37,
+    "compiled_up_to_date": true,
+    "exact_save_returned": true,
+    "property_flags_changed": false,
+    "fresh_process_reopens_proven": 2,
+    "saved_receipt": {
+      "retained_local_receipt": "NativeBlueprintR2/terminal.json",
+      "sha256": "d770d7b8bee98f6f1ec2d6c18a6deb948d2e13758868af123cd83d43035813a3",
+      "bytes": 2920
+    },
+    "latest_fresh_receipt": {
+      "retained_local_receipt": "RecoveryReadinessR1/terminal.json",
+      "sha256": "c6611689ec00d0f7adde9e451124f318797669dcd0333344d3e1110bf592b203",
+      "bytes": 3210
+    }
+  },
+  "slate": {
+    "actual_observations": {
+      "scope": "disposable_virtual_slate_button",
+      "ran": true,
+      "detached_widget_rejected": true,
+      "wrong_button_rejected": true,
+      "disabled_button_rejected": true,
+      "enabled_click_handled": true,
+      "virtual_focus_preserved": true,
+      "button_released": true,
+      "keyboard_focus_preserved": true,
+      "active_window_preserved": true,
+      "virtual_user_released": true,
+      "window_unregister_called": true,
+      "owned_content_detached": true,
+      "click_count": 1,
+      "failure_reason": "",
+      "passed": true,
+      "production_ui_accepted": false
+    },
+    "protected_equal": true,
+    "receipt": {
+      "retained_local_receipt": "NativeSlateR2/terminal.json",
+      "sha256": "8bb1fea71dd63946336920673f06f5872858f55cf375bbacc902991325ba1a24",
+      "bytes": 3491
+    },
+    "prior_attempt": {
+      "stage": "NATIVE_FIXTURE_CRASH_FAILED",
+      "receipt": {
+        "retained_local_receipt": "NativeSlateR1/terminal.json",
+        "sha256": "7be7446ba26ae88680c3261ae4dd6839c371f17d10ef9e0ef27c17ac25068640",
+        "bytes": 960
+      },
+      "repair": "Use public pointer-aware FWidgetPath constructor for all routes; detach only owned content before unregistering; report explicit API call separately from observed detachment.",
+      "private_engine_crash_frame_exact_symbol_unproven": true
+    }
+  },
+  "automation": {
+    "discovery": {
+      "status": "ready"
+    },
+    "exact_catalogs": {
+      "Daedalus.Slate.Acceptance.VirtualButton": {
+        "tests": [
+          "Daedalus.Slate.Acceptance.VirtualButton"
+        ],
+        "total": 1,
+        "returned": 1
+      },
+      "Daedalus.Slate.Acceptance.RepeatCleanup": {
+        "tests": [
+          "Daedalus.Slate.Acceptance.RepeatCleanup"
+        ],
+        "total": 1,
+        "returned": 1
+      },
+      "Daedalus.Editor.Validation.Policy": {
+        "tests": [
+          "Daedalus.Editor.Validation.Policy"
+        ],
+        "total": 1,
+        "returned": 1
+      },
+      "Daedalus.Editor.Validation.NativeProjection": {
+        "tests": [
+          "Daedalus.Editor.Validation.NativeProjection"
+        ],
+        "total": 1,
+        "returned": 1
+      }
+    },
+    "actual_results": {
+      "tests": [
+        {
+          "name": "Daedalus.Editor.Validation.NativeProjection",
+          "state": "Success",
+          "duration": 0.012647699564695358,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Editor.Validation.Policy",
+          "state": "Success",
+          "duration": 0.011544797569513321,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Slate.Acceptance.RepeatCleanup",
+          "state": "Success",
+          "duration": 0.015121102333068848,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Slate.Acceptance.VirtualButton",
+          "state": "Success",
+          "duration": 0.013638801872730255,
+          "errors": [],
+          "warnings": []
+        }
+      ],
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "total": 4,
+      "duration": 0.05295240134000778
+    },
+    "strict_consumer_accepted": true,
+    "receipt": {
+      "retained_local_receipt": "AutomationResultsR1/terminal.json",
+      "sha256": "325344d90c83001890d845a4a1ab858b41f5834c2dad1c77bed4e9df139fb88c",
+      "bytes": 4756
+    },
+    "named_fixtures_automation_run": false,
+    "policy_and_projection_are_not_subsystem_invocation": true
+  },
+  "validation": {
+    "three_class_coverage_complete": false,
+    "expected_outcomes_match": false,
+    "actual_calls": [
+      {
+        "fixture": {
+          "path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationValid.ValidationValid",
+          "outcome": "Valid",
+          "class": "/Script/DaedalusLink.DaedalusAcceptanceValidationFixture",
+          "properties": {
+            "Outcome": "Valid"
+          },
+          "saved": true
+        },
+        "reply": {
+          "status": "Valid",
+          "native_invoked": true,
+          "accepted": true,
+          "cancellation_observed": false,
+          "native_return": 0,
+          "diagnostic": "Complete Valid result for every exact requested asset.",
+          "snapshot_json": "{\"snapshot_kind\": \"explicit_native_members_not_mcp_schema\", \"requested_assets\": [\"/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationValid.ValidationValid\"], \"native_return\": 0, \"results\": {\"NumRequested\": 1, \"NumExternalObjects\": 0, \"NumChecked\": 1, \"NumValid\": 1, \"NumInvalid\": 0, \"NumSkipped\": 0, \"NumWarnings\": 0, \"NumUnableToValidate\": 0, \"bAssetLimitReached\": false, \"AssetsDetails\": {\"/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationValid.ValidationValid\": {\"PackageName\": \"/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationValid\", \"AssetName\": \"ValidationValid\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}}, \"ValidatorMessages\": []}, \"settings\": {\"bSkipExcludedDirectories\": false, \"bShowIfNoFailures\": false, \"bCollectPerAssetDetails\": true, \"ValidationUsecase\": \"EDataValidationUsecase::Script\", \"bLoadAssetsForValidation\": true, \"bUnloadAssetsLoadedForValidation\": false, \"bLoadExternalObjectsForValidation\": true, \"bCaptureAssetLoadLogs\": true, \"bCaptureLogsDuringValidation\": true, \"bCaptureWarningsDuringValidationAsErrors\": false, \"MaxAssetsToValidate\": 2, \"bValidateReferencersOfDeletedAssets\": false, \"bSilent\": true}, \"provenance\": {\"fresh_out_results\": \"attested\", \"native_invocation\": \"attested\", \"captured_at_utc\": \"2026-10-19T16:43:48.954Z\"}, \"native_runtime_qualified\": false, \"unknowns\": [\"native_runtime_unqualified\", \"official_mcp_callable_unverified\", \"tokenized_message_tokens_projected_to_text_only\", \"validator_statistics_not_captured\", \"settings_message_log_fields_not_captured\"]}"
+        }
+      },
+      {
+        "fixture": {
+          "path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationInvalid.ValidationInvalid",
+          "outcome": "Invalid",
+          "class": "/Script/DaedalusLink.DaedalusAcceptanceValidationFixture",
+          "properties": {
+            "Outcome": "Invalid"
+          },
+          "saved": true
+        },
+        "reply": {
+          "status": "Invalid",
+          "native_invoked": true,
+          "accepted": false,
+          "cancellation_observed": false,
+          "native_return": 1,
+          "diagnostic": "One or more assets are Invalid.",
+          "snapshot_json": "{\"snapshot_kind\": \"explicit_native_members_not_mcp_schema\", \"requested_assets\": [\"/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationInvalid.ValidationInvalid\"], \"native_return\": 1, \"results\": {\"NumRequested\": 1, \"NumExternalObjects\": 0, \"NumChecked\": 1, \"NumValid\": 0, \"NumInvalid\": 1, \"NumSkipped\": 0, \"NumWarnings\": 0, \"NumUnableToValidate\": 0, \"bAssetLimitReached\": false, \"AssetsDetails\": {\"/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationInvalid.ValidationInvalid\": {\"PackageName\": \"/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationInvalid\", \"AssetName\": \"ValidationInvalid\", \"Result\": \"Invalid\", \"ValidationErrors\": [\"Owned acceptance fixture intentionally requires repair.\"], \"ValidationWarnings\": [], \"ValidationMessages\": [{\"Severity\": \"Error\", \"Text\": \"Owned acceptance fixture intentionally requires repair.\"}], \"ExternalObjects\": []}}, \"ValidatorMessages\": []}, \"settings\": {\"bSkipExcludedDirectories\": false, \"bShowIfNoFailures\": false, \"bCollectPerAssetDetails\": true, \"ValidationUsecase\": \"EDataValidationUsecase::Script\", \"bLoadAssetsForValidation\": true, \"bUnloadAssetsLoadedForValidation\": false, \"bLoadExternalObjectsForValidation\": true, \"bCaptureAssetLoadLogs\": true, \"bCaptureLogsDuringValidation\": true, \"bCaptureWarningsDuringValidationAsErrors\": false, \"MaxAssetsToValidate\": 2, \"bValidateReferencersOfDeletedAssets\": false, \"bSilent\": true}, \"provenance\": {\"fresh_out_results\": \"attested\", \"native_invocation\": \"attested\", \"captured_at_utc\": \"2026-10-19T16:43:49.235Z\"}, \"native_runtime_qualified\": false, \"unknowns\": [\"native_runtime_unqualified\", \"official_mcp_callable_unverified\", \"tokenized_message_tokens_projected_to_text_only\", \"validator_statistics_not_captured\", \"settings_message_log_fields_not_captured\"]}"
+        }
+      },
+      {
+        "fixture": {
+          "path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationNotValidated.ValidationNotValidated",
+          "outcome": "NotValidated",
+          "class": "/Script/DaedalusLink.DaedalusAcceptanceValidationFixture",
+          "properties": {
+            "Outcome": "NotValidated"
+          },
+          "saved": true
+        },
+        "reply": {
+          "status": "Valid",
+          "native_invoked": true,
+          "accepted": true,
+          "cancellation_observed": false,
+          "native_return": 0,
+          "diagnostic": "Complete Valid result for every exact requested asset.",
+          "snapshot_json": "{\"snapshot_kind\": \"explicit_native_members_not_mcp_schema\", \"requested_assets\": [\"/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationNotValidated.ValidationNotValidated\"], \"native_return\": 0, \"results\": {\"NumRequested\": 1, \"NumExternalObjects\": 0, \"NumChecked\": 1, \"NumValid\": 1, \"NumInvalid\": 0, \"NumSkipped\": 0, \"NumWarnings\": 0, \"NumUnableToValidate\": 0, \"bAssetLimitReached\": false, \"AssetsDetails\": {\"/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationNotValidated.ValidationNotValidated\": {\"PackageName\": \"/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationNotValidated\", \"AssetName\": \"ValidationNotValidated\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}}, \"ValidatorMessages\": []}, \"settings\": {\"bSkipExcludedDirectories\": false, \"bShowIfNoFailures\": false, \"bCollectPerAssetDetails\": true, \"ValidationUsecase\": \"EDataValidationUsecase::Script\", \"bLoadAssetsForValidation\": true, \"bUnloadAssetsLoadedForValidation\": false, \"bLoadExternalObjectsForValidation\": true, \"bCaptureAssetLoadLogs\": true, \"bCaptureLogsDuringValidation\": true, \"bCaptureWarningsDuringValidationAsErrors\": false, \"MaxAssetsToValidate\": 2, \"bValidateReferencersOfDeletedAssets\": false, \"bSilent\": true}, \"provenance\": {\"fresh_out_results\": \"attested\", \"native_invocation\": \"attested\", \"captured_at_utc\": \"2026-10-19T16:43:49.536Z\"}, \"native_runtime_qualified\": false, \"unknowns\": [\"native_runtime_unqualified\", \"official_mcp_callable_unverified\", \"tokenized_message_tokens_projected_to_text_only\", \"validator_statistics_not_captured\", \"settings_message_log_fields_not_captured\"]}"
+        }
+      }
+    ],
+    "receipt": {
+      "retained_local_receipt": "NativeValidationR1/terminal.json",
+      "sha256": "55252f5c93a4d72a15d8c457eb105ab2ea1c59fe62f725aad738a8579ff93c98",
+      "bytes": 9045
+    },
+    "current_blocker": "Configured class NotValidated contributed neutral to the enabled-validator union; the observed aggregate was Valid. No global validators, settings, fixtures or oracle were changed. Exact contributing validator identity is unknown.",
+    "aggregation_source": {
+      "EditorValidatorSubsystem.cpp": {
+        "sha256": "c7a758c926f413240cfa598ab90af296db9dc39584c43ae3d56f7dbe2546b0a8",
+        "lines": "651-690"
+      },
+      "CoreUObject/Private/Misc/DataValidation.cpp": {
+        "sha256": "2402214633c8cae23474f114e912253e621348b448d134ce13b8b867abd0f35b",
+        "lines": "31-41"
+      }
+    }
+  },
+  "import_reimport": {
+    "stage": "REIMPORTED_PRESERVED_RESTORED_SAVED",
+    "source_sha256": "4e83515ecb6c49139db195354651fd6e23cebdf6150b2011778755ec8c41581f",
+    "source_bytes": 18576,
+    "pipeline": "existing interchange_harness; new owned namespace only",
+    "facts": {
+      "mesh_found": true,
+      "path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate.Prop_PracticeCrate",
+      "tris_lod0": 264,
+      "bounds_min_cm": [
+        -26.0,
+        -26.499998092651367,
+        0.0
+      ],
+      "bounds_max_cm": [
+        26.0,
+        26.499998092651367,
+        50.0
+      ],
+      "materials": [
+        {
+          "slot": "Prop_PracticeCrate_M0",
+          "material": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0"
+        },
+        {
+          "slot": "Prop_PracticeCrate_M1",
+          "material": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1"
+        }
+      ],
+      "sockets": [
+        {
+          "name": "Top",
+          "location_cm": [
+            0.0,
+            0.0,
+            50.0
+          ],
+          "rotation_pyr": [
+            0.0,
+            180.0,
+            -90.0
+          ]
+        }
+      ],
+      "collision": {
+        "convex": 1,
+        "hulls": [
+          {
+            "verts": 24,
+            "extent_cm": [
+              52.0,
+              53.0,
+              50.0
+            ]
+          }
+        ]
+      },
+      "simple_collision_count": 1,
+      "lods": 1,
+      "lod0_source_tris": 264,
+      "lod1_source_tris": null,
+      "nanite": false,
+      "inventory": [
+        "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate [StaticMesh]",
+        "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0 [Material]",
+        "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1 [Material]"
+      ],
+      "dirty": []
+    },
+    "same_uobject": true,
+    "preserved": {
+      "path": true,
+      "tris_lod0": true,
+      "bounds_min_cm": true,
+      "bounds_max_cm": true,
+      "materials": true,
+      "sockets": true,
+      "collision": true,
+      "simple_collision_count": true,
+      "lods": true,
+      "nanite": true,
+      "inventory": true
+    },
+    "custom_lightmap_128_preserved": true,
+    "restored_lightmap_resolution": 4,
+    "exact_save": {
+      "saved": true,
+      "passes": 1,
+      "detail": [
+        {
+          "pass": 1,
+          "packages": [
+            "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate"
+          ],
+          "ok": true
+        }
+      ],
+      "dirty_after": []
+    },
+    "receipt": {
+      "retained_local_receipt": "ReimportFinishR1/terminal.json",
+      "sha256": "077555fb7369ac00a11f8b28dcc1f9b2201e20e5e807d2f80965d9c4efa043ca",
+      "bytes": 4416
+    },
+    "world_placed": false,
+    "world_saved": false,
+    "fresh_process_reopen_after_import": false,
+    "timing_limit": "Polling elapsed values include resource holds and observation delay; they are not import performance measurements.",
+    "history": [
+      "Original memory-floor hold dispatched zero calls.",
+      "Read-only reconciliation established a flat three-object layout, replacing an incorrect expected per-type layout before saving. No rename or repeated import.",
+      "Native Top socket exists; the reused harness warning claiming glTF drops socket empties is stale. No sidecar or socket-edit stage ran."
+    ]
+  },
+  "preservation": {
+    "stage": "PRESERVED_CLEAN_PARTIAL_VALIDATION_COVERAGE",
+    "protected_saved_files": 1352,
+    "mismatches": 0,
+    "unchanged_original_source_config_files": 223,
+    "approved_original_source_config_updates": 3,
+    "new_owned_saved_packages": [
+      {
+        "package": "/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationValid",
+        "sha256": "2b77c7073f7323a566f3391d8dc1c0a2f13fdfa60fe1da4a3ae73ecfbdab55bd",
+        "bytes": 1575
+      },
+      {
+        "package": "/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationInvalid",
+        "sha256": "8b60ea23ae679d15311fc5f4cce50c3a4d4932597843b1afe0170de5212aa9ad",
+        "bytes": 1587
+      },
+      {
+        "package": "/Game/CodexToolEvaluation/EpicIntegrationR1/Validation/ValidationNotValidated",
+        "sha256": "5143c80e69e45c35be4fead5e5b490846d51f034e1e48e906eaa9fccfed7a470",
+        "bytes": 1386
+      },
+      {
+        "package": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate",
+        "sha256": "9c7b11ef397716b6ebbab6f7ac81a479a3bc9568b77ef9c5691bf1c1326a4294",
+        "bytes": 71710
+      },
+      {
+        "package": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0",
+        "sha256": "1735ad01f28b8e2d6b3307501530078376dda3014ea1bf5e8c016c7dbe2342e3",
+        "bytes": 53220
+      },
+      {
+        "package": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1",
+        "sha256": "fdc76cdd744f0ff049c4270d8b4d7f8af3fdc1a719c943ade7d00c342309c001",
+        "bytes": 53184
+      }
+    ],
+    "scene": {
+      "actors": 22878,
+      "sha256": "828a1b087b3890c7a10747b6aed571fb109b6ae3c2096c58d716b2288f8513dd",
+      "scope": "actor path/class/label/location/rotation/scale"
+    },
+    "camera_preserved": true,
+    "dirty_maps": [],
+    "dirty_content": [],
+    "pie": false,
+    "no_unfinished_owned_operations": true,
+    "world_saved": false,
+    "receipt": {
+      "retained_local_receipt": "final-preservation.json",
+      "sha256": "fe6f6e3dd325e64166e3c6b0f823aec45c3d73127192e8de408c8781e68cf564",
+      "bytes": 6450
+    }
+  },
+  "resource_custody": {
+    "compute_normally_released": true,
+    "sole_unreal_custody_retained": true,
+    "editor_kept_open": true,
+    "release_receipt": {
+      "retained_local_receipt": "compute-release.json",
+      "sha256": "fdb7543667cc61b6ab6fa173ea9b3e9296dd31fa40918a681222b73eefdb3ba6",
+      "bytes": 1123
+    }
+  },
+  "remaining_limits": [
+    "Native three-class DataValidation coverage incomplete; Valid and Invalid real invocations proven.",
+    "Disposable Slate button acceptance does not qualify production game UI.",
+    "NamedFixtures automation launch flags not supplied; equivalent direct native calls retained with the mismatch.",
+    "Owned import/reimport saved and read back in current process; no additional fresh-process reopen for that fixture.",
+    "No blanket product integration or global legacy-import default migration is claimed."
+  ]
+}

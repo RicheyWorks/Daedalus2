@@ -1,0 +1,32 @@
+{
+ "meadow": {
+  "LUFS": -21.0,
+  "peak_dB": -10.4,
+  "seam_jump": 0.0015,
+  "hf_above_6k": 0.0394
+ },
+ "bramble": {
+  "LUFS": -21.0,
+  "peak_dB": -6.7,
+  "seam_jump": 0.0015,
+  "hf_above_6k": 0.0127
+ },
+ "pine": {
+  "LUFS": -21.0,
+  "peak_dB": -7.5,
+  "seam_jump": 0.0181,
+  "hf_above_6k": 0.0232
+ },
+ "oak": {
+  "LUFS": -21.0,
+  "peak_dB": -6.5,
+  "seam_jump": 0.0022,
+  "hf_above_6k": 0.016
+ },
+ "willow": {
+  "LUFS": -24.6,
+  "peak_dB": -3.0,
+  "seam_jump": 0.0058,
+  "hf_above_6k": 0.0538
+ }
+}

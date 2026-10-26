@@ -45,7 +45,7 @@ with sync_playwright() as p:
         m = mn()
         while mn()["idx"] != m["cmds"].index(cmd): bot.press("down", 70)
         bot.press("a", 150)
-    check("START opens the field menu with the eight commands", open_menu() and mn()["cmds"] == ["ITEM", "MAGIC", "EQUIP", "STATUS", "ORDER", "BESTIARY", "SAVE", "OPTIONS"], mn())
+    check("START opens the field menu with the nine commands", open_menu() and mn()["cmds"] == ["ITEM", "MAGIC", "EQUIP", "STATUS", "ORDER", "BESTIARY", "FISH", "SAVE", "OPTIONS"], mn())
     ev("PRISM_DEMO.give('Steel Saber'); PRISM_DEMO.give('Silver Lance')")
     pick("EQUIP")
     check("EQUIP opens on Corin's slots", mn()["sub"] == "equip" and mn()["who"] == 0)

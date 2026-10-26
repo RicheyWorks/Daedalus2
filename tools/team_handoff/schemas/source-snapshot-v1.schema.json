@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Daedalus explicit legacy-source snapshot request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "profile", "campaign", "captured_utc", "max_source_age_seconds", "identity", "session_ref", "runtime", "source_state", "inputs"],
+  "properties": {
+    "schema": {"const": "daedalus.source-snapshot-request.v1"},
+    "profile": {"const": "legacy-r22-saved-boundary.v1"},
+    "campaign": {"$ref": "#/$defs/text"},
+    "captured_utc": {"$ref": "#/$defs/utc"},
+    "max_source_age_seconds": {"type": "integer", "minimum": 1, "maximum": 3600},
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "session", "host"],
+      "properties": {
+        "owner": {"$ref": "#/$defs/text"},
+        "session": {"$ref": "#/$defs/text"},
+        "host": {"$ref": "#/$defs/text"}
+      }
+    },
+    "session_ref": {"$ref": "#/$defs/text"},
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "artifact_sha256", "generation"],
+      "properties": {
+        "name": {"$ref": "#/$defs/text"},
+        "version": {"$ref": "#/$defs/text"},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "generation": {"$ref": "#/$defs/text"}
+      }
+    },
+    "source_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dirty", "exceptions"],
+      "properties": {
+        "dirty": {"type": ["boolean", "null"]},
+        "exceptions": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/text"}}
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["session", "launch", "config", "owner", "terminal", "ledger", "monitor", "native", "catalog", "journal", "source", "build"],
+      "properties": {
+        "session": {"$ref": "#/$defs/input"},
+        "launch": {"$ref": "#/$defs/input"},
+        "config": {"$ref": "#/$defs/input"},
+        "owner": {"$ref": "#/$defs/input"},
+        "terminal": {"$ref": "#/$defs/input"},
+        "ledger": {"$ref": "#/$defs/input"},
+        "monitor": {"$ref": "#/$defs/input"},
+        "native": {"$ref": "#/$defs/input"},
+        "catalog": {"$ref": "#/$defs/input"},
+        "journal": {"$ref": "#/$defs/input"},
+        "source": {"$ref": "#/$defs/input"},
+        "build": {"$ref": "#/$defs/input"}
+      }
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "maxLength": 4096, "pattern": "^[^\\x00-\\x1f]+$"},
+    "utc": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?(?:Z|\\+00:00)$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "relativePath": {"type": "string", "maxLength": 220, "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*$"},
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "path", "logical_path", "sha256", "bytes", "reason"],
+      "properties": {"status": {}, "path": {}, "logical_path": {}, "sha256": {}, "bytes": {}, "reason": {}},
+      "oneOf": [
+        {
+          "properties": {
+            "status": {"const": "present"},
+            "path": {"$ref": "#/$defs/relativePath"},
+            "logical_path": {"$ref": "#/$defs/text"},
+            "sha256": {"$ref": "#/$defs/sha256"},
+            "bytes": {"type": "integer", "minimum": 0, "maximum": 16777216},
+            "reason": {"type": "null"}
+          }
+        },
+        {
+          "properties": {
+            "status": {"const": "unknown"},
+            "path": {"type": "null"},
+            "logical_path": {"type": "null"},
+            "sha256": {"type": "null"},
+            "bytes": {"type": "null"},
+            "reason": {"$ref": "#/$defs/text"}
+          }
+        }
+      ]
+    }
+  },
+  "$comment": "source_snapshot.py is authoritative for calendar and fractional timestamp semantics, portable noncolliding paths, byte pins, stable before/after capture, cross-receipt identity/window/progress checks and holds. logical_path and session_ref preserve original path data; they never authorize discovery or reads outside explicitly supplied copies. Unknown essential inputs hold without producing a checkpoint; explicitly unknown source/build provenance remains unknown in any produced packet."
+}

@@ -1,0 +1,83 @@
+{
+ "schema": "bb-material-variants/1",
+ "asset": "Bark (pcg-ecology tree trunks; meshes untouched)",
+ "slot": "Bark",
+ "status": "NOT READY",
+ "gap": "G103 (pythagoras 49770, code 9fcb07bd com.daedalus.world.battlefield.SootMoths)",
+ "parent_material": {
+  "name": "M_Bark_Soot (UE side; wraps the trees' bark textures)",
+  "graph": "e = 1.08 - 1.32*Soot; cover = smoothstep(e - 0.08, e + 0.08, SootMask(uv * SootTiling)); BaseColor = lerp(BarkBaseColor, SootColour, cover); Roughness = lerp(BarkRoughness, SootRoughness, cover); Normal = lerp(BarkNormal, FlattenNormal(BarkNormal, 0.5), cover)",
+  "soot_colour": {
+   "srgb_hex": "1B1A18",
+   "linear_rgba": [
+    0.01096,
+    0.01033,
+    0.009134,
+    1.0
+   ],
+   "roughness": 0.95
+  }
+ },
+ "params": {
+  "Soot": "scalar 0..1 = SootMoths bark darkness (years().bark / Report bark)",
+  "SootColour": "vector, linear",
+  "SootRoughness": "scalar",
+  "SootMask": "texture, greyscale, sRGB off, tileable",
+  "SootTiling": "scalar (repeats per metre of trunk UV)"
+ },
+ "mask": {
+  "file": "T_Bark_SootMask.png",
+  "sha256": "7e456d023a9a4b6b63577003a1db125f2e76bed8d139bda6c65bd6b40d2d94f6",
+  "format": "PNG 8-bit greyscale 512x512, tileable, white = soot settles first",
+  "uv": "the trunk's bark UVs (tiling)"
+ },
+ "instances": {
+  "MI_Bark_Clean": {
+   "parent": "M_Bark_Soot",
+   "params": {
+    "Soot": 0.0,
+    "SootColour": {
+     "srgb_hex": "1B1A18",
+     "linear_rgba": [
+      0.01096,
+      0.01033,
+      0.009134,
+      1.0
+     ]
+    },
+    "SootRoughness": 0.95,
+    "SootMask": "T_Bark_SootMask.png",
+    "SootTiling": 1.0
+   },
+   "band": "OAK",
+   "coverage_at_this_soot": 0.0
+  },
+  "MI_Bark_Sooted": {
+   "parent": "M_Bark_Soot",
+   "params": {
+    "Soot": 0.8,
+    "SootColour": {
+     "srgb_hex": "1B1A18",
+     "linear_rgba": [
+      0.01096,
+      0.01033,
+      0.009134,
+      1.0
+     ]
+    },
+    "SootRoughness": 0.95,
+    "SootMask": "T_Bark_SootMask.png",
+    "SootTiling": 1.0
+   },
+   "band": "BARE",
+   "coverage_at_this_soot": 1.0
+  }
+ },
+ "bands": {
+  "BARE": "Soot >= 0.5",
+  "SCRUB": "0.2 <= Soot < 0.5",
+  "OAK": "Soot < 0.2",
+  "source": "SootMoths.Report.bark()"
+ },
+ "drive": "one MID per trunk band, or set Soot each simulated year from SootMoths.years() (it settles at level * (1 - filters * 0.25))"
+}

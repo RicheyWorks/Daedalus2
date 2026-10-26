@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: MIT
+name: Prismheart input checks
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/rpg_demo/index.html'
+      - 'tools/rpg_demo/input_lifecycle_test.js'
+      - 'tools/rpg_demo/input_transition_test.js'
+      - 'tools/rpg_demo/dialog_input_test.js'
+      - 'tools/rpg_demo/name_entry_key_test.js'
+      - 'tools/rpg_demo/battle_cancel_test.js'
+      - 'tools/rpg_demo/battle_plan_test.js'
+      - 'tools/rpg_demo/held_action_test.js'
+      - 'tools/rpg_demo/confused_action_test.js'
+      - 'tools/rpg_demo/build_demo.py'
+      - 'tools/rpg_demo/summons.js'
+      - 'data/rpg/party.json'
+      - 'data/rpg/interiors.json'
+      - 'data/rpg/prism-village.json'
+      - 'data/rpg/title.json'
+      - 'data/rpg/spells.json'
+      - 'data/rpg/prism-bosses.json'
+      - 'data/rpg/prism-bestiary.json'
+      - 'data/rpg/prism-encounters.json'
+      - 'data/rpg/portal-bestiary.json'
+      - 'data/rpg/portal-encounters.json'
+      - 'data/rpg/dungeons.json'
+      - '.github/workflows/prism-input.yml'
+permissions:
+  contents: read
+jobs:
+  input-source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      # Existing VM checks use fake DOM/device peers and catalog fixtures, without a browser or native runtime.
+      # Keep the suites serial with the same heap cap used for local validation.
+      - name: Input lifecycle and focus transitions
+        run: node --max-old-space-size=128 tools/rpg_demo/input_lifecycle_test.js
+      - name: Input edges across mode transitions
+        run: node --max-old-space-size=128 tools/rpg_demo/input_transition_test.js
+      - name: Dialogue choices and callback input priority
+        run: node --max-old-space-size=128 tools/rpg_demo/dialog_input_test.js
+      - name: Name entry keyboard and title transitions
+        run: node --max-old-space-size=128 tools/rpg_demo/name_entry_key_test.js
+      - name: Battle command cancellation and input priority
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_cancel_test.js
+      - name: Battle planning chooser and target previews
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_plan_test.js
+      - name: Held battle actions and status guards
+        run: node --max-old-space-size=128 tools/rpg_demo/held_action_test.js
+      - name: Confused battle action resolution
+        run: node --max-old-space-size=128 tools/rpg_demo/confused_action_test.js

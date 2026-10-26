@@ -1413,3 +1413,230 @@ The world map's `Village` landmark used to say "the way is sealed". It is now Wi
 - **Proof:** `tools/rpg_demo/village_test.py` passes 17/17. It walks a BFS route up to each villager and checks each
   speaks their own line. It also checks the barrel and the chest each give their prize once, there are no battles
   inside, and the gate leads back to the world.
+
+### 14.41 The Prismheart demo: fishing in Windmere's pond
+
+- **The data (`data/rpg/prism-fish.json`, original species):**
+
+  | Fish | Rarity | Weight | Effect |
+  |---|---|---|---|
+  | Reedling | common | 40 | heal 20 HP |
+  | Pond Perch | common | 30 | heal 30 HP |
+  | Mudskipper Eel | uncommon | 15 | heal 45 HP |
+  | Glassfin Minnow | uncommon | 9 | restore 15 MP |
+  | Sunscale Carp | rare | 5 | heal 120 HP |
+  | Prismscale Koi | legendary | 1 | restore 40 MP |
+
+  - Each fish has a bite window from 0.9 s (Reedling) down to 0.35 s (Prismscale Koi).
+  - `build_demo.py` adds every fish to the gear table as an item, so it is eaten from ITEM like any tonic.
+  - The build refuses an effect, weight or window the demo cannot use, or a Windmere with no water.
+- **The game:**
+  - Face water in a village or town and press A to cast.
+  - After 1.2–3.6 s (game time) a fish picked by weight bites, and "!" shows over the float, which dips.
+  - A during the bite lands it into the bag and the fish log. "NEW!" shows the first time a kind is caught, and a
+    toast shows the log count and the fish's note.
+  - A before the bite scatters it; a bite you ignore gets away; B reels in at any point.
+  - The fish log is saved at the inn, CONTINUE restores it and NEW GAME empties it.
+  - The Windmere Sailor explains how to fish.
+- **Proof:** `tools/rpg_demo/fish_test.py` passes 15/15, 6 runs in a row. It checks:
+  - casting only at water;
+  - reeling in, striking too soon, and a bite that gets away;
+  - landing fish into the bag and log, with "NEW!" only once;
+  - the fish as an ITEM with its real numbers;
+  - bite odds over 20,000 draws (commons most, the koi rarest);
+  - saving and CONTINUE, and NEW GAME.
+- **Note:** the strike test runs at real speed. At the suite's 6× speed a 0.35 s bite lasts about 60 ms, which is
+  shorter than a test round trip.
+- **Flake found and fixed in the test, not the game:** `face("right")` on the bank can walk a step onto grass, so the
+  next "face left and cast" faced grass. The test now warps back to the bank before casting.
+- **FISH page and the Elder's request (follow-up):**
+  - The field menu has a ninth command, FISH. It lists every kind in the table. Uncaught fish show as "???" with
+    their rarity and how often they bite. Caught fish show their count, their note and what eating them really does
+    (`itemLine`, at the demo's scaled numbers).
+  - The Windmere Elder has a `request` in `prism-village.json`: she buys a Sunscale Carp for 600 gold, once per
+    journey. The request is saved in `quests`, CONTINUE restores it and NEW GAME clears it.
+  - `fish_test.py` passes 22/22.
+- **Fix, stranded skiff (PootScoot review 32769):**
+  - **The bug:** a field-menu SAVE while parked on a walled-off sky cache saved that spot. CONTINUE starts on foot at
+    the inn, so the skiff sat where no one could walk to it.
+  - **The fix:** `recoverAir()` runs on CONTINUE. It keeps a parked spot only if it is landable ground the party can
+    walk to from the Town (`footReach()`, a BFS like the build's). Anything else goes back to the dock with a
+    "THE SKIFF FLEW HOME" toast: an isolated pocket, ground it could never land on, bad or missing coordinates.
+    Opened caches and first-Warden eligibility are kept.
+  - **Proof:** `airship_test.py` passes 37/37. It checks:
+    - recovery keeps a reachable spot;
+    - recovery sends home a pocket spot, reachable forest, and five kinds of bad coordinates;
+    - with no saved skiff it moors at the dock with nothing recalled;
+    - the real path works: land on the cache, SAVE from the menu, CONTINUE, then the skiff is at the dock, the cache
+      stays opened and it boards again.
+  - **Found on the way:** the old test had rested at the inn while the skiff sat on the cache, which is the same
+    stranding.
+
+### 14.42 The Prismheart demo: time of day
+
+- **Time passes in steps:**
+  - 4 minutes a step on the world map, 2 in town, the village or indoors, and 1 in dungeons;
+  - 2 a flown step (the skiff is quick);
+  - 15 a battle.
+
+  A journey starts on day 1 at 08:00, and the clock rolls over midnight into the next day.
+- **The day:** dawn 5–7, day 7–18, dusk 18–20, night 20–5.
+- **What changes:**
+  - The world map, town and village darken toward night (a blue tint up to 0.5). Town lamps and the
+    Town/Village/Castle markers glow with a warm radial light. Indoors and dungeons are unchanged.
+  - At dusk and night, world-map random battles come a quarter more often.
+  - The rare fish feed at night. `prism-fish.json night_weight` replaces `weight` between dusk and dawn, so carp
+    and koi bite about 2.5–3× more often.
+  - The field menu shows the clock (`D3 21:05`), blue at night.
+  - A night at the inn wakes the party at 07:00 the next day; a camp tent wakes it at 06:00.
+- **Saves:** the clock is saved, and a save from before the clock loads at day 1, 07:00.
+- **Proof:** `tools/rpg_demo/clock_test.py` passes 16/16. It checks:
+  - the step and battle costs;
+  - the midnight rollover and every phase boundary;
+  - the town at 23:00 measurably darker than at noon (mean canvas brightness), with indoors unchanged;
+  - the menu clock;
+  - night fish odds over 20,000 draws;
+  - waking at the inn, saving and CONTINUE, an old save, and NEW GAME.
+
+### 14.43 The Prismheart demo: shops buy too
+
+- **How selling works:** every shop except the magic shop has BUY and SELL tabs, switched with LEFT/RIGHT. BUY is
+  first, so existing play and the quest bot are unchanged.
+- **What sells:** SELL lists every bag item that has a price, fish and sky-cache finds included, for half that
+  price. Equipped gear is not in the bag, so it never appears.
+- **Using the list:** A sells one and the list shrinks with it. An empty bag says "NOTHING I CAN BUY FROM YOU". B
+  leaves from either tab.
+- **What it gives the game:** an economy loop. Night fishing turns a Sunscale Carp into 45 G here, or 600 G from the
+  Windmere Elder once.
+- **Proof:** `tools/rpg_demo/sell_test.py` passes 13/13.
+  - **Found in the test, not the game:** the test's own bag-clearing called `give(k, -0)`. The hook reads 0 as "1"
+    (`n || 1`), so it added a fish back. It now skips empty stacks.
+
+## 15. CSRBT ecosystem: implemented interfaces and Daedalus coverage (2026-10-14)
+
+Owner: `codex-csrbt-reuse`. The 22:01:26 UTC user direction expands the existing CSRBT lane to
+useful implemented ecosystem capabilities, tracing actual code before replacements. This section is
+an additive current-source inventory; the earlier Phase 0 audit and its historical statements remain
+historical. Source bindings, committed delivery, installed runtime, native execution and end-to-end
+proof are separate stages. Dedicated tests/builds are deferred for this phase. No service, editor,
+transport, native kernel, replica or fault-injection target was activated by this inventory.
+
+### 15.1 Actual delivery and preserved behavior
+
+- Existing `daedalus-core/.../world/ecology/Diversity.java` already adapts CSRBT
+  `CommunityMetrics`; `Biogeography.java` already carries theoretical-model formulas. Their
+  `Community`/fractional-abundance behavior remains unchanged.
+- PR145, source `88426cc4cff50c77022557788a3d00c183a653d2`, is the separate draft catalog-delta
+  slice: `tools/blender/asset_catalog_delta.py` reuses CSRBT `tools/evidence.py::compare`;
+  `production_queue.py --previous` adds optional comparison of declared export SHA256 values.
+  Its 14 focused pure-data checks are historical; they were not repeated in this phase. A missing
+  catalog entry is not a delete instruction; catalog declarations are not fresh file-byte proof.
+- This slice adapts all six actual `BetaDiversity.java` measures in
+  `daedalus-core/src/main/java/com/daedalus/world/ecology/CommunityComparison.java`: Jaccard,
+  Sørensen, Bray–Curtis, Renkonen, Pianka and Whittaker turnover. The donor takes integer `Long`
+  counts; Daedalus retains finite nonnegative `Double` populations without rounding. Positive
+  presence is sorted; common scaling avoids overflow of finite counts. Upstream empty-community
+  conventions remain explicit. Existing one-community indices are not replaced.
+- `EcologyComparisonController.java` uses existing `WorldHub.get` and `WorldService.ecology`.
+  `GET /api/v1/world/{id}/islands/{slot}/ecology/compare?otherWorldId=...&otherSlot=...` compares
+  mounted worlds only, returns normal world/island 404s, and carries both independently captured
+  ecology days in `IslandEcologyComparisonResponse`. Comparing one island to itself reuses one
+  snapshot. Existing current-day stepping semantics remain; a cross-world atomic census is not
+  claimed. The exact GET route joins the existing public ecology read policy.
+- The existing `daedalus-server/src/main/resources/static/realm.js` Life panel offers comparison
+  among that world's existing islands, including empty communities. It fetches on an explicit
+  click, discards stale selection/frame responses, and labels all six measures and snapshot days.
+  The API also accepts a different mounted world. No WebSocket contract was changed.
+- These additions are source-wired only at this stage: no build, runtime request, browser/native
+  execution or end-to-end result is claimed. The full ecosystem is not complete because this
+  ecology slice is complete in source. The donor MIT notice is retained at
+  `docs/third-party/CSRBT-MIT.txt` (Copyright 2026 Richmond); PR145's existing notices remain.
+
+### 15.2 All fourteen actual repositories and public seams
+
+All repositories were read at `C:/Users/730ri/projects/<Repository>/`. Each root `LICENSE` is MIT,
+Copyright (c) 2026 Richmond. In the table, `java/<package>/<file>` expands to
+`<Repository>/src/main/java/io/github/richeyworks/<package>/<file>`, except CSRBT's explicit
+module paths. “Possible fit” is an integration design based on read source, not installed coverage.
+Every unbound row below remains a concrete missing implementation, not a completion receipt.
+
+| Repository / observed version | Actual implemented interface/source | Possible Daedalus fit and missing binding |
+|---|---|---|
+| CSRBT core 0.3.1 | `CSRBT/csrbt-core/src/main/java/io/github/richeyworks/csrbt/OrderedSet.java`, `PersistentRankedSet.java`, `PersistentTreeEngine.java`, `interfaces/TreeEngine.java`, `interfaces/TreePersistenceAdapter.java`, `augment/GenericIntervalAugmentor.java`; `control/`, `ensemble/`, `evolution/`, `persistence/`, `event/`, `export/` | Ordered/range/interval catalog lookup and persisted local data could consume public types. No new indexed Daedalus catalog binding exists here. Health-gated strategy morphing/ensemble policy is implemented upstream, but requires a relevant measured workload before runtime adoption. Ranked routing remains declined in **Daedalus** `docs/adr/ADR-002-csrbt-rankedset-for-routing.md`; donor ADR-002 is a different decision. |
+| SuperBeefSort 0.1.0 | `java/superbeefsort/BeefSort.java`, `feed/StreamingFeeder.java`, `feed/ParallelFeeder.java`, `external/ExternalMergeSorter.java`, `external/SpillSerializer.java`; `registry/StrategyProvider.java` | Seeded bulk catalog ordering, sorted recovery and external spill are real implementations. Existing `production_queue.py` remains Python and is not using this sorter. Missing typed production-record serializer, an actual bulk-import consumer, build dependency resolution and later workload evidence. No speculative sorting speedup is claimed. |
+| SmokeHouse 0.3.0 | `java/smokehouse/SmokeHouse.java`, `IndexedStore.java`, `SmokeHouseOptions.java`, `RecordCodec.java`, `Replica.java`, `ReplicationServer.java` | Actual append-log store, rebuildable secondary indexes, typed interval endpoints, tail and read replicas could retain production catalog/receipt history. Current `InventoryCatalogService` serves read-only `.dic` resources; `WorldService` remains its existing world persistence. No replacement, production-store instance, record codec, durable receipt binding or lifecycle/size policy was installed. |
+| Carver 0.1.0 | `java/carver/Carver.java`, `Query.java`, `Planner.java`, `Plan.java`, `PlanStats.java` | Plans primary/secondary/interval/full-scan reads over `IndexedStore`. Missing a Daedalus typed catalog store/query consumer. Its contract is per-walk consistency, not a transaction across predicates; no atomic query claim. |
+| Renderer 0.1.1 | `java/renderer/Renderer.java`, `GroupView.java`: `countBy`, `sumBy`, `top`, tail-driven rebuild | Could expose export/import receipt totals by author/realm/state from the same catalog log. Current production queue JSON totals are snapshots, not Renderer views. Missing store event binding, lifecycle and query/UI binding. This is a data aggregate engine, not a graphics renderer. |
+| Brine 0.1.0 | `java/brine/Brine.java`; CSRBT `csrbt-experimental/.../cache/CacheEvolutionLoop.java`, `CacheGenome.java`, `SegmentedLruCache.java` | Implemented read-through store cache and caller-cadenced evolved residency; tail invalidates and a gap drops cached values. Missing actual catalog-read consumer and dependency/lifecycle wiring. Bounded asynchronous invalidation staleness is explicit. No automatic CPU/build/resource throttling is proposed. |
+| PitBoss 0.1.0 | `java/pitboss/PitBoss.java`: `addReplica`, `tick`, `rebootstrap`, explicitly invoked `promote` | Could maintain local read replicas of the catalog after a real store exists. Missing lifecycle, explicit administration and read-consumer mapping. No instance started; no consensus, automatic failover or split-brain prevention claim. |
+| DryAge 0.3.0 | `java/dryage/DryAge.java`: `preserve`, `generations`, `asOf`, record-bounded view, `retainNewest` | Preserved catalog/receipt generations could extend PR145's earlier/current comparison. Missing catalog store capture/read binding, scratch lifecycle and retention controls. Its record-coordinate history is complete only for an uncompacted preserved generation; no reconstruction of unpreserved history. |
+| Twine 0.1.1 | `java/twine/Twine.java`: `over(PutSink, DeleteSink, ...)`, `batch`, `recover` | Actual journal + atomic rename + idempotent replay could bind an export record and receipt batch. Missing one typed store and all-writes routing. Must recover before later writes and use indexed sinks rather than bypassing indexes. It provides crash recovery; intermediate multi-op application is not automatically invisible to arbitrary concurrent readers. |
+| SmokeSignal 0.3.0 | `java/smokesignal/SmokeSignalClient.java`, `SmokeSignalServer.java`, nested `SmokeSignalServer.WriteRoute` | Existing loopback numeric/typed serialized store API could expose that catalog locally. Missing validated record serializers, service ownership and Daedalus consumer binding. No listener/client/port was started, and this is not a replacement for the shared Unreal harness/transport. |
+| Jerky 0.2.0 | `java/jerky/Jerky.java`: `cure`, `verify`, `restore`, `names`, `extract` | Actual DEFLATE/CRC archive of SmokeHouse backup directories could preserve receipt-log generations. Missing store backup producer and archive workflow; CRC is corruption checking, not identity/provenance SHA256. Existing `WorldPackageService` ZIP/GLB packages remain their own format, not Jerky archives. |
+| Rub 0.1.0 | `java/rub/Rub.java`, `Vitals.java`: `sample`, `tick`, `history`, `pulse`, explicit gap counters | Catalog-store gauge/meter history could show committed mutations, segments and gaps. Missing a SmokeHouse-backed production-store observer and UI binding. These are store/tail metrics, not live OS/Task Manager CPU/RAM measurements. No resource-management policy added. |
+| Sizzle 0.1.0 | `java/sizzle/Sizzle.java`, `ChaosPlan.java`: typed write sinks and slow-tail seam | Upstream fault-injection paths are implemented. Relevant later to isolated durability verification after a local store integration, not active builds or production writes. No production binding or injection; dedicated tests remain deferred. |
+| WholeHog 0.2.1 | `java/wholehog/Organism.java`, `Exhibit.java`, `HarnessConsole.java` | Actual composition joins all engines under indexed-write routing, common lifecycle, archival and observability. `Organism` is specifically `Long,String` with integer `attr,start,end` values, and construction starts tail/replica/wire resources. It is not a drop-in asset metadata database. A useful catalog needs the generic underlying public engines and a typed record schema while preserving these routing contracts. No organism constructed or console launched. |
+
+### 15.3 Actual connectors, plugins, contracts, examples and dependencies
+
+- CSRBT's existing `tools/harness_contract.py` provides the gateway/registry/plugin contract with
+  `manifest`, `discover`, `observe`, `execute`, policy and replay cache. Actual target plugins are
+  `harness_plugin_page.py`, `harness_plugin_session.py`, `harness_plugin_lab.py`,
+  `harness_plugin_organism.py` (and a fixture). Actual transports are `harness_stdio.py`,
+  `harness_http.py`, `harness_mcp.py`; `harness_targets.py`, `routes.json`, `artifact_map.json`
+  and field pages provide registrations/navigation. These files were identified, not edited or run:
+  Poot remains the sole shared harness coder and harness tests are deferred.
+- The organism plugin is a working declared numeric-key/attribute/span protocol over
+  `WholeHog/.../HarnessConsole.java`. It names rank/order, Carver secondary/interval queries,
+  Renderer groups, Brine reads, PitBoss fleet/replicas, DryAge generations/as-of, Jerky archive
+  operations, SmokeHouse segments/compaction, Twine recovery, Rub history and Sizzle's reopen
+  seam. Numeric-only examples do not establish a free-text production asset connector.
+- Other actual examples include WholeHog `Exhibit.java`, CSRBT `ArenaSession.java`,
+  `SearchArenaSession.java`, `ViabilityMap.java`, `ecology/ExperimentLab.java`, `ExperimentSpec.java`,
+  `ExperimentExport.java` and field pages. Ecology helpers also include `DarwinCore.java`,
+  `FieldData.java`, `FieldReport.java`, `LifeTable.java`, `LogisticGrowth.java`,
+  `MarkRecapture.java`, `MendelianGenetics.java`, `PopulationGenetics.java`, `PhyloTree.java`,
+  `RangeQuadrats.java`, `SnapshotLineage.java`, `WorkloadTrace.java`, `TheoreticalModels.java`
+  and `EcologyRecorder.java`. Their implemented field/demo features remain unbound where Daedalus
+  has no matching observation/census input contract. Tree key access frequency is not animal
+  abundance; Darwin Core occurrence metadata must not invent geography or individual counts.
+  `EcologyRecorder` is op-indexed; closed windows are capped but event lifespans/population series
+  need draining or reconstruction for a long-lived deployment.
+- Java donors target 17; Daedalus targets 21 and preserves the SLF4J-only core boundary. CSRBT core
+  uses Log4j API; experimental additionally uses POI OOXML (Office exports). These external
+  dependencies were not added to Daedalus for the JDK-only BetaDiversity adaptation.
+- CSRBT's third actual Gradle module, `csrbt-benchmarks`, contains JMH evidence work rather than a
+  runtime feature. The core also implements `BPlusTreeEngine.java`, `TreeEngineRegistry.java`,
+  `adapter/NavigableOrderedSet.java`, strategy families (red-black/AVL/splay/weight-balanced/hybrid),
+  `export/TreeExport.java`, `TreeSessionRecorder.java` and order-statistics/diagnostics utilities.
+  Those engine/recording choices remain unbound to a Daedalus production workload here; a
+  benchmark module's existence is not performance evidence for this host or this integration.
+- Sibling `settings.gradle.kts` composite builds substitute actual local source. Several declared
+  coordinates name older SmokeHouse 0.2.0/core 0.3.0 while local versions are newer. This inventory
+  verifies source composition, **not Maven Central publication, locally resolved artifacts or
+  binary compatibility**. WholeHog's settings include eleven sibling engines, which reach
+  SuperBeefSort and CSRBT transitively. A Maven consumer still needs an explicit reproducible
+  dependency/source-packaging path; no build or dependency installation was performed.
+- SuperBeefSort's actual strategy plugin registration is
+  `src/main/resources/META-INF/services/io.github.richeyworks.superbeefsort.registry.StrategyProvider`.
+  Optional `sbs-kernels-rust/.../RustKernelStrategyProvider.java` has its own service registration,
+  Java 22 FFM/Cargo/native-library build requirement. Optional
+  `sbs-intelligence-client/.../GrpcIntelligenceClient.java` implements the core `IntelligenceClient`
+  seam; `src/main/proto` is canonical, protobuf 3.25.3/gRPC 1.62.2 are declared, enabled only by
+  `-PwithIntelligence`. Neither is a required dependency for this ecology feature; neither native
+  kernel nor learned-selection service was activated.
+
+### 15.4 Remaining implementation order and honest completion boundary
+
+The next production-data path is a **typed catalog/receipt store**, not replacement ranking for
+load balancing: define an immutable asset/receipt record and real serialization over existing
+SmokeHouse/IndexedStore public APIs; route every write through indexed sinks/Twine; connect the
+existing catalog/production queue inputs and a Daedalus lookup/history consumer. Then bind
+Carver queries, Renderer aggregates, Brine lookups, DryAge/Jerky preserved history and Rub
+telemetry to that same truth. PitBoss/SmokeSignal need a relevant owned replica/local-consumer
+workflow rather than a gratuitous running service. Preserve WholeHog's demonstrated write-routing
+contracts instead of rewriting its numeric example into a different domain. Bulk ordering and
+external spill come from SuperBeefSort when the production input actually uses them. Each missing
+binding in the table must receive its own source/commit/connected/evidence stage before full
+ecosystem completion can be claimed. Deferred tests, native work and end-to-end validation remain
+explicit future stages; this document and the ecology feature do not supply that proof.

@@ -1,0 +1,16 @@
+(fn TryGardenInteract ()
+  (if (Variables|Default|GetLoadBlocked) (return))
+  (if (Game|IsGamePaused) (return))
+  (bind hero (Utilities|Casting|CastToDaedalusHero :Object (Game|GetPlayerPawn :PlayerIndex 0))
+    (:then
+      (if (Daedalus|IsSettingsOpen :self hero) (return))
+      (if (Daedalus|IsFieldOpen :self hero) (return))
+      (if (Daedalus|IsDialogueOpen :self hero) (return))
+      (if (== (Variables|Default|GetGardenStage) 0)
+        (if (<= (Transformation|GetDistanceTo :self (Variables|Default|GetSeedActor) :OtherActor hero) 240.0)
+          (CallFunction|CommitGardenStage :NewStage 1))
+        (else
+          (if (== (Variables|Default|GetGardenStage) 1)
+            (if (<= (Transformation|GetDistanceTo :self (Variables|Default|GetPlanterActor) :OtherActor hero) 240.0)
+              (CallFunction|CommitGardenStage :NewStage 2))))))
+    (:CastFailed)))

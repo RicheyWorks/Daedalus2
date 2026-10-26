@@ -1,0 +1,153 @@
+{
+  "schema": "daedalus.stillwater-plants-placement.v1",
+  "utc": "2026-10-23T04:19:01.040493+00:00",
+  "status": "BUILT_SAVED_EDITOR_CAPTURED",
+  "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+  "map_sha256": "0772c23bec01a62744b65c4773b8c5f0656f1d4f7f5a40fd210b2a7444ac65a3",
+  "composition": {
+    "saved": true,
+    "plants": 12,
+    "by_kind": [
+      {
+        "kind": "Frogbit",
+        "instances": 6,
+        "actors": 6
+      },
+      {
+        "kind": "PinkLily",
+        "instances": 3,
+        "actors": 3
+      },
+      {
+        "kind": "WaterLily",
+        "instances": 3,
+        "actors": 3
+      }
+    ],
+    "new_actors": 12,
+    "actors_current": 734,
+    "used_native_instancing": false,
+    "waterline_cm": 25.1,
+    "actor_scale": [
+      1,
+      1,
+      1
+    ],
+    "composition": "Three small edge groups; no new middle-water filler, route or shoreline blockage. Aquatic origins meet water surface, roots remain below.",
+    "collision": "All new plant components NoCollision; original solid floor and paths untouched.",
+    "dirty_after": {
+      "maps": [],
+      "content": []
+    },
+    "new_imports": 0,
+    "Play_run": false
+  },
+  "layout_cm": [
+    {
+      "kind": "Frogbit",
+      "x": -2450,
+      "y": 2615,
+      "yaw": 15
+    },
+    {
+      "kind": "Frogbit",
+      "x": -2390,
+      "y": 2670,
+      "yaw": 83
+    },
+    {
+      "kind": "PinkLily",
+      "x": -2500,
+      "y": 2540,
+      "yaw": 35
+    },
+    {
+      "kind": "WaterLily",
+      "x": -2415,
+      "y": 2520,
+      "yaw": 122
+    },
+    {
+      "kind": "Frogbit",
+      "x": -2410,
+      "y": 2245,
+      "yaw": 145
+    },
+    {
+      "kind": "Frogbit",
+      "x": -2335,
+      "y": 2200,
+      "yaw": 213
+    },
+    {
+      "kind": "PinkLily",
+      "x": -2490,
+      "y": 2310,
+      "yaw": 195
+    },
+    {
+      "kind": "WaterLily",
+      "x": -2330,
+      "y": 2290,
+      "yaw": 250
+    },
+    {
+      "kind": "Frogbit",
+      "x": -1845,
+      "y": 2605,
+      "yaw": 275
+    },
+    {
+      "kind": "Frogbit",
+      "x": -1900,
+      "y": 2675,
+      "yaw": 320
+    },
+    {
+      "kind": "PinkLily",
+      "x": -1775,
+      "y": 2480,
+      "yaw": 310
+    },
+    {
+      "kind": "WaterLily",
+      "x": -1870,
+      "y": 2500,
+      "yaw": 27
+    }
+  ],
+  "images": [
+    {
+      "path": "images/stillwater-r8-pond.png",
+      "sha256": "0ff040be22e36a43972f96c6ef29845f42df297cac90fe53ab129d3dc74345e9"
+    },
+    {
+      "path": "images/stillwater-r8-garden.png",
+      "sha256": "810866d9a378922f49ade8ced9d2aa5d21191559f05ba5dade6613b0e73316de"
+    }
+  ],
+  "plant_origin_z_cm": 25.25,
+  "authored_origin": "Source Z0 is the waterline; negative lily roots remain below. No bottom-snapping.",
+  "instancing_decision": "Shared palette does not already have instanced-mesh usage enabled. Twelve ordinary actors preserve that material unchanged instead of triggering a usage flag change.",
+  "preservation": {
+    "protected_files_unchanged": 312,
+    "clean_packages": true,
+    "compute_released": true,
+    "original_floor_collision_unchanged": true,
+    "existing_activity_and_progress_code_unchanged": true,
+    "Play_run": false,
+    "camera": "Changed intentionally for the two editor captures; no prior-camera equality claimed."
+  },
+  "pixel_review": "Actual pond and garden editor captures inspected. Three small new edge groups leave open water between them. Foreground tree partly occludes the pond view; overview establishes spacing. Repeated raised floor tiles, black perimeter walls and bright/pale foliage remain visible quality gaps. No benchmark acceptance.",
+  "remaining_production_backlog": [
+    "Next gameplay slice: a friendly Stillwater gardenkeeper restoration activity, reusing E prompts, existing objective UI and the isolated garden progress conventions. Give the destination a useful purpose without a general farming framework.",
+    "Improve owned ground and connecting-route presentation: repeated raised floor tiles and dark seams dominate the current overview. Keep existing continuous collision and generous roaming space.",
+    "Improve destination and perimeter readability with current approved content; avoid redundant floating instructions. Final art style remains undecided and the established reference quality bar remains unmet."
+  ],
+  "limits": [
+    "Decorative placement only, no pond gameplay or new interactions.",
+    "No Play/persistence/reload loop repeated. Existing R7 activity remains built/saved with runtime persistence unproven.",
+    "No new import or validation rerun; three previously admitted native asset packages remain unchanged.",
+    "No claim of benchmark visual quality, production ecology or general unattended adoption."
+  ]
+}

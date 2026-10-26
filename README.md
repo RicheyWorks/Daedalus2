@@ -11,8 +11,8 @@ come up with, as long as it is original.
 **Daedalus is a huge voxel multiverse.** It is many worlds, each with its own look and kind of play, and you
 **warp** between them through sky gates and portals:
 - **Sky Islands and Lands**: Minecraft / Sandbox style. The pieces of a shattered planet, with caves, ores and arks.
-  Live in Unreal.
-- **The Portal Realm**: an original 8-bit RPG, with towns, a castle, keys, chests and a dark cave. Live in Unreal.
+  Implemented in Unreal.
+- **The Portal Realm**: an original 8-bit RPG, with towns, a castle, keys, chests and a dark cave. Implemented in Unreal.
 - **Parcels**: Decentraland style.
 - **Bricks**: Roblox style.
 - **Gallery City**: Cryptovoxels style.
@@ -27,6 +27,24 @@ islands. Ownership lives on a public chain.
 **Building for it, or picking a realm for your island or items? Read [`docs/REALMS.md`](./docs/REALMS.md) first.**
 It lists every realm, what is built, what art fits, where the details are, and the naming rules: original
 names only.
+
+## Integration and native status — 26 October 2026
+
+Repository integration and the installed Unreal build have separate checkpoints.
+The saved rebuild-4 report below is an owner-reported native snapshot; later main
+commits do not automatically become installed or gameplay-accepted.
+
+| Stage | Recorded outcome | Remaining boundary |
+|---|---|---|
+| Realm source integration | Selected Gallery, Bricks and Parcels tranches are merged; [PR463](https://github.com/RicheyWorks/Daedalus2/pull/463) records 16 original/integrated patch pairs and their dependencies. | Remaining packets and held gates are listed in the [realm guide](docs/realms/REALM-DEPENDENCIES-20261026.md). |
+| Batched native rebuild 4 | Owner reports main `e22a493d` plus the [PR464 fix](https://github.com/RicheyWorks/Daedalus2/pull/464): second UBT pass succeeded with zero errors, followed by a normal reopen and 30/30 new classes loading. | This proves the reported compile/load stage, not every feature's input, rendering, collision, persistence or gameplay. The failed first pass remains recorded. |
+| Source merged during that window | [PR450](https://github.com/RicheyWorks/Daedalus2/pull/450)'s `DaedalusDesktopMazeCore.h` was the source/install mismatch recorded after rebuild 4. | It remained source-only at that checkpoint and needs the next owner-controlled rebuild. |
+| Custody and production | The owner completed the handoff and normally released both resource leases; ingestion remained paused. | A release, successful build or empty lock table is not authority to claim the editor or resume ingestion. Monitor target reconciliation remained pending in that report. |
+
+Use the current verified custodian and saved per-feature receipts for subsequent
+work. Keep source/CI, merged, installed, reflected and actual runtime acceptance
+distinct; [AGENTS.md](AGENTS.md) and the [lessons](docs/LESSONS-LEARNED.md) describe
+the handoff and preservation rules. This documentation performs no native action.
 
 ## The engine underneath
 
@@ -288,9 +306,9 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018), and who owns each and whom they let build (ADR-026) |
 | `GET` | `/api/v1/world/{id}/plots` | public | A Parcels world's 60 plots: footprint, height limit, what each opened with, owner and builders; the plaza and the helipad (ADR-033). Plots are claimed through `/islands/{n}/claim` |
 | `GET` | `/api/v1/hero` | required | Your hero (ADR-037): unspent EXP, Attack/Magic/Life levels 1–8, what the next of each costs, which can be raised now, and what they mean (hearts, magic, damage) |
-| `GET` | `/api/v1/hero/rules` | public | The foes (life, power, EXP, reach, guard, strike, a shifting shield, speed) and the Zelda II level costs every client plays by (ADR-037) |
+| `GET` | `/api/v1/hero/rules` | public | The foes (life, power, EXP, reach, guard, strike, a shifting shield, speed) and the level costs every client plays by (ADR-037) |
 | `POST` | `/api/v1/hero/defeat` | required | Report a foe beaten; the server adds that foe's EXP from its own table. TOO_FAST when two fall quicker than a sword swings |
-| `POST` | `/api/v1/hero/raise` | required | Spend EXP on ATTACK, MAGIC or LIFE; EXP resets to zero (Zelda II). NOT_ENOUGH otherwise |
+| `POST` | `/api/v1/hero/raise` | required | Spend EXP on ATTACK, MAGIC or LIFE; EXP resets to zero. NOT_ENOUGH otherwise |
 | `POST` | `/api/v1/hero/fall` | required | Fall in battle: unspent EXP is lost; levels stay |
 | `GET` | `/api/v1/world/{id}/gallery` | public | A Gallery City's parcels (footprint, height, address, gallery or open, owner, builders), named streets, the Origin plaza and the drone pad (ADR-035). Parcels are claimed through `/islands/{n}/claim` |
 | `GET` | `/api/v1/world/{id}/art` | public | Every frame on a wall in a Gallery City: position, facing, size, seed, title, generator, who hung it, its parcel's address, and its image (ADR-035) |
@@ -302,6 +320,7 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/tokens/{tokenId}` | public | ERC-721 metadata for the island in lane slot `tokenId`: name, description, portrait, realm link and traits (seed, size, trees, crystals, waterfall, ark, kinds living); unknown slot 404 (ADR-027) |
 | `GET` | `/api/v1/world/{id}/islands/{slot}/portrait.png` | public | The island's 512×512 isometric portrait, grown from its seed; cacheable for a day (ADR-027) |
 | `GET` | `/api/v1/world/{id}/islands/{slot}/ecology` | public | One island's living community: ecological day, habitat by guild, diversity indices and every kind there by count; unknown slot 404 (ADR-023) |
+| `GET` | `/api/v1/world/{id}/islands/{slot}/ecology/compare?otherWorldId={otherId}&otherSlot={otherSlot}` | public | Compare two mounted islands using six CSRBT beta-diversity measures; both snapshot days are explicit, unknown world/slot 404 |
 | `POST` | `/api/v1/world/{id}/arks/{arkId}/voyage` | required | Order an ark (or a Parcels world's helicopter, `heli-0`) to another island, to a sky gate, or home (`VoyageRequest`: `toSlot`, `toGate` (ADR-031) or `toHome` (ADR-033)). Already-there, underway and no-such-island are named results; unknown ark 404 (ADR-020) |
 | `GET` | `/api/v1/world/{id}/presence` | public | Who is walking around in this world now: each player's position, heading, animation and look, dropped after the stale time (ADR-039). Unknown world 404 |
 | `POST` | `/api/v1/world/{id}/presence` | required | Say where you are, a few times a second (header `X-Daedalus-Tab` tells two tabs of one account apart); everyone subscribed to `/topic/world/{id}/presence` gets MOVE frames (ADR-039) |
@@ -316,7 +335,9 @@ public consumers).
 | `GET` | `/api/v1/reach/orrery` | public | The Orrery Reach's five voxel isles (settings, offsets, column heights) from the Java port of the Unreal isle core, for `/reach.html` (ADR-058) |
 | `POST` | `/api/v1/tactics/decide` | required | Unreal's squad round trip: `{roster: DTR 1, events: DTE 1}` in, `{result: APPLY/REPEAT/STALE, spec: DTO 1}` out, fenced per session and squad (ADR-060) |
 | `POST` | `/api/v1/kennel/brew` | required | Configured engine host calculates a deterministic TONIC 1 from herbs/coat/drinker/stage/charm/seed; no inventory mutation. [Contract and fixtures](docs/contracts/tonic-v1/README.md). |
+| `POST` | `/api/v1/brew/melody` | required | Configured engine host calculates a Youtube Master Island melody brew (3-5 ordered herbs, optional stages and played records) as JSON: item, cadence, contour, quality, found-tune bonus; no inventory mutation. [Contract and schema](docs/contracts/brew-melody-v1/README.md). |
 | `POST` | `/api/v1/audio/design` | required | Configured engine host designs AUD 1 ambience layers and a PCS 1 creature call from biome/weather/genome inputs. [Contract](docs/contracts/aud-v1/README.md). |
+| `POST` | `/api/v1/audio/herb-chord` | required | Configured engine host designs an HRB 1 herb-chord record (root, quality, effect, strength, frequencies) from 1-8 herbs; additive to AUD 1. [Contract](docs/contracts/hrb-v1/README.md). |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/claim` | required | Claim an island: from then on only its owner and the builders they name change its cubes. Owner is the signed-in user; already-claimed, blocked and bad-owner are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/abandon` | required | The owner gives an island back; its cubes stay and it is open again. Not-owner and not-claimed are named results (ADR-026) |
 | `POST` | `/api/v1/world/{id}/islands/{slot}/builders` | required | The owner lets someone build (`allow: true`) or stops them (`IslandClaimRequest`) (ADR-026) |

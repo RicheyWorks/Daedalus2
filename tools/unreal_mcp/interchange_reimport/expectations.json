@@ -1,0 +1,89 @@
+{
+    "schema": "daedalus.interchange-reimport-fixture.v1",
+    "asset": "Prop_PracticeCrate",
+    "producer": "blender-team 48374 (request grok-epic-speedup-20261019), recipe Daedalus2 df2c93b4 crate_recipe.py --variant A|B",
+    "tolerance_m": 0.001,
+    "color_tolerance": 0.01,
+    "ue_tolerance_cm": 0.2,
+    "test_root": "/Game/Daedalus/Tests/InterchangeFixture20261019",
+    "socket": {
+        "name": "SOCKET_Top",
+        "gltf_translation": [
+            0,
+            0.5,
+            0
+        ],
+        "ue_socket_name": "Top",
+        "ue_location_cm": [
+            0,
+            0,
+            50
+        ],
+        "ue_imported_by_stock_interchange": true,
+        "note": "SOCKET_Top imports as socket Top (PR #203, main a3a019b2); the sidecar is a cross-check"
+    },
+    "collision": {
+        "name": "UCX_Prop_PracticeCrate",
+        "ue_convex_elems": 1
+    },
+    "materials": [
+        {
+            "name": "Prop_PracticeCrate_M0",
+            "palette": "wood",
+            "srgb_hex": "9A6B3F"
+        },
+        {
+            "name": "Prop_PracticeCrate_M1",
+            "palette": "dark",
+            "srgb_hex": "4A4D57"
+        }
+    ],
+    "variants": {
+        "A": {
+            "bytes": 10884,
+            "sha256": "bec0d7e76e9536feb0a8ea461dce68827d37871c4c2406a4d74f6bd71baa2549",
+            "tris": 132,
+            "ucx_tris": 12,
+            "dims_m_gltf": [
+                0.52,
+                0.5,
+                0.52
+            ],
+            "ue_dims_cm": [
+                52,
+                52,
+                50
+            ],
+            "ue_lod0_tris": {
+                "nanite_off": 132
+            }
+        },
+        "B": {
+            "bytes": 18576,
+            "sha256": "4e83515ecb6c49139db195354651fd6e23cebdf6150b2011778755ec8c41581f",
+            "tris": 264,
+            "ucx_tris": 12,
+            "dims_m_gltf": [
+                0.52,
+                0.5,
+                0.53
+            ],
+            "ue_dims_cm": [
+                52,
+                53,
+                50
+            ],
+            "ue_lod0_tris": {
+                "nanite_off": 264,
+                "nanite_on_fallback": 256
+            }
+        }
+    },
+    "reimport_must": [
+        "same object path and same UObject identity (path + package GUID/persistent guid unchanged)",
+        "tris A->B = 132->264",
+        "material slot names and material refs unchanged",
+        "collision updated from UCX (1 convex, extent follows B)",
+        "socket Top kept"
+    ]
+}

@@ -1,0 +1,1518 @@
+[
+  {
+    "kind": "water_surface",
+    "label": "CommonsR5StillwaterSurface",
+    "x": -2150,
+    "y": 2450,
+    "sx": 10,
+    "sy": 7,
+    "sz": 0.022,
+    "z": 24,
+    "yaw": 0
+  },
+  {
+    "kind": "owned_earth",
+    "label": "CommonsR5GardenGround",
+    "x": -2150,
+    "y": 2450,
+    "sx": 23,
+    "sy": 21,
+    "sz": 0.02,
+    "z": 22,
+    "yaw": -12
+  },
+  {
+    "kind": "Prop_Orr_Spring_Basin",
+    "label": "CommonsR5SpringBasin",
+    "x": -2150,
+    "y": 2450,
+    "scale": 1.5,
+    "yaw": 0,
+    "z": 25
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone02",
+    "x": -1647.7052658050256,
+    "y": 2655.0,
+    "scale": 0.78,
+    "yaw": 120,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone03",
+    "x": -1739.8780669118023,
+    "y": 2739.9137802864843,
+    "scale": 0.78,
+    "yaw": 135,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone04",
+    "x": -1860.0,
+    "y": 2805.0704155516196,
+    "scale": 0.78,
+    "yaw": 150,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone05",
+    "x": -1999.884953840538,
+    "y": 2846.029588778518,
+    "scale": 0.78,
+    "yaw": 165,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone06",
+    "x": -2150.0,
+    "y": 2860.0,
+    "scale": 0.78,
+    "yaw": 180,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone07",
+    "x": -2300.115046159462,
+    "y": 2846.029588778518,
+    "scale": 0.78,
+    "yaw": 195,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone08",
+    "x": -2440.0,
+    "y": 2805.07041555162,
+    "scale": 0.78,
+    "yaw": 210,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone09",
+    "x": -2560.1219330881977,
+    "y": 2739.9137802864843,
+    "scale": 0.78,
+    "yaw": 225,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone10",
+    "x": -2652.2947341949744,
+    "y": 2655.0,
+    "scale": 0.78,
+    "yaw": 240,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone14",
+    "x": -2652.2947341949744,
+    "y": 2245.0,
+    "scale": 0.78,
+    "yaw": 300,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone15",
+    "x": -2560.1219330881977,
+    "y": 2160.0862197135157,
+    "scale": 0.78,
+    "yaw": 315,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone16",
+    "x": -2440.0000000000005,
+    "y": 2094.9295844483804,
+    "scale": 0.78,
+    "yaw": 330,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone17",
+    "x": -2300.115046159462,
+    "y": 2053.970411221482,
+    "scale": 0.78,
+    "yaw": 345,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone18",
+    "x": -2150.0,
+    "y": 2040.0,
+    "scale": 0.78,
+    "yaw": 360,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone19",
+    "x": -1999.8849538405382,
+    "y": 2053.9704112214818,
+    "scale": 0.78,
+    "yaw": 375,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone20",
+    "x": -1860.0,
+    "y": 2094.9295844483804,
+    "scale": 0.78,
+    "yaw": 390,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone21",
+    "x": -1739.8780669118025,
+    "y": 2160.0862197135157,
+    "scale": 0.78,
+    "yaw": 405,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5PoolStone22",
+    "x": -1647.7052658050256,
+    "y": 2245.0,
+    "scale": 0.78,
+    "yaw": 420,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach00L",
+    "x": -120,
+    "y": 1322,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach00R",
+    "x": -120,
+    "y": 1418,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach01L",
+    "x": -221,
+    "y": 1339,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach01R",
+    "x": -221,
+    "y": 1435,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach02L",
+    "x": -322,
+    "y": 1356,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach02R",
+    "x": -322,
+    "y": 1452,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach03L",
+    "x": -423,
+    "y": 1373,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach03R",
+    "x": -423,
+    "y": 1469,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach04L",
+    "x": -524,
+    "y": 1390,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach04R",
+    "x": -524,
+    "y": 1486,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach05L",
+    "x": -625,
+    "y": 1407,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach05R",
+    "x": -625,
+    "y": 1503,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach06L",
+    "x": -726,
+    "y": 1424,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach06R",
+    "x": -726,
+    "y": 1520,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach07L",
+    "x": -827,
+    "y": 1441,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach07R",
+    "x": -827,
+    "y": 1537,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach08L",
+    "x": -928,
+    "y": 1458,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach08R",
+    "x": -928,
+    "y": 1554,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach09L",
+    "x": -1029,
+    "y": 1475,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach09R",
+    "x": -1029,
+    "y": 1571,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach10L",
+    "x": -1130,
+    "y": 1492,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach10R",
+    "x": -1130,
+    "y": 1588,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach11L",
+    "x": -1231,
+    "y": 1509,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach11R",
+    "x": -1231,
+    "y": 1605,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach12L",
+    "x": -1332,
+    "y": 1526,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach12R",
+    "x": -1332,
+    "y": 1622,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach13L",
+    "x": -1433,
+    "y": 1543,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach13R",
+    "x": -1433,
+    "y": 1639,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach14L",
+    "x": -1534,
+    "y": 1560,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach14R",
+    "x": -1534,
+    "y": 1656,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach15L",
+    "x": -1635,
+    "y": 1577,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach15R",
+    "x": -1635,
+    "y": 1673,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach16L",
+    "x": -1736,
+    "y": 1594,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach16R",
+    "x": -1736,
+    "y": 1690,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach17L",
+    "x": -1837,
+    "y": 1611,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR5Approach17R",
+    "x": -1837,
+    "y": 1707,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Bench_Curved",
+    "label": "CommonsR5Bench0",
+    "x": -3050,
+    "y": 2450,
+    "scale": 1.2,
+    "yaw": 90,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Bench_Curved",
+    "label": "CommonsR5Bench1",
+    "x": -2750,
+    "y": 3210,
+    "scale": 1.2,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Bench_Curved",
+    "label": "CommonsR5Bench2",
+    "x": -1990,
+    "y": 3310,
+    "scale": 1.2,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Bench_Curved",
+    "label": "CommonsR5Bench3",
+    "x": -1330,
+    "y": 2850,
+    "scale": 1.2,
+    "yaw": -90,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Post",
+    "label": "CommonsR5Post0",
+    "x": -2950,
+    "y": 1850,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Post",
+    "label": "CommonsR5Post1",
+    "x": -3130,
+    "y": 2930,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Post",
+    "label": "CommonsR5Post2",
+    "x": -1800,
+    "y": 3380,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Post",
+    "label": "CommonsR5Post3",
+    "x": -1120,
+    "y": 2430,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Path",
+    "label": "CommonsR5PathLamp0",
+    "x": -400,
+    "y": 1450,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Path",
+    "label": "CommonsR5PathLamp1",
+    "x": -900,
+    "y": 1510,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Path",
+    "label": "CommonsR5PathLamp2",
+    "x": -1400,
+    "y": 1600,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Path",
+    "label": "CommonsR5PathLamp3",
+    "x": -1860,
+    "y": 1700,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Long",
+    "label": "CommonsR5Planter0",
+    "x": -2750,
+    "y": 1830,
+    "scale": 1.4,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Long",
+    "label": "CommonsR5Planter1",
+    "x": -1300,
+    "y": 1930,
+    "scale": 1.4,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Long",
+    "label": "CommonsR5Planter2",
+    "x": -2850,
+    "y": 3250,
+    "scale": 1.4,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Long",
+    "label": "CommonsR5Planter3",
+    "x": -1390,
+    "y": 3020,
+    "scale": 1.4,
+    "yaw": 90,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Round",
+    "label": "CommonsR5RoundPlanter0",
+    "x": -1700,
+    "y": 1710,
+    "scale": 1.3,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Round",
+    "label": "CommonsR5RoundPlanter1",
+    "x": -2300,
+    "y": 1710,
+    "scale": 1.3,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Round",
+    "label": "CommonsR5RoundPlanter2",
+    "x": -3080,
+    "y": 2500,
+    "scale": 1.3,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Round",
+    "label": "CommonsR5RoundPlanter3",
+    "x": -2050,
+    "y": 3430,
+    "scale": 1.3,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR5ShelterTrunk0",
+    "x": -3350,
+    "y": 3200,
+    "scale": 1.05,
+    "yaw": 25,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR5ShelterCanopy0",
+    "x": -3350,
+    "y": 3200,
+    "scale": 1.05,
+    "yaw": 25,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR5ShelterTrunk1",
+    "x": -1100,
+    "y": 3400,
+    "scale": 0.9,
+    "yaw": 100,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR5ShelterCanopy1",
+    "x": -1100,
+    "y": 3400,
+    "scale": 0.9,
+    "yaw": 100,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR5ShelterTrunk2",
+    "x": -3450,
+    "y": 1750,
+    "scale": 0.8,
+    "yaw": 150,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR5ShelterCanopy2",
+    "x": -3450,
+    "y": 1750,
+    "scale": 0.8,
+    "yaw": 150,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Aqua_WaterLily",
+    "label": "CommonsR5WaterLily0",
+    "x": -2026.3149748855944,
+    "y": 2465.4555286255,
+    "scale": 1.0,
+    "yaw": 0,
+    "z": 25
+  },
+  {
+    "kind": "Prop_Aqua_WaterLily",
+    "label": "CommonsR5WaterLily1",
+    "x": -2040.9426154208065,
+    "y": 2562.196763121495,
+    "scale": 1.2,
+    "yaw": 61,
+    "z": 25
+  },
+  {
+    "kind": "Prop_Aqua_WaterLily",
+    "label": "CommonsR5WaterLily2",
+    "x": -2223.91871928128,
+    "y": 2627.343981706673,
+    "scale": 1.0,
+    "yaw": 122,
+    "z": 25
+  },
+  {
+    "kind": "Prop_Aqua_WaterLily",
+    "label": "CommonsR5WaterLily3",
+    "x": -2261.2513967002246,
+    "y": 2488.0271965856573,
+    "scale": 1.2,
+    "yaw": 183,
+    "z": 25
+  },
+  {
+    "kind": "Prop_Aqua_WaterLily",
+    "label": "CommonsR5WaterLily4",
+    "x": -2344.5877228583395,
+    "y": 2406.927333165318,
+    "scale": 1.0,
+    "yaw": 244,
+    "z": 25
+  },
+  {
+    "kind": "Prop_Aqua_WaterLily",
+    "label": "CommonsR5WaterLily5",
+    "x": -2266.1639852624485,
+    "y": 2282.2730539768186,
+    "scale": 1.2,
+    "yaw": 305,
+    "z": 25
+  },
+  {
+    "kind": "Prop_Aqua_WaterLily",
+    "label": "CommonsR5WaterLily6",
+    "x": -2100.7678778103514,
+    "y": 2375.439106870352,
+    "scale": 1.0,
+    "yaw": 366,
+    "z": 25
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin0Grass0",
+    "x": -3030.0,
+    "y": 1900.0,
+    "scale": 1.6,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin0Grass1",
+    "x": -3172.253179007392,
+    "y": 1943.0350962251175,
+    "scale": 1.85,
+    "yaw": 41,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin0Grass2",
+    "x": -3089.018376413795,
+    "y": 1818.411654226286,
+    "scale": 1.6,
+    "yaw": 82,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin0Grass3",
+    "x": -3006.250739932657,
+    "y": 1979.4146693631526,
+    "scale": 1.85,
+    "yaw": 123,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin0Grass4",
+    "x": -3279.235011048222,
+    "y": 1879.4574205820022,
+    "scale": 1.6,
+    "yaw": 164,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin0Grass5",
+    "x": -2922.8877963792943,
+    "y": 1826.6586034606585,
+    "scale": 1.85,
+    "yaw": 205,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin0Grass6",
+    "x": -3161.5989327343996,
+    "y": 2049.428725326919,
+    "scale": 1.6,
+    "yaw": 246,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin0Flower0",
+    "x": -3005.0,
+    "y": 1900.0,
+    "scale": 1.25,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin0Flower1",
+    "x": -3070.64338553438,
+    "y": 1980.839803885088,
+    "scale": 1.25,
+    "yaw": 37,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin0Flower2",
+    "x": -3176.85661446562,
+    "y": 1949.9617464448602,
+    "scale": 1.25,
+    "yaw": 74,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin0Flower3",
+    "x": -3176.85661446562,
+    "y": 1850.0382535551398,
+    "scale": 1.25,
+    "yaw": 111,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin0Flower4",
+    "x": -3070.64338553438,
+    "y": 1819.160196114912,
+    "scale": 1.25,
+    "yaw": 148,
+    "z": 24
+  },
+  {
+    "kind": "rocks",
+    "label": "CommonsR5Margin0Rocks",
+    "x": -3210,
+    "y": 1980,
+    "scale": 0.35,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin1Grass0",
+    "x": -3139.998288950852,
+    "y": 2723.4342324084073,
+    "scale": 1.6,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin1Grass1",
+    "x": -3296.0326210528415,
+    "y": 2712.6997374223756,
+    "scale": 1.85,
+    "yaw": 41,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin1Grass2",
+    "x": -3125.939058211148,
+    "y": 2633.741508160692,
+    "scale": 1.6,
+    "yaw": 82,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin1Grass3",
+    "x": -3182.5667050797424,
+    "y": 2799.4565427532266,
+    "scale": 1.85,
+    "yaw": 123,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin1Grass4",
+    "x": -3337.3571436005445,
+    "y": 2622.388216870423,
+    "scale": 1.6,
+    "yaw": 164,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin1Grass5",
+    "x": -2990.071961755133,
+    "y": 2696.4268465559753,
+    "scale": 1.85,
+    "yaw": 205,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin1Grass6",
+    "x": -3371.2028724805987,
+    "y": 2807.463649910007,
+    "scale": 1.6,
+    "yaw": 246,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin1Flower0",
+    "x": -3113.9007602315182,
+    "y": 2735.9225522479596,
+    "scale": 1.25,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin1Flower1",
+    "x": -3211.577587623489,
+    "y": 2784.3664228895123,
+    "scale": 1.25,
+    "yaw": 37,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin1Flower2",
+    "x": -3293.254582427528,
+    "y": 2716.2187646070065,
+    "scale": 1.25,
+    "yaw": 74,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin1Flower3",
+    "x": -3246.056913923402,
+    "y": 2625.6573248931513,
+    "scale": 1.25,
+    "yaw": 111,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin1Flower4",
+    "x": -3135.2101557940628,
+    "y": 2637.8349353623707,
+    "scale": 1.25,
+    "yaw": 148,
+    "z": 24
+  },
+  {
+    "kind": "rocks",
+    "label": "CommonsR5Margin1Rocks",
+    "x": -3310,
+    "y": 2780,
+    "scale": 0.35,
+    "yaw": 41,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin2Grass0",
+    "x": -2817.1369906049877,
+    "y": 3410.174115475081,
+    "scale": 1.6,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin2Grass1",
+    "x": -2942.3788661270337,
+    "y": 3348.736503066809,
+    "scale": 1.85,
+    "yaw": 41,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin2Grass2",
+    "x": -2734.0163884649924,
+    "y": 3337.9991205767283,
+    "scale": 1.6,
+    "yaw": 82,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin2Grass3",
+    "x": -2913.8627593690608,
+    "y": 3461.087123214742,
+    "scale": 1.85,
+    "yaw": 123,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin2Grass4",
+    "x": -2906.2410929762405,
+    "y": 3257.4900141222834,
+    "scale": 1.6,
+    "yaw": 164,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin2Grass5",
+    "x": -2667.225303852621,
+    "y": 3437.215815954123,
+    "scale": 1.85,
+    "yaw": 205,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin2Grass6",
+    "x": -3081.900075418886,
+    "y": 3404.799928106996,
+    "scale": 1.6,
+    "yaw": 246,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin2Flower0",
+    "x": -2788.935177079779,
+    "y": 3435.113777665113,
+    "scale": 1.25,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin2Flower1",
+    "x": -2900.3423301021544,
+    "y": 3442.084088173296,
+    "scale": 1.25,
+    "yaw": 37,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin2Flower2",
+    "x": -2942.1780939962196,
+    "y": 3349.436638874028,
+    "scale": 1.25,
+    "yaw": 74,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin2Flower3",
+    "x": -2856.626865005692,
+    "y": 3285.207055727915,
+    "scale": 1.25,
+    "yaw": 111,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin2Flower4",
+    "x": -2761.9175338161554,
+    "y": 3338.1584395596474,
+    "scale": 1.25,
+    "yaw": 148,
+    "z": 24
+  },
+  {
+    "kind": "rocks",
+    "label": "CommonsR5Margin2Rocks",
+    "x": -2960,
+    "y": 3450,
+    "scale": 0.35,
+    "yaw": 82,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin3Grass0",
+    "x": -2053.663516937006,
+    "y": 3595.437643831333,
+    "scale": 1.6,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin3Grass1",
+    "x": -2112.335665587221,
+    "y": 3500.8475140382025,
+    "scale": 1.85,
+    "yaw": 41,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin3Grass2",
+    "x": -1925.2262233385622,
+    "y": 3561.3982769686295,
+    "scale": 1.6,
+    "yaw": 82,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin3Grass3",
+    "x": -2176.9154330477904,
+    "y": 3606.6972643161757,
+    "scale": 1.85,
+    "yaw": 123,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin3Grass4",
+    "x": -2009.0589081094167,
+    "y": 3434.7320213359067,
+    "scale": 1.6,
+    "yaw": 164,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin3Grass5",
+    "x": -1946.5910523782718,
+    "y": 3668.8035524957963,
+    "scale": 1.85,
+    "yaw": 205,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin3Grass6",
+    "x": -2276.3514508782464,
+    "y": 3502.1950709701955,
+    "scale": 1.6,
+    "yaw": 246,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin3Flower0",
+    "x": -2025.4121907152605,
+    "y": 3632.1036952345708,
+    "scale": 1.25,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin3Flower1",
+    "x": -2129.673703954815,
+    "y": 3596.2943179762774,
+    "scale": 1.25,
+    "yaw": 37,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin3Flower2",
+    "x": -2123.8288663384124,
+    "y": 3496.507766760764,
+    "scale": 1.25,
+    "yaw": 74,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin3Flower3",
+    "x": -2015.9550447931965,
+    "y": 3470.6456637477377,
+    "scale": 1.25,
+    "yaw": 111,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin3Flower4",
+    "x": -1955.1301941983154,
+    "y": 3554.4485562806503,
+    "scale": 1.25,
+    "yaw": 148,
+    "z": 24
+  },
+  {
+    "kind": "rocks",
+    "label": "CommonsR5Margin3Rocks",
+    "x": -2160,
+    "y": 3630,
+    "scale": 0.35,
+    "yaw": 123,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin4Grass0",
+    "x": -1239.1435032429522,
+    "y": 3187.7212095512546,
+    "scale": 1.6,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin4Grass1",
+    "x": -1214.4853222907018,
+    "y": 3086.9996895038457,
+    "scale": 1.85,
+    "yaw": 41,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin4Grass2",
+    "x": -1102.0796088564216,
+    "y": 3201.5413400269817,
+    "scale": 1.6,
+    "yaw": 82,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin4Grass3",
+    "x": -1353.7127589569675,
+    "y": 3156.110958807439,
+    "scale": 1.85,
+    "yaw": 123,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin4Grass4",
+    "x": -1073.5721765764624,
+    "y": 3064.9021016199376,
+    "scale": 1.6,
+    "yaw": 164,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin4Grass5",
+    "x": -1205.4971591446533,
+    "y": 3286.4532248591636,
+    "scale": 1.85,
+    "yaw": 205,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin4Grass6",
+    "x": -1356.1420488997408,
+    "y": 3033.246427939537,
+    "scale": 1.6,
+    "yaw": 246,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin4Flower0",
+    "x": -1216.4965768783584,
+    "y": 3233.7086590060376,
+    "scale": 1.25,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin4Flower1",
+    "x": -1294.0754665304491,
+    "y": 3161.8297135816056,
+    "scale": 1.25,
+    "yaw": 37,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin4Flower2",
+    "x": -1241.6452589449623,
+    "y": 3073.6025060645707,
+    "scale": 1.25,
+    "yaw": 74,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin4Flower3",
+    "x": -1131.6627189678281,
+    "y": 3090.9540385109854,
+    "scale": 1.25,
+    "yaw": 111,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Bluebell",
+    "label": "CommonsR5Margin4Flower4",
+    "x": -1116.1199786784018,
+    "y": 3189.905082836801,
+    "scale": 1.25,
+    "yaw": 148,
+    "z": 24
+  },
+  {
+    "kind": "rocks",
+    "label": "CommonsR5Margin4Rocks",
+    "x": -1310,
+    "y": 3230,
+    "scale": 0.35,
+    "yaw": 164,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin5Grass0",
+    "x": -1103.4415450925655,
+    "y": 2319.229130909202,
+    "scale": 1.6,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin5Grass1",
+    "x": -1002.4970236282212,
+    "y": 2241.148873779031,
+    "scale": 1.85,
+    "yaw": 41,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin5Grass2",
+    "x": -996.9054619409658,
+    "y": 2376.9608256423658,
+    "scale": 1.6,
+    "yaw": 82,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin5Grass3",
+    "x": -1176.599668309446,
+    "y": 2253.778963815173,
+    "scale": 1.85,
+    "yaw": 123,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin5Grass4",
+    "x": -864.2014996153896,
+    "y": 2269.381706964372,
+    "scale": 1.6,
+    "yaw": 164,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin5Grass5",
+    "x": -1152.832917752833,
+    "y": 2415.122932353459,
+    "scale": 1.85,
+    "yaw": 205,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Grass_MeadowGrass",
+    "label": "CommonsR5Margin5Grass6",
+    "x": -1081.3282662847291,
+    "y": 2147.6502406090112,
+    "scale": 1.6,
+    "yaw": 246,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin5Flower0",
+    "x": -1094.4897614533493,
+    "y": 2369.6279237645645,
+    "scale": 1.25,
+    "yaw": 0,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin5Flower1",
+    "x": -1130.8489518164884,
+    "y": 2275.1484050985673,
+    "scale": 1.25,
+    "yaw": 37,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin5Flower2",
+    "x": -1041.657978611542,
+    "y": 2215.0129459117065,
+    "scale": 1.25,
+    "yaw": 74,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin5Flower3",
+    "x": -950.1757353180649,
+    "y": 2272.3267068711416,
+    "scale": 1.25,
+    "yaw": 111,
+    "z": 24
+  },
+  {
+    "kind": "Prop_Flower_Poppy",
+    "label": "CommonsR5Margin5Flower4",
+    "x": -982.8275728005553,
+    "y": 2367.88401835402,
+    "scale": 1.25,
+    "yaw": 148,
+    "z": 24
+  },
+  {
+    "kind": "rocks",
+    "label": "CommonsR5Margin5Rocks",
+    "x": -1150,
+    "y": 2380,
+    "scale": 0.35,
+    "yaw": 205,
+    "z": 20
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "format": "daedalus-world-package",
+  "version": 1,
+  "generator": "synthetic census fixture",
+  "world": {"id": "alpha", "style": "ISLANDS", "title": "Synthetic Alpha", "seed": 7, "revision": 12},
+  "geometry": {"file": "world.glb", "chunkSize": 16, "chunks": 1, "triangles": 12, "materials": []},
+  "palette": [],
+  "islands": [
+    {"slot": 9, "seed": 9, "radius": 8, "origin": [0, 0, 0], "dock": [1, 0, 0], "owner": ""},
+    {"slot": 2, "seed": 2, "radius": 8, "origin": [10, 0, 0], "dock": [11, 0, 0], "owner": ""}
+  ],
+  "assets": [
+    {"name": "ark", "file": "assets/ark.glb", "use": "one per ark; placement is deliberately unspecified"},
+    {"name": "beacon", "file": "assets/beacon.glb", "use": "synthetic shared definition"}
+  ],
+  "arks": [{"id": "synthetic-ark", "name": "Reference only", "homeSlot": 2, "slot": 9, "berth": [1, 0, 0], "state": "MOORED"}]
+}
