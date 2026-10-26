@@ -170,10 +170,25 @@ void Shot() {
     }
     Check(Rim<Stone && Stone<F.Commands.size(),"enemy shot keeps a dark rim on the grass");
 }
+void Swing() {
+    ZeldaGame G;
+    Input Fire;Fire.FirePressed=true;G.Step(Fire);
+    Check(G.GetPlayer().Attacking,"a fire press shows the swing");
+    const auto& P=G.GetPlayer();
+    Frame F;G.Render(F);
+    std::size_t Shade=F.Commands.size(),Steel=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Line || C.A.X!=P.X || C.A.Y!=P.Y+12 || C.B.X!=P.X || C.B.Y!=P.Y+32) continue;
+        if(C.Size==6 && C.Tint.R==24 && C.Tint.G==28 && C.Tint.B==40) Shade=N;
+        if(C.Size==4 && C.Tint.R==200 && C.Tint.G==200 && C.Tint.B==220) Steel=N;
+    }
+    Check(Shade<Steel && Steel<F.Commands.size(),"the swing keeps a dark edge on the road");
+}
 }
 
 int main() {
-    try { View();Rupee();Shot(); }
+    try { View();Rupee();Shot();Swing(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

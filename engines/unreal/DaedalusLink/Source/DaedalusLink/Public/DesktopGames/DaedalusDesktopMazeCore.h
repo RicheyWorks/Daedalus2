@@ -948,10 +948,14 @@ private:
         F.AddTriangle({P.X-8,P.Y-16},{P.X,P.Y-28},{P.X+8,P.Y-16},Tunic);
         F.AddCircle(P.X-3,P.Y-13,1,Black); F.AddCircle(P.X+3,P.Y-13,1,Black);
         if(P.Attacking) {
-            if(P.Face==Facing::Right) { F.AddLine(P.X+8,P.Y-5,P.X+28,P.Y-5,Steel,4); F.AddTriangle({P.X+28,P.Y-8},{P.X+35,P.Y-5},{P.X+28,P.Y-2},Gold); }
-            else if(P.Face==Facing::Left) { F.AddLine(P.X-8,P.Y-5,P.X-28,P.Y-5,Steel,4); F.AddTriangle({P.X-28,P.Y-8},{P.X-35,P.Y-5},{P.X-28,P.Y-2},Gold); }
-            else if(P.Face==Facing::Up) { F.AddLine(P.X,P.Y-18,P.X,P.Y-38,Steel,4); F.AddTriangle({P.X-4,P.Y-38},{P.X,P.Y-45},{P.X+4,P.Y-38},Gold); }
-            else { F.AddLine(P.X,P.Y+12,P.X,P.Y+32,Steel,4); F.AddTriangle({P.X-4,P.Y+32},{P.X,P.Y+40},{P.X+4,P.Y+32},Gold); }
+            const auto Swing=[&](double X,double Y,double X2,double Y2) {
+                F.AddLine(X,Y,X2,Y2,{24,28,40,255},6);
+                F.AddLine(X,Y,X2,Y2,Steel,4);
+            };
+            if(P.Face==Facing::Right) { Swing(P.X+8,P.Y-5,P.X+28,P.Y-5); F.AddTriangle({P.X+28,P.Y-8},{P.X+35,P.Y-5},{P.X+28,P.Y-2},Gold); }
+            else if(P.Face==Facing::Left) { Swing(P.X-8,P.Y-5,P.X-28,P.Y-5); F.AddTriangle({P.X-28,P.Y-8},{P.X-35,P.Y-5},{P.X-28,P.Y-2},Gold); }
+            else if(P.Face==Facing::Up) { Swing(P.X,P.Y-18,P.X,P.Y-38); F.AddTriangle({P.X-4,P.Y-38},{P.X,P.Y-45},{P.X+4,P.Y-38},Gold); }
+            else { Swing(P.X,P.Y+12,P.X,P.Y+32); F.AddTriangle({P.X-4,P.Y+32},{P.X,P.Y+40},{P.X+4,P.Y+32},Gold); }
         } else {
             const bool Side=P.Face==Facing::Right || P.Face==Facing::Left;
             const double X=P.Face==Facing::Right ? P.X-12 : P.Face==Facing::Left ? P.X+4 : P.X-6;
