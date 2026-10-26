@@ -467,12 +467,12 @@ void ADaedalusJavaArcade::FinishSavedRead(Operation Op, FTicket Ticket, const TS
     if (Op == Operation::SudokuSavedBootstrap)
     {
         const auto Json = JavaArcadeWire::Parse(Text);
-        FString Owner;
-        if (!JavaArcadeWire::String(Json, TEXT("playerId"), Owner, 128))
+        FString PlayerOwner;
+        if (!JavaArcadeWire::String(Json, TEXT("playerId"), PlayerOwner, 128))
         { Refuse(TEXT("The local account reply was invalid. Refresh saved boards to try again."), false); return; }
-        if (!SavedCacheOwner.IsEmpty() && SavedCacheOwner != Owner)
+        if (!SavedCacheOwner.IsEmpty() && SavedCacheOwner != PlayerOwner)
         { SavedGames.Reset(); bSavedGamesLoaded = false; SavedCacheOwner.Reset(); }
-        SavedBootstrapOwner = Owner;
+        SavedBootstrapOwner = PlayerOwner;
         if (!SavedGamesGuard.ContinueBootstrap(Ticket)) return;
         const auto Read = SavedGamesGuard.BeginRead(FPlatformTime::Seconds());
         const FString Path = FString::Printf(TEXT("/api/game/saved?limit=%d"), static_cast<int32>(JA::SudokuSavedListLimit));
