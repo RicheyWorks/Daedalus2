@@ -1,7 +1,7 @@
 # Desktop maze and adventure ports
 
 These ports use the actual Desktop collection. They do not replace it with the
-unrelated repository ComputerPets or Minesweeper projects. All three families
+unrelated repository ComputerPets or Beacon Sweep projects. All three families
 have one discovered source variant, so these are also their latest baselines.
 The Desktop originals were read only and remain unchanged.
 

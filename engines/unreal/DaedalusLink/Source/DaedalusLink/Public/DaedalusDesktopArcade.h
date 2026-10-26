@@ -120,8 +120,8 @@ public:
 	/** At most eight 1/60-second steps. Invalid/negative delta is ignored; stalled wall time is dropped. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") int32 AdvanceGame(double DeltaSeconds);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void RestartGame();
-	/** Start an unrevealed Minesweeper puzzle with a fresh seed at the current size. Saved board is kept. */
-	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool NewMinesweeperPuzzle();
+	/** Start an unrevealed Beacon Sweep puzzle with a fresh seed at the current size. Saved board is kept. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool NewBeaconSweepPuzzle();
 	/** Star keeps advancing its own pause-menu input; generic games stop within Driver::Advance. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void PauseGame(bool bPaused);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FDaedalusDesktopArcadeState GetState() const;
@@ -135,9 +135,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") int32 GetGameOption() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FString GetCabinetId() const { return CabinetId; }
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FString GetSelectedGameId() const;
-	/** Save the current Minesweeper board to its separate local slot. Failed writes preserve the previous save. */
+	/** Save the current Beacon Sweep board to its separate local slot. Failed writes preserve the previous save. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SaveGame();
-	/** Continue Minesweeper when selected, otherwise the native Star run. Invalid files preserve the current session. */
+	/** Continue Beacon Sweep when selected, otherwise the native Star run. Invalid files preserve the current session. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool ResumeGame();
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<int64> GetHighScores() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<FDaedalusDesktopArcadeHighScore> GetHighScoreRecords() const;
@@ -167,7 +167,7 @@ private:
 	FString SelectedSavePath() const;
 	static FString SaveDirectory();
 	static FString SavePath();
-	static FString MinesweeperSavePath();
+	static FString BeaconSweepSavePath();
 	static FString ScoresPath();
 
 	daedalus::desktop::Driver Session;

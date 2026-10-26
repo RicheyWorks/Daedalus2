@@ -202,7 +202,7 @@ namespace DesktopArcadeUI
 			{
 				FSlateDrawElement::MakeBox(Elements, ++LayerId, Screen.ToPaintGeometry(), WhiteBrush(), ESlateDrawEffect::None, FLinearColor(0.f, 0.f, 0.f, 0.65f));
 				FSlateDrawElement::MakeText(Elements, ++LayerId, Screen.ToPaintGeometry(LogicalSize, FSlateLayoutTransform(FVector2f(30.f, LogicalSize.Y * 0.45f))),
-					State.Id == TEXT("minesweeper")
+					State.Id == TEXT("beacon_sweep")
 						? TEXT("PAUSED - P / Start: resume\nF5 / pad X: save board\nF9 / pad Y: continue saved board")
 						: daedalus::desktop::SupportsManualSave(TCHAR_TO_UTF8(*State.Id))
 						? TEXT("PAUSED - P / Start: resume\nF5 / pad X: save run\nF9 / pad Y: continue saved run")
@@ -368,13 +368,13 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(4.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::MinesweeperVisibility)
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(4.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::BeaconSweepVisibility)
 				+ SWrapBox::Slot()
 				[MakeAction(TEXT("Save board"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SaveGame(); }), false, true)]
 				+ SWrapBox::Slot()
 				[
 					SNew(SButton).IsFocusable(true).ContentPadding(FMargin(12.f, 6.f))
-					.ToolTipText(FText::FromString(TEXT("Replace the current board with the last saved Minesweeper board.")))
+					.ToolTipText(FText::FromString(TEXT("Replace the current board with the last saved Beacon Sweep board.")))
 					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && Actor->GetState().bHasSavedRun; })
 					.OnClicked_Lambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->ResumeGame(); return FocusReply(); })
 					[SNew(STextBlock).Text(FText::FromString(TEXT("Continue saved board")))]
@@ -387,11 +387,11 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				// Save/continue for every other game in the host save-slot table (Minesweeper keeps its own row above).
+				// Save/continue for every other game in the host save-slot table (Beacon Sweep keeps its own row above).
 				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(4.f, 4.f))
 				.Visibility_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get();
 					const FString Id = Actor ? Actor->GetSelectedGameId() : FString();
-					return Actor && Id != TEXT("minesweeper") && daedalus::desktop::SupportsManualSave(TCHAR_TO_UTF8(*Id)) ? EVisibility::Visible : EVisibility::Collapsed; })
+					return Actor && Id != TEXT("beacon_sweep") && daedalus::desktop::SupportsManualSave(TCHAR_TO_UTF8(*Id)) ? EVisibility::Visible : EVisibility::Collapsed; })
 				+ SWrapBox::Slot()
 				[MakeAction(TEXT("Save run"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SaveGame(); }), false, true)]
 				+ SWrapBox::Slot()
@@ -410,24 +410,24 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SVerticalBox).Visibility(this, &SDaedalusDesktopArcade::MinesweeperVisibility)
+				SNew(SVerticalBox).Visibility(this, &SDaedalusDesktopArcade::BeaconSweepVisibility)
 				+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 4.f)
-				[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::MinesweeperDifficultyText).AutoWrapText(true)]
+				[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::BeaconSweepDifficultyText).AutoWrapText(true)]
 				+ SVerticalBox::Slot().AutoHeight()
 				[
 					SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(4.f, 4.f))
 					+ SWrapBox::Slot()
 					[MakeAction(TEXT("New puzzle"), FSimpleDelegate::CreateLambda([this]()
-					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->NewMinesweeperPuzzle(); }), true, true)]
+					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->NewBeaconSweepPuzzle(); }), true, true)]
 					+ SWrapBox::Slot()
 					[MakeAction(TEXT("9 x 9 / 10 mines"), FSimpleDelegate::CreateLambda([this]()
-					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("minesweeper")) Actor->SetGameOption(0); }), true, true)]
+					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("beacon_sweep")) Actor->SetGameOption(0); }), true, true)]
 					+ SWrapBox::Slot()
 					[MakeAction(TEXT("16 x 16 / 40 mines"), FSimpleDelegate::CreateLambda([this]()
-					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("minesweeper")) Actor->SetGameOption(1); }), true, true)]
+					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("beacon_sweep")) Actor->SetGameOption(1); }), true, true)]
 					+ SWrapBox::Slot()
 					[MakeAction(TEXT("30 x 16 / 99 mines"), FSimpleDelegate::CreateLambda([this]()
-					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("minesweeper")) Actor->SetGameOption(2); }), true, true)]
+					{ if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->GetSelectedGameId() == TEXT("beacon_sweep")) Actor->SetGameOption(2); }), true, true)]
 				]
 				+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 4.f, 0.f, 0.f)
 				[SNew(STextBlock).Text(FText::FromString(TEXT("New puzzle and size changes replace this board. Save first to keep progress. The saved board stays unchanged."))).AutoWrapText(true)]
@@ -545,7 +545,7 @@ bool SDaedalusDesktopArcade::HasGameHelp() const
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	if (!Actor) return false;
 	const FString Id = Actor->GetSelectedGameId();
-	return Id == TEXT("minesweeper") || Id == TEXT("star_shooter") || Id == TEXT("dodge_ball");
+	return Id == TEXT("beacon_sweep") || Id == TEXT("star_shooter") || Id == TEXT("dodge_ball");
 }
 
 EVisibility SDaedalusDesktopArcade::GameHelpVisibility() const { return HasGameHelp() ? EVisibility::Visible : EVisibility::Collapsed; }
@@ -553,12 +553,12 @@ EVisibility SDaedalusDesktopArcade::GameHelpVisibility() const { return HasGameH
 FText SDaedalusDesktopArcade::GameHelpTitle() const
 {
 	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT("Courtyard Clash — How to play"));
-	return FText::FromString(HelpGameId == TEXT("minesweeper") ? TEXT("Minesweeper — How to play") : TEXT("Star Shooter — How to play"));
+	return FText::FromString(HelpGameId == TEXT("beacon_sweep") ? TEXT("Beacon Sweep — How to play") : TEXT("Star Shooter — How to play"));
 }
 
 FText SDaedalusDesktopArcade::GameHelpIntro() const
 {
-	if (HelpGameId == TEXT("minesweeper")) return FText::FromString(TEXT(
+	if (HelpGameId == TEXT("beacon_sweep")) return FText::FromString(TEXT(
 		"YOUR GOAL\nReveal every cell that has no mine. Flags are optional reminders; marking all mines alone does not finish the board.\n\n"
 		"A SAFE START\nChoose any covered cell and reveal it. Your first reveal and its neighbours are mine-free. An empty cell opens the connected empty area and its safe numbered border; flags block that reveal.\n\n"
 		"READ THE NUMBERS\nA number counts mines in the cells touching it, including diagonals: up to eight neighbours. Use nearby numbers together to decide which covered cells are safe.\n\n"
@@ -580,7 +580,7 @@ FText SDaedalusDesktopArcade::GameHelpIntro() const
 
 FText SDaedalusDesktopArcade::GameHelpProgress() const
 {
-	if (HelpGameId == TEXT("minesweeper")) return FText::FromString(TEXT(
+	if (HelpGameId == TEXT("beacon_sweep")) return FText::FromString(TEXT(
 		"KEEP YOUR BOARD\nSave board / F5 keeps one local saved board. Continue saved board / F9 replaces the current board with that save, including its flags, selected cell, size, active timer and seed. Continue adds no time spent away. While paused, pad X saves and pad Y continues.\n\n"
 		"Save & Close leaves the cabinet open if writing fails. New puzzle chooses a fresh seed at the current size. Restart keeps the current size and seed; choosing a different first cell can change the mine layout. Close, Restart, New puzzle and size changes keep the saved board unchanged. Save first before starting another board if you want to keep this progress.\n\n"
 		"To reach cabinet buttons, return paused, press F2 / right-stick click, then close the catalog list and navigate the controls.\n\n"
@@ -765,7 +765,7 @@ FText SDaedalusDesktopArcade::StatusText() const
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	if (!Actor) return FText::FromString(TEXT("Arcade unavailable."));
 	const FDaedalusDesktopArcadeState State = Actor->GetState();
-	FString Text = State.Id == TEXT("minesweeper") ? State.Note
+	FString Text = State.Id == TEXT("beacon_sweep") ? State.Note
 		: FString::Printf(TEXT("Score %lld   Lives / health %d   Seed %d   %s"), State.Score, State.Lives, State.Seed, *State.Note);
 	if (State.bWon) Text += TEXT("   Won");
 	else if (State.bOver) Text += TEXT("   Result / next round");
@@ -779,16 +779,16 @@ EVisibility SDaedalusDesktopArcade::StarVisibility() const
 	return Actor && Actor->GetSelectedGameId() == TEXT("star_shooter") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
-EVisibility SDaedalusDesktopArcade::MinesweeperVisibility() const
+EVisibility SDaedalusDesktopArcade::BeaconSweepVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
-	return Actor && Actor->GetSelectedGameId() == TEXT("minesweeper") ? EVisibility::Visible : EVisibility::Collapsed;
+	return Actor && Actor->GetSelectedGameId() == TEXT("beacon_sweep") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
-FText SDaedalusDesktopArcade::MinesweeperDifficultyText() const
+FText SDaedalusDesktopArcade::BeaconSweepDifficultyText() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
-	if (!Actor || Actor->GetSelectedGameId() != TEXT("minesweeper")) return FText::GetEmpty();
+	if (!Actor || Actor->GetSelectedGameId() != TEXT("beacon_sweep")) return FText::GetEmpty();
 	const int32 Option = Actor->GetState().Option;
 	const TCHAR* Board = Option == 0 ? TEXT("9 x 9 / 10 mines") : Option == 1 ? TEXT("16 x 16 / 40 mines")
 		: Option == 2 ? TEXT("30 x 16 / 99 mines") : TEXT("unavailable");
@@ -874,7 +874,7 @@ FText SDaedalusDesktopArcade::ControlText() const
 	FString Text = Id == TEXT("twinwake")
 		? TEXT("Up/Down, W/S, D-pad or left stick: paddle. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ")
 		: TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ");
-	if (Id == TEXT("minesweeper")) Text += TEXT("F1 / left-stick click: How to play. Mouse left: reveal; right: flag; middle: open around a number when its flags match. J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
+	if (Id == TEXT("beacon_sweep")) Text += TEXT("F1 / left-stick click: How to play. Mouse left: reveal; right: flag; middle: open around a number when its flags match. J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
 	else if (Id == TEXT("dungeon")) Text += TEXT("J/Space or pad A/X: light. Shift or pad Y/LB: trail. K/Enter or pad B: reset the circuit.");
 	else if (Id == TEXT("glowtrail")) Text += Actor && Actor->GetGameOption() == 1
 		? TEXT("Clear every dot. Fruit opportunities follow 76 and 228 collected dots. Each is worth 100 points and lasts 20 seconds of active play; the second waits if one is already out. Power pellets frighten ghosts. Fresh pad A/Space/Enter replays a finished run.")

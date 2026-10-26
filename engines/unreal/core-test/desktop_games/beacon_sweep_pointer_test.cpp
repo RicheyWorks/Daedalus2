@@ -22,7 +22,7 @@ Vec Center(const Frame& F,int Index) {
     for(const auto& C:F.Commands) if(C.Kind==Shape::Rectangle && N++==Index) return {C.A.X+C.B.X/2,C.A.Y+C.B.Y/2};
     return {-1,-1};
 }
-bool Click(MinesweeperGame& G,int Index,int Button) {
+bool Click(BeaconSweepGame& G,int Index,int Button) {
     Frame F;G.Render(F);const auto P=Center(F,Index);Game& Core=G;
     return Core.SourcePointerButton(P.X,P.Y,Button);
 }
@@ -36,7 +36,7 @@ std::vector<int> Neighbours(int N,int W,int H) {
     return Out;
 }
 void Geometry(int Option) {
-    MinesweeperGame G;G.SetOption(Option,730);Game& Core=G;
+    BeaconSweepGame G;G.SetOption(Option,730);Game& Core=G;
     const int W=Option==0?9:Option==1?16:30,H=Option==0?9:16;
     for(int N:{0,W-1,(H-1)*W,W*H-1,(H/2)*W+W/2}) {
         Check(Click(G,N,1),"each rendered corner/center accepts one right press");
@@ -61,19 +61,19 @@ void Geometry(int Option) {
 }
 void SafeOpeningAndLoss(int Option,std::uint32_t Seed) {
     const int W=Option==0?9:Option==1?16:30,H=Option==0?9:16,N=(H/2)*W+W/2;
-    MinesweeperGame G;G.SetOption(Option,Seed);
+    BeaconSweepGame G;G.SetOption(Option,Seed);
     Check(Click(G,N,1) && Click(G,N,0) && Fields(G.SaveState())[6]=="0","a flagged first cell cannot plant or reveal");
     Check(Click(G,N,1) && Click(G,N,0),"unflag then reveal starts the board through normal rules");
     const auto S=Fields(G.SaveState());bool Safe=S[6]=="1";
     for(int I:Neighbours(N,W,H)) Safe=Safe && !(Bits(S,I)&1);
     Check(Safe && !(Bits(S,N)&1) && S[5]=="0","first pointer reveal protects its full neighborhood without advancing the timer");
-    MinesweeperGame Fresh;Fresh.SetOption(Option,Seed);Click(Fresh,N,0);
+    BeaconSweepGame Fresh;Fresh.SetOption(Option,Seed);Click(Fresh,N,0);
     Check(G.SaveState()==Fresh.SaveState(),"preplaced and removed flag does not change deterministic planting");
     const auto OpenBefore=G.SaveState();Check(Click(G,N,1) && G.SaveState()==OpenBefore,"open cells cannot acquire flags");
     int Mine=-1;for(int I=0;I<W*H;++I) if(Bits(S,I)&1) {Mine=I;break;}
     Check(Mine>=0,"real planted layout provides a mine for fast-loss fixture");if(Mine<0) return;
     Check(Click(G,Mine,0) && G.GetStatus().Over && !G.GetStatus().Won && Fields(G.SaveState())[5]=="0","two immediate reveals can lose before a timer step");
-    const std::string Loss=G.SaveState();MinesweeperGame Restored;
+    const std::string Loss=G.SaveState();BeaconSweepGame Restored;
     Check(Restored.RestoreState(Loss,1) && Restored.SaveState()==Loss,"zero-tick fast loss restores exact board flags cursor seed and result");
     Check(!Click(G,N,0) && !Click(G,N,1) && !Click(G,N,2) && G.SaveState()==Loss,"terminal pointer presses cannot restart or change the result");
     auto Invalid=Fields(Loss);
@@ -82,7 +82,7 @@ void SafeOpeningAndLoss(int Option,std::uint32_t Seed) {
 }
 void Chords() {
     constexpr int W=9,H=9;
-    MinesweeperGame Base;Base.Reset(730);Click(Base,40,0);const auto S=Fields(Base.SaveState());
+    BeaconSweepGame Base;Base.Reset(730);Click(Base,40,0);const auto S=Fields(Base.SaveState());
     int Number=-1;std::vector<int> Mines,Safe;
     for(int N=0;N<W*H && Number<0;++N) if((Bits(S,N)&3)==2) {
         std::vector<int> M,C;
@@ -90,26 +90,26 @@ void Chords() {
         if(!M.empty() && !C.empty()) {Number=N;Mines=M;Safe=C;}
     }
     Check(Number>=0,"real opening supplies an open number with covered mines and safe neighbors");if(Number<0) return;
-    MinesweeperGame Correct=Base;
+    BeaconSweepGame Correct=Base;
     const auto Before=S[9];Check(Click(Correct,Number,2) && Fields(Correct.SaveState())[9]==Before,"mismatched flag count leaves neighbors covered");
     for(int I:Mines) Click(Correct,I,1);
     Check(Click(Correct,Number,2) && (!Correct.GetStatus().Over || Correct.GetStatus().Won),"correct matching flags chord without a loss");
     bool Opened=true;for(int I:Safe) Opened=Opened && (Bits(Fields(Correct.SaveState()),I)&2);
     Check(Opened && Fields(Correct.SaveState())[5]=="0","chord opens safe neighbors once without adding timer frames");
-    MinesweeperGame Wrong=Base;
+    BeaconSweepGame Wrong=Base;
     for(std::size_t I=1;I<Mines.size();++I) Click(Wrong,Mines[I],1);
     Click(Wrong,Safe[0],1);
     Check(Click(Wrong,Number,2) && Wrong.GetStatus().Over && !Wrong.GetStatus().Won,"matching but wrong flags retain the normal chord loss");
-    MinesweeperGame Restored;
+    BeaconSweepGame Restored;
     Check(Restored.RestoreState(Wrong.SaveState(),0) && Restored.SaveState()==Wrong.SaveState(),"fast wrong-flag chord loss also resumes exactly");
 }
 void WinAndDriver() {
-    MinesweeperGame G;G.Reset(730);Click(G,40,0);const auto S=Fields(G.SaveState());
+    BeaconSweepGame G;G.Reset(730);Click(G,40,0);const auto S=Fields(G.SaveState());
     for(int N=0;N<81 && !G.GetStatus().Over;++N) if(!(Bits(S,N)&1)) Click(G,N,0);
     Check(G.GetStatus().Won && Fields(G.SaveState())[5]=="0","mouse can finish a complete safe board without fake time");
-    MinesweeperGame Restored;
+    BeaconSweepGame Restored;
     Check(Restored.RestoreState(G.SaveState(),1) && Restored.GetStatus().Won,"zero-tick completed board retains existing save support");
-    Driver D;D.Select("minesweeper",730);const auto P=Center(D.GetFrame(),40);
+    Driver D;D.Select("beacon_sweep",730);const auto P=Center(D.GetFrame(),40);
     const std::string Before=D.CaptureSave();D.SetPaused(true);
     Check(!D.SourcePointerButton(P.X,P.Y,0) && D.CaptureSave()==Before && D.Ticks()==0,"paused pointer cannot reveal or automatically resume");
     D.SetPaused(false);Input Pending;Pending.Right=Pending.ActionPressed=true;D.SetInput(Pending);
@@ -122,11 +122,11 @@ void WinAndDriver() {
 }
 }
 int main() {
-    MinesweeperGame Uninitialized;Check(!Uninitialized.SourcePointerButton(200,100,0),"uninitialized board ignores pointer events");
+    BeaconSweepGame Uninitialized;Check(!Uninitialized.SourcePointerButton(200,100,0),"uninitialized board ignores pointer events");
     for(int Option=0;Option<3;++Option) {
         Geometry(Option);for(std::uint32_t Seed:{0u,730u,UINT32_MAX}) SafeOpeningAndLoss(Option,Seed);
     }
     Chords();WinAndDriver();
-    std::cout<<"Minesweeper pointer: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
+    std::cout<<"Beacon Sweep pointer: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
     return Failed?1:0;
 }

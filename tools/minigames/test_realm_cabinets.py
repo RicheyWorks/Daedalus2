@@ -10,7 +10,7 @@ import realm_cabinets as rc  # noqa: E402
 
 CATALOG = {
     "games": [{"id": g, "title": g.title(), "host": "ADaedalusDesktopArcade", "option_count": n} for g, n in
-              (("twinwake", 4), ("minesweeper", 3), ("star_shooter", 3), ("riftwing", 2), ("lanternwild", 2))],
+              (("twinwake", 4), ("beacon_sweep", 3), ("star_shooter", 3), ("riftwing", 2), ("lanternwild", 2))],
     "java_cabinets": [{"id": "sudoku", "title": "SudokuPro", "host": "ADaedalusJavaArcade",
                        "game_enum": "EDaedalusJavaGame::Sudoku", "requires": "java"}],
 }
@@ -26,7 +26,7 @@ class Selection(unittest.TestCase):
     def test_all_by_default_includes_java(self):
         out = rc.build(CATALOG, spec())
         self.assertEqual([c["game"] for c in out["realms"][0]["cabinets"]],
-                         ["twinwake", "minesweeper", "star_shooter", "riftwing", "lanternwild", "sudoku"])
+                         ["twinwake", "beacon_sweep", "star_shooter", "riftwing", "lanternwild", "sudoku"])
 
     def test_patterns_and_exclude(self):
         out = rc.build(CATALOG, spec(include=["*_shooter", "twinwake"], exclude=["riftwing_*"]))
@@ -80,7 +80,7 @@ class Options(unittest.TestCase):
     def test_option_applied(self):
         cabs = rc.build(CATALOG, spec(options={"lanternwild": 1, "twinwake": 3}))["realms"][0]["cabinets"]
         got = {c["game"]: c["option"] for c in cabs if "option" in c}
-        self.assertEqual((got["lanternwild"], got["twinwake"], got["minesweeper"]), (1, 3, 0))
+        self.assertEqual((got["lanternwild"], got["twinwake"], got["beacon_sweep"]), (1, 3, 0))
 
     def test_option_out_of_range(self):
         for bad in (2, -1, 1.0, True, "1"):

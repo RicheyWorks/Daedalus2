@@ -15,7 +15,7 @@ std::string Pack(const std::vector<std::string>& Tokens) {
     for(const auto& Token:Tokens) {if(!Out.empty()) Out+=' ';Out+=Token;}
     return Out;
 }
-void Move(MinesweeperGame& Game,int X,int Y) {
+void Move(BeaconSweepGame& Game,int X,int Y) {
     const auto Tokens=Fields(Game.SaveState());
     const int StartX=std::stoi(Tokens[3]),StartY=std::stoi(Tokens[4]);
     for(int N=0;N<std::abs(X-StartX);++N) {
@@ -25,9 +25,9 @@ void Move(MinesweeperGame& Game,int X,int Y) {
         Input I;I.Up=Y<StartY;I.Down=Y>StartY;Game.Step(I);Game.Step({});
     }
 }
-void Reveal(MinesweeperGame& Game) {Input I;I.FirePressed=true;Game.Step(I);}
-void Flag(MinesweeperGame& Game) {Input I;I.ActionPressed=true;Game.Step(I);}
-bool SameFrame(const MinesweeperGame& A,const MinesweeperGame& B) {
+void Reveal(BeaconSweepGame& Game) {Input I;I.FirePressed=true;Game.Step(I);}
+void Flag(BeaconSweepGame& Game) {Input I;I.ActionPressed=true;Game.Step(I);}
+bool SameFrame(const BeaconSweepGame& A,const BeaconSweepGame& B) {
     Frame F,G;A.Render(F);B.Render(G);
     if(F.Commands.size()!=G.Commands.size() || F.Width!=G.Width || F.Height!=G.Height) return false;
     for(std::size_t N=0;N<F.Commands.size();++N) {
@@ -43,11 +43,11 @@ bool SameFrame(const MinesweeperGame& A,const MinesweeperGame& B) {
 int main() {
     int Checks=0,Failed=0;
     auto Check=[&](bool Ok,const char* What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}};
-    MinesweeperGame Uninitialized;Check(Uninitialized.SaveState().empty(),"uninitialized board has no save");
+    BeaconSweepGame Uninitialized;Check(Uninitialized.SaveState().empty(),"uninitialized board has no save");
     // Real inputs produce each state; saved hidden cells let this test choose safe/mine targets.
     for(int Option=0;Option<3;++Option) for(std::uint32_t Seed:{0u,730u,UINT32_MAX}) {
         const int Width=Option==0?9:Option==1?16:30,Height=Option==0?9:16;
-        MinesweeperGame Original,Resumed;
+        BeaconSweepGame Original,Resumed;
         Original.SetOption(Option,Seed);Move(Original,1,1);Flag(Original);Move(Original,Width/2,Height/2);
         const std::string BeforeFirst=Original.SaveState();
         Check(!BeforeFirst.empty() && BeforeFirst.size()<4096,"all difficulties fit bounded save");
@@ -67,7 +67,7 @@ int main() {
         Check(Resumed.RestoreState(Midgame,1) && Resumed.SaveState()==Midgame,"planted board timer flags option roundtrip");
         Check(SameFrame(Original,Resumed) && Original.GetStatus().Note==Resumed.GetStatus().Note,"numbers and active time restored");
         // The flag at 1,1 may hold back a safe flood cell. Unflag before clearing the board.
-        MinesweeperGame Winning;
+        BeaconSweepGame Winning;
         Check(Winning.RestoreState(Midgame,1),"midgame can continue independently");
         if(!Winning.GetStatus().Over) {Move(Winning,1,1);Flag(Winning);}
         for(int N=0;N<Width*Height && !Winning.GetStatus().Over;++N) {
@@ -86,7 +86,7 @@ int main() {
         Check(Resumed.RestoreState(Loss,1) && Resumed.SaveState()==Loss && SameFrame(Original,Resumed),"lost board roundtrip");
     }
 
-    MinesweeperGame Live;
+    BeaconSweepGame Live;
     Live.Reset(730);Reveal(Live);for(int N=0;N<80;++N) Live.Step({});
     const std::string Good=Live.SaveState();const auto Tokens=Fields(Good);
     auto Refuse=[&](const std::string& Bad) {
@@ -115,23 +115,23 @@ int main() {
     Refuse(Pack(BadLoss)); // cannot lose after the board was already cleared
     BadLoss=Tokens;BadLoss[5]="0";BadLoss[7]="1";
     for(char& C:BadLoss[9]) if((C-'0')&1) {C='3';break;}
-    MinesweeperGame FastLoss;
+    BeaconSweepGame FastLoss;
     Check(FastLoss.RestoreState(Pack(BadLoss),1) && FastLoss.SaveState()==Pack(BadLoss),"multiple pointer events can produce a valid zero-tick later loss");
     for(char& C:BadLoss[9]) if(!((C-'0')&1)) C='0';
     Refuse(Pack(BadLoss)); // a first-reveal loss still cannot have any safe cell open
     auto Maximum=Tokens;Maximum[5]="18446744073709551615";
-    MinesweeperGame Saturated;
+    BeaconSweepGame Saturated;
     Check(Saturated.RestoreState(Pack(Maximum),1),"uint64 maximum timer accepted without overflow");
     Saturated.Step({});Check(Saturated.SaveState()==Pack(Maximum),"timer saturates on next step");
-    MinesweeperGame Fresh;Fresh.Reset(1);
+    BeaconSweepGame Fresh;Fresh.Reset(1);
     auto Empty=Fields(Fresh.SaveState());
     for(std::size_t N:{5u,6u,7u,8u}) {auto Bad=Empty;Bad[N]="1";Refuse(Pack(Bad));}
     Empty[9][0]='1';Refuse(Pack(Empty));Empty[9][0]='2';Refuse(Pack(Empty));
 
     Driver Source,Destination;
-    Check(Source.Select("minesweeper",730) && Source.SetOption(2),"driver selects expert Minesweeper");
+    Check(Source.Select("beacon_sweep",730) && Source.SetOption(2),"driver selects expert Beacon Sweep");
     const std::string DriverSave=Source.CaptureSave();
-    Check(Destination.Select("minesweeper",99) && Destination.RestoreSave(DriverSave)
+    Check(Destination.Select("beacon_sweep",99) && Destination.RestoreSave(DriverSave)
         && Destination.GetSeed()==730 && Destination.GetOption()==2,"driver restores difficulty and restart seed");
     Input Pending;Pending.ActionPressed=true;Destination.SetInput(Pending);Destination.SetPaused(true);
     Check(!Destination.RestoreSave("invalid") && Destination.IsPaused() && Destination.CaptureSave()==DriverSave,"failed restore preserves driver pause and board");
@@ -143,10 +143,10 @@ int main() {
     Pending={};Pending.FirePressed=true;Source.SetInput(Pending);Destination.SetInput(Pending);
     Source.Advance(Driver::StepSeconds);Destination.Advance(Driver::StepSeconds);
     Check(Source.CaptureSave()==Destination.CaptureSave(),"driver first reveal stays deterministic after restart");
-    Check(!Destination.RestoreSave("DGS1 0 1 135 3 0 0 0 1 0"),"Star payload cannot replace Minesweeper");
+    Check(!Destination.RestoreSave("DGS1 0 1 135 3 0 0 0 1 0"),"Star payload cannot replace Beacon Sweep");
     Check(Source.Select("star_shooter",730),"Star remains selectable");
     Source.SourceKeyDown(6);const auto StarSave=Source.CaptureSave();
     Check(!StarSave.empty() && Source.RestoreSave(StarSave) && Source.GetSeed()==730,"Star save and fallback seed remain compatible");
-    std::cout<<"Minesweeper save/resume: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
+    std::cout<<"Beacon Sweep save/resume: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
     return Failed?1:0;
 }

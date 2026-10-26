@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-#include "DesktopGames/DaedalusDesktopMinesweeperCore.h"
+#include "DesktopGames/DaedalusDesktopBeaconSweepCore.h"
 #include <iostream>
 #include <sstream>
 
@@ -7,18 +7,18 @@ using namespace daedalus::desktop;
 namespace {
 int Checks=0,Failed=0;
 void Check(bool Good,const char* What) {++Checks;if(!Good){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
-std::vector<std::string> Fields(const MinesweeperGame& G) {
+std::vector<std::string> Fields(const BeaconSweepGame& G) {
     std::istringstream In(G.SaveState());std::vector<std::string> Out;std::string Token;
     while(In>>Token) Out.push_back(Token);
     return Out;
 }
-bool NoteHas(const MinesweeperGame& G,const std::string& Text) {return G.GetStatus().Note.find(Text)!=std::string::npos;}
-bool FrameHas(const MinesweeperGame& G,const std::string& Text) {
+bool NoteHas(const BeaconSweepGame& G,const std::string& Text) {return G.GetStatus().Note.find(Text)!=std::string::npos;}
+bool FrameHas(const BeaconSweepGame& G,const std::string& Text) {
     Frame F;G.Render(F);
     for(const auto& C:F.Commands) if(C.Kind==Shape::Text && C.Label.find(Text)!=std::string::npos) return true;
     return false;
 }
-void Move(MinesweeperGame& G,int X,int Y) {
+void Move(BeaconSweepGame& G,int X,int Y) {
     const auto Before=Fields(G);const int StartX=std::stoi(Before[3]),StartY=std::stoi(Before[4]);
     for(int N=0;N<std::abs(X-StartX);++N) {
         Input I;I.Left=X<StartX;I.Right=X>StartX;G.Step(I);G.Step({});
@@ -27,9 +27,9 @@ void Move(MinesweeperGame& G,int X,int Y) {
         Input I;I.Up=Y<StartY;I.Down=Y>StartY;G.Step(I);G.Step({});
     }
 }
-void Reveal(MinesweeperGame& G) {Input I;I.FirePressed=true;G.Step(I);}
-void Flag(MinesweeperGame& G) {Input I;I.ActionPressed=true;G.Step(I);}
-void Chord(MinesweeperGame& G) {Input I;I.DashPressed=true;G.Step(I);}
+void Reveal(BeaconSweepGame& G) {Input I;I.FirePressed=true;G.Step(I);}
+void Flag(BeaconSweepGame& G) {Input I;I.ActionPressed=true;G.Step(I);}
+void Chord(BeaconSweepGame& G) {Input I;I.DashPressed=true;G.Step(I);}
 int Bits(const std::string& Layout,int I) {return Layout[static_cast<std::size_t>(I)]-'0';}
 std::vector<int> Neighbours(int I) {
     std::vector<int> Out;
@@ -50,14 +50,14 @@ int ChordTarget(const std::string& Layout) {
     }
     return -1;
 }
-void BlockedStepPreserves(const MinesweeperGame& Before,const Input& Attempt,const char* What) {
+void BlockedStepPreserves(const BeaconSweepGame& Before,const Input& Attempt,const char* What) {
     auto Tried=Before,Idle=Before;Tried.Step(Attempt);Idle.Step({});
     Check(Tried.SaveState()==Idle.SaveState(),What);
 }
 }
 
 int main() {
-    MinesweeperGame G;G.Reset(730);
+    BeaconSweepGame G;G.Reset(730);
     const std::string Fresh=G.SaveState();
     Check(NoteHas(G,"Row 1, column 1: covered."),"selected covered cell has readable coordinates");
     Check(NoteHas(G,"First reveal and its neighbours are mine-free"),"first-opening protection is explained before play");
@@ -126,6 +126,6 @@ int main() {
             Check(NoteHas(Wrong,"Mine hit. Restart to try again"),"loss replaces active-cell chord advice with recovery guidance");
         }
     }
-    std::cout<<"Minesweeper guidance: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
+    std::cout<<"Beacon Sweep guidance: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
     return Failed?1:0;
 }

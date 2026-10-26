@@ -1,14 +1,14 @@
-# Minesweeper saved-board slice
+# Beacon Sweep saved-board slice
 
-Minesweeper already had first-reveal safety, flood reveal, flags, chord, three
+Beacon Sweep already had first-reveal safety, flood reveal, flags, chord, three
 difficulties and terminal states. This slice adds exact-board save/resume through
 the existing `Game`/`Driver` facilities and native cabinet, without changing its rules.
 
 The cabinet offers Save board, Continue saved board and Save & Close. Saving uses
 the existing bounded temporary-file replacement helper and the dedicated
-`Saved/DaedalusDesktopGames/minesweeper.dgs` slot. Normal Close and starting another
+`Saved/DaedalusDesktopGames/beacon_sweep.dgs` slot. Normal Close and starting another
 board do not write that slot. A failed Save & Close stays open for recovery. The slot
-is shared between Minesweeper cabinets on one installation; it is not an account or
+is shared between Beacon Sweep cabinets on one installation; it is not an account or
 cloud save. Star's `star_shooter.dgs`, `DGS1` format and leaderboard remain separate.
 Keyboard F5 saves and F9 loads. While paused, gamepad X saves and Y loads; the
 pause overlay names these actions. Active-play reveal/chord mappings stay unchanged.
@@ -37,18 +37,18 @@ so Restart and later difficulty changes retain their established deterministic b
 
 ## Focused verification
 
-`minesweeper_test.cpp` runs 214 checks using real input transitions and resumed
+`beacon_sweep_test.cpp` runs 214 checks using real input transitions and resumed
 boards: all three difficulties at seeds 0, 730 and UINT32_MAX; flags/cursor/timer;
 first-reveal safety; completion and loss; rendered adjacency/result parity; malformed
 save preservation; timer saturation; driver pause/input cleanup and seed adoption;
 and compatibility with Star's existing save path through the driver.
 
-Build only `desktop_minesweeper` in this directory's existing CMake project, then
-run `ctest --test-dir <build-dir> -R ^desktop_minesweeper$ --output-on-failure`.
-Alternatively compile only `minesweeper_test.cpp` as C++17 with the plugin Public
+Build only `desktop_beacon_sweep` in this directory's existing CMake project, then
+run `ctest --test-dir <build-dir> -R ^desktop_beacon_sweep$ --output-on-failure`.
+Alternatively compile only `beacon_sweep_test.cpp` as C++17 with the plugin Public
 directory on the include path. Strict MSVC `/W4 /WX /permissive-` passed locally.
 A separate tiny probe against baseline `b684100d8` failed as expected because its
-Minesweeper `SaveState` was empty and `RestoreState` unavailable. No source fixtures,
+Beacon Sweep `SaveState` was empty and `RestoreState` unavailable. No source fixtures,
 game saves, services, editor sessions, UHT or engine builds were used.
 
 Native acceptance still needs: Save/Continue after application restart; missing,
@@ -64,7 +64,7 @@ before reveal, open-cell flag refusal and the matching-count chord requirement.
 Matching flags are explicitly not proof of safety. Guidance is not saved and adds
 no new state: DGM1 fields, mine placement, actions and active time remain unchanged.
 
-`desktop_minesweeper_guidance` / `minesweeper_guidance_test.cpp` passed 29/29 strict
+`desktop_beacon_sweep_guidance` / `beacon_sweep_guidance_test.cpp` passed 29/29 strict
 single-TU MSVC checks, using real seed-730 actions, idle-clone comparisons for blocked
 actions, successful and wrong-flag chords, and reset/restore/presentation save-byte
 preservation. The same test against the prior header passed12/29 and failed17
@@ -81,7 +81,7 @@ host changes are involved. The existing native host forwards A into a new Jump
 edge, so it can also reveal the fresh board's safe first cell; no suppression state
 is added. This behavior is modeled offline and remains native acceptance work.
 
-`desktop_minesweeper_replay` / `minesweeper_replay_test.cpp` passed37/37 strict
+`desktop_beacon_sweep_replay` / `beacon_sweep_replay_test.cpp` passed37/37 strict
 single-TU MSVC checks: real win/loss/expert loss, reset and deterministic planting,
 repeat cleanup, restored seed/difficulty, paused refusal, stale-edge cleanup and
 modeled A forwarding. The same test against the preceding header passed12/19,
@@ -111,7 +111,7 @@ open, exactly one open mine, the correct mine count and consistent terminal bits
 Impossible first-reveal losses and malformed records remain atomically refused;
 no format/version change or artificial timer advancement is introduced.
 
-`desktop_minesweeper_pointer` / `minesweeper_pointer_test.cpp` passed 197/197 strict
+`desktop_beacon_sweep_pointer` / `beacon_sweep_pointer_test.cpp` passed 197/197 strict
 single-TU MSVC checks, using actual rendered cell centers across all presets and
 three seeds, bounds/gutters, flagging, safe openings, successful/wrong-flag chords,
 complete wins, zero-tick loss restoration, paused/terminal refusal and stale-input
@@ -132,7 +132,7 @@ engine/editor or full suite was run for this slice.
 
 ## Readable beginner guide
 
-The cabinet's existing native help panel now serves Minesweeper as well as Star.
+The cabinet's existing native help panel now serves Beacon Sweep as well as Star.
 How to play / F1 / left-stick click pauses the current board and opens readable,
 wrapped, scrollable rules: reveal every safe cell, first-opening safety, diagonal
 number clues, flood/flag interaction, an estimated mine counter, optional chording
@@ -160,8 +160,8 @@ opening cell. Continue remains authoritative for the exact older saved board and
 adopts its seed for subsequent replay. The new action clears old input and time
 debt, and never forwards its activation into a first reveal. Other games refuse it.
 
-The focused C++17 target is desktop_minesweeper_new_puzzle, or compile only
-minesweeper_new_puzzle_test.cpp against the plugin Public directory. Native seed
+The focused C++17 target is desktop_beacon_sweep_new_puzzle, or compile only
+beacon_sweep_new_puzzle_test.cpp against the plugin Public directory. Native seed
 generation, reflected API compilation, button layout/focus, mixed input and actual
 save-slot preservation remain native acceptance work. The portable suite tests
 real Driver, rendered targets, board rules and save/resume without engine headers.

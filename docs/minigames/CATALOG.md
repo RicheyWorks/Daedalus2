@@ -8,7 +8,7 @@ batched rebuild under the editor custodian.
 
 | id | title | portable tests |
 |---|---|---|
-| `minesweeper` | Minesweeper | 5 |
+| `beacon_sweep` | Beacon Sweep | 5 |
 | `twinwake` | Twinwake Volley | 6 |
 | `dungeon` | Dungeon Prototype | 5 |
 | `driftstone` | Driftstone Patrol | 4 |
@@ -28,7 +28,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 
 | id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | hints | action_cue | save_restore |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `minesweeper` | yes |  | yes |  | yes |  | yes |  |  | yes |
+| `beacon_sweep` | yes |  | yes |  | yes |  | yes |  |  | yes |
 | `twinwake` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `dungeon` | yes |  |  |  |  |  | yes | yes | yes | yes |
 | `driftstone` | yes |  | yes | yes |  |  | yes |  |  | yes |

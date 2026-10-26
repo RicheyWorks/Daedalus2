@@ -12,17 +12,17 @@ std::vector<std::string> Fields(const std::string& Save) {
     while(In>>Token) Out.push_back(Token);
     return Out;
 }
-int Width(const MinesweeperGame& G) {return G.GetOption()==0?9:G.GetOption()==1?16:30;}
-void Move(MinesweeperGame& G,int X,int Y) {
+int Width(const BeaconSweepGame& G) {return G.GetOption()==0?9:G.GetOption()==1?16:30;}
+void Move(BeaconSweepGame& G,int X,int Y) {
     G.Step({}); // Begin each deliberate tap sequence with no held movement.
     const auto F=Fields(G.SaveState());const int StartX=std::stoi(F[3]),StartY=std::stoi(F[4]);
     for(int N=0;N<std::abs(X-StartX);++N) {Input I;I.Left=X<StartX;I.Right=X>StartX;G.Step(I);G.Step({});}
     for(int N=0;N<std::abs(Y-StartY);++N) {Input I;I.Up=Y<StartY;I.Down=Y>StartY;G.Step(I);G.Step({});}
 }
-void Reveal(MinesweeperGame& G) {Input I;I.FirePressed=true;G.Step(I);}
-void Flag(MinesweeperGame& G) {Input I;I.ActionPressed=true;G.Step(I);}
-MinesweeperGame ActualLoss(int Option,std::uint32_t Seed) {
-    MinesweeperGame G;G.SetOption(Option,Seed);Reveal(G);
+void Reveal(BeaconSweepGame& G) {Input I;I.FirePressed=true;G.Step(I);}
+void Flag(BeaconSweepGame& G) {Input I;I.ActionPressed=true;G.Step(I);}
+BeaconSweepGame ActualLoss(int Option,std::uint32_t Seed) {
+    BeaconSweepGame G;G.SetOption(Option,Seed);Reveal(G);
     const std::string Layout=Fields(G.SaveState())[9];const int W=Width(G);
     int Target=-1,Marker=-1;
     for(std::size_t N=0;N<Layout.size();++N) if(((Layout[N]-'0')&1) && N%static_cast<std::size_t>(W)>0) {Target=static_cast<int>(N);break;}
@@ -35,8 +35,8 @@ MinesweeperGame ActualLoss(int Option,std::uint32_t Seed) {
     Held.FirePressed=true;G.Step(Held);
     return G;
 }
-MinesweeperGame ActualWin(std::uint32_t Seed) {
-    MinesweeperGame G;G.Reset(Seed);Reveal(G);
+BeaconSweepGame ActualWin(std::uint32_t Seed) {
+    BeaconSweepGame G;G.Reset(Seed);Reveal(G);
     const auto Layout=Fields(G.SaveState())[9];
     for(std::size_t N=0;N<Layout.size();++N) if((Layout[N]-'0')&1) {Move(G,static_cast<int>(N)%9,static_cast<int>(N)/9);Flag(G);break;}
     // Test-only route reads the saved layout, but all completion transitions use real Step input.
@@ -46,7 +46,7 @@ MinesweeperGame ActualWin(std::uint32_t Seed) {
     }
     return G;
 }
-void Replay(MinesweeperGame G,int Option,std::uint32_t Seed,bool Won) {
+void Replay(BeaconSweepGame G,int Option,std::uint32_t Seed,bool Won) {
     Game& Core=G;const std::string Terminal=G.SaveState();
     Check(G.GetStatus().Over && G.GetStatus().Won==Won,"real play reaches the requested result");
     Check(G.GetStatus().Note.find("Pad A / R: replay. Start: pause/save")!=std::string::npos,"result names replay and preserves pause/save discoverability");
@@ -58,7 +58,7 @@ void Replay(MinesweeperGame G,int Option,std::uint32_t Seed,bool Won) {
     Check(G.SaveState()==Terminal,"held gameplay actions and timer remain frozen on result");
     const bool Accepted=Core.SourceControllerButton(0);Check(Accepted,"fresh A replays the completed board");
     if(!Accepted) return; // The unchanged preceding header fails cleanly without continuing a terminal run.
-    MinesweeperGame Fresh;Fresh.SetOption(Option,Seed);
+    BeaconSweepGame Fresh;Fresh.SetOption(Option,Seed);
     Check(G.SaveState()==Fresh.SaveState() && G.GetOption()==Option,"replay clears board flags cursor timer and terminal state while retaining seed/difficulty");
     Check(!Core.SourceControllerButton(0) && !Core.SourceControllerButton(1) && G.SaveState()==Fresh.SaveState(),"active A/Start raw events do not restart a new board");
     Input Right;Right.Right=true;
@@ -74,7 +74,7 @@ int main() {
     const auto Loss=ActualLoss(0,730),Win=ActualWin(730),ExpertLoss=ActualLoss(2,0);
     Replay(Loss,0,730,false);Replay(Win,0,730,true);Replay(ExpertLoss,2,0,false);
     const std::string SavedExpert=ExpertLoss.SaveState();
-    Driver D;Check(D.Select("minesweeper",99) && D.RestoreSave(SavedExpert) && D.GetSeed()==0 && D.GetOption()==2,"terminal resume adopts persisted seed and expert difficulty over unrelated driver seed");
+    Driver D;Check(D.Select("beacon_sweep",99) && D.RestoreSave(SavedExpert) && D.GetSeed()==0 && D.GetOption()==2,"terminal resume adopts persisted seed and expert difficulty over unrelated driver seed");
     Check(!D.SourceControllerButton(1) && D.CaptureSave()==SavedExpert,"terminal Start remains unconsumed for the host pause/save path");
     D.SetPaused(true);
     Check(!D.SourceControllerButton(0) && D.IsPaused() && D.CaptureSave()==SavedExpert,"paused board cannot replay through A while save controls own input");
@@ -82,7 +82,7 @@ int main() {
     Input Stale;Stale.Right=true;Stale.FirePressed=Stale.JumpPressed=Stale.ActionPressed=Stale.DashPressed=true;D.SetInput(Stale);
     const bool Accepted=D.SourceControllerButton(0);Check(Accepted,"fresh A replays after returning from pause");
     if(Accepted) {
-        MinesweeperGame Fresh;Fresh.SetOption(2,0);const std::string Blank=Fresh.SaveState();
+        BeaconSweepGame Fresh;Fresh.SetOption(2,0);const std::string Blank=Fresh.SaveState();
         Check(D.CaptureSave()==Blank && !D.IsPaused(),"Driver replay preserves restored seed/difficulty and starts unplanted");
         D.Advance(Driver::StepSeconds);
         Check(D.CaptureSave()==Blank,"accepted replay clears stale semantic edges and movement");
@@ -92,6 +92,6 @@ int main() {
         const auto Started=Fields(D.CaptureSave());
         Check(D.CaptureSave()==Fresh.SaveState() && Started[6]=="1" && ((Started[9][0]-'0')&2)!=0,"native-style fresh A forwarding safely reveals the new first cell");
     }
-    std::cout<<"Minesweeper terminal replay: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
+    std::cout<<"Beacon Sweep terminal replay: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
     return Failed?1:0;
 }

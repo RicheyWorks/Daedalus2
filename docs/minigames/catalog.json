@@ -4,17 +4,17 @@
   "realm_placement": "Spawn one ADaedalusDesktopArcade cabinet per entry, or one cabinet with a picker; call StartGame(id, seed) on use. Derive the seed from realm id + player for repeatable runs.",
   "games": [
     {
-      "id": "minesweeper",
-      "title": "Minesweeper",
+      "id": "beacon_sweep",
+      "title": "Beacon Sweep",
       "summary": "Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord",
       "host": "ADaedalusDesktopArcade",
-      "start": "StartGame(\"minesweeper\", Seed)",
+      "start": "StartGame(\"beacon_sweep\", Seed)",
       "portable_tests": [
-        "desktop_minesweeper",
-        "desktop_minesweeper_guidance",
-        "desktop_minesweeper_new_puzzle",
-        "desktop_minesweeper_pointer",
-        "desktop_minesweeper_replay"
+        "desktop_beacon_sweep",
+        "desktop_beacon_sweep_guidance",
+        "desktop_beacon_sweep_new_puzzle",
+        "desktop_beacon_sweep_pointer",
+        "desktop_beacon_sweep_replay"
       ],
       "option_count": 3,
       "capabilities": [

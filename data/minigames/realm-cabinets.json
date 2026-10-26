@@ -86,8 +86,8 @@
       "layout": "arc",
       "cabinets": [
         {
-          "game": "minesweeper",
-          "title": "Minesweeper",
+          "game": "beacon_sweep",
+          "title": "Beacon Sweep",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             1.351,
@@ -95,9 +95,9 @@
             0.0
           ],
           "yaw_deg": 122.704,
-          "seed": 1193700883,
+          "seed": 2007421199,
           "option": 0,
-          "start": "StartGame(\"minesweeper\", 1193700883)"
+          "start": "StartGame(\"beacon_sweep\", 2007421199)"
         },
         {
           "game": "sudoku",
@@ -184,8 +184,8 @@
       "layout": "grid",
       "cabinets": [
         {
-          "game": "minesweeper",
-          "title": "Minesweeper",
+          "game": "beacon_sweep",
+          "title": "Beacon Sweep",
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
@@ -193,9 +193,9 @@
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 572993567,
+          "seed": 2130025594,
           "option": 0,
-          "start": "StartGame(\"minesweeper\", 572993567)"
+          "start": "StartGame(\"beacon_sweep\", 2130025594)"
         },
         {
           "game": "twinwake",
