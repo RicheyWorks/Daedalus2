@@ -40,6 +40,8 @@ jobs:
         run: cmake -S engines/unreal/core-test/desktop_games -B desktop-build
       - name: Minigame catalog is current
         run: python tools/minigames/minigame_catalog.py --check
+      - name: Every cabinet has a save slot, how-to line, scoreboard entry and an original name
+        run: python tools/minigames/catalog_validate.py
       - name: Realm cabinet placements are current and tested
         run: |
           python tools/minigames/realm_cabinets.py --check
