@@ -10,6 +10,7 @@ on:
       - 'tools/unreal_preflight/preflight*'
       - 'tools/unreal_preflight/fixtures/**'
       - 'tools/unreal_preflight/rebuild_delta/**'
+      - 'tools/unreal_preflight/build_receipt/**'
       - '.github/workflows/epic-source-tools.yml'
 permissions:
   contents: read
@@ -31,6 +32,8 @@ jobs:
         run: python -m unittest discover -s tools/unreal_mcp/convention_audit -p 'test_*.py' -v
       - name: Rebuild delta helper
         run: python -m unittest discover -s tools/unreal_preflight/rebuild_delta -p 'test_*.py' -v
+      - name: Plugin build receipt
+        run: python -m unittest discover -s tools/unreal_preflight/build_receipt -p 'test_*.py' -v
       - name: Preflight rule fixtures
         run: python tools/unreal_preflight/preflight_test.py
       - name: Preflight on main tree
