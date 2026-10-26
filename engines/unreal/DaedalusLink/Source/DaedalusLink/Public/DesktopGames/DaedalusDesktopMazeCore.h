@@ -951,6 +951,7 @@ private:
             F.AddRect(E.X-12,E.Y-14,24,28,{128,128,128,255}); F.AddRect(E.X-8,E.Y-10,16,20,{100,100,100,255});
             F.AddCircle(E.X,E.Y-4,7,{24,24,24,255});
             F.AddCircle(E.X,E.Y-4,5,{220,220,220,255});
+            F.AddCircle(E.X,E.Y-4,2,Black);
         }
         if(E.HitFlash>0) { F.AddLine(E.X-14,E.Y-16,E.X+14,E.Y-16,White,2); F.AddLine(E.X-14,E.Y+16,E.X+14,E.Y+16,White,2); }
         if(E.Kind==EnemyKind::Moblin) {

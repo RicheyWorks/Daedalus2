@@ -213,14 +213,15 @@ void View() {
                 && C.Tint.R==128 && C.Tint.G==128 && C.Tint.B==128) Stone=N;
         }
         Check(Shade<Stone && Stone<F.Commands.size(),"armos keeps a dark rim behind the gray stone");
-        std::size_t EyeRim=F.Commands.size(),Eye=F.Commands.size();
+        std::size_t EyeRim=F.Commands.size(),Eye=F.Commands.size(),EyeDot=F.Commands.size();
         for(std::size_t N=0;N<F.Commands.size();++N) {
             const auto& C=F.Commands[N];
             if(C.Kind!=Shape::Circle || C.A.X!=Armos->X || C.A.Y!=Armos->Y-4) continue;
             if(C.Size==7 && C.Tint.R==24 && C.Tint.G==24 && C.Tint.B==24) EyeRim=N;
             if(C.Size==5 && C.Tint.R==220 && C.Tint.G==220 && C.Tint.B==220) Eye=N;
+            if(C.Size==2 && C.Tint.R==0 && C.Tint.G==0 && C.Tint.B==0) EyeDot=N;
         }
-        Check(EyeRim<Eye && Eye<F.Commands.size(),"the armos eye keeps a dark ring on the stone");
+        Check(EyeRim<Eye && Eye<EyeDot && EyeDot<F.Commands.size(),"the armos eye keeps a dark ring and a pupil");
     }
 }
 void Rupee() {
