@@ -83,14 +83,15 @@ void Fright() {
         if(C.Size==9 && Pale(C.Tint)) Body=N;
     }
     Check(Halo<Body && Body<F.Commands.size(),"frightened ghost has a white halo behind a pale body");
-    std::size_t Rim=F.Commands.size(),Eye=F.Commands.size();
+    std::size_t Rim=F.Commands.size(),Eye=F.Commands.size(),Pupil=F.Commands.size();
     for(std::size_t N=0;N<F.Commands.size();++N) {
         const auto& C=F.Commands[N];
         if(C.Kind!=Shape::Circle || C.A.X!=396 || C.A.Y!=297) continue;
         if(C.Size==4 && C.Tint.R==24 && C.Tint.G==28 && C.Tint.B==48) Rim=N;
         if(C.Size==3 && White(C.Tint)) Eye=N;
+        if(C.Size==2 && C.Tint.R==0 && C.Tint.G==0 && C.Tint.B==0) Pupil=N;
     }
-    Check(Rim<Eye && Eye<F.Commands.size(),"frightened eyes keep a dark ring on the pale body");
+    Check(Rim<Eye && Eye<Pupil && Pupil<F.Commands.size(),"frightened eyes keep a dark ring and a readable pupil");
 }
 }
 

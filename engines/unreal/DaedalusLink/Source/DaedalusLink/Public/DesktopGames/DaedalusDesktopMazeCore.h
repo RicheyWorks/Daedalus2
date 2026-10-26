@@ -559,7 +559,7 @@ public:
                 Out.AddCircle(X,G.Y,9,C); Out.AddRect(X-9,G.Y,18,8,C);
                 Out.AddCircle(X-4,G.Y-3,4,{24,28,48,255}); Out.AddCircle(X+4,G.Y-3,4,{24,28,48,255});
                 Out.AddCircle(X-4,G.Y-3,3,White); Out.AddCircle(X+4,G.Y-3,3,White);
-                Out.AddCircle(X-4,G.Y-3,1,Black); Out.AddCircle(X+4,G.Y-3,1,Black);
+                Out.AddCircle(X-4,G.Y-3,2,Black); Out.AddCircle(X+4,G.Y-3,2,Black);
             };
             DrawGhost(G.X);
             if(IsTunnelActor(G.X,G.Y)) {
