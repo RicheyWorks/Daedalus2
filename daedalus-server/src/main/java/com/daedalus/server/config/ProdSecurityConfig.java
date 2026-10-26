@@ -218,6 +218,7 @@ public class ProdSecurityConfig {
                                 "/api/v1/world/*/package/world.glb").permitAll()
                         // An island's living community (ADR-023): read-only, steps the clock it reads.
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/ecology").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/ecology/compare").permitAll()
                         // Token metadata and its image (ADR-027): a marketplace fetches these unsigned.
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/tokens/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/world/*/islands/*/portrait.png").permitAll()
