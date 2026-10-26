@@ -4,7 +4,7 @@ package com.daedalus.world.adventure;
 
 /**
  * The foes of the Shattering (ADR-037): animals blighted by the meteor's dust, each a lesson in high and
- * low, in the spirit of Zelda II's bots, Lowders, Aches and Iron Knuckles.
+ * low, in the spirit of classic side-view sword fighters: hoppers, shield-bearers and armoured knights.
  *
  * <ul>
  *   <li><b>Blight slime</b> — hops at your shins. No guard; one hit. The first thing anyone beats.</li>
@@ -18,7 +18,7 @@ package com.daedalus.world.adventure;
  *
  * @param life   hits it takes from an Attack 1 sword
  * @param power  half-hearts its hit costs a Life 1 hero
- * @param exp    experience for beating it (Zelda II's scale: a bot is worth 2, an Iron Knuckle 50)
+ * @param exp    experience for beating it (a small hopper is worth 2, an armoured knight 50)
  * @param reach  the only height a thrust can hit it at, or null for either
  * @param guard  the height it always guards, or null (the stone knight's guard moves; see {@link #shifting})
  * @param strike the height it attacks at, or null when it strikes where it is not guarding

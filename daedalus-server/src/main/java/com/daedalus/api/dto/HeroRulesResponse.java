@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * The rules every client plays by (ADR-037): each foe's life, power, experience, the height it can be
  * reached at, the height it guards, the height it strikes at (null when it strikes where it is not
- * guarding), whether its shield moves, and its speed. Also Zelda II's experience costs for the first seven
+ * guarding), whether its shield moves, and its speed. Also the experience costs for the first seven
  * levels (index 0 is level 1 → 2); past them each costs half again the last, without end. And what Heal
  * costs and restores.
  */

@@ -19,7 +19,7 @@ const near = (a, b, e = 1e-3) => Math.abs(a - b) < e;
 
 // settings store
 const S = DaedalusSettings.create({ schema });
-check("Halo Infinite tab order", JSON.stringify(S.tabs()) === JSON.stringify(["CONTROLLER", "KEYBOARD/MOUSE", "VIDEO", "AUDIO", "GAMEPLAY", "ACCESSIBILITY"]), S.tabs());
+check("console tab order", JSON.stringify(S.tabs()) === JSON.stringify(["CONTROLLER", "KEYBOARD/MOUSE", "VIDEO", "AUDIO", "GAMEPLAY", "ACCESSIBILITY"]), S.tabs());
 check("native defaults kept (LeftDeadzone 15, FOV 80, LookSensH 5)", S.get("LeftDeadzone") === 15 && S.get("FieldOfView") === 80 && S.get("LookSensH") === 5);
 check("audio defaults reuse data/settings/defaults.json (Main 80, Music 60, Effects 80)", S.get("MainVolume") === 80 && S.get("MusicVolume") === 60 && S.get("EffectsVolume") === 80);
 check("slider clamps and snaps", S.set("LeftDeadzone", 99) && S.get("LeftDeadzone") === 40 && S.set("LookSensH", 7.26) && near(S.get("LookSensH"), 7.5));
