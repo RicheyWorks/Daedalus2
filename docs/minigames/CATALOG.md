@@ -12,11 +12,11 @@ batched rebuild under the editor custodian.
 | `pong` | Twinwake Volley | 5 |
 | `dungeon` | Dungeon Prototype | 4 |
 | `asteroids` | Driftstone Patrol | 4 |
-| `football` | Football / Soccer | 2 |
+| `football` | Football / Soccer | 3 |
 | `pacman` | Glowtrail Chase | 6 |
 | `sega_shooter` | Riftwing Vanguard | 5 |
 | `shadow_ninja` | Shadow Ninja | 5 |
-| `star_shooter` | Star Shooter | 2 |
+| `star_shooter` | Star Shooter | 3 |
 | `dodge_ball` | Courtyard Clash | 6 |
 | `contra` | Ironwake Advance | 3 |
 | `zelda` | Lanternwild Quest | 3 |
