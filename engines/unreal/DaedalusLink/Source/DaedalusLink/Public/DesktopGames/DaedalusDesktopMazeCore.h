@@ -174,11 +174,17 @@ public:
         const std::string Controls=std::string("Move: WASD/arrows/stick/hat. J/Space/pad A/X: light. K/Enter/pad B: reset. Shift/pad Y: trail ")+(TrailEnabled?"ON":"OFF");
         Out.AddText(12,Rows*Tile+35,Notice.empty()?Controls:Notice,White,14);
         Out.AddText(12,Rows*Tile+54,HintLine(),Color{255,236,180,255},14);
+        Out.AddText(520,Rows*Tile+54,ActionCue(),Color{120,225,255,255},14);
     }
     std::string HintLine() const {
         if(Complete) return "HINT Action or R replays this circuit.";
         if(LitCount==LanternCount) return "HINT Walk to the cyan EXIT and press Fire or Jump.";
         return "HINT Light the lantern marked NEXT. Shift or pad Y shows the trail.";
+    }
+    std::string ActionCue() const {
+        if(Complete) return "CUE Replay";
+        if(LitCount==LanternCount) return "CUE Exit";
+        return "CUE Next lantern";
     }
     Status GetStatus() const override {
         std::string Text=std::string(Option==1?"Threadlight Switchback circuit ":"Threadlight circuit ")+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size())+": ";
@@ -827,6 +833,7 @@ public:
             Out.AddText(195,325,"Pad A / Space / Enter / R: replay",White,17);
         }
         Out.AddText(10,78,HintLine(),Color{255,236,180,255},14);
+        Out.AddText(520,78,ActionCue(),Color{120,225,255,255},14);
     }
     std::string HintLine() const {
         if(Won) return "HINT Press Fire or R to walk Lanternwild again.";
@@ -838,6 +845,13 @@ public:
         }
         if(Keys>0) return "HINT The roster is clear and the key is yours.";
         return "HINT Walk onto the gold KEY.";
+    }
+    std::string ActionCue() const {
+        if(Won) return "CUE Replay";
+        if(Over) return "CUE Retry";
+        if(LivingEnemyCount()>0) return Hero.AttackTimer==0 ? "CUE Swing" : "CUE Wait";
+        if(Keys>0) return "CUE Clear";
+        return "CUE Key";
     }
     Status GetStatus() const override {
         const std::string Text=Won?"Victory: roster defeated and key collected. Pad A / Space / Enter / R: replay."

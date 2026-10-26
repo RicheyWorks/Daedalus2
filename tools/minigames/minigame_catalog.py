@@ -92,6 +92,7 @@ CAPABILITIES = {
     "core_pause": ("OwnPause",),
     "focus_freeze": (),  # test-only: proven by focus_freeze_test.cpp
     "hints": (),  # test-only: proven by hints_test.cpp
+    "action_cue": (),  # test-only: proven by action_cue_test.cpp
     "save_restore": ("SaveState", "RestoreState"),
 }
 
