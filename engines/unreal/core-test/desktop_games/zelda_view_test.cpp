@@ -59,6 +59,21 @@ void View() {
         }
         Check(Shade<Coat && Coat<F.Commands.size(),"moblin keeps a dark body behind the green tunic");
     }
+    const ZeldaGame::Enemy* Armos=nullptr;
+    for(const auto& E:G.GetEnemies()) if(E.Kind==ZeldaGame::EnemyKind::Armos && E.Alive) Armos=&E;
+    Check(Armos!=nullptr,"a living armos is on the fresh board");
+    if(Armos) {
+        std::size_t Shade=F.Commands.size(),Stone=F.Commands.size();
+        for(std::size_t N=0;N<F.Commands.size();++N) {
+            const auto& C=F.Commands[N];
+            if(C.Kind!=Shape::Rectangle) continue;
+            if(C.A.X==Armos->X-14 && C.A.Y==Armos->Y-16 && C.B.X==28 && C.B.Y==32
+                && C.Tint.R==24 && C.Tint.G==24 && C.Tint.B==24) Shade=N;
+            if(C.A.X==Armos->X-12 && C.A.Y==Armos->Y-14 && C.B.X==24 && C.B.Y==28
+                && C.Tint.R==128 && C.Tint.G==128 && C.Tint.B==128) Stone=N;
+        }
+        Check(Shade<Stone && Stone<F.Commands.size(),"armos keeps a dark rim behind the gray stone");
+    }
 }
 }
 
