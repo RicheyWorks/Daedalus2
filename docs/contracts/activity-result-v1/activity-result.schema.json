@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "activity-result/v1",
+  "title": "ActivityResult",
+  "description": "A finished minigame credited to one creature or plant. Field rules and the exactly-once receipt are in README.md. Unknown fields are rejected.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "activityId", "attemptId", "subjectId", "subjectKind", "outcome", "learned"],
+  "properties": {
+    "version": {
+      "const": "activity-result/v1"
+    },
+    "activityId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]([a-z0-9.-]{0,62}[a-z0-9])?$"
+    },
+    "attemptId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9]([A-Za-z0-9._:-]{0,62}[A-Za-z0-9])?$"
+    },
+    "subjectId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9]([A-Za-z0-9._:-]{0,62}[A-Za-z0-9])?$"
+    },
+    "subjectKind": {
+      "enum": ["CREATURE", "PLANT"]
+    },
+    "outcome": {
+      "enum": ["LEARNED", "COMPLETED", "MISSED", "FAILED"]
+    },
+    "learned": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9]([A-Za-z0-9._:-]{0,62}[A-Za-z0-9])?$"
+    },
+    "detail": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 8,
+      "propertyNames": {
+        "pattern": "^[a-z]([a-z0-9-]{0,30}[a-z0-9])?$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 96,
+        "pattern": "^[\\u0020-\\u007E]{1,96}$"
+      }
+    }
+  }
+}
