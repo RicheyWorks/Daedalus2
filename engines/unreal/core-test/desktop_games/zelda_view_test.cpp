@@ -46,6 +46,16 @@ void View() {
         if(C.Size==55 && C.Tint.R==30 && C.Tint.G==144 && C.Tint.B==255) Pond=N;
     }
     Check(Shore<Pond && Pond<F.Commands.size(),"the pond keeps a dark shore on the grass");
+    std::size_t Wall=F.Commands.size(),Door=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Rectangle) continue;
+        if(C.A.X==380 && C.A.Y==80 && C.B.X==40 && C.B.Y==50
+            && C.Tint.R==60 && C.Tint.G==40 && C.Tint.B==20) Wall=N;
+        if(C.A.X==394 && C.A.Y==104 && C.B.X==12 && C.B.Y==26
+            && C.Tint.R==24 && C.Tint.G==16 && C.Tint.B==8) Door=N;
+    }
+    Check(Wall<Door && Door<F.Commands.size(),"the cabin keeps a door on its wall");
     std::size_t Brim=F.Commands.size(),Cap=F.Commands.size();
     for(std::size_t N=0;N<F.Commands.size();++N) {
         const auto& C=F.Commands[N];
