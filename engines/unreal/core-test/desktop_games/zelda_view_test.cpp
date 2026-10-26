@@ -182,6 +182,14 @@ void View() {
             if(C.Size==10 && C.Tint.R==200 && C.Tint.G==50 && C.Tint.B==50) OctoBody=N;
         }
         Check(OctoRim<OctoBody && OctoBody<F.Commands.size(),"the pond octorok keeps a dark rim on the water");
+        std::size_t EyeWhite=F.Commands.size(),EyeDot=F.Commands.size();
+        for(std::size_t N=0;N<F.Commands.size();++N) {
+            const auto& C=F.Commands[N];
+            if(C.Kind!=Shape::Circle || C.A.X!=Octo->X-4 || C.A.Y!=Octo->Y-2) continue;
+            if(C.Size==3 && C.Tint.R==255 && C.Tint.G==255 && C.Tint.B==255) EyeWhite=N;
+            if(C.Size==2 && C.Tint.R==0 && C.Tint.G==0 && C.Tint.B==0) EyeDot=N;
+        }
+        Check(EyeWhite<EyeDot && EyeDot<F.Commands.size(),"the octorok pupil is large enough to see");
     }
     const ZeldaGame::Enemy* Armos=nullptr;
     for(const auto& E:G.GetEnemies()) if(E.Kind==ZeldaGame::EnemyKind::Armos && E.Alive) Armos=&E;
