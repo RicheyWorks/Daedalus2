@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "exported_assets": 500,
+  "unique_palette_proportion_variants": 500,
+  "male_female_pairs": 125,
+  "ordinary_female_herds": 73,
+  "exceptional_female_herd_size": 12,
+  "mountain_alphas": 1,
+  "total_triangles": 508000,
+  "unreal_runtime_proven": false
+}
