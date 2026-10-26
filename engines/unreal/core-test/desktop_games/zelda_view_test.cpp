@@ -36,6 +36,14 @@ void View() {
         if(C.Size==14 && C.Tint.R==128 && C.Tint.G==128 && C.Tint.B==128) Rock=N;
     }
     Check(RockRim<Rock && Rock<F.Commands.size(),"rock keeps a dark rim on the grass");
+    std::size_t Edge=F.Commands.size(),Canopy=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Triangle || C.A.X!=50) continue;
+        if(C.A.Y==52 && C.Tint.R==170 && C.Tint.G==220 && C.Tint.B==90) Edge=N;
+        if(C.A.Y==55 && C.Tint.R==0 && C.Tint.G==100 && C.Tint.B==0) Canopy=N;
+    }
+    Check(Edge<Canopy && Canopy<F.Commands.size(),"tree canopy keeps a light edge on the grass");
 }
 }
 
