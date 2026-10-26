@@ -189,10 +189,30 @@ public:
         int Open=0;for(const auto& C:Cells) Open+=C.Open&&!C.Mine?1:0;
         return {Won?1000:Open,0,Lost||Won,Won,ProgressNote()+" | "+CellNote()+" "+ActionNote()};
     }
+    std::string HintLine() const {
+        if(Won) return "HINT Pad A or R starts a fresh board.";
+        if(Lost) return "HINT Pad A or R tries this seed again.";
+        if(Cells.empty()) return "HINT Reveal a covered cell to begin.";
+        const auto& C=Cells[Index(X,Y)];
+        if(C.Flag) return "HINT K or pad B lifts the flag.";
+        if(C.Open) return "HINT Chord when the flags match the number.";
+        return Planted?"HINT J reveals. K flags a guess.":"HINT The first reveal is safe.";
+    }
+    std::string ActionCue() const {
+        if(Won||Lost) return "CUE Replay";
+        if(Cells.empty()) return "CUE Reveal";
+        const auto& C=Cells[Index(X,Y)];
+        if(C.Flag) return "CUE Unflag";
+        if(C.Open) return "CUE Chord";
+        return "CUE Reveal";
+    }
     void Render(Frame& F) const override {
         F.Clear(800,600,{13,23,35,255});F.AddText(25,12,"BEACON SWEEP",{116,224,195,255},26);
+        F.AddText(520,16,ActionCue(),{120,225,255,255},16);
         F.AddText(25,48,ProgressNote(),White,18);
+        F.AddText(520,48,HintLine(),{255,236,180,255},13);
         const auto L=GetBoardLayout();const double Size=L.Size,Left=L.Left,Top=L.Top;
+        if(static_cast<int>(Cells.size())!=Width*Height) return;
         for(int I=0;I<Width*Height;++I) {
             const auto& C=Cells[I];double Px=Left+(I%Width)*Size,Py=Top+(I/Width)*Size;
             F.AddRect(Px,Py,Size-1,Size-1,C.Open?Color{39,55,68,255}:Color{78,106,119,255});

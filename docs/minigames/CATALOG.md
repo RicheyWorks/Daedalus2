@@ -28,7 +28,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 
 | id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | hints | action_cue | save_restore |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `beacon_sweep` | yes |  | yes |  | yes |  | yes |  |  | yes |
+| `beacon_sweep` | yes |  | yes |  | yes |  | yes | yes | yes | yes |
 | `twinwake` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `dungeon` | yes |  |  |  |  |  | yes | yes | yes | yes |
 | `driftstone` | yes |  | yes | yes |  |  | yes |  |  | yes |

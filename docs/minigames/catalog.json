@@ -18,8 +18,10 @@
       ],
       "option_count": 3,
       "capabilities": [
+        "action_cue",
         "focus_freeze",
         "fresh_pad_replay",
+        "hints",
         "options",
         "pointer",
         "save_restore"
