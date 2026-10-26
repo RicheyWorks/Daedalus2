@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Checkpoint saves for Driftstone Patrol / driftstone (DAS1) and Riftwing Vanguard / riftwing (DSS1).
+// Checkpoint saves for Driftstone Patrol / driftstone (DAS1) and Gleamwing Sentinel / riftwing (DSS1).
 // catalog-capability: save_restore: driftstone riftwing
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>

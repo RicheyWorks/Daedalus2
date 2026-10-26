@@ -9,7 +9,7 @@ Per desktop game in docs/minigames/catalog.json:
   * the scoreboard capability (proven by scoreboard_test.cpp),
   * a unique title, and no trademarked game, company or character name in id, title,
     summary or how-to line (Java cabinet titles and summaries are checked too).
-Internal ids (star_shooter, dodge_ball) and save file names are not titles and are not scanned; the old ids kept in GameAliases for save compatibility are not scanned. Stdlib only.
+Internal ids (star_shooter, dodge_ball, riftwing) and save file names are not titles and are not scanned; the old ids kept in GameAliases for save compatibility are not scanned. Stdlib only.
 """
 import json
 import pathlib
@@ -35,7 +35,7 @@ TRADEMARKS = [
     "pokemon", "ninja gaiden", "street fighter", "mortal kombat", "frogger", "centipede", "dig dug",
     "q bert", "qbert", "breakout", "arkanoid", "gradius", "r type", "robotron",
     "bomberman", "dragon quest", "dragon warrior", "final fantasy", "hydlide", "atari", "capcom",
-    "konami", "namco", "taito", "square enix", "minecraft", "roblox", "fortnite", "fifa", "star shooter", "clash",
+    "konami", "namco", "taito", "square enix", "minecraft", "roblox", "fortnite", "fifa", "star shooter", "clash", "riftwing",
 ]
 
 
@@ -45,7 +45,7 @@ def _pattern(name):
 
 
 # Internal ids kept after a title-only rename so saves and cabinets stay stable.
-LEGACY_INTERNAL_IDS = {"star_shooter"}  # titled Lumen Barrage since 2026-10-26
+LEGACY_INTERNAL_IDS = {"star_shooter", "riftwing"}  # titled Lumen Barrage / Gleamwing Sentinel since 2026-10-26
 
 PATTERNS = [(t, _pattern(t)) for t in TRADEMARKS]
 

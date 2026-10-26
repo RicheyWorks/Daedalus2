@@ -373,11 +373,11 @@ The third dock completes the course; fresh retry retains its mode and seed.
 Endless and Three waves keep their existing rules. Native mode/controls, goal
 readability and human flight learning remain unverified.
 
-Riftwing Vanguard's ordinary ships show two basic/four chaser **health pips**, so
+Gleamwing Sentinel's ordinary ships show two basic/four chaser **health pips**, so
 surviving hits remain visible. The boss retains its separate health bar. Combat
 and scoring rules are unchanged; native cue readability remains unverified.
 
-Riftwing Vanguard offers **Boss rehearsal** beside its default Full run. The same
+Gleamwing Sentinel offers **Boss rehearsal** beside its default Full run. The same
 20-HP boss arrives immediately, with the normal starting ship and score zero;
 regular enemies still provide pressure. Full run keeps its 1500-point entry.
 Rehearsal has clear mode/result cues and retains the usual shooting, pickups,

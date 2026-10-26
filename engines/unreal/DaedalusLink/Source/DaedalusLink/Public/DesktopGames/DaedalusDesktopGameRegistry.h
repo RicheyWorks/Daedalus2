@@ -22,7 +22,7 @@ inline const std::vector<Entry>& Catalog() {
         {"driftstone","Driftstone Patrol","Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot"},
         {"football","Football / Soccer","A ninety-second duel on the Daedalus pitch. Move: WASD/arrows or left stick; J/X: kick"},
         {"glowtrail","Glowtrail Chase","Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick"},
-        {"riftwing","Riftwing Vanguard","Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot"},
+        {"riftwing","Gleamwing Sentinel","Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot"},
         {"emberstep","Emberstep Ascent","Scale the ember terraces and face the sentinel. Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb"},
         {"star_shooter","Lumen Barrage","Hold the starlanes through escalating waves. Move: WASD/arrows or left stick; J/X: shoot; P/Start: pause/save menu"},
         {"dodge_ball","Pebblecourt Rally","Lead three teammates through four courtyard rounds. Move: WASD/arrows or left stick; throw/catch/jump actions"},

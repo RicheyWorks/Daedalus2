@@ -119,7 +119,7 @@ is bounded to five commands per ordinary enemy (at most 320 across the existing
 
 ### Optional Riftwing boss rehearsal
 
-Riftwing Vanguard (the Riftwing core) offers **Full run / Boss rehearsal** through the
+Gleamwing Sentinel (the Riftwing core) offers **Full run / Boss rehearsal** through the
 cabinet's existing checked mode controls. Full run remains option 0 and reaches
 the boss at 1500 real points. Option 1 starts that same 20-HP boss immediately,
 with score zero, three lives and the ordinary weapon/speed. Regular enemies,
