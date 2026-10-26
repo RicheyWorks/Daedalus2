@@ -549,6 +549,7 @@ public:
         for(const auto& G:Ghosts) if(G.Alive) {
             const Color C=G.Frightened ? Color{190,210,255,255} : G.Tint;
             const auto DrawGhost=[&](double X) {
+                Out.AddCircle(X,G.Y,12,{12,16,48,255});
                 if(G.Frightened) Out.AddCircle(X,G.Y,11,White);
                 Out.AddCircle(X,G.Y,9,C); Out.AddRect(X-9,G.Y,18,8,C);
                 Out.AddCircle(X-4,G.Y-3,3,White); Out.AddCircle(X+4,G.Y-3,3,White);

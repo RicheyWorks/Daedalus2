@@ -45,6 +45,18 @@ void HeroRing() {
     }
     Check(Ring<Body && Body<F.Commands.size(),"hero keeps a dark ring behind the yellow body");
 }
+void GhostRim() {
+    PacmanGame G;
+    Frame F;G.Render(F);
+    std::size_t Rim=F.Commands.size(),Body=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Circle || C.A.X!=290 || C.A.Y!=290) continue;
+        if(C.Size==12 && C.Tint.R==12 && C.Tint.G==16 && C.Tint.B==48) Rim=N;
+        if(C.Size==9 && C.Tint.R==0 && C.Tint.G==255 && C.Tint.B==255) Body=N;
+    }
+    Check(Rim<Body && Body<F.Commands.size(),"cyan ghost keeps a dark ring on the blue walls");
+}
 void Fright() {
     PacmanGame G;
     MazeTestAccess::Fright(G);
@@ -61,7 +73,7 @@ void Fright() {
 }
 
 int main() {
-    try { Pellets();HeroRing();Fright(); }
+    try { Pellets();HeroRing();GhostRim();Fright(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
