@@ -41,7 +41,8 @@ bool SameFrame(const Frame& A,const Frame& B) {
 }
 bool SameShots(const std::vector<platformers::ContraBullet>& A,const std::vector<platformers::ContraBullet>& B) {
     if(A.size()!=B.size()) return false;
-    for(std::size_t N=0;N<A.size();++N) if(A[N].X!=B[N].X||A[N].Y!=B[N].Y||A[N].VX!=B[N].VX||A[N].VY!=B[N].VY||A[N].Life!=B[N].Life) return false;return true;
+    for(std::size_t N=0;N<A.size();++N) if(A[N].X!=B[N].X||A[N].Y!=B[N].Y||A[N].VX!=B[N].VX||A[N].VY!=B[N].VY||A[N].Life!=B[N].Life) return false;
+    return true;
 }
 Contra Range(std::uint32_t Seed=730) {Contra G;G.SetOption(1,Seed);return G;}
 void ModesAndPhysics() {
