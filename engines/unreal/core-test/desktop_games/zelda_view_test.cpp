@@ -169,6 +169,13 @@ void View() {
             if(C.Size==7 && C.Tint.R==200 && C.Tint.G==180 && C.Tint.B==150) Face=N;
         }
         Check(FaceRim<Face && Face<F.Commands.size(),"the moblin face keeps a dark rim on the road");
+        std::size_t FaceDot=F.Commands.size();
+        for(std::size_t N=0;N<F.Commands.size();++N) {
+            const auto& C=F.Commands[N];
+            if(C.Kind==Shape::Circle && C.A.X==Moblin->X-3 && C.A.Y==Moblin->Y-13 && C.Size==2
+                && C.Tint.R==0 && C.Tint.G==0 && C.Tint.B==0) FaceDot=N;
+        }
+        Check(Face<FaceDot && FaceDot<F.Commands.size(),"the moblin face keeps pupils on the tan");
         std::size_t HpPlate=F.Commands.size(),Hp=F.Commands.size();
         for(std::size_t N=0;N<F.Commands.size();++N) {
             const auto& C=F.Commands[N];
