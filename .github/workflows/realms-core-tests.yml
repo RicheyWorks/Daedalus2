@@ -12,9 +12,19 @@ on:
       - 'engines/unreal/core-test/gallery_*'
       - 'engines/unreal/core-test/mail_route_*'
       - 'engines/unreal/core-test/verify_*'
-      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusBricks*Core.h'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusBricks*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusGalleryMotif*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusGallerySpectrum*'
       - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusGallery*Core.h'
-      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMailRoute*Core.h'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMailRoute*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusBricks*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusGalleryMotif*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusGallerySpectrum*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusMailRoute*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusLocalSvgFiles*'
+      - 'docs/realms/REALM-DEPENDENCIES-20261026.md'
+      - 'docs/realms/dependency-reconciliation-*.json'
+      - 'tools/realm/test_dependency_reconciliation.py'
       - '.github/workflows/realms-core-tests.yml'
 permissions:
   contents: read
@@ -28,6 +38,8 @@ jobs:
         with:
           python-version: '3.10'
       - uses: ilammy/msvc-dev-cmd@v1
+      - name: Realm dependency reconciliation (source only)
+        run: python -B -m unittest discover -s tools/realm -p test_dependency_reconciliation.py -v
       - name: Build and run realms core tests (cl /W4 /WX)
         shell: pwsh
         working-directory: engines/unreal/core-test
