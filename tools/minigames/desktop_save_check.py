@@ -98,7 +98,7 @@ gw = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_game_world()
 if gw is None: raise RuntimeError("PIE world not available")
 xf = unreal.Transform(location=[0.0, 0.0, -100000.0])
 arc = unreal.GameplayStatics.begin_deferred_actor_spawn_from_class(gw, unreal.DaedalusDesktopArcade, xf)
-arc.set_editor_property("b_auto_advance", False)
+arc.set_editor_property("auto_advance", False)
 unreal.GameplayStatics.finish_spawning_actor(arc, xf)
 out = {}
 def press(i):
