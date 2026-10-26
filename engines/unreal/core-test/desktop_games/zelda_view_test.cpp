@@ -35,6 +35,14 @@ void View() {
         if(Tunic(F.Commands[N],P)) Body=N;
     }
     Check(Rim<Body && Body<F.Commands.size(),"dark outline draws behind the tunic");
+    std::size_t Look=F.Commands.size(),Dot=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Circle) continue;
+        if(C.A.X==P.X && C.A.Y==P.Y-11 && C.Size==7 && C.Tint.R==255 && C.Tint.G==218 && C.Tint.B==185) Look=N;
+        if(C.A.X==P.X-3 && C.A.Y==P.Y-13 && C.Size==2 && C.Tint.R==0 && C.Tint.G==0 && C.Tint.B==0) Dot=N;
+    }
+    Check(Look<Dot && Dot<F.Commands.size(),"the hero pupils are large enough to see");
     std::size_t Border=F.Commands.size(),Road=F.Commands.size();
     for(std::size_t N=0;N<F.Commands.size();++N) {
         const auto& C=F.Commands[N];

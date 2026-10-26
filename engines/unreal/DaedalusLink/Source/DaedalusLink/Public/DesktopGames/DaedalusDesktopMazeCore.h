@@ -965,7 +965,7 @@ private:
         F.AddRect(P.X-8,P.Y-4,16,20,Tunic); F.AddCircle(P.X,P.Y-11,7,{255,218,185,255});
         F.AddTriangle({P.X-10,P.Y-16},{P.X,P.Y-32},{P.X+10,P.Y-16},Outline);
         F.AddTriangle({P.X-8,P.Y-16},{P.X,P.Y-28},{P.X+8,P.Y-16},Tunic);
-        F.AddCircle(P.X-3,P.Y-13,1,Black); F.AddCircle(P.X+3,P.Y-13,1,Black);
+        F.AddCircle(P.X-3,P.Y-13,2,Black); F.AddCircle(P.X+3,P.Y-13,2,Black);
         if(P.Attacking) {
             const auto Swing=[&](double X,double Y,double X2,double Y2) {
                 F.AddLine(X,Y,X2,Y2,{24,28,40,255},6);
