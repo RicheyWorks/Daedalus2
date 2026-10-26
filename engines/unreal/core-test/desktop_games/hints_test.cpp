@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Accessibility hints for the three cabinets that only had options and focus freeze.
 // The line is drawn on the frame. It does not change score, movement, or saves.
-// catalog-capability: hints: dungeon dodge_ball zelda
+// catalog-capability: hints: dungeon dodge_ball lanternwild
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -40,19 +40,19 @@ void DodgeHints() {
     G.Data.Round=4;
     Check(G.HintLine().find("fresh four-round")!=std::string::npos,"finished tournament hint starts a new score");
 }
-void ZeldaHints() {
-    ZeldaGame G;
+void LanternwildHints() {
+    LanternwildGame G;
     const auto Note=G.GetStatus().Note;
     Check(G.HintLine()=="HINT Press J or pad A once to swing. Shift toggles held-sword assist.","fresh quest hint teaches one swing");
     Frame F;G.Render(F);
-    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"zelda hint is on the frame and stays out of status");
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"lanternwild hint is on the frame and stays out of status");
     Input Swing;Swing.FirePressed=true;G.Step(Swing);
     Check(G.HintLine().find("recovering")!=std::string::npos,"a swing replaces the hint while the sword recovers");
 }
 }
 
 int main() {
-    try { DungeonHints();DodgeHints();ZeldaHints(); }
+    try { DungeonHints();DodgeHints();LanternwildHints(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

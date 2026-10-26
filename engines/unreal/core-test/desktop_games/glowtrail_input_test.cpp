@@ -13,7 +13,7 @@ Input KeyboardEquivalent(Input I) {
     I.PadLeft=I.PadRight=I.PadUp=I.PadDown=false;
     return I;
 }
-bool SamePlayer(const PacmanGame::Player& A,const PacmanGame::Player& B) {
+bool SamePlayer(const GlowtrailGame::Player& A,const GlowtrailGame::Player& B) {
     return A.X==B.X && A.Y==B.Y && A.Dir.X==B.Dir.X && A.Dir.Y==B.Dir.Y
         && A.Next.X==B.Next.X && A.Next.Y==B.Next.Y && A.Mouth==B.Mouth;
 }
@@ -52,11 +52,11 @@ int main() {
     for(int Mask=0;Mask<16;++Mask) for(bool Mixed:{false,true}) for(const auto AxisValue:Axes) {
         Input I;I.PadLeft=(Mask&1)!=0;I.PadRight=(Mask&2)!=0;I.PadUp=(Mask&4)!=0;I.PadDown=(Mask&8)!=0;
         I.Left=Mixed;I.Up=Mixed;I.AxisX=AxisValue.X;I.AxisY=AxisValue.Y;
-        PacmanGame::Player Pad,Keyboard;Pad.Dir={1,0};Pad.Next={1,0};Keyboard=Pad;
+        GlowtrailGame::Player Pad,Keyboard;Pad.Dir={1,0};Pad.Next={1,0};Keyboard=Pad;
         Pad.Update(I);Keyboard.Update(KeyboardEquivalent(I));
         Check(SamePlayer(Pad,Keyboard),"direct Pad and equivalent keyboard preserve turn queue, movement and animation");
     }
-    PacmanGame::Player P;
+    GlowtrailGame::Player P;
     Input I;I.PadLeft=true;P.Update(I);Check(P.Next.X==-1 && P.Next.Y==0,"Pad left queues a left turn");
     P={};I={};I.PadRight=true;P.Update(I);Check(P.Next.X==1 && P.Next.Y==0,"Pad right queues a right turn");
     P={};I={};I.PadUp=true;P.Update(I);Check(P.Next.X==0 && P.Next.Y==-1,"Pad up queues an up turn even if obstructed");
@@ -71,9 +71,9 @@ int main() {
     P={};I={};I.PadLeft=true;I.AxisY=.300001;P.Update(I);Check(P.Next.X==0 && P.Next.Y==1,"analog immediately above threshold still overrides hat");
     P={};P.Next={-1,0};I={};P.Update(I);Check(P.Next.X==-1 && P.Next.Y==0,"neutral hats retain queued turn");
 
-    PacmanGame PadGame,KeyGame;PadGame.Reset(730);KeyGame.Reset(730);
+    GlowtrailGame PadGame,KeyGame;PadGame.Reset(730);KeyGame.Reset(730);
     Driver PadDriver,KeyDriver;
-    Check(PadDriver.Select("pacman",730) && KeyDriver.Select("pacman",730),"both drivers select existing game");
+    Check(PadDriver.Select("glowtrail",730) && KeyDriver.Select("glowtrail",730),"both drivers select existing game");
     for(int Step=0;Step<96;++Step) {
         const Input Pad=Route(Step),Keys=KeyboardEquivalent(Pad);
         PadGame.Step(Pad);KeyGame.Step(Keys);
@@ -85,6 +85,6 @@ int main() {
         Check(SameStatus(PadDriver.GetStatus(),KeyDriver.GetStatus()) && SameFrame(PadDriver.GetFrame(),KeyDriver.GetFrame()),
             "Driver Pad API matches equivalent keyboard route");
     }
-    std::cout<<"Pacman direct Pad input: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
+    std::cout<<"Glowtrail direct Pad input: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
     return Failed?1:0;
 }

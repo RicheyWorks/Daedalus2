@@ -14,14 +14,14 @@
       "columns": 4,
       "include": [
         "*_shooter",
-        "asteroids",
-        "contra",
-        "shadow_ninja",
-        "zelda"
+        "driftstone",
+        "ironwake",
+        "emberstep",
+        "lanternwild"
       ],
       "java": false,
       "options": {
-        "zelda": 1
+        "lanternwild": 1
       }
     },
     {
@@ -37,7 +37,7 @@
       "realm": "island_prometheus",
       "layout": "row",
       "include": [
-        "pong",
+        "twinwake",
         "football",
         "dodge_ball"
       ]

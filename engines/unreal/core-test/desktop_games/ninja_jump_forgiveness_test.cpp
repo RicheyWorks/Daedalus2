@@ -6,7 +6,7 @@
 
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop { namespace platformers {
-struct TestAccess { static NinjaPlayer& PlayerOf(ShadowNinjaGame& G) {return G.Player;} };
+struct TestAccess { static NinjaPlayer& PlayerOf(EmberstepGame& G) {return G.Player;} };
 }}}
 namespace {
 using Player=platformers::NinjaPlayer;
@@ -49,7 +49,7 @@ void SourceNinjaSteps(const char* Filename) {
         Input I;I.Left=(Keys&1)!=0;I.Right=(Keys&2)!=0;I.Up=(Keys&4)!=0;I.Down=(Keys&8)!=0;I.Jump=(Keys&16)!=0 || V[22]!=0;
         I.AxisX=V[18];I.AxisY=V[19];std::vector<Rect> Platforms;
         if(Preset==1) {
-            ShadowNinjaGame G;G.Reset(10);platformers::TestAccess::PlayerOf(G)=P;
+            EmberstepGame G;G.Reset(10);platformers::TestAccess::PlayerOf(G)=P;
             I.PadLeft=V[20]<0;I.PadRight=V[20]>0;I.PadDown=V[21]<0;I.PadUp=V[21]>0;
             for(int F=0;F<Frames;++F) G.Step(I);
             P=G.GetPlayer();
@@ -114,7 +114,7 @@ void WallCancellationAndArrival() {
     P.Update(Tap(),Empty);Check(P.VY==-9,"successful wall jump clears grace before the next fresh air jump");
 }
 void ResetWindows() {
-    ShadowNinjaGame G;G.Reset(730);auto& P=platformers::TestAccess::PlayerOf(G);
+    EmberstepGame G;G.Reset(730);auto& P=platformers::TestAccess::PlayerOf(G);
     P=Player{};P.X=150;P.Y=200;P.OnGround=false;P.DoubleJump=false;P.Update(Tap(),Empty);
     auto Probe=P;Probe.Y=295;Probe.VY=1;Probe.Update({},Floor);
     Check(Probe.VY==-11 && Probe.Y==289,"reset fixture contains an actual pending landing tap");
@@ -125,7 +125,7 @@ void ResetWindows() {
     Check(Probe.VY>0 && !Probe.DoubleJump,"game Reset also clears a real walkoff grace window");
 }
 void DriverEdges() {
-    Driver D;Check(D.Select("shadow_ninja",730),"existing Driver selects Ninja");ShadowNinjaGame Expected;Expected.Reset(730);
+    Driver D;Check(D.Select("emberstep",730),"existing Driver selects Ninja");EmberstepGame Expected;Expected.Reset(730);
     Input Jump=Tap();Jump.Jump=true;D.SetInput(Jump);D.Advance(Driver::StepSeconds*8);Expected.Step(Jump);
     Input Held;Held.Jump=true;for(int N=0;N<7;++N) Expected.Step(Held);Frame F;Expected.Render(F);
     Check(SameFrame(D.GetFrame(),F),"catch-up consumes one jump edge and preserves held input without requeuing");
@@ -133,7 +133,7 @@ void DriverEdges() {
     Check(D.Advance(Driver::StepSeconds*8)==0 && SameFrame(Before,D.GetFrame()),"pause freezes the existing jump trajectory");
     D.SetPaused(false);D.Advance(Driver::StepSeconds);Expected.Step({});Expected.Render(F);
     Check(SameFrame(D.GetFrame(),F),"resume clears a stale queued input edge instead of performing an air jump");
-    D.SetInput(Tap());D.Restart();ShadowNinjaGame Fresh;Fresh.Reset(730);Fresh.Render(F);
+    D.SetInput(Tap());D.Restart();EmberstepGame Fresh;Fresh.Reset(730);Fresh.Render(F);
     Check(SameFrame(D.GetFrame(),F),"Driver restart clears pending edges and player forgiveness state");
 }
 }

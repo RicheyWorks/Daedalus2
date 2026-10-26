@@ -5,7 +5,7 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop {
 struct MazeTestAccess {
-    static void Crossing(PacmanGame& G) {
+    static void Crossing(GlowtrailGame& G) {
         G.Reset(730);G.Hero={};G.Hero.X=530;G.Hero.Y=290;
         for(auto& P:G.Pellets) P.Alive=false;
         G.Pellets.front().Alive=true;G.Remaining=1;
@@ -13,17 +13,17 @@ struct MazeTestAccess {
         auto& E=G.Ghosts[0];E.Alive=true;E.X=.5;E.Y=290;E.Dir={1,0};E.Frightened=false;
         G.Rng.Seed(0x80000000u); // No initial turn; chase sample is below .6.
     }
-    static std::uint32_t NextRandom(const PacmanGame& G) {auto R=G.Rng;return R.Next();}
+    static std::uint32_t NextRandom(const GlowtrailGame& G) {auto R=G.Rng;return R.Next();}
 };
 }}
 namespace {
-using Ghost=PacmanGame::Ghost;
+using Ghost=GlowtrailGame::Ghost;
 int Checks=0,Failed=0;
 void Check(bool Ok,const std::string& What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
 bool Close(double A,double B) {return std::isfinite(A)&&std::isfinite(B)&&std::abs(A-B)<1e-8;}
 Ghost At(double X,double Y=290,int Dx=0,int Dy=0) {Ghost G;G.X=X;G.Y=Y;G.Dir={Dx,Dy};return G;}
 void Aim(Ghost& G,double X,double Y=290,double Turn=1,double Chase=0,bool RepairDoor=true,bool UseTunnels=true) {
-    PacmanGame::Player P;P.X=X;P.Y=Y;G.UpdateWithChoices(P,Turn,Chase,{{{1,0},{-1,0},{0,1},{0,-1}}},RepairDoor,UseTunnels);
+    GlowtrailGame::Player P;P.X=X;P.Y=Y;G.UpdateWithChoices(P,Turn,Chase,{{{1,0},{-1,0},{0,1},{0,-1}}},RepairDoor,UseTunnels);
 }
 void Position(const Ghost& G,double X,double Y,int Dx,int Dy,const char* Why) {Check(Close(G.X,X)&&Close(G.Y,Y)&&G.Dir.X==Dx&&G.Dir.Y==Dy,Why);}
 void EdgePursuit() {
@@ -64,14 +64,14 @@ void OriginalDecisionGates() {
     Position(G,.5,290,1,0,"dead ghost does not turn or cross");Check(G.Frightened&&G.FrightenedTimer==1,"dead ghost does not consume its fright timer");
 }
 void RandomAndGameStep() {
-    PacmanGame::Player P;P.X=550;P.Y=290;Random SeamRandom,OrdinaryRandom,Expected;SeamRandom.Seed(730);OrdinaryRandom=Expected=SeamRandom;
+    GlowtrailGame::Player P;P.X=550;P.Y=290;Random SeamRandom,OrdinaryRandom,Expected;SeamRandom.Seed(730);OrdinaryRandom=Expected=SeamRandom;
     auto Seam=At(.5),Ordinary=At(130);Seam.Update(P,SeamRandom);Ordinary.Update(P,OrdinaryRandom);
     for(int N=0;N<5;++N) Expected.Next();
     const auto Sixth=Expected.Next();
     Check(SeamRandom.Next()==Sixth&&OrdinaryRandom.Next()==Sixth,"actual alive updates retain exactly two samples plus three shuffle draws");
     auto Dead=At(.5);Dead.Alive=false;Dead.Frightened=true;Dead.FrightenedTimer=3;Random R;R.Seed(730);Expected=R;Dead.Update(P,R);
     Check(R.Next()==Expected.Next()&&Dead.FrightenedTimer==3&&Dead.X==.5,"actual dead update consumes neither RNG nor timer");
-    PacmanGame G;MazeTestAccess::Crossing(G);Expected.Seed(0x80000000u);const double Turn=Expected.Unit(),Chase=Expected.Unit();
+    GlowtrailGame G;MazeTestAccess::Crossing(G);Expected.Seed(0x80000000u);const double Turn=Expected.Unit(),Chase=Expected.Unit();
     Check(Turn>=.05&&Chase<.6,"full-game fixture uses normal nonturning chase samples");
     for(int N=0;N<3;++N) Expected.Next();
     const auto Next=Expected.Next();G.Step({});const auto& E=G.GetGhosts()[0];
@@ -82,5 +82,5 @@ void RandomAndGameStep() {
 }
 int main() {
     EdgePursuit();RouteFences();OriginalDecisionGates();RandomAndGameStep();
-    std::cout<<"Pacman tunnel pursuit: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
+    std::cout<<"Glowtrail tunnel pursuit: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
 }

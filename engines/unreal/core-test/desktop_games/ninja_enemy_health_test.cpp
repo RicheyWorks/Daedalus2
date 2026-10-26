@@ -6,14 +6,14 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop { namespace platformers {
 struct TestAccess {
-    static void Encounter(ShadowNinjaGame& G,bool Jumper,int Health) {
+    static void Encounter(EmberstepGame& G,bool Jumper,int Health) {
         G.Reset(730);G.Enemies={{400,450,0,0,Health,Jumper}};G.Attacks.clear();G.Gold.clear();G.SpawnTimer=100;
         G.Player.Invincible=100;
     }
-    static NinjaEnemy& Enemy(ShadowNinjaGame& G) {return G.Enemies.front();}
-    static void Strike(ShadowNinjaGame& G,bool Star) {G.Attacks={{Star?391.0:397.0,450,1,Star?50:12,Star,0}};}
-    static void Spin(ShadowNinjaGame& G) {G.Player.X=400;G.Player.Y=450;G.Player.Spinning=5;G.Enemies.front().X=425;}
-    static std::string Snapshot(const ShadowNinjaGame& G) {
+    static NinjaEnemy& Enemy(EmberstepGame& G) {return G.Enemies.front();}
+    static void Strike(EmberstepGame& G,bool Star) {G.Attacks={{Star?391.0:397.0,450,1,Star?50:12,Star,0}};}
+    static void Spin(EmberstepGame& G) {G.Player.X=400;G.Player.Y=450;G.Player.Spinning=5;G.Enemies.front().X=425;}
+    static std::string Snapshot(const EmberstepGame& G) {
         std::ostringstream O;O.precision(17);const auto& P=G.Player;auto R=G.Rng;
         O<<G.SessionSeed<<' '<<G.Score<<' '<<G.SpawnTimer<<' '<<G.BossPulseCueFrames<<' '<<G.BossActive<<' '<<G.Over<<' '<<G.Won<<' '<<R.Next();
         O<<' '<<P.X<<' '<<P.Y<<' '<<P.VX<<' '<<P.VY<<' '<<P.OnGround<<' '<<P.Facing<<' '<<P.AttackCooldown<<' '<<P.Health<<' '<<P.Invincible
@@ -48,7 +48,7 @@ bool Pips(const Frame& F,const platformers::NinjaEnemy& E) {
 }
 void FullAndPosition() {
     for(bool Jumper:{false,true}) {
-        ShadowNinjaGame G;Access::Encounter(G,Jumper,Jumper?4:2);Frame F;G.Render(F);const auto& E=Access::Enemy(G);
+        EmberstepGame G;Access::Encounter(G,Jumper,Jumper?4:2);Frame F;G.Render(F);const auto& E=Access::Enemy(G);
         Check(Pips(F,E),"full health shows each enemy type's actual two/four-hit capacity");
         if(!Jumper) Check(RectAt(F,E.X-10,E.Y-18,20,26,{220,50,50,255}),"walker body rectangle is retained below its pips");
         else Check(std::any_of(F.Commands.begin(),F.Commands.end(),[&](const DrawCommand& C){return C.Kind==Shape::Circle
@@ -61,7 +61,7 @@ void FullAndPosition() {
 }
 void ActualDamage() {
     for(int Kind=0;Kind<3;++Kind) for(bool Jumper:{false,true}) {
-        const int Maximum=Jumper?4:2;ShadowNinjaGame G;Access::Encounter(G,Jumper,Maximum);
+        const int Maximum=Jumper?4:2;EmberstepGame G;Access::Encounter(G,Jumper,Maximum);
         if(Kind==2) Access::Spin(G);else Access::Strike(G,Kind==1);
         G.Step({});Frame F;G.Render(F);
         Check(G.EnemyCount()==1&&Access::Enemy(G).Health==Maximum-1&&Pips(F,Access::Enemy(G)),"surviving sword/star/spin hit removes exactly one filled health pip");
@@ -73,7 +73,7 @@ void ActualDamage() {
     }
 }
 void PresentationPurity() {
-    ShadowNinjaGame Observed;Access::Encounter(Observed,true,3);auto Quiet=Observed;const auto Before=Access::Snapshot(Observed);
+    EmberstepGame Observed;Access::Encounter(Observed,true,3);auto Quiet=Observed;const auto Before=Access::Snapshot(Observed);
     const auto Note=Observed.GetStatus().Note;Frame F;
     for(int N=0;N<4;++N) {Observed.Render(F);Observed.GetStatus();}
     Check(Pips(F,Access::Enemy(Observed))&&Access::Snapshot(Observed)==Before&&Observed.GetStatus().Note==Note,"repeated presentation preserves partial health, input state, timers and future random state");

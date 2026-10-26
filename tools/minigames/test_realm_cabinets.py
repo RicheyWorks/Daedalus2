@@ -10,7 +10,7 @@ import realm_cabinets as rc  # noqa: E402
 
 CATALOG = {
     "games": [{"id": g, "title": g.title(), "host": "ADaedalusDesktopArcade", "option_count": n} for g, n in
-              (("pong", 4), ("minesweeper", 3), ("star_shooter", 3), ("sega_shooter", 2), ("zelda", 2))],
+              (("twinwake", 4), ("minesweeper", 3), ("star_shooter", 3), ("riftwing", 2), ("lanternwild", 2))],
     "java_cabinets": [{"id": "sudoku", "title": "SudokuPro", "host": "ADaedalusJavaArcade",
                        "game_enum": "EDaedalusJavaGame::Sudoku", "requires": "java"}],
 }
@@ -26,11 +26,11 @@ class Selection(unittest.TestCase):
     def test_all_by_default_includes_java(self):
         out = rc.build(CATALOG, spec())
         self.assertEqual([c["game"] for c in out["realms"][0]["cabinets"]],
-                         ["pong", "minesweeper", "star_shooter", "sega_shooter", "zelda", "sudoku"])
+                         ["twinwake", "minesweeper", "star_shooter", "riftwing", "lanternwild", "sudoku"])
 
     def test_patterns_and_exclude(self):
-        out = rc.build(CATALOG, spec(include=["*_shooter", "pong"], exclude=["sega_*"]))
-        self.assertEqual([c["game"] for c in out["realms"][0]["cabinets"]], ["pong", "star_shooter"])
+        out = rc.build(CATALOG, spec(include=["*_shooter", "twinwake"], exclude=["riftwing_*"]))
+        self.assertEqual([c["game"] for c in out["realms"][0]["cabinets"]], ["twinwake", "star_shooter"])
 
     def test_java_off(self):
         out = rc.build(CATALOG, spec(java=False))
@@ -43,8 +43,8 @@ class Selection(unittest.TestCase):
         self.assertNotIn("start", cab)
 
     def test_desktop_start_call_uses_seed(self):
-        cab = rc.build(CATALOG, spec(include=["pong"]))["realms"][0]["cabinets"][0]
-        self.assertEqual(cab["start"], f'StartGame("pong", {cab["seed"]})')
+        cab = rc.build(CATALOG, spec(include=["twinwake"]))["realms"][0]["cabinets"][0]
+        self.assertEqual(cab["start"], f'StartGame("twinwake", {cab["seed"]})')
 
 
 class Errors(unittest.TestCase):
@@ -78,18 +78,18 @@ class Options(unittest.TestCase):
         self.assertTrue(all("option" not in c for c in cabs if c["host"] == "ADaedalusJavaArcade"))
 
     def test_option_applied(self):
-        cabs = rc.build(CATALOG, spec(options={"zelda": 1, "pong": 3}))["realms"][0]["cabinets"]
+        cabs = rc.build(CATALOG, spec(options={"lanternwild": 1, "twinwake": 3}))["realms"][0]["cabinets"]
         got = {c["game"]: c["option"] for c in cabs if "option" in c}
-        self.assertEqual((got["zelda"], got["pong"], got["minesweeper"]), (1, 3, 0))
+        self.assertEqual((got["lanternwild"], got["twinwake"], got["minesweeper"]), (1, 3, 0))
 
     def test_option_out_of_range(self):
         for bad in (2, -1, 1.0, True, "1"):
             with self.assertRaises(rc.SpecError, msg=repr(bad)):
-                rc.build(CATALOG, spec(options={"zelda": bad}))
+                rc.build(CATALOG, spec(options={"lanternwild": bad}))
 
     def test_option_for_unplaced_or_java(self):
         with self.assertRaises(rc.SpecError):
-            rc.build(CATALOG, spec(include=["pong"], options={"zelda": 1}))
+            rc.build(CATALOG, spec(include=["twinwake"], options={"lanternwild": 1}))
         with self.assertRaises(rc.SpecError):
             rc.build(CATALOG, spec(options={"sudoku": 0}))
         with self.assertRaises(rc.SpecError):
@@ -136,9 +136,9 @@ class Layouts(unittest.TestCase):
 
 class Stability(unittest.TestCase):
     def test_seed_stable_and_distinct(self):
-        self.assertEqual(rc.stable_seed("r", "pong"), rc.stable_seed("r", "pong"))
-        self.assertNotEqual(rc.stable_seed("r", "pong"), rc.stable_seed("s", "pong"))
-        self.assertTrue(0 <= rc.stable_seed("r", "pong") <= 0x7FFFFFFF)
+        self.assertEqual(rc.stable_seed("r", "twinwake"), rc.stable_seed("r", "twinwake"))
+        self.assertNotEqual(rc.stable_seed("r", "twinwake"), rc.stable_seed("s", "twinwake"))
+        self.assertTrue(0 <= rc.stable_seed("r", "twinwake") <= 0x7FFFFFFF)
 
     def test_deterministic_output(self):
         self.assertEqual(rc.render(rc.build(CATALOG, spec())), rc.render(rc.build(CATALOG, spec())))

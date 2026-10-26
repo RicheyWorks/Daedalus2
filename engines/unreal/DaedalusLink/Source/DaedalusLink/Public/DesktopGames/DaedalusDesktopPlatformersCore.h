@@ -10,7 +10,7 @@ namespace daedalus { namespace desktop { namespace platformers {
 struct TestAccess;
 // Latest Desktop sources, selected by the user. See platformers_notes.md for
 // source hashes, original defects, source parity and deliberate adaptations.
-inline const std::array<Rect,5>& ContraPlatforms() {
+inline const std::array<Rect,5>& IronwakePlatforms() {
     static const std::array<Rect,5> P{{{300,420,120,20},{500,320,80,20},
         {650,440,100,20},{900,380,150,20},{1100,300,60,20}}}; return P;
 }
@@ -27,11 +27,11 @@ inline bool PixelContains(const Rect& R,double X,double Y) {
 inline void AddScore(std::int64_t& Score,int Amount) {
     Score=std::min(Score,std::numeric_limits<std::int64_t>::max()-Amount)+Amount;
 }
-struct ContraBullet {
+struct IronwakeBullet {
     double X=0,Y=0,VX=0,VY=0; int Life=60;
     void Update() { X+=VX; Y+=VY; --Life; }
 };
-struct ContraPlayer {
+struct IronwakePlayer {
     double X=100,Y=480,VY=0;
     bool FacingRight=true,OnGround=false,Crouching=false;
     int Lives=3,Cooldown=0,FireRate=8,SpreadTimer=0,Invincible=0;
@@ -70,7 +70,7 @@ struct ContraPlayer {
         if(SpreadTimer>0 && --SpreadTimer==0) Spread=false;
         if(Invincible>0) --Invincible;
     }
-    void Shoot(std::vector<ContraBullet>& Bullets) {
+    void Shoot(std::vector<IronwakeBullet>& Bullets) {
         if(Cooldown>0 || Bullets.size()+ (Spread?3u:1u)>96) return;
         Cooldown=FireRate;
         const double StartX=X+(FacingRight?32:0),StartY=Y+(Crouching?16:24);
@@ -83,14 +83,14 @@ struct ContraPlayer {
         } else Bullets.push_back({StartX,StartY,12.0*D,0,60});
     }
 };
-struct ContraEnemy {
+struct IronwakeEnemy {
     double X=0,Y=470,VX=-2; int Health=1,ShootTimer=60,Kind=0;
     int Width() const { return Kind==2?60:28; }
     int Height() const { return Kind==2?70:40; }
     Rect GetRect() const { return PixelRect(X,Y,Width(),Height()); }
     // Random results are arguments: deterministic source fixtures can inject
     // exact Python decisions without coupling rules to either random generator.
-    void Update(const ContraPlayer& P,std::vector<ContraBullet>& Bullets,
+    void Update(const IronwakePlayer& P,std::vector<IronwakeBullet>& Bullets,
                 bool Turn,int NextShootTimer) {
         if(Health<=0) return;
         X+=VX;
@@ -103,7 +103,7 @@ struct ContraEnemy {
         if(Kind==2) VX=X>P.X+200?-1.5:(X<P.X-100?1.5:0);
     }
 };
-struct ContraPowerup { double X=0,Y=0,Bob=0; bool Rapid=false; };
+struct IronwakePowerup { double X=0,Y=0,Bob=0; bool Rapid=false; };
 struct Particle { double X=0,Y=0,VX=0,VY=0; int Life=0; Color Tint; };
 
 struct NinjaAttack {
@@ -223,12 +223,12 @@ struct NinjaBoss {
 }}} // daedalus::desktop::platformers
 
 namespace daedalus { namespace desktop {
-class ContraGame final : public Game {
+class IronwakeGame final : public Game {
     friend struct platformers::TestAccess;
-    platformers::ContraPlayer Player;
-    std::vector<platformers::ContraBullet> Bullets,EnemyBullets;
-    std::vector<platformers::ContraEnemy> Enemies;
-    std::vector<platformers::ContraPowerup> Powerups;
+    platformers::IronwakePlayer Player;
+    std::vector<platformers::IronwakeBullet> Bullets,EnemyBullets;
+    std::vector<platformers::IronwakeEnemy> Enemies;
+    std::vector<platformers::IronwakePowerup> Powerups;
     std::vector<platformers::Particle> Particles;
     Random Rng,CosmeticRng;
     double CameraX=0,Progress=0;
@@ -307,7 +307,7 @@ class ContraGame final : public Game {
 public:
     static constexpr std::size_t MaxBullets=96,MaxEnemies=6,MaxParticles=160;
     static constexpr double FinishX=2800;
-    ContraGame() { Reset(730); }
+    IronwakeGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed;AtTitle=false;
         Player={}; Bullets.clear(); EnemyBullets.clear(); Enemies.clear(); Powerups.clear(); Particles.clear();
@@ -406,7 +406,7 @@ public:
         }
         Previous=Controls;
         if(Controls.FirePressed) Player.Shoot(Bullets);
-        Player.Update(Controls,platformers::ContraPlatforms(),CameraX);
+        Player.Update(Controls,platformers::IronwakePlatforms(),CameraX);
         if(Controls.Fire || Controls.FirePressed) Player.Shoot(Bullets);
         const double Target=std::max(0.0,Player.X-350);
         CameraX=CameraX*.85+Target*.15;
@@ -476,7 +476,7 @@ public:
             : "IRONWAKE ADVANCE | "+GoalText()+" | "+FireReadiness()+(Player.Invincible>0 ? " | "+ProtectionText() : "");
         return {Player.Score,Player.Lives,Over,Won,Note};
     }
-    const platformers::ContraPlayer& GetPlayer() const { return Player; }
+    const platformers::IronwakePlayer& GetPlayer() const { return Player; }
     double GetCameraX() const { return CameraX; }
     std::size_t BulletCount() const { return Bullets.size()+EnemyBullets.size(); }
     std::size_t EnemyCount() const { return Enemies.size(); }
@@ -504,7 +504,7 @@ public:
             F.AddTriangle({X-20,350},{X+20,280},{X+60,350},{0,100,0,255});
         }
         F.AddRect(0,520,800,80,{139,69,19,255}); F.AddRect(0,520,800,12,{34,139,34,255});
-        for(const auto& P:platformers::ContraPlatforms()) {
+        for(const auto& P:platformers::IronwakePlatforms()) {
             const double X=P.X-CameraX;
             if(X>-150 && X<900) { F.AddRect(X,P.Y,P.W,P.H,{101,67,33,255}); F.AddRect(X,P.Y,P.W,6,{34,139,34,255}); }
         }
@@ -600,7 +600,7 @@ private:
     }
 };
 
-class ShadowNinjaGame final : public Game {
+class EmberstepGame final : public Game {
     friend struct platformers::TestAccess;
     platformers::NinjaPlayer Player;
     std::vector<platformers::NinjaAttack> Attacks;
@@ -642,7 +642,7 @@ class ShadowNinjaGame final : public Game {
 public:
     static constexpr std::size_t MaxAttacks=64,MaxEnemies=5;
     static constexpr int BossScoreThreshold=1200,PulseReceiptFrames=8;
-    ShadowNinjaGame() { Reset(730); }
+    EmberstepGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed;
         Player={}; Attacks.clear(); Enemies.clear(); Gold.clear(); Boss={};

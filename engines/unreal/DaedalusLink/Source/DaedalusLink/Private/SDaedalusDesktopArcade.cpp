@@ -290,11 +290,11 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			[SNew(STextBlock).Text(this, &SDaedalusDesktopArcade::StatusText).Font(DAUI::Font(13)).AutoWrapText(true).ColorAndOpacity(FLinearColor(0.7f, 0.85f, 1.f))]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::PongVisibility)
-				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Match"), 0, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
-				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Rally practice"), 1, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
-				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("First to 5"), 2, TEXT("Changing mode starts over. First to five points wins this short match."))]
-				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Target rally"), 3, TEXT("Changing mode starts over. Hit three gold windows in order on the return wall; missed rallies keep cleared targets."))]
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::TwinwakeVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("twinwake"), TEXT("Match"), 0, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("twinwake"), TEXT("Rally practice"), 1, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("twinwake"), TEXT("First to 5"), 2, TEXT("Changing mode starts over. First to five points wins this short match."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("twinwake"), TEXT("Target rally"), 3, TEXT("Changing mode starts over. Hit three gold windows in order on the return wall; missed rallies keep cleared targets."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
@@ -304,34 +304,34 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::AsteroidsVisibility)
-				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Endless"), 0, TEXT("Changing mode starts over. Endless keeps the original wave progression."))]
-				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Three waves"), 1, TEXT("Changing mode starts over. Clear all rocks in the first three waves to finish the voyage."))]
-				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Flight practice"), 2, TEXT("Changing mode starts over. Turn, thrust and brake to dock at three beacons; no enemies or clock."))]
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::DriftstoneVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("driftstone"), TEXT("Endless"), 0, TEXT("Changing mode starts over. Endless keeps the original wave progression."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("driftstone"), TEXT("Three waves"), 1, TEXT("Changing mode starts over. Clear all rocks in the first three waves to finish the voyage."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("driftstone"), TEXT("Flight practice"), 2, TEXT("Changing mode starts over. Turn, thrust and brake to dock at three beacons; no enemies or clock."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::SegaVisibility)
-				+ SWrapBox::Slot()[MakeMode(TEXT("sega_shooter"), TEXT("Full run"), 0, TEXT("Changing mode starts over. Full run reaches the boss at 1500 points."))]
-				+ SWrapBox::Slot()[MakeMode(TEXT("sega_shooter"), TEXT("Boss rehearsal"), 1, TEXT("Changing mode starts over. Rehearsal starts the same boss immediately; regular enemies still arrive."))]
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::RiftwingVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("riftwing"), TEXT("Full run"), 0, TEXT("Changing mode starts over. Full run reaches the boss at 1500 points."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("riftwing"), TEXT("Boss rehearsal"), 1, TEXT("Changing mode starts over. Rehearsal starts the same boss immediately; regular enemies still arrive."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
 				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::NinjaVisibility)
-				+ SWrapBox::Slot()[MakeMode(TEXT("shadow_ninja"), TEXT("Adventure"), 0, TEXT("Changing mode starts over. Adventure keeps the original enemies and boss."))]
-				+ SWrapBox::Slot()[MakeMode(TEXT("shadow_ninja"), TEXT("Terrace climb"), 1, TEXT("Changing mode starts over. Reach three lights with the existing jumps and wall climb; pit falls return to the last terrace."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("emberstep"), TEXT("Adventure"), 0, TEXT("Changing mode starts over. Adventure keeps the original enemies and boss."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("emberstep"), TEXT("Terrace climb"), 1, TEXT("Changing mode starts over. Reach three lights with the existing jumps and wall climb; pit falls return to the last terrace."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::ContraVisibility)
-				+ SWrapBox::Slot()[MakeMode(TEXT("contra"), TEXT("Full run"), 0, TEXT("Changing mode starts over. Full run keeps the original enemies, pickups and distance goal."))]
-				+ SWrapBox::Slot()[MakeMode(TEXT("contra"), TEXT("Target range"), 1, TEXT("Changing mode starts over. Hit three panels with standing, jumping and low shots; no enemies or clock."))]
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::IronwakeVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("ironwake"), TEXT("Full run"), 0, TEXT("Changing mode starts over. Full run keeps the original enemies, pickups and distance goal."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("ironwake"), TEXT("Target range"), 1, TEXT("Changing mode starts over. Hit three panels with standing, jumping and low shots; no enemies or clock."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::PacmanVisibility)
-				+ SWrapBox::Slot()[MakeMode(TEXT("pacman"), TEXT("Classic"), 0, TEXT("Changing mode starts over. Classic keeps the existing dot-clear and ghost rules."))]
-				+ SWrapBox::Slot()[MakeMode(TEXT("pacman"), TEXT("Bonus fruit"), 1, TEXT("Changing mode starts over. After 76 and 228 dots, each fruit is worth 100 points and lasts 20 seconds of active play. The second waits if one is already out. Clearing every dot still finishes."))]
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::GlowtrailVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("glowtrail"), TEXT("Classic"), 0, TEXT("Changing mode starts over. Classic keeps the existing dot-clear and ghost rules."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("glowtrail"), TEXT("Bonus fruit"), 1, TEXT("Changing mode starts over. After 76 and 228 dots, each fruit is worth 100 points and lasts 20 seconds of active play. The second waits if one is already out. Clearing every dot still finishes."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
@@ -795,10 +795,10 @@ FText SDaedalusDesktopArcade::MinesweeperDifficultyText() const
 	return FText::FromString(FString::Printf(TEXT("Current board: %s"), Board));
 }
 
-EVisibility SDaedalusDesktopArcade::PongVisibility() const
+EVisibility SDaedalusDesktopArcade::TwinwakeVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
-	return Actor && Actor->GetSelectedGameId() == TEXT("pong") ? EVisibility::Visible : EVisibility::Collapsed;
+	return Actor && Actor->GetSelectedGameId() == TEXT("twinwake") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
 EVisibility SDaedalusDesktopArcade::FootballVisibility() const
@@ -813,34 +813,34 @@ EVisibility SDaedalusDesktopArcade::DungeonVisibility() const
 	return Actor && Actor->GetSelectedGameId() == TEXT("dungeon") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
-EVisibility SDaedalusDesktopArcade::SegaVisibility() const
+EVisibility SDaedalusDesktopArcade::RiftwingVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
-	return Actor && Actor->GetSelectedGameId() == TEXT("sega_shooter") ? EVisibility::Visible : EVisibility::Collapsed;
+	return Actor && Actor->GetSelectedGameId() == TEXT("riftwing") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
-EVisibility SDaedalusDesktopArcade::AsteroidsVisibility() const
+EVisibility SDaedalusDesktopArcade::DriftstoneVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
-	return Actor && Actor->GetSelectedGameId() == TEXT("asteroids") ? EVisibility::Visible : EVisibility::Collapsed;
+	return Actor && Actor->GetSelectedGameId() == TEXT("driftstone") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
 EVisibility SDaedalusDesktopArcade::NinjaVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
-	return Actor && Actor->GetSelectedGameId() == TEXT("shadow_ninja") ? EVisibility::Visible : EVisibility::Collapsed;
+	return Actor && Actor->GetSelectedGameId() == TEXT("emberstep") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
-EVisibility SDaedalusDesktopArcade::ContraVisibility() const
+EVisibility SDaedalusDesktopArcade::IronwakeVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
-	return Actor && Actor->GetSelectedGameId() == TEXT("contra") ? EVisibility::Visible : EVisibility::Collapsed;
+	return Actor && Actor->GetSelectedGameId() == TEXT("ironwake") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
-EVisibility SDaedalusDesktopArcade::PacmanVisibility() const
+EVisibility SDaedalusDesktopArcade::GlowtrailVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
-	return Actor && Actor->GetSelectedGameId() == TEXT("pacman") ? EVisibility::Visible : EVisibility::Collapsed;
+	return Actor && Actor->GetSelectedGameId() == TEXT("glowtrail") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const
@@ -871,24 +871,24 @@ FText SDaedalusDesktopArcade::ControlText() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	const FString Id = Actor ? Actor->GetSelectedGameId() : FString();
-	FString Text = Id == TEXT("pong")
+	FString Text = Id == TEXT("twinwake")
 		? TEXT("Up/Down, W/S, D-pad or left stick: paddle. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ")
 		: TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ");
 	if (Id == TEXT("minesweeper")) Text += TEXT("F1 / left-stick click: How to play. Mouse left: reveal; right: flag; middle: open around a number when its flags match. J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
 	else if (Id == TEXT("dungeon")) Text += TEXT("J/Space or pad A/X: light. Shift or pad Y/LB: trail. K/Enter or pad B: reset the circuit.");
-	else if (Id == TEXT("pacman")) Text += Actor && Actor->GetGameOption() == 1
+	else if (Id == TEXT("glowtrail")) Text += Actor && Actor->GetGameOption() == 1
 		? TEXT("Clear every dot. Fruit opportunities follow 76 and 228 collected dots. Each is worth 100 points and lasts 20 seconds of active play; the second waits if one is already out. Power pellets frighten ghosts. Fresh pad A/Space/Enter replays a finished run.")
 		: TEXT("Clear every dot. Power pellets frighten ghosts. Fresh pad A/Space/Enter replays a finished run.");
-	else if (Id == TEXT("zelda")) Text += TEXT("Space/J/K/Enter or pad A/B/X/RB: sword. Shift/V or pad Y/LB: toggle hold-to-swing assist (starts off). Assist keeps the usual swing timing and stays selected on retry.");
+	else if (Id == TEXT("lanternwild")) Text += TEXT("Space/J/K/Enter or pad A/B/X/RB: sword. Shift/V or pad Y/LB: toggle hold-to-swing assist (starts off). Assist keeps the usual swing timing and stays selected on retry.");
 	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: fresh throw; V/pad Y/LB: pass, hold to catch + keep; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
-	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
-	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
+	else if (Id == TEXT("emberstep")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
+	else if (Id == TEXT("ironwake")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
 	else if (Id == TEXT("star_shooter")) Text += TEXT("F1 / left-stick click: How to play. Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Game over: fresh pad A/Start or R/Restart retries. Difficulty buttons start a new run.");
-	else if (Id == TEXT("asteroids")) Text += Actor && Actor->GetGameOption() == 2
+	else if (Id == TEXT("driftstone")) Text += Actor && Actor->GetGameOption() == 2
 		? TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Stop inside the gold ring under braking to dock.")
 		: TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Space/J/Z or pad face/bumper: shoot.");
-	else if (Id == TEXT("sega_shooter")) Text += TEXT("Space/J/Z or pad face/bumper: shoot.");
-	else if (Id == TEXT("pong")) Text += Actor && Actor->GetGameOption() == 3
+	else if (Id == TEXT("riftwing")) Text += TEXT("Space/J/Z or pad face/bumper: shoot.");
+	else if (Id == TEXT("twinwake")) Text += Actor && Actor->GetGameOption() == 3
 		? TEXT("Hit the gold wall windows in order. Move at impact to add spin; missed rallies keep cleared targets. Space / pad A or J / pad X: serve early or replay the completed course.")
 		: TEXT("Move at impact to add spin. Space / pad A or J / pad X: serve early.");
 	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or pad A/X: kick. Target practice: move around the ball to aim. During a shot, K/Enter or pad B sets it up again.");
@@ -987,7 +987,7 @@ void SDaedalusDesktopArcade::PushInput(const FKey& PressedKey)
 		// Preserve independent hat fields and the real stick; the core handles hat movement precedence.
 		// The core reads PadUp/PadDown for country selection. Never turn hat-up into keyboard Up: that would wrongly charge throws.
 	}
-	else if (Id == TEXT("shadow_ninja"))
+	else if (Id == TEXT("emberstep"))
 	{
 		auto Sword = [](const FKey& Key) { return Key == EKeys::J || Key == EKeys::Z || Key == EKeys::X || Key == EKeys::Gamepad_FaceButton_Right || Key == EKeys::Gamepad_FaceButton_Left; };
 		Input.Fire = false;
@@ -999,17 +999,17 @@ void SDaedalusDesktopArcade::PushInput(const FKey& PressedKey)
 		bDashEdge = PressedKey == EKeys::LeftShift || PressedKey == EKeys::RightShift || PressedKey == EKeys::V || PressedKey == EKeys::Gamepad_LeftShoulder;
 		// The core passes these separate hats to NinjaPlayer::Update; preserve opposing keyboard/hat priority there.
 	}
-	else if (Id == TEXT("contra"))
+	else if (Id == TEXT("ironwake"))
 	{
 		Input.Jump |= Held(EKeys::W); bJumpEdge |= PressedKey == EKeys::W;
 		Input.Action |= Held(EKeys::B); bActionEdge |= PressedKey == EKeys::B;
 	}
-	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter"))
+	else if (Id == TEXT("driftstone") || Id == TEXT("riftwing"))
 	{
 		auto ExtraFire = [](const FKey& Key) { return Key == EKeys::SpaceBar || Key == EKeys::Gamepad_FaceButton_Bottom || Key == EKeys::Gamepad_FaceButton_Right || Key == EKeys::Gamepad_FaceButton_Top || Key == EKeys::Gamepad_LeftShoulder; };
 		for (const FKey& Key : HeldKeys) Input.Fire |= ExtraFire(Key);
 		bFireEdge |= ExtraFire(PressedKey);
-		if (Id == TEXT("asteroids"))
+		if (Id == TEXT("driftstone"))
 		{
 			// B remains a fire button. Only the dedicated brake controls set Action here.
 			Input.Action = Held(EKeys::K) || Held(EKeys::Gamepad_LeftTrigger) || LeftTrigger > 0.5f;
@@ -1027,8 +1027,8 @@ void SDaedalusDesktopArcade::PushInput(const FKey& PressedKey)
 			bFireEdge |= PressedKey == EKeys::Enter; // Source pause confirmation; does not toggle pause as a generic Action.
 		}
 	}
-	// These cores use merged digital directions. Asteroids and Dodge preserve independent keyboard/hat behavior.
-	if (Id != TEXT("asteroids") && Id != TEXT("dodge_ball") && Id != TEXT("shadow_ninja"))
+	// These cores use merged digital directions. Driftstone and Dodge preserve independent keyboard/hat behavior.
+	if (Id != TEXT("driftstone") && Id != TEXT("dodge_ball") && Id != TEXT("emberstep"))
 	{
 		Input.Left |= Input.PadLeft; Input.Right |= Input.PadRight;
 		Input.Up |= Input.PadUp; Input.Down |= Input.PadDown;

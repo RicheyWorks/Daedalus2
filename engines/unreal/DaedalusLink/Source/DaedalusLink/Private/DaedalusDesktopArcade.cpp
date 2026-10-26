@@ -239,7 +239,15 @@ FString ADaedalusDesktopArcade::ScoresPath() { return FPaths::Combine(SaveDirect
 FString ADaedalusDesktopArcade::SelectedSavePath() const
 {
 	// Slot table keeps minesweeper.dgs / star_shooter.dgs; unslotted games keep the Star fallback.
-	return FPaths::Combine(SaveDirectory(), UTF8_TO_TCHAR(DD::SaveFileFor(Session.ActiveId())));
+	const FString Current = FPaths::Combine(SaveDirectory(), UTF8_TO_TCHAR(DD::SaveFileFor(Session.ActiveId())));
+	// A save written before the 2026-10-25 rename is still read until the new file exists.
+	const char* Legacy = DD::LegacySaveFileFor(Session.ActiveId());
+	if (Legacy && IFileManager::Get().FileSize(*Current) <= 0)
+	{
+		const FString Old = FPaths::Combine(SaveDirectory(), UTF8_TO_TCHAR(Legacy));
+		if (IFileManager::Get().FileSize(*Old) > 0) return Old;
+	}
+	return Current;
 }
 
 void ADaedalusDesktopArcade::RefreshSavedRun()
@@ -251,7 +259,8 @@ void ADaedalusDesktopArcade::RefreshSavedRun()
 bool ADaedalusDesktopArcade::WriteOwnedFile(const FString& Filename, const FString& Text) const
 {
 	// Only these private filenames can be written. Replace after a complete bounded temp write.
-	bool bOwned = Filename == SavePath() || Filename == MinesweeperSavePath() || Filename == ScoresPath();
+	bool bOwned = Filename == FPaths::Combine(SaveDirectory(), UTF8_TO_TCHAR(DD::SaveFileFor(Session.ActiveId())))
+		|| Filename == SavePath() || Filename == MinesweeperSavePath() || Filename == ScoresPath();
 	for (const DD::SaveSlot& Slot : DD::SaveSlots) bOwned = bOwned || Filename == FPaths::Combine(SaveDirectory(), UTF8_TO_TCHAR(Slot.File));
 	if (!bOwned || Text.Len() > 4096) return false;
 	IFileManager& Files = IFileManager::Get();
@@ -269,7 +278,7 @@ bool ADaedalusDesktopArcade::SaveGame()
 	const bool bMinesweeper = Session.ActiveId() == "minesweeper";
 	const std::string Payload = Session.CaptureSave();
 	if (Payload.empty() || Payload.size() > 4096
-		|| !WriteOwnedFile(SelectedSavePath(), FString(UTF8_TO_TCHAR(Payload.c_str()))))
+		|| !WriteOwnedFile(FPaths::Combine(SaveDirectory(), UTF8_TO_TCHAR(DD::SaveFileFor(Session.ActiveId()))), FString(UTF8_TO_TCHAR(Payload.c_str()))))
 	{
 		RunSaveError = bMinesweeper ? TEXT("Board could not be saved. Your current board and previous save were kept; try Save board again.")
 			: TEXT("Run could not be saved (titles and finished runs have nothing to save). Your current run and previous save were kept.");

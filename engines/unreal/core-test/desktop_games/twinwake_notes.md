@@ -1,4 +1,4 @@
-# Pong moving-paddle spin
+# Twinwake moving-paddle spin
 
 This is an intentional native gameplay improvement, separate from pinned Python
 source parity. Before it, aligned rallies kept |Vy|=3 regardless of paddle motion,
@@ -17,7 +17,7 @@ Status text and a post-contact cue teach moving at impact. The initial render st
 contains the original six commands. Canonical source, oracle and eleven parity
 fixtures are unchanged; their contact case is neutral and remains source-faithful.
 
-`pong_spin_test.cpp` covers keyboard/Pad/analog and combined controls, neutral/CPU/
+`twinwake_spin_test.cpp` covers keyboard/Pad/analog and combined controls, neutral/CPU/
 outgoing contacts, clamps, finite input handling, velocity caps, presentation purity,
 the existing serve window and one bounded real-Reset scoring route (at most 420
 steps). Parent's pre-change private probe found the same input return at frame 201:
@@ -25,15 +25,15 @@ baseline kept Vy −3 and CPU caught it at 335; candidate Vy −6 missed at 335 
 That probe was a single deterministic policy, not a general balance or live-play proof.
 
 Compile only this C++17 test with the plugin Public include path, then run it and
-the existing `pong_test.cpp` against unchanged `pong_parity.txt`. Replaying the new
+the existing `twinwake_test.cpp` against unchanged `twinwake_parity.txt`. Replaying the new
 test unchanged against the preceding header should fail the new spin/agency checks.
 Native Slate/controller play and broader balance remain unverified by portable checks.
 
 Focused evidence: strict single-TU MSVC C++17 `/W4 /WX /permissive- /Od` passed
-36/36 spin checks (real return201, point349) and the existing30/30 Pong checks
+36/36 spin checks (real return201, point349) and the existing30/30 Twinwake checks
 covering all11 unchanged source fixtures. The new test compiled unchanged against
 the prior header passed23/36, failing13 spin/guidance/agency checks as expected.
-CMake target: `desktop_pong_spin`. No engine build, editor or live play was run.
+CMake target: `desktop_twinwake_spin`. No engine build, editor or live play was run.
 
 ## Optional Rally practice
 
@@ -54,9 +54,9 @@ prior AI, collision, score, spin and serve behavior.
 Native Match/Rally practice controls use the existing option API and Slate toggle
 style, with bound checked state and native focus. Pressing the selected mode is
 a no-op; changing mode or Restart deliberately resets the session best. Misses
-preserve it. There is no Pong saved-run format or durable best claim.
+preserve it. There is no Twinwake saved-run format or durable best claim.
 
-`pong_practice_test.cpp` / `desktop_pong_practice` uses public existing state and
+`twinwake_practice_test.cpp` / `desktop_twinwake_practice` uses public existing state and
 virtual option APIs for bounded serve/contact/retry fixtures, render/status
 purity and Driver mode/pause/input cleanup. A real-Reset tracking policy reaches
 two returns within a 1,200-step cap without per-step rendering. Native checkbox
@@ -64,7 +64,7 @@ release/focus, viewport scaling and actual human/controller play remain pending;
 portable rendering commands are not native visual acceptance.
 
 Strict single-TU MSVC /W4 /WX /permissive- passed 74/74 practice checks. The exact
-pre-feature Pong header at 07b3c1fe4 passed 20/74 (54 expected failures), compiling
+pre-feature Twinwake header at 07b3c1fe4 passed 20/74 (54 expected failures), compiling
 the same test unchanged through a private include overlay. Existing Match suites
 were run once for this change: parity30/30 and moving-paddle spin36/36 (real return
 201, point349). No source fixture was regenerated, no production header reverted,
@@ -97,7 +97,7 @@ builder/save changes. Old practice and quick-match invalid upper bound changes
 from3 to4 because3 is now valid; those full suites are not rerun by this slice.
 Native controls/focus, viewport fit and human placement learning remain pending.
 
-`desktop_pong_target_rally` / `pong_target_rally_test.cpp` passed 61/61 strict
+`desktop_twinwake_target_rally` / `twinwake_target_rally_test.cpp` passed 61/61 strict
 single-TU MSVC C++17 checks. A bounded public-input controller clears all3 windows
 in1033 steps with3 actual paddle returns and no pose/score writes to its route
 instance. It previews17 fixed impact-axis choices on short game copies; this
@@ -129,7 +129,7 @@ the focused quick-match check covers that boundary through both core and Driver.
 Native module/Slate compile, checkbox focus/release, viewport/fonts, physical play
 and difficulty/feel remain acceptance work.
 
-`desktop_pong_quick_match` / `pong_quick_match_test.cpp` passed 151/151 strict
+`desktop_twinwake_quick_match` / `twinwake_quick_match_test.cpp` passed 151/151 strict
 single-TU MSVC checks: two controlled five-goal rounds through actual Step, result
 freeze/three replay edges, serve timing, score-strip/neutral-opening cues, mode3
 refusal through core/Driver and 80 paired preterminal physics steps against Match.

@@ -6,19 +6,19 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop {
 // Position shots without a bot; only real Step collisions remove or split rocks.
-struct AsteroidsTestAccess {
-    static int Aim(AsteroidsGame& G) {
+struct DriftstoneTestAccess {
+    static int Aim(DriftstoneGame& G) {
         for(std::size_t N=0;N<G.Rocks.size();++N) {
             auto& A=G.Rocks[N];A.X=50+static_cast<double>(N%8)*90;A.Y=60+static_cast<double>(N/8)*90;A.Vx=A.Vy=0;
         }
         const auto& A=G.Rocks.front();G.Bullets.push_back({A.X,A.Y,0,0,45,true});G.RespawnGrace=2;return A.Size;
     }
-    static void Ufo(AsteroidsGame& G) {G.Ufos.push_back({100,500,0,60});}
-    static void LethalLastRock(AsteroidsGame& G) {
-        G.Lives=1;G.RespawnGrace=0;G.Player=AsteroidsGame::Ship{};
+    static void Ufo(DriftstoneGame& G) {G.Ufos.push_back({100,500,0,60});}
+    static void LethalLastRock(DriftstoneGame& G) {
+        G.Lives=1;G.RespawnGrace=0;G.Player=DriftstoneGame::Ship{};
         auto& A=G.Rocks.front();A.X=400;A.Y=300;A.Vx=A.Vy=0;G.Bullets.push_back({400,300,0,0,45,true});
     }
-    static std::string Snapshot(const AsteroidsGame& G) {
+    static std::string Snapshot(const DriftstoneGame& G) {
         std::ostringstream O;O.precision(17);auto R=G.Rng;const auto& P=G.Player;
         O<<G.SessionSeed<<' '<<G.Score<<' '<<G.Lives<<' '<<G.Level<<' '<<G.UfoTimer<<' '<<G.RespawnGrace<<' '<<G.Over<<' '<<R.Next();
         O<<' '<<P.X<<' '<<P.Y<<' '<<P.Angle<<' '<<P.Vx<<' '<<P.Vy<<' '<<P.Thrust<<' '<<P.Cooldown<<' '<<P.Braking;
@@ -31,7 +31,7 @@ struct AsteroidsTestAccess {
 };
 }}
 namespace {
-using Access=AsteroidsTestAccess;
+using Access=DriftstoneTestAccess;
 int Checks=0,Failed=0;
 void Check(bool Ok,const std::string& What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
 bool Tint(Color A,Color B) {return A.R==B.R&&A.G==B.G&&A.B==B.B&&A.A==B.A;}
@@ -46,7 +46,7 @@ bool Text(const Frame& F,const std::string& Part) {
     return std::any_of(F.Commands.begin(),F.Commands.end(),[&](const DrawCommand& C){return C.Kind==Shape::Text&&C.Label.find(Part)!=std::string::npos;});
 }
 void Modes() {
-    AsteroidsGame G;G.Reset(730);const auto Original=Access::Snapshot(G);
+    DriftstoneGame G;G.Reset(730);const auto Original=Access::Snapshot(G);
     Check(G.GetOption()==0&&G.GetLevel()==1&&G.GetRockCount()==6&&!G.GetStatus().Won,"default remains an endless six-rock opening");
     const bool Accepted=G.SetOption(1,730);Check(Accepted,"three-wave voyage is selectable");if(!Accepted) return;
     Check(G.GetOption()==1&&Access::Snapshot(G)==Original,"voyage opens with identical original ship rocks timers and random state");
@@ -55,12 +55,12 @@ void Modes() {
         Check(!G.SetOption(Invalid,99)&&G.GetOption()==1&&Access::Snapshot(G)==Before,"invalid option preserves the complete voyage simulation");
         Frame After;G.Render(After);Check(SameFrame(BeforeFrame,After),"invalid option preserves presentation");
     }
-    Input Move;Move.Up=Move.Fire=true;G.Step(Move);G.Reset(99);AsteroidsGame Fresh;Fresh.SetOption(1,99);
+    Input Move;Move.Up=Move.Fire=true;G.Step(Move);G.Reset(99);DriftstoneGame Fresh;Fresh.SetOption(1,99);
     Check(G.GetOption()==1&&Access::Snapshot(G)==Access::Snapshot(Fresh),"Reset retains voyage and replaces progress using the requested seed");
     Check(G.SetOption(0,730)&&G.GetOption()==0&&Access::Snapshot(G)==Original,"explicit mode selection returns to unchanged endless opening");
 }
 void ActualVoyage() {
-    AsteroidsGame Voyage,Endless,LastSmall;Endless.Reset(730);
+    DriftstoneGame Voyage,Endless,LastSmall;Endless.Reset(730);
     const bool Accepted=Voyage.SetOption(1,730);Check(Accepted,"real split route selects voyage");if(!Accepted) return;
     int Hits=0,Large=0,Medium=0,Small=0;std::int64_t ExpectedScore=0;bool HaveLastSmall=false;
     for(int Wave=1;Wave<=3;++Wave) {
@@ -71,7 +71,7 @@ void ActualVoyage() {
                 LastSmall=Voyage;HaveLastSmall=true;Access::Ufo(Voyage);Access::Ufo(Endless);
             }
             const int Size=Access::Aim(Voyage);Check(Access::Aim(Endless)==Size,"paired endless route shoots the same real rock size");
-            ++Hits;Large+=Size==3;Medium+=Size==2;Small+=Size==1;ExpectedScore+=AsteroidsGame::RockPoints(Size);
+            ++Hits;Large+=Size==3;Medium+=Size==2;Small+=Size==1;ExpectedScore+=DriftstoneGame::RockPoints(Size);
             Voyage.Step({});Endless.Step({});
             Check(Voyage.GetStatus().Score==ExpectedScore,"each actual collision awards only the original size-based score");
             if(Size>1 || Count>1) {
@@ -93,7 +93,7 @@ void ActualVoyage() {
     Voyage.Render(F);
     Check(Access::Snapshot(Voyage)==Frozen&&SameFrame(Picture,F)&&Voyage.GetStatus().Note==Note,"won state freezes movement bullets UFOs timers score and presentation");
     for(bool Controller:{false,true}) {
-        auto Replay=Voyage;const bool Retried=Controller?Replay.SourceControllerButton(0):Replay.SourceKeyDown(6);AsteroidsGame Fresh;Fresh.SetOption(1,730);
+        auto Replay=Voyage;const bool Retried=Controller?Replay.SourceControllerButton(0):Replay.SourceKeyDown(6);DriftstoneGame Fresh;Fresh.SetOption(1,730);
         Check(Retried&&Replay.GetOption()==1&&!Replay.GetStatus().Won&&!Replay.GetStatus().Over&&Access::Snapshot(Replay)==Access::Snapshot(Fresh),"fresh A or Enter replays the voyage with its original seed and mode");
     }
     Check(HaveLastSmall,"actual split route retained a one-small-rock companion for lethal settlement");
@@ -104,11 +104,11 @@ void ActualVoyage() {
     }
 }
 void DriverCleanup() {
-    Driver D;Check(D.Select("asteroids",730),"Driver selects existing Asteroids");D.Advance(Driver::StepSeconds*2.5);
+    Driver D;Check(D.Select("driftstone",730),"Driver selects existing Driftstone");D.Advance(Driver::StepSeconds*2.5);
     Input Stale;Stale.Up=Stale.Fire=Stale.Action=true;Stale.FirePressed=Stale.ActionPressed=true;D.SetInput(Stale);
     const bool Accepted=D.SetOption(1);Check(Accepted&&D.GetOption()==1&&D.Ticks()==0&&D.GetSeed()==730,"Driver mode selection retains seed and resets accounting");if(!Accepted) return;
     Check(D.Advance(Driver::StepSeconds*.5)==0,"mode selection clears prior fractional time");
-    AsteroidsGame Expected;Expected.SetOption(1,730);Expected.Step({});Frame F;Expected.Render(F);
+    DriftstoneGame Expected;Expected.SetOption(1,730);Expected.Step({});Frame F;Expected.Render(F);
     Check(D.Advance(Driver::StepSeconds*.5)==1&&SameFrame(D.GetFrame(),F),"mode selection clears stale thrust brake and fire before the first step");
     D.SetPaused(true);D.SetInput(Stale);D.Restart();Expected.Reset(730);Expected.Render(F);
     Check(D.GetOption()==1&&!D.IsPaused()&&D.Ticks()==0&&SameFrame(D.GetFrame(),F),"Driver Restart retains voyage while clearing pause and progress");
@@ -117,5 +117,5 @@ void DriverCleanup() {
 }
 int main() {
     Modes();ActualVoyage();DriverCleanup();
-    std::cout<<"Asteroids voyage: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
+    std::cout<<"Driftstone voyage: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
 }

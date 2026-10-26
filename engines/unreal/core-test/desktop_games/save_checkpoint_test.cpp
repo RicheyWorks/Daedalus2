@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-// Checkpoint saves for Football (DFS1) and Glowtrail Chase / Pac-Man (DMS1):
+// Checkpoint saves for Football (DFS1) and Glowtrail Chase / Glowtrail (DMS1):
 // round trips, fresh re-rack on restore, finished runs not saved, strict
 // validation that leaves the run untouched, and Driver capture/restore.
-// catalog-capability: save_restore: football pacman
+// catalog-capability: save_restore: football glowtrail
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <string>
@@ -10,7 +10,7 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop {
 struct MazeTestAccess {
-    static void End(PacmanGame& G,bool Won) {G.Over=!Won;G.Won=Won;}
+    static void End(GlowtrailGame& G,bool Won) {G.Over=!Won;G.Won=Won;}
 };
 }}  // namespace daedalus::desktop
 namespace {
@@ -48,29 +48,29 @@ void Football() {
     }
 }
 
-void Pacman() {
-    PacmanGame G;G.Reset(8);
+void Glowtrail() {
+    GlowtrailGame G;G.Reset(8);
     const std::string Zero=G.SaveState();
-    Check(Zero=="DMS1 0 0 3","pacman fresh payload: "+Zero);
-    PacmanGame H;Check(H.RestoreState("DMS1 1 4560 2",8),"pacman restores");
+    Check(Zero=="DMS1 0 0 3","glowtrail fresh payload: "+Zero);
+    GlowtrailGame H;Check(H.RestoreState("DMS1 1 4560 2",8),"glowtrail restores");
     Check(H.GetOption()==1 && H.GetStatus().Score==4560 && H.GetStatus().Lives==2 && !H.GetStatus().Over,"score, lives and mode restored");
-    Check(H.SaveState()=="DMS1 1 4560 2","pacman round trip");
-    PacmanGame Ref;Ref.SetOption(1,8);
+    Check(H.SaveState()=="DMS1 1 4560 2","glowtrail round trip");
+    GlowtrailGame Ref;Ref.SetOption(1,8);
     Frame A,B;H.Render(A);Ref.Render(B);
     Check(A.Commands.size()==B.Commands.size(),"restore starts a fresh maze");
     for(bool Won:{false,true}) {
-        PacmanGame E;E.Reset(8);MazeTestAccess::End(E,Won);
-        Check(E.SaveState().empty(),std::string("finished pacman run is not saved (")+(Won?"won":"lost")+")");
+        GlowtrailGame E;E.Reset(8);MazeTestAccess::End(E,Won);
+        Check(E.SaveState().empty(),std::string("finished glowtrail run is not saved (")+(Won?"won":"lost")+")");
     }
     for(const char* Bad:{"","DMS2 0 0 3","DMS1 0 0","DMS1 0 0 3 x","DMS1 2 0 3","DMS1 0 -5 3","DMS1 0 0 0",
                          "DMS1 0 0 4","DMS1 0 1000000001 3","DMS1 0 x 3"}) {
-        PacmanGame F;F.Reset(8);F.SetOption(1,8);
-        Check(!F.RestoreState(Bad,8) && F.GetOption()==1 && F.GetStatus().Score==0,std::string("pacman rejects '")+Bad+"'");
+        GlowtrailGame F;F.Reset(8);F.SetOption(1,8);
+        Check(!F.RestoreState(Bad,8) && F.GetOption()==1 && F.GetStatus().Score==0,std::string("glowtrail rejects '")+Bad+"'");
     }
 }
 
 void ThroughDriver() {
-    for(const char* Id:{"football","pacman"}) {
+    for(const char* Id:{"football","glowtrail"}) {
         Driver D;D.Select(Id,5);
         Input I;I.FirePressed=true;D.SetInput(I);
         for(int N=0;N<30;++N) D.Advance(Driver::StepSeconds);
@@ -84,7 +84,7 @@ void ThroughDriver() {
 }  // namespace
 
 int main() {
-    Football();Pacman();ThroughDriver();
+    Football();Glowtrail();ThroughDriver();
     std::cout<<"save checkpoints: "<<(Checks-Failed)<<"/"<<Checks<<" checks\n";
     return Failed==0?0:1;
 }

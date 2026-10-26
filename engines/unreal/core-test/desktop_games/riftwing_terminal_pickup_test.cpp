@@ -4,8 +4,8 @@
 
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop {
-struct SegaTestAccess {
-    static void ContactPickup(SegaShooterGame& G,SegaShooterGame::PowerKind Kind,int Lives,bool BossContact=false,bool LastBossHit=false) {
+struct RiftwingTestAccess {
+    static void ContactPickup(RiftwingGame& G,RiftwingGame::PowerKind Kind,int Lives,bool BossContact=false,bool LastBossHit=false) {
         G.Pilot.Lives=Lives;G.Pilot.Invincible=0;G.Pilot.X=BossContact?620:150;G.Pilot.Y=300;
         G.SpawnTimer=100;G.Bullets.clear();G.Enemies.clear();G.Powerups.clear();
         // Normal drift reaches the pilot this step. The second item expires offscreen.
@@ -19,9 +19,9 @@ struct SegaTestAccess {
             if(LastBossHit) G.Bullets.push_back({G.Boss.X-10,300,10,0,true});
         } else G.Enemies.push_back({G.Pilot.X+3,300,3,4,60,true,true});
     }
-    static const std::vector<SegaShooterGame::Powerup>& Pickups(const SegaShooterGame& G) {return G.Powerups;}
-    static std::size_t BulletCount(const SegaShooterGame& G) {return G.Bullets.size();}
-    static bool SameHidden(const SegaShooterGame& A,const SegaShooterGame& B) {
+    static const std::vector<RiftwingGame::Powerup>& Pickups(const RiftwingGame& G) {return G.Powerups;}
+    static std::size_t BulletCount(const RiftwingGame& G) {return G.Bullets.size();}
+    static bool SameHidden(const RiftwingGame& A,const RiftwingGame& B) {
         auto R=A.Rng,S=B.Rng;
         return A.SessionSeed==B.SessionSeed && A.SpawnTimer==B.SpawnTimer && R.Next()==S.Next();
     }
@@ -42,15 +42,15 @@ bool SameFrame(const Frame& A,const Frame& B) {
     return A.Background.R==B.Background.R && A.Background.G==B.Background.G
         && A.Background.B==B.Background.B && A.Background.A==B.Background.A;
 }
-bool Same(const SegaShooterGame& A,const SegaShooterGame& B) {
+bool Same(const RiftwingGame& A,const RiftwingGame& B) {
     Frame F,G;A.Render(F);B.Render(G);const auto S=A.GetStatus(),T=B.GetStatus();
     const auto& P=A.GetPlayer();const auto& Q=B.GetPlayer();
     return SameFrame(F,G) && S.Score==T.Score && S.Lives==T.Lives && S.Over==T.Over && S.Won==T.Won && S.Note==T.Note
         && P.X==Q.X && P.Y==Q.Y && P.Speed==Q.Speed && P.Cooldown==Q.Cooldown && P.Power==Q.Power
-        && P.Lives==Q.Lives && P.Invincible==Q.Invincible && SegaTestAccess::SameHidden(A,B);
+        && P.Lives==Q.Lives && P.Invincible==Q.Invincible && RiftwingTestAccess::SameHidden(A,B);
 }
-void FrozenAndReplay(const SegaShooterGame& Terminal,std::uint32_t Seed) {
-    SegaShooterGame G=Terminal;
+void FrozenAndReplay(const RiftwingGame& Terminal,std::uint32_t Seed) {
+    RiftwingGame G=Terminal;
     Input Held;Held.Right=Held.Fire=Held.Jump=Held.Action=Held.Dash=true;
     Held.FirePressed=Held.JumpPressed=Held.ActionPressed=Held.DashPressed=true;
     for(int N=0;N<8;++N) G.Step(Held);
@@ -60,7 +60,7 @@ void FrozenAndReplay(const SegaShooterGame& Terminal,std::uint32_t Seed) {
         const bool Accepted=Event<2?Core.SourceControllerButton(Event):Core.SourceKeyDown(Event==2?6:7);
         Check(Accepted,"fresh A/Start/Enter/Space retries the defeated result");
         if(!Accepted) continue;
-        SegaShooterGame Fresh;Fresh.Reset(Seed);
+        RiftwingGame Fresh;Fresh.Reset(Seed);
         Check(Same(G,Fresh),"retry resets pickups terminal flags player timers and original seed");
         for(int N=0;N<6;++N) {
             Input I;I.Right=N<3;I.Fire=N<4;I.FirePressed=N==0;G.Step(I);Fresh.Step(I);
@@ -68,48 +68,48 @@ void FrozenAndReplay(const SegaShooterGame& Terminal,std::uint32_t Seed) {
         Check(Same(G,Fresh),"following replay frames retain original seeded spawns and input behavior");
     }
 }
-void LethalPickup(SegaShooterGame::PowerKind Kind,bool BossContact) {
+void LethalPickup(RiftwingGame::PowerKind Kind,bool BossContact) {
     constexpr std::uint32_t Seed=12345;
-    SegaShooterGame G;G.Reset(Seed);SegaTestAccess::ContactPickup(G,Kind,1,BossContact);
+    RiftwingGame G;G.Reset(Seed);RiftwingTestAccess::ContactPickup(G,Kind,1,BossContact);
     G.Step({});const auto& P=G.GetPlayer();const auto S=G.GetStatus();
     Check(S.Over && !S.Won && P.Lives==0 && S.Lives==0,"lethal contact remains a zero-life defeat beside any pickup kind");
     Check(P.Power==1 && P.Speed==5 && P.Invincible==60,"post-lethal pickups grant no weapon speed or life benefits");
-    const auto& Pickups=SegaTestAccess::Pickups(G);
+    const auto& Pickups=RiftwingTestAccess::Pickups(G);
     Check(Pickups.size()==1 && Pickups[0].Alive && Pickups[0].Kind==Kind
         && Pickups[0].X==P.X && Pickups[0].Y==P.Y,"overlapping pickup stays alive at its normally updated position");
-    Check(G.GetEnemyCount()==0 && SegaTestAccess::BulletCount(G)==0 && G.GetPickupCount()==1,"contact actor and out-of-bounds actors still receive normal cleanup");
+    Check(G.GetEnemyCount()==0 && RiftwingTestAccess::BulletCount(G)==0 && G.GetPickupCount()==1,"contact actor and out-of-bounds actors still receive normal cleanup");
     Check(S.Score==(BossContact?1500:0) && G.HasBoss()==BossContact,"lethal guard leaves existing boss progression and score intact");
     if(BossContact) Check(G.GetBossHealth()==20,"lethal boss contact does not damage the boss");
-    if(Kind==SegaShooterGame::PowerKind::Life && !BossContact) FrozenAndReplay(G,Seed);
+    if(Kind==RiftwingGame::PowerKind::Life && !BossContact) FrozenAndReplay(G,Seed);
 }
-void SurvivingPickup(SegaShooterGame::PowerKind Kind) {
-    SegaShooterGame G;G.Reset(12345);SegaTestAccess::ContactPickup(G,Kind,2);G.Step({});
+void SurvivingPickup(RiftwingGame::PowerKind Kind) {
+    RiftwingGame G;G.Reset(12345);RiftwingTestAccess::ContactPickup(G,Kind,2);G.Step({});
     const auto& P=G.GetPlayer();
     Check(!G.GetStatus().Over && !G.GetStatus().Won && P.Invincible==60,"nonlethal contact remains live with normal protection");
-    Check(P.Lives==(Kind==SegaShooterGame::PowerKind::Life?2:1)
-        && P.Power==(Kind==SegaShooterGame::PowerKind::Power?2:1)
-        && P.Speed==(Kind==SegaShooterGame::PowerKind::Speed?6:5),"surviving contact still applies the same-step pickup normally");
-    Check(G.GetPickupCount()==0 && G.GetEnemyCount()==0 && SegaTestAccess::BulletCount(G)==0,"live pickup and expired actors clean up normally");
+    Check(P.Lives==(Kind==RiftwingGame::PowerKind::Life?2:1)
+        && P.Power==(Kind==RiftwingGame::PowerKind::Power?2:1)
+        && P.Speed==(Kind==RiftwingGame::PowerKind::Speed?6:5),"surviving contact still applies the same-step pickup normally");
+    Check(G.GetPickupCount()==0 && G.GetEnemyCount()==0 && RiftwingTestAccess::BulletCount(G)==0,"live pickup and expired actors clean up normally");
 }
 void MutualBossDefeat() {
     constexpr std::uint32_t Seed=98765;
-    SegaShooterGame G;G.Reset(Seed);SegaTestAccess::ContactPickup(G,SegaShooterGame::PowerKind::Life,1,true,true);G.Step({});
+    RiftwingGame G;G.Reset(Seed);RiftwingTestAccess::ContactPickup(G,RiftwingGame::PowerKind::Life,1,true,true);G.Step({});
     const auto S=G.GetStatus();
     Check(S.Over && S.Won && S.Lives==0 && S.Score==2000 && !G.HasBoss(),"simultaneous last boss hit and lethal contact retain both terminal flags and 500-point reward");
     Frame F;G.Render(F);bool NamedTie=false;
     for(const auto& C:F.Commands) if(C.Label=="BOSS DOWN / SHIP LOST") NamedTie=true;
     Check(NamedTie && S.Note.find("Boss defeated; ship lost")!=std::string::npos,"intentional mutual-defeat presentation remains available");
-    Check(G.GetPickupCount()==1 && SegaTestAccess::Pickups(G)[0].Alive && G.GetPlayer().Lives==0,"mutual defeat leaves overlapping Life unconsumed");
-    Check(SegaTestAccess::BulletCount(G)==0 && G.GetEnemyCount()==0,"boss hit and escaped actors still clean up on the tie");
+    Check(G.GetPickupCount()==1 && RiftwingTestAccess::Pickups(G)[0].Alive && G.GetPlayer().Lives==0,"mutual defeat leaves overlapping Life unconsumed");
+    Check(RiftwingTestAccess::BulletCount(G)==0 && G.GetEnemyCount()==0,"boss hit and escaped actors still clean up on the tie");
     FrozenAndReplay(G,Seed);
 }
 }
 
 int main() {
-    for(auto Kind:{SegaShooterGame::PowerKind::Life,SegaShooterGame::PowerKind::Power,SegaShooterGame::PowerKind::Speed}) {
+    for(auto Kind:{RiftwingGame::PowerKind::Life,RiftwingGame::PowerKind::Power,RiftwingGame::PowerKind::Speed}) {
         LethalPickup(Kind,false);LethalPickup(Kind,true);SurvivingPickup(Kind);
     }
     MutualBossDefeat();
-    std::cout<<"Sega terminal pickups: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
+    std::cout<<"Riftwing terminal pickups: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
     return Failed?1:0;
 }

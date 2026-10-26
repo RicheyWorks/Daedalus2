@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Review-safe oracle: execute only latest Pong's bounded numeric frame statements.
+"""Review-safe oracle: execute only latest Twinwake's bounded numeric frame statements.
 
 No imports or complete game execution. No pygame, display, filesystem persistence,
 controller device or event loop runs. Default checks a committed synthetic fixture.
@@ -16,7 +16,7 @@ FIELDS = ("player_y", "ai_y", "ball_x", "ball_y", "ball_vx", "ball_vy", "player_
 def generate(path):
     raw = path.read_bytes()
     if hashlib.sha256(raw).hexdigest() != PIN:
-        raise RuntimeError("Canonical latest Pong source changed")
+        raise RuntimeError("Canonical latest Twinwake source changed")
     lines = raw.decode("utf-8-sig").splitlines()
     first = next(i + 1 for i, s in enumerate(lines) if "# Player controls" in s)
     last = next(i + 1 for i, s in enumerate(lines) if s.strip() == "# Draw")
@@ -40,7 +40,7 @@ def generate(path):
         ("first_paddle_hit", (250,250,65,300,-5,3,0,0),0,0,0),
         ("first_wall_hit", (250,250,400,588,5,3,0,0),0,0,0),
     ]
-    result = ["PONG 1", "# latest pong (1).py SHA256 " + PIN]
+    result = ["TWINWAKE 1", "# latest twinwake (1).py SHA256 " + PIN]
     for name, before, up, down, axis in cases:
         env = dict(zip(FIELDS, before))
         env.update(pygame=SimpleNamespace(K_UP=1,K_DOWN=2,key=SimpleNamespace(get_pressed=lambda: {1:bool(up),2:bool(down)})),
@@ -52,11 +52,11 @@ def generate(path):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--source",type=Path,required=True)
-    p.add_argument("--output",type=Path,default=Path(__file__).with_name("pong_parity.txt"))
+    p.add_argument("--output",type=Path,default=Path(__file__).with_name("twinwake_parity.txt"))
     p.add_argument("--write",action="store_true")
     args=p.parse_args(); data=generate(args.source)
     if args.write: args.output.write_text(data,encoding="utf-8",newline="\n")
-    elif args.output.read_text(encoding="utf-8")!=data: raise RuntimeError("Pong source fixture mismatch")
-    print("Pong source oracle: 11 reviewed numeric cases PASS")
+    elif args.output.read_text(encoding="utf-8")!=data: raise RuntimeError("Twinwake source fixture mismatch")
+    print("Twinwake source oracle: 11 reviewed numeric cases PASS")
 
 if __name__=="__main__": main()

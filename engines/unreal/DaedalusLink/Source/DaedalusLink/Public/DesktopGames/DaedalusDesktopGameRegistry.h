@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 #pragma once
-#include "DaedalusDesktopPongCore.h"
+#include "DaedalusDesktopTwinwakeCore.h"
 #include "DaedalusDesktopMinesweeperCore.h"
 #include "DaedalusDesktopMazeCore.h"
 #include "DaedalusDesktopShootersCore.h"
 #include "DaedalusDesktopSportsCore.h"
 #include "DaedalusDesktopPlatformersCore.h"
+#include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
 
@@ -14,33 +15,34 @@ struct Entry { std::string Id, Title, Controls; };
 inline const std::vector<Entry>& Catalog() {
     static const std::vector<Entry> Entries{
         {"minesweeper","Minesweeper","Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord"},
-        {"pong","Twinwake Volley","A fast duel across the twinwake court. Up/Down or left stick: paddle"},
+        {"twinwake","Twinwake Volley","A fast duel across the twinwake court. Up/Down or left stick: paddle"},
         {"dungeon","Dungeon Prototype","Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick; Shift/pad Y: trail"},
-        {"asteroids","Driftstone Patrol","Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot"},
+        {"driftstone","Driftstone Patrol","Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot"},
         {"football","Football / Soccer","A ninety-second duel on the Daedalus pitch. Move: WASD/arrows or left stick; J/X: kick"},
-        {"pacman","Glowtrail Chase","Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick"},
-        {"sega_shooter","Riftwing Vanguard","Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot"},
-        {"shadow_ninja","Shadow Ninja","Scale the ember terraces and face the sentinel. Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb"},
+        {"glowtrail","Glowtrail Chase","Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick"},
+        {"riftwing","Riftwing Vanguard","Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot"},
+        {"emberstep","Emberstep Ascent","Scale the ember terraces and face the sentinel. Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb"},
         {"star_shooter","Star Shooter","Hold the starlanes through escalating waves. Move: WASD/arrows or left stick; J/X: shoot; P/Start: pause/save menu"},
         {"dodge_ball","Courtyard Clash","Lead three teammates through four courtyard rounds. Move: WASD/arrows or left stick; throw/catch/jump actions"},
-        {"contra","Ironwake Advance","Run the ironwake route through platforms and enemy fire. Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/pad A: jump"},
-        {"zelda","Lanternwild Quest","Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword"}
+        {"ironwake","Ironwake Advance","Run the ironwake route through platforms and enemy fire. Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/pad A: jump"},
+        {"lanternwild","Lanternwild Quest","Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword"}
     };
     return Entries;
 }
-inline std::unique_ptr<Game> CreateGame(const std::string& Id) {
+inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
+    const std::string Id=CanonicalGameId(RawId);
     if(Id=="minesweeper") return std::make_unique<MinesweeperGame>();
-    if(Id=="pong") return std::make_unique<PongGame>();
+    if(Id=="twinwake") return std::make_unique<TwinwakeGame>();
     if(Id=="dungeon") return std::make_unique<DungeonGame>();
-    if(Id=="asteroids") return std::make_unique<AsteroidsGame>();
+    if(Id=="driftstone") return std::make_unique<DriftstoneGame>();
     if(Id=="football") return std::make_unique<FootballGame>();
-    if(Id=="pacman") return std::make_unique<PacmanGame>();
-    if(Id=="sega_shooter") return std::make_unique<SegaShooterGame>();
-    if(Id=="shadow_ninja") return std::make_unique<ShadowNinjaGame>();
+    if(Id=="glowtrail") return std::make_unique<GlowtrailGame>();
+    if(Id=="riftwing") return std::make_unique<RiftwingGame>();
+    if(Id=="emberstep") return std::make_unique<EmberstepGame>();
     if(Id=="star_shooter") return std::make_unique<StarShooterGame>();
     if(Id=="dodge_ball") return std::make_unique<DodgeBallGame>();
-    if(Id=="contra") return std::make_unique<ContraGame>();
-    if(Id=="zelda") return std::make_unique<ZeldaGame>();
+    if(Id=="ironwake") return std::make_unique<IronwakeGame>();
+    if(Id=="lanternwild") return std::make_unique<LanternwildGame>();
     return nullptr;
 }
 
@@ -60,7 +62,7 @@ public:
     bool Select(const std::string& NewId,std::uint32_t NewSeed) {
         auto Candidate=CreateGame(NewId);
         if(!Candidate) return false;
-        Candidate->Reset(NewSeed); Candidate->EnterTitle(); Active=std::move(Candidate); Id=NewId; Seed=NewSeed;
+        Candidate->Reset(NewSeed); Candidate->EnterTitle(); Active=std::move(Candidate); Id=CanonicalGameId(NewId); Seed=NewSeed;
         Controls={}; PendingSeconds=0; StepCount=0; Paused=false; Refresh(); return true;
     }
     void Restart() {

@@ -6,7 +6,7 @@ using namespace daedalus::desktop;
 namespace {
 int Checks=0,Failed=0;
 void Check(bool Ok,const std::string& What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
-bool SameState(const PongGame::State& A,const PongGame::State& B) {
+bool SameState(const TwinwakeGame::State& A,const TwinwakeGame::State& B) {
     return A.PlayerY==B.PlayerY&&A.ComputerY==B.ComputerY&&A.BallX==B.BallX&&A.BallY==B.BallY&&A.BallVX==B.BallVX&&A.BallVY==B.BallVY
         &&A.PlayerScore==B.PlayerScore&&A.ComputerScore==B.ComputerScore&&A.ServeFrames==B.ServeFrames&&A.ContactFrames==B.ContactFrames
         &&A.PointFrames==B.PointFrames&&A.LastPoint==B.LastPoint&&A.LastContact==B.LastContact&&A.Rally==B.Rally&&A.BestRally==B.BestRally;
@@ -26,12 +26,12 @@ bool Text(const Frame& F,const std::string& Part) {
 bool RectAt(const Frame& F,double X,double Y,double W,double H) {
     return std::any_of(F.Commands.begin(),F.Commands.end(),[&](const DrawCommand& C){return C.Kind==Shape::Rectangle&&C.A.X==X&&C.A.Y==Y&&C.B.X==W&&C.B.Y==H;});
 }
-PongGame Quick() {PongGame G;G.SetOption(2,730);return G;}
+TwinwakeGame Quick() {TwinwakeGame G;G.SetOption(2,730);return G;}
 Input Edge(int Which) {Input I;I.FirePressed=Which==0;I.JumpPressed=Which==1;I.ActionPressed=Which==2;return I;}
-void Goal(PongGame& G,bool Human) {
+void Goal(TwinwakeGame& G,bool Human) {
     G.S.ServeFrames=0;G.S.BallX=Human?799:1;G.S.BallY=300;G.S.BallVX=Human?5:-5;G.S.BallVY=0;G.Step({});
 }
-PongGame Complete(bool Human) {
+TwinwakeGame Complete(bool Human) {
     auto G=Quick();
     for(int Point=1;Point<=5;++Point) {
         Goal(G,Human);const auto Status=G.GetStatus();
@@ -41,7 +41,7 @@ PongGame Complete(bool Human) {
     }return G;
 }
 void ModesAndServe() {
-    PongGame G;Frame F;G.Render(F);Check(G.GetOption()==0&&F.Width==800&&F.Height==600&&F.Commands.size()==6,"endless Match remains the unchanged default opening");
+    TwinwakeGame G;Frame F;G.Render(F);Check(G.GetOption()==0&&F.Width==800&&F.Height==600&&F.Commands.size()==6,"endless Match remains the unchanged default opening");
     Check(G.SetOption(1,730)&&G.GetOption()==1&&G.S.ServeFrames==120,"rally practice remains selectable");
     G.Render(F);Check(F.Width==800&&F.Height==720,"practice keeps its existing separate court layout");
     Check(G.SetOption(2,730)&&G.GetOption()==2&&G.S.ServeFrames==45&&G.S.LastPoint==0,"First to 5 starts with neutral forty-five-step preparation");
@@ -88,7 +88,7 @@ void PresentationAndParity() {
     const auto Before=G.S;const auto Note=G.GetStatus().Note;Frame Again;
     for(int N=0;N<4;++N) {G.Render(Again);G.GetStatus();}
     Check(SameState(Before,G.S)&&SameFrame(F,Again)&&G.GetStatus().Note==Note,"rendering and status leave quick match and timers untouched");
-    PongGame Endless;G.S.ServeFrames=0;G.S.BallX=65;G.S.BallY=300;G.S.BallVX=-5;G.S.BallVY=2;G.S.Rally=2;G.S.BestRally=4;Endless.S=G.S;
+    TwinwakeGame Endless;G.S.ServeFrames=0;G.S.BallX=65;G.S.BallY=300;G.S.BallVX=-5;G.S.BallVY=2;G.S.Rally=2;G.S.BestRally=4;Endless.S=G.S;
     for(int N=0;N<80;++N) {
         Input I;I.Down=N%20<10;I.Up=!I.Down;I.AxisY=N%4==0?.25:0;G.Step(I);Endless.Step(I);
         Check(SameState(G.S,Endless.S)&&!G.GetStatus().Over,"preterminal match keeps endless physics step "+std::to_string(N));
@@ -96,7 +96,7 @@ void PresentationAndParity() {
     Goal(G,true);Goal(Endless,true);Check(SameState(G.S,Endless.S)&&G.S.PlayerScore==1,"ordinary quick-match point shares endless scoring and serve rules");
 }
 void DriverLifecycle() {
-    Driver D;Check(D.Select("pong",730),"Driver selects existing Pong");D.Advance(Driver::StepSeconds*2.5);
+    Driver D;Check(D.Select("twinwake",730),"Driver selects existing Twinwake");D.Advance(Driver::StepSeconds*2.5);
     Input Stale;Stale.Down=Stale.Fire=Stale.Jump=Stale.Action=true;Stale.FirePressed=Stale.JumpPressed=Stale.ActionPressed=true;
     D.SetInput(Stale);
     Check(D.SetOption(2)&&D.GetOption()==2&&!D.IsPaused()&&D.Ticks()==0&&D.GetSeed()==730,"mode selection resets accounting and input while retaining seed");
@@ -116,5 +116,5 @@ void DriverLifecycle() {
 }
 int main() {
     ModesAndServe();ResultsAndReplay();PresentationAndParity();DriverLifecycle();
-    std::cout<<"Pong First to 5: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
+    std::cout<<"Twinwake First to 5: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
 }

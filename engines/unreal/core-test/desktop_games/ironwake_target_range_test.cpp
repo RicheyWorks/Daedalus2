@@ -6,18 +6,18 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop { namespace platformers {
 struct TestAccess {
-    static const std::vector<ContraBullet>& Shots(const ContraGame& G) {return G.Bullets;}
-    static void ShotAt(ContraGame& G,double X,double Y,int Life=60,bool Twice=false) {
+    static const std::vector<IronwakeBullet>& Shots(const IronwakeGame& G) {return G.Bullets;}
+    static void ShotAt(IronwakeGame& G,double X,double Y,int Life=60,bool Twice=false) {
         G.Bullets={{X-12,Y,12,0,Life}};if(Twice) G.Bullets.push_back({X-11,Y,12,0,Life});
     }
-    static std::uint32_t NextRandom(const ContraGame& G) {auto R=G.Rng;return R.Next();}
-    static std::string PlayerCode(const ContraPlayer& P) {
+    static std::uint32_t NextRandom(const IronwakeGame& G) {auto R=G.Rng;return R.Next();}
+    static std::string PlayerCode(const IronwakePlayer& P) {
         std::ostringstream O;O.precision(17);O<<P.X<<' '<<P.Y<<' '<<P.VY<<' '<<P.FacingRight<<' '<<P.OnGround<<' '<<P.Crouching<<' '<<P.Lives<<' '<<P.Cooldown
             <<' '<<P.FireRate<<' '<<P.SpreadTimer<<' '<<P.Invincible<<' '<<P.Score<<' '<<P.Spread<<' '<<P.GroundGraceFrames;return O.str();
     }
-    static std::string Snapshot(const ContraGame& G) {
+    static std::string Snapshot(const IronwakeGame& G) {
         std::ostringstream O;O.precision(17);O<<G.Option<<' '<<G.RangeStage<<' '<<G.SessionSeed<<' '<<G.CameraX<<' '<<G.Progress<<' '<<G.Over<<' '<<G.Won<<' '<<G.FinalBossSpawned<<' '<<G.AtTitle<<' '<<G.NamedKeyInput<<' '<<G.CheatIndex<<' '<<PlayerCode(G.Player);
-        const auto Bullets=[&](const std::vector<ContraBullet>& V){O<<' '<<V.size();for(const auto& B:V) O<<' '<<B.X<<' '<<B.Y<<' '<<B.VX<<' '<<B.VY<<' '<<B.Life;};Bullets(G.Bullets);Bullets(G.EnemyBullets);
+        const auto Bullets=[&](const std::vector<IronwakeBullet>& V){O<<' '<<V.size();for(const auto& B:V) O<<' '<<B.X<<' '<<B.Y<<' '<<B.VX<<' '<<B.VY<<' '<<B.Life;};Bullets(G.Bullets);Bullets(G.EnemyBullets);
         O<<' '<<G.Enemies.size();for(const auto& E:G.Enemies) O<<' '<<E.X<<' '<<E.Y<<' '<<E.VX<<' '<<E.Health<<' '<<E.ShootTimer<<' '<<E.Kind;
         O<<' '<<G.Powerups.size();for(const auto& P:G.Powerups) O<<' '<<P.X<<' '<<P.Y<<' '<<P.Bob<<' '<<P.Rapid;
         O<<' '<<G.Particles.size();for(const auto& P:G.Particles) O<<' '<<P.X<<' '<<P.Y<<' '<<P.VX<<' '<<P.VY<<' '<<P.Life<<' '<<static_cast<int>(P.Tint.R)<<' '<<static_cast<int>(P.Tint.G)<<' '<<static_cast<int>(P.Tint.B)<<' '<<static_cast<int>(P.Tint.A);
@@ -27,7 +27,7 @@ struct TestAccess {
 };
 }}}
 namespace {
-using Contra=ContraGame;
+using Ironwake=IronwakeGame;
 using Access=platformers::TestAccess;
 constexpr std::array<Rect,3> Targets{{{340,485,24,20},{620,340,24,40},{970,503,24,15}}};
 int Checks=0,Failed=0;
@@ -39,30 +39,30 @@ bool SameFrame(const Frame& A,const Frame& B) {
         if(C.Kind!=D.Kind||C.A.X!=D.A.X||C.A.Y!=D.A.Y||C.B.X!=D.B.X||C.B.Y!=D.B.Y||C.C.X!=D.C.X||C.C.Y!=D.C.Y||C.Size!=D.Size||C.Label!=D.Label||!Tint(C.Tint,D.Tint)) return false;
     }return true;
 }
-bool SameShots(const std::vector<platformers::ContraBullet>& A,const std::vector<platformers::ContraBullet>& B) {
+bool SameShots(const std::vector<platformers::IronwakeBullet>& A,const std::vector<platformers::IronwakeBullet>& B) {
     if(A.size()!=B.size()) return false;
     for(std::size_t N=0;N<A.size();++N) if(A[N].X!=B[N].X||A[N].Y!=B[N].Y||A[N].VX!=B[N].VX||A[N].VY!=B[N].VY||A[N].Life!=B[N].Life) return false;
     return true;
 }
-Contra Range(std::uint32_t Seed=730) {Contra G;G.SetOption(1,Seed);return G;}
+Ironwake Range(std::uint32_t Seed=730) {Ironwake G;G.SetOption(1,Seed);return G;}
 void ModesAndPhysics() {
-    Contra Full;Full.Reset(730);Check(Full.GetOption()==0&&Full.EnemyCount()==2,"Full run remains default with its original two enemies");
+    Ironwake Full;Full.Reset(730);Check(Full.GetOption()==0&&Full.EnemyCount()==2,"Full run remains default with its original two enemies");
     auto G=Range();Random R;R.Seed(730);Check(G.GetOption()==1&&!G.IsAtTitle()&&G.GetRangeHits()==0&&G.EnemyCount()==0&&G.BulletCount()==0&&G.GetStatus().Score==0&&G.GetStatus().Lives==3&&Access::NextRandom(G)==R.Next(),"explicit range selection starts active with normal player state and no spawn draws");
     G.SetOption(0,730);Check(Access::Snapshot(G)==Access::Snapshot(Full),"returning to Full run restores its complete original seeded state");
     for(int N=0;N<4;++N) {Input I;I.Right=N<2;I.Fire=N<3;G.Step(I);Full.Step(I);}Check(Access::Snapshot(G)==Access::Snapshot(Full),"short full-run companion retains combat physics and RNG");
-    G=Range();auto Player=G.GetPlayer();std::vector<platformers::ContraBullet> Bullets;double Camera=0;
+    G=Range();auto Player=G.GetPlayer();std::vector<platformers::IronwakeBullet> Bullets;double Camera=0;
     for(int N=0;N<12;++N) {
         Input I;I.Right=N<4;I.Jump=I.JumpPressed=N==4;I.Down=N>=8;I.Fire=true;I.FirePressed=N==0;
         if(I.FirePressed) Player.Shoot(Bullets);
-        Player.Update(I,platformers::ContraPlatforms(),Camera);if(I.Fire||I.FirePressed) Player.Shoot(Bullets);
+        Player.Update(I,platformers::IronwakePlatforms(),Camera);if(I.Fire||I.FirePressed) Player.Shoot(Bullets);
         Camera=Camera*.85+std::max(0.0,Player.X-350)*.15;for(auto& B:Bullets) B.Update();
         Bullets.erase(std::remove_if(Bullets.begin(),Bullets.end(),[&](const auto& B){return B.Life<=0||B.X>Camera+900||B.X<Camera-100;}),Bullets.end());G.Step(I);
         Check(G.GetRangeHits()==0&&Access::PlayerCode(G.GetPlayer())==Access::PlayerCode(Player)&&SameShots(Access::Shots(G),Bullets)&&G.GetCameraX()==Camera,"range reuses exact player shoot update camera and projectile expiry order");
     }
     G=Range();const auto Before=Access::NextRandom(G);Input Walk;Walk.Right=true;for(int N=0;N<600;++N) G.Step(Walk);
-    Check(G.GetPlayer().X>Contra::FinishX&&!G.GetStatus().Over&&!G.GetStatus().Won&&G.GetRangeHits()==0&&G.EnemyCount()==0&&G.BulletCount()==0&&G.GetStatus().Lives==3&&G.GetStatus().Score==0&&Access::NextRandom(G)==Before,"long safe range movement neither spawns threats nor uses the full-run distance victory");
+    Check(G.GetPlayer().X>Ironwake::FinishX&&!G.GetStatus().Over&&!G.GetStatus().Won&&G.GetRangeHits()==0&&G.EnemyCount()==0&&G.BulletCount()==0&&G.GetStatus().Lives==3&&G.GetStatus().Score==0&&Access::NextRandom(G)==Before,"long safe range movement neither spawns threats nor uses the full-run distance victory");
 }
-bool PublicRoute(std::array<Contra,3>& Stages,Contra& Complete) {
+bool PublicRoute(std::array<Ironwake,3>& Stages,Ironwake& Complete) {
     auto G=Range();Stages[0]=G;int Steps=0;const auto Step=[&](const Input& I){G.Step(I);++Steps;};Input Fire;Fire.Fire=true;
     Step(Fire);Check(Access::Shots(G).size()==1&&Access::Shots(G)[0].Y==496&&G.GetPlayer().Cooldown==8,"standing held shot retains its original height and eight-step cooldown");
     for(int N=1;N<40&&G.GetRangeHits()==0;++N) Step(Fire);
@@ -76,9 +76,9 @@ bool PublicRoute(std::array<Contra,3>& Stages,Contra& Complete) {
     Input LowFire=Fire;LowFire.Down=true;Step(LowFire);Check(Access::Shots(G).size()==1&&Access::Shots(G)[0].Y==512&&G.GetPlayer().Cooldown==8,"crouched held shot retains its original low muzzle height and cooldown");
     for(int N=1;N<40&&!G.GetStatus().Over;++N) Step(LowFire);
     Check(G.GetRangeHits()==3&&G.GetStatus().Won&&G.GetStatus().Over&&G.GetStatus().Score==0&&G.GetStatus().Lives==3&&Steps<=303,"public standing jumping and crouching shots complete all targets without score or damage changes");
-    std::cout<<"Contra range public route: "<<Steps<<" steps\n";Complete=G;return G.GetStatus().Won;
+    std::cout<<"Ironwake range public route: "<<Steps<<" steps\n";Complete=G;return G.GetStatus().Won;
 }
-void BoundariesAndPurity(const std::array<Contra,3>& Stages) {
+void BoundariesAndPurity(const std::array<Ironwake,3>& Stages) {
     for(std::size_t N=0;N<Stages.size();++N) {
         auto G=Stages[N];const auto T=Targets[N];Access::ShotAt(G,T.X+2,T.Y+2,60,true);G.Step({});
         Check(G.GetRangeHits()==static_cast<int>(N)+1&&Access::Shots(G).size()==1&&Access::Shots(G)[0].X==T.X+3&&G.GetStatus().Score==0,"active target consumes exactly one real updated bullet per step");
@@ -93,7 +93,7 @@ void BoundariesAndPurity(const std::array<Contra,3>& Stages) {
     for(int N=0;N<4;++N) {G.Render(Again);G.GetStatus();G.GetRangeHits();}Check(Access::Snapshot(G)==Before&&SameFrame(F,Again),"render and progress getters preserve the whole range and both RNG streams");
     G.Reset(99);Check(G.GetOption()==1&&Access::Snapshot(G)==Access::Snapshot(Range(99)),"Reset keeps range mode while clearing targets bullets particles and progress");
 }
-void TitleAndRetry(const Contra& Complete) {
+void TitleAndRetry(const Ironwake& Complete) {
     auto G=Range();G.EnterTitle();Input Held;Held.Fire=Held.Jump=true;Held.JumpPressed=true;G.Step(Held);
     Check(G.GetOption()==1&&G.IsAtTitle()&&G.BulletCount()==0,"range retains title's explicit raw-start requirement");
     for(int Key:{0,0,1,1,2,3,2,3,4,5}) G.SourceKeyDown(Key);
@@ -107,18 +107,18 @@ void TitleAndRetry(const Contra& Complete) {
     Check(G.GetOption()==1&&!G.GetStatus().Over&&G.GetRangeHits()==0&&G.GetPlayer().Lives==3&&G.BulletCount()==0&&Access::Snapshot(G)==Access::Snapshot(Expected),"fresh Enter retry keeps range through the existing named-key lifecycle");
 }
 void DriverLifecycle() {
-    Driver D;Check(D.Select("contra",730)&&D.GetOption()==0,"fresh Driver selection defaults to Full run title");D.Advance(Driver::StepSeconds*2.5);Input Stale;Stale.Right=Stale.Fire=Stale.FirePressed=Stale.Jump=true;D.SetInput(Stale);
+    Driver D;Check(D.Select("ironwake",730)&&D.GetOption()==0,"fresh Driver selection defaults to Full run title");D.Advance(Driver::StepSeconds*2.5);Input Stale;Stale.Right=Stale.Fire=Stale.FirePressed=Stale.Jump=true;D.SetInput(Stale);
     Check(D.SetOption(1)&&D.GetOption()==1&&D.Ticks()==0&&D.Advance(Driver::StepSeconds*.5)==0,"explicit range selection starts active and clears title input and partial time");
-    Contra Expected;Expected.EnterTitle();Expected.SetOption(1,730);Expected.Step({});Frame F;Expected.Render(F);
+    Ironwake Expected;Expected.EnterTitle();Expected.SetOption(1,730);Expected.Step({});Frame F;Expected.Render(F);
     Check(D.Advance(Driver::StepSeconds*.5)==1&&SameFrame(D.GetFrame(),F),"first range step has no queued shot jump or movement");
     D.SetPaused(true);D.SetInput(Stale);const auto Before=D.GetFrame();Check(D.Advance(Driver::StepSeconds*8)==0&&SameFrame(Before,D.GetFrame()),"Driver pause freezes the range");
     D.Restart();Expected.Reset(730);Expected.Render(F);Check(D.GetOption()==1&&!D.IsPaused()&&D.Ticks()==0&&SameFrame(D.GetFrame(),F),"Driver Restart retains range while clearing paused input and target progress");
     Expected.Step({});Expected.Render(F);Check(D.Advance(Driver::StepSeconds)==1&&SameFrame(D.GetFrame(),F),"restart clears stale held actions before active simulation");
-    D.Select("contra",730);Contra Fresh;Fresh.EnterTitle();Fresh.Render(F);Check(D.GetOption()==0&&SameFrame(D.GetFrame(),F),"fresh cabinet selection returns to original Full run title");
+    D.Select("ironwake",730);Ironwake Fresh;Fresh.EnterTitle();Fresh.Render(F);Check(D.GetOption()==0&&SameFrame(D.GetFrame(),F),"fresh cabinet selection returns to original Full run title");
 }
 }
 int main() {
-    ModesAndPhysics();std::array<Contra,3> Stages;Contra Complete;
+    ModesAndPhysics();std::array<Ironwake,3> Stages;Ironwake Complete;
     if(PublicRoute(Stages,Complete)) {BoundariesAndPurity(Stages);TitleAndRetry(Complete);}DriverLifecycle();
-    std::cout<<"Contra target range: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
+    std::cout<<"Ironwake target range: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
 }

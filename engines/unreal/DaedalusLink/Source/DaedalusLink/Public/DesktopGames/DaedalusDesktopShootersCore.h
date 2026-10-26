@@ -49,8 +49,8 @@ template<std::size_t N> inline void MakeStars(std::array<Star,N>& Stars,Random& 
 
 // Latest Desktop asteroids_pygame_ce.py: ship inertia, splitting rocks and UFOs.
 // One Step is one source 60 Hz frame; host owns elapsed-time accumulation/input.
-class AsteroidsGame final : public Game {
-    friend struct AsteroidsTestAccess;
+class DriftstoneGame final : public Game {
+    friend struct DriftstoneTestAccess;
 public:
     struct Ship {
         double X=400,Y=300,Angle=-90,Vx=0,Vy=0;
@@ -328,10 +328,10 @@ private:
     }
 };
 
-// Source Sega-themed horizontal shooter. No enemy shots exist in the source.
+// Source Riftwing-themed horizontal shooter. No enemy shots exist in the source.
 // Native boss hit/engagement and held fire repair otherwise unreachable victory.
-class SegaShooterGame final : public Game {
-    friend struct SegaTestAccess;
+class RiftwingGame final : public Game {
+    friend struct RiftwingTestAccess;
 public:
     struct Bullet { double X=0,Y=0,Vx=10,Vy=0; bool Alive=true; void Update(){X+=Vx;Y+=Vy;} };
     struct Player {

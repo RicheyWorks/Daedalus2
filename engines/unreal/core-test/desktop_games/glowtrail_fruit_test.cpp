@@ -6,26 +6,26 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop {
 struct MazeTestAccess {
-    static void IsolateGhosts(PacmanGame& G) {for(auto& E:G.Ghosts) {E.X=E.Y=-1000;E.Alive=true;E.Frightened=false;E.FrightenedTimer=0;}}
-    static void Progress(PacmanGame& G,int Eaten,bool LeaveHeroDot=false) {
+    static void IsolateGhosts(GlowtrailGame& G) {for(auto& E:G.Ghosts) {E.X=E.Y=-1000;E.Alive=true;E.Frightened=false;E.FrightenedTimer=0;}}
+    static void Progress(GlowtrailGame& G,int Eaten,bool LeaveHeroDot=false) {
         for(auto& P:G.Pellets) P.Alive=true;
         int Taken=0;
-        const auto Take=[&](PacmanGame::Pellet& P){if(P.Alive&&Taken<Eaten) {P.Alive=false;++Taken;}};
-        if(!LeaveHeroDot) for(auto& P:G.Pellets) if(PacmanGame::DistanceToPellet(G.Hero,P)<12) Take(P);
-        for(auto& P:G.Pellets) if(!LeaveHeroDot||PacmanGame::DistanceToPellet(G.Hero,P)>=12) Take(P);
-        G.Remaining=static_cast<int>(G.Pellets.size())-Taken;G.Score=G.FruitCollected*PacmanGame::FruitPoints;
+        const auto Take=[&](GlowtrailGame::Pellet& P){if(P.Alive&&Taken<Eaten) {P.Alive=false;++Taken;}};
+        if(!LeaveHeroDot) for(auto& P:G.Pellets) if(GlowtrailGame::DistanceToPellet(G.Hero,P)<12) Take(P);
+        for(auto& P:G.Pellets) if(!LeaveHeroDot||GlowtrailGame::DistanceToPellet(G.Hero,P)>=12) Take(P);
+        G.Remaining=static_cast<int>(G.Pellets.size())-Taken;G.Score=G.FruitCollected*GlowtrailGame::FruitPoints;
         for(const auto& P:G.Pellets) if(!P.Alive) G.Score+=P.Power?50:10;
     }
-    static void At(PacmanGame& G,double X,double Y) {G.Hero.X=X;G.Hero.Y=Y;G.Hero.Dir=G.Hero.Next={};}
-    static void LastFrames(PacmanGame& G,int Frames) {G.FruitFrames=Frames;} // Retained-spawn expiry boundaries only.
-    static int Issued(const PacmanGame& G) {return G.FruitIssued;}
-    static bool Pending(const PacmanGame& G) {return G.FruitPending;}
-    static int RawFrames(const PacmanGame& G) {return G.FruitFrames;}
-    static void Contact(PacmanGame& G,int Lives,bool Frightened=false,int Grace=0) {
-        At(G,PacmanGame::FruitSpot.X,PacmanGame::FruitSpot.Y);G.Lives=Lives;G.RespawnFrames=Grace;
+    static void At(GlowtrailGame& G,double X,double Y) {G.Hero.X=X;G.Hero.Y=Y;G.Hero.Dir=G.Hero.Next={};}
+    static void LastFrames(GlowtrailGame& G,int Frames) {G.FruitFrames=Frames;} // Retained-spawn expiry boundaries only.
+    static int Issued(const GlowtrailGame& G) {return G.FruitIssued;}
+    static bool Pending(const GlowtrailGame& G) {return G.FruitPending;}
+    static int RawFrames(const GlowtrailGame& G) {return G.FruitFrames;}
+    static void Contact(GlowtrailGame& G,int Lives,bool Frightened=false,int Grace=0) {
+        At(G,GlowtrailGame::FruitSpot.X,GlowtrailGame::FruitSpot.Y);G.Lives=Lives;G.RespawnFrames=Grace;
         auto& E=G.Ghosts[0];E.X=G.Hero.X;E.Y=G.Hero.Y;E.Dir={};E.Alive=true;E.Frightened=Frightened;E.FrightenedTimer=300;
     }
-    static std::string Snapshot(const PacmanGame& G,bool Fruit=true) {
+    static std::string Snapshot(const GlowtrailGame& G,bool Fruit=true) {
         std::ostringstream O;O.precision(17);if(Fruit) O<<G.Option<<' '<<G.FruitFrames<<' '<<G.FruitIssued<<' '<<G.FruitCollected<<' '<<G.FruitPending<<' ';
         O<<G.SessionSeed<<' '<<G.Score<<' '<<G.Lives<<' '<<G.Remaining<<' '<<G.Level<<' '<<G.RespawnFrames<<' '<<G.Over<<' '<<G.Won;
         O<<' '<<G.Hero.X<<' '<<G.Hero.Y<<' '<<G.Hero.Dir.X<<' '<<G.Hero.Dir.Y<<' '<<G.Hero.Next.X<<' '<<G.Hero.Next.Y<<' '<<G.Hero.Mouth;
@@ -36,7 +36,7 @@ struct MazeTestAccess {
 };
 }}
 namespace {
-using Pac=PacmanGame;
+using Pac=GlowtrailGame;
 using Access=MazeTestAccess;
 int Checks=0,Failed=0;
 void Check(bool Ok,const std::string& Why) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<Why<<'\n';}}
@@ -112,7 +112,7 @@ void ResultAndDriver(const Pac& Result) {
     for(int N=0;N<8;++N) G.Step(Held);
     G.Render(Again);Check(Access::Snapshot(G)==Before&&SameFrame(F,Again),"result freezes hidden fruit state alongside held movement and timers");
     Input Retry;Retry.FirePressed=true;G.Step(Retry);Check(G.GetOption()==1&&Access::Snapshot(G)==Access::Snapshot(Bonus()),"fresh semantic replay keeps Bonus mode and clears both opportunities");
-    Driver D;Check(D.Select("pacman",730)&&D.GetOption()==0,"Driver defaults a new Glowtrail cabinet to Classic");D.Advance(Driver::StepSeconds*2.5);Input Stale;Stale.Right=Stale.FirePressed=true;D.SetInput(Stale);
+    Driver D;Check(D.Select("glowtrail",730)&&D.GetOption()==0,"Driver defaults a new Glowtrail cabinet to Classic");D.Advance(Driver::StepSeconds*2.5);Input Stale;Stale.Right=Stale.FirePressed=true;D.SetInput(Stale);
     Check(D.SetOption(1)&&D.GetOption()==1&&D.Ticks()==0&&D.Advance(Driver::StepSeconds*.5)==0,"Bonus selection clears pending input and old partial time");
     auto Expected=Bonus();Expected.Step({});Expected.Render(F);Check(D.Advance(Driver::StepSeconds*.5)==1&&SameFrame(D.GetFrame(),F),"first Bonus step has no stale movement or replay edge");
     D.SetPaused(true);D.SetInput(Stale);const auto Paused=D.GetFrame();Check(D.Advance(Driver::StepSeconds*8)==0&&SameFrame(Paused,D.GetFrame()),"pause freezes active-play timing");
@@ -122,5 +122,5 @@ void ResultAndDriver(const Pac& Result) {
 }
 int main() {
     const auto Spawned=FirstSpawn();ModesAndPublicRoute(Spawned);QueueAndBoundaries(Spawned);Pac Result;CollisionAndResults(Spawned,Result);ResultAndDriver(Result);
-    std::cout<<"Pacman bonus fruit: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
+    std::cout<<"Glowtrail bonus fruit: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
 }

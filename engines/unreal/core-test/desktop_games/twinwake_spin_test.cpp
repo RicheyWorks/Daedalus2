@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-#include "DesktopGames/DaedalusDesktopPongCore.h"
+#include "DesktopGames/DaedalusDesktopTwinwakeCore.h"
 #include <iostream>
 #include <limits>
 
@@ -7,17 +7,17 @@ using namespace daedalus::desktop;
 namespace {
 int Checks=0,Failed=0;
 void Check(bool Ok,const char* What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
-PongGame Return(const Input& I,double PlayerY=250,double BallVY=3,double BallY=300) {
-    PongGame G;G.Reset(730);G.S.PlayerY=PlayerY;G.S.BallX=65;G.S.BallY=BallY;G.S.BallVX=-5;G.S.BallVY=BallVY;
+TwinwakeGame Return(const Input& I,double PlayerY=250,double BallVY=3,double BallY=300) {
+    TwinwakeGame G;G.Reset(730);G.S.PlayerY=PlayerY;G.S.BallX=65;G.S.BallY=BallY;G.S.BallVX=-5;G.S.BallVY=BallVY;
     G.Step(I);return G;
 }
-bool SameState(const PongGame::State& A,const PongGame::State& B) {
+bool SameState(const TwinwakeGame::State& A,const TwinwakeGame::State& B) {
     return A.PlayerY==B.PlayerY && A.ComputerY==B.ComputerY && A.BallX==B.BallX && A.BallY==B.BallY
         && A.BallVX==B.BallVX && A.BallVY==B.BallVY && A.PlayerScore==B.PlayerScore && A.ComputerScore==B.ComputerScore
         && A.ServeFrames==B.ServeFrames && A.ContactFrames==B.ContactFrames && A.PointFrames==B.PointFrames
         && A.LastPoint==B.LastPoint && A.LastContact==B.LastContact && A.Rally==B.Rally && A.BestRally==B.BestRally;
 }
-Input FollowThenMoveAtImpact(const PongGame::State& S) {
+Input FollowThenMoveAtImpact(const TwinwakeGame::State& S) {
     Input I;
     if(S.BallVX<0 && S.BallX<105) {I.Up=S.BallVY<0;I.Down=S.BallVY>0;}
     else I.AxisY=Clamp((S.BallY-(S.PlayerY+50))/8,-1,1);
@@ -30,7 +30,7 @@ bool HasText(const Frame& F,const std::string& Label) {
 }
 
 int main() {
-    PongGame G=Return({});
+    TwinwakeGame G=Return({});
     Check(G.S.BallVX==5 && G.S.BallVY==3 && G.S.Rally==1,"neutral source return keeps its angle and one contact");
     G=Return({},250,-6);Check(G.S.BallVY==-6,"neutral return preserves existing spin");
     Input Up,Down,PadUp,PadDown;Up.Up=true;Down.Down=true;PadUp.PadUp=true;PadDown.PadDown=true;
@@ -103,6 +103,6 @@ int main() {
     Check(FirstReturn>0 && FirstReturn<=420 && FirstDelta==-6 && FirstVy==-6,"ordinary input creates a moving return from real Reset");
     Check(ScoreFrame>FirstReturn && ScoreFrame<=420 && G.S.PlayerScore==1 && G.S.ComputerScore==0,"moving return reaches a real player point through unchanged CPU/scoring");
     Check(!G.GetStatus().Over && !G.GetStatus().Won,"successful return does not invent a match-ending threshold");
-    std::cout<<"Pong moving-paddle spin: "<<Checks-Failed<<'/'<<Checks<<" checks passed; return "<<FirstReturn<<", point "<<ScoreFrame<<'\n';
+    std::cout<<"Twinwake moving-paddle spin: "<<Checks-Failed<<'/'<<Checks<<" checks passed; return "<<FirstReturn<<", point "<<ScoreFrame<<'\n';
     return Failed?1:0;
 }

@@ -7,7 +7,7 @@
 #include <string>
 
 namespace daedalus { namespace desktop {
-class PongGame final : public Game {
+class TwinwakeGame final : public Game {
     int Option=0;
     bool Practice() const { return Option==1 || Option==3; }
     bool QuickMatch() const { return Option==2; }

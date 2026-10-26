@@ -6,9 +6,9 @@
   "canonicalSelection": "Latest LastWriteTimeUtc plus revision filenames and verified source evolution; originals preserved",
   "games": [
     {
-      "id": "pong",
-      "sourceTitle": "Pong",
-      "source": "pong (1).py",
+      "id": "twinwake",
+      "sourceTitle": "Twinwake",
+      "source": "twinwake (1).py",
       "modifiedUtc": "2026-05-01T04:32:22Z",
       "sha256": "f098754ca1d5171f34560eb1f444d1b2cfd42b90a81478c737e182d2e2957d23",
       "framework": "Python / Pygame; Pygame CE declared by many headers",
@@ -24,8 +24,8 @@
       "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
-      "id": "asteroids",
-      "sourceTitle": "Asteroids",
+      "id": "driftstone",
+      "sourceTitle": "Driftstone",
       "source": "asteroids_pygame_ce.py",
       "modifiedUtc": "2026-05-02T08:17:04Z",
       "sha256": "8a46338b4d93d9447df7feab40dff21b99bfa0ce7614698681b8a5c91f0fc20b",
@@ -42,8 +42,8 @@
       "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
-      "id": "pacman",
-      "sourceTitle": "Pac-Man",
+      "id": "glowtrail",
+      "sourceTitle": "Glowtrail",
       "source": "pacman.py",
       "modifiedUtc": "2026-05-01T02:27:10Z",
       "sha256": "6cad8d138888c7a18d80e0e034546a49e57618610ac3e5dcce9886a7358ad8ed",
@@ -51,8 +51,8 @@
       "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
-      "id": "sega_shooter",
-      "sourceTitle": "Sega Space Shooter",
+      "id": "riftwing",
+      "sourceTitle": "Riftwing Space Shooter",
       "source": "sega_space_shooter.py",
       "modifiedUtc": "2026-05-01T02:59:48Z",
       "sha256": "5108b3065fa91332570445adaccbb8c5bb77e437bc0bd8e37213737e931ad0db",
@@ -60,8 +60,8 @@
       "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
-      "id": "shadow_ninja",
-      "sourceTitle": "Shadow Ninja",
+      "id": "emberstep",
+      "sourceTitle": "Emberstep Ascent",
       "source": "shadow_ninja_platform_fixed.py",
       "modifiedUtc": "2026-05-02T08:22:10Z",
       "sha256": "83dd921b95043a2723b61513d84471adbfaede29dd18744367835fbc3aa03e36",
@@ -79,7 +79,7 @@
     },
     {
       "id": "dodge_ball",
-      "sourceTitle": "Super Dodge Ball Tournament",
+      "sourceTitle": "Courtyard Clash Tournament",
       "source": "super_dodge_ball_fixed.py",
       "modifiedUtc": "2026-05-02T08:24:56Z",
       "sha256": "359b4bc045b00186e9d3ee915863de214453b22df8b81a881402ee6b49d21cb6",
@@ -87,8 +87,8 @@
       "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
-      "id": "contra",
-      "sourceTitle": "CONTRA",
+      "id": "ironwake",
+      "sourceTitle": "IRONWAKE",
       "source": "contra.py",
       "modifiedUtc": "2026-05-01T02:14:59Z",
       "sha256": "2e845d67754fc81feeea881b7c6d3068a60042c3371e9f8fdeae5a8616d09107",
@@ -96,8 +96,8 @@
       "stage": "source-pinned; native-tested; runtime-wrapped and reviewed; isolated UHT, actor/widget and generated reflection compiled; plugin link/load and live acceptance pending"
     },
     {
-      "id": "zelda",
-      "sourceTitle": "Zelda: A Link to the Past",
+      "id": "lanternwild",
+      "sourceTitle": "Lanternwild Quest",
       "source": "zelda.py",
       "modifiedUtc": "2026-05-01T02:22:14Z",
       "sha256": "713f6de7c27a92d65fdedd77a6c15a7e80a964d098d5ba209dbf32e648cc9bdd",

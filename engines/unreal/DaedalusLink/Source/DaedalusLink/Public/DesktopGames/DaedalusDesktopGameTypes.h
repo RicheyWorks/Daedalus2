@@ -17,7 +17,7 @@ struct Color { std::uint8_t R = 255, G = 255, B = 255, A = 255; };
 inline constexpr Color White{255,255,255,255}, Black{0,0,0,255};
 
 // One source-style 60 Hz step. Digital direction and analog axes are separate:
-// latest Pong supports both keyboard and left-stick input in the same frame.
+// latest Twinwake supports both keyboard and left-stick input in the same frame.
 struct Input {
     bool Left = false, Right = false, Up = false, Down = false;
     bool PadLeft = false, PadRight = false, PadUp = false, PadDown = false;
