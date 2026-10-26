@@ -64,7 +64,7 @@ private:
 	FText StatusText() const;
 	FText ControlText() const;
 	FText LeaderboardText() const;
-	FText MinesweeperDifficultyText() const;
+	FText BeaconSweepDifficultyText() const;
 	EVisibility StarVisibility() const;
 	EVisibility TwinwakeVisibility() const;
 	EVisibility FootballVisibility() const;
@@ -74,7 +74,7 @@ private:
 	EVisibility IronwakeVisibility() const;
 	EVisibility GlowtrailVisibility() const;
 	EVisibility DungeonVisibility() const;
-	EVisibility MinesweeperVisibility() const;
+	EVisibility BeaconSweepVisibility() const;
 	EVisibility LeaderboardVisibility() const;
 	TSharedRef<SWidget> MakeGameRow(TSharedPtr<FString> Item) const;
 	void SelectCatalogChoice(TSharedPtr<FString> Item, ESelectInfo::Type Selection);

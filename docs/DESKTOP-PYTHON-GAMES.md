@@ -37,7 +37,7 @@ for copied/OneDrive files. Full SHA-256 pins are in `desktop-games-sources.json`
 | lanternwild | `zelda.py` | Sole script, May 1 | Maze slice |
 
 All are Python/Pygame; many source headers specify Pygame CE. The `(1)/(2)/(3)` and
-`fixed` scripts are revisions, not extra games. The unrelated ComputerPets/Minesweeper
+`fixed` scripts are revisions, not extra games. The unrelated ComputerPets/Beacon Sweep
 work is not a substitute for this collection. The native catalog contains these eleven games.
 The user's next requested additions are SudokuPro and BlackJackPro: thirteen requested game
 families in total, with the two Java additions assessed separately below.
@@ -98,17 +98,17 @@ refuses writing. New/restarted native runs deliberately retain the previous save
 new-game path deletes it. The port never reads or overwrites the Python originals' home save files.
 Per-game controls/features and intentional repairs are documented with each test family.
 
-## Minesweeper saved boards
+## Beacon Sweep saved boards
 
-The existing native Minesweeper now has **Save board**, **Continue saved board** and
+The existing native Beacon Sweep now has **Save board**, **Continue saved board** and
 **Save & Close** in its cabinet. Save & Close leaves the cabinet open if writing fails.
 Plain Close, Restart and game selection leave the previous saved board unchanged;
 Continue explicitly replaces the current board. One local slot is shared by this
-installation's Minesweeper cabinets, separate from Star Shooter's files.
+installation's Beacon Sweep cabinets, separate from Star Shooter's files.
 F5 saves and F9 continues the saved board. While paused, gamepad X saves and Y
 continues the saved board; P / Start returns to play.
 
-The Minesweeper cabinet also exposes the engine's three existing **New board**
+The Beacon Sweep cabinet also exposes the engine's three existing **New board**
 presets: 9 x 9 with 10 mines, 16 x 16 with 40, and 30 x 16 with 99. The current preset
 comes from the actor's active option, including after Continue. Selecting any
 preset, even the current one, starts a fresh board at the retained seed. Save
@@ -134,7 +134,7 @@ clicks; resume or start another board explicitly. Keyboard/gamepad actions remai
 available. Each accepted mouse press clears prior held inputs and acts once,
 without adding a timer step or changing first-reveal safety.
 
-Minesweeper also uses the native **How to play** panel (F1 / left-stick click).
+Beacon Sweep also uses the native **How to play** panel (F1 / left-stick click).
 Readable sections explain the clear-every-safe-cell goal, safe opening, diagonal
 number clues, flood reveal, optional flags, the estimated mine counter, chording
 risks, mouse/keyboard/controller controls and exact-board save/continue. The
@@ -145,7 +145,7 @@ Help is tied to the game that opened it and closes if the active game changes;
 it cannot resume a different game. No game rules, timer or save records change.
 Native guide layout/focus, mixed input and save/continue acceptance remain pending.
 
-`Saved/DaedalusDesktopGames/minesweeper.dgs` stores the exact board, flags, selected
+`Saved/DaedalusDesktopGames/beacon_sweep.dgs` stores the exact board, flags, selected
 cell, difficulty, active timer and original seed in a bounded versioned `DGM1` record.
 Saving before the first reveal retains its deterministic 3x3 safe opening. Continue
 does not add elapsed wall time or restore held inputs. Won and lost boards retain
@@ -155,7 +155,7 @@ zero-tick result also roundtrips in the same `DGM1` format.
 
 The focused portable test covers all difficulties, pre-reveal and planted roundtrips,
 continued play through completion/loss, refused saves, input cleanup and Star save
-compatibility. See [Minesweeper notes](../engines/unreal/core-test/desktop_games/minesweeper_notes.md)
+compatibility. See [Beacon Sweep notes](../engines/unreal/core-test/desktop_games/beacon_sweep_notes.md)
 for format and reproduction. Unreal compilation, native filesystem failure handling
 and live Slate controls remain acceptance work; portable checks do not prove them.
 

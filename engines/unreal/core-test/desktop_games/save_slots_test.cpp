@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Host save-slot table: every slot is a real save-capable game with a unique,
-// safe file name; Minesweeper and Star keep their original files and styles;
+// safe file name; Beacon Sweep and Star keep their original files and styles;
 // unslotted games keep the legacy Star fallback; manual slots round-trip a
 // started run through the same Driver path the host uses for Continue.
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
@@ -45,7 +45,7 @@ int main() {
         Check(E.Select(ResumeGameId(Id),11) && E.RestoreSave(Save),Id+": Continue path restores the save");
         Check(E.CaptureSave()==Save,Id+": Continue path round-trips");
     }
-    Check(std::string(SaveFileFor("minesweeper"))=="minesweeper.dgs" && SupportsManualSave("minesweeper"),"minesweeper unchanged: manual, minesweeper.dgs");
+    Check(std::string(SaveFileFor("beacon_sweep"))=="beacon_sweep.dgs" && SupportsManualSave("beacon_sweep"),"beacon_sweep unchanged: manual, beacon_sweep.dgs");
     Check(std::string(SaveFileFor("star_shooter"))=="star_shooter.dgs" && !SupportsManualSave("star_shooter"),"star unchanged: source menu only, star_shooter.dgs");
     for(const GameAlias& Alias:GameAliases) {
         const std::string Old=Alias.OldId,New=Alias.Id;
@@ -55,7 +55,7 @@ int main() {
         Check(CreateGame(Old)!=nullptr,Old+": old id still creates the game");
         Driver D;Check(D.Select(Old,4) && D.ActiveId()==New,Old+": driver reports the new id");
     }
-    Check(LegacySaveFileFor("minesweeper")==nullptr && LegacySaveFileFor("star_shooter")==nullptr && CanonicalGameId("dodge_ball")=="dodge_ball","unrenamed games have no alias");
+    Check(LegacySaveFileFor("star_shooter")==nullptr && CanonicalGameId("dodge_ball")=="dodge_ball","unrenamed games have no alias");
     for(const char* Id:{"","nope"}) {
         Check(!FindSaveSlot(Id) && !SupportsManualSave(Id),std::string(Id)+": no slot, no manual save");
         Check(std::string(ResumeGameId(Id))=="star_shooter" && std::string(SaveFileFor(Id))=="star_shooter.dgs",std::string(Id)+": keeps legacy Star fallback");

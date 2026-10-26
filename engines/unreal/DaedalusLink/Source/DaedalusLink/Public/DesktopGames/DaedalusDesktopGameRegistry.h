@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include "DaedalusDesktopTwinwakeCore.h"
-#include "DaedalusDesktopMinesweeperCore.h"
+#include "DaedalusDesktopBeaconSweepCore.h"
 #include "DaedalusDesktopMazeCore.h"
 #include "DaedalusDesktopShootersCore.h"
 #include "DaedalusDesktopSportsCore.h"
@@ -14,7 +14,7 @@ namespace daedalus { namespace desktop {
 struct Entry { std::string Id, Title, Controls; };
 inline const std::vector<Entry>& Catalog() {
     static const std::vector<Entry> Entries{
-        {"minesweeper","Minesweeper","Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord"},
+        {"beacon_sweep","Beacon Sweep","Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord"},
         {"twinwake","Twinwake Volley","A fast duel across the twinwake court. Up/Down or left stick: paddle"},
         {"dungeon","Dungeon Prototype","Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick; Shift/pad Y: trail"},
         {"driftstone","Driftstone Patrol","Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot"},
@@ -31,7 +31,7 @@ inline const std::vector<Entry>& Catalog() {
 }
 inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     const std::string Id=CanonicalGameId(RawId);
-    if(Id=="minesweeper") return std::make_unique<MinesweeperGame>();
+    if(Id=="beacon_sweep") return std::make_unique<BeaconSweepGame>();
     if(Id=="twinwake") return std::make_unique<TwinwakeGame>();
     if(Id=="dungeon") return std::make_unique<DungeonGame>();
     if(Id=="driftstone") return std::make_unique<DriftstoneGame>();
@@ -70,8 +70,8 @@ public:
         Active->Reset(Seed); Controls={}; PendingSeconds=0; StepCount=0; Paused=false; Refresh();
     }
     // Explicit fresh puzzle, separate from same-seed Restart. Never writes a saved board.
-    bool NewMinesweeperPuzzle(std::uint32_t SeedCandidate) {
-        if(!Active || Id!="minesweeper" || HasSaveRequest()) return false;
+    bool NewBeaconSweepPuzzle(std::uint32_t SeedCandidate) {
+        if(!Active || Id!="beacon_sweep" || HasSaveRequest()) return false;
         // Keep native int32 seed presentation nonnegative. Existing uint32 saves stay readable.
         std::uint32_t NextSeed=SeedCandidate&0x7fffffffu;
         if(Random::InitialState(NextSeed)==Random::InitialState(Seed)) NextSeed=(NextSeed+1u)&0x7fffffffu;

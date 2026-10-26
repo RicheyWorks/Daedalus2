@@ -30,7 +30,7 @@
       "include": [
         "blackjack",
         "sudoku",
-        "minesweeper"
+        "beacon_sweep"
       ]
     },
     {

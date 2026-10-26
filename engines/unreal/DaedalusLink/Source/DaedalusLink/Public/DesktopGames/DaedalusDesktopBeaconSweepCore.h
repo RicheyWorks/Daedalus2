@@ -7,7 +7,7 @@
 #include <utility>
 namespace daedalus { namespace desktop {
 // Original native implementation. First reveal protects the entire 3x3 neighbourhood.
-class MinesweeperGame final : public Game {
+class BeaconSweepGame final : public Game {
     struct Cell { bool Mine=false, Open=false, Flag=false; int Near=0; };
     std::vector<Cell> Cells;
     Random Rng;
@@ -146,7 +146,7 @@ public:
             || !ReadNumber(In,1,SavedPlanted) || !ReadNumber(In,1,SavedLost) || !ReadNumber(In,1,SavedWon)
             || !(In>>Layout) || (In>>Extra)) return false;
         // Restore into a separate board: a refused file must never damage the live run.
-        MinesweeperGame Candidate;
+        BeaconSweepGame Candidate;
         Candidate.Option=static_cast<int>(SavedOption);Candidate.Reset(static_cast<std::uint32_t>(SavedSeed));
         if(SavedX>=static_cast<std::uint64_t>(Candidate.Width) || SavedY>=static_cast<std::uint64_t>(Candidate.Height)
             || Layout.size()!=Candidate.Cells.size()) return false;
@@ -190,7 +190,7 @@ public:
         return {Won?1000:Open,0,Lost||Won,Won,ProgressNote()+" | "+CellNote()+" "+ActionNote()};
     }
     void Render(Frame& F) const override {
-        F.Clear(800,600,{13,23,35,255});F.AddText(25,12,"MINESWEEPER",{116,224,195,255},26);
+        F.Clear(800,600,{13,23,35,255});F.AddText(25,12,"BEACON SWEEP",{116,224,195,255},26);
         F.AddText(25,48,ProgressNote(),White,18);
         const auto L=GetBoardLayout();const double Size=L.Size,Left=L.Left,Top=L.Top;
         for(int I=0;I<Width*Height;++I) {
