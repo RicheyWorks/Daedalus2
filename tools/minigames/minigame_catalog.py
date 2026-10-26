@@ -24,6 +24,7 @@ TESTS = ROOT / "engines/unreal/core-test/desktop_games"
 JAVA_HDR = ROOT / "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h"
 JAVA_PROTO = ROOT / "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/DaedalusJavaArcadeProtocol.h"
 JAVA_TESTS = ROOT / "engines/unreal/core-test/java_arcade/CMakeLists.txt"
+SLOTS_HDR = REG.parent / "DaedalusDesktopSaveSlots.h"
 OUT_JSON = ROOT / "docs/minigames/catalog.json"
 OUT_MD = ROOT / "docs/minigames/CATALOG.md"
 
@@ -206,6 +207,13 @@ def build():
             "capabilities": sorted(set(capmap.get(factory_map.get(gid, ""), [])) | verified.get(gid, set())),
             "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
         })
+    if SLOTS_HDR.exists():
+        slots = set(re.findall(r'\{"([a-z_]+)","[a-z_]+\.dgs",SaveStyle::', SLOTS_HDR.read_text(encoding="utf-8")))
+        saving = {g["id"] for g in games if "save_restore" in g["capabilities"]}
+        for gid in sorted(saving - slots):
+            errors.append(f"'{gid}' implements save/restore but has no host slot in DaedalusDesktopSaveSlots.h")
+        for gid in sorted(slots - saving):
+            errors.append(f"host save slot '{gid}' has no save/restore in its core")
     java = parse_java(errors)
     data = {
         "schema": "daedalus.minigames.catalog/v1",

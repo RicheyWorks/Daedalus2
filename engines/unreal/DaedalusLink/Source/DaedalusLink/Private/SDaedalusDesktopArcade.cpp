@@ -2,6 +2,7 @@
 #include "SDaedalusDesktopArcade.h"
 
 #include "DesktopGames/DaedalusDesktopMazeCore.h"
+#include "DesktopGames/DaedalusDesktopSaveSlots.h"
 #include "Engine/GameViewportClient.h"
 #include "Engine/LocalPlayer.h"
 #include "Framework/Application/SlateApplication.h"
@@ -203,6 +204,8 @@ namespace DesktopArcadeUI
 				FSlateDrawElement::MakeText(Elements, ++LayerId, Screen.ToPaintGeometry(LogicalSize, FSlateLayoutTransform(FVector2f(30.f, LogicalSize.Y * 0.45f))),
 					State.Id == TEXT("minesweeper")
 						? TEXT("PAUSED - P / Start: resume\nF5 / pad X: save board\nF9 / pad Y: continue saved board")
+						: daedalus::desktop::SupportsManualSave(TCHAR_TO_UTF8(*State.Id))
+						? TEXT("PAUSED - P / Start: resume\nF5 / pad X: save run\nF9 / pad Y: continue saved run")
 						: TEXT("PAUSED - P / Start or Resume to continue"), Font(24, true), ESlateDrawEffect::None, FLinearColor::White);
 			}
 			Elements.PopClip();
@@ -375,6 +378,29 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && Actor->GetState().bHasSavedRun; })
 					.OnClicked_Lambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->ResumeGame(); return FocusReply(); })
 					[SNew(STextBlock).Text(FText::FromString(TEXT("Continue saved board")))]
+				]
+				+ SWrapBox::Slot()
+				[MakeAction(TEXT("Save & Close"), FSimpleDelegate::CreateLambda([this]()
+				{
+					if (ADaedalusDesktopArcade* Actor = Game.Get()) if (Actor->SaveGame()) Actor->CloseArcade();
+				}), false, true)]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
+				// Save/continue for every other game in the host save-slot table (Minesweeper keeps its own row above).
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(4.f, 4.f))
+				.Visibility_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get();
+					const FString Id = Actor ? Actor->GetSelectedGameId() : FString();
+					return Actor && Id != TEXT("minesweeper") && daedalus::desktop::SupportsManualSave(TCHAR_TO_UTF8(*Id)) ? EVisibility::Visible : EVisibility::Collapsed; })
+				+ SWrapBox::Slot()
+				[MakeAction(TEXT("Save run"), FSimpleDelegate::CreateLambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->SaveGame(); }), false, true)]
+				+ SWrapBox::Slot()
+				[
+					SNew(SButton).IsFocusable(true).ContentPadding(FMargin(12.f, 6.f))
+					.ToolTipText(FText::FromString(TEXT("Replace the current run with this game's last saved run (score and mode; positions start fresh).")))
+					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && Actor->GetState().bHasSavedRun; })
+					.OnClicked_Lambda([this]() { if (ADaedalusDesktopArcade* Actor = Game.Get()) Actor->ResumeGame(); return FocusReply(); })
+					[SNew(STextBlock).Text(FText::FromString(TEXT("Continue saved run")))]
 				]
 				+ SWrapBox::Slot()
 				[MakeAction(TEXT("Save & Close"), FSimpleDelegate::CreateLambda([this]()
@@ -1069,7 +1095,7 @@ FReply SDaedalusDesktopArcade::OnKeyDown(const FGeometry& Geometry, const FKeyEv
 				Actor->RestartGame();
 				return FReply::Handled();
 			}
-			if (State.Id == TEXT("minesweeper"))
+			if (daedalus::desktop::SupportsManualSave(TCHAR_TO_UTF8(*State.Id)))
 			{
 				if (Key == EKeys::F5 || (State.bPaused && Key == EKeys::Gamepad_FaceButton_Left))
 				{ Actor->SaveGame(); return FReply::Handled(); }

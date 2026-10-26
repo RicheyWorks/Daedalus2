@@ -23,6 +23,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Widgets/SViewport.h"
 
+#include "DesktopGames/DaedalusDesktopSaveSlots.h"
 namespace DD = daedalus::desktop;
 
 namespace DesktopArcadeStorage
@@ -237,7 +238,8 @@ FString ADaedalusDesktopArcade::ScoresPath() { return FPaths::Combine(SaveDirect
 
 FString ADaedalusDesktopArcade::SelectedSavePath() const
 {
-	return Session.ActiveId() == "minesweeper" ? MinesweeperSavePath() : SavePath();
+	// Slot table keeps minesweeper.dgs / star_shooter.dgs; unslotted games keep the Star fallback.
+	return FPaths::Combine(SaveDirectory(), UTF8_TO_TCHAR(DD::SaveFileFor(Session.ActiveId())));
 }
 
 void ADaedalusDesktopArcade::RefreshSavedRun()
@@ -249,7 +251,9 @@ void ADaedalusDesktopArcade::RefreshSavedRun()
 bool ADaedalusDesktopArcade::WriteOwnedFile(const FString& Filename, const FString& Text) const
 {
 	// Only these private filenames can be written. Replace after a complete bounded temp write.
-	if ((Filename != SavePath() && Filename != MinesweeperSavePath() && Filename != ScoresPath()) || Text.Len() > 4096) return false;
+	bool bOwned = Filename == SavePath() || Filename == MinesweeperSavePath() || Filename == ScoresPath();
+	for (const DD::SaveSlot& Slot : DD::SaveSlots) bOwned = bOwned || Filename == FPaths::Combine(SaveDirectory(), UTF8_TO_TCHAR(Slot.File));
+	if (!bOwned || Text.Len() > 4096) return false;
 	IFileManager& Files = IFileManager::Get();
 	if (!Files.MakeDirectory(*SaveDirectory(), true)) return false;
 	const FString Temp = Filename + TEXT(".") + FGuid::NewGuid().ToString(EGuidFormats::Digits) + TEXT(".tmp");
@@ -261,17 +265,20 @@ bool ADaedalusDesktopArcade::WriteOwnedFile(const FString& Filename, const FStri
 
 bool ADaedalusDesktopArcade::SaveGame()
 {
-	if (bClosing || bCloseScheduled || Session.ActiveId() != "minesweeper") return false;
+	if (bClosing || bCloseScheduled || !DD::SupportsManualSave(Session.ActiveId())) return false;
+	const bool bMinesweeper = Session.ActiveId() == "minesweeper";
 	const std::string Payload = Session.CaptureSave();
 	if (Payload.empty() || Payload.size() > 4096
-		|| !WriteOwnedFile(MinesweeperSavePath(), FString(UTF8_TO_TCHAR(Payload.c_str()))))
+		|| !WriteOwnedFile(SelectedSavePath(), FString(UTF8_TO_TCHAR(Payload.c_str()))))
 	{
-		RunSaveError = TEXT("Board could not be saved. Your current board and previous save were kept; try Save board again.");
+		RunSaveError = bMinesweeper ? TEXT("Board could not be saved. Your current board and previous save were kept; try Save board again.")
+			: TEXT("Run could not be saved (titles and finished runs have nothing to save). Your current run and previous save were kept.");
 		RefreshSavedRun();
 		return false;
 	}
 	bHasSavedRun = true;
-	RunSaveError = TEXT("Board saved on this installation. Continue saved board restores it after closing or restarting.");
+	RunSaveError = bMinesweeper ? TEXT("Board saved on this installation. Continue saved board restores it after closing or restarting.")
+		: TEXT("Run saved on this installation. Continue saved run restores its score and mode with a fresh start.");
 	return true;
 }
 
@@ -280,6 +287,7 @@ bool ADaedalusDesktopArcade::ResumeGame()
 	if (Session.HasSaveRequest()) { RunSaveError = TEXT("A Star save is pending; Continue cannot replace it."); return false; }
 	if (bClosing || bCloseScheduled) return false;
 	const bool bMinesweeper = Session.ActiveId() == "minesweeper";
+	const bool bOtherSlot = !bMinesweeper && DD::SupportsManualSave(Session.ActiveId());
 	const FString Filename = SelectedSavePath();
 	RefreshSavedRun();
 	const int64 Bytes = IFileManager::Get().FileSize(*Filename);
@@ -287,20 +295,23 @@ bool ADaedalusDesktopArcade::ResumeGame()
 	if (Bytes <= 0 || Bytes > 4096 || !FFileHelper::LoadFileToString(Text, *Filename))
 	{
 		RunSaveError = bMinesweeper ? TEXT("No readable saved board (maximum 4 KB). Your current board was kept.")
+			: bOtherSlot ? TEXT("No readable saved run for this game (maximum 4 KB). Your current run was kept.")
 			: TEXT("No readable native Star save (maximum 4 KB).");
 		return false;
 	}
 	DD::Driver Candidate;
-	if (!Candidate.Select(bMinesweeper ? "minesweeper" : "star_shooter", static_cast<uint32>(CurrentSeed)) || !Candidate.RestoreSave(TCHAR_TO_UTF8(*Text)))
+	if (!Candidate.Select(DD::ResumeGameId(Session.ActiveId()), static_cast<uint32>(CurrentSeed)) || !Candidate.RestoreSave(TCHAR_TO_UTF8(*Text)))
 	{
 		RunSaveError = bMinesweeper ? TEXT("The saved board could not be read. Your current board and the save file were kept.")
+			: bOtherSlot ? TEXT("The saved run could not be read. Your current run and the save file were kept.")
 			: TEXT("Native Star save was refused; the current run was kept.");
 		return false;
 	}
 	Session = std::move(Candidate);
 	CurrentSeed = static_cast<int32>(Session.GetSeed());
 	bHasSavedRun = true; bScoreSubmitted = false;
-	RunSaveError = bMinesweeper ? TEXT("Saved board continued. Flags, revealed cells and active time were restored.") : FString();
+	RunSaveError = bMinesweeper ? TEXT("Saved board continued. Flags, revealed cells and active time were restored.")
+		: bOtherSlot ? FString(TEXT("Saved run continued: score and mode restored, positions start fresh.")) : FString();
 	NextSaveAttemptSeconds = 0.0;
 	ResetPresentationInput();
 	return true;
