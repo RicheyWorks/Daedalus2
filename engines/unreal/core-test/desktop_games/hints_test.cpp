@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Accessibility hints for the three cabinets that only had options and focus freeze.
 // The line is drawn on the frame. It does not change score, movement, or saves.
-// catalog-capability: hints: beacon_sweep dungeon dodge_ball lanternwild
+// catalog-capability: hints: beacon_sweep dungeon dodge_ball lanternwild twinwake
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -49,6 +49,17 @@ void BeaconHints() {
     Input Flag;Flag.ActionPressed=true;G.Step(Flag);
     Check(G.HintLine()=="HINT K or pad B lifts the flag.","a flag tells how to lift it");
 }
+void TwinwakeHints() {
+    TwinwakeGame G;
+    Check(G.SetOption(1,730),"practice mode opens");
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine()=="HINT Move as you meet the ball to bend it.","practice hint teaches the bend");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"twinwake hint is on the practice frame and stays out of status");
+    Check(G.SetOption(0,730) && G.HintLine().find("add spin")!=std::string::npos,"match hint teaches spin");
+    Frame Open;G.Render(Open);
+    Check(Open.Commands.size()==6,"match opening stays six commands");
+}
 void LanternwildHints() {
     LanternwildGame G;
     const auto Note=G.GetStatus().Note;
@@ -61,7 +72,7 @@ void LanternwildHints() {
 }
 
 int main() {
-    try { BeaconHints();DungeonHints();DodgeHints();LanternwildHints(); }
+    try { BeaconHints();DungeonHints();DodgeHints();LanternwildHints();TwinwakeHints(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
