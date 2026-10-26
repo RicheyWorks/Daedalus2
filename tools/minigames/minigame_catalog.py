@@ -92,6 +92,8 @@ CAPABILITIES = {
     "core_pause": ("OwnPause",),
     "focus_freeze": (),  # test-only: proven by focus_freeze_test.cpp
     "hints": (),  # test-only: proven by hints_test.cpp
+    "key_hint": (),  # test-only: proven by a11y_test.cpp
+    "contrast_mark": (),  # test-only: proven by a11y_test.cpp
     "scoreboard": (),  # test-only: proven by scoreboard_test.cpp. Host reads Status.Score.
     "action_cue": (),  # test-only: proven by action_cue_test.cpp
     "save_restore": ("SaveState", "RestoreState"),
