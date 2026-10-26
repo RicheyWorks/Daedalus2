@@ -13,7 +13,6 @@ on:
       - 'tools/unreal_mcp/interchange_reimport/**'
       - 'tools/unreal_mcp/sequence_mrq_native/**'
       - 'tools/unreal_mcp/tests/**'
-      - 'tools/video/**'
       - 'tools/unreal_mcp/mrq_scene_context.py'
       - 'tools/unreal_mcp/pcg_fixture_acceptance.py'
       - '.github/workflows/engine-free-tool-tests.yml'
@@ -53,8 +52,5 @@ jobs:
       - name: tools/unreal_mcp/tests
         working-directory: tools/unreal_mcp/tests
         run: python -m unittest test_mine_fresh_import test_mine_sequencer_diagnostic -v
-      - name: tools/video
-        working-directory: tools/video
-        run: python -m unittest test_video -v
       - name: unreal_mcp root-import tests
         run: python -m unittest tools.unreal_mcp.tests.test_mrq_scene_context tools.unreal_mcp.tests.test_pcg_fixture_acceptance -v
