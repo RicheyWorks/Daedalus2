@@ -106,6 +106,26 @@ public:
         if(Started && RunFrames<std::numeric_limits<std::uint64_t>::max()) ++RunFrames;
         if(Interact) InteractWithCircuit();
     }
+    // Checkpoint save: room, circuit seed, lanterns lit in order, trail and run time.
+    // Restore returns to the start tile with those lanterns lit. Completed runs are not saved.
+    std::string SaveState() const override {
+        if(Complete) return {};
+        return "DDS1 "+std::to_string(Option)+" "+std::to_string(SessionSeed)+" "+std::to_string(LitCount)
+            +" "+(TrailEnabled?"1":"0")+" "+std::to_string(RunFrames);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Room=-1,SeedValue=-1,Count=-1,Trail=-1,Frames=-1;
+        if(!(In>>Version>>Room>>SeedValue>>Count>>Trail>>Frames) || Version!="DDS1" || (In>>Extra)) return false;
+        if(Room<0 || Room>1 || SeedValue<0 || SeedValue>0x7fffffffLL || Count<0 || Count>LanternCount
+            || (Trail!=0 && Trail!=1) || Frames<0 || Frames>1000000000000LL) return false;
+        Option=static_cast<int>(Room);Reset(static_cast<std::uint32_t>(SeedValue));
+        for(int N=0;N<Count;++N) Lit[static_cast<std::size_t>(Order[static_cast<std::size_t>(N)])]=true;
+        LitCount=static_cast<int>(Count);TrailEnabled=Trail==1;RunFrames=static_cast<std::uint64_t>(Frames);
+        Started=Count>0 || Frames>0;
+        return true;
+    }
+    std::uint32_t SeedAfterRestore(std::uint32_t) const override { return SessionSeed; }
     const Player& GetPlayer() const { return Hero; }
     int GetLitCount() const { return LitCount; }
     std::uint64_t GetElapsedFrames() const { return RunFrames; }
@@ -225,6 +245,7 @@ private:
     Player Hero;
     std::uint32_t SessionSeed=0;
     std::array<int,LanternCount> Order{{0,1,2}};
+    friend struct MazeTestAccess; // Controlled test seam, as for Pac-Man and Zelda.
     std::array<bool,LanternCount> Lit{};
     int LitCount=0, NoticeFrames=0,Option=0;
     std::uint64_t RunFrames=0;
@@ -742,6 +763,24 @@ public:
     }
     bool IsSwordReady() const { return !Over && !Won && Hero.AttackTimer==0; }
     bool IsSwordAssistEnabled() const { return SwordAssist; }
+    // Checkpoint save: option, score, health, trinkets and the live assist toggle.
+    // Restore starts a fresh roster on the session seed. Finished runs are not saved.
+    std::string SaveState() const override {
+        if(Over || Won) return {};
+        return "DZS1 "+std::to_string(Option)+" "+std::to_string(Score)+" "+std::to_string(Hero.Health)
+            +" "+std::to_string(Hero.Rupees)+" "+(SwordAssist?"1":"0");
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mode=-1,Points=-1,Life=-1,Trinkets=-1,Assist=-1;
+        if(!(In>>Version>>Mode>>Points>>Life>>Trinkets>>Assist) || Version!="DZS1" || (In>>Extra)) return false;
+        const Player Fresh{};
+        if(Mode<0 || Mode>1 || Points<0 || Points>1000000000LL || Life<1 || Life>Fresh.MaxHealth
+            || Trinkets<0 || Trinkets>1000000LL || (Assist!=0 && Assist!=1)) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);
+        Score=Points;Hero.Health=static_cast<int>(Life);Hero.Rupees=static_cast<int>(Trinkets);SwordAssist=Assist==1;
+        return true;
+    }
     void Render(Frame& Out) const override {
         Out.Clear(800,600,{34,139,34,255});
         Out.AddRect(100,200,600,80,{210,180,140,255}); Out.AddRect(350,100,80,400,{210,180,140,255});
