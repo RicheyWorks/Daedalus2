@@ -730,6 +730,13 @@ public:
         if(Data.Round>=4) return "HINT Confirm a country to start a fresh four-round score.";
         return "HINT Press Fire to start the next round.";
     }
+    std::string ActionCue() const {
+        if(Data.Mode==Phase::Title) return "CUE Countries";
+        if(Data.Mode==Phase::CountrySelect) return "CUE Confirm";
+        if(Data.Mode==Phase::Playing) return Data.DodgeBall.InAir ? "CUE Catch" : "CUE Charge";
+        if(Data.Round>=4) return "CUE New score";
+        return "CUE Next round";
+    }
     void DrawPlayer(Frame& F,const Player& P) const {
         constexpr Color Yellow{255,220,50,255},Red{220,50,50,255};
         if(P.Health<=0) { F.AddCircle(P.X,P.Y,10,{70,70,70,255});F.AddText(P.X-10,P.Y-8,"KO",White,14);return; }
@@ -830,6 +837,7 @@ public:
         }
         const double HintY=Data.Mode==Phase::Playing?36.0:578.0;
         F.AddText(16,HintY,HintLine(),Color{255,236,180,255},12);
+        F.AddText(560,HintY,ActionCue(),Color{120,225,255,255},12);
     }
 private:
     std::string TournamentResultText() const {
