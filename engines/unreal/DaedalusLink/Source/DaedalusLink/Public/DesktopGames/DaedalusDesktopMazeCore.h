@@ -4,6 +4,8 @@
 #include <array>
 #include <cstring>
 #include <limits>
+#include <sstream>
+#include <string>
 
 // Desktop-only canonical sources: PythonGames/main.py, pacman.py and zelda.py.
 // See core-test/desktop_games/maze_notes.md for source pins and deliberate fixes.
@@ -389,6 +391,20 @@ public:
         Option=Value;Reset(Seed);return true;
     }
     int GetOption() const override { return Option; }
+    // Checkpoint save: mode, score and lives. Restore starts a fresh maze on the
+    // session seed with that score and lives. Finished runs are not saved.
+    std::string SaveState() const override {
+        if(Over || Won) return {};
+        return "DMS1 "+std::to_string(Option)+" "+std::to_string(Score)+" "+std::to_string(Lives);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mode=-1,Points=-1,Left=-1;
+        if(!(In>>Version>>Mode>>Points>>Left) || Version!="DMS1" || (In>>Extra)) return false;
+        if(Mode<0 || Mode>1 || Points<0 || Points>1000000000LL || Left<1 || Left>3) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);Score=static_cast<decltype(Score)>(Points);Lives=static_cast<int>(Left);
+        return true;
+    }
     bool IsFruitActive() const { return Option==1 && !Over && !Won && FruitFrames>0; }
     int FruitFramesRemaining() const { return IsFruitActive()?FruitFrames:0; }
     int FruitsCollected() const { return FruitCollected; }
