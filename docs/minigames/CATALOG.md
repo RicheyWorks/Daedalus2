@@ -35,10 +35,10 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `football` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `pacman` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `sega_shooter` | yes |  | yes | yes |  |  | yes |  |  | yes |
-| `shadow_ninja` | yes |  | yes | yes |  |  | yes |  |  |  |
+| `shadow_ninja` | yes |  | yes | yes |  |  | yes |  |  | yes |
 | `star_shooter` | yes |  |  |  |  | yes | yes |  |  | yes |
-| `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes |  |
-| `contra` | yes | yes | yes | yes |  |  | yes |  |  |  |
+| `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes | yes |
+| `contra` | yes | yes | yes | yes |  |  | yes |  |  | yes |
 | `zelda` | yes |  |  |  |  |  | yes | yes | yes | yes |
 
 ## Java cabinets

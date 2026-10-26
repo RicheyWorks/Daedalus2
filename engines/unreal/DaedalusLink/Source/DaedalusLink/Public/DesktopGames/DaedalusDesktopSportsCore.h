@@ -452,6 +452,26 @@ public:
         Option=Value;Reset(Seed);return true;
     }
     int GetOption() const override { return Option; }
+    // Checkpoint save during play: countries, tournament score and round. Restore
+    // replays the current round from kickoff. Title, country select and round results are not saved.
+    std::string SaveState() const override {
+        if(Data.Mode!=Phase::Playing) return {};
+        return "DBS1 "+std::to_string(Data.SelectedCountry)+" "+std::to_string(Data.OpponentCountry)+" "
+            +std::to_string(Data.HumanScore)+" "+std::to_string(Data.CpuScore)+" "+std::to_string(Data.Round);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mine=-1,Theirs=-1,Wins=-1,Losses=-1,Turn=-1;
+        if(!(In>>Version>>Mine>>Theirs>>Wins>>Losses>>Turn) || Version!="DBS1" || (In>>Extra)) return false;
+        const long long Last=static_cast<long long>(Countries.size())-1;
+        if(Mine<0 || Mine>Last || Theirs<0 || Theirs>Last || Mine==Theirs || Turn<1 || Turn>4
+            || Wins<0 || Losses<0 || Wins+Losses!=Turn-1) return false;
+        Reset(Seed);
+        Data.SelectedCountry=static_cast<int>(Mine);Data.OpponentCountry=static_cast<int>(Theirs);
+        Data.HumanScore=static_cast<int>(Wins);Data.CpuScore=static_cast<int>(Losses);Data.Round=static_cast<int>(Turn);
+        StartMatch();
+        return true;
+    }
     static Player MakePlayer(int CountryIndex,int Slot,bool Cpu,int SuperType=1) {
         const int SafeCountry=std::max(0,std::min(7,CountryIndex));
         const int SafeSlot=std::max(0,std::min(2,Slot));

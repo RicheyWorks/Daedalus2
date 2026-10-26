@@ -180,6 +180,7 @@
         "focus_freeze",
         "fresh_pad_replay",
         "options",
+        "save_restore",
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
@@ -223,7 +224,8 @@
         "action_cue",
         "focus_freeze",
         "hints",
-        "options"
+        "options",
+        "save_restore"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -243,6 +245,7 @@
         "focus_freeze",
         "fresh_pad_replay",
         "options",
+        "save_restore",
         "source_keys",
         "title_screen"
       ],
