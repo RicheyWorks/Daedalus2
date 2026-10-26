@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 """Headless: export one voxel catalogue (eggs | props | sims) as FBX + json, plus a contact sheet per family.
     blender -b --factory-startup --python-exit-code 1 --python tools/blender/export_catalog.py -- MODULE OUT_DIR [family ...] [--force] [--no-sheet]
-MODULE: eggs (voxel_eggs, 196 Prop_Egg_*), props (voxel_props: house | grave | sport), sims (voxel_sims: kit | machine | appliance | house).
+MODULE: eggs (voxel_eggs, 196 Prop_Egg_*), aquatic (voxel_aquatic: pond | marsh | submerged | sea | realm, 258), props (voxel_props: house | grave | sport), sims (voxel_sims: kit | machine | appliance | house).
 Same recipe as export_farm.py: build everything, free each object after export, then rebuild a family in a grid and render once with Workbench.
 """
 import math
@@ -33,6 +33,18 @@ elif module == "props":
     def voxels_of(name):
         p = M.plan(name)
         return p if isinstance(p, list) else [v for vs in p.values() for v in vs]
+elif module == "prism":
+    import realm_prism_props as M
+    PITCH = {"structure": 14.0, "item": 2.4}
+
+    def voxels_of(name):
+        return M.plan(name)
+elif module == "aquatic":
+    import voxel_aquatic as M
+    PITCH = {"pond": 6.0, "marsh": 2.4, "submerged": 2.0, "sea": 6.0, "realm": 2.4}
+
+    def voxels_of(name):
+        return M.plan(name)
 elif module == "sims":
     import voxel_sims as M
     PITCH = {"kit": 3.5, "machine": 2.5, "appliance": 3.0, "house": 24.0}
@@ -66,7 +78,7 @@ if "--no-sheet" not in argv:
             cm = M.CATALOG[n][1]
             ob = V._mesh_from_voxels(n, vox, scale=cm, pal=M.PAL)
             zmin = min(z for _, _, z, _ in vox)
-            ob.location = ((i % cols) * pitch - cols * pitch / 2, -(i // cols) * pitch, -zmin * cm / 100.0)
+            ob.location = ((i % cols) * pitch - (cols - 1) * pitch / 2, -(i // cols) * pitch, -zmin * cm / 100.0)
             for v in ob.data.vertices:
                 v.co /= 100.0
             ob.data.color_attributes.active_color = ob.data.color_attributes["Col"]

@@ -1,0 +1,718 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Valley_ExclosureFence",
+   "kind": "Prop",
+   "seed": 5858,
+   "spec": {
+    "gap": "G58",
+    "ask": "pythagoras 49257",
+    "lod": "LOD0/1",
+    "size_m": "3 m x 1.8 m wire (posts 1.9 m), tileable",
+    "tri_cap": 2500,
+    "collision": "UCX wall",
+    "sockets": [
+     "End_A",
+     "End_B"
+    ],
+    "chain": "segment n SOCKET_End_B = segment n+1 SOCKET_End_A; close a run with Prop_Valley_ExclosureFence_EndPost"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Valley_ExclosureFence_M0",
+     "colour": "weathered post timber",
+     "hex": "6F5B45",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Valley_ExclosureFence_M1",
+     "colour": "galvanised wire",
+     "hex": "9EA3A8",
+     "roughness": 0.45,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Valley_ExclosureFence_M2",
+     "colour": "post cap / staples",
+     "hex": "4A3D30",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Valley_ExclosureFence",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "PostJoint",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.0552,
+       "length": 1.9,
+       "centre": [
+        -1.5,
+        0,
+        0.95
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "segments": 5
+       }
+      },
+      {
+       "name": "PostJoint_Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.063,
+       "r2": 0.024,
+       "length": 0.05,
+       "centre": [
+        -1.5,
+        0,
+        1.925
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "PostMid",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.0552,
+       "length": 1.9,
+       "centre": [
+        0,
+        0,
+        0.95
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "segments": 5
+       }
+      },
+      {
+       "name": "PostMid_Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.063,
+       "r2": 0.024,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        1.925
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strand0",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 3.0,
+       "centre": [
+        0,
+        -0.064,
+        0.12
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Strand1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 3.0,
+       "centre": [
+        0,
+        -0.064,
+        0.27
+       ],
+       "slot": 1,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strand2",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 3.0,
+       "centre": [
+        0,
+        -0.064,
+        0.45
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Strand3",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 3.0,
+       "centre": [
+        0,
+        -0.064,
+        0.66
+       ],
+       "slot": 1,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strand4",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 3.0,
+       "centre": [
+        0,
+        -0.064,
+        0.9
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Strand5",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 3.0,
+       "centre": [
+        0,
+        -0.064,
+        1.17
+       ],
+       "slot": 1,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strand6",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 3.0,
+       "centre": [
+        0,
+        -0.064,
+        1.47
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Strand7",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 3.0,
+       "centre": [
+        0,
+        -0.064,
+        1.78
+       ],
+       "slot": 1,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Stay0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 1.66,
+       "centre": [
+        -1.2,
+        -0.068,
+        0.95
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Stay1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 1.66,
+       "centre": [
+        -0.9,
+        -0.068,
+        0.95
+       ],
+       "slot": 1,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Stay2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 1.66,
+       "centre": [
+        -0.6,
+        -0.068,
+        0.95
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Stay3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 1.66,
+       "centre": [
+        -0.3,
+        -0.068,
+        0.95
+       ],
+       "slot": 1,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Stay4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 1.66,
+       "centre": [
+        0.3,
+        -0.068,
+        0.95
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Stay5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 1.66,
+       "centre": [
+        0.6,
+        -0.068,
+        0.95
+       ],
+       "slot": 1,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Stay6",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 1.66,
+       "centre": [
+        0.9,
+        -0.068,
+        0.95
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Stay7",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 1.66,
+       "centre": [
+        1.2,
+        -0.068,
+        0.95
+       ],
+       "slot": 1,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_End_A",
+     "location": [
+      -1.5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      -1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      -1.5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_End_B",
+     "location": [
+      1.5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      1.5,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Valley_ExclosureFence_00",
+     "shape": "box",
+     "size": [
+      3.0,
+      0.14,
+      1.8
+     ],
+     "centre": [
+      0,
+      0,
+      0.9
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 304,
+    "lod1_triangles": 128,
+    "lod1_ratio": 0.421,
+    "objects": {
+     "Prop_Valley_ExclosureFence": 304
+    },
+    "bounds_min": [
+     -1.563,
+     -0.071,
+     0.0
+    ],
+    "bounds_max": [
+     1.5,
+     0.063,
+     1.95
+    ],
+    "dimensions": [
+     3.063,
+     0.134,
+     1.95
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c2302868bca17ede2ac30fc6d1b4a784c313ce4c2a77aa46bb6a328719b5d9c3"
+  },
+  {
+   "asset": "Prop_Valley_ExclosureFence_EndPost",
+   "kind": "Prop",
+   "seed": 5858,
+   "spec": {
+    "gap": "G58",
+    "ask": "pythagoras 49257",
+    "lod": "LOD0/1",
+    "size_m": "end post 1.95 m + brace",
+    "tri_cap": 600,
+    "collision": "UCX post",
+    "sockets": [
+     "End_A"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Valley_ExclosureFence_EndPost_M0",
+     "colour": "weathered post timber",
+     "hex": "6F5B45",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Valley_ExclosureFence_EndPost_M1",
+     "colour": "galvanised wire",
+     "hex": "9EA3A8",
+     "roughness": 0.45,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Valley_ExclosureFence_EndPost_M2",
+     "colour": "post cap / staples",
+     "hex": "4A3D30",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Valley_ExclosureFence_EndPost",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.069,
+       "r2": 0.06348,
+       "length": 1.95,
+       "centre": [
+        0,
+        0,
+        0.975
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "segments": 5
+       }
+      },
+      {
+       "name": "Post_Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.07245,
+       "r2": 0.0276,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        1.975
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Brace",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.04,
+       "r2": 0.04,
+       "length": 1.2,
+       "centre": [
+        -0.42,
+        0,
+        0.55
+       ],
+       "slot": 0,
+       "segments": 6,
+       "rot": [
+        0,
+        -52,
+        0
+       ],
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "BracePad",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.12,
+        0.04
+       ],
+       "centre": [
+        -0.8,
+        0,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_End_A",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      -1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Valley_ExclosureFence_EndPost_00",
+     "shape": "box",
+     "size": [
+      0.15,
+      0.15,
+      1.9
+     ],
+     "centre": [
+      0,
+      0,
+      0.95
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "off_centre_ok": "brace runs back along the fence (-X) from the post; origin = post so SOCKET_End_A sits on the run's end",
+   "nanite": true,
+   "predicted": {
+    "triangles": 88,
+    "lod1_triangles": 40,
+    "lod1_ratio": 0.455,
+    "objects": {
+     "Prop_Valley_ExclosureFence_EndPost": 88
+    },
+    "bounds_min": [
+     -0.89,
+     -0.0725,
+     0.0
+    ],
+    "bounds_max": [
+     0.0725,
+     0.0725,
+     2.0
+    ],
+    "dimensions": [
+     0.9625,
+     0.145,
+     2.0
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1e469bf11f1671865c7abd6e4355532b7ec4dc44513bf9e7ba63e741f7bda5b4"
+  }
+ ]
+}

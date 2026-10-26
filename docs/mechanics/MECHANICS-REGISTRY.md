@@ -86,3 +86,42 @@ shared 8-bone rig with Idle/Walk/Attack/Hurt (row WZ18). Which species live on a
 - `voxel_sims.py`: Sims/practical realm — 26-piece build kit, 18 practical machines mapped to PRACTICAL-APPS.md
   tools, 21 appliances (needs loop), `House_Sims_Starter` furnished house in six part meshes. Row WZ26. §14.10.
 - Rule kept: nobody else owns eggs/hatching, house props, or the Sims kit — extend these files, don't fork them.
+
+## Dragons — 16:45
+- `voxel_dragons.py`: 504 flying dragons (12 elements × 6 forms × 7 variants), rigged, hover/cruise/dive/breath
+  clips. Element ↔ realm chemistry; dragons are raid sources, mounts when tamed, and the fairy form hatches from
+  dragon eggs. Row WZ27. Architecture §14.11. Owner: Team Claude; extend the element/form tables, don't fork.
+
+## Reconciled from Ultra (buckwild-sol) owner-direction records — 17:00
+- **Living Island Defense** (`docs/mechanics/LIVING-ISLAND-DEFENSE.md`, `data/defense/living-island-defense-plan.json`,
+  Ultra branch `codex/living-island-defense`): the whole ecology fights zombie waves (carnivorous plants intercept,
+  bees warn/harass, trees barrier, animals guard/scout, aquatic life in connected water). Bodies: our `voxel_creatures`
+  (206 + 504 dragons) and `voxel_flora`; deployable units are ledger identities, not the drawn bodies.
+  **Seam closed**: `Ledger(tactical=True)` makes `zombie_wave` stage a `pending_wave` instead of settling FOOD loss +
+  `zombie_drop`; the tactical resolver calls `settle_wave(held)` once (test `TacticalWave`). Row WZ14 (zombie waves)
+  now has two branches: managed (default) and tactical (Ultra's resolver).
+- **All-life progression & minigames** (`docs/mechanics/LIFE-PROGRESSION-AND-MINIGAMES.md`,
+  `data/progression/life-progression-plan.json`, branch `codex/life-progression`): maturity / earned levels /
+  evolved forms / inherited genome. Our hooks: `voxel_flora` tree STAGES (Sapling→Ancient) are the maturity track for
+  plants; `voxel_eggs` hatch pools + `voxel_creatures` families are the breeding/genome inputs; dragon `spec()` fields
+  (element, form, variant) are the evolved-form axes. No XP curve chosen here (owner tuning stays null).
+- **Sky seed Farm** (Ultra, `tools/economy/island_farm.py`, `docs/mechanics/ISLAND-FARMING.md`): sits over the pinned
+  Colony Ledger with managed FOOD suppression; no overlap with ledger core — ACKed on the hub.
+
+## Owls, HD islands, octets — 18:45
+- `voxel_owls.py`: 504 owls (14 species × 6 plumages × 6 variants); night hunters/scouts. Row WZ28. §14.12.
+- `hd_island.py`: high-end smooth islands (authored terrain, strata, clipped water, sky river, instanced foliage,
+  lit buildings, UCX, LODs). Row WZ29. §14.13. Same chemistry/terrace roles as the voxel islands, so the ledger,
+  farm (Ultra's island_farm) and defense plans read either.
+- `hd_cluster.py`: 10 eight-island octets (Super Island standard, 14 bridges, 7 ring sky-streams, seasonal themes).
+  Row WZ30. §14.14.
+
+## RPG realms — 20:00
+- Portal Realm (ADR-052): Team Claude cast for all Planned population rows (990 + 5 bosses). Codex keeps
+  portal_cast/portal_monsters/slime polish and native import. Row WZ32.
+- Prismheart Realm (ADR-067, new, original): PRISM01 job classes, PRISM02 waystones, PRISM03 shards + summons,
+  PRISM04 airship travel; chemistry `REALMS["PRISMHEART"]` (sunroot → Mana Draught brew, peach → waystone offering,
+  barley → Skyfarer ration, duneback → stable mount). Row WZ33.
+- 20:15 Random encounters (both RPG realms): `data/rpg/{portal,prism}-bestiary.json` (160 types each) and
+  `-encounters.json` (zone step rates + formations) from `tools/blender/rpg_bestiary.py`; battle sprites for every
+  enemy. Row WZ34. Owner: Team Claude for the data + art; battle runtime/rules not claimed.

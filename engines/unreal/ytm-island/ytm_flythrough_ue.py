@@ -37,9 +37,21 @@ def actors():
 
 PYT_SUB = "Island_Pythagoras"
 PYT_CENTRE = unreal.Vector(-60000, 60000, 2500)
+# Layout from pythagoras pyth_island_ue.py (ORIGIN + CENT, cm): five 30 m habitat patches on a 120 m island. Used when no
+# PYT_Label_/PYT_Habitat_ marker is loaded, so shots still aim at the real patches instead of a ring around the centre.
+PYT_CENT = {"YoungMeadow": (-3200, -3200), "BrambleScrub": (3200, -3200), "PineStand": (3200, 3200),
+            "OldGrowthOak": (-3200, 3200), "WillowRiverbank": (0, 0)}
+# patches are only 30 m wide, so on Island_Pythagoras use tighter orbits (radius cm, height cm); sweep/lens stay from STYLE
+PYT_ORBIT = {"YoungMeadow": (2200, 500), "BrambleScrub": (1800, 300), "PineStand": (2400, 1100),
+             "OldGrowthOak": (2000, 800), "WillowRiverbank": (2200, 300)}
+def style_for(b, c):
+    st = STYLE[b]
+    if b in PYT_ORBIT and abs(c.x - PYT_CENTRE.x) < 8000 and abs(c.y - PYT_CENTRE.y) < 8000:
+        return (PYT_ORBIT[b][0], PYT_ORBIT[b][1], st[2], st[3])
+    return st
 def pyt_loaded():
     """READ-ONLY: report whether pythagoras's sublevel is streamed in. We never add, remove, modify or save it
-    (adding a level would dirty DaedalusWorld); if it is not loaded we orbit PYT_CENTRE instead."""
+    (adding a level would dirty DaedalusWorld); if it is not loaded we aim at the PYT_CENT layout positions instead."""
     w = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
     for s_ in unreal.EditorLevelUtils.get_levels(w):
         if PYT_SUB in s_.get_path_name(): return True
@@ -67,12 +79,10 @@ def biome_centres():
     unreal.log("YTM: real biome centres for %s" % sorted(found))
     if len(found) < len(BIOMES):
         # Wild Biomes lives in Island_Pythagoras around PYT_CENTRE; without markers, orbit that centre (5 points, 40 m apart)
-        o = PYT_CENTRE
-        for i, b in enumerate(BIOMES):
+        for b, (cx, cy) in PYT_CENT.items():
             if b not in found:
-                t = 2 * math.pi * i / len(BIOMES)
-                found[b] = unreal.Vector(o.x + 4000 * math.cos(t), o.y + 4000 * math.sin(t), o.z)
-                unreal.log_warning("YTM: no marker for %s, orbiting Island_Pythagoras centre" % b)
+                found[b] = unreal.Vector(PYT_CENTRE.x + cx, PYT_CENTRE.y + cy, PYT_CENTRE.z)
+                unreal.log_warning("YTM: no marker for %s, using Island_Pythagoras layout position" % b)
     # Youtube Master Island hero shot (spawn marker placed by ytm_island_ue.py)
     sp = next((a for a in actors() if a.actor_has_tag("YTM_Spawn")), None)
     if sp:
@@ -129,8 +139,8 @@ def run():
     master = make_sequence("WB_Flythrough_Master", frames * len(shots))
     for i, b in enumerate(shots):
         s = make_sequence(b if b.startswith("YTM_") else "WB_Flythrough_" + b, frames)
-        add_camera(s, centres[b], STYLE[b], 0, frames)
-        add_camera(master, centres[b], STYLE[b], i * frames, frames)
+        add_camera(s, centres[b], style_for(b, centres[b]) if b in BIOMES else STYLE[b], 0, frames)
+        add_camera(master, centres[b], style_for(b, centres[b]) if b in BIOMES else STYLE[b], i * frames, frames)
         eas.save_loaded_asset(s)
     eas.save_loaded_asset(master)
     now_dirty = {p.get_name() for p in unreal.EditorLoadingAndSavingUtils.get_dirty_map_packages()}

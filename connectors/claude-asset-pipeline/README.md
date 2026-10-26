@@ -65,9 +65,19 @@ MIT
 
 Checks a combat slice's art before it reaches Unreal: weapon sockets (`SOCKET_<Name>` nodes), enemy skeleton (joint count and required joints) and LOD0..LODn, environment collision (`UCX_`/`UBX_`/`USP_`/`UCP_`), and optional triangle budgets. Passing assets are imported through `ship.land` with `--import`; failing assets are never imported. Writes `report.json` and `REPORT.md`.
 
-```n python -m asset_pipeline.combat_handoff --spec specs/combat-slice-1.json --folder <art dir> --out <dir> [--import]
- python harness/combat_handoff_test.py   # offline, no editor
+```
+python -m asset_pipeline.combat_handoff --spec specs/combat-slice-1.json --folder <art dir> --out <dir> [--import]
+python harness/combat_handoff_test.py   # offline, no editor
 ```
 
 New slice: write a new spec. New kind of asset: add a check function to `ROLES`.
+### What is still missing, and sample files
+
+```
+python -m asset_pipeline.combat_report --spec specs/combat-slice-1.json --folder <art dir> --queue <art dir>\QUEUE.md --out <dir>
+python -m asset_pipeline.combat_fixtures --spec specs/combat-slice-1.json --out <dir> [--defect Enemy_Slice1_Guard=lods]
+python harness/combat_report_test.py   # offline, 36 cases
+```
+
+`combat_report` turns the spec plus the art folder into `TODO-FOR-BLENDER-TEAM.md` (and `todo.json`): per asset MISSING / FIX / READY, its art queue row, what the file must contain, and for every failed check how to fix it in Blender. It reads files only (never Unreal, never Blender, no import) and exits 0 only when the whole slice is READY. `combat_fixtures` writes minimal hand-made sample `.glb` files built from the spec (one passing set, or one asset with a named defect: `socket`, `skin`, `joints`, `lods`, `lod-order`, `tris`, `collision`, `nocollision`, `broken`) so the team can see what a passing file contains. They are test shapes, never art: do not import them.
 

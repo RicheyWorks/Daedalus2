@@ -76,3 +76,21 @@
   generic `export_catalog.py {eggs|props|sims} OUT [family…] [--force] [--no-sheet]`. Exports land in
   `engines/unreal/art/claude-eggs|claude-props|claude-sims` with `sheet-<family>.png`. Architecture §14.8–14.10,
   tracker rows WZ24–WZ26.
+- 16:45: `voxel_dragons.py` + `export_dragons.py` → `engines/unreal/art/claude-dragons/` (504 GLB/FBX/json,
+  `dragons.manifest.json`, `sheet-<element>.png`, `views/` for two quality-bar samples). Row WZ27, §14.11.
+
+### Addendum 18:45 — owls, next-level Blender, octets (model switched to Opus 5.5 mid-session)
+- Owls: `voxel_owls.py` + `export_owls.py` → `claude-owls/` (504 GLB/FBX/json in 379 s, `owls.manifest.json`, 14 sheets).
+- Codex check-in: read their craft (bevelled primitives + named Principled materials + LOD decimation in
+  portal_hero_polish/lods; Ultra's Lumenwake authored-height terrain). Our original take: `hd_island.py` (§14.13).
+- Octets: `hd_cluster.py` → `claude-octets/` (10 × 8 islands; chain log `projects\_to_delete\claude-octets.log`).
+- Hub: replied to 31231 (dragon contract facts: Col vertex colour, no UVs/materials by design, 8-bone rig, clips),
+  ACK 31090 (docs), ACK 31095 (PhotoPDF manifest deferred). Codex audit 31068 gaps (props vertex-colour only, no
+  UCX on props, H39 water binding) → the HD path carries named materials + translucent water slot + UCX.
+
+### Addendum 19:50 — 10k island run
+- Octets: all 10 rebuilt on the fast path (exit 0, 3 s per plot) → `claude-octets/`. Owl sheets re-rendered facing camera.
+- Batch: 4 workers, seeds 10000–19999 → `claude-hd-islands/batch/`; 2,064 done at 19:48 (0 failures, 0 memory pauses),
+  ~55/min. Restarted on v3 outlines (hd_island 1e47be839). Worker scripts/logs: `projects\_to_delete\claude-hd-batch-w0..3.*`.
+- Known gap: an island killed between json and thumbnail (worker restart) has no thumb/index row — rerun `hd_batch.py`
+  with the same range to fill (it skips islands whose json exists; thumbs need a separate pass if wanted).

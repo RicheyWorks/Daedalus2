@@ -19,6 +19,7 @@ Pure Python (no Blender, no Unreal). `manifest(seed)` returns the JSON the expor
 """
 import json
 import random
+import zlib
 
 HERBS = ("dawnleaf", "rillprism", "cinderbud", "stillmoss", "stridefern", "clearbell")   # docs/mechanics/RingInfusion.md
 HERB_ESSENCE = {"dawnleaf": "warm", "rillprism": "cool", "cinderbud": "warm", "stillmoss": "calm", "stridefern": "quick", "clearbell": "cool"}
@@ -29,9 +30,10 @@ ORCHARD = {   # species -> (fruit, uses) ; uses name the mechanic that consumes 
     "orange": ("orange", ("eat", "sell", "marmalade@inn", "clearbell_pairing@brew")),
     "pear": ("pear", ("eat", "sell", "perry@inn")),
     "lemon": ("lemon", ("sell", "filter_rinse@waterworks", "tonic_sour@brew")),
+    "peach": ("peach", ("eat", "sell", "cobbler@inn", "waystone_offering@shrine")),
 }
-CROPS = {"wheat": "bread@inn", "carrot": "stew@inn", "pumpkin": "lantern@craft", "beet": "dye_purple@craft", "corn": "feed@kennel", "cabbage": "stew@inn"}
-LIVESTOCK = {"sheep": "wool@craft", "hen": "egg@inn", "cow": "milk@inn", "goat": "milk@inn", "bee": "honey@brew"}
+CROPS = {"barley": "skyfarer_ration@inn", "turnip": "stew@inn", "sunroot": "mana_draught@brew", "wheat": "bread@inn", "carrot": "stew@inn", "pumpkin": "lantern@craft", "beet": "dye_purple@craft", "corn": "feed@kennel", "cabbage": "stew@inn"}
+LIVESTOCK = {"duneback": "mount@stable", "sheep": "wool@craft", "hen": "egg@inn", "cow": "milk@inn", "goat": "milk@inn", "bee": "honey@brew"}
 FISH = ("rillperch", "glassfin", "skytrout", "ember_koi")
 GRADES = (("COMMON", 0.70, 1.0, 1.0), ("RICH", 0.25, 2.2, 3.0), ("LEGENDARY", 0.05, 3.0, 3.0))   # ADR-050 odds and multipliers
 
@@ -64,18 +66,33 @@ REALMS = {
                "livestock": ("hen",), "power": ("workshop_generator", "plane_fuel"), "water": "sea docks",
                "story": "BRK01-BRK03: repair scattered assemblies, restore the airfield, plane/hover cart travel",
                "mechanics": ("BRK01 repair", "BRK02 modules", "BRK03 transport")},
-    "PORTAL": {"type": "8-bit Dragon-Warrior realm (towns, caves, castles)", "materials": ("stone", "wood", "iron", "dragon_scale", "egg_shell"),
+    "PORTAL": {"type": "8-bit console-RPG realm (towns, caves, castles; original names only, REALMS.md)", "materials": ("stone", "wood", "iron", "dragon_scale", "egg_shell"),
                "ores": ("iron", "silver", "gold"), "herbs": tuple(HERBS), "orchard": ("apple", "plum"), "crops": ("wheat", "cabbage"),
                "livestock": ("cow", "hen", "bee"), "power": ("torch_oil", "dragon_fire"), "water": "wells, the keeper's waterworks",
                "story": "PORT01-PORT12: keys and gates, inns and shops, land eggs that hatch, RingInfusion brews",
                "mechanics": ("PORT01 keys", "PORT03 inn/shop", "PORT06 egg stages", "RingInfusion")},
+    "PRISMHEART": {"type": "16-bit crystal-era party RPG (ADR-067): crystal shrines, an airship, job classes, summon spirits",
+                   "materials": ("stone", "wood", "prism_glass", "skysilk", "brass"),
+                   "ores": ("iron", "silver", "gold", "starmetal"), "herbs": tuple(HERBS), "orchard": ("pear", "peach", "lemon"),
+                   "crops": ("barley", "turnip", "sunroot"), "livestock": ("duneback", "hen", "goat"),
+                   "power": ("crystal_lamp", "water_wheel", "windmill"), "water": "harbour cisterns and shrine springs",
+                   "story": "ADR-067: six Prism Shards, the Skyfarer airship opens the map, waystones save, summon spirits answer shard-bearers",
+                   "mechanics": ("PRISM01 job classes", "PRISM02 waystones", "PRISM03 shards + summons", "PRISM04 airship travel", "RingInfusion")},
 }
+
+
+# Chemistry algorithm version, written into every profile. v1 (until 2026-10-15) seeded from hash(realm), which Python
+# salts per process, so v1 profiles are NOT reproducible. Manifests written under v1 stay as historical records:
+# do not regenerate them. Re-rolling an old seed under v2 gives new chemistry; the geometry hooks are unchanged.
+CHEM_ALGORITHM = "v2-crc32"
 
 
 def profile(seed, realm="WORLD-ZERO"):
     realm = realm.upper()
     R = REALMS.get(realm, REALMS["WORLD-ZERO"])
-    rng = random.Random((seed * 1_000_003 + 17) ^ (hash(realm) & 0xFFFF))
+    # zlib.crc32, not hash(): str hashes are salted per process (PYTHONHASHSEED), which made every island's chemistry
+    # change from run to run. crc32 is stable, so the same seed and realm give the same chemistry in any process.
+    rng = random.Random((seed * 1_000_003 + 17) ^ (zlib.crc32(realm.encode("utf-8")) & 0xFFFF))
     r = rng.random()
     grade = GRADES[0]
     acc = 0.0
@@ -115,6 +132,7 @@ def profile(seed, realm="WORLD-ZERO"):
     surplus = max(goods, key=goods.get)
     need = min(goods, key=goods.get)
     return {
+        "algorithm": CHEM_ALGORITHM,
         "seed": seed,
         "realm": realm,
         "realm_type": R["type"],

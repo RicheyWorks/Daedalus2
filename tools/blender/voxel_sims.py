@@ -385,11 +385,15 @@ def starter_house():
     for x in range(-W // 2, -10):                    # kitchen half wall
         parts["walls"].append((x, 0, 1, "wall_y"))
         parts["walls"].append((x, 0, 2, "wall_y"))
-    for z in range(0, 12):                           # ridge roof
-        for x in range(-W // 2 - 3 + z * 0, W // 2 + 3):
-            for y in range(-D // 2 - 3 + z * 3, D // 2 + 3 - z * 3):
-                if y in (-D // 2 - 3 + z * 3, D // 2 + 2 - z * 3) or z == 11:
+    for z in range(0, 12):                           # ridge roof: 3 voxels of run per voxel of rise, solid slabs
+        lo, hi = -D // 2 - 3 + z * 3, D // 2 + 3 - z * 3
+        for x in range(-W // 2 - 3, W // 2 + 3):
+            for y in range(lo, hi):
+                if y < lo + 3 or y >= hi - 3 or z == 11:
                     parts["roof"].append((x, y, 15 + z, "roof_s"))
+            if z == 0:                                # eaves underside / ceiling
+                for y in range(-D // 2 - 1, D // 2 + 1):
+                    parts["roof"].append((x, y, 15, "wall_w"))
     for z in range(15, 30):
         parts["roof"].append((30, 20, z, "stone"))
         parts["roof"].append((31, 20, z, "stone"))

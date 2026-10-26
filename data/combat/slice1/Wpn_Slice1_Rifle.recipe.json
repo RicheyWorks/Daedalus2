@@ -1,0 +1,532 @@
+{
+ "schema": "bb-recipe/1",
+ "asset": "Wpn_Slice1_Rifle",
+ "status": "SOURCE-ONLY: recipe staged, not built, not exported, not READY",
+ "seed": 1101,
+ "recipe_sha256": "a6c78b0a4d1a3a80e0ad9aa3e30d00ccc20c8f0bcd70bb62a81623d5a120c551",
+ "spec": {
+  "file": "connectors/claude-asset-pipeline/specs/combat-slice-1.json",
+  "max_triangles": 40000,
+  "sockets": [
+   "Muzzle",
+   "Grip",
+   "Sight",
+   "Magazine"
+  ]
+ },
+ "units": "metres; Blender Z up, front -Y, origin bottom centre; glTF export +Y up",
+ "materials": [
+  {
+   "slot": 0,
+   "name": "Wpn_Slice1_Rifle_M0",
+   "palette": "dark",
+   "hex": "4A4D57",
+   "glow": false
+  },
+  {
+   "slot": 1,
+   "name": "Wpn_Slice1_Rifle_M1",
+   "palette": "steel",
+   "hex": "C9D4E0",
+   "glow": false
+  },
+  {
+   "slot": 2,
+   "name": "Wpn_Slice1_Rifle_M2",
+   "palette": "starmetal",
+   "hex": "7FE3FF",
+   "glow": true
+  }
+ ],
+ "parts": [
+  {
+   "name": "Receiver",
+   "shape": "box",
+   "size": [
+    0.07,
+    0.321,
+    0.12
+   ],
+   "centre": [
+    0.0,
+    0.0725,
+    0.219
+   ],
+   "slot": 0,
+   "tris": 44
+  },
+  {
+   "name": "Rail",
+   "shape": "box",
+   "size": [
+    0.035,
+    0.2889,
+    0.02
+   ],
+   "centre": [
+    0.0,
+    0.0725,
+    0.289
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "Handguard",
+   "shape": "box",
+   "size": [
+    0.063,
+    0.202,
+    0.09
+   ],
+   "centre": [
+    0.0,
+    -0.189,
+    0.224
+   ],
+   "slot": 0,
+   "tris": 44
+  },
+  {
+   "name": "Rib_0",
+   "shape": "box",
+   "size": [
+    0.0672,
+    0.012,
+    0.066
+   ],
+   "centre": [
+    0.0,
+    -0.1284,
+    0.224
+   ],
+   "slot": 2,
+   "tris": 44
+  },
+  {
+   "name": "Rib_1",
+   "shape": "box",
+   "size": [
+    0.0672,
+    0.012,
+    0.066
+   ],
+   "centre": [
+    0.0,
+    -0.1688,
+    0.224
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "Rib_2",
+   "shape": "box",
+   "size": [
+    0.0672,
+    0.012,
+    0.066
+   ],
+   "centre": [
+    0.0,
+    -0.2092,
+    0.224
+   ],
+   "slot": 2,
+   "tris": 44
+  },
+  {
+   "name": "Rib_3",
+   "shape": "box",
+   "size": [
+    0.0672,
+    0.012,
+    0.066
+   ],
+   "centre": [
+    0.0,
+    -0.2496,
+    0.224
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "Barrel",
+   "shape": "cyl_y",
+   "radius": 0.014,
+   "length": 0.131,
+   "centre": [
+    0.0,
+    -0.3555,
+    0.229
+   ],
+   "segments": 16,
+   "slot": 1,
+   "tris": 60
+  },
+  {
+   "name": "MuzzleBrake",
+   "shape": "cyl_y",
+   "radius": 0.022,
+   "length": 0.05,
+   "centre": [
+    0.0,
+    -0.446,
+    0.229
+   ],
+   "segments": 16,
+   "slot": 1,
+   "tris": 60
+  },
+  {
+   "name": "FrontSight",
+   "shape": "box",
+   "size": [
+    0.012,
+    0.015,
+    0.035
+   ],
+   "centre": [
+    0.0,
+    -0.27,
+    0.2815
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "OpticBody",
+   "shape": "box",
+   "size": [
+    0.04,
+    0.122,
+    0.04
+   ],
+   "centre": [
+    0.0,
+    0.0525,
+    0.329
+   ],
+   "slot": 0,
+   "tris": 44
+  },
+  {
+   "name": "OpticMount",
+   "shape": "box",
+   "size": [
+    0.03,
+    0.03,
+    0.015
+   ],
+   "centre": [
+    0.0,
+    0.0525,
+    0.3065
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "OpticLens",
+   "shape": "cyl_y",
+   "radius": 0.016,
+   "length": 0.01,
+   "centre": [
+    0.0,
+    -0.0135,
+    0.329
+   ],
+   "segments": 16,
+   "slot": 2,
+   "tris": 60
+  },
+  {
+   "name": "Magazine",
+   "shape": "box",
+   "size": [
+    0.045,
+    0.07,
+    0.144
+   ],
+   "centre": [
+    0.0,
+    0.0025,
+    0.087
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "MagBase",
+   "shape": "box",
+   "size": [
+    0.05,
+    0.08,
+    0.015
+   ],
+   "centre": [
+    0.0,
+    0.0025,
+    0.0075
+   ],
+   "slot": 0,
+   "tris": 44
+  },
+  {
+   "name": "PistolGrip",
+   "shape": "box",
+   "size": [
+    0.04,
+    0.05,
+    0.12
+   ],
+   "centre": [
+    0.0,
+    0.1525,
+    0.099
+   ],
+   "slot": 0,
+   "tris": 44
+  },
+  {
+   "name": "TriggerGuard",
+   "shape": "box",
+   "size": [
+    0.012,
+    0.07,
+    0.01
+   ],
+   "centre": [
+    0.0,
+    0.0975,
+    0.114
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "Trigger",
+   "shape": "box",
+   "size": [
+    0.008,
+    0.008,
+    0.03
+   ],
+   "centre": [
+    0.0,
+    0.1075,
+    0.139
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "Stock",
+   "shape": "box",
+   "size": [
+    0.05,
+    0.218,
+    0.084
+   ],
+   "centre": [
+    0.0,
+    0.342,
+    0.214
+   ],
+   "slot": 0,
+   "tris": 44
+  },
+  {
+   "name": "StockRidge",
+   "shape": "box",
+   "size": [
+    0.03,
+    0.1744,
+    0.015
+   ],
+   "centre": [
+    0.0,
+    0.342,
+    0.2635
+   ],
+   "slot": 2,
+   "tris": 44
+  },
+  {
+   "name": "ButtPad",
+   "shape": "box",
+   "size": [
+    0.055,
+    0.02,
+    0.132
+   ],
+   "centre": [
+    0.0,
+    0.461,
+    0.204
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "Strip",
+   "shape": "box",
+   "size": [
+    0.074,
+    0.1605,
+    0.012
+   ],
+   "centre": [
+    0.0,
+    0.0725,
+    0.199
+   ],
+   "slot": 2,
+   "tris": 44
+  }
+ ],
+ "sockets": [
+  {
+   "name": "SOCKET_Muzzle",
+   "location": [
+    0.0,
+    -0.471,
+    0.229
+   ],
+   "forward": [
+    0,
+    -1,
+    0
+   ],
+   "attach": {
+    "barrel": [
+     0,
+     -1,
+     0
+    ],
+    "up": [
+     0,
+     0,
+     1
+    ]
+   },
+   "location_gltf": [
+    0.0,
+    0.229,
+    0.471
+   ]
+  },
+  {
+   "name": "SOCKET_Grip",
+   "location": [
+    0.0,
+    0.1525,
+    0.099
+   ],
+   "forward": [
+    0,
+    -1,
+    0
+   ],
+   "attach": {
+    "barrel": [
+     0,
+     -1,
+     0
+    ],
+    "up": [
+     0,
+     0,
+     1
+    ]
+   },
+   "location_gltf": [
+    0.0,
+    0.099,
+    -0.1525
+   ]
+  },
+  {
+   "name": "SOCKET_Sight",
+   "location": [
+    0.0,
+    0.1135,
+    0.329
+   ],
+   "forward": [
+    0,
+    -1,
+    0
+   ],
+   "attach": {
+    "barrel": [
+     0,
+     -1,
+     0
+    ],
+    "up": [
+     0,
+     0,
+     1
+    ]
+   },
+   "location_gltf": [
+    0.0,
+    0.329,
+    -0.1135
+   ]
+  },
+  {
+   "name": "SOCKET_Magazine",
+   "location": [
+    0.0,
+    0.0025,
+    0.159
+   ],
+   "forward": [
+    0,
+    -1,
+    0
+   ],
+   "location_gltf": [
+    0.0,
+    0.159,
+    -0.0025
+   ]
+  }
+ ],
+ "predicted": {
+  "triangles": 1016,
+  "parts": 22,
+  "bounds_min": [
+   -0.037,
+   -0.471,
+   0.0
+  ],
+  "bounds_max": [
+   0.037,
+   0.471,
+   0.349
+  ],
+  "dimensions": [
+   0.074,
+   0.942,
+   0.349
+  ]
+ },
+ "checks": {
+  "triangles <= 40000": true,
+  "sockets Muzzle/Grip/Sight/Magazine": true,
+  "sockets inside bounds": true,
+  "material slots 1..3": true,
+  "origin at bottom centre": true
+ },
+ "export": {
+  "format": "GLB",
+  "export_yup": true,
+  "export_apply": true,
+  "export_extras": true
+ },
+ "build": "blender -b --factory-startup --python tools/blender/weapons/build_rifle.py -- --manifest <this file> --out <staging dir outside art/>  (needs a coordinated window)"
+}

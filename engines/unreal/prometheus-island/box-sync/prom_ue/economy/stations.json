@@ -1,0 +1,45 @@
+{
+ "schema": "daedalus.economy/v0",
+ "stations": [
+  {
+   "id": "kiln",
+   "tier": 1
+  },
+  {
+   "id": "bloomery",
+   "tier": 2
+  },
+  {
+   "id": "smelter",
+   "tier": 3
+  },
+  {
+   "id": "still",
+   "tier": 2
+  },
+  {
+   "id": "spinning_wheel",
+   "tier": 1
+  },
+  {
+   "id": "cookpot",
+   "tier": 1
+  },
+  {
+   "id": "dye_vat",
+   "tier": 1
+  },
+  {
+   "id": "anvil",
+   "tier": 2
+  },
+  {
+   "id": "workbench",
+   "tier": 1
+  },
+  {
+   "id": "refinery",
+   "tier": 4
+  }
+ ]
+}

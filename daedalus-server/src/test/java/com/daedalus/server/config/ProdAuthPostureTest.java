@@ -97,7 +97,9 @@ class ProdAuthPostureTest {
 
     static {
         EXPECTED.put("POST /api/v1/audio/design", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/audio/herb-chord", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/kennel/brew", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/brew/melody", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/inventory/" + ID + "/catalog", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/ocean/v1", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/realms", Posture.AUTHENTICATED);

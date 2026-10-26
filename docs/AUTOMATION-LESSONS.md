@@ -1339,3 +1339,136 @@ shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rail
   (`build(keep=False)`): 71 creatures in 29 s. Keep them only for a contact sheet (`--sheet`).
 - Factory startup ships a cube, a light and a camera — delete them before a contact-sheet render or the cube
   photobombs the sheet.
+
+## 2026-10-14 16:30 — eggs / house-grave-sports / Sims realm catalogues, and a launcher gotcha
+- `export_catalog.py {eggs|props|sims} OUT [family…]` exported 412 assets in ~10 s total (3 s / 2 s / 1 s plus
+  sheets) — freeing objects after every export is what keeps the FBX exporter linear.
+- The bridge's `powershell_start` background jobs stopped launching silently (job .ps1 written, no log, no
+  process, `running:true` forever). Launch the written job script yourself instead:
+  `Start-Process powershell -ArgumentList "-NoProfile","-ExecutionPolicy","Bypass","-File",<job.ps1> -WindowStyle Hidden`
+  and have the script append to its own log under `projects\_to_delete\`. Check `Get-Process blender` /
+  the log after 8 s — don't wait a minute on a job that never started.
+- Roof lesson: a sloped voxel roof built as "edge rows per z" leaves see-through slats when the run per rise
+  is > 1 voxel; fill `run` rows per step (voxel_sims starter house, 3-per-1 pitch) and add a ceiling slab.
+- Single-item contact sheets: centre with `(cols - 1) * pitch / 2`, not `cols * pitch / 2`.
+
+## 2026-10-14 18:45 — owls / HD islands
+- Names with underscores inside a field (`owl_great_horned_plain_01`) break `split("_")[i]`; parse with the module's
+  `spec()` — the owl sheets crashed after a clean 504 export because of this (exit 1, assets fine).
+- Collision boxes render unless `hide_render = True`; a deck-level UCX slab poked through the lake basin and turned
+  the lake magenta in Workbench. Keep the safety floor below the deepest carved basin.
+- Keel depth must scale with the plateau radius, or a small islet hangs a full-size keel and reads as a pillar.
+- Contact-sheet cameras look from −Y; creatures face +Y — rotate subjects 155–180° in the sheet only.
+- HD island timing (PC, Blender 4.3.1 headless): 17 s build+export per island, ~91 k tris, 612 objects (instances).
+- One Blender process building 8 HD islands slowed 17 s → 65 s per plot (scene accumulation). Fix: one fresh
+  process per plot (`--plot I`), then a links pass that re-imports the 8 GLBs to render. ~16 s per plot, flat.
+- Ring layouts: Ultra's 256 m pitch is neighbour-to-neighbour. For 7 around a hub the ring radius is
+  256 / (2·sin(π/7)) = 295 m; using 256 m as the radius left ring islands only ~2 m apart.
+- glTF re-import leaves `diffuse_color` white, so Workbench MATERIAL renders go grey — copy Base Color back (and
+  the mean vertex colour for vertex-coloured terrain) before rendering an imported overview.
+- Killing my own jobs by command-line match: exclude `$PID` — a pattern that appears in the command text also
+  matches the bridge shell running the kill, which cut that call short.
+
+## 2026-10-14 19:10 — 20× faster islands
+- `bpy.ops.mesh.primitive_*`, `transform_apply`, `modifier_apply`, `object.convert`, `object.join` each re-evaluate
+  the scene: an 860-object island took 70 s. Writing meshes with bmesh (`create_cube/cone/uvsphere`, `bevel`),
+  sweeping tubes along a Catmull-Rom spline, joining with `bm.from_mesh` after `me.transform(matrix_basis)`, and
+  resampling LODs from the height function brought it to 3.2 s. Use `matrix_basis` when nothing is parented —
+  `matrix_world` is stale until a depsgraph update.
+- Mass runs: one Blender process per worker, purge (`bpy.data.batch_remove`) objects/meshes/materials after every
+  item and clear module caches (material dict) — no slowdown over hundreds of items; resume by skipping existing json.
+- Shared PC memory: 4 workers + Unreal editor + another team's Cycles render took free RAM to 0.4 GB. Workers now
+  check `GlobalMemoryStatusEx` and pause below 1.5 GB.
+
+## 2026-10-14 20:25 — pixel art from Blender
+- Blender 4.x default view transform is AgX: Workbench renders come out desaturated and lifted. Use `Standard`.
+- Read renders back with `colorspace_settings.name = "Non-Color"` or pixels arrive linearised (muddy).
+- Pixelate inside Blender with numpy (no PIL there): alpha-weighted block average → colour limit (top-N of a coarse
+  lattice) → 1 px outline → nearest ×4. One shared module: `tools/blender/pixel_art.py`.
+- A shaded "sky" plane renders grey under studio light — render transparent and composite the gradient in numpy.
+- A gamma sweep on one sheet (1.0 vs 1.6) settled the setting in one render each; do that before batch re-renders.
+
+## Long-lived Blender workers: purge every datablock type, and recycle the process (2026-10-14)
+- The 10k HD-island run fell from ~45 to ~4 islands/min around island 8,000 while each island still built in 6-9 s:
+  the time went *between* islands. `purge()` removed objects/meshes/materials/curves but not the ThumbCam camera made
+  per island, images, actions, node groups, textures, stray collections/worlds — thousands of orphans per worker.
+- Fix (`hd_batch.py`): remove every datablock collection the build touches + `bpy.data.orphans_purge(do_recursive=True)`,
+  and `--max-items 150` so a wrapper loop restarts a fresh Blender (resume skips finished islands). After the restart:
+  ~3.5 s per island, ~60 islands/min on 4 workers.
+- Watch the gap between log lines, not the per-item time the script prints.
+
+## A new file under `static/` is a production decision (2026-10-15)
+
+Production serves only the files listed in `ProdSecurityConfig.STATIC_PAGES` / `STATIC_SCRIPTS` and answers 401 to
+the rest; `ProdStaticSurfacePostureTest` fails the build while any static file has no recorded posture. The
+controller and settings modules (`/controllers/*`, `/settings/*`) shipped without rows: the realm page imports them,
+so prod would have refused them and the realm would not have loaded. It went unseen because the realm checks ran
+against a dev-profile server, and because `mvn -pl daedalus-server test` without `-am` compiled against a stale core
+jar, failed to compile, and left an old passing surefire report on disk. Rules: list every new static file in
+`ProdSecurityConfig`; run the server tests with `-am`; read the BUILD line, never a leftover report.
+
+## Never seed from hash() of a string (2026-10-15)
+- **The bug:** `island_chemistry.profile()` used `hash(realm)` in its RNG seed. Python salts str hashes per process
+  (PYTHONHASHSEED), so every island's "seeded" chemistry differed on every run, and nothing ever flagged it.
+- **The fix:** `zlib.crc32(realm.encode())`.
+- **The rule:** derive seeds from stable digests (crc32/sha) only, and test determinism by building twice in two
+  processes and diffing the manifests.
+- **Cloud builds:** Blender work can run headless in the cloud with `pip install bpy` (5.2.2, cp313) in a venv. That
+  frees the shared PC for native work.
+
+## Blender: refresh matrices before measuring (2026-10-15)
+- **The trap:** objects created in a script have a stale `matrix_world` until `bpy.context.view_layer.update()` runs.
+  Distances computed with it compare meshes sitting at their local origin. Reedwheel r4's first clearance read was
+  0.09 m because of this.
+- **The rule:** call `view_layer.update()` before any `matrix_world`-based measurement, and verify a geometric claim
+  on the delivered files in a fresh process (`tools/blender/clearance_check.py`).
+- **Name the metric:** a centre-distance guard is not a mesh clearance. Say which metric was measured, report the
+  measured number, and make the build fail when the number misses.
+
+## Art can disprove a design: render it at the design's own numbers (2026-10-15)
+- **What happened:** the tide-pool habitat proposal r1 passed its checker (46/46): no zone dries out under any
+  resident. Building it as Tide-Pen art r2 showed a 3 m seahorse standing out of 0.7 m low water. The checker only
+  asked whether a zone was wet, never whether it was deeper than the creature is tall.
+- **The fix:** proposal r2 gives residents a body size read from the voxel creature itself, and both the checker and
+  the build fail when a used zone is shallower than its resident.
+- **Also found:** r1's sea sheet ran under the whole shelf at z=0, so every pool showed sea level whatever its own
+  water did. A tide state cannot be shown until each basin owns its water.
+- **Also found:** GLBs holding a `Glow_*` lamp sphere export the same triangles in a different order run to run, so
+  their bytes never hash the same twice; every other role is byte-identical. Pin the delivered bytes; do not expect
+  a rebuild to reproduce lamp roles byte for byte.
+
+## Blender's create_uvsphere is not deterministic: sort, then prove with two processes (2026-10-15)
+- **The bug:** `bmesh.ops.create_uvsphere` (Blender 5.2) emits the same faces in a different order on every run.
+  Every GLB holding a sphere (lamps, lanterns, string lights) hashed differently each build: Tide-Pen r1/r2
+  CareStation and Pen, and Reedwheel r4 Island, KeeperPost, Refuge, RepairStation, Shore and Walkway. The geometry
+  was the same each time; only the bytes moved.
+- **The fix:** `hd_island.sphere` now ranks the faces by rounded centroid and sorts them. `tools/blender/repro_check.py
+  RECIPE` builds twice in two fresh processes and compares every GLB: Tide-Pen r1/r2/r3 and Reedwheel r4 now pass.
+- **What this means for delivered packets:** bytes already delivered stay the reference, pinned by their hashes.
+  A rebuild of those sphere roles will not match them byte for byte. The rebuilt geometry is the same, and Reedwheel
+  r4's WheelFrame and WheelRotor do rebuild byte-identical.
+- **Confirmed for the operator too:** `bpy.ops.mesh.primitive_uv_sphere_add` gives a different face order on each
+  of three runs. It is used by labyrinth_cast, portal_hero_polish, realm_creature, gallery_creatures and
+  portal_slime_polish (not changed here; their owners decide).
+- **The shared fix:** `tools/blender/stable_mesh.py` provides `sort_faces(obj)` and `sort_bmesh(bm)`. Faces are
+  ranked by centroid, with vertex positions as the tie-break. Three runs of the operator sphere followed by
+  `sort_faces` give the same order. `hd_island.sphere` uses it, and Tide-Pen r3 rebuilds byte-identical to the
+  delivered packet.
+
+## A render cache key must cover everything that decides the pixels (2026-10-16)
+- **The bug:** PootScoot's review (32692) found it. `--resume` reused a shot when its GLBs, samples and resolution
+  matched. It ignored the camera frame, focus, view and the tide `adjust()` hook. A changed camera or water offset
+  with the same GLBs would have reused the old PNG while the card reported the new state. The sidecar was also
+  written in place, so an interrupted write could leave a half file.
+- **Did it happen?** No. In the Tide-Pen r3 batch the reused shots (after hero/detail/top, before hero/detail) had the
+  same cameras and no adjustment, and all three tide shots were rendered fresh.
+- **The fix:** `tools/blender/render_cache.py` (pure, no bpy) builds one cache key from:
+  - the sources;
+  - samples, resolution, view, focus and frame;
+  - a JSON identity for whatever `adjust()` does.
+
+  A shot made with `adjust()` but no identity is never reused. A malformed, truncated or pre-key sidecar is a miss,
+  not an error. The PNG and sidecar are written to temp files and renamed, sidecar last. `render_cache_test.py`
+  passes 22/22.
+- **The rule:** list every input that decides the output before writing a cache key, and make a missing or unnamed
+  input a miss.

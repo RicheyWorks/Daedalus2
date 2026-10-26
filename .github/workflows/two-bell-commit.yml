@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Two-Bell Commit
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/two_bell_commit.py'
+      - 'tools/streaming/two_bell_commit_test.py'
+      - 'data/islands/disk-saver/two-bell-commit-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/two-bell-commit.yml'
+permissions:
+  contents: read
+jobs:
+  two-bell-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G144 Two-Bell Commit rules (torn moves, presumed abort, logged decision wins, G86 tie-in)
+        run: python -m unittest tools/streaming/two_bell_commit_test.py -v
+      - name: CLI smoke (logged two-bell wins)
+        run: python tools/streaming/two_bell_commit.py data/islands/disk-saver/two-bell-commit-v1.json

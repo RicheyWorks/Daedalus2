@@ -590,6 +590,8 @@ INSECTS = ("butterfly", "moth", "dragonfly", "firefly", "ladybug", "beetle", "gr
 PLANTS = ("venus_flytrap", "pitcher", "monkey_cup", "sun_pitcher", "cobra_lily", "moccasin", "sundew", "dewy_pine", "rainbow_plant", "butterwort", "bladderwort", "corkscrew", "waterwheel")
 SPECIES = {"animal": tuple(ANIMALS), "bird": tuple(BIRDS), "bee": tuple(BEES), "plant": PLANTS, "fish": tuple(FISH),
            "zombie": tuple(ZOMBIES), "dino": DINOS, "sea": SEA, "insect": INSECTS}
+NAMES = {}   # species key -> export name override (e.g. "Mob_Portal_AshDrake_Voxel_01")
+EXTRA = {}   # family -> (names, plan_fn): other catalogues (voxel_dragons) register here and ride the same rig/clips/export
 
 
 def plan(species):
@@ -611,15 +613,21 @@ def plan(species):
         return _sea(species)
     if species in INSECTS:
         return _insect(species)
+    for names, fn in EXTRA.values():
+        if species in names:
+            return fn(species)
     raise KeyError(species)
 
 
 def family_of(species):
-    return next(f for f, names in SPECIES.items() if species in names)
+    for f, names in SPECIES.items():
+        if species in names:
+            return f
+    return next(f for f, (names, _) in EXTRA.items() if species in names)
 
 
 def all_species():
-    return [s for names in SPECIES.values() for s in names]
+    return [s for names in SPECIES.values() for s in names] + [s for names, _ in EXTRA.values() for s in names]
 
 
 # ---- Blender: mesh, rig, clips, export -------------------------------------------------------------------------
@@ -631,7 +639,7 @@ def build(species, out_dir, scale=10.0, keep=False):
     import bpy
     parts = plan(species)
     fam = family_of(species)
-    name = "Creature_" + "".join(w.capitalize() for w in species.split("_"))
+    name = NAMES.get(species) or "Creature_" + "".join(w.capitalize() for w in species.split("_"))
     for ob in list(bpy.data.objects):
         if ob.name.startswith(name):
             bpy.data.objects.remove(ob, do_unlink=True)
@@ -706,14 +714,33 @@ def build(species, out_dir, scale=10.0, keep=False):
         rig.animation_data_create()
         act = bpy.data.actions.new(name + "_" + clip)
         rig.animation_data.action = act
-        for f in range(1, n + 2, 6 if clip == "Walk" else 3):
+        for f in range(1, n + 2, 6 if (clip == "Walk" and fam != "rabbit") else 3):
             ph = (f - 1) / n * 2 * math.pi
             for p in rig.pose.bones:
                 p.location = (0, 0, 0)
                 p.rotation_euler = (0, 0, 0)
             rig.pose.bones["body"].location.z = 0.02 * k * math.sin(ph)
             if clip == "Idle":
-                if fam == "bee" or (fam == "insect" and len(parts.get("wing.L", [])) > 0):
+                if fam == "dragon":                                                 # hovering: slow wingbeats, tail sway
+                    for side in ("L", "R"):
+                        rig.pose.bones["wing." + side].rotation_euler.y = 0.7 * math.sin(ph * 2) * (1 if side == "L" else -1)
+                    rig.pose.bones["body"].location.z = 0.25 * k + 0.06 * k * math.sin(ph * 2)
+                    rig.pose.bones["tail"].rotation_euler.z = 0.25 * math.sin(ph)
+                    rig.pose.bones["head"].rotation_euler.x = 0.1 * math.sin(ph)
+                elif fam == "owl":                                                  # the owl look: slow head swivel, blink-bob
+                    rig.pose.bones["head"].rotation_euler.z = 1.2 * math.sin(ph)
+                    rig.pose.bones["head"].rotation_euler.x = 0.1 * math.sin(ph * 3)
+                    rig.pose.bones["body"].location.z = 0.01 * k * math.sin(ph * 2)
+                elif fam == "wolf":                                                 # ears-up watch: slow scan, low tail sway, breathing
+                    rig.pose.bones["head"].rotation_euler.z = 0.35 * math.sin(ph)
+                    rig.pose.bones["head"].rotation_euler.x = 0.06 * math.sin(ph * 2)
+                    rig.pose.bones["tail"].rotation_euler.z = 0.2 * math.sin(ph * 2)
+                    rig.pose.bones["body"].location.z = 0.008 * k * math.sin(ph * 2)
+                elif fam == "rabbit":                                               # nose twitch, alert freeze, twitch again
+                    rig.pose.bones["head"].rotation_euler.x = 0.05 * math.sin(ph * 8) * (1 if math.sin(ph) > 0 else 0)
+                    rig.pose.bones["head"].rotation_euler.z = 0.25 * max(0.0, math.sin(ph - 1.0))
+                    rig.pose.bones["body"].location.z = 0.01 * k * math.sin(ph * 4)
+                elif fam == "bee" or (fam == "insect" and len(parts.get("wing.L", [])) > 0):
                     for side in ("L", "R"):
                         rig.pose.bones["wing." + side].rotation_euler.y = 0.9 * math.sin(ph * 6) * (1 if side == "L" else -1)
                     rig.pose.bones["body"].location.z = 0.05 * k * math.sin(ph) + 0.3 * k
@@ -723,10 +750,35 @@ def build(species, out_dir, scale=10.0, keep=False):
                 else:
                     rig.pose.bones["head"].rotation_euler.x = 0.08 * math.sin(ph)
                     rig.pose.bones["tail"].rotation_euler.z = 0.3 * math.sin(ph * 2)
+            elif clip in ("Walk", "Run") and fam == "dragon":                          # Walk = cruise, Run = dive-speed
+                fast = 1.6 if clip == "Run" else 1.0
+                for side, sgn in (("L", 1), ("R", -1)):
+                    rig.pose.bones["wing." + side].rotation_euler.y = 1.0 * math.sin(ph * 2 * fast) * sgn
+                    rig.pose.bones["leg." + side].rotation_euler.x = -0.6                 # legs tucked in flight
+                rig.pose.bones["body"].location.z = 0.25 * k + 0.08 * k * math.sin(ph * 2 * fast)
+                rig.pose.bones["body"].rotation_euler.x = 0.1 * fast
+                rig.pose.bones["tail"].rotation_euler.x = 0.2 * math.sin(ph * 2 * fast)
+                rig.pose.bones["head"].rotation_euler.x = -0.1 * fast
+            elif clip in ("Walk", "Run") and fam == "rabbit":                         # hops: push off the hind feet, land on the fore
+                hops = 2 if clip == "Walk" else 3
+                hp = (ph * hops) % (2 * math.pi)
+                up = max(0.0, math.sin(hp))
+                rig.pose.bones["body"].location.z = (0.35 if clip == "Walk" else 0.55) * k * up
+                rig.pose.bones["body"].rotation_euler.x = -0.25 * math.sin(hp)                    # nose up on take-off, down on landing
+                for side in ("L", "R"):
+                    rig.pose.bones["leg." + side].rotation_euler.x = 0.7 * math.sin(hp)          # both hind feet together
+                rig.pose.bones["tail"].rotation_euler.x = 0.3 * up
+            elif clip == "Run" and fam == "wolf":                                      # gallop: big reach, back flexes, tail streams
+                for side, sgn in (("L", 1), ("R", -1)):
+                    rig.pose.bones["leg." + side].rotation_euler.x = 0.95 * math.sin(ph + (0.5 if sgn < 0 else 0))
+                rig.pose.bones["body"].location.z = 0.08 * k * abs(math.sin(ph))
+                rig.pose.bones["body"].rotation_euler.x = 0.12 * math.sin(ph)
+                rig.pose.bones["head"].rotation_euler.x = 0.1 - 0.1 * math.sin(ph)
+                rig.pose.bones["tail"].rotation_euler.x = -0.35
             elif clip == "Run" and fam not in ("plant",):
                 for side, sgn in (("L", 1), ("R", -1)):
                     rig.pose.bones["leg." + side].rotation_euler.x = 0.8 * math.sin(ph) * sgn
-                    rig.pose.bones["wing." + side].rotation_euler.y = (1.1 if fam in ("bird", "bee") else 0.4) * math.sin(ph * 2) * sgn
+                    rig.pose.bones["wing." + side].rotation_euler.y = (1.1 if fam in ("bird", "bee", "owl") else 0.4) * math.sin(ph * 2) * sgn
                 rig.pose.bones["body"].location.z = 0.06 * k * abs(math.sin(ph))
                 rig.pose.bones["body"].rotation_euler.x = 0.12                     # leans into the run
                 rig.pose.bones["head"].rotation_euler.x = 0.15 * math.sin(ph * 2)
@@ -756,6 +808,33 @@ def build(species, out_dir, scale=10.0, keep=False):
                     for side in ("L", "R"):
                         rig.pose.bones["wing." + side].rotation_euler.x = -0.6 * (1 - math.cos(ph)) / 2   # grab
                     rig.pose.bones["head"].rotation_euler.x = 0.3 * math.sin(ph)
+                elif fam == "owl":                                                              # silent swoop: wings wide, dip, talons forward
+                    dip = (1 - math.cos(ph)) / 2
+                    for side in ("L", "R"):
+                        rig.pose.bones["wing." + side].rotation_euler.y = 1.3 * dip * (1 if side == "L" else -1)
+                        rig.pose.bones["leg." + side].rotation_euler.x = -0.9 * dip
+                    rig.pose.bones["body"].location.z = 0.3 * k * dip - 0.1 * k * max(0.0, math.sin(ph * 2))
+                    rig.pose.bones["body"].rotation_euler.x = 0.3 * dip
+                elif fam == "dragon":                                                           # breath: rear back, then pour it out
+                    rear = max(0.0, math.sin(ph)) if ph < math.pi else 0.0
+                    rig.pose.bones["head"].rotation_euler.x = -0.6 * rear + 0.5 * max(0.0, math.sin(ph - math.pi))
+                    rig.pose.bones["body"].rotation_euler.x = -0.2 * rear
+                    rig.pose.bones["body"].location.z = 0.25 * k
+                    for side in ("L", "R"):
+                        rig.pose.bones["wing." + side].rotation_euler.y = 0.8 * (1 if side == "L" else -1) * (0.5 + 0.5 * rear)
+                elif fam == "wolf":                                                             # the howl: sit back, muzzle to the sky
+                    up = (1 - math.cos(ph)) / 2
+                    rig.pose.bones["body"].rotation_euler.x = -0.35 * up
+                    rig.pose.bones["head"].rotation_euler.x = -1.0 * up
+                    rig.pose.bones["tail"].rotation_euler.x = 0.3 * up
+                    for side in ("L", "R"):
+                        rig.pose.bones["leg." + side].rotation_euler.x = 0.25 * up
+                elif fam == "rabbit":                                                           # rear up on the hind feet to look
+                    up = (1 - math.cos(ph)) / 2
+                    rig.pose.bones["body"].rotation_euler.x = -0.7 * up
+                    rig.pose.bones["body"].location.z = 0.15 * k * up
+                    rig.pose.bones["head"].rotation_euler.x = 0.55 * up
+                    rig.pose.bones["head"].rotation_euler.z = 0.4 * math.sin(ph * 2) * up
                 elif fam == "dino":
                     rig.pose.bones["head"].rotation_euler.z = 0.5 * math.sin(ph)                    # roar sweep
                     rig.pose.bones["head"].rotation_euler.x = -0.4 * max(0.0, math.sin(ph))
@@ -770,7 +849,7 @@ def build(species, out_dir, scale=10.0, keep=False):
                     rig.pose.bones["leg." + side].rotation_euler.x = (0.3 if fam == "zombie" else 0.45) * math.sin(ph) * sgn
                 if fam == "zombie":
                     rig.pose.bones["body"].rotation_euler.z = 0.15 * math.sin(ph)              # the shamble
-                    rig.pose.bones["wing." + side].rotation_euler.y = (0.8 if fam == "bird" else 0.15) * math.sin(ph * (2 if fam == "bird" else 1)) * sgn
+                    rig.pose.bones["wing." + side].rotation_euler.y = (0.8 if fam in ("bird", "owl") else 0.15) * math.sin(ph * (2 if fam in ("bird", "owl") else 1)) * sgn
                 rig.pose.bones["body"].location.z = 0.03 * k * abs(math.sin(ph))
                 rig.pose.bones["head"].rotation_euler.x = 0.1 * math.sin(ph * 2)
             elif clip == "Attack":
@@ -787,7 +866,7 @@ def build(species, out_dir, scale=10.0, keep=False):
             for p in rig.pose.bones:
                 p.keyframe_insert(data_path="rotation_euler", frame=f)
                 p.keyframe_insert(data_path="location", frame=f)
-        if clip in ("Walk", "Run"):
+        if clip in ("Walk", "Run") and fam not in ("dragon", "rabbit"):   # hops arc smoothly      # flyers glide smoothly; walkers keep the stepped feel
             for fc in act.fcurves:
                 for key in fc.keyframe_points:
                     key.interpolation = "CONSTANT"        # the stepped voxel feel, like the Portal creatures

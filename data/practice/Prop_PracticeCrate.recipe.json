@@ -1,0 +1,139 @@
+{
+ "schema": "blender-recipe/v1",
+ "asset": "Prop_PracticeCrate",
+ "status": "RECIPE (staged, not READY)",
+ "spec": {
+  "request_id": "ueb-practice-crate-20261019",
+  "link": 48146,
+  "tri_cap": 500,
+  "sockets": [
+   "Top"
+  ],
+  "size_m": [
+   0.52,
+   0.52,
+   0.5
+  ],
+  "palette": [
+   "wood",
+   "dark"
+  ],
+  "lod": "LOD0 only",
+  "collision": "none",
+  "seed": 0
+ },
+ "units": "metres, Blender Z up, front -Y, origin bottom centre; glTF +Y up",
+ "materials": [
+  {
+   "slot": 0,
+   "name": "Prop_PracticeCrate_M0",
+   "palette": "wood",
+   "hex": "9A6B3F",
+   "glow": false
+  },
+  {
+   "slot": 1,
+   "name": "Prop_PracticeCrate_M1",
+   "palette": "dark",
+   "hex": "4A4D57",
+   "glow": false
+  }
+ ],
+ "parts": [
+  {
+   "name": "Body",
+   "shape": "box",
+   "size": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "centre": [
+    0,
+    0,
+    0.25
+   ],
+   "slot": 0,
+   "tris": 44
+  },
+  {
+   "name": "BandLow",
+   "shape": "box",
+   "size": [
+    0.52,
+    0.52,
+    0.06
+   ],
+   "centre": [
+    0,
+    0,
+    0.1
+   ],
+   "slot": 1,
+   "tris": 44
+  },
+  {
+   "name": "BandHigh",
+   "shape": "box",
+   "size": [
+    0.52,
+    0.52,
+    0.06
+   ],
+   "centre": [
+    0,
+    0,
+    0.4
+   ],
+   "slot": 1,
+   "tris": 44
+  }
+ ],
+ "sockets": [
+  {
+   "name": "SOCKET_Top",
+   "location": [
+    0.0,
+    0.0,
+    0.5
+   ],
+   "forward": [
+    0,
+    -1,
+    0
+   ],
+   "location_gltf": [
+    0.0,
+    0.5,
+    0.0
+   ]
+  }
+ ],
+ "predicted": {
+  "triangles": 132,
+  "parts": 3,
+  "bounds_min": [
+   -0.26,
+   -0.26,
+   0.0
+  ],
+  "bounds_max": [
+   0.26,
+   0.26,
+   0.5
+  ],
+  "dimensions": [
+   0.52,
+   0.52,
+   0.5
+  ]
+ },
+ "export": {
+  "format": "GLB",
+  "export_yup": true,
+  "export_apply": true,
+  "export_extras": true
+ },
+ "build": "blender -b --factory-startup --python tools/blender/weapons/build_rifle.py -- --manifest <this> --out <staging dir outside art>",
+ "recipe_sha256": "9a52db79bd7ab814db42f5ded3008171901f747a633a73e498120dd23fa91438"
+}

@@ -127,6 +127,54 @@ namespace JavaArcadeWire
         FJsonSerializer::Serialize(Object.ToSharedRef(), TJsonWriterFactory<>::Create(&Out));
         return Out;
     }
+    bool SudokuBoard(const TSharedPtr<FJsonObject>& Json, JA::SudokuView& Out)
+    {
+        JA::SudokuView Candidate;
+        FString Id, Owner;
+        int64 Number = 0;
+        if (!String(Json, TEXT("gameId"), Id, 256) || !String(Json, TEXT("playerId"), Owner, 128)) return false;
+        Candidate.GameId = TCHAR_TO_UTF8(*Id); Candidate.Owner = TCHAR_TO_UTF8(*Owner);
+        if (!Integer(Json, TEXT("difficulty"), Number, 1, 5)) return false;
+        Candidate.Difficulty = static_cast<int>(Number);
+        if (!Integer(Json, TEXT("lives"), Number, 0, 1000)) return false;
+        Candidate.Lives = static_cast<int>(Number);
+        if (!Integer(Json, TEXT("score"), Candidate.Score, -MaxSafeInteger)
+            || !Integer(Json, TEXT("hintCount"), Candidate.HintCount)
+            || !Integer(Json, TEXT("moveCount"), Candidate.MoveCount)
+            || !Integer(Json, TEXT("elapsedSeconds"), Candidate.ElapsedSeconds)
+            || !Integer(Json, TEXT("timeLimitSeconds"), Candidate.TimeLimitSeconds)
+            || !Integer(Json, TEXT("secondsLeft"), Candidate.SecondsLeft)
+            || !Bool(Json, TEXT("solved"), Candidate.Solved)
+            || !Bool(Json, TEXT("timeUp"), Candidate.TimeUp)
+            || !Bool(Json, TEXT("chaosMode"), Candidate.ChaosMode)
+            || !Bool(Json, TEXT("mirrorMode"), Candidate.MirrorMode)) return false;
+        const TArray<TSharedPtr<FJsonValue>>* Rows = nullptr;
+        if (!Json->TryGetArrayField(TEXT("cells"), Rows) || Rows->Num() != 9) return false;
+        int32 Index = 0;
+        for (const auto& Row : *Rows)
+        {
+            if (!Row.IsValid() || Row->Type != EJson::Array || Row->AsArray().Num() != 9) return false;
+            for (const auto& Cell : Row->AsArray())
+            {
+                if (!Cell.IsValid() || Cell->Type != EJson::Object) return false;
+                const TSharedPtr<FJsonObject> C = Cell->AsObject();
+                if (!Integer(C, TEXT("value"), Number, 0, 9) || !Bool(C, TEXT("isGiven"), Candidate.Givens[Index])) return false;
+                Candidate.Values[Index] = static_cast<int>(Number);
+                const TArray<TSharedPtr<FJsonValue>>* Marks = nullptr;
+                if (!C->TryGetArrayField(TEXT("pencilMarks"), Marks) || Marks->Num() > 9) return false;
+                for (const auto& Mark : *Marks)
+                {
+                    double Digit = 0;
+                    if (!Mark.IsValid() || Mark->Type != EJson::Number || !Mark->TryGetNumber(Digit) || Digit < 1 || Digit > 9 || FMath::FloorToDouble(Digit) != Digit) return false;
+                    Candidate.PencilMasks[Index] |= static_cast<uint16>(1u << static_cast<unsigned>(Digit));
+                }
+                ++Index;
+            }
+        }
+        if (!JA::ValidSudoku(Candidate)) return false;
+        Out = std::move(Candidate);
+        return true;
+    }
     bool Card(const TSharedPtr<FJsonValue>& Value, JA::VisibleCard& Out)
     {
         if (!Value.IsValid() || Value->Type != EJson::Object) return false;
@@ -305,6 +353,7 @@ void ADaedalusJavaArcade::StopSocket()
 }
 void ADaedalusJavaArcade::CancelTransport(bool bForgetSecrets)
 {
+    CancelSavedReads(true);
     Guard.Close();
     if (HttpTask.IsValid()) HttpTask->bCancelled.Store(true);
     StopSocket();
@@ -324,52 +373,181 @@ bool ADaedalusJavaArcade::ConfigureSudokuCredentials(const FString& Username, co
     return true;
 }
 
+void ADaedalusJavaArcade::CancelSavedReads(bool bClearCache)
+{
+    SavedGamesGuard.Close();
+    if (SavedGamesTask.IsValid()) SavedGamesTask->bCancelled.Store(true);
+    // The worker retains its task until completion; do not start a second auxiliary HTTP request meanwhile.
+    SavedLastReadOperation = Operation::None;
+    SavedBootstrapOwner.Reset();
+    bSavedGamesLoading = false; bSavedGamesReady = false;
+    if (bClearCache)
+    {
+        SavedOrigin.Reset(); SavedCacheOwner.Reset(); SavedGames.Reset();
+        bSavedGamesLoaded = false; SavedGamesMessage.Reset();
+    }
+}
+bool ADaedalusJavaArcade::SavedScopeValid() const
+{
+    FString Origin;
+    return Game == ActiveGame && ActiveGame == EDaedalusJavaGame::Sudoku && !BasicAuthorization.IsEmpty()
+        && !SavedOrigin.IsEmpty() && JavaArcadeWire::Origin(SudokuOrigin, Origin) && Origin == SavedOrigin;
+}
+bool ADaedalusJavaArcade::RefreshSavedSudokuGames()
+{
+    FString Origin;
+    if (Game != ActiveGame || ActiveGame != EDaedalusJavaGame::Sudoku || BasicAuthorization.IsEmpty()) return false;
+    if (!JavaArcadeWire::Origin(SudokuOrigin, Origin)) { CancelSavedReads(true); return false; }
+    if (!SavedOrigin.IsEmpty() && SavedOrigin != Origin) CancelSavedReads(true);
+    if (SavedGamesTask.IsValid() || bSavedGamesLoading || SavedGamesGuard.PendingKind() != JA::Work::None) return false;
+    SavedOrigin = Origin; SavedBootstrapOwner.Reset(); SavedGamesGuard.Open();
+    bSavedGamesLoading = true; bSavedGamesReady = false;
+    SavedGamesMessage = TEXT("Reading saved boards from the local Java account…");
+    const auto Ticket = SavedGamesGuard.BeginRead(FPlatformTime::Seconds());
+    if (!SendSavedRead(Operation::SudokuSavedBootstrap, TEXT("/api/session"), Ticket))
+    {
+        SavedGamesGuard.Reject(Ticket, true); bSavedGamesLoading = false;
+        SavedGamesMessage = TEXT("Saved boards could not be requested. Refresh to try again."); return false;
+    }
+    return true;
+}
+bool ADaedalusJavaArcade::CanResumeSavedSudokuGame(const FString& Id) const
+{
+    const auto Phase = Guard.GetPhase();
+    if (!SavedScopeValid() || !bSavedGamesLoaded || !bSavedGamesReady || bSavedGamesLoading
+        || HttpTask.IsValid() || Guard.PendingKind() != JA::Work::None || Guard.HasUncertainOutcome() || bAwaitingSudokuReconcile
+        || (Phase != JA::Phase::Closed && Phase != JA::Phase::Ready && Phase != JA::Phase::Failed)) return false;
+    return SavedGames.ContainsByPredicate([&Id](const FDaedalusSudokuSavedGame& Saved) { return Saved.GameId == Id; });
+}
+bool ADaedalusJavaArcade::ResumeSavedSudokuGame(const FString& Id)
+{
+    // Only this explicit selection can enter the existing board-resume flow.
+    return CanResumeSavedSudokuGame(Id) && ResumeSudokuGame(Id);
+}
+bool ADaedalusJavaArcade::SendSavedRead(Operation Op, const FString& Path, const FTicket& Ticket)
+{
+    if (SavedGamesTask.IsValid() || !SavedScopeValid() || !SavedGamesGuard.Current(Ticket)
+        || (Op != Operation::SudokuSavedBootstrap && Op != Operation::SudokuSavedList)
+        || !Path.StartsWith(TEXT("/")) || !JavaArcadeWire::HeaderValue(BasicAuthorization)) return false;
+    FHttpModule::Get();
+    auto Task = MakeShared<FJavaArcadeHttpTask, ESPMode::ThreadSafe>();
+    Task->Ticket = Ticket; Task->Operation = static_cast<uint8>(Op); Task->Url = SavedOrigin + Path;
+    Task->Verb = TEXT("GET");
+    Task->Limit = Op == Operation::SudokuSavedList ? JA::SudokuSavedListMaxPayloadBytes : JA::SessionGuard::MaxPayloadBytes;
+    Task->RequestHeaders = { TEXT("Accept: application/json"), TEXT("Authorization: ") + BasicAuthorization };
+    SavedGamesTask = Task; SavedLastReadOperation = Op;
+    Async(EAsyncExecution::ThreadPool, [Task] { Task->Run(); });
+    return true;
+}
+void ADaedalusJavaArcade::FinishSavedRead(Operation Op, FTicket Ticket, const TSharedPtr<FJavaArcadeHttpTask, ESPMode::ThreadSafe>& Task)
+{
+    if (!SavedScopeValid() || !SavedGamesGuard.Current(Ticket)) return;
+    auto Refuse = [this, Ticket](const TCHAR* Message, bool bRetryable, bool bAuthorizationFailure = false)
+    {
+        if (bRetryable) SavedGamesGuard.Fail(Ticket, FPlatformTime::Seconds(), true);
+        else SavedGamesGuard.Reject(Ticket, bAuthorizationFailure);
+        bSavedGamesReady = false;
+        bSavedGamesLoading = SavedGamesGuard.GetPhase() == JA::Phase::Connecting;
+        SavedGamesMessage = Message;
+    };
+    if (!Task->bSuccess || Task->StatusCode < 200 || Task->StatusCode >= 300)
+    {
+        if (Task->StatusCode == 401 || Task->StatusCode == 403 || Task->bRedirect)
+            Refuse(TEXT("Saved boards were refused. Check the local Sudoku credentials before refreshing."), false, true);
+        else if (Task->StatusCode >= 400 && Task->StatusCode < 500)
+            Refuse(TEXT("Java refused the saved-board list. Refresh to try again; the current board was kept."), false);
+        else
+            Refuse(TEXT("Saved boards could not be read. Safe reads have a bounded retry budget; refresh to try again."), true);
+        return;
+    }
+    if (!JA::PayloadFits(static_cast<std::size_t>(Task->Response.Num()), Task->Limit))
+    { Refuse(TEXT("The saved-board reply was empty or exceeded bounds. Refresh to try again."), false); return; }
+    const FUTF8ToTCHAR Converted(reinterpret_cast<const ANSICHAR*>(Task->Response.GetData()), Task->Response.Num());
+    const FString Text(Converted.Length(), Converted.Get());
+    if (Op == Operation::SudokuSavedBootstrap)
+    {
+        const auto Json = JavaArcadeWire::Parse(Text);
+        FString PlayerOwner;
+        if (!JavaArcadeWire::String(Json, TEXT("playerId"), PlayerOwner, 128))
+        { Refuse(TEXT("The local account reply was invalid. Refresh saved boards to try again."), false); return; }
+        if (!SavedCacheOwner.IsEmpty() && SavedCacheOwner != PlayerOwner)
+        { SavedGames.Reset(); bSavedGamesLoaded = false; SavedCacheOwner.Reset(); }
+        SavedBootstrapOwner = PlayerOwner;
+        if (!SavedGamesGuard.ContinueBootstrap(Ticket)) return;
+        const auto Read = SavedGamesGuard.BeginRead(FPlatformTime::Seconds());
+        const FString Path = FString::Printf(TEXT("/api/game/saved?limit=%d"), static_cast<int32>(JA::SudokuSavedListLimit));
+        if (!SendSavedRead(Operation::SudokuSavedList, Path, Read))
+        {
+            SavedGamesGuard.Reject(Read, true); bSavedGamesLoading = false; bSavedGamesReady = false;
+            SavedGamesMessage = TEXT("Saved boards could not be requested. Refresh to try again.");
+        }
+        return;
+    }
+    if (Op != Operation::SudokuSavedList || !JavaArcadeWire::SafeText(Text))
+    { Refuse(TEXT("The saved-board list was invalid. Refresh to try again."), false); return; }
+    TArray<TSharedPtr<FJsonValue>> Rows;
+    if (!FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Rows)
+        || Rows.Num() > static_cast<int32>(JA::SudokuSavedListLimit))
+    { Refuse(TEXT("The saved-board list did not match the bounded Java contract. Refresh to try again."), false); return; }
+    std::vector<JA::SudokuView> Boards;
+    for (const auto& Row : Rows)
+    {
+        JA::SudokuView Candidate;
+        if (!Row.IsValid() || Row->Type != EJson::Object || JavaArcadeWire::Secrets(Row)
+            || !JavaArcadeWire::SudokuBoard(Row->AsObject(), Candidate))
+        { Refuse(TEXT("A saved board was invalid. Refresh the list to try again."), false); return; }
+        Boards.push_back(std::move(Candidate));
+    }
+    std::vector<JA::SudokuSavedGame> Summaries;
+    if (!JA::ProjectSavedSudokuGames(Boards, TCHAR_TO_UTF8(*SavedBootstrapOwner), Summaries))
+    { Refuse(TEXT("Saved boards did not match this account or list contract. Refresh to try again."), false); return; }
+    TArray<FDaedalusSudokuSavedGame> Candidate;
+    for (const auto& Summary : Summaries)
+    {
+        FDaedalusSudokuSavedGame Saved;
+        Saved.GameId = UTF8_TO_TCHAR(Summary.GameId.c_str()); Saved.Difficulty = Summary.Difficulty;
+        Saved.FilledCells = Summary.FilledCells; Saved.GivensCount = Summary.GivensCount; Saved.Lives = Summary.Lives;
+        Saved.ElapsedSeconds = Summary.ElapsedSeconds; Saved.bSolved = Summary.Solved; Saved.bTimeUp = Summary.TimeUp;
+        Candidate.Add(MoveTemp(Saved));
+    }
+    if (!SavedGamesGuard.Snapshot(Ticket)) return;
+    SavedGames = MoveTemp(Candidate); SavedCacheOwner = SavedBootstrapOwner;
+    bSavedGamesLoaded = true; bSavedGamesLoading = false; bSavedGamesReady = true;
+    SavedGamesMessage = SavedGames.IsEmpty() ? TEXT("No saved Sudoku boards were returned.") : TEXT("Choose a saved board to continue.");
+}
+void ADaedalusJavaArcade::TickSavedReads(double Now)
+{
+    if (!SavedOrigin.IsEmpty() && !SavedScopeValid()) CancelSavedReads(true);
+    if (SavedGamesGuard.Tick(Now) != JA::TimerEvent::None)
+    {
+        if (SavedGamesTask.IsValid()) SavedGamesTask->bCancelled.Store(true);
+        bSavedGamesReady = false; bSavedGamesLoading = SavedGamesGuard.GetPhase() == JA::Phase::Connecting;
+        SavedGamesMessage = TEXT("Reading saved boards timed out. Safe reads retry within a bounded budget; refresh to try again.");
+    }
+    if (SavedGamesTask.IsValid() && SavedGamesTask->bDone.Load())
+    {
+        const auto Completed = SavedGamesTask; SavedGamesTask.Reset();
+        FinishSavedRead(static_cast<Operation>(Completed->Operation), Completed->Ticket, Completed);
+    }
+    if (!SavedGamesTask.IsValid() && SavedGamesGuard.ReadRetryDue(Now))
+    {
+        const auto Ticket = SavedGamesGuard.BeginRead(Now);
+        const FString Path = SavedLastReadOperation == Operation::SudokuSavedBootstrap ? TEXT("/api/session")
+            : FString::Printf(TEXT("/api/game/saved?limit=%d"), static_cast<int32>(JA::SudokuSavedListLimit));
+        if (!SendSavedRead(SavedLastReadOperation, Path, Ticket))
+        {
+            SavedGamesGuard.Reject(Ticket, true); bSavedGamesLoading = false; bSavedGamesReady = false;
+            SavedGamesMessage = TEXT("Saved-board retry could not start. Refresh to try again.");
+        }
+    }
+}
+
 bool ADaedalusJavaArcade::ApplySudoku(const TSharedPtr<FJsonObject>& Json)
 {
     JA::SudokuView Candidate;
-    FString Id, BoardOwner;
-    int64 Number = 0;
-    if (!JavaArcadeWire::String(Json, TEXT("gameId"), Id, 256) || !JavaArcadeWire::String(Json, TEXT("playerId"), BoardOwner, 128)
-        || BoardOwner != AuthenticatedPlayerId || (!RequestedSudokuId.IsEmpty() && Id != RequestedSudokuId)) return false;
-    Candidate.GameId = TCHAR_TO_UTF8(*Id); Candidate.Owner = TCHAR_TO_UTF8(*BoardOwner);
-    if (!JavaArcadeWire::Integer(Json, TEXT("difficulty"), Number, 1, 5)) return false;
-    Candidate.Difficulty = static_cast<int>(Number);
-    if (!JavaArcadeWire::Integer(Json, TEXT("lives"), Number, 0, 1000)) return false;
-    Candidate.Lives = static_cast<int>(Number);
-    if (!JavaArcadeWire::Integer(Json, TEXT("score"), Candidate.Score, -JavaArcadeWire::MaxSafeInteger)
-        || !JavaArcadeWire::Integer(Json, TEXT("hintCount"), Candidate.HintCount)
-        || !JavaArcadeWire::Integer(Json, TEXT("moveCount"), Candidate.MoveCount)
-        || !JavaArcadeWire::Integer(Json, TEXT("elapsedSeconds"), Candidate.ElapsedSeconds)
-        || !JavaArcadeWire::Integer(Json, TEXT("timeLimitSeconds"), Candidate.TimeLimitSeconds)
-        || !JavaArcadeWire::Integer(Json, TEXT("secondsLeft"), Candidate.SecondsLeft)
-        || !JavaArcadeWire::Bool(Json, TEXT("solved"), Candidate.Solved)
-        || !JavaArcadeWire::Bool(Json, TEXT("timeUp"), Candidate.TimeUp)
-        || !JavaArcadeWire::Bool(Json, TEXT("chaosMode"), Candidate.ChaosMode)
-        || !JavaArcadeWire::Bool(Json, TEXT("mirrorMode"), Candidate.MirrorMode)) return false;
-    const TArray<TSharedPtr<FJsonValue>>* Rows = nullptr;
-    if (!Json->TryGetArrayField(TEXT("cells"), Rows) || Rows->Num() != 9) return false;
-    int32 Index = 0;
-    for (const auto& Row : *Rows)
-    {
-        if (!Row.IsValid() || Row->Type != EJson::Array || Row->AsArray().Num() != 9) return false;
-        for (const auto& Cell : Row->AsArray())
-        {
-            if (!Cell.IsValid() || Cell->Type != EJson::Object) return false;
-            const TSharedPtr<FJsonObject> C = Cell->AsObject();
-            if (!JavaArcadeWire::Integer(C, TEXT("value"), Number, 0, 9) || !JavaArcadeWire::Bool(C, TEXT("isGiven"), Candidate.Givens[Index])) return false;
-            Candidate.Values[Index] = static_cast<int>(Number);
-            const TArray<TSharedPtr<FJsonValue>>* Marks = nullptr;
-            if (!C->TryGetArrayField(TEXT("pencilMarks"), Marks) || Marks->Num() > 9) return false;
-            for (const auto& Mark : *Marks)
-            {
-                double Digit = 0;
-                if (!Mark.IsValid() || Mark->Type != EJson::Number || !Mark->TryGetNumber(Digit) || Digit < 1 || Digit > 9 || FMath::FloorToDouble(Digit) != Digit) return false;
-                Candidate.PencilMasks[Index] |= static_cast<uint16>(1u << static_cast<unsigned>(Digit));
-            }
-            ++Index;
-        }
-    }
-    if (!JA::ValidSudoku(Candidate)) return false;
+    if (!JavaArcadeWire::SudokuBoard(Json, Candidate) || Candidate.Owner != TCHAR_TO_UTF8(*AuthenticatedPlayerId)) return false;
+    const FString Id = UTF8_TO_TCHAR(Candidate.GameId.c_str());
+    if (!RequestedSudokuId.IsEmpty() && Id != RequestedSudokuId) return false;
     // Atomic projection: malformed/wrong-board replies never partially replace an existing view.
     FDaedalusJavaArcadeState Next;
     Next.Game = EDaedalusJavaGame::Sudoku; Next.SessionId = Id; Next.bOwner = true;
@@ -902,6 +1080,14 @@ bool ADaedalusJavaArcade::SendHttp(Operation Op, const FString& Verb, const FStr
 FDaedalusJavaArcadeState ADaedalusJavaArcade::GetState() const
 {
     auto Out = View;
+    // A changed origin/account must hide old metadata even before the next core tick cancels its worker.
+    Out.SavedGames.Reset(); Out.bSavedGamesLoaded = false; Out.bSavedGamesLoading = false; Out.bSavedGamesReady = false; Out.SavedGamesMessage.Reset();
+    if (SavedScopeValid())
+    {
+        Out.SavedGames = SavedGames; Out.bSavedGamesLoaded = bSavedGamesLoaded;
+        Out.bSavedGamesLoading = bSavedGamesLoading; Out.bSavedGamesReady = bSavedGamesReady;
+        Out.SavedGamesMessage = SavedGamesMessage;
+    }
     Out.Game = ActiveGame;
     const auto Phase = Guard.GetPhase();
     Out.bBusy = Guard.PendingKind() != JA::Work::None;
@@ -928,6 +1114,7 @@ bool ADaedalusJavaArcade::CoreTick(float Delta)
 {
     if (Game != ActiveGame) CancelTransport(true);
     const double Now = FPlatformTime::Seconds();
+    TickSavedReads(Now);
     const auto Timeout = Guard.Tick(Now);
     if (Timeout != JA::TimerEvent::None)
     {
