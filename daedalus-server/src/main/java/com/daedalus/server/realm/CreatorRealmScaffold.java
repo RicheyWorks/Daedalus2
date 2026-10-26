@@ -47,14 +47,14 @@ public final class CreatorRealmScaffold {
                         String previewUri, Attribution creator, SaleIntent saleIntent, List<String> componentIds,
                         List<Original> originals, List<BriefRevision> ideas) {
         public Entry {
-            componentIds = copy(componentIds);
-            originals = copy(originals);
-            ideas = copy(ideas);
+            componentIds = componentIds == null ? List.of() : List.copyOf(componentIds);
+            originals = originals == null ? List.of() : List.copyOf(originals);
+            ideas = ideas == null ? List.of() : List.copyOf(ideas);
         }
     }
     public record Manifest(int schemaVersion, Identity identity, Attribution realmAttribution, boolean enabled,
                            boolean ready, Creative creative, Connection connection, Marketplace marketplace, List<Entry> entries) {
-        public Manifest { entries = copy(entries); }
+        public Manifest { entries = entries == null ? List.of() : List.copyOf(entries); }
     }
 
     private CreatorRealmScaffold() { }
@@ -214,7 +214,6 @@ public final class CreatorRealmScaffold {
     }
 
     private static boolean present(String value) { return value != null && !value.isBlank(); }
-    private static <T> List<T> copy(List<T> values) { return values == null ? List.of() : List.copyOf(values); }
     private static <T> boolean prefix(List<T> before, List<T> after) {
         return after.size() >= before.size() && after.subList(0, before.size()).equals(before);
     }
