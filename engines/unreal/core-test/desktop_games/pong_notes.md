@@ -70,6 +70,43 @@ were run once for this change: parity30/30 and moving-paddle spin36/36 (real ret
 201, point349). No source fixture was regenerated, no production header reverted,
 and no engine/UHT build, editor, service or broad suite was run.
 
+## Optional Target rally
+
+Mode3 adds placement goals to the existing full-height practice return wall.
+Ordered ball-center windows are inclusive[60,220], [230,390] and[400,560] in the
+original court coordinates. They are deliberately broad, separate160px bands.
+Only a real guarded outgoing right-wall bounce at centerX732 can clear the next
+window, consume one goal and reverse the ball normally. Other placements still
+reflect. There is no positional/edge-hit aiming rule: actual paddle displacement
+at contact adds spin to existing vertical velocity, and intervening wall bounces
+can reverse it. Existing140px paddle, Vx4, spin cap4, radius contact and120-step
+serve are reused; no new movement, input or reflection physics is introduced.
+
+PlayerScore records0..3 cleared windows. PrepareServe leaves it intact through a
+miss while resetting the ordinary rally; CPU score stays0. Third clearance freezes
+the course and reuses the existing fresh rematch gate, which returns before motion
+or serve skipping. Reset/mode change clears goals and retains the selected mode;
+active native choice remains a no-op. The five-return celebration remains mode1
+only, so course feedback describes real cleared goals. Match0, practice1 and
+First to5mode2 retain their complete branches/configuration.
+
+Existing practice layout gains wall segments/numbers, target count and completion
+in the same slots. Miss recovery explicitly retains progress. Native checked mode
+row uses MakeMode; actor header is comment-only, with no actor/input API/registry/
+builder/save changes. Old practice and quick-match invalid upper bound changes
+from3 to4 because3 is now valid; those full suites are not rerun by this slice.
+Native controls/focus, viewport fit and human placement learning remain pending.
+
+`desktop_pong_target_rally` / `pong_target_rally_test.cpp` passed 61/61 strict
+single-TU MSVC C++17 checks. A bounded public-input controller clears all3 windows
+in1033 steps with3 actual paddle returns and no pose/score writes to its route
+instance. It previews17 fixed impact-axis choices on short game copies; this
+demonstrates reachability, not human aiming difficulty. Checks cover inclusive
+band endpoints, wrong/incoming contacts, single-event scoring, preserved misses,
+serve/replay/reset, short0/1/2 companions, render/status purity and Driver cleanup.
+No old parity/spin/practice/quick suites or old-header proof repeated. Updated
+invalid-bound literals in the two old test files are source-reviewed only.
+
 ## Optional First to 5
 
 Mode 2 adds a short match with a clear finish: the first side to five points wins.

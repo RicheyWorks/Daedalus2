@@ -250,6 +250,14 @@ making damage visible without another helper label. Sword, star, spin, scoring
 and movement rules are retained. Native cue size, contrast and play acceptance
 remain unverified.
 
+Shadow Ninja also offers **Terrace climb**, an optional three-light practice route
+through its existing room. Two terrace jumps lead to a wall-climb finish. Pit falls
+return to the last terrace while keeping collected lights; a lower-platform landing
+still uses ordinary movement. The same jump and wall controls apply. The course
+has no enemies or boss, and Adventure keeps its original rules. A fresh result
+retry keeps the mode; changing modes starts over. Native focus/layout and human
+course acceptance remain unverified.
+
 Glowtrail Chase's matching blue openings in the central passage connect across
 the 560-pixel maze. Movement continues through either opening with its overshoot;
 pursuers can follow, and contact/dot collection remains continuous across the seam.
@@ -257,6 +265,12 @@ Other walls stay solid. Mirrored silhouettes and gate marks explain the route
 without new controls. This native extension preserves the map, all 304 dots and
 existing score/life/power/respawn rules; pinned source fixtures retain their
 original boundary behavior. Native visual/input and chase feel remain unverified.
+
+In Glowtrail's paired passage, chasing pursuers follow the shorter clear route
+through the opposite gate when both actors are in its outer arms. The central
+room's walls still block that shortcut. Frightened steering, ordinary maze pursuit,
+movement speed and random choices retain their existing rules. Native chase feel
+and visual acceptance remain unverified.
 
 Ironwake Advance likewise accepts a jump shortly after stepping off a platform,
 while keeping its existing held-jump landing hops, crouch restriction and jump
@@ -270,6 +284,72 @@ is selected by the unchanged throw rule. A muted cue during cooldown is a curren
 snapshot; moving players and country supers can change the eventual flight. It
 adds no control or gameplay rule. Native readability/feel acceptance is pending.
 
+Courtyard Clash's country picker accepts **stick flicks** alongside keys and the
+D-pad. Tilt vertically past 0.6 once, then center both axes within 0.3 before the
+next choice. The stick gesture that opens the picker is consumed. Match movement
+and the existing original-stick-versus-hat charge rules are retained. Native
+hardware and selection layout acceptance remain unverified.
+
+Threadlight's optional **Switchback** room adds staggered passages to navigate
+with the same lantern, exit and trail rules. Original room stays the default;
+each room offers the existing six lantern orders. Changing rooms starts over,
+and Next circuit keeps the selected room while advancing the order. The current
+room appears in the existing progress line. No reward or world-Dungeon dependency
+is added. Native room controls, navigation clarity and play feel are pending.
+
+Twinwake Volley's optional **Target rally** adds three ordered gold windows on
+the familiar practice return wall. Move the paddle at contact to change spin and
+experiment with placement. Wrong windows still return the ball, and missed rallies
+keep cleared targets. The third window completes the course; fresh retry retains
+its mode. It uses Rally practice's paddle, speed, spin limit and serve behavior.
+Match, Rally practice and First to 5 remain unchanged. Native controls/layout and
+human aiming difficulty remain unverified.
+
+Glowtrail Chase offers optional **Bonus fruit** beside Classic. After collecting
+76 and 228 dots, a fruit near the maze center offers 100 arcade points for 20 live
+seconds. A second opportunity waits its turn if fruit is already present. Follow
+the fruit/countdown in the existing score line; missed fruit never blocks clearing
+the 304 dots. Movement, ghosts, power pellets and Classic rules stay the same.
+New runs clear fruit opportunities, and same-mode retry keeps its seed. Native
+controls/layout and human detour timing remain unverified.
+
+Ironwake Advance offers an optional **Target range** beside its original Full run.
+Three ordered gold panels teach standing, jumping and low shots with the existing
+movement, crouch, platforms, weapons and bullets. The high panel has a generous
+jump-shot window; an edge marker points toward an offscreen goal. No enemies or
+timer interrupt practice, and missed shots can be retried freely. The third hit
+completes the range without score; fresh retry keeps its mode and seed. Full run
+keeps the original enemies, pickups and distance goal. Native acceptance is pending.
+
+Lanternwild Quest offers optional **Shift / pad Y: hold-to-swing assist** (also
+V / LB), initially off. Enable it to hold an existing sword button instead of
+tapping for each swing. It uses the same attack timing and combat rules, keeps
+current progress when toggled and remembers the choice on retry. Held buttons
+never replay a finished run; fresh cabinet selection starts with assist off.
+The existing footer shows the choice. Native controls and play feel are pending.
+
+Courtyard Clash supports **V / pad Y / LB: pass** to the next living teammate in
+P1/P2/P3 order, skipping knockouts. The ball travels normally; the blue-ringed
+receiver catches automatically when it comes close, then settles before another throw. Passes
+are harmless to your team and can be intercepted by opponents. Existing attack
+throws retain friendly hits. A valid pass wins a simultaneous pass/throw press;
+holding pass alone does not chain passes. Native controls and play feel are pending.
+
+Holding **V / pad Y / LB** also catches and keeps an incoming ball, using the
+ordinary catch range. It pauses the automatic held-throw rethrow so there is time
+to move, charge or choose a teammate. Let go of throw first, then release and press
+V/Y/LB again to pass; releasing it with throw held restores automatic rethrow. A fresh
+throw press while carrying still throws. Space/Z/J/A alone keeps its original
+catch-and-rethrow behavior. No new defense radius, cooldown or invulnerability.
+
+Courtyard Clash also uses **How to play / F1 / left-stick click** for an on-demand
+guide to shared team movement, nearest-target throws, held catch/rethrow, jumping,
+charging and the four-round flow. The existing native guide pauses play, scrolls
+with Page Up/Down or LB/RB, and clears held input. **Resume game** returns to the
+same match or result; continuing a result still needs a fresh gameplay press.
+**Return paused** keeps it paused. Native layout, scroll/focus and mixed physical
+input acceptance remain pending.
+
 After Courtyard Clash's fourth round, the **tournament scorecard** declares the
 overall win, opponent win or draw from the existing cumulative match wins. Large
 counts and four-segment bars distinguish your chosen country from all opponents;
@@ -277,6 +357,25 @@ the smaller last-match line preserves who won that match. Earlier-round results
 and all play/scoring rules are retained. A fresh continue press still returns to
 title, and confirming a country starts a new tournament. Native font/layout and
 physical input acceptance remain unverified.
+
+Driftstone Patrol offers **Three waves** beside its original Endless mode. Clear
+every rock and split fragment through wave three to finish the voyage. The same
+flight, brake, UFO, score and life rules apply; wave N/3 and the result show the
+goal. Restart/fresh retry keeps the mode, and changing modes starts over. Native
+controls/layout, voyage duration and play feel remain unverified.
+
+Driftstone's optional **Flight practice** teaches controlled arrivals with three
+numbered docking beacons. Fly into the gold ring and hold K / left trigger until
+the ship stops to dock. Turning, thrust, coasting, brake and screen wrap use the
+same ship physics. Position and heading carry between goals; a missed approach
+can loop around freely. There are no enemies, clock, shots or score in practice.
+The third dock completes the course; fresh retry retains its mode and seed.
+Endless and Three waves keep their existing rules. Native mode/controls, goal
+readability and human flight learning remain unverified.
+
+Riftwing Vanguard's ordinary ships show two basic/four chaser **health pips**, so
+surviving hits remain visible. The boss retains its separate health bar. Combat
+and scoring rules are unchanged; native cue readability remains unverified.
 
 Riftwing Vanguard offers **Boss rehearsal** beside its default Full run. The same
 20-HP boss arrives immediately, with the normal starting ship and score zero;

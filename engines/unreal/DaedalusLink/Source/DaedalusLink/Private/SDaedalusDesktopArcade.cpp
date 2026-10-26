@@ -291,6 +291,7 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Match"), 0, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
 				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Rally practice"), 1, TEXT("Changing mode starts over. Session best lasts until Restart or a mode change."))]
 				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("First to 5"), 2, TEXT("Changing mode starts over. First to five points wins this short match."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("pong"), TEXT("Target rally"), 3, TEXT("Changing mode starts over. Hit three gold windows in order on the return wall; missed rallies keep cleared targets."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
@@ -300,18 +301,45 @@ void SDaedalusDesktopArcade::Construct(const FArguments& InArgs)
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::AsteroidsVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Endless"), 0, TEXT("Changing mode starts over. Endless keeps the original wave progression."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Three waves"), 1, TEXT("Changing mode starts over. Clear all rocks in the first three waves to finish the voyage."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("asteroids"), TEXT("Flight practice"), 2, TEXT("Changing mode starts over. Turn, thrust and brake to dock at three beacons; no enemies or clock."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
 				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::SegaVisibility)
 				+ SWrapBox::Slot()[MakeMode(TEXT("sega_shooter"), TEXT("Full run"), 0, TEXT("Changing mode starts over. Full run reaches the boss at 1500 points."))]
 				+ SWrapBox::Slot()[MakeMode(TEXT("sega_shooter"), TEXT("Boss rehearsal"), 1, TEXT("Changing mode starts over. Rehearsal starts the same boss immediately; regular enemies still arrive."))]
 			]
 			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
 			[
-				SNew(SHorizontalBox).Visibility(this, &SDaedalusDesktopArcade::DungeonVisibility)
-				+ SHorizontalBox::Slot().AutoWidth().Padding(2.f)
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::NinjaVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("shadow_ninja"), TEXT("Adventure"), 0, TEXT("Changing mode starts over. Adventure keeps the original enemies and boss."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("shadow_ninja"), TEXT("Terrace climb"), 1, TEXT("Changing mode starts over. Reach three lights with the existing jumps and wall climb; pit falls return to the last terrace."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::ContraVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("contra"), TEXT("Full run"), 0, TEXT("Changing mode starts over. Full run keeps the original enemies, pickups and distance goal."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("contra"), TEXT("Target range"), 1, TEXT("Changing mode starts over. Hit three panels with standing, jumping and low shots; no enemies or clock."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::PacmanVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("pacman"), TEXT("Classic"), 0, TEXT("Changing mode starts over. Classic keeps the existing dot-clear and ghost rules."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("pacman"), TEXT("Bonus fruit"), 1, TEXT("Changing mode starts over. After 76 and 228 dots, each fruit is worth 100 points and lasts 20 seconds of active play. The second waits if one is already out. Clearing every dot still finishes."))]
+			]
+			+ SVerticalBox::Slot().AutoHeight().Padding(0.f, 0.f, 0.f, 6.f)
+			[
+				SNew(SWrapBox).UseAllottedSize(true).InnerSlotPadding(FVector2D(8.f, 4.f)).Visibility(this, &SDaedalusDesktopArcade::DungeonVisibility)
+				+ SWrapBox::Slot()[MakeMode(TEXT("dungeon"), TEXT("Original room"), 0, TEXT("Changing room starts over. Original room keeps the existing map and six lantern orders."))]
+				+ SWrapBox::Slot()[MakeMode(TEXT("dungeon"), TEXT("Switchback"), 1, TEXT("Changing room starts over. Staggered passages form a new room with the same lantern, exit and optional trail rules."))]
+				+ SWrapBox::Slot()
 				[
 					SNew(SButton).IsFocusable(true).ContentPadding(FMargin(10.f, 4.f))
 					.Text(FText::FromString(TEXT("Next circuit")))
-					.ToolTipText(FText::FromString(TEXT("Start the next lantern order, clearing this circuit's progress. Restart replays the current order.")))
+					.ToolTipText(FText::FromString(TEXT("Start the next lantern order in this room, clearing circuit progress. Restart replays the current order.")))
 					.IsEnabled_Lambda([this]() { const ADaedalusDesktopArcade* Actor = Game.Get(); return Actor && Actor->GetSelectedGameId() == TEXT("dungeon") && !Actor->GetState().bSavePending; })
 					.OnClicked(this, &SDaedalusDesktopArcade::NextCircuit)
 				]
@@ -465,7 +493,8 @@ bool SDaedalusDesktopArcade::CanResumeGameHelp() const
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	if (!bGameHelpOpen || !Actor) return false;
 	const auto State = Actor->GetState();
-	return State.Id == HelpGameId && !State.bSavePending && !State.bOver;
+	// Dodge results continue between rounds; resume the retained scorecard, without confirming it.
+	return State.Id == HelpGameId && !State.bSavePending && (!State.bOver || State.Id == TEXT("dodge_ball"));
 }
 
 FReply SDaedalusDesktopArcade::DismissGameHelp(bool bResume)
@@ -490,13 +519,14 @@ bool SDaedalusDesktopArcade::HasGameHelp() const
 	const ADaedalusDesktopArcade* Actor = Game.Get();
 	if (!Actor) return false;
 	const FString Id = Actor->GetSelectedGameId();
-	return Id == TEXT("minesweeper") || Id == TEXT("star_shooter");
+	return Id == TEXT("minesweeper") || Id == TEXT("star_shooter") || Id == TEXT("dodge_ball");
 }
 
 EVisibility SDaedalusDesktopArcade::GameHelpVisibility() const { return HasGameHelp() ? EVisibility::Visible : EVisibility::Collapsed; }
 
 FText SDaedalusDesktopArcade::GameHelpTitle() const
 {
+	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT("Courtyard Clash — How to play"));
 	return FText::FromString(HelpGameId == TEXT("minesweeper") ? TEXT("Minesweeper — How to play") : TEXT("Star Shooter — How to play"));
 }
 
@@ -508,6 +538,13 @@ FText SDaedalusDesktopArcade::GameHelpIntro() const
 		"READ THE NUMBERS\nA number counts mines in the cells touching it, including diagonals: up to eight neighbours. Use nearby numbers together to decide which covered cells are safe.\n\n"
 		"FLAGS AND CHORDING\nFlag a suspected mine; right-click again to remove a flag. A wrongly flagged safe cell must be unflagged and revealed to finish. Mines remaining is the total mine count minus your flags, so it can be negative and does not confirm that your flags are correct.\n\n"
 		"On an open number, a chord reveals the unflagged neighbours when the neighbouring flag count matches that number. A wrong flag can make this hit a mine. You can reveal cells individually instead.\n\n"
+		"CONTROLS IN THE GAME"));
+	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT(
+		"YOUR TEAM\nMove and jump all three living teammates together. Approach a loose ball to pick it up. A throw aims at the nearest living opponent; the small brackets and C1/C2/C3 cue show the current target.\n\n"
+		"THROW AND CATCH\nSpace/Z/J or pad A throws. Holding it also catches a nearby incoming ball and can immediately rethrow when ready. Hold V / pad Y / LB to catch and keep the ball instead, even if the throw button is held. While carrying, a fresh throw press still throws. Pad X/RB throws only on a fresh press. Shift / pad B jumps; an airborne teammate catches automatically when a ball comes close.\n\n"
+		"PASS THE BALL\nA fresh V / pad Y / LB press while carrying passes to the next living teammate in P1/P2/P3 order, skipping anyone knocked out. After catching with this button held, let go of the throw button first, then release and press V / Y / LB again to pass. Releasing catch-and-keep while throw is held restores automatic rethrow. The ball travels normally; the receiver catches it automatically when it comes close, then settles briefly before another throw. A missed pass can be picked up when it stops. Passes are safe for your team; opponents can intercept them. A valid pass takes priority if you press pass and throw together.\n\n"
+		"CHARGE A SUPER\nWhile carrying the ball, hold W/Up or push the left stick up to build charge, then throw. Charge past halfway for your country's super throw. These inputs also move the team. D-pad Up moves without charging; it can be combined with stick Up to charge. Country supers can change the throw angle.\n\n"
+		"WATCH YOUR TEAM\nAttack throws can hit teammates. Normal hits cost one health; super hits cost two. A teammate with no health sits out for the rest of the match.\n\n"
 		"CONTROLS IN THE GAME"));
 	return FText::FromString(TEXT(
 		"YOUR GOAL\nSurvive successive waves and build your score. Keep moving to avoid enemy fire. Bosses arrive on every fifth wave; the run ends when your lives run out.\n\n"
@@ -522,6 +559,10 @@ FText SDaedalusDesktopArcade::GameHelpProgress() const
 		"Save & Close leaves the cabinet open if writing fails. New puzzle chooses a fresh seed at the current size. Restart keeps the current size and seed; choosing a different first cell can change the mine layout. Close, Restart, New puzzle and size changes keep the saved board unchanged. Save first before starting another board if you want to keep this progress.\n\n"
 		"To reach cabinet buttons, return paused, press F2 / right-stick click, then close the catalog list and navigate the controls.\n\n"
 		"AFTER A RESULT\nA mine hit ends the board; revealing every safe cell wins. Return paused keeps the result paused. Then R / Restart retries at the current size and seed. For pad A replay, use P / Start to show the result first, then press pad A freshly. To save the finished board before retrying, return paused and use F5 / pad X."));
+	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT(
+		"FOUR ROUNDS\nChoose a country with keys, D-pad or stick flicks, then confirm. Knock out the other team to win a match. All four matches count toward the tournament result; random opponents can repeat.\n\n"
+		"BETWEEN MATCHES\nA fresh throw, confirm or jump press starts the next round. After round four, the scorecard shows the overall win, loss or draw. Continue returns to the title; confirming a country starts a fresh tournament. R / Restart clears the tournament.\n\n"
+		"RETURN TO PLAY\nHelp pauses this match or result. Resume game returns to the same screen; a result still needs a fresh continuation press. Return paused keeps it paused. F1 / left-stick click opens this guide again."));
 	return FText::FromString(TEXT(
 		"KEEP YOUR RUN\nIn the game, P / Start opens the pause menu. Select Save & Quit with Up/Down, then confirm with Space / pad A or J / pad X. Save warnings appear here too; a pending save keeps Resume unavailable.\n\n"
 		"Continue saved Star run restores your saved score, wave, lives and upgrades. The arena, position and timers start fresh. To reach cabinet buttons, return paused, press F2 / right-stick click, then close the catalog list and navigate the controls. Restart and difficulty buttons start a new run while keeping the previous saved run.\n\n"
@@ -636,9 +677,15 @@ FReply SDaedalusDesktopArcade::NextCircuit()
 	{
 		const FDaedalusDesktopArcadeState State = Actor->GetState();
 		if (State.Id != TEXT("dungeon") || State.bSavePending) return FReply::Handled();
+		const int32 Room = Actor->GetGameOption();
 		const std::uint32_t Seed = daedalus::desktop::DungeonGame::NextCircuitSeed(static_cast<std::uint32_t>(State.Seed));
 		if (Actor->StartGame(TEXT("dungeon"), static_cast<int32>(Seed)))
 		{
+			if (Room == 1 && !Actor->SetGameOption(Room))
+			{
+				CatalogError = TEXT("The next circuit started, but Switchback could not be selected.");
+				return FReply::Handled();
+			}
 			CatalogError.Reset();
 			return FocusReply();
 		}
@@ -746,6 +793,30 @@ EVisibility SDaedalusDesktopArcade::SegaVisibility() const
 	return Actor && Actor->GetSelectedGameId() == TEXT("sega_shooter") ? EVisibility::Visible : EVisibility::Collapsed;
 }
 
+EVisibility SDaedalusDesktopArcade::AsteroidsVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("asteroids") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+EVisibility SDaedalusDesktopArcade::NinjaVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("shadow_ninja") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+EVisibility SDaedalusDesktopArcade::ContraVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("contra") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
+EVisibility SDaedalusDesktopArcade::PacmanVisibility() const
+{
+	const ADaedalusDesktopArcade* Actor = Game.Get();
+	return Actor && Actor->GetSelectedGameId() == TEXT("pacman") ? EVisibility::Visible : EVisibility::Collapsed;
+}
+
 EVisibility SDaedalusDesktopArcade::LeaderboardVisibility() const
 {
 	const ADaedalusDesktopArcade* Actor = Game.Get();
@@ -779,14 +850,21 @@ FText SDaedalusDesktopArcade::ControlText() const
 		: TEXT("Move: WASD / arrows, D-pad or left stick. P / Start: pause. F2 / right-stick click: choose game. R: restart. Esc / Back: close. ");
 	if (Id == TEXT("minesweeper")) Text += TEXT("F1 / left-stick click: How to play. Mouse left: reveal; right: flag; middle: open around a number when its flags match. J/Space or pad A/X: reveal. K/Enter or pad B: flag. Shift or pad Y/LB: open around a number when its flags match. F5: save board. F9: continue saved board. When paused, pad X saves and pad Y continues the saved board. Close leaves the save unchanged.");
 	else if (Id == TEXT("dungeon")) Text += TEXT("J/Space or pad A/X: light. Shift or pad Y/LB: trail. K/Enter or pad B: reset the circuit.");
-	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: throw press only; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
+	else if (Id == TEXT("pacman")) Text += Actor && Actor->GetGameOption() == 1
+		? TEXT("Clear every dot. Fruit opportunities follow 76 and 228 collected dots. Each is worth 100 points and lasts 20 seconds of active play; the second waits if one is already out. Power pellets frighten ghosts. Fresh pad A/Space/Enter replays a finished run.")
+		: TEXT("Clear every dot. Power pellets frighten ghosts. Fresh pad A/Space/Enter replays a finished run.");
+	else if (Id == TEXT("zelda")) Text += TEXT("Space/J/K/Enter or pad A/B/X/RB: sword. Shift/V or pad Y/LB: toggle hold-to-swing assist (starts off). Assist keeps the usual swing timing and stays selected on retry.");
+	else if (Id == TEXT("dodge_ball")) Text += TEXT("Space/Z/J or pad A: throw/catch; pad X/RB: fresh throw; V/pad Y/LB: pass, hold to catch + keep; Shift/pad B: jump; Up: charge; K/Enter: confirm.");
 	else if (Id == TEXT("shadow_ninja")) Text += TEXT("Space/A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb.");
 	else if (Id == TEXT("contra")) Text += TEXT("Enter/Space or pad A: title start; literal arrow keys then B,A: source code. Space/W or pad A: jump; J/Z/Ctrl/X/RT: shoot; Down: crouch. Enter/R or pad A/Start: terminal retry.");
 	else if (Id == TEXT("star_shooter")) Text += TEXT("F1 / left-stick click: How to play. Space/J/Z/X/RT: shoot; source pause menu Up/Down: select, J/X or Space/A: confirm, Shift/Y: resume. Game over: fresh pad A/Start or R/Restart retries. Difficulty buttons start a new run.");
-	else if (Id == TEXT("asteroids") || Id == TEXT("sega_shooter")) Text += Id == TEXT("asteroids")
-		? TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Space/J/Z or pad face/bumper: shoot.")
-		: TEXT("Space/J/Z or pad face/bumper: shoot.");
-	else if (Id == TEXT("pong")) Text += TEXT("Move at impact to add spin. Space / pad A or J / pad X: serve early.");
+	else if (Id == TEXT("asteroids")) Text += Actor && Actor->GetGameOption() == 2
+		? TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Stop inside the gold ring under braking to dock.")
+		: TEXT("Left/Right: turn; Up: thrust; hold K / left trigger: brake. Space/J/Z or pad face/bumper: shoot.");
+	else if (Id == TEXT("sega_shooter")) Text += TEXT("Space/J/Z or pad face/bumper: shoot.");
+	else if (Id == TEXT("pong")) Text += Actor && Actor->GetGameOption() == 3
+		? TEXT("Hit the gold wall windows in order. Move at impact to add spin; missed rallies keep cleared targets. Space / pad A or J / pad X: serve early or replay the completed course.")
+		: TEXT("Move at impact to add spin. Space / pad A or J / pad X: serve early.");
 	else if (Id == TEXT("football")) Text += TEXT("Space/J/Z or pad A/X: kick. Target practice: move around the ball to aim. During a shot, K/Enter or pad B sets it up again.");
 	else Text += TEXT("J/Z/X: fire/sword, Space/A: jump/confirm, K/B/Enter: action. Source title screens use the cabinet launcher.");
 	return FText::FromString(Text);
@@ -876,9 +954,10 @@ void SDaedalusDesktopArcade::PushInput(const FKey& PressedKey)
 		auto FireEdge = [&FireHeld](const FKey& Key) { return FireHeld(Key) || Key == EKeys::Gamepad_FaceButton_Left || Key == EKeys::Gamepad_RightShoulder; };
 		auto Jump = [](const FKey& Key) { return Key == EKeys::LeftShift || Key == EKeys::RightShift || Key == EKeys::Gamepad_FaceButton_Right; };
 		auto Action = [](const FKey& Key) { return Key == EKeys::K || Key == EKeys::C || Key == EKeys::Enter; };
+		auto Pass = [](const FKey& Key) { return Key == EKeys::V || Key == EKeys::Gamepad_FaceButton_Top || Key == EKeys::Gamepad_LeftShoulder; };
 		Input.Fire = Input.Jump = Input.Action = Input.Dash = false;
-		for (const FKey& Key : HeldKeys) { Input.Fire |= FireHeld(Key); Input.Jump |= Jump(Key); Input.Action |= Action(Key); }
-		bFireEdge = FireEdge(PressedKey); bJumpEdge = Jump(PressedKey); bActionEdge = Action(PressedKey); bDashEdge = false;
+		for (const FKey& Key : HeldKeys) { Input.Fire |= FireHeld(Key); Input.Jump |= Jump(Key); Input.Action |= Action(Key); Input.Dash |= Pass(Key); }
+		bFireEdge = FireEdge(PressedKey); bJumpEdge = Jump(PressedKey); bActionEdge = Action(PressedKey); bDashEdge = Pass(PressedKey);
 		// Preserve independent hat fields and the real stick; the core handles hat movement precedence.
 		// The core reads PadUp/PadDown for country selection. Never turn hat-up into keyboard Up: that would wrongly charge throws.
 	}

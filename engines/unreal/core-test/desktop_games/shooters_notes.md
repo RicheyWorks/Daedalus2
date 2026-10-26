@@ -28,11 +28,94 @@ Preserved rules include 5-degree digital rotation, 6-degree scaled stick rotatio
 
 Polish changes: one life loss per frame, 60-frame visible respawn protection, bounded rejection sampling/entity population and bounded wave population (32 initial rocks after high levels). Rocks split after the hit pass and consumed bullets cannot damage a second target. Keyboard directions and `Input::PadLeft/PadRight/PadUp/PadDown` remain separate, preserving source additive keyboard-and-D-pad rotation. `Ship::Update(Input, hatX, hatY)` also exposes independent hat values for source actor fixtures. The source's any-button title start is a host menu concern; held face/bumper actions map to fire.
 
+### Optional Driftstone flight practice
+
+Option2 / Flight practice offers three sequential docking beacons at (400,180),
+(650,180) and (100,420). The current one has a gold28px ring; completed beacons
+turn green and future ones stay muted. Stop the ship center strictly inside the
+current ring while braking to advance. The same Ship.Update turns/thrusts/coasts,
+applies braking's existing .02 component snap and wraps with its original discarded
+overshoot. Docking requires Braking and both components exactly zero after Update;
+it never creates new stop physics. Position and heading remain between goals.
+Missed approaches are recoverable through ordinary flight; there is no timer.
+
+Practice Reset clears stage and all entities, creates the same seeded stars and
+skips initial rocks. Its Step returns after Ship.Update and goal settlement,
+before firing, UFO timers/collisions and empty-rock wave advancement. Thus no
+combat, score, life loss or waves occur. The third dock sets Won and freezes;
+existing fresh raw retry and host Restart retain mode/seed. Mode0 Endless and
+Mode1 Three waves retain their complete original branches and RNG order. The old
+voyage test's upper invalid option changes from2 to3 because2 is now valid; no
+voyage bulk rerun is implied. The existing checked MakeMode row gains one choice;
+the public actor header change is comment-only, and no host input API is added.
+Native controls/focus, viewport scale and learning/difficulty remain pending.
+
+`desktop_asteroids_flight_practice` / `asteroids_flight_practice_test.cpp` passed
+36/36 strict single-TU MSVC C++17 checks. One bounded public-input route docked all
+three beacons in423 steps; every step matched detached Ship.Update, with no pose
+or stage assignments on that route. Local boundary fixtures retain actual reached
+stage copies. Checks cover order, strict radius/braking/both-zero velocity,
+original discarded-overshoot wrap,360-step no-combat/no-wave/RNG idle, short modes
+0/1 companions, invalid -1/3, pure reads, freeze/retries and Driver cleanup. No old
+brake/voyage/terminal suite or old-header proof was repeated. The voyage test's
+updated invalid-upper-bound literal was source-reviewed only in this slice.
+
+### Optional Driftstone three-wave voyage
+
+Driftstone Patrol (Asteroids) offers **Endless / Three waves** through the existing
+checked mode controls. Option 0 retains the original endless progression. Option
+1 finishes after all rocks in wave three have been destroyed, before spawning
+wave four. The original six/six/seven large rocks and all their splits remain:
+133 rock destructions across the voyage. There is no duration/easier-mode promise.
+
+Flight, brake, firing, UFOs, scoring, life loss and between-wave protection remain
+unchanged. The existing wave-clear rule requires rocks, not surviving UFOs. Lethal
+damage still blocks simultaneous completion. Success freezes the run and shows
+its earned score; it adds no bonus or saved progression. Wave N/3 and the existing
+objective line identify the goal. Restart/fresh result retry retain mode and seed;
+changing mode starts over and the active native mode remains a no-op.
+
+One friend-only AsteroidsTestAccess seam supports bounded real collision/split
+regressions without exposing mutable runtime getters or requiring a fragile pilot
+bot. `desktop_asteroids_voyage` / `asteroids_voyage_test.cpp` covers this slice.
+The previous broad source, braking and replay suites remain separate evidence.
+Native mode focus, terminal input, layout, duration and human play feel are pending.
+
+Strict serial single-TU MSVC C++17 passed 559/559 focused assertions. One bounded
+controlled route performed all 133 actual collision/split hits (19 large, 38 medium,
+76 small) and earned the original 20,900 rock points. Its Endless companion kept
+identical simulation/RNG through precompletion and then spawned wave four's eight
+large rocks. Checks also cover no early finish/bonus, surviving-UFO completion,
+simultaneous lethal/final-rock loss priority, terminal freeze, two representative
+fresh retries, invalid modes, Reset and Driver input/time/pause cleanup. These are
+controlled collision fixtures, not a human pilot or difficulty/duration acceptance.
+No old source, braking, replay suite or old-header proof was repeated.
+
 ## Sega Space Shooter
 
 Preserved player clamping and axis override, power levels 1/2/3 with corresponding normal/double/spread bullets, cooldown 6, basic sine and chaser enemy movement, health 2/4, 100 kill points, 25% powerup chance, power cap 3, speed cap 8, life cap 5 and 60-frame collision invulnerability. The unused enemy shot timers remain timers; no enemy projectile feature was invented.
 
 The canonical source has no `draw_text` implementation and never tests a projectile against its separate boss, making the intended win unreachable. The native rendering contract fixes the text failure; boss bullet and contact collisions are now connected. At 1500 points the 20-HP chaser boss enters and stays in the right-side engagement region instead of drifting permanently off-screen. Defeat awards 500 points and ends in victory. Held fire and keyboard restart through the shared host are usability enhancements. Single-use projectiles and one life loss per frame fix overlapping-hit defects.
+
+### Riftwing ordinary-enemy health cues
+
+Ordinary enemies now show compact health pips above their original silhouettes:
+two for basic ships and four for chasers, matching spawn health. Filled gold pips
+empty after surviving damage. Both rows leave four pixels above the silhouette,
+using the existing health state with no helper label or new timer. The boss keeps
+its separate 20HP bar. The cue follows both Full run and Boss rehearsal enemies;
+combat, scoring, random draws and pickup behavior are unchanged.
+
+`desktop_sega_enemy_health` / `sega_enemy_health_test.cpp` focuses on real hit
+settlement and presentation, using the existing Sega-only friend seam. Native
+cue size, contrast, overlap and human play acceptance remain pending.
+
+Strict serial single-TU MSVC C++17 passed 19/19 focused checks: both moving
+silhouettes, real surviving/lethal shots, original 100-point/drop RNG behavior,
+offscreen cleanup, rehearsal/boss-bar companion and repeated-render/future-state
+purity. No old shooter, rehearsal or replay bulk was rerun. The added rendering
+is bounded to five commands per ordinary enemy (at most 320 across the existing
+64-enemy cap); no gameplay field or timer was added.
 
 ### Optional Riftwing boss rehearsal
 

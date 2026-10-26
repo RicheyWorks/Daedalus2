@@ -39,6 +39,36 @@ Enter or R/Restart replays a completed/lost run with its original seed. Pad A,
 Space or Enter also triggers Zelda's sword during play. Start keeps its existing
 pause/resume role; no terminal retry binding or simulation rule was added.
 
+### Optional Lanternwild hold-to-swing assist
+
+Live fresh Shift / V / pad Y / LB (DashPressed) toggles hold-to-swing assistance,
+off by default. Enabled, held Fire/Action/Jump sword aliases feed the same one-shot
+Hero.Attack gate and original hit/drop/key block. Attacks remain before movement
+with the same 18-step cooldown, damage, hitboxes and rules. A held modifier never
+repeats the toggle. Turning it off retains fresh sword presses. Toggling consumes
+an ordinary live simulation step without resetting progress, movement, health,
+cooldown or RNG; enemies and timers continue normally. This is an optional native
+control extension, not missing Python parity or an automatic combat/player system.
+
+The preference survives Reset and fresh terminal retry in the same game object;
+a fresh cabinet selection creates a default-off object. Terminal handling stays
+first: held sword inputs and the toggle never replay, and a fresh replay returns
+before attacking. Existing Driver/host pause/restart cleanup discards queued input.
+The existing combat/footer slots show fresh/held behavior and the selected choice;
+there is no new HUD row, game mode or host API. Native control text uses existing
+key mappings; no input adapter, actor, registry or shared builder edit is needed.
+Native controls/focus, footer fit and human timing remain unverified.
+
+`desktop_zelda_sword_assist` / `zelda_sword_assist_test.cpp` passed 127/127 strict
+single-TU MSVC C++17 checks. Assisted held aliases match manual fresh swings at the
+18-step cadence, including complete world/RNG state. A prepared encounter retains
+the four original enemy kinds/HP/timers: real attack-before-movement kills three,
+the next swing defeats the two-HP enemy, then normal movement collects its spawned
+key for victory (19 combat steps plus one collection step). No score/key/victory is
+assigned. Toggles preserve progress/cooldown, readbacks are pure, same-cabinet retry
+preserves preference, and Driver pause/catch-up/restart/new selection clean input.
+No old broad maze or terminal suite was repeated; no native execution is implied.
+
 Snapshots are available through const getters. Internal boundary cases in the
 native tests use a test peer, not an exposed mutable gameplay API. Zelda retains
 four source enemies, at most 128 rocks and 16 collectibles; its actual repaired
@@ -113,6 +143,37 @@ against the exact prior Maze header at `0b1b95038` passed 14/28, with fourteen
 expected failures; absent paths stop traversal sections early. No fixtures were
 regenerated. The normalized Pac-Man/Zelda suffix remains identical (472 lines).
 
+### Threadlight Switchback room
+
+Mode0 keeps the original map and static IsWall/Collides default behavior. Optional
+mode1 selects a separately authored20x7 Switchback map with staggered upper/lower
+passages, warm wall caps and a dark floor. It uses the same40px body/spawn(80,80),
+5px X-before-Y movement, three existing lantern/exit anchors, six orders, near
+interaction, clock, notices and140-anchor dotted trail engine. Selected-room
+collision feeds both movement axes, rendering and every trail query; no mutable
+shared map or parallel pathfinder is introduced. The room name reuses progress/
+status text. All original constants and mode0 drawing remain unchanged.
+
+Reset keeps the room and clears current lights/time/trail/notices. Room choice
+uses existing checked MakeMode controls beside Next circuit in a wrapping row.
+Next circuit captures the room before StartGame creates a fresh engine, then
+restores Switchback through the existing option API; the Original path needs no
+extra reset. A failed restoration reports that the next circuit started without
+claiming the old circuit was kept. No actor implementation, new input/host API,
+seed encoding or world-Dungeon/save/builder changes. Canonical circuit seeds and
+their six-order wrap stay unchanged. Native room/next-circuit focus, scale and
+human route learning remain unverified.
+
+`desktop_dungeon_switchback` / `dungeon_switchback_test.cpp` passed 146/146 strict
+single-TU MSVC C++17 checks. All six new-room orders complete through real rendered-
+trail inputs and explicit interactions, paired with guide-off play:2360 total
+movement/interaction steps. No route pose/light/progress assignments. New-room
+140-anchor BFS checks full-body connectivity; tests cover20-column walls/spawn,
+selected-map collision/rendering, wrong/early interactions preserving progress,
+real unaligned connector safety, completion/reset priority, pure reads and Driver
+room/seed/circuit cleanup. Host-style Select then option restore is emulated,
+not claimed as native execution. No Original-room traversal or old suite repeated.
+
 **Pac-Man:** all 31x28 source map characters and 304 dot coordinates are retained,
 as are the 2.5-pixel player and 2-pixel ghost speeds, buffered directions, digital
 direction precedence, dominant-axis stick directions, mouth cycle, four ghost
@@ -147,6 +208,45 @@ Python's seeded random stream or call-consumption order. Ghost respawn retains
 the source's frightened-state behavior; it is not presented as original arcade
 AI or ghost behavior.
 
+### Optional Glowtrail bonus fruit
+
+Classic mode0 remains the default. Mode1 / Bonus fruit adds a timed optional
+detour at the existing open dot center(270,350), row17/column13. Two one-shot
+milestones,76 and228 eaten of the original304 dots, offer one fruit worth100 local
+arcade points for1200 live60Hz steps. There is one active fruit and at most one
+pending opportunity; the second never replaces the first or shortens its timer.
+Issuing advances the milestone index, so expiry/death cannot respawn it repeatedly.
+
+Live Step snapshots fruit-idle and lives, then decrements the old timer. The exact
+original movement, pellet, ghost-contact, win and group-respawn order remains.
+After that, a live bonus helper issues at most one milestone, spawns pending fruit
+only when idle at step entry, then collects within strict12px only if no life was
+lost. Spawn starts at1200; first decrement is next step. Expiry or collection can
+start a queued successor only on a later step. Nonterminal loss retains the fruit/
+pending opportunity and its live clock; protected/frightened contact is not damage.
+Death or dot-clear results settle before fruit, hiding it/countdown and freezing
+the retained state. Fruit never delays all-dot victory. Reset clears fruit state
+and keeps mode/seed. No movement, power, tunnel, ghost RNG or source reward changes
+occur in Classic; bonus adds only the two explicit optional100-point pickups.
+
+Procedural fruit draws after dots and before actors. The existing footer/status
+shows count, value/time or dots to the next opportunity; bonus footer uses17px to
+fit, Classic retains20px. Native mode choice uses existing MakeMode and a game-only
+visibility function, with active-mode no-op and explicit reset. No actor/input API,
+registry, shared builder, save/realm or new rendering framework is involved.
+Native controls, viewport fit and human routing/time pressure remain unverified.
+
+`desktop_pacman_fruit` / `pacman_fruit_test.cpp` passed 36/36 strict single-TU
+MSVC C++17 checks. A consistent75-dot progress fixture leaves all304 authored
+pellets represented, then real dot76 consumption spawns fruit. A fixed120-step
+public-input corridor route from the untouched normal spawn collects it, earning
+exactly100 plus actual dot points; ghosts are isolated off-map for this route,
+so this does not prove adversarial difficulty. Retained spawned states exercise
+queue/expiry boundaries (only boundary timers shortened), strict12px, protected/
+frightened/damaging contacts, death/last-dot priority, finite milestones, reset/
+replay, Classic world/RNG companions, pure reads and Driver cleanup. No full-board
+traversal, solver, old maze suite or old-header proof was repeated.
+
 ### Glowtrail's paired passage
 
 The two outer openings in row 14 now connect in native play. Walk through either
@@ -159,8 +259,8 @@ Only a whole quantized 16x16 collision box fitting row 14 may use the passage.
 Adjacent walls and ordinary out-of-map lookups stay solid. Candidate positions
 are bounded around the seam, so distant invalid test actors cannot fold into the
 maze. Player turn probes, ghost choices and actual movement share that rule.
-Ghost chase still compares ordinary coordinates; no new AI/pathfinding or RNG
-draws are added.
+Ghost chase can use the shorter clear route through opposite outer gates;
+central-compartment pursuit keeps ordinary coordinates. No extra RNG draw is used.
 
 Contact uses the original rectangle overlap plus the translated opposite-edge
 rectangle for eligible actors. Pickups retain their strict 12-pixel Euclidean
@@ -178,14 +278,40 @@ The pinned fixture contents are unchanged; native defaults enable the repaired
 maze and passage. Source-only evidence remains separate from native rendering,
 physical input and human chase/escape acceptance.
 
-`desktop_pacman_tunnel` / `pacman_tunnel_test.cpp` passed 108/108 strict single-TU
-MSVC checks, including the 60 PAC-only pinned source cases in disabled mode.
+When the paired passage was introduced, `desktop_pacman_tunnel` /
+`pacman_tunnel_test.cpp` passed 108/108 strict single-TU MSVC checks, including
+the 60 PAC-only pinned source cases in disabled mode.
 Focused native cases cover two-way overshoot/probes, row/candidate fences,
 quantized seam contact, ordinary off-passage contact, damage/capture/grace,
 strict circular pickup distance and both edge dots once, unchanged RNG call
 counts, dead actors, terminal/reset behavior and presentation/mask order/purity.
 No broad maze suite, repeated full-map traversal, old-header proof, fixture
 regeneration or engine/editor/native playtest ran for this extension.
+
+### Seam-aware pursuit
+
+An unfrightened chasing ghost now chooses the shorter seam displacement when
+both actors fit the passage and both full quantized bodies have a clear horizontal
+approach to the relevant outer edge. Row 14 is partitioned by walls: the center
+room must keep raw pursuit. The approach check derives those walls from the
+existing map, scanning at most 28 cells per side. Half-period ties keep the old
+direction, as do shorter direct routes, off-row/invalid actors and disabled source
+mode. Existing next-position collision checks and two-pixel movement/wrap remain.
+
+Frightened/random steering, chase probability, recovery timing and the five random
+draws per living ghost are retained. There is no pathfinder, new game state, map,
+score/life rule, input or rendering change. The paired-passage test's one deliberate
+raw-pursuit expectation is updated to the new native direction. Pinned fixtures
+are untouched. `desktop_pacman_pursuit` / `pacman_pursuit_test.cpp` targets this
+correction; the prior full tunnel/source suite is separate historical evidence.
+Native chase difficulty, visual continuity and human play acceptance are pending.
+
+Strict serial single-TU MSVC C++17 passed 37/37 focused checks: two-way fractional
+crossing, body/map/row/source-mode fences, ties and short routes, original chase/
+random/fright/dead gates, five-draw accounting and one full-game Step crossing with
+unrelated progress intact. The old tunnel target's one native-pursuit expectation
+was updated; its 60 disabled-mode source cases and broad suite were not rerun.
+No fixture changed, engine build or native playtest was performed.
 
 **Zelda:** source Link spawn `(400,450)`, speed 3.5, six half-hearts, source 0.707
 diagonal scale and two-level stick deadzone, directional attack rectangles,

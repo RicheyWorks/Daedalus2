@@ -50,6 +50,7 @@ template<std::size_t N> inline void MakeStars(std::array<Star,N>& Stars,Random& 
 // Latest Desktop asteroids_pygame_ce.py: ship inertia, splitting rocks and UFOs.
 // One Step is one source 60 Hz frame; host owns elapsed-time accumulation/input.
 class AsteroidsGame final : public Game {
+    friend struct AsteroidsTestAccess;
 public:
     struct Ship {
         double X=400,Y=300,Angle=-90,Vx=0,Vy=0;
@@ -109,23 +110,38 @@ public:
     std::size_t GetRockCount() const { return Rocks.size(); }
     std::size_t GetUfoCount() const { return Ufos.size(); }
     int GetProtectionFrames() const { return RespawnGrace; }
-    bool IsFireReady() const { return !Over && Bullets.size()<MaxBullets && Player.Cooldown==0; }
+    bool IsFireReady() const { return Option!=2 && !Over && !Won && Bullets.size()<MaxBullets && Player.Cooldown==0; }
+    int GetDockedBeaconCount() const { return FlightStage; }
     std::size_t EntityCount() const { return Rocks.size()+Bullets.size()+Ufos.size(); }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed;
-        Rng.Seed(Seed); Player=Ship{}; Score=0; Lives=3; Level=1; Over=false; RespawnGrace=0; UfoTimer=300;
-        Bullets.clear(); Ufos.clear(); Rocks.clear(); shooter_detail::MakeStars(Stars,Rng); CreateRocks(6);
+        Rng.Seed(Seed); Player=Ship{}; Score=0; Lives=3; Level=1; Over=false; Won=false; RespawnGrace=0; UfoTimer=300;
+        Bullets.clear(); Ufos.clear(); Rocks.clear(); shooter_detail::MakeStars(Stars,Rng);
+        FlightStage=0;if(Option!=2) CreateRocks(6);
     }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>2) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
     bool SourceControllerButton(int Button) override {
-        if(Over && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
+        if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
         return false;
     }
     bool SourceKeyDown(int Key) override {
-        if(Over && (Key==6 || Key==7)) {Reset(SessionSeed);return true;}
+        if((Over || Won) && (Key==6 || Key==7)) {Reset(SessionSeed);return true;}
         return false;
     }
     void Step(const Input& I) override {
-        if(Over) return;
+        if(Over || Won) return;
+        if(Option==2) {
+            Player.Update(I);
+            const Vec Goal=FlightBeacons[static_cast<std::size_t>(FlightStage)];
+            if(Player.Braking && Player.Vx==0 && Player.Vy==0 && Distance(Player.X,Player.Y,Goal.X,Goal.Y)<28) {
+                ++FlightStage;Won=FlightStage==static_cast<int>(FlightBeacons.size());
+            }
+            return; // Empty practice space never enters firing, UFOs or wave progression.
+        }
         if(RespawnGrace>0) --RespawnGrace;
         // Source KEYDOWN/JOYBUTTONDOWN can shoot before ship.update; held fire after.
         if(I.FirePressed) Fire();
@@ -177,6 +193,7 @@ public:
         shooter_detail::Remove(Ufos,[](const Ufo& U){return U.X<-30 || U.X>830;});
         shooter_detail::Remove(Bullets,[](const Bullet& B){return B.Life<=0;});
         if(!Over && Rocks.empty()) {
+            if(Option==1 && Level>=3) {Won=true;return;}
             Level=std::min(Level+1,1000000); Player=Ship{}; Bullets.clear(); Ufos.clear(); UfoTimer=Rng.Int(300,600);
             CreateRocks(std::min(4+Level,32)); RespawnGrace=60;
         }
@@ -184,6 +201,12 @@ public:
     void Render(Frame& F) const override {
         using namespace shooter_detail;
         F.Clear(); for(const auto& S:Stars) F.AddCircle(S.X,S.Y,1,White);
+        if(Option==2) for(std::size_t N=0;N<FlightBeacons.size();++N) {
+            const Vec Goal=FlightBeacons[N];const int Index=static_cast<int>(N);
+            const Color Tint=Index<FlightStage?Green:(Index==FlightStage?Gold:Color{75,95,125,255});
+            Ellipse(F,Goal.X,Goal.Y,Index==FlightStage?28:16,Index==FlightStage?28:16,Tint);
+            F.AddText(Goal.X-5,Goal.Y-9,std::to_string(Index+1),Tint,16);
+        }
         if(!Over && (RespawnGrace==0 || (RespawnGrace/4)%2!=0)) {
             const double R=Radians(Player.Angle);
             Outline(F,{{Player.X+15*std::cos(R),Player.Y+15*std::sin(R)},
@@ -198,6 +221,7 @@ public:
                 {Player.X-4*std::cos(R+2.2),Player.Y-4*std::sin(R+2.2)},
                 {Player.X-4*std::cos(R-2.2),Player.Y-4*std::sin(R-2.2)},Yellow);
         }
+        if(Option==2) { RenderFlightPractice(F);return; }
         for(const auto& A:Rocks) {
             std::vector<Vec> Points;
             for(int N=0;N<8;++N) { const double R=Radians(A.Angle+N*45); Points.push_back({A.X+A.Radius()*A.Shape[N]*std::cos(R),A.Y+A.Radius()*A.Shape[N]*std::sin(R)}); }
@@ -206,40 +230,59 @@ public:
         for(const auto& B:Bullets) F.AddCircle(B.X,B.Y,3,B.PlayerOwned?White:Red);
         for(const auto& U:Ufos) { const Color UfoGreen{80,255,80,255};Ellipse(F,U.X,U.Y,15,6,UfoGreen);Outline(F,{{U.X-8,U.Y-12},{U.X+8,U.Y-12},{U.X+8,U.Y-4},{U.X-8,U.Y-4}},UfoGreen); }
         F.AddText(30,15,"SCORE: "+std::to_string(Score)); F.AddText(660,15,"LIVES: "+std::to_string(Lives));
-        F.AddText(355,15,"LEVEL: "+std::to_string(Level),Yellow,18);
+        F.AddText(355,15,std::string(Option==1?"WAVE: ":"LEVEL: ")+std::to_string(Level)+(Option==1?"/3":""),Yellow,18);
         F.AddText(30,42,"ROCKS: "+std::to_string(GetRockCount())+"   UFOs: "+std::to_string(GetUfoCount()),White,16);
         F.AddText(30,65,"FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
-        if(!Over) {
+        if(!Over && !Won) {
             if(Player.Braking) F.AddText(420,42,"BRAKING",LightBlue,17);
             F.AddText(420,65,ProtectionNote(),RespawnGrace>0?Cyan:White,15);
             if(RespawnGrace>0) Ellipse(F,Player.X,Player.Y,23,23,Cyan);
         }
-        F.AddText(30,548,"Clear all rocks to advance; larger rocks split into two.",White,15);
+        F.AddText(30,548,Option==1?"Voyage: clear all rocks in three waves. Larger rocks split into two."
+            :"Clear all rocks to advance; larger rocks split into two.",White,15);
         F.AddText(30,572,"Left/Right: turn   Up: thrust   K/LT: brake   Space/pad: fire",White,15);
-        if(Over) {
+        if(Over || Won) {
             F.AddRect(170,225,460,115,{15,20,35,235});
-            F.AddText(285,238,"GAME OVER",Red,40);
+            F.AddText(Won?210:285,238,Won?"THREE WAVES CLEARED!":"GAME OVER",Won?Green:Red,Won?30:40);
             F.AddText(200,290,"Wave "+std::to_string(Level)+"   Final score "+std::to_string(Score),White,18);
             F.AddText(185,315,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
         }
     }
     Status GetStatus() const override {
+        if(Option==2) return {Score,Lives,false,Won,Won?
+            "Flight practice complete; pad A/Start, Enter/Space or R/Restart to retry":
+            "Flight practice: docked "+std::to_string(FlightStage)+"/3; stop under braking inside the gold ring. Turn / thrust / K-LT brake; edges wrap."};
+        if(Won) return {Score,Lives,false,true,"Three-wave voyage complete; pad A/Start, Enter/Space or R/Restart to retry"};
         if(Over) return {Score,Lives,true,false,"Game over at wave "+std::to_string(Level)+"; pad A/Start, Enter/Space or R/Restart to retry"};
-        return {Score,Lives,false,false,"Wave "+std::to_string(Level)+"; rocks "+std::to_string(GetRockCount())+"; UFOs "+std::to_string(GetUfoCount())+
+        return {Score,Lives,false,false,"Wave "+std::to_string(Level)+(Option==1?"/3 voyage":"")+"; rocks "+std::to_string(GetRockCount())+"; UFOs "+std::to_string(GetUfoCount())+
             "; "+ProtectionNote()+"; fire "+FireNote()+(Player.Braking?"; BRAKING":"")+"; turn / thrust / K-LT brake / hold fire"};
     }
 private:
     Random Rng; Ship Player; std::vector<Rock> Rocks; std::vector<Bullet> Bullets; std::vector<Ufo> Ufos;
     std::array<shooter_detail::Star,80> Stars{};
     std::uint32_t SessionSeed=730;
-    std::int64_t Score=0; int Lives=3,Level=1,UfoTimer=300,RespawnGrace=0; bool Over=false;
+    std::int64_t Score=0; int Lives=3,Level=1,UfoTimer=300,RespawnGrace=0,Option=0,FlightStage=0; bool Over=false,Won=false;
+    inline static constexpr std::array<Vec,3> FlightBeacons{{{400,180},{650,180},{100,420}}};
+    void RenderFlightPractice(Frame& F) const {
+        using namespace shooter_detail;
+        F.AddText(30,15,"FLIGHT PRACTICE",White,24);
+        F.AddText(610,15,"DOCKED "+std::to_string(FlightStage)+"/3",Gold,22);
+        F.AddText(30,52,Player.Braking?(Player.Vx==0 && Player.Vy==0?"STOPPED":"BRAKING"):"Find the next gold ring",LightBlue,17);
+        F.AddText(30,548,"Stop under braking inside the GOLD ring. Edges wrap.",White,15);
+        F.AddText(30,572,"Left/Right, stick or hat: turn | Up: thrust | K/LT: brake",White,15);
+        if(Won) {
+            F.AddRect(170,225,460,115,{15,20,35,235});
+            F.AddText(215,248,"DOCKING COMPLETE!",Green,30);
+            F.AddText(185,305,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
+        }
+    }
     std::string ProtectionNote() const {
         // The source-style timer decrements before the next collision pass.
         if(RespawnGrace==1) return "PROTECTION EXPIRES NEXT LIVE STEP";
         return RespawnGrace>1?"PROTECTION TIMER: "+std::to_string(RespawnGrace):"COLLISIONS ACTIVE";
     }
     std::string FireNote() const {
-        if(Over) return "RUN ENDED";
+        if(Over || Won) return "RUN ENDED";
         if(Bullets.size()>=MaxBullets) return "SHOT LIMIT";
         return Player.Cooldown>0?"COOLDOWN "+std::to_string(Player.Cooldown)+" STEPS":"READY";
     }
@@ -392,7 +435,14 @@ public:
             F.AddTriangle({Pilot.X-12,Pilot.Y},{Pilot.X-22,Pilot.Y-6},{Pilot.X-22,Pilot.Y+6},{255,200,50,255});
         }
         auto DrawEnemy=[&F](const Enemy& E){ if(E.Chaser) F.AddTriangle({E.X+10,E.Y},{E.X-12,E.Y-10},{E.X-12,E.Y+10},{255,100,100,255}); else { Ellipse(F,E.X,E.Y,12,8,{255,80,80,255},true);F.AddCircle(E.X+5,E.Y,5,{255,150,150,255}); } };
-        for(const auto& E:Enemies) DrawEnemy(E);
+        for(const auto& E:Enemies) {
+            DrawEnemy(E);
+            const int MaxHealth=E.Chaser?4:2;
+            const double Top=E.Y-(E.Chaser?23:21);
+            F.AddRect(E.X-MaxHealth*4-1,Top,MaxHealth*8+2,9,{0,0,40,255});
+            for(int N=0;N<MaxHealth;++N) F.AddRect(E.X-MaxHealth*4+1+N*8,Top+2,6,5,
+                N<E.Health?Color{255,215,100,255}:Color{70,70,90,255});
+        }
         for(const auto& B:Bullets) {F.AddCircle(B.X,B.Y,4,{255,255,100,255});F.AddCircle(B.X,B.Y,2,White);}
         for(const auto& P:Powerups) {
             if(P.Kind==PowerKind::Speed) Polygon(F,{{P.X,P.Y-8},{P.X+8,P.Y},{P.X,P.Y+8},{P.X-8,P.Y}},Green);

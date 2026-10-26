@@ -45,6 +45,86 @@ bracket, multiplayer or persistent leaderboard feature.
 
 ## Deliberate changes
 
+### Courtyard teammate passing
+
+V / pad Y / LB sends a fresh pass to the next living teammate in cyclic P1/P2/P3
+order, skipping knockouts. This changes the holder and its existing roster power/
+speed traits; control still moves the whole team together. The native Dodge-only
+override uses DashPressed for passing and held Dash for catch-and-keep, with Shift/B jump and all
+throw/confirm mappings intact. The pass action opens title/continues results via
+the existing DashPressed rules; it does not confirm country selection.
+
+A valid pass from an existing Playing step takes priority over simultaneous fresh
+Fire; a refused pass falls back to the original throw path. Validate possession,
+cooldown and recipient first, then attach a local ball copy through UpdateBall,
+aim from the hand and use the unchanged normal Throw. Zero-length aim is refused
+before mutation. Motion, drag and bounce use the original UpdateBall. There is no
+homing or remote handoff. Only the intended receiver catches automatically; all
+other human catches/hits are skipped during a tagged pass, making it harmless to
+the passing team. CPU interception and damage retain their normal behavior.
+
+The receiver gets at least 14 cooldown steps after movement ticking, so held Fire
+cannot immediately rethrow the same catch. Tags clear before normal rethrows/CPU
+ownership, on hits/stop/round reset and Reset. A receiver that becomes unavailable
+leaves the pass harmless until it stops or changes ownership; a miss uses ordinary
+loose-ball recovery. One private recipient index is added, with read-only feedback.
+The existing readiness line names the recipient and a blue ring marks it in flight.
+No scoring, roster, country, tournament, save or default attack rule is changed.
+
+`desktop_dodge_pass` / `dodge_pass_test.cpp` passed 70/70 strict single-TU MSVC
+C++17 checks: the three-player cycle, KO skipping, zero-aim refusal, post-tick
+catch cooldown, ordinary friendly-hit companion, CPU catch/hit, misses, input
+priority, round cleanup, read purity and Driver pause/catch-up edges. No broad
+sports fixtures or engine build were repeated. Native binding/focus,
+receiver-ring readability and human pass/throw feel remain unverified.
+
+### Courtyard catch and keep
+
+Held V / pad Y / LB maps to held Dash in the existing Dodge-only native override.
+It enables the same grounded Catch as held Fire, including strict normal/super
+distance and the original airborne rules. While held it suppresses only the
+automatic held-Fire backup throw, so a catch or loose pickup stays possessed for
+movement, charging or a deliberate pass. It does not send another pass without
+DashPressed. Release and press again to pass; a fresh FirePressed when already
+carrying still takes the existing throw path, unless a valid simultaneous pass
+wins as before. On a fresh FirePressed step, both new guard gates are disabled,
+preserving the complete legacy catch/rethrow ordering (including airborne catches).
+A fresh-only throw with no possession does not queue a later throw.
+Releasing guard with Fire still held restores the ordinary rethrow immediately
+when the existing cooldown permits. No new state, cooldown, radius, physics,
+invulnerability, roster rule, score or default non-guard control path is added.
+Title/selection/result held-only input does not advance; pause/reset clear it via
+the unchanged host/Driver input lifecycle. Help LB scrolling remains intercepted
+before game input. Physical input/focus and catch/charge/pass feel remain pending.
+
+`desktop_dodge_guard` / `dodge_guard_test.cpp` passed 47/47 strict single-TU MSVC
+C++17 checks: normal/super catches, strict radii and KO/airborne companions,
+movement/charge retention, release/repress into a real teammate pass, legacy hit
+and held rethrow, four explicit-Fire ground/air and fresh/held parity cases,
+presentation purity and Driver title/pause/catch-up/reset boundaries. No broad
+sports fixtures or previous completed checks were repeated.
+
+### Courtyard native How to play
+
+Courtyard now reuses the existing native paused help modal (button / F1 /
+left-stick click), rather than adding more court labels. Its own title, intro and
+progress branches explain shared trio movement, nearest target, held catch/rethrow
+versus fresh pad X/RB throw, jump catch, stick/hat charging and four-round results.
+They bypass Star's save instructions. Existing scroll, focus, held-accept repeat
+protection and pending-save notices/fences are retained.
+
+Dodge's Over flag marks a match result within a continuing tournament. Its help
+Resume button therefore permits that retained result, without advancing it;
+another fresh gameplay press performs the existing continuation. Other games'
+terminal-resume restrictions are unchanged. Return paused still leaves play paused.
+No game core, input adapter, actor state/save or new modal framework changed.
+
+This native Slate-only slice receives focused source/control-flow review and
+whitespace checks. Engine compilation, physical help/resume/scroll focus, held
+input isolation and viewport acceptance are deferred to the sole native owner.
+Portable sports or source fixtures cannot establish those native behaviors and
+were not rerun for this slice.
+
 ### Courtyard throw target
 
 Human possession now shows small inward chevrons at the current nearest living
@@ -68,6 +148,31 @@ throw direction. Extra rendering/status calls preserve paired future state for
 24 steps across all eight countries. No old physics fixtures or full sports suite
 rerun, no engine build/editor/native acceptance. Visibility at native scale and
 human interpretation of a changing target remain unverified.
+
+### Courtyard stick country selection
+
+The country picker now accepts a vertical stick flick beyond 0.6, once per tilt.
+Both axes must center within 0.3 before the next choice. A stick gesture that
+opens the picker is consumed; a neutral button/key entry permits a fresh flick.
+This completes the existing stick title-entry flow without scrolling past choices
+while the stick is held. Up/Down key and hat edges retain their current priority;
+a simultaneous stick gesture is consumed even when a digital edge wins.
+
+The original axes are untouched for match movement and charge. Hat-only Up still
+does not charge, while original stick Up beyond 0.5 still does. Confirmation,
+country stats, tournament/RNG behavior and reset are retained. The existing
+selection line/status names stick flicks rather than adding a helper row.
+
+`desktop_dodge_country_stick` / `dodge_country_stick_test.cpp` checks actual title
+entry, centering/thresholds/held gestures, wrapping and mixed inputs, Reset,
+confirmation and the live stick/hat charge distinction. Native stick hardware,
+layout and player acceptance remain unverified.
+
+Strict serial single-TU MSVC C++17 passed 48/48 focused checks: actual title
+entry, strict engage/inclusive release thresholds, held/reversed/jittered tilts,
+horizontal centering, wrapping, mixed digital priorities, reset, chosen roster,
+confirmation and unchanged live charge companions. No old sports bulk or source
+fixtures were rerun; the native adapter is unchanged.
 
 ### Courtyard tournament finish
 

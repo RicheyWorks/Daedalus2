@@ -36,6 +36,11 @@ public:
         "#.................#", "#.........####....#", "#.................#",
         "####################"
     }};
+    inline static constexpr std::array<const char*,Rows> SwitchbackMap{{
+        "####################", "#..................#", "#..##########.####.#",
+        "#..................#", "########.#########.#", "#..................#",
+        "####################"
+    }};
     struct Player { double X=80, Y=80; };
     enum class CircuitStage { Lanterns, ExitUnlocked, Complete };
     static constexpr int LanternCount=3;
@@ -53,24 +58,30 @@ public:
         return CircuitNumber(Seed)%static_cast<std::uint32_t>(Routes.size());
     }
     inline static constexpr Vec Exit{60,220};
-    static bool IsWall(int Col,int Row) {
+    static bool IsWall(int Col,int Row,int Room=0) {
         // Ragged source rows and all out-of-map coordinates are solid.
+        const auto& Layout=Room==1?SwitchbackMap:Map;
         return Row<0 || Row>=Rows || Col<0 || Col>=Columns ||
-            Col>=static_cast<int>(std::strlen(Map[static_cast<std::size_t>(Row)])) ||
-            Map[static_cast<std::size_t>(Row)][Col]=='#';
+            Col>=static_cast<int>(std::strlen(Layout[static_cast<std::size_t>(Row)])) ||
+            Layout[static_cast<std::size_t>(Row)][Col]=='#';
     }
-    static bool Collides(double X,double Y) {
+    static bool Collides(double X,double Y,int Room=0) {
         const int Left=static_cast<int>(std::floor(X/Tile));
         const int Right=static_cast<int>(std::floor((X+Tile-0.001)/Tile));
         const int Top=static_cast<int>(std::floor(Y/Tile));
         const int Bottom=static_cast<int>(std::floor((Y+Tile-0.001)/Tile));
-        return IsWall(Left,Top)||IsWall(Right,Top)||IsWall(Left,Bottom)||IsWall(Right,Bottom);
+        return IsWall(Left,Top,Room)||IsWall(Right,Top,Room)||IsWall(Left,Bottom,Room)||IsWall(Right,Bottom,Room);
     }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed; Hero={}; Order=Routes[Seed%Routes.size()];
         Lit={}; LitCount=0; RunFrames=0; Started=false; Complete=false; TrailEnabled=false;
         Notice.clear(); NoticeFrames=0;
     }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
     void Step(const Input& I) override {
         if(I.ActionPressed) { Reset(SessionSeed); return; }
         if(Complete) return; // A fresh reset is deliberate; held interaction cannot replay.
@@ -86,8 +97,8 @@ public:
         const double Y=std::abs(Axis(I.AxisY))>0.2 ? Axis(I.AxisY) : static_cast<double>(D.Y);
         const double Dx=X*5, Dy=Y*5;
         const Player Before=Hero;
-        if(!Collides(Hero.X+Dx,Hero.Y)) Hero.X+=Dx;
-        if(!Collides(Hero.X,Hero.Y+Dy)) Hero.Y+=Dy;
+        if(!Collides(Hero.X+Dx,Hero.Y,Option)) Hero.X+=Dx;
+        if(!Collides(Hero.X,Hero.Y+Dy,Option)) Hero.Y+=Dy;
         const bool Interact=I.FirePressed || I.JumpPressed;
         Started=Started || Hero.X!=Before.X || Hero.Y!=Before.Y || Interact;
         if(Started && RunFrames<std::numeric_limits<std::uint64_t>::max()) ++RunFrames;
@@ -100,9 +111,12 @@ public:
         return Complete?CircuitStage::Complete:(LitCount==LanternCount?CircuitStage::ExitUnlocked:CircuitStage::Lanterns);
     }
     void Render(Frame& Out) const override {
-        Out.Clear(Columns*Tile,Rows*Tile+64,Black);
+        Out.Clear(Columns*Tile,Rows*Tile+64,Option==1?Color{10,24,32,255}:Black);
         for(int Y=0;Y<Rows;++Y) for(int X=0;X<Columns;++X)
-            if(IsWall(X,Y)) Out.AddRect(X*Tile,Y*Tile,Tile,Tile,{100,100,100,255});
+            if(IsWall(X,Y,Option)) {
+                Out.AddRect(X*Tile,Y*Tile,Tile,Tile,Option==1?Color{110,83,55,255}:Color{100,100,100,255});
+                if(Option==1) Out.AddRect(X*Tile,Y*Tile,Tile,6,{160,125,72,255});
+            }
         if(TrailEnabled && !Complete) {
             const auto Path=TrailPath();
             const Color Trail{135,180,205,255};
@@ -130,7 +144,7 @@ public:
         }
         Out.AddRect(Exit.X-16,Exit.Y-16,32,32,LitCount==LanternCount?Color{80,200,255,255}:Color{95,100,120,255});
         Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",Black,12);
-        const std::string Circuit="Circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size());
+        const std::string Circuit=std::string(Option==1?"Switchback | ":"")+"Circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size());
         const std::string Progress=Circuit+(Complete?" clear in "+std::to_string(RunFrames/60)+"s. K/Enter/pad B or R: replay."
             :(LitCount==LanternCount?": exit unsealed. Approach EXIT and light it."
                 :": "+std::to_string(LitCount)+"/3 lit. Next: "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]));
@@ -139,7 +153,7 @@ public:
         Out.AddText(12,Rows*Tile+35,Notice.empty()?Controls:Notice,White,14);
     }
     Status GetStatus() const override {
-        std::string Text="Threadlight circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size())+": ";
+        std::string Text=std::string(Option==1?"Threadlight Switchback circuit ":"Threadlight circuit ")+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size())+": ";
         Text+=Complete?"complete; Action/R replays."
             :(LitCount==LanternCount?"Exit unlocked; approach EXIT and press Fire/Jump."
                 :std::to_string(LitCount)+"/3: seek "+LanternNames[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]+"; Fire/Jump lights, Action resets.");
@@ -155,7 +169,7 @@ private:
         const int StartY=static_cast<int>(std::floor(Hero.Y/Tile));
         const Vec Target=LitCount<LanternCount?Lanterns[static_cast<std::size_t>(Order[static_cast<std::size_t>(LitCount)])]:Exit;
         const int GoalX=static_cast<int>(Target.X/Tile),GoalY=static_cast<int>(Target.Y/Tile);
-        if(Collides(Hero.X,Hero.Y) || Collides(StartX*Tile,StartY*Tile) || Collides(GoalX*Tile,GoalY*Tile)) return {};
+        if(Collides(Hero.X,Hero.Y,Option) || Collides(StartX*Tile,StartY*Tile,Option) || Collides(GoalX*Tile,GoalY*Tile,Option)) return {};
         const int Start=StartY*Columns+StartX,Goal=GoalY*Columns+GoalX;
         std::array<int,Count> Parent{},Queue{};Parent.fill(-1);
         int Head=0,Tail=0;Queue[static_cast<std::size_t>(Tail++)]=Start;Parent[static_cast<std::size_t>(Start)]=Start;
@@ -164,7 +178,7 @@ private:
             const int Node=Queue[static_cast<std::size_t>(Head++)];
             for(const auto D:Directions) {
                 const int X=Node%Columns+D.X,Y=Node/Columns+D.Y;
-                if(X<0 || X>=Columns || Y<0 || Y>=Rows || Collides(X*Tile,Y*Tile)) continue;
+                if(X<0 || X>=Columns || Y<0 || Y>=Rows || Collides(X*Tile,Y*Tile,Option)) continue;
                 const int Next=Y*Columns+X;
                 if(Parent[static_cast<std::size_t>(Next)]>=0) continue;
                 Parent[static_cast<std::size_t>(Next)]=Node;Queue[static_cast<std::size_t>(Tail++)]=Next;
@@ -210,7 +224,7 @@ private:
     std::uint32_t SessionSeed=0;
     std::array<int,LanternCount> Order{{0,1,2}};
     std::array<bool,LanternCount> Lit{};
-    int LitCount=0, NoticeFrames=0;
+    int LitCount=0, NoticeFrames=0,Option=0;
     std::uint64_t RunFrames=0;
     bool Started=false, Complete=false, TrailEnabled=false;
     std::string Notice;
@@ -220,6 +234,8 @@ class PacmanGame final : public Game {
 public:
     static constexpr int Tile=20, Columns=28, Rows=31;
     static constexpr int RespawnGraceFrames=90; // Native rule extension after a nonterminal death.
+    static constexpr int FruitLifetimeFrames=1200,FruitPoints=100;
+    inline static constexpr Vec FruitSpot{270,350};
     inline static constexpr std::array<const char*,Rows> Map{{
         "############################", "#............##............#",
         "#.####.#####.##.#####.####.#", "#.####.#####.##.#####.####.#",
@@ -252,6 +268,15 @@ public:
     }
     static double WrapTunnelX(double X) {
         return X<0 ? X+Columns*Tile : X>=Columns*Tile ? X-Columns*Tile : X;
+    }
+    static bool ClearTunnelApproach(double X,bool Left,bool RepairDoor=true) {
+        // Canonical actors only. Row 14 also contains walls around the center room.
+        const Rect Body=maze::PixelRect(X-8,14*Tile,16,16);
+        for(int Col=0;Col<Columns;++Col) {
+            const bool OnRoute=Left?Col*Tile<=Body.X+15:(Col+1)*Tile>Body.X;
+            if(OnRoute && IsWall(Col,14,RepairDoor)) return false;
+        }
+        return true;
     }
     static bool Collides(double X,double Y,bool RepairDoor=true,bool UseTunnels=true) {
         const Rect R=maze::PixelRect(X-8,Y-8,16,16);
@@ -304,7 +329,13 @@ public:
                 for(const auto D:Dirs) if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor,UseTunnels)) { Dir=D; break; }
             }
             if(!Frightened && ChaseSample<0.6) {
-                const double Dx=TargetPlayer.X-X, Dy=TargetPlayer.Y-Y;
+                double Dx=TargetPlayer.X-X;
+                const double Dy=TargetPlayer.Y-Y;
+                if(UseTunnels && IsTunnelActor(X,Y) && IsTunnelActor(TargetPlayer.X,TargetPlayer.Y)) {
+                    const double Width=Columns*Tile;
+                    if(Dx>Width/2 && ClearTunnelApproach(X,true,RepairDoor) && ClearTunnelApproach(TargetPlayer.X,false,RepairDoor)) Dx-=Width;
+                    else if(Dx<-Width/2 && ClearTunnelApproach(X,false,RepairDoor) && ClearTunnelApproach(TargetPlayer.X,true,RepairDoor)) Dx+=Width;
+                }
                 const maze::Direction D=std::abs(Dx)>std::abs(Dy) ? maze::Direction{Dx>0 ? 1 : -1,0} : maze::Direction{0,Dy>0 ? 1 : -1};
                 if(!Collides(X+D.X*2,Y+D.Y*2,RepairDoor,UseTunnels)) Dir=D;
             }
@@ -351,9 +382,21 @@ public:
                  {290,290,{}, {0,255,255,255}}, {330,290,{}, {255,165,0,255}}}};
         const std::array<maze::Direction,4> Dirs{{{1,0},{-1,0},{0,1},{0,-1}}};
         for(auto& G:Ghosts) G.Dir=Dirs[static_cast<std::size_t>(Rng.Int(0,3))];
+        FruitFrames=FruitIssued=FruitCollected=0;FruitPending=false;
     }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
+    bool IsFruitActive() const { return Option==1 && !Over && !Won && FruitFrames>0; }
+    int FruitFramesRemaining() const { return IsFruitActive()?FruitFrames:0; }
+    int FruitsCollected() const { return FruitCollected; }
     void Step(const Input& I) override {
         if(Over || Won) { if(maze::RestartPressed(I)) Reset(SessionSeed); return; }
+        const bool FruitIdleAtStart=FruitFrames==0;
+        const int LivesAtStart=Lives;
+        if(Option==1 && FruitFrames>0) --FruitFrames;
         // Snapshot before ticking: a new 90-step guard protects exactly the next
         // 90 live collision steps. Movement, pellets, frightened captures and RNG stay live.
         const bool ProtectedThisStep=RespawnFrames>0;
@@ -377,6 +420,7 @@ public:
         if(!Over && Remaining==0) { Won=true; ++Level; }
         if(std::all_of(Ghosts.begin(),Ghosts.end(),[](const Ghost& G){return !G.Alive;}))
             for(auto& G:Ghosts) { G.Alive=true; G.X=290; G.Y=290; }
+        if(Option==1) UpdateFruit(FruitIdleAtStart,Lives==LivesAtStart);
     }
     const Player& GetPlayer() const { return Hero; }
     const std::array<Ghost,4>& GetGhosts() const { return Ghosts; }
@@ -416,6 +460,13 @@ public:
             Out.AddRect(Side==0 ? X : X+4,14*Tile+2,2,16,Gate);
         }
         for(const auto& P:Pellets) if(P.Alive) Out.AddCircle(P.X,P.Y,P.Power ? 6 : 3,White);
+        if(IsFruitActive()) {
+            const double X=FruitSpot.X,Y=FruitSpot.Y;
+            Out.AddCircle(X,Y,11,{95,50,40,255});
+            Out.AddCircle(X-3,Y+1,7,{255,120,85,255});Out.AddCircle(X+3,Y+1,7,{255,95,100,255});
+            Out.AddTriangle({X,Y-5},{X+8,Y-12},{X+4,Y-4},{75,215,100,255});
+            Out.AddCircle(X-4,Y-2,2,White);
+        }
         const bool ShowGrace=RespawnFrames>0 && !Over && !Won;
         const double Angle=Hero.Dir.X<0 ? 3.141592653589793 : Hero.Dir.Y<0 ? -1.5707963267948966 : Hero.Dir.Y>0 ? 1.5707963267948966 : 0;
         const double Mouth=(30+std::abs(std::sin(Hero.Mouth/5.0)*25))*3.141592653589793/180;
@@ -445,7 +496,8 @@ public:
             }
         }
         Out.AddRect(Columns*Tile,0,800-Columns*Tile,Rows*Tile,Black);
-        Out.AddText(10,630,"SCORE "+std::to_string(Score)+"  LIVES "+std::to_string(Lives)+"  LEVEL "+std::to_string(Level));
+        const std::string Footer="SCORE "+std::to_string(Score)+"  LIVES "+std::to_string(Lives)+"  LEVEL "+std::to_string(Level);
+        Out.AddText(10,630,Footer+(Option==1?"  |  "+FruitNote():""),White,Option==1?17:20);
         Out.AddText(580,136,"GLOWTRAIL",maze::Yellow,22);
         Out.AddText(580,162,"CHASE",maze::Yellow,22);
         Out.AddText(580,190,"Move: arrows / WASD / stick",White,14);
@@ -476,6 +528,7 @@ public:
             if(Window.Frightened>0) Text+=" First recovery: "+std::to_string(Window.Seconds())+"s"+(Window.Frames<=60?" (final second).":".");
             if(RespawnFrames>0) Text+=" Respawn grace: "+std::to_string(RespawnFrames)+" steps.";
         }
+        if(Option==1) Text+=" "+FruitNote()+".";
         return {Score,Lives,Over,Won,Text};
     }
 private:
@@ -488,6 +541,29 @@ private:
     std::int64_t Score=0;
     int Lives=3, Remaining=0, Level=1, RespawnFrames=0;
     bool Over=false, Won=false;
+    int Option=0,FruitFrames=0,FruitIssued=0,FruitCollected=0;
+    bool FruitPending=false;
+    inline static constexpr std::array<int,2> FruitMilestones{{76,228}};
+    void UpdateFruit(bool IdleAtStart,bool MayCollect) {
+        if(Over || Won) return; // Dot-clear/death results settle before optional fruit.
+        const int Eaten=static_cast<int>(Pellets.size())-Remaining;
+        if(FruitIssued<static_cast<int>(FruitMilestones.size()) && Eaten>=FruitMilestones[static_cast<std::size_t>(FruitIssued)]) {
+            ++FruitIssued;FruitPending=true;
+        }
+        if(IdleAtStart && FruitFrames==0 && FruitPending) { FruitFrames=FruitLifetimeFrames;FruitPending=false; }
+        if(MayCollect && IsFruitActive() && Distance(Hero.X,Hero.Y,FruitSpot.X,FruitSpot.Y)<12) {
+            Score+=FruitPoints;FruitFrames=0;++FruitCollected;
+        }
+    }
+    std::string FruitNote() const {
+        const std::string Count="FRUIT "+std::to_string(FruitCollected)+"/2";
+        if(Over || Won) return Count;
+        if(IsFruitActive()) return Count+" "+std::to_string(FruitPoints)+"pt / "+std::to_string((FruitFrames+59)/60)+"s"+(FruitPending?" +1 queued":"");
+        if(FruitPending) return Count+" queued";
+        if(FruitIssued<static_cast<int>(FruitMilestones.size()))
+            return Count+" in "+std::to_string(FruitMilestones[static_cast<std::size_t>(FruitIssued)]-(static_cast<int>(Pellets.size())-Remaining))+" dots";
+        return Count;
+    }
 };
 
 class ZeldaGame final : public Game {
@@ -572,6 +648,7 @@ public:
     };
     ZeldaGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
+        // Preserve the player's optional control preference across same-cabinet retries.
         SessionSeed=Seed; Rng.Seed(Seed); Hero={}; Score=0; Keys=0; KeySpawned=false; Over=false; Won=false;
         Message.clear(); MessageTimer=0; Projectiles.clear(); Collectibles.clear();
         Enemies={{{200,150,EnemyKind::Octorok,1,Rng.Int(60,120)},
@@ -582,8 +659,10 @@ public:
     }
     void Step(const Input& I) override {
         if(Over || Won) { if(maze::RestartPressed(I)) Reset(SessionSeed); return; }
-        // Source attacks are KEYDOWN events and hit immediately, before movement.
-        if(maze::RestartPressed(I) && Hero.Attack()) {
+        if(I.DashPressed) SwordAssist=!SwordAssist;
+        // Default source KEYDOWNs and optional held assistance share the same attack gate and order.
+        const bool Swing=maze::RestartPressed(I) || (SwordAssist && (I.Fire || I.Action || I.Jump));
+        if(Swing && Hero.Attack()) {
             const Rect Attack=Hero.GetAttackRect();
             Vec LastDefeated{Hero.X,Hero.Y};
             for(auto& E:Enemies) if(E.Alive && Attack.Overlaps(E.GetRect())) {
@@ -639,6 +718,7 @@ public:
         return std::any_of(Collectibles.begin(),Collectibles.end(),[](const Collectible& C){return C.Kind==PickupKind::Key;});
     }
     bool IsSwordReady() const { return !Over && !Won && Hero.AttackTimer==0; }
+    bool IsSwordAssistEnabled() const { return SwordAssist; }
     void Render(Frame& Out) const override {
         Out.Clear(800,600,{34,139,34,255});
         Out.AddRect(100,200,600,80,{210,180,140,255}); Out.AddRect(350,100,80,400,{210,180,140,255});
@@ -672,7 +752,7 @@ public:
         if(MessageTimer>0) Out.AddText(330,58,Message,maze::Yellow,18);
         Out.AddText(10,559,"SCORE "+std::to_string(Score)+" | "+CombatText(),White,13);
         Out.AddText(10,582,(Over || Won)?"Run ended. Pad A / Space / Enter / R: replay."
-            :"Move: WASD/arrows/stick/D-pad. Pad A / Space / Enter: sword. R: restart.",White,12);
+            :std::string("Move: keys/stick/hat | Sword: Space/J/pad A/X | Shift/pad Y: toggle assist ")+(SwordAssist?"ON":"OFF")+" | R: restart.",White,12);
         if(Over || Won) {
             Out.AddRect(170,245,470,125,{0,55,0,230});
             Out.AddText(280,270,Won ? "VICTORY!" : "GAME OVER",maze::Yellow,38);
@@ -694,7 +774,7 @@ private:
     std::vector<Collectible> Collectibles;
     std::int64_t Score=0;
     int Keys=0, MessageTimer=0;
-    bool KeySpawned=false, Over=false, Won=false;
+    bool KeySpawned=false, Over=false, Won=false, SwordAssist=false;
     std::string Message;
     std::string ObjectiveText() const {
         const int Living=LivingEnemyCount();
@@ -705,6 +785,7 @@ private:
     std::string CombatText() const {
         if(Over || Won) return "Run ended | Shield decorative";
         std::string Text=Hero.AttackTimer==0?"Sword READY":"Sword wait "+std::to_string(Hero.AttackTimer)+" steps";
+        Text+=SwordAssist?" (hold sword)":" (fresh press)";
         if(Hero.Invincible==1) Text+=" | Hurt grace expires next live step";
         else if(Hero.Invincible>1) Text+=" | Hurt grace timer "+std::to_string(Hero.Invincible);
         return Text+" | Shield decorative";
