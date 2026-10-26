@@ -824,7 +824,10 @@ public:
         Out.AddCircle(610,355,55,{30,144,255,255}); Out.AddCircle(610,355,42,{20,100,180,255});
         Out.AddRect(380,80,40,50,{60,40,20,255}); Out.AddTriangle({380,80},{400,50},{420,80},{40,30,10,255});
         for(const auto& E:Enemies) if(E.Alive) DrawEnemy(Out,E);
-        for(const auto& P:Projectiles) { Out.AddCircle(P.X,P.Y,5,{128,128,128,255}); Out.AddCircle(P.X,P.Y,3,{80,80,80,255}); }
+        for(const auto& P:Projectiles) {
+            Out.AddCircle(P.X,P.Y,7,{24,24,24,255});
+            Out.AddCircle(P.X,P.Y,5,{128,128,128,255}); Out.AddCircle(P.X,P.Y,3,{80,80,80,255});
+        }
         for(const auto& C:Collectibles) {
             const double X=C.X, Y=C.Y+std::sin(C.Bob)*3;
             if(C.Kind==PickupKind::Rupee) {

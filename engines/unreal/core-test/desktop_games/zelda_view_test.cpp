@@ -75,10 +75,26 @@ void View() {
         Check(Shade<Stone && Stone<F.Commands.size(),"armos keeps a dark rim behind the gray stone");
     }
 }
+void Shot() {
+    ZeldaGame G;
+    for(int N=0;N<160 && G.GetProjectiles().empty();++N) G.Step({});
+    Check(!G.GetProjectiles().empty(),"an enemy shot appears before the octorok timer runs out");
+    if(G.GetProjectiles().empty()) return;
+    const auto& S=G.GetProjectiles().front();
+    Frame F;G.Render(F);
+    std::size_t Rim=F.Commands.size(),Stone=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Circle || C.A.X!=S.X || C.A.Y!=S.Y) continue;
+        if(C.Size==7 && C.Tint.R==24 && C.Tint.G==24 && C.Tint.B==24) Rim=N;
+        if(C.Size==5 && C.Tint.R==128 && C.Tint.G==128 && C.Tint.B==128) Stone=N;
+    }
+    Check(Rim<Stone && Stone<F.Commands.size(),"enemy shot keeps a dark rim on the grass");
+}
 }
 
 int main() {
-    try { View(); }
+    try { View();Shot(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
