@@ -20,9 +20,11 @@
       "option_count": 3,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "pointer",
         "save_restore",
@@ -48,9 +50,11 @@
       "option_count": 4,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -75,8 +79,10 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "focus_freeze",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -99,9 +105,11 @@
       "option_count": 3,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -123,8 +131,10 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "contrast_mark",
         "focus_freeze",
         "fresh_pad_replay",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -150,8 +160,10 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "contrast_mark",
         "focus_freeze",
         "fresh_pad_replay",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -176,9 +188,11 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -202,8 +216,10 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "contrast_mark",
         "focus_freeze",
         "fresh_pad_replay",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -225,8 +241,10 @@
       ],
       "option_count": 3,
       "capabilities": [
+        "contrast_mark",
         "core_pause",
         "focus_freeze",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -251,8 +269,10 @@
       "option_count": 8,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "focus_freeze",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -273,8 +293,10 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "contrast_mark",
         "focus_freeze",
         "fresh_pad_replay",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -299,8 +321,10 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "focus_freeze",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -320,8 +344,10 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "focus_freeze",
         "hints",
+        "key_hint",
         "options",
         "scoreboard",
         "source_keys"
@@ -341,8 +367,10 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "focus_freeze",
         "hints",
+        "key_hint",
         "options",
         "scoreboard",
         "source_keys"

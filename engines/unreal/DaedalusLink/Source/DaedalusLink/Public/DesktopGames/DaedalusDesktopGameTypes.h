@@ -93,7 +93,17 @@ public:
     virtual bool SetOption(int,std::uint32_t) { return false; }
     virtual int GetOption() const { return -1; }
     virtual std::string HowToLine() const { return {}; }
+    virtual std::string KeyHint() const { return {}; }
+    virtual std::string ContrastMark() const { return "MARK ACT"; }
 };
+inline void DrawAccess(Frame& F, double X, double Y, const std::string& Keys, const std::string& Mark) {
+    F.AddRect(X,Y,220,34,{16,18,32,255});
+    F.AddText(X+6,Y+2,Keys,{255,236,180,255},12);
+    const bool Act=Mark=="MARK ACT";
+    if(Act) F.AddTriangle({X+8,Y+20},{X+16,Y+28},{X+24,Y+20},{255,236,180,255});
+    else F.AddLine(X+6,Y+24,X+24,Y+24,{120,225,255,255},3);
+    F.AddText(X+30,Y+16,Mark,{120,225,255,255},12);
+}
 // Portable random stream is deliberately different from Python random. Parity
 // tests inject fixed source cases; this stream makes native sessions replayable.
 class Random {

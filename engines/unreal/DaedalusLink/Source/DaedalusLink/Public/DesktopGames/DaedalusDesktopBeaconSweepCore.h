@@ -207,11 +207,13 @@ public:
         return "CUE Reveal";
     }
     std::string HowToLine() const override { return "HOW Move the mark, then reveal or flag a cell."; }
+    std::string KeyHint() const override { return "KEYS Arrows move. J reveals. K flags."; }
     void Render(Frame& F) const override {
         F.Clear(800,600,{13,23,35,255});F.AddText(25,12,"BEACON SWEEP",{116,224,195,255},26);
         F.AddText(520,16,ActionCue(),{120,225,255,255},16);
         F.AddText(25,48,ProgressNote(),White,18);
         F.AddText(24,72,HowToLine(),{255,236,180,255},13);
+        DrawAccess(F,240,64,KeyHint(),ContrastMark());
         F.AddText(520,48,HintLine(),{255,236,180,255},13);
         const auto L=GetBoardLayout();const double Size=L.Size,Left=L.Left,Top=L.Top;
         if(static_cast<int>(Cells.size())!=Width*Height) return;
