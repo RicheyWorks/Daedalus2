@@ -38,6 +38,14 @@ void View() {
             && C.Tint.R==210 && C.Tint.G==180 && C.Tint.B==140) Road=N;
     }
     Check(Border<Road && Road<F.Commands.size(),"the cross road keeps a dark border on the grass");
+    std::size_t Shore=F.Commands.size(),Pond=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Circle || C.A.X!=610 || C.A.Y!=355) continue;
+        if(C.Size==62 && C.Tint.R==12 && C.Tint.G==64 && C.Tint.B==28) Shore=N;
+        if(C.Size==55 && C.Tint.R==30 && C.Tint.G==144 && C.Tint.B==255) Pond=N;
+    }
+    Check(Shore<Pond && Pond<F.Commands.size(),"the pond keeps a dark shore on the grass");
     std::size_t Brim=F.Commands.size(),Cap=F.Commands.size();
     for(std::size_t N=0;N<F.Commands.size();++N) {
         const auto& C=F.Commands[N];

@@ -826,6 +826,7 @@ public:
             Out.AddCircle(R.X,R.Y,16,{24,24,24,255});
             Out.AddCircle(R.X,R.Y,14,{128,128,128,255}); Out.AddCircle(R.X,R.Y,9,{100,100,100,255});
         }
+        Out.AddCircle(610,355,62,{12,64,28,255});
         Out.AddCircle(610,355,55,{30,144,255,255}); Out.AddCircle(610,355,42,{20,100,180,255});
         Out.AddRect(380,80,40,50,{60,40,20,255}); Out.AddTriangle({380,80},{400,50},{420,80},{40,30,10,255});
         for(const auto& E:Enemies) if(E.Alive) DrawEnemy(Out,E);
