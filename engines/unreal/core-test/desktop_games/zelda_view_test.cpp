@@ -143,6 +143,16 @@ void View() {
                 && C.Tint.R==80 && C.Tint.G==120 && C.Tint.B==80) Coat=N;
         }
         Check(Shade<Coat && Coat<F.Commands.size(),"moblin keeps a dark body behind the green tunic");
+        std::size_t Haft=F.Commands.size(),Gold=F.Commands.size();
+        for(std::size_t N=0;N<F.Commands.size();++N) {
+            const auto& C=F.Commands[N];
+            if(C.Kind!=Shape::Triangle || (C.A.Y!=Moblin->Y-10 && C.A.Y!=Moblin->Y-8)) continue;
+            if(C.A.X==Moblin->X-11 && C.A.Y==Moblin->Y-10 && C.B.X==Moblin->X-22
+                && C.Tint.R==48 && C.Tint.G==32 && C.Tint.B==12) Haft=N;
+            if(C.A.X==Moblin->X-12 && C.A.Y==Moblin->Y-8 && C.B.X==Moblin->X-18
+                && C.Tint.R==255 && C.Tint.G==200 && C.Tint.B==50) Gold=N;
+        }
+        Check(Haft<Gold && Gold<F.Commands.size(),"the moblin spear keeps a dark edge on the road");
     }
     const ZeldaGame::Enemy* Armos=nullptr;
     for(const auto& E:G.GetEnemies()) if(E.Kind==ZeldaGame::EnemyKind::Armos && E.Alive) Armos=&E;

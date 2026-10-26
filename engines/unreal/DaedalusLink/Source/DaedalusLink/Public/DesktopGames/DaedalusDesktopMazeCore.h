@@ -940,6 +940,7 @@ private:
         } else if(E.Kind==EnemyKind::Moblin) {
             F.AddRect(E.X-12,E.Y-14,24,28,{16,36,16,255});
             F.AddRect(E.X-10,E.Y-12,20,24,{80,120,80,255}); F.AddCircle(E.X,E.Y-12,7,{200,180,150,255});
+            F.AddTriangle({E.X-11,E.Y-10},{E.X-22,E.Y},{E.X-11,E.Y+10},{48,32,12,255});
             F.AddTriangle({E.X-12,E.Y-8},{E.X-18,E.Y},{E.X-12,E.Y+8},{255,200,50,255});
         } else {
             F.AddRect(E.X-14,E.Y-16,28,32,{24,24,24,255});
