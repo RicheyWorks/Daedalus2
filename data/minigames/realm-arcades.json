@@ -1,6 +1,6 @@
 {
   "schema": "daedalus.minigames.realm_arcades/v1",
-  "about": "Which realms host arcade cabinets. Patterns match catalog ids (fnmatch). Edit, then run tools/minigames/realm_cabinets.py. 'options' maps a placed desktop game to its SetGameOption value.",
+  "about": "Which realms host arcade cabinets. Patterns match catalog ids (fnmatch). Edit, then run tools/minigames/realm_cabinets.py. 'options' maps a placed desktop game to its SetGameOption value. Realm ids taken from docs/REALMS.md names are unconfirmed proposals (id_status in the output).",
   "defaults": {
     "anchor": "arcade_plaza",
     "layout": "row",
@@ -48,6 +48,98 @@
       "columns": 5,
       "include": [
         "*"
+      ]
+    },
+    {
+      "realm": "shattered_planet",
+      "layout": "grid",
+      "columns": 4,
+      "include": [
+        "*"
+      ]
+    },
+    {
+      "realm": "portal_realm",
+      "layout": "row",
+      "include": [
+        "lanternwild",
+        "dungeon",
+        "glowtrail",
+        "beacon_sweep",
+        "gloam_latch"
+      ],
+      "java": false
+    },
+    {
+      "realm": "parcels",
+      "layout": "arc",
+      "include": [
+        "blackjack",
+        "sudoku",
+        "beacon_sweep",
+        "gloam_latch"
+      ]
+    },
+    {
+      "realm": "bricks",
+      "layout": "row",
+      "include": [
+        "emberstep",
+        "ironwake",
+        "football",
+        "dodge_ball",
+        "twinwake"
+      ]
+    },
+    {
+      "realm": "gallery_city",
+      "layout": "grid",
+      "columns": 3,
+      "include": [
+        "glowtrail",
+        "gloam_latch",
+        "reedbeat",
+        "driftstone",
+        "beacon_sweep"
+      ]
+    },
+    {
+      "realm": "orrery_reach",
+      "layout": "arc",
+      "include": [
+        "reedbeat",
+        "gloam_latch",
+        "sudoku",
+        "star_shooter"
+      ]
+    },
+    {
+      "realm": "prismheart_realm",
+      "layout": "row",
+      "include": [
+        "riftwing",
+        "star_shooter",
+        "lanternwild",
+        "dungeon"
+      ]
+    },
+    {
+      "realm": "labyrinth",
+      "layout": "row",
+      "include": [
+        "dungeon",
+        "glowtrail",
+        "beacon_sweep",
+        "gloam_latch"
+      ]
+    },
+    {
+      "realm": "space",
+      "layout": "arc",
+      "include": [
+        "driftstone",
+        "star_shooter",
+        "riftwing"
       ]
     }
   ]

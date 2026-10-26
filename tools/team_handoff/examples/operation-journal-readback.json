@@ -1,0 +1,31 @@
+{
+  "schema": "daedalus.operation-journal-record.v1",
+  "stage": "readback",
+  "operation_key": "op-1",
+  "operation_id": "fixture-save-1",
+  "session_id": "fixture-session",
+  "event_utc": "2026-10-26T10:04:00Z",
+  "intent_sha256": "1c162a8397c1be362411b3a4da23ebef2a3587eadb6dfdf2b01c169d4e1948e1",
+  "target_ids": [
+    "fixture-skull-1",
+    "fixture-toter-1"
+  ],
+  "outcome": "saved",
+  "references": {
+    "result_sha256": "91c25231675ab09a4c1cde1be7a9cb7f5389f615e5643542000f0cf263b018ce",
+    "save_sha256": "7a9eeb1cf3fa763092872eb7d544ad529a64578c4ac2288f05dd01c93f5ded19",
+    "native_sha256": "185b70c2b834b6041c76c7bb1d69264ea021e476995b9f46a040e03661795081",
+    "ledger_sha256": "88230ac0d4a51a82851894b06ba0d5bc91cd0708aea48ad443aa7f300dde93eb"
+  },
+  "evidence": {
+    "receipt": {
+      "path": "operation-journal-readback-proof.json",
+      "logical_path": "C:/Synthetic/Original/readback-proof.json",
+      "sha256": "455714b92a951214c3f7c4c2651d9150b4f91318e1e9103d9dfc994d09c45808",
+      "bytes": 705
+    },
+    "native": null,
+    "ledger": null
+  },
+  "reason": null
+}
