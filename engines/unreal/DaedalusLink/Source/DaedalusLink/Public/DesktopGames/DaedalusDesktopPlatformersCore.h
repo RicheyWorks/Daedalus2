@@ -3,6 +3,8 @@
 #include "DaedalusDesktopGameTypes.h"
 #include <array>
 #include <limits>
+#include <sstream>
+#include <string>
 
 namespace daedalus { namespace desktop { namespace platformers {
 struct TestAccess;
@@ -323,6 +325,23 @@ public:
     }
     int GetOption() const override { return Option; }
     int GetRangeHits() const { return RangeStage; }
+    // Checkpoint save: mode, score, lives, spread gun and range hits (option 1).
+    // Restore starts a fresh stage from the left edge. Title and finished runs are not saved.
+    std::string SaveState() const override {
+        if(AtTitle || Over || Won) return {};
+        return "DCS1 "+std::to_string(Option)+" "+std::to_string(Player.Score)+" "+std::to_string(Player.Lives)+" "
+            +(Player.Spread?"1":"0")+" "+std::to_string(RangeStage);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mode=-1,Points=-1,Left=-1,Gun=-1,Hits=-1;
+        if(!(In>>Version>>Mode>>Points>>Left>>Gun>>Hits) || Version!="DCS1" || (In>>Extra)) return false;
+        if(Mode<0 || Mode>1 || Points<0 || Points>1000000000000LL || Left<1 || Left>99 || Gun<0 || Gun>1
+            || Hits<0 || Hits>(Mode==1?static_cast<long long>(RangeTargets.size())-1:0)) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);
+        Player.Score=Points;Player.Lives=static_cast<int>(Left);Player.Spread=Gun==1;RangeStage=static_cast<int>(Hits);
+        return true;
+    }
     // Optional cabinet lifecycle/key seam. The host dispatches ordered raw
     // keyboard events before its next fixed Step; held input remains movement.
     // Keys: 0..5 = Up,Down,Left,Right,B,A; 6 Enter; 7 Space; 8 R; 9 other.
@@ -630,6 +649,26 @@ public:
         BossActive=false; Over=false; Won=false; SpawnTimer=0; BossPulseCueFrames=0; Score=0; CourseStage=0; Previous={}; Rng.Seed(Seed);
         if(Option==1) Gold.push_back(CourseLights.front());
         else for(int I=0;I<5;++I) Gold.push_back({static_cast<double>(Rng.Int(80,700)),static_cast<double>(Rng.Int(200,400))});
+    }
+    // Checkpoint save: mode, score, health and terrace lights (option 1). Restore
+    // starts a fresh field, or stands on the last lit terrace. Finished runs are not saved.
+    std::string SaveState() const override {
+        if(Over || Won) return {};
+        return "DNS1 "+std::to_string(Option)+" "+std::to_string(Score)+" "+std::to_string(Player.Health)+" "+std::to_string(CourseStage);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mode=-1,Points=-1,Life=-1,Stage=-1;
+        if(!(In>>Version>>Mode>>Points>>Life>>Stage) || Version!="DNS1" || (In>>Extra)) return false;
+        if(Mode<0 || Mode>1 || Points<0 || Points>1000000000000LL || Life<1 || Life>platformers::NinjaPlayer{}.Health
+            || Stage<0 || Stage>(Mode==1?static_cast<long long>(CourseLights.size())-1:0)) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);
+        Score=Points;Player.Health=static_cast<int>(Life);CourseStage=static_cast<int>(Stage);
+        if(Option==1 && CourseStage>0) {
+            const Vec Anchor=CourseAnchors[static_cast<std::size_t>(CourseStage)];
+            Player.X=Anchor.X;Player.Y=Anchor.Y;Gold.front()=CourseLights[static_cast<std::size_t>(CourseStage)];
+        }
+        return true;
     }
     bool SetOption(int Value,std::uint32_t Seed) override {
         if(Value<0 || Value>1) return false;

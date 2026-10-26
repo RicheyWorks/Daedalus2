@@ -34,6 +34,11 @@ int main() {
         Driver D;D.Select(Id,11);
         Input Start;Start.FirePressed=true;Start.JumpPressed=true;D.SetInput(Start);
         for(int N=0;N<20;++N) D.Advance(Driver::StepSeconds);
+        // Title screens and menus (Contra, Dodge Ball country select) need fresh presses.
+        for(int Press=0;Press<6 && D.CaptureSave().empty();++Press) {
+            D.ClearInput();for(int N=0;N<3;++N) D.Advance(Driver::StepSeconds);
+            D.SetInput(Start);D.SourceControllerButton(0);for(int N=0;N<3;++N) D.Advance(Driver::StepSeconds);
+        }
         const std::string Save=D.CaptureSave();
         Check(!Save.empty() && Save.size()<=4096,Id+": started run produces a bounded save");
         Driver E;
@@ -42,7 +47,7 @@ int main() {
     }
     Check(std::string(SaveFileFor("minesweeper"))=="minesweeper.dgs" && SupportsManualSave("minesweeper"),"minesweeper unchanged: manual, minesweeper.dgs");
     Check(std::string(SaveFileFor("star_shooter"))=="star_shooter.dgs" && !SupportsManualSave("star_shooter"),"star unchanged: source menu only, star_shooter.dgs");
-    for(const char* Id:{"shadow_ninja","dodge_ball","contra","","nope"}) {
+    for(const char* Id:{"","nope"}) {
         Check(!FindSaveSlot(Id) && !SupportsManualSave(Id),std::string(Id)+": no slot, no manual save");
         Check(std::string(ResumeGameId(Id))=="star_shooter" && std::string(SaveFileFor(Id))=="star_shooter.dgs",std::string(Id)+": keeps legacy Star fallback");
     }
