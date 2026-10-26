@@ -366,12 +366,26 @@
           "start": "StartGame(\"gloam_latch\", 1204673192)"
         },
         {
+          "game": "reedbeat",
+          "title": "Reedbeat",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            5.0,
+            2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 229994874,
+          "option": 0,
+          "start": "StartGame(\"reedbeat\", 229994874)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             5.0,
-            2.5,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -384,8 +398,8 @@
           "title": "BlackJackPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            5.0,
-            5.0,
+            7.5,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
