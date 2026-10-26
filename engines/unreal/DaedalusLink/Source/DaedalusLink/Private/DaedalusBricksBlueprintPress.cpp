@@ -3,6 +3,7 @@
 #include "DaedalusBricksBridgeWorkshop.h"
 #include "DaedalusBricksSkylineWorkshop.h"
 #include "DaedalusHero.h"
+#include "DaedalusLocalSvgFiles.h"
 #include "Components/PointLightComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -11,22 +12,14 @@
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
-#include "HAL/FileManager.h"
 #include "Misc/Guid.h"
-#include "Misc/Paths.h"
 #include "Templates/UnrealTemplate.h"
 #include "UObject/ConstructorHelpers.h"
-#if PLATFORM_WINDOWS
-#include "Windows/WindowsHWrapper.h"
-#endif
 
 namespace DaedalusBlueprintPressLocal
 {
     std::string Utf8(const FString& Text)
     { const FTCHARToUTF8 Value(*Text,Text.Len()); return std::string(Value.Get(),static_cast<size_t>(Value.Length())); }
-    FString Folder()
-    { return FPaths::ConvertRelativePathToFull(FPaths::Combine(FPaths::ProjectSavedDir(),TEXT("Daedalus"),TEXT("BlueprintPrints"))); }
-    FString Filename(const FString& Id) { return TEXT("Blueprint_")+Id+TEXT(".svg"); }
     bool LocalReach(const ADaedalusHero* Hero,const AActor* Press,const APlayerController* Expected=nullptr)
     {
         if (!IsInGameThread() || !IsValid(Hero) || Hero->IsActorBeingDestroyed() || !Hero->HasActorBegunPlay() || !IsValid(Press) ||
@@ -55,51 +48,6 @@ namespace DaedalusBlueprintPressLocal
             }
         }
         return Out;
-    }
-    bool Refuse(FString& Error,const TCHAR* Why) { Error=Why; return false; }
-#if PLATFORM_WINDOWS
-    class Handle
-    {
-    public:
-        explicit Handle(HANDLE File):Value(File) {}
-        ~Handle() { Close(); }
-        Handle(const Handle&)=delete; Handle& operator=(const Handle&)=delete;
-        bool Valid() const { return Value!=INVALID_HANDLE_VALUE && Value!=nullptr; }
-        HANDLE Get() const { return Value; }
-        bool Close() { if (!Valid()) return true; const HANDLE Previous=Value; Value=INVALID_HANDLE_VALUE; return ::CloseHandle(Previous)!=0; }
-    private:
-        HANDLE Value;
-    };
-#endif
-    bool WriteNewVerified(const FString& Id,const std::string& Bytes,FString& Error)
-    {
-        if (!daedalus::blueprintprint::ValidId(Utf8(Id)) || Bytes.empty() || Bytes.size()>daedalus::blueprintprint::MaxSvgBytes)
-            return Refuse(Error,TEXT("The print could not be prepared. Your blueprint is unchanged."));
-#if PLATFORM_WINDOWS
-        const FString Directory=Folder(),Path=FPaths::Combine(Directory,Filename(Id));
-        if (!IFileManager::Get().MakeDirectory(*Directory,true)) return Refuse(Error,TEXT("The print folder could not be prepared. Your blueprint is unchanged."));
-        // Reuse the proven fresh-file path from Motif/Portal. UE5.8's active
-        // generic writer does not honor NoReplaceExisting; CREATE_NEW does.
-        // No failed fresh file is deleted or reused, including partial bytes.
-        Handle File(::CreateFileW(*Path,GENERIC_WRITE,0,nullptr,CREATE_NEW,FILE_ATTRIBUTE_NORMAL,nullptr));
-        if (!File.Valid()) return Refuse(Error,TEXT("A fresh print could not be created. Earlier files were not changed."));
-        DWORD Written=0; const DWORD Size=static_cast<DWORD>(Bytes.size());
-        const bool Wrote=::WriteFile(File.Get(),Bytes.data(),Size,&Written,nullptr)!=0 && Written==Size;
-        const bool Flushed=Wrote && ::FlushFileBuffers(File.Get())!=0; const bool Closed=File.Close();
-        if (!Wrote || !Flushed || !Closed) return Refuse(Error,TEXT("The print could not be completed. Any fresh file is kept for review; your blueprint stays unchanged."));
-        Handle Readback(::CreateFileW(*Path,GENERIC_READ,FILE_SHARE_READ,nullptr,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr));
-        if (!Readback.Valid()) return Refuse(Error,TEXT("The print could not be confirmed. The new file is kept for review; your blueprint stays unchanged."));
-        LARGE_INTEGER Length={};
-        if (!::GetFileSizeEx(Readback.Get(),&Length) || Length.QuadPart!=static_cast<LONGLONG>(Bytes.size()))
-            return Refuse(Error,TEXT("Print readback length did not match. The new file is kept for review; no earlier print was changed."));
-        std::string Back(Bytes.size(),'\0'); DWORD Received=0;
-        const bool Read=::ReadFile(Readback.Get(),&Back[0],Size,&Received,nullptr)!=0 && Received==Size;
-        const bool ReadClosed=Readback.Close();
-        if (!Read || !ReadClosed || Back!=Bytes) return Refuse(Error,TEXT("Exact print readback was not confirmed. The file is kept for review; your blueprint stays unchanged."));
-        return true;
-#else
-        return Refuse(Error,TEXT("Local blueprint printing needs Windows in this edition. Your workshop remains editable."));
-#endif
     }
 }
 
@@ -180,12 +128,12 @@ bool ADaedalusBricksBlueprintPress::Use(ADaedalusHero* Hero)
     const bool Prepared=Kind==EDaedalusBlueprintPrintSource::Bridge?daedalus::blueprintprint::RenderBridgeSvg(Rule,Mask,Identity,Bytes):
         daedalus::blueprintprint::RenderSkylineSvg(Rule,Grid,Identity,Bytes);
     if (!Prepared || !ParticipantsReady()) { if (Alive()) { Notice=TEXT("The frozen blueprint could not be prepared. No print was started; the live plan is unchanged."); Refresh(); } return false; }
-    FString Error; const bool Kept=DaedalusBlueprintPressLocal::WriteNewVerified(Id,Bytes,Error);
+    FString Error; const bool Kept=DaedalusLocalSvgFiles::WriteNewVerified(DaedalusLocalSvgFiles::Kind::Blueprint,Id,Bytes,Error);
     // Once writing starts a fresh file may exist even if this actor ends.
     // Never claim that no effect occurred or delete a failed/uncertain print.
     if (!Alive() || Epoch!=StartEpoch) return false;
     if (!Kept) { Notice=Error; Refresh(); return false; }
-    LastPrintId=Identity.Id; LastFilename=DaedalusBlueprintPressLocal::Filename(Id); FrozenSource=Source; FrozenKind=Kind; bFrozen=true;
+    LastPrintId=Identity.Id; LastFilename=DaedalusLocalSvgFiles::Filename(DaedalusLocalSvgFiles::Kind::Blueprint,Id); FrozenSource=Source; FrozenKind=Kind; bFrozen=true;
     Notice=SourceReady()?TEXT("New print saved and verified from the frozen model. Find it in Saved/Daedalus/BlueprintPrints. Each file keeps its own rules and snapshot; the live plan stays editable."):
         TEXT("The frozen print was saved and verified. The bound source changed or ended after capture; use a new press for another source. Find this print in Saved/Daedalus/BlueprintPrints.");
     Refresh(Id); return Alive();

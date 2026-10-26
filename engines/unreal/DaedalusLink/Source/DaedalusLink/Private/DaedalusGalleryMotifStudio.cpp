@@ -23,25 +23,25 @@
 
 namespace DaedalusMotifLocal
 {
-    constexpr int32 ToolCount=85, MaxFiles=128, MaxBytes=512;
+    constexpr int32 ToolCount=86, MaxFiles=128, MaxBytes=512;
     FVector CellCentre(int32 Cell) { return FVector((Cell/8-3.5)*60,-(Cell%8-3.5)*60,0); }
     FVector PaletteCentre(int32 Colour) { return FVector(-210+60*Colour,-300,0); }
     FVector ToolAt(int32 Index)
     {
         if (Index<64) return CellCentre(Index);
         if (Index<76) return FVector(350+130*((Index-64)/4),180-120*((Index-64)%4),65);
-        return Index<84?PaletteCentre(Index-76):FVector(610,-300,65);
+        return Index<84?PaletteCentre(Index-76):Index==84?FVector(610,-300,65):FVector(480,-300,65);
     }
     EDaedalusMotifAction ToolAction(int32 Index)
-    { return Index<64?EDaedalusMotifAction::Cell:Index<76?static_cast<EDaedalusMotifAction>(Index-63):Index<84?EDaedalusMotifAction::Palette:EDaedalusMotifAction::PickInk; }
+    { return Index<64?EDaedalusMotifAction::Cell:Index<76?static_cast<EDaedalusMotifAction>(Index-63):Index<84?EDaedalusMotifAction::Palette:Index==84?EDaedalusMotifAction::PickInk:EDaedalusMotifAction::Guide; }
     int32 ToolParameter(int32 Index) { return Index<64?Index:Index<84 && Index>=76?Index-76:-1; }
     int32 ToolIndex(EDaedalusMotifAction Action,int32 Parameter)
-    { return Action==EDaedalusMotifAction::Cell?Parameter:Action==EDaedalusMotifAction::Palette?76+Parameter:Action==EDaedalusMotifAction::PickInk?84:63+static_cast<int32>(Action); }
+    { return Action==EDaedalusMotifAction::Cell?Parameter:Action==EDaedalusMotifAction::Palette?76+Parameter:Action==EDaedalusMotifAction::PickInk?84:Action==EDaedalusMotifAction::Guide?85:63+static_cast<int32>(Action); }
     bool ValidAction(EDaedalusMotifAction Action,int32 Cell)
     {
         if (Action==EDaedalusMotifAction::Cell) return Cell>=0 && Cell<64;
         if (Action==EDaedalusMotifAction::Palette) return Cell>=0 && Cell<8;
-        return Cell==-1 && static_cast<uint8>(Action)>=1 && static_cast<uint8>(Action)<=static_cast<uint8>(EDaedalusMotifAction::PickInk);
+        return Cell==-1 && static_cast<uint8>(Action)>=1 && static_cast<uint8>(Action)<=static_cast<uint8>(EDaedalusMotifAction::Guide);
     }
     bool LocalReach(const ADaedalusHero* Hero,const AActor* Actor)
     {
@@ -249,11 +249,30 @@ bool ADaedalusGalleryMotifStudio::ToolsReady() const
     }
     return true;
 }
+bool ADaedalusGalleryMotifStudio::HasGuideReference() const
+{ return !LineageId.empty() && daedalus::motif::CanonicalId(LineageId)==LineageId && daedalus::motif::ValidImage(Baseline); }
 void ADaedalusGalleryMotifStudio::DrawCanvas()
 {
     if (!ViewsReady() || !Draft.Active()) return;
     DaedalusMotifLocal::Ink Main; Main.Tile(FVector(0,0,1),247,FLinearColor(0.08f,0.13f,0.18f));
     for (int32 Cell=0;Cell<64;++Cell) Main.Tile(DaedalusMotifLocal::CellCentre(Cell)+FVector(0,0,3),29,DaedalusMotifLocal::Colour(Draft.Canvas()[Cell]));
+    if (GuideMode && HasGuideReference())
+        for (int32 Cell=0;Cell<64;++Cell)
+        {
+            const FVector At=DaedalusMotifLocal::CellCentre(Cell)+FVector(0,0,3.4);
+            if (GuideMode==1 && Baseline[Cell]!=0)
+            {
+                // Hollow inset marks leave the actual ink/Paper tile visible.
+                // No transparent material, sampled ghost ink or canvas write.
+                Main.Outline(At,13,FLinearColor(0.08f,0.13f,0.18f));
+                Main.Outline(At+FVector(0,0,0.1),10,DaedalusMotifLocal::Colour(Baseline[Cell]));
+            }
+            else if (GuideMode==2 && Draft.Canvas()[Cell]!=Baseline[Cell])
+            {
+                Main.Outline(At,19,FLinearColor(0.08f,0.13f,0.18f));
+                Main.Outline(At+FVector(0,0,0.1),16,FLinearColor(1.f,0.7f,0.1f));
+            }
+        }
     for (int32 Colour=0;Colour<8;++Colour)
     {
         const FVector At=DaedalusMotifLocal::PaletteCentre(Colour)+FVector(0,0,3); Main.Tile(At,24,DaedalusMotifLocal::Colour(Colour));
@@ -292,6 +311,8 @@ void ADaedalusGalleryMotifStudio::Refresh()
     FString State=IsDirty()?TEXT("DRAFT CHANGED / EXPORT TO KEEP"):!LineageId.empty()?TEXT("DRAFT MATCHES KEPT SKETCH"):TEXT("BLANK DRAFT / EXPORT TO KEEP");
     FString Text=State+FString::Printf(TEXT("\nInk: %s   /   %s\nBrush: %s   /   Undo %u   Redo %u\nChosen: %s\n"),UTF8_TO_TCHAR(daedalus::motif::ColourName(Ink)),
         UTF8_TO_TCHAR(daedalus::motif::SymmetryName(Mode)),bPicking?TEXT("Pick ink / one square"):bFill?TEXT("Area fill"):TEXT("Point"),static_cast<unsigned>(Draft.UndoCount()),static_cast<unsigned>(Draft.RedoCount()),bHasChosen?*ChosenId.Left(8):TEXT("none / use Next sketch"));
+    if (GuideMode && HasGuideReference())
+        Text+=FString::Printf(TEXT("Guide: %s / kept-loaded %s\nInset marks are not paint.\n"),GuideMode==1?TEXT("Kept Ghost"):TEXT("Changes"),*DaedalusMotifLocal::Native(LineageId).Left(8));
     Text+=Notice;
     if (ViewsReady()) DrawCanvas();
     if (!IsStudioAlive()) return;
@@ -415,6 +436,7 @@ FString ADaedalusGalleryMotifStudio::ToolPrompt(EDaedalusMotifAction Action,int3
     if (Action==EDaedalusMotifAction::Colour) return TEXT("E / X: Next ink colour; Paper / erase removes ink");
     if (Action==EDaedalusMotifAction::Palette) return FString::Printf(TEXT("E / X: Choose palette %d / %s. No drawing edit."),Cell+1,UTF8_TO_TCHAR(daedalus::motif::ColourName(Cell)));
     if (Action==EDaedalusMotifAction::PickInk) return bPicking?TEXT("E / X: Cancel picking and resume the previous brush"):TEXT("E / X: Pick ink from one floor-draft square, then resume Point / Area fill");
+    if (Action==EDaedalusMotifAction::Guide) return HasGuideReference()?TEXT("E / X: Guide Off / Kept Ghost / Changes. Inset reference marks are not paint; Pick and Fill read the actual draft"):TEXT("E / X: Keep or load a sketch before using the reference guide; the drawing stays unchanged");
     if (Action==EDaedalusMotifAction::Symmetry) return TEXT("E / X: Next symmetry; palette and symmetry do not change drawing history");
     if (Action==EDaedalusMotifAction::Brush) return TEXT("E / X: Switch Point / Area fill. Fill uses touching same-colour squares and their symmetry copies; diagonal corners stay separate");
     if (Action==EDaedalusMotifAction::Rotate) return TEXT("E / X: Rotate the whole draft clockwise 90 degrees; Undo restores it. Kept exports stay unchanged");
@@ -438,6 +460,7 @@ FString ADaedalusGalleryMotifStudio::ToolLabel(EDaedalusMotifAction Action,int32
     else if (Action==EDaedalusMotifAction::Colour) Text=TEXT("Next colour\n")+FString(UTF8_TO_TCHAR(daedalus::motif::ColourName(Ink)));
     else if (Action==EDaedalusMotifAction::Palette) Text=FString::FromInt(Cell+1)+(Cell==Ink?TEXT(" *"):TEXT(""));
     else if (Action==EDaedalusMotifAction::PickInk) Text=bPicking?TEXT("Pick ink armed\nChoose one square"):TEXT("Pick ink\nFrom floor draft");
+    else if (Action==EDaedalusMotifAction::Guide) Text=GuideMode==1?TEXT("Guide: KEPT GHOST\nInset marks only"):GuideMode==2?TEXT("Guide: CHANGES\nDifferent squares"):TEXT("Guide: OFF\nKept / loaded image");
     else if (Action==EDaedalusMotifAction::Symmetry) Text=TEXT("Next symmetry\n")+FString(UTF8_TO_TCHAR(daedalus::motif::SymmetryName(Mode)));
     else if (Action==EDaedalusMotifAction::Undo) Text=FString::Printf(TEXT("Undo / %u"),static_cast<unsigned>(Draft.UndoCount()));
     else if (Action==EDaedalusMotifAction::Redo) Text=FString::Printf(TEXT("Redo / %u"),static_cast<unsigned>(Draft.RedoCount()));
@@ -464,7 +487,7 @@ bool ADaedalusGalleryMotifStudio::Operate(ADaedalusHero* Hero,const AActor* Tool
         !Bound->Matches(this,Action,Cell) || !Bound->GetActorTransform().Equals(FTransform(DaedalusMotifLocal::ToolAt(Slot))*GetActorTransform(),0.01) || !IsStudioAlive()) return false;
     TGuardValue<bool> Busy(bBusy,true); bFeedback=true; FeedbackAction=Action; FeedbackCell=Cell;
     if (Action!=ArmedAction) { ArmedAction=EDaedalusMotifAction::Cell; ArmedId.Reset(); ArmedBytes.clear(); }
-    if (Action!=EDaedalusMotifAction::Cell && Action!=EDaedalusMotifAction::PickInk) bPicking=false;
+    if (Action!=EDaedalusMotifAction::Cell && Action!=EDaedalusMotifAction::PickInk && Action!=EDaedalusMotifAction::Guide) bPicking=false;
     if (Action!=EDaedalusMotifAction::Export && (!bAvailable || !ViewsReady() || !ToolsReady()))
     { bAvailable=false; Notice=TEXT("Some studio tools or views are unavailable. The draft is kept; Export can still preserve it."); Refresh(); return false; }
     bool Changed=false;
@@ -498,6 +521,17 @@ bool ADaedalusGalleryMotifStudio::Operate(ADaedalusHero* Hero,const AActor* Tool
     { Ink=Cell; Notice=FString::Printf(TEXT("Palette %d: %s. Point / Area fill resumes with this ink; the drawing and history are unchanged."),Cell+1,UTF8_TO_TCHAR(daedalus::motif::ColourName(Ink))); Changed=true; }
     else if (Action==EDaedalusMotifAction::PickInk)
     { bPicking=!bPicking; Notice=bPicking?TEXT("Choose one floor-draft square to pick its ink. Paper is valid. Picking does not paint or change Undo / Redo; the previous brush resumes."):TEXT("Picking cancelled. Your previous Point / Area fill brush resumes."); Changed=true; }
+    else if (Action==EDaedalusMotifAction::Guide)
+    {
+        if (!HasGuideReference()) Notice=TEXT("Keep or load a sketch first. There is no kept-image reference yet; the drawing, brush and history stay unchanged.");
+        else
+        {
+            GuideMode=(GuideMode+1)%3; Changed=true;
+            Notice=GuideMode==1?TEXT("Kept Ghost: hollow inset marks show ink in the last kept / loaded image. They are not paint. Pick still reads actual draft ink; no history or file changes."):
+                GuideMode==2?TEXT("Changes: inset gold marks show squares different from the last kept / loaded image. Paper erase and Pick keep their actual draft meaning; no history changes."):
+                TEXT("Guide off. The draft, brush, armed Pick and drawing history are unchanged.");
+        }
+    }
     else if (Action==EDaedalusMotifAction::Symmetry)
     { Mode=static_cast<daedalus::motif::Symmetry>((static_cast<unsigned>(Mode)+1)%daedalus::motif::SymmetryCount); Notice=TEXT("Symmetry changed. The next point or filled region is copied through this symmetry. Outlines show its current targets; the picture is unchanged."); Changed=true; }
     else if (Action==EDaedalusMotifAction::Brush)

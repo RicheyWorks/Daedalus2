@@ -30,6 +30,9 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Daedalus|MotifStudy") TObjectPtr<UTextRenderComponent> Readout;
     UPROPERTY(BlueprintAssignable, Category="Daedalus|MotifStudy") FDaedalusMotifStudyViewChanged OnViewChanged;
     UFUNCTION(BlueprintPure, Category="Daedalus|MotifStudy") bool HasCapturedSketch() const { return bCaptured; }
+    /** Read-only actor-life document, never the mutable requested MotifId or a file reload. */
+    bool CopyCapturedSketch(daedalus::motif::Document& Out) const
+    { if (!Alive() || !bCaptured || !ViewsReady()) return false; const auto Snapshot=Captured; Out=Snapshot; return true; }
 protected:
     virtual void BeginPlay() override;
     virtual void EndPlay(const EEndPlayReason::Type Reason) override;

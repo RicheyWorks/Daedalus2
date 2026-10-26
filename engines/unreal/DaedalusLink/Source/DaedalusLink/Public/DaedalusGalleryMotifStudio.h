@@ -14,7 +14,7 @@ class USceneComponent;
 class UTextRenderComponent;
 UENUM(BlueprintType)
 // Append new tools so existing placed/Blueprint action ordinals stay stable.
-enum class EDaedalusMotifAction : uint8 { Cell, Colour, Symmetry, Undo, Redo, Export, NextSketch, SaveLoad, SaveClear, Brush, Rotate, FlipColumns, FlipRows, Palette, PickInk };
+enum class EDaedalusMotifAction : uint8 { Cell, Colour, Symmetry, Undo, Redo, Export, NextSketch, SaveLoad, SaveClear, Brush, Rotate, FlipColumns, FlipRows, Palette, PickInk, Guide };
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDaedalusMotifViewChanged, ADaedalusGalleryMotifStudio*, Studio);
 
 /** An original local 8x8 motif studio; not the Gallery server frame protocol.
@@ -54,7 +54,7 @@ private:
     FString ChosenId, ArmedId;
     std::string ArmedBytes;
     FString Notice;
-    int32 Ink=1, SelectedCell=-1;
+    int32 Ink=1, SelectedCell=-1, GuideMode=0; // Off / kept ghost / changes; view only.
     daedalus::motif::Symmetry Mode=daedalus::motif::Symmetry::None;
     EDaedalusMotifAction ArmedAction=EDaedalusMotifAction::Cell;
     EDaedalusMotifAction FeedbackAction=EDaedalusMotifAction::Colour;
@@ -63,6 +63,7 @@ private:
     bool bEnding=false, bBusy=false, bNotifying=false, bAvailable=true, bToolsAttempted=false, bFeedback=false, bHasChosen=false, bFill=false, bPicking=false;
     bool ViewsReady() const;
     bool ToolsReady() const;
+    bool HasGuideReference() const;
     void SpawnTools();
     void ReleaseTools();
     void DrawCanvas();
