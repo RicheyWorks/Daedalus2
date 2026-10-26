@@ -852,6 +852,7 @@ public:
             }
         }
         DrawPlayer(Out,Hero);
+        Out.AddRect(0,4,800,48,{8,36,16,255});
         Out.AddText(10,10,"HEALTH "+std::to_string(Hero.Health)+"/"+std::to_string(Hero.MaxHealth)+"  TRINKETS "+std::to_string(Hero.Rupees)+"  KEY "+std::to_string(Keys));
         Out.AddText(10,35,ObjectiveText(),White,15);
         if(MessageTimer>0) Out.AddText(330,58,Message,maze::Yellow,18);
