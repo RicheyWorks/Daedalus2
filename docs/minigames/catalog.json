@@ -64,6 +64,7 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "action_cue",
         "focus_freeze",
         "hints",
         "options",
@@ -219,6 +220,7 @@
       ],
       "option_count": 8,
       "capabilities": [
+        "action_cue",
         "focus_freeze",
         "hints",
         "options"
@@ -259,6 +261,7 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "action_cue",
         "focus_freeze",
         "hints",
         "options",
