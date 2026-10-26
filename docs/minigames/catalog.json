@@ -127,7 +127,8 @@
         "desktop_pacman_input",
         "desktop_pacman_power",
         "desktop_pacman_pursuit",
-        "desktop_pacman_tunnel"
+        "desktop_pacman_tunnel",
+        "desktop_pacman_view"
       ],
       "option_count": 2,
       "capabilities": [

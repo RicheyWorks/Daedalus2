@@ -522,7 +522,7 @@ public:
             Out.AddRect(X,14*Tile+2,6,2,Gate); Out.AddRect(X,15*Tile-4,6,2,Gate);
             Out.AddRect(Side==0 ? X : X+4,14*Tile+2,2,16,Gate);
         }
-        for(const auto& P:Pellets) if(P.Alive) Out.AddCircle(P.X,P.Y,P.Power ? 6 : 3,White);
+        for(const auto& P:Pellets) if(P.Alive) Out.AddCircle(P.X,P.Y,P.Power ? 6 : 3,P.Power ? Color{255,204,40,255} : White);
         if(IsFruitActive()) {
             const double X=FruitSpot.X,Y=FruitSpot.Y;
             Out.AddCircle(X,Y,11,{95,50,40,255});
@@ -546,8 +546,9 @@ public:
             else if(Hero.X+Extent>Columns*Tile) DrawHero(Hero.X-Columns*Tile);
         }
         for(const auto& G:Ghosts) if(G.Alive) {
-            const Color C=G.Frightened ? Color{0,0,200,255} : G.Tint;
+            const Color C=G.Frightened ? Color{190,210,255,255} : G.Tint;
             const auto DrawGhost=[&](double X) {
+                if(G.Frightened) Out.AddCircle(X,G.Y,11,White);
                 Out.AddCircle(X,G.Y,9,C); Out.AddRect(X-9,G.Y,18,8,C);
                 Out.AddCircle(X-4,G.Y-3,3,White); Out.AddCircle(X+4,G.Y-3,3,White);
                 Out.AddCircle(X-4,G.Y-3,1,Black); Out.AddCircle(X+4,G.Y-3,1,Black);

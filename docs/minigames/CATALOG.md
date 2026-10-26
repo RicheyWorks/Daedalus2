@@ -13,7 +13,7 @@ batched rebuild under the editor custodian.
 | `dungeon` | Dungeon Prototype | 6 |
 | `asteroids` | Driftstone Patrol | 4 |
 | `football` | Football / Soccer | 3 |
-| `pacman` | Glowtrail Chase | 7 |
+| `pacman` | Glowtrail Chase | 8 |
 | `sega_shooter` | Riftwing Vanguard | 5 |
 | `shadow_ninja` | Shadow Ninja | 5 |
 | `star_shooter` | Star Shooter | 3 |
