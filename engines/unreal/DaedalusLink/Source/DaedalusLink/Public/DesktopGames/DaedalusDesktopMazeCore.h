@@ -157,6 +157,7 @@ public:
             const Vec P=Lanterns[static_cast<std::size_t>(L)];
             const bool Next=LitCount<LanternCount && Order[static_cast<std::size_t>(LitCount)]==L;
             const Color Tint=Lit[static_cast<std::size_t>(L)]?Color{90,220,160,255}:(Next?maze::Yellow:Color{120,135,155,255});
+            Out.AddCircle(P.X,P.Y,19,{24,28,40,255});
             Out.AddCircle(P.X,P.Y,16,Tint);
             int Number=1;
             for(int N=0;N<LanternCount;++N) if(Order[static_cast<std::size_t>(N)]==L) Number=N+1;

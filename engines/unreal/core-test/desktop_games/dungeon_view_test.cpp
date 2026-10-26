@@ -57,6 +57,14 @@ void View() {
         if(C.Tint.R==0 && C.Tint.G==0 && C.Tint.B==0) ++BlackNumbers;
     }
     Check(WhiteNumbers==2 && BlackNumbers==1,"dim lantern numbers are white and the next lantern number stays black");
+    std::size_t Ring=Numbers.Commands.size(),Glass=Numbers.Commands.size();
+    for(std::size_t N=0;N<Numbers.Commands.size();++N) {
+        const auto& C=Numbers.Commands[N];
+        if(C.Kind!=Shape::Circle || C.A.X!=Dungeon::Lanterns[0].X || C.A.Y!=Dungeon::Lanterns[0].Y) continue;
+        if(C.Size==19 && C.Tint.R==24 && C.Tint.G==28 && C.Tint.B==40) Ring=N;
+        if(C.Size==16) Glass=N;
+    }
+    Check(Ring<Glass && Glass<Numbers.Commands.size(),"each lantern keeps a dark ring on the wall");
     MarkOrder(Fresh,"fresh room");
     Input Right;Right.Right=true;Fresh.Step(Right);
     MarkOrder(Fresh,"moved room");
