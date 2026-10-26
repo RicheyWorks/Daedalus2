@@ -32,6 +32,19 @@ void Pellets() {
     }
     Check(Powers==4 && Dots>0,"four gold power pellets stay distinct from white dots");
 }
+void HeroRing() {
+    PacmanGame G;
+    const auto& P=G.GetPlayer();
+    Frame F;G.Render(F);
+    std::size_t Ring=F.Commands.size(),Body=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Circle || C.A.X!=P.X || C.A.Y!=P.Y) continue;
+        if(C.Size==12 && C.Tint.R==24 && C.Tint.G==24 && C.Tint.B==24) Ring=N;
+        if(C.Size==10 && C.Tint.R==255 && C.Tint.G==255 && C.Tint.B==0) Body=N;
+    }
+    Check(Ring<Body && Body<F.Commands.size(),"hero keeps a dark ring behind the yellow body");
+}
 void Fright() {
     PacmanGame G;
     MazeTestAccess::Fright(G);
@@ -48,7 +61,7 @@ void Fright() {
 }
 
 int main() {
-    try { Pellets();Fright(); }
+    try { Pellets();HeroRing();Fright(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

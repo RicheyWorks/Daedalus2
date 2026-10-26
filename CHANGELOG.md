@@ -12,7 +12,7 @@ under the `_migration/` portfolios.
 
 - **Dungeon cabinet view.** White corner marks draw after the lanterns and the exit, so the player tile stays visible when it overlaps them. The sealed exit label is white on the gray door, dim lantern numbers are white on the gray glass, and original-room walls keep a light top edge so they separate from that glass. Movement and controls are unchanged.
 - **Lanternwild view.** The hero tunic and head get a dark outline so they read on the green ground. Rocks keep a dark rim on the grass, tree canopies keep a light edge, and the moblin keeps a dark body so its green tunic reads on the grass. Controls are unchanged.
-- **Glowtrail view.** Power pellets are gold, and frightened ghosts are pale with a white halo so they read against the blue walls. Controls are unchanged.
+- **Glowtrail view.** Power pellets are gold, frightened ghosts are pale with a white halo so they read against the blue walls, and the hero keeps a dark ring behind the yellow body. Controls are unchanged.
 
 - **Combat and EXP (ADR-037).**
   Zelda II in the realm:

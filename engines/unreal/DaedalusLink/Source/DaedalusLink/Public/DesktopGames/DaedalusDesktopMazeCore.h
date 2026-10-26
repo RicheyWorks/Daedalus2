@@ -535,6 +535,7 @@ public:
         const double Mouth=(30+std::abs(std::sin(Hero.Mouth/5.0)*25))*3.141592653589793/180;
         const auto DrawHero=[&](double X) {
             if(ShowGrace) Out.AddCircle(X,Hero.Y,14,{80,200,255,255});
+            Out.AddCircle(X,Hero.Y,12,{24,24,24,255});
             Out.AddCircle(X,Hero.Y,10,maze::Yellow);
             Out.AddTriangle({X,Hero.Y},{X+10*std::cos(Angle-Mouth),Hero.Y+10*std::sin(Angle-Mouth)},
                 {X+10*std::cos(Angle+Mouth),Hero.Y+10*std::sin(Angle+Mouth)},Black);
