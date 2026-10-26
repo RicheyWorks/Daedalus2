@@ -164,8 +164,9 @@ public:
             if(Lit[static_cast<std::size_t>(L)]) Out.AddText(P.X-14,P.Y+18,"LIT",White,12);
             else if(Next) Out.AddText(P.X-18,P.Y+18,"NEXT",White,12);
         }
-        Out.AddRect(Exit.X-16,Exit.Y-16,32,32,LitCount==LanternCount?Color{80,200,255,255}:Color{95,100,120,255});
-        Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",Black,12);
+        const bool ExitOpen=LitCount==LanternCount;
+        Out.AddRect(Exit.X-16,Exit.Y-16,32,32,ExitOpen?Color{80,200,255,255}:Color{95,100,120,255});
+        Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",ExitOpen?Black:White,12);
         DrawHeroMark(Out);
         const std::string Circuit=std::string(Option==1?"Switchback | ":"")+"Circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size());
         const std::string Progress=Circuit+(Complete?" clear in "+std::to_string(RunFrames/60)+"s. K/Enter/pad B or R: replay."

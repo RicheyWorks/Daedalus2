@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Dungeon viewing: the player tile keeps a white corner mark above lanterns and the exit.
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
+#include <cstdint>
 #include <iostream>
 #include <string>
 
@@ -29,8 +30,15 @@ void MarkOrder(const Dungeon& G,const std::string& What) {
     }
     Check(Body<Lantern && Lantern<Corner && Corner<F.Commands.size(),What+" draws the body, then a lantern, then the corner mark");
 }
+bool ExitLabel(const Dungeon& G,std::uint8_t R,std::uint8_t Gv,std::uint8_t B) {
+    Frame F;G.Render(F);
+    for(const auto& C:F.Commands)
+        if(C.Kind==Shape::Text && C.Label=="EXIT" && C.Tint.R==R && C.Tint.G==Gv && C.Tint.B==B) return true;
+    return false;
+}
 void View() {
     Dungeon Fresh;
+    Check(ExitLabel(Fresh,255,255,255),"sealed exit label is white on the gray door");
     MarkOrder(Fresh,"fresh room");
     Input Right;Right.Right=true;Fresh.Step(Right);
     MarkOrder(Fresh,"moved room");
