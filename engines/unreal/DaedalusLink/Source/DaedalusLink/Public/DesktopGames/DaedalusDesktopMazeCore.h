@@ -167,6 +167,7 @@ public:
             else if(Next) Out.AddText(P.X-18,P.Y+18,"NEXT",White,12);
         }
         const bool ExitOpen=LitCount==LanternCount;
+        Out.AddRect(Exit.X-20,Exit.Y-20,40,40,{24,28,40,255});
         Out.AddRect(Exit.X-16,Exit.Y-16,32,32,ExitOpen?Color{80,200,255,255}:Color{95,100,120,255});
         Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",ExitOpen?Black:White,12);
         DrawHeroMark(Out);

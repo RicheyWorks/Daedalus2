@@ -50,6 +50,19 @@ bool WallCap(const Dungeon& G,bool Light) {
 void View() {
     Dungeon Fresh;
     Check(ExitLabel(Fresh,255,255,255),"sealed exit label is white on the gray door");
+    {
+        Frame Door;Fresh.Render(Door);
+        std::size_t FrameAt=Door.Commands.size(),Slab=Door.Commands.size();
+        for(std::size_t N=0;N<Door.Commands.size();++N) {
+            const auto& C=Door.Commands[N];
+            if(C.Kind!=Shape::Rectangle) continue;
+            if(C.A.X==Dungeon::Exit.X-20 && C.A.Y==Dungeon::Exit.Y-20 && C.B.X==40 && C.B.Y==40
+                && C.Tint.R==24 && C.Tint.G==28 && C.Tint.B==40) FrameAt=N;
+            if(C.A.X==Dungeon::Exit.X-16 && C.A.Y==Dungeon::Exit.Y-16 && C.B.X==32 && C.B.Y==32
+                && C.Tint.R==95 && C.Tint.G==100 && C.Tint.B==120) Slab=N;
+        }
+        Check(FrameAt<Slab && Slab<Door.Commands.size(),"the sealed exit keeps a dark frame on the floor");
+    }
     Check(WallCap(Fresh,true),"original room walls keep a light top edge");
     Frame Numbers;Fresh.Render(Numbers);int WhiteNumbers=0,BlackNumbers=0;
     for(const auto& C:Numbers.Commands) if(C.Kind==Shape::Text && C.Label.size()==1 && C.Label[0]>='1' && C.Label[0]<='3') {
