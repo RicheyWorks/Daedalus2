@@ -1,0 +1,24 @@
+{
+ "schema": "daedalus.ocean-links/v1",
+ "about": "Sky-to-sea links: which docks exist, in which realm, for which vessels, and which docks connect. Realm ids are the session ids from engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusRealmSessionCore.h (WORLD-ZERO, OCEAN, ...). Checked by tools/ocean/links_check.py against those RealmDefs. Data only: no host loads this yet (DaedalusOceanTravelComponent::ConfigureHost is fed in code today; team-codex owns it).",
+ "status": "design",
+ "docks": [
+  {"id": "wz-rim-tidepen", "realm": "WORLD-ZERO", "underwater": false, "vessels": ["boat"],
+   "anchor": {"kind": "island_terrace", "role": "dock", "source": "hd_island manifest terraces[role=dock] + its sky-sea boat (hd_island.py buildings: dock)"},
+   "story": "The rim dock under the waterfall lip. Sky-sea boats ride the falls' spray down to the Ocean pier; they float, they cannot fly (ADR-066)."},
+  {"id": "ocean-pier-boat", "realm": "OCEAN", "underwater": false, "vessels": ["boat"],
+   "anchor": {"kind": "block", "xyz": [0, 1, 8], "source": "daedalus-core OceanTerrain.boatBerth()"}},
+  {"id": "ocean-pier-sub", "realm": "OCEAN", "underwater": true, "vessels": ["sub"],
+   "anchor": {"kind": "block", "xyz": [0, -8, 8], "source": "daedalus-core OceanTerrain.submarineBerth()"}},
+  {"id": "ocean-tidepen-landing", "realm": "OCEAN", "underwater": false, "vessels": ["boat"],
+   "anchor": {"kind": "block", "xyz": [24, 1, 24], "source": "design: the tide-pen shelf beside the pier (data/ocean/tidepen.json)"},
+   "story": "A rock shelf of tide pools beside the pier, where sky-born sea creatures are cared for before anyone may pen them."}
+ ],
+ "connections": [
+  {"departure": "wz-rim-tidepen", "destination": "ocean-pier-boat", "boats": true, "submarines": false},
+  {"departure": "wz-rim-tidepen", "destination": "ocean-tidepen-landing", "boats": true, "submarines": false}
+ ],
+ "returns": [
+  {"from": "OCEAN", "to": "WORLD-ZERO", "via": "SHORE", "rule": "session core: OCEAN --shore--> the realm you sailed from"}
+ ]
+}

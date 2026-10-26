@@ -1,0 +1,313 @@
+{
+  "schema": "daedalus.material-factor-hotfix-evidence.v1",
+  "engine": "5.8.4-58902052+++UE5+Release-5.8",
+  "source_scope": "Two editor-only reflected material factor reader files; existing transport and dependencies only.",
+  "native_source_pins": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMaterialFactorLibrary.h",
+      "sha256": "3b110daa4911be3838dda867d1b78d919a8decc060b8e871b79c646783af86d3",
+      "bytes": 796
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusMaterialFactorLibrary.cpp",
+      "sha256": "1467499ce0149dbbcb33b4961b176f1f7e32a7d1206cf8df27a64d280703a3c0",
+      "bytes": 15265
+    }
+  ],
+  "native_build": {
+    "exit_code": 0,
+    "receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/NativeBuildR2/build-terminal.json",
+      "sha256": "8e59c50f4d1cf7bf6de56e911dd1d9928606fd8ad2a0294d710373b98940f625",
+      "bytes": 494
+    },
+    "saved_packages_preserved": 27594,
+    "preservation_receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/NativeBuildR2/postbuild-preservation.json",
+      "sha256": "978970879f0980c90e29683b5b8663d33f1f8ca2606545d62f17da46c78cfcd8",
+      "bytes": 489
+    },
+    "compiler_warning": "C4701 potentially uninitialized local VectorValue; color read is guarded by the supported assignment paths. Warning retained; no warning-free claim."
+  },
+  "fresh_process_readback": {
+    "blueprint": {
+      "path": "/Game/CodexToolEvaluation/EpicIntegrationR1/BP_CompileReceipt.BP_CompileReceipt",
+      "values": {
+        "AuditValue": 37
+      },
+      "status": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+      "fresh_process_reopen": true
+    },
+    "import_fixture": {
+      "path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate.Prop_PracticeCrate",
+      "triangles": 264,
+      "lightmap_resolution": 4,
+      "nanite": false,
+      "convex": 1,
+      "materials": [
+        "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+        "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1"
+      ],
+      "native_top_socket_present": true
+    },
+    "scene": {
+      "actors": 22878,
+      "sha256": "828a1b087b3890c7a10747b6aed571fb109b6ae3c2096c58d716b2288f8513dd",
+      "scope": "actor path/class/label/location/rotation/scale"
+    },
+    "camera_matches_preclose": true,
+    "dirty_maps": [],
+    "dirty_content": [],
+    "receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/HotfixReopenReadinessR1/terminal.json",
+      "sha256": "6ac9eac896ef4ea62e581c83219f9742fe33e3b4b2f4a879c0c1a1d673850158",
+      "bytes": 3912
+    }
+  },
+  "material_acceptance": {
+    "state": "HELD",
+    "native_wrapper_calls": 1,
+    "native_invoked": true,
+    "asset_loads_during_wrapper": 0,
+    "mutations": 0,
+    "saved_materials_observed": 2,
+    "base_color_admitted": false,
+    "pbr_quality_accepted": false,
+    "native_runtime_qualified": false,
+    "preserved": true,
+    "source_hashes_preserved": true,
+    "unsupported_current_connections": [
+      {
+        "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+        "input": "base_color",
+        "expression_class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+        "expression_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0:MaterialExpressionMaterialFunctionCall_0",
+        "output_index": 0,
+        "value": null
+      },
+      {
+        "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+        "input": "metallic",
+        "expression_class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+        "expression_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0:MaterialExpressionMaterialFunctionCall_0",
+        "output_index": 1,
+        "value": null
+      },
+      {
+        "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+        "input": "roughness",
+        "expression_class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+        "expression_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0:MaterialExpressionMaterialFunctionCall_0",
+        "output_index": 3,
+        "value": null
+      },
+      {
+        "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1",
+        "input": "base_color",
+        "expression_class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+        "expression_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1:MaterialExpressionMaterialFunctionCall_0",
+        "output_index": 0,
+        "value": null
+      },
+      {
+        "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1",
+        "input": "metallic",
+        "expression_class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+        "expression_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1:MaterialExpressionMaterialFunctionCall_0",
+        "output_index": 1,
+        "value": null
+      },
+      {
+        "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1",
+        "input": "roughness",
+        "expression_class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+        "expression_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1:MaterialExpressionMaterialFunctionCall_0",
+        "output_index": 3,
+        "value": null
+      }
+    ],
+    "blocker": "The actual imported materials route through MaterialExpressionMaterialFunctionCall outputs0/1/3. The reviewed reader admits only direct primary outputs of four exact constant/parameter classes or unambiguous inline constants. No function graph/default inference or repeated witness was used.",
+    "receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/AcceptanceHostR2/receipt.json",
+      "sha256": "a0641c76c40a5ae33cdb3ac6a799689eb47bd00a6622fd18b38519c44e00a515",
+      "bytes": 6065
+    },
+    "native_receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/MaterialFactorReadR2/terminal.json",
+      "sha256": "f5ec97569912f6908d160c62c2b6b893c5bb942dcf3f18f551b518f9c97f4d1c",
+      "bytes": 13166
+    }
+  },
+  "policy": {
+    "local_source_commit": "f91a716785cb3ccec762d7f2afb6de555159fc21",
+    "local_source_reviewed": true,
+    "python_source_publication": "AUTOMATIC_REVIEW_BLOCKED_NOT_RETRIED_OR_REROUTED",
+    "python_sources_in_this_change": false,
+    "synthetic_policy_tests_passed": 23,
+    "offline_test_receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/OfflinePolicyR2/terminal.json",
+      "sha256": "43c4996c82ea6e70649890c35b8d449ec8157128bec67dd0d7b4d35a4981e4c0",
+      "bytes": 2330
+    },
+    "source_sha256": "4e83515ecb6c49139db195354651fd6e23cebdf6150b2011778755ec8c41581f",
+    "existing_fixture_sha256": "8799e75c65c2828123bd078ee97871703a83f76cca12a19f3ad2d20e832b5a1d",
+    "new_tolerance_or_global_policy": false
+  },
+  "slate_hotfix_regression": {
+    "passed": true,
+    "click_count": 1,
+    "actual_fixture_receipt": {
+      "scope": "disposable_virtual_slate_button",
+      "ran": true,
+      "detached_widget_rejected": true,
+      "wrong_button_rejected": true,
+      "disabled_button_rejected": true,
+      "enabled_click_handled": true,
+      "virtual_focus_preserved": true,
+      "button_released": true,
+      "keyboard_focus_preserved": true,
+      "active_window_preserved": true,
+      "virtual_user_released": true,
+      "window_unregister_called": true,
+      "owned_content_detached": true,
+      "click_count": 1,
+      "failure_reason": "",
+      "passed": true,
+      "production_ui_accepted": false
+    },
+    "preserved": true,
+    "production_ui_accepted": false,
+    "receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/HotfixNativeSlateR1/terminal.json",
+      "sha256": "cf390a21aa575a4619690a6e0323a93743997edfd74de5a5e3f35ead429c9627",
+      "bytes": 3473
+    }
+  },
+  "validation_hotfix_regression": {
+    "actual_subset": [
+      {
+        "expected": "Valid",
+        "actual": "Valid",
+        "native_invoked": true,
+        "accepted": true,
+        "native_return": 0
+      },
+      {
+        "expected": "Invalid",
+        "actual": "Invalid",
+        "native_invoked": true,
+        "accepted": false,
+        "native_return": 1
+      }
+    ],
+    "subset_matches": true,
+    "three_class_native_qualification": false,
+    "notvalidated_coverage": "Existing aggregate classification blocker retained; no validator settings or expected oracle changed and no third call repeated.",
+    "receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/HotfixNativeValidationSubsetR1/terminal.json",
+      "sha256": "5410e33849cb75a79ef43ff4fdc822c1267a23c193ccdf1bd03478b0e38003f0",
+      "bytes": 8061
+    }
+  },
+  "hotfix_automation": {
+    "discovery_started": true,
+    "test_run_dispatched": true,
+    "known_terminal": true,
+    "actual_results": {
+      "tests": [
+        {
+          "name": "Daedalus.Editor.Validation.NativeProjection",
+          "state": "Success",
+          "duration": 0.014801401644945145,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Editor.Validation.Policy",
+          "state": "Success",
+          "duration": 0.01179320365190506,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Slate.Acceptance.RepeatCleanup",
+          "state": "Success",
+          "duration": 0.016782298684120178,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Slate.Acceptance.VirtualButton",
+          "state": "Success",
+          "duration": 0.0235958993434906,
+          "errors": [],
+          "warnings": []
+        }
+      ],
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "total": 4,
+      "duration": 0.06697280704975128
+    },
+    "controller": {
+      "state": "Ready",
+      "numEnabled": 4,
+      "numComplete": 4,
+      "numPassed": 4,
+      "numFailed": 0
+    },
+    "exact_names": [
+      "Daedalus.Slate.Acceptance.VirtualButton",
+      "Daedalus.Slate.Acceptance.RepeatCleanup",
+      "Daedalus.Editor.Validation.Policy",
+      "Daedalus.Editor.Validation.NativeProjection"
+    ],
+    "initial_memory_hold_native_test_dispatches": 0,
+    "unchanged_memory_guard": true,
+    "original_run_consumed_only_after_fresh_headroom_recovered": true,
+    "receipt": {
+      "retained_local_receipt": "MaterialFactorAdmission20261019/HotfixAutomationResultsR1/terminal.json",
+      "sha256": "38b80bcdb552c7bb82a783e36b4a86a471aec8d6eefa9674afa1846d3cf039b7",
+      "bytes": 4653
+    },
+    "full_suite": false,
+    "named_fixtures_test": false
+  },
+  "limits": [
+    "Imported function-call material graphs remain HELD; no RGB or full PBR quality acceptance.",
+    "Native three-class validation coverage remains incomplete.",
+    "Disposable Slate fixture does not qualify production game UI.",
+    "Official updater completed and executable matches5.8.4, but LauncherInstalled.dat retained stale5.8.3 with official install-info-write warning; metadata was not hand-edited.",
+    "No all-products integration, new native import/reimport or performance improvement is claimed."
+  ],
+  "final_preservation": {
+    "saved_package_count": 27594,
+    "mismatches": [],
+    "scene": {
+      "actors": 22878,
+      "sha256": "828a1b087b3890c7a10747b6aed571fb109b6ae3c2096c58d716b2288f8513dd",
+      "scope": "actor path/class/label/location/rotation/scale"
+    },
+    "camera_preserved": true,
+    "canonical_header_sha256": "8bde83421c0c7c0c1913cf6c9a9c6614e089ca78b84479a3b5e8ab9d869edfe7",
+    "world_saved": false,
+    "receipt": {
+      "retained_local_receipt": "Unreal584Update20261020/final-preservation.json",
+      "sha256": "338a72b7b7d971875b3002018c7183c952d556ad60013f390d05112a1b8a363b",
+      "bytes": 2664
+    }
+  },
+  "resource_custody": {
+    "compute_normally_released": true,
+    "explicit_readback_owned_compute_absent": true,
+    "sole_unreal_custody_retained": true,
+    "editor_open": true,
+    "editor_pid": 51600,
+    "receipt": {
+      "retained_local_receipt": "Unreal584Update20261020/compute-release.json",
+      "sha256": "2bfceb08cfe95ffc51c1f65f5f1170d7840f80fcddf3b2e4589451a48162e819",
+      "bytes": 1715
+    }
+  }
+}

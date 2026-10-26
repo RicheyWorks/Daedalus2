@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""The Halo Infinite-style settings panel, driven by a simulated pad, the keyboard and touch (Playwright).
+"""The console-style settings panel, driven by a simulated pad, the keyboard and touch (Playwright).
 
     python tools/settings/panel_test.py DEMO_DIR      (a folder built by tools/rpg_demo/build_demo.py)
 
@@ -34,7 +34,7 @@ with sync_playwright() as p:
     tap(0); W(300)                                                  # A on the title: unlocks audio like a real first press
     tap(8); W(300)
     check("View opens Settings", ev("PRISM_DEMO.panel().isOpen()"))
-    check("tabs in Halo Infinite order", pg.eval_on_selector_all(".dset .tab", "e => e.map(x => x.textContent)") == ["CONTROLLER", "KEYBOARD/MOUSE", "VIDEO", "AUDIO", "GAMEPLAY", "ACCESSIBILITY"])
+    check("tabs in console order", pg.eval_on_selector_all(".dset .tab", "e => e.map(x => x.textContent)") == ["CONTROLLER", "KEYBOARD/MOUSE", "VIDEO", "AUDIO", "GAMEPLAY", "ACCESSIBILITY"])
     pg.screenshot(path=os.path.join(DEMO, "..", "t_settings_controller.png"))
     for _ in range(3): tap(5)
     check("RB x3 -> AUDIO, first row Main", state() == {"tab": "AUDIO", "row": "MainVolume"}, state())

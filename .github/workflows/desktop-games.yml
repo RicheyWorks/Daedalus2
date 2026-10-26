@@ -1,10 +1,10 @@
 name: Desktop Python game ports
 on:
   pull_request:
-    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "docs/desktop-games-sources.json", ".github/workflows/desktop-games.yml"]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "docs/desktop-games-sources.json", "tools/minigames/**", "docs/minigames/**", "data/minigames/**", ".github/workflows/desktop-games.yml"]
   push:
     branches: [main]
-    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", ".github/workflows/desktop-games.yml"]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "tools/minigames/**", "docs/minigames/**", "data/minigames/**", ".github/workflows/desktop-games.yml"]
 permissions:
   contents: read
 concurrency:
@@ -38,6 +38,12 @@ jobs:
       - name: Configure MSVC
         if: runner.os == 'Windows'
         run: cmake -S engines/unreal/core-test/desktop_games -B desktop-build
+      - name: Minigame catalog is current
+        run: python tools/minigames/minigame_catalog.py --check
+      - name: Realm cabinet placements are current and tested
+        run: |
+          python tools/minigames/realm_cabinets.py --check
+          python -m unittest discover -s tools/minigames -p "test_*.py" -v
       - name: Compile
         run: cmake --build desktop-build --config Debug
       - name: Replay actual source fixtures and lifecycle checks

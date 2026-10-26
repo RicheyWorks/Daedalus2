@@ -158,6 +158,11 @@
                 <targetPath>kennel</targetPath>
                 <includes><include>tonics.json</include></includes>
             </resource>
+            <resource>
+                <directory>../engines/unreal/ytm-island</directory>
+                <targetPath>brew</targetPath>
+                <includes><include>found_tunes.csv</include></includes>
+            </resource>
         </resources>
         <plugins>
             <plugin>

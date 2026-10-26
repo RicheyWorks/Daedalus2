@@ -1,0 +1,826 @@
+{
+  "schema": "daedalus.mine-fresh-import-proof-source.v1",
+  "state": "BOUNDED_FRESH_MINE_SAVE_RELOAD_ACCEPTED_V2",
+  "problem": "Original Mine final rate24/start0/stop1.54166662693 are retained, but CommonPipelineDataFactoryNode is absent from the 8-node saved dependency graph. Historical final bake/offset evidence is unavailable; no historical admission is fabricated.",
+  "change": "Two separate closed native read functions capture actual final common/factory attributes plus independent pinned glTF source proof, and fixed private fresh-clip Source poses. Existing exact original-reader function bytes unchanged. One producer isolates exactly Mine, disables all roots on pre-factory qualification failure, and captures post-import/current proof. No general evaluator/service/dependency or engine retention change.",
+  "native_files": [
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusProspectorMineReadLibrary.cpp",
+      "sha256": "7d32478f5a080f514d2772f7d36da75344a7643ead08f54598adcba047a7e3be",
+      "bytes": 31807
+    },
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusProspectorMineReadLibrary.h",
+      "sha256": "ef53e67c87b3935336a814d4dbdeccaf4f2bde7d975ee1ca1cb818dbe5fa6e5d",
+      "bytes": 1320
+    },
+    {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\Tests\\DaedalusMineFreshScopeTest.cpp",
+      "sha256": "63f801cfbbe0fb6f36e18b7f022479fae7c738326fb46d51eaa61ed120cd91bd",
+      "bytes": 1188
+    }
+  ],
+  "pure_files": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\tools\\unreal_mcp\\mine_fresh_import.py",
+      "sha256": "cc67bfda8038e9284dd401516d11227e81f955d3252a04c305f0727c3f21eafc",
+      "bytes": 10343
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\tools\\unreal_mcp\\tests\\test_mine_fresh_import.py",
+      "sha256": "765d0a1e6e5697bd8696dd90dddfaffcdc4a9295ffc008925405aadaf2917a87",
+      "bytes": 7329
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\tools\\unreal_mcp\\mine_sequencer_diagnostic.py",
+      "sha256": "a017e5a74c74060623a4dcdebb744bb6f13c74be2bf0893dc1bf5a23212e7db8",
+      "bytes": 2718
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\tools\\unreal_mcp\\tests\\test_mine_sequencer_diagnostic.py",
+      "sha256": "98e7b2ea3a5736e4b04d80fb98f4d36225bdc72fdb36d43ffbf40f3652ebd527",
+      "bytes": 2435
+    }
+  ],
+  "scope": {
+    "source_sha256": "0c47c958e29b590e531c3dc804c10656054d7d6b20f2aa5e182f5cde4f004f14",
+    "asset": "/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine.Twaker_ProspectorMine",
+    "skeleton": "/Game/Daedalus/ShardsteadWorkers/Probe_20261016T1628Z/Prospector/Twaker_Prospector/SkeletalMeshes/Twaker_Prospector_Skeleton.Twaker_Prospector_Skeleton",
+    "source_copy": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\source\\Twaker_Prospector.glb",
+      "sha256": "0c47c958e29b590e531c3dc804c10656054d7d6b20f2aa5e182f5cde4f004f14",
+      "bytes": 212424
+    },
+    "replace_existing": false,
+    "original_reimports": 0,
+    "world_saves": 0
+  },
+  "comparison_contract": {
+    "name": "RAW_EXACT_THEN_UE_TRANSFORM_TRANSLATION_V2",
+    "translation_tolerance_cm": 9.999999747378752e-05,
+    "source": "Installed FTransform::Equals default UE_KINDA_SMALL_NUMBER=(1.e-4f), exactly promoted to double; the active Sequencer model uses Equals in its FK output path. This is existing engine semantic equivalence, not a measured/tuned arithmetic-error bound.",
+    "source_receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\QualifiedRemainingR2\\source-gate.json",
+      "sha256": "7715cb86ab79d18950c8529e33656ea23b46927634f7d703f8de6776c89799ef",
+      "bytes": 3416
+    },
+    "preconditions": "Four independently observed raw forearm translations/scales equal the pinned source exactly, with Euler orientations within the unchanged V1 budget. Only those witnessed samples may use UE translation equivalence. Other bones, rotations/scales, IDs/hash/hierarchy/rate/timing remain V1.",
+    "V1_and_historical_routes_unchanged": true,
+    "exact_internal_FK_arithmetic_proven": false,
+    "negative_tests": "Original V1 refusal retained; above native budget, changed raw value1e-8, missing/duplicate witnesses, wrong Skeleton/source and unwitnessed bone differences refused."
+  },
+  "validation": {
+    "pure_test_methods_passed": 6,
+    "synthetic_source_clip_counterexamples": 23,
+    "pure_results": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshBuildR2\\focused-tests.txt",
+      "sha256": "a414914c99fa67e4ccb3ee6e7d8c2f910044e36f4f382d744327f7206b6e3c0e",
+      "bytes": 447
+    },
+    "source_review": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshBuildR3\\source-review.json",
+      "sha256": "fd32143ca0962fa05f100a9bb71ddf101b4893ef321422e2487fde043ab6478b",
+      "bytes": 2443
+    },
+    "failed_compile": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshBuildR2\\build-terminal.json",
+      "sha256": "87a5f6bc104aeca66fe2064b8cb1fcef1f3633738f13e5f274f92f6d1e9fd7bc",
+      "bytes": 453
+    },
+    "failure_repair": "13new-scope Error calls qualified against global class Error; old function unchanged.",
+    "corrected_build": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshBuildR3\\build-terminal.json",
+      "sha256": "f53c2649e6595b836389e63c7e1f741a7f083e8ccf7fcb9522420eec59ecbd6a",
+      "bytes": 451
+    },
+    "compiled_binary": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+      "sha256": "922a751c51b59a74e0e69b8556b30dab11ff3dbf4720672108d843408304b2bb",
+      "bytes": 10546176
+    },
+    "actual_ready_editor": {
+      "pid": 39812,
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\MineReady-result.json",
+        "sha256": "874b426a577a0f704152a374ef2cbc56cac4dff6aab8c401392527cce049e627",
+        "bytes": 1610
+      },
+      "scene_camera_clean_preserved": true
+    },
+    "native_scope_test": {
+      "name": "Daedalus.Editor.Animation.MineFreshScopeRefusal",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "warnings": 0,
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\native-scope-test.json",
+        "sha256": "965fded092e5968313caf6ba26cfe917f1b4a6df688a5a017f48902f53ec2de4",
+        "bytes": 2486
+      }
+    },
+    "source_pose_qualification": {
+      "pre_factory_source_and_reference_qualified": true,
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\source-qualification.json",
+        "sha256": "7a91953d535d152931ef8ad058e5e3b2366c605cd45e5598ce8902dddda641ec",
+        "bytes": 153
+      },
+      "copied_clip_samples_qualified": false
+    },
+    "fresh_import": {
+      "dispatched": 1,
+      "known_terminal": true,
+      "outputs": [
+        "/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine.Twaker_ProspectorMine"
+      ],
+      "errors": [
+        "completion: copied clip/source sample mismatch"
+      ],
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\import-terminal.json",
+        "sha256": "1d2a103f8709848ed8db05262bc3ec7616c85f90ce01d33250bbdee80aade86f",
+        "bytes": 232
+      }
+    },
+    "save_reload": "ACTUAL_TRUE_PRIVATE_PACKAGE_ONLY",
+    "mismatched_skeleton_native_import": "NOT_RUN",
+    "synthetic_hierarchy_refusal": {
+      "kind": "synthetic_mutation_of_actual_source_proof_before_factories",
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\synthetic-incompatible-skeleton-refusal.json",
+        "sha256": "209846147fd1c75b70df73f1557915674a3e6f9d09c0130558bb56c101ebbe75",
+        "bytes": 147
+      }
+    },
+    "qualified_remaining_only": {
+      "current_pre_save": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\QualifiedRemainingR2\\pre-save-witness.json",
+        "sha256": "948de28cfcf894ecf8b4754cceaafc651295274ec9625b9e6d3ec41a718c4e92",
+        "bytes": 36180
+      },
+      "current_post_reload": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\QualifiedRemainingR2\\post-reload-witness.json",
+        "sha256": "485430f9e4665e54d64e7ad06baa900b8bde3744e2e5ad8e667dd1bc642f17e5",
+        "bytes": 36180
+      },
+      "native_result": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\QualifiedRemainingR2\\native-result.json",
+        "sha256": "436c1353b01e4a068bc4d19cf24d10e806d08a91d4b952dd1cf95d900c91fb84",
+        "bytes": 2714
+      },
+      "tests_passed": 14,
+      "source_gate": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\QualifiedRemainingR2\\source-gate.json",
+        "sha256": "7715cb86ab79d18950c8529e33656ea23b46927634f7d703f8de6776c89799ef",
+        "bytes": 3416
+      },
+      "save_return": true,
+      "clean_reload_return": true,
+      "raw_transforms_exactly_persisted": true,
+      "legacy_V1_still_refuses": true
+    }
+  },
+  "release": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\hold-release.json",
+    "sha256": "10647212a87b817bf613f263484e75bffb9a899b5bc0f24d39555f05569d39e6",
+    "bytes": 417
+  },
+  "preservation": {
+    "all_original_package_source_pins_verified": true,
+    "fields": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "dirty_maps": [],
+    "dirty_content": [],
+    "last_native_observed_utc": "2026-10-21T22:24:53.194541+00:00",
+    "compute_release": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\QualifiedRemainingR2\\release.json",
+      "sha256": "df7093aa99404278e681fc0b54337e9bf45ba03f1b20923cbd115e5ad270a82b",
+      "bytes": 418
+    },
+    "sole_editor_pid": 39812,
+    "additional_imports": 0,
+    "restarts": 0,
+    "original_saves": 0
+  },
+  "status_correction": "A restricted/default process-list query returned no editor during startup, but subsequent retained native readiness and escalated OS read confirmed the original39812 alive. No recovery/second launch was issued. Absence in an incomplete process view must not trigger a duplicate launch.",
+  "remaining": "This bounded fresh-source roundtrip is complete under explicit V2 engine equivalence. Exact FK arithmetic mechanism, bitwise evaluated-pose equality, every-frame/compressed-playback/visual production acceptance and historical metadata recovery remain outside the result.",
+  "historical_admission": false,
+  "fresh_roundtrip_accepted": true,
+  "compressed_playback_accepted": false,
+  "production_adopted": false,
+  "native_runtime_qualified": false,
+  "memory_hold_history": {
+    "utc": "2026-10-21T21:43:00.985255+00:00",
+    "action": "Run native MineFreshScopeRefusal before isolated import",
+    "status": "GUARD_REFUSED_BEFORE_DISPATCH",
+    "reason": "fresh memory headroom fails explicit operator floor",
+    "measured_observed_utc": "2026-10-21T21:42:30.007466+00:00",
+    "available_physical": 1151029248,
+    "required_physical": 1740800000,
+    "available_commit": 28048019456,
+    "required_commit": 2252800000,
+    "measurement_source": "Exact retained exec tool output; diagnostic-only zero-floor sample, never used for admission",
+    "native_discovery_stage_exists": false,
+    "imports_dispatched": 0,
+    "source_pose_qualified": false,
+    "scope_test_executed": false,
+    "pending_native_rpc": false,
+    "uncertain_outcome": false
+  },
+  "actual_live_profile": {
+    "skeleton_path": "/Game/Daedalus/ShardsteadWorkers/Probe_20261016T1628Z/Prospector/Twaker_Prospector/SkeletalMeshes/Twaker_Prospector_Skeleton.Twaker_Prospector_Skeleton",
+    "factory_uid": "\\AnimSequence\\SkeletalAnimation\\\\Scene\\Twaker_Prospector_scene_0\\Twaker_Prospector_node_15\\Twaker_Prospector_joint_13_4",
+    "job_container": "/Engine/Transient.InterchangeBaseNodeContainer_134",
+    "sample_rate": 24,
+    "range_start": 0,
+    "range_stop": 1.5416666269302368,
+    "bake_meshes": true,
+    "bone_tracks": true,
+    "global_offset": {
+      "translation_cm": [
+        0,
+        0,
+        0
+      ],
+      "rotation_xyzw": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "actual_clip_timing_tracks": {
+    "length_s": 1.5416666269302368,
+    "sample_rate": 24,
+    "range_start": 0,
+    "range_stop": 1.5416666269302368,
+    "track_names": [
+      "root",
+      "pelvis",
+      "spine",
+      "head",
+      "arm_l",
+      "forearm_l",
+      "arm_r",
+      "forearm_r",
+      "thigh_l",
+      "calf_l",
+      "foot_l",
+      "thigh_r",
+      "calf_r",
+      "foot_r"
+    ],
+    "clip_skeleton_path": "/Game/Daedalus/ShardsteadWorkers/Probe_20261016T1628Z/Prospector/Twaker_Prospector/SkeletalMeshes/Twaker_Prospector_Skeleton.Twaker_Prospector_Skeleton",
+    "stored_source_path": "C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/MineClipRoundtrip20261021/FreshImportR1/source/Twaker_Prospector.glb"
+  },
+  "raw_channel_diagnostic": {
+    "schema": "daedalus.mine-raw-storage-localization.v1",
+    "utc": "2026-10-21T22:15:09.394765+00:00",
+    "pid": 39812,
+    "actual_model": {
+      "path": "/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine.Twaker_ProspectorMine:AnimationSequencerDataModel",
+      "class": "/Script/AnimationData.AnimationSequencerDataModel"
+    },
+    "display_rate": {
+      "numerator": 24,
+      "denominator": 1
+    },
+    "tick_resolution": {
+      "numerator": 24,
+      "denominator": 1
+    },
+    "source_capture": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshImportR1\\source-proof-raw.json",
+      "sha256": "b1aca9e5f1dbfd7b12dcc29ab30a8f22b1b249615a1ef1e6b98e95c5db47ef17",
+      "bytes": 15872
+    },
+    "raw_capture": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\RawKeysR3\\raw-result.json",
+      "sha256": "5199bb1beb323c504527ba41a1bb417447b297d2da84f626263165864f1d495f",
+      "bytes": 43661
+    },
+    "legacy_read_failure": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\RawKeysR1\\raw-result.json",
+      "sha256": "e6e9c2af026334f92cd81056b2b538b557a92f21afd8c593e3bce1a6df6ba4f8",
+      "bytes": 2380
+    },
+    "explicit_key_only_read_failure": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\RawKeysR2\\raw-result.json",
+      "sha256": "83534944771f3743f5a2495dc0e15caa9ca3abbd1ab45b8b9467efb23e8a355e",
+      "bytes": 7414
+    },
+    "actual_channel_storage": {
+      "constant_default_channels": 17,
+      "keyed_channels": 1,
+      "keyed_channel_key_counts": [
+        38
+      ]
+    },
+    "rows": [
+      {
+        "frame": 0,
+        "bone": "forearm_L",
+        "raw_decoded_transform": {
+          "translation_cm": [
+            7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.08713860063417257,
+            -0.09539024107116403,
+            0.11871178231445056,
+            0.9844872162337254
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "independent_source": {
+          "translation_cm": [
+            7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.08713848888874054,
+            -0.09539028257131577,
+            0.11871159076690674,
+            0.9844873547554016
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "Source_evaluated_pose": {
+          "translation_cm": [
+            -4.363171823840162e-05,
+            1.4024149264102448e-05,
+            30.701912323494618
+          ],
+          "rotation_xyzw": [
+            -0.08713848005404326,
+            0.095390280565405,
+            -0.118711579617002,
+            -0.98448724752145
+          ],
+          "scale": [
+            0.9999997679787451,
+            0.9999998882041794,
+            1.0000000197441778
+          ]
+        },
+        "stored_translation_exactly_equals_source": true,
+        "stored_scale_exactly_equals_source": true,
+        "stored_rotation_matches_unchanged_budget": true,
+        "evaluated_Source_pose_matches_unchanged_budget": false,
+        "max_raw_to_evaluated_translation_delta_cm": 5.1571152237528395e-05
+      },
+      {
+        "frame": 0,
+        "bone": "forearm_R",
+        "raw_decoded_transform": {
+          "translation_cm": [
+            -7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.08713860063417257,
+            0.09539024107116403,
+            -0.11871178231445056,
+            0.9844872162337254
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "independent_source": {
+          "translation_cm": [
+            -7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.08713848888874054,
+            0.09539028257131577,
+            -0.11871159076690674,
+            0.9844873547554016
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "Source_evaluated_pose": {
+          "translation_cm": [
+            4.363171823840162e-05,
+            1.4024149264102448e-05,
+            30.701912323494618
+          ],
+          "rotation_xyzw": [
+            -0.08713848005404326,
+            -0.095390280565405,
+            0.118711579617002,
+            -0.98448724752145
+          ],
+          "scale": [
+            0.9999997679787451,
+            0.9999998882041794,
+            1.0000000197441778
+          ]
+        },
+        "stored_translation_exactly_equals_source": true,
+        "stored_scale_exactly_equals_source": true,
+        "stored_rotation_matches_unchanged_budget": true,
+        "evaluated_Source_pose_matches_unchanged_budget": false,
+        "max_raw_to_evaluated_translation_delta_cm": 5.1571152237528395e-05
+      },
+      {
+        "frame": 24,
+        "bone": "forearm_L",
+        "raw_decoded_transform": {
+          "translation_cm": [
+            7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.08713860063417257,
+            -0.09539024107116403,
+            0.11871178231445056,
+            0.9844872162337254
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "independent_source": {
+          "translation_cm": [
+            7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.08713848888874054,
+            -0.09539028257131577,
+            0.11871159076690674,
+            0.9844873547554016
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "Source_evaluated_pose": {
+          "translation_cm": [
+            -4.363171823840162e-05,
+            1.4024149264102448e-05,
+            30.701912323494618
+          ],
+          "rotation_xyzw": [
+            -0.08713848005404326,
+            0.095390280565405,
+            -0.118711579617002,
+            -0.98448724752145
+          ],
+          "scale": [
+            0.9999997679787451,
+            0.9999998882041794,
+            1.0000000197441778
+          ]
+        },
+        "stored_translation_exactly_equals_source": true,
+        "stored_scale_exactly_equals_source": true,
+        "stored_rotation_matches_unchanged_budget": true,
+        "evaluated_Source_pose_matches_unchanged_budget": false,
+        "max_raw_to_evaluated_translation_delta_cm": 5.1571152237528395e-05
+      },
+      {
+        "frame": 24,
+        "bone": "forearm_R",
+        "raw_decoded_transform": {
+          "translation_cm": [
+            -7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.26655369166778575,
+            0.07195284485030579,
+            -0.1342183797765273,
+            0.9517128475051636
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "independent_source": {
+          "translation_cm": [
+            -7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.2665536105632782,
+            0.0719529241323471,
+            -0.13421818614006042,
+            0.9517130255699158
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "Source_evaluated_pose": {
+          "translation_cm": [
+            -7.939433999126777e-06,
+            1.8592136257211678e-06,
+            30.70189666748047
+          ],
+          "rotation_xyzw": [
+            0.2665536916677858,
+            0.07195284485030581,
+            -0.13421837977652734,
+            0.9517128475051636
+          ],
+          "scale": [
+            0.9999998807907104,
+            0.9999998211860657,
+            0.9999999403953552
+          ]
+        },
+        "stored_translation_exactly_equals_source": true,
+        "stored_scale_exactly_equals_source": true,
+        "stored_rotation_matches_unchanged_budget": true,
+        "evaluated_Source_pose_matches_unchanged_budget": true,
+        "max_raw_to_evaluated_translation_delta_cm": 0.0
+      }
+    ],
+    "installed_source": [
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Animation\\AnimationData\\Source\\AnimationData\\Private\\AnimSequencerDataModel.h",
+          "sha256": "e9a19808caeef7a4c3740dd729ca3a3ab1829e7b33d704691a9434db37024cb2",
+          "bytes": 12107
+        },
+        "lines": [
+          36,
+          36
+        ],
+        "finding": "Actual model derives UMovieSceneSequence, not UAnimDataModel."
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Animation\\AnimationData\\Source\\AnimationData\\Private\\AnimSequencerDataModel.cpp",
+          "sha256": "fefc7bb97468d3f6c04ff971d06168acf49d5cdf6e8beb931d0bea56d010e580",
+          "bytes": 71981
+        },
+        "lines": [
+          345,
+          348
+        ],
+        "finding": "Legacy GetBoneAnimationTracks returns a static empty list; do not use it as missing-animation evidence."
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Animation\\AnimationData\\Source\\AnimationData\\Private\\AnimSequencerDataModel.cpp",
+          "sha256": "fefc7bb97468d3f6c04ff971d06168acf49d5cdf6e8beb931d0bea56d010e580",
+          "bytes": 71981
+        },
+        "lines": [
+          1248,
+          1298
+        ],
+        "finding": "Raw transform getter reads stored/default float channel data and reconstructs Euler quaternion controls."
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Animation\\AnimationData\\Source\\AnimationData\\Private\\AnimSequencerDataModel.cpp",
+          "sha256": "fefc7bb97468d3f6c04ff971d06168acf49d5cdf6e8beb931d0bea56d010e580",
+          "bytes": 71981
+        },
+        "lines": [
+          775,
+          801
+        ],
+        "finding": "Actual Evaluate path runs EvaluateTrack then GeneratePoseData."
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Animation\\AnimationData\\Source\\AnimationData\\Private\\AnimSequencerDataModel.cpp",
+          "sha256": "fefc7bb97468d3f6c04ff971d06168acf49d5cdf6e8beb931d0bea56d010e580",
+          "bytes": 71981
+        },
+        "lines": [
+          1345,
+          1423
+        ],
+        "finding": "GeneratePoseData executes ControlRig and reads current RigHierarchy local transforms; this is distinct from stored channel values."
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Editor\\AnimationBlueprintLibrary\\Private\\AnimPose.cpp",
+          "sha256": "4e521a8e1d36f83d3115dce744752b4978c4e47b51aadd75b3cd27e600597361",
+          "bytes": 25114
+        },
+        "lines": [
+          654,
+          660
+        ],
+        "finding": "Typed Source evaluation sets Source data and disables retargeting for our bShouldRetarget=false request."
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Engine\\Private\\Animation\\AnimSequenceHelpers.cpp",
+          "sha256": "3391f6e37ec8481997543b3477408528b2fded4eb2227037b67528a18c2e0724",
+          "bytes": 36434
+        },
+        "lines": [
+          309,
+          337
+        ],
+        "finding": "Retarget scope predicate: disabled retargeting plus same Skeleton makes bShouldRetarget false. This is source/parameter inference, not an instrumented branch trace."
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Plugins\\Animation\\ControlRig\\Source\\ControlRig\\Private\\Rigs\\FKControlRig.cpp",
+          "sha256": "bd96a48361adc4cf2dc32c91f28b5d9966f3fb0de9041930c8a78ea0827d1159",
+          "bytes": 20563
+        },
+        "lines": [
+          28,
+          58
+        ],
+        "finding": "Actual control naming lowercases bone name and appends _CONTROL."
+      },
+      {
+        "file": {
+          "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Core\\Private\\Math\\UnrealMath.cpp",
+          "sha256": "e9b9583becb9679f01a6de82e97b7dbf8043f61457f75acedb1454ed2f4f0eb0",
+          "bytes": 120177
+        },
+        "lines": [
+          559,
+          561
+        ],
+        "finding": "Euler X/Y/Z maps to roll/pitch/yaw; MakeFromEuler at787-790 delegates through this Rotator mapping."
+      }
+    ],
+    "current_evaluation_exactly_repeats_previous": true,
+    "conclusion": "All four sampled stored forearm translations/scales exactly match independent source payload values; Euler rotations pass the unchanged existing budget. Three later Source/FK pose translations fail that budget. Thus the measured deviation is introduced after stored channels, within the Sequencer/FK evaluation path; source-to-stored unit/value mismatch is not observed in this four-transform subset.",
+    "retargeting_limit": "Disabled-retarget/same-Skeleton predicate is source-grounded from the exact native request. No runtime branch instrumentation or claim of a specific internal FK arithmetic operation.",
+    "unresolved": "Exact FK evaluation/control-offset/precision operation responsible for the three deviations is not yet established. No mathematical error-bound proof supports a larger budget; do not accept current evaluated Source poses or save/reload on smallness alone.",
+    "comparison_budget_revised": false,
+    "historical_route_changed": false,
+    "imports": 0,
+    "saves": 0,
+    "restarts": 0,
+    "preserved": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "dirty_private_clip_preserved_unsaved": true,
+    "release": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\RawKeysR3\\release.json",
+      "sha256": "83998c60d25fe5f1465ccbdbfc993eea8ee6edd5fc1e0ec4a7d012591912f229",
+      "bytes": 418
+    },
+    "new_decoder_pure_tests": {
+      "passed": 6,
+      "native_tests": 0,
+      "receipt": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\RawDiagnosticPublicationR1\\focused-tests.txt",
+        "sha256": "2b82e2fc82ce73647dd7a8caa17bddcc3d2e7b2f120158c266552d00fc3e6138",
+        "bytes": 463
+      }
+    },
+    "full_roundtrip_accepted": false,
+    "storage_subset_match_is_not_runtime_admission": true
+  },
+  "V1_contract_and_failure_history": {
+    "name": "FLOAT32_TRANSFORM_8EPS_V1",
+    "epsilon": 9.5367431640625e-07,
+    "why": "Independent converter explicitly narrows transforms through FTransform3f; native references/poses are doubles. Eight binary32 epsilons times max(1,abs(a),abs(b)) is an explicit component acceptance budget for this separate fresh test. It covers the observed two-foot quaternion normalization difference of2.22e-16 and small float packing roundoff; it is not a general retarget/geometry/provenance tolerance.",
+    "quaternions": "Require finite near-unit input; normalize and handle q/-q orientation equivalence before component comparison.",
+    "translation_units": "cm",
+    "exact_checks": [
+      "source digest",
+      "asset and Skeleton identity",
+      "14bone membership and parent hierarchy",
+      "24Hz rate",
+      "sample times0,1",
+      "identity global offset"
+    ],
+    "old_exact_oracle_unchanged": true,
+    "runtime_equivalence_proven": false
+  },
+  "raw_diagnostic_limits": {
+    "stored_source_matches": 4,
+    "Source_pose_V1_failures": 3,
+    "cause_stage": "After stored channels, within Sequencer/FK evaluation. Exact internal arithmetic unproven.",
+    "R1_and_R2_probe_receipts": [
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\RawKeysR1\\raw-result.json",
+        "sha256": "e6e9c2af026334f92cd81056b2b538b557a92f21afd8c593e3bce1a6df6ba4f8",
+        "bytes": 2380
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\RawKeysR2\\raw-result.json",
+        "sha256": "83534944771f3743f5a2495dc0e15caa9ca3abbd1ab45b8b9467efb23e8a355e",
+        "bytes": 7414
+      }
+    ],
+    "successful_public_channel_read": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\RawKeysR3\\raw-result.json",
+      "sha256": "5199bb1beb323c504527ba41a1bb417447b297d2da84f626263165864f1d495f",
+      "bytes": 43661
+    },
+    "actual_default_channels": 17,
+    "actual_keyed_channels": 1,
+    "keyed_channel_keys": 38
+  },
+  "failure_history_preserved": {
+    "original_R1_completion": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\FreshTerminalR1\\completion.json",
+      "sha256": "34b2fdcc9d0cfc7476e31bff0d8268f9406924fcfe3b1c1aa0c976e6b1607d13",
+      "bytes": 4778
+    },
+    "old_failed_engine_journal": [
+      "completion: copied clip/source sample mismatch"
+    ],
+    "remaining_R2_AST_no_dispatch": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MineClipRoundtrip20261021\\QualifiedRemainingR2\\predispatch-closed-r2.json",
+      "sha256": "2c4c2fcd9d44009322af78cbffb6816765bd0e4c56beb2df96c6d61791dde66a",
+      "bytes": 666
+    },
+    "source_values_or_old_capture_edited": false
+  },
+  "bounded_scope": {
+    "asset": "/Game/CodexToolEvaluation/MineClipRoundtrip/FreshR1/Twaker_ProspectorMine.Twaker_ProspectorMine",
+    "expected_Skeleton": "/Game/Daedalus/ShardsteadWorkers/Probe_20261016T1628Z/Prospector/Twaker_Prospector/SkeletalMeshes/Twaker_Prospector_Skeleton.Twaker_Prospector_Skeleton",
+    "rate_hz": 24,
+    "bone_tracks": 14,
+    "range_s": [
+      0,
+      1.5416666269302368
+    ],
+    "Source_pose_samples_s": [
+      0,
+      1
+    ],
+    "raw_forearm_frames": [
+      0,
+      24
+    ],
+    "current_pre_and_post_qualified": true,
+    "saved_package": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Content\\CodexToolEvaluation\\MineClipRoundtrip\\FreshR1\\Twaker_ProspectorMine.uasset",
+      "sha256": "1cb6480b5826e640013fbfd6f8013509a4b89f0ead89051d6384cf5810487510",
+      "bytes": 73233
+    },
+    "representative_sample_scope_not_all_frames": true,
+    "production_adopted": false,
+    "compressed_playback_accepted": false,
+    "visual_acceptance": false,
+    "historical_admission": false,
+    "native_runtime_qualified_generic_flag_unchanged": false
+  }
+}

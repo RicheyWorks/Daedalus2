@@ -1,0 +1,487 @@
+[
+ {
+  "asset": "Prop_YTM_Crop_Clover_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Clover_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Clover_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Groat_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Groat_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Groat_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Kelpweed_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Kelpweed_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Kelpweed_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Bitroot_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Bitroot_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Bitroot_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Spudlet_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Spudlet_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Spudlet_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Moonbean_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Moonbean_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Moonbean_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Reedcorn_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Reedcorn_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Reedcorn_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Saltgrass_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Saltgrass_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Saltgrass_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Pumplet_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Pumplet_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Pumplet_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Chordberry_S1",
+  "kind": "prop",
+  "size": "~0.27 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Chordberry_S2",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Chordberry_S3",
+  "kind": "prop",
+  "size": "~0.51 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Milk",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Wool",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Egg",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Bacon",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Cheese",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Feather",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Hide",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_GlowFleece",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Stew_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Stew_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Omelet_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Omelet_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Pie_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Pie_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Porridge_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Porridge_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Roast_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Roast_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Soup_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Soup_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Salad_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Salad_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Bread_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Bread_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Cup_Empty",
+  "kind": "item",
+  "size": "~0.12 m"
+ },
+ {
+  "asset": "Item_YTM_Cup_Full",
+  "kind": "item",
+  "size": "~0.12 m"
+ },
+ {
+  "asset": "Item_YTM_Canteen_Empty",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Canteen_Full",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Jug_Empty",
+  "kind": "item",
+  "size": "~0.35 m"
+ },
+ {
+  "asset": "Item_YTM_Jug_Full",
+  "kind": "item",
+  "size": "~0.35 m"
+ },
+ {
+  "asset": "Item_YTM_Bucket_Empty",
+  "kind": "item",
+  "size": "~0.40 m"
+ },
+ {
+  "asset": "Item_YTM_Bucket_Full",
+  "kind": "item",
+  "size": "~0.40 m"
+ },
+ {
+  "asset": "Item_YTM_Flask_Empty",
+  "kind": "item",
+  "size": "~0.20 m"
+ },
+ {
+  "asset": "Item_YTM_Flask_Full",
+  "kind": "item",
+  "size": "~0.20 m"
+ },
+ {
+  "asset": "Bld_YTM_Barn",
+  "kind": "building",
+  "size": "~6 m"
+ },
+ {
+  "asset": "Bld_YTM_Coop",
+  "kind": "building",
+  "size": "~2.2 m"
+ },
+ {
+  "asset": "Bld_YTM_Stable",
+  "kind": "building",
+  "size": "~4 m"
+ },
+ {
+  "asset": "Bld_YTM_PigPen",
+  "kind": "building",
+  "size": "~3 m"
+ },
+ {
+  "asset": "Bld_YTM_Silo",
+  "kind": "building",
+  "size": "~3 m"
+ },
+ {
+  "asset": "Prop_YTM_Fence_V1",
+  "kind": "prop",
+  "size": "~1 m"
+ },
+ {
+  "asset": "Prop_YTM_Fence_V2",
+  "kind": "prop",
+  "size": "~1 m"
+ },
+ {
+  "asset": "Prop_YTM_Fence_V3",
+  "kind": "prop",
+  "size": "~1 m"
+ },
+ {
+  "asset": "Prop_YTM_Fence_V4",
+  "kind": "prop",
+  "size": "~1 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Doleaf",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Doleaf",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Rebell",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Rebell",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Mimint",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Mimint",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Fasage",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Fasage",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Solthorn",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Solthorn",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Lavine",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Lavine",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Tisquill",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Tisquill",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Sharpcress",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Sharpcress",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Flatfern",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Flatfern",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Dronebloom",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Dronebloom",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Hushmoss",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Hushmoss",
+  "kind": "item",
+  "size": "~0.16 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Gloryroot",
+  "kind": "item",
+  "size": "~0.33 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Gloryroot",
+  "kind": "item",
+  "size": "~0.16 m"
+ }
+]

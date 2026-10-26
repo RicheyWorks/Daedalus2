@@ -29,6 +29,7 @@ import bpy
 from mathutils import Vector, noise
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import stable_mesh  # noqa: E402  (same folder; deterministic face order)
 import island_chemistry as CH  # noqa: E402
 
 R = 110.0                 # plateau half-width (superellipse)
@@ -44,6 +45,8 @@ KINDS = {
     "crystal": ((.55, .45, .75), (.75, .65, .95), (.40, .35, .55), (.70, .62, .85), (.40, .80, 1.0), (.90, .60, 1.0), "crystal"),
 }
 MATS = {}
+EXTERNAL_WHEEL = False    # a recipe that builds its own stream wheel (kit_waterworks) sets this so gameplay() skips the inline one
+LAST = {}                 # build() leaves its layout A, height h, chemistry and gameplay rows here for recipes that add on top
 
 
 def smooth(t):
@@ -130,6 +133,9 @@ def box(name, loc, size, mat, bevel=.12, rot=(0, 0, 0)):
 def sphere(name, loc, size, mat, seg=16, rings=8):
     bm = bmesh.new()
     bmesh.ops.create_uvsphere(bm, u_segments=seg, v_segments=rings, radius=1.0)
+    # create_uvsphere emits its faces in a different order on every run (Blender 5.2, measured), so every GLB with a
+    # sphere hashed differently each build. Sort faces by rounded centroid: same mesh, stable bytes.
+    stable_mesh.sort_bmesh(bm)
     bmesh.ops.scale(bm, vec=Vector(size), verts=bm.verts)
     return _obj(name, bm, mat, loc)
 
@@ -1072,7 +1078,7 @@ def gameplay(prefix, A, h, kind, seed, chem):
         x, y = tx + 12, ty + 10
     marker(GP, prefix, "power_unit", "PowerUnit", x, y, h(x, y), "chemistry power_unit (Codex PowerUnit 86100 parts)",
            {"drive": drive, "parts": list(pu.get("parts", {}).keys()), "energy_per_unit": pu.get("energy_per_unit")})
-    if "stream" in drive:
+    if "stream" in drive and not EXTERNAL_WHEEL:
         wheel = material("Steel", (.6, .64, .7), .4, .9)
         cone(prefix + "_PowerUnit_WaterWheel", (x, y, WATER + 1.6), 2.6, 2.6, .8, wheel, 16, (math.pi / 2, 0, 0))
         box(prefix + "_PowerUnit_Housing", (x + 3.5, y, h(x + 3.5, y) + 1.4), (2.6, 2.2, 2.8), material("Brass", (.72, .50, .15), .35, .8), .1)
@@ -1165,6 +1171,8 @@ def build(seed, kind, out_dir, offset=(0, 0, 0), prefix=None, realm="WORLD-ZERO"
     buildings(name, A, h, kind, chem)
     kind_features(name, A, h, kind, seed)
     GP = gameplay(name, A, h, kind, seed, chem)
+    LAST.clear()
+    LAST.update(A=A, h=h, chem=chem, GP=GP, name=name)
     rim_details(name, h, kind, seed)
     collision(name, A, name + "_Terrain")
     lod = lods(top, name + "_Terrain", h, kind)
@@ -1202,10 +1210,17 @@ def export_group(path, objs):
                              mesh_smooth_type="FACE", use_mesh_modifiers=True, path_mode="AUTO")
     for o in objs:
         if o.type == "MESH" and o.data.color_attributes:
-            o.data.color_attributes.active_color = o.data.color_attributes[0]
+            ca = o.data.color_attributes
+            ca.active_color = ca[0]
+            if hasattr(ca, "render_color_index"):
+                ca.render_color_index = 0                # Blender 5.x writes COLOR_0 from the RENDER colour, not the active one
     try:                                            # Blender 4.2+: write COLOR_0 from the active colour attribute
-        bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True,
-                                  export_vertex_color="ACTIVE")
+        try:
+            bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True,
+                                      export_vertex_color="ACTIVE", export_all_vertex_colors=False)
+        except TypeError:
+            bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True,
+                                      export_vertex_color="ACTIVE")
     except TypeError:
         bpy.ops.export_scene.gltf(filepath=path + ".glb", export_format="GLB", use_selection=True, export_yup=True, export_apply=True)
 

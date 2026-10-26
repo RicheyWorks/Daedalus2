@@ -1,0 +1,2502 @@
+[
+ {
+  "asset": "Prop_YTM_Herb_Doleaf_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Doleaf_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Doleaf_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Doleaf_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Doleaf",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Doleaf",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Rebell_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Rebell_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Rebell_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Rebell_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Rebell",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Rebell",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Mimint_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Mimint_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Mimint_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Mimint_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Mimint",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Mimint",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Fasage_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Fasage_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Fasage_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Fasage_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Fasage",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Fasage",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Solthorn_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Solthorn_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Solthorn_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Solthorn_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Solthorn",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Solthorn",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Lavine_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Lavine_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Lavine_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Lavine_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Lavine",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Lavine",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Tisquill_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Tisquill_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Tisquill_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Tisquill_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Tisquill",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Tisquill",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Sharpcress_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Sharpcress_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Sharpcress_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Sharpcress_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Sharpcress",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Sharpcress",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Flatfern_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Flatfern_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Flatfern_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Flatfern_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Flatfern",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Flatfern",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Dronebloom_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Dronebloom_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Dronebloom_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Dronebloom_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Dronebloom",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Dronebloom",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Hushmoss_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Hushmoss_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Hushmoss_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Hushmoss_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Hushmoss",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Hushmoss",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Gloryroot_S1",
+  "kind": "prop",
+  "size": "~0.39 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Gloryroot_S2",
+  "kind": "prop",
+  "size": "~0.56 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Gloryroot_S3",
+  "kind": "prop",
+  "size": "~0.73 m"
+ },
+ {
+  "asset": "Prop_YTM_Herb_Gloryroot_S4",
+  "kind": "prop",
+  "size": "~0.90 m"
+ },
+ {
+  "asset": "Item_YTM_Herb_Gloryroot",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Seed_Gloryroot",
+  "kind": "item",
+  "size": "~0.15 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Major_T1",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Major_T2",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Major_T3",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Major_T4",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Minor_T1",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Minor_T2",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Minor_T3",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Minor_T4",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Sus_T1",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Sus_T2",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Sus_T3",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Sus_T4",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Dim_T1",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Dim_T2",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Dim_T3",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Dim_T4",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Aug_T1",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Aug_T2",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Aug_T3",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Aug_T4",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Seventh_T1",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Seventh_T2",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Seventh_T3",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Item_YTM_Tonic_Seventh_T4",
+  "kind": "item",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Mob_YTM_Mooncalf_Calf",
+  "kind": "mob",
+  "size": "~0.83 m"
+ },
+ {
+  "asset": "Mob_YTM_Mooncalf_Adult",
+  "kind": "mob",
+  "size": "~1.50 m"
+ },
+ {
+  "asset": "Mob_YTM_Mooncalf_Elder",
+  "kind": "mob",
+  "size": "~1.72 m"
+ },
+ {
+  "asset": "Mob_YTM_ReefSheep_Calf",
+  "kind": "mob",
+  "size": "~0.55 m"
+ },
+ {
+  "asset": "Mob_YTM_ReefSheep_Adult",
+  "kind": "mob",
+  "size": "~1.00 m"
+ },
+ {
+  "asset": "Mob_YTM_ReefSheep_Elder",
+  "kind": "mob",
+  "size": "~1.15 m"
+ },
+ {
+  "asset": "Mob_YTM_BubbleHen_Calf",
+  "kind": "mob",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Mob_YTM_BubbleHen_Adult",
+  "kind": "mob",
+  "size": "~0.45 m"
+ },
+ {
+  "asset": "Mob_YTM_BubbleHen_Elder",
+  "kind": "mob",
+  "size": "~0.52 m"
+ },
+ {
+  "asset": "Mob_YTM_Kelpig_Calf",
+  "kind": "mob",
+  "size": "~0.44 m"
+ },
+ {
+  "asset": "Mob_YTM_Kelpig_Adult",
+  "kind": "mob",
+  "size": "~0.80 m"
+ },
+ {
+  "asset": "Mob_YTM_Kelpig_Elder",
+  "kind": "mob",
+  "size": "~0.92 m"
+ },
+ {
+  "asset": "Mob_YTM_DriftGoat_Calf",
+  "kind": "mob",
+  "size": "~0.52 m"
+ },
+ {
+  "asset": "Mob_YTM_DriftGoat_Adult",
+  "kind": "mob",
+  "size": "~0.95 m"
+ },
+ {
+  "asset": "Mob_YTM_DriftGoat_Elder",
+  "kind": "mob",
+  "size": "~1.09 m"
+ },
+ {
+  "asset": "Mob_YTM_StormDuck_Calf",
+  "kind": "mob",
+  "size": "~0.22 m"
+ },
+ {
+  "asset": "Mob_YTM_StormDuck_Adult",
+  "kind": "mob",
+  "size": "~0.40 m"
+ },
+ {
+  "asset": "Mob_YTM_StormDuck_Elder",
+  "kind": "mob",
+  "size": "~0.46 m"
+ },
+ {
+  "asset": "Mob_YTM_Hornox_Calf",
+  "kind": "mob",
+  "size": "~0.99 m"
+ },
+ {
+  "asset": "Mob_YTM_Hornox_Adult",
+  "kind": "mob",
+  "size": "~1.80 m"
+ },
+ {
+  "asset": "Mob_YTM_Hornox_Elder",
+  "kind": "mob",
+  "size": "~2.07 m"
+ },
+ {
+  "asset": "Mob_YTM_Glowllama_Calf",
+  "kind": "mob",
+  "size": "~0.88 m"
+ },
+ {
+  "asset": "Mob_YTM_Glowllama_Adult",
+  "kind": "mob",
+  "size": "~1.60 m"
+ },
+ {
+  "asset": "Mob_YTM_Glowllama_Elder",
+  "kind": "mob",
+  "size": "~1.84 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Milk",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Wool",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Egg",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Bacon",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Cheese",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Feather",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_Hide",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Prod_GlowFleece",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Stew_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Stew_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Omelet_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Omelet_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Pie_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Pie_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Porridge_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Porridge_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Roast_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Roast_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Soup_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Soup_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Salad_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Salad_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Bread_Raw",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Food_Bread_Cooked",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Clover_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Clover_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Clover_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Groat_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Groat_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Groat_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Kelpweed_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Kelpweed_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Kelpweed_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Bitroot_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Bitroot_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Bitroot_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Spudlet_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Spudlet_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Spudlet_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Moonbean_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Moonbean_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Moonbean_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Reedcorn_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Reedcorn_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Reedcorn_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Saltgrass_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Saltgrass_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Saltgrass_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Pumplet_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Pumplet_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Pumplet_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Chordberry_S1",
+  "kind": "prop",
+  "size": "~0.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Chordberry_S2",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Crop_Chordberry_S3",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Well_V1",
+  "kind": "prop",
+  "size": "~1.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Well_V2",
+  "kind": "prop",
+  "size": "~1.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Spring_V1",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Spring_V2",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Cistern_V1",
+  "kind": "prop",
+  "size": "~2.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Cistern_V2",
+  "kind": "prop",
+  "size": "~2.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_RainBarrel_V1",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_RainBarrel_V2",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_HandPump_V1",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_HandPump_V2",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Fountain_V1",
+  "kind": "prop",
+  "size": "~1.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Fountain_V2",
+  "kind": "prop",
+  "size": "~1.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Filter_V1",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Filter_V2",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Boiler_V1",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Boiler_V2",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Aqueduct_V1",
+  "kind": "prop",
+  "size": "~2.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Aqueduct_V2",
+  "kind": "prop",
+  "size": "~2.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Pool_V1",
+  "kind": "prop",
+  "size": "~0.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Water_Pool_V2",
+  "kind": "prop",
+  "size": "~0.4 m"
+ },
+ {
+  "asset": "Item_YTM_Cup_Empty",
+  "kind": "item",
+  "size": "~0.12 m"
+ },
+ {
+  "asset": "Item_YTM_Cup_Full",
+  "kind": "item",
+  "size": "~0.12 m"
+ },
+ {
+  "asset": "Item_YTM_Canteen_Empty",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Canteen_Full",
+  "kind": "item",
+  "size": "~0.25 m"
+ },
+ {
+  "asset": "Item_YTM_Jug_Empty",
+  "kind": "item",
+  "size": "~0.35 m"
+ },
+ {
+  "asset": "Item_YTM_Jug_Full",
+  "kind": "item",
+  "size": "~0.35 m"
+ },
+ {
+  "asset": "Item_YTM_Bucket_Empty",
+  "kind": "item",
+  "size": "~0.40 m"
+ },
+ {
+  "asset": "Item_YTM_Bucket_Full",
+  "kind": "item",
+  "size": "~0.40 m"
+ },
+ {
+  "asset": "Item_YTM_Flask_Empty",
+  "kind": "item",
+  "size": "~0.20 m"
+ },
+ {
+  "asset": "Item_YTM_Flask_Full",
+  "kind": "item",
+  "size": "~0.20 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Brewbench",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Stove",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Smelter",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Mill",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Churn",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Press",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Loom",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Station_Smokehouse",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Bld_YTM_Barn",
+  "kind": "building",
+  "size": "~6 m"
+ },
+ {
+  "asset": "Bld_YTM_Coop",
+  "kind": "building",
+  "size": "~2.2 m"
+ },
+ {
+  "asset": "Bld_YTM_Stable",
+  "kind": "building",
+  "size": "~4 m"
+ },
+ {
+  "asset": "Bld_YTM_PigPen",
+  "kind": "building",
+  "size": "~3 m"
+ },
+ {
+  "asset": "Bld_YTM_Silo",
+  "kind": "building",
+  "size": "~3 m"
+ },
+ {
+  "asset": "Prop_YTM_Fence_V1",
+  "kind": "prop",
+  "size": "~1 m"
+ },
+ {
+  "asset": "Prop_YTM_Fence_V2",
+  "kind": "prop",
+  "size": "~1 m"
+ },
+ {
+  "asset": "Prop_YTM_Fence_V3",
+  "kind": "prop",
+  "size": "~1 m"
+ },
+ {
+  "asset": "Prop_YTM_Fence_V4",
+  "kind": "prop",
+  "size": "~1 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K001",
+  "kind": "prop",
+  "size": "~7.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K002",
+  "kind": "prop",
+  "size": "~2.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K003",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K004",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K005",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K006",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K007",
+  "kind": "prop",
+  "size": "~7.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K008",
+  "kind": "prop",
+  "size": "~3.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K009",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K010",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K011",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K012",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K013",
+  "kind": "prop",
+  "size": "~9.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K014",
+  "kind": "prop",
+  "size": "~1.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K015",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K016",
+  "kind": "prop",
+  "size": "~1.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K017",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K018",
+  "kind": "prop",
+  "size": "~1.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K019",
+  "kind": "prop",
+  "size": "~6.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K020",
+  "kind": "prop",
+  "size": "~3.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K021",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K022",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K023",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K024",
+  "kind": "prop",
+  "size": "~2.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K025",
+  "kind": "prop",
+  "size": "~3.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K026",
+  "kind": "prop",
+  "size": "~1.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K027",
+  "kind": "prop",
+  "size": "~1.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K028",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K029",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K030",
+  "kind": "prop",
+  "size": "~3.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K031",
+  "kind": "prop",
+  "size": "~3.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K032",
+  "kind": "prop",
+  "size": "~3.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K033",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K034",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K035",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K036",
+  "kind": "prop",
+  "size": "~2.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K037",
+  "kind": "prop",
+  "size": "~3.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K038",
+  "kind": "prop",
+  "size": "~2.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K039",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K040",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K041",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K042",
+  "kind": "prop",
+  "size": "~3.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K043",
+  "kind": "prop",
+  "size": "~8.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K044",
+  "kind": "prop",
+  "size": "~3.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K045",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K046",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K047",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K048",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K049",
+  "kind": "prop",
+  "size": "~5.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K050",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K051",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K052",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K053",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K054",
+  "kind": "prop",
+  "size": "~2.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K055",
+  "kind": "prop",
+  "size": "~9.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K056",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K057",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K058",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K059",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K060",
+  "kind": "prop",
+  "size": "~2.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K061",
+  "kind": "prop",
+  "size": "~8.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K062",
+  "kind": "prop",
+  "size": "~2.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K063",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K064",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K065",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K066",
+  "kind": "prop",
+  "size": "~1.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K067",
+  "kind": "prop",
+  "size": "~4.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K068",
+  "kind": "prop",
+  "size": "~3.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K069",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K070",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K071",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K072",
+  "kind": "prop",
+  "size": "~2.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K073",
+  "kind": "prop",
+  "size": "~5.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K074",
+  "kind": "prop",
+  "size": "~1.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K075",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K076",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K077",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K078",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K079",
+  "kind": "prop",
+  "size": "~4.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K080",
+  "kind": "prop",
+  "size": "~1.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K081",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K082",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K083",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K084",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K085",
+  "kind": "prop",
+  "size": "~8.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K086",
+  "kind": "prop",
+  "size": "~2.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K087",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K088",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K089",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K090",
+  "kind": "prop",
+  "size": "~3.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K091",
+  "kind": "prop",
+  "size": "~9.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K092",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K093",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K094",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K095",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K096",
+  "kind": "prop",
+  "size": "~2.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K097",
+  "kind": "prop",
+  "size": "~6.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K098",
+  "kind": "prop",
+  "size": "~2.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K099",
+  "kind": "prop",
+  "size": "~1.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K100",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K101",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K102",
+  "kind": "prop",
+  "size": "~2.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K103",
+  "kind": "prop",
+  "size": "~5.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K104",
+  "kind": "prop",
+  "size": "~3.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K105",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K106",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K107",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K108",
+  "kind": "prop",
+  "size": "~3.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K109",
+  "kind": "prop",
+  "size": "~7.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K110",
+  "kind": "prop",
+  "size": "~3.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K111",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K112",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K113",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K114",
+  "kind": "prop",
+  "size": "~2.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K115",
+  "kind": "prop",
+  "size": "~9.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K116",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K117",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K118",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K119",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K120",
+  "kind": "prop",
+  "size": "~1.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K121",
+  "kind": "prop",
+  "size": "~6.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K122",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K123",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K124",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K125",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K126",
+  "kind": "prop",
+  "size": "~3.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K127",
+  "kind": "prop",
+  "size": "~6.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K128",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K129",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K130",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K131",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K132",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K133",
+  "kind": "prop",
+  "size": "~8.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K134",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K135",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K136",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K137",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K138",
+  "kind": "prop",
+  "size": "~2.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K139",
+  "kind": "prop",
+  "size": "~6.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K140",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K141",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K142",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K143",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K144",
+  "kind": "prop",
+  "size": "~3.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K145",
+  "kind": "prop",
+  "size": "~5.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K146",
+  "kind": "prop",
+  "size": "~2.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K147",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K148",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K149",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K150",
+  "kind": "prop",
+  "size": "~2.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K151",
+  "kind": "prop",
+  "size": "~5.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K152",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K153",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K154",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K155",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K156",
+  "kind": "prop",
+  "size": "~2.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K157",
+  "kind": "prop",
+  "size": "~6.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K158",
+  "kind": "prop",
+  "size": "~2.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K159",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K160",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K161",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K162",
+  "kind": "prop",
+  "size": "~3.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K163",
+  "kind": "prop",
+  "size": "~5.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K164",
+  "kind": "prop",
+  "size": "~1.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K165",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K166",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K167",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K168",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K169",
+  "kind": "prop",
+  "size": "~4.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K170",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K171",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K172",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K173",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K174",
+  "kind": "prop",
+  "size": "~3.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K175",
+  "kind": "prop",
+  "size": "~6.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K176",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K177",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K178",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K179",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K180",
+  "kind": "prop",
+  "size": "~1.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K181",
+  "kind": "prop",
+  "size": "~9.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K182",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K183",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K184",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K185",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K186",
+  "kind": "prop",
+  "size": "~2.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K187",
+  "kind": "prop",
+  "size": "~7.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K188",
+  "kind": "prop",
+  "size": "~3.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K189",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K190",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K191",
+  "kind": "prop",
+  "size": "~1.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K192",
+  "kind": "prop",
+  "size": "~3.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K193",
+  "kind": "prop",
+  "size": "~4.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K194",
+  "kind": "prop",
+  "size": "~3.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K195",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K196",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K197",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K198",
+  "kind": "prop",
+  "size": "~2.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K199",
+  "kind": "prop",
+  "size": "~5.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K200",
+  "kind": "prop",
+  "size": "~2.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K201",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K202",
+  "kind": "prop",
+  "size": "~1.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K203",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K204",
+  "kind": "prop",
+  "size": "~2.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K205",
+  "kind": "prop",
+  "size": "~7.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K206",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K207",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K208",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K209",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K210",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K211",
+  "kind": "prop",
+  "size": "~5.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K212",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K213",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K214",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K215",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K216",
+  "kind": "prop",
+  "size": "~2.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K217",
+  "kind": "prop",
+  "size": "~5.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K218",
+  "kind": "prop",
+  "size": "~3.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K219",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K220",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K221",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K222",
+  "kind": "prop",
+  "size": "~3.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K223",
+  "kind": "prop",
+  "size": "~9.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K224",
+  "kind": "prop",
+  "size": "~2.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K225",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K226",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K227",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K228",
+  "kind": "prop",
+  "size": "~3.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K229",
+  "kind": "prop",
+  "size": "~6.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K230",
+  "kind": "prop",
+  "size": "~2.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K231",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K232",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K233",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K234",
+  "kind": "prop",
+  "size": "~3.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K235",
+  "kind": "prop",
+  "size": "~5.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K236",
+  "kind": "prop",
+  "size": "~1.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K237",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K238",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K239",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K240",
+  "kind": "prop",
+  "size": "~3.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K241",
+  "kind": "prop",
+  "size": "~4.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K242",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K243",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K244",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K245",
+  "kind": "prop",
+  "size": "~1.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K246",
+  "kind": "prop",
+  "size": "~1.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K247",
+  "kind": "prop",
+  "size": "~7.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K248",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K249",
+  "kind": "prop",
+  "size": "~1.1 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K250",
+  "kind": "prop",
+  "size": "~1.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K251",
+  "kind": "prop",
+  "size": "~0.8 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K252",
+  "kind": "prop",
+  "size": "~3.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K253",
+  "kind": "prop",
+  "size": "~4.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K254",
+  "kind": "prop",
+  "size": "~2.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K255",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K256",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K257",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K258",
+  "kind": "prop",
+  "size": "~2.0 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K259",
+  "kind": "prop",
+  "size": "~5.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K260",
+  "kind": "prop",
+  "size": "~3.2 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K261",
+  "kind": "prop",
+  "size": "~1.4 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K262",
+  "kind": "prop",
+  "size": "~1.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K263",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K264",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K265",
+  "kind": "prop",
+  "size": "~8.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K266",
+  "kind": "prop",
+  "size": "~3.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K267",
+  "kind": "prop",
+  "size": "~1.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K268",
+  "kind": "prop",
+  "size": "~1.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K269",
+  "kind": "prop",
+  "size": "~0.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K270",
+  "kind": "prop",
+  "size": "~1.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K271",
+  "kind": "prop",
+  "size": "~7.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K272",
+  "kind": "prop",
+  "size": "~2.3 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K273",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Bush_K274",
+  "kind": "prop",
+  "size": "~0.5 m"
+ },
+ {
+  "asset": "Prop_YTM_Log_K275",
+  "kind": "prop",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Rock_K276",
+  "kind": "prop",
+  "size": "~2.6 m"
+ },
+ {
+  "asset": "Prop_YTM_Cliff_K277",
+  "kind": "prop",
+  "size": "~8.9 m"
+ },
+ {
+  "asset": "Prop_YTM_Boulder_K278",
+  "kind": "prop",
+  "size": "~0.7 m"
+ },
+ {
+  "asset": "Prop_YTM_Stump_K279",
+  "kind": "prop",
+  "size": "~1.0 m"
+ }
+]

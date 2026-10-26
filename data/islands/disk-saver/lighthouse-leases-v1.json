@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "quest": "q_lighthouse_leases",
+  "lore": "One light may burn over the save log at a time. The harbour hands the light from keeper to keeper by the hourglass, but every keeper's glass runs fast or slow, and now and then a keeper nods off between reading the glass and writing the log. Trust the glass alone and two lights burn at once. Only the numbered brass tokens, rising with every hand-over, let the harbour turn away a keeper who woke too late.",
+  "leases": {"lease": 20, "epochs": 40, "write_permille": 600, "max_drift_permille": 150, "pause_permille": 60, "max_pause": 12, "news_delay": 6, "guard": 4, "mode": "fenced"},
+  "shoals_data": "data/islands/disk-saver/compaction-shoals-v1.json",
+  "seed": 171,
+  "npc": {"name": "Keeper Ines", "lines": {
+    "start": "One light at a time over the save log. Choose how the harbour hands it over.",
+    "handover": "The glass is empty. The light passes to the next keeper.",
+    "fenced": "Your token is older than the harbour's. Go back to sleep, old keeper.",
+    "win": "Never two lights at once. Every stale keeper was turned away.",
+    "fail": "Two lights burned and the log took both. Number the tokens."}}
+}

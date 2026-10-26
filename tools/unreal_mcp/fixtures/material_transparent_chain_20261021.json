@@ -1,0 +1,2689 @@
+{
+  "schema": "daedalus.material-transparent-chain-native-evidence.r5",
+  "created_utc": "2026-10-21T01:52:44.125708+00:00",
+  "actual": true,
+  "synthetic": false,
+  "engine": "5.8.4-58902052+++UE5+Release-5.8",
+  "source_gate": "CLEAR",
+  "source_files": [
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMaterialFactorLibrary.h",
+      "sha256": "2a3318342df5035809889a398409f1b3fc02a0b49361706bbd8b3daec2e0a450",
+      "bytes": 1753
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusMaterialFactorLibrary.cpp",
+      "sha256": "858261101f12c5b6a432701226ab841995f9a9a482a4feb5ffb0fc591355f1c8",
+      "bytes": 66456
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusMaterialTransparentChainPolicy.h",
+      "sha256": "6211c5b9a238ebca3548f93f519a51f9863bcf4481a96b527abc07b69f2b43cc",
+      "bytes": 6699
+    },
+    {
+      "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Private/Tests/DaedalusMaterialSwitchProofTest.cpp",
+      "sha256": "bcb9342cf73a8aa1f4ee7fae915c01a27de3b3ca1a4e514474084970af64cc53",
+      "bytes": 28047
+    }
+  ],
+  "source_review": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\source-review-chain-r5-final.json",
+    "sha256": "ab9cc0735ce5c21a1b859ebbe6b945b10f74bee4f4b7cca8d91d2c34b49d6496",
+    "bytes": 10702
+  },
+  "build": {
+    "started_utc": "2026-10-21T01:31:22.945844+00:00",
+    "ended_utc": "2026-10-21T01:31:47.304083+00:00",
+    "elapsed_seconds": 24.358105300001625,
+    "exit_code": 0,
+    "known_terminal": true,
+    "log": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\NativeChainBuildR5\\build.log",
+      "sha256": "ec7e51b52d873a70369634710d63b12fef21fa39d6cf8f0beb60906c6338cb4d",
+      "bytes": 4973
+    }
+  },
+  "build_warning": "C4701 potentially uninitialized VectorValue in unchanged InputFacts; not a warning-free build claim.",
+  "fresh_reopen": {
+    "utc": "2026-10-21T01:32:05.669113+00:00",
+    "start_utc": "2026-10-21T01:32:05.5884565Z",
+    "pid": 45296,
+    "visible_launch": true,
+    "executable": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
+    "arguments": [
+      "C:\\Unreal\\DaedalusRealm\\DaedalusRealm.uproject",
+      "/Game/Daedalus/DaedalusWorld",
+      "-d3d11",
+      "-gpucrashdebugging",
+      "-NoSplash",
+      "-trace=cpu,loadtime,assetloadtime,log,region",
+      "-tracefile=C:/Users/730ri/Documents/Codex/2026-10-14/task/startup-attribution-next-required-20261021/startup-required-material-reopen.utrace"
+    ],
+    "engine_version": {
+      "MajorVersion": 5,
+      "MinorVersion": 8,
+      "PatchVersion": 4,
+      "Changelist": 58902052,
+      "CompatibleChangelist": 55116800,
+      "IsLicenseeVersion": 0,
+      "IsPromotedBuild": 1,
+      "BranchName": "++UE5+Release-5.8"
+    },
+    "build_terminal_sha256": "5ef1be21226891fa30c24400890fbe189d440408e166c65c6f45db67e198775d",
+    "ready": false,
+    "native_snapshot_after_launch": false
+  },
+  "native_readiness": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\NativeChainReadyR5\\terminal.json",
+    "sha256": "b4ffc279389ddb75e7f98d4f9530d6fada18a03f6d470c9f56b5a4d56fa847e1",
+    "bytes": 3604
+  },
+  "actual_native_tests": {
+    "utc": "2026-10-21T01:36:41.890919+00:00",
+    "passed_actual_four": true,
+    "terminal": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\NativeChainTestsResultsR5\\terminal.json",
+      "sha256": "167ed556773a790b86fa2c9b9e0de3b4e3bc8d1ff1d0ece46189c9e3c69c94fa",
+      "bytes": 6077
+    },
+    "results": {
+      "tests": [
+        {
+          "name": "Daedalus.Material.Chain.Bindings",
+          "state": "Success",
+          "duration": 0.015167102217674255,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Material.Chain.Frames",
+          "state": "Success",
+          "duration": 0.01164189726114273,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Material.Chain.Masks",
+          "state": "Success",
+          "duration": 0.011097896844148636,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "Daedalus.Material.Chain.Traversal",
+          "state": "Success",
+          "duration": 0.020225100219249725,
+          "errors": [],
+          "warnings": []
+        }
+      ],
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "total": 4,
+      "duration": 0.05813199654221535
+    },
+    "preservation": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "names": [
+      "Daedalus.Material.Chain.Traversal",
+      "Daedalus.Material.Chain.Frames",
+      "Daedalus.Material.Chain.Bindings",
+      "Daedalus.Material.Chain.Masks"
+    ]
+  },
+  "new_reader_calls": 1,
+  "original_raw": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainCaptureHostR5\\witness.raw.json",
+    "sha256": "72009a6e24e0000d1c426cdbfe4e5bb3da1e0bfe18ba09ec436004c86f0222ac",
+    "bytes": 162034
+  },
+  "native_terminal": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\NativeChainProofReadR5\\terminal.json",
+    "sha256": "ec750ef479e9af3d06cd83d1fad1a2b15707a4466cad8974b3c8073f7b92b885",
+    "bytes": 344717
+  },
+  "proof_observation": {
+    "schema": "daedalus.material-static-switch-proof-observation.v1",
+    "capture_id": "2fb09835-476e-e892-246d-d3a4752d43a3",
+    "observed_at_utc": "2026-10-21T01:37:10.094Z",
+    "native_invoked": true
+  },
+  "native_state": "held",
+  "native_errors": [
+    "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0/base_color: Selected transparent path has an unknown endpoint, cache/context/mask/cycle or budget failure",
+    "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0/metallic: Independent selector proof failed or is unsupported; no default inference",
+    "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0/roughness: Independent selector proof failed or is unsupported; no default inference",
+    "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1/base_color: Selected transparent path has an unknown endpoint, cache/context/mask/cycle or budget failure",
+    "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1/metallic: Independent selector proof failed or is unsupported; no default inference",
+    "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1/roughness: Independent selector proof failed or is unsupported; no default inference"
+  ],
+  "materials": [
+    {
+      "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+      "route_proofs": [
+        {
+          "schema": "daedalus.material-static-switch-route.v2",
+          "property": "base_color",
+          "selected_chain": {
+            "schema": "daedalus.material-transparent-chain.v1",
+            "start_frame": "root",
+            "complete": false,
+            "steps": [
+              {
+                "frame": "root",
+                "source_path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+                "operation": "function_output",
+                "child_frame": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+                "output_node": {
+                  "path": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence:MaterialExpressionFunctionOutput_0",
+                  "class": "/Script/Engine.MaterialExpressionFunctionOutput",
+                  "owner": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence"
+                },
+                "cached_output_pointer_equal": true,
+                "binding_guid": "01159293423ad57d1fa91882253d14e5",
+                "node_guid": "01159293423ad57d1fa91882253d14e5",
+                "next": {
+                  "expression": {
+                    "path": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence:MaterialExpressionLinearInterpolate_2",
+                    "class": "/Script/Engine.MaterialExpressionLinearInterpolate",
+                    "owner": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence"
+                  },
+                  "expression_present": true,
+                  "output_index": 0,
+                  "raw_masks": {
+                    "Mask": 0,
+                    "MaskR": 0,
+                    "MaskG": 0,
+                    "MaskB": 0,
+                    "MaskA": 0
+                  },
+                  "selected_cached_output": {
+                    "name": "None",
+                    "masks": {
+                      "Mask": 0,
+                      "MaskR": 0,
+                      "MaskG": 0,
+                      "MaskB": 0,
+                      "MaskA": 0
+                    }
+                  },
+                  "selected_cached_index_valid": true,
+                  "effective_masks": {
+                    "Mask": 0,
+                    "MaskR": 0,
+                    "MaskG": 0,
+                    "MaskB": 0,
+                    "MaskA": 0
+                  }
+                }
+              }
+            ],
+            "end_frame": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16"
+          },
+          "selector_chain": null,
+          "selected_branch": "a",
+          "switch": {
+            "expression": {
+              "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticSwitchParameter_0",
+              "class": "/Script/Engine.MaterialExpressionStaticSwitchParameter",
+              "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+            },
+            "dynamic_branch": false,
+            "expression_guid": "d1a7ca54428bd3ced00bd1ada58f9181",
+            "parameter_name": "bHasIridescence",
+            "parameter_query": {
+              "api": "UMaterialInterface::GetStaticSwitchParameterValue",
+              "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+              "caller_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0:MaterialExpressionMaterialFunctionCall_0",
+              "function_path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body",
+              "node_expression_guid": "d1a7ca54428bd3ced00bd1ada58f9181",
+              "parameter_info": {
+                "name": "bHasIridescence",
+                "association": "GlobalParameter",
+                "index": -1
+              },
+              "enumeration_complete": true,
+              "enumerated_count": 9,
+              "parameter_info_count": 9,
+              "parameter_guid_count": 9,
+              "enumerated_matches": [
+                {
+                  "parameter_info": {
+                    "name": "bHasIridescence",
+                    "association": "GlobalParameter",
+                    "index": -1
+                  },
+                  "expression_guid": "d1a7ca54428bd3ced00bd1ada58f9181"
+                }
+              ],
+              "query_succeeded": true,
+              "overridden_only": false,
+              "returned_expression_guid": "d1a7ca54428bd3ced00bd1ada58f9181",
+              "value": true
+            },
+            "a": {
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "expression_present": true,
+              "output_index": 0,
+              "raw_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              },
+              "selected_cached_output": {
+                "name": "BaseColor",
+                "masks": {
+                  "Mask": 0,
+                  "MaskR": 0,
+                  "MaskG": 0,
+                  "MaskB": 0,
+                  "MaskA": 0
+                }
+              },
+              "selected_cached_index_valid": true,
+              "traced_connected": true,
+              "trace_complete": true,
+              "effective_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              },
+              "trace_cycle": false,
+              "trace_hops": 0,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            },
+            "b": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionNamedRerouteUsage_2",
+                "class": "/Script/Engine.MaterialExpressionNamedRerouteUsage",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 1,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticSwitch_0",
+                "class": "/Script/Engine.MaterialExpressionStaticSwitch",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            }
+          }
+        },
+        {
+          "schema": "daedalus.material-static-switch-route.v2",
+          "property": "metallic",
+          "selected_chain": null,
+          "selector_chain": {
+            "schema": "daedalus.material-transparent-chain.v1",
+            "start_frame": "root",
+            "complete": false,
+            "steps": [],
+            "end_frame": "root"
+          },
+          "switch": {
+            "expression": {
+              "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticSwitch_3",
+              "class": "/Script/Engine.MaterialExpressionStaticSwitch",
+              "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+            },
+            "default_value": false,
+            "value": {
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticBoolParameter_3",
+                "class": "/Script/Engine.MaterialExpressionStaticBoolParameter",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "expression_present": true,
+              "output_index": 0,
+              "raw_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              },
+              "selected_cached_output": {
+                "name": "None",
+                "masks": {
+                  "Mask": 0,
+                  "MaskR": 0,
+                  "MaskG": 0,
+                  "MaskB": 0,
+                  "MaskA": 0
+                }
+              },
+              "selected_cached_index_valid": true,
+              "effective_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              }
+            },
+            "a": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionReroute_3",
+                "class": "/Script/Engine.MaterialExpressionReroute",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 1,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_8",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            },
+            "b": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionNamedRerouteUsage_6",
+                "class": "/Script/Engine.MaterialExpressionNamedRerouteUsage",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 1,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionFunctionInput_56",
+                "class": "/Script/Engine.MaterialExpressionFunctionInput",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            }
+          }
+        },
+        {
+          "schema": "daedalus.material-static-switch-route.v2",
+          "property": "roughness",
+          "selected_chain": null,
+          "selector_chain": {
+            "schema": "daedalus.material-transparent-chain.v1",
+            "start_frame": "root",
+            "complete": false,
+            "steps": [],
+            "end_frame": "root"
+          },
+          "switch": {
+            "expression": {
+              "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticSwitch_4",
+              "class": "/Script/Engine.MaterialExpressionStaticSwitch",
+              "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+            },
+            "default_value": false,
+            "value": {
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticBoolParameter_4",
+                "class": "/Script/Engine.MaterialExpressionStaticBoolParameter",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "expression_present": true,
+              "output_index": 0,
+              "raw_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              },
+              "selected_cached_output": {
+                "name": "None",
+                "masks": {
+                  "Mask": 0,
+                  "MaskR": 0,
+                  "MaskG": 0,
+                  "MaskB": 0,
+                  "MaskA": 0
+                }
+              },
+              "selected_cached_index_valid": true,
+              "effective_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              }
+            },
+            "a": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_8",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 0,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_8",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            },
+            "b": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionNamedRerouteUsage_7",
+                "class": "/Script/Engine.MaterialExpressionNamedRerouteUsage",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 1,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionFunctionInput_65",
+                "class": "/Script/Engine.MaterialExpressionFunctionInput",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            }
+          }
+        }
+      ],
+      "closed_function_frames": [
+        {
+          "id": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+          "parent": "root",
+          "caller": {
+            "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+            "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+            "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+          },
+          "function": {
+            "path": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence",
+            "class": "/Script/Engine.MaterialFunction",
+            "owner": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence"
+          },
+          "cached_bindings_complete": true,
+          "inputs_count": 14,
+          "outputs_count": 1,
+          "inputs": [
+            [
+              0,
+              "0c4fd776441840baa9ce7db9cb352651",
+              "0c4fd776441840baa9ce7db9cb352651",
+              "MaterialExpressionFunctionInput_6"
+            ],
+            [
+              1,
+              "ccd1bcf34bcc4d1d346d4ca91a39c416",
+              "ccd1bcf34bcc4d1d346d4ca91a39c416",
+              "MaterialExpressionFunctionInput_5"
+            ],
+            [
+              2,
+              "e0be9e4e45f8bdd29191e39836325c96",
+              "e0be9e4e45f8bdd29191e39836325c96",
+              "MaterialExpressionFunctionInput_28"
+            ],
+            [
+              3,
+              "4a122cc4480fbf8a15337985760a23d6",
+              "4a122cc4480fbf8a15337985760a23d6",
+              "MaterialExpressionFunctionInput_3"
+            ],
+            [
+              4,
+              "1f2792fe4e520e163476b18526ccfb0a",
+              "1f2792fe4e520e163476b18526ccfb0a",
+              "MaterialExpressionFunctionInput_0"
+            ],
+            [
+              5,
+              "da96b02c419335469e2428972af4288b",
+              "da96b02c419335469e2428972af4288b",
+              "MaterialExpressionFunctionInput_14"
+            ],
+            [
+              6,
+              "93af4612435d243e450fd0a87c672898",
+              "93af4612435d243e450fd0a87c672898",
+              "MaterialExpressionFunctionInput_26"
+            ],
+            [
+              7,
+              "55a34fd14c04d45d9ad1b8ae545949b1",
+              "55a34fd14c04d45d9ad1b8ae545949b1",
+              "MaterialExpressionFunctionInput_27"
+            ],
+            [
+              8,
+              "9f0cf35940f47e7fe8236c8d1f40e58b",
+              "9f0cf35940f47e7fe8236c8d1f40e58b",
+              "MaterialExpressionFunctionInput_10"
+            ],
+            [
+              9,
+              "babd6bb04de7cddd3e099ba1dcd81818",
+              "babd6bb04de7cddd3e099ba1dcd81818",
+              "MaterialExpressionFunctionInput_11"
+            ],
+            [
+              10,
+              "1d7aade94d917f715336a0bb101a5668",
+              "1d7aade94d917f715336a0bb101a5668",
+              "MaterialExpressionFunctionInput_12"
+            ],
+            [
+              11,
+              "c2b27f85414d317c6bdfa2ab65e2f83a",
+              "c2b27f85414d317c6bdfa2ab65e2f83a",
+              "MaterialExpressionFunctionInput_1"
+            ],
+            [
+              12,
+              "39844580406cc76d5392ec9cdac000c8",
+              "39844580406cc76d5392ec9cdac000c8",
+              "MaterialExpressionFunctionInput_2"
+            ],
+            [
+              13,
+              "3a2389a4470609abf91b9dbe69683860",
+              "3a2389a4470609abf91b9dbe69683860",
+              "MaterialExpressionFunctionInput_4"
+            ]
+          ],
+          "outputs": [
+            [
+              0,
+              "01159293423ad57d1fa91882253d14e5",
+              "01159293423ad57d1fa91882253d14e5",
+              "MaterialExpressionFunctionOutput_0"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1",
+      "route_proofs": [
+        {
+          "schema": "daedalus.material-static-switch-route.v2",
+          "property": "base_color",
+          "selected_chain": {
+            "schema": "daedalus.material-transparent-chain.v1",
+            "start_frame": "root",
+            "complete": false,
+            "steps": [
+              {
+                "frame": "root",
+                "source_path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+                "operation": "function_output",
+                "child_frame": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+                "output_node": {
+                  "path": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence:MaterialExpressionFunctionOutput_0",
+                  "class": "/Script/Engine.MaterialExpressionFunctionOutput",
+                  "owner": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence"
+                },
+                "cached_output_pointer_equal": true,
+                "binding_guid": "01159293423ad57d1fa91882253d14e5",
+                "node_guid": "01159293423ad57d1fa91882253d14e5",
+                "next": {
+                  "expression": {
+                    "path": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence:MaterialExpressionLinearInterpolate_2",
+                    "class": "/Script/Engine.MaterialExpressionLinearInterpolate",
+                    "owner": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence"
+                  },
+                  "expression_present": true,
+                  "output_index": 0,
+                  "raw_masks": {
+                    "Mask": 0,
+                    "MaskR": 0,
+                    "MaskG": 0,
+                    "MaskB": 0,
+                    "MaskA": 0
+                  },
+                  "selected_cached_output": {
+                    "name": "None",
+                    "masks": {
+                      "Mask": 0,
+                      "MaskR": 0,
+                      "MaskG": 0,
+                      "MaskB": 0,
+                      "MaskA": 0
+                    }
+                  },
+                  "selected_cached_index_valid": true,
+                  "effective_masks": {
+                    "Mask": 0,
+                    "MaskR": 0,
+                    "MaskG": 0,
+                    "MaskB": 0,
+                    "MaskA": 0
+                  }
+                }
+              }
+            ],
+            "end_frame": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16"
+          },
+          "selector_chain": null,
+          "selected_branch": "a",
+          "switch": {
+            "expression": {
+              "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticSwitchParameter_0",
+              "class": "/Script/Engine.MaterialExpressionStaticSwitchParameter",
+              "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+            },
+            "dynamic_branch": false,
+            "expression_guid": "d1a7ca54428bd3ced00bd1ada58f9181",
+            "parameter_name": "bHasIridescence",
+            "parameter_query": {
+              "api": "UMaterialInterface::GetStaticSwitchParameterValue",
+              "material_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1",
+              "caller_path": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1:MaterialExpressionMaterialFunctionCall_0",
+              "function_path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body",
+              "node_expression_guid": "d1a7ca54428bd3ced00bd1ada58f9181",
+              "parameter_info": {
+                "name": "bHasIridescence",
+                "association": "GlobalParameter",
+                "index": -1
+              },
+              "enumeration_complete": true,
+              "enumerated_count": 9,
+              "parameter_info_count": 9,
+              "parameter_guid_count": 9,
+              "enumerated_matches": [
+                {
+                  "parameter_info": {
+                    "name": "bHasIridescence",
+                    "association": "GlobalParameter",
+                    "index": -1
+                  },
+                  "expression_guid": "d1a7ca54428bd3ced00bd1ada58f9181"
+                }
+              ],
+              "query_succeeded": true,
+              "overridden_only": false,
+              "returned_expression_guid": "d1a7ca54428bd3ced00bd1ada58f9181",
+              "value": true
+            },
+            "a": {
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "expression_present": true,
+              "output_index": 0,
+              "raw_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              },
+              "selected_cached_output": {
+                "name": "BaseColor",
+                "masks": {
+                  "Mask": 0,
+                  "MaskR": 0,
+                  "MaskG": 0,
+                  "MaskB": 0,
+                  "MaskA": 0
+                }
+              },
+              "selected_cached_index_valid": true,
+              "traced_connected": true,
+              "trace_complete": true,
+              "effective_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              },
+              "trace_cycle": false,
+              "trace_hops": 0,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            },
+            "b": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionNamedRerouteUsage_2",
+                "class": "/Script/Engine.MaterialExpressionNamedRerouteUsage",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 1,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticSwitch_0",
+                "class": "/Script/Engine.MaterialExpressionStaticSwitch",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            }
+          }
+        },
+        {
+          "schema": "daedalus.material-static-switch-route.v2",
+          "property": "metallic",
+          "selected_chain": null,
+          "selector_chain": {
+            "schema": "daedalus.material-transparent-chain.v1",
+            "start_frame": "root",
+            "complete": false,
+            "steps": [],
+            "end_frame": "root"
+          },
+          "switch": {
+            "expression": {
+              "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticSwitch_3",
+              "class": "/Script/Engine.MaterialExpressionStaticSwitch",
+              "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+            },
+            "default_value": false,
+            "value": {
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticBoolParameter_3",
+                "class": "/Script/Engine.MaterialExpressionStaticBoolParameter",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "expression_present": true,
+              "output_index": 0,
+              "raw_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              },
+              "selected_cached_output": {
+                "name": "None",
+                "masks": {
+                  "Mask": 0,
+                  "MaskR": 0,
+                  "MaskG": 0,
+                  "MaskB": 0,
+                  "MaskA": 0
+                }
+              },
+              "selected_cached_index_valid": true,
+              "effective_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              }
+            },
+            "a": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionReroute_3",
+                "class": "/Script/Engine.MaterialExpressionReroute",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 1,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_8",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            },
+            "b": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionNamedRerouteUsage_6",
+                "class": "/Script/Engine.MaterialExpressionNamedRerouteUsage",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 1,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionFunctionInput_56",
+                "class": "/Script/Engine.MaterialExpressionFunctionInput",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            }
+          }
+        },
+        {
+          "schema": "daedalus.material-static-switch-route.v2",
+          "property": "roughness",
+          "selected_chain": null,
+          "selector_chain": {
+            "schema": "daedalus.material-transparent-chain.v1",
+            "start_frame": "root",
+            "complete": false,
+            "steps": [],
+            "end_frame": "root"
+          },
+          "switch": {
+            "expression": {
+              "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticSwitch_4",
+              "class": "/Script/Engine.MaterialExpressionStaticSwitch",
+              "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+            },
+            "default_value": false,
+            "value": {
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionStaticBoolParameter_4",
+                "class": "/Script/Engine.MaterialExpressionStaticBoolParameter",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "expression_present": true,
+              "output_index": 0,
+              "raw_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              },
+              "selected_cached_output": {
+                "name": "None",
+                "masks": {
+                  "Mask": 0,
+                  "MaskR": 0,
+                  "MaskG": 0,
+                  "MaskB": 0,
+                  "MaskA": 0
+                }
+              },
+              "selected_cached_index_valid": true,
+              "effective_masks": {
+                "Mask": 0,
+                "MaskR": 0,
+                "MaskG": 0,
+                "MaskB": 0,
+                "MaskA": 0
+              }
+            },
+            "a": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_8",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 0,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_8",
+                "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            },
+            "b": {
+              "expression_present": true,
+              "expression": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionNamedRerouteUsage_7",
+                "class": "/Script/Engine.MaterialExpressionNamedRerouteUsage",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              },
+              "trace_complete": true,
+              "traced_connected": true,
+              "trace_cycle": false,
+              "trace_hops": 1,
+              "trace_endpoint": {
+                "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionFunctionInput_65",
+                "class": "/Script/Engine.MaterialExpressionFunctionInput",
+                "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+              }
+            }
+          }
+        }
+      ],
+      "closed_function_frames": [
+        {
+          "id": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+          "parent": "root",
+          "caller": {
+            "path": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body:MaterialExpressionMaterialFunctionCall_16",
+            "class": "/Script/Engine.MaterialExpressionMaterialFunctionCall",
+            "owner": "/InterchangeAssets/gltf/MaterialBodies/MF_Default_Body.MF_Default_Body"
+          },
+          "function": {
+            "path": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence.MF_Iridescence",
+            "class": "/Script/Engine.MaterialFunction",
+            "owner": "/InterchangeAssets/gltf/MaterialFunctions/MF_Iridescence"
+          },
+          "cached_bindings_complete": true,
+          "inputs_count": 14,
+          "outputs_count": 1,
+          "inputs": [
+            [
+              0,
+              "0c4fd776441840baa9ce7db9cb352651",
+              "0c4fd776441840baa9ce7db9cb352651",
+              "MaterialExpressionFunctionInput_6"
+            ],
+            [
+              1,
+              "ccd1bcf34bcc4d1d346d4ca91a39c416",
+              "ccd1bcf34bcc4d1d346d4ca91a39c416",
+              "MaterialExpressionFunctionInput_5"
+            ],
+            [
+              2,
+              "e0be9e4e45f8bdd29191e39836325c96",
+              "e0be9e4e45f8bdd29191e39836325c96",
+              "MaterialExpressionFunctionInput_28"
+            ],
+            [
+              3,
+              "4a122cc4480fbf8a15337985760a23d6",
+              "4a122cc4480fbf8a15337985760a23d6",
+              "MaterialExpressionFunctionInput_3"
+            ],
+            [
+              4,
+              "1f2792fe4e520e163476b18526ccfb0a",
+              "1f2792fe4e520e163476b18526ccfb0a",
+              "MaterialExpressionFunctionInput_0"
+            ],
+            [
+              5,
+              "da96b02c419335469e2428972af4288b",
+              "da96b02c419335469e2428972af4288b",
+              "MaterialExpressionFunctionInput_14"
+            ],
+            [
+              6,
+              "93af4612435d243e450fd0a87c672898",
+              "93af4612435d243e450fd0a87c672898",
+              "MaterialExpressionFunctionInput_26"
+            ],
+            [
+              7,
+              "55a34fd14c04d45d9ad1b8ae545949b1",
+              "55a34fd14c04d45d9ad1b8ae545949b1",
+              "MaterialExpressionFunctionInput_27"
+            ],
+            [
+              8,
+              "9f0cf35940f47e7fe8236c8d1f40e58b",
+              "9f0cf35940f47e7fe8236c8d1f40e58b",
+              "MaterialExpressionFunctionInput_10"
+            ],
+            [
+              9,
+              "babd6bb04de7cddd3e099ba1dcd81818",
+              "babd6bb04de7cddd3e099ba1dcd81818",
+              "MaterialExpressionFunctionInput_11"
+            ],
+            [
+              10,
+              "1d7aade94d917f715336a0bb101a5668",
+              "1d7aade94d917f715336a0bb101a5668",
+              "MaterialExpressionFunctionInput_12"
+            ],
+            [
+              11,
+              "c2b27f85414d317c6bdfa2ab65e2f83a",
+              "c2b27f85414d317c6bdfa2ab65e2f83a",
+              "MaterialExpressionFunctionInput_1"
+            ],
+            [
+              12,
+              "39844580406cc76d5392ec9cdac000c8",
+              "39844580406cc76d5392ec9cdac000c8",
+              "MaterialExpressionFunctionInput_2"
+            ],
+            [
+              13,
+              "3a2389a4470609abf91b9dbe69683860",
+              "3a2389a4470609abf91b9dbe69683860",
+              "MaterialExpressionFunctionInput_4"
+            ]
+          ],
+          "outputs": [
+            [
+              0,
+              "01159293423ad57d1fa91882253d14e5",
+              "01159293423ad57d1fa91882253d14e5",
+              "MaterialExpressionFunctionOutput_0"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "same_raw_consumer": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainCaptureHostR5\\consumer-receipt.json",
+    "sha256": "4f01eeee56ce85e71dde0baf9ae7ba9d0da25adc540d9f5015cfb4013b30b1c4",
+    "bytes": 24968
+  },
+  "normalization": {
+    "state": "HELD",
+    "base_color_admitted": false,
+    "diagnostic_sha256": "72009a6e24e0000d1c426cdbfe4e5bb3da1e0bfe18ba09ec436004c86f0222ac",
+    "reason": "Native complete closure and explicit switch proofs required; no HELD promotion",
+    "required_switches": []
+  },
+  "native_preservation": {
+    "project": true,
+    "world": true,
+    "pie": true,
+    "game_world": true,
+    "dirty_maps": true,
+    "dirty_content": true,
+    "scene": true,
+    "selection": true,
+    "camera": true
+  },
+  "postbuild_saved_preservation": {
+    "utc": "2026-10-21T01:31:47.348081+00:00",
+    "protected_saved_count": 27594,
+    "saved_changes": [],
+    "other_source_config_changes": [],
+    "staged_source_changes": [],
+    "reviewed_source_changes": [],
+    "engine_version_unchanged": true,
+    "canonical_header_unchanged": true,
+    "retained_support_diagnostic_changes": [],
+    "all_preserved": true
+  },
+  "final_saved_preservation": {
+    "utc": "2026-10-21T01:52:02.354269+00:00",
+    "protected_count": 27594,
+    "saved_changes": [],
+    "added_packages": [],
+    "missing_packages": [],
+    "other_source_config_changes": [],
+    "native_source_changes": [],
+    "canonical_header": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Build\\AcceptedContracts\\native_validation_result_snapshot.h",
+      "sha256": "8bde83421c0c7c0c1913cf6c9a9c6614e089ca78b84479a3b5e8ab9d869edfe7",
+      "bytes": 30250
+    },
+    "known_native_preservation": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "current_os": {
+      "editors": [
+        {
+          "Id": 45296,
+          "Path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
+          "MainWindowTitle": "DaedalusRealm - Unreal Editor",
+          "Responding": true,
+          "StartUtc": "2026-10-21T01:32:05.5884565Z"
+        }
+      ],
+      "listeners": [
+        {
+          "LocalAddress": "127.0.0.1",
+          "LocalPort": 9877,
+          "OwningProcess": 45296
+        }
+      ]
+    },
+    "resources": {
+      "length": 64,
+      "load": 91,
+      "total_physical": 34081234944,
+      "available_physical": 3038044160,
+      "total_commit_limit": 74883424256,
+      "available_commit": 29996867584,
+      "total_virtual": 140737488224256,
+      "available_virtual": 140733048864768,
+      "reserved": 0,
+      "observed_utc": "2026-10-21T01:51:12.589648+00:00",
+      "available_commit_note": "OS ullAvailPageFile; process virtual address space is separately recorded",
+      "minimum_free_physical_mib": 1660.15625,
+      "minimum_free_commit_mib": 2148.4375,
+      "safety_limit": "Measured data only; optional floors are explicit operator choices, not a measured general safe ceiling."
+    },
+    "locks": {
+      "compute": {
+        "holder": "codex-play-guard",
+        "note": "Allocated R5 material chain source/build/tests, one required traced reopen and one proof capture; app known terminal hub50790.",
+        "at": 1792545882.5268166,
+        "ttl": 3600.0,
+        "age_s": 1590.1,
+        "left_s": 2009.9
+      },
+      "unreal": {
+        "holder": "codex-play-guard",
+        "note": "Authorized R5 complete-path material implementation and one required restart with startup attribution; sole native writer preserving current work.",
+        "at": 1792545017.1381316,
+        "ttl": 7200.0,
+        "age_s": 2455.5,
+        "left_s": 4744.5
+      }
+    },
+    "native_calls": 0,
+    "offline_analysis_reconciliation": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupOfflineAnalysisR5\\reconciliation.json",
+      "sha256": "227322f03a933d3822fc88351391d33eb3b4f475839ab910805354a93ee83548",
+      "bytes": 20993
+    },
+    "fresh_native_call_requested": false,
+    "compute_release_performed": false,
+    "all_preserved": true
+  },
+  "normal_compute_release": {
+    "utc": "2026-10-21T01:52:35.405934+00:00",
+    "capture": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\NativeChainProofReadR5\\terminal.json",
+      "sha256": "ec750ef479e9af3d06cd83d1fad1a2b15707a4466cad8974b3c8073f7b92b885",
+      "bytes": 344717
+    },
+    "raw_proof": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainCaptureHostR5\\witness.raw.json",
+      "sha256": "72009a6e24e0000d1c426cdbfe4e5bb3da1e0bfe18ba09ec436004c86f0222ac",
+      "bytes": 162034
+    },
+    "metadata": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainCaptureHostR5\\capture-metadata.json",
+      "sha256": "d0ccdd3a187b2a764db24722851f146efb7952004b395accd3c0a08fa8981e4a",
+      "bytes": 1246
+    },
+    "tests": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainCaptureHostR5\\tests-qualified.json",
+      "sha256": "d2e0ff2ab9350d95f245657fb32277283b971ce494de7157d08a14e2e2e28ddd",
+      "bytes": 1628
+    },
+    "source_after": [
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusMaterialFactorLibrary.h",
+        "sha256": "2a3318342df5035809889a398409f1b3fc02a0b49361706bbd8b3daec2e0a450",
+        "bytes": 1753
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Public\\DaedalusMaterialFactorLibrary.h",
+        "sha256": "2a3318342df5035809889a398409f1b3fc02a0b49361706bbd8b3daec2e0a450",
+        "bytes": 1753
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusMaterialFactorLibrary.cpp",
+        "sha256": "858261101f12c5b6a432701226ab841995f9a9a482a4feb5ffb0fc591355f1c8",
+        "bytes": 66456
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusMaterialFactorLibrary.cpp",
+        "sha256": "858261101f12c5b6a432701226ab841995f9a9a482a4feb5ffb0fc591355f1c8",
+        "bytes": 66456
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusMaterialTransparentChainPolicy.h",
+        "sha256": "6211c5b9a238ebca3548f93f519a51f9863bcf4481a96b527abc07b69f2b43cc",
+        "bytes": 6699
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusMaterialTransparentChainPolicy.h",
+        "sha256": "6211c5b9a238ebca3548f93f519a51f9863bcf4481a96b527abc07b69f2b43cc",
+        "bytes": 6699
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\Tests\\DaedalusMaterialSwitchProofTest.cpp",
+        "sha256": "bcb9342cf73a8aa1f4ee7fae915c01a27de3b3ca1a4e514474084970af64cc53",
+        "bytes": 28047
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\Tests\\DaedalusMaterialSwitchProofTest.cpp",
+        "sha256": "bcb9342cf73a8aa1f4ee7fae915c01a27de3b3ca1a4e514474084970af64cc53",
+        "bytes": 28047
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusMaterialCachedDiagnostic.h",
+        "sha256": "f9ee622e714d1861586e35b59771e43a59151a9c5d66132103bfd0add2fb1220",
+        "bytes": 11430
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusMaterialSwitchProofPolicy.h",
+        "sha256": "033764eebd465aad4a34962b84f7cd198b275b5735a7a3258fdca9097b57fdb9",
+        "bytes": 3330
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Source\\DaedalusLink\\Private\\Tests\\DaedalusMaterialCachedDiagnosticTest.cpp",
+        "sha256": "0364d45b810aa2bfd57866007d0243052f5fbcef08bc220d77b4a0836822bb58",
+        "bytes": 16036
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Build\\AcceptedContracts\\native_validation_result_snapshot.h",
+        "sha256": "8bde83421c0c7c0c1913cf6c9a9c6614e089ca78b84479a3b5e8ab9d869edfe7",
+        "bytes": 30250
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\material-transparent-chain-operator-handoff-r5-20261021.json",
+        "sha256": "d2f4e514e326e92041c3f7961ddcee8b1fddb11ae2d4c0c88d8af4870c2e4947",
+        "bytes": 6399
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\material-transparent-chain-producer-contract-r5.json",
+        "sha256": "ea955258d284c860b3dea879bc8b38773105ddd612dcd19a42ab5c26c9cb8160",
+        "bytes": 11548
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\material-factor-policy-source\\tools\\unreal_mcp\\interchange_harness\\material_factor_policy.py",
+        "sha256": "d4a8acb7a99e0d27ac40467c2d345aa3fad211e34b95f8c9d907c7af30dc5243",
+        "bytes": 42558
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\material-factor-policy-source\\tools\\unreal_mcp\\interchange_harness\\test_material_factor_policy.py",
+        "sha256": "f7531c974319a914afa3dae33f3c9c7fce6d993deeb24904c1dec05f8c0f316d",
+        "bytes": 43325
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\material-factor-policy-source\\tools\\unreal_mcp\\interchange_harness\\ue_material_factor_facts.py",
+        "sha256": "97c28b714df2365daeeaf0123bbbd38a8e1cbfe7817d24915ee08d8681c3f976",
+        "bytes": 17151
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\material_chain_native_r5.py",
+        "sha256": "f0ff731a4790f50efe7d28a359234734a411442ed737a76883f37af49ce35a6e",
+        "bytes": 22878
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\material_native_run_r2.py",
+        "sha256": "61a1606800e20f4da80e0a82827f6c83bcb6fb71d5b5886f4b5d14f3ec90cc26",
+        "bytes": 3828
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\material_factor_build_r2.py",
+        "sha256": "5959d445ab2d9c3dc98ed25de34d71ff57a437830d1615969a117c1d86e13266",
+        "bytes": 13084
+      },
+      {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\AcceptanceHostR2\\witness.json",
+        "sha256": "38546a4920338aeab58985647eee35bca9eb5f00907bd236924a0aebfb811046",
+        "bytes": 9096
+      }
+    ],
+    "materials_after": [
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\CodexToolEvaluation\\EpicIntegrationR1\\Import\\Prop_PracticeCrate\\Prop_PracticeCrate_M0.uasset",
+        "sha256": "1735ad01f28b8e2d6b3307501530078376dda3014ea1bf5e8c016c7dbe2342e3",
+        "bytes": 53220
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\CodexToolEvaluation\\EpicIntegrationR1\\Import\\Prop_PracticeCrate\\Prop_PracticeCrate_M1.uasset",
+        "sha256": "fdc76cdd744f0ff049c4270d8b4d7f8af3fdc1a719c943ade7d00c342309c001",
+        "bytes": 53184
+      }
+    ],
+    "source_hashes_unchanged": true,
+    "saved_material_hashes_unchanged": true,
+    "release": {
+      "ok": true,
+      "lock": null
+    },
+    "after_locks": {
+      "unreal": {
+        "holder": "codex-play-guard",
+        "note": "Authorized R5 complete-path material implementation and one required restart with startup attribution; sole native writer preserving current work.",
+        "at": 1792545017.1381316,
+        "ttl": 7200.0,
+        "age_s": 2538.3,
+        "left_s": 4661.7
+      }
+    },
+    "own_compute_absent": true,
+    "unreal_retained": true,
+    "admission": "HELD",
+    "consumer_receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainCaptureHostR5\\consumer-receipt.json",
+      "sha256": "4f01eeee56ce85e71dde0baf9ae7ba9d0da25adc540d9f5015cfb4013b30b1c4",
+      "bytes": 24968
+    },
+    "startup_trace_receipt": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupTraceFinishR5\\receipt.json",
+      "sha256": "2457a99f673624673d60f9420a612864234db73f34344f6f5cd78e3843fa09f7",
+      "bytes": 5009
+    },
+    "new_reader_calls": 1,
+    "publication_actions": 0
+  },
+  "startup_trace": {
+    "state": "TRACE_STOPPED_FILE_CLOSED_READABLE",
+    "trace_finalized": true,
+    "trace_parsed": false,
+    "startup_cause_attributed": false,
+    "automatic_replay_permitted": false,
+    "stop_request_outcome": "KNOWN_CALLBACK_RETURNED",
+    "stop_calls_confirmed": 1,
+    "trace": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\startup-attribution-next-required-20261021\\startup-required-material-reopen.utrace",
+      "sha256": "c46c3697cfd8d7834420b8a6bed628355b11746f56f60c67bad2affd430d63ba",
+      "bytes": 122197514
+    },
+    "stop_calls": 1,
+    "trace_disconnected": true,
+    "status_before_preservation": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "stop_preservation": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "final_preservation": {
+      "project": true,
+      "world": true,
+      "pie": true,
+      "game_world": true,
+      "dirty_maps": true,
+      "dirty_content": true,
+      "scene": true,
+      "selection": true,
+      "camera": true
+    },
+    "status_before_flushed": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupTraceFinishR5\\before-flushed-status.json",
+      "sha256": "8ea5e3500372f886e6d339c668afff4f23d5753f211ce74031175a922f92594a",
+      "bytes": 3633
+    },
+    "status_after_flushed": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupTraceFinishR5\\after-flushed-status.json",
+      "sha256": "c8e8cb8e2105f27bc73e9f33b59729fef0c7996f75141de1526a8bbf9f8a7ce0",
+      "bytes": 3208
+    },
+    "utc": "2026-10-21T01:34:55.783235+00:00",
+    "source_before": [
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Content\\Python\\daedalus_control.py",
+        "sha256": "068123e5f3966d26371e3294620e2c708f26cc6164a21319f8b56e47b090dc1f",
+        "bytes": 10380
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\ClaudeUnrealBridge\\Content\\Python\\claude_unreal_bridge.py",
+        "sha256": "67b4bca79258d2efe39ebf08a4539e971ab96f398845219bd9e4148486314eae",
+        "bytes": 30740
+      },
+      {
+        "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Core\\Private\\ProfilingDebugging\\TraceAuxiliary.cpp",
+        "sha256": "2b22138854ce293b9ada5065da500f17b814cbfc1a5b9ece09701a5de337501a",
+        "bytes": 98700
+      },
+      {
+        "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\TraceLog\\Private\\Trace\\Writer.cpp",
+        "sha256": "6232c94bcccd384ec87c2c711c045b1d12959650e24ed99da8f4a952e0c55457",
+        "bytes": 50244
+      },
+      {
+        "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Engine\\Private\\KismetSystemLibrary.cpp",
+        "sha256": "73bdebccdeff448e4f2330123f66ee516767b3af66050d6bdfeca9ed893eeab6",
+        "bytes": 154733
+      }
+    ],
+    "source_after": [
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Content\\Python\\daedalus_control.py",
+        "sha256": "068123e5f3966d26371e3294620e2c708f26cc6164a21319f8b56e47b090dc1f",
+        "bytes": 10380
+      },
+      {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\ClaudeUnrealBridge\\Content\\Python\\claude_unreal_bridge.py",
+        "sha256": "67b4bca79258d2efe39ebf08a4539e971ab96f398845219bd9e4148486314eae",
+        "bytes": 30740
+      },
+      {
+        "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Core\\Private\\ProfilingDebugging\\TraceAuxiliary.cpp",
+        "sha256": "2b22138854ce293b9ada5065da500f17b814cbfc1a5b9ece09701a5de337501a",
+        "bytes": 98700
+      },
+      {
+        "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\TraceLog\\Private\\Trace\\Writer.cpp",
+        "sha256": "6232c94bcccd384ec87c2c711c045b1d12959650e24ed99da8f4a952e0c55457",
+        "bytes": 50244
+      },
+      {
+        "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Engine\\Private\\KismetSystemLibrary.cpp",
+        "sha256": "73bdebccdeff448e4f2330123f66ee516767b3af66050d6bdfeca9ed893eeab6",
+        "bytes": 154733
+      }
+    ],
+    "sources_unchanged": true,
+    "phase_outcomes": {
+      "ChainStartupTraceStatusBeforeR5": {
+        "dispatch_exists": true,
+        "reply_exists": true,
+        "known_success_terminal_exists": true
+      },
+      "ChainStartupTraceStopR5": {
+        "dispatch_exists": true,
+        "reply_exists": true,
+        "known_success_terminal_exists": true
+      },
+      "ChainStartupTraceStatusR5": {
+        "dispatch_exists": true,
+        "reply_exists": true,
+        "known_success_terminal_exists": true
+      }
+    },
+    "compute_release_performed": false
+  },
+  "startup_analysis_receipt": null,
+  "startup_analysis_error": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupOfflineAnalysisR5\\host-error.json",
+    "sha256": "91b7c7a1b352658bfd41431847ee4df063e96ced2f258273a54e3c94b519efae",
+    "bytes": 439
+  },
+  "startup_attribution": {
+    "schema": "daedalus.startup-attribution.r5",
+    "utc": "2026-10-21T01:48:49.668459+00:00",
+    "summary": "The saved CPU trace points to actor reconstruction during world component initialization: four calls total 87.441 seconds within the 108.995-second map load. Exact actor identity remains unbound. Analyzer warnings, the host memory-floor failure and unknown analyzer exit code are retained; this is diagnostic evidence, not a clean qualified analysis or a proven fix.",
+    "actual": true,
+    "synthetic": false,
+    "startup_fixed": false,
+    "analysis_clean": false,
+    "source_trace": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\startup-attribution-next-required-20261021\\startup-required-material-reopen.utrace",
+      "bytes": 122197514,
+      "sha256": "c46c3697cfd8d7834420b8a6bed628355b11746f56f60c67bad2affd430d63ba"
+    },
+    "interval": {
+      "log_path": "C:\\Unreal\\DaedalusRealm\\Saved\\Logs\\DaedalusRealm.log",
+      "captured_prefix": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupOfflineAnalysisR5\\startup-log-prefix.log",
+        "bytes": 355911,
+        "sha256": "8b56afae24ea4b31d4078289e4a197ad666700c9b329444e4d149dd8c1d0d3ba"
+      },
+      "editor_pid": 45296,
+      "editor_start_utc": "2026-10-21T01:32:05.5884565Z",
+      "startup_complete_utc": "2026-10-21T01:34:08.416000+00:00",
+      "actual_launch_to_startup_seconds": 122.827544,
+      "start_time_seconds": 0,
+      "end_time_seconds": 138,
+      "margin_seconds": 15,
+      "event_lines": [
+        "[2026.10.21-01.32.18:538][  0]LogInit: Display: Engine is initialized. Leaving FEngineLoop::Init()",
+        "[2026.10.21-01.32.18:541][  0]Cmd: MAP LOAD FILE=\"../../../../../../Unreal/DaedalusRealm/Content/Daedalus/DaedalusWorld.umap\" TEMPLATE=0 SHOWPROGRESS=0 FEATURELEVEL=3",
+        "[2026.10.21-01.34.08:416][  0]LogStall: Startup complete."
+      ],
+      "alignment_limit": "Log UTC is bound to the actual process. Export timestamps are trace-relative seconds; exact trace-zero/UTC equality is not attested. Events intersecting this interval retain unclipped timestamps/durations."
+    },
+    "cpu_timer_statistics": {
+      "UEditorEngine::Map_Load": {
+        "Name": "UEditorEngine::Map_Load",
+        "Count": "1",
+        "C.Avg": "1.000000",
+        "Incl": "108.994696",
+        "I.Min": "108.994696",
+        "I.Max": "108.994696",
+        "I.Avg": "108.994696",
+        "I.Med": "108.994696",
+        "Excl": "0.058598",
+        "E.Min": "0.058598",
+        "E.Max": "0.058598",
+        "E.Avg": "0.058598",
+        "E.Med": "0.058598"
+      },
+      "ULevel::IncrementalUpdateComponents": {
+        "Name": "ULevel::IncrementalUpdateComponents",
+        "Count": "216",
+        "C.Avg": "216.000000",
+        "Incl": "90.834648",
+        "I.Min": "0.000157",
+        "I.Max": "87.851089",
+        "I.Avg": "0.420531",
+        "I.Med": "0.000157",
+        "Excl": "0.008388",
+        "E.Min": "0.000001",
+        "E.Max": "0.003108",
+        "E.Avg": "0.000039",
+        "E.Med": "0.000001"
+      },
+      "AActor::RerunConstructionScripts": {
+        "Name": "AActor::RerunConstructionScripts",
+        "Count": "23318",
+        "C.Avg": "23318.000000",
+        "Incl": "89.708516",
+        "I.Min": "0.000003",
+        "I.Max": "22.454431",
+        "I.Avg": "0.003847",
+        "I.Med": "0.000003",
+        "Excl": "87.468503",
+        "E.Min": "0.000002",
+        "E.Max": "22.356010",
+        "E.Avg": "0.003751",
+        "E.Med": "0.000002"
+      },
+      "UWorld::UpdateWorldComponents": {
+        "Name": "UWorld::UpdateWorldComponents",
+        "Count": "2",
+        "C.Avg": "2.000000",
+        "Incl": "87.853601",
+        "I.Min": "0.000370",
+        "I.Max": "87.853230",
+        "I.Avg": "43.926800",
+        "I.Med": "87.409529",
+        "Excl": "0.000098",
+        "E.Min": "0.000045",
+        "E.Max": "0.000053",
+        "E.Avg": "0.000049",
+        "E.Med": "0.000053"
+      },
+      "UWorld::FlushLevelStreaming": {
+        "Name": "UWorld::FlushLevelStreaming",
+        "Count": "2",
+        "C.Avg": "2.000000",
+        "Incl": "15.398440",
+        "I.Min": "0.000016",
+        "I.Max": "15.398424",
+        "I.Avg": "7.699220",
+        "I.Med": "15.320654",
+        "Excl": "0.000027",
+        "E.Min": "0.000012",
+        "E.Max": "0.000015",
+        "E.Avg": "0.000013",
+        "E.Med": "0.000014"
+      }
+    },
+    "long_construction_events": [
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 17.7752695,
+        "EndTime": 40.2297006,
+        "Duration": 22.4544311,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 40.2297683,
+        "EndTime": 61.916099,
+        "Duration": 21.6863307,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 61.9161833,
+        "EndTime": 83.5951073,
+        "Duration": 21.678924,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 83.5951795,
+        "EndTime": 105.216281,
+        "Duration": 21.6211014,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 113.278581,
+        "EndTime": 113.796413,
+        "Duration": 0.5178329,
+        "Depth": 9
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 114.276108,
+        "EndTime": 114.77902,
+        "Duration": 0.5029128,
+        "Depth": 9
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 113.796419,
+        "EndTime": 114.276102,
+        "Duration": 0.479683,
+        "Depth": 9
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 112.668634,
+        "EndTime": 113.055784,
+        "Duration": 0.3871501,
+        "Depth": 9
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 113.061093,
+        "EndTime": 113.126419,
+        "Duration": 0.0653258,
+        "Depth": 9
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 113.219922,
+        "EndTime": 113.278453,
+        "Duration": 0.0585312,
+        "Depth": 9
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 113.126929,
+        "EndTime": 113.184777,
+        "Duration": 0.057848,
+        "Depth": 9
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 113.1849,
+        "EndTime": 113.219785,
+        "Duration": 0.0348851,
+        "Depth": 9
+      }
+    ],
+    "longest_cpu_events": [
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 10257,
+        "TimerName": "EditorInit",
+        "StartTime": 10.0567592,
+        "EndTime": 122.748478,
+        "Duration": 112.6917184,
+        "Depth": 0
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 15010,
+        "TimerName": "UEditorEngine::Map_Load",
+        "StartTime": 12.8667289,
+        "EndTime": 121.861425,
+        "Duration": 108.9946962,
+        "Depth": 1
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12636,
+        "TimerName": "UWorld::UpdateWorldComponents",
+        "StartTime": 17.4039256,
+        "EndTime": 105.257156,
+        "Duration": 87.8532305,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12639,
+        "TimerName": "ULevel::IncrementalUpdateComponents",
+        "StartTime": 17.4041103,
+        "EndTime": 105.255199,
+        "Duration": 87.8510892,
+        "Depth": 3
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 17.7752695,
+        "EndTime": 40.2297006,
+        "Duration": 22.4544311,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 40.2297683,
+        "EndTime": 61.916099,
+        "Duration": 21.6863307,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 61.9161833,
+        "EndTime": 83.5951073,
+        "Duration": 21.678924,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12644,
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": 83.5951795,
+        "EndTime": 105.216281,
+        "Duration": 21.6211014,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 15015,
+        "TimerName": "UWorld::FlushLevelStreaming",
+        "StartTime": 105.257157,
+        "EndTime": 120.655581,
+        "Duration": 15.3984241,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 15016,
+        "TimerName": "UWorld::UpdateLevelStreaming",
+        "StartTime": 105.257158,
+        "EndTime": 120.655566,
+        "Duration": 15.3984084,
+        "Depth": 3
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 2,
+        "TimerName": "FEngineLoop::PreInitPreStartupScreen",
+        "StartTime": 0.1928971,
+        "EndTime": 7.0412613,
+        "Duration": 6.8483642,
+        "Depth": 0
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 2987,
+        "TimerName": "LoadPackageInternal",
+        "StartTime": 12.8906997,
+        "EndTime": 17.385904,
+        "Duration": 4.4952043,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 290,
+        "TimerName": "FlushAsyncLoading",
+        "StartTime": 12.8907082,
+        "EndTime": 17.3858972,
+        "Duration": 4.495189,
+        "Depth": 3
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294552,
+        "TimerName": "FEngineLoop::Tick",
+        "StartTime": 122.748498,
+        "EndTime": 126.591033,
+        "Duration": 3.8425351,
+        "Depth": 0
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294744,
+        "TimerName": "Frame",
+        "StartTime": 122.748524,
+        "EndTime": 126.590958,
+        "Duration": 3.8424336,
+        "Depth": 1
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294552,
+        "TimerName": "FEngineLoop::Tick",
+        "StartTime": 126.591034,
+        "EndTime": 130.122195,
+        "Duration": 3.5311608,
+        "Depth": 0
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294744,
+        "TimerName": "Frame",
+        "StartTime": 126.591045,
+        "EndTime": 130.122186,
+        "Duration": 3.5311406,
+        "Depth": 1
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 298,
+        "TimerName": "AsyncLoadingTime",
+        "StartTime": 12.8912974,
+        "EndTime": 16.4166889,
+        "Duration": 3.5253915,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 30783,
+        "TimerName": "LevelStreamingDynamic",
+        "StartTime": 109.082784,
+        "EndTime": 112.584273,
+        "Duration": 3.5014889,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 74202,
+        "TimerName": "DaedalusWorld",
+        "StartTime": 109.082784,
+        "EndTime": 112.584272,
+        "Duration": 3.5014874,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 290,
+        "TimerName": "FlushAsyncLoading",
+        "StartTime": 109.082814,
+        "EndTime": 112.584269,
+        "Duration": 3.5014553,
+        "Depth": 6
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294572,
+        "TimerName": "Tick_Engine",
+        "StartTime": 126.591148,
+        "EndTime": 129.998491,
+        "Duration": 3.4073428,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 298,
+        "TimerName": "AsyncLoadingTime",
+        "StartTime": 109.082853,
+        "EndTime": 112.349268,
+        "Duration": 3.2664155,
+        "Depth": 7
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 137,
+        "TimerName": "InitDerivedData",
+        "StartTime": 2.490176,
+        "EndTime": 5.6914941,
+        "Duration": 3.2013181,
+        "Depth": 1
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 202,
+        "TimerName": "FDerivedDataBackendGraph::ParseGraph",
+        "StartTime": 2.4925132,
+        "EndTime": 5.691377,
+        "Duration": 3.1988638,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 248,
+        "TimerName": "FEngineLoop::PreInitPostStartupScreen",
+        "StartTime": 7.0412623,
+        "EndTime": 10.0567498,
+        "Duration": 3.0154875,
+        "Depth": 0
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 10258,
+        "TimerName": "FEngineLoop::Init",
+        "StartTime": 10.0567772,
+        "EndTime": 12.8641982,
+        "Duration": 2.807421,
+        "Depth": 1
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 339,
+        "TimerName": "Event_PreloadExports",
+        "StartTime": 109.672665,
+        "EndTime": 112.346516,
+        "Duration": 2.6738513,
+        "Depth": 8
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 30783,
+        "TimerName": "LevelStreamingDynamic",
+        "StartTime": 112.584279,
+        "EndTime": 114.834343,
+        "Duration": 2.2500641,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 110373,
+        "TimerName": "AddToWorld",
+        "StartTime": 112.584281,
+        "EndTime": 114.834335,
+        "Duration": 2.2500538,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 52413,
+        "TimerName": "PersistentLevel",
+        "StartTime": 112.584282,
+        "EndTime": 114.834335,
+        "Duration": 2.2500527,
+        "Depth": 6
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 110407,
+        "TimerName": "AddToWorld_UpdateComponents",
+        "StartTime": 112.599728,
+        "EndTime": 114.779028,
+        "Duration": 2.1792996,
+        "Depth": 7
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 12639,
+        "TimerName": "ULevel::IncrementalUpdateComponents",
+        "StartTime": 112.59973,
+        "EndTime": 114.779027,
+        "Duration": 2.1792965,
+        "Depth": 8
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 339,
+        "TimerName": "Event_PreloadExports",
+        "StartTime": 14.2335695,
+        "EndTime": 16.4123246,
+        "Duration": 2.1787551,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 10262,
+        "TimerName": "GEngine->Init",
+        "StartTime": 10.0568588,
+        "EndTime": 12.1110441,
+        "Duration": 2.0541853,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294572,
+        "TimerName": "Tick_Engine",
+        "StartTime": 122.771576,
+        "EndTime": 124.817793,
+        "Duration": 2.0462169,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294792,
+        "TimerName": "UWorld_Tick",
+        "StartTime": 127.558859,
+        "EndTime": 129.353596,
+        "Duration": 1.7947368,
+        "Depth": 3
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 4785,
+        "TimerName": "LoadStartupModules",
+        "StartTime": 8.1179186,
+        "EndTime": 9.8923693,
+        "Duration": 1.7744507,
+        "Depth": 1
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 295566,
+        "TimerName": "TickCompletionEvents",
+        "StartTime": 127.603754,
+        "EndTime": 129.35023,
+        "Duration": 1.7464763,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 295567,
+        "TimerName": "ProcessUntilTasksComplete",
+        "StartTime": 127.603754,
+        "EndTime": 129.350227,
+        "Duration": 1.7464738,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 295244,
+        "TimerName": "Tick_Core",
+        "StartTime": 125.13753,
+        "EndTime": 126.586504,
+        "Duration": 1.4489743,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 340,
+        "TimerName": "FLinkerLoad::Preload",
+        "StartTime": 109.676149,
+        "EndTime": 111.11135,
+        "Duration": 1.435201,
+        "Depth": 9
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 183034,
+        "TimerName": "FLinkerLoad::Preload Surface",
+        "StartTime": 109.676149,
+        "EndTime": 111.11135,
+        "Duration": 1.4352003,
+        "Depth": 10
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 183035,
+        "TimerName": "Surface",
+        "StartTime": 109.67615,
+        "EndTime": 111.11135,
+        "Duration": 1.4351997,
+        "Depth": 11
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 53144,
+        "TimerName": "ProceduralMeshComponent_LoadSerialize",
+        "StartTime": 109.676152,
+        "EndTime": 111.111344,
+        "Duration": 1.4351921,
+        "Depth": 12
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 183036,
+        "TimerName": "ProceduralMeshComponent /Game/Claude/ClaudeIsland_Sub.ClaudeIsland_Sub:PersistentLevel.DaedalusVoxelIsle_0.Surface",
+        "StartTime": 109.676153,
+        "EndTime": 111.111344,
+        "Duration": 1.4351914,
+        "Depth": 13
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 285,
+        "TimerName": "UObject_Serialize",
+        "StartTime": 109.676153,
+        "EndTime": 111.111339,
+        "Duration": 1.4351861,
+        "Depth": 14
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 2981,
+        "TimerName": "LoadModule",
+        "StartTime": 10.5733009,
+        "EndTime": 11.9565709,
+        "Duration": 1.38327,
+        "Depth": 3
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 2983,
+        "TimerName": "StartupModule",
+        "StartTime": 10.5735196,
+        "EndTime": 11.9565345,
+        "Duration": 1.3830149,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294576,
+        "TimerName": "UMassEntityEditorSubsystem::Tick",
+        "StartTime": 122.929088,
+        "EndTime": 124.208155,
+        "Duration": 1.2790669,
+        "Depth": 3
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 30782,
+        "TimerName": "LevelStreamingAlwaysLoaded",
+        "StartTime": 114.929247,
+        "EndTime": 116.085628,
+        "Duration": 1.1563805,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 74202,
+        "TimerName": "DaedalusWorld",
+        "StartTime": 114.929248,
+        "EndTime": 116.085627,
+        "Duration": 1.1563786,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 290,
+        "TimerName": "FlushAsyncLoading",
+        "StartTime": 114.929294,
+        "EndTime": 116.085624,
+        "Duration": 1.1563302,
+        "Depth": 6
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 30783,
+        "TimerName": "LevelStreamingDynamic",
+        "StartTime": 105.258554,
+        "EndTime": 106.361435,
+        "Duration": 1.1028812,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 110373,
+        "TimerName": "AddToWorld",
+        "StartTime": 105.258558,
+        "EndTime": 106.361413,
+        "Duration": 1.1028552,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 52413,
+        "TimerName": "PersistentLevel",
+        "StartTime": 105.258558,
+        "EndTime": 106.361413,
+        "Duration": 1.1028549,
+        "Depth": 6
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 110388,
+        "TimerName": "FStaticMeshCompilingManager::ProcessStaticMeshes",
+        "StartTime": 105.26221,
+        "EndTime": 106.359102,
+        "Duration": 1.0968923,
+        "Depth": 7
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 110389,
+        "TimerName": "ProcessFinishedStaticMeshes",
+        "StartTime": 105.262256,
+        "EndTime": 106.359101,
+        "Duration": 1.0968449,
+        "Depth": 8
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 151,
+        "TimerName": "WaitForTasks",
+        "StartTime": 127.603758,
+        "EndTime": 128.593004,
+        "Duration": 0.9892454,
+        "Depth": 6
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294589,
+        "TimerName": "FTaskBase::WaitWithNamedThreadsSupport",
+        "StartTime": 123.189148,
+        "EndTime": 124.138154,
+        "Duration": 0.9490063,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 30782,
+        "TimerName": "LevelStreamingAlwaysLoaded",
+        "StartTime": 118.805839,
+        "EndTime": 119.749913,
+        "Duration": 0.9440743,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 74202,
+        "TimerName": "DaedalusWorld",
+        "StartTime": 118.80584,
+        "EndTime": 119.749912,
+        "Duration": 0.9440719,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 290,
+        "TimerName": "FlushAsyncLoading",
+        "StartTime": 118.805884,
+        "EndTime": 119.74991,
+        "Duration": 0.9440258,
+        "Depth": 6
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 86,
+        "TimerName": "FPluginManager::LoadModulesForEnabledPlugins",
+        "StartTime": 8.1179276,
+        "EndTime": 8.977164,
+        "Duration": 0.8592364,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 30783,
+        "TimerName": "LevelStreamingDynamic",
+        "StartTime": 106.76085,
+        "EndTime": 107.587527,
+        "Duration": 0.8266775,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 74202,
+        "TimerName": "DaedalusWorld",
+        "StartTime": 106.76085,
+        "EndTime": 107.587527,
+        "Duration": 0.8266762,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 290,
+        "TimerName": "FlushAsyncLoading",
+        "StartTime": 106.760876,
+        "EndTime": 107.587524,
+        "Duration": 0.826648,
+        "Depth": 6
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 298,
+        "TimerName": "AsyncLoadingTime",
+        "StartTime": 114.929445,
+        "EndTime": 115.756071,
+        "Duration": 0.8266258,
+        "Depth": 7
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 55,
+        "TimerName": "ProcessNewlyLoadedUObjects",
+        "StartTime": 7.0478336,
+        "EndTime": 7.8730534,
+        "Duration": 0.8252198,
+        "Depth": 1
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 30782,
+        "TimerName": "LevelStreamingAlwaysLoaded",
+        "StartTime": 116.141425,
+        "EndTime": 116.956112,
+        "Duration": 0.8146871,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 74202,
+        "TimerName": "DaedalusWorld",
+        "StartTime": 116.141426,
+        "EndTime": 116.956111,
+        "Duration": 0.8146852,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 290,
+        "TimerName": "FlushAsyncLoading",
+        "StartTime": 116.141477,
+        "EndTime": 116.956108,
+        "Duration": 0.814631,
+        "Depth": 6
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 295260,
+        "TimerName": "FSlateApplication::AddModalWindow",
+        "StartTime": 125.294171,
+        "EndTime": 126.105622,
+        "Duration": 0.8114515,
+        "Depth": 3
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 86,
+        "TimerName": "FPluginManager::LoadModulesForEnabledPlugins",
+        "StartTime": 8.9771664,
+        "EndTime": 9.7861578,
+        "Duration": 0.8089914,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 930,
+        "TimerName": "FlushRenderingCommands",
+        "StartTime": 125.294174,
+        "EndTime": 126.080757,
+        "Duration": 0.7865825,
+        "Depth": 4
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 931,
+        "TimerName": "Sync_RenderingThread",
+        "StartTime": 125.294185,
+        "EndTime": 126.080756,
+        "Duration": 0.7865707,
+        "Depth": 5
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294375,
+        "TimerName": "EditorInit::MainFrame",
+        "StartTime": 121.965579,
+        "EndTime": 122.741891,
+        "Duration": 0.7763122,
+        "Depth": 1
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 294376,
+        "TimerName": "FMainFrameModule::CreateDefaultMainFrame",
+        "StartTime": 121.965583,
+        "EndTime": 122.741891,
+        "Duration": 0.7763074,
+        "Depth": 2
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 298,
+        "TimerName": "AsyncLoadingTime",
+        "StartTime": 118.806164,
+        "EndTime": 119.551623,
+        "Duration": 0.7454583,
+        "Depth": 7
+      },
+      {
+        "ThreadId": 2,
+        "ThreadName": "GameThread",
+        "TimerId": 65,
+        "TimerName": "AppInit",
+        "StartTime": 0.4399031,
+        "EndTime": 1.1757574,
+        "Duration": 0.7358543,
+        "Depth": 1
+      }
+    ],
+    "event_rows_read": 6665113,
+    "construction_events": 23318,
+    "stream_seconds": 20.70334449999791,
+    "runtime_actor_identity_proven": false,
+    "analysis_errors": [
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:665][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.02:666][  0]LogTraceServices: Error: [MemAlloc] Invalid Tag on Thread 2 (Tracker=0)!",
+      "[2026.10.21-01.44.05:863][ 12]LogTraceServices: Error: [MemAlloc] TagTracker errors: 25251"
+    ],
+    "limits": [
+      "Inclusive timer totals overlap and must not be added as independent costs.",
+      "Static CPU timer names do not attest actor identities or function bodies.",
+      "Log UTC and trace-relative zero are not assumed equal.",
+      "Analyzer exit code was not retained by the stopped wrapper; OS absence plus normal-exit log proves termination, not exit0.",
+      "No additional process, editor call, restart, settings change or memory-floor change."
+    ]
+  },
+  "startup_analysis_reconciliation": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupOfflineAnalysisR5\\reconciliation.json",
+    "sha256": "227322f03a933d3822fc88351391d33eb3b4f475839ab910805354a93ee83548",
+    "bytes": 20993
+  },
+  "startup_source_review": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\startup-source-attribution-review-r5.json",
+    "sha256": "069960a1bb7a8ccc15989fc5ee71ba4f8426de5e4b0add1acf7ee08ee1d2c4f4",
+    "bytes": 15752
+  },
+  "limits": [
+    "The current materials remain HELD; no actual compact factor witness or PBR quality acceptance.",
+    "The native parameter API returned true for bHasIridescence; this is a captured API fact, not a full shader-evaluation claim.",
+    "Selected base color reaches MF_Iridescence.MaterialExpressionLinearInterpolate_2; arithmetic is outside the transparent contract.",
+    "Connected ordinary selectors are StaticBoolParameter_3/_4, outside the typed StaticBool-only endpoint contract; no default inference.",
+    "Four passing pure native predicate tests do not prove arbitrary material graph semantics.",
+    "Existing material Python/UCX/startup/combat publication holds remain stopped."
+  ],
+  "native_runtime_qualified": false,
+  "pbr_quality_accepted": false,
+  "plan_only": true
+}

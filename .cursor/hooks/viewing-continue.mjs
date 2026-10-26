@@ -5,6 +5,16 @@
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
+
+const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+function git(args) {
+  try {
+    return execSync("git " + args, { cwd: REPO_ROOT, encoding: "utf8", timeout: 3000, stdio: ["ignore", "pipe", "ignore"] }).trim();
+  } catch {
+    return "";
+  }
+}
 
 const STATE_FILE = join(dirname(fileURLToPath(import.meta.url)), "state", "viewing-autopilot.json");
 
@@ -71,6 +81,14 @@ if (name.includes("stop") && !name.includes("subagent")) {
     console.log("{}");
     process.exit(0);
   }
+  // Quiet unless something new was committed or there is uncommitted work.
+  const head = git("rev-parse HEAD");
+  const dirty = git("status --porcelain --untracked-files=no").length > 0;
+  if (!dirty && head && head === state.lastHead) {
+    console.log("{}");
+    process.exit(0);
+  }
+  state.lastHead = head;
   state.lastContinueAt = Date.now();
   save(state);
   console.log(JSON.stringify({

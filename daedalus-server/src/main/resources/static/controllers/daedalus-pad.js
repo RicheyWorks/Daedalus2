@@ -194,7 +194,7 @@
       return st;
     }
     /* Sticks: radial center dead zone with rescale (no cross-shaped dead zone, diagonals stay diagonal), a max input
-       threshold, and an optional axial dead zone, per stick, from the Controller tab (Halo Infinite's three). */
+       threshold, and an optional axial dead zone, per stick, from the Controller tab (a modern console game's three). */
     const setting = (id, d) => (opt.settings && opt.settings.loaded() ? opt.settings.get(id) : d);
     function shapeStick(ax, kx, ky, side) {
       const dz = setting(side + "Deadzone", opt.deadzone * 100) / 100, mx = Math.max(dz + 0.01, setting(side + "MaxInput", 100) / 100);
@@ -215,9 +215,9 @@
     function stickDir(rec) {                               /* one cardinal: press 0.55 / release 0.40 / switch bias 0.10 */
       const src = rec.pre || rec.ax, x = src.lx, y = src.ly, axv = Math.abs(x), ayv = Math.abs(y), cur = rec.stick;
       const want = Math.max(axv, ayv) < 0.55 ? null : axv > ayv ? (x > 0 ? "right" : "left") : (y > 0 ? "down" : "up");
-      if (cur) {
-        const v = cur === "left" || cur === "right" ? axv : ayv;
-        if (v < 0.40) return (rec.stick = want);
+      if (cur) {                                             /* controller contract 1: the held direction's own signed component */
+        const v = cur === "right" ? x : cur === "left" ? -x : cur === "down" ? y : -y;
+        if (v <= 0.40) return (rec.stick = want);
         if (want && want !== cur && Math.max(axv, ayv) - v > 0.10) return (rec.stick = want);
         return cur;
       }
@@ -266,7 +266,12 @@
         if (!pads[gp.index] || pads[gp.index].id !== gp.id) connect(gp);
         const rec = pads[gp.index];
         if (bind) { bindStep(gp, rec); rec.logical = {}; continue; }
-        rec.logical = logical(rec, read(gp, rec), now);
+        const lg = logical(rec, read(gp, rec), now);
+        if (rec.suppress) {                                  /* after release-all: nothing counts until the pad is let go */
+          if (Object.values(lg).some(Boolean)) { rec.logical = {}; continue; }
+          rec.suppress = false;
+        }
+        rec.logical = lg;
       }
       for (const i in pads) if (!list[i] || list[i].connected === false || list[i].id !== pads[i].id) drop(i);
       merge();
@@ -340,10 +345,11 @@
       const r = index !== undefined ? pads[index] : Object.values(pads).find(p => p.ax && (p.ax.lx || p.ax.ly || p.ax.rx || p.ax.ry)) || Object.values(pads)[0];
       return r ? r.ax : { lx: 0, ly: 0, rx: 0, ry: 0, lt: 0, rt: 0 };
     }
+    function releaseAll() { keyHeld = {}; for (const i in pads) { pads[i].logical = {}; pads[i].suppress = true; pads[i].stick = null; } merge(); }
     if (root.addEventListener) {
       root.addEventListener("gamepadconnected", e => { if (e.gamepad) connect(e.gamepad); sample(); });
       root.addEventListener("gamepaddisconnected", e => { if (e.gamepad) drop(e.gamepad.index); merge(); });
-      root.addEventListener("blur", () => { keyHeld = {}; for (const i in pads) pads[i].logical = {}; merge(); });
+      root.addEventListener("blur", () => releaseAll());
       if (opt.arcadeKeys) {
         root.addEventListener("keydown", e => { const k = MAME_P1[e.code]; if (k && !e.repeat) { keyHeld[k] = true; merge(); } });
         root.addEventListener("keyup", e => { const k = MAME_P1[e.code]; if (k) { keyHeld[k] = false; merge(); } });
@@ -363,6 +369,7 @@
       held: a => !!held[a],
       pressed: a => { const v = !!edges[a]; edges[a] = false; return v; },
       released: a => { const v = !!ups[a]; ups[a] = false; return v; },
+      releaseAll,
       clearEdges: () => { for (const k in edges) edges[k] = false; for (const k in ups) ups[k] = false; },
       axes: index => { const r = index !== undefined ? pads[index] : Object.values(pads).find(p => p.ax && (p.ax.lx || p.ax.ly || p.ax.rx || p.ax.ry)) || Object.values(pads)[0];
         return r ? Object.assign({}, r.ax) : { lx: 0, ly: 0, rx: 0, ry: 0, lt: 0, rt: 0 }; },

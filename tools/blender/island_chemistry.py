@@ -19,6 +19,7 @@ Pure Python (no Blender, no Unreal). `manifest(seed)` returns the JSON the expor
 """
 import json
 import random
+import zlib
 
 HERBS = ("dawnleaf", "rillprism", "cinderbud", "stillmoss", "stridefern", "clearbell")   # docs/mechanics/RingInfusion.md
 HERB_ESSENCE = {"dawnleaf": "warm", "rillprism": "cool", "cinderbud": "warm", "stillmoss": "calm", "stridefern": "quick", "clearbell": "cool"}
@@ -80,10 +81,18 @@ REALMS = {
 }
 
 
+# Chemistry algorithm version, written into every profile. v1 (until 2026-10-15) seeded from hash(realm), which Python
+# salts per process, so v1 profiles are NOT reproducible. Manifests written under v1 stay as historical records:
+# do not regenerate them. Re-rolling an old seed under v2 gives new chemistry; the geometry hooks are unchanged.
+CHEM_ALGORITHM = "v2-crc32"
+
+
 def profile(seed, realm="WORLD-ZERO"):
     realm = realm.upper()
     R = REALMS.get(realm, REALMS["WORLD-ZERO"])
-    rng = random.Random((seed * 1_000_003 + 17) ^ (hash(realm) & 0xFFFF))
+    # zlib.crc32, not hash(): str hashes are salted per process (PYTHONHASHSEED), which made every island's chemistry
+    # change from run to run. crc32 is stable, so the same seed and realm give the same chemistry in any process.
+    rng = random.Random((seed * 1_000_003 + 17) ^ (zlib.crc32(realm.encode("utf-8")) & 0xFFFF))
     r = rng.random()
     grade = GRADES[0]
     acc = 0.0
@@ -123,6 +132,7 @@ def profile(seed, realm="WORLD-ZERO"):
     surplus = max(goods, key=goods.get)
     need = min(goods, key=goods.get)
     return {
+        "algorithm": CHEM_ALGORITHM,
         "seed": seed,
         "realm": realm,
         "realm_type": R["type"],

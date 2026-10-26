@@ -70,7 +70,7 @@ with sync_playwright() as p:
     print("after battle", st()["mode"], st()["party"][:2], st()["cue"])
     D = json.load(open(DEMO + "/data.json"))
     walk = set(D["dungeon_walkable"])
-    fl0 = D["dungeon"]["floors"][0]; c = fl0["chests"][0]
+    fl0 = D["dungeons"][0]["floors"][0]; c = fl0["chests"][0]
     for dx, dy, dn in ((0, 1, "up"), (0, -1, "down"), (1, 0, "left"), (-1, 0, "right")):
         if fl0["grid"][c["y"] + dy][c["x"] + dx] in walk: break
     pg.evaluate("PRISM_DEMO.warp('dungeon',%d,%d,0)" % (c["x"] + dx, c["y"] + dy)); pg.wait_for_timeout(400)
@@ -79,7 +79,7 @@ with sync_playwright() as p:
     print("chest", st()["dialog"], g0, "->", st()["gold"], st()["cue"])
     pg.screenshot(path=S + "/t_dungeon.png")
     press("a", 3, 300)
-    gate = D["dungeon"]["floors"][2]["boss"]["gate"]
+    gate = D["dungeons"][0]["floors"][2]["boss"]["gate"]
     pg.evaluate("PRISM_DEMO.warp('dungeon',%d,%d,2)" % (gate["x"], gate["y"] + 1)); pg.wait_for_timeout(400)
     pg.evaluate("PRISM_DEMO.hold('up',true)"); pg.wait_for_timeout(50); pg.evaluate("PRISM_DEMO.hold('up',false)"); pg.wait_for_timeout(300)
     press("a", wait=900); print("gate ask", st()["dialog"], st()["mode"])

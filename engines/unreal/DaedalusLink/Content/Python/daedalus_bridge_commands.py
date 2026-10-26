@@ -90,7 +90,7 @@ def hero_setup(p):
 
 def _register(bridge):
     bridge.register("daedalus.hero_setup", hero_setup,
-                    "Make Play spawn the Daedalus hero (walk, jump, dash, sword, Zelda II down-thrust) on an island: "
+                    "Make Play spawn the Daedalus hero (walk, jump, dash, sword, Lanternwild II down-thrust) on an island: "
                     "sets the GameMode Override and a PlayerStart on the ground", {"world": "str"})
     bridge.register("daedalus.import_world", import_world,
                     "Download a Daedalus World Package from its server, import it (chunks, materials, sky, ark, live "
