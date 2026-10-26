@@ -11,10 +11,10 @@ SLOTS_H = (pathlib.Path(__file__).resolve().parents[2] / "engines/unreal/Daedalu
 
 
 class PlanTest(unittest.TestCase):
-    def test_twelve_games_one_plan_each(self):
+    def test_fourteen_games_one_plan_each(self):
         plan = d.build_plan()
         self.assertEqual([p["game"] for p in plan], d.GAMES)
-        self.assertEqual(len(plan), 12)
+        self.assertEqual(len(plan), 14)
         self.assertEqual({p["expect"] for p in plan if p["game"] == "star_shooter"}, {"skip_source_menu"})
         self.assertTrue(all(p["expect"] == "manual_save" for p in plan if p["game"] != "star_shooter"))
 

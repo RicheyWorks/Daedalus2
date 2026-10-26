@@ -315,7 +315,8 @@
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"gloam_latch\", Seed)",
       "portable_tests": [
-        "desktop_gloam_latch"
+        "desktop_gloam_latch",
+        "desktop_gloam_latch_save"
       ],
       "option_count": 2,
       "capabilities": [
@@ -323,6 +324,7 @@
         "focus_freeze",
         "hints",
         "options",
+        "save_restore",
         "scoreboard",
         "source_keys"
       ],
@@ -336,7 +338,8 @@
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"reedbeat\", Seed)",
       "portable_tests": [
-        "desktop_reedbeat"
+        "desktop_reedbeat",
+        "desktop_reedbeat_save"
       ],
       "option_count": 2,
       "capabilities": [
@@ -344,6 +347,7 @@
         "focus_freeze",
         "hints",
         "options",
+        "save_restore",
         "scoreboard",
         "source_keys"
       ],

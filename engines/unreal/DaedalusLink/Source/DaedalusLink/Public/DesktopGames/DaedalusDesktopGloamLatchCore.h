@@ -2,6 +2,7 @@
 #pragma once
 #include "DaedalusDesktopGameTypes.h"
 #include <array>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -51,6 +52,29 @@ public:
         Option=Value; SessionSeed=Seed?Seed:1; Deal(); return true;
     }
     int GetOption() const override { return Option; }
+    // Save: option, seed, cursor, moves and the lit lamps as a bit mask. A cleared board
+    // has nothing to continue, so it saves nothing. Retry after a restore deals the same latch.
+    std::string SaveState() const override {
+        if(Won) return {};
+        std::uint32_t Bits=0;
+        for(int Cell=0;Cell<Width*Width;++Cell) if(Lamp[static_cast<std::size_t>(Cell)]) Bits|=1u<<Cell;
+        return "GLS1 "+std::to_string(Option)+" "+std::to_string(SessionSeed)+" "+std::to_string(CursorCell)
+            +" "+std::to_string(Moves)+" "+std::to_string(Bits);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t) override {
+        if(Payload.size()>96) return false;
+        std::istringstream In(Payload);std::string Version,Extra;
+        long long Mode=-1,SeedValue=-1,Cell=-1,MoveCount=-1,Bits=-1;
+        if(!(In>>Version>>Mode>>SeedValue>>Cell>>MoveCount>>Bits) || Version!="GLS1" || (In>>Extra)) return false;
+        if(Mode<0 || Mode>1 || SeedValue<1 || SeedValue>4294967295LL || MoveCount<0 || MoveCount>1000000) return false;
+        const int W=Mode==1?3:5;
+        if(Cell<0 || Cell>=W*W || Bits<=0 || Bits>=(1LL<<(W*W))) return false;
+        Option=static_cast<int>(Mode);SessionSeed=static_cast<std::uint32_t>(SeedValue);Deal();
+        for(int C=0;C<W*W;++C) Lamp[static_cast<std::size_t>(C)]=((Bits>>C)&1)!=0;
+        CursorCell=static_cast<int>(Cell);Moves=static_cast<int>(MoveCount);Won=false;
+        return true;
+    }
+    std::uint32_t SeedAfterRestore(std::uint32_t) const override { return SessionSeed; }
     bool SourceKeyDown(int Key) override {
         if(Won && (Key==5 || Key==6 || Key==7 || Key==8)) { Deal(); return true; }
         return false;

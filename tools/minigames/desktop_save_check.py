@@ -1,4 +1,4 @@
-"""In-editor save/restore check for the 12 desktop-arcade games (ADaedalusDesktopArcade).
+"""In-editor save/restore check for the 14 desktop-arcade games (ADaedalusDesktopArcade).
 
 Default is --dry-run: prints the plan and touches nothing. --run drives the editor through the
 authorized bridge (127.0.0.1:9877, execute_python) and needs:
@@ -15,7 +15,8 @@ Entry points read from DaedalusDesktopArcade.h/.cpp and DaedalusDesktopSaveSlots
 import argparse, datetime, json, os, shutil, socket, sys, time, urllib.request
 
 GAMES = ["beacon_sweep", "twinwake", "dungeon", "driftstone", "football", "glowtrail",
-         "riftwing", "emberstep", "star_shooter", "dodge_ball", "ironwake", "lanternwild"]
+         "riftwing", "emberstep", "star_shooter", "dodge_ball", "ironwake", "lanternwild",
+         "gloam_latch", "reedbeat"]
 SOURCE_MENU = {"star_shooter"}          # SaveStyle::SourceMenu in DaedalusDesktopSaveSlots.h
 COMPARE_FIELDS = ("id", "score", "option")  # ResumeGame: "score and mode restored, positions start fresh"
 ALLOWED_MAPS = ("/Game/Daedalus/Sandbox/NativeDiscovery/20261024/R18_C0030/L_GrandCollection_C0030",

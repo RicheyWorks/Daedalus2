@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #pragma once
 #include "DaedalusDesktopGameTypes.h"
+#include <sstream>
 #include <string>
 
 namespace daedalus { namespace desktop {
@@ -32,6 +33,24 @@ public:
         Option=Value; SessionSeed=Seed?Seed:1; Deal(); return true;
     }
     int GetOption() const override { return Option; }
+    // Save: option, hits and misses. The beat clock starts fresh on Continue, like the
+    // other cabinets restart positions. A finished round saves nothing.
+    std::string SaveState() const override {
+        if(Won||Lost) return {};
+        return "RBS1 "+std::to_string(Option)+" "+std::to_string(Hits)+" "+std::to_string(Misses);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>64) return false;
+        std::istringstream In(Payload);std::string Version,Extra;
+        long long Mode=-1,HitValue=-1,MissValue=-1;
+        if(!(In>>Version>>Mode>>HitValue>>MissValue) || Version!="RBS1" || (In>>Extra)) return false;
+        if(Mode<0 || Mode>1) return false;
+        const long long RoundNotes=Mode==1?4:8;
+        if(HitValue<0 || HitValue>=RoundNotes || MissValue<0 || MissValue>=3) return false;
+        Option=static_cast<int>(Mode);SessionSeed=Seed?Seed:1;Deal();
+        Hits=static_cast<int>(HitValue);Misses=static_cast<int>(MissValue);
+        return true;
+    }
     bool SourceKeyDown(int Key) override {
         if((Won||Lost) && (Key==5 || Key==6 || Key==7 || Key==8)) { Deal(); return true; }
         return false;
