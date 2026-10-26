@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Lighthouse Leases
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/lighthouse_leases.py'
+      - 'tools/streaming/lighthouse_leases_test.py'
+      - 'data/islands/disk-saver/lighthouse-leases-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/lighthouse-leases.yml'
+permissions:
+  contents: read
+jobs:
+  lighthouse-leases:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G171 Lighthouse Leases rules (drift bound = brute force, fencing rejects stale writes, oracle, replay, G86 tie-in)
+        run: python -m unittest tools/streaming/lighthouse_leases_test.py -v
+      - name: CLI smoke (fencing tokens win)
+        run: python tools/streaming/lighthouse_leases.py data/islands/disk-saver/lighthouse-leases-v1.json

@@ -90,7 +90,7 @@ void FDaedalusSettings::Add(FName Id, const TCHAR* Tab, const TCHAR* Section, co
 FDaedalusSettings::FDaedalusSettings()
 {
 	using K = EDaedalusSettingKind;
-	// Tabs and sections follow Halo Infinite's settings (Controller, Keyboard/Mouse, Video, Gameplay, Accessibility).
+	// Tabs and sections follow a modern console game's settings (Controller, Keyboard/Mouse, Video, Gameplay, Accessibility).
 	Tabs = {TEXT("CONTROLLER"), TEXT("KEYBOARD/MOUSE"), TEXT("VIDEO"), TEXT("GAMEPLAY"), TEXT("ACCESSIBILITY")};
 	const TCHAR* Pad = TEXT("CONTROLLER");
 	const TCHAR* Kbm = TEXT("KEYBOARD/MOUSE");
@@ -111,7 +111,7 @@ FDaedalusSettings::FDaedalusSettings()
 	Add("MouseSensH", Kbm, TEXT("Sensitivity"), TEXT("Mouse Sensitivity (Horizontal)"), TEXT("Camera turn per mouse count, on a 1-10 scale. Look is raw and unsmoothed, so high-polling mice (Razer 8K) track exactly."), K::Slider, 5, 0.5f, 10, 0.1f);
 	Add("MouseSensV", Kbm, TEXT("Sensitivity"), TEXT("Mouse Sensitivity (Vertical)"), TEXT("The same for up and down."), K::Slider, 5, 0.5f, 10, 0.1f);
 
-	Add("CameraView", TEXT("VIDEO"), TEXT("Camera"), TEXT("Camera View"), TEXT("First Person sees through the hero's eyes with a centred reticle, like Halo Infinite. Over the Shoulder sits behind one shoulder, like Gears of War. Classic follows from behind. R3, D-pad up or V switches in play."), K::Choice, 1, 0, 2, 1, TEXT(""), {TEXT("FIRST PERSON"), TEXT("OVER THE SHOULDER"), TEXT("CLASSIC")});
+	Add("CameraView", TEXT("VIDEO"), TEXT("Camera"), TEXT("Camera View"), TEXT("First Person sees through the hero's eyes with a centred reticle, like a modern console shooter. Over the Shoulder sits behind one shoulder; a third-person view. Classic follows from behind. R3, D-pad up or V switches in play."), K::Choice, 1, 0, 2, 1, TEXT(""), {TEXT("FIRST PERSON"), TEXT("OVER THE SHOULDER"), TEXT("CLASSIC")});
 	Add("Shoulder", TEXT("VIDEO"), TEXT("Camera"), TEXT("Shoulder"), TEXT("Which shoulder the camera sits behind in Over the Shoulder. LB, D-pad down or C swaps it in play."), K::Choice, 0, 0, 1, 1, TEXT(""), {TEXT("RIGHT"), TEXT("LEFT")});
 	Add("Reticle", TEXT("VIDEO"), TEXT("Camera"), TEXT("Reticle"), TEXT("The centred aiming reticle in First Person and Over the Shoulder, and with the blaster in any view."), K::Toggle, 1);
 	Add("FieldOfView", TEXT("VIDEO"), TEXT("Camera"), TEXT("Field of View"), TEXT("How wide the camera sees. Wider shows more of the islands; narrower feels closer to the hero."), K::Slider, 80, 70, 110, 1, TEXT("°"));

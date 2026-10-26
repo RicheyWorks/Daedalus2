@@ -39,13 +39,16 @@ def material():
 
 
 def import_island(seed, force=False, save=False):
-    """Import Island_C<seed>.glb under ROOT/Island_C<seed>; returns {layer: mesh path}."""
+    """Import Island_C<seed>.fbx under ROOT/Island_C<seed> (skipped when its meshes exist, unless force); returns
+    {layer: mesh path}."""
     name = "Island_C%d" % seed
     dest = "%s/%s" % (ROOT, name)
     # the interchange importer makes <destination_path>/<destination_name>/StaticMeshes/...
     paths = {}
-    for layers, d in ((LAYERS, dest), (OLD_LAYERS, dest), (OLD_LAYERS, dest + "/" + name)):
-        cand = {l: "%s/StaticMeshes/%s_%s.%s_%s" % (d, name, l, name, l) for l in layers}
+    # the FBX factory puts meshes flat under dest; Interchange nests <dest>/StaticMeshes (and the first GLB batch
+    # went one level deeper still)
+    for layers, d in ((LAYERS, dest), (LAYERS, dest + "/StaticMeshes"), (OLD_LAYERS, dest + "/StaticMeshes"), (OLD_LAYERS, dest + "/" + name + "/StaticMeshes")):
+        cand = {l: "%s/%s_%s.%s_%s" % (d, name, l, name, l) for l in layers}
         if unreal.EditorAssetLibrary.does_asset_exist(cand[layers[0]]):
             paths = cand
             break
@@ -58,17 +61,9 @@ def import_island(seed, force=False, save=False):
         t.automated = True
         t.replace_existing = True
         t.save = False
-        o = unreal.FbxImportUI()
-        o.import_materials = False
-        o.import_textures = False
-        o.import_as_skeletal = False
-        o.import_mesh = True
-        d = o.static_mesh_import_data
-        d.set_editor_property("combine_meshes", False)
-        d.set_editor_property("generate_lightmap_u_vs", False)
-        d.set_editor_property("auto_generate_collision", False)
-        d.set_editor_property("build_nanite", False)
-        d.set_editor_property("vertex_color_import_option", unreal.VertexColorImportOption.REPLACE)
+        o = _interchange_options() if USE_INTERCHANGE else None
+        if o is None:
+            o = _fbx_options()
         t.options = o
         unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([t])
         made = [str(p) for p in t.imported_object_paths]
@@ -93,6 +88,50 @@ def import_island(seed, force=False, save=False):
             unreal.EditorAssetLibrary.save_loaded_asset(sm)
         out[l] = p
     return out
+
+
+USE_INTERCHANGE = False     # research doc 2026-10-14: the documented 5.8 route; flip after one measured batch
+
+
+def _fbx_options():
+    o = unreal.FbxImportUI()
+    o.import_materials = False
+    o.import_textures = False
+    o.import_as_skeletal = False
+    o.import_mesh = True
+    d = o.static_mesh_import_data
+    d.set_editor_property("combine_meshes", False)
+    d.set_editor_property("generate_lightmap_u_vs", False)
+    d.set_editor_property("auto_generate_collision", False)
+    d.set_editor_property("build_nanite", False)
+    d.set_editor_property("vertex_color_import_option", unreal.VertexColorImportOption.REPLACE)
+    return o
+
+
+def _interchange_options():
+    """InterchangePipelineStackOverride with a GenericAssetsPipeline (Epic docs, see UNREAL-RESEARCH-2026-10-14.md):
+    Nanite off, no lightmap UVs, UCX by name, vertex colours replaced, no materials. Returns None if the classes
+    are missing so the FBX options stay the fallback."""
+    try:
+        p = unreal.InterchangeGenericAssetsPipeline()
+        mp = p.get_editor_property("mesh_pipeline")
+        mp.set_editor_property("build_nanite", False)
+        mp.set_editor_property("generate_lightmap_u_vs", False)
+        mp.set_editor_property("collision", True)
+        mp.set_editor_property("import_collision_according_to_mesh_name", True)
+        mp.set_editor_property("one_convex_hull_per_ucx", True)
+        cm = p.get_editor_property("common_meshes_properties")
+        cm.set_editor_property("vertex_color_import_option", unreal.InterchangeVertexColorImportOption.IVCIO_REPLACE)
+        try:
+            p.get_editor_property("material_pipeline").set_editor_property("import_materials", False)
+        except Exception:
+            pass
+        st = unreal.InterchangePipelineStackOverride()
+        st.add_pipeline(p)
+        return st
+    except Exception as e:
+        unreal.log_warning("interchange options unavailable: %s" % e)
+        return None
 
 
 def _simple_collision(sm):

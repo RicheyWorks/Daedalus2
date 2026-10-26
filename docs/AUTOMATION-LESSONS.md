@@ -1263,3 +1263,212 @@ the pagefile size is Richey's setting, not the bots'.
   Of the remaining 34 GB commit the visible processes account for ~20 GB (ChatGPT ×21 processes 4.7 GB, Edge/webview
   2.2 GB, node 0.9 GB); the rest is driver/kernel. The commit *limit* itself moved 61 → 52 → 46 GB between samples
   (dynamic pagefile), which is why commit % jumps without the editor changing.
+- **(10:50 addendum) The import cost was Nanite.** Interchange's GLB pipeline builds Nanite for every static mesh
+  by default: 10–19 s and ~250 MB per island. The classic FBX importer with `FbxImportUI.static_mesh_import_data.
+  build_nanite = False` (plus no lightmap UVs, no auto collision, vertex colours REPLACE) imports an island in 6 s
+  and the editor stays ~2 GB lighter per 24 islands. FBX vertex colours arrive raw and Unreal reads them as sRGB,
+  so the palette is sRGB-encoded at mesh build time (`c ** (1/2.2)`); the GLB exporter had done that silently. The
+  UCX hull is ignored by the importer here (0 simple collision even with `UCX_<body>_00`), so the body falls back to
+  complex-as-simple collision, which walks fine at 80k tris.
+- **Recycle loop trap.** A RAM gate that fires right after a relaunch (shader compile spike, a headless Blender
+  export running at the same time) recycles the editor again after 3 islands: 4 minutes per 3 islands. Sample the
+  gate after the editor has settled, and don't run the headless export while the editor is loading.
+
+## 2026-10-14 11:45 — Contest, Codex's turn: what their hand-off taught us (read during their editor slot, per Richey)
+- Scoreboard at 11:40: Team Claude 129 islands placed and saved (deeds 240–368, generator v4, 200 more exported);
+  Team Codex 47 static meshes saved as assets (3 "original-derived" islands + 21 harbor modules), 0 placed. Their
+  generator builds on our `voxel_island.plan` mesher and binds our `M_VoxelVertexColour` — so that material's name
+  and parentage are now a shared contract (don't reparent it mid-contest).
+- Worth adopting: (1) per-solid UCX convex pieces (equal-height patches in pivot space) instead of one hull — the
+  importer ignored our single hull anyway and complex-as-simple is the fallback; (2) `blender -b --factory-startup
+  --python-exit-code 1` so a script exception fails the job (Blender exits 0 otherwise); (3) read `.color_srgb`, not
+  `.color`, when identifying palette keys from a BMesh; (4) `FAssetCompilingManager.FinishCompilationForObjects`
+  for just the imported meshes instead of waiting on everything.
+- Backend fact they measured: on 5.8.3 the FBX AssetImportTask also goes through Interchange (log shows Interchange
+  translators), and FbxImportUI flags read back "unavailable" from `InterchangeAssetImportData`. Our readback of the
+  mesh itself (nanite_settings.enabled False, vertex colours present) is the proof that counts, not the import-data
+  object.
+- Hand-off protocol both teams now follow: the holder posts "UNREAL RELEASED" with the saved map state; nobody
+  closes or steals the editor; the other team's actors are never cleared; map saves are allowed only by the holder.
+
+## 2026-10-14 13:50 — Blender contest (hero island, types, clusters)
+- Richey's turn: contest moved to Blender; Codex keeps the editor; Team Claude builds headless. Hero island
+  "Skyfall" (`tools/blender/hero_island.py`, seed 39) exports in 7 s; a four-island cluster (1.9 M island voxels,
+  `island_cluster.py`) in ~27 s; Workbench previews render in 1.5 s each — `color_attributes.active_color` must be
+  set or VERTEX shading renders black. Relative out_dir paths lose the PNGs (Blender resolves render paths from its
+  own cwd): pass absolute paths.
+- Items need reasons: `island_chemistry.py` rolls the island's materials and economy from the seed per realm, and
+  `docs/mechanics/MECHANICS-REGISTRY.md` says where every mechanic is tracked (the Mechanics sheet in
+  `Realm-production-2026-10-13.xlsx` is THE list; WZ01–07 added). Halloween belongs to the Labyrinth (LAB09), so the
+  halloween cluster is a LABYRINTH realm asset.
+- Cluster palettes: colour keys are shared across islands, so a theme's grass override repainted every kind; the fix
+  is per-kind key suffixes (`grass@mesa`) added to the cluster palette.
+
+## 2026-10-14 14:20 — How Team Claude builds islands in Blender (recipe + seeds)
+**Pipeline.** `plan(seed, realm, kind)` is pure Python: it returns `{layer: [(x, y, z, colour_key)]}` at 1 voxel =
+1 m with the walk surface at z=0 and the pivot at the plateau centre. Nothing touches `bpy` until `build()`, so the
+planner is unit-tested in the cloud, previewed with a 20-line raster, and only then meshed. Meshing is
+`voxel_island.greedy_quads` (coplanar same-colour faces merged into rectangles; colour noise in 4-voxel patches
+and keel jaggedness per 3×3 column so the merge pays: 40k → 11k quads per island) into one bmesh per layer group
+(body / water / clouds) with a `Col` byte-colour attribute (palette sRGB-encoded because Unreal reads FBX colours
+as sRGB). Collision = one `UCX_<body>_NN` box per walk-surface rectangle. Export = FBX (`FBX_SCALE_ALL`, −Y
+forward, Z up) at 100 units per voxel → place in Unreal at scale 0.01. Previews: Workbench, `color_type VERTEX`,
+and the `Col` attribute must be the mesh's **active color** or it renders black. Always headless
+(`blender -b --factory-startup --python-exit-code 1 --python … -- args`), absolute output paths, one process at a
+time on the shared PC; never the GUI lock.
+
+**The seed decides everything.** `seed % 6` → biome/kind, `seed % 4 == 1` → two-lobed footprint, and
+`island_chemistry.profile(seed, realm)` rolls grade (COMMON 70 / RICH 25 / LEGENDARY 5 — the meteor crater and
+starmetal appear only on LEGENDARY), spring purity (filter hut), herbs, orchard species, crops, livestock, power
+source, fish, and the four goods. Same seed + realm = same island forever; a different realm = a different
+island from the same seed. Seeds used today: deeds 240–368 (World Zero, v1–v4 contest islands, placed), hero
+`Island_H39` (LEGENDARY: apple/cherry/pear, water wheel, filter needed), types H91 volcano, H124 frost, H125 mesa,
+H131 mire, H144 crystal (all LEGENDARY rolls so the crater shows), clusters seed 7 (members 70–73), Super Island
+seed 3 (members 30–33), hero batch 1000–1059 (kind = seed % 6). Find LEGENDARY seeds with
+`[s for s in range(N) if CH.profile(s)["geology"]["grade"] == "LEGENDARY"]`.
+
+**Composition rules that read from the air** (the quality bar + Codex's review notes): fat keel with ore veins and
+the glowing Heartstone, terraced rim, a hill with the lake on it, a stream with a readable source → basin →
+outlet → brink → waterfall and the destination (ocean basin) visible below, a sky river that arcs through a cloud,
+one principal landmark (cottage + chimney smoke) and clusters at different heights, groves not grids, flowers in
+beds and drifts, props with a reason (well, filter hut, water wheel, herb ring, trough, orchard, crop rows, pen,
+shop, inn, news board, smithy, windmill, power unit, dock + ark, pier, mine rails, cave mouth, crater).
+- **(14:45) Blender exporters slow down with scene size, not file size.** Exporting 171 rigged creatures in one
+  process went from 0.5 s to 10 s each because every creature's actions and armature stayed in `bpy.data`; glTF and
+  FBX scan all actions per export. Free the creature's objects, actions, mesh and armature after each export
+  (`build(keep=False)`): 71 creatures in 29 s. Keep them only for a contact sheet (`--sheet`).
+- Factory startup ships a cube, a light and a camera — delete them before a contact-sheet render or the cube
+  photobombs the sheet.
+
+## 2026-10-14 16:30 — eggs / house-grave-sports / Sims realm catalogues, and a launcher gotcha
+- `export_catalog.py {eggs|props|sims} OUT [family…]` exported 412 assets in ~10 s total (3 s / 2 s / 1 s plus
+  sheets) — freeing objects after every export is what keeps the FBX exporter linear.
+- The bridge's `powershell_start` background jobs stopped launching silently (job .ps1 written, no log, no
+  process, `running:true` forever). Launch the written job script yourself instead:
+  `Start-Process powershell -ArgumentList "-NoProfile","-ExecutionPolicy","Bypass","-File",<job.ps1> -WindowStyle Hidden`
+  and have the script append to its own log under `projects\_to_delete\`. Check `Get-Process blender` /
+  the log after 8 s — don't wait a minute on a job that never started.
+- Roof lesson: a sloped voxel roof built as "edge rows per z" leaves see-through slats when the run per rise
+  is > 1 voxel; fill `run` rows per step (voxel_sims starter house, 3-per-1 pitch) and add a ceiling slab.
+- Single-item contact sheets: centre with `(cols - 1) * pitch / 2`, not `cols * pitch / 2`.
+
+## 2026-10-14 18:45 — owls / HD islands
+- Names with underscores inside a field (`owl_great_horned_plain_01`) break `split("_")[i]`; parse with the module's
+  `spec()` — the owl sheets crashed after a clean 504 export because of this (exit 1, assets fine).
+- Collision boxes render unless `hide_render = True`; a deck-level UCX slab poked through the lake basin and turned
+  the lake magenta in Workbench. Keep the safety floor below the deepest carved basin.
+- Keel depth must scale with the plateau radius, or a small islet hangs a full-size keel and reads as a pillar.
+- Contact-sheet cameras look from −Y; creatures face +Y — rotate subjects 155–180° in the sheet only.
+- HD island timing (PC, Blender 4.3.1 headless): 17 s build+export per island, ~91 k tris, 612 objects (instances).
+- One Blender process building 8 HD islands slowed 17 s → 65 s per plot (scene accumulation). Fix: one fresh
+  process per plot (`--plot I`), then a links pass that re-imports the 8 GLBs to render. ~16 s per plot, flat.
+- Ring layouts: Ultra's 256 m pitch is neighbour-to-neighbour. For 7 around a hub the ring radius is
+  256 / (2·sin(π/7)) = 295 m; using 256 m as the radius left ring islands only ~2 m apart.
+- glTF re-import leaves `diffuse_color` white, so Workbench MATERIAL renders go grey — copy Base Color back (and
+  the mean vertex colour for vertex-coloured terrain) before rendering an imported overview.
+- Killing my own jobs by command-line match: exclude `$PID` — a pattern that appears in the command text also
+  matches the bridge shell running the kill, which cut that call short.
+
+## 2026-10-14 19:10 — 20× faster islands
+- `bpy.ops.mesh.primitive_*`, `transform_apply`, `modifier_apply`, `object.convert`, `object.join` each re-evaluate
+  the scene: an 860-object island took 70 s. Writing meshes with bmesh (`create_cube/cone/uvsphere`, `bevel`),
+  sweeping tubes along a Catmull-Rom spline, joining with `bm.from_mesh` after `me.transform(matrix_basis)`, and
+  resampling LODs from the height function brought it to 3.2 s. Use `matrix_basis` when nothing is parented —
+  `matrix_world` is stale until a depsgraph update.
+- Mass runs: one Blender process per worker, purge (`bpy.data.batch_remove`) objects/meshes/materials after every
+  item and clear module caches (material dict) — no slowdown over hundreds of items; resume by skipping existing json.
+- Shared PC memory: 4 workers + Unreal editor + another team's Cycles render took free RAM to 0.4 GB. Workers now
+  check `GlobalMemoryStatusEx` and pause below 1.5 GB.
+
+## 2026-10-14 20:25 — pixel art from Blender
+- Blender 4.x default view transform is AgX: Workbench renders come out desaturated and lifted. Use `Standard`.
+- Read renders back with `colorspace_settings.name = "Non-Color"` or pixels arrive linearised (muddy).
+- Pixelate inside Blender with numpy (no PIL there): alpha-weighted block average → colour limit (top-N of a coarse
+  lattice) → 1 px outline → nearest ×4. One shared module: `tools/blender/pixel_art.py`.
+- A shaded "sky" plane renders grey under studio light — render transparent and composite the gradient in numpy.
+- A gamma sweep on one sheet (1.0 vs 1.6) settled the setting in one render each; do that before batch re-renders.
+
+## Long-lived Blender workers: purge every datablock type, and recycle the process (2026-10-14)
+- The 10k HD-island run fell from ~45 to ~4 islands/min around island 8,000 while each island still built in 6-9 s:
+  the time went *between* islands. `purge()` removed objects/meshes/materials/curves but not the ThumbCam camera made
+  per island, images, actions, node groups, textures, stray collections/worlds — thousands of orphans per worker.
+- Fix (`hd_batch.py`): remove every datablock collection the build touches + `bpy.data.orphans_purge(do_recursive=True)`,
+  and `--max-items 150` so a wrapper loop restarts a fresh Blender (resume skips finished islands). After the restart:
+  ~3.5 s per island, ~60 islands/min on 4 workers.
+- Watch the gap between log lines, not the per-item time the script prints.
+
+## A new file under `static/` is a production decision (2026-10-15)
+
+Production serves only the files listed in `ProdSecurityConfig.STATIC_PAGES` / `STATIC_SCRIPTS` and answers 401 to
+the rest; `ProdStaticSurfacePostureTest` fails the build while any static file has no recorded posture. The
+controller and settings modules (`/controllers/*`, `/settings/*`) shipped without rows: the realm page imports them,
+so prod would have refused them and the realm would not have loaded. It went unseen because the realm checks ran
+against a dev-profile server, and because `mvn -pl daedalus-server test` without `-am` compiled against a stale core
+jar, failed to compile, and left an old passing surefire report on disk. Rules: list every new static file in
+`ProdSecurityConfig`; run the server tests with `-am`; read the BUILD line, never a leftover report.
+
+## Never seed from hash() of a string (2026-10-15)
+- **The bug:** `island_chemistry.profile()` used `hash(realm)` in its RNG seed. Python salts str hashes per process
+  (PYTHONHASHSEED), so every island's "seeded" chemistry differed on every run, and nothing ever flagged it.
+- **The fix:** `zlib.crc32(realm.encode())`.
+- **The rule:** derive seeds from stable digests (crc32/sha) only, and test determinism by building twice in two
+  processes and diffing the manifests.
+- **Cloud builds:** Blender work can run headless in the cloud with `pip install bpy` (5.2.2, cp313) in a venv. That
+  frees the shared PC for native work.
+
+## Blender: refresh matrices before measuring (2026-10-15)
+- **The trap:** objects created in a script have a stale `matrix_world` until `bpy.context.view_layer.update()` runs.
+  Distances computed with it compare meshes sitting at their local origin. Reedwheel r4's first clearance read was
+  0.09 m because of this.
+- **The rule:** call `view_layer.update()` before any `matrix_world`-based measurement, and verify a geometric claim
+  on the delivered files in a fresh process (`tools/blender/clearance_check.py`).
+- **Name the metric:** a centre-distance guard is not a mesh clearance. Say which metric was measured, report the
+  measured number, and make the build fail when the number misses.
+
+## Art can disprove a design: render it at the design's own numbers (2026-10-15)
+- **What happened:** the tide-pool habitat proposal r1 passed its checker (46/46): no zone dries out under any
+  resident. Building it as Tide-Pen art r2 showed a 3 m seahorse standing out of 0.7 m low water. The checker only
+  asked whether a zone was wet, never whether it was deeper than the creature is tall.
+- **The fix:** proposal r2 gives residents a body size read from the voxel creature itself, and both the checker and
+  the build fail when a used zone is shallower than its resident.
+- **Also found:** r1's sea sheet ran under the whole shelf at z=0, so every pool showed sea level whatever its own
+  water did. A tide state cannot be shown until each basin owns its water.
+- **Also found:** GLBs holding a `Glow_*` lamp sphere export the same triangles in a different order run to run, so
+  their bytes never hash the same twice; every other role is byte-identical. Pin the delivered bytes; do not expect
+  a rebuild to reproduce lamp roles byte for byte.
+
+## Blender's create_uvsphere is not deterministic: sort, then prove with two processes (2026-10-15)
+- **The bug:** `bmesh.ops.create_uvsphere` (Blender 5.2) emits the same faces in a different order on every run.
+  Every GLB holding a sphere (lamps, lanterns, string lights) hashed differently each build: Tide-Pen r1/r2
+  CareStation and Pen, and Reedwheel r4 Island, KeeperPost, Refuge, RepairStation, Shore and Walkway. The geometry
+  was the same each time; only the bytes moved.
+- **The fix:** `hd_island.sphere` now ranks the faces by rounded centroid and sorts them. `tools/blender/repro_check.py
+  RECIPE` builds twice in two fresh processes and compares every GLB: Tide-Pen r1/r2/r3 and Reedwheel r4 now pass.
+- **What this means for delivered packets:** bytes already delivered stay the reference, pinned by their hashes.
+  A rebuild of those sphere roles will not match them byte for byte. The rebuilt geometry is the same, and Reedwheel
+  r4's WheelFrame and WheelRotor do rebuild byte-identical.
+- **Confirmed for the operator too:** `bpy.ops.mesh.primitive_uv_sphere_add` gives a different face order on each
+  of three runs. It is used by labyrinth_cast, portal_hero_polish, realm_creature, gallery_creatures and
+  portal_slime_polish (not changed here; their owners decide).
+- **The shared fix:** `tools/blender/stable_mesh.py` provides `sort_faces(obj)` and `sort_bmesh(bm)`. Faces are
+  ranked by centroid, with vertex positions as the tie-break. Three runs of the operator sphere followed by
+  `sort_faces` give the same order. `hd_island.sphere` uses it, and Tide-Pen r3 rebuilds byte-identical to the
+  delivered packet.
+
+## A render cache key must cover everything that decides the pixels (2026-10-16)
+- **The bug:** PootScoot's review (32692) found it. `--resume` reused a shot when its GLBs, samples and resolution
+  matched. It ignored the camera frame, focus, view and the tide `adjust()` hook. A changed camera or water offset
+  with the same GLBs would have reused the old PNG while the card reported the new state. The sidecar was also
+  written in place, so an interrupted write could leave a half file.
+- **Did it happen?** No. In the Tide-Pen r3 batch the reused shots (after hero/detail/top, before hero/detail) had the
+  same cameras and no adjustment, and all three tide shots were rendered fresh.
+- **The fix:** `tools/blender/render_cache.py` (pure, no bpy) builds one cache key from:
+  - the sources;
+  - samples, resolution, view, focus and frame;
+  - a JSON identity for whatever `adjust()` does.
+
+  A shot made with `adjust()` but no identity is never reused. A malformed, truncated or pre-key sidecar is a miss,
+  not an error. The PNG and sidecar are written to temp files and renamed, sidecar last. `render_cache_test.py`
+  passes 22/22.
+- **The rule:** list every input that decides the output before writing a cache key, and make a missing or unnamed
+  input a miss.

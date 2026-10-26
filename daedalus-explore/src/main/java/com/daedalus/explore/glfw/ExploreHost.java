@@ -37,6 +37,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_GAMEPAD_AXIS_RIGHT_Y;
 import static org.lwjgl.glfw.GLFW.GLFW_GAMEPAD_BUTTON_DPAD_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_GAMEPAD_BUTTON_DPAD_RIGHT;
 import static org.lwjgl.glfw.GLFW.GLFW_JOYSTICK_1;
+import static org.lwjgl.glfw.GLFW.GLFW_JOYSTICK_LAST;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_B;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
@@ -61,6 +62,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwJoystickIsGamepad;
+import static org.lwjgl.glfw.GLFW.glfwUpdateGamepadMappings;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSetInputMode;
@@ -150,6 +152,7 @@ public final class ExploreHost {
         if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
+        loadPadMappings();
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -298,7 +301,8 @@ public final class ExploreHost {
 
     private static ExploreInput.Intent pad(GLFWGamepadState state, double dt,
                                          boolean[] snapHeld) {
-        if (!glfwJoystickIsGamepad(GLFW_JOYSTICK_1) || !glfwGetGamepadState(GLFW_JOYSTICK_1, state)) {
+        int jid = firstGamepad();
+        if (jid < 0 || !glfwGetGamepadState(jid, state)) {
             return ExploreInput.Intent.none();
         }
         boolean left = state.buttons(GLFW_GAMEPAD_BUTTON_DPAD_LEFT) == GLFW_PRESS;
@@ -313,6 +317,34 @@ public final class ExploreHost {
                 state.axes(GLFW_GAMEPAD_AXIS_RIGHT_X),
                 state.axes(GLFW_GAMEPAD_AXIS_RIGHT_Y),
                 snapLeft, snapRight, dt);
+    }
+
+    /** The first connected joystick GLFW recognises as a gamepad, in any slot, or -1. */
+    private static int firstGamepad() {
+        for (int jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; jid++) {
+            if (glfwJoystickIsGamepad(jid)) {
+                return jid;
+            }
+        }
+        return -1;
+    }
+
+    /** Hand GLFW the community controller database, so retro pads, adapters and arcade sticks map as gamepads. */
+    private static void loadPadMappings() {
+        String db = com.daedalus.explore.PadMappings.load();
+        if (db.isEmpty()) {
+            return;
+        }
+        byte[] bytes = db.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        ByteBuffer buf = org.lwjgl.system.MemoryUtil.memAlloc(bytes.length + 1);
+        try {
+            buf.put(bytes).put((byte) 0).flip();
+            if (!glfwUpdateGamepadMappings(buf)) {
+                System.err.println("Daedalus: GLFW rejected part of the controller database");
+            }
+        } finally {
+            org.lwjgl.system.MemoryUtil.memFree(buf);
+        }
     }
 
     private static int upload(byte[] rgba) {

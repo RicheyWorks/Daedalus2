@@ -1,0 +1,154 @@
+// ARCHIVED NATIVE-FAILED PROBE. Not compiled or registered by the plugin.
+// Do not rerun unchanged, suppress the ensure, or change the NotValidated oracle.
+// Full compiled test source SHA256 bcb8ee02eb401de3ded0e47083fc79f8f718cae078886dd80a58d2f169d5eb62.
+// This preserves the original attempted assertions; failure/policy limits are in the adjacent proof.
+// SPDX-License-Identifier: MIT
+#include "DaedalusNativeValidationBridge.h"
+#include "DaedalusEditorAcceptanceLibrary.h"
+
+#if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
+#include "Dom/JsonObject.h"
+#include "AssetRegistry/AssetData.h"
+#include "Editor.h"
+#include "EditorValidatorBase.h"
+#include "EditorValidatorSubsystem.h"
+#include "Logging/TokenizedMessage.h"
+#include "Misc/AutomationTest.h"
+#include "Misc/CommandLine.h"
+#include "Misc/Parse.h"
+#include "Misc/Guid.h"
+#include "Misc/PackageName.h"
+#include "Misc/ScopeExit.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
+#include "Serialization/JsonWriter.h"
+#include "UObject/Package.h"
+#include "UObject/StrongObjectPtr.h"
+// Real aggregate, using the normal initialized editor subsystem and its unchanged
+// enabled validators. An unmapped, in-memory-only owner fixture has no package file
+// or localization root to validate. This is deliberately NOT the saved /Game
+// wrapper contract or a replacement oracle for NamedFixtures above.
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDaedalusValidationUnmappedAggregateTest,
+    "Daedalus.Editor.Validation.UnmappedNotValidatedAggregate",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FDaedalusValidationUnmappedAggregateTest::RunTest(const FString& Parameters)
+{
+    if (!IsInGameThread() || !GEditor || GEditor->PlayWorld)
+    {
+        AddError(TEXT("Editor game thread without PIE required; no validation performed."));
+        return false;
+    }
+    UEditorValidatorSubsystem* Subsystem = GEditor->GetEditorSubsystem<UEditorValidatorSubsystem>();
+    if (!Subsystem) { AddError(TEXT("Initialized editor validator subsystem missing.")); return false; }
+    const FString PackageName = TEXT("/DaedalusValidationControl/NotValidated_") + FGuid::NewGuid().ToString(EGuidFormats::Digits);
+    FString Filename;
+    if (FPackageName::TryConvertLongPackageNameToFilename(PackageName, Filename) || FindPackage(nullptr, *PackageName))
+    {
+        AddError(TEXT("Fixture root must remain unmapped and new; no mount/overwrite fallback."));
+        return false;
+    }
+    TStrongObjectPtr<UPackage> Package(CreatePackage(*PackageName));
+    Package->SetPackageFlags(PKG_InMemoryOnly);
+    TStrongObjectPtr<UDaedalusAcceptanceValidationFixture> Fixture(
+        NewObject<UDaedalusAcceptanceValidationFixture>(Package.Get(), TEXT("NotValidated"), RF_Public | RF_Standalone));
+    ON_SCOPE_EXIT
+    {
+        // Only the objects allocated above; no disk asset, registry entry, forced
+        // GC, global validator, or existing dirty package is saved/removed/reset.
+        Fixture->MarkAsGarbage();
+        Package->MarkAsGarbage();
+    };
+    Fixture->Outcome = EDaedalusAcceptanceValidationOutcome::NotValidated;
+    const FString Path = Fixture->GetPathName();
+    const FAssetData Asset(Fixture.Get());
+    if (!Asset.IsValid() || Asset.FastGetAsset(false) != Fixture.Get() || Package->IsDirty())
+    {
+        AddError(TEXT("Private loaded clean fixture identity failed; no native call."));
+        return false;
+    }
+    auto EnabledNames = [Subsystem]()
+    {
+        TArray<FString> Names;
+        Subsystem->ForEachEnabledValidator([&Names](UEditorValidatorBase* Validator)
+        { Names.Add(Validator->GetClass()->GetPathName()); return true; });
+        Names.Sort();
+        return Names;
+    };
+    const TArray<FString> Before = EnabledNames();
+    if (Before.IsEmpty())
+    {
+        AddError(TEXT("Normal global validators must be present; empty private-subsystem substitution refused."));
+        return false;
+    }
+    FValidateAssetsSettings Settings;
+    Settings.bCollectPerAssetDetails = true;
+    Settings.bLoadAssetsForValidation = true;
+    Settings.bUnloadAssetsLoadedForValidation = false;
+    Settings.bLoadExternalObjectsForValidation = true;
+    Settings.bCaptureAssetLoadLogs = true;
+    Settings.bCaptureLogsDuringValidation = true;
+    Settings.bCaptureWarningsDuringValidationAsErrors = false;
+    Settings.bSkipExcludedDirectories = false;
+    Settings.bShowIfNoFailures = false;
+    Settings.bValidateReferencersOfDeletedAssets = false;
+    Settings.ValidationUsecase = EDataValidationUsecase::Script;
+    Settings.MaxAssetsToValidate = 2;
+    Settings.bSilent = true;
+    Settings.ShowMessageLogSeverity.Reset();
+    FValidateAssetsResults Results;
+    const int32 NativeReturn = Subsystem->ValidateAssetsWithSettings({Asset}, Settings, Results);
+    const TArray<FString> After = EnabledNames();
+    const auto Projection = FDaedalusNativeValidationBridge::ProjectNativeResult({Path}, Settings, NativeReturn, Results, false);
+    TestEqual(TEXT("Real native return"), NativeReturn, 0);
+    TestEqual(TEXT("Exactly one requested"), Results.NumRequested, 1);
+    TestEqual(TEXT("Checked, not skipped"), Results.NumChecked, 1);
+    TestEqual(TEXT("No skipped substitution"), Results.NumSkipped, 0);
+    TestEqual(TEXT("Genuine aggregate unable-to-validate"), Results.NumUnableToValidate, 1);
+    TestEqual(TEXT("No Valid contribution"), Results.NumValid, 0);
+    TestEqual(TEXT("No Invalid contribution"), Results.NumInvalid, 0);
+    TestEqual(TEXT("No warnings"), Results.NumWarnings, 0);
+    TestEqual(TEXT("No external expansion"), Results.NumExternalObjects, 0);
+    TestFalse(TEXT("No limit reached"), Results.bAssetLimitReached);
+    TestEqual(TEXT("One actual detail"), Results.AssetsDetails.Num(), 1);
+    const FValidateAssetsDetails* Detail = Results.AssetsDetails.Find(Path);
+    TestNotNull(TEXT("Exact fixture detail"), Detail);
+    if (Detail) TestEqual(TEXT("Actual native detail enum"), Detail->Result, EDataValidationResult::NotValidated);
+    TestTrue(TEXT("Global enabled validator identities unchanged"), Before == After);
+    TestFalse(TEXT("Private package remains clean"), Package->IsDirty());
+    TestEqual(TEXT("Unchanged adapter classification"), Projection.Status, EDaedalusNativeValidationStatus::NotValidated);
+    TestFalse(TEXT("Projection does not fabricate bridge invocation"), Projection.bNativeInvoked);
+    TestFalse(TEXT("NotValidated is never accepted"), Projection.bAccepted);
+    TestFalse(TEXT("Canonical projection retained"), Projection.SnapshotJson.IsEmpty());
+    TSharedRef<FJsonObject> Evidence = MakeShared<FJsonObject>();
+    Evidence->SetStringField(TEXT("scope"), TEXT("normal_global_subsystem_unmapped_in_memory_fixture"));
+    Evidence->SetStringField(TEXT("asset"), Path);
+    Evidence->SetBoolField(TEXT("native_invoked_by_test"), true);
+    Evidence->SetBoolField(TEXT("bridge_wrapper_invoked"), false);
+    Evidence->SetNumberField(TEXT("native_return"), NativeReturn);
+    Evidence->SetNumberField(TEXT("requested"), Results.NumRequested);
+    Evidence->SetNumberField(TEXT("checked"), Results.NumChecked);
+    Evidence->SetNumberField(TEXT("skipped"), Results.NumSkipped);
+    Evidence->SetNumberField(TEXT("unable"), Results.NumUnableToValidate);
+    Evidence->SetNumberField(TEXT("valid"), Results.NumValid);
+    Evidence->SetNumberField(TEXT("invalid"), Results.NumInvalid);
+    Evidence->SetBoolField(TEXT("validators_unchanged"), Before == After);
+    Evidence->SetBoolField(TEXT("package_dirty"), Package->IsDirty());
+    Evidence->SetStringField(TEXT("canonical_projection_json"), Projection.SnapshotJson);
+    TArray<TSharedPtr<FJsonValue>> Stats;
+    for (const auto& Pair : Results.ValidatorStatistics)
+    {
+        TSharedRef<FJsonObject> Stat = MakeShared<FJsonObject>();
+        Stat->SetStringField(TEXT("validator"), Pair.Key.ToString());
+        Stat->SetNumberField(TEXT("assets_validated"), Pair.Value.AssetsValidated);
+        Stat->SetNumberField(TEXT("assets_added"), Pair.Value.AssetsAddedForValidation);
+        TestEqual(TEXT("No validator contribution relabelled"), Pair.Value.AssetsValidated, 0);
+        Stats.Add(MakeShared<FJsonValueObject>(Stat));
+    }
+    Evidence->SetArrayField(TEXT("validator_statistics"), Stats);
+    FString Text;
+    FJsonSerializer::Serialize(Evidence, TJsonWriterFactory<>::Create(&Text));
+    AddInfo(TEXT("UNMAPPED_NOTVALIDATED_NATIVE_V1 ") + Text);
+    return !HasAnyErrors();
+}
+#endif

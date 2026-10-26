@@ -1,0 +1,3102 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_RecordPlayer",
+   "kind": "Prop",
+   "seed": 3333,
+   "frame_of": [
+    "Prop_YTM_RecordPlayer_Crank",
+    "Prop_YTM_Record_Whole",
+    "Prop_YTM_Record_Scratched"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Hinge_Crank",
+     "mover": "Prop_YTM_RecordPlayer_Crank",
+     "pivot_m": [
+      0.182,
+      0.0,
+      0.09
+     ],
+     "motion": "spin",
+     "spin_axis_blender": [
+      1,
+      0,
+      0
+     ],
+     "spin_axis_ue": [
+      1,
+      0,
+      0
+     ],
+     "open_blender_euler_deg": null,
+     "open_ue_rotator": null
+    },
+    {
+     "socket": "SOCKET_Spin",
+     "mover": "Prop_YTM_Record_Whole",
+     "alt_movers": [
+      "Prop_YTM_Record_Scratched"
+     ],
+     "pivot_m": [
+      0.0,
+      0.0,
+      0.175
+     ],
+     "motion": "spin",
+     "spin_axis_blender": [
+      0,
+      0,
+      1
+     ],
+     "spin_axis_ue": [
+      0,
+      0,
+      1
+     ],
+     "rpm": 78,
+     "open_blender_euler_deg": null,
+     "open_ue_rotator": null
+    }
+   ],
+   "spec": {
+    "gap": "G33",
+    "ask": "youtube-master 48984",
+    "size_m": "cabinet 0.36 m, ~0.58 m to the horn top; record 10 in (0.254 m)",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX cabinet + horn; crank and record own UCX",
+    "split": "frame glb (UEB 48812): root hulls only; crank at SOCKET_Hinge_Crank, record at SOCKET_Spin"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RecordPlayer_M0",
+     "colour": "walnut",
+     "hex": "6B4226",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_RecordPlayer_M1",
+     "colour": "green felt",
+     "hex": "2E4A3A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_RecordPlayer_M2",
+     "colour": "brass",
+     "hex": "B08D3C",
+     "roughness": 0.45,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RecordPlayer",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Plinth_L1",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Cabinet",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.34,
+        0.14
+       ],
+       "centre": [
+        0,
+        0,
+        0.09
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Cabinet_L1",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.34,
+        0.14
+       ],
+       "centre": [
+        0,
+        0,
+        0.09
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Platter",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.015,
+       "centre": [
+        0,
+        0,
+        0.1675
+       ],
+       "slot": 1,
+       "segments": 24,
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Spindle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.02,
+       "centre": [
+        0,
+        0,
+        0.185
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ArmBase",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.03,
+       "centre": [
+        0,
+        0.155,
+        0.175
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Neck",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.013,
+       "length": 0.045,
+       "centre": [
+        0,
+        0.155,
+        0.2125
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "AxleBoss",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.018,
+       "r2": 0.018,
+       "length": 0.012,
+       "centre": [
+        0.176,
+        0,
+        0.09
+       ],
+       "slot": 2,
+       "segments": 10,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tonearm",
+       "shape": "box",
+       "size": [
+        0.2207,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.025,
+        0.0475,
+        0.196
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -76.9081
+       ]
+      },
+      {
+       "name": "Head",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.02,
+        0.012
+       ],
+       "centre": [
+        0.05,
+        -0.06,
+        0.19
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -76.9081
+       ]
+      },
+      {
+       "name": "Stylus",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0015,
+       "r2": 0.0015,
+       "length": 0.008,
+       "centre": [
+        0.05,
+        -0.06,
+        0.182
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Horn",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.013,
+         0.0
+        ],
+        [
+         0.01566,
+         0.05333
+        ],
+        [
+         0.02522,
+         0.10667
+        ],
+        [
+         0.04282,
+         0.16
+        ],
+        [
+         0.06915,
+         0.21333
+        ],
+        [
+         0.10473,
+         0.26667
+        ],
+        [
+         0.15,
+         0.32
+        ]
+       ],
+       "centre": [
+        0.0,
+        0.155,
+        0.235
+       ],
+       "slot": 2,
+       "segments": 20,
+       "caps": [
+        false,
+        false
+       ],
+       "rot": [
+        36.8699,
+        0,
+        0
+       ],
+       "lod1": {
+        "segments": 10
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hinge_Crank",
+     "location": [
+      0.182,
+      0.0,
+      0.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.182,
+      0.09,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Spin",
+     "location": [
+      0.0,
+      0.0,
+      0.175
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.175,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Needle",
+     "location": [
+      0.05,
+      -0.06,
+      0.178
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.178,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0.0,
+      -0.037,
+      0.491
+     ],
+     "parent": null,
+     "forward": [
+      0.0,
+      -0.6,
+      0.8
+     ],
+     "location_gltf": [
+      0.0,
+      0.491,
+      0.037
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_00",
+     "shape": "box",
+     "size": [
+      0.36,
+      0.36,
+      0.175
+     ],
+     "centre": [
+      0,
+      0,
+      0.0875
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_01",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.32,
+      0.37
+     ],
+     "centre": [
+      0,
+      -0.005,
+      0.39
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 600,
+    "lod1_triangles": 252,
+    "lod1_ratio": 0.42,
+    "objects": {
+     "Prop_YTM_RecordPlayer": 600
+    },
+    "bounds_min": [
+     -0.18,
+     -0.18,
+     0.0
+    ],
+    "bounds_max": [
+     0.182,
+     0.18,
+     0.581
+    ],
+    "dimensions": [
+     0.362,
+     0.36,
+     0.581
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "810cb479c3703923818d8abdc02f6a64a49dfd909937b0d984b575646b82c0aa"
+  },
+  {
+   "asset": "Prop_YTM_RecordPlayer_Crank",
+   "kind": "Prop",
+   "seed": 3333,
+   "mover_of": "Prop_YTM_RecordPlayer",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Crank",
+    "mover": "Prop_YTM_RecordPlayer_Crank",
+    "pivot_m": [
+     0.182,
+     0.0,
+     0.09
+    ],
+    "motion": "spin",
+    "spin_axis_blender": [
+     1,
+     0,
+     0
+    ],
+    "spin_axis_ue": [
+     1,
+     0,
+     0
+    ],
+    "open_blender_euler_deg": null,
+    "open_ue_rotator": null
+   },
+   "spec": {
+    "gap": "G33",
+    "ask": "youtube-master 48984",
+    "size_m": "cabinet 0.36 m, ~0.58 m to the horn top; record 10 in (0.254 m)",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX cabinet + horn; crank and record own UCX",
+    "split": "mover glb (UEB 48812): origin = crank axle"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RecordPlayer_Crank_M0",
+     "colour": "walnut",
+     "hex": "6B4226",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_RecordPlayer_Crank_M1",
+     "colour": "brass",
+     "hex": "B08D3C",
+     "roughness": 0.45,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RecordPlayer_Crank",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the axle (frame SOCKET_Hinge_Crank)",
+     "parts": [
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.03,
+       "centre": [
+        0.015,
+        0.0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Arm",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.014,
+        0.08
+       ],
+       "centre": [
+        0.03,
+        0.0,
+        0.035
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Arm_L1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.014,
+        0.08
+       ],
+       "centre": [
+        0.03,
+        0.0,
+        0.035
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Knob",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.011,
+       "r2": 0.011,
+       "length": 0.03,
+       "centre": [
+        0.051,
+        0.0,
+        0.068
+       ],
+       "slot": 0,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_Crank_00",
+     "shape": "box",
+     "size": [
+      0.08,
+      0.026,
+      0.1
+     ],
+     "centre": [
+      0.04,
+      0,
+      0.042
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "off_centre_ok": "origin is the crank axle (attach at Prop_YTM_RecordPlayer SOCKET_Hinge_Crank)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 108,
+    "lod1_triangles": 44,
+    "lod1_ratio": 0.407,
+    "objects": {
+     "Prop_YTM_RecordPlayer_Crank": 108
+    },
+    "bounds_min": [
+     0.0,
+     -0.011,
+     -0.006
+    ],
+    "bounds_max": [
+     0.066,
+     0.011,
+     0.0785
+    ],
+    "dimensions": [
+     0.066,
+     0.022,
+     0.0845
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b0221346cebfe75d7f443188d09ce3162141bdc8aa0248e26a211cb1c579e5e1"
+  },
+  {
+   "asset": "Prop_YTM_Record_Whole",
+   "kind": "Prop",
+   "seed": 3333,
+   "mover_of": "Prop_YTM_RecordPlayer",
+   "hinge": {
+    "socket": "SOCKET_Spin",
+    "mover": "Prop_YTM_Record_Whole",
+    "alt_movers": [
+     "Prop_YTM_Record_Scratched"
+    ],
+    "pivot_m": [
+     0.0,
+     0.0,
+     0.175
+    ],
+    "motion": "spin",
+    "spin_axis_blender": [
+     0,
+     0,
+     1
+    ],
+    "spin_axis_ue": [
+     0,
+     0,
+     1
+    ],
+    "rpm": 78,
+    "open_blender_euler_deg": null,
+    "open_ue_rotator": null
+   },
+   "record_state": "Whole",
+   "spec": {
+    "gap": "G33",
+    "ask": "youtube-master 48984",
+    "size_m": "cabinet 0.36 m, ~0.58 m to the horn top; record 10 in (0.254 m)",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX cabinet + horn; crank and record own UCX",
+    "split": "mover glb: origin = record bottom centre = frame SOCKET_Spin",
+    "note": "scratch eats the cadence: gouge across the inner grooves"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Record_Whole_M0",
+     "colour": "black shellac",
+     "hex": "16161A",
+     "roughness": 0.35,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Record_Whole_M1",
+     "colour": "cream label / bare gouge",
+     "hex": "E8DCC0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_Record_Whole_M2",
+     "colour": "groove sheen",
+     "hex": "3A3A40",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Record_Whole",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "record; spins about Z at SOCKET_Spin",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.127,
+       "r2": 0.127,
+       "length": 0.003,
+       "centre": [
+        0,
+        0,
+        0.0015
+       ],
+       "slot": 0,
+       "segments": 32,
+       "lod1": {
+        "segments": 16
+       }
+      },
+      {
+       "name": "Label",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.045,
+       "length": 0.0006,
+       "centre": [
+        0,
+        0,
+        0.0033
+       ],
+       "slot": 1,
+       "segments": 16,
+       "lod1": {
+        "segments": 8
+       }
+      },
+      {
+       "name": "Groove0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0588,
+         0.003
+        ],
+        [
+         0.06,
+         0.0034
+        ],
+        [
+         0.0612,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 2,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Groove1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0838,
+         0.003
+        ],
+        [
+         0.085,
+         0.0034
+        ],
+        [
+         0.0862,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 2,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Groove2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.1088,
+         0.003
+        ],
+        [
+         0.11,
+         0.0034
+        ],
+        [
+         0.1112,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 2,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Spin",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_Record_Whole_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.127,
+     "r2": 0.127,
+     "length": 0.004,
+     "centre": [
+      0,
+      0,
+      0.002
+     ],
+     "segments": 12,
+     "parent": null,
+     "tris": 44,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 472,
+    "lod1_triangles": 232,
+    "lod1_ratio": 0.492,
+    "objects": {
+     "Prop_YTM_Record_Whole": 472
+    },
+    "bounds_min": [
+     -0.127,
+     -0.127,
+     0.0
+    ],
+    "bounds_max": [
+     0.127,
+     0.127,
+     0.0036
+    ],
+    "dimensions": [
+     0.254,
+     0.254,
+     0.0036
+    ],
+    "collision_tris": 44
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "209d9b524a147a80d5304d1c22b5c5d24a4ebe337bac08504760fcd8329189ca"
+  },
+  {
+   "asset": "Prop_YTM_Record_Scratched",
+   "kind": "Prop",
+   "seed": 3333,
+   "mover_of": "Prop_YTM_RecordPlayer",
+   "hinge": {
+    "socket": "SOCKET_Spin",
+    "mover": "Prop_YTM_Record_Whole",
+    "alt_movers": [
+     "Prop_YTM_Record_Scratched"
+    ],
+    "pivot_m": [
+     0.0,
+     0.0,
+     0.175
+    ],
+    "motion": "spin",
+    "spin_axis_blender": [
+     0,
+     0,
+     1
+    ],
+    "spin_axis_ue": [
+     0,
+     0,
+     1
+    ],
+    "rpm": 78,
+    "open_blender_euler_deg": null,
+    "open_ue_rotator": null
+   },
+   "record_state": "Scratched",
+   "spec": {
+    "gap": "G33",
+    "ask": "youtube-master 48984",
+    "size_m": "cabinet 0.36 m, ~0.58 m to the horn top; record 10 in (0.254 m)",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX cabinet + horn; crank and record own UCX",
+    "split": "mover glb: origin = record bottom centre = frame SOCKET_Spin",
+    "note": "scratch eats the cadence: gouge across the inner grooves"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Record_Scratched_M0",
+     "colour": "black shellac",
+     "hex": "16161A",
+     "roughness": 0.35,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Record_Scratched_M1",
+     "colour": "cream label / bare gouge",
+     "hex": "E8DCC0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_Record_Scratched_M2",
+     "colour": "groove sheen",
+     "hex": "3A3A40",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Record_Scratched",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "record; spins about Z at SOCKET_Spin",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.127,
+       "r2": 0.127,
+       "length": 0.003,
+       "centre": [
+        0,
+        0,
+        0.0015
+       ],
+       "slot": 0,
+       "segments": 32,
+       "lod1": {
+        "segments": 16
+       }
+      },
+      {
+       "name": "Label",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.045,
+       "length": 0.0006,
+       "centre": [
+        0,
+        0,
+        0.0033
+       ],
+       "slot": 1,
+       "segments": 16,
+       "lod1": {
+        "segments": 8
+       }
+      },
+      {
+       "name": "Groove0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0588,
+         0.003
+        ],
+        [
+         0.06,
+         0.0034
+        ],
+        [
+         0.0612,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 2,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Groove1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0838,
+         0.003
+        ],
+        [
+         0.085,
+         0.0034
+        ],
+        [
+         0.0862,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 2,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Groove2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.1088,
+         0.003
+        ],
+        [
+         0.11,
+         0.0034
+        ],
+        [
+         0.1112,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 2,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Gouge0",
+       "shape": "box",
+       "size": [
+        0.01675,
+        0.0035,
+        0.0008
+       ],
+       "centre": [
+        0.04494,
+        0.0323,
+        0.0035
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        40.2947
+       ]
+      },
+      {
+       "name": "Gouge1",
+       "shape": "box",
+       "size": [
+        0.01682,
+        0.0035,
+        0.0008
+       ],
+       "centre": [
+        0.05587,
+        0.04224,
+        0.0035
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        44.2702
+       ]
+      },
+      {
+       "name": "Gouge2",
+       "shape": "box",
+       "size": [
+        0.01679,
+        0.0035,
+        0.0008
+       ],
+       "centre": [
+        0.06645,
+        0.0526,
+        0.0035
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        44.5258
+       ]
+      },
+      {
+       "name": "Burr",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.006,
+        0.0012
+       ],
+       "centre": [
+        0.07172,
+        0.05778,
+        0.0036
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        20
+       ],
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Spin",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_Record_Scratched_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.127,
+     "r2": 0.127,
+     "length": 0.004,
+     "centre": [
+      0,
+      0,
+      0.002
+     ],
+     "segments": 12,
+     "parent": null,
+     "tris": 44,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 520,
+    "lod1_triangles": 268,
+    "lod1_ratio": 0.515,
+    "objects": {
+     "Prop_YTM_Record_Scratched": 520
+    },
+    "bounds_min": [
+     -0.127,
+     -0.127,
+     0.0
+    ],
+    "bounds_max": [
+     0.127,
+     0.127,
+     0.0042
+    ],
+    "dimensions": [
+     0.254,
+     0.254,
+     0.0042
+    ],
+    "collision_tris": 44
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "385e19f05a0665030779ec13e34ae626447febe906ad73492b085e59aabebc77"
+  },
+  {
+   "asset": "Prop_YTM_RecordPlayer_Whole",
+   "kind": "Prop",
+   "seed": 3333,
+   "state_of": "Prop_YTM_RecordPlayer",
+   "record_state": "Whole",
+   "spec": {
+    "gap": "G33",
+    "ask": "youtube-master 48984",
+    "size_m": "cabinet 0.36 m, ~0.58 m to the horn top; record 10 in (0.254 m)",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX cabinet + horn; crank and record own UCX",
+    "state": "assembled snapshot; ship the frame + movers for gameplay"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RecordPlayer_Whole_M0",
+     "colour": "walnut",
+     "hex": "6B4226",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_RecordPlayer_Whole_M1",
+     "colour": "green felt",
+     "hex": "2E4A3A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_RecordPlayer_Whole_M2",
+     "colour": "brass",
+     "hex": "B08D3C",
+     "roughness": 0.45,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_RecordPlayer_Whole_M3",
+     "colour": "black shellac",
+     "hex": "16161A",
+     "roughness": 0.35,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_YTM_RecordPlayer_Whole_M4",
+     "colour": "cream label / bare gouge",
+     "hex": "E8DCC0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_YTM_RecordPlayer_Whole_M5",
+     "colour": "groove sheen",
+     "hex": "3A3A40",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RecordPlayer_Whole",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Plinth_L1",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Cabinet",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.34,
+        0.14
+       ],
+       "centre": [
+        0,
+        0,
+        0.09
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Cabinet_L1",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.34,
+        0.14
+       ],
+       "centre": [
+        0,
+        0,
+        0.09
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Platter",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.015,
+       "centre": [
+        0,
+        0,
+        0.1675
+       ],
+       "slot": 1,
+       "segments": 24,
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Spindle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.02,
+       "centre": [
+        0,
+        0,
+        0.185
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ArmBase",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.03,
+       "centre": [
+        0,
+        0.155,
+        0.175
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Neck",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.013,
+       "length": 0.045,
+       "centre": [
+        0,
+        0.155,
+        0.2125
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "AxleBoss",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.018,
+       "r2": 0.018,
+       "length": 0.012,
+       "centre": [
+        0.176,
+        0,
+        0.09
+       ],
+       "slot": 2,
+       "segments": 10,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tonearm",
+       "shape": "box",
+       "size": [
+        0.2207,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.025,
+        0.0475,
+        0.196
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -76.9081
+       ]
+      },
+      {
+       "name": "Head",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.02,
+        0.012
+       ],
+       "centre": [
+        0.05,
+        -0.06,
+        0.19
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -76.9081
+       ]
+      },
+      {
+       "name": "Stylus",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0015,
+       "r2": 0.0015,
+       "length": 0.008,
+       "centre": [
+        0.05,
+        -0.06,
+        0.182
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Horn",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.013,
+         0.0
+        ],
+        [
+         0.01566,
+         0.05333
+        ],
+        [
+         0.02522,
+         0.10667
+        ],
+        [
+         0.04282,
+         0.16
+        ],
+        [
+         0.06915,
+         0.21333
+        ],
+        [
+         0.10473,
+         0.26667
+        ],
+        [
+         0.15,
+         0.32
+        ]
+       ],
+       "centre": [
+        0.0,
+        0.155,
+        0.235
+       ],
+       "slot": 2,
+       "segments": 20,
+       "caps": [
+        false,
+        false
+       ],
+       "rot": [
+        36.8699,
+        0,
+        0
+       ],
+       "lod1": {
+        "segments": 10
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_YTM_RecordPlayer_Whole_Crank",
+     "parent": "Prop_YTM_RecordPlayer_Whole",
+     "pivot": [
+      0.182,
+      0.0,
+      0.09
+     ],
+     "role": "crank (child; turns about X at the axle)",
+     "parts": [
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.03,
+       "centre": [
+        0.197,
+        0,
+        0.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Arm",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.014,
+        0.08
+       ],
+       "centre": [
+        0.212,
+        0,
+        0.125
+       ],
+       "slot": 2,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Arm_L1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.014,
+        0.08
+       ],
+       "centre": [
+        0.212,
+        0,
+        0.125
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Knob",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.011,
+       "r2": 0.011,
+       "length": 0.03,
+       "centre": [
+        0.233,
+        0,
+        0.158
+       ],
+       "slot": 0,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_YTM_RecordPlayer_Whole_Record",
+     "parent": "Prop_YTM_RecordPlayer_Whole",
+     "pivot": [
+      0.0,
+      0.0,
+      0.175
+     ],
+     "role": "record (child; spins about Z at SOCKET_Spin)",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.127,
+       "r2": 0.127,
+       "length": 0.003,
+       "centre": [
+        0,
+        0,
+        0.1765
+       ],
+       "slot": 3,
+       "segments": 32,
+       "lod1": {
+        "segments": 16
+       }
+      },
+      {
+       "name": "Label",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.045,
+       "length": 0.0006,
+       "centre": [
+        0,
+        0,
+        0.1783
+       ],
+       "slot": 4,
+       "segments": 16,
+       "lod1": {
+        "segments": 8
+       }
+      },
+      {
+       "name": "Groove0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0588,
+         0.003
+        ],
+        [
+         0.06,
+         0.0034
+        ],
+        [
+         0.0612,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.175
+       ],
+       "slot": 5,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Groove1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0838,
+         0.003
+        ],
+        [
+         0.085,
+         0.0034
+        ],
+        [
+         0.0862,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.175
+       ],
+       "slot": 5,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Groove2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.1088,
+         0.003
+        ],
+        [
+         0.11,
+         0.0034
+        ],
+        [
+         0.1112,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.175
+       ],
+       "slot": 5,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hinge_Crank",
+     "location": [
+      0.182,
+      0.0,
+      0.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.182,
+      0.09,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Spin",
+     "location": [
+      0.0,
+      0.0,
+      0.175
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.175,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Needle",
+     "location": [
+      0.05,
+      -0.06,
+      0.178
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.178,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0.0,
+      -0.037,
+      0.491
+     ],
+     "parent": null,
+     "forward": [
+      0.0,
+      -0.6,
+      0.8
+     ],
+     "location_gltf": [
+      0.0,
+      0.491,
+      0.037
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_Whole_00",
+     "shape": "box",
+     "size": [
+      0.36,
+      0.36,
+      0.175
+     ],
+     "centre": [
+      0,
+      0,
+      0.0875
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_Whole_01",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.32,
+      0.37
+     ],
+     "centre": [
+      0,
+      -0.005,
+      0.39
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_Whole_02",
+     "shape": "box",
+     "size": [
+      0.08,
+      0.026,
+      0.1
+     ],
+     "centre": [
+      0.222,
+      0,
+      0.132
+     ],
+     "parent": "Prop_YTM_RecordPlayer_Whole_Crank",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_Whole_03",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.127,
+     "r2": 0.127,
+     "length": 0.004,
+     "centre": [
+      0,
+      0,
+      0.177
+     ],
+     "segments": 12,
+     "parent": "Prop_YTM_RecordPlayer_Whole_Record",
+     "tris": 44,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 1180,
+    "lod1_triangles": 528,
+    "lod1_ratio": 0.447,
+    "objects": {
+     "Prop_YTM_RecordPlayer_Whole": 600,
+     "Prop_YTM_RecordPlayer_Whole_Crank": 108,
+     "Prop_YTM_RecordPlayer_Whole_Record": 472
+    },
+    "bounds_min": [
+     -0.18,
+     -0.18,
+     0.0
+    ],
+    "bounds_max": [
+     0.248,
+     0.18,
+     0.581
+    ],
+    "dimensions": [
+     0.428,
+     0.36,
+     0.581
+    ],
+    "collision_tris": 80
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b0c784779601059325c2908c4d65c3e6c575338c6047811bf9fb8fa3013e2845"
+  },
+  {
+   "asset": "Prop_YTM_RecordPlayer_Scratched",
+   "kind": "Prop",
+   "seed": 3333,
+   "state_of": "Prop_YTM_RecordPlayer",
+   "record_state": "Scratched",
+   "spec": {
+    "gap": "G33",
+    "ask": "youtube-master 48984",
+    "size_m": "cabinet 0.36 m, ~0.58 m to the horn top; record 10 in (0.254 m)",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX cabinet + horn; crank and record own UCX",
+    "state": "assembled snapshot; ship the frame + movers for gameplay"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RecordPlayer_Scratched_M0",
+     "colour": "walnut",
+     "hex": "6B4226",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_RecordPlayer_Scratched_M1",
+     "colour": "green felt",
+     "hex": "2E4A3A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_RecordPlayer_Scratched_M2",
+     "colour": "brass",
+     "hex": "B08D3C",
+     "roughness": 0.45,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_RecordPlayer_Scratched_M3",
+     "colour": "black shellac",
+     "hex": "16161A",
+     "roughness": 0.35,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_YTM_RecordPlayer_Scratched_M4",
+     "colour": "cream label / bare gouge",
+     "hex": "E8DCC0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_YTM_RecordPlayer_Scratched_M5",
+     "colour": "groove sheen",
+     "hex": "3A3A40",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RecordPlayer_Scratched",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Plinth_L1",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Cabinet",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.34,
+        0.14
+       ],
+       "centre": [
+        0,
+        0,
+        0.09
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Cabinet_L1",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.34,
+        0.14
+       ],
+       "centre": [
+        0,
+        0,
+        0.09
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Platter",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.015,
+       "centre": [
+        0,
+        0,
+        0.1675
+       ],
+       "slot": 1,
+       "segments": 24,
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Spindle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.02,
+       "centre": [
+        0,
+        0,
+        0.185
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ArmBase",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.03,
+       "centre": [
+        0,
+        0.155,
+        0.175
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Neck",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.013,
+       "length": 0.045,
+       "centre": [
+        0,
+        0.155,
+        0.2125
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "AxleBoss",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.018,
+       "r2": 0.018,
+       "length": 0.012,
+       "centre": [
+        0.176,
+        0,
+        0.09
+       ],
+       "slot": 2,
+       "segments": 10,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tonearm",
+       "shape": "box",
+       "size": [
+        0.2207,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.025,
+        0.0475,
+        0.196
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -76.9081
+       ]
+      },
+      {
+       "name": "Head",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.02,
+        0.012
+       ],
+       "centre": [
+        0.05,
+        -0.06,
+        0.19
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -76.9081
+       ]
+      },
+      {
+       "name": "Stylus",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0015,
+       "r2": 0.0015,
+       "length": 0.008,
+       "centre": [
+        0.05,
+        -0.06,
+        0.182
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Horn",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.013,
+         0.0
+        ],
+        [
+         0.01566,
+         0.05333
+        ],
+        [
+         0.02522,
+         0.10667
+        ],
+        [
+         0.04282,
+         0.16
+        ],
+        [
+         0.06915,
+         0.21333
+        ],
+        [
+         0.10473,
+         0.26667
+        ],
+        [
+         0.15,
+         0.32
+        ]
+       ],
+       "centre": [
+        0.0,
+        0.155,
+        0.235
+       ],
+       "slot": 2,
+       "segments": 20,
+       "caps": [
+        false,
+        false
+       ],
+       "rot": [
+        36.8699,
+        0,
+        0
+       ],
+       "lod1": {
+        "segments": 10
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_YTM_RecordPlayer_Scratched_Crank",
+     "parent": "Prop_YTM_RecordPlayer_Scratched",
+     "pivot": [
+      0.182,
+      0.0,
+      0.09
+     ],
+     "role": "crank (child; turns about X at the axle)",
+     "parts": [
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.03,
+       "centre": [
+        0.197,
+        0,
+        0.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Arm",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.014,
+        0.08
+       ],
+       "centre": [
+        0.212,
+        0,
+        0.125
+       ],
+       "slot": 2,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Arm_L1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.014,
+        0.08
+       ],
+       "centre": [
+        0.212,
+        0,
+        0.125
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Knob",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.011,
+       "r2": 0.011,
+       "length": 0.03,
+       "centre": [
+        0.233,
+        0,
+        0.158
+       ],
+       "slot": 0,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_YTM_RecordPlayer_Scratched_Record",
+     "parent": "Prop_YTM_RecordPlayer_Scratched",
+     "pivot": [
+      0.0,
+      0.0,
+      0.175
+     ],
+     "role": "record (child; spins about Z at SOCKET_Spin)",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.127,
+       "r2": 0.127,
+       "length": 0.003,
+       "centre": [
+        0,
+        0,
+        0.1765
+       ],
+       "slot": 3,
+       "segments": 32,
+       "lod1": {
+        "segments": 16
+       }
+      },
+      {
+       "name": "Label",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.045,
+       "length": 0.0006,
+       "centre": [
+        0,
+        0,
+        0.1783
+       ],
+       "slot": 4,
+       "segments": 16,
+       "lod1": {
+        "segments": 8
+       }
+      },
+      {
+       "name": "Groove0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0588,
+         0.003
+        ],
+        [
+         0.06,
+         0.0034
+        ],
+        [
+         0.0612,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.175
+       ],
+       "slot": 5,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Groove1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0838,
+         0.003
+        ],
+        [
+         0.085,
+         0.0034
+        ],
+        [
+         0.0862,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.175
+       ],
+       "slot": 5,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Groove2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.1088,
+         0.003
+        ],
+        [
+         0.11,
+         0.0034
+        ],
+        [
+         0.1112,
+         0.003
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.175
+       ],
+       "slot": 5,
+       "segments": 24,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 12
+       }
+      },
+      {
+       "name": "Gouge0",
+       "shape": "box",
+       "size": [
+        0.01675,
+        0.0035,
+        0.0008
+       ],
+       "centre": [
+        0.04494,
+        0.0323,
+        0.1785
+       ],
+       "slot": 4,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        40.2947
+       ]
+      },
+      {
+       "name": "Gouge1",
+       "shape": "box",
+       "size": [
+        0.01682,
+        0.0035,
+        0.0008
+       ],
+       "centre": [
+        0.05587,
+        0.04224,
+        0.1785
+       ],
+       "slot": 4,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        44.2702
+       ]
+      },
+      {
+       "name": "Gouge2",
+       "shape": "box",
+       "size": [
+        0.01679,
+        0.0035,
+        0.0008
+       ],
+       "centre": [
+        0.06645,
+        0.0526,
+        0.1785
+       ],
+       "slot": 4,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        44.5258
+       ]
+      },
+      {
+       "name": "Burr",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.006,
+        0.0012
+       ],
+       "centre": [
+        0.07172,
+        0.05778,
+        0.1786
+       ],
+       "slot": 4,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        20
+       ],
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hinge_Crank",
+     "location": [
+      0.182,
+      0.0,
+      0.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.182,
+      0.09,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Spin",
+     "location": [
+      0.0,
+      0.0,
+      0.175
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.175,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Needle",
+     "location": [
+      0.05,
+      -0.06,
+      0.178
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.178,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Sound",
+     "location": [
+      0.0,
+      -0.037,
+      0.491
+     ],
+     "parent": null,
+     "forward": [
+      0.0,
+      -0.6,
+      0.8
+     ],
+     "location_gltf": [
+      0.0,
+      0.491,
+      0.037
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_Scratched_00",
+     "shape": "box",
+     "size": [
+      0.36,
+      0.36,
+      0.175
+     ],
+     "centre": [
+      0,
+      0,
+      0.0875
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_Scratched_01",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.32,
+      0.37
+     ],
+     "centre": [
+      0,
+      -0.005,
+      0.39
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_Scratched_02",
+     "shape": "box",
+     "size": [
+      0.08,
+      0.026,
+      0.1
+     ],
+     "centre": [
+      0.222,
+      0,
+      0.132
+     ],
+     "parent": "Prop_YTM_RecordPlayer_Scratched_Crank",
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_RecordPlayer_Scratched_03",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.127,
+     "r2": 0.127,
+     "length": 0.004,
+     "centre": [
+      0,
+      0,
+      0.177
+     ],
+     "segments": 12,
+     "parent": "Prop_YTM_RecordPlayer_Scratched_Record",
+     "tris": 44,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 1228,
+    "lod1_triangles": 564,
+    "lod1_ratio": 0.459,
+    "objects": {
+     "Prop_YTM_RecordPlayer_Scratched": 600,
+     "Prop_YTM_RecordPlayer_Scratched_Crank": 108,
+     "Prop_YTM_RecordPlayer_Scratched_Record": 520
+    },
+    "bounds_min": [
+     -0.18,
+     -0.18,
+     0.0
+    ],
+    "bounds_max": [
+     0.248,
+     0.18,
+     0.581
+    ],
+    "dimensions": [
+     0.428,
+     0.36,
+     0.581
+    ],
+    "collision_tris": 80
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b8ae9a696ce531707c7e2a936007345563d7138ce45c106d95df2aa34452f934"
+  }
+ ]
+}

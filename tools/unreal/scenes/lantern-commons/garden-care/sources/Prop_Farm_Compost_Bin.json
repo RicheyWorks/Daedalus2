@@ -1,0 +1,10 @@
+{
+ "name": "Prop_Farm_Compost_Bin",
+ "family": "tool",
+ "voxel_cm": 10.0,
+ "parts": {
+  "body": 67
+ },
+ "pivot": "bottom-centre",
+ "wheels_spin": false
+}

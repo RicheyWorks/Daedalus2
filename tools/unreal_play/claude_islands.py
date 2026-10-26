@@ -62,10 +62,30 @@ def recycle_editor():
             except Exception:
                 continue
     subprocess.run([sys.executable, os.path.join(REPO, "tools", "unreal_mcp", "doctor.py"), "--fix"], capture_output=True, text=True, timeout=120)
-    print("RECYCLE: editor back, ram/commit %s" % (vitals(),), flush=True)
+    for _ in range(12):                 # let the shader-compile spike pass before the gate samples again
+        ram, commit = vitals()
+        if ram < RAM_MAX - 4:
+            break
+        time.sleep(20)
+    print("RECYCLE: editor back, ram/commit %s" % ((ram, commit),), flush=True)
+
+
+def reimport(start, stop, chunk):
+    """Re-import the FBX of seeds already placed (actors keep pointing at the same assets): used after the sRGB fix."""
+    for s in range(start, stop, chunk):
+        seeds = list(range(s, min(s + chunk, stop)))
+        code = ("import importlib, daedalus_claude_islands as C\nimportlib.reload(C)\n"
+                "def steps():\n    n = [len(C.import_island(s, force=True)) for s in %r]\n    yield\n    C.save_assets()\n    return n\n" % (seeds,))
+        r = wire.call(wire.UNREAL, "daedalus.steps", code=code, label="reimport %d" % s, timeout=1800)
+        print("reimport %s..%s: %s %.0fs error=%s" % (seeds[0], seeds[-1], r.get("result"), r.get("seconds") or 0, (r.get("error") or "-")[-200:]), flush=True)
+        if r.get("error"):
+            return 1
+    return 0
 
 
 def main(argv):
+    if argv and argv[0] == "reimport":
+        return reimport(int(argv[1]), int(argv[2]), int(argv[3]) if len(argv) > 3 else 3)
     start, stop = int(argv[0]), int(argv[1])
     chunk = int(argv[2]) if len(argv) > 2 else 4
     realm = argv[3] if len(argv) > 3 else "WORLD-ZERO"

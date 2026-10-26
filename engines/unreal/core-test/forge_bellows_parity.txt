@@ -1,0 +1,901 @@
+# forge_bellows_core_test.cpp --write: BLW 1 parity (hephaestus). 5 metals x oxen 0..2 x seeds 0..19 x steady/spam/fitful.
+m=0 ox=0 s=0 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=727 final=713 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=0 spam BLW 1 in=24 pm=200 cinders=3 doused=1 peak=830 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=0 fitful BLW 1 in=35 pm=291 cinders=0 doused=0 peak=701 final=389 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=1 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=727 final=709 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=1 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=1 fitful BLW 1 in=1 pm=8 cinders=0 doused=0 peak=662 final=556 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=2 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=726 final=721 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=2 spam BLW 1 in=19 pm=158 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=619 final=439 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=3 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=728 final=714 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=3 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=831 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=3 fitful BLW 1 in=2 pm=16 cinders=0 doused=0 peak=661 final=593 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=4 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=728 final=710 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=4 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=636 final=502 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=5 steady BLW 1 in=116 pm=966 cinders=0 doused=0 peak=727 final=714 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=5 spam BLW 1 in=21 pm=175 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=632 final=561 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=6 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=727 final=709 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=6 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=829 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=6 fitful BLW 1 in=5 pm=41 cinders=0 doused=0 peak=672 final=495 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=7 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=727 final=709 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=7 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=832 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=7 fitful BLW 1 in=11 pm=91 cinders=0 doused=0 peak=678 final=528 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=8 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=726 final=714 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=8 spam BLW 1 in=21 pm=175 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=8 fitful BLW 1 in=2 pm=16 cinders=0 doused=0 peak=672 final=613 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=9 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=726 final=714 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=9 spam BLW 1 in=21 pm=175 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=9 fitful BLW 1 in=3 pm=25 cinders=0 doused=0 peak=685 final=522 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=10 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=726 final=718 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=10 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=835 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=10 fitful BLW 1 in=21 pm=175 cinders=0 doused=0 peak=708 final=696 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=11 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=728 final=709 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=11 spam BLW 1 in=20 pm=166 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=11 fitful BLW 1 in=30 pm=250 cinders=0 doused=0 peak=698 final=644 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=12 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=727 final=709 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=12 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=831 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=633 final=511 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=13 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=727 final=709 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=13 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=832 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=630 final=423 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=14 steady BLW 1 in=113 pm=941 cinders=0 doused=0 peak=727 final=718 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=14 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=832 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=625 final=538 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=15 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=728 final=714 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=15 spam BLW 1 in=20 pm=166 cinders=3 doused=1 peak=835 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=634 final=454 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=16 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=728 final=709 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=16 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=649 final=585 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=17 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=728 final=715 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=17 spam BLW 1 in=25 pm=208 cinders=3 doused=1 peak=835 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=17 fitful BLW 1 in=38 pm=316 cinders=0 doused=0 peak=702 final=611 FITFUL ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=18 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=727 final=714 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=18 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=832 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=18 fitful BLW 1 in=8 pm=66 cinders=0 doused=0 peak=711 final=536 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=0 s=19 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=727 final=714 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=0 s=19 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=835 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=0 s=19 fitful BLW 1 in=7 pm=58 cinders=0 doused=0 peak=681 final=488 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=0 ox=1 s=0 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=732 final=731 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=0 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=830 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=0 fitful BLW 1 in=69 pm=575 cinders=0 doused=0 peak=767 final=453 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=1 s=1 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=732 final=726 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=1 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=829 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=1 fitful BLW 1 in=34 pm=283 cinders=0 doused=0 peak=746 final=631 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=2 steady BLW 1 in=116 pm=966 cinders=0 doused=0 peak=732 final=725 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=2 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=2 fitful BLW 1 in=3 pm=25 cinders=0 doused=0 peak=683 final=501 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=3 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=728 final=705 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=3 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=832 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=3 fitful BLW 1 in=7 pm=58 cinders=0 doused=0 peak=690 final=672 COLD ready=1 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=4 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=731 final=709 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=4 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=828 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=4 fitful BLW 1 in=6 pm=50 cinders=0 doused=0 peak=677 final=569 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=5 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=730 final=726 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=5 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=832 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=5 fitful BLW 1 in=5 pm=41 cinders=0 doused=0 peak=700 final=639 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=6 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=731 final=721 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=6 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=830 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=6 fitful BLW 1 in=22 pm=183 cinders=0 doused=0 peak=706 final=564 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=7 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=725 final=705 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=7 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=828 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=7 fitful BLW 1 in=62 pm=516 cinders=0 doused=0 peak=755 final=598 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=1 s=8 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=732 final=727 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=8 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=832 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=8 fitful BLW 1 in=14 pm=116 cinders=0 doused=0 peak=699 final=699 COLD ready=1 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=9 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=730 final=728 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=9 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=9 fitful BLW 1 in=44 pm=366 cinders=0 doused=0 peak=724 final=593 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=1 s=10 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=729 final=722 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=10 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=10 fitful BLW 1 in=42 pm=350 cinders=0 doused=0 peak=797 final=785 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=1 s=11 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=729 final=712 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=11 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=830 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=11 fitful BLW 1 in=62 pm=516 cinders=0 doused=0 peak=788 final=738 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=1 s=12 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=732 final=701 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=12 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=827 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=12 fitful BLW 1 in=1 pm=8 cinders=0 doused=0 peak=657 final=592 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=13 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=730 final=705 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=13 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=828 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=13 fitful BLW 1 in=4 pm=33 cinders=0 doused=0 peak=667 final=483 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=14 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=728 final=722 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=14 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=826 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=14 fitful BLW 1 in=17 pm=141 cinders=0 doused=0 peak=693 final=604 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=15 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=731 final=708 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=15 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=832 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=650 final=523 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=16 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=731 final=722 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=16 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=828 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=16 fitful BLW 1 in=46 pm=383 cinders=0 doused=0 peak=725 final=663 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=1 s=17 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=732 final=704 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=17 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=835 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=17 fitful BLW 1 in=61 pm=508 cinders=0 doused=0 peak=781 final=698 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=1 s=18 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=730 final=705 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=18 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=18 fitful BLW 1 in=15 pm=125 cinders=0 doused=0 peak=752 final=608 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=1 s=19 steady BLW 1 in=116 pm=966 cinders=0 doused=0 peak=731 final=730 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=1 s=19 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=1 s=19 fitful BLW 1 in=27 pm=225 cinders=0 doused=0 peak=736 final=563 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=0 ox=2 s=0 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=737 final=726 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=0 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=827 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=0 fitful BLW 1 in=57 pm=475 cinders=1 doused=0 peak=817 final=524 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=1 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=735 final=709 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=1 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=1 fitful BLW 1 in=57 pm=475 cinders=1 doused=0 peak=832 final=631 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=2 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=737 final=734 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=2 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=830 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=2 fitful BLW 1 in=39 pm=325 cinders=0 doused=0 peak=767 final=580 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=3 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=735 final=730 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=3 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=825 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=3 fitful BLW 1 in=47 pm=391 cinders=0 doused=0 peak=768 final=768 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=4 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=735 final=708 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=4 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=4 fitful BLW 1 in=71 pm=591 cinders=0 doused=0 peak=754 final=653 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=5 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=735 final=718 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=5 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=829 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=5 fitful BLW 1 in=77 pm=641 cinders=0 doused=0 peak=795 final=734 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=0 ox=2 s=6 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=737 final=727 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=6 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=824 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=6 fitful BLW 1 in=67 pm=558 cinders=0 doused=0 peak=754 final=652 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=7 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=736 final=714 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=7 spam BLW 1 in=8 pm=66 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=7 fitful BLW 1 in=60 pm=500 cinders=1 doused=0 peak=832 final=648 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=8 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=737 final=730 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=8 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=8 fitful BLW 1 in=48 pm=400 cinders=0 doused=0 peak=804 final=804 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=9 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=735 final=701 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=9 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=833 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=9 fitful BLW 1 in=60 pm=500 cinders=0 doused=0 peak=823 final=679 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=10 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=737 final=722 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=10 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=826 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=10 fitful BLW 1 in=46 pm=383 cinders=2 doused=0 peak=822 final=750 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=11 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=737 final=714 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=11 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=824 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=11 fitful BLW 1 in=60 pm=500 cinders=2 doused=0 peak=830 final=775 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=12 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=737 final=707 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=12 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=12 fitful BLW 1 in=59 pm=491 cinders=0 doused=0 peak=751 final=699 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=13 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=736 final=709 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=13 spam BLW 1 in=8 pm=66 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=13 fitful BLW 1 in=63 pm=525 cinders=0 doused=0 peak=742 final=553 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=14 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=735 final=717 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=14 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=822 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=14 fitful BLW 1 in=49 pm=408 cinders=0 doused=0 peak=783 final=688 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=15 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=737 final=714 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=15 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=15 fitful BLW 1 in=2 pm=16 cinders=0 doused=0 peak=674 final=607 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=0 ox=2 s=16 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=735 final=717 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=16 spam BLW 1 in=8 pm=66 cinders=3 doused=1 peak=834 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=16 fitful BLW 1 in=65 pm=541 cinders=1 doused=0 peak=820 final=667 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=17 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=735 final=734 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=17 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=824 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=17 fitful BLW 1 in=51 pm=425 cinders=2 doused=0 peak=827 final=722 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=0 ox=2 s=18 steady BLW 1 in=118 pm=983 cinders=0 doused=0 peak=737 final=736 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=18 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=831 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=18 fitful BLW 1 in=74 pm=616 cinders=0 doused=0 peak=805 final=700 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=0 ox=2 s=19 steady BLW 1 in=117 pm=975 cinders=0 doused=0 peak=737 final=737 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=0 ox=2 s=19 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=828 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=0 ox=2 s=19 fitful BLW 1 in=87 pm=725 cinders=0 doused=0 peak=803 final=657 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=1 ox=0 s=0 steady BLW 1 in=110 pm=916 cinders=0 doused=0 peak=788 final=769 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=0 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=0 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=701 final=389 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=1 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=788 final=767 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=1 spam BLW 1 in=25 pm=208 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=1 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=662 final=556 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=2 steady BLW 1 in=110 pm=916 cinders=0 doused=0 peak=788 final=778 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=2 spam BLW 1 in=21 pm=175 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=619 final=439 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=3 steady BLW 1 in=110 pm=916 cinders=0 doused=0 peak=788 final=769 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=3 spam BLW 1 in=19 pm=158 cinders=3 doused=1 peak=876 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=661 final=593 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=4 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=788 final=765 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=4 spam BLW 1 in=32 pm=266 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=636 final=502 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=5 steady BLW 1 in=107 pm=891 cinders=0 doused=0 peak=788 final=775 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=5 spam BLW 1 in=26 pm=216 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=632 final=561 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=6 steady BLW 1 in=110 pm=916 cinders=0 doused=0 peak=788 final=769 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=6 spam BLW 1 in=25 pm=208 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=672 final=495 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=7 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=788 final=785 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=7 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=7 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=678 final=528 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=8 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=788 final=775 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=8 spam BLW 1 in=32 pm=266 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=672 final=613 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=9 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=788 final=768 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=9 spam BLW 1 in=20 pm=166 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=9 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=685 final=522 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=10 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=788 final=769 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=10 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=10 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=708 final=696 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=11 steady BLW 1 in=110 pm=916 cinders=0 doused=0 peak=788 final=766 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=11 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=11 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=698 final=644 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=12 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=788 final=772 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=12 spam BLW 1 in=32 pm=266 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=633 final=511 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=13 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=788 final=764 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=13 spam BLW 1 in=24 pm=200 cinders=3 doused=1 peak=877 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=630 final=423 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=14 steady BLW 1 in=108 pm=900 cinders=0 doused=0 peak=788 final=769 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=14 spam BLW 1 in=19 pm=158 cinders=3 doused=1 peak=877 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=625 final=538 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=15 steady BLW 1 in=110 pm=916 cinders=0 doused=0 peak=788 final=766 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=15 spam BLW 1 in=30 pm=250 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=634 final=454 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=16 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=788 final=769 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=16 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=649 final=585 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=17 steady BLW 1 in=105 pm=875 cinders=0 doused=0 peak=788 final=785 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=17 spam BLW 1 in=21 pm=175 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=17 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=702 final=611 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=18 steady BLW 1 in=110 pm=916 cinders=0 doused=0 peak=788 final=769 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=18 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=711 final=536 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=0 s=19 steady BLW 1 in=110 pm=916 cinders=0 doused=0 peak=788 final=775 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=0 s=19 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=877 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=0 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=681 final=488 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=1 ox=1 s=0 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=792 final=761 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=0 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=0 fitful BLW 1 in=30 pm=250 cinders=0 doused=0 peak=767 final=453 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=1 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=792 final=773 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=1 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=1 fitful BLW 1 in=3 pm=25 cinders=0 doused=0 peak=746 final=631 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=2 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=791 final=787 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=2 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=872 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=683 final=501 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=3 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=791 final=764 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=3 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=877 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=690 final=672 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=4 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=792 final=769 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=4 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=677 final=569 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=5 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=792 final=779 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=5 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=700 final=639 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=6 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=792 final=779 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=6 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=706 final=564 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=7 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=791 final=787 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=7 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=7 fitful BLW 1 in=8 pm=66 cinders=0 doused=0 peak=755 final=598 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=8 steady BLW 1 in=113 pm=941 cinders=0 doused=0 peak=791 final=791 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=8 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=874 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=699 final=699 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=9 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=792 final=772 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=9 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=877 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=9 fitful BLW 1 in=2 pm=16 cinders=0 doused=0 peak=724 final=593 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=10 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=792 final=761 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=10 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=10 fitful BLW 1 in=28 pm=233 cinders=0 doused=0 peak=797 final=785 COLD ready=1 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=11 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=792 final=773 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=11 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=11 fitful BLW 1 in=39 pm=325 cinders=0 doused=0 peak=788 final=738 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=1 s=12 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=791 final=769 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=12 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=877 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=657 final=592 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=13 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=791 final=772 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=13 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=667 final=483 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=14 steady BLW 1 in=111 pm=925 cinders=0 doused=0 peak=791 final=764 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=14 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=693 final=604 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=15 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=792 final=787 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=15 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=650 final=523 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=16 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=791 final=778 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=16 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=16 fitful BLW 1 in=1 pm=8 cinders=0 doused=0 peak=725 final=663 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=17 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=792 final=787 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=17 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=875 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=17 fitful BLW 1 in=49 pm=408 cinders=0 doused=0 peak=781 final=698 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=1 s=18 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=792 final=768 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=18 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=18 fitful BLW 1 in=4 pm=33 cinders=0 doused=0 peak=752 final=608 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=1 s=19 steady BLW 1 in=112 pm=933 cinders=0 doused=0 peak=792 final=785 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=1 s=19 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=877 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=1 s=19 fitful BLW 1 in=3 pm=25 cinders=0 doused=0 peak=736 final=563 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=1 ox=2 s=0 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=777 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=0 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=0 fitful BLW 1 in=47 pm=391 cinders=0 doused=0 peak=863 final=537 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=2 s=1 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=762 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=1 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=876 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=1 fitful BLW 1 in=41 pm=341 cinders=0 doused=0 peak=850 final=724 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=2 s=2 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=797 final=796 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=2 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=874 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=2 fitful BLW 1 in=10 pm=83 cinders=0 doused=0 peak=767 final=580 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=3 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=786 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=3 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=3 fitful BLW 1 in=5 pm=41 cinders=0 doused=0 peak=768 final=768 COLD ready=1 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=4 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=761 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=4 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=876 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=4 fitful BLW 1 in=11 pm=91 cinders=0 doused=0 peak=754 final=653 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=5 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=797 final=775 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=5 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=5 fitful BLW 1 in=16 pm=133 cinders=0 doused=0 peak=795 final=734 COLD ready=1 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=6 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=781 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=6 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=6 fitful BLW 1 in=12 pm=100 cinders=0 doused=0 peak=754 final=652 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=7 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=766 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=7 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=7 fitful BLW 1 in=52 pm=433 cinders=0 doused=0 peak=850 final=685 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=2 s=8 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=789 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=8 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=8 fitful BLW 1 in=23 pm=191 cinders=0 doused=0 peak=804 final=804 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=9 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=793 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=9 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=875 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=9 fitful BLW 1 in=48 pm=400 cinders=0 doused=0 peak=823 final=679 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=2 s=10 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=797 final=776 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=10 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=879 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=10 fitful BLW 1 in=39 pm=325 cinders=1 doused=0 peak=876 final=828 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=2 s=11 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=774 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=11 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=11 fitful BLW 1 in=54 pm=450 cinders=1 doused=0 peak=875 final=788 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=2 s=12 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=797 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=12 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=876 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=12 fitful BLW 1 in=6 pm=50 cinders=0 doused=0 peak=751 final=699 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=13 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=765 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=13 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=13 fitful BLW 1 in=8 pm=66 cinders=0 doused=0 peak=742 final=553 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=14 steady BLW 1 in=113 pm=941 cinders=0 doused=0 peak=797 final=773 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=14 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=876 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=14 fitful BLW 1 in=38 pm=316 cinders=0 doused=0 peak=783 final=688 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=2 s=15 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=772 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=15 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=674 final=607 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=16 steady BLW 1 in=115 pm=958 cinders=0 doused=0 peak=797 final=772 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=16 spam BLW 1 in=9 pm=75 cinders=3 doused=1 peak=878 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=16 fitful BLW 1 in=64 pm=533 cinders=0 doused=0 peak=839 final=765 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=2 s=17 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=797 final=790 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=17 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=876 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=17 fitful BLW 1 in=56 pm=466 cinders=1 doused=0 peak=874 final=784 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=1 ox=2 s=18 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=797 final=791 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=18 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=880 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=18 fitful BLW 1 in=17 pm=141 cinders=0 doused=0 peak=805 final=700 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=1 ox=2 s=19 steady BLW 1 in=114 pm=950 cinders=0 doused=0 peak=797 final=796 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=1 ox=2 s=19 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=874 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=1 ox=2 s=19 fitful BLW 1 in=30 pm=250 cinders=0 doused=0 peak=803 final=657 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=0 s=0 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=878 final=863 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=0 spam BLW 1 in=34 pm=283 cinders=2 doused=0 peak=969 final=937 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=0 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=701 final=389 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=1 steady BLW 1 in=94 pm=783 cinders=0 doused=0 peak=878 final=867 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=1 spam BLW 1 in=28 pm=233 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=1 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=662 final=556 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=2 steady BLW 1 in=97 pm=808 cinders=0 doused=0 peak=878 final=875 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=2 spam BLW 1 in=32 pm=266 cinders=3 doused=1 peak=969 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=619 final=439 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=3 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=878 final=854 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=0 s=3 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=661 final=593 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=4 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=877 final=856 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=4 spam BLW 1 in=33 pm=275 cinders=3 doused=1 peak=969 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=636 final=502 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=5 steady BLW 1 in=92 pm=766 cinders=0 doused=0 peak=878 final=854 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=5 spam BLW 1 in=22 pm=183 cinders=3 doused=1 peak=969 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=632 final=561 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=6 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=878 final=857 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=6 spam BLW 1 in=46 pm=383 cinders=3 doused=1 peak=968 final=27 FITFUL ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=672 final=495 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=7 steady BLW 1 in=104 pm=866 cinders=0 doused=0 peak=878 final=872 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=0 s=7 spam BLW 1 in=26 pm=216 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=7 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=678 final=528 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=8 steady BLW 1 in=88 pm=733 cinders=0 doused=0 peak=878 final=856 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=8 spam BLW 1 in=26 pm=216 cinders=3 doused=1 peak=968 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=672 final=613 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=9 steady BLW 1 in=95 pm=791 cinders=0 doused=0 peak=878 final=876 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=9 spam BLW 1 in=25 pm=208 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=9 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=685 final=522 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=10 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=878 final=857 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=10 spam BLW 1 in=29 pm=241 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=10 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=708 final=696 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=11 steady BLW 1 in=100 pm=833 cinders=0 doused=0 peak=878 final=859 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=11 spam BLW 1 in=27 pm=225 cinders=3 doused=1 peak=969 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=11 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=698 final=644 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=12 steady BLW 1 in=98 pm=816 cinders=0 doused=0 peak=878 final=861 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=12 spam BLW 1 in=18 pm=150 cinders=1 doused=0 peak=969 final=954 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=633 final=511 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=13 steady BLW 1 in=104 pm=866 cinders=0 doused=0 peak=878 final=850 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=0 s=13 spam BLW 1 in=30 pm=250 cinders=3 doused=1 peak=970 final=90 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=630 final=423 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=14 steady BLW 1 in=100 pm=833 cinders=0 doused=0 peak=877 final=868 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=14 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=625 final=538 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=15 steady BLW 1 in=95 pm=791 cinders=0 doused=0 peak=878 final=872 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=15 spam BLW 1 in=36 pm=300 cinders=3 doused=1 peak=970 final=793 FITFUL ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=634 final=454 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=16 steady BLW 1 in=104 pm=866 cinders=0 doused=0 peak=878 final=850 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=0 s=16 spam BLW 1 in=40 pm=333 cinders=3 doused=1 peak=969 final=222 FITFUL ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=649 final=585 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=17 steady BLW 1 in=92 pm=766 cinders=0 doused=0 peak=878 final=860 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=0 s=17 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=17 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=702 final=611 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=18 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=878 final=854 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=0 s=18 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=711 final=536 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=0 s=19 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=878 final=858 STEADY ready=1 speed=1000 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=0 s=19 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=970 final=58 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=0 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=681 final=488 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=2 ox=1 s=0 steady BLW 1 in=106 pm=883 cinders=0 doused=0 peak=882 final=868 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=0 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=0 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=767 final=453 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=1 steady BLW 1 in=107 pm=891 cinders=0 doused=0 peak=882 final=874 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=1 spam BLW 1 in=22 pm=183 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=1 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=746 final=631 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=2 steady BLW 1 in=103 pm=858 cinders=0 doused=0 peak=882 final=864 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=2 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=968 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=683 final=501 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=3 steady BLW 1 in=106 pm=883 cinders=0 doused=0 peak=882 final=866 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=3 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=966 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=690 final=672 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=4 steady BLW 1 in=106 pm=883 cinders=0 doused=0 peak=882 final=870 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=4 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=968 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=677 final=569 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=5 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=882 final=857 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=1 s=5 spam BLW 1 in=20 pm=166 cinders=3 doused=1 peak=969 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=700 final=639 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=6 steady BLW 1 in=106 pm=883 cinders=0 doused=0 peak=882 final=882 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=6 spam BLW 1 in=19 pm=158 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=706 final=564 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=7 steady BLW 1 in=108 pm=900 cinders=0 doused=0 peak=882 final=880 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=7 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=967 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=7 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=755 final=598 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=8 steady BLW 1 in=104 pm=866 cinders=0 doused=0 peak=882 final=857 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=8 spam BLW 1 in=22 pm=183 cinders=3 doused=1 peak=968 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=699 final=699 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=9 steady BLW 1 in=104 pm=866 cinders=0 doused=0 peak=882 final=878 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=9 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=9 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=724 final=593 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=10 steady BLW 1 in=105 pm=875 cinders=0 doused=0 peak=882 final=870 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=10 spam BLW 1 in=21 pm=175 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=10 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=797 final=785 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=11 steady BLW 1 in=106 pm=883 cinders=0 doused=0 peak=882 final=870 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=11 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=11 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=788 final=738 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=12 steady BLW 1 in=107 pm=891 cinders=0 doused=0 peak=882 final=870 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=12 spam BLW 1 in=21 pm=175 cinders=3 doused=1 peak=967 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=657 final=592 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=13 steady BLW 1 in=108 pm=900 cinders=0 doused=0 peak=882 final=866 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=13 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=964 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=667 final=483 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=14 steady BLW 1 in=105 pm=875 cinders=0 doused=0 peak=882 final=866 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=14 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=693 final=604 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=15 steady BLW 1 in=106 pm=883 cinders=0 doused=0 peak=882 final=861 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=15 spam BLW 1 in=25 pm=208 cinders=3 doused=1 peak=967 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=650 final=523 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=16 steady BLW 1 in=108 pm=900 cinders=0 doused=0 peak=882 final=874 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=16 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=968 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=725 final=663 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=17 steady BLW 1 in=100 pm=833 cinders=0 doused=0 peak=882 final=873 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=2 ox=1 s=17 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=969 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=17 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=781 final=698 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=18 steady BLW 1 in=106 pm=883 cinders=0 doused=0 peak=882 final=872 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=18 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=752 final=608 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=1 s=19 steady BLW 1 in=106 pm=883 cinders=0 doused=0 peak=882 final=853 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=1 s=19 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=967 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=1 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=736 final=563 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=2 ox=2 s=0 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=887 final=881 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=0 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=0 fitful BLW 1 in=25 pm=208 cinders=0 doused=0 peak=863 final=537 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=1 steady BLW 1 in=111 pm=925 cinders=0 doused=0 peak=887 final=866 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=1 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=964 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=1 fitful BLW 1 in=5 pm=41 cinders=0 doused=0 peak=850 final=724 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=2 steady BLW 1 in=110 pm=916 cinders=0 doused=0 peak=887 final=865 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=2 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=959 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=767 final=580 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=3 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=887 final=887 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=3 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=969 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=768 final=768 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=4 steady BLW 1 in=111 pm=925 cinders=0 doused=0 peak=887 final=867 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=4 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=754 final=653 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=5 steady BLW 1 in=108 pm=900 cinders=0 doused=0 peak=887 final=882 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=5 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=965 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=795 final=734 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=6 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=886 final=885 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=6 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=754 final=652 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=7 steady BLW 1 in=111 pm=925 cinders=0 doused=0 peak=887 final=864 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=7 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=967 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=7 fitful BLW 1 in=8 pm=66 cinders=0 doused=0 peak=850 final=685 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=8 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=887 final=862 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=8 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=969 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=804 final=804 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=9 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=887 final=856 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=9 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=967 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=9 fitful BLW 1 in=1 pm=8 cinders=0 doused=0 peak=823 final=679 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=10 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=887 final=882 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=10 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=10 fitful BLW 1 in=27 pm=225 cinders=0 doused=0 peak=910 final=895 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=11 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=886 final=879 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=11 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=11 fitful BLW 1 in=41 pm=341 cinders=0 doused=0 peak=911 final=856 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=2 ox=2 s=12 steady BLW 1 in=111 pm=925 cinders=0 doused=0 peak=887 final=862 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=12 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=751 final=699 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=13 steady BLW 1 in=111 pm=925 cinders=0 doused=0 peak=887 final=865 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=13 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=967 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=742 final=553 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=14 steady BLW 1 in=108 pm=900 cinders=0 doused=0 peak=887 final=875 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=14 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=967 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=783 final=688 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=15 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=887 final=878 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=15 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=674 final=607 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=16 steady BLW 1 in=111 pm=925 cinders=0 doused=0 peak=887 final=870 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=16 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=16 fitful BLW 1 in=3 pm=25 cinders=0 doused=0 peak=839 final=765 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=17 steady BLW 1 in=107 pm=891 cinders=0 doused=0 peak=886 final=865 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=17 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=967 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=17 fitful BLW 1 in=53 pm=441 cinders=0 doused=0 peak=895 final=809 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=2 ox=2 s=18 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=886 final=869 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=18 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=970 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=805 final=700 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=2 ox=2 s=19 steady BLW 1 in=109 pm=908 cinders=0 doused=0 peak=887 final=857 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=2 ox=2 s=19 spam BLW 1 in=10 pm=83 cinders=3 doused=1 peak=968 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=2 ox=2 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=803 final=657 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=0 s=0 steady BLW 1 in=89 pm=741 cinders=0 doused=0 peak=926 final=903 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=0 spam BLW 1 in=25 pm=208 cinders=1 doused=0 peak=1003 final=970 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=0 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=701 final=389 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=1 steady BLW 1 in=87 pm=725 cinders=0 doused=0 peak=927 final=927 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=1 spam BLW 1 in=27 pm=225 cinders=3 doused=1 peak=1005 final=63 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=1 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=662 final=556 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=2 steady BLW 1 in=85 pm=708 cinders=0 doused=0 peak=928 final=910 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=2 spam BLW 1 in=38 pm=316 cinders=2 doused=0 peak=1004 final=989 FITFUL ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=619 final=439 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=3 steady BLW 1 in=96 pm=800 cinders=0 doused=0 peak=927 final=905 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=3 spam BLW 1 in=35 pm=291 cinders=3 doused=1 peak=1005 final=342 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=661 final=593 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=4 steady BLW 1 in=91 pm=758 cinders=0 doused=0 peak=928 final=911 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=4 spam BLW 1 in=34 pm=283 cinders=3 doused=1 peak=1004 final=409 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=636 final=502 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=5 steady BLW 1 in=86 pm=716 cinders=0 doused=0 peak=928 final=917 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=5 spam BLW 1 in=29 pm=241 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=632 final=561 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=6 steady BLW 1 in=94 pm=783 cinders=0 doused=0 peak=927 final=913 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=6 spam BLW 1 in=38 pm=316 cinders=2 doused=0 peak=1005 final=978 FITFUL ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=672 final=495 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=7 steady BLW 1 in=95 pm=791 cinders=0 doused=0 peak=926 final=919 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=7 spam BLW 1 in=24 pm=200 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=7 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=678 final=528 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=8 steady BLW 1 in=79 pm=658 cinders=0 doused=0 peak=928 final=924 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=8 spam BLW 1 in=30 pm=250 cinders=2 doused=0 peak=1005 final=1000 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=672 final=613 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=9 steady BLW 1 in=85 pm=708 cinders=0 doused=0 peak=928 final=904 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=9 spam BLW 1 in=29 pm=241 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=9 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=685 final=522 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=10 steady BLW 1 in=94 pm=783 cinders=0 doused=0 peak=927 final=905 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=10 spam BLW 1 in=37 pm=308 cinders=3 doused=1 peak=1004 final=32 FITFUL ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=10 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=708 final=696 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=11 steady BLW 1 in=90 pm=750 cinders=0 doused=0 peak=928 final=918 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=11 spam BLW 1 in=31 pm=258 cinders=3 doused=1 peak=1003 final=387 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=11 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=698 final=644 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=12 steady BLW 1 in=92 pm=766 cinders=0 doused=0 peak=926 final=925 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=12 spam BLW 1 in=47 pm=391 cinders=1 doused=0 peak=1003 final=947 FITFUL ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=633 final=511 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=13 steady BLW 1 in=94 pm=783 cinders=0 doused=0 peak=926 final=926 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=13 spam BLW 1 in=46 pm=383 cinders=3 doused=1 peak=1004 final=653 FITFUL ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=630 final=423 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=14 steady BLW 1 in=94 pm=783 cinders=0 doused=0 peak=926 final=917 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=14 spam BLW 1 in=32 pm=266 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=625 final=538 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=15 steady BLW 1 in=83 pm=691 cinders=0 doused=0 peak=928 final=916 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=15 spam BLW 1 in=22 pm=183 cinders=2 doused=0 peak=1005 final=889 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=634 final=454 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=16 steady BLW 1 in=97 pm=808 cinders=0 doused=0 peak=928 final=903 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=16 spam BLW 1 in=40 pm=333 cinders=2 doused=0 peak=1002 final=1000 FITFUL ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=649 final=585 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=17 steady BLW 1 in=83 pm=691 cinders=0 doused=0 peak=925 final=903 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=17 spam BLW 1 in=35 pm=291 cinders=2 doused=0 peak=1004 final=997 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=17 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=702 final=611 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=18 steady BLW 1 in=93 pm=775 cinders=0 doused=0 peak=928 final=912 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=18 spam BLW 1 in=30 pm=250 cinders=3 doused=1 peak=1005 final=438 COLD ready=0 speed=1000 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=0 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=711 final=536 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=19 steady BLW 1 in=96 pm=800 cinders=0 doused=0 peak=928 final=911 WARM ready=1 speed=1000 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=0 s=19 spam BLW 1 in=41 pm=341 cinders=2 doused=0 peak=1004 final=953 FITFUL ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=0 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=681 final=488 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=3 ox=1 s=0 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=932 final=913 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=1 s=0 spam BLW 1 in=25 pm=208 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=0 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=767 final=453 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=1 steady BLW 1 in=97 pm=808 cinders=0 doused=0 peak=932 final=908 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=1 spam BLW 1 in=20 pm=166 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=1 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=746 final=631 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=2 steady BLW 1 in=98 pm=816 cinders=0 doused=0 peak=931 final=909 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=2 spam BLW 1 in=20 pm=166 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=683 final=501 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=3 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=932 final=906 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=1 s=3 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=690 final=672 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=4 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=932 final=900 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=1 s=4 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=677 final=569 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=5 steady BLW 1 in=94 pm=783 cinders=0 doused=0 peak=931 final=904 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=5 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=700 final=639 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=6 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=932 final=921 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=1 s=6 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=706 final=564 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=7 steady BLW 1 in=104 pm=866 cinders=0 doused=0 peak=931 final=914 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=1 s=7 spam BLW 1 in=21 pm=175 cinders=3 doused=1 peak=1002 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=7 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=755 final=598 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=8 steady BLW 1 in=91 pm=758 cinders=0 doused=0 peak=932 final=910 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=8 spam BLW 1 in=19 pm=158 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=699 final=699 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=9 steady BLW 1 in=100 pm=833 cinders=0 doused=0 peak=932 final=918 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=9 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=9 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=724 final=593 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=10 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=932 final=932 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=10 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=10 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=797 final=785 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=11 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=932 final=914 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=11 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=11 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=788 final=738 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=12 steady BLW 1 in=100 pm=833 cinders=0 doused=0 peak=932 final=915 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=12 spam BLW 1 in=24 pm=200 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=657 final=592 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=13 steady BLW 1 in=104 pm=866 cinders=0 doused=0 peak=930 final=906 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=1 s=13 spam BLW 1 in=20 pm=166 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=667 final=483 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=14 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=932 final=930 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=14 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=693 final=604 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=15 steady BLW 1 in=98 pm=816 cinders=0 doused=0 peak=932 final=907 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=15 spam BLW 1 in=25 pm=208 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=650 final=523 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=16 steady BLW 1 in=104 pm=866 cinders=0 doused=0 peak=928 final=917 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=1 s=16 spam BLW 1 in=26 pm=216 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=725 final=663 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=17 steady BLW 1 in=94 pm=783 cinders=0 doused=0 peak=932 final=914 WARM ready=1 speed=1150 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=1 s=17 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=17 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=781 final=698 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=18 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=932 final=906 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=1 s=18 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=752 final=608 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=1 s=19 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=932 final=926 STEADY ready=1 speed=1150 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=1 s=19 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=1002 final=20 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=1 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=736 final=563 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=3 ox=2 s=0 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=937 final=905 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=2 s=0 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=0 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=863 final=537 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=1 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=937 final=923 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=1 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1000 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=1 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=850 final=724 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=2 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=937 final=928 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=2 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=767 final=580 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=3 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=937 final=909 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=3 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=768 final=768 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=4 steady BLW 1 in=99 pm=825 cinders=0 doused=0 peak=937 final=922 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=4 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=1001 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=754 final=653 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=5 steady BLW 1 in=98 pm=816 cinders=0 doused=0 peak=937 final=905 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=5 spam BLW 1 in=18 pm=150 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=795 final=734 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=6 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=937 final=907 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=6 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=754 final=652 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=7 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=937 final=924 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=2 s=7 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=1001 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=7 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=850 final=685 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=8 steady BLW 1 in=102 pm=850 cinders=0 doused=0 peak=937 final=917 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=2 s=8 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=804 final=804 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=9 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=937 final=922 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=9 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=9 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=823 final=679 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=10 steady BLW 1 in=100 pm=833 cinders=0 doused=0 peak=937 final=901 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=10 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=1004 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=10 fitful BLW 1 in=14 pm=116 cinders=0 doused=0 peak=910 final=895 COLD ready=1 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=11 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=937 final=933 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=11 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=11 fitful BLW 1 in=13 pm=108 cinders=0 doused=0 peak=911 final=856 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=12 steady BLW 1 in=103 pm=858 cinders=0 doused=0 peak=937 final=924 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=2 s=12 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=751 final=699 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=13 steady BLW 1 in=103 pm=858 cinders=0 doused=0 peak=937 final=919 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=2 s=13 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=1003 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=742 final=553 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=14 steady BLW 1 in=98 pm=816 cinders=0 doused=0 peak=937 final=937 WARM ready=0 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=14 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=783 final=688 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=15 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=937 final=934 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=15 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=1001 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=674 final=607 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=16 steady BLW 1 in=103 pm=858 cinders=0 doused=0 peak=937 final=931 STEADY ready=1 speed=1300 | Steady as the caldera. Pull the blank, it's ready.
+m=3 ox=2 s=16 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=1001 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=839 final=765 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=17 steady BLW 1 in=98 pm=816 cinders=0 doused=0 peak=937 final=927 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=17 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=1002 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=17 fitful BLW 1 in=20 pm=166 cinders=0 doused=0 peak=895 final=809 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=18 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=937 final=917 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=18 spam BLW 1 in=11 pm=91 cinders=3 doused=1 peak=1005 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=805 final=700 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=3 ox=2 s=19 steady BLW 1 in=101 pm=841 cinders=0 doused=0 peak=937 final=917 WARM ready=1 speed=1300 | Warm enough to work. Keep the rhythm and the blank will forgive you.
+m=3 ox=2 s=19 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=1000 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=3 ox=2 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=803 final=657 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=0 s=0 steady BLW 1 in=0 pm=0 cinders=0 doused=0 peak=1060 final=1000 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=0 spam BLW 1 in=0 pm=0 cinders=0 doused=0 peak=1060 final=1000 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=0 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=701 final=389 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=1 steady BLW 1 in=30 pm=250 cinders=0 doused=0 peak=1127 final=1097 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=1 spam BLW 1 in=30 pm=250 cinders=0 doused=0 peak=1127 final=1097 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=1 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=662 final=556 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=2 steady BLW 1 in=5 pm=41 cinders=0 doused=0 peak=1082 final=1073 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=2 spam BLW 1 in=5 pm=41 cinders=0 doused=0 peak=1082 final=1073 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=619 final=439 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=3 steady BLW 1 in=20 pm=166 cinders=0 doused=0 peak=1116 final=1116 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=3 spam BLW 1 in=20 pm=166 cinders=0 doused=0 peak=1116 final=1116 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=661 final=593 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=4 steady BLW 1 in=25 pm=208 cinders=0 doused=0 peak=1128 final=1086 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=4 spam BLW 1 in=21 pm=175 cinders=0 doused=0 peak=1136 final=1112 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=636 final=502 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=5 steady BLW 1 in=25 pm=208 cinders=0 doused=0 peak=1128 final=1079 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=5 spam BLW 1 in=37 pm=308 cinders=0 doused=0 peak=1130 final=1097 FITFUL ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=632 final=561 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=6 steady BLW 1 in=4 pm=33 cinders=0 doused=0 peak=1084 final=1084 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=6 spam BLW 1 in=4 pm=33 cinders=0 doused=0 peak=1084 final=1084 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=672 final=495 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=7 steady BLW 1 in=50 pm=416 cinders=0 doused=0 peak=1128 final=1104 FITFUL ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=7 spam BLW 1 in=46 pm=383 cinders=0 doused=0 peak=1136 final=1117 FITFUL ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=7 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=678 final=528 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=8 steady BLW 1 in=19 pm=158 cinders=0 doused=0 peak=1110 final=1088 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=8 spam BLW 1 in=19 pm=158 cinders=0 doused=0 peak=1110 final=1088 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=672 final=613 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=9 steady BLW 1 in=39 pm=325 cinders=0 doused=0 peak=1127 final=1094 FITFUL ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=9 spam BLW 1 in=29 pm=241 cinders=0 doused=0 peak=1151 final=1115 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=9 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=685 final=522 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=10 steady BLW 1 in=36 pm=300 cinders=0 doused=0 peak=1128 final=1122 FITFUL ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=10 spam BLW 1 in=26 pm=216 cinders=0 doused=0 peak=1148 final=1148 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=10 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=708 final=696 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=11 steady BLW 1 in=29 pm=241 cinders=0 doused=0 peak=1106 final=1058 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=11 spam BLW 1 in=29 pm=241 cinders=0 doused=0 peak=1106 final=1058 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=11 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=698 final=644 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=12 steady BLW 1 in=0 pm=0 cinders=0 doused=0 peak=1030 final=999 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=12 spam BLW 1 in=0 pm=0 cinders=0 doused=0 peak=1030 final=999 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=633 final=511 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=13 steady BLW 1 in=13 pm=108 cinders=0 doused=0 peak=1112 final=1112 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=13 spam BLW 1 in=13 pm=108 cinders=0 doused=0 peak=1112 final=1112 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=630 final=423 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=14 steady BLW 1 in=39 pm=325 cinders=0 doused=0 peak=1128 final=1101 FITFUL ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=14 spam BLW 1 in=27 pm=225 cinders=0 doused=0 peak=1153 final=1153 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=625 final=538 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=15 steady BLW 1 in=0 pm=0 cinders=0 doused=0 peak=1072 final=1062 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=15 spam BLW 1 in=0 pm=0 cinders=0 doused=0 peak=1072 final=1062 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=634 final=454 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=16 steady BLW 1 in=8 pm=66 cinders=0 doused=0 peak=1097 final=1097 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=16 spam BLW 1 in=8 pm=66 cinders=0 doused=0 peak=1097 final=1097 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=649 final=585 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=17 steady BLW 1 in=17 pm=141 cinders=0 doused=0 peak=1097 final=1062 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=17 spam BLW 1 in=17 pm=141 cinders=0 doused=0 peak=1097 final=1062 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=17 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=702 final=611 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=18 steady BLW 1 in=27 pm=225 cinders=0 doused=0 peak=1105 final=1105 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=18 spam BLW 1 in=27 pm=225 cinders=0 doused=0 peak=1105 final=1105 COLD ready=1 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=711 final=536 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=19 steady BLW 1 in=1 pm=8 cinders=0 doused=0 peak=1076 final=1033 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=19 spam BLW 1 in=1 pm=8 cinders=0 doused=0 peak=1076 final=1033 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=0 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=681 final=488 COLD ready=0 speed=1000 | Forgeox on the bellows buys you time. Don't waste it.
+m=4 ox=1 s=0 steady BLW 1 in=55 pm=458 cinders=0 doused=0 peak=1132 final=1095 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=0 spam BLW 1 in=48 pm=400 cinders=1 doused=0 peak=1171 final=1114 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=0 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=767 final=453 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=1 steady BLW 1 in=61 pm=508 cinders=0 doused=0 peak=1132 final=1126 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=1 spam BLW 1 in=29 pm=241 cinders=2 doused=0 peak=1171 final=1149 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=1 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=746 final=631 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=2 steady BLW 1 in=58 pm=483 cinders=0 doused=0 peak=1132 final=1123 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=2 spam BLW 1 in=23 pm=191 cinders=2 doused=0 peak=1173 final=1057 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=683 final=501 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=3 steady BLW 1 in=67 pm=558 cinders=0 doused=0 peak=1132 final=1114 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=3 spam BLW 1 in=38 pm=316 cinders=2 doused=0 peak=1175 final=1151 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=690 final=672 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=4 steady BLW 1 in=51 pm=425 cinders=0 doused=0 peak=1132 final=1089 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=4 spam BLW 1 in=30 pm=250 cinders=2 doused=0 peak=1173 final=1142 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=677 final=569 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=5 steady BLW 1 in=55 pm=458 cinders=0 doused=0 peak=1131 final=1131 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=5 spam BLW 1 in=35 pm=291 cinders=2 doused=0 peak=1174 final=1153 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=700 final=639 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=6 steady BLW 1 in=60 pm=500 cinders=0 doused=0 peak=1132 final=1122 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=6 spam BLW 1 in=29 pm=241 cinders=2 doused=0 peak=1175 final=1089 COLD ready=1 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=706 final=564 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=7 steady BLW 1 in=67 pm=558 cinders=0 doused=0 peak=1132 final=1130 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=7 spam BLW 1 in=30 pm=250 cinders=3 doused=1 peak=1174 final=867 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=1 s=7 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=755 final=598 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=8 steady BLW 1 in=59 pm=491 cinders=0 doused=0 peak=1132 final=1123 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=8 spam BLW 1 in=28 pm=233 cinders=2 doused=0 peak=1174 final=1120 COLD ready=1 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=699 final=699 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=9 steady BLW 1 in=58 pm=483 cinders=0 doused=0 peak=1131 final=1106 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=9 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=1175 final=474 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=1 s=9 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=724 final=593 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=10 steady BLW 1 in=59 pm=491 cinders=0 doused=0 peak=1132 final=1101 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=10 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=1175 final=748 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=1 s=10 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=797 final=785 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=11 steady BLW 1 in=59 pm=491 cinders=0 doused=0 peak=1132 final=1094 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=11 spam BLW 1 in=37 pm=308 cinders=2 doused=0 peak=1175 final=1115 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=11 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=788 final=738 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=12 steady BLW 1 in=53 pm=441 cinders=0 doused=0 peak=1131 final=1116 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=12 spam BLW 1 in=20 pm=166 cinders=0 doused=0 peak=1173 final=1149 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=657 final=592 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=13 steady BLW 1 in=60 pm=500 cinders=0 doused=0 peak=1131 final=1104 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=13 spam BLW 1 in=33 pm=275 cinders=2 doused=0 peak=1175 final=1120 COLD ready=1 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=667 final=483 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=14 steady BLW 1 in=65 pm=541 cinders=0 doused=0 peak=1131 final=1119 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=14 spam BLW 1 in=30 pm=250 cinders=3 doused=1 peak=1175 final=579 COLD ready=0 speed=1150 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=1 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=693 final=604 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=15 steady BLW 1 in=60 pm=500 cinders=0 doused=0 peak=1130 final=1107 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=15 spam BLW 1 in=40 pm=333 cinders=1 doused=0 peak=1171 final=1148 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=650 final=523 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=16 steady BLW 1 in=68 pm=566 cinders=0 doused=0 peak=1132 final=1124 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=16 spam BLW 1 in=39 pm=325 cinders=1 doused=0 peak=1172 final=1169 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=725 final=663 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=17 steady BLW 1 in=56 pm=466 cinders=0 doused=0 peak=1132 final=1120 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=17 spam BLW 1 in=25 pm=208 cinders=2 doused=0 peak=1173 final=1104 COLD ready=1 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=17 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=781 final=698 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=18 steady BLW 1 in=60 pm=500 cinders=0 doused=0 peak=1132 final=1130 FITFUL ready=0 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=18 spam BLW 1 in=30 pm=250 cinders=2 doused=0 peak=1175 final=1142 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=752 final=608 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=19 steady BLW 1 in=68 pm=566 cinders=0 doused=0 peak=1132 final=1112 FITFUL ready=1 speed=1150 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=1 s=19 spam BLW 1 in=27 pm=225 cinders=1 doused=0 peak=1171 final=1125 COLD ready=1 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=1 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=736 final=563 COLD ready=0 speed=1150 | Cold bed, cold iron. Again.
+m=4 ox=2 s=0 steady BLW 1 in=66 pm=550 cinders=0 doused=0 peak=1137 final=1133 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=0 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=1171 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=0 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=863 final=537 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=1 steady BLW 1 in=62 pm=516 cinders=0 doused=0 peak=1137 final=1120 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=1 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=1173 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=1 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=850 final=724 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=2 steady BLW 1 in=61 pm=508 cinders=0 doused=0 peak=1137 final=1118 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=2 spam BLW 1 in=19 pm=158 cinders=3 doused=1 peak=1175 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=2 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=767 final=580 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=3 steady BLW 1 in=66 pm=550 cinders=0 doused=0 peak=1137 final=1114 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=3 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=1170 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=3 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=768 final=768 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=4 steady BLW 1 in=62 pm=516 cinders=0 doused=0 peak=1137 final=1107 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=4 spam BLW 1 in=17 pm=141 cinders=3 doused=1 peak=1173 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=4 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=754 final=653 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=5 steady BLW 1 in=60 pm=500 cinders=0 doused=0 peak=1137 final=1109 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=5 spam BLW 1 in=19 pm=158 cinders=3 doused=1 peak=1175 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=5 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=795 final=734 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=6 steady BLW 1 in=61 pm=508 cinders=0 doused=0 peak=1137 final=1121 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=6 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=1173 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=6 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=754 final=652 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=7 steady BLW 1 in=65 pm=541 cinders=0 doused=0 peak=1137 final=1129 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=7 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1174 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=7 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=850 final=685 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=8 steady BLW 1 in=58 pm=483 cinders=0 doused=0 peak=1137 final=1132 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=8 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1175 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=8 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=804 final=804 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=9 steady BLW 1 in=60 pm=500 cinders=0 doused=0 peak=1137 final=1119 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=9 spam BLW 1 in=15 pm=125 cinders=3 doused=1 peak=1173 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=9 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=823 final=679 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=10 steady BLW 1 in=65 pm=541 cinders=0 doused=0 peak=1137 final=1118 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=10 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1172 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=10 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=910 final=895 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=11 steady BLW 1 in=66 pm=550 cinders=0 doused=0 peak=1137 final=1124 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=11 spam BLW 1 in=13 pm=108 cinders=3 doused=1 peak=1174 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=11 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=911 final=856 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=12 steady BLW 1 in=70 pm=583 cinders=0 doused=0 peak=1137 final=1110 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=12 spam BLW 1 in=23 pm=191 cinders=3 doused=1 peak=1172 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=12 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=751 final=699 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=13 steady BLW 1 in=66 pm=550 cinders=0 doused=0 peak=1137 final=1135 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=13 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1173 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=13 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=742 final=553 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=14 steady BLW 1 in=63 pm=525 cinders=0 doused=0 peak=1137 final=1113 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=14 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1175 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=14 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=783 final=688 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=15 steady BLW 1 in=66 pm=550 cinders=0 doused=0 peak=1136 final=1135 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=15 spam BLW 1 in=21 pm=175 cinders=3 doused=1 peak=1171 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=15 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=674 final=607 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=16 steady BLW 1 in=68 pm=566 cinders=0 doused=0 peak=1137 final=1132 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=16 spam BLW 1 in=16 pm=133 cinders=3 doused=1 peak=1175 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=16 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=839 final=765 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=17 steady BLW 1 in=60 pm=500 cinders=0 doused=0 peak=1137 final=1100 FITFUL ready=1 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=17 spam BLW 1 in=12 pm=100 cinders=3 doused=1 peak=1173 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=17 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=895 final=809 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=18 steady BLW 1 in=67 pm=558 cinders=0 doused=0 peak=1136 final=1136 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=18 spam BLW 1 in=14 pm=116 cinders=3 doused=1 peak=1171 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=18 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=805 final=700 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.
+m=4 ox=2 s=19 steady BLW 1 in=70 pm=583 cinders=0 doused=0 peak=1136 final=1127 FITFUL ready=0 speed=1300 | Fits and starts. Watch the colour, not your arm.
+m=4 ox=2 s=19 spam BLW 1 in=19 pm=158 cinders=3 doused=1 peak=1175 final=20 COLD ready=0 speed=1300 | You choked her on cinders. Rake the bed, fetch coal, and pump like you mean it, not like you're angry.
+m=4 ox=2 s=19 fitful BLW 1 in=0 pm=0 cinders=0 doused=0 peak=803 final=657 COLD ready=0 speed=1300 | Cold bed, cold iron. Again.

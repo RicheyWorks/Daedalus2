@@ -29,7 +29,7 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 /**
- * Heroes over HTTP (ADR-037): the Zelda II game of experience and levels. The realm fights; the server keeps
+ * Heroes over HTTP (ADR-037): the hero game of experience and levels. The realm fights; the server keeps
  * the score. A hero is one per person, across every world.
  */
 @RestController
@@ -112,7 +112,7 @@ public class HeroController {
     }
 
     @PostMapping("/raise")
-    @Operation(summary = "Spend experience on Attack, Magic or Life; it resets to zero, as in Zelda II.")
+    @Operation(summary = "Spend experience on Attack, Magic or Life; it resets to zero.")
     @PerKeyRateLimit("mazeGenerate")
     public ResponseEntity<HeroResponse> raise(@Valid @RequestBody HeroRequest body, Principal principal) {
         if (body.stat() == null) {

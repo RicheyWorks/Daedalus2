@@ -1,0 +1,5 @@
+DSB 1
+island BlenderBoss x -6000000 y 6000000 ram 40456 disk 18460
+island DiskSaver x 4000000 y 4000000 ram 25015 disk 25470
+island Hephaestus x 6000000 y 2000000 ram 19408 disk 16192
+island OddsReaper x 400000 y -400000 ram 30592 disk 60928

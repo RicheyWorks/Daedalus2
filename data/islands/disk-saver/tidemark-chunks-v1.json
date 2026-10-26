@@ -1,0 +1,15 @@
+{
+  "v": 1,
+  "quest": "q_tidemark_chunks",
+  "lore": "Every season each island writes its save again, changed only here and there. Tallyman Oro keeps one copy of every chunk in the vault and a tally of which chunks make each save. Cut the saves at fixed fathoms and a single new byte throws every later cut off by one; cut where the tide leaves its mark in the bytes themselves and the cuts fall back into step right after the change.",
+  "chunks": {"versions": 12, "bytes_per_weight": 256, "edits": 3, "max_run": 24, "insert_permille": 400, "delete_permille": 300, "window": 16, "mask_bits": 7, "min_chunk": 32, "max_chunk": 1024, "fixed_size": 160, "ref_bytes": 8, "byte_unit": 80, "mode": "cdc"},
+  "shoals_data": "data/islands/disk-saver/compaction-shoals-v1.json",
+  "spring_data": "data/islands/disk-saver/byte-spring-v1.json",
+  "seed": 175,
+  "npc": {"name": "Tallyman Oro", "lines": {
+    "start": "One copy of every chunk, and a tally for every save. Choose where to cut.",
+    "tidemark": "The tide left its mark here. Cut on the mark.",
+    "shift": "One new byte and every fixed cut slid along. Nothing matches now.",
+    "win": "Twelve seasons of saves, and the vault still has room.",
+    "fail": "The vault is full of near-copies. Cut on the tidemarks."}}
+}
