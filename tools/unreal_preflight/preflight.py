@@ -23,6 +23,9 @@ Every rule comes from a real failure on 2026-10-12 (docs/AUTOMATION-LESSONS.md):
                 drop A/U/I, USTRUCT drops F, UENUM and dynamic delegates keep theirs). UHT stops the whole module before
                 compiling: "Class 'ADaedalusBrewBench' shares engine name 'DaedalusBrewBench' with class
                 'ADaedalusBrewBench' in DaedalusHomestead.h(80)" (2026-10-19, #350 vs #285).
+  P11 editor-flag  a script that launches the GUI editor with -AutoDeclinePackageRecovery (anywhere), or with
+                -unattended when it is not a commandlet (-run=), a -game client or a -nullrhi run. Both throw the
+                package-recovery restore list away (engines/unreal/unreal-job.ps1). Comment lines are ignored.
 """
 import os
 import re
@@ -205,6 +208,23 @@ def check_py(path, text, errors):
         errors.append((path, line_of(text, m.start()), "P6", "static C++ helpers are not visible to Python unless they are a UFUNCTION"))
 
 
+SCRIPT_EXTS = (".py", ".ps1", ".cmd", ".bat")
+_COMMENT_RE = re.compile(r"^\s*(#|//|::|rem\s|REM\s|<#|\*)")
+_EDITOR_RE = re.compile(r"UnrealEditor(?!-Cmd)(\.exe)?\b|\$editor\b|_editor_cmd\(\)", re.I)
+
+
+def check_editor_flags(path, text, errors):
+    """P11: banned editor launch flags in scripts."""
+    for number, line in enumerate(text.splitlines(), 1):
+        if _COMMENT_RE.match(line):
+            continue
+        if re.search(r"-AutoDeclinePackageRecovery\b", line, re.I):
+            errors.append((path, number, "P11", "-AutoDeclinePackageRecovery throws the package-recovery restore list away; never launch with it"))
+        elif (re.search(r"-unattended\b", line, re.I) and _EDITOR_RE.search(line)
+              and not re.search(r"-run=|-game\b|-nullrhi\b", line, re.I)):
+            errors.append((path, number, "P11", "-unattended on a GUI editor launch drops package recovery; only commandlets, -game or -nullrhi runs may use it"))
+
+
 def scan(paths):
     files = []
     for p in paths:
@@ -213,7 +233,7 @@ def scan(paths):
             continue
         for root, dirs, names in os.walk(p):
             dirs[:] = [d for d in dirs if d not in ("Intermediate", "Binaries", "__pycache__", ".git", "fixtures")]
-            files += [os.path.join(root, n) for n in names if n.endswith((".h", ".cpp", ".py"))]
+            files += [os.path.join(root, n) for n in names if n.endswith((".h", ".cpp") + SCRIPT_EXTS)]
     texts = {f: open(f, encoding="utf-8", errors="replace").read() for f in files}
     cpp_sources = [t for f, t in texts.items() if f.endswith(".cpp")]
     holders = std_holders([t for f, t in texts.items() if f.endswith((".h", ".cpp"))])
@@ -223,6 +243,8 @@ def scan(paths):
             check_cpp(f, t, errors, cpp_sources + [t], holders)
         elif f.endswith(".py") and "preflight" not in os.path.basename(f):
             check_py(f, t, errors)
+        if f.endswith(SCRIPT_EXTS) and "preflight" not in os.path.basename(f):
+            check_editor_flags(f, t, errors)
     check_uht_names(texts, errors)
     return errors
 
