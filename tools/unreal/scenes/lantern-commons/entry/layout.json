@@ -1,0 +1,479 @@
+[
+  {
+    "kind": "Prop_Orr_Aqueduct_Arch",
+    "label": "CommonsR6WelcomeArch",
+    "x": -2100,
+    "y": -800,
+    "scale": 1.25,
+    "yaw": 90,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Post",
+    "label": "CommonsR6EntryLanternL",
+    "x": -2100,
+    "y": -1145,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Long",
+    "label": "CommonsR6EntryPlanterL",
+    "x": -2350,
+    "y": -1290,
+    "scale": 1.3,
+    "yaw": 90,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Fence_Low",
+    "label": "CommonsR6EntryFenceL",
+    "x": -2100,
+    "y": -1440,
+    "scale": 1.2,
+    "yaw": 90,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6EntryHedgeL",
+    "x": -2220,
+    "y": -1450,
+    "scale": 1.8,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Lantern_Post",
+    "label": "CommonsR6EntryLanternR",
+    "x": -2100,
+    "y": -455,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Planter_Long",
+    "label": "CommonsR6EntryPlanterR",
+    "x": -2350,
+    "y": -310,
+    "scale": 1.3,
+    "yaw": 90,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Fence_Low",
+    "label": "CommonsR6EntryFenceR",
+    "x": -2100,
+    "y": -160,
+    "scale": 1.2,
+    "yaw": 90,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6EntryHedgeR",
+    "x": -2220,
+    "y": -150,
+    "scale": 1.8,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR6EntryStone0L",
+    "x": -1910,
+    "y": -848,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR6EntryStone0R",
+    "x": -1910,
+    "y": -752,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR6EntryStone1L",
+    "x": -1660,
+    "y": -848,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR6EntryStone1R",
+    "x": -1660,
+    "y": -752,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR6EntryStone2L",
+    "x": -1410,
+    "y": -848,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR6EntryStone2R",
+    "x": -1410,
+    "y": -752,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR6EntryStone3L",
+    "x": -1160,
+    "y": -848,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Orr_Path_Tile_Cobble",
+    "label": "CommonsR6EntryStone3R",
+    "x": -1160,
+    "y": -752,
+    "scale": 1,
+    "yaw": 0,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Crater_RimRock",
+    "label": "CommonsR6BoundaryRock0",
+    "x": -3150,
+    "y": 4700,
+    "scale": 1.05,
+    "yaw": 30,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6BoundaryHedge0",
+    "x": -3340,
+    "y": 4540,
+    "scale": 1.8,
+    "yaw": 30,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR6BoundaryWillowTrunk0",
+    "x": -3150,
+    "y": 4700,
+    "scale": 1.05,
+    "yaw": 30,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR6BoundaryWillowCanopy0",
+    "x": -3150,
+    "y": 4700,
+    "scale": 1.05,
+    "yaw": 30,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Crater_RimRock",
+    "label": "CommonsR6BoundaryRock1",
+    "x": 500,
+    "y": 4700,
+    "scale": 1.1,
+    "yaw": 100,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6BoundaryHedge1",
+    "x": 310,
+    "y": 4540,
+    "scale": 1.8,
+    "yaw": 100,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR6BoundaryWillowTrunk1",
+    "x": 500,
+    "y": 4700,
+    "scale": 1.17,
+    "yaw": 100,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR6BoundaryWillowCanopy1",
+    "x": 500,
+    "y": 4700,
+    "scale": 1.17,
+    "yaw": 100,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Crater_RimRock",
+    "label": "CommonsR6BoundaryRock2",
+    "x": 3350,
+    "y": 4650,
+    "scale": 0.95,
+    "yaw": 150,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6BoundaryHedge2",
+    "x": 3160,
+    "y": 4490,
+    "scale": 1.8,
+    "yaw": 150,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR6BoundaryWillowTrunk2",
+    "x": 3350,
+    "y": 4650,
+    "scale": 1.29,
+    "yaw": 150,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR6BoundaryWillowCanopy2",
+    "x": 3350,
+    "y": 4650,
+    "scale": 1.29,
+    "yaw": 150,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Crater_RimRock",
+    "label": "CommonsR6BoundaryRock3",
+    "x": 4750,
+    "y": 2500,
+    "scale": 1.1,
+    "yaw": 40,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6BoundaryHedge3",
+    "x": 4560,
+    "y": 2340,
+    "scale": 1.8,
+    "yaw": 40,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR6BoundaryWillowTrunk3",
+    "x": 4750,
+    "y": 2500,
+    "scale": 1.05,
+    "yaw": 40,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR6BoundaryWillowCanopy3",
+    "x": 4750,
+    "y": 2500,
+    "scale": 1.05,
+    "yaw": 40,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Crater_RimRock",
+    "label": "CommonsR6BoundaryRock4",
+    "x": 4750,
+    "y": -2500,
+    "scale": 1,
+    "yaw": 120,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6BoundaryHedge4",
+    "x": 4560,
+    "y": -2660,
+    "scale": 1.8,
+    "yaw": 120,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR6BoundaryWillowTrunk4",
+    "x": 4750,
+    "y": -2500,
+    "scale": 1.17,
+    "yaw": 120,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR6BoundaryWillowCanopy4",
+    "x": 4750,
+    "y": -2500,
+    "scale": 1.17,
+    "yaw": 120,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Crater_RimRock",
+    "label": "CommonsR6BoundaryRock5",
+    "x": 2800,
+    "y": -4650,
+    "scale": 1.1,
+    "yaw": 60,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6BoundaryHedge5",
+    "x": 2610,
+    "y": -4810,
+    "scale": 1.8,
+    "yaw": 60,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR6BoundaryWillowTrunk5",
+    "x": 2800,
+    "y": -4650,
+    "scale": 1.29,
+    "yaw": 60,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR6BoundaryWillowCanopy5",
+    "x": 2800,
+    "y": -4650,
+    "scale": 1.29,
+    "yaw": 60,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Crater_RimRock",
+    "label": "CommonsR6BoundaryRock6",
+    "x": -500,
+    "y": -4650,
+    "scale": 1.05,
+    "yaw": 140,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6BoundaryHedge6",
+    "x": -690,
+    "y": -4810,
+    "scale": 1.8,
+    "yaw": 140,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR6BoundaryWillowTrunk6",
+    "x": -500,
+    "y": -4650,
+    "scale": 1.05,
+    "yaw": 140,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR6BoundaryWillowCanopy6",
+    "x": -500,
+    "y": -4650,
+    "scale": 1.05,
+    "yaw": 140,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Crater_RimRock",
+    "label": "CommonsR6BoundaryRock7",
+    "x": -3550,
+    "y": -4500,
+    "scale": 0.95,
+    "yaw": 10,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6BoundaryHedge7",
+    "x": -3740,
+    "y": -4660,
+    "scale": 1.8,
+    "yaw": 10,
+    "z": 20
+  },
+  {
+    "kind": "willow",
+    "label": "CommonsR6BoundaryWillowTrunk7",
+    "x": -3550,
+    "y": -4500,
+    "scale": 1.17,
+    "yaw": 10,
+    "z": 20
+  },
+  {
+    "kind": "canopy",
+    "label": "CommonsR6BoundaryWillowCanopy7",
+    "x": -3550,
+    "y": -4500,
+    "scale": 1.17,
+    "yaw": 10,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Island_RockCluster_K11V0",
+    "label": "CommonsR6WestRock0",
+    "x": -4750,
+    "y": -2300,
+    "scale": 1.45,
+    "yaw": 40,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6WestHedge0",
+    "x": -4580,
+    "y": -2430,
+    "scale": 1.8,
+    "yaw": 40,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Island_RockCluster_K11V0",
+    "label": "CommonsR6WestRock1",
+    "x": -4750,
+    "y": 1800,
+    "scale": 1.45,
+    "yaw": 140,
+    "z": 20
+  },
+  {
+    "kind": "Prop_Shrub_Hedge",
+    "label": "CommonsR6WestHedge1",
+    "x": -4580,
+    "y": 1670,
+    "scale": 1.8,
+    "yaw": 140,
+    "z": 20
+  }
+]

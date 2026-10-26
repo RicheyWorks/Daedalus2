@@ -1,0 +1,57 @@
+name,kind,category,world,owner,status,queue_status,blender_files,uassets,path
+Mob_Gallery_Sketcher,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_Sketcher.glb
+Mob_Gallery_CuratorVell,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_CuratorVell.glb
+Mob_Gallery_FrameHangerTwins,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_FrameHangerTwins.glb
+Mob_Gallery_VarnishMonk,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_VarnishMonk.glb
+Mob_Gallery_RestorerAma,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_RestorerAma.glb
+Mob_Gallery_PigmentMiner,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_PigmentMiner.glb
+Mob_Gallery_GalleryGuard,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_GalleryGuard.glb
+Mob_Gallery_StreetMuralist,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_StreetMuralist.glb
+Mob_Gallery_LightTailor,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_LightTailor.glb
+Mob_Gallery_DroneMechanicPell,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_DroneMechanicPell.glb
+Mob_Gallery_CriticBloom,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_CriticBloom.glb
+Mob_Gallery_LostSelfPortrait,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_LostSelfPortrait.glb
+Mob_Gallery_EchoChoir,Mob,characters,Gallery City,team-codex,blender_only,READY,gallery-buildout/cast/gallery-city-cast.blend,,gallery-buildout/cast/Mob_Gallery_EchoChoir.glb
+Mob_Gallery_Smudgeling,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_Smudgeling.glb
+Mob_Gallery_ThumbtackBeetle,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_ThumbtackBeetle.glb
+Mob_Gallery_CanvasMoth,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_CanvasMoth.glb
+Mob_Gallery_EaselStrider,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_EaselStrider.glb
+Mob_Gallery_TurpentineToad,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_TurpentineToad.glb
+Mob_Gallery_MosaicHound,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_MosaicHound.glb
+Mob_Gallery_GildedFrameMimic,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_GildedFrameMimic.glb
+Mob_Gallery_SentinelBust,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_SentinelBust.glb
+Mob_Gallery_LightProjection,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_LightProjection.glb
+Mob_Gallery_GreyWash,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_GreyWash.glb
+Mob_Gallery_PaperCrane,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_PaperCrane.glb
+Mob_Gallery_BrushtailSquirrel,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_BrushtailSquirrel.glb
+Mob_Gallery_GalleryDrone,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_GalleryDrone.glb
+Mob_Gallery_KiteRay,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_KiteRay.glb
+Mob_Gallery_EaselMule,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_EaselMule.glb
+Mob_Gallery_Inkpup,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_Inkpup.glb
+Mob_Gallery_PrismFinch,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_PrismFinch.glb
+Mob_Gallery_CrayonGecko,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_CrayonGecko.glb
+Mob_Gallery_LampMoth,Mob,fauna,Gallery City,team-codex,blender_only,READY,gallery-buildout/creatures/gallery-creatures.blend,,gallery-buildout/creatures/Mob_Gallery_LampMoth.glb
+Prop_Gallery_FloorTile,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_FloorTile.glb
+Prop_Gallery_MosaicFloor,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_MosaicFloor.glb
+Prop_Gallery_Walkway,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_Walkway.glb
+Prop_Gallery_FrameWall,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_FrameWall.glb
+Prop_Gallery_WindowWall,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_WindowWall.glb
+Prop_Gallery_DoorFrame,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_DoorFrame.glb
+Prop_Gallery_CornerColumn,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_CornerColumn.glb
+Prop_Gallery_Railing,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_Railing.glb
+Prop_Gallery_Ramp,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_Ramp.glb
+Prop_Gallery_Stairs,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_Stairs.glb
+Prop_Gallery_PaintingFrame,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_PaintingFrame.glb
+Prop_Gallery_MuralPanel,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_MuralPanel.glb
+Prop_Gallery_RestorationBench,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_RestorationBench.glb
+Prop_Gallery_PigmentCrate,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_PigmentCrate.glb
+Prop_Gallery_BrushRack,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_BrushRack.glb
+Prop_Gallery_VarnishStation,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_VarnishStation.glb
+Prop_Gallery_TailorStand,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_TailorStand.glb
+Prop_Gallery_CriticLectern,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_CriticLectern.glb
+Prop_Gallery_DroneDock,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_DroneDock.glb
+Prop_Gallery_DroneRepairBench,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_DroneRepairBench.glb
+Prop_Gallery_ConcertPlatform,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_ConcertPlatform.glb
+Prop_Gallery_RainbowFrame,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_RainbowFrame.glb
+Prop_Gallery_AirlockEntry,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_AirlockEntry.glb
+Prop_Gallery_QuestNoticeboard,Prop,props (other),Gallery City,team-codex,blender_only,READY,gallery-buildout/environment/gallery-environment.blend,,gallery-buildout/environment/Prop_Gallery_QuestNoticeboard.glb

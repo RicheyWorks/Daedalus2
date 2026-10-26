@@ -1,0 +1,8 @@
+{
+  "_comment": "Every suite the harness runs. floor: the fewest checks the suite may count and still pass (a suite that silently counts fewer is red even if it exits 0). Raise floors with run_all --raise-floors, never by hand downward.",
+  "suites": [
+    {"name": "e2e", "cmd": ["-m", "harness.e2e"], "floor": 23, "what": "the MCP extension over stdio, end to end, against the stand-in editor"},
+    {"name": "contract", "cmd": ["-m", "harness.contract"], "floor": 14, "what": "risk ladder, policy refusals, request_id replay"},
+    {"name": "walk", "cmd": ["-m", "harness.walk", "--standin"], "floor": 14, "what": "every listed command driven and accounted for"}
+  ]
+}

@@ -1,0 +1,57 @@
+name,kind,category,world,owner,status,queue_status,blender_files,uassets,path
+Mob_Bricks_Builder,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_Builder.glb
+Mob_Bricks_ForemanKip,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_ForemanKip.glb
+Mob_Bricks_BrickBaker,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_BrickBaker.glb
+Mob_Bricks_BlueprintArchivist,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_BlueprintArchivist.glb
+Mob_Bricks_CraneOperatorSal,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_CraneOperatorSal.glb
+Mob_Bricks_DemolitionDuo,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_DemolitionDuo.glb
+Mob_Bricks_MayorMinifold,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_MayorMinifold.glb
+Mob_Bricks_AirfieldAceNova,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_AirfieldAceNova.glb
+Mob_Bricks_ToySoldierSergeant,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_ToySoldierSergeant.glb
+Mob_Bricks_MissingPieceCollector,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_MissingPieceCollector.glb
+Mob_Bricks_AdhesiveAlchemist,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_AdhesiveAlchemist.glb
+Mob_Bricks_Studmonger,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_Studmonger.glb
+Mob_Bricks_BuilderKidsClub,Mob,characters,Brick Realm,team-codex,blender_only,READY,bricks-buildout/cast/brick-cast.blend,,bricks-buildout/cast/Mob_Bricks_BuilderKidsClub.glb
+Mob_Bricks_Brickbug,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_Brickbug.glb
+Mob_Bricks_LooseStud,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_LooseStud.glb
+Mob_Bricks_PlateCrab,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_PlateCrab.glb
+Mob_Bricks_HingeHound,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_HingeHound.glb
+Mob_Bricks_SlopeSlug,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_SlopeSlug.glb
+Mob_Bricks_RebuildRex,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_RebuildRex.glb
+Mob_Bricks_WindUpKnight,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_WindUpKnight.glb
+Mob_Bricks_TowerTitan,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_TowerTitan.glb
+Mob_Bricks_MagnetMoth,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_MagnetMoth.glb
+Mob_Bricks_Unmaker,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_Unmaker.glb
+Mob_Bricks_ClockworkPigeon,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_ClockworkPigeon.glb
+Mob_Bricks_SpringFrog,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_SpringFrog.glb
+Mob_Bricks_BrickPlane,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_BrickPlane.glb
+Mob_Bricks_BrickPony,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_BrickPony.glb
+Mob_Bricks_HoverCart,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_HoverCart.glb
+Mob_Bricks_Studpup,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_Studpup.glb
+Mob_Bricks_TileTurtle,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_TileTurtle.glb
+Mob_Bricks_SpinnerTop,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_SpinnerTop.glb
+Mob_Bricks_PocketBot,Mob,fauna,Brick Realm,team-codex,blender_only,READY,bricks-buildout/creatures/brick-creatures.blend,,bricks-buildout/creatures/Mob_Bricks_PocketBot.glb
+Prop_Bricks_MeadowTile,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_MeadowTile.glb
+Prop_Bricks_Baseplate,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_Baseplate.glb
+Prop_Bricks_RoadTile,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_RoadTile.glb
+Prop_Bricks_Wall,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_Wall.glb
+Prop_Bricks_WindowWall,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_WindowWall.glb
+Prop_Bricks_DoorFrame,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_DoorFrame.glb
+Prop_Bricks_Column,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_Column.glb
+Prop_Bricks_Rail,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_Rail.glb
+Prop_Bricks_Ramp,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_Ramp.glb
+Prop_Bricks_Stairs,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_Stairs.glb
+Prop_Bricks_Workbench,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_Workbench.glb
+Prop_Bricks_Kiln,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_Kiln.glb
+Prop_Bricks_RecipeArchive,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_RecipeArchive.glb
+Prop_Bricks_CraneBase,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_CraneBase.glb
+Prop_Bricks_SalvageBin,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_SalvageBin.glb
+Prop_Bricks_Noticeboard,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_Noticeboard.glb
+Prop_Bricks_TradeCounter,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_TradeCounter.glb
+Prop_Bricks_RunwayTile,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_RunwayTile.glb
+Prop_Bricks_HangarFrame,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_HangarFrame.glb
+Prop_Bricks_RepairBay,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_RepairBay.glb
+Prop_Bricks_ConcertPlatform,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_ConcertPlatform.glb
+Prop_Bricks_RainbowFrame,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_RainbowFrame.glb
+Prop_Bricks_BoatDock,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_BoatDock.glb
+Prop_Bricks_UnderwaterAirlock,Prop,props (other),Brick Realm,team-codex,blender_only,READY,bricks-buildout/environment/brick-environment.blend,,bricks-buildout/environment/Prop_Bricks_UnderwaterAirlock.glb

@@ -1,0 +1,370 @@
+# SPDX-License-Identifier: MIT
+"""Hephaestus's 10-minute editor turn (referee equal-turn order: youtube-master -> hephaestus -> pythagoras). Run ONLY for a granted turn.
+    python heph_turn.py [--now]
+The referee HOLDS the turn clock while the editor is down, so every slot after the hold shifts. This runner is therefore
+handoff-driven, not clock-driven: it never starts before EARLIEST, and it starts only when the previous holder (youtube-master)
+posts a HANDOFF, or the referee (buffffff) / 2hot2trot posts a GRANT or GO addressed to hephaestus. No fixed-time fallback.
+The 10 minutes are counted from the moment it starts: work hard-stops at start+8 min, Play stop + save by start+9 min.
+Bridge liveness PREFLIGHT before CLAIM: once cleared, it pings the bridge with a short timeout; while the bridge is dead
+(GPU-crashed editor, socket refused or ping never answers) it does NOT post TURN START, does not start the 10-minute clock and
+does not place anything; it posts one HOLD note, re-pings every HEPH_PREFLIGHT_S (default 30 s) and needs two good pings in a
+row after a failure, until the bridge recovers or GIVE_UP. Each check writes shots/hephaestus/bridge_status.json {ok, ts, detail}.
+Then: ping bridge (retries while the editor comes back) -> stop Play if running -> heph_island_ue.run() -> hero shot -> save ->
+post DONE + HANDOFF -> pythagoras. Bridge port: HEPH_BRIDGE_PORT (default 9877; editor B in the multi-editor plan is 9878).
+Whatever fails, it stops Play and saves."""
+import base64, datetime as dt, json, os, re, socket, sys, time
+
+REPO = r"C:\Users\730ri\projects\Daedalus2"
+TOOL = REPO + r"\tools\islands\hephaestus"
+LINK = r"C:\Users\730ri\projects\bot-team\link"
+SHOTS = r"C:\Users\730ri\projects\bot-team\shots\hephaestus"
+OUTBOX = LINK + r"\outbox\hephaestus.jsonl"
+PREV = os.environ.get("HEPH_PREV", "youtube-master")
+NEXT = os.environ.get("HEPH_NEXT", "pythagoras")
+GRANTERS = ("buffffff", "2hot2trot")
+PORT = int(os.environ.get("HEPH_BRIDGE_PORT", "9877"))
+TODAY = dt.date.today()
+def _hhmm(name, default):
+    """HH:MM today, or a full ISO stamp (YYYY-MM-DDTHH:MM) so a re-arm after midnight can point at yesterday's posts."""
+    v = os.environ.get(name, default)
+    if "T" in v or "-" in v: return dt.datetime.fromisoformat(v[:16])
+    h, m = v.split(":")
+    return dt.datetime.combine(TODAY, dt.time(int(h), int(m)))
+
+
+def give_up_at(start=None, env=None):
+    """When to stop waiting. HEPH_GIVE_UP=HH:MM (an already-passed time rolls to tomorrow, so a round-3 turn armed at 23:10 is
+    not killed by a stale 23:00), else start + HEPH_GIVE_UP_MIN minutes (default 180). Replaces the old fixed 23:00 give-up."""
+    env = os.environ if env is None else env
+    start = start or dt.datetime.now()
+    v = env.get("HEPH_GIVE_UP")
+    if v:
+        h, m = v.split(":")
+        t = dt.datetime.combine(start.date(), dt.time(int(h), int(m)))
+        return t if t > start else t + dt.timedelta(days=1)
+    return start + dt.timedelta(minutes=int(env.get("HEPH_GIVE_UP_MIN", "180")))
+
+
+# round-2 re-arm: HEPH_SINCE=19:40 so round-1's 18:43 youtube-master HANDOFF can't re-trigger a turn
+EARLIEST = _hhmm("HEPH_EARLIEST", os.environ.get("HEPH_SINCE", "17:43"))  # never start earlier than this
+SINCE = _hhmm("HEPH_SINCE", "17:30")     # only HANDOFF/GRANT posts newer than this count
+GIVE_UP = give_up_at()  # relative (start+180 min) or HEPH_GIVE_UP rolling past midnight; was a fixed 23:00 that would burn round 3
+TURN_S, WORK_S, SAVE_S = 600, 480, 60
+# a real handoff names us as the receiver ("HANDOFF youtube-master -> hephaestus"); "going after disk-saver HANDOFF" must not count
+HANDOFF_US = re.compile(r"HANDOFF\s+hephaestus\b|HANDOFF[^.]{0,60}?(->|\\u2192|\u2192|\bto\b)\s*hephaestus", re.I)
+GRANT_US = re.compile(r"GRANT[^.]{0,40}?hephaestus|GO hephaestus", re.I)
+# referee skip of the previous holder = our turn (e.g. "youtube-master forfeits", "skip youtube-master")
+SKIP_PREV = re.compile(r"skip\w*\s+" + re.escape(PREV) + r"|" + re.escape(PREV) + r"[^.]{0,60}?\b(forfeit\w*|skipped|skips)\b", re.I)
+PREFLIGHT_S = int(os.environ.get("HEPH_PREFLIGHT_S", "30"))  # re-ping period while the bridge is dead
+PING_S = int(os.environ.get("HEPH_PING_S", "5"))               # liveness ping timeout (call() adds +10 s socket slack)
+LOG = []
+T0 = None
+HARD_STOP = None
+
+
+def say(m):
+    line = f"[{dt.datetime.now():%H:%M:%S}] {m}"; print(line, flush=True); LOG.append(line)
+
+
+def link(text, to="*"):
+    with open(OUTBOX, "a", encoding="utf-8") as f:
+        f.write(json.dumps({"from": "hephaestus", "to": to, "type": "note", "body": {"text": text}}) + "\n")
+
+
+def _tail():
+    p = LINK + r"\log.jsonl"
+    try:
+        with open(p, "rb") as f:
+            f.seek(max(0, os.path.getsize(p) - 2_000_000)); return f.read().decode("utf-8", "ignore")
+    except OSError: return ""
+
+
+def go_signal(since):
+    """Who cleared us to start: PREV's HANDOFF, or a GRANT/GO to hephaestus from the referee or 2hot2trot (newer than `since`)."""
+    for line in _tail().splitlines()[::-1]:
+        if "HANDOFF" not in line and "GRANT" not in line and "GO" not in line and not SKIP_PREV.search(line): continue
+        try: r = json.loads(line)
+        except ValueError: continue
+        try:
+            if dt.datetime.fromisoformat(str(r.get("ts", ""))[:19]) < since: continue
+        except ValueError: continue
+        text = json.dumps(r.get("body", {}))
+        src = r.get("from")
+        if src == PREV and (HANDOFF_US.search(text) or "TURN DONE" in text): return f"{PREV} HANDOFF #{r.get('id')}"
+        if src in GRANTERS and ((r.get("to") == "hephaestus" and re.search(r"\bGRANT|\bGO\b", text)) or GRANT_US.search(text)):
+            return f"{src} GRANT #{r.get('id')}"
+        if src in GRANTERS and SKIP_PREV.search(text): return f"{src} SKIP {PREV} #{r.get('id')}"
+    return None
+
+
+def call(kind, timeout=60, **params):
+    params["bridge_timeout"] = timeout
+    with socket.create_connection(("127.0.0.1", PORT), timeout=timeout + 10) as s:
+        s.sendall((json.dumps({"id": int(time.time() * 1000), "type": kind, "params": params}) + "\n").encode())
+        buf = b""
+        while not buf.endswith(b"\n"):
+            chunk = s.recv(65536)
+            if not chunk: break
+            buf += chunk
+    r = json.loads(buf)
+    if r.get("status") != "ok": raise RuntimeError(f"{kind}: {r.get('message')}")
+    return r.get("result", {})
+
+
+def bridge_alive():
+    """Short liveness ping. A GPU-dead editor may refuse the socket or accept it and never answer; both count as dead.
+    Writes shots/hephaestus/bridge_status.json {ok, ts, detail} on every check."""
+    try:
+        p = call("ping", timeout=PING_S)
+        ok, detail = True, f"level={p.get('level')} playing={p.get('playing')}"
+    except Exception as e:
+        ok, detail = False, f"{type(e).__name__}: {e}"[:300]
+    try:
+        os.makedirs(SHOTS, exist_ok=True)
+        with open(os.path.join(SHOTS, "bridge_status.json"), "w", encoding="utf-8") as f:
+            json.dump({"ok": ok, "ts": dt.datetime.now().isoformat(timespec="seconds"), "port": PORT, "detail": detail}, f)
+    except OSError: pass
+    return ok, detail
+
+
+def preflight(why):
+    """Do not CLAIM while the bridge is dead: a crashed editor must not burn our 10-minute turn. True once the bridge
+    answers (twice in a row if it had been dead), False if still dead at GIVE_UP."""
+    held = False
+    while dt.datetime.now() < GIVE_UP:
+        ok, detail = bridge_alive()
+        if ok and held:  # just came back: make sure it stays up before we claim
+            time.sleep(10); ok, detail = bridge_alive()
+        if ok:
+            say(f"preflight: bridge 127.0.0.1:{PORT} alive ({detail})")
+            if held: link(f"DOING hephaestus: bridge {PORT} answering again ({detail}); claiming turn cleared by {why}")
+            return True
+        say(f"preflight: bridge 127.0.0.1:{PORT} DEAD ({detail}); NOT claiming or placing; re-ping in {PREFLIGHT_S}s "
+            f"(give-up {GIVE_UP:%H:%M})")
+        if not held:
+            link(f"HOLD hephaestus: cleared by {why} but bridge {PORT} is dead ({detail[:120]}); NOT claiming the turn or "
+                 f"placing; re-pinging every {PREFLIGHT_S}s until it answers or {GIVE_UP:%H:%M}. Turn clock not started.")
+            held = True
+        time.sleep(PREFLIGHT_S)
+    return False
+
+
+def free_ram_gb():
+    """Free physical RAM in GB (Windows GlobalMemoryStatusEx; no psutil needed). None if unknown."""
+    try:
+        import ctypes
+        class M(ctypes.Structure):
+            _fields_ = [("len", ctypes.c_ulong), ("load", ctypes.c_ulong), ("total", ctypes.c_ulonglong),
+                        ("avail", ctypes.c_ulonglong), ("tp", ctypes.c_ulonglong), ("ap", ctypes.c_ulonglong),
+                        ("tv", ctypes.c_ulonglong), ("av", ctypes.c_ulonglong), ("ext", ctypes.c_ulonglong)]
+        m = M(); m.len = ctypes.sizeof(M)
+        return m.avail / 2**30 if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m)) else None
+    except Exception: return None
+
+
+RAM_MIN_GB = float(os.environ.get("HEPH_RAM_MIN_GB", "1.0"))  # team rule 20:05: no imports under 1 GB free
+PREFLIGHT_JSON = REPO + r"\data\islands\hephaestus\preflight.json"
+
+
+def should_force_lod1(preflight, env):
+    """Auto LOD1 landmark swap. HEPH_FORCE_LOD1=0 disables, =1 forces; otherwise on when preflight lists lod1_ready
+    landmarks and needs_import is empty (hi-res already in Unreal, so only a forced reimport swaps in LOD1)."""
+    v = (env or {}).get("HEPH_FORCE_LOD1")
+    if v == "0": return False
+    if v == "1": return True
+    preflight = preflight or {}
+    return bool(preflight.get("lod1_ready")) and not preflight.get("needs_import")
+
+
+def load_preflight(path=PREFLIGHT_JSON):
+    try:
+        with open(path, encoding="utf-8") as f: return json.load(f)
+    except (OSError, ValueError): return {}
+
+
+def left(): return (HARD_STOP - dt.timedelta(seconds=SAVE_S) - dt.datetime.now()).total_seconds()
+
+
+def main():
+    global T0, HARD_STOP
+    why = "--now"
+    if "--now" not in sys.argv:
+        why = None
+        while dt.datetime.now() < GIVE_UP:
+            if dt.datetime.now() >= EARLIEST:
+                why = go_signal(SINCE)
+                if why: break
+            time.sleep(5)
+        if not why:
+            say(f"no HANDOFF from {PREV} and no GRANT by {GIVE_UP:%H:%M}; not starting")
+            link(f"BLOCKED editor turn (hephaestus): no HANDOFF from {PREV} or referee GRANT by {GIVE_UP:%H:%M}; "
+                 "did not touch the editor. Back of the line; need a new turn.")
+            return None
+    if not preflight(why):
+        say(f"bridge 127.0.0.1:{PORT} still dead at {GIVE_UP:%H:%M}; not starting")
+        link(f"BLOCKED editor turn (hephaestus): cleared by {why} but bridge {PORT} stayed dead until {GIVE_UP:%H:%M}; "
+             "never claimed, did not touch the editor. Need a make-up turn once the editor is back.")
+        return None
+    T0 = time.time()
+    start = dt.datetime.now()
+    HARD_STOP = start + dt.timedelta(seconds=WORK_S + SAVE_S)
+    say(f"go: {why}; work until {start + dt.timedelta(seconds=WORK_S):%H:%M:%S}, saved by {HARD_STOP:%H:%M:%S}, port {PORT}")
+    os.makedirs(SHOTS, exist_ok=True)
+    link(f"TURN START hephaestus {start:%H:%M}-{start + dt.timedelta(seconds=TURN_S):%H:%M} (after {why}): "
+         "DOING, placing Hephaestus Island in its own sublevel")
+    p = None
+    while p is None and left() > 60:
+        try: p = call("ping", timeout=15)
+        except Exception as e: say(f"bridge not up yet ({e}); retrying"); time.sleep(10)
+    if p is None: raise RuntimeError(f"bridge 127.0.0.1:{PORT} never answered")
+    say(f"editor: {p.get('level')} playing={p.get('playing')}")
+    if p.get("playing"): call("stop")
+    ram = free_ram_gb()
+    for _ in range(6):  # give the box up to ~60s to free memory before deciding
+        if ram is None or ram >= RAM_MIN_GB or left() < 120: break
+        say(f"RAM guard: {ram:.2f} GB free < {RAM_MIN_GB} GB; waiting"); time.sleep(10); ram = free_ram_gb()
+    low = ram is not None and ram < RAM_MIN_GB
+    say(f"RAM {'unknown' if ram is None else f'{ram:.2f} GB'} free; imports {'SKIPPED (place-only)' if low else 'allowed'}")
+    if low: link(f"DOING island:hephaestus: RAM guard {ram:.2f} GB free < {RAM_MIN_GB} GB, place-only turn (no glb imports)")
+    pf = load_preflight()
+    lod1 = should_force_lod1(pf, os.environ)
+    if lod1:
+        if os.environ.get("HEPH_FORCE_LOD1") != "1":
+            say(f"auto HEPH_FORCE_LOD1=1: preflight lod1_ready={len(pf.get('lod1_ready') or [])} landmarks, needs_import empty")
+        os.environ["HEPH_FORCE_LOD1"] = "1"
+        if low: say("HEPH_FORCE_LOD1 set but RAM guard skips imports this turn (no LOD1 swap)")
+    code = (f"import os,runpy,sys; os.environ['HEPH_NO_IMPORT']='{'1' if low else '0'}'; "
+            f"os.environ['HEPH_FORCE_LOD1']='{'1' if lod1 else '0'}'; sys.path.insert(0, r'{TOOL}'); "
+            f"result = runpy.run_path(r'{TOOL}\\heph_island_ue.py', run_name='heph_turn')['run']()")
+    isle = call("execute_python", timeout=int(max(30, left() - 25)), code=code).get("result"); say(f"island: {isle}")
+    if isle and left() > 20:
+        cam, rot = isle["cam"], isle["cam_rot"]
+        call("execute_python", timeout=15, code="import unreal; unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)."
+             f"set_level_viewport_camera_info(unreal.Vector({cam[0]},{cam[1]},{cam[2]}), unreal.Rotator(roll=0,pitch={rot[0]},yaw={rot[1]}))")
+        # Round-1 timed out on viewport_screenshot (modal/busy). Prefer SceneCapture from heph_island_ue (loads at turn start),
+        # then retry viewport + HighResShot. Stable path: hero_r2.png.
+        shot_path = os.path.join(SHOTS, "hero_r2.png")
+        shot_ok = False
+        # heph_island_ue.run() already tried warm SceneCapture; reuse if present
+        if isle.get("shot") and os.path.isfile(isle["shot"]) and os.path.getsize(isle["shot"]) > 1000:
+            shot_path = isle["shot"]; shot_ok = True; say(f"shot from island SceneCapture: {shot_path}")
+        elif os.path.isfile(shot_path) and os.path.getsize(shot_path) > 1000:
+            shot_ok = True; say(f"shot already on disk: {shot_path}")
+        if not shot_ok:
+            for attempt, (w, h, settle, to) in enumerate(((1920, 1080, 5, 45), (1920, 1080, 8, 60), (1280, 720, 5, 45)), 1):
+                if left() < 15: break
+                try:
+                    time.sleep(settle)
+                    r = call("viewport_screenshot", timeout=to, width=w, height=h)
+                    with open(shot_path, "wb") as f: f.write(base64.b64decode(r["image_png_base64"]))
+                    say(f"shot {shot_path} ({w}x{h} attempt {attempt})")
+                    shot_ok = True
+                    break
+                except Exception as e:
+                    say(f"viewport_screenshot attempt {attempt} failed: {e}")
+        if not shot_ok and left() > 20:
+            try:
+                hr = os.path.join(SHOTS, "hero_highres")
+                os.makedirs(hr, exist_ok=True)
+                code = (
+                    "import unreal\n"
+                    "unreal.SystemLibrary.execute_console_command(None, 'HighResShot 1920x1080')\n"
+                    "unreal.SystemLibrary.execute_console_command(None, 'Shot')\n"
+                    "result = {'ok': True}"
+                )
+                time.sleep(3)
+                call("execute_python", timeout=30, code=code)
+                time.sleep(4)
+                saved = r"C:\Unreal\DaedalusRealm\Saved\Screenshots"
+                cands = []
+                for root, _, files in os.walk(saved):
+                    for fn in files:
+                        if fn.lower().endswith(".png"):
+                            cands.append(os.path.join(root, fn))
+                if cands:
+                    import shutil
+                    newest = max(cands, key=os.path.getmtime)
+                    shutil.copy2(newest, shot_path)
+                    say(f"shot fallback HighResShot/Shot -> {shot_path} from {newest}")
+                    shot_ok = True
+                else:
+                    say("HighResShot fallback: no png under Saved/Screenshots yet")
+            except Exception as e:
+                say(f"HighResShot fallback failed: {e}")
+        if not shot_ok and left() > 25:
+            # Last resort: warm SceneCapture via heph_island_ue.hero_capture (file loaded from disk now)
+            try:
+                tgt = isle.get("hero_target") or [cam[0] - 14000, cam[1] + 16000, 500]
+                code = (
+                    "import runpy,sys\n"
+                    f"sys.path.insert(0, r'{TOOL}')\n"
+                    f"m = runpy.run_path(r'{TOOL}\\heph_island_ue.py', run_name='heph_shot')\n"
+                    "import unreal\n"
+                    f"cam = unreal.Vector({cam[0]},{cam[1]},{cam[2]})\n"
+                    f"tgt = unreal.Vector({tgt[0]},{tgt[1]},{tgt[2]})\n"
+                    "result = m['hero_capture'](cam, tgt)"
+                )
+                r = call("execute_python", timeout=int(min(90, max(30, left() - 10))), code=code).get("result")
+                if r and os.path.isfile(str(r)) and os.path.getsize(str(r)) > 1000:
+                    shot_path = str(r); shot_ok = True; say(f"shot SceneCapture re-arm path: {shot_path}")
+                else:
+                    say(f"SceneCapture re-call returned: {r}")
+            except Exception as e:
+                say(f"SceneCapture re-call failed: {e}")
+        if not shot_ok:
+            say("viewport_screenshot FAILED after retries + HighResShot + SceneCapture; hero shot still owed")
+            link("NEED island:hephaestus: viewport_screenshot still failing after retries+HighResShot+SceneCapture; hero shot owed (unreal-team bridge 9877)")
+        else:
+            link(f"DONE island:hephaestus hero shot ready: {shot_path}")
+        # Referee wants a 20s Play check (oddsreaper pattern). Only if time remains.
+        if left() > 35:
+            try:
+                call("play", timeout=60)
+                say("Play start (20s check)")
+                time.sleep(20)
+                play_shot = os.path.join(SHOTS, "hero_unreal_play.png")
+                try:
+                    r = call("viewport_screenshot", timeout=45, width=1280, height=720)
+                    with open(play_shot, "wb") as f: f.write(base64.b64decode(r["image_png_base64"]))
+                    say(f"play shot {play_shot}")
+                except Exception as e:
+                    say(f"play shot skipped: {e}")
+                call("stop", timeout=30)
+                say("Play stop after 20s check")
+                link("DONE island:hephaestus: 20s Play check completed (Play stopped)")
+            except Exception as e:
+                say(f"Play check failed: {e}")
+                link(f"NEED island:hephaestus: 20s Play check failed: {str(e)[:160]}")
+                try:
+                    call("stop", timeout=20)
+                except Exception:
+                    pass
+        else:
+            say(f"skip Play check; only {left():.0f}s left before save window")
+    return isle
+
+
+if __name__ == "__main__":
+    _bad = [x for x in sys.argv[1:] if x != "--now"]
+    if _bad:  # never run a turn on an unknown flag (round-3: "--help" ran a real out-of-turn turn)
+        print(__doc__); print(f"refusing: unknown args {_bad}; only --now is accepted; nothing done"); sys.exit(2)
+    ok, err, isle = True, "", None
+    try:
+        isle = main()
+        if isle is None and T0 is None: sys.exit(0)
+        ok = bool(isle and isle.get("ok"))
+    except Exception as e: ok, err = False, str(e); say(f"FAIL {e}")
+    finally:
+        if T0 is not None:
+            for step, fn in (("stop", lambda: call("stop", timeout=20)), ("save", lambda: call("save", timeout=60))):
+                try: fn(); say(step)
+                except Exception as e: say(f"{step} failed: {e}")
+            secs = time.time() - T0
+            summary = (f"placed {isle['placed']}/{isle['want']}, imported {isle['imported']} hero glbs, missing {isle['missing']}"
+                       if isle else "no placement result")
+            link(f"{'DONE' if ok else 'BLOCKED'} island:hephaestus editor turn {secs:.0f}s: {summary}; sublevel "
+                 f"/Game/Hephaestus/Maps/HephaestusIsland at 6000000,2000000; shot in {SHOTS}" + ("" if ok else f" | {err[:200]}") +
+                 " | Play stopped, saved")
+            link(f"TURN DONE + HANDOFF hephaestus -> {NEXT}: editor saved, Play stopped")
+            os.makedirs(SHOTS, exist_ok=True)
+            open(os.path.join(SHOTS, "turn.log"), "w").write("\n".join(LOG))

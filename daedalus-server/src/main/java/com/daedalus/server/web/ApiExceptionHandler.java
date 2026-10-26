@@ -178,18 +178,49 @@ public class ApiExceptionHandler {
     }
 
     /**
+     * First Identify used to train on the request thread (~40s). The fit now runs on a
+     * dedicated trainer; until it publishes, the answer is 503 with Retry-After, not a
+     * stuck Tomcat worker.
+     */
+    @ExceptionHandler(com.daedalus.server.service.FingerprintService.ClassifierWarmingException.class)
+    public ResponseEntity<ProblemDetail> onClassifierWarming(
+            com.daedalus.server.service.FingerprintService.ClassifierWarmingException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
+                HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+        pd.setTitle("Classifier warming");
+        pd.setType(URI.create("https://daedalus.dev/problems/classifier-warming"));
+        pd.setProperty("kind", "classifier-warming");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .header(HttpHeaders.RETRY_AFTER, "5")
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
+    /**
      * The living-maze ticker is full ({@code daedalus.living.max-concurrent} runs already
      * animating). 409 rather than 429: the caller's quota is fine — the shared resource is
      * busy, and retrying after a run settles will succeed.
      */
+    /**
+     * A plugin generator returned null. 500 rather than 400: the request named a
+     * registered id and valid dimensions — the implementation broke its contract.
+     */
+    @ExceptionHandler(com.daedalus.server.service.MazeGenerationService.NullGridException.class)
+    public ResponseEntity<ProblemDetail> onNullGrid(
+            com.daedalus.server.service.MazeGenerationService.NullGridException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        pd.setTitle("Generator returned nothing");
+        pd.setType(URI.create("https://daedalus.dev/problems/generator-contract"));
+        pd.setProperty("kind", "generator-contract");
+        pd.setProperty("generator", ex.generatorId());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
     @ExceptionHandler(com.daedalus.server.service.LivingMazeService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onLivingCapacity(
             com.daedalus.server.service.LivingMazeService.CapacityExceededException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-        pd.setTitle("Too many living mazes");
-        pd.setType(URI.create("https://daedalus.dev/problems/living-capacity"));
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+        return capacityConflict("Too many living mazes", "living-capacity", ex.getMessage());
     }
 
     /**
@@ -208,9 +239,29 @@ public class ApiExceptionHandler {
                 HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
         pd.setTitle("Solver gave up");
         pd.setType(URI.create("https://daedalus.dev/problems/solver-budget"));
+        pd.setProperty("kind", "solver-budget");
         pd.setProperty("solver", ex.solverId());
         pd.setProperty("nodeBudget", ex.budget());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
+    }
+
+    /**
+     * Join refused: the session finished, or it already has {@code MAX_PLAYERS}.
+     * Both are 409; the type tells the client whether to wait or pick another room.
+     */
+    @ExceptionHandler(com.daedalus.server.service.GameSessionService.JoinRefusedException.class)
+    public ResponseEntity<ProblemDetail> onJoinRefused(
+            com.daedalus.server.service.GameSessionService.JoinRefusedException ex) {
+        boolean done = ex.reason()
+                == com.daedalus.server.service.GameSessionService.JoinRefusedException.Reason.COMPLETED;
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle(done ? "Session completed" : "Session full");
+        pd.setType(URI.create(done
+                ? "https://daedalus.dev/problems/session-completed"
+                : "https://daedalus.dev/problems/session-full"));
+        pd.setProperty("kind", done ? "session-completed" : "session-full");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }
 
@@ -218,9 +269,48 @@ public class ApiExceptionHandler {
     @ExceptionHandler(com.daedalus.server.service.TrafficService.CapacityExceededException.class)
     public ResponseEntity<ProblemDetail> onTrafficCapacity(
             com.daedalus.server.service.TrafficService.CapacityExceededException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-        pd.setTitle("Too many tracked mazes");
-        pd.setType(URI.create("https://daedalus.dev/problems/traffic-capacity"));
+        return capacityConflict("Too many tracked mazes", "traffic-capacity", ex.getMessage());
+    }
+
+    /** Session store is full — refuse the new open; do not LRU-evict a mid-hunt session. */
+    @ExceptionHandler(com.daedalus.server.service.GameSessionService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onSessionCapacity(
+            com.daedalus.server.service.GameSessionService.CapacityExceededException ex) {
+        return capacityConflict("Too many live sessions", "session-capacity", ex.getMessage());
+    }
+
+    /** Agent walk store is full — same 409 posture as the session pool. */
+    @ExceptionHandler(com.daedalus.server.service.AgentWalkService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onAgentCapacity(
+            com.daedalus.server.service.AgentWalkService.CapacityExceededException ex) {
+        return capacityConflict("Too many agent walks", "agent-capacity", ex.getMessage());
+    }
+
+    /** Maze cache is full — refuse the new generate; do not LRU-evict a maze still in play. */
+    @ExceptionHandler(com.daedalus.server.service.MazeGenerationService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onMazeCapacity(
+            com.daedalus.server.service.MazeGenerationService.CapacityExceededException ex) {
+        return capacityConflict("Too many cached mazes", "maze-capacity", ex.getMessage());
+    }
+
+    /** Waypoint placements are full — refuse the new maze's first tour; do not LRU-evict frozen coins. */
+    @ExceptionHandler(com.daedalus.server.service.WaypointService.CapacityExceededException.class)
+    public ResponseEntity<ProblemDetail> onTourCapacity(
+            com.daedalus.server.service.WaypointService.CapacityExceededException ex) {
+        return capacityConflict("Too many waypoint tours", "tour-capacity", ex.getMessage());
+    }
+
+    /**
+     * Shared 409 for a bounded store that is full. Kind is the problem-type slug
+     * ({@code living-capacity}, {@code session-capacity}, …) so clients can tell
+     * which pool to wait on. Title stays human; detail is the service message.
+     */
+    private static ResponseEntity<ProblemDetail> capacityConflict(
+            String title, String kind, String detail) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, detail);
+        pd.setTitle(title);
+        pd.setType(URI.create("https://daedalus.dev/problems/" + kind));
+        pd.setProperty("kind", kind);
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON).body(pd);
     }

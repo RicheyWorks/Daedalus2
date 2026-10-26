@@ -116,7 +116,10 @@ public class MazeGrid {
 
     public void carve(Cell from, Direction d) {
         Point np = from.position().step(d);
-        if (!inBounds(np)) return;
+        if (!inBounds(np)) {
+            throw new IllegalArgumentException(
+                    "Cannot carve " + d + " from " + from.position() + ": out of bounds");
+        }
         Cell to = cell(np);
         from.open(d);
         to.open(d.opposite());
@@ -128,6 +131,21 @@ public class MazeGrid {
             throw new IllegalArgumentException("Points " + a + " and " + b + " are not adjacent");
         }
         carve(cell(a), d);
+    }
+
+    /**
+     * Close the passage between two adjacent cells on both sides. The inverse of
+     * {@link #carve(Point, Point)} — living-mazes v2 ({@code Sealer}) uses this to harden a
+     * maze. Callers that must stay connected have to pick a non-bridge; this method itself
+     * only toggles walls.
+     */
+    public void seal(Point a, Point b) {
+        Direction d = directionBetween(a, b);
+        if (d == null) {
+            throw new IllegalArgumentException("Points " + a + " and " + b + " are not adjacent");
+        }
+        cell(a).close(d);
+        cell(b).close(d.opposite());
     }
 
     /**
@@ -161,14 +179,21 @@ public class MazeGrid {
 
     public List<Point> openNeighbors(Point p) {
         List<Point> out = new ArrayList<>(4);
-        Cell here = cell(p);
         for (Direction d : Direction.values()) {
-            if (here.isOpen(d)) {
+            if (isOpen(p.row(), p.col(), d)) {
                 Point n = p.step(d);
                 if (inBounds(n)) out.add(n);
             }
         }
         return out;
+    }
+
+    /**
+     * Whether the passage from {@code (row, col)} toward {@code d} is open. Coordinate form
+     * so the graph seam can walk walls without allocating a {@link Point} per hop.
+     */
+    public boolean isOpen(int row, int col, Direction d) {
+        return cell(row, col).isOpen(d);
     }
 
     /**

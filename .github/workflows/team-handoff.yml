@@ -1,0 +1,36 @@
+name: Agent handoff harness
+on:
+  pull_request:
+    paths:
+      - 'connectors/claude-asset-pipeline/asset_pipeline/teamlink.py'
+      - 'connectors/claude-asset-pipeline/asset_pipeline/live_handoff.py'
+      - 'connectors/claude-asset-pipeline/harness/*handoff_test.py'
+      - 'connectors/claude-asset-pipeline/harness/teamlink_test.py'
+      - 'connectors/claude-asset-pipeline/harness/teamlink_doctor_test.py'
+      - 'connectors/claude-asset-pipeline/teamlink.ps1'
+      - 'connectors/claude-asset-pipeline/harness/teamlink_watch_test.py'
+      - '.github/workflows/team-handoff.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  handoff:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python harness/live_handoff_test.py
+        working-directory: connectors/claude-asset-pipeline
+      - run: python harness/teamlink_test.py
+        working-directory: connectors/claude-asset-pipeline
+
+      - run: python harness/teamlink_doctor_test.py
+        working-directory: connectors/claude-asset-pipeline
+
+      - run: python harness/teamlink_watch_test.py
+        working-directory: connectors/claude-asset-pipeline

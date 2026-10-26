@@ -6,8 +6,8 @@ with evidence. Each check continues past failures so one break cannot hide the r
     # The sweep generates well over the default 30-mazes-per-minute budget, so run the
     # server with the generous test-profile limits or it will throttle itself mid-run.
     SPRING_PROFILES_ACTIVE=test java -jar daedalus-server/target/daedalus-server-*-exec.jar &
-    python3 sweep/api-sweep.py      # 14 checks, API level
-    node    sweep/ui-sweep.js       # 16 checks, real browser (needs playwright)
+    python3 sweep/api-sweep.py      # 22 checks, API level
+    node    sweep/ui-sweep.js       # leftover-state N-checks, real browser (needs playwright)
 
 Why it exists: features were verified individually in the batch that built them, but later
 consolidation work modified services those earlier features depend on (`LivingMazeService`,

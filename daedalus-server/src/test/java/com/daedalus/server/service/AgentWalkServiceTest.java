@@ -159,4 +159,60 @@ class AgentWalkServiceTest {
                 .as("unknown maze → null → controller 404")
                 .isNull();
     }
+
+    @Test
+    void openingPastTheWalkCapRefusesInsteadOfEvictingAMidHuntWalk() {
+        var capped = new AgentWalkService(gen, event -> { }, 2, Duration.ofHours(1), 100_000);
+        var first = capped.open(mazeId, 8);
+        assertThat(first).isNotNull();
+        capped.step(first.agentId(), first.open().get(0));
+        var second = capped.open(mazeId, 8);
+        assertThat(second).isNotNull();
+
+        assertThatThrownBy(() -> capped.open(mazeId, 8))
+                .as("Caffeine put at maximumSize used to LRU-evict the older walk; "
+                        + "the next view then 404ed after an unrelated open")
+                .isInstanceOf(AgentWalkService.CapacityExceededException.class);
+
+        assertThat(capped.view(first.agentId()))
+                .as("the mid-hunt walk must still be queryable after the refused open")
+                .isNotNull();
+        assertThat(capped.view(first.agentId()).stepsUsed()).isEqualTo(1);
+        assertThat(capped.view(second.agentId())).isNotNull();
+    }
+
+    @Test
+    void twoFirstWalksCannotBothTakeTheLastSlot() throws Exception {
+        var capped = new AgentWalkService(gen, event -> { }, 1, Duration.ofHours(1), 100_000);
+        var go = new java.util.concurrent.CountDownLatch(1);
+        var accepted = new java.util.concurrent.CopyOnWriteArrayList<UUID>();
+        var refused = new java.util.concurrent.atomic.AtomicInteger();
+        try (var pool = java.util.concurrent.Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceOpen(capped, mazeId, go, accepted, refused));
+            var b = pool.submit(() -> raceOpen(capped, mazeId, go, accepted, refused));
+            go.countDown();
+            a.get(2, java.util.concurrent.TimeUnit.SECONDS);
+            b.get(2, java.util.concurrent.TimeUnit.SECONDS);
+        }
+        assertThat(accepted).as("exactly one first walk owns the only slot").hasSize(1);
+        assertThat(refused.get()).isEqualTo(1);
+        assertThat(capped.view(accepted.get(0)))
+                .as("the walk that won the slot is still live")
+                .isNotNull();
+    }
+
+    private static void raceOpen(AgentWalkService agents, UUID mazeId,
+                                 java.util.concurrent.CountDownLatch go,
+                                 java.util.concurrent.CopyOnWriteArrayList<UUID> accepted,
+                                 java.util.concurrent.atomic.AtomicInteger refused) {
+        try {
+            go.await();
+            accepted.add(agents.open(mazeId, 8).agentId());
+        } catch (AgentWalkService.CapacityExceededException e) {
+            refused.incrementAndGet();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
 }

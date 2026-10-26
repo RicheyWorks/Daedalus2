@@ -3,7 +3,11 @@
 package com.daedalus.server;
 
 import com.daedalus.engine.generators.GeneratorRegistry;
+import com.daedalus.server.health.FingerprintHealthIndicator;
+import com.daedalus.server.health.LeaderboardHealthIndicator;
+import com.daedalus.server.health.LivingMazeHealthIndicator;
 import com.daedalus.server.health.PluginSubsystemHealthIndicator;
+import com.daedalus.server.health.TrafficHealthIndicator;
 import com.daedalus.solver.solvers.SolverRegistry;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,7 +72,8 @@ class ApplicationSmokeTest {
             "/api/v1/maze/{id}",
             "/api/v1/maze/{id}/solve/{solverId}",
             "/api/v1/auth/login",
-            "/api/v1/plugins");
+            "/api/v1/plugins",
+            "/api/v1/leaderboard");
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -116,6 +121,38 @@ class ApplicationSmokeTest {
     }
 
     @Test
+    void leaderboardHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
+        assertThat(context.getBeansOfType(LeaderboardHealthIndicator.class))
+                .as("Redis read and write fallbacks must be health details, not warn-only logs")
+                .isNotEmpty();
+        assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
+    }
+
+    @Test
+    void fingerprintHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
+        assertThat(context.getBeansOfType(FingerprintHealthIndicator.class))
+                .as("a thrown classifier fit must be a health detail, not a warn-only log")
+                .isNotEmpty();
+        assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
+    }
+
+    @Test
+    void livingMazeHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
+        assertThat(context.getBeansOfType(LivingMazeHealthIndicator.class))
+                .as("a thrown living tick must be a health detail, not a warn-only log")
+                .isNotEmpty();
+        assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
+    }
+
+    @Test
+    void trafficHealthIndicatorIsRegistered_andDoesNotDragTheAggregateDown() {
+        assertThat(context.getBeansOfType(TrafficHealthIndicator.class))
+                .as("a thrown traffic tick must be a health detail, not a warn-only log")
+                .isNotEmpty();
+        assertThat(readTree(getBody("/actuator/health")).path("status").asText()).isEqualTo("UP");
+    }
+
+    @Test
     void openApiDocument_isServedAndCoversTheContractEndpoints() {
         JsonNode doc = readTree(getBody("/v3/api-docs"));
 
@@ -140,6 +177,17 @@ class ApplicationSmokeTest {
         // read by someone without the source checked out, which is exactly the reader those
         // links failed.
         JsonNode info = doc.path("info");
+        assertThat(info.path("version").asText())
+                .as("spec version is the project version, not the first-draft leftover")
+                .isEqualTo("1.2.0-SNAPSHOT");
+        List<String> tagNames = new ArrayList<>();
+        doc.path("tags").forEach(t -> tagNames.add(t.path("name").asText()));
+        assertThat(tagNames)
+                .as("every live controller tag is registered, not only the first three")
+                .contains("Mazes", "Agents", "Insight", "Campaign", "Auth",
+                        "Plugins", "Leaderboard");
+        JsonNode lbTags = paths.path("/api/v1/leaderboard").path("get").path("tags");
+        assertThat(lbTags.toString()).contains("Leaderboard");
         for (String url : List.of(info.path("contact").path("url").asText(),
                                   info.path("license").path("url").asText(),
                                   doc.path("externalDocs").path("url").asText())) {

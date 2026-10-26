@@ -1,0 +1,931 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Par_MailBag",
+   "kind": "Prop",
+   "seed": 1414,
+   "spec": {
+    "row": 11,
+    "gap": "G14",
+    "tri_cap": 1500,
+    "lod": "LOD0/1",
+    "collision": "UCX box",
+    "size_m": "bag 0.5 m",
+    "sockets": [
+     "Carry"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Par_MailBag_M0",
+     "colour": "canvas",
+     "hex": "8C6B3F",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Par_MailBag_M1",
+     "colour": "leather strap",
+     "hex": "5A3A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Par_MailBag_M2",
+     "colour": "brass",
+     "hex": "B08D3C",
+     "roughness": 0.5,
+     "metallic": 0.6,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Par_MailBag",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "box",
+       "size": [
+        0.45,
+        0.15,
+        0.32
+       ],
+       "centre": [
+        0,
+        0,
+        0.16
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Body_L1",
+       "shape": "box",
+       "size": [
+        0.45,
+        0.15,
+        0.32
+       ],
+       "centre": [
+        0,
+        0,
+        0.16
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Flap",
+       "shape": "box",
+       "size": [
+        0.46,
+        0.03,
+        0.17
+       ],
+       "centre": [
+        0,
+        -0.085,
+        0.24
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Flap_L1",
+       "shape": "box",
+       "size": [
+        0.46,
+        0.03,
+        0.17
+       ],
+       "centre": [
+        0,
+        -0.085,
+        0.24
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Buckle",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.02,
+        0.05
+       ],
+       "centre": [
+        0,
+        -0.105,
+        0.17
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Strap0",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.04,
+        0.012
+       ],
+       "centre": [
+        0.20473,
+        0,
+        0.36673
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        77.1429,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "Strap1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.04,
+        0.012
+       ],
+       "centre": [
+        0.16418,
+        0,
+        0.45093
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        51.4286,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strap2",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.04,
+        0.012
+       ],
+       "centre": [
+        0.09112,
+        0,
+        0.5092
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        25.7143,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "Strap3",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.04,
+        0.012
+       ],
+       "centre": [
+        0.0,
+        0,
+        0.53
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0.0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strap4",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.04,
+        0.012
+       ],
+       "centre": [
+        -0.09112,
+        0,
+        0.5092
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        -25.7143,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "Strap5",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.04,
+        0.012
+       ],
+       "centre": [
+        -0.16418,
+        0,
+        0.45093
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        -51.4286,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Strap6",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.04,
+        0.012
+       ],
+       "centre": [
+        -0.20473,
+        0,
+        0.36673
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        -77.1429,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Carry",
+     "location": [
+      0,
+      0,
+      0.53
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.53,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Par_MailBag_00",
+     "shape": "box",
+     "size": [
+      0.46,
+      0.18,
+      0.33
+     ],
+     "centre": [
+      0,
+      -0.01,
+      0.165
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 184,
+    "lod1_triangles": 84,
+    "lod1_ratio": 0.457,
+    "objects": {
+     "Prop_Par_MailBag": 184
+    },
+    "bounds_min": [
+     -0.23,
+     -0.115,
+     0.0
+    ],
+    "bounds_max": [
+     0.23,
+     0.075,
+     0.5363
+    ],
+    "dimensions": [
+     0.46,
+     0.19,
+     0.5363
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "58849a391b1bf8f584a1690e51192cbb2162f293c85a8b3fdc44332303fe1da1"
+  },
+  {
+   "asset": "Prop_Par_Letter",
+   "kind": "Prop",
+   "seed": 1414,
+   "lod1": false,
+   "spec": {
+    "row": 11,
+    "gap": "G14",
+    "tri_cap": 1500,
+    "lod": "LOD0 only (80 tris)",
+    "collision": "UCX box",
+    "size_m": "letter 0.2 m",
+    "sockets": [
+     "Carry"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Par_Letter_M0",
+     "colour": "paper",
+     "hex": "E8DDC0",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Par_Letter_M1",
+     "colour": "wax seal",
+     "hex": "A12A2A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Par_Letter",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Envelope",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.12,
+        0.004
+       ],
+       "centre": [
+        0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FlapL",
+       "shape": "box",
+       "size": [
+        0.115,
+        0.004,
+        0.0012
+       ],
+       "centre": [
+        -0.045,
+        -0.025,
+        0.0046
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        28
+       ]
+      },
+      {
+       "name": "FlapR",
+       "shape": "box",
+       "size": [
+        0.115,
+        0.004,
+        0.0012
+       ],
+       "centre": [
+        0.045,
+        -0.025,
+        0.0046
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -28
+       ]
+      },
+      {
+       "name": "Seal",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.013,
+       "length": 0.003,
+       "centre": [
+        0,
+        -0.005,
+        0.0055
+       ],
+       "slot": 1,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Carry",
+     "location": [
+      0,
+      0,
+      0.004
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.004,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Par_Letter_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.12,
+      0.008
+     ],
+     "centre": [
+      0,
+      0,
+      0.004
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 80,
+    "lod1_triangles": null,
+    "lod1_ratio": null,
+    "objects": {
+     "Prop_Par_Letter": 80
+    },
+    "bounds_min": [
+     -0.1,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     0.1,
+     0.06,
+     0.007
+    ],
+    "dimensions": [
+     0.2,
+     0.12,
+     0.007
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ee44aec1ff555b479ef38f0bb9b9c9130bb983add98e60ded1b662f0b3c5e869"
+  },
+  {
+   "asset": "Prop_Par_PlotMailbox",
+   "kind": "Prop",
+   "seed": 1414,
+   "spec": {
+    "row": 11,
+    "gap": "G14",
+    "tri_cap": 1500,
+    "lod": "LOD0/1",
+    "collision": "UCX box",
+    "size_m": "mailbox 1.2 m",
+    "sockets": [
+     "Slot"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Par_PlotMailbox_M0",
+     "colour": "post wood",
+     "hex": "7A5232",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Par_PlotMailbox_M1",
+     "colour": "painted tin",
+     "hex": "3E6E8E",
+     "roughness": 0.6,
+     "metallic": 0.4,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Par_PlotMailbox_M2",
+     "colour": "flag red",
+     "hex": "C0392B",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Par_PlotMailbox",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "box",
+       "size": [
+        0.09,
+        0.09,
+        0.95
+       ],
+       "centre": [
+        0,
+        0,
+        0.475
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Post_L1",
+       "shape": "box",
+       "size": [
+        0.09,
+        0.09,
+        0.95
+       ],
+       "centre": [
+        0,
+        0,
+        0.475
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Shelf",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.48,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.965
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Shelf_L1",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.48,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.965
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Box",
+       "shape": "box",
+       "size": [
+        0.25,
+        0.45,
+        0.13
+       ],
+       "centre": [
+        0,
+        0,
+        1.045
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Roof",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.125,
+       "r2": 0.125,
+       "length": 0.45,
+       "centre": [
+        0,
+        0,
+        1.11
+       ],
+       "slot": 1,
+       "segments": 16,
+       "lod1": {
+        "segments": 8
+       }
+      },
+      {
+       "name": "Slot",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.012,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.226,
+        1.08
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FlagArm",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.03,
+        0.18
+       ],
+       "centre": [
+        0.131,
+        0.08,
+        1.1
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Flag",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.09,
+        0.06
+       ],
+       "centre": [
+        0.131,
+        0.05,
+        1.17
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Slot",
+     "location": [
+      0,
+      -0.23,
+      1.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.08,
+      0.23
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Par_PlotMailbox_00",
+     "shape": "box",
+     "size": [
+      0.1,
+      0.1,
+      0.95
+     ],
+     "centre": [
+      0,
+      0,
+      0.475
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Par_PlotMailbox_01",
+     "shape": "box",
+     "size": [
+      0.27,
+      0.46,
+      0.27
+     ],
+     "centre": [
+      0,
+      0,
+      1.1
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 228,
+    "lod1_triangles": 120,
+    "lod1_ratio": 0.526,
+    "objects": {
+     "Prop_Par_PlotMailbox": 228
+    },
+    "bounds_min": [
+     -0.14,
+     -0.24,
+     0.0
+    ],
+    "bounds_max": [
+     0.14,
+     0.24,
+     1.235
+    ],
+    "dimensions": [
+     0.28,
+     0.48,
+     1.235
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "40d4a786e088ca7f30ea67191a55d9b68d7ecd9ea5f20f3986cb80a2292383ac"
+  }
+ ]
+}

@@ -31,6 +31,6 @@ class MazeWebSocketMutationBridgeTest {
                 new MazeGrid(5, 5)));
 
         verify(stomp).convertAndSend("/topic/maze/" + mazeId + "/state",
-                new MutationFrame(mazeId, 4, 3, 12, false));
+                new MutationFrame(mazeId, 4, 3, 0, 12, false));
     }
 }

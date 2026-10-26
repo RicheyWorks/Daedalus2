@@ -1,0 +1,778 @@
+[
+{
+"i": 375,
+"name": "Rock_Basalt_V11",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 376,
+"name": "Rock_Basalt_V12",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 377,
+"name": "Rock_Basalt_V13",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 378,
+"name": "Rock_Basalt_V14",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 379,
+"name": "Rock_Basalt_V15",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 380,
+"name": "Rock_Basalt_V16",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 381,
+"name": "Rock_Basalt_V17",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 382,
+"name": "Rock_Basalt_V18",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 383,
+"name": "Rock_Basalt_V19",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 384,
+"name": "Rock_Basalt_V20",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 385,
+"name": "Rock_Basalt_V21",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 386,
+"name": "Rock_Basalt_V22",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 387,
+"name": "Rock_Basalt_V23",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 388,
+"name": "Rock_Basalt_V24",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 389,
+"name": "Rock_Basalt_V25",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 390,
+"name": "Rock_Basalt_V26",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 391,
+"name": "Rock_Basalt_V27",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 392,
+"name": "Rock_Basalt_V28",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 393,
+"name": "Rock_Basalt_V29",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 394,
+"name": "Rock_Basalt_V30",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 395,
+"name": "Rock_Basalt_V31",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 396,
+"name": "Rock_Basalt_V32",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 397,
+"name": "Rock_Basalt_V33",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 398,
+"name": "Rock_Basalt_V34",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 399,
+"name": "Rock_Basalt_V35",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 400,
+"name": "Rock_Basalt_V36",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 401,
+"name": "Rock_Basalt_V37",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 402,
+"name": "Rock_Basalt_V38",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 403,
+"name": "Rock_Basalt_V39",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 404,
+"name": "Rock_Basalt_V40",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 405,
+"name": "Rock_Basalt_V41",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 406,
+"name": "Rock_Basalt_V42",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 407,
+"name": "Rock_Basalt_V43",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 408,
+"name": "Rock_Basalt_V44",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 409,
+"name": "Rock_Basalt_V45",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 410,
+"name": "Rock_Basalt_V46",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 411,
+"name": "Rock_Basalt_V47",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 412,
+"name": "Rock_Basalt_V48",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 413,
+"name": "Rock_Basalt_V49",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 414,
+"name": "Rock_Basalt_V50",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 415,
+"name": "Rock_Basalt_V51",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 416,
+"name": "Rock_Basalt_V52",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 417,
+"name": "Rock_Basalt_V53",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 418,
+"name": "Rock_Basalt_V54",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 419,
+"name": "Rock_Basalt_V55",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 420,
+"name": "Rock_Basalt_V56",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 421,
+"name": "Rock_Basalt_V57",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 422,
+"name": "Rock_Basalt_V58",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 423,
+"name": "Rock_Basalt_V59",
+"cat": "rock",
+"tris": 80
+},
+{
+"i": 424,
+"name": "Tree_Spruce_V00",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 425,
+"name": "Tree_Spruce_V01",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 426,
+"name": "Tree_Spruce_V02",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 427,
+"name": "Tree_Spruce_V03",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 428,
+"name": "Tree_Spruce_V04",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 429,
+"name": "Tree_Spruce_V05",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 430,
+"name": "Tree_Spruce_V06",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 431,
+"name": "Tree_Spruce_V07",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 432,
+"name": "Tree_Spruce_V08",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 433,
+"name": "Tree_Spruce_V09",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 434,
+"name": "Tree_Spruce_V10",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 435,
+"name": "Tree_Spruce_V11",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 436,
+"name": "Tree_Spruce_V12",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 437,
+"name": "Tree_Spruce_V13",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 438,
+"name": "Tree_Spruce_V14",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 439,
+"name": "Tree_Spruce_V15",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 440,
+"name": "Tree_Spruce_V16",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 441,
+"name": "Tree_Spruce_V17",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 442,
+"name": "Tree_Spruce_V18",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 443,
+"name": "Tree_Spruce_V19",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 444,
+"name": "Tree_Spruce_V20",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 445,
+"name": "Tree_Spruce_V21",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 446,
+"name": "Tree_Spruce_V22",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 447,
+"name": "Tree_Spruce_V23",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 448,
+"name": "Tree_Spruce_V24",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 449,
+"name": "Tree_Spruce_V25",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 450,
+"name": "Tree_Spruce_V26",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 451,
+"name": "Tree_Spruce_V27",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 452,
+"name": "Tree_Spruce_V28",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 453,
+"name": "Tree_Spruce_V29",
+"cat": "tree",
+"tris": 100
+},
+{
+"i": 454,
+"name": "Fungus_Shelf_V00",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 455,
+"name": "Fungus_Shelf_V01",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 456,
+"name": "Fungus_Shelf_V02",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 457,
+"name": "Fungus_Shelf_V03",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 458,
+"name": "Fungus_Shelf_V04",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 459,
+"name": "Fungus_Shelf_V05",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 460,
+"name": "Fungus_Shelf_V06",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 461,
+"name": "Fungus_Shelf_V07",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 462,
+"name": "Fungus_Shelf_V08",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 463,
+"name": "Fungus_Shelf_V09",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 464,
+"name": "Fungus_Shelf_V10",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 465,
+"name": "Fungus_Shelf_V11",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 466,
+"name": "Fungus_Shelf_V12",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 467,
+"name": "Fungus_Shelf_V13",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 468,
+"name": "Fungus_Shelf_V14",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 469,
+"name": "Fungus_Shelf_V15",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 470,
+"name": "Fungus_Shelf_V16",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 471,
+"name": "Fungus_Shelf_V17",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 472,
+"name": "Fungus_Shelf_V18",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 473,
+"name": "Fungus_Shelf_V19",
+"cat": "fungus",
+"tris": 132
+},
+{
+"i": 474,
+"name": "Music_Vinyl_V00",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 475,
+"name": "Music_Vinyl_V01",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 476,
+"name": "Music_Vinyl_V02",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 477,
+"name": "Music_Vinyl_V03",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 478,
+"name": "Music_Vinyl_V04",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 479,
+"name": "Music_Vinyl_V05",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 480,
+"name": "Music_Vinyl_V06",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 481,
+"name": "Music_Vinyl_V07",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 482,
+"name": "Music_Vinyl_V08",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 483,
+"name": "Music_Vinyl_V09",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 484,
+"name": "Music_Vinyl_V10",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 485,
+"name": "Music_Vinyl_V11",
+"cat": "music",
+"tris": 184,
+"kind": "Vinyl"
+},
+{
+"i": 486,
+"name": "Music_PressPlate_V00",
+"cat": "music",
+"tris": 196,
+"kind": "PressPlate"
+},
+{
+"i": 487,
+"name": "Music_PressPlate_V01",
+"cat": "music",
+"tris": 196,
+"kind": "PressPlate"
+},
+{
+"i": 488,
+"name": "Music_PressPlate_V02",
+"cat": "music",
+"tris": 196,
+"kind": "PressPlate"
+},
+{
+"i": 489,
+"name": "Music_PressPlate_V03",
+"cat": "music",
+"tris": 196,
+"kind": "PressPlate"
+},
+{
+"i": 490,
+"name": "Music_Speaker_V00",
+"cat": "music",
+"tris": 88,
+"kind": "Speaker"
+},
+{
+"i": 491,
+"name": "Music_Speaker_V01",
+"cat": "music",
+"tris": 88,
+"kind": "Speaker"
+},
+{
+"i": 492,
+"name": "Music_Speaker_V02",
+"cat": "music",
+"tris": 88,
+"kind": "Speaker"
+},
+{
+"i": 493,
+"name": "Music_Speaker_V03",
+"cat": "music",
+"tris": 88,
+"kind": "Speaker"
+},
+{
+"i": 494,
+"name": "Music_Speaker_V04",
+"cat": "music",
+"tris": 88,
+"kind": "Speaker"
+},
+{
+"i": 495,
+"name": "Music_Speaker_V05",
+"cat": "music",
+"tris": 88,
+"kind": "Speaker"
+},
+{
+"i": 496,
+"name": "Music_Lantern_V00",
+"cat": "music",
+"tris": 120,
+"kind": "Lantern"
+},
+{
+"i": 497,
+"name": "Music_Lantern_V01",
+"cat": "music",
+"tris": 120,
+"kind": "Lantern"
+},
+{
+"i": 498,
+"name": "Music_Lantern_V02",
+"cat": "music",
+"tris": 120,
+"kind": "Lantern"
+},
+{
+"i": 499,
+"name": "Music_Lantern_V03",
+"cat": "music",
+"tris": 120,
+"kind": "Lantern"
+}
+]

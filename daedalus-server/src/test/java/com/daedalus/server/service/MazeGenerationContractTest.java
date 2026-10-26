@@ -187,13 +187,43 @@ class MazeGenerationContractTest {
         var svc = service();
         Method fallback = MazeGenerationService.class.getDeclaredMethod(
                 "fallback", String.class, int.class, int.class, long.class,
-                java.util.List.class, Throwable.class);
+                java.util.List.class, double.class, Throwable.class);
         fallback.setAccessible(true);
         var callerError = new IllegalArgumentException("unknown generator: nope");
 
-        assertThatThrownBy(() -> fallback.invoke(svc, "nope", 9, 9, 1L, null, callerError))
+        assertThatThrownBy(() -> fallback.invoke(svc, "nope", 9, 9, 1L, null, 0.0, callerError))
                 .isInstanceOf(InvocationTargetException.class)
                 .cause().isSameAs(callerError);
+    }
+
+    @Test
+    void theFallbackRethrowsAnUnknownAlgorithmInsteadOfServingBinaryTree() throws Exception {
+        var svc = service();
+        Method fallback = MazeGenerationService.class.getDeclaredMethod(
+                "fallback", String.class, int.class, int.class, long.class,
+                java.util.List.class, double.class, Throwable.class);
+        fallback.setAccessible(true);
+        var unknown = new com.daedalus.engine.UnknownAlgorithmException(
+                "generator", "nope", java.util.List.of("binary-tree"));
+
+        assertThatThrownBy(() -> fallback.invoke(svc, "nope", 9, 9, 1L, null, 0.0, unknown))
+                .isInstanceOf(InvocationTargetException.class)
+                .cause().isSameAs(unknown);
+    }
+
+    @Test
+    void theFallbackRethrowsCapacityInsteadOfServingADifferentMaze() throws Exception {
+        var svc = service();
+        Method fallback = MazeGenerationService.class.getDeclaredMethod(
+                "fallback", String.class, int.class, int.class, long.class,
+                java.util.List.class, double.class, Throwable.class);
+        fallback.setAccessible(true);
+        var full = new MazeGenerationService.CapacityExceededException(1);
+
+        assertThatThrownBy(() -> fallback.invoke(svc, "recursive-backtracker", 9, 9, 1L,
+                null, 0.0, full))
+                .isInstanceOf(InvocationTargetException.class)
+                .cause().isSameAs(full);
     }
 
     @Test
@@ -207,7 +237,7 @@ class MazeGenerationContractTest {
                 new SimpleMeterRegistry());
 
         assertThatThrownBy(() -> svc.generate("null-plugin", 9, 9, 1L))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(MazeGenerationService.NullGridException.class)
                 .hasMessageContaining("null-plugin");
     }
 

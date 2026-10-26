@@ -17,23 +17,49 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    # Validate approved integration stacks before their parent merges.
+    branches: [ main, codex/realm-production-queue ]
 
-# Cancel in-flight runs on the same ref when a new push lands — saves CI
-# minutes on rapid pushes / rebases.
+# Cancel superseded pull_request runs on the same ref (saves CI minutes on
+# rapid pushes / rebases), but never cancel push runs on main: every merge
+# must finish its own run so main always has a completed result.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # contents: write is needed only by the coverage-badge commit step on main.
 permissions:
   contents: write
 
 jobs:
+  windows-host:
+    name: Windows plugin host
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      # Plugin JAR-lock and host destroyMethod are Windows-specific. Ubuntu
+      # already runs the full reactor; this job is the half that was invisible
+      # on linux file locks.
+      - name: Plugin host shutdown on Windows
+        shell: bash
+        run: mvn -B -ntp -pl daedalus-server -am test -Dtest=PluginHostShutdownTest -Dsurefire.failIfNoSpecifiedTests=false
+      - name: Minimal Unreal packaging fixture scope guards
+        run: python -m unittest discover -s tools/unreal/packaging-witness -p test_prepare_fixture.py -v
+      - name: Unattended ingestion checkpoint and refusal guards
+        run: python -m unittest tools/unreal_mcp/test_unattended_ingestion.py tools/unreal_mcp/test_unattended_codex_adapter.py -v
+
   build:
     name: Build & test
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
 
     # The Codecov step's guard needs the secret visible to a step-level `if:`.
     # The `secrets` context is not recognized there (using it makes the whole
@@ -81,11 +107,33 @@ jobs:
         # Their tests pin the claims the examples' narratives make — without
         # this step, 17 test methods across these three modules never execute
         # on any push, and a core API change that breaks an example ships
-        # green (TESTING.md, gap P1).
+        # green (TESTING.md, former gap P1 — closed 2026-07-31).
         run: |
           mvn -B -ntp -f examples/loadbalancer-topology/pom.xml clean package
           mvn -B -ntp -f examples/dungeon-layout/pom.xml clean package
           mvn -B -ntp -f examples/benchmark-harness/pom.xml clean package
+          mvn -B -ntp -f examples/openxr-plugin/pom.xml clean package
+
+      # WebUiSmokeTest is a source-shape pin, not a feature sweep. This is the
+      # real HTTP pass: generate, solve, live, traffic, sessions, breed, tour.
+      # Playwright ui-sweep.js stays local — it needs a browser and minutes.
+      - name: API sweep against a test-profile server
+        run: |
+          set -euo pipefail
+          JAR=$(echo daedalus-server/target/daedalus-server-*-exec.jar)
+          SPRING_PROFILES_ACTIVE=test java -jar "$JAR" &
+          SERVER_PID=$!
+          cleanup() { kill "$SERVER_PID" 2>/dev/null || true; wait "$SERVER_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:8080/actuator/health >/dev/null; then
+              break
+            fi
+            sleep 2
+          done
+          curl -sf http://localhost:8080/actuator/health >/dev/null
+          python3 -m unittest discover -s sweep -p 'test_*.py'
+          python3 sweep/api-sweep.py
 
       # Coverage upload (BACKLOG: the last outstanding piece of the original
       # "GitHub Actions CI" item). Guarded on the CODECOV_TOKEN secret —
@@ -98,7 +146,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ env.CODECOV_TOKEN }}
-          files: daedalus-core/target/site/jacoco/jacoco.xml,daedalus-plugin-api/target/site/jacoco/jacoco.xml,daedalus-plugin-runtime/target/site/jacoco/jacoco.xml,daedalus-server/target/site/jacoco/jacoco.xml,daedalus-desktop/target/site/jacoco/jacoco.xml
+          files: daedalus-core/target/site/jacoco/jacoco.xml,daedalus-plugin-api/target/site/jacoco/jacoco.xml,daedalus-plugin-runtime/target/site/jacoco/jacoco.xml,daedalus-server/target/site/jacoco/jacoco.xml,daedalus-desktop/target/site/jacoco/jacoco.xml,daedalus-explore/target/site/jacoco/jacoco.xml
           fail_ci_if_error: false
 
       # Coverage badge: only on pushes to main (not PRs — no commit rights
@@ -126,7 +174,19 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add .github/badges
             git commit -m "chore: update coverage badge [skip ci]"
-            git push
+            # Main runs are no longer cancelled by the next merge, so main may have
+            # moved on while this run was testing. Rebase the badge commit onto the
+            # latest main and retry; the badge is cosmetic, so never fail the build
+            # over it (the next main run refreshes it).
+            ok=0
+            for i in 1 2 3; do
+              if git pull --rebase --quiet origin main && git push; then ok=1; break; fi
+              git rebase --abort 2>/dev/null || true
+              sleep $((i * 5))
+            done
+            if [[ $ok -ne 1 ]]; then
+              echo "::warning::coverage badge not pushed (main moved on); the next main run refreshes it"
+            fi
           else
             echo "Badge unchanged — nothing to commit."
           fi

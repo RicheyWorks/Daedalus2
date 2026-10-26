@@ -1,0 +1,79 @@
+#pragma once
+#include <cstddef>
+#include <string>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+// Ordered, per-player quest progress. Caller supplies authoritative events.
+// No inventory awards, networking, persistence or client trust is implied.
+namespace DaedalusPortalQuest
+{
+struct Step
+{
+    std::string Type;
+    std::string Target;
+    unsigned Required = 1;
+};
+enum class Result { Ignored, Duplicate, Progressed, Completed, CapacityReached };
+
+class Progress
+{
+public:
+    // Exceptions are off in Unreal game targets (preflight P8): a bad step list leaves the quest empty and
+    // Valid() false, and Why() says what was wrong.
+    explicit Progress(std::vector<Step> steps) : Steps(std::move(steps))
+    {
+        if (Steps.empty() || Steps.size() > 32)
+        {
+            Invalid = "Quest needs one to thirty-two steps";
+            Steps.clear();
+            return;
+        }
+        for (const auto& s : Steps)
+            if (s.Type.empty() || s.Target.empty() || s.Required == 0)
+            {
+                Invalid = "Quest step needs type, target and positive count";
+                Steps.clear();
+                return;
+            }
+    }
+    bool Valid() const { return Invalid.empty(); }
+    const std::string& Why() const { return Invalid; }
+
+    Result Apply(const std::string& eventId, const std::string& type,
+                 const std::string& target, unsigned amount = 1)
+    {
+        if (!Valid() || eventId.empty() || eventId.size() > 128 || amount == 0)
+            return Result::Ignored;
+        if (Seen.count(eventId)) return Result::Duplicate;
+        if (Complete()) return Result::Ignored;
+        const Step& s = Steps[Current];
+        if (s.Type != type || s.Target != target) return Result::Ignored;
+        // Never evict processed IDs and thereby permit old replay.
+        if (Seen.size() >= 512) return Result::CapacityReached;
+        Seen.insert(eventId);
+        const unsigned remaining = s.Required - Count;
+        Count += amount < remaining ? amount : remaining;
+        if (Count == s.Required) { ++Current; Count = 0; }
+        return Complete() ? Result::Completed : Result::Progressed;
+    }
+
+    bool Complete() const { return Valid() && Current == Steps.size(); }
+    std::size_t StepIndex() const { return Current; }
+    unsigned StepCount() const { return Count; }
+    bool ClaimReward()
+    {
+        if (!Complete() || RewardClaimed) return false;
+        RewardClaimed = true;
+        return true; // A signal only. Host must persist/award atomically.
+    }
+private:
+    std::vector<Step> Steps;
+    std::string Invalid;
+    std::unordered_set<std::string> Seen;
+    std::size_t Current = 0;
+    unsigned Count = 0;
+    bool RewardClaimed = false;
+};
+}

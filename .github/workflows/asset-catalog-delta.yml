@@ -1,0 +1,35 @@
+name: Asset catalog delta
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/blender/asset_catalog_delta.py'
+      - 'tools/blender/production_queue.py'
+      - 'tools/blender/test_asset_catalog_delta.py'
+      - 'tools/blender/test_production_queue.py'
+      - '.github/workflows/asset-catalog-delta.yml'
+  pull_request:
+    paths:
+      - 'tools/blender/asset_catalog_delta.py'
+      - 'tools/blender/production_queue.py'
+      - 'tools/blender/test_asset_catalog_delta.py'
+      - 'tools/blender/test_production_queue.py'
+      - '.github/workflows/asset-catalog-delta.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Verify catalog deltas
+        run: python -B -m unittest discover -s tools/blender -p test_asset_catalog_delta.py -v
+      - name: Preserve existing queue behavior
+        run: python -B -m unittest discover -s tools/blender -p test_production_queue.py -v

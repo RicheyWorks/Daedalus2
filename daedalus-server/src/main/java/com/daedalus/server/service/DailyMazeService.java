@@ -22,7 +22,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * self-prunes to the last few days, so this adds no unbounded store (house rule,
  * 2026-07-29 audit). If the maze cache evicts the day's maze (2h idle TTL on a quiet
  * server), the next request regenerates it — same seed, same maze, new id — rather than
- * pinning cache entries or resurrecting evicted ones.
+ * pinning cache entries or resurrecting evicted ones. Two first requests used to each
+ * {@code generate} and keep the loser in the maze cache until idle TTL; admission is
+ * now per-date {@code compute}, so the day mints one maze.
  */
 @Service
 public class DailyMazeService {
@@ -61,24 +63,16 @@ public class DailyMazeService {
         LocalDate date = LocalDate.now(clock);
         byDate.keySet().removeIf(d -> d.isBefore(date.minusDays(2))); // self-pruning, stays tiny
 
-        while (true) {
-            UUID id = byDate.get(date);
-            if (id != null) {
-                var cached = gen.find(id);
+        UUID id = byDate.compute(date, (d, existing) -> {
+            if (existing != null) {
+                var cached = gen.find(existing);
                 if (cached != null) {
-                    return new Daily(date, cached);
+                    return existing;
                 }
-                byDate.remove(date, id); // evicted from the maze cache — regenerate (same seed)
-                continue;
             }
-            var fresh = gen.generate(generatorId, rows, cols, seedFor(date));
-            UUID winner = byDate.putIfAbsent(date, fresh.metadata().id());
-            if (winner == null) {
-                return new Daily(date, fresh);
-            }
-            // Lost a first-request race: the winner's maze is the canonical one for the day
-            // (the loser's copy is topologically identical anyway — same seed). Loop to fetch.
-        }
+            return gen.generate(generatorId, rows, cols, seedFor(date)).metadata().id();
+        });
+        return new Daily(date, gen.find(id));
     }
 
     /**

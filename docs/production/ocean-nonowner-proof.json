@@ -1,0 +1,39 @@
+{
+  "passed": [
+    {
+      "mode": "boat",
+      "elapsed_seconds": 24.734,
+      "server_pid": 45228,
+      "client_pid": 59260,
+      "port": 61622,
+      "result": "[2026.10.13-21.24.49:721][450]LogTemp: Display: OCEAN_NETWORK_PASS mode=boat x=1693.449 z=0.000 stopped=2.003",
+      "transport": "localhost Unreal IpNetDriver; actual remote owner RPC",
+      "rendered_gameplay_proven": false,
+      "server_log_sha256": "db285ffed87186e2b3de7d77dbac4d6566bc1375bf587acad236a47c7e817044",
+      "client_log_sha256": "46d371f70a89e08f6cdfca76ce1e2b09d92aeaabf04b4f601f438cdf0ecf22b5",
+      "non_owner_refused": true,
+      "foreign_client_log_sha256": "b80456db15b1e41eb199908fde4cc85460a096a1ac52fcbf9767bbda9cea035e"
+    },
+    {
+      "mode": "submarine",
+      "elapsed_seconds": 23.657,
+      "server_pid": 25384,
+      "client_pid": 23464,
+      "port": 49665,
+      "result": "[2026.10.13-21.25.13:838][417]LogTemp: Display: OCEAN_NETWORK_PASS mode=submarine x=1789.845 z=-722.971 stopped=2.000",
+      "transport": "localhost Unreal IpNetDriver; actual remote owner RPC",
+      "rendered_gameplay_proven": false,
+      "server_log_sha256": "6fbd6f1e44cb11fcb738104eb307890e4dc381e95b9e1bb9a9d4dc5d98342616",
+      "client_log_sha256": "252e1bc98f34df140221f6751ce8f782695a52c04c59fe609ce14464153c1a24",
+      "non_owner_refused": true,
+      "foreign_client_log_sha256": "d88489d60e189bf18d5d5d1dbb18f4e820e5b2b60ca9e69cb812003921bac303"
+    }
+  ],
+  "owned_children_stopped": true,
+  "compiled_input_sha256": {
+    "Public/DaedalusOceanTravelComponent.h": "a2f118dea0d1f3c1fc980c1395d3e9b5370c12ef0d0c840c253607843bee59a9",
+    "Private/DaedalusOceanTravelComponent.cpp": "5c104f7c9082797cd820e680fb61524e8dc589ef04b24a49bf7abd099bcb4eef",
+    "Public/OceanNetworkProbe.h": "dc487aabe904bcf94ab3cdb0b7975765c5215cc07c20822f5bcaf020c5cfb9ec",
+    "Private/OceanNetworkProbe.cpp": "8d74c9af3cfc2f0d021af213dc39f3ffb330562acd2e69331a6aed94f53be16c"
+  }
+}

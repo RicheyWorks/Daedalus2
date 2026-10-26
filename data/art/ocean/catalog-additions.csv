@@ -1,0 +1,4 @@
+name,kind,category,world,owner,status,queue_status,blender_files,uassets,path
+Prop_Ocean_TideSkiff,Prop,vehicles,Ocean Realm,team-codex,blender_only,READY,ocean-vessels/ocean-vessels.blend,,ocean-vessels/Prop_Ocean_TideSkiff.glb
+Prop_Ocean_CoralSubmarine,Prop,vehicles,Ocean Realm,team-codex,blender_only,READY,ocean-vessels/ocean-vessels.blend,,ocean-vessels/Prop_Ocean_CoralSubmarine.glb
+Prop_Ocean_HarbourDock,Prop,structures,Ocean Realm,team-codex,blender_only,READY,ocean-vessels/ocean-vessels.blend,,ocean-vessels/Prop_Ocean_HarbourDock.glb

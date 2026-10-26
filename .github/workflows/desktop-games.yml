@@ -1,0 +1,62 @@
+name: Desktop Python game ports
+on:
+  pull_request:
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "docs/desktop-games-sources.json", "tools/minigames/**", "docs/minigames/**", "data/minigames/**", ".github/workflows/desktop-games.yml"]
+  push:
+    branches: [main]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "tools/minigames/**", "docs/minigames/**", "data/minigames/**", ".github/workflows/desktop-games.yml"]
+permissions:
+  contents: read
+concurrency:
+  group: desktop-games-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  portable-games:
+    name: Desktop game parity (${{ matrix.compiler }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            compiler: gcc
+            cxx: g++
+          - os: ubuntu-latest
+            compiler: clang
+            cxx: clang++
+          - os: windows-latest
+            compiler: msvc
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Configure Linux with sanitizers
+        if: runner.os == 'Linux'
+        run: cmake -S engines/unreal/core-test/desktop_games -B desktop-build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DDESKTOP_SANITIZERS=ON
+      - name: Configure MSVC
+        if: runner.os == 'Windows'
+        run: cmake -S engines/unreal/core-test/desktop_games -B desktop-build
+      - name: Minigame catalog is current
+        run: python tools/minigames/minigame_catalog.py --check
+      - name: Realm cabinet placements are current and tested
+        run: |
+          python tools/minigames/realm_cabinets.py --check
+          python -m unittest discover -s tools/minigames -p "test_*.py" -v
+      - name: Compile
+        run: cmake --build desktop-build --config Debug
+      - name: Replay actual source fixtures and lifecycle checks
+        run: ctest --test-dir desktop-build -C Debug --output-on-failure
+      - name: Native source preflight
+        run: >-
+          python tools/unreal_preflight/preflight.py
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusDesktopArcade.h
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.h
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp
+      - name: Validate source inventory
+        run: python -c "import json; d=json.load(open('docs/desktop-games-sources.json')); assert len(d['games'])==11; assert len({g['id'] for g in d['games']})==11; assert all(len(g['sha256'])==64 for g in d['games'])"
+# CI replays synthetic fixtures produced by reviewed source fragments. It cannot
+# read the user's private Desktop or establish Unreal compilation/live gameplay.

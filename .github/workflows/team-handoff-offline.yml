@@ -1,0 +1,25 @@
+name: Offline takeover packets
+on:
+  pull_request:
+    paths:
+      - 'tools/team_handoff/**'
+      - '.github/workflows/team-handoff-offline.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.12']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Stdlib offline fault injection (serial temp fixtures)
+        run: python -m unittest tools.team_handoff.test_takeover -v

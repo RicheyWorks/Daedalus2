@@ -428,3 +428,45 @@ above. It was kept, because on the way it pinned something real that nothing els
 seven solvers the property suite holds to BFS's hop count, only three read `weightOf`. The test
 was right, its stated motivation was wrong, and a javadoc that still claimed the mutation
 motivated it would have sent the next reader hunting a bug that does not exist.
+
+**A field whose only producer is the code under test is the field nothing asserts.** `boardteeth.py`
+came from a bug no amount of reading found: every completed run reached the leaderboard claiming it
+was played on a generator called "unknown", because `GameSessionService` wrote that literal. Six
+test classes construct a `LeaderboardEntry` and every one of them passes its own generator id, so
+each is a good test of what it tests and collectively they never look at the value the service
+writes. Worse, `LeaderboardService` keys a Redis partition on that value, so the defect was not a
+cosmetic string — it collapsed every generator's board into one set named after the placeholder,
+and nothing read that set anyway. Two tells to reuse: a *constant* on a production write path is
+worth a second look wherever fixtures supply the same field, and a partition key nothing reads is
+not a partition. Found by booting the jar and playing a session, which no unit test in this repo
+does.
+
+**Write the regression test, then mutate the fix — the fix's own test is where the same mistake
+recurs.** `boardteeth.py` scored 5/7 on its first run and both survivors were holes in the tests
+written minutes earlier for the bug it was pinning. Reverting the controller to the old
+`open()` overload — the original defect, one level up — left every attribution test green,
+because all of them called the service directly with the value already in hand: the fix's test
+reproduced the bug's blind spot exactly. The other survivor lived in the seam between two tests,
+where a service-level test never passed the argument the controller always passes and the
+controller test mocked the service away. A fix is not verified by a test that passes; it is
+verified by a test that fails when the fix is removed, and by one that fails when each *layer*
+of the fix is removed separately.
+
+**A scanner defines the shape of what it can miss.** `ProdAuthPostureTest` walks the controller
+sources for `@…Mapping` annotations and fails the build for any endpoint with no recorded posture
+— genuinely thorough, and structurally incapable of noticing that the web UI answered 401 in prod
+for its whole life. A static file has no annotation, so it could never appear in that table. The
+lesson is not "add a row"; it is that every completeness check silently defines a category of
+thing it is blind to, and that category is worth naming out loud when you write the scanner. Here
+the blind spot happened to contain the client half of a feature whose server half had already been
+fixed, tested and written up — the spectator permalink points at `https://host/#session=`, which
+is the page, which was closed.
+
+**Pin the layer that refused, not the fact that it failed.** `staticteeth.py` scored 4/5, and the
+survivor was dropping `HttpMethod.GET` from a `permitAll` matcher so every verb on the path is
+permitted. `POST /` fails either way, which is why the first table missed it: with the method
+scope the *security* layer answers 401; without it security says yes and the servlet layer answers
+405. Both are "not 2xx". Treating 405 as a refusal makes the widening invisible, so the refused
+set now excludes it deliberately. Whenever a test asserts "this request is rejected", check which
+component is doing the rejecting — an assertion satisfied by a downstream accident does not pin
+the upstream decision.

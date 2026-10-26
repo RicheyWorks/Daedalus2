@@ -5,20 +5,14 @@ package com.daedalus.server.controller;
 import com.daedalus.api.dto.DailyMazeResponse;
 import com.daedalus.api.dto.GenerateRequest;
 import com.daedalus.api.dto.GenerateResponse;
-import com.daedalus.api.dto.MoveRequest;
-import com.daedalus.api.dto.SessionResponse;
 import com.daedalus.api.dto.SolveResponse;
 import com.daedalus.api.validation.AlgorithmId;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.AlgorithmDescriptor;
-import com.daedalus.model.LeaderboardEntry;
-import com.daedalus.model.TileType;
 import com.daedalus.server.ratelimit.PerKeyRateLimit;
 import com.daedalus.server.web.ResourceNotFoundException;
 import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.DailyMazeService;
-import com.daedalus.server.service.GameSessionService;
-import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.LivingMazeService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
@@ -26,14 +20,13 @@ import com.daedalus.server.service.TrafficService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,24 +45,20 @@ import java.util.UUID;
  *   <li>{@code GET    /api/v1/maze/{id}}                       — fetch metadata + tile grid</li>
  *   <li>{@code POST   /api/v1/maze/{id}/live}                  — bring the maze to life (ADR-006)</li>
  *   <li>{@code POST   /api/v1/maze/{id}/solve/{solverId}}      — run a solver against the maze</li>
- *   <li>{@code POST   /api/v1/maze/{id}/session?player=...}    — open a play session</li>
- *   <li>{@code POST   /api/v1/session/{id}/move}               — move a player</li>
- *   <li>{@code POST   /api/v1/session/{id}/join?player=...}    — join as an extra player
- *       (multiplayer flag)</li>
- *   <li>{@code GET    /api/v1/leaderboard?n=20}                — leaderboard snapshot</li>
+ *   <li>{@code POST   /api/v1/maze/breed}                      — crossbreed two mazes</li>
  * </ul>
+ * Session open/move/join live on {@link SessionController}; the board lives on
+ * {@link LeaderboardController}.
  */
 @RestController
 @RequestMapping("/api/v1")
-@Tag(name = "Mazes", description = "Generate, fetch, solve, and play mazes.")
+@Tag(name = "Mazes", description = "Generate, fetch, and solve mazes.")
 @Validated // enables @Min/@Max/@Pattern on @PathVariable and @RequestParam (body validation works without it)
 public class MazeController {
 
     private final MazeGenerationService gen;
     private final MazeSolverService solverSvc;
     private final AlgorithmCatalogService catalog;
-    private final GameSessionService sessions;
-    private final LeaderboardService leaderboard;
     private final LivingMazeService living;
     private final DailyMazeService daily;
     private final TrafficService traffic;
@@ -77,16 +66,12 @@ public class MazeController {
     public MazeController(MazeGenerationService gen,
                           MazeSolverService solverSvc,
                           AlgorithmCatalogService catalog,
-                          GameSessionService sessions,
-                          LeaderboardService leaderboard,
                           LivingMazeService living,
                           DailyMazeService daily,
                           TrafficService traffic) {
         this.gen = gen;
         this.solverSvc = solverSvc;
         this.catalog = catalog;
-        this.sessions = sessions;
-        this.leaderboard = leaderboard;
         this.living = living;
         this.daily = daily;
         this.traffic = traffic;
@@ -105,16 +90,21 @@ public class MazeController {
     @Operation(summary = "Generate a maze.",
             description = "If the named generator is unavailable or the circuit breaker is open, "
                     + "the response's generatorId reflects the actual fallback algorithm used. "
+                    + "Optional braid in [0, 1] opens that fraction of dead ends after generation "
+                    + "(the tournament's sample recipe). "
                     + "Rate-limited per caller (authenticated subject, else client IP) against the "
                     + "'mazeGenerate' budget; bursts past the configured limit return 429 with a "
                     + "Retry-After header.")
     @PerKeyRateLimit("mazeGenerate")
     public GenerateResponse generate(@Valid @RequestBody GenerateRequest req) {
         long seed = req.seed() != null ? req.seed() : System.nanoTime();
-        var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed, req.hotspots());
+        double braid = req.braid() == null ? 0.0 : req.braid();
+        var cached = gen.generate(req.generatorId(), req.rows(), req.cols(), seed,
+                req.hotspots(), braid);
         String actualGeneratorId = cached.metadata().generatorId();
-        return toResponse(cached.metadata().id(), actualGeneratorId,
-                req.rows(), req.cols(), seed, cached.grid(), cached.hotspots());
+        return MazeResponses.toResponse(cached.metadata().id(), actualGeneratorId,
+                req.rows(), req.cols(), seed, cached.grid(), cached.hotspots(),
+                cached.braid());
     }
 
     /**
@@ -132,10 +122,10 @@ public class MazeController {
     public DailyMazeResponse daily() {
         var d = daily.today();
         var c = d.maze();
-        return new DailyMazeResponse(d.date().toString(), toResponse(
+        return new DailyMazeResponse(d.date().toString(), MazeResponses.toResponse(
                 c.metadata().id(), c.metadata().generatorId(),
                 c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid(),
-                c.hotspots()));
+                c.hotspots(), c.braid()));
     }
 
     @GetMapping("/maze/{id}")
@@ -143,10 +133,10 @@ public class MazeController {
     public ResponseEntity<GenerateResponse> get(@PathVariable UUID id) {
         var c = gen.find(id);
         if (c == null) throw ResourceNotFoundException.maze(id);
-        return ResponseEntity.ok(toResponse(
+        return ResponseEntity.ok(MazeResponses.toResponse(
                 c.metadata().id(), c.metadata().generatorId(),
                 c.metadata().rows(), c.metadata().cols(), c.metadata().seed(), c.grid(),
-                c.hotspots()));
+                c.hotspots(), c.braid()));
     }
 
     /**
@@ -160,7 +150,12 @@ public class MazeController {
     @Operation(summary = "The maze as ASCII art (Accept: text/plain); optional ?solve=<solverId> overlays a route.")
     public ResponseEntity<String> getAscii(
             @PathVariable UUID id,
-            @RequestParam(required = false) @AlgorithmId String solve) {
+            @RequestParam(required = false)
+            // @AlgorithmId is @NotBlank — a missing query 400'd the dump.
+            @Pattern(regexp = "^[a-z0-9][a-z0-9-]{0,63}$",
+                    message = "must be 1-64 chars, lowercase letters / digits / hyphens, "
+                            + "leading hyphen disallowed")
+            String solve) {
         var c = gen.find(id);
         if (c == null) throw ResourceNotFoundException.maze(id);
         List<com.daedalus.model.Point> path = List.of();
@@ -173,17 +168,20 @@ public class MazeController {
     }
 
     /**
-     * ADR-006 — living mazes. Erosion only ever opens walls, so a live maze can never
-     * become unsolvable mid-run; the default seed derives from the maze id so the same
-     * maze brought to life erodes the same way every time.
+     * ADR-006 / ADR-008 — living mazes. Erosion only ever opens walls; hardening
+     * ({@code seal}) only ever closes non-forest passages, so a live maze can never
+     * become unsolvable mid-run. The default seed derives from the maze id so the same
+     * maze brought to life mutates the same way every time. {@code seal} defaults to the
+     * process-wide {@code daedalus.living.seal-factor} (0 — v1 erosion only).
      */
     @PostMapping("/maze/{id}/live")
-    @Operation(summary = "Bring a maze to life: schedule bounded erosion ticks that mutate it in place.",
-            description = "Each tick opens a fraction of the maze's dead-end walls and drifts "
-                    + "hotspot costs on weighted mazes, then swaps the new snapshot into the "
-                    + "cache and publishes a MutationFrame on /topic/maze/{id}/state. Idempotent "
-                    + "while alive (a second call returns the running ticker's status). Answers "
-                    + "409 when daedalus.living.max-concurrent mazes are already alive. "
+    @Operation(summary = "Bring a maze to life: schedule bounded mutation ticks that mutate it in place.",
+            description = "Each tick opens a fraction of the maze's dead-end walls, optionally "
+                    + "closes a fraction of extra passages (seal in [0,1]), and drifts hotspot "
+                    + "costs on weighted mazes, then swaps the new snapshot into the cache and "
+                    + "publishes a MutationFrame on /topic/maze/{id}/state. Idempotent while "
+                    + "alive (a second call returns the running ticker's status). Answers 409 "
+                    + "when daedalus.living.max-concurrent mazes are already alive. "
                     + "Rate-limited per caller against the 'mazeLive' budget.")
     @PerKeyRateLimit("mazeLive")
     public ResponseEntity<LivingMazeService.LiveStatus> live(
@@ -192,11 +190,17 @@ public class MazeController {
             @Min(value = 1,   message = "ticks must be at least 1")
             @Max(value = 240, message = "ticks must be at most 240")
             int ticks,
-            @RequestParam(required = false) Long seed) {
+            @RequestParam(required = false) Long seed,
+            @RequestParam(required = false)
+            @DecimalMin(value = "0.0", message = "seal must be at least 0")
+            @DecimalMax(value = "1.0", message = "seal must be at most 1")
+            Double seal) {
         var c = gen.find(id);
         if (c == null) throw ResourceNotFoundException.maze(id);
         long erosionSeed = seed != null ? seed : id.getLeastSignificantBits();
-        return ResponseEntity.ok(living.start(id, ticks, erosionSeed));
+        return ResponseEntity.ok(seal == null
+                ? living.start(id, ticks, erosionSeed)
+                : living.start(id, ticks, erosionSeed, seal));
     }
 
     /**
@@ -250,7 +254,9 @@ public class MazeController {
     @Operation(summary = "Breed two mazes: the child inherits patches of both and is repaired to full connectivity.",
             description = "Parents must share dimensions (400 otherwise). The child is a "
                     + "first-class maze — solve it, play it, bring it to life, breed it "
-                    + "again. Rate-limited against the 'mazeGenerate' budget.")
+                    + "again. Parent hotspots are unioned (max cost on a shared cell, "
+                    + "capped at 64) so a weighted pair does not breed a uniform-cost child. "
+                    + "Rate-limited against the 'mazeGenerate' budget.")
     @PerKeyRateLimit("mazeGenerate")
     public ResponseEntity<GenerateResponse> breed(
             @RequestParam UUID a,
@@ -265,145 +271,10 @@ public class MazeController {
         long s = seed != null ? seed
                 : a.getLeastSignificantBits() ^ Long.rotateLeft(b.getLeastSignificantBits(), 17);
         MazeGrid child = com.daedalus.engine.MazeBreeder.breed(pa.grid(), pb.grid(), s);
-        var cached = gen.adopt(child, "crossbreed", s);
-        return ResponseEntity.ok(toResponse(cached.metadata().id(), "crossbreed",
-                child.rows(), child.cols(), s, child, null));
-    }
-
-    /**
-     * ADR-006 idea #6 — the spectator seam: a read-only snapshot of a live session. The
-     * web UI's {@code #session=<id>} permalink loads this once and then follows the same
-     * STOMP frames the players produce.
-     */
-    @GetMapping("/session/{id}")
-    @Operation(summary = "Read-only session snapshot — the spectator entry point.",
-            description = "Pair with /topic/session/{id}/player for live moves; owned "
-                    + "sessions keep their existing per-destination STOMP authorization.")
-    public ResponseEntity<com.daedalus.api.dto.SessionViewResponse> session(@PathVariable UUID id) {
-        var s = sessions.find(id);
-        if (s == null) throw ResourceNotFoundException.session(id);
-        return ResponseEntity.ok(new com.daedalus.api.dto.SessionViewResponse(
-                s.id(), s.mazeId(), s.players(), s.completed(), s.moveCount(), s.score()));
-    }
-
-    @PostMapping("/maze/{id}/session")
-    @Operation(summary = "Open a play session for the given maze.",
-            description = "The returned session id is required for /api/v1/session/{id}/move. "
-                    + "When the request is authenticated, the session is owned by the token's "
-                    + "subject and its /topic/session/{id}/player STOMP topic is restricted "
-                    + "to that subject. Rate-limited per caller against the 'sessionOpen' "
-                    + "budget — session creation feeds every bounded store downstream.")
-    @PerKeyRateLimit("sessionOpen")
-    public ResponseEntity<SessionResponse> openSession(
-            @PathVariable UUID id,
-            @RequestParam(defaultValue = "anon")
-            @NotBlank
-            @Size(max = 64, message = "player name must be at most 64 chars")
-            String player,
-            Authentication authentication) {
-        var c = gen.find(id);
-        if (c == null) throw ResourceNotFoundException.maze(id);
-        var s = sessions.open(id, player, c.grid().start(), ownerOf(authentication));
-        return ResponseEntity.ok(new SessionResponse(s.id(), id, s.currentPosition()));
-    }
-
-    /**
-     * The verified subject a new session should be owned by, or {@code null} for anonymous
-     * callers. Anonymous includes Spring's {@code AnonymousAuthenticationToken} (the dev
-     * profile's permitAll posture), so a dev session stays unowned and its topics stay open —
-     * mirroring how {@code StompAuthChannelInterceptor} treats missing-vs-forged credentials.
-     */
-    static String ownerOf(Authentication authentication) {
-        if (authentication == null
-                || !authentication.isAuthenticated()
-                || authentication instanceof AnonymousAuthenticationToken) {
-            return null;
-        }
-        return authentication.getName();
-    }
-
-    @PostMapping("/session/{id}/move")
-    @Operation(summary = "Move a player to an adjacent cell.",
-            description = "Returns true if the move was legal (target cell is open and adjacent). "
-                    + "Omit 'player' to move the session's opening player; name one to move a "
-                    + "joined player (multiplayer flag only). Rate-limited per caller against the "
-                    + "'sessionMove' budget — the same 1200/min the fog-of-war agent gets, because "
-                    + "it is the same shape of traffic. Until an audit measured it this endpoint "
-                    + "had no limit at all, and one client sustained 201 moves/s.")
-    @PerKeyRateLimit("sessionMove")
-    public ResponseEntity<Boolean> move(@PathVariable UUID id, @Valid @RequestBody MoveRequest req) {
-        var s = sessions.find(id);
-        if (s == null) throw ResourceNotFoundException.session(id);
-        // The session is fine and its maze has been evicted. Previously indistinguishable from
-        // "no such session", which sent callers looking for the wrong problem.
-        var c = gen.find(s.mazeId());
-        if (c == null) throw new ResourceNotFoundException("maze", s.mazeId().toString(),
-                "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
-                        + "from the cache, so moves cannot be validated against it.");
-        return ResponseEntity.ok(sessions.tryMove(id, req.player(), c.grid(), req.to()));
-    }
-
-    @PostMapping("/session/{id}/join")
-    @Operation(summary = "Join an existing session as an additional named player.",
-            description = "Requires the daedalus.session.multiplayer flag; without it this "
-                    + "endpoint answers 404 as if it did not exist. Joining a name already in "
-                    + "the session keeps that player's position (reconnect must not teleport). "
-                    + "Rate-limited per caller against the 'sessionOpen' budget.")
-    @PerKeyRateLimit("sessionOpen")
-    public ResponseEntity<SessionResponse> join(
-            @PathVariable UUID id,
-            @RequestParam
-            @NotBlank
-            @Size(max = 64, message = "player name must be at most 64 chars")
-            String player) {
-        // Multiplayer off answers exactly what an unknown session answers — the endpoint has
-        // to look absent, not disabled, or the 404 becomes a feature-flag oracle.
-        if (!sessions.multiplayerEnabled()) throw ResourceNotFoundException.session(id);
-        var s = sessions.find(id);
-        if (s == null) throw ResourceNotFoundException.session(id);
-        // The session is fine and its maze has been evicted. Previously indistinguishable from
-        // "no such session", which sent callers looking for the wrong problem.
-        var c = gen.find(s.mazeId());
-        if (c == null) throw new ResourceNotFoundException("maze", s.mazeId().toString(),
-                "Session " + id + " is open but its maze " + s.mazeId() + " has been evicted "
-                        + "from the cache, so moves cannot be validated against it.");
-        var joined = sessions.join(id, player, c.grid().start());
-        if (joined == null) return ResponseEntity.status(409).build(); // completed session
-        return ResponseEntity.ok(new SessionResponse(
-                joined.id(), joined.mazeId(), joined.playerPosition(player)));
-    }
-
-    @GetMapping("/leaderboard")
-    @Operation(summary = "Top-N completion times across active sessions.",
-            description = "Snapshot — backed by Redis when daedalus.redis.enabled=true, "
-                    + "otherwise in-memory. Pass maze=<id> for that maze's own board — the "
-                    + "partition behind the daily challenge's leaderboard.")
-    public List<LeaderboardEntry> leaderboard(
-            @RequestParam(defaultValue = "20")
-            @Min(value = 1,   message = "n must be at least 1")
-            @Max(value = 100, message = "n must be at most 100")
-            int n,
-            @RequestParam(required = false) UUID maze) {
-        return leaderboard.top(n, maze);
-    }
-
-    /**
-     * Build a {@link GenerateResponse} from a maze grid + its identifying metadata. The grid's
-     * {@link MazeGrid#toTileGrid()} returns the typed {@link TileType} layer; we flatten it to
-     * {@code char[][]} here so the JSON response carries glyphs that any tile renderer (web,
-     * desktop, terminal) can consume directly without importing the {@code TileType} enum.
-     */
-    private static GenerateResponse toResponse(UUID id, String generatorId, int rows, int cols,
-                                                long seed, MazeGrid grid,
-                                                List<com.daedalus.api.dto.Hotspot> hotspots) {
-        TileType[][] tiles = grid.toTileGrid();
-        char[][] glyphs = new char[tiles.length][];
-        for (int r = 0; r < tiles.length; r++) {
-            glyphs[r] = new char[tiles[r].length];
-            for (int c = 0; c < tiles[r].length; c++) {
-                glyphs[r][c] = tiles[r][c].glyph();
-            }
-        }
-        return new GenerateResponse(id, generatorId, rows, cols, seed, glyphs, hotspots);
+        var cached = gen.adopt(child, "crossbreed", s,
+                MazeResponses.mergeParentHotspots(pa.hotspots(), pb.hotspots()));
+        return ResponseEntity.ok(MazeResponses.toResponse(cached.metadata().id(), "crossbreed",
+                cached.grid().rows(), cached.grid().cols(), s, cached.grid(),
+                cached.hotspots(), null));
     }
 }

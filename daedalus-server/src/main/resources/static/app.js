@@ -1,0 +1,501 @@
+// SPDX-License-Identifier: MIT
+// Daedalus web UI script. Served next to index.html; no build step.
+"use strict";
+const $ = id => document.getElementById(id);
+const state = {
+  maze: null,            // GenerateResponse (tiles as array of strings, thanks to Jackson char[])
+  path: null,            // SolveResponse.path (cell coords)
+  pathProgress: 1,       // 0..1 — animated reveal of the solver path
+  session: null,         // { id, positions: {playerName: {row,col}}, primary, goal }
+  seat: null,            // who this tab's arrows and clicks move (opener, or the spectate-join)
+  joined: null,          // second player's name, when joined
+  trails: {},            // playerName -> [Point] breadcrumbs during play
+  algos: {},             // id -> AlgorithmDescriptor, for the info cards
+  stomp: null,
+  subs: [],
+  livePoll: null,        // interval id — STOMP-less fallback while a maze is alive
+  liveTickMs: 2000,      // last living cadence — reconnect re-arms with this
+  trafficPoll: null,     // interval id — STOMP-less fallback while traffic is tracked
+  trafficTickMs: 2000,   // last traffic cadence — reconnect re-arms with this
+  race: null,            // {lanes: [{id, color, expansions, path, front, pathProg}]} during a race
+  dailyId: null,         // set when the current maze is today's daily → scoped leaderboard
+  analysis: null,        // AnalysisResponse — chokepoint/dead-end overlay when set
+  ghost: null,           // {moves, name, score, elapsedMs, started, pos, done} during play
+  ghostTimer: null,      // interval advancing the ghost
+  sessionStart: null,    // performance.now() at session open — for the ghost verdict
+  prevMazeId: null,      // last maze before this one — crossbreeding's other parent
+  readOnly: false,       // spectating: render everything, control nothing
+  spectatePoll: null,    // interval id — STOMP-less spectator fallback
+  tour: null,            // {waypoints, optimalOrder, optimalCost} in waypoint-hunt mode
+  tourGot: [],           // waypoints collected this session (display only; server scores)
+  campaign: null,        // {seed, stages} once a campaign is loaded
+  stageIndex: null,      // which stage is on screen
+  cleared: {},           // stageIndex → true once its goal is reached
+  token: null,           // JWT from POST /auth/login — attached to REST and STOMP
+  user: null,            // display name that minted the token
+  fog: null,             // AgentView + seen Set — cells this walk has stood on
+  lbQuery: null,         // last /leaderboard path actually fetched (partition, not a title)
+  caption: null,         // which theory panel last wrote #compareBox — living ticks refresh it
+  fingerprint: null,     // last Identification — living ticks re-ask; the feature is erosion
+};
+
+/** Escape untrusted text (player names arrive from other clients) before it meets innerHTML. */
+function esc(s) {
+  return String(s).replace(/[&<>"']/g,
+      ch => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[ch]));
+}
+
+function log(kind, text) {
+  const line = document.createElement("div");
+  const t = new Date().toLocaleTimeString();
+  line.innerHTML = `<span class="t">${t}</span>`;
+  const span = document.createElement("span");
+  span.className = kind;
+  span.textContent = text; // never innerHTML: frame contents include other users' names
+  line.appendChild(span);
+  const box = $("log");
+  box.prepend(line);
+  while (box.childElementCount > 200) box.lastChild.remove();
+}
+
+/** Host bag for desk leftover writes. Built at call time. */
+function deskHost() {
+  return {$, api, apiPlain, esc, log, connectStomp, refreshPlugins, updateInfo};
+}
+
+function lbMazeScope() { return DaedalusDesk.mazeScope(state); }
+function lbRequest() { return DaedalusDesk.request(state, deskHost()); }
+async function refreshLeaderboard() { return DaedalusDesk.refresh(state, deskHost()); }
+
+// ---------- REST ----------
+const TOKEN_KEY = DaedalusDesk.TOKEN_KEY;
+const USER_KEY = DaedalusDesk.USER_KEY;
+
+function renderAuth() { return DaedalusDesk.renderAuth(state, deskHost()); }
+async function login() { return DaedalusDesk.login(state, deskHost()); }
+function logout() { return DaedalusDesk.logout(state, deskHost()); }
+
+/** RFC 7807 + fetch live in api.js. Wrappers keep leftover-state name pins. */
+const CAPACITY_WHY = DaedalusApi.CAPACITY_WHY;
+const GONE_WHY = DaedalusApi.GONE_WHY;
+const BUDGET_WHY = DaedalusApi.BUDGET_WHY;
+async function problemWhy(res) { return DaedalusApi.problemWhy(res); }
+function nameCapacity(msg) { return DaedalusApi.nameCapacity(msg); }
+function nameGone(msg) { return DaedalusApi.nameGone(msg); }
+function nameBudget(msg) { return DaedalusApi.nameBudget(msg); }
+function permalinkLoadFailed(getErr, rebuildErr) {
+  return DaedalusApi.permalinkLoadFailed(getErr, rebuildErr);
+}
+async function api(path, opts) { return DaedalusApi.request(path, opts, state.token); }
+async function apiPlain(path) { return DaedalusApi.requestPlain(path, state.token); }
+
+/** Host bags for extracted coordinators. Built at call time so leftover helpers can stay below. */
+function liveHost() {
+  return {
+    $, log,
+    startSpectatePolling, startTrafficPolling, onTrafficPulse,
+    applyMove, refreshPlugins, refreshLivingMaze, onWorldEvent,
+  };
+}
+function worldHost() {
+  return {$, api, state};
+}
+function refreshWorld() { return DaedalusWorld.inspect(worldHost()); }
+function onWorldEvent(m) { return DaedalusWorld.onEvent(worldHost(), m); }
+function sessionHost() {
+  return {
+    $, api, log, esc, draw,
+    leaveSpectate, setGodModeEnabled, pinHash, resubscribe, summonGhost,
+    nameGone, flashStatus, refreshTourStatus, tourVerdict,
+    refreshLeaderboard, onStageCleared,
+    bumpAnim() { DaedalusSolve.bump(); },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+function fogHost() {
+  return {
+    $, api, log, esc, draw,
+    leaveSpectate, setGodModeEnabled, pinHash, resubscribe,
+    bumpAnim() { DaedalusSolve.bump(); },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+
+function connectStomp() { return DaedalusLive.connect(state, liveHost()); }
+function armStompFallbacks() { return DaedalusLive.armFallbacks(state, liveHost()); }
+function resubscribe() { return DaedalusLive.resubscribe(state, liveHost()); }
+function startLivePolling(mazeId, tickMillis, ticks) {
+  return DaedalusLive.startPolling(state, liveHost(), mazeId, tickMillis, ticks);
+}
+async function onMutation(m) { return DaedalusLive.applyMutation(state, liveHost(), m); }
+
+function livingHost() {
+  return {
+    $, api, log,
+    refuseSpectatorWrite, nameCapacity, startLivePolling,
+    applyFogView, setGodModeEnabled, refreshTheoryOverlays, refreshTourStatus, draw,
+  };
+}
+async function bringToLife() { return DaedalusLiving.awaken(state, livingHost()); }
+async function simulateTraffic() { return DaedalusLiving.simulate(state, livingHost()); }
+function startTrafficPolling(mazeId, tickMillis) {
+  return DaedalusLiving.pollTraffic(state, livingHost(), mazeId, tickMillis);
+}
+async function onTrafficPulse(m) { return DaedalusLiving.onPulse(state, livingHost(), m); }
+async function refreshLivingMaze(fromPoll) {
+  return DaedalusLiving.refresh(state, livingHost(), fromPoll);
+}
+
+function ghostHost() {
+  return {api, log, draw, mazeStart, thisTabSeat};
+}
+async function summonGhost() { return DaedalusGhost.summon(state, ghostHost()); }
+
+function labHost() {
+  return {$, api, log, esc};
+}
+async function loadLabMetrics() { return DaedalusLab.loadMetrics(state, labHost()); }
+async function measureGrowth() { return DaedalusLab.measure(state, labHost()); }
+function renderLab(fit) { return DaedalusLab.render(state, labHost(), fit); }
+
+function tournamentHost() {
+  return {$, api, log, esc, braidFactor, updateInfo, syncBraid, generate};
+}
+async function runTournament() { return DaedalusTournament.run(state, tournamentHost()); }
+
+async function play() { return DaedalusSession.open(state, sessionHost()); }
+async function join() { return DaedalusSession.joinSeat(state, sessionHost()); }
+async function move(name, dr, dc) { return DaedalusSession.hop(state, sessionHost(), name, dr, dc); }
+function applyMove(who, to, from) { return DaedalusSession.apply(state, sessionHost(), who, to, from); }
+async function confirmWin(who) { return DaedalusSession.confirm(state, sessionHost(), who); }
+function declareWin(who) { return DaedalusSession.declare(state, sessionHost(), who); }
+
+function applyFogView(view) { return DaedalusFogWalk.applyView(state, view); }
+function carveFogOpenings(view) { return DaedalusFogWalk.carveOpenings(state, view); }
+async function startFog() { return DaedalusFogWalk.start(state, fogHost()); }
+async function fogStep(dr, dc) { return DaedalusFogWalk.step(state, fogHost(), dr, dc); }
+
+function mintHost() {
+  return {
+    $, api, log, esc, draw,
+    leaveSpectate, setGodModeEnabled, pinHash, resubscribe,
+    refreshLeaderboard, updateInfo, syncBraid,
+    bumpAnim() { DaedalusSolve.bump(); },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+    projectWorld() { return DaedalusWorld.projectLab(worldHost()); },
+  };
+}
+function campaignHost() {
+  return {
+    $, api, log, esc,
+    leaveSpectate, setGodModeEnabled, pinHash, adoptMaze, play,
+    startLivePolling, refreshLeaderboard,
+  };
+}
+
+function applyHotspotsFromMaze(maze) { return DaedalusMint.applySpots(state, mintHost(), maze); }
+function applyBraidFromMaze(maze) { return DaedalusMint.applyBraid(state, mintHost(), maze); }
+function adoptMaze(maze, roundTripMs, sourceLabel) {
+  return DaedalusMint.adopt(state, mintHost(), maze, roundTripMs, sourceLabel);
+}
+async function generate(opts) { return DaedalusMint.mint(state, mintHost(), opts); }
+async function loadDaily() { return DaedalusMint.daily(state, mintHost()); }
+async function crossbreed() { return DaedalusMint.breed(state, mintHost()); }
+
+async function loadCampaign(seed, stage) {
+  return DaedalusCampaign.load(state, campaignHost(), seed, stage);
+}
+function leaveCampaign() { return DaedalusCampaign.leave(state, campaignHost()); }
+function renderCampaign() { return DaedalusCampaign.render(state, campaignHost()); }
+function onStageCleared() { return DaedalusCampaign.onCleared(state, campaignHost()); }
+async function playStage(index) { return DaedalusCampaign.playRung(state, campaignHost(), index); }
+
+function theoryHost() {
+  return {
+    $, api, log, esc, draw,
+    leaveSpectate, showAscii,
+    bumpAnim() { DaedalusSolve.bump(); },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+async function fingerprintWhenReady(id) {
+  return DaedalusTheory.waitFingerprint(state, theoryHost(), id);
+}
+async function identifyGenerator() { return DaedalusTheory.identify(state, theoryHost()); }
+function paintFingerprintCaption(f) { return DaedalusTheory.paintFingerprint(state, theoryHost(), f); }
+async function analyzeStructure() { return DaedalusTheory.analyze(state, theoryHost()); }
+function paintAnalysisCaption(a) { return DaedalusTheory.paintAnalysis(state, theoryHost(), a); }
+async function hardestRoute() { return DaedalusTheory.hardest(state, theoryHost()); }
+function paintHardestCaption(h) { return DaedalusTheory.paintHardest(state, theoryHost(), h); }
+async function distanceHeatMap() { return DaedalusTheory.heat(state, theoryHost()); }
+function paintFieldCaption(f) { return DaedalusTheory.paintField(state, theoryHost(), f); }
+async function placeSanctuaries() { return DaedalusTheory.sanctuaries(state, theoryHost()); }
+function paintSanctuariesCaption(s) { return DaedalusTheory.paintSanctuaries(state, theoryHost(), s); }
+async function heuristicLens() { return DaedalusTheory.lens(state, theoryHost()); }
+function paintLensCaption(l) { return DaedalusTheory.paintLens(state, theoryHost(), l); }
+async function refreshTheoryOverlays(forMaze, stale) {
+  return DaedalusTheory.refreshOverlays(state, theoryHost(), forMaze, stale);
+}
+
+function huntHost() {
+  return {
+    $, api, log, esc, draw,
+    refuseSpectatorWrite, play,
+    bumpAnim() { DaedalusSolve.bump(); },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+async function startTour() { return DaedalusHunt.start(state, huntHost()); }
+async function refreshTourStatus() { return DaedalusHunt.refresh(state, huntHost()); }
+async function tourVerdict() { return DaedalusHunt.verdict(state, huntHost()); }
+
+function solveHost() {
+  return {
+    $, api, log, esc, draw,
+    leaveSpectate,
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+async function solve() { return DaedalusSolve.run(state, solveHost()); }
+function animateSearch() { return DaedalusSolve.search(state, solveHost()); }
+function animatePath() { return DaedalusSolve.path(state, solveHost()); }
+async function raceSolvers() { return DaedalusSolve.race(state, solveHost()); }
+function animateRace() { return DaedalusSolve.raceTick(state, solveHost()); }
+function raceSummary() { return DaedalusSolve.summary(state, solveHost()); }
+async function compareSolvers() { return DaedalusSolve.compare(state, solveHost()); }
+
+function spectateHost() {
+  return {
+    $, api, log, esc, draw, drawEmpty,
+    updateInfo, syncBraid, generate,
+    leaveCampaign, playStage, loadCampaign, loadDaily, adoptMaze,
+    setGodModeEnabled, resubscribe, refreshLeaderboard,
+    permalinkLoadFailed, nameGone, summonGhost,
+    bumpAnim() { DaedalusSolve.bump(); },
+    clearStatusFlash() { clearTimeout(statusFlashTimer); statusFlashTimer = null; },
+  };
+}
+function applyRecipeToForm(h) { return DaedalusSpectate.applyRecipe(state, spectateHost(), h); }
+async function rebuildFromRecipe(h) { return DaedalusSpectate.rebuild(state, spectateHost(), h); }
+function currentPermalink() { return DaedalusSpectate.permalink(state, spectateHost()); }
+function pinHash() { return DaedalusSpectate.pin(state, spectateHost()); }
+function hashShowsCurrent() { return DaedalusSpectate.showsCurrent(state, spectateHost()); }
+function leaveSpectate() { return DaedalusSpectate.leaveWatch(state, spectateHost()); }
+function armSpectatorWrites(on) { return DaedalusSpectate.armWrites(state, spectateHost(), on); }
+function refuseSpectatorWrite(what) { return DaedalusSpectate.refuseWrite(state, spectateHost(), what); }
+function leaveMaze() { return DaedalusSpectate.leave(state, spectateHost()); }
+async function loadFromHash() { return DaedalusSpectate.load(state, spectateHost()); }
+async function spectate(sessionId) { return DaedalusSpectate.watch(state, spectateHost(), sessionId); }
+function startSpectatePolling() { return DaedalusSpectate.startPolling(state, spectateHost()); }
+function adoptSessionView(view) { return DaedalusSpectate.adoptView(state, spectateHost(), view); }
+async function hydrateSpectatorOverlays(view) {
+  return DaedalusSpectate.hydrate(state, spectateHost(), view);
+}
+
+async function refreshPlugins() { return DaedalusDesk.plugins(state, deskHost()); }
+async function showAscii() { return DaedalusDesk.ascii(state, deskHost()); }
+async function loadAlgorithms() { return DaedalusDesk.algorithms(state, deskHost()); }
+function updateInfo() { return DaedalusDesk.updateInfo(state, deskHost()); }
+$("generator").addEventListener("change", updateInfo);
+$("solver").addEventListener("change", updateInfo);
+$("lbGen").addEventListener("change", () => { refreshLeaderboard(); pinHash(); });
+
+function braidFactor() { return DaedalusDesk.braidFactor(deskHost()); }
+function syncBraid(fromId) { return DaedalusDesk.syncBraid(deskHost(), fromId); }
+
+if ($("braid")) $("braid").addEventListener("change", () => syncBraid("braid"));
+if ($("tourBraid")) $("tourBraid").addEventListener("change", () => syncBraid("tourBraid"));
+
+function mulberry32(a) { return DaedalusShare.rng32(a); }
+function placeHotspots(rows, cols, count, seed, cost) {
+  return DaedalusShare.placeSpots(rows, cols, count, seed, cost);
+}
+
+const GOD_MODE = DaedalusDesk.GOD_MODE;
+function setGodModeEnabled(on) { return DaedalusDesk.setGodModeEnabled(deskHost(), on); }
+
+// Snapshot whatever is on the canvas at click time — path overlays and players included.
+$("pngExport").addEventListener("click", function refresh() {
+  this.href = $("maze").toDataURL("image/png");
+});
+
+/**
+ * Shareable address-bar state. adoptMaze used to write #maze= unconditionally, which
+ * turned a campaign link into a mute maze, a daily into an unscoped board, and a
+ * spectator refresh into "just this topology". One writer, one reader.
+ *
+ * Exclusive kinds, first match wins: session, campaign, daily, maze, generator.
+ */
+function parseHash() {
+  return DaedalusShare.readHash(location.hash);
+}
+
+/** Seed and optional stage from `#campaign=SEED` / `#campaign=SEED:N`. Missing stage is 0. */
+function parseCampaignToken(h) {
+  return DaedalusShare.campaignToken(h);
+}
+
+/** Recipe that rebuilds this maze when the cached id is gone. `g` not `generator` —
+ *  `#generator=` is its own permalink kind (the partition), not a field on `#maze=`. */
+function recipeParts(maze) {
+  return DaedalusShare.mazeRecipe(maze);
+}
+
+// Spectate / hash leftover writes live in spectate.js (DaedalusSpectate).
+
+/** Who this tab moves — join-from-spectate keeps primary as the opener. */
+function thisTabSeat() {
+  return DaedalusSeat.whoMoves(state.session, state.seat);
+}
+
+window.addEventListener("hashchange", () => {
+  loadFromHash().catch(e => log("err", e.message));
+});
+
+// Spectator leftover writes live in spectate.js (DaedalusSpectate).
+
+/** Maze start plus every recorded `to` — one player's 4-walk. */
+function sessionWalk(start, moves) {
+  return DaedalusShare.walkFromMoves(start, moves);
+}
+
+function mazeStart(maze) {
+  return DaedalusShare.startFromTiles(maze && maze.tiles);
+}
+
+// Living-maze leftover writes live in living.js (DaedalusLiving).
+
+// Lab leftover writes live in lab.js (DaedalusLab).
+// Hunt leftover writes live in hunt.js (DaedalusHunt).
+function sameCell(a, b) { return a && b && a.row === b.row && a.col === b.col; }
+
+const DISTANCE_RAMP = DaedalusCaption.DISTANCE_RAMP;
+const LENS_COLORS = DaedalusCaption.LENS_COLORS;   // must expand / tie / never
+
+// Ghost leftover writes live in ghost.js (DaedalusGhost).
+
+// Traffic leftover writes live in living.js (DaedalusLiving).
+// Theory overlay refresh lives in theory.js (DaedalusTheory.refreshOverlays).
+
+// Solve leftover writes live in solve.js (DaedalusSolve).
+
+let statusFlashTimer = null;
+function flashStatus(text) {
+  const el = $("status"), prev = el.textContent;
+  el.textContent = text;
+  clearTimeout(statusFlashTimer);
+  statusFlashTimer = setTimeout(() => { el.textContent = prev; }, 900);
+}
+
+
+function stageHost() {
+  return {$, log, thisTabSeat, move, fogStep};
+}
+
+function pathRevealMs(n) {
+  return DaedalusDraw.pathRevealMs(n);
+}
+
+function tourWalk() { return DaedalusStage.tourWalk(state); }
+function ghostWalk() { return DaedalusStage.ghostWalk(state); }
+function cellKey(r, c) { return DaedalusFog.key(r, c); }
+function mazeScene() { return DaedalusStage.scene(state); }
+function draw() { return DaedalusStage.paint(state, stageHost()); }
+function drawEmpty() { return DaedalusStage.paintEmpty(stageHost()); }
+
+$("maze").addEventListener("click", ev => {
+  DaedalusStage.click(state, stageHost(), ev);
+});
+
+// ---------- wiring ----------
+$("generate").onclick = () => generate().catch(e => log("err", e.message));
+$("daily").onclick = () => loadDaily().catch(e => log("err", e.message));
+$("breed").onclick = () => crossbreed().catch(e => log("err", e.message));
+$("campaign").onclick = () => loadCampaign(null).catch(e => log("err", e.message));
+$("solve").onclick = () => solve().catch(e => log("err", e.message));
+$("compare").onclick = () => compareSolvers().catch(e => log("err", e.message));
+$("live").onclick = () => bringToLife().catch(e => log("err", e.message));
+$("traffic").onclick = () => simulateTraffic().catch(e => log("err", e.message));
+$("race").onclick = () => raceSolvers().catch(e => log("err", e.message));
+$("analyze").onclick = () => analyzeStructure().catch(e => log("err", e.message));
+$("hardest").onclick = () => hardestRoute().catch(e => log("err", e.message));
+$("heatmap").onclick = () => distanceHeatMap().catch(e => log("err", e.message));
+$("sanctuaries").onclick = () => placeSanctuaries().catch(e => log("err", e.message));
+$("tournament").onclick = () => runTournament().catch(e => log("err", e.message));
+$("lens").onclick = () => heuristicLens().catch(e => log("err", e.message));
+$("tour").onclick = () => startTour().catch(e => log("err", e.message));
+$("fingerprint").onclick = () => identifyGenerator().catch(e => log("err", e.message));
+$("measure").onclick = () => measureGrowth().catch(e => {
+  log("err", e.message); $("labOut").textContent = "measurement failed — see the log";
+});
+$("play").onclick = () => play().catch(e => log("err", e.message));
+$("join").onclick = () => join();
+$("fog").onclick = () => startFog().catch(e => log("err", e.message));
+$("ascii").onclick = () => showAscii().catch(e => log("err", e.message));
+$("auth").addEventListener("submit", e => {
+  e.preventDefault();
+  login().catch(err => log("err", err.message));
+});
+$("logout").onclick = logout;
+document.addEventListener("keydown", e => {
+  DaedalusStage.key(state, stageHost(), e);
+});
+
+function permalinkOnBar() {
+  const h = DaedalusShare.readHash(location.hash);
+  return !!(h.session || h.maze || h.daily || h.campaign || h.generator);
+}
+
+function showGate(on) {
+  const gate = $("gate");
+  if (gate) gate.hidden = !on;
+}
+
+function enterWell() {
+  showGate(false);
+}
+
+function copyPre(id) {
+  const el = $(id);
+  if (!el || !navigator.clipboard) return;
+  navigator.clipboard.writeText(el.textContent).catch(() => {});
+}
+
+function openDetails(label) {
+  enterWell();
+  document.querySelectorAll("details").forEach(d => {
+    const sum = d.querySelector("summary");
+    if (sum && sum.textContent.trim().toLowerCase() === label) d.open = true;
+  });
+}
+
+$("home").onclick = () => showGate(true);
+$("gateWell").onclick = enterWell;
+$("gateDaily").onclick = () => {
+  enterWell();
+  loadDaily().catch(e => log("err", e.message));
+};
+$("gateCampaign").onclick = () => {
+  enterWell();
+  loadCampaign(null).catch(e => log("err", e.message));
+};
+$("gateLive").onclick = () => openDetails("hazards");
+$("gateTheory").onclick = () => openDetails("theory");
+$("gateCopyDesktop").onclick = () => copyPre("gateDesktopCmd");
+$("gateCopyExplore").onclick = () => copyPre("gateExploreCmd");
+window.addEventListener("hashchange", () => {
+  if (permalinkOnBar()) showGate(false);
+});
+if (permalinkOnBar()) showGate(false);
+
+DaedalusDesk.restore(state);
+renderAuth();
+DaedalusStage.watch(stageHost(), () => state);
+drawEmpty();
+refreshLeaderboard();
+refreshPlugins();
+refreshWorld();
+loadLabMetrics();
+loadAlgorithms().then(connectStomp).then(loadFromHash).then(() => {
+  if (permalinkOnBar()) showGate(false);
+}).catch(e => log("err", e.message));
