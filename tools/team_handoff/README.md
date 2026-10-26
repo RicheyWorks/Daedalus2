@@ -156,6 +156,89 @@ are authoritative for semantic equality, timestamp precision/calendar validity,
 relative paths, hash links and conditional admission. Preserve up to nine UTC
 fractional digits, including .NET's seven-digit process generation timestamps.
 
+## Explicit legacy-source snapshot adapter
+
+`source_snapshot.capture(request, source_root, store)` closes the offline seam
+between exported legacy receipts and `seal`. The supported profile is
+`legacy-r22-saved-boundary.v1`; actual owner names are data. It reads only the
+twelve allowlisted input roles and never searches a campaign directory or follows
+a path embedded in a receipt. Each supplied file has an explicit relative path,
+original logical reference, SHA-256 and byte size. Missing facts require an
+explicit absence reason. The output store must be fresh, with an existing parent,
+and disjoint from the exported inputs.
+
+```sh
+python -m tools.team_handoff.cli source-snapshot --request tools/team_handoff/examples/source-snapshot-request.json --source-root tools/team_handoff/examples --store /tmp/source-snapshot-demo
+python -m tools.team_handoff.cli inspect-source-snapshot --store /tmp/source-snapshot-demo --expected-receipt <receipt_sha256>
+```
+
+The fixtures are synthetic and have fixed historical timestamps. Choose a fresh
+temporary output path on Windows. A completed capture returns `status: sealed`,
+but **always** `admission_status: held`, `liveness: not_observed` and
+`may_execute: false`. Exit `0` means the offline capture/inspection completed;
+exit `3` retains a source-evidence HOLD, and exit `2` reports malformed input or
+I/O/integrity failure. File observation time and historical `owner_live` fields
+never become current liveness evidence.
+
+The profile requires a consistent session/config, producer launch, owner,
+terminal saved boundary, ledger, monitor, native receipt, catalog and explicit
+journal inventory. Session owner/reference, producer PID/start and editor
+PID/start must agree. Producer start comes from the pinned launch receipt, not
+`owner.utc`. Original session start/deadline define the sealed window; the
+request has no replacement-window field. `config.initial_checkpoint` describes
+the predecessor and never resets current saved progress. Counts/next index come
+from the agreeing current ledger/terminal/monitor. The last saved journal event
+supplies `saved_utc`; capture time and file mtimes cannot refresh it.
+
+The explicit journal copy uses `daedalus.source-operation-journal.v1` with a
+session ID, complete-inventory declaration, cutoff and operations. Each operation
+retains the existing six operation fields plus its original `event_utc`. The
+current save must bind the retained ledger intent, native result and exact native
+stable item identities. Unresolved operations, later results, source counts ahead
+of saved counts, pending work, mismatched worlds/references or stale source events
+hold capture. Nothing derives a replay command. This is a supported offline
+inventory contract; no real journal scanner or reconciliation provider is installed.
+
+All inputs are copied without rewriting their bytes, with complete hash rounds
+around copying and a final recheck after semantic validation. Changed, missing or
+contradictory files leave copied witnesses and a held result without publishing a
+current packet. Input sets must be quiescent immutable exports: endpoint hashes
+detect observable changes, and cannot fence an unrelated writer, detect arbitrary
+ABA replacement or establish that no later live dispatch occurred.
+
+```text
+fresh-store/
+  source-snapshot/
+    request.json, capture.json, result.json
+    copies/<role>.json          original exported bytes, including supplements
+  packet/                       the existing sealed-packet store
+    current.json, packets/...
+```
+
+Session, launch, config, terminal and journal originals are supplements to the
+existing seven packet roles. The capture manifest pins every copy, both hash
+rounds, the request and the mapped checkpoint. Its completed result links that
+manifest to the sealed packet digest. **Pin both `receipt_sha256` and
+`packet_sha256` through the trusted handoff route.**
+`read_snapshot(store, expected_sha256=...)` verifies this composite, including
+all supplements and the existing packet reader; `read_packet` alone does not
+verify supplementary lineage. The checkpoint retains the latest verified save;
+earlier reconciled operation history stays byte-for-byte in the journal copy.
+
+An interruption may leave copies or even `packet/current.json` before the final
+capture result exists. `read_snapshot` reports `snapshot_incomplete`; inspect and
+reconcile that outcome. Repeating capture against an existing store is refused,
+including after an interrupted or held attempt. Each new capture uses its own
+retained store and starts an independent packet chain at sequence `1`; this
+adapter does not mutate or append to a prior packet store.
+
+Missing source/build receipts remain explicitly unknown. Supplied build-time
+claims are checked by the existing provenance validator; current byte pins,
+capture time or a supplied DLL hash never manufacture historical parity. Runtime
+metadata, source completeness and journal completeness remain declared facts
+requiring trusted integration. The adapter performs no process, resource,
+broker, editor, build or custody calls.
+
 ## Remaining production integration
 
 1. Have the existing sole producer call `seal` at coherent healthy boundaries with
