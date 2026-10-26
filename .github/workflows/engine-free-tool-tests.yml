@@ -1,0 +1,56 @@
+# SPDX-License-Identifier: MIT
+# Engine-free unit tests that existed on main but were not run by any workflow (found Oct 25, 2026).
+name: Engine-free tool tests
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/economy/**'
+      - 'tools/islands/sol/**'
+      - 'tools/unreal/plugin_drift/**'
+      - 'tools/unreal_mcp/interchange_harness/**'
+      - 'tools/unreal_mcp/interchange_reimport/**'
+      - 'tools/unreal_mcp/sequence_mrq_native/**'
+      - 'tools/unreal_mcp/tests/**'
+      - 'tools/unreal_mcp/mrq_scene_context.py'
+      - 'tools/unreal_mcp/pcg_fixture_acceptance.py'
+      - '.github/workflows/engine-free-tool-tests.yml'
+permissions:
+  contents: read
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: tools/economy
+        working-directory: tools/economy
+        run: python -m unittest test_colony_ledger test_daybook_parity -v
+      - name: tools/islands/sol
+        working-directory: tools/islands/sol
+        run: python -m unittest test_sol_rules -v
+      - name: tools/unreal/plugin_drift
+        working-directory: tools/unreal/plugin_drift
+        run: python -m unittest test_plugin_drift test_secret_scan -v
+      - name: tools/unreal_mcp/interchange_harness
+        working-directory: tools/unreal_mcp/interchange_harness
+        run: python -m unittest test_harness_core -v
+      - name: tools/unreal_mcp/interchange_reimport
+        working-directory: tools/unreal_mcp/interchange_reimport
+        run: python -m unittest test_glb_intake -v
+      - name: tools/unreal_mcp/sequence_mrq_native
+        working-directory: tools/unreal_mcp/sequence_mrq_native
+        run: python -m unittest test_public_sequence_key_facts_r2 -v
+      - name: tools/unreal_mcp/tests
+        working-directory: tools/unreal_mcp/tests
+        run: python -m unittest test_mine_fresh_import test_mine_sequencer_diagnostic -v
+      - name: unreal_mcp root-import tests
+        run: python -m unittest tools.unreal_mcp.tests.test_mrq_scene_context tools.unreal_mcp.tests.test_pcg_fixture_acceptance -v
