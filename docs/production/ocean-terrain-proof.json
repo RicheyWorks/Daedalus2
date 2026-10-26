@@ -1,0 +1,63 @@
+{
+  "realm": "ocean",
+  "generator_version": 1,
+  "seed": 42013,
+  "requested_chunks": 64,
+  "stored_chunks": 64,
+  "triangles": 51150,
+  "units": "metres",
+  "up_axis": "Y",
+  "bounds": {
+    "min": [
+      -32,
+      -48,
+      -32
+    ],
+    "max_exclusive": [
+      32,
+      16,
+      32
+    ]
+  },
+  "spawn": [
+    0,
+    2,
+    0
+  ],
+  "boat_berth": [
+    0,
+    1,
+    8
+  ],
+  "submarine_berth": [
+    0,
+    -8,
+    8
+  ],
+  "server_registered": false,
+  "unreal_play_verified": false,
+  "generation_save_reload_mesh_seconds": 0.240338,
+  "source_head": "c4fc45c02b9018a67880f3512f05c40479056387",
+  "focused_tests": 6,
+  "core_regression_tests": 706,
+  "failures": 0,
+  "errors": 0,
+  "deterministic_daew_and_glb": "true",
+  "german_locale_json_verified": "true",
+  "core_suite_seconds": 27.863,
+  "delivery_directory": "C:/Users/730ri/Documents/Codex/2026-10-13/ocean-terrain-2",
+  "files": {
+    "ocean.glb": {
+      "bytes": 4352824,
+      "sha256": "727b3b436bcd8929eb67c6d6687d54e00e9cf21937b2c5d14a31b4faa3cf7ee0"
+    },
+    "ocean.daew": {
+      "bytes": 6135,
+      "sha256": "a0f0b99bd59cb69a7377d7de8bba2efbfc52779dcc732296e874bf4dea5cae60"
+    },
+    "ocean.json": {
+      "bytes": 415,
+      "sha256": "020affdc0f2736add94642bdeb731cd956b885850d61a194f49c7340a876d118"
+    }
+  }
+}

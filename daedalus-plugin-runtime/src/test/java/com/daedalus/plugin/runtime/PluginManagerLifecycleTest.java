@@ -54,31 +54,41 @@ class PluginManagerLifecycleTest {
 
     /** Records every lifecycle callback so tests can assert order and per-plugin progression. */
     private static final class TrackingPlugin implements MazePlugin {
+        private enum Boom { NONE, INIT, REGISTER, START }
+
         private final PluginManifest manifest;
         private final List<String> calls;
-        private final boolean throwOnInit;
+        private final Boom boom;
 
         TrackingPlugin(String id, List<String> calls, String... requires) {
-            this(id, calls, false, requires);
+            this(id, calls, Boom.NONE, requires);
         }
 
         TrackingPlugin(String id, List<String> calls, boolean throwOnInit, String... requires) {
+            this(id, calls, throwOnInit ? Boom.INIT : Boom.NONE, requires);
+        }
+
+        TrackingPlugin(String id, List<String> calls, Boom boom, String... requires) {
             this.manifest = new PluginManifest(id, id, "1.0", "test", "test plugin", requires);
             this.calls = calls;
-            this.throwOnInit = throwOnInit;
+            this.boom = boom;
         }
 
         @Override public PluginManifest manifest() { return manifest; }
 
         @Override public void init(PluginContext ctx) {
             calls.add(manifest.id() + ":init");
-            if (throwOnInit) throw new RuntimeException("boom in init for " + manifest.id());
+            if (boom == Boom.INIT) throw new RuntimeException("boom in init for " + manifest.id());
         }
         @Override public void registerAlgorithms(PluginContext ctx) {
             calls.add(manifest.id() + ":register");
+            if (boom == Boom.REGISTER) {
+                throw new RuntimeException("boom in register for " + manifest.id());
+            }
         }
         @Override public void start(PluginContext ctx) {
             calls.add(manifest.id() + ":start");
+            if (boom == Boom.START) throw new RuntimeException("boom in start for " + manifest.id());
         }
         @Override public void stop(PluginContext ctx) {
             calls.add(manifest.id() + ":stop");
@@ -176,6 +186,49 @@ class PluginManagerLifecycleTest {
         assertThat(event.errorMessage()).contains("boom in init for broken");
         assertThat(event.cause()).isNotNull();
         assertThat(event.getTimestamp()).isPositive();
+    }
+
+    @Test
+    void bootAll_publishesPluginFailedEvent_whenRegisterThrows(@TempDir Path pluginDir) {
+        List<String> calls = new ArrayList<>();
+        PluginRegistry registry = new PluginRegistry();
+        registry.put(new TrackingPlugin("good", calls));
+        registry.put(new TrackingPlugin("broken", calls, TrackingPlugin.Boom.REGISTER));
+
+        Rig rig = rigWith(registry, pluginDir);
+        rig.manager.bootAll();
+
+        assertThat(registry.get("good").state())
+                .as("a register miss must not stop the next plugin")
+                .isEqualTo(PluginLifecycle.STARTED);
+        assertThat(registry.get("broken").state()).isEqualTo(PluginLifecycle.FAILED);
+
+        ArgumentCaptor<Object> events = ArgumentCaptor.forClass(Object.class);
+        verify(rig.spring).publishEvent(events.capture());
+        PluginFailedEvent event = (PluginFailedEvent) events.getValue();
+        assertThat(event.pluginId()).isEqualTo("broken");
+        assertThat(event.phase()).isEqualTo(PluginFailedEvent.Phase.REGISTER_ALGORITHMS);
+        assertThat(event.errorMessage()).contains("boom in register for broken");
+        assertThat(calls).doesNotContain("broken:start");
+    }
+
+    @Test
+    void bootAll_publishesPluginFailedEvent_whenStartThrows(@TempDir Path pluginDir) {
+        List<String> calls = new ArrayList<>();
+        PluginRegistry registry = new PluginRegistry();
+        registry.put(new TrackingPlugin("broken", calls, TrackingPlugin.Boom.START));
+
+        Rig rig = rigWith(registry, pluginDir);
+        rig.manager.bootAll();
+
+        ArgumentCaptor<Object> events = ArgumentCaptor.forClass(Object.class);
+        verify(rig.spring).publishEvent(events.capture());
+        PluginFailedEvent event = (PluginFailedEvent) events.getValue();
+        assertThat(event.pluginId()).isEqualTo("broken");
+        assertThat(event.phase()).isEqualTo(PluginFailedEvent.Phase.START);
+        assertThat(event.errorMessage()).contains("boom in start for broken");
+        assertThat(calls).contains("broken:register");
+        assertThat(registry.get("broken").state()).isEqualTo(PluginLifecycle.FAILED);
     }
 
     @Test

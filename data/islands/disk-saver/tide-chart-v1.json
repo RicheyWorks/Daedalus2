@@ -1,0 +1,40 @@
+{
+  "v": 1,
+  "quest": "q_tide_chart",
+  "lore": "DiskSaver Island's hot pool berths only so many island caches; the home cache never leaves. Each tide an island asks to stream in. The harbour posts a tide chart of who comes next: clear the berth needed last, and the stalls stay low.",
+  "pool": {
+    "capacity_kib": 480,
+    "tides": 60,
+    "chart_len": 8,
+    "stall_budget_kib": 3000
+  },
+  "islands": [
+    {
+      "id": "cache_north",
+      "cost_kib": 90,
+      "weight": 2
+    },
+    {
+      "id": "cache_south",
+      "cost_kib": 140,
+      "weight": 1
+    },
+    {
+      "id": "vault_east",
+      "cost_kib": 260,
+      "weight": 3
+    }
+  ],
+  "seed": 1,
+  "npc": {
+    "name": "Harbourmaster Belady",
+    "lines": {
+      "start": "Tide chart's posted. Read it before you clear a berth.",
+      "hit": "Already berthed. No wait.",
+      "miss": "Not in the pool. The island stalls while it streams in.",
+      "evict": "Berth cleared. Pick the one the chart needs last.",
+      "win": "Season's done and the stalls stayed in budget. Good reading.",
+      "fail": "Too many stalls. The islands queue at the harbour mouth."
+    }
+  }
+}

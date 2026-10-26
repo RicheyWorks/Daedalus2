@@ -25,12 +25,17 @@ import java.util.UUID;
  *
  * <p>Only completed runs qualify — an abandoned wander is not a ghost — and "best" means
  * highest score (the same ordering the leaderboard uses, so the ghost IS the local record
- * holder). Empty trails (a session completed without recorded moves — theoretically a
- * 1×1 maze) are ignored rather than stored as degenerate ghosts.
+ * holder). Empty walks (a session completed without recorded moves — theoretically a
+ * 1×1 maze) are ignored rather than stored as degenerate ghosts. The recording is
+ * the seat that stepped on the goal, not always the opener.
  *
  * <p><b>Bounded</b> (house rule): one ghost per maze in a Caffeine cache
  * ({@code daedalus.ghost.max-mazes} / {@code idle-ttl}), and each recording is already
- * capped at {@link GameSession#MAX_TRAIL} moves by the model.
+ * capped at {@link GameSession#MAX_TRAIL} moves by the model. A finish on a maze
+ * that is not already seated, at cap, is dropped rather than LRU-evicting a
+ * recording someone is still racing or spectating. Finish cannot 409 — the
+ * session already completed. An existing seat still merges the higher score.
+ * Idle TTL still evicts abandoned recordings.
  */
 @Service
 public class GhostService {
@@ -41,9 +46,24 @@ public class GhostService {
      * @param elapsedMs wall-clock duration of the recorded run (last move's stamp)
      */
     public record GhostRun(UUID mazeId, String playerName, long score,
-                           long elapsedMs, List<GameSession.TimedMove> moves) {}
+                           long elapsedMs, List<GameSession.TimedMove> moves) {
+        public GhostRun {
+            moves = moves == null ? null : List.copyOf(moves);
+        }
+    }
 
+    private final long maxMazes;
     private final Cache<UUID, GhostRun> ghosts;
+    /**
+     * Serialises first-insert against the cap. Caffeine {@code merge} at
+     * {@code maximumSize} evicts LRU, so a finish on a new maze used to drop
+     * another maze's ghost while someone was still racing or spectating it.
+     * Living, traffic, session, walk, and maze refuse at cap under this lock.
+     * A completed run cannot 409 — the move already happened — so a new maze
+     * at cap drops this ghost instead of an in-use one. Idle TTL still evicts
+     * abandoned recordings. An existing seat still merges.
+     */
+    private final Object admission = new Object();
 
     @Autowired
     public GhostService(
@@ -59,6 +79,7 @@ public class GhostService {
      * suite green each time, because no test could move a clock.
      */
     GhostService(long maxMazes, Duration idleTtl, Ticker ticker) {
+        this.maxMazes = maxMazes;
         this.ghosts = Caffeine.newBuilder()
                 .maximumSize(maxMazes)
                 .expireAfterAccess(idleTtl)
@@ -70,14 +91,22 @@ public class GhostService {
     @EventListener
     public void onCompleted(SessionCompletedEvent e) {
         GameSession s = e.session();
-        List<GameSession.TimedMove> trail = s.trail();
+        String who = s.completedBy();
+        List<GameSession.TimedMove> trail = s.walkOf(who);
         if (trail.isEmpty()) {
             return;
         }
-        GhostRun challenger = new GhostRun(s.mazeId(), s.playerName(), s.score(),
+        GhostRun challenger = new GhostRun(s.mazeId(), who, s.score(),
                 trail.get(trail.size() - 1).tMs(), trail);
-        ghosts.asMap().merge(s.mazeId(), challenger,
-                (incumbent, fresh) -> fresh.score() > incumbent.score() ? fresh : incumbent);
+        synchronized (admission) {
+            ghosts.cleanUp();
+            if (ghosts.getIfPresent(s.mazeId()) == null
+                    && ghosts.asMap().size() >= maxMazes) {
+                return;
+            }
+            ghosts.asMap().merge(s.mazeId(), challenger,
+                    (incumbent, fresh) -> fresh.score() > incumbent.score() ? fresh : incumbent);
+        }
     }
 
     /**

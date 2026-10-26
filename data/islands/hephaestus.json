@@ -1,0 +1,136 @@
+{
+    "schema":  "daedalus.island/v0",
+    "id":  "island_hephaestus",
+    "owner":  "hephaestus",
+    "theme":  "forge / volcanic",
+    "size_mult":  2.0,
+    "footprint_m":  [
+                        1024,
+                        1024
+                    ],
+    "story":  "The 10,000 islands are fragments of one shattered planet, the biggest world ever known. Hephaestus Island is the fragment whose core took the asteroid's direct strike: the impact melted its heart into a living forge. The first ark crews tamed that molten core and built the Great Forge on it, and every ark hull since has been riveted here.",
+    "zones":  [
+                  {
+                      "id":  "caldera_forge",
+                      "desc":  "Great Forge inside the dormant caldera, anvils on the lava rim",
+                      "art":  [
+                                  "Prop_ForgeForge_*",
+                                  "Prop_ForgeAnvil_*",
+                                  "Prop_ForgeBellows_*",
+                                  "Prop_ForgeQuenchTub_*",
+                                  "Prop_ForgeChimney_*",
+                                  "Prop_ForgeForgeAltar_*"
+                              ]
+                  },
+                  {
+                      "id":  "meteor_scar",
+                      "desc":  "Impact scar where the asteroid struck the fragment's core: asteroid shard fused into planet rock, starmetal + emberite ore (Item_Shard_Asteroid, Item_Shard_Planet)",
+                      "art":  [
+                                  "Prop_Asteroid_Core",
+                                  "Prop_ForgeObsidianSpire_*",
+                                  "Item_Ore_Emberite",
+                                  "Item_Ore_Starmetal"
+                              ]
+                  },
+                  {
+                      "id":  "ark_drydock",
+                      "desc":  "Half-built ark on stilts, where players repair and upgrade arks",
+                      "art":  [
+                                  "Veh_Ark",
+                                  "Prop_ArkWreck_Hull"
+                              ]
+                  },
+                  {
+                      "id":  "ash_fields",
+                      "desc":  "Fertile ash slopes: herb beds, ranch pens for emberhens, ashgoats, forgeox, lavaboar, cinderwool, and vent bees",
+                      "art":  [
+                                  "Item_Herb_*",
+                                  "Prop_Ranch*"
+                              ]
+                  },
+                  {
+                      "id":  "hot_springs",
+                      "desc":  "Clean springs + steam vents; drinkable water source",
+                      "art":  [
+                                  "Prop_ForgeVentPlume_*",
+                                  "Prop_WaterWellhead_Clay",
+                                  "Prop_WaterRainCatch_*"
+                              ]
+                  },
+                  {
+                      "id":  "basalt_coast",
+                      "desc":  "Black-sand shore, salt still, lava tubes",
+                      "art":  [
+                                  "Prop_WaterStill_*",
+                                  "Prop_ForgeLavaRock_*",
+                                  "Prop_ForgeMagmaPool_*"
+                              ]
+                  }
+              ],
+    "resources":  {
+                      "ore":  [
+                                  "Emberite",
+                                  "Obsidian",
+                                  "Sulfur",
+                                  "Basalt",
+                                  "Iron",
+                                  "Starmetal"
+                              ],
+                      "herbs":  [
+                                    "Emberleaf",
+                                    "Ashmint",
+                                    "Cinderroot",
+                                    "Sulfurbloom",
+                                    "Lavathistle",
+                                    "Forgefern",
+                                    "Smokesage",
+                                    "Glowcap",
+                                    "Starpetal",
+                                    "Ironbark",
+                                    "Saltgrass",
+                                    "Cometcress",
+                                    "Ventmoss",
+                                    "Charlily",
+                                    "Blazeberry",
+                                    "Coalclover",
+                                    "Mistwort",
+                                    "Dewbell",
+                                    "Thornwick",
+                                    "Sunspike",
+                                    "Frostfrond",
+                                    "Moonmallow",
+                                    "Ravenroot",
+                                    "Bloodnettle",
+                                    "Calmbloom",
+                                    "Bitterweed",
+                                    "Honeyreed",
+                                    "Quartzvine",
+                                    "Pyreweed",
+                                    "Shardsorrel",
+                                    "Vigorleaf",
+                                    "Duskthyme",
+                                    "Kilnpoppy",
+                                    "Boilbalm",
+                                    "Steamreed",
+                                    "Hearthbasil"
+                                ],
+                      "animals":  [
+                                      "emberhen",
+                                      "ashgoat",
+                                      "forgeox",
+                                      "lavaboar",
+                                      "cinderwool",
+                                      "vent_bees"
+                                  ]
+                  },
+    "hazards":  [
+                    "lava (damage 10/s; fire_resist herb combo negates)",
+                    "heat zone at caldera (thirst drain x2)"
+                ],
+    "quests":  [
+                   "q_crater",
+                   "q_ark",
+                   "q_forge_temper"
+               ],
+    "jukebox":  "forge-anvil rhythm stem (ask prometheus)"
+}

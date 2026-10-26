@@ -40,6 +40,11 @@ public class MazeSolverService {
      */
     public record Result(List<Point> path, MazeStats stats, String solverId,
                          List<Point> expansions) {
+        public Result {
+            path = path == null ? null : List.copyOf(path);
+            expansions = expansions == null ? null : List.copyOf(expansions);
+        }
+
         public Result(List<Point> path, MazeStats stats, String solverId) {
             this(path, stats, solverId, null);
         }

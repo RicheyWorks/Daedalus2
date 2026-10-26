@@ -139,14 +139,17 @@ become dramatically better once mazes can already change under a walker's feet.
 - The maze cache stops being append-only: `MazeGenerationService.replace` swaps immutable
   snapshots, and every reader (REST, ASCII, sessions, solvers) picks up the newest grid on
   its next lookup with no locking — readers mid-request keep a consistent old snapshot.
-- `/topic/maze/{id}/state` now carries two frame shapes (`GeneratedFrame`, `MutationFrame`);
-  subscribers must branch on shape. The web UI does; external consumers are told via the
-  frame's self-describing `tick` field.
+- `/topic/maze/{id}/state` carries three frame shapes (`GeneratedFrame`,
+  `MutationFrame`, `TrafficFrame`); subscribers must branch on shape. The web
+  UI does; external consumers are told via `generatorId` / `tick` /
+  `congestedCells`.
 - Solved paths and leaderboard times refer to the maze *as it was* — accepted for v1 and
   visible in the UI (it re-solves on every mutation).
 - Wall *closing* (mazes getting harder) is deliberately out of scope: it needs a
   connectivity proof per closure. **Re-fire trigger:** if Option 3 or 7 is built, revisit
-  closing with a cut-vertex check.
+  closing with a cut-vertex check. **Fired 2026-08-17** — both options had shipped; the
+  proof is a spanning-forest complement (cut-*edge*, not cut-vertex — the wording above
+  named the wrong object). See [ADR-008](ADR-008-living-mazes-hardening.md).
 - A new always-on scheduler thread exists; bounded by `max-concurrent` and per-run tick caps,
   and every run self-terminates (ticks exhausted, maze settled, or maze evicted).
 
@@ -300,3 +303,9 @@ become dramatically better once mazes can already change under a walker's feet.
         old maze's response, it leaves the player on the previous maze under the new maze's
         leaderboard heading. **Every flake is a race until proven otherwise**; this roadmap's
         last real defect was found by refusing to re-run until green.
+
+16. [x] Hardening (2026-08-17). The re-fire trigger above fired once traffic and fog-of-war
+        were both live. `Sealer` closes extra passages without disconnecting the habitable
+        graph; `POST /live?seal=` is the opt-in so v1 `/live` stays erosion-only. The
+        interesting correction is in ADR-008: the trigger asked for a cut-vertex check and
+        the operation removes an edge.

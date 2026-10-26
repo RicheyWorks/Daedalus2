@@ -8,8 +8,6 @@ import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
 import com.daedalus.server.service.AlgorithmCatalogService;
-import com.daedalus.server.service.GameSessionService;
-import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.MazeGenerationService;
 import com.daedalus.server.service.MazeSolverService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -46,8 +45,6 @@ class MazeControllerGeneratorIdTest {
                 gen,
                 mock(MazeSolverService.class),
                 mock(AlgorithmCatalogService.class),
-                mock(GameSessionService.class),
-                mock(LeaderboardService.class),
                 mock(com.daedalus.server.service.LivingMazeService.class),
                 mock(com.daedalus.server.service.DailyMazeService.class),
                 mock(com.daedalus.server.service.TrafficService.class));
@@ -64,7 +61,8 @@ class MazeControllerGeneratorIdTest {
         MazeGenerationService.Cached cached =
                 new MazeGenerationService.Cached(fallbackMeta, grid, new MazeStats());
 
-        when(gen.generate(anyString(), anyInt(), anyInt(), anyLong(), org.mockito.ArgumentMatchers.any())).thenReturn(cached);
+        when(gen.generate(anyString(), anyInt(), anyInt(), anyLong(),
+                org.mockito.ArgumentMatchers.any(), anyDouble())).thenReturn(cached);
 
         String body = new ObjectMapper().writeValueAsString(
                 new GenerateRequest("astar", 5, 5, 42L));

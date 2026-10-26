@@ -48,7 +48,7 @@ public class MazeWebSocketController {
     @EventListener
     public void onMutated(MazeMutatedEvent e) {
         stomp.convertAndSend("/topic/maze/" + e.mazeId() + "/state",
-                new MutationFrame(e.mazeId(), e.tick(), e.wallsOpened(),
+                new MutationFrame(e.mazeId(), e.tick(), e.wallsOpened(), e.wallsClosed(),
                         e.deadEndsRemaining(), e.settled()));
     }
 

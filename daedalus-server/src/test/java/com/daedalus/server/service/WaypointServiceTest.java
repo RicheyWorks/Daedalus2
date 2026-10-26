@@ -2,12 +2,14 @@
 
 package com.daedalus.server.service;
 
+import com.daedalus.engine.Braider;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
 import com.daedalus.model.Point;
 import com.daedalus.plugin.events.PlayerMovedEvent;
 import com.daedalus.theory.MazeMetrics;
+import com.daedalus.theory.WaypointTour;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +21,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -174,6 +182,133 @@ class WaypointServiceTest {
         var b = fresh.tourFor(mazeId, 4);
         assertThat(b.waypoints()).isEqualTo(a.waypoints());
         assertThat(b.optimalCost()).isEqualTo(a.optimalCost());
+        assertThat(b.path()).isEqualTo(a.path());
+    }
+
+    @Test
+    void theOptimalPathIsTheWalkTheCostCounts() {
+        var tour = waypoints.tourFor(mazeId, 4);
+        assertThat(tour.path()).isNotEmpty();
+        assertThat(tour.path().getFirst()).isEqualTo(grid.start());
+        assertThat(tour.path().getLast()).isEqualTo(grid.goal());
+        assertThat(tour.path().size() - 1)
+                .as("optimalCost is path hops, not a separate estimate")
+                .isEqualTo(tour.optimalCost());
+        for (int i = 1; i < tour.path().size(); i++) {
+            Point a = tour.path().get(i - 1);
+            Point b = tour.path().get(i);
+            assertThat(Math.abs(a.row() - b.row()) + Math.abs(a.col() - b.col()))
+                    .as("tour path hops through a wall at %s -> %s", a, b)
+                    .isEqualTo(1);
+        }
+        assertThat(tour.path()).containsAll(tour.waypoints());
+    }
+
+    @Test
+    void aNewHuntAtTheCollectedCapDoesNotWipeAMidHuntPickup() {
+        waypoints = new WaypointService(gen, sessions, 4, 1, Duration.ofHours(2));
+        var tour = waypoints.tourFor(mazeId, 4);
+        var first = sessions.open(mazeId, "a", grid.start());
+        Point coin = tour.waypoints().get(0);
+        waypoints.onPlayerMoved(new PlayerMovedEvent(this, first.id(), "a", grid.start(), coin));
+        assertThat(waypoints.progressFor(first.id()).collected()).isEqualTo(1);
+
+        var second = sessions.open(mazeId, "b", grid.start());
+        waypoints.onPlayerMoved(new PlayerMovedEvent(this, second.id(), "b", grid.start(), coin));
+
+        assertThat(waypoints.progressFor(first.id()).collected())
+                .as("Caffeine put at maximumSize used to LRU-evict the older collected set "
+                        + "so a mid-hunt pickup vanished after an unrelated hunt's first coin")
+                .isEqualTo(1);
+    }
+
+    /**
+     * Caffeine {@code get(compute)} at {@code maximumSize} used to LRU-evict another
+     * maze's frozen coins on a first {@code GET /tour}. {@code progressFor} then
+     * went null, pickups stopped attaching, and a later {@code tourFor} reminted
+     * a different set. HTTP can 409 here — unlike a move that already happened.
+     */
+    @Test
+    void aFirstTourOnANewMazeAtCapDoesNotEvictAnotherMazesFrozenCoins() {
+        waypoints = new WaypointService(gen, sessions, 4, 1, Duration.ofHours(2));
+        var frozen = waypoints.tourFor(mazeId, 8);
+        var session = sessions.open(mazeId, "p", grid.start());
+        Point coin = frozen.waypoints().get(0);
+        waypoints.onPlayerMoved(new PlayerMovedEvent(this, session.id(), "p",
+                grid.start(), coin));
+        assertThat(waypoints.progressFor(session.id()).collected()).isEqualTo(1);
+
+        UUID other = gen.generate("recursive-backtracker", 13, 13, 43L).metadata().id();
+        assertThatThrownBy(() -> waypoints.tourFor(other, 4))
+                .as("Caffeine get(compute) at maximumSize used to LRU-evict the seated "
+                        + "maze's coins so progressFor went null and a later tour reminted")
+                .isInstanceOf(WaypointService.CapacityExceededException.class);
+
+        assertThat(waypoints.progressFor(session.id()))
+                .as("the seated maze's frozen coins must still be readable")
+                .isNotNull();
+        assertThat(waypoints.progressFor(session.id()).collected())
+                .as("pickups must keep attaching to the seated hunt")
+                .isEqualTo(1);
+        assertThat(waypoints.progressFor(session.id()).waypoints())
+                .isEqualTo(frozen.waypoints());
+
+        var later = waypoints.tourFor(mazeId, 4);
+        assertThat(later.waypoints())
+                .as("a later ?count= on the seated maze must not remint after a refused stranger")
+                .isEqualTo(frozen.waypoints());
+        assertThat(later.waypoints()).hasSize(8);
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
+    }
+
+    @Test
+    void twoFirstToursCannotBothTakeTheLastPlacementSlot() throws Exception {
+        waypoints = new WaypointService(gen, sessions, 4, 1, Duration.ofHours(2));
+        UUID other = gen.generate("recursive-backtracker", 13, 13, 43L).metadata().id();
+        var go = new CountDownLatch(1);
+        var accepted = new CopyOnWriteArrayList<UUID>();
+        var refused = new AtomicInteger();
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceAdmitTour(mazeId, 3, go, accepted, refused));
+            var b = pool.submit(() -> raceAdmitTour(other, 8, go, accepted, refused));
+            go.countDown();
+            a.get(30, TimeUnit.SECONDS);
+            b.get(30, TimeUnit.SECONDS);
+        }
+        assertThat(accepted).as("exactly one first tour owns the only slot").hasSize(1);
+        assertThat(refused.get()).isEqualTo(1);
+        UUID seated = accepted.get(0);
+        var again = waypoints.tourFor(seated, 4);
+        assertThat(again.waypoints())
+                .as("the maze that won the slot must still return its frozen set")
+                .hasSize(seated.equals(mazeId) ? 3 : 8);
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
+    }
+
+    private void raceAdmitTour(UUID id, int count, CountDownLatch go,
+                               CopyOnWriteArrayList<UUID> accepted, AtomicInteger refused) {
+        try {
+            go.await();
+            waypoints.tourFor(id, count);
+            accepted.add(id);
+        } catch (WaypointService.CapacityExceededException e) {
+            refused.incrementAndGet();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
+
+    @Test
+    void readingProgressDoesNotMintATour() {
+        var session = sessions.open(mazeId, "p", grid.start());
+        assertThat(waypoints.progressFor(session.id()))
+                .as("a spectator GET must not freeze coins the players then have to collect")
+                .isNull();
+        assertThat(waypoints.tourFor(mazeId, 4)).isNotNull();
+        assertThat(waypoints.progressFor(session.id()))
+                .as("once someone has asked for the tour, progress is a read")
+                .isNotNull();
     }
 
     @Test
@@ -228,6 +363,110 @@ class WaypointServiceTest {
     }
 
     /**
+     * Two first asks used to each mint {@code mazeId:k}. Progress then preferred
+     * {@code mazeId:defaultCount} (or the first {@code asMap()} scan), so a hunt
+     * opened at {@code ?count=8} collected against the default coin set once
+     * anyone also asked for the no-arg tour.
+     */
+    @Test
+    void twoFirstToursAtDifferentCountsShareOnePlacementAndPickups() {
+        var first = waypoints.tourFor(mazeId, 8);
+        var later = waypoints.tourFor(mazeId, 4);
+        assertThat(later.waypoints())
+                .as("a later ?count= must not mint a second coin set")
+                .isEqualTo(first.waypoints());
+        assertThat(first.waypoints()).hasSize(8);
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
+
+        var session = sessions.open(mazeId, "p", grid.start());
+        var before = waypoints.progressFor(session.id());
+        assertThat(before.waypoints()).isEqualTo(first.waypoints());
+        assertThat(before.total()).isEqualTo(8);
+
+        Point target = first.waypoints().get(0);
+        List<Point> route = MazeMetrics.shortestPath(grid, grid.start(), target);
+        for (int i = 1; i < route.size(); i++) {
+            assertThat(sessions.tryMove(session.id(), grid, route.get(i))).isTrue();
+            waypoints.onPlayerMoved(new PlayerMovedEvent(this, session.id(), "p",
+                    route.get(i - 1), route.get(i)));
+        }
+        var after = waypoints.progressFor(session.id());
+        long onRoute = first.waypoints().stream().filter(route::contains).count();
+        assertThat(after.collected())
+                .as("pickups attached to the default set, not the frozen hunt")
+                .isEqualTo((int) onRoute);
+        assertThat(after.remaining()).doesNotContain(target);
+        assertThat(after.total()).isEqualTo(8);
+    }
+
+    @Test
+    void twoFirstToursAtDifferentCountsMintOnePlacement() throws Exception {
+        var go = new CountDownLatch(1);
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceTour(3, go));
+            var b = pool.submit(() -> raceTour(8, go));
+            go.countDown();
+            var left = a.get(30, TimeUnit.SECONDS);
+            var right = b.get(30, TimeUnit.SECONDS);
+            assertThat(left.waypoints())
+                    .as("two first inserts at different k used to each mint mazeId:k")
+                    .isEqualTo(right.waypoints());
+        }
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
+    }
+
+    private WaypointService.Tour raceTour(int count, CountDownLatch go) {
+        try {
+            go.await();
+            return waypoints.tourFor(mazeId, count);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
+
+    @Test
+    void aHuntOpenedAtANonDefaultCountIsCollectable() {
+        var tour = waypoints.tourFor(mazeId, 8);
+        assertThat(tour.waypoints()).hasSize(8);
+        var session = sessions.open(mazeId, "p", grid.start());
+        var before = waypoints.progressFor(session.id());
+        assertThat(before).isNotNull();
+        assertThat(before.total()).isEqualTo(8);
+        assertThat(before.waypoints()).isEqualTo(tour.waypoints());
+        assertThat(before.path()).isEqualTo(tour.path());
+
+        Point target = tour.waypoints().get(0);
+        List<Point> route = MazeMetrics.shortestPath(grid, grid.start(), target);
+        for (int i = 1; i < route.size(); i++) {
+            assertThat(sessions.tryMove(session.id(), grid, route.get(i))).isTrue();
+            waypoints.onPlayerMoved(new PlayerMovedEvent(this, session.id(), "p",
+                    route.get(i - 1), route.get(i)));
+        }
+        var after = waypoints.progressFor(session.id());
+        // k=8 is dense enough that the shortest path to the first coin can
+        // step on another; collected is observed pickups, not "we named one".
+        long onRoute = tour.waypoints().stream().filter(route::contains).count();
+        assertThat(after.collected()).isEqualTo((int) onRoute);
+        assertThat(after.remaining()).doesNotContain(target);
+        assertThat(after.walked()).isEqualTo(route.size() - 1L);
+    }
+
+    @Test
+    void walkedCountsTheOpenerTrailNotEverySeat() {
+        waypoints.tourFor(mazeId, 4);
+        var session = sessions.open(mazeId, "opener", grid.start());
+        assertThat(sessions.join(session.id(), "joiner", grid.start())).isNotNull();
+        Point step = grid.openNeighbors(grid.start()).get(0);
+        assertThat(sessions.tryMove(session.id(), "joiner", grid, step)).isTrue();
+        var progress = waypoints.progressFor(session.id());
+        assertThat(progress.walked())
+                .as("a joiner hop must not inflate the tour verdict")
+                .isZero();
+        assertThat(session.moveCount()).isEqualTo(1);
+    }
+
+    /**
      * The cap has to leave room for the goal. Clamping to {@code MAX_WAYPOINTS} exactly and
      * then appending the goal as the compulsory last stop hands Held-Karp one stop too many,
      * which it refuses — so an over-large {@code count} answered 500 rather than capping.
@@ -240,8 +479,36 @@ class WaypointServiceTest {
                 .as("an unbounded waypoint count would let one request run 2^k Held-Karp")
                 .isLessThanOrEqualTo(com.daedalus.theory.WaypointTour.MAX_WAYPOINTS - 1);
         assertThat(huge.feasible()).isTrue();
-        assertThat(waypoints.tourFor(mazeId, 0).waypoints()).hasSize(1); // clamps up, not to zero
+        UUID other = gen.generate("recursive-backtracker", 13, 13, 43L).metadata().id();
+        assertThat(waypoints.tourFor(other, 0).waypoints()).hasSize(1); // clamps up, not to zero
         assertThat(waypoints.tourFor(UUID.randomUUID(), 4)).isNull();
         assertThat(waypoints.progressFor(UUID.randomUUID())).isNull();
+    }
+
+    @Test
+    void aLivingTickRescoresTheTourWithoutMovingTheWaypoints() {
+        var before = waypoints.tourFor(mazeId, 4);
+        MazeGrid next = grid.copy();
+        Braider.braid(next, 1.0, 7L);
+        var cached = gen.find(mazeId);
+        assertThat(gen.replace(mazeId, new MazeGenerationService.Cached(
+                cached.metadata(), next, cached.stats(), cached.hotspots()))).isTrue();
+
+        var after = waypoints.tourFor(mazeId, 4);
+        assertThat(after.waypoints())
+                .as("the coins stay put — a living maze is a hazard, not a new puzzle")
+                .isEqualTo(before.waypoints());
+
+        List<Point> stops = new ArrayList<>(before.waypoints());
+        stops.add(next.goal());
+        int liveCost = WaypointTour.shortestTour(next, next.start(), stops).totalCost();
+        assertThat(after.optimalCost())
+                .as("the number we score against must be Held-Karp on the live grid, not "
+                        + "the tree the tour was first asked about")
+                .isEqualTo(liveCost);
+        assertThat(liveCost)
+                .as("full braid on a tree adds shortcuts; if this equals the tree cost the "
+                        + "fixture is not exercising the stale-cache bug")
+                .isLessThan(before.optimalCost());
     }
 }

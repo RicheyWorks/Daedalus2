@@ -27,9 +27,11 @@ package com.daedalus.server.web;
  *
  * <p>All 27 sites used to answer identically. Several were never the same thing:
  * <ul>
- *   <li>{@code POST /session/&#123;id&#125;/move} 404s both when the session is unknown
- *       <em>and</em> when the session is fine but its maze has been evicted from the cache — very
- *       different problems for the caller, previously indistinguishable;</li>
+ *   <li>{@code POST /session/&#123;id&#125;/move} and {@code POST /session/&#123;id&#125;/join}
+ *       404 both when the session is unknown <em>and</em> when the session is fine but its maze
+ *       has been evicted from the cache — very different problems for the caller, previously
+ *       indistinguishable. The two endpoints must not share a sentence: join used to say
+ *       "moves cannot be validated" (copy-paste, 2026-08-26);</li>
  *   <li>{@code GET /maze/&#123;id&#125;/ghost} 404s when the maze is unknown and when the maze is
  *       fine but nobody has completed a run on it yet — the second is not an error at all, it is
  *       "come back later";</li>
@@ -84,6 +86,23 @@ public class ResourceNotFoundException extends RuntimeException {
     public static ResourceNotFoundException agent(Object id) {
         return new ResourceNotFoundException("agent", String.valueOf(id),
                 "No agent walk " + id + " is open.");
+    }
+
+    /** A world id that is not this host's persistent volume. */
+    /** No ark with that id: islands launch {@code ark-<slot>}, one each (ADR-019). */
+    public static ResourceNotFoundException ark(Object id) {
+        return new ResourceNotFoundException("ark", String.valueOf(id),
+                "No ark " + id + " sails here. Each raised island launches ark-<slot>.");
+    }
+
+    public static ResourceNotFoundException island(Object slot) {
+        return new ResourceNotFoundException("island", String.valueOf(slot),
+                "No island is raised in slot " + slot + ". GET /islands lists the lane.");
+    }
+
+    public static ResourceNotFoundException world(Object id) {
+        return new ResourceNotFoundException("world", String.valueOf(id),
+                "No world " + id + " is mounted. This host serves world-zero.");
     }
 
     /** What kind of thing was missing. */

@@ -1,0 +1,294 @@
+// SPDX-License-Identifier: MIT
+// The squad-tactics contract (DTO 1) and the local director, checked without Unreal. Build:
+//   g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public tactics_core_test.cpp
+#include "DaedalusTacticsCore.h"
+#include <algorithm>
+#include <chrono>
+#include <cstdio>
+#include <random>
+using namespace daedalus::tactics;
+static int Passed = 0, Total = 0;
+static void Check(const char* Name, bool OK) { ++Total; Passed += OK; std::printf("%s %s\n", OK ? "PASS" : "FAIL", Name); }
+
+static const Order* Find(const Spec& S, const std::string& U)
+{
+	for (const Order& O : S.Orders) if (O.Unit == U) return &O;
+	return nullptr;
+}
+static double Dist(const Vec& A, const Vec& B) { return std::sqrt((A.X - B.X) * (A.X - B.X) + (A.Y - B.Y) * (A.Y - B.Y)); }
+
+int main(int argc, char** argv)
+{
+	// --- the format
+	const std::string Good = "DTO 1\nsquad orr-1 tick 42\norder foe-a FLANK LEFT 100 200 30 | player keeps to the ridge\n"
+		"order foe-b RETREAT - -50.5 0 0\r\n# a comment\n\norder foe-c HOLD - 0 0 0\n";
+	ParseResult R = Parse(Good);
+	Check("a good spec parses", R.Ok && R.Out.Squad == "orr-1" && R.Out.Tick == 42 && R.Out.Orders.size() == 3);
+	Check("the why survives", R.Ok && R.Out.Orders[0].Why == "player keeps to the ridge");
+	Check("verbs, sides and points read", R.Ok && R.Out.Orders[0].Do == Verb::Flank && R.Out.Orders[0].Way == Side::Left
+		&& R.Out.Orders[1].Do == Verb::Retreat && R.Out.Orders[1].At.X == -50.5);
+	ParseResult Again = Parse(Write(R.Out));
+	Check("write then parse gives the same spec", Again.Ok && Write(Again.Out) == Write(R.Out));
+	struct Bad { const char* Text; const char* Why; };
+	const Bad Bads[] = {
+		{"", "empty"}, {"DTO 2\nsquad s tick 1\n", "version 2"}, {"DTX 1\n", "wrong magic"},
+		{"DTO 1\norder a HOLD - 0 0 0\n", "order before squad"}, {"DTO 1\nsquad s tick 1\norder a JUMP - 0 0 0\n", "unknown verb"},
+		{"DTO 1\nsquad s tick 1\norder a FLANK - 0 0 0\n", "flank without a side"},
+		{"DTO 1\nsquad s tick 1\norder a HOLD - nan 0 0\n", "NaN point"}, {"DTO 1\nsquad s tick 1\norder a HOLD - 1e300 0 0\n", "huge point"},
+		{"DTO 1\nsquad s tick 1\norder a HOLD - 0 0\n", "short order"}, {"DTO 1\nsquad s tick 1\norder a HOLD - 0 0 0\norder a ATTACK - 0 0 0\n", "two orders for one unit"},
+		{"DTO 1\nsquad s tick -1\n", "negative tick"}, {"DTO 1\nsquad s tick 1.5\n", "fractional tick"},
+		{"DTO 1\nsquad b@d tick 1\n", "bad squad id"}, {"DTO 1\nsquad s tick 1\nsquad t tick 2\n", "second squad"},
+		{"DTO 1\n", "no squad"}, {"DTO 1\nsquad s tick 1\n| only a reason\n", "only a reason"},
+		{"DTO 1\nsquad s tick 1\nfire everything\n", "unknown line"},
+		{"DTO 1\nsquad s tick 1\norder a HOLD - 0x10 0 0\n", "hex number"}, {"DTO 1\nsquad s tick 1\norder a HOLD - 1.5d 0 0\n", "Java suffix"},
+		{"DTO 1\nsquad s tick 1\norder a HOLD - inf 0 0\n", "inf"}, {"DTO 1\nsquad s tick 1\norder a HOLD - 1e 0 0\n", "bare exponent"},
+	};
+	int Refused = 0;
+	for (const Bad& B : Bads)
+	{
+		ParseResult X = Parse(B.Text);
+		if (!X.Ok && !X.Error.empty() && X.Out.Orders.empty()) ++Refused;
+		else std::printf("  not refused: %s\n", B.Why);
+	}
+	Check("21 bad specs are each refused whole, with a reason", Refused == 21);
+	std::string Big = "DTO 1\nsquad s tick 1\n";
+	for (int i = 0; i <= static_cast<int>(MaxOrders); ++i) Big += "order u" + std::to_string(i) + " HOLD - 0 0 0\n";
+	Check("more than MaxOrders is refused (bounded work)", !Parse(Big).Ok);
+	Check("a refusal names the line", Parse("DTO 1\nsquad s tick 1\norder a JUMP - 0 0 0\n").Error.rfind("line 3", 0) == 0);
+
+	// --- events
+	const std::string Ev = WriteEvents(7, {{EventKind::Hit, "foe-a", {1, 2, 3}, 12.5}, {EventKind::Player, "player", {0, 0, 0}, 80}});
+	Check("events write as DTE 1", Ev == "DTE 1\ntick 7\nevent HIT foe-a 1.0 2.0 3.0 12.5\nevent PLAYER player 0.0 0.0 0.0 80.0\n");
+
+	// --- geometry
+	const Vec P{0, 0, 0}, From{-1000, 0, 0};
+	const Vec L = FlankPoint(P, From, Side::Left, 900), Rt = FlankPoint(P, From, Side::Right, 900);
+	Check("flank points sit at the radius", std::fabs(Dist(L, P) - 900) < 1e-6 && std::fabs(Dist(Rt, P) - 900) < 1e-6);
+	Check("left and right are opposite sides", std::fabs(L.X + Rt.X) < 1e-6 && std::fabs(L.Y + Rt.Y) < 1e-6 && L.Y != 0);
+	Check("a flank point is beside the player, not behind the squad", std::fabs(L.X) < 1e-6);
+	Check("away-from moves away", Dist(AwayFrom(P, From, 1500), P) > Dist(From, P));
+	Check("coincident points still give a direction", std::isfinite(FlankPoint(P, P, Side::Left, 900).X));
+
+	// --- the local director: three foes and one player
+	const std::vector<Unit> Three = {{"foe-a", {-600, 0, 0}, 60, 60, true}, {"foe-b", {-900, 300, 0}, 60, 60, true},
+		{"foe-c", {-1100, -200, 0}, 60, 60, false}};
+	Spec D = Decide("orr-1", 1, Three, P);
+	Check("one attacks, two flank", Find(D, "foe-a")->Do == Verb::Attack && Find(D, "foe-b")->Do == Verb::Flank
+		&& Find(D, "foe-c")->Do == Verb::Flank);
+	Check("the flanks go opposite ways", Find(D, "foe-b")->Way != Find(D, "foe-c")->Way);
+	Check("every order says why", std::all_of(D.Orders.begin(), D.Orders.end(), [](const Order& O) { return !O.Why.empty(); }));
+	std::vector<Unit> Hurt = Three;
+	Hurt[0].Health = 10;
+	Spec DH = Decide("orr-1", 2, Hurt, P);
+	Check("a badly hurt foe retreats", Find(DH, "foe-a")->Do == Verb::Retreat && Find(DH, "foe-a")->Why == "health 16%");
+	Check("the next nearest takes over the attack", Find(DH, "foe-b")->Do == Verb::Attack);
+	Check("the retreat point is further from the player", Dist(Find(DH, "foe-a")->At, P) > Dist(Hurt[0].At, P));
+	Spec DHigh = Decide("orr-1", 3, Three, Vec{0, 0, 500});
+	Check("on high ground the lead defends instead of charging up", Find(DHigh, "foe-a")->Do == Verb::Defend);
+	Spec Far = Decide("orr-1", 4, Three, Vec{9000, 0, 0});
+	Check("out of range, all hold", std::all_of(Far.Orders.begin(), Far.Orders.end(), [](const Order& O) { return O.Do == Verb::Hold; }));
+	Check("nobody, no orders", Decide("s", 5, {}, P).Orders.empty());
+	std::vector<Unit> Shuffled = {Three[2], Three[0], Three[1]};
+	Check("same world, same orders, whatever the input order", Write(Decide("orr-1", 1, Shuffled, P)) == Write(D));
+	Check("the director's own spec parses", Parse(Write(D)).Ok);
+	std::vector<Unit> Tie = {{"b", {-500, 0, 0}, 1, 1, true}, {"a", {500, 0, 0}, 1, 1, true}};
+	Check("a distance tie goes by name", Find(Decide("s", 1, Tie, P), "a")->Do == Verb::Attack);
+	std::vector<Unit> Zero = {{"z", {-500, 0, 0}, 0, 0, true}};
+	Check("zero max health is not a division by zero", Find(Decide("s", 1, Zero, P), "z")->Do == Verb::Retreat);
+
+	// --- integration requirements from Astra (team-codex): size cap, roster bootstrap, stale fencing
+	{
+		std::vector<Unit> Big;
+		for (int i = 0; i < 300; ++i) Big.push_back({"b" + std::to_string(i), {-500.0 - i, 0, 0}, 60, 60, true});
+		Spec SB = Decide("big", 1, Big, P);
+		Check("a 300-unit squad orders its nearest 256 (MaxOrders)", SB.Orders.size() == MaxOrders && Find(SB, "b0") && !Find(SB, "b299"));
+		Check("so its spec is never refused for size", Parse(Write(SB)).Ok);
+		const std::string Ro = WriteRoster("a1b2c3", "pack-1", 9, {{"pack-1-1", "BLIGHT_SLIME", 42.5, 60, {1, 2, 3}, true}, {"pack-1-2", "STONE_KNIGHT", 0, 120, {4, 5, 6}, false}});
+		Check("the roster writes as DTR 1", Ro == "DTR 1\nsession a1b2c3 squad pack-1 tick 9\nunit pack-1-1 BLIGHT_SLIME 42.5 60.0 1.0 2.0 3.0 1\nunit pack-1-2 STONE_KNIGHT 0.0 120.0 4.0 5.0 6.0 0\n");
+		Check("first outside spec applies", Check(0, false, 5) == Fence::Apply);
+		Check("a newer tick applies", Check(5, true, 6) == Fence::Apply);
+		Check("the same tick is a repeat", Check(5, true, 5) == Fence::Repeat);
+		Check("an older tick is stale", Check(5, true, 4) == Fence::Stale);
+	}
+
+	// --- bounded: latency by squad size (the director runs about once a second, not per frame)
+	std::mt19937 Rng(7);
+	std::uniform_real_distribution<double> U(-2500, 2500);
+	double Worst = 0;
+	for (int N : {3, 30, 300, 3000})
+	{
+		std::vector<Unit> Many;
+		for (int i = 0; i < N; ++i) Many.push_back({"u" + std::to_string(i), {U(Rng), U(Rng), 0}, 60, 60, true});
+		const auto T0 = std::chrono::steady_clock::now();
+		Spec M = Decide("big", 1, Many, P);
+		const double Ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - T0).count();
+		std::printf("  decide %5d units: %.3f ms, %zu orders\n", N, Ms, M.Orders.size());
+		if (N == 300) Worst = Ms;
+		if (M.Orders.size() != std::min<size_t>(static_cast<size_t>(N), MaxOrders)) Worst = 1e9;   // capped at MaxOrders
+	}
+	Check("300 units decide in well under one 60 fps frame (16.7 ms)", Worst < 16.7);
+
+	// --- the frame budget for Astra's Java director (ADR-060 "end-to-end budget"): what the game thread pays per spec.
+	// Median of 200 runs each, so a noisy machine doesn't decide it. Run without sanitizers for real numbers:
+	//   g++ -std=c++17 -O2 -DNDEBUG -I../DaedalusLink/Source/DaedalusLink/Public tactics_core_test.cpp
+	{
+		std::vector<Unit> Full;
+		for (int i = 0; i < static_cast<int>(MaxOrders); ++i) Full.push_back({"u" + std::to_string(i), {U(Rng), U(Rng), 0}, 60, 60, true});
+		const std::string Text = Write(Decide("full", 7, Full, P));
+		std::vector<RosterUnit> Roster;
+		for (int i = 0; i < static_cast<int>(MaxOrders); ++i)
+			Roster.push_back({"u" + std::to_string(i), "SLIME", 40.0 + i % 20, 60, {U(Rng), U(Rng), 0}, i % 3 == 0});
+		auto Median = [](auto&& Fn) {
+			std::vector<double> T;
+			for (int r = 0; r < 200; ++r)
+			{
+				const auto T0 = std::chrono::steady_clock::now();
+				Fn();
+				T.push_back(std::chrono::duration<double, std::micro>(std::chrono::steady_clock::now() - T0).count());
+			}
+			std::sort(T.begin(), T.end());
+			return T[T.size() / 2];
+		};
+		size_t Sink = 0;
+		const double ParseUs = Median([&] { Sink += Parse(Text).Out.Orders.size(); });
+		const double WriteUs = Median([&] { Sink += Write(Parse(Text).Out).size(); }) - ParseUs;
+		const double RosterUs = Median([&] { Sink += WriteRoster("0123456789ab", "full", 7, Roster).size(); });
+		const double DecideUs = Median([&] { Sink += Decide("full", 7, Full, P).Orders.size(); });
+		std::printf("  budget, 256 orders (%zu bytes): parse %.1f us, write %.1f us, roster %.1f us, decide %.1f us (sink %zu)\n",
+			Text.size(), ParseUs, WriteUs < 0 ? 0 : WriteUs, RosterUs, DecideUs, Sink);
+		Check("a full 256-order spec parses in under 1 ms on the game thread", ParseUs < 1000);
+		Check("a full 256-unit roster writes in under 1 ms", RosterUs < 1000);
+	}
+
+	// --- to_chars must give printf's bytes, or the C++/Java/JS parity breaks: a million values, ties included
+	{
+		std::mt19937_64 G(64);
+		std::uniform_real_distribution<double> Wide(-2e6, 2e6);
+		int Bad = 0;
+		for (int i = 0; i < 1000000 && Bad < 5; ++i)
+		{
+			const double V = i % 4 == 0 ? std::round(Wide(G) * 4) / 4 : i % 4 == 1 ? std::round(Wide(G) * 20) / 20 : Wide(G);
+			char B[64];
+			std::snprintf(B, sizeof B, "%.1f", V);
+			if (Num(V) != B) { std::printf("  %.17g: %s vs %s\n", V, Num(V).c_str(), B); ++Bad; }
+		}
+		for (double V : {0.0, -0.0, 0.05, 0.15, 0.25, -0.25, 2.5e-7, 1e15 + 0.25, 1e300})
+		{
+			char B[400];
+			std::snprintf(B, sizeof B, "%.1f", V);
+			if (Num(V) != B) ++Bad;
+		}
+		Check("Num (to_chars) == printf %.1f on 1,000,009 values", Bad == 0);
+		double X = 0;
+		Check("Number takes '+1.5' and refuses 'inf', '0x10', '1.5d'", Number("+1.5", X) && X == 1.5 && !Number("inf", X) && !Number("0x10", X) && !Number("1.5d", X));
+	}
+
+	// --- garbage in from the network (the spec now arrives over HTTP): 200,000 random byte strings, biased toward the
+	// grammar's own pieces. Under ASan/UBSan nothing may crash, and anything accepted must write back and re-read to
+	// itself (all or nothing, never half a spec).
+	{
+		std::mt19937_64 G(2026);
+		const std::vector<std::string> Bits = {"DTO 1\n", "squad s tick 3\n", "order ", "a ", "ATTACK ", "FLANK ", "LEFT ",
+			"- ", "1.5 ", "-0 ", "1e8 ", "1e9 ", "nan ", "| why", "\n", "\r\n", " ", "\t", "#", "\0", "\xff", "|", "squad ",
+			"tick ", "99999999999999999999", "0x1 "};
+		int Accepted = 0, Broken = 0;
+		for (int K = 0; K < 200000; ++K)
+		{
+			std::string T;
+			const int Parts = 1 + static_cast<int>(G() % 24);
+			for (int P2 = 0; P2 < Parts; ++P2)
+			{
+				if (G() % 4 == 0) T += static_cast<char>(G() % 256);
+				else T += Bits[static_cast<size_t>(G() % Bits.size())];
+			}
+			const ParseResult R = Parse(T);
+			if (!R.Ok) { if (R.Error.empty() || !R.Out.Orders.empty()) ++Broken; continue; }
+			++Accepted;
+			const std::string W = Write(R.Out);
+			const ParseResult Again = Parse(W);
+			if (!Again.Ok || Write(Again.Out) != W) ++Broken;
+		}
+		std::printf("  garbage: 200000 inputs, %d accepted, %d broken\n", Accepted, Broken);
+		Check("random bytes never crash the parser, and what it accepts round-trips", Broken == 0);
+	}
+
+	// --- the parity file for the Java port (VoxelIsle-style): 40 seeded squads, their decided specs, plus round-trips
+	if (argc > 2 && std::string(argv[1]) == "--write")
+	{
+		FILE* F = std::fopen(argv[2], "w");
+		std::fprintf(F, "# tactics_core_test.cpp --write: per case, the inputs then Write(Decide(...)) between 'spec' and 'end'\n");
+		std::mt19937 G(2026);
+		for (int Case = 0; Case < 40; ++Case)
+		{
+			std::uniform_real_distribution<double> Pos(-3000, 3000), Hgt(-400, 700), Hp(0, 60);
+			const int N = 1 + static_cast<int>(G() % 7);
+			const Vec Pl{std::round(Pos(G)) / 4, std::round(Pos(G)) / 4, std::round(Hgt(G)) / 2};   // quarter-cm points: exact ties
+			std::vector<Unit> Us;
+			for (int i = 0; i < N; ++i)
+				Us.push_back({"u" + std::to_string((Case * 7 + i * 3) % 10), {std::round(Pos(G)) / 4, std::round(Pos(G)) / 4, std::round(Hgt(G) / 4)},
+					std::round(Hp(G)), 60, (G() & 1) != 0});
+			// unique names
+			for (int i = 0; i < N; ++i) Us[i].Name += "-" + std::to_string(i);
+			if (Case % 5 == 0)
+				for (Unit& U : Us) U.At.X += 6000;   // out of range: everyone HOLDs
+			std::fprintf(F, "case %d player %.17g %.17g %.17g\n", Case, Pl.X, Pl.Y, Pl.Z);
+			for (const Unit& U : Us)
+				std::fprintf(F, "unit %s %.17g %.17g %.17g %.17g %.17g %d\n", U.Name.c_str(), U.At.X, U.At.Y, U.At.Z, U.Health, U.MaxHealth, U.SeesPlayer ? 1 : 0);
+			std::fprintf(F, "spec\n%send\n", Write(Decide("sq-" + std::to_string(Case), Case, Us, Pl)).c_str());
+		}
+		// every refusal, with its exact message (the Java port must refuse the same specs the same way)
+		for (const Bad& B : Bads)
+		{
+			std::string T = B.Text, E;
+			for (char C : T) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C);
+			std::fprintf(F, "bad\t%s\t%s\n", E.c_str(), Parse(B.Text).Error.c_str());
+		}
+		std::fprintf(F, "events\t%s\n", [&] { std::string E; for (char C : WriteEvents(41, {{EventKind::Seen, "pack-1-1", {1.25, -2, 3}, 1}, {EventKind::Hit, "pack-1-2", {0, 0, 0}, 12.5}, {EventKind::Down, "pack-1-2", {7, 8, 9}, 0}, {EventKind::Player, "player", {-100.5, 20, 0}, 87.5}})) E += C == '\n' ? std::string("\\n") : std::string(1, C); return E; }().c_str());
+		std::fprintf(F, "roster\t%s\n", [&] { std::string E; for (char C : WriteRoster("a1b2c3", "pack-1", 9, {{"pack-1-1", "BLIGHT_SLIME", 42.5, 60, {1, 2, 3}, true}, {"pack-1-2", "STONE_KNIGHT", 0, 120, {-4.25, 5, 6}, false}})) E += C == '\n' ? std::string("\\n") : std::string(1, C); return E; }().c_str());
+		std::fprintf(F, "good\t%s\n", [&] { std::string E; for (char C : Good) E += C == '\n' ? std::string("\\n") : C == '\r' ? std::string("\\r") : std::string(1, C); return E; }().c_str());
+		// fuzz: 600 mutated specs (ASCII only, so Java reads the same bytes). Each line: hex of the text, then either
+		// "ok" and hex of Write(parsed) or "err" and the message. Java must agree on every one (TacticsFuzzParityTest).
+		{
+			auto Hex = [](const std::string& T) { static const char* D = "0123456789abcdef"; std::string H; for (unsigned char C : T) { H += D[C >> 4]; H += D[C & 15]; } return H; };
+			std::mt19937 Fz(4242);
+			auto Pick = [&](int N) { return static_cast<int>(Fz() % static_cast<unsigned>(N)); };
+			const std::vector<std::string> Nums = {"1e5", "+3", ".5", "5.", "-0", "1e", "0x1", "inf", "nan", "1.5d", "1e400",
+				"123456789012", "-1e8", "100000000.5", "00012", "1_0", "--1", "1e+2", "1E-2", "", "+", "."};
+			const std::string Alphabet = " \t\v\f\r\n|#.-+eE0123456789aZ_LEFTRIGHT";
+			const std::string Base = Write(Decide("fz", 3, {{"a", {100, 0, 0}, 60, 60, true}, {"b", {300, 50, 0}, 10, 60, true},
+				{"c", {-200, 80, 0}, 60, 60, false}, {"d", {0, -400, 0}, 60, 60, true}}, P)) + "# trailer\n";
+			int Oks = 0;
+			for (int K = 0; K < 600; ++K)
+			{
+				std::string T = Base;
+				const int Ops = 1 + Pick(4);
+				for (int O = 0; O < Ops && !T.empty(); ++O)
+				{
+					const size_t At = static_cast<size_t>(Pick(static_cast<int>(T.size())));
+					switch (Pick(7))
+					{
+					case 0: T.erase(At, 1); break;
+					case 1: T.insert(At, 1, Alphabet[static_cast<size_t>(Pick(static_cast<int>(Alphabet.size())))]); break;
+					case 2: { const size_t B = T.rfind('\n', At), E = T.find('\n', At); const std::string L = T.substr(B == std::string::npos ? 0 : B + 1, E == std::string::npos ? std::string::npos : E - (B == std::string::npos ? 0 : B + 1)); T.insert(E == std::string::npos ? T.size() : E + 1, L + "\n"); break; }
+					case 3: { // replace one number-looking token
+						size_t B = At; while (B < T.size() && !(std::isdigit(static_cast<unsigned char>(T[B])) || T[B] == '-')) ++B;
+						size_t E = B; while (E < T.size() && T[E] != ' ' && T[E] != '\n') ++E;
+						if (B < T.size()) T.replace(B, E - B, Nums[static_cast<size_t>(Pick(static_cast<int>(Nums.size())))]);
+						break; }
+					case 4: T.insert(At, std::string(static_cast<size_t>(1 + Pick(3)), " \t\v\f"[Pick(4)])); break;
+					case 5: T.insert(At, std::string(static_cast<size_t>(500 + Pick(40)), 'x')); break;
+					default: T.insert(At, " | why"); break;
+					}
+				}
+				const ParseResult R = Parse(T);
+				Oks += R.Ok;
+				std::fprintf(F, "fuzz\t%s\t%s\t%s\n", Hex(T).c_str(), R.Ok ? "ok" : "err", R.Ok ? Hex(Write(R.Out)).c_str() : R.Error.c_str());
+			}
+			std::printf("  fuzz: 600 mutated specs, %d still parse\n", Oks);
+		}
+		std::fclose(F);
+		std::printf("wrote %s\n", argv[2]);
+	}
+	std::printf("%d/%d\n", Passed, Total);
+	return Passed == Total ? 0 : 1;
+}

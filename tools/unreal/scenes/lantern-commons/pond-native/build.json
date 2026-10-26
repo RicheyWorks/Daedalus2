@@ -1,0 +1,359 @@
+{
+  "schema": "daedalus.commons-native-pond-batch.v1",
+  "utc": "2026-10-23T04:02:39.387566+00:00",
+  "prepared": 3,
+  "imported": 3,
+  "saved": 3,
+  "admitted": 3,
+  "held": 0,
+  "placed": 0,
+  "workflow": "Epic StaticMeshTools.import_file; native AssetImportTask/Interchange pipeline correction for the demonstrated missing vertex-colour option; explicit native save.",
+  "native_pipeline": {
+    "vertex_color_import_option": "IVCIO_REPLACE",
+    "reimport_strategy": "APPLY_PIPELINE_PROPERTIES",
+    "bake_meshes": false,
+    "build_scale3d": [
+      1,
+      1,
+      1
+    ],
+    "import_materials": false,
+    "generate_lightmap_u_vs": false,
+    "build_nanite": false,
+    "collision": false
+  },
+  "items": [
+    {
+      "name": "Prop_Aquatic_Pond_Frogbit_4",
+      "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a/Prop_Aquatic_Pond_Frogbit_4.Prop_Aquatic_Pond_Frogbit_4",
+      "package_sha256": "85a0f0ea84bc708afeb64163eb4fe037b9df6a4a59f4e183fcd2797f0d87fc2a",
+      "package_bytes": 109270,
+      "source_sha256": "6bd59792c5edff9ab824f111bc13f7c1a082edc9b3a0f1162f9400bd5780adae",
+      "triangles": 220,
+      "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+      "source_palette": {
+        "triangles": 220,
+        "all_faces_flat": true,
+        "observed_rgba_bytes": [
+          [
+            128,
+            189,
+            128,
+            255
+          ],
+          [
+            251,
+            250,
+            246,
+            255
+          ],
+          [
+            253,
+            237,
+            123,
+            255
+          ]
+        ],
+        "expected_rgba_bytes": [
+          [
+            128,
+            189,
+            128,
+            255
+          ],
+          [
+            251,
+            250,
+            246,
+            255
+          ],
+          [
+            253,
+            237,
+            123,
+            255
+          ]
+        ],
+        "source_palette_matches": true
+      },
+      "bounds_origin_cm": [
+        2.5,
+        -2.5,
+        7.5
+      ],
+      "bounds_extent_cm": [
+        37.5,
+        27.5,
+        7.5
+      ],
+      "native_import_data_class": "InterchangeAssetImportData",
+      "saved": true,
+      "admitted": true,
+      "initial_convenience_import_settings": {
+        "vertex_color_import_option": "<VertexColorImportOption.IGNORE: 1>",
+        "import_uniform_scale": 1.0,
+        "convert_scene": true,
+        "convert_scene_unit": false
+      },
+      "initial_colours": "All white; corrected before final admission."
+    },
+    {
+      "name": "Prop_Aquatic_Pond_PinkLily_4",
+      "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492/Prop_Aquatic_Pond_PinkLily_4.Prop_Aquatic_Pond_PinkLily_4",
+      "package_sha256": "cd5dddf45be9bed890282bff78e3868a01d805ea9a03b6bf1a938e853d17dee0",
+      "package_bytes": 113914,
+      "source_sha256": "8b5fcea2ae0a44926210bf9ccfcd42da3333d77f1187e36287797d0c15ba2eec",
+      "triangles": 544,
+      "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+      "source_palette": {
+        "triangles": 544,
+        "all_faces_flat": true,
+        "observed_rgba_bytes": [
+          [
+            104,
+            160,
+            111,
+            255
+          ],
+          [
+            128,
+            189,
+            128,
+            255
+          ],
+          [
+            194,
+            183,
+            164,
+            255
+          ],
+          [
+            194,
+            205,
+            148,
+            255
+          ],
+          [
+            250,
+            205,
+            220,
+            255
+          ],
+          [
+            253,
+            237,
+            123,
+            255
+          ]
+        ],
+        "expected_rgba_bytes": [
+          [
+            104,
+            160,
+            111,
+            255
+          ],
+          [
+            128,
+            189,
+            128,
+            255
+          ],
+          [
+            194,
+            183,
+            164,
+            255
+          ],
+          [
+            194,
+            205,
+            148,
+            255
+          ],
+          [
+            250,
+            205,
+            220,
+            255
+          ],
+          [
+            253,
+            237,
+            123,
+            255
+          ]
+        ],
+        "source_palette_matches": true
+      },
+      "bounds_origin_cm": [
+        -2.5,
+        7.5,
+        -5.0
+      ],
+      "bounds_extent_cm": [
+        42.5,
+        37.5,
+        20.0
+      ],
+      "native_import_data_class": "InterchangeAssetImportData",
+      "saved": true,
+      "admitted": true,
+      "initial_convenience_import_settings": {
+        "vertex_color_import_option": "<VertexColorImportOption.IGNORE: 1>",
+        "import_uniform_scale": 1.0,
+        "convert_scene": true,
+        "convert_scene_unit": false
+      },
+      "initial_colours": "All white; corrected before final admission."
+    },
+    {
+      "name": "Prop_Aquatic_Pond_WaterLily_4",
+      "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b/Prop_Aquatic_Pond_WaterLily_4.Prop_Aquatic_Pond_WaterLily_4",
+      "package_sha256": "6cc39e5570ceed62bb026d7e80e2093ffd1ced1ec5023709f3be5fafb2a0b597",
+      "package_bytes": 113262,
+      "source_sha256": "5499801cc09c511b9183f3e66b41e9a27540aeea9b57cf2238fbe454e8f1af2d",
+      "triangles": 492,
+      "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+      "source_palette": {
+        "triangles": 492,
+        "all_faces_flat": true,
+        "observed_rgba_bytes": [
+          [
+            104,
+            160,
+            111,
+            255
+          ],
+          [
+            128,
+            189,
+            128,
+            255
+          ],
+          [
+            194,
+            183,
+            164,
+            255
+          ],
+          [
+            194,
+            205,
+            148,
+            255
+          ],
+          [
+            251,
+            250,
+            246,
+            255
+          ],
+          [
+            253,
+            237,
+            123,
+            255
+          ]
+        ],
+        "expected_rgba_bytes": [
+          [
+            104,
+            160,
+            111,
+            255
+          ],
+          [
+            128,
+            189,
+            128,
+            255
+          ],
+          [
+            194,
+            183,
+            164,
+            255
+          ],
+          [
+            194,
+            205,
+            148,
+            255
+          ],
+          [
+            251,
+            250,
+            246,
+            255
+          ],
+          [
+            253,
+            237,
+            123,
+            255
+          ]
+        ],
+        "source_palette_matches": true
+      },
+      "bounds_origin_cm": [
+        -7.5,
+        2.5,
+        -5.0
+      ],
+      "bounds_extent_cm": [
+        42.5,
+        32.5,
+        20.0
+      ],
+      "native_import_data_class": "InterchangeAssetImportData",
+      "saved": true,
+      "admitted": true,
+      "initial_convenience_import_settings": {
+        "vertex_color_import_option": "<VertexColorImportOption.IGNORE: 1>",
+        "import_uniform_scale": 1.0,
+        "convert_scene": true,
+        "convert_scene_unit": false
+      },
+      "initial_colours": "All white; corrected before final admission."
+    }
+  ],
+  "native_validation": {
+    "status": "Valid",
+    "native_invoked": true,
+    "accepted": true,
+    "cancellation_observed": false,
+    "native_return": 0,
+    "diagnostic": "Complete Valid result for every exact requested asset.",
+    "snapshot_json": "{\"snapshot_kind\": \"explicit_native_members_not_mcp_schema\", \"requested_assets\": [\"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a/Prop_Aquatic_Pond_Frogbit_4.Prop_Aquatic_Pond_Frogbit_4\", \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492/Prop_Aquatic_Pond_PinkLily_4.Prop_Aquatic_Pond_PinkLily_4\", \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b/Prop_Aquatic_Pond_WaterLily_4.Prop_Aquatic_Pond_WaterLily_4\"], \"native_return\": 0, \"results\": {\"NumRequested\": 3, \"NumExternalObjects\": 0, \"NumChecked\": 3, \"NumValid\": 3, \"NumInvalid\": 0, \"NumSkipped\": 0, \"NumWarnings\": 0, \"NumUnableToValidate\": 0, \"bAssetLimitReached\": false, \"AssetsDetails\": {\"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a/Prop_Aquatic_Pond_Frogbit_4.Prop_Aquatic_Pond_Frogbit_4\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a/Prop_Aquatic_Pond_Frogbit_4\", \"AssetName\": \"Prop_Aquatic_Pond_Frogbit_4\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}, \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492/Prop_Aquatic_Pond_PinkLily_4.Prop_Aquatic_Pond_PinkLily_4\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492/Prop_Aquatic_Pond_PinkLily_4\", \"AssetName\": \"Prop_Aquatic_Pond_PinkLily_4\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}, \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b/Prop_Aquatic_Pond_WaterLily_4.Prop_Aquatic_Pond_WaterLily_4\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b/Prop_Aquatic_Pond_WaterLily_4\", \"AssetName\": \"Prop_Aquatic_Pond_WaterLily_4\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}}, \"ValidatorMessages\": []}, \"settings\": {\"bSkipExcludedDirectories\": false, \"bShowIfNoFailures\": false, \"bCollectPerAssetDetails\": true, \"ValidationUsecase\": \"EDataValidationUsecase::Script\", \"bLoadAssetsForValidation\": true, \"bUnloadAssetsLoadedForValidation\": false, \"bLoadExternalObjectsForValidation\": true, \"bCaptureAssetLoadLogs\": true, \"bCaptureLogsDuringValidation\": true, \"bCaptureWarningsDuringValidationAsErrors\": false, \"MaxAssetsToValidate\": 4, \"bValidateReferencersOfDeletedAssets\": false, \"bSilent\": true}, \"provenance\": {\"fresh_out_results\": \"attested\", \"native_invocation\": \"attested\", \"captured_at_utc\": \"2026-10-23T03:58:20.161Z\"}, \"native_runtime_qualified\": false, \"unknowns\": [\"native_runtime_unqualified\", \"official_mcp_callable_unverified\", \"tokenized_message_tokens_projected_to_text_only\", \"validator_statistics_not_captured\", \"settings_message_log_fields_not_captured\"]}"
+  },
+  "preservation": {
+    "dirty_after": {
+      "maps": [],
+      "content": []
+    },
+    "scene_actor_count_preserved": true,
+    "camera_preserved": false,
+    "selection_preserved": true,
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard",
+    "Play_run": false
+  },
+  "protected_files": 310,
+  "source_hashes_unchanged": true,
+  "compute_released": true,
+  "camera_note": "Current view differs from the starting viewport; no camera-write API was used. Cause unproven; left current view untouched.",
+  "dedup_scope": "Native searches for these three names and registered SHA tags; exact fresh destinations and no-overwrite initial import. Not complete historical hash coverage.",
+  "known_correction_history": [
+    "Initial first-class convenience imports used FBX IGNORE and produced all-white vertices despite native Valid.",
+    "An owned-only correction using FbxImportUI saved Frogbit through Interchange; reading an FBX-only property then failed. Actual reply/traceback retained, no uncertain import replay.",
+    "Actual readback still white. Explicit native Interchange pipeline with ApplyPipelineProperties then repaired exactly the three new backed-up assets.",
+    "Corrected source palettes/topology read back exactly, followed by one fresh native validation batch: 3 checked, 3 Valid, zero warnings/errors/skips."
+  ],
+  "historical_custom_wrapper": "Context-refusal cause remains unknown. Diagnostic commit b75271c was applied as a6255c7bb17a992f63d54ea9c85ee76c95af94e0 but no diagnostic page was dispatched after the user chose native workflow.",
+  "limits": [
+    "No game/world placements or visual/ecology/gameplay acceptance.",
+    "Native canonical snapshot flags/unknowns are retained unchanged; no generic unattended-run adoption.",
+    "New asset packages only; existing Commons map, R7 activity and all original packages stayed unchanged.",
+    "Actor scale1 corresponds to the observed native centimetre sizes; the old custom unit100/actor0.01 profile was not used."
+  ]
+}

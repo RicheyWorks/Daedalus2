@@ -1,0 +1,468 @@
+DRR 1
+seed 7
+name SHARDLANDS
+item HERB USE 10 25 HERB
+item TONIC USE 30 10 TONIC
+item ANTIDOTE USE 8 0 ANTIDOTE
+item TORCH USE 8 3 TORCH
+item WINGS USE 25 0 WINGS
+item MIGHT_SEED USE 0 2 MIGHT SEED
+item LIFE_SEED USE 0 6 LIFE SEED
+item BRONZE_KEY KEY 45 1 BRONZE KEY
+item SILVER_KEY KEY 0 2 SILVER KEY
+item STAR_KEY KEY 0 3 STAR KEY
+item CLUB WEAPON 25 4 CLUB
+item COPPER_SWORD WEAPON 110 9 COPPER SWORD
+item IRON_AXE WEAPON 280 15 IRON AXE
+item EMBER_BLADE WEAPON 0 22 EMBER BLADE
+item STAR_BLADE WEAPON 0 30 STAR BLADE
+item CLOTHES ARMOR 15 2 CLOTHES
+item LEATHER_VEST ARMOR 70 6 LEATHER VEST
+item CHAIN_MAIL ARMOR 240 12 CHAIN MAIL
+item SHARD_MAIL ARMOR 0 18 SHARD MAIL
+item METEOR_MAIL ARMOR 0 26 METEOR MAIL
+item STAR_SHARD TREASURE 0 300 STAR SHARD
+item DRAGON_EGG EGG 0 0 DRAGON EGG
+monster BLIGHT_SLIME 0 58d840 188c10 6 5 2 3 2 2 COMMON POISON HERB 8 BLIGHT SLIME
+monster BOG_SLIME 0 8c34c8 4c1478 14 9 5 4 6 6 UNCOMMON POISON,CALL ANTIDOTE 6 BOG SLIME
+monster LUCKY_DRIP 0 f8b800 c87800 4 6 99 30 120 10 RARE FLEE,HARD MIGHT_SEED 4 LUCKY DRIP
+monster DUST_WISP 1 bcbcbc 8c34c8 8 7 3 9 3 4 COMMON - TONIC 10 DUST WISP
+monster EMBER_WISP 1 f87818 d82800 16 11 6 12 9 9 UNCOMMON ZAP TONIC 6 EMBER WISP
+monster SHARDBACK 2 9c9c9c 3ce0e0 16 10 9 4 6 7 COMMON - HERB 6 SHARDBACK
+monster GLASSBACK 2 f0f0fc f878c8 28 15 18 6 16 14 UNCOMMON CALL STAR_SHARD 16 GLASSBACK
+monster PUFFCAP 3 d82800 f0d090 10 6 4 5 4 5 COMMON SLEEP HERB 8 PUFFCAP
+monster SHADECAP 3 8c34c8 9c9c9c 22 12 8 8 12 12 UNCOMMON SLEEP,HEAL LIFE_SEED 12 SHADECAP
+monster GLOOMWING 5 3c3c3c d82800 12 9 4 14 6 6 COMMON FLEE TORCH 6 GLOOMWING
+monster STARE_ORB 7 f8f8f8 58f8 20 12 7 10 14 12 UNCOMMON SLEEP,ZAP TONIC 5 STARE ORB
+monster GNASHBOX 6 a0581c f8b800 34 18 12 9 30 60 RARE ZAP STAR_SHARD 3 GNASHBOX
+monster MOSS_KNIGHT 4 2c8c18 80d010 36 17 14 7 32 25 UNCOMMON - CHAIN_MAIL 12 MOSS KNIGHT
+monster STONE_KNIGHT 4 7c7c7c d82800 50 21 18 7 55 40 RARE DOUBLE IRON_AXE 10 STONE KNIGHT
+monster SHARD_TYRANT 4 f8b800 8c34c8 160 28 20 12 400 300 LEGENDARY ZAP,HEAL,DOUBLE,BOSS STAR_SHARD 1 SHARD TYRANT
+map FIELD 64 64 FIELD 0 - 0 0 FIELD
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:::::~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:TT.:::::~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~::TT.......:~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:..TT........:~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~:..:~~~~~~~~:...TT........:~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~:...~~~~~~~~:...TT........:~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~....:~~~~~~~:...T.........:~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~....:~~~~~~:............TT:::~::::~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~....:~~~~~~:............TTTTT.:...:~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~....:~~~~~~:............TTTTT......:~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~:.....:~~~~::............TTTTT.......~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~.......~~~~:.........................:~~~~~~~~~~
+row :::~~~~~~~~~~~~:.......:~~~.TTTT.........hhhhhh......:~~~~~~~~~~
+row :::~~~~~~~~~~~~........:~~~.T%TTT........hhhhhhh.....:~~~~~~~~~~
+row ~~~~~~~~~~~~~~~.........:::T%%%TT........hhhhhhhh.....:~~~~~~~~~
+row ~~~~~~~~~~~~~~:..........:T%%%%TT.........hhhhhhhhh.A..:~~~~~~~~
+row ~~~~~~~~~~~~~~.........TT:::%%%T...........hhhhhhhhh...:~~~~~~~~
+row ~~~~~~~~~~~:::........T:::::%%%T..............hhhhhh...:~~~~~~~~
+row ~~~~~~~~~~~:..........::~:::%%TT..............hhhhhh....~~~~~~~~
+row ~~~~~~~~~~~:.........:~~~~~::.................hhh^hh....:~~~~~~~
+row ~~~~~~~~~~~..........:~~~~~~:............hh..hhhh^^h....:~~~~~~~
+row ~~~~~~~~~~:.........::~~~~~~:............hhhhhhhhhhhh....~~~~~~~
+row ~~~~~~~~:::.........:~~~~~~~:........hhhhhhhhhhhhhhhhV...~~~~~~~
+row ~~~~~~~:::..........:~~~~~~~%T.....hhhhhhh^^^^hhhhhh....:~~~~~~~
+row ~~~~~~~:::T.........:~~~~~~~%T....hhhhhhhh^^^^^hhh......:~~~~~~~
+row ~~~~~~~:%TT.........:~~~~~~~%%...hhhhhhhhh^^^^^^h.......:~~~~~~~
+row ~~~~~~~:TTT.........:~~~~~~~%%..Vhhhhhhhhh^^^^^hhh......:~~~~~~~
+row ~~~~~~~~:T...........::~~~~:%%T....hhhhhhhhhhhhhhhh.....~~~~~~~~
+row ~~~~~~~~:.............::~~~::%TT.................hhh....~~~~~~~~
+row ~~~~~~~~~..............:~~~::%%%TTTTTTTT.........hh....:~~~~~~~~
+row ~~~~~~~~~..............::::::TT%%%%%%%%T...............:~~~~~~~~
+row ~~~~~~~~~.......TT......:::::.O%%%%%%%%T..............:~~~~~~~~~
+row ~~~~~~~~:.....KTTTT............T%%%%:::::::~~:.......~~~~~~~~~~~
+row ::::~~~~:......TTTTT...........::::~~:~~~~~~~~~:...:~~~~~~~~~~~~
+row .....:::.......TTThhhh.........:~~~~~::~~~~~~~~~~::~~~~~~~~~~~~~
+row .................Thhhhhh.......~~~~~~::~~~~~~~~~~~~~~~~~~~~~~~~~
+row ........TTT.......hhhhhhhhh....~~~~~~::~~~~~~~~~~~~~~~~~~~~~~~~~
+row .......TTTT.......hh^^^hhhh...:~~~~~:::~~~~~~~~~~~~~~~~~~~~~~~~~
+row .......T%%TT......hhhhhhhhh...:~~~~:::~~~~~~~~~~~~~~~~~~~~~~~~~~
+row .....:::::::::....hhhhhhhhh...T~~~:::::~~~~~~~~~~~~~~~~~~~~~~~~~
+row ....:~~~~~~~~::....hhhh........:~:%%%T::~~~~~~~~~~~~~~~~~~~~~~~~
+row :::::~~~~~~~~~:....hh..........T%%%%%T..:~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~:...hh..........T%%%%%T..:~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~...hh..........TTTT%%T..~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~...hh...........TTTTT...:~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~:...............TTTT.....~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~:...............TTTT......:~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~:...............TTTTT......::~~~~~~~~~~~~~~~~~~~
+row :::~~~~~~~~~~~~~:TT.............TTTTTT......::~::~~~~:~~~~~~~~~~
+row ..:~~~~~~~~~~~~~~:%T.....h......T%%%%%.......:::::~~~~::::::~~~~
+row ..:~~~~~~~~~~~~~~~:T............T%%%%%T..:....:.::~~~~~:::::~~~~
+row .:~~~~~~~~~~~~~~~~:T............%%%%%%T.:::::::::~~~~~~~~::~~~~~
+row ~~~~~~~~~~~~~~~~~~~:...........T%%::%T.:::::~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~:.........::~~~~:::~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~.......:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~:....:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~:..:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~::~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+zrow ..................................22222.........................
+zrow .................................255222222......................
+zrow ...............................225522222222.....................
+zrow ..............................22255222222222....................
+zrow .................2222........222255222222222....................
+zrow .................2222........222255222222222....................
+zrow .................22222.......222252222222222....................
+zrow .................22222......222222222222255222.2222.............
+zrow .................22222......222222222222255555222222............
+zrow .................22222......2222222222222555552222222...........
+zrow ................2222222....22222222222222555552222222...........
+zrow ................2222222....222222222222222222222222222..........
+zrow ...............222222222...255552222222223333332222222..........
+zrow ...............222222222...254555222222223333333222222..........
+zrow ...............2222222222225444552222222233333333222222.........
+zrow ..............22222222222254444552222222223333333332.222........
+zrow ..............222222222552214445112222222223333333332222........
+zrow ...........222222222225222114445111222222222223333332222........
+zrow ...........2222222222222.1114455111122222222223333332222........
+zrow ...........22222222222.....1111111111222222222333.3322222.......
+zrow ...........22222222222......111111111122233223333..322222.......
+zrow ..........222222222222......11111111111223333333333332222.......
+zrow ........2222222222222.......1111111113333333333333333.222.......
+zrow .......22222222222221.......45011113333333....33333322222.......
+zrow .......22252222222211.......40001133333333.....3332222222.......
+zrow .......24552222222111.......44000333333333......322222222.......
+zrow .......25552222221111.......4400.033333333.....3332222222.......
+zrow ........252222221111111....04400000333333333333333322222........
+zrow ........2222222111111111...00400000011111111112223332222........
+zrow .........222221111111111...00444000005551111111223322222........
+zrow .........222211111111110000000.4444444451111111122222222........
+zrow .........22211115511110000000...44444445111111111222222.........
+zrow ........222111.5555110000000.....4440000111..11122222...........
+zrow 2222....222211155555110000000...000..0.........22222............
+zrow 222222222222211555333310000000.0.....01..........22.............
+zrow 2222222222222211153333330000000......11.........................
+zrow 2222222255522221113333333000000......11.........................
+zrow 22222225555222221133...33300000.....111.........................
+zrow 2222222544552222213333333330000....111..........................
+zrow 2222222222222222223333333331000...11111.........................
+zrow 22222........2222223333111111000.1444511........................
+zrow 22222.........222223311111111105444445111.......................
+zrow ...............22223311111111115444445112.......................
+zrow ................222332111111111555544512........................
+zrow ................2223322111111111555551222.......................
+zrow ................2222222211111111555512222.......................
+zrow ................222222222111111155552222222.....................
+zrow ................22222222221111115555522222222...................
+zrow ................255222222221111155555522222222.22...............
+zrow .................245222223221111544444222222222222..............
+zrow ..................25222222222111544444522222222222..............
+zrow ..................2522222222221244444452222222222...............
+zrow ...................2222222222225442245222222....................
+zrow .....................222222222222....222........................
+zrow .......................22222222.................................
+zrow .......................222222...................................
+zrow ........................2222....................................
+zrow .........................22.....................................
+zrow ................................................................
+zrow ................................................................
+zrow ................................................................
+zrow ................................................................
+zrow ................................................................
+zrow ................................................................
+end
+map TOWN1 24 20 TOWN 0 FIELD 32 26 ASHDALE
+row ########################
+row #,,,,,,,,,,,,,,,,,,,,,,#
+row #,#######,,,,,,#######,#
+row #,#bbbbb#,,,,,,#bbbbb#,#
+row #,#-----#,,,,,,#-----#,#
+row #,#bbbbb#,,,,,,#bbbbb#,#
+row #,#bbbbb#,,,,,,#bbbbb#,#
+row #,###D###,,,,,,###D###,#
+row #,,,,,,,,,,,,,,,,,,,,,,#
+row #,,T,...T,,,,,,,,,,,,,,#
+row #,#######,,,,,,#######,#
+row #,#Cbbbb#,,,,,,#bbbbb#,#
+row #,#bbbbbL,,,,,,#-----#,#
+row #,#bbbbb#,,,,,,#bbbbb#,#
+row #,#bbbbC#,,,,,,#bbbbb#,#
+row #,#######,,,,,,###D###,#
+row #T,,.,..,,,,,,,,,,,,,,,#
+row #T,.,,,.,,,,,,,T.,TT,,.#
+row #,,,,,,,,,,,,,,,,,,,,,,#
+row ############D###########
+end
+map TOWN2 24 20 TOWN 0 FIELD 53 22 STONEHOLM
+row ########################
+row #,,,,,,,,,,,,,,,,,,,,,,#
+row #,#######,,,,,,#######,#
+row #,#bbbbb#,,,,,,#bbbbb#,#
+row #,#-----#,,,,,,#-----#,#
+row #,#bbbbb#,,,,,,#bbbbb#,#
+row #,#bbbbb#,,,,,,#bbbbb#,#
+row #,###D###,,,,,,###D###,#
+row #,,,,,,,,,,,,,,,,,,,,,,#
+row #,,T.,.,T,,,,,,,,,,,,,,#
+row #,#######,,,,,,#######,#
+row #,#Cbbbb#,,,,,,#bbbbb#,#
+row #.#bbbbbL,,,,,,#-----#,#
+row #T#bbbbb#,,,,,,#bbbbb#,#
+row #.#CbbbC#,,,,,,#bbbbb#,#
+row #,#######,,,,,,###D###,#
+row #T,TT,,..,,,,,,,,,,,,,,#
+row #,,,TT.T,,,,,,,.,,T,,.T#
+row #,,,,,,,,,,,,,,,,,,,,,,#
+row ############D###########
+end
+map CASTLE 20 18 CASTLE 0 FIELD 14 32 CASTLE
+row ####################
+row #bbbbb#bbbQbb#bbbbb#
+row #bCbCb#bbb|bb#bbCbb#
+row #bbbbbLbbb|bbLbbbbb#
+row #bCbbb#bbb|bb#bbCbb#
+row #bbbbb#bbb|bb#bbbbb#
+row #######bbb|bb#######
+row #bbbbbbbbb|bbbbbbbb#
+row #bbbbbbbbb|bbbbbbbb#
+row #bb#bbb#bb|bb#bbb#b#
+row #bbbbbbbbb|bbbbbbbb#
+row #bbbbbbbbb|bbbbbbbb#
+row #bbbbbbbbb|bbbbbbbb#
+row #bb#bbb#bb|bb#bbb#b#
+row #bbbbbbbbb|bbbbbbbb#
+row #bbbbbbbbb|bbbbbbbb#
+row #bbbbbbbbb|bbbbbbbb#
+row ##########D#########
+end
+map CAVE1 31 23 CAVE 1 - 0 0 CAVE B1
+row WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+row WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+row WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+row WWW_____WWWWWWWWWWWWW_____WWWWW
+row WWW_____WWWWWWWWWWWWW_____WWWWW
+row WWW__<____________________WWWWW
+row WWW_____WWWWWWWWWWWWW_____WWWWW
+row WWW_____WWWWWWWWWWWWW_____WWWWW
+row WWWWW_WWWWWWWWWWWWWWWWW_WWWWWWW
+row WWWWW_WWWWWWWWWWWWWWWWW_WWWWWWW
+row WWWWW_WWWWWWWWWWWWWWWWW_WWWWWWW
+row WWWWW_WWWWWWWWWWWWWWWWW_WWWWWWW
+row WWWWW_WWWWWWWWWWWWWWWWW_WWWWWWW
+row WWWWW_WWWWWWW____CWWWWW_WWWWWWW
+row WWWWW_WWWWWWW_____WWWWW_WWWWWWW
+row WWWWW_____________WWWWW_WWWWWWW
+row WWWWW___WWWWW_____WWWWW_WWWWWWW
+row WWWWWC__WWWWW_____WWWC_____>WWW
+row WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+row WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+row WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+row WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+row WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+zrow ...............................
+zrow ...............................
+zrow ...............................
+zrow ...66666.............66666.....
+zrow ...6...6.............66666.....
+zrow ...6...6666666666666666666.....
+zrow ...6...6.............66666.....
+zrow ...66666.............66666.....
+zrow .....6.................6.......
+zrow .....6.................6.......
+zrow .....6.................6.......
+zrow .....6.................6.......
+zrow .....6.................6.......
+zrow .....6.......6666......6.......
+zrow .....6.......66666.....6.......
+zrow .....6666666666666.....6.......
+zrow .....666.....66666.....6.......
+zrow ......66.....66666....6666.....
+zrow ...............................
+zrow ...............................
+zrow ...............................
+zrow ...............................
+zrow ...............................
+end
+map CAVE2 27 19 CAVE 1 - 0 0 CAVE B2
+row WWWWWWWWWWWWWWWWWWWWWWWWWWW
+row W<______________W___W_____W
+row W_W_WWWWWWWWWWW_W_W_W_WWW_W
+row W_W___________W_W_W_____W_W
+row W_WWWWWWWWWWW_WWW_WWWWW_W_W
+row W___________W_____W___W_W_W
+row WWWWW_WWWWWWWWW_WWW_W_W_W_W
+row WC____W_______W_W___W___W_W
+row WWWWWWW_WWWWW_W_W_WWW_WWW_W
+row W_______W___W_W___W_____W_W
+row W_W_WWWWW_W_W_W_WWW_WWW_W_W
+row W_W_W___W_W___W_____W_____W
+row W_W_W_W_W_W_WWWWWWW_W_WWW_W
+row W_W_W_W_W___W_____W_____W_W
+row W_W_W_W_WWW_W_W_W_WWWWW_W_W
+row W_WCW_W___W_WCW_W_______W_W
+row W_WWW_WWW_W_WWW_WWWWWWWWW_W
+row W_______W>W_____WC________W
+row WWWWWWWWWWWWWWWWWWWWWWWWWWW
+zrow ...........................
+zrow ...7777777777777.777.77777.
+zrow ...7...........7.7.7.7...7.
+zrow .7.77777777777.7.7.77777.7.
+zrow .7...........7...7.....7.7.
+zrow .77777777777.77777.777.7.7.
+zrow .....7.........7...7.7.7.7.
+zrow ..7777.7777777.7.777.777.7.
+zrow .......7.....7.7.7...7...7.
+zrow .7777777.777.7.777.77777.7.
+zrow .7.7.....7.7.7.7...7...7.7.
+zrow .7.7.777.7.777.77777.77777.
+zrow .7.7.7.7.7.7.......7.7...7.
+zrow .7.7.7.7.777.77777.77777.7.
+zrow .7.7.7.7...7.7.7.7.....7.7.
+zrow .7...7.777.7...7.7777777.7.
+zrow .7...7.....7...7.........7.
+zrow .7777777...77777..77777777.
+zrow ...........................
+end
+map CAVE3 27 19 CAVE 1 - 0 0 CAVE B3
+row WWWWWWWWWWWWWWWWWWWWWWWWWWW
+row W<W_____W_______________W_W
+row W_W_W_WWW_WWWWW_WWWWWWW_W_W
+row W_W_W________CW_W_____W___W
+row W_W_WWWWWWWWWWW_WWWWW_WWW_W
+row W___W_____W___W_W_______W_W
+row W_WWW_WWW_W_W_W_W_WWWWWWW_W
+row WCW___W_W_W_W___W_W_____W_W
+row WWW_WWW_W_W_WWWWW_W_WWW_W_W
+row W___W_____W___W_____W___W_W
+row W_WWWWWWW_WWW_W_WWWWW_WWW_W
+row W_______W_____W_____W_W___W
+row W_WWWWW_WWWWWWWWWWW_W_W_WWW
+row W_WC__W_____W_____W_W___W_W
+row W_WWW_WWWWW_W_WWW_WWW_WWW_W
+row W___W___W___W_W___WCW_W___W
+row WWW_WWW_W_WWW_W_WWW_W_WWW_W
+row W_______W_____W_____W_____W
+row WWWWWWWWWWWWWWWWWWWWWWWWWWW
+zrow ...........................
+zrow ...88888.888888888888888.8.
+zrow ...8.8...8.....8.......8.8.
+zrow .8.8.88888888..8.88888.888.
+zrow .8.8...........8.....8...8.
+zrow .888.88888.888.8.8888888.8.
+zrow .8...8...8.8.8.8.8.......8.
+zrow ...888.8.8.8.888.8.88888.8.
+zrow ...8...8.8.8.....8.8...8.8.
+zrow .888.88888.888.88888.888.8.
+zrow .8.......8...8.8.....8...8.
+zrow .8888888.88888.88888.8.888.
+zrow .8.....8...........8.8.8...
+zrow .8..88.88888.88888.8.888.8.
+zrow .8...8.....8.8...8...8...8.
+zrow .888.888.888.8.888.8.8.888.
+zrow ...8...8.8...8.8.....8...8.
+zrow .8888888.88888.88888.88888.
+zrow ...........................
+end
+zone 0 22 BLIGHT_SLIME:50:1:3 DUST_WISP:30:1:2 PUFFCAP:20:1:2
+zone 1 20 BLIGHT_SLIME:20:2:3 DUST_WISP:20:1:3 PUFFCAP:15:1:2 SHARDBACK:20:1:2 EMBER_WISP:12:1:2 BOG_SLIME:10:1:2 LUCKY_DRIP:2:1:1
+zone 2 18 SHARDBACK:18:1:3 EMBER_WISP:18:1:3 GLASSBACK:14:1:2 SHADECAP:14:1:2 STARE_ORB:12:1:2 MOSS_KNIGHT:10:1:1 LUCKY_DRIP:3:1:2 STONE_KNIGHT:3:1:1
+zone 3 16 SHARDBACK:40:1:3 GLASSBACK:15:1:2 MOSS_KNIGHT:8:1:1 LUCKY_DRIP:2:1:1
+zone 4 14 BLIGHT_SLIME:25:2:3 BOG_SLIME:35:1:3 PUFFCAP:15:1:3 SHADECAP:15:1:2
+zone 5 20 PUFFCAP:35:1:3 DUST_WISP:25:1:2 GLOOMWING:25:1:3 SHADECAP:10:1:1
+zone 6 14 GLOOMWING:35:1:3 SHARDBACK:25:1:2 BOG_SLIME:20:1:2 STARE_ORB:15:1:1 LUCKY_DRIP:3:1:1
+zone 7 13 GLOOMWING:20:2:3 STARE_ORB:22:1:2 GLASSBACK:20:1:2 MOSS_KNIGHT:18:1:2 LUCKY_DRIP:4:1:2
+zone 8 12 STONE_KNIGHT:25:1:2 MOSS_KNIGHT:25:1:2 STARE_ORB:20:1:3 GLASSBACK:20:1:3 LUCKY_DRIP:5:1:2
+link FIELD 32 26 TOWN1 12 18
+link FIELD 53 22 TOWN2 12 18
+link FIELD 14 32 CASTLE 10 16
+link FIELD 52 15 CAVE1 5 5
+link CAVE1 5 5 FIELD 52 15
+link CAVE1 27 17 CAVE2 1 1
+link CAVE2 1 1 CAVE1 27 17
+link CAVE2 9 17 CAVE3 1 1
+link CAVE3 1 1 CAVE2 9 17
+chest TOWN1 3 11 ITEM ANTIDOTE
+chest TOWN1 7 14 ITEM BRONZE_KEY
+chest TOWN2 3 11 GOLD 39
+chest TOWN2 7 14 ITEM TORCH
+chest TOWN2 3 14 GOLD 145
+chest CASTLE 2 2 ITEM SHARD_MAIL
+chest CASTLE 4 2 ITEM TONIC
+chest CASTLE 2 4 ITEM DRAGON_EGG
+chest CASTLE 16 2 ITEM STAR_BLADE
+chest CASTLE 16 4 ITEM METEOR_MAIL
+chest CAVE3 19 15 ITEM STAR_KEY
+chest CAVE1 21 17 ITEM MIGHT_SEED
+chest CAVE1 5 17 ITEM HERB
+chest CAVE1 17 13 ITEM STAR_SHARD
+chest CAVE2 3 15 ITEM SILVER_KEY
+chest CAVE2 17 17 ITEM BRONZE_KEY
+chest CAVE2 1 7 ITEM EMBER_BLADE
+chest CAVE2 13 15 ITEM MIGHT_SEED
+chest CAVE3 1 7 MIMIC GNASHBOX
+chest CAVE3 13 3 GOLD 355
+chest CAVE3 3 13 MIMIC GNASHBOX
+door TOWN1 8 12 1
+door TOWN2 8 12 1
+door CASTLE 6 3 2
+door CASTLE 13 3 3
+npc TOWN1 5 3 0 7c4c14 8c34c8 3c3c3c 0 0 INN 6 - INNKEEPER: WELCOME, TRAVELERS.
+npc TOWN1 18 3 0 bcbcbc d82800 28a0 0 0 SHOP 0 T1ITEMS MERCHANT: HERBS AND TORCHES!
+npc TOWN1 18 11 0 f87818 2c8c18 28a0 0 0 SHOP 0 T1GEAR SMITH: STEEL FOR THE ROAD.
+npc TOWN1 11 9 1 d82800 8c34c8 3c3c3c 0 0 NEWS 0 - ELDER: NEWS OF THE DAY!
+npc TOWN1 13 17 0 3c3c3c 8c34c8 7c7c7c 0 0 TALK 0 - GUARD: THE CAVE MOUTH LIES/FAR TO THE NORTHEAST.
+npc TOWN1 10 14 1 bcbcbc 8888 603008 0 0 TALK 0 - KID: A GOLD SLIME RAN FROM ME!/LUCKY DRIPS FLEE. HIT THEM FAST.
+npc TOWN1 13 5 1 bcbcbc d82800 7c7c7c 0 0 TALK 0 - WOMAN: THE STOREROOM WANTS/A BRONZE KEY. THE CASTLE SELLS THEM./THE CASTLE IS TO THE WEST.
+npc TOWN2 5 3 0 d82800 8888 7c7c7c 0 0 INN 14 - INNKEEPER: WELCOME, TRAVELERS.
+npc TOWN2 18 3 0 f87818 a0581c 3c3c3c 0 0 SHOP 0 T2ITEMS MERCHANT: HERBS AND TORCHES!
+npc TOWN2 18 11 0 f8b800 8888 3c3c3c 0 0 SHOP 0 T2GEAR SMITH: STEEL FOR THE ROAD.
+npc TOWN2 11 9 1 bcbcbc a0581c 28a0 0 0 NEWS 0 - ELDER: NEWS OF THE DAY!
+npc TOWN2 13 17 0 bcbcbc 8c34c8 28a0 0 0 TALK 0 - GUARD: THE QUEEN'S VAULT/OPENS ONLY TO A STAR KEY.
+npc TOWN2 10 14 1 7c4c14 8888 3c3c3c 0 0 TALK 0 - MINER: THE STAR KEY LIES AT THE/BOTTOM OF THE CAVE, PAST A/TYRANT MADE OF SHARDS.
+npc TOWN2 13 5 1 3c3c3c 58f8 3c3c3c 0 0 TALK 0 - SAGE: CHESTS IN THE DEEP CAN BITE./BRING TORCHES. THE DARK IS LONG.
+npc CASTLE 10 2 0 bcbcbc 58f8 7c7c7c f8b800 d82800 QUEEN 0 - QUEEN: WELCOME, TRAVELERS./OUR WORLD BROKE, BUT WE ENDURE./HELP EACH OTHER. THAT IS HOW WE LIVE.
+npc CASTLE 7 11 1 bcbcbc 58f8 28a0 0 0 TALK 0 - KNIGHT: A SILVER KEY OPENS/THE TREASURY. IT WAS LOST/IN THE CAVE'S SECOND FLOOR.
+npc CASTLE 15 11 1 7c4c14 a0581c 603008 0 0 NEWS 0 - SCHOLAR: THE BUBBLE HOLDS/EVERY PIECE OF OUR WORLD.
+npc CASTLE 4 15 0 7c4c14 d82800 603008 0 0 SHOP 0 KEYS KEYMAKER: KEYS, TORCHES, WINGS.
+shop T1ITEMS HERB ANTIDOTE TORCH WINGS
+shop T1GEAR CLUB COPPER_SWORD CLOTHES LEATHER_VEST
+shop T2ITEMS HERB TONIC ANTIDOTE TORCH WINGS
+shop T2GEAR COPPER_SWORD IRON_AXE LEATHER_VEST CHAIN_MAIL
+shop KEYS BRONZE_KEY TORCH WINGS HERB
+boss CAVE3 19 16 SHARD_TYRANT
+land 0 FIELD 22 32 4 4 -
+land 1 FIELD 26 32 4 4 HERO
+land 2 FIELD 22 36 4 4 OSTRA
+land 3 FIELD 20 28 4 4 -
+land 4 FIELD 24 40 4 4 -
+land 5 FIELD 16 24 4 4 -
+land 6 FIELD 16 20 4 4 -
+land 7 FIELD 24 44 4 4 -
+land 8 FIELD 28 44 4 4 -
+land 9 FIELD 12 20 4 4 -
+land 10 FIELD 12 24 4 4 -
+land 11 FIELD 12 28 4 4 -
+land 12 FIELD 40 28 4 4 -
+land 13 FIELD 12 36 4 4 -
+land 14 FIELD 16 16 4 4 -
+land 15 FIELD 32 16 4 4 -
+land 16 FIELD 36 16 4 4 -
+land 17 FIELD 20 48 4 4 -
+land 18 FIELD 28 48 4 4 -
+land 19 FIELD 40 48 4 4 -
+land 20 FIELD 44 28 4 4 -
+land 21 FIELD 8 32 4 4 -
+land 22 FIELD 16 12 4 4 -
+land 23 FIELD 20 12 4 4 -
+land 24 FIELD 36 12 4 4 -
+land 25 FIELD 24 52 4 4 -
+land 26 FIELD 28 8 4 4 -
+land 27 FIELD 32 8 4 4 -
+land 28 FIELD 36 8 4 4 -
+land 29 FIELD 48 8 4 4 -
+land 30 FIELD 52 16 4 4 -
+land 31 FIELD 52 24 4 4 -
+land 32 FIELD 0 36 4 4 -
+land 33 FIELD 36 4 4 4 -
+spawn FIELD 30 32
+portal FIELD 30 31
+news A STAR FELL BEYOND STONEHOLM.
+news THE ARKS SAIL AT DUSK.
+news LUCKY DRIPS WERE SEEN IN THE MEADOW.

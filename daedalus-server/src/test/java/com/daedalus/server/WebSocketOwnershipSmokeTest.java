@@ -227,6 +227,25 @@ class WebSocketOwnershipSmokeTest {
     }
 
     @Test
+    void aJoinerReceivesTheSessionsFrames() throws Exception {
+        // The composition ADR-012 exists to close: join used to put a piece on the board
+        // and leave this topic owner-only, so a second authenticated client could move
+        // over REST and never see a frame. Bypass the multiplayer flag — the interceptor
+        // reads GameSession, not the service.
+        GameSession game = sessions.open(UUID.randomUUID(), "Alice", new Point(0, 0), "alice");
+        assertThat(game.join("Bob", new Point(0, 0), "bob")).isTrue();
+
+        StompSession s = connectAs("bob", new ErrorFrameLatch());
+        BlockingQueue<MoveFrame> received = subscribeToPlayerTopic(s, game);
+
+        MoveFrame frame = publishUntilReceived(received,
+                new PlayerMovedEvent(this, game.id(), new Point(0, 0), new Point(1, 0)));
+
+        assertThat(frame).isNotNull();
+        assertThat(frame.sessionId()).isEqualTo(game.id());
+    }
+
+    @Test
     void anotherSubjectsSubscriptionIsRefusedWithAStompError() throws Exception {
         GameSession game = sessions.open(UUID.randomUUID(), "Alice", new Point(0, 0), "alice");
         ErrorFrameLatch mallory = new ErrorFrameLatch();

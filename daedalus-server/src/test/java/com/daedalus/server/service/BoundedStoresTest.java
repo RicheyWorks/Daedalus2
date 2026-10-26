@@ -20,8 +20,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -36,26 +41,6 @@ import static org.mockito.Mockito.mock;
  * unbounded implementation.
  */
 class BoundedStoresTest {
-
-    /**
-     * Caffeine evicts asynchronously (maintenance piggybacks on later cache operations), so a
-     * single post-insert snapshot can overcount. Poll with a deadline; against the pre-fix
-     * unbounded stores this never converges and the assertion still fails, so the teeth
-     * survive the retry.
-     */
-    private static long survivorsWithin(List<UUID> ids, java.util.function.Function<UUID, Object> find,
-                                        long bound) throws InterruptedException {
-        long survivors = Long.MAX_VALUE;
-        long deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();
-        while (System.nanoTime() < deadline) {
-            survivors = ids.stream().filter(id -> find.apply(id) != null).count();
-            if (survivors <= bound) {
-                break;
-            }
-            Thread.sleep(50);
-        }
-        return survivors;
-    }
 
     /**
      * The three tests below prove eviction for three named stores. This one asks the harder
@@ -164,29 +149,113 @@ class BoundedStoresTest {
     }
 
     @Test
-    void mazeCacheEvictsPastItsBound() throws Exception {
+    void mazeCacheRefusesPastItsBoundInsteadOfEvictingALiveOne() {
         GeneratorRegistry registry = new GeneratorRegistry(List.of(new BinaryTreeGenerator()));
         MazeGenerationService svc = new MazeGenerationService(
                 registry, event -> { }, new SimpleMeterRegistry(), 3, Duration.ofHours(1));
 
-        List<UUID> ids = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            ids.add(svc.generate("binary-tree", 5, 5, i).metadata().id());
+        List<UUID> live = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            live.add(svc.generate("binary-tree", 5, 5, i).metadata().id());
         }
-        // Caffeine's size eviction is not strictly FIFO, so assert the bound, not the victims.
-        assertThat(survivorsWithin(ids, svc::find, 3)).isLessThanOrEqualTo(3);
+        assertThatThrownBy(() -> svc.generate("binary-tree", 5, 5, 99L))
+                .as("Caffeine put at maximumSize used to LRU-evict; a mid-hunt session "
+                        + "or walk then 404ed after an unrelated generate")
+                .isInstanceOf(MazeGenerationService.CapacityExceededException.class);
+        for (UUID id : live) {
+            assertThat(svc.find(id))
+                    .as("the older cached maze must still be findable after the refused generate")
+                    .isNotNull();
+        }
     }
 
     @Test
-    void sessionStoreEvictsPastItsBound() throws Exception {
+    void anUnrelatedGenerateAtCapDoesNot404ALiveSessionOrWalk() {
+        GeneratorRegistry registry = new GeneratorRegistry(List.of(new BinaryTreeGenerator()));
+        MazeGenerationService gen = new MazeGenerationService(
+                registry, event -> { }, new SimpleMeterRegistry(), 1, Duration.ofHours(1));
+        GameSessionService sessions = new GameSessionService(
+                event -> { }, mock(LeaderboardService.class), false, 10, Duration.ofHours(1));
+        AgentWalkService walks = new AgentWalkService(gen, event -> { }, 10, Duration.ofHours(1),
+                100_000);
+
+        var maze = gen.generate("binary-tree", 5, 5, 1L);
+        var session = sessions.open(maze.metadata().id(), "p", maze.grid().start());
+        Point step = maze.grid().openNeighbors(maze.grid().start()).get(0);
+        assertThat(sessions.tryMove(session.id(), maze.grid(), step)).isTrue();
+        var walk = walks.open(maze.metadata().id(), 8);
+        assertThat(walk).isNotNull();
+        walks.step(walk.agentId(), walk.open().get(0));
+
+        assertThatThrownBy(() -> gen.generate("binary-tree", 5, 5, 2L))
+                .as("one extra generate used to LRU-evict the only slot; tryMove / agent "
+                        + "step then treated the missing maze as gone")
+                .isInstanceOf(MazeGenerationService.CapacityExceededException.class);
+
+        assertThat(gen.find(maze.metadata().id())).isNotNull();
+        Point next = maze.grid().openNeighbors(step).get(0);
+        assertThat(sessions.tryMove(session.id(), null, maze.grid(), next, gen))
+                .as("the mid-hunt session must still validate against its maze")
+                .isTrue();
+        assertThat(walks.view(walk.agentId()))
+                .as("the mid-hunt walk must still see its maze")
+                .isNotNull();
+    }
+
+    @Test
+    void twoFirstGeneratesCannotBothTakeTheLastMazeSlot() throws Exception {
+        GeneratorRegistry registry = new GeneratorRegistry(List.of(new BinaryTreeGenerator()));
+        MazeGenerationService svc = new MazeGenerationService(
+                registry, event -> { }, new SimpleMeterRegistry(), 1, Duration.ofHours(1));
+        var go = new CountDownLatch(1);
+        var accepted = new CopyOnWriteArrayList<UUID>();
+        var refused = new AtomicInteger();
+        try (var pool = Executors.newFixedThreadPool(2)) {
+            var a = pool.submit(() -> raceGenerate(svc, 1L, go, accepted, refused));
+            var b = pool.submit(() -> raceGenerate(svc, 2L, go, accepted, refused));
+            go.countDown();
+            a.get(5, java.util.concurrent.TimeUnit.SECONDS);
+            b.get(5, java.util.concurrent.TimeUnit.SECONDS);
+        }
+        assertThat(accepted).as("exactly one first generate owns the only slot").hasSize(1);
+        assertThat(refused.get()).isEqualTo(1);
+        assertThat(svc.find(accepted.get(0)))
+                .as("the maze that won the slot is still live")
+                .isNotNull();
+    }
+
+    private static void raceGenerate(MazeGenerationService svc, long seed,
+                                     CountDownLatch go, CopyOnWriteArrayList<UUID> accepted,
+                                     AtomicInteger refused) {
+        try {
+            go.await();
+            accepted.add(svc.generate("binary-tree", 5, 5, seed).metadata().id());
+        } catch (MazeGenerationService.CapacityExceededException e) {
+            refused.incrementAndGet();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
+
+    @Test
+    void sessionStoreRefusesPastItsBoundInsteadOfEvictingALiveOne() {
         GameSessionService svc = new GameSessionService(
                 event -> { }, mock(LeaderboardService.class), false, 3, Duration.ofHours(1));
 
-        List<UUID> ids = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            ids.add(svc.open(UUID.randomUUID(), "p" + i, new Point(0, 0)).id());
+        List<UUID> live = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            live.add(svc.open(UUID.randomUUID(), "p" + i, new Point(0, 0)).id());
         }
-        assertThat(survivorsWithin(ids, svc::find, 3)).isLessThanOrEqualTo(3);
+        assertThatThrownBy(() -> svc.open(UUID.randomUUID(), "overflow", new Point(0, 0)))
+                .as("Caffeine put at maximumSize used to LRU-evict; a mid-hunt session "
+                        + "then 404ed after an unrelated open")
+                .isInstanceOf(GameSessionService.CapacityExceededException.class);
+        for (UUID id : live) {
+            assertThat(svc.find(id))
+                    .as("the older live session must still be findable after the refused open")
+                    .isNotNull();
+        }
     }
 
     /** Moves Caffeine's clock without moving the wall clock — see {@code PerKeyRateLimitEvictionTest}. */
@@ -199,13 +268,46 @@ class BoundedStoresTest {
      * asking how many others were in the same state. The answer was four more, holding five
      * caches between them.
      *
-     * <p>Note what makes them observable at all. A memoization cache — tours, tournaments, fits
-     * — is a pure function behind a map, so eviction changes no answer anybody can see; the
-     * recomputed value is identical. Each service therefore reports its own cached count, the
-     * same window {@code trackedCount}, {@code liveCount} and {@code plannedCount} already open
-     * onto their stores. Without that, "the bound works" is unfalsifiable, and an unfalsifiable
-     * claim in a test file is worse than no test because it reads like coverage.
+     * <p>Note what makes them observable at all. A memoization cache — tournaments, fits —
+     * is a pure function behind a map, so eviction changes no answer anybody can see; the
+     * recomputed value is identical. Placement is not: LRU-evicting a seated maze's coins
+     * made {@code progressFor} null and a later {@code tourFor} remint. Each service
+     * therefore reports its own cached count, the same window {@code trackedCount},
+     * {@code liveCount} and {@code plannedCount} already open onto their stores. Without
+     * that, "the bound works" is unfalsifiable, and an unfalsifiable claim in a test file
+     * is worse than no test because it reads like coverage.
      */
+    @Test
+    void ghostStoreDropsANewMazeAtCapInsteadOfEvictingAnInUseOne() {
+        GhostService ghosts = new GhostService(2, Duration.ofHours(24));
+        UUID a = UUID.randomUUID();
+        UUID b = UUID.randomUUID();
+        UUID c = UUID.randomUUID();
+        ghosts.onCompleted(new com.daedalus.plugin.events.SessionCompletedEvent(
+                this, finishedGhost(a, "alice")));
+        ghosts.onCompleted(new com.daedalus.plugin.events.SessionCompletedEvent(
+                this, finishedGhost(b, "bob")));
+
+        ghosts.onCompleted(new com.daedalus.plugin.events.SessionCompletedEvent(
+                this, finishedGhost(c, "cara")));
+
+        assertThat(ghosts.ghostOf(a))
+                .as("Caffeine merge at maximumSize used to LRU-evict; a spectator "
+                        + "or racer then 404ed after an unrelated finish")
+                .isNotNull();
+        assertThat(ghosts.ghostOf(b)).isNotNull();
+        assertThat(ghosts.ghostOf(c))
+                .as("finish cannot 409; the new maze's ghost is dropped, not an in-use one")
+                .isNull();
+    }
+
+    private static GameSession finishedGhost(UUID mazeId, String name) {
+        GameSession session = new GameSession(mazeId, name, new Point(0, 0));
+        session.move(new Point(0, 1));
+        session.complete(100);
+        return session;
+    }
+
     @Test
     void ghostsExpireWhenIdle() {
         FakeClock clock = new FakeClock();
@@ -223,6 +325,28 @@ class BoundedStoresTest {
         assertThat(ghosts.ghostOf(mazeId))
                 .as("a ghost nobody has raced in a day is not worth a megabyte of trail")
                 .isNull();
+    }
+
+    @Test
+    void waypointPlacementsRefusePastTheirBoundInsteadOfEvictingAFrozenTour() {
+        GeneratorRegistry registry = new GeneratorRegistry(List.of(new RecursiveBacktrackerGenerator()));
+        MazeGenerationService gen = new MazeGenerationService(
+                registry, event -> { }, new SimpleMeterRegistry());
+        WaypointService waypoints = new WaypointService(gen,
+                new GameSessionService(event -> { }, mock(LeaderboardService.class), false),
+                5, 1, Duration.ofHours(2));
+        UUID seated = gen.generate("recursive-backtracker", 11, 11, 1L).metadata().id();
+        var frozen = waypoints.tourFor(seated, 3);
+        UUID stranger = gen.generate("recursive-backtracker", 11, 11, 2L).metadata().id();
+
+        assertThatThrownBy(() -> waypoints.tourFor(stranger, 4))
+                .as("Caffeine get(compute) at maximumSize used to LRU-evict; another maze's "
+                        + "frozen coins then vanished and a later tour reminted a different set")
+                .isInstanceOf(WaypointService.CapacityExceededException.class);
+        assertThat(waypoints.tourFor(seated, 8).waypoints())
+                .as("the seated maze must still return the first-insert set after the refused tour")
+                .isEqualTo(frozen.waypoints());
+        assertThat(waypoints.cachedTours()).isEqualTo(1);
     }
 
     @Test

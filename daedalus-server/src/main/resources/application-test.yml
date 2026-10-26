@@ -20,6 +20,8 @@ management:
 daedalus:
   plugins:
     scan-on-startup: false
+  world:
+    file: ${java.io.tmpdir}/daedalus-test-world-zero.daew
 
 # Tests run with very generous limits so happy-path MockMvc tests don't accidentally trip
 # the breakers. The dedicated rate-limit test overrides one instance to a tiny budget at
@@ -27,6 +29,11 @@ daedalus:
 resilience4j:
   ratelimiter:
     instances:
+      presence:
+        limit-for-period: 100000
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false
       mazeGenerate:
         limit-for-period: 100000
         limit-refresh-period: 1s

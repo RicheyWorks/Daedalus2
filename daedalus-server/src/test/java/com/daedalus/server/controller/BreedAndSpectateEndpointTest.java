@@ -2,6 +2,7 @@
 
 package com.daedalus.server.controller;
 
+import com.daedalus.api.dto.Hotspot;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.model.Point;
 import com.daedalus.server.service.MazeGenerationService;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,6 +78,31 @@ class BreedAndSpectateEndpointTest {
     }
 
     @Test
+    void aBredChildInheritsParentHotspots() throws Exception {
+        UUID a = generateWeighted("recursive-backtracker", 11, 11, 5L, 2, 2, 10);
+        UUID b = generateWeighted("binary-tree", 11, 11, 6L, 4, 4, 25);
+
+        JsonNode child = MAPPER.readTree(client()
+                .post().uri("/api/v1/maze/breed?a=" + a + "&b=" + b + "&seed=7")
+                .exchange().expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody());
+        assertThat(child.get("hotspots")).hasSize(2);
+        UUID childId = UUID.fromString(child.get("id").asText());
+        MazeGrid grid = gen.find(childId).grid();
+        assertThat(grid.weightOf(new Point(2, 2))).isEqualTo(10.0);
+        assertThat(grid.weightOf(new Point(4, 4))).isEqualTo(25.0);
+    }
+
+    @Test
+    void overlappingParentHotspotsKeepTheHigherCost() {
+        List<Hotspot> merged = MazeResponses.mergeParentHotspots(
+                List.of(new Hotspot(1, 1, 10), new Hotspot(2, 2, 5)),
+                List.of(new Hotspot(1, 1, 25), new Hotspot(3, 3, 8)));
+        assertThat(merged).containsExactly(
+                new Hotspot(1, 1, 25), new Hotspot(2, 2, 5), new Hotspot(3, 3, 8));
+    }
+
+    @Test
     void mismatchedParentsAre400AndUnknownParentsAre404() throws Exception {
         UUID big = generate("recursive-backtracker", 13, 13, 3L);
         UUID small = generate("recursive-backtracker", 7, 7, 4L);
@@ -101,9 +128,12 @@ class BreedAndSpectateEndpointTest {
                 .exchange().expectStatus().isOk()
                 .expectBody().returnResult().getResponseBody());
         assertThat(before.get("mazeId").asText()).isEqualTo(id.toString());
+        assertThat(before.get("player").asText()).isEqualTo("runner");
         assertThat(before.get("completed").asBoolean()).isFalse();
+        assertThat(before.get("completedBy").isNull()).isTrue();
         assertThat(before.get("moveCount").asLong()).isZero();
         assertThat(before.get("players").get("runner")).isNotNull();
+        assertThat(before.get("trail")).as("no hops before the first move").isEmpty();
 
         Point step = grid.openNeighbors(grid.start()).get(0);
         client().post().uri("/api/v1/session/" + sessionId + "/move")
@@ -119,6 +149,13 @@ class BreedAndSpectateEndpointTest {
                 .isEqualTo(1);
         assertThat(after.get("players").get("runner").get("row").asInt()).isEqualTo(step.row());
         assertThat(after.get("players").get("runner").get("col").asInt()).isEqualTo(step.col());
+        assertThat(after.get("trail")).as("the snapshot carries the walk, not just the seat")
+                .hasSize(1);
+        assertThat(after.get("trail").get(0).get("to").get("row").asInt()).isEqualTo(step.row());
+        assertThat(after.get("trail").get(0).get("to").get("col").asInt()).isEqualTo(step.col());
+        assertThat(after.get("trail").get(0).has("tMs")).isTrue();
+        assertThat(after.get("walks").get("runner")).as("the opener's walk is also under walks")
+                .hasSize(1);
 
         // Reading a session must never advance it — the view is a snapshot, not a turn.
         MAPPER.readTree(client().get().uri("/api/v1/session/" + sessionId)
@@ -137,6 +174,19 @@ class BreedAndSpectateEndpointTest {
                 .header("Content-Type", "application/json")
                 .body("{\"generatorId\":\"" + generator + "\",\"rows\":" + rows
                         + ",\"cols\":" + cols + ",\"seed\":" + seed + "}")
+                .exchange().expectStatus().isOk()
+                .expectBody().returnResult().getResponseBody());
+        return UUID.fromString(maze.get("id").asText());
+    }
+
+    private UUID generateWeighted(String generator, int rows, int cols, long seed,
+                                  int row, int col, double cost) throws Exception {
+        JsonNode maze = MAPPER.readTree(client().post().uri("/api/v1/maze/generate")
+                .header("Content-Type", "application/json")
+                .body("{\"generatorId\":\"" + generator + "\",\"rows\":" + rows
+                        + ",\"cols\":" + cols + ",\"seed\":" + seed
+                        + ",\"hotspots\":[{\"row\":" + row + ",\"col\":" + col
+                        + ",\"cost\":" + cost + "}]}")
                 .exchange().expectStatus().isOk()
                 .expectBody().returnResult().getResponseBody());
         return UUID.fromString(maze.get("id").asText());

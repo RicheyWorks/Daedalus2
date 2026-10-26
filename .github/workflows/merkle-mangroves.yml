@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Merkle Mangroves
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/merkle_mangroves.py'
+      - 'tools/streaming/merkle_mangroves_test.py'
+      - 'data/islands/disk-saver/merkle-mangroves-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/merkle-mangroves.yml'
+permissions:
+  contents: read
+jobs:
+  merkle-mangroves:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G90 Merkle Mangroves rules (tree hashes, descent repair, traps, G86 tie-in)
+        run: python -m unittest tools/streaming/merkle_mangroves_test.py -v
+      - name: CLI smoke (Merkle descent wins)
+        run: python tools/streaming/merkle_mangroves.py data/islands/disk-saver/merkle-mangroves-v1.json

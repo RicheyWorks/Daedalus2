@@ -67,10 +67,10 @@ MUT = [
      "            }"),
     (LM, "start is no longer idempotent (a second run per maze)",
      "            if (existing != null) {\n"
-     "                return existing; // idempotent: one run per maze\n"
+     "                run = existing;\n"
      "            }",
      "            if (false) {\n"
-     "                return existing; // idempotent: one run per maze\n"
+     "                run = existing;\n"
      "            }"),
     (LM, "a second ticker is scheduled on restart",
      "            if (run.future == null) {",
