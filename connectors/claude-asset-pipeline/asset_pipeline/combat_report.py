@@ -19,7 +19,7 @@ import time
 from . import combat_handoff as ch
 
 HOW = [  # (regex on the failed check name, how to fix it in Blender)
-    (r"^glb on disk", "Export {name}.glb (glTF Binary, +Y up, Apply Modifiers) to {folder}\\glb\\{name}.glb."),
+    (r"^glb on disk", "Export {name}.glb (glTF Binary, +Y up, Apply Modifiers) to {glb}."),
     (r"^glb readable", "Re-export as glTF Binary (.glb); the file could not be read."),
     (r"^socket (\w+)", "Add an Empty named SOCKET_{g1} at the attach point, parented to the weapon, and export empties (not 'selected only')."),
     (r"^skeleton present", "Export with the armature and skinning on (glTF: Include > Armature / Skinning), one skin."),
@@ -37,7 +37,7 @@ def howto(check, name, folder):
     for pat, text in HOW:
         m = re.match(pat, check["check"])
         if m:
-            vals = {"name": name, "folder": folder}
+            vals = {"name": name, "folder": folder, "glb": os.path.join(folder, "glb", name + ".glb")}
             for i, g in enumerate(m.groups(), 1):
                 vals["g%d" % i] = g
             vals["n"] = max(0, int(m.group(1)) - 1) if m.groups() and m.group(1).isdigit() else 2
