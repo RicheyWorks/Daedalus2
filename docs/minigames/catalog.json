@@ -1,0 +1,177 @@
+{
+  "schema": "daedalus.minigames.catalog/v1",
+  "generated_by": "tools/minigames/minigame_catalog.py",
+  "realm_placement": "Spawn one ADaedalusDesktopArcade cabinet per entry, or one cabinet with a picker; call StartGame(id, seed) on use. Derive the seed from realm id + player for repeatable runs.",
+  "games": [
+    {
+      "id": "minesweeper",
+      "title": "Minesweeper",
+      "summary": "Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"minesweeper\", Seed)",
+      "portable_tests": [
+        "desktop_minesweeper",
+        "desktop_minesweeper_guidance",
+        "desktop_minesweeper_new_puzzle",
+        "desktop_minesweeper_pointer",
+        "desktop_minesweeper_replay"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "pong",
+      "title": "Twinwake Volley",
+      "summary": "A fast duel across the twinwake court. Up/Down or left stick: paddle",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"pong\", Seed)",
+      "portable_tests": [
+        "desktop_pong",
+        "desktop_pong_practice",
+        "desktop_pong_quick_match",
+        "desktop_pong_spin",
+        "desktop_pong_target_rally"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "dungeon",
+      "title": "Dungeon Prototype",
+      "summary": "Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick; Shift/pad Y: trail",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"dungeon\", Seed)",
+      "portable_tests": [
+        "desktop_dungeon_circuit",
+        "desktop_dungeon_switchback",
+        "desktop_dungeon_trail",
+        "desktop_maze"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "asteroids",
+      "title": "Driftstone Patrol",
+      "summary": "Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"asteroids\", Seed)",
+      "portable_tests": [
+        "desktop_asteroids_brake",
+        "desktop_asteroids_flight_practice",
+        "desktop_asteroids_voyage",
+        "desktop_shooters"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "football",
+      "title": "Football / Soccer",
+      "summary": "A ninety-second duel on the Daedalus pitch. Move: WASD/arrows or left stick; J/X: kick",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"football\", Seed)",
+      "portable_tests": [
+        "desktop_football_practice",
+        "desktop_sports"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "pacman",
+      "title": "Glowtrail Chase",
+      "summary": "Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"pacman\", Seed)",
+      "portable_tests": [
+        "desktop_maze",
+        "desktop_pacman_fruit",
+        "desktop_pacman_input",
+        "desktop_pacman_power",
+        "desktop_pacman_pursuit",
+        "desktop_pacman_tunnel"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "sega_shooter",
+      "title": "Riftwing Vanguard",
+      "summary": "Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"sega_shooter\", Seed)",
+      "portable_tests": [
+        "desktop_sega_boss_rehearsal",
+        "desktop_sega_enemy_health",
+        "desktop_sega_terminal_pickup",
+        "desktop_shooter_terminal",
+        "desktop_shooters"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shadow_ninja",
+      "title": "Shadow Ninja",
+      "summary": "Scale the ember terraces and face the sentinel. Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shadow_ninja\", Seed)",
+      "portable_tests": [
+        "desktop_ninja_enemy_health",
+        "desktop_ninja_jump",
+        "desktop_ninja_replay",
+        "desktop_ninja_terrace_course",
+        "desktop_platformers"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "star_shooter",
+      "title": "Star Shooter",
+      "summary": "Hold the starlanes through escalating waves. Move: WASD/arrows or left stick; J/X: shoot; P/Start: pause/save menu",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"star_shooter\", Seed)",
+      "portable_tests": [
+        "desktop_shooters",
+        "desktop_star_terminal_pickup"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "dodge_ball",
+      "title": "Courtyard Clash",
+      "summary": "Lead three teammates through four courtyard rounds. Move: WASD/arrows or left stick; throw/catch/jump actions",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"dodge_ball\", Seed)",
+      "portable_tests": [
+        "desktop_dodge_country_stick",
+        "desktop_dodge_guard",
+        "desktop_dodge_pass",
+        "desktop_dodge_target",
+        "desktop_dodge_tournament",
+        "desktop_sports"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "contra",
+      "title": "Ironwake Advance",
+      "summary": "Run the ironwake route through platforms and enemy fire. Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/pad A: jump",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"contra\", Seed)",
+      "portable_tests": [
+        "desktop_contra_ledge",
+        "desktop_contra_target_range",
+        "desktop_platformers"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "zelda",
+      "title": "Lanternwild Quest",
+      "summary": "Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"zelda\", Seed)",
+      "portable_tests": [
+        "desktop_platformers",
+        "desktop_zelda_sword_assist",
+        "desktop_zelda_terminal"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    }
+  ]
+}
