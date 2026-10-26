@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Daedalus declared complete build input inventory v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "commit", "files"],
+  "properties": {
+    "schema": {"const": "daedalus.build-inputs.v1"},
+    "commit": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "category", "sha256", "bytes"],
+        "properties": {
+          "path": {"type": "string", "maxLength": 220, "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*$"},
+          "category": {"enum": ["source", "header", "descriptor", "config", "generated"]},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    }
+  },
+  "$comment": "Python validation requires unique portable paths and exact checkpoint commit/hash binding. Inventory completeness is a producer attestation; this schema does not discover compiler inputs."
+}
