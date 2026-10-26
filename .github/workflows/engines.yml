@@ -40,6 +40,24 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public ecology_core_test.cpp -o ecology_core_test && ./ecology_core_test
       - name: Kennel Isle TONIC 1 trough core (request, reply parser, trough, effect ledger; fixtures from docs/contracts/tonic-v1)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public tonic_core_test.cpp -o tonic_core_test && ./tonic_core_test ../../../docs/contracts/tonic-v1
+      - name: Kennel Isle care core (G84 DaedalusKennelCore.h replays the Java bond/training/growth parity table)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_core_test.cpp -o kennel_core_test && ./kennel_core_test kennel_parity.txt
+      - name: Kennel Isle pet core for the UE binding (G102 DaedalusKennelPetCore.h; EndDay == G84 rules, seeded drills, tags)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_pet_core_test.cpp -o kennel_pet_core_test && ./kennel_pet_core_test
+      - name: Kennel Isle pet core, clang (G102)
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public kennel_pet_core_test.cpp -o kennel_pet_core_test_clang && ./kennel_pet_core_test_clang
+      - name: Kennel Isle muster core (G128 DaedalusKennelMusterCore.h replays the Java G107 roster parity table)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_muster_core_test.cpp -o kennel_muster_core_test && ./kennel_muster_core_test kennel_muster_parity.txt
+      - name: Kennel Isle muster core, clang (G128)
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public kennel_muster_core_test.cpp -o kennel_muster_core_test_clang && ./kennel_muster_core_test_clang kennel_muster_parity.txt
+      - name: Kennel Isle voyage + landfall core (G154 DaedalusKennelVoyageCore.h replays the Java G140/G147 parity table)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_voyage_core_test.cpp -o kennel_voyage_core_test && ./kennel_voyage_core_test kennel_voyage_parity.txt
+      - name: Kennel Isle voyage + landfall core, clang (G154)
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public kennel_voyage_core_test.cpp -o kennel_voyage_core_test_clang && ./kennel_voyage_core_test_clang kennel_voyage_parity.txt
+      - name: LAB03 Echo Bell gate session (AEchoBellGate cue scheduling, taps, judge, retry; replays docs/contracts/echo-bell-v1 CUE-SHEET.md + peals.ebg)
+        run: |
+          cmp echo_bell/DaedalusEchoBellCore.h ../DaedalusLink/Source/DaedalusLink/Public/DaedalusEchoBellCore.h
+          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public echo_bell/echo_bell_gate_session_test.cpp -o echo_bell_gate_session_test && ./echo_bell_gate_session_test ../../../docs/contracts/echo-bell-v1/CUE-SHEET.md ../../../docs/contracts/echo-bell-v1/peals.ebg
       - name: import script compiles and refuses a non-package
         run: |
           python3 -m py_compile ../DaedalusLink/Content/Python/import_world_package.py ../DaedalusLink/Content/Python/daedalus_view.py ../DaedalusLink/Content/Python/init_unreal.py ../DaedalusLink/Content/Python/daedalus_bridge_commands.py live_parity.py

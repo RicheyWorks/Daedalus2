@@ -50,11 +50,13 @@ template<std::size_t N> inline void MakeStars(std::array<Star,N>& Stars,Random& 
 // Latest Desktop asteroids_pygame_ce.py: ship inertia, splitting rocks and UFOs.
 // One Step is one source 60 Hz frame; host owns elapsed-time accumulation/input.
 class AsteroidsGame final : public Game {
+    friend struct AsteroidsTestAccess;
 public:
     struct Ship {
         double X=400,Y=300,Angle=-90,Vx=0,Vy=0;
         bool Thrust=false;
         int Cooldown=0;
+        bool Braking=false;
         void Update(const Input& I,int HatX=0,int HatY=0) {
             if(I.Left) Angle-=5;
             if(I.Right) Angle+=5;
@@ -62,9 +64,16 @@ public:
             HatX+=(I.PadRight?1:0)-(I.PadLeft?1:0);
             HatY+=(I.PadUp?1:0)-(I.PadDown?1:0);
             if(HatX<0) Angle-=5;else if(HatX>0) Angle+=5;
-            Thrust=I.Up || shooter_detail::DeadAxis(I.AxisY)<-0.4 || HatY>0;
+            Braking=I.Action || I.ActionPressed;
+            Thrust=!Braking && (I.Up || shooter_detail::DeadAxis(I.AxisY)<-0.4 || HatY>0);
             if(Thrust) { const double R=shooter_detail::Radians(Angle); Vx+=std::cos(R)*0.15; Vy+=std::sin(R)*0.15; }
-            Vx*=0.985; Vy*=0.985; X+=Vx; Y+=Vy;
+            Vx*=0.985; Vy*=0.985;
+            if(Braking) {
+                Vx*=0.8;Vy*=0.8;
+                if(std::abs(Vx)<0.02) Vx=0;
+                if(std::abs(Vy)<0.02) Vy=0;
+            }
+            X+=Vx; Y+=Vy;
             shooter_detail::Wrap(X,800); shooter_detail::Wrap(Y,600);
             if(Cooldown>0) --Cooldown;
             // Keep trig arguments precise through very long sessions; equivalent rotation.
@@ -98,13 +107,41 @@ public:
     }
     const Ship& GetShip() const { return Player; }
     int GetLevel() const { return Level; }
+    std::size_t GetRockCount() const { return Rocks.size(); }
+    std::size_t GetUfoCount() const { return Ufos.size(); }
+    int GetProtectionFrames() const { return RespawnGrace; }
+    bool IsFireReady() const { return Option!=2 && !Over && !Won && Bullets.size()<MaxBullets && Player.Cooldown==0; }
+    int GetDockedBeaconCount() const { return FlightStage; }
     std::size_t EntityCount() const { return Rocks.size()+Bullets.size()+Ufos.size(); }
     void Reset(std::uint32_t Seed) override {
-        Rng.Seed(Seed); Player=Ship{}; Score=0; Lives=3; Level=1; Over=false; RespawnGrace=0; UfoTimer=300;
-        Bullets.clear(); Ufos.clear(); Rocks.clear(); shooter_detail::MakeStars(Stars,Rng); CreateRocks(6);
+        SessionSeed=Seed;
+        Rng.Seed(Seed); Player=Ship{}; Score=0; Lives=3; Level=1; Over=false; Won=false; RespawnGrace=0; UfoTimer=300;
+        Bullets.clear(); Ufos.clear(); Rocks.clear(); shooter_detail::MakeStars(Stars,Rng);
+        FlightStage=0;if(Option!=2) CreateRocks(6);
+    }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>2) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
+    bool SourceControllerButton(int Button) override {
+        if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
+        return false;
+    }
+    bool SourceKeyDown(int Key) override {
+        if((Over || Won) && (Key==6 || Key==7)) {Reset(SessionSeed);return true;}
+        return false;
     }
     void Step(const Input& I) override {
-        if(Over) return;
+        if(Over || Won) return;
+        if(Option==2) {
+            Player.Update(I);
+            const Vec Goal=FlightBeacons[static_cast<std::size_t>(FlightStage)];
+            if(Player.Braking && Player.Vx==0 && Player.Vy==0 && Distance(Player.X,Player.Y,Goal.X,Goal.Y)<28) {
+                ++FlightStage;Won=FlightStage==static_cast<int>(FlightBeacons.size());
+            }
+            return; // Empty practice space never enters firing, UFOs or wave progression.
+        }
         if(RespawnGrace>0) --RespawnGrace;
         // Source KEYDOWN/JOYBUTTONDOWN can shoot before ship.update; held fire after.
         if(I.FirePressed) Fire();
@@ -156,6 +193,7 @@ public:
         shooter_detail::Remove(Ufos,[](const Ufo& U){return U.X<-30 || U.X>830;});
         shooter_detail::Remove(Bullets,[](const Bullet& B){return B.Life<=0;});
         if(!Over && Rocks.empty()) {
+            if(Option==1 && Level>=3) {Won=true;return;}
             Level=std::min(Level+1,1000000); Player=Ship{}; Bullets.clear(); Ufos.clear(); UfoTimer=Rng.Int(300,600);
             CreateRocks(std::min(4+Level,32)); RespawnGrace=60;
         }
@@ -163,15 +201,27 @@ public:
     void Render(Frame& F) const override {
         using namespace shooter_detail;
         F.Clear(); for(const auto& S:Stars) F.AddCircle(S.X,S.Y,1,White);
+        if(Option==2) for(std::size_t N=0;N<FlightBeacons.size();++N) {
+            const Vec Goal=FlightBeacons[N];const int Index=static_cast<int>(N);
+            const Color Tint=Index<FlightStage?Green:(Index==FlightStage?Gold:Color{75,95,125,255});
+            Ellipse(F,Goal.X,Goal.Y,Index==FlightStage?28:16,Index==FlightStage?28:16,Tint);
+            F.AddText(Goal.X-5,Goal.Y-9,std::to_string(Index+1),Tint,16);
+        }
         if(!Over && (RespawnGrace==0 || (RespawnGrace/4)%2!=0)) {
             const double R=Radians(Player.Angle);
             Outline(F,{{Player.X+15*std::cos(R),Player.Y+15*std::sin(R)},
                 {Player.X+10*std::cos(R+2.5),Player.Y+10*std::sin(R+2.5)},
                 {Player.X+10*std::cos(R-2.5),Player.Y+10*std::sin(R-2.5)}},White);
+            if(Player.Braking) for(int Side:{-1,1}) {
+                const double Sx=-std::sin(R)*Side*16,Sy=std::cos(R)*Side*16;
+                F.AddLine(Player.X+Sx-8*std::cos(R),Player.Y+Sy-8*std::sin(R),
+                    Player.X+Sx+4*std::cos(R),Player.Y+Sy+4*std::sin(R),LightBlue,3);
+            }
             if(Player.Thrust) F.AddTriangle({Player.X-12*std::cos(R),Player.Y-12*std::sin(R)},
                 {Player.X-4*std::cos(R+2.2),Player.Y-4*std::sin(R+2.2)},
                 {Player.X-4*std::cos(R-2.2),Player.Y-4*std::sin(R-2.2)},Yellow);
         }
+        if(Option==2) { RenderFlightPractice(F);return; }
         for(const auto& A:Rocks) {
             std::vector<Vec> Points;
             for(int N=0;N<8;++N) { const double R=Radians(A.Angle+N*45); Points.push_back({A.X+A.Radius()*A.Shape[N]*std::cos(R),A.Y+A.Radius()*A.Shape[N]*std::sin(R)}); }
@@ -180,14 +230,62 @@ public:
         for(const auto& B:Bullets) F.AddCircle(B.X,B.Y,3,B.PlayerOwned?White:Red);
         for(const auto& U:Ufos) { const Color UfoGreen{80,255,80,255};Ellipse(F,U.X,U.Y,15,6,UfoGreen);Outline(F,{{U.X-8,U.Y-12},{U.X+8,U.Y-12},{U.X+8,U.Y-4},{U.X-8,U.Y-4}},UfoGreen); }
         F.AddText(30,15,"SCORE: "+std::to_string(Score)); F.AddText(660,15,"LIVES: "+std::to_string(Lives));
-        F.AddText(355,15,"LEVEL: "+std::to_string(Level),Yellow,18);
-        if(Over) F.AddText(285,250,"GAME OVER",Red,40);
+        F.AddText(355,15,std::string(Option==1?"WAVE: ":"LEVEL: ")+std::to_string(Level)+(Option==1?"/3":""),Yellow,18);
+        F.AddText(30,42,"ROCKS: "+std::to_string(GetRockCount())+"   UFOs: "+std::to_string(GetUfoCount()),White,16);
+        F.AddText(30,65,"FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
+        if(!Over && !Won) {
+            if(Player.Braking) F.AddText(420,42,"BRAKING",LightBlue,17);
+            F.AddText(420,65,ProtectionNote(),RespawnGrace>0?Cyan:White,15);
+            if(RespawnGrace>0) Ellipse(F,Player.X,Player.Y,23,23,Cyan);
+        }
+        F.AddText(30,548,Option==1?"Voyage: clear all rocks in three waves. Larger rocks split into two."
+            :"Clear all rocks to advance; larger rocks split into two.",White,15);
+        F.AddText(30,572,"Left/Right: turn   Up: thrust   K/LT: brake   Space/pad: fire",White,15);
+        if(Over || Won) {
+            F.AddRect(170,225,460,115,{15,20,35,235});
+            F.AddText(Won?210:285,238,Won?"THREE WAVES CLEARED!":"GAME OVER",Won?Green:Red,Won?30:40);
+            F.AddText(200,290,"Wave "+std::to_string(Level)+"   Final score "+std::to_string(Score),White,18);
+            F.AddText(185,315,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
+        }
     }
-    Status GetStatus() const override { return {Score,Lives,Over,false,"Rotate / thrust / fire; UFOs target the ship"}; }
+    Status GetStatus() const override {
+        if(Option==2) return {Score,Lives,false,Won,Won?
+            "Flight practice complete; pad A/Start, Enter/Space or R/Restart to retry":
+            "Flight practice: docked "+std::to_string(FlightStage)+"/3; stop under braking inside the gold ring. Turn / thrust / K-LT brake; edges wrap."};
+        if(Won) return {Score,Lives,false,true,"Three-wave voyage complete; pad A/Start, Enter/Space or R/Restart to retry"};
+        if(Over) return {Score,Lives,true,false,"Game over at wave "+std::to_string(Level)+"; pad A/Start, Enter/Space or R/Restart to retry"};
+        return {Score,Lives,false,false,"Wave "+std::to_string(Level)+(Option==1?"/3 voyage":"")+"; rocks "+std::to_string(GetRockCount())+"; UFOs "+std::to_string(GetUfoCount())+
+            "; "+ProtectionNote()+"; fire "+FireNote()+(Player.Braking?"; BRAKING":"")+"; turn / thrust / K-LT brake / hold fire"};
+    }
 private:
     Random Rng; Ship Player; std::vector<Rock> Rocks; std::vector<Bullet> Bullets; std::vector<Ufo> Ufos;
     std::array<shooter_detail::Star,80> Stars{};
-    std::int64_t Score=0; int Lives=3,Level=1,UfoTimer=300,RespawnGrace=0; bool Over=false;
+    std::uint32_t SessionSeed=730;
+    std::int64_t Score=0; int Lives=3,Level=1,UfoTimer=300,RespawnGrace=0,Option=0,FlightStage=0; bool Over=false,Won=false;
+    inline static constexpr std::array<Vec,3> FlightBeacons{{{400,180},{650,180},{100,420}}};
+    void RenderFlightPractice(Frame& F) const {
+        using namespace shooter_detail;
+        F.AddText(30,15,"FLIGHT PRACTICE",White,24);
+        F.AddText(610,15,"DOCKED "+std::to_string(FlightStage)+"/3",Gold,22);
+        F.AddText(30,52,Player.Braking?(Player.Vx==0 && Player.Vy==0?"STOPPED":"BRAKING"):"Find the next gold ring",LightBlue,17);
+        F.AddText(30,548,"Stop under braking inside the GOLD ring. Edges wrap.",White,15);
+        F.AddText(30,572,"Left/Right, stick or hat: turn | Up: thrust | K/LT: brake",White,15);
+        if(Won) {
+            F.AddRect(170,225,460,115,{15,20,35,235});
+            F.AddText(215,248,"DOCKING COMPLETE!",Green,30);
+            F.AddText(185,305,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
+        }
+    }
+    std::string ProtectionNote() const {
+        // The source-style timer decrements before the next collision pass.
+        if(RespawnGrace==1) return "PROTECTION EXPIRES NEXT LIVE STEP";
+        return RespawnGrace>1?"PROTECTION TIMER: "+std::to_string(RespawnGrace):"COLLISIONS ACTIVE";
+    }
+    std::string FireNote() const {
+        if(Over || Won) return "RUN ENDED";
+        if(Bullets.size()>=MaxBullets) return "SHOT LIMIT";
+        return Player.Cooldown>0?"COOLDOWN "+std::to_string(Player.Cooldown)+" STEPS":"READY";
+    }
     void Fire() {
         if(Bullets.size()>=MaxBullets) return;
         Bullet B;
@@ -216,6 +314,7 @@ private:
 // Source Sega-themed horizontal shooter. No enemy shots exist in the source.
 // Native boss hit/engagement and held fire repair otherwise unreachable victory.
 class SegaShooterGame final : public Game {
+    friend struct SegaTestAccess;
 public:
     struct Bullet { double X=0,Y=0,Vx=10,Vy=0; bool Alive=true; void Update(){X+=Vx;Y+=Vy;} };
     struct Player {
@@ -223,10 +322,11 @@ public:
         int Cooldown=0,Power=1,Lives=3,Invincible=0;
         void Update(const Input& I) {
             double Dx=0,Dy=0;
-            if(I.Left) Dx=-1;
-            if(I.Right) Dx=1;
-            if(I.Up) Dy=-1;
-            if(I.Down) Dy=1;
+            // Match the existing cabinet's merged directions for direct core input.
+            if(I.Left || I.PadLeft) Dx=-1;
+            if(I.Right || I.PadRight) Dx=1;
+            if(I.Up || I.PadUp) Dy=-1;
+            if(I.Down || I.PadDown) Dy=1;
             const double Sx=shooter_detail::DeadAxis(I.AxisX),Sy=shooter_detail::DeadAxis(I.AxisY);
             if(std::abs(Sx)>0.2 || std::abs(Sy)>0.2) {Dx=Sx;Dy=Sy;}
             X=Clamp(X+Dx*Speed,30,750); Y=Clamp(Y+Dy*Speed,20,580);
@@ -259,10 +359,29 @@ public:
     }
     const Player& GetPlayer() const { return Pilot; }
     bool HasBoss() const { return BossActive; }
+    int GetBossHealth() const { return BossActive?std::max(0,Boss.Health):0; }
+    std::size_t GetEnemyCount() const { return Enemies.size(); }
+    std::size_t GetPickupCount() const { return Powerups.size(); }
+    bool IsFireReady() const { return !Over && !Won && Bullets.size()+3<=MaxBullets && Pilot.Cooldown==0; }
     std::size_t EntityCount() const { return Bullets.size()+Enemies.size()+Powerups.size()+(BossActive?1:0); }
     void Reset(std::uint32_t Seed) override {
+        SessionSeed=Seed;
         Rng.Seed(Seed); Pilot=Player{}; Score=0; SpawnTimer=0; Over=false; Won=false; BossActive=false; Boss=Enemy{};
         Bullets.clear(); Enemies.clear(); Powerups.clear(); shooter_detail::MakeStars(Stars,Rng);
+        if(Option==1) StartBoss();
+    }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
+    bool SourceControllerButton(int Button) override {
+        if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
+        return false;
+    }
+    bool SourceKeyDown(int Key) override {
+        if((Over || Won) && (Key==6 || Key==7)) {Reset(SessionSeed);return true;}
+        return false;
     }
     void Step(const Input& I) override {
         if(Over || Won) return;
@@ -294,8 +413,11 @@ public:
             for(auto& E:Enemies) if(E.Alive && Distance(Pilot.X,Pilot.Y,E.X,E.Y)<22) { E.Alive=false; Damage(); break; }
             if(Pilot.Invincible==0 && BossActive && Distance(Pilot.X,Pilot.Y,Boss.X,Boss.Y)<22) Damage();
         }
-        for(auto& P:Powerups) if(P.Alive && Distance(Pilot.X,Pilot.Y,P.X,P.Y)<18) {ApplyPower(Pilot,P.Kind);P.Alive=false;}
-        if(Score>=1500 && !BossActive && !Won) { Boss={750,300,1.5,20,60,true,true}; BossActive=true; }
+        // Defeat blocks pickups; the existing boss outcome still settles below, including a mutual loss.
+        if(!Over) {
+            for(auto& P:Powerups) if(P.Alive && Distance(Pilot.X,Pilot.Y,P.X,P.Y)<18) {ApplyPower(Pilot,P.Kind);P.Alive=false;}
+        }
+        if(Score>=1500 && !BossActive && !Won) StartBoss();
         if(BossActive) {
             Boss.Update(Pilot); Boss.X=std::max(600.0,Boss.X);
             if(Boss.Health<=0) { BossActive=false; shooter_detail::AddScore(Score,500); Won=true; }
@@ -313,23 +435,69 @@ public:
             F.AddTriangle({Pilot.X-12,Pilot.Y},{Pilot.X-22,Pilot.Y-6},{Pilot.X-22,Pilot.Y+6},{255,200,50,255});
         }
         auto DrawEnemy=[&F](const Enemy& E){ if(E.Chaser) F.AddTriangle({E.X+10,E.Y},{E.X-12,E.Y-10},{E.X-12,E.Y+10},{255,100,100,255}); else { Ellipse(F,E.X,E.Y,12,8,{255,80,80,255},true);F.AddCircle(E.X+5,E.Y,5,{255,150,150,255}); } };
-        for(const auto& E:Enemies) DrawEnemy(E);
+        for(const auto& E:Enemies) {
+            DrawEnemy(E);
+            const int MaxHealth=E.Chaser?4:2;
+            const double Top=E.Y-(E.Chaser?23:21);
+            F.AddRect(E.X-MaxHealth*4-1,Top,MaxHealth*8+2,9,{0,0,40,255});
+            for(int N=0;N<MaxHealth;++N) F.AddRect(E.X-MaxHealth*4+1+N*8,Top+2,6,5,
+                N<E.Health?Color{255,215,100,255}:Color{70,70,90,255});
+        }
         for(const auto& B:Bullets) {F.AddCircle(B.X,B.Y,4,{255,255,100,255});F.AddCircle(B.X,B.Y,2,White);}
         for(const auto& P:Powerups) {
             if(P.Kind==PowerKind::Speed) Polygon(F,{{P.X,P.Y-8},{P.X+8,P.Y},{P.X,P.Y+8},{P.X-8,P.Y}},Green);
             else { F.AddCircle(P.X,P.Y,P.Kind==PowerKind::Power?8:7,P.Kind==PowerKind::Power?Yellow:Red);F.AddCircle(P.X,P.Y,3,White); }
+            F.AddText(Clamp(P.X-18,4,748),Clamp(P.Y+10,42,532),PickupName(P.Kind),White,13);
         }
         if(BossActive) {DrawEnemy(Boss);F.AddRect(Boss.X-30,Boss.Y-40,60,6,Red);F.AddRect(Boss.X-30,Boss.Y-40,60*Clamp(Boss.Health/20.0,0,1),6,Green);}
         F.AddText(30,20,"SCORE: "+std::to_string(Score)); F.AddText(660,20,"LIVES: "+std::to_string(Pilot.Lives),Red);
         F.AddText(350,20,"POWER: "+std::to_string(Pilot.Power),Yellow,18);
-        if(Over) F.AddText(285,250,"GAME OVER",Red,40);
-        if(Won) F.AddText(230,250,"BOSS DEFEATED!",Green,40);
+        F.AddText(30,45,std::string(Option==1?"REHEARSAL | ENEMIES: ":"ENEMIES: ")+std::to_string(GetEnemyCount())+"   PICKUPS: "+std::to_string(GetPickupCount()),White,15);
+        F.AddText(420,45,BossNote(),BossActive?Red:Yellow,15);
+        F.AddText(30,67,"FIRE: "+FireNote()+"   SHOT: "+ShotName(),IsFireReady()?Green:Yellow,15);
+        F.AddText(30,89,"SPEED: "+std::to_string(static_cast<int>(Pilot.Speed))+"/8   "+ProtectionNote(),Cyan,15);
+        F.AddText(30,548,"POWER +1 (max 3)   SPEED +1 (max 8)   LIFE +1 (max 5)",White,15);
+        F.AddText(30,572,"WASD/arrows, D-pad or stick: move   Space/J/Z/pad: hold fire",White,15);
+        if(Over || Won) {
+            F.AddRect(145,225,510,120,{15,20,40,235});
+            const std::string Result=Over?(Won?"BOSS DOWN / SHIP LOST":(Option==1?"REHEARSAL ENDED":"GAME OVER"))
+                :(Option==1?"REHEARSAL COMPLETE!":"BOSS DEFEATED!");
+            F.AddText(175,238,Result,Over?Red:Green,30);
+            F.AddText(175,285,"Final score: "+std::to_string(Score),White,20);
+            F.AddText(175,315,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
+        }
     }
-    Status GetStatus() const override {return {Score,Pilot.Lives,Over,Won,"Move / hold fire; power, speed and life pickups"};}
+    Status GetStatus() const override {
+        const std::string Mode=Option==1?"Boss rehearsal; ":"";
+        if(Over || Won) return {Score,Pilot.Lives,Over,Won,Mode+(Over?(Won?"Boss defeated; ship lost":"Game over"):"Boss defeated")+
+            std::string("; final score ")+std::to_string(Score)+"; pad A/Start, Enter/Space or R/Restart to retry"};
+        return {Score,Pilot.Lives,false,false,Mode+BossNote()+"; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+
+            "; "+ShotName()+"; speed "+std::to_string(static_cast<int>(Pilot.Speed))+"/8; "+ProtectionNote()+"; fire "+FireNote()};
+    }
 private:
     Random Rng; Player Pilot; Enemy Boss; std::vector<Bullet> Bullets; std::vector<Enemy> Enemies; std::vector<Powerup> Powerups;
+    std::uint32_t SessionSeed=730;
+    int Option=0;
     std::array<shooter_detail::Star,80> Stars{};
     std::int64_t Score=0; int SpawnTimer=0; bool Over=false,Won=false,BossActive=false;
+    void StartBoss() { Boss={750,300,1.5,20,60,true,true};BossActive=true; }
+    static const char* PickupName(PowerKind Kind) { return Kind==PowerKind::Power?"POWER":(Kind==PowerKind::Speed?"SPEED":"LIFE"); }
+    std::string ShotName() const { return Pilot.Power==1?"NORMAL":(Pilot.Power==2?"DOUBLE":"SPREAD"); }
+    std::string ProtectionNote() const {
+        if(Over || Won) return "RUN ENDED";
+        if(Pilot.Invincible==1) return "PROTECTION EXPIRES NEXT LIVE STEP";
+        return Pilot.Invincible>1?"PROTECTION TIMER: "+std::to_string(Pilot.Invincible):"COLLISIONS ACTIVE";
+    }
+    std::string BossNote() const {
+        if(BossActive) return "BOSS HP: "+std::to_string(GetBossHealth())+"/20";
+        if(Won) return "BOSS DEFEATED";
+        return "BOSS AT 1500: "+std::to_string(std::max<std::int64_t>(0,1500-Score))+" TO GO";
+    }
+    std::string FireNote() const {
+        if(Over || Won) return "RUN ENDED";
+        if(Bullets.size()+3>MaxBullets) return "SHOT LIMIT";
+        return Pilot.Cooldown>0?"COOLDOWN "+std::to_string(Pilot.Cooldown)+" STEPS":"READY";
+    }
     void Fire() {
         if(Bullets.size()+3>MaxBullets) return;
         for(const auto& B:Pilot.Shoot()) Bullets.push_back(B);
@@ -340,6 +508,7 @@ private:
 // Latest star_shootergpt1_fixed.py. Difficulty, escort bonuses, dive types and
 // multi-stage bosses are separate explicit rules so the host does not duplicate them.
 class StarShooterGame final : public Game {
+    friend struct StarTerminalTestAccess;
 public:
     enum class Difficulty { Easy=0,Medium=1,Hard=2 };
     struct DifficultyConfig { double EnemySpeed,EnemyHp,ShootDelay,DiveChance,BossHp; int SpawnRate,Lives; };
@@ -360,10 +529,11 @@ public:
         bool Shield=false,Triple=false,SpeedBoost=false;
         void Update(const Input& I) {
             double Dx=shooter_detail::DeadAxis(I.AxisX),Dy=shooter_detail::DeadAxis(I.AxisY);
-            if(I.Left) Dx=-1;
-            if(I.Right) Dx=1;
-            if(I.Up) Dy=-1;
-            if(I.Down) Dy=1;
+            // Match the existing cabinet merge; digital directions still override the stick.
+            if(I.Left || I.PadLeft) Dx=-1;
+            if(I.Right || I.PadRight) Dx=1;
+            if(I.Up || I.PadUp) Dy=-1;
+            if(I.Down || I.PadDown) Dy=1;
             const double Speed=6*(SpeedBoost?1.6:1.0); X=Clamp(X+Dx*Speed,20,780);Y=Clamp(Y+Dy*Speed,20,580);
             if(Cooldown>0) --Cooldown;
             if(Invincible>0) --Invincible;
@@ -509,6 +679,11 @@ public:
     int GetWave() const {return Wave;}
     int GetSpawnRate() const {return SpawnRate;}
     bool HasBoss() const {return BossActive;}
+    const Boss& GetBoss() const {return BossActor;}
+    std::size_t GetEnemyCount() const {return Enemies.size();}
+    std::size_t GetPickupCount() const {return Powerups.size();}
+    int GetWaveFramesRemaining() const {return std::max(0,1200-WaveTimer);}
+    bool IsFireReady() const {return !Over && !QuitRequested && !Paused && Bullets.size()+3<=MaxBullets && Pilot.Cooldown==0;}
     bool IsPaused() const {return Paused;}
     bool WantsQuit() const {return QuitRequested;}
     bool HasSaveRequest() const {return SaveRequested;}
@@ -600,7 +775,10 @@ public:
         if(Pilot.Invincible==0) for(auto& B:Bullets) if(B.Alive && !B.PlayerOwned && B.Bounds().Overlaps(Pilot.Bounds())) {B.Alive=false;HitPlayer();break;}
         if(Pilot.Invincible==0) for(auto& E:Enemies) if(E.Alive && E.Bounds().Overlaps(Pilot.Bounds())) {E.Alive=false;HitPlayer();break;}
         if(Pilot.Invincible==0 && BossActive && BossActor.State!=BossState::Entering && BossActor.State!=BossState::Returning && BossActor.Bounds().Overlaps(Pilot.Bounds())) HitPlayer();
-        for(auto& P:Powerups) if(P.Alive && P.Bounds().Overlaps(Pilot.Bounds())) {P.Apply(Pilot);P.Alive=false;}
+        // Keep the final loadout at the lethal contact; surviving hits still collect normally.
+        if(!Over) {
+            for(auto& P:Powerups) if(P.Alive && P.Bounds().Overlaps(Pilot.Bounds())) {P.Apply(Pilot);P.Alive=false;}
+        }
         for(auto& P:Effects) {P.X+=P.Dx;P.Y+=P.Dy;--P.Life;}
         for(auto& P:Popups) {P.Y-=0.65;--P.Life;}
         shooter_detail::Remove(Effects,[](const Effect& P){return P.Life<=0;});
@@ -626,20 +804,39 @@ public:
         for(const auto& P:Popups) F.AddText(P.X,P.Y,P.Label,P.Tint,17);
         F.AddText(15,40,"SCORE "+std::to_string(Score)); F.AddText(345,40,"WAVE "+std::to_string(Wave),Yellow);
         F.AddText(655,40,"LIVES "+std::to_string(Pilot.Lives),Cyan);
+        F.AddText(15,65,"ENEMIES "+std::to_string(GetEnemyCount())+"   PICKUPS "+std::to_string(GetPickupCount())+
+            "   WAVE SHIFT IN "+std::to_string(GetWaveFramesRemaining())+" STEPS",White,15);
+        F.AddText(15,88,std::string(Pilot.Triple?"TRIPLE":"TWIN")+" SHOT   FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
+        F.AddText(420,88,ProtectionNote(),Cyan,15);
+        F.AddText(15,110,BossNote(),BossActive?BossActor.Tint:Yellow,15);
+        F.AddText(15,548,"Move: WASD/arrows, D-pad or stick   Hold Space/J/X/RT: fire   P/Start: pause",White,14);
         F.AddText(15,572,DifficultyName(Mode),Mode==Difficulty::Easy?Green:(Mode==Difficulty::Medium?Yellow:Red),17);
         double BadgeX=135;
         if(Pilot.Triple) {F.AddText(BadgeX,572,"[ 3X SHOT ]",LightBlue,17);BadgeX+=135;}
         if(Pilot.Shield) {F.AddText(BadgeX,572,"[ SHIELD ]",Green,17);BadgeX+=125;}
         if(Pilot.SpeedBoost) F.AddText(BadgeX,572,"[ SPEED ]",Yellow,17);
         if(BossActive && BossActor.State==BossState::Entering) F.AddText(270,280,"BOSS INCOMING!",DarkRed,28);
-        if(Over) F.AddText(280,250,"GAME OVER",Red,40);
-        if(Paused) {
+        if(Over) {
+            F.AddRect(170,225,460,120,{15,20,40,235});
+            F.AddText(280,238,"GAME OVER",Red,40);
+            F.AddText(200,288,"Final score "+std::to_string(Score)+"   Wave "+std::to_string(Wave),White,18);
+            F.AddText(200,318,"Pad A / Start or R / Restart: retry",Cyan,17);
+        }
+        if(Paused && !Over) {
             F.AddRect(200,180,400,250,{15,20,40,235});F.AddText(330,195,"PAUSED",White,32);
             const char* Labels[3]={"Resume","Save & Quit","Quit to Menu"};
             for(int N=0;N<3;++N) F.AddText(265,260+N*45,std::string(PauseSelection==N?"> ":"  ")+Labels[N],PauseSelection==N?Cyan:White,22);
+            F.AddText(225,400,"Up/Down: select   J/X or Space/A: confirm",White,14);
         }
     }
-    Status GetStatus() const override {return {Score,std::max(0,Pilot.Lives),Over,false,QuitRequested?"Quit requested":(Paused?"Paused: resume / save and quit / menu":std::string(DifficultyName(Mode))+"; move / fire / pause")};}
+    Status GetStatus() const override {
+        if(QuitRequested) return {Score,std::max(0,Pilot.Lives),Over,false,SaveRequested?"Save & Quit requested; host persistence pending":"Quit requested"};
+        if(Over) return {Score,std::max(0,Pilot.Lives),true,false,"Game over; wave "+std::to_string(Wave)+"; fresh pad A/Start or R/Restart to retry"};
+        if(Paused) return {Score,std::max(0,Pilot.Lives),false,false,"Paused: Up/Down select; J/X or Space/A confirm; Shift/Y resume"};
+        return {Score,std::max(0,Pilot.Lives),false,false,std::string(DifficultyName(Mode))+"; wave "+std::to_string(Wave)+"; shift in "+std::to_string(GetWaveFramesRemaining())+
+            " steps; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+"; "+BossNote()+"; "+
+            (Pilot.Triple?"triple":"twin")+" shot; fire "+FireNote()+"; "+ProtectionNote()+"; speed "+(Pilot.SpeedBoost?"boosted":"normal")};
+    }
     static const char* DifficultyName(Difficulty D) {return D==Difficulty::Easy?"Easy":(D==Difficulty::Medium?"Medium":"Hard");}
 private:
     struct Effect {double X,Y,Dx,Dy;int Life;Color Tint;};
@@ -650,6 +847,24 @@ private:
     std::int64_t Score=0;std::uint64_t NextId=1;int Wave=1,WaveTimer=0,SpawnTimer=0,SpawnRate=110,PauseSelection=0,PauseNavCooldown=0;
     bool Over=false,BossActive=false,BossKilledThisWave=false,Paused=false,QuitRequested=false,SaveRequested=false;
     RunSnapshot PendingSave;
+    std::string FireNote() const {
+        if(Over || QuitRequested) return "RUN ENDED";
+        if(Paused) return "PAUSED";
+        if(Bullets.size()+3>MaxBullets) return "SHOT LIMIT";
+        return Pilot.Cooldown>0?"COOLDOWN "+std::to_string(Pilot.Cooldown)+" STEPS":"READY";
+    }
+    std::string ProtectionNote() const {
+        if(Over || QuitRequested) return "RUN ENDED";
+        if(Pilot.Invincible==1) return std::string("PROTECTION EXPIRES NEXT LIVE STEP")+(Pilot.Shield?" + SHIELD":"");
+        if(Pilot.Invincible>1) return "PROTECTION TIMER: "+std::to_string(Pilot.Invincible)+(Pilot.Shield?" + SHIELD":"");
+        return Pilot.Shield?"SHIELD READY":"COLLISIONS ACTIVE";
+    }
+    std::string BossNote() const {
+        if(!BossActive) return BossKilledThisWave?"LAST BOSS CLEARED; POWERUPS RESET ON DEFEAT":"BOSSES ARRIVE EVERY FIFTH WAVE";
+        const char* State=BossActor.State==BossState::Entering?"ENTERING":(BossActor.State==BossState::Pacing?"PACING":(BossActor.State==BossState::Charging?"CHARGING":"RETURNING"));
+        const char* Phase=BossActor.Phase33?"BERSERK":(BossActor.Phase66?"ENRAGED":"NORMAL");
+        return "BOSS HP "+std::to_string(std::max(0,BossActor.Hp))+"/"+std::to_string(BossActor.MaxHp)+"   "+State+"   "+Phase;
+    }
     static bool ValidDifficulty(Difficulty D) {return D==Difficulty::Easy || D==Difficulty::Medium || D==Difficulty::Hard;}
     static Color PowerColor(PowerKind K) {return K==PowerKind::Triple?shooter_detail::LightBlue:(K==PowerKind::Shield?shooter_detail::Green:shooter_detail::Yellow);}
     static const char* PowerLabel(PowerKind K) {return K==PowerKind::Triple?"3X":(K==PowerKind::Shield?"SH":">>");}

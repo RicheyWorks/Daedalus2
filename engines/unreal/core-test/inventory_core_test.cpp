@@ -78,6 +78,20 @@ int main(int argc, char** argv)
         Check("an item filed under ALL is refused", !Bad.Parse("DIC 1\nrealm X\ntab ALL\nitem A ALL - USE A\n", E), E);
     }
 
+    // A blank record may contain separators after ordinary text editing.
+    {
+        Catalog Spaced;
+        std::string Err;
+        const bool Loaded = Spaced.Parse("DIC 1\n   \nrealm X\ntab ALL\n \ntab TOOLS\nitem BRUSH TOOLS - INSPECT Brush\n    ", Err);
+        Check("space-only catalog lines are blank records", Loaded, Err);
+        Check("blank records preserve catalog contents", Loaded && Spaced.Realm == "X" && Spaced.Tabs.size() == 2
+            && Spaced.Items.size() == 1 && Spaced.Find("BRUSH") && Spaced.Find("BRUSH")->Name == "Brush");
+        Check("records after blank lines retain their original diagnostic line", !Spaced.Parse("DIC 1\n   \nrealm X\ntab ALL\nunknown\n", Err)
+            && Err == "line 5: unknown record unknown", Err);
+        Check("a failed parse after blank lines leaves the prior catalog intact", Spaced.Realm == "X"
+            && Spaced.Tabs.size() == 2 && Spaced.Items.size() == 1 && Spaced.Find("BRUSH"));
+    }
+
     // ---- the same controls in two realms
     const Catalog& Gallery = Cats["gallery-city"];
     const Catalog& Bricks = Cats["bricks"];
@@ -156,6 +170,64 @@ int main(int argc, char** argv)
     Check("an empty bag opens to no rows and no selection", E.Rows().empty() && E.Selected() == nullptr && !E.Confirm(I));
     E.Right(); E.Down(); E.NextTab();
     Check("moving through nothing is harmless", E.Cursor() == 0 && E.TabName() == "WAYFINDING");
+
+    // Refresh must not carry an open action menu onto a different item at the same row.
+    {
+        Tabs R;
+        Intent Out;
+        R.Open(Gallery, {{"HEARTSTONE", 1}}, {}, 6);
+        Check("refresh insertion starts on Heartstone INSPECT", !R.Confirm(Out) && R.ActionsShown()
+            && R.Selected() && R.Selected()->Def->Id == "HEARTSTONE" && R.ActionLabels() == std::vector<std::string>{"INSPECT"});
+        R.Refresh({{"PAINT_SPRAY", 1}, {"HEARTSTONE", 1}}, {});
+        Check("insertion retains tab and row but closes the old item's actions", R.TabIndex() == 0 && R.Cursor() == 0
+            && R.Selected() && R.Selected()->Def->Id == "PAINT_SPRAY" && !R.ActionsShown() && R.ActionIndex() == 0);
+        Check("the new item requires a fresh action-menu open before an intent", !R.Confirm(Out)
+            && R.ActionsShown() && Out.Action.empty() && Out.ItemId.empty() && Out.Count == 0);
+        Check("a second confirm deliberately equips the newly selected spray", R.Confirm(Out)
+            && Out.Action == "EQUIP" && Out.ItemId == "PAINT_SPRAY" && Out.Slot == "HAND" && Out.Count == 1);
+    }
+
+    // The old SPLIT index is outside Heartstone's shorter action list: inspect state, never confirm it on baseline.
+    {
+        Tabs R;
+        Intent Out;
+        R.Open(Gallery, {{"PIGMENT_RED", 12}, {"HEARTSTONE", 1}}, {}, 6);
+        R.Confirm(Out); R.Down(); R.Down();
+        Check("removal starts with pigment SPLIT highlighted", R.ActionsShown() && R.ActionIndex() == 2
+            && R.Selected() && R.Selected()->Def->Id == "PIGMENT_RED");
+        R.Refresh({{"HEARTSTONE", 1}}, {});
+        Check("removing the selected item closes and resets its stale action index", !R.ActionsShown() && R.ActionIndex() == 0);
+        Check("removal keeps ALL and clamps selection onto the remaining Heartstone", R.TabIndex() == 0 && R.Cursor() == 0
+            && R.Selected() && R.Selected()->Def->Id == "HEARTSTONE" && R.ActionLabels() == std::vector<std::string>{"INSPECT"});
+    }
+
+    {
+        Tabs R;
+        Intent Out;
+        R.Open(Gallery, {{"SELF_PORTRAIT_FRAME", 1}, {"HEARTSTONE", 1}}, {}, 6);
+        R.SelectTab(5); R.Right(); R.Confirm(Out);
+        R.Refresh({}, {});
+        Check("an empty refresh keeps the QUEST tab and clamps its cursor", R.TabName() == "QUEST" && R.Cursor() == 0
+            && R.Rows().empty() && R.Selected() == nullptr);
+        Check("an empty refresh clears the open action menu", !R.ActionsShown() && R.ActionIndex() == 0 && !R.Confirm(Out));
+        Check("the empty refreshed panel closes with one Back", R.Back() && !R.Opened());
+    }
+
+    // A count-only refresh of the same selected item keeps the player's pending action, using the new quantity.
+    {
+        Tabs R;
+        Intent Out;
+        R.Open(Gallery, {{"PIGMENT_RED", 1}, {"PIGMENT_BLUE", 6}}, {}, 6);
+        R.SelectTab(2); R.Right(); R.Confirm(Out); R.Down(); R.Down();
+        R.Refresh({{"PIGMENT_RED", 1}, {"PIGMENT_BLUE", 10}}, {});
+        Check("same-item refresh keeps tab, nonzero cursor and highlighted SPLIT", R.TabName() == "PIGMENT" && R.Cursor() == 1
+            && R.Selected() && R.Selected()->Def->Id == "PIGMENT_BLUE" && R.Selected()->Count == 10
+            && R.ActionsShown() && R.ActionIndex() == 2);
+        Check("the retained SPLIT intent uses the refreshed count", R.Confirm(Out)
+            && Out.Action == "SPLIT" && Out.ItemId == "PIGMENT_BLUE" && Out.Count == 5);
+        Check("confirm still leaves the refreshed stack unchanged until the host acts", R.Selected()
+            && R.Selected()->Count == 10 && !R.ActionsShown());
+    }
 
     // a harness line
     Check("describe names realm, theme, tab, item", G.Describe().find("realm=GALLERY-CITY theme=gallery tab=ALL(1/6)") != std::string::npos && G.Describe().find("item=PAINT_SPRAY x1") != std::string::npos, G.Describe());

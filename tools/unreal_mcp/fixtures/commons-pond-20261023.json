@@ -1,0 +1,488 @@
+{
+  "schema": "daedalus.commons-pond-source-measurements.v1",
+  "stage": "source_candidate_measured_operator_qualification_and_native_admission_pending",
+  "observed_utc": "2026-10-23T02:16:10.843648+00:00",
+  "prepared": 3,
+  "imported": 0,
+  "admitted": 0,
+  "held": 3,
+  "source_views_personally_inspected_by_operator": false,
+  "native_validation": "NotValidated",
+  "original_manifest": {
+    "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\aquatic.manifest.json",
+    "bytes": 9405,
+    "sha256": "cbee25058a48b2173cbba6adb66cc557a0f00779b76d09df1429f9551685ba87"
+  },
+  "preparation_packet": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\CommonsGardenR4\\next-ingestion-prepared.json",
+    "bytes": 6391,
+    "sha256": "d210c0b9dbe66ef37028b4a569680a52556a4ac2d52c1e66c2136755d429ac98"
+  },
+  "native_route_files": {
+    "native_helper": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_qualified_static.py",
+      "bytes": 28818,
+      "sha256": "ff67f266fa45b276d287d69d5fa750b445353960d7213234dede15bc1f135df0"
+    },
+    "shared_helper": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\engines\\unreal\\DaedalusLink\\Content\\Python\\daedalus_codex_catalogue.py",
+      "bytes": 22414,
+      "sha256": "00e48d8a86cd377250c439d6992a5bec6deb09b0f77e9607bf7beebd324d1d03"
+    },
+    "prior_native_used": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PondLotusFloweringR1\\DeliveryR1\\native-source-used.py",
+      "bytes": 28818,
+      "sha256": "ff67f266fa45b276d287d69d5fa750b445353960d7213234dede15bc1f135df0"
+    },
+    "host_delivery": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_qualified_static_delivery.py",
+      "bytes": 20022,
+      "sha256": "7736cfb01a2b90a89939a4b63b38f1ba6b5020186e0049825a4af8e752ef7f02"
+    },
+    "retained_host": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\contest-island-production\\tools\\unreal\\codex_skyfarm_greenhouse_delivery.py",
+      "bytes": 22864,
+      "sha256": "514af0d0a0e8b753e306bf7087b9a1aee27b93c3d0c765dc4d71a133aab5be89"
+    },
+    "baseline_guard": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\hlod_fixture_execute_r1.py",
+      "bytes": 13492,
+      "sha256": "3264b5f786b24b79fee4450cf5d32452bac3ac5987e32cd8a67c203d69d96be5"
+    }
+  },
+  "items": [
+    {
+      "name": "Prop_Aquatic_Pond_Frogbit_4",
+      "fbx": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Pond_Frogbit_4.fbx",
+      "sidecar": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Pond_Frogbit_4.json",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a",
+      "fingerprint": {
+        "bytes": 16668,
+        "sha256": "6bd59792c5edff9ab824f111bc13f7c1a082edc9b3a0f1162f9400bd5780adae"
+      },
+      "sidecar_fingerprint": {
+        "bytes": 372,
+        "sha256": "231f1dd3cf98f692a8689bba18d57d9ad9a0a38e525df4efe9d12d7b37689b8d"
+      },
+      "triangles": 220,
+      "source_unit_scale_factor": 100.0,
+      "mesh_geometry_count": 1,
+      "mesh_model_count": 1,
+      "animations": 0,
+      "animation_curves": 0,
+      "deformers": 0,
+      "textures": 0,
+      "videos": 0,
+      "authored_ucx": 0,
+      "source_bounds": {
+        "min": [
+          -35.0,
+          -25.0,
+          0.0
+        ],
+        "max": [
+          40.0,
+          30.0,
+          15.0
+        ]
+      },
+      "rgba_bytes": [
+        [
+          128,
+          189,
+          128,
+          255
+        ],
+        [
+          251,
+          250,
+          246,
+          255
+        ],
+        [
+          253,
+          237,
+          123,
+          255
+        ]
+      ],
+      "author": "unverified",
+      "provenance": {
+        "historical_author": "unverified",
+        "source_recipe": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_aquatic.py",
+          "bytes": 35748,
+          "sha256": "8e6de6507add69337ba36454534e155b42d478d3be5f64d90617fa12b1aec5f1"
+        },
+        "sidecar": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Pond_Frogbit_4.json",
+          "bytes": 372,
+          "sha256": "231f1dd3cf98f692a8689bba18d57d9ad9a0a38e525df4efe9d12d7b37689b8d"
+        },
+        "retained_payload_regenerated": false,
+        "recipe_seed_formula": "sum(map(ord, species)) * 10 + stage_index",
+        "recipe_seed": 7174,
+        "ecology_runtime": "Sidecar uses are source intent; no native ecological behavior accepted."
+      },
+      "observed": {
+        "fbx_version": 7400,
+        "polygons": 110,
+        "polygon_sizes": [
+          4
+        ],
+        "vertex_count": 137,
+        "polygon_corner_count": 440,
+        "referenced_corner_bounds": {
+          "min": [
+            -35.0,
+            -25.0,
+            0.0
+          ],
+          "max": [
+            40.0,
+            30.0,
+            15.0
+          ]
+        },
+        "material_count": 1,
+        "model_names": [
+          "Prop_Aquatic_Pond_Frogbit_4\u0000\u0001Model"
+        ],
+        "original_unit_scale_factor": 100.0,
+        "sidecar_facts": {
+          "name": "Prop_Aquatic_Pond_Frogbit_4",
+          "species": "Frogbit",
+          "family": "pond",
+          "stage": "Flowering",
+          "stage_index": 4,
+          "voxel_cm": 5.0,
+          "voxels": 52,
+          "pivot": "waterline",
+          "height_m": 0.15,
+          "depth_below_pivot_m": 0.0,
+          "uses": {
+            "cover": "frogs",
+            "islands": [
+              "meadow",
+              "frost"
+            ]
+          },
+          "source": "tools/blender/voxel_aquatic.py"
+        }
+      },
+      "admission": "HELD",
+      "native_validation": "NotValidated",
+      "native_import_dispatched": false
+    },
+    {
+      "name": "Prop_Aquatic_Pond_PinkLily_4",
+      "fbx": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Pond_PinkLily_4.fbx",
+      "sidecar": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Pond_PinkLily_4.json",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492",
+      "fingerprint": {
+        "bytes": 19068,
+        "sha256": "8b5fcea2ae0a44926210bf9ccfcd42da3333d77f1187e36287797d0c15ba2eec"
+      },
+      "sidecar_fingerprint": {
+        "bytes": 451,
+        "sha256": "16ce4558542f3491c37e620288145647e1d7ff1e2e1b56a83ef9d3fcf45ec490"
+      },
+      "triangles": 544,
+      "source_unit_scale_factor": 100.0,
+      "mesh_geometry_count": 1,
+      "mesh_model_count": 1,
+      "animations": 0,
+      "animation_curves": 0,
+      "deformers": 0,
+      "textures": 0,
+      "videos": 0,
+      "authored_ucx": 0,
+      "source_bounds": {
+        "min": [
+          -45.0,
+          -45.0,
+          -25.0
+        ],
+        "max": [
+          40.0,
+          30.0,
+          15.0
+        ]
+      },
+      "rgba_bytes": [
+        [
+          104,
+          160,
+          111,
+          255
+        ],
+        [
+          128,
+          189,
+          128,
+          255
+        ],
+        [
+          194,
+          183,
+          164,
+          255
+        ],
+        [
+          194,
+          205,
+          148,
+          255
+        ],
+        [
+          250,
+          205,
+          220,
+          255
+        ],
+        [
+          253,
+          237,
+          123,
+          255
+        ]
+      ],
+      "author": "unverified",
+      "provenance": {
+        "historical_author": "unverified",
+        "source_recipe": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_aquatic.py",
+          "bytes": 35748,
+          "sha256": "8e6de6507add69337ba36454534e155b42d478d3be5f64d90617fa12b1aec5f1"
+        },
+        "sidecar": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Pond_PinkLily_4.json",
+          "bytes": 451,
+          "sha256": "16ce4558542f3491c37e620288145647e1d7ff1e2e1b56a83ef9d3fcf45ec490"
+        },
+        "retained_payload_regenerated": false,
+        "recipe_seed_formula": "sum(map(ord, species)) * 10 + stage_index",
+        "recipe_seed": 8124,
+        "ecology_runtime": "Sidecar uses are source intent; no native ecological behavior accepted."
+      },
+      "observed": {
+        "fbx_version": 7400,
+        "polygons": 272,
+        "polygon_sizes": [
+          4
+        ],
+        "vertex_count": 308,
+        "polygon_corner_count": 1088,
+        "referenced_corner_bounds": {
+          "min": [
+            -45.0,
+            -45.0,
+            -25.0
+          ],
+          "max": [
+            40.0,
+            30.0,
+            15.0
+          ]
+        },
+        "material_count": 1,
+        "model_names": [
+          "Prop_Aquatic_Pond_PinkLily_4\u0000\u0001Model"
+        ],
+        "original_unit_scale_factor": 100.0,
+        "sidecar_facts": {
+          "name": "Prop_Aquatic_Pond_PinkLily_4",
+          "species": "PinkLily",
+          "family": "pond",
+          "stage": "Flowering",
+          "stage_index": 4,
+          "voxel_cm": 5.0,
+          "voxels": 149,
+          "pivot": "waterline",
+          "height_m": 0.15,
+          "depth_below_pivot_m": 0.25,
+          "uses": {
+            "fish": [
+              "ember_koi"
+            ],
+            "cover": "frogs",
+            "goods": [
+              "dye_pink@craft"
+            ],
+            "islands": [
+              "meadow",
+              "mire"
+            ]
+          },
+          "source": "tools/blender/voxel_aquatic.py"
+        }
+      },
+      "admission": "HELD",
+      "native_validation": "NotValidated",
+      "native_import_dispatched": false
+    },
+    {
+      "name": "Prop_Aquatic_Pond_WaterLily_4",
+      "fbx": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Pond_WaterLily_4.fbx",
+      "sidecar": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Pond_WaterLily_4.json",
+      "destination": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b",
+      "fingerprint": {
+        "bytes": 18780,
+        "sha256": "5499801cc09c511b9183f3e66b41e9a27540aeea9b57cf2238fbe454e8f1af2d"
+      },
+      "sidecar_fingerprint": {
+        "bytes": 488,
+        "sha256": "2f0bd9f3c885785a9b8337673039e0aa8387e183a32307d1ef2b0a870edf0e2d"
+      },
+      "triangles": 492,
+      "source_unit_scale_factor": 100.0,
+      "mesh_geometry_count": 1,
+      "mesh_model_count": 1,
+      "animations": 0,
+      "animation_curves": 0,
+      "deformers": 0,
+      "textures": 0,
+      "videos": 0,
+      "authored_ucx": 0,
+      "source_bounds": {
+        "min": [
+          -50.0,
+          -35.0,
+          -25.0
+        ],
+        "max": [
+          35.0,
+          30.0,
+          15.0
+        ]
+      },
+      "rgba_bytes": [
+        [
+          104,
+          160,
+          111,
+          255
+        ],
+        [
+          128,
+          189,
+          128,
+          255
+        ],
+        [
+          194,
+          183,
+          164,
+          255
+        ],
+        [
+          194,
+          205,
+          148,
+          255
+        ],
+        [
+          251,
+          250,
+          246,
+          255
+        ],
+        [
+          253,
+          237,
+          123,
+          255
+        ]
+      ],
+      "author": "unverified",
+      "provenance": {
+        "historical_author": "unverified",
+        "source_recipe": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_aquatic.py",
+          "bytes": 35748,
+          "sha256": "8e6de6507add69337ba36454534e155b42d478d3be5f64d90617fa12b1aec5f1"
+        },
+        "sidecar": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-aquatic\\Prop_Aquatic_Pond_WaterLily_4.json",
+          "bytes": 488,
+          "sha256": "2f0bd9f3c885785a9b8337673039e0aa8387e183a32307d1ef2b0a870edf0e2d"
+        },
+        "retained_payload_regenerated": false,
+        "recipe_seed_formula": "sum(map(ord, species)) * 10 + stage_index",
+        "recipe_seed": 9254,
+        "ecology_runtime": "Sidecar uses are source intent; no native ecological behavior accepted."
+      },
+      "observed": {
+        "fbx_version": 7400,
+        "polygons": 246,
+        "polygon_sizes": [
+          4
+        ],
+        "vertex_count": 293,
+        "polygon_corner_count": 984,
+        "referenced_corner_bounds": {
+          "min": [
+            -50.0,
+            -35.0,
+            -25.0
+          ],
+          "max": [
+            35.0,
+            30.0,
+            15.0
+          ]
+        },
+        "material_count": 1,
+        "model_names": [
+          "Prop_Aquatic_Pond_WaterLily_4\u0000\u0001Model"
+        ],
+        "original_unit_scale_factor": 100.0,
+        "sidecar_facts": {
+          "name": "Prop_Aquatic_Pond_WaterLily_4",
+          "species": "WaterLily",
+          "family": "pond",
+          "stage": "Flowering",
+          "stage_index": 4,
+          "voxel_cm": 5.0,
+          "voxels": 140,
+          "pivot": "waterline",
+          "height_m": 0.15,
+          "depth_below_pivot_m": 0.25,
+          "uses": {
+            "fish": [
+              "rillperch",
+              "glassfin"
+            ],
+            "cover": "frogs, fry",
+            "goods": [
+              "lily_root@inn"
+            ],
+            "islands": [
+              "meadow",
+              "mire",
+              "crystal"
+            ]
+          },
+          "source": "tools/blender/voxel_aquatic.py"
+        }
+      },
+      "admission": "HELD",
+      "native_validation": "NotValidated",
+      "native_import_dispatched": false
+    }
+  ],
+  "memory_before": {
+    "physical_free_bytes": 9865371648,
+    "required_floor_bytes": 1740800000
+  },
+  "memory_after": {
+    "physical_free_bytes": 9863872512,
+    "required_floor_bytes": 1740800000
+  },
+  "limits": [
+    "File-only parse; no receiver connection, native import/save/validation or GUI process.",
+    "Namespaced destinations are plans only; global source-hash and destination deduplication require fresh sole-writer admission.",
+    "Existing source profile uses unit100/build1/future actor scale0.01, not Coupler profile.",
+    "Prior Lotus qualification does not qualify these three sources; native material/appearance/runtime remain untested."
+  ]
+}

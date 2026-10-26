@@ -71,10 +71,22 @@ public:
     virtual void Render(Frame& Out) const = 0;
     virtual Status GetStatus() const = 0;
     // Optional source-specific facilities. Hosts use virtual dispatch, never UE-disabled RTTI.
+    virtual void EnterTitle() {}
+    // Ordered non-repeat keyboard events: Up,Down,Left,Right,B,A,Enter,Space,R,other.
+    // True means a run transition: discard semantic edges from the old state.
+    virtual bool SourceKeyDown(int) { return false; }
+    // Separate controller events: 0 A, 1 Start. True consumes a source action,
+    // keeping controller events out of keyboard cheat tracking.
+    virtual bool SourceControllerButton(int) { return false; }
+    // Logical canvas coordinates, button 0 left / 1 right / 2 middle. No fixed step.
+    // True consumes one pointer action; hosts discard old held/semantic input.
+    virtual bool SourcePointerButton(double,double,int) { return false; }
     virtual bool OwnPause(bool) { return false; }
     virtual bool IsCorePaused() const { return false; }
     virtual std::string SaveState() const { return {}; }
     virtual bool RestoreState(const std::string&,std::uint32_t) { return false; }
+    // Games with an exact-board save retain the original restart/first-reveal seed.
+    virtual std::uint32_t SeedAfterRestore(std::uint32_t Fallback) const { return Fallback; }
     virtual bool SavePending() const { return false; }
     virtual void ClearSavePending() {}
     virtual bool WantsExit() const { return false; }
@@ -86,7 +98,8 @@ public:
 class Random {
     std::uint32_t State = 730;
 public:
-    void Seed(std::uint32_t Value) { State=Value ? Value : 0x6d2b79f5u; }
+    static std::uint32_t InitialState(std::uint32_t Value) { return Value ? Value : 0x6d2b79f5u; }
+    void Seed(std::uint32_t Value) { State=InitialState(Value); }
     std::uint32_t Next() { State^=State<<13; State^=State>>17; State^=State<<5; return State; }
     double Unit() { return static_cast<double>(Next()) / 4294967296.0; }
     int Int(int Low,int High) { return High<=Low ? Low : Low+static_cast<int>(Next()%static_cast<std::uint32_t>(High-Low+1)); }

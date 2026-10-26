@@ -1,0 +1,24 @@
+{
+  "v": 1,
+  "quest": "q_defrag_tide",
+  "lore": "Below the Byte Spring the cache shelf is a strip of tide-worn blocks. The island caches lie scattered across it, and every break costs a seek when an island streams in. Each tide eats one more free block. Pack the caches before the shelf crumbles.",
+  "disk": {"blocks": 96, "block_kib": 20, "moves_per_tide": 4, "tides": 12, "seek_target": 4},
+  "files": [
+    {"id": "disk_saver_home", "blocks": 6, "priority": 4},
+    {"id": "cache_north", "blocks": 5, "priority": 2},
+    {"id": "cache_south", "blocks": 7, "priority": 1},
+    {"id": "vault_east", "blocks": 13, "priority": 3}
+  ],
+  "seed": 1,
+  "npc": {
+    "name": "Tidewright Seek",
+    "lines": {
+      "start": "The shelf's in pieces again. Every gap is a seek when the islands stream in.",
+      "move": "Block shifted. Keep the caches in one run.",
+      "erode": "The tide took another free block. It will not give it back.",
+      "close": "Nearly there. One or two more packs.",
+      "win": "Clean runs, end to end. The islands will stream like water.",
+      "fail": "The tides ran out. The caches stream in stutters this season."
+    }
+  }
+}

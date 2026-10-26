@@ -1,0 +1,252 @@
+{
+  "schema": "daedalus.commons-plant-activity-build.v1",
+  "utc": "2026-10-23T03:19:04.876050+00:00",
+  "status": "BUILT_COMPILED_SAVED_NOT_PLAY_VERIFIED",
+  "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+  "map_sha256": "9b5899f5706d23125c02cd1e2402fd0943d495c0a8bcc22854218715aacfaace",
+  "saved_assets": [
+    {
+      "path": "GardenActivityR7/BP_CommonsGardenActivity.uasset",
+      "sha256": "8c0219002a37671c5c380c72c65724e4033675fbf5c0b3b3304aeefcdbf460f0",
+      "bytes": 434489
+    },
+    {
+      "path": "GardenActivityR7/SG_CommonsGarden.uasset",
+      "sha256": "a67cecdbacb4dd9e9b04c4f324609ee94963ca4c12a38b4fba999c0ee66f41fe",
+      "bytes": 9011
+    },
+    {
+      "path": "GardenActivityR7/WBP_CommonsGarden.uasset",
+      "sha256": "75ee48d5f701c31fb09a2e7b94f22caff8ed995d41491f68b0e84a979fd3e834",
+      "bytes": 34197
+    }
+  ],
+  "native_behavior": {
+    "built_saved": [
+      "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/SG_CommonsGarden",
+      "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/BP_CommonsGardenActivity",
+      "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/WBP_CommonsGarden"
+    ],
+    "functions": [
+      "InitGarden",
+      "CommitGardenStage",
+      "TryGardenInteract",
+      "RefreshGarden"
+    ],
+    "input": "E Pressed, consume_input=false, execute_when_paused=false",
+    "slot": "Daedalus_LanternCommons_Garden_v1",
+    "stages": "0 seed available, 1 seed carried, 2 flower planted",
+    "persistence": "Load version1 stage0..2 only; save before local advance; failed saves retain old state for retry.",
+    "shared_progress_writes": false,
+    "Play_run": false,
+    "runtime_persistence_proven": false
+  },
+  "native_composition": {
+    "saved": true,
+    "actors": [
+      {
+        "label": "CommonsR7ContinuousGardenRoute",
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_692",
+        "asset": "/Engine/BasicShapes/Cube"
+      },
+      {
+        "label": "CommonsR7SeedDisplay",
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_693",
+        "asset": "/Engine/BasicShapes/Cube"
+      },
+      {
+        "label": "CommonsR7CollectibleSeed",
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_694",
+        "asset": "/Game/Daedalus/Art/Item/Item_Orr_Seed_Pouch/Item_Orr_Seed_Pouch/StaticMeshes/Item_Orr_Seed_Pouch.Item_Orr_Seed_Pouch"
+      },
+      {
+        "label": "CommonsR7PlantingPot",
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_695",
+        "asset": "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Round/Prop_Orr_Planter_Round/StaticMeshes/Prop_Orr_Planter_Round.Prop_Orr_Planter_Round"
+      },
+      {
+        "label": "CommonsR7PlantedFlower",
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_696",
+        "asset": "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy"
+      },
+      {
+        "label": "CommonsR7GardenLamp0",
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_697",
+        "asset": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path"
+      },
+      {
+        "label": "CommonsR7GardenLamp1",
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_698",
+        "asset": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path"
+      },
+      {
+        "label": "CommonsR7GardenLamp2",
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_699",
+        "asset": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path"
+      },
+      {
+        "label": "CommonsR7GardenActivity",
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.BP_CommonsGardenActivity_C_0",
+        "asset": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/BP_CommonsGardenActivity.BP_CommonsGardenActivity_C"
+      }
+    ],
+    "continuous_route_m": [
+      14.5,
+      2.4
+    ],
+    "hidden_old_stones": [
+      "CommonsR6EntryStone0L",
+      "CommonsR6EntryStone0R",
+      "CommonsR6EntryStone1L",
+      "CommonsR6EntryStone1R",
+      "CommonsR6EntryStone2L",
+      "CommonsR6EntryStone2R",
+      "CommonsR6EntryStone3L",
+      "CommonsR6EntryStone3R"
+    ],
+    "old_instructions_hidden": {
+      "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.TextRenderActor_0",
+      "text": "LANTERN COMMONS\nFollow the amber stones to the gold arch\nExplore at your own pace - no enemies\nYour Explorer Log will guide you."
+    },
+    "bounds": {
+      "seed": {
+        "path": "/Game/Daedalus/Art/Item/Item_Orr_Seed_Pouch/Item_Orr_Seed_Pouch/StaticMeshes/Item_Orr_Seed_Pouch.Item_Orr_Seed_Pouch",
+        "origin": [
+          0.0,
+          0.0,
+          19.797536849975586
+        ],
+        "extent": [
+          23.516550064086914,
+          16.797536849975586,
+          19.797536849975586
+        ]
+      },
+      "pot": {
+        "path": "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Round/Prop_Orr_Planter_Round/StaticMeshes/Prop_Orr_Planter_Round.Prop_Orr_Planter_Round",
+        "origin": [
+          0.0,
+          0.0,
+          25.86211585998535
+        ],
+        "extent": [
+          32.910953521728516,
+          32.910953521728516,
+          25.86211585998535
+        ]
+      },
+      "flower": {
+        "path": "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy",
+        "origin": [
+          0.0,
+          0.0,
+          19.5
+        ],
+        "extent": [
+          12.5,
+          10.5,
+          19.5
+        ]
+      },
+      "lantern": {
+        "path": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path",
+        "origin": [
+          0.0,
+          0.0,
+          77.48424530029297
+        ],
+        "extent": [
+          16.0,
+          16.0,
+          77.48424530029297
+        ]
+      }
+    },
+    "seed_location": [
+      -1550,
+      -1045,
+      100
+    ],
+    "planter_location": [
+      -850,
+      -800,
+      24
+    ],
+    "dirty_after": {
+      "maps": [],
+      "content": []
+    },
+    "Play_run": false,
+    "runtime_input_and_persistence": "Built and compiled; not exercised in Play under build-only direction.",
+    "inventory_scope": "Owned activity-stage seed, not the shared Orrery Satchel or Hero save."
+  },
+  "current_scene": {
+    "saved": true,
+    "dirty_after": {
+      "maps": [],
+      "content": []
+    },
+    "actors_current": 722,
+    "Play_run": false
+  },
+  "progress_preserved": true,
+  "compute_released": true,
+  "ingestion": {
+    "utc": "2026-10-23T03:15:57.360884+00:00",
+    "prepared": 3,
+    "imported": 0,
+    "admitted": 0,
+    "held": 3,
+    "queue_created": false,
+    "complete_pages": 0,
+    "blocker": "Pinned v2 capture_inventory_page refused Inventory editor/current protected context differs on two known-terminal attempts. Intermediate exact PID/editor/engine/world/camera/actor readback matched baseline; the failing condition at dispatch remains unproven. No policy or baseline was relaxed.",
+    "attempts": [
+      "SourceMetadataPage0000R1",
+      "SourceMetadataPage0000R2"
+    ],
+    "metadata_load_count": "Unknown: capture_inventory_page uses the same admission function before and after loads; the bridge first-line error alone does not identify which guard failed. No completed page or source-hash coverage exists.",
+    "preservation": {
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard",
+      "Play_active": false,
+      "actors": 722,
+      "imports": 0
+    },
+    "protected_files_checked": 310,
+    "release": {
+      "ok": true,
+      "lock": null
+    },
+    "native_pending": false,
+    "correction": "Earlier checkpoint inferred pre-load refusal and metadata_meshes_loaded=0; that detail is not proven and is superseded by unknown here."
+  },
+  "source_commits_accounted": [
+    {
+      "origin": "PR415 7c12bc6f5",
+      "local": "7f651a40d"
+    },
+    {
+      "origin": "PR415 3f821573462bc8f82285ce2b0bb7c2340da69415",
+      "local": "68923e41b"
+    },
+    {
+      "origin": "PR416 7959531c677291ef70707308de0b0a351d20badc",
+      "local": "bf732ec21"
+    },
+    {
+      "origin": "PR415 cb049a109336b77f94d3d0eebc03c491715f7864",
+      "local": "97bd0806c2035f5bded869719384008b5d1a60ec"
+    }
+  ],
+  "pixel_review": "Actual saved garden capture inspected via a reduced JPEG rendering of the unchanged PNG. Continuous amber approach, seed pedestal and pink planter visible. Repetitive tiled floor and broad bare areas remain; benchmark not met.",
+  "limits": [
+    "No Play/input/save/reload proof was run, per build-only direction; runtime persistence is unproven.",
+    "Seed ownership is this isolated activity stage; it does not debit Orrery.Satchel or alter Hero/chart progression.",
+    "One local garden slot/player; no multiplayer/cloud persistence or generic farming system.",
+    "Editor captures do not prove runtime HUD or post-plant completion.",
+    "No fresh source-hash coverage or pond import/admission succeeded; three candidates remain held."
+  ]
+}

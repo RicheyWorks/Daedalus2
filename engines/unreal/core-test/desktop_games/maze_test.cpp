@@ -68,7 +68,7 @@ static void SourceFixture(const std::string& Filename) {
             Good=DungeonGame::IsWall(X/40,Y/40)==(Wall!=0);
         } else if(Kind=="PAC_COLLISION") {
             double X=0,Y=0; int Collision=0; In>>X>>Y>>Collision;
-            Good=PacmanGame::Collides(X,Y,false)==(Collision!=0);
+            Good=PacmanGame::Collides(X,Y,false,false)==(Collision!=0);
         } else if(Kind=="PAC_PLAYER") {
             PacmanGame::Player Hero;
             int Left=0,Right=0,Up=0,Down=0,Steps=0,Ex=0,Ey=0,Enx=0,Eny=0,Emouth=0;
@@ -76,7 +76,7 @@ static void SourceFixture(const std::string& Filename) {
             In>>Name>>Hero.X>>Hero.Y>>Hero.Dir.X>>Hero.Dir.Y>>Hero.Next.X>>Hero.Next.Y>>Hero.Mouth
               >>Left>>Right>>Up>>Down>>I.AxisX>>I.AxisY>>Steps>>ExpectX>>ExpectY>>Ex>>Ey>>Enx>>Eny>>Emouth;
             I.Left=Left!=0;I.Right=Right!=0;I.Up=Up!=0;I.Down=Down!=0;
-            for(int N=0;N<Steps;++N) Hero.Update(I,false);
+            for(int N=0;N<Steps;++N) Hero.Update(I,false,false);
             Good=Near(Hero.X,ExpectX)&&Near(Hero.Y,ExpectY)&&Hero.Dir.X==Ex&&Hero.Dir.Y==Ey&&Hero.Next.X==Enx&&Hero.Next.Y==Eny&&Hero.Mouth==Emouth;
         } else if(Kind=="PAC_GHOST") {
             PacmanGame::Ghost Ghost; PacmanGame::Player Hero;
@@ -84,7 +84,7 @@ static void SourceFixture(const std::string& Filename) {
             In>>Name>>Ghost.X>>Ghost.Y>>Ghost.Dir.X>>Ghost.Dir.Y>>Alive>>Frightened>>Ghost.FrightenedTimer>>Hero.X>>Hero.Y>>Turn>>Chase
               >>ExpectX>>ExpectY>>Ex>>Ey>>EAlive>>EFright>>ETimer;
             Ghost.Alive=Alive!=0;Ghost.Frightened=Frightened!=0;
-            Ghost.UpdateWithChoices(Hero,Turn,Chase,{{{1,0},{-1,0},{0,1},{0,-1}}},false);
+            Ghost.UpdateWithChoices(Hero,Turn,Chase,{{{1,0},{-1,0},{0,1},{0,-1}}},false,false);
             Good=Near(Ghost.X,ExpectX)&&Near(Ghost.Y,ExpectY)&&Ghost.Dir.X==Ex&&Ghost.Dir.Y==Ey&&Ghost.Alive==(EAlive!=0)&&Ghost.Frightened==(EFright!=0)&&Ghost.FrightenedTimer==ETimer;
         } else if(Kind=="ZELDA_PLAYER") {
             ZeldaGame::Player Hero; Input I;
@@ -216,7 +216,7 @@ static void NativeLifecycle() {
     MazeTestAccess::ZeldaTerminal(Zelda);Zelda.Step(Held);Check("Zelda held action does not restart without press",Zelda.GetStatus().Over);
     Zelda.Step(Restart);Check("Zelda gameover restart restores health",!Zelda.GetStatus().Over&&Zelda.GetPlayer().Health==6);
 
-    Frame F;Dungeon.Render(F);Check("Dungeon procedural frame is bounded finite source extent",ValidFrame(F)&&F.Width==800&&F.Height==280);
+    Frame F;Dungeon.Render(F);Check("Dungeon procedural frame is bounded finite source extent",ValidFrame(F)&&F.Width==800&&F.Height==344);
     Pac.Render(F);Check("Pac frame fits whole620-pixel maze and HUD",ValidFrame(F)&&F.Width==800&&F.Height==660);
     Zelda.Render(F);Check("Zelda procedural world and source character frame is bounded finite",ValidFrame(F)&&F.Width==800&&F.Height==600);
     for(int Round=0;Round<16;++Round) {

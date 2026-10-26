@@ -1,0 +1,25 @@
+{
+  "v": 1,
+  "quest": "q_two_bell_commit",
+  "lore": "Saves sail between the islands all season: a save leaves its home island and lands on another, and both ends have to agree. Harbourmaster Ines rings the harbour bells to say when a move is final. If she rings once and a quay is full, a save gets deleted at home and never written abroad, or written abroad and never deleted at home. Two bells (ready? then go) fix most of it, but Ines has been known to faint mid-ring, and if she wakes up without remembering what she decided, the harbour is in trouble. Hence the log book.",
+  "harbour": {"keys_per_island": 200, "moves": 600, "refuse_permille": 40, "crash_permille": 30, "recover_ticks": 12, "protocol": "two_bell_log", "max_blocked": 400, "min_committed": 480},
+  "islands": [
+    {"id": "cache_north"},
+    {"id": "cache_south"},
+    {"id": "vault_east"},
+    {"id": "archive_a"},
+    {"id": "archive_b"},
+    {"id": "archive_c"}
+  ],
+  "seed": 1,
+  "npc": {
+    "name": "Harbourmaster Ines",
+    "lines": {
+      "start": "Six hundred moves this season. Nobody deletes a save until both quays have said yes.",
+      "bell": "First bell: are you ready? Second bell: go.",
+      "crash": "Ugh... what did I decide? Fetch me the log book.",
+      "win": "Every save on exactly one island. Not one lost, not one doubled.",
+      "fail": "Saves deleted at home and never landed, or landed twice. That's a torn move. Ring it again."
+    }
+  }
+}

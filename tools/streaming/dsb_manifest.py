@@ -46,7 +46,18 @@ def load_measured(root):
         return {}
     with open(p, encoding="utf-8") as f:
         isl = json.load(f).get("islands", {})
-    return {k: v for k, v in isl.items() if v.get("files", 0) > 0}
+    out = {k: dict(v) for k, v in isl.items() if v.get("files", 0) > 0}
+    # Owner-consented file-byte pins in data/islands/streaming_sources.json ("pin": {"disk_kib": N, ...}) beat a
+    # measurement; only the cost keys are used, provenance fields are kept in the file for receipts.
+    sp = os.path.join(root, "data", "islands", "streaming_sources.json")
+    if os.path.isfile(sp):
+        with open(sp, encoding="utf-8") as f:
+            for row in json.load(f).get("islands", []):
+                pin = row.get("pin") or {}
+                cost_keys = {k: pin[k] for k in ("ram_kib", "disk_kib") if k in pin}
+                if cost_keys:
+                    out.setdefault(island_id(row["island"]), {}).update(cost_keys)
+    return out
 
 
 def entry(doc, source, measured=None):

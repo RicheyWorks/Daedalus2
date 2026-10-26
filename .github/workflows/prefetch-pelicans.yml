@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Prefetch Pelicans
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/prefetch_pelicans.py'
+      - 'tools/streaming/prefetch_pelicans_test.py'
+      - 'data/islands/disk-saver/prefetch-pelicans-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/prefetch-pelicans.yml'
+permissions:
+  contents: read
+jobs:
+  prefetch-pelicans:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G123 Prefetch Pelicans rules (readahead stalls vs ferry waste, depth traps, G86 tie-in)
+        run: python -m unittest tools/streaming/prefetch_pelicans_test.py -v
+      - name: CLI smoke (latency+1 readahead wins)
+        run: python tools/streaming/prefetch_pelicans.py data/islands/disk-saver/prefetch-pelicans-v1.json

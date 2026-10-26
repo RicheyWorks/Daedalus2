@@ -1,0 +1,20 @@
+{
+ "name": "Prop_Aquatic_Pond_Frogbit_4",
+ "species": "Frogbit",
+ "family": "pond",
+ "stage": "Flowering",
+ "stage_index": 4,
+ "voxel_cm": 5.0,
+ "voxels": 52,
+ "pivot": "waterline",
+ "height_m": 0.15,
+ "depth_below_pivot_m": 0.0,
+ "uses": {
+  "cover": "frogs",
+  "islands": [
+   "meadow",
+   "frost"
+  ]
+ },
+ "source": "tools/blender/voxel_aquatic.py"
+}

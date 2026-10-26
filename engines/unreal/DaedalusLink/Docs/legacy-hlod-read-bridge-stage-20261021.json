@@ -1,0 +1,76 @@
+{
+  "schema": "daedalus.legacy-hlod-read-bridge-stage.v1",
+  "utc": "2026-10-21T23:59:38.948447+00:00",
+  "state": "SOURCE_STAGED_NATIVE_BLOCKED_NORMAL_RAM",
+  "source_only": true,
+  "native_qualified": false,
+  "actual_native_calls": 0,
+  "actual_builds_or_restarts": 0,
+  "actual_HLOD_generation_or_save": 0,
+  "scope": "Stage ONLY exact prepared read-only legacy closure header and supplied additive reflected wrapper. No builder operation, production streaming policy, WorldPartition migration, experimental enable or plugin install. A loaded inventory, empty/no-op success or ordinary streaming state cannot qualify HLOD.",
+  "applicability": {
+    "prior_actual_world_fact": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\IndependentIntegrationPreflight20261021\\world-targets.raw.json",
+      "bytes": 3137,
+      "sha256": "787c4be0eb6aae7e25f11b020013f7b71c2401a3af09594cfe303831c2b90b2a"
+    },
+    "prior_observation": "DaedalusWorld was nonpartitioned/legacy streaming. This is prior evidence, not a new current native observation.",
+    "fresh_applicability": null,
+    "ordinary_streaming": "YTM visibility/loaded evidence from MRQ is distinct from a legacy ALODActor mesh/proxy or WorldPartition HLOD proof.",
+    "legacy_bridge": "ReadLoadedClosureJson uses actual current World + exact loaded actor path; empty string inventories capped loaded ALODActor members only; never auto-select.",
+    "WorldPartition_HLOD": "Separate world-partitioned builder/layer workflow; not proven or enabled here."
+  },
+  "canonical_header": {
+    "sha256": "9f65d67834232e10461ad9606ea1205e14fab86c949d38386054381bb10e83ae",
+    "bytes": 36121,
+    "review": "Existing combined SOURCE/API CLEAR in prepared R4 handoff; source bytes staged exactly, no divergent implementation.",
+    "upstream_pr": "https://github.com/RicheyWorks/Daedalus2/pull/413",
+    "upstream_head": "0eed5b74ca701e3a95f3e6e926f9bbd599a565d7"
+  },
+  "integration": {
+    "wrapper": "UDaedalusEditorAcceptanceLibrary::ReadLegacyHlodClosure(const FString&)",
+    "existing_methods_preserved_byte_for_byte": true,
+    "runtime_refusal_JSON_syntax_checked": true,
+    "runtime_stub": "HELD/read_only true/build_admitted false/serialization_complete false",
+    "source_dependencies": "Uses existing editor UnrealEd/Core/Engine/Json; no Build.cs/project/installed-plugin descriptor change.",
+    "read_result_bound_utf8_bytes": 262144,
+    "limits": "Output/traversal caps are not a native time/heap ceiling. Loaded membership/referencers do not establish unloaded/global closure; hard references may resolve implicitly.",
+    "tests": "No new engine test or compile performed. Supplied low-impact wrapper and exact already-reviewed header staged; no unrelated old tests rerun and no CI counted as native success."
+  },
+  "runtime_status": {
+    "source_staged_in_repo": true,
+    "staged_in_live_plugin": false,
+    "compiled": false,
+    "reflected_or_called": false,
+    "live_wrapper_source_unchanged": true,
+    "fresh_current_editor_native_state_not_read": true,
+    "no_compute_lease_claimed": true
+  },
+  "resource_blocker": {
+    "utc": "2026-10-21T23:54:44.114202+00:00",
+    "available_physical": 1073684480,
+    "available_commit": 26853638144,
+    "normal_physical_floor": 1740800000,
+    "normal_commit_floor": 2252800000,
+    "normal_pass": false,
+    "PCG_oneoff_expired": true
+  },
+  "exception": "Previous PCG one-time exception is expired and not reused. Normal physical/commit minima remain unchanged; no source guard alteration, process/Cursor closure or settings change.",
+  "engine_builder_source": {
+    "path": "C:/Program Files/Epic Games/UE_5.8/Engine/Source/Editor/UnrealEd/Private/HierarchicalLOD.cpp",
+    "observed_function": "FHierarchicalLODBuilder::BuildMeshForLODActor(ALODActor*, uint32)",
+    "finding": "Plain C++; reads the actor level WorldSettings/setup and calls CreateOrRetrieveLevelHLODProxy for that LEVEL+tier. Copying only an actor in the production level does not isolate the shared proxy package. Require source/settings/proxy/package/user closure before any later test build."
+  },
+  "smallest_next_step": [
+    "Fresh normal resources, sole actual editor identity/custody, no pending operation and current clean/preserved work.",
+    "One normal exact-source staged read-bridge build/reopen only when safe; preserve existing methods/source and project profile.",
+    "At most one empty-path loaded candidate read, then one independently useful owned exact target closure; no arbitrary first candidate or guessed actor path.",
+    "Only after real source/settings/shared-proxy/package closure, define a separately bounded copy/test-level cluster/proxy witness. No broad builder, production policy change or no-op acceptance."
+  ],
+  "blockers": [
+    "Fresh normal physical headroom1,073,684,480B below1,740,800,000B; commit passes.",
+    "Read bridge source is staged only: current binary does not gain a callable from source publication.",
+    "No fresh loaded cluster/source/settings/shared-proxy closure bound; an actual build cannot be scoped honestly yet."
+  ],
+  "saved_work": "This task changed only isolated repository source/evidence files. No editor RPC, close/restart, actor/property/asset/world save or app action. Current live source unchanged; previous native PCG preservation receipt remains separately dated evidence, not a fresh HLOD observation."
+}

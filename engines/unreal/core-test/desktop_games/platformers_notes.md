@@ -29,6 +29,11 @@ Call one `Step` per 1/60-second simulation step. The Unreal adapter should cap a
 | Dash / DashPressed | No gameplay action | V or LB; ground spin on edge |
 | Reset | Clear score/lives/transients, reproduce seed | Clear health/score/boss/transients, reproduce seed |
 
+Ironwake Advance's completed/lost run accepts a fresh Enter, controller A/Start
+or R/Restart to replay the stored seed. The result screen and status advertise
+these existing bindings; Space starts from the title but is not a terminal retry
+key. The native adapter forwards ordered fresh events and ignores held repeats.
+
 For Shadow Ninja, keyboard directions, stick axes and D-pad directions remain separate. `ShadowNinjaGame::Step` passes `PadRight-PadLeft` and `PadUp-PadDown` into the player's explicit hat parameters. The source's horizontal hat wins over keyboard and stick input, including opposing directions; both D-pad flags cancel to neutral. Vertical wall-climb conditions preserve the source's independent up/down checks, so opposing keyboard/stick/hat climb requests can cancel. The wrapper should retain these independent fields rather than merging D-pad into keyboard directions or clearing stick axes. Controller connection/hotplug and physical mappings belong to the adapter.
 
 CONTRA `SubmitCheatKey(key, titleScreen=false)` accepts `0=up, 1=down, 2=left, 3=right, 4=B, 5=A`. The source sequence U,U,D,D,L,R,L,R,B,A gives +5 lives, capped at 99, and 600 steps of spread in play; passing `titleScreen=true` gives the source's 30-lives title bonus. Normal gameplay feeds digital direction/action/jump edges automatically. A title-screen-specific binding is optional UI work; native `Reset` starts play directly.
@@ -42,6 +47,153 @@ CONTRA preserves gravity 0.6, jump −13, keyboard movement 5, source crouching 
 Shadow Ninja preserves start at (175,380), feet-based platform collision and its forgiving landing band, gravity 0.6 capped at 12, ground jump −11, double jump −9, wall slide capped at 1, wall climb 3, wall jump −10/7 with a 10-pixel push, edge-triggered jumping, sword cooldown/lifetime 18/12, star cooldown/lifetime/speed 12/50/9, spin duration/cooldown 25/45, source per-frame spin damage, five health, pit death at y >540, gold score 50, sword/star/spin kill scores 150/100/200, boss spawn at score 1200, boss health 25 and victory bonus 800. The `LEVEL: 1` indicator remains unchanged because the source never increments the level. Procedural torches are static visual decoration in the port.
 
 ## Repairs and deliberate adaptations
+
+### Ironwake target range
+
+Optional mode1 / Target range teaches shot heights with three ordered rectangles:
+(340,485,24,20), (620,340,24,40), (970,503,24,15). Source standing-ground shots are
+at496, jump-apex shots at361.6 and settled crouch shots at512. The high panel gives
+15 post-update jump decisions, so the original eight-step held-fire cadence has
+room to connect. Actual truncated PixelContains bullet hits decide success; no
+posture gate rejects valid platform, spread or other source shot alternatives.
+
+Reset keeps the mode and clears targets, entities, weapons, particles and progress;
+range skips the original initial enemies/pickup. The shared input/player/camera/
+bullet prefix remains unchanged. A range branch then consumes one impacting bullet,
+advances at most one target and ticks the same particles, returning before enemy
+fire, random spawns, pickups, damage or source distance victory. It has no timer,
+target score or extra reward. Third hit sets Won/Over and freezes. Position and
+heading carry between goals; existing camera/backtracking and bullet expiry apply.
+Mode0 retains the full original run and RNG/cosmetic order. Title, keyboard bonus,
+selected title lives, controller start and fresh retries retain their existing paths.
+
+Gold/green/muted panels and one offscreen edge arrow identify goals. Existing HUD
+slots show target count/progress and the current shot hint; no tutorial panel/row.
+The native checked mode row uses MakeMode and a game-specific ContraVisibility;
+public actor header is comment-only, with no actor/input API or builder changes.
+Mode changes start over; active native mode is a no-op. Native controls/focus,
+viewport readability and human shot learning remain unverified.
+
+`desktop_contra_target_range` / `contra_target_range_test.cpp` passed 51/51 strict
+single-TU MSVC C++17 checks. A public-input standing/jump/crouch shot route finished
+in198 steps, with no pose/stage assignment. Local fixtures retain real reached
+stage copies and check quantized order, strict edges, expiry and consumed bullets.
+Also covered12 detached player/shoot/bullet/camera parity steps,600-step safe range
+movement past the source finish without spawning/completing, default/mode/RNG,
+title bonus and selected lives, pure reads, terminal retries and Driver cleanup.
+No old ledge/source/platformer/replay bulk or old-header proof was repeated; no
+Unreal compilation, physical input or human play acceptance is implied.
+
+### Ironwake ledge timing
+
+The existing held-jump landing hop remains unchanged. A short ground-grace window
+also accepts a jump during the six decisions after stepping off a platform, using
+the same -13 impulse and subsequent 0.6 gravity. Crouching still prevents jumping.
+Airborne and crouched decisions expire the window; a successful jump consumes it,
+so holding Jump cannot grant another airborne jump. No landing queue or new input
+edge rule is introduced.
+
+The appended counter resets with the player. Accepted damage clears it after the
+existing invincibility/terminal guard; a rejected protected hit does not erase it.
+The existing fallback relocation also clears it independently of that guard.
+Title/start/replay still use the same Reset path and preserve their original lives
+and cheat-prefix behavior. The current readiness line recognizes grace without
+adding labels. This timing allowance is a native extension, not Python parity.
+
+`desktop_contra_ledge` / `contra_ledge_grace_test.cpp` passed 743/743 strict
+single-TU MSVC checks, including only the 51 existing CSTEP cases and their
+original thirteen fields. Focused cases cover actual walkoff/expiry, crouch,
+no second airborne jump, unchanged held landing hops/camera precedence, enemy
+and projectile damage, rejected protected Hurt, readiness, Reset/title/start/
+controller replay and terminal freeze. The dormant fall relocation cleanup was
+source-reviewed; no test-only seam was added to force that path.
+An initial compile stopped on the test fixture's global name shadowing a template
+loop variable; renaming that fixture fixed it without changing warnings or game
+code. No runtime assertions ran before that correction. No full platformer suite,
+fixture regeneration, repeated replay proof, engine build or native playtest.
+
+### Shadow Ninja jump timing
+
+The native cabinet accepts a slightly late ledge press and a slightly early
+landing tap without changing the ground/double/wall impulses or controls. Ground
+grace lasts six decisions after the first unsupported step. A fresh unavailable
+jump remains queued for six fixed steps including its press step. At 60 Hz each
+window is about 100 ms. Ground/grace jumps use -11; an ordinary available double
+jump stays immediate at -9 and the wall jump keeps its source -10/7/push behavior.
+
+The queue is ground-only. If it reaches a normal landing, the source collision
+snaps the feet to the platform, then the usual -11 upward movement begins in that
+same update. The existing landing band is unchanged. A queued press cannot become
+a delayed double or wall jump. Successful jumps and wall attachment clear both
+windows; holding Jump cannot refresh either queue or chain another landing hop.
+Reset clears the appended player counters and terminal simulation remains frozen.
+The existing readiness line recognizes ground grace without adding helper labels.
+These timing windows are a native extension, not Python source parity.
+
+No new action, mode, reflected API, actor/save change, engine framework or asset is
+introduced. Focus/pause and physical button feel remain native acceptance work.
+
+`desktop_ninja_jump` / `ninja_jump_forgiveness_test.cpp` passed 1,360/1,360 strict
+single-TU MSVC C++17 checks. This includes only the 83 existing NSTEP fixtures and
+their original fifteen fields, plus grace/buffer boundaries, an actual spent air
+jump and early landing tap, held expiry, wall cancellation, wall-entry priority,
+Reset and Driver pause/input checks. The six-step window does not pre-empt a
+physical wall arrival. No original fixture regenerated, broad platformer suite,
+repeated replay proof, engine build or native playtest was run for this change.
+
+### Optional Shadow Ninja Terrace climb
+
+The cabinet offers **Adventure / Terrace climb** using the existing checked-mode
+controls. Adventure remains option 0 with its enemies, gold, boss and rules. Option
+1 is an ordered three-light practice route through the same four platforms and
+the same NinjaPlayer movement, jumps and wall climb. Targets are (410,290),
+(640,210), then (765,140): two terrace jumps and a right-wall climb. Only the next
+light is active, with a larger halo; the existing level slot counts lights /3.
+
+Practice has no enemies or boss. Falling below the existing pit boundary restores
+the player to the last supported anchor, preserving collected lights and score.
+Anchors are (175,380), (410,300), then (640,220). Recovery clears transient attacks
+and jump windows and latches held Jump, so it does not create an automatic hop.
+Landing on the lower platform remains ordinary platforming and can be recovered
+with the same controls. Each light earns the existing 50-point gold award; all
+three freeze a course-clear result. No timer, persistent reward or save is added.
+
+Reset/fresh terminal retry retain mode and seed. A mode change starts over while
+selecting the active native mode keeps progress. The practice HUD replaces unused
+combat readiness with one goal row and a short movement/jump/wall footer, rather
+than adding a help modal. Adventure output and random draws retain their rules.
+`desktop_ninja_terrace_course` / `ninja_terrace_course_test.cpp` is the focused
+public-input course, recovery and lifecycle check; prior source/grace/replay bulk
+is separate evidence. Native mode focus, glow/layout and human difficulty/feel are
+unverified.
+
+Strict serial single-TU MSVC C++17 passed 34/34 focused checks. The single public
+movement/jump/wall route completed all three lights in 172 steps, score 150 and
+health five, without setting progress or goals. Retained route states verified all
+three pit anchors, preserved progress, transient/held-jump cleanup and fresh jumps.
+Mode validation/reset, ten-draw Adventure reset and short default companions,
+presentation purity, terminal freeze, two representative retries and Driver input/
+time/pause cleanup passed. No old source, grace, replay or broad platformer suite
+was repeated. Portable scripted completion does not establish native play feel.
+
+### Shadow Ninja enemy health cues
+
+Ordinary enemies now carry compact health pips above their existing silhouette:
+two for walkers and four for jumpers, matching the existing spawn health. Gold
+pips empty after a sword, star or spin hit, making surviving damage visible. The
+cue follows each enemy's current position; defeated enemies and their pips leave
+together. There is no new helper label, hit timer, saved field, RNG draw or combat
+rule. Player readiness, boss health, scoring, movement and replay are retained.
+
+`desktop_ninja_enemy_health` / `ninja_enemy_health_test.cpp` passed 58/58 strict
+serial single-TU MSVC C++17 checks: full/partial health, retained silhouettes,
+moving coordinates, actual sword/star/spin damage, lethal removal and scores,
+presentation purity, 24 paired future steps and Reset cleanup. It uses the existing
+test seam. No broad platformer suite or repeated source/replay proof was run for
+this render-only slice. Native cue size, contrast, overlap and human play
+acceptance remain unverified.
+
+### Other source repairs
 
 - One coherent CONTRA core replaces the concatenated/unreachable script structure. New and restarted sessions share the last revision's two-enemy start and pickup at (620,350), fixing its inconsistent three-enemy restart initializer.
 - A final CONTRA boss spawn has a once-only encounter flag; the original final-spawn block recreated a final boss after every death. Normal stage-driven boss spawning is retained. The source distance victory rule remains intact.

@@ -1,0 +1,2034 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Survey_Calipers",
+   "kind": "Prop",
+   "seed": 9192,
+   "frame_of": [
+    "Prop_Survey_Calipers_Jaw"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Slide",
+     "mover": "Prop_Survey_Calipers_Jaw",
+     "pivot_m": [
+      -0.088,
+      0.0,
+      0.0
+     ],
+     "motion": "slide",
+     "slide_axis_blender": [
+      1,
+      0,
+      0
+     ],
+     "slide_axis_ue": [
+      1,
+      0,
+      0
+     ],
+     "travel_m": [
+      0.0,
+      0.15
+     ],
+     "reading": "jaw gap mm = slide offset (m) x 1000; LichenClock.measure() diameter",
+     "open_blender_euler_deg": null,
+     "open_ue_rotator": null
+    }
+   ],
+   "spec": {
+    "gap": "G91",
+    "ask": "pythagoras 49650",
+    "lod": "LOD0/1",
+    "size_m": "200 mm calipers (scale 0-150 mm)",
+    "tri_cap": 1500,
+    "collision": "UCX beam + jaw",
+    "sockets": [
+     "Grip",
+     "Slide",
+     "JawTip"
+    ],
+    "held": "attach socket +X along the beam, +Z up the scale face",
+    "split": "frame glb (UEB 48812): jaw mover at SOCKET_Slide, slides +X"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Survey_Calipers_M0",
+     "colour": "stainless steel",
+     "hex": "B9BFC6",
+     "roughness": 0.32,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Survey_Calipers_M1",
+     "colour": "engraved marks",
+     "hex": "1E2124",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Survey_Calipers_M2",
+     "colour": "brass wheel / screw",
+     "hex": "B08D57",
+     "roughness": 0.4,
+     "metallic": 0.85,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Survey_Calipers",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Beam",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.016,
+        0.0035
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FixedJaw",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.042,
+        0.0035
+       ],
+       "centre": [
+        -0.094,
+        -0.029,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FixedJawTip",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.012,
+        0.0035
+       ],
+       "centre": [
+        -0.09,
+        -0.056,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FixedInnerJaw",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.016,
+        0.0035
+       ],
+       "centre": [
+        -0.091,
+        0.016,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Tick00",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.088,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick01",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.083,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick02",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.078,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick03",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.073,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick04",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.068,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick05",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.063,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick06",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.058,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick07",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.053,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick08",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.048,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick09",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.043,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick10",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.038,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick11",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.033,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick12",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.028,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick13",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.023,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick14",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.018,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick15",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.013,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick16",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.008,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick17",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.003,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick18",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.002,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick19",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.007,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick20",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.012,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick21",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.017,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick22",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.022,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick23",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.027,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick24",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.032,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick25",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.037,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick26",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.042,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick27",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.047,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick28",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.052,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick29",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.057,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick30",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.062,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0.05,
+      0,
+      0.00175
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.00175,
+      0.0
+     ],
+     "attach": {
+      "barrel": [
+       1,
+       0,
+       0
+      ],
+      "up": [
+       0,
+       0,
+       1
+      ]
+     }
+    },
+    {
+     "name": "SOCKET_Slide",
+     "location": [
+      -0.088,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      -0.088,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_JawTip",
+     "location": [
+      -0.088,
+      -0.056,
+      0.00175
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      -0.088,
+      0.00175,
+      0.056
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Survey_Calipers_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.016,
+      0.0035
+     ],
+     "centre": [
+      0,
+      0,
+      0.00175
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Survey_Calipers_01",
+     "shape": "box",
+     "size": [
+      0.012,
+      0.054,
+      0.0035
+     ],
+     "centre": [
+      -0.094,
+      -0.035,
+      0.00175
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": false,
+   "predicted": {
+    "triangles": 420,
+    "lod1_triangles": 240,
+    "lod1_ratio": 0.571,
+    "objects": {
+     "Prop_Survey_Calipers": 420
+    },
+    "bounds_min": [
+     -0.1,
+     -0.062,
+     0.0
+    ],
+    "bounds_max": [
+     0.1,
+     0.024,
+     0.0038
+    ],
+    "dimensions": [
+     0.2,
+     0.086,
+     0.0038
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "21d1c24d2042c9999028d70a6d2cbe3285a4d925d33a758113ae651fb9b0724d"
+  },
+  {
+   "asset": "Prop_Survey_Calipers_Jaw",
+   "kind": "Prop",
+   "seed": 9192,
+   "mover_of": "Prop_Survey_Calipers",
+   "hinge": {
+    "socket": "SOCKET_Slide",
+    "mover": "Prop_Survey_Calipers_Jaw",
+    "pivot_m": [
+     -0.088,
+     0.0,
+     0.0
+    ],
+    "motion": "slide",
+    "slide_axis_blender": [
+     1,
+     0,
+     0
+    ],
+    "slide_axis_ue": [
+     1,
+     0,
+     0
+    ],
+    "travel_m": [
+     0.0,
+     0.15
+    ],
+    "reading": "jaw gap mm = slide offset (m) x 1000; LichenClock.measure() diameter",
+    "open_blender_euler_deg": null,
+    "open_ue_rotator": null
+   },
+   "spec": {
+    "gap": "G91",
+    "ask": "pythagoras 49650",
+    "lod": "LOD0/1",
+    "split": "mover glb (UEB 48812): origin = SOCKET_Slide (closed); translate +X 0-0.15 m"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Survey_Calipers_Jaw_M0",
+     "colour": "stainless steel",
+     "hex": "B9BFC6",
+     "roughness": 0.32,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Survey_Calipers_Jaw_M1",
+     "colour": "engraved marks",
+     "hex": "1E2124",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Survey_Calipers_Jaw_M2",
+     "colour": "brass wheel / screw",
+     "hex": "B08D57",
+     "roughness": 0.4,
+     "metallic": 0.85,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Survey_Calipers_Jaw",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the slide zero (frame SOCKET_Slide); slides +X",
+     "parts": [
+      {
+       "name": "Slider",
+       "shape": "box",
+       "size": [
+        0.038,
+        0.024,
+        0.007
+       ],
+       "centre": [
+        0.019,
+        0.0,
+        0.0035
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "MovingJaw",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.038,
+        0.0035
+       ],
+       "centre": [
+        0.006,
+        -0.031,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "MovingJawTip",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.012,
+        0.0035
+       ],
+       "centre": [
+        0.002,
+        -0.056,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "MovingInnerJaw",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.012,
+        0.0035
+       ],
+       "centre": [
+        0.003,
+        0.018,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "VernierWindow",
+       "shape": "box",
+       "size": [
+        0.024,
+        0.007,
+        0.0004
+       ],
+       "centre": [
+        0.02,
+        0.0055,
+        0.0072
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ThumbWheel",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0052,
+       "r2": 0.0052,
+       "length": 0.004,
+       "centre": [
+        0.031,
+        -0.0145,
+        0.0052
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "LockScrew",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.004,
+       "centre": [
+        0.019,
+        -0.006,
+        0.009
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Slide",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Survey_Calipers_Jaw_00",
+     "shape": "box",
+     "size": [
+      0.038,
+      0.086,
+      0.007
+     ],
+     "centre": [
+      0.019,
+      -0.019,
+      0.0035
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "off_centre_ok": "origin is the slide zero at the jaw face (attach at Prop_Survey_Calipers SOCKET_Slide)",
+   "nanite": false,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 68,
+    "lod1_ratio": 0.515,
+    "objects": {
+     "Prop_Survey_Calipers_Jaw": 132
+    },
+    "bounds_min": [
+     0.0,
+     -0.062,
+     0.0
+    ],
+    "bounds_max": [
+     0.038,
+     0.024,
+     0.011
+    ],
+    "dimensions": [
+     0.038,
+     0.086,
+     0.011
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b83b1dda8b8113f02716af29e395390f058b33e0aa33f632dc8ccb57609659b5"
+  },
+  {
+   "asset": "Prop_Survey_Calipers_Static",
+   "kind": "Prop",
+   "seed": 9192,
+   "jaw_open_mm": 60,
+   "spec": {
+    "gap": "G91",
+    "ask": "pythagoras 49650",
+    "lod": "LOD0/1",
+    "size_m": "200 mm calipers, jaw open 60 mm",
+    "tri_cap": 2000,
+    "collision": "UCX box",
+    "sockets": [
+     "Grip",
+     "JawTip"
+    ],
+    "state": "assembled single mesh; ship frame + jaw for gameplay"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Survey_Calipers_Static_M0",
+     "colour": "stainless steel",
+     "hex": "B9BFC6",
+     "roughness": 0.32,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Survey_Calipers_Static_M1",
+     "colour": "engraved marks",
+     "hex": "1E2124",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Survey_Calipers_Static_M2",
+     "colour": "brass wheel / screw",
+     "hex": "B08D57",
+     "roughness": 0.4,
+     "metallic": 0.85,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Survey_Calipers_Static",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Beam",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.016,
+        0.0035
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FixedJaw",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.042,
+        0.0035
+       ],
+       "centre": [
+        -0.094,
+        -0.029,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FixedJawTip",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.012,
+        0.0035
+       ],
+       "centre": [
+        -0.09,
+        -0.056,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FixedInnerJaw",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.016,
+        0.0035
+       ],
+       "centre": [
+        -0.091,
+        0.016,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Tick00",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.088,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick01",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.083,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick02",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.078,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick03",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.073,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick04",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.068,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick05",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.063,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick06",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.058,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick07",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.053,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick08",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.048,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick09",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.043,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick10",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.038,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick11",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.033,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick12",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.028,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick13",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.023,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick14",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.018,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick15",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.013,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick16",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        -0.008,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick17",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        -0.003,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick18",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.002,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick19",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.007,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick20",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.012,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick21",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.017,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick22",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.022,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick23",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.027,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick24",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.032,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick25",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.037,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick26",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.042,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick27",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.047,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick28",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.052,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tick29",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.0035,
+        0.0003
+       ],
+       "centre": [
+        0.057,
+        0.00575,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tick30",
+       "shape": "box",
+       "size": [
+        0.0006,
+        0.006,
+        0.0003
+       ],
+       "centre": [
+        0.062,
+        0.0045,
+        0.00365
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Slider",
+       "shape": "box",
+       "size": [
+        0.038,
+        0.024,
+        0.007
+       ],
+       "centre": [
+        -0.009,
+        0.0,
+        0.0035
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "MovingJaw",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.038,
+        0.0035
+       ],
+       "centre": [
+        -0.022,
+        -0.031,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "MovingJawTip",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.012,
+        0.0035
+       ],
+       "centre": [
+        -0.026,
+        -0.056,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "MovingInnerJaw",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.012,
+        0.0035
+       ],
+       "centre": [
+        -0.025,
+        0.018,
+        0.00175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "VernierWindow",
+       "shape": "box",
+       "size": [
+        0.024,
+        0.007,
+        0.0004
+       ],
+       "centre": [
+        -0.008,
+        0.0055,
+        0.0072
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ThumbWheel",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0052,
+       "r2": 0.0052,
+       "length": 0.004,
+       "centre": [
+        0.003,
+        -0.0145,
+        0.0052
+       ],
+       "slot": 2,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "LockScrew",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.004,
+       "centre": [
+        -0.009,
+        -0.006,
+        0.009
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0.05,
+      0,
+      0.00175
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.00175,
+      0.0
+     ],
+     "attach": {
+      "barrel": [
+       1,
+       0,
+       0
+      ],
+      "up": [
+       0,
+       0,
+       1
+      ]
+     }
+    },
+    {
+     "name": "SOCKET_JawTip",
+     "location": [
+      -0.088,
+      -0.056,
+      0.00175
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      -0.088,
+      0.00175,
+      0.056
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Survey_Calipers_Static_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.086,
+      0.007
+     ],
+     "centre": [
+      0,
+      -0.019,
+      0.0035
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": false,
+   "predicted": {
+    "triangles": 552,
+    "lod1_triangles": 308,
+    "lod1_ratio": 0.558,
+    "objects": {
+     "Prop_Survey_Calipers_Static": 552
+    },
+    "bounds_min": [
+     -0.1,
+     -0.062,
+     0.0
+    ],
+    "bounds_max": [
+     0.1,
+     0.024,
+     0.011
+    ],
+    "dimensions": [
+     0.2,
+     0.086,
+     0.011
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1cbce0de0777858bbeb76465e92f42f044518d38d4f7aa05eb5eae7a9b0949cc"
+  }
+ ]
+}
