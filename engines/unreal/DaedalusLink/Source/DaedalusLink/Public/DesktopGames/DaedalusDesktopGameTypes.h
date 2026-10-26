@@ -99,9 +99,10 @@ public:
 inline void DrawAccess(Frame& F, double X, double Y, const std::string& Keys, const std::string& Mark) {
     F.AddRect(X,Y,220,34,{16,18,32,255});
     F.AddText(X+6,Y+2,Keys,{255,236,180,255},12);
-    const bool Act=Mark=="MARK ACT";
-    if(Act) F.AddTriangle({X+8,Y+20},{X+16,Y+28},{X+24,Y+20},{255,236,180,255});
-    else F.AddLine(X+6,Y+24,X+24,Y+24,{120,225,255,255},3);
+    if(Mark=="MARK ACT") {
+        F.AddRect(X+8,Y+20,16,4,{255,236,180,255});
+        F.AddRect(X+14,Y+16,4,12,{255,236,180,255});
+    } else F.AddRect(X+8,Y+22,16,4,{120,225,255,255});
     F.AddText(X+30,Y+16,Mark,{120,225,255,255},12);
 }
 // Portable random stream is deliberately different from Python random. Parity

@@ -10,7 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
-- **Controller and accessibility marks.** Every desktop cabinet draws a key hint and a contrast mark on a dark plate. The mark is the word ACT with a triangle, or WAIT with a bar, so colour is not the only signal. The Twinwake match opening stays six draw commands.
+- **Controller and accessibility marks.** Every desktop cabinet draws a key hint and a contrast mark on a dark plate. ACT is a cream plus and WAIT is a cyan bar, so colour is not the only signal. The plate is drawn after Beacon Sweep cells, and the mark uses rectangles so Glowtrail passage order stays intact. The Twinwake match opening stays six draw commands.
 - **How to play.** Every desktop cabinet has one original how-to line in the catalog and on the frame. The Twinwake match opening stays six draw commands; practice shows that line.
 - **Scoreboard hook.** Every desktop cabinet reports `Status.Score` through the catalog `scoreboard` capability. The number stays inside the range the arcade host already shows. Save files are unchanged.
 - **Reedbeat.** A rhythm round. Option 0 is eight short glows and option 1 is a four-note practice with a wider glow. Strike on the glow; early taps count as misses. A cream hint and a cyan cue sit on the bottom edge.

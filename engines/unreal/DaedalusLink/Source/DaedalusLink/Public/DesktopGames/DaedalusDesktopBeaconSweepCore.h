@@ -213,7 +213,6 @@ public:
         F.AddText(520,16,ActionCue(),{120,225,255,255},16);
         F.AddText(25,48,ProgressNote(),White,18);
         F.AddText(24,72,HowToLine(),{255,236,180,255},13);
-        DrawAccess(F,240,64,KeyHint(),ContrastMark());
         F.AddText(520,48,HintLine(),{255,236,180,255},13);
         const auto L=GetBoardLayout();const double Size=L.Size,Left=L.Left,Top=L.Top;
         if(static_cast<int>(Cells.size())!=Width*Height) return;
@@ -230,6 +229,7 @@ public:
         F.AddText(25,541,CellNote(),White,14);
         F.AddText(25,561,ActionNote(),White,13);
         F.AddText(25,582,"Move: arrows/stick | J/Space/pad A/X: reveal | K/pad B: flag | Shift/pad Y/LB: chord",White,12);
+        DrawAccess(F,430,536,KeyHint(),ContrastMark());
     }
 };
 }}

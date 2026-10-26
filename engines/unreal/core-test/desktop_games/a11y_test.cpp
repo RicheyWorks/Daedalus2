@@ -17,8 +17,9 @@ bool HasText(const Frame& F,const std::string& Part) {
     return false;
 }
 bool HasShape(const Frame& F,const std::string& Mark) {
-    const Shape Want=Mark=="MARK ACT"?Shape::Triangle:Shape::Line;
-    for(const auto& C:F.Commands) if(C.Kind==Want) return true;
+    const bool Act=Mark=="MARK ACT";
+    for(const auto& C:F.Commands) if(C.Kind==Shape::Rectangle && C.B.X==16 && C.B.Y==4
+        && C.Tint.R==(Act?255:120) && C.Tint.G==(Act?236:225)) return true;
     return false;
 }
 }
