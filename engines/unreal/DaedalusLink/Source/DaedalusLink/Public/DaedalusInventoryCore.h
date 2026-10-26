@@ -88,6 +88,7 @@ struct Catalog
             const std::string& L = Lines[I];
             if (L.empty() || L[0] == '#') continue;
             std::vector<std::string> F = Split(L, ' ');
+            if (F.empty()) continue;
             auto Rest = [&](size_t From) {
                 std::string R;
                 for (size_t k = From; k < F.size(); ++k) { if (!R.empty()) R += ' '; R += F[k]; }
@@ -221,12 +222,20 @@ public:
     void Close() { IsOpen = false; ActionsOpen = false; }
     bool Opened() const { return IsOpen; }
 
-    /** The host's bag changed (an Intent ran): keep the tab and cursor, refresh the rows. */
+    /** Refresh the host's bag, keeping tab/cursor; dismiss actions if their selected item changes. */
     void Refresh(const std::map<std::string, int>& Bag, const std::map<std::string, std::string>& Equipped)
     {
+        const Entry* Before = Selected();
+        const ItemDef* ActionItem = Before ? Before->Def : nullptr;
         Counts = Bag;
         Worn = Equipped;
         Rebuild();
+        const Entry* After = Selected();
+        if (ActionsOpen && (!After || After->Def != ActionItem))
+        {
+            ActionsOpen = false;
+            ActionCursor = 0;
+        }
     }
 
     // ---- navigation

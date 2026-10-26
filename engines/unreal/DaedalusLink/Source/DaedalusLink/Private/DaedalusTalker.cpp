@@ -124,12 +124,22 @@ TArray<FString> ADaedalusTalker::ArtIds() const
 		if (Realm.Len()) Realm = Realm.Left(1).ToUpper() + Realm.Mid(1).ToLower();
 		Spellings.Add(Realm);
 	}
-	FString Pascal, Word;
-	auto Flush = [&]() { if (Word.Len()) { Pascal += Word.Left(1).ToUpper() + Word.Mid(1); Word.Empty(); } };
-	for (const TCHAR C : Who) { if (FChar::IsAlnum(C)) Word.AppendChar(C); else Flush(); }
-	Flush();
+	// "The Architect's Apprentice" -> ArchitectApprentice as well as TheArchitectSApprentice: Sol's exports drop
+	// articles and possessives.
+	FString Clean = Who.Replace(TEXT("'s "), TEXT(" ")).Replace(TEXT("'"), TEXT(""));
+	TArray<FString> Forms = {Who};
+	if (Clean != Who) Forms.Add(Clean);
+	if (Clean.StartsWith(TEXT("The "))) Forms.Add(Clean.Mid(4));
 	TArray<FString> Out;
-	for (const FString& Realm : Spellings) Out.Add(FString::Printf(TEXT("Mob_%s_%s"), *Realm, *Pascal));
+	for (const FString& Realm : Spellings)
+		for (const FString& Form : Forms)
+		{
+			FString Pascal, Word;
+			auto Flush = [&]() { if (Word.Len()) { Pascal += Word.Left(1).ToUpper() + Word.Mid(1); Word.Empty(); } };
+			for (const TCHAR C : Form) { if (FChar::IsAlnum(C)) Word.AppendChar(C); else Flush(); }
+			Flush();
+			Out.AddUnique(FString::Printf(TEXT("Mob_%s_%s"), *Realm, *Pascal));
+		}
 	return Out;
 }
 

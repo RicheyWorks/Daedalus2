@@ -80,8 +80,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 Routes = 0;
 	/** ADR-055: parts of the Blender team's Mob_ art worn by this foe (0: the art isn't shipped, the crystal shows). */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") int32 ArtParts = 0;
+	/** A realm's bestiary creature (DaedalusBestiaryCore): the skeletal art id worn instead of the static Mob_ parts. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus") FString SkeletalArt;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus") TObjectPtr<class USkeletalMeshComponent> SkinMesh;
 	/** The Mob_ asset each kind wears. */
 	static FString ArtFor(const FString& Kind);
+	int32 DressSkeletal();
 
 protected:
 	virtual void BeginPlay() override;

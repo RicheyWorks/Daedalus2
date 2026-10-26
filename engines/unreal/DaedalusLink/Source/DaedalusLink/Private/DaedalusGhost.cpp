@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: MIT
 
 #include "DaedalusGhost.h"
+#include "DaedalusMountCore.h"
+#include "DaedalusLinkModule.h"
+#include "AssetRegistry/AssetRegistryModule.h"
+#include "Animation/AnimSequence.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMesh.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
@@ -358,6 +364,64 @@ void ADaedalusGhost::Shot(const FVector& Muzzle)
 	}
 }
 
+FString ADaedalusGhost::Wear(const FString& Realm)
+{
+	const daedalus::mount::Profile& P = daedalus::mount::For(TCHAR_TO_UTF8(*Realm.ToUpper()));
+	MountRealm = UTF8_TO_TCHAR(P.Realm.c_str());
+	MountName = UTF8_TO_TCHAR(P.Name.c_str());
+	MountArt = UTF8_TO_TCHAR(P.ArtId.c_str());
+	HoverHeight = static_cast<float>(P.HoverCm);
+	TopSpeed = static_cast<float>(P.TopCmS);
+	BoostSpeed = static_cast<float>(P.BoostCmS);
+	CeilingCm = static_cast<float>(P.CeilingM * 100.0);
+	WantedHeight = HoverHeight;
+	bMountArt = false;
+	if (Skin) { Skin->DestroyComponent(); Skin = nullptr; }
+	if (!MountArt.IsEmpty())
+	{
+		FAssetRegistryModule& Reg = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+		TArray<FAssetData> Found;
+		Reg.Get().GetAssetsByPath(FName(*(TEXT("/Game/Daedalus/Art/Creatures/") + MountArt)), Found, true);
+		USkeletalMesh* Mesh = nullptr;
+		UAnimSequence* Idle = nullptr;
+		for (const FAssetData& D : Found)
+		{
+			if (D.AssetClassPath.GetAssetName() == USkeletalMesh::StaticClass()->GetFName() && !Mesh) Mesh = Cast<USkeletalMesh>(D.GetAsset());
+			if (D.AssetClassPath.GetAssetName() == UAnimSequence::StaticClass()->GetFName() && (!Idle || D.AssetName.ToString().Contains(TEXT("Idle")))) Idle = Cast<UAnimSequence>(D.GetAsset());
+		}
+		if (Mesh)
+		{
+			Skin = NewObject<USkeletalMeshComponent>(this, TEXT("MountSkin"));
+			Skin->SetupAttachment(Frame);
+			Skin->RegisterComponent();
+			Skin->SetSkeletalMesh(Mesh);
+			Skin->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			Skin->SetRelativeScale3D(FVector(static_cast<float>(P.ScaleArt)));
+			Skin->SetRelativeLocation(FVector(0.f, 0.f, -HoverHeight * 0.5f));
+			if (Idle) { Skin->SetAnimationMode(EAnimationMode::AnimationSingleNode); Skin->PlayAnimation(Idle, true); }
+			bMountArt = true;
+		}
+	}
+	// The cube bike shows only when no art wears the frame.
+	TArray<USceneComponent*> Kids;
+	Frame->GetChildrenComponents(false, Kids);
+	for (USceneComponent* K : Kids)
+		if (UStaticMeshComponent* M = Cast<UStaticMeshComponent>(K)) M->SetVisibility(!bMountArt, true);
+	UE_LOG(LogDaedalus, Log, TEXT("Ghost wears %s"), *MountState());
+	return MountState();
+}
+
+void ADaedalusGhost::Lift(float OverGroundCm)
+{
+	WantedHeight = CeilingCm > 0.f ? static_cast<float>(daedalus::mount::Altitude(daedalus::mount::For(TCHAR_TO_UTF8(*MountRealm)), OverGroundCm)) : HoverHeight;
+}
+
+FString ADaedalusGhost::MountState() const
+{
+	return FString::Printf(TEXT("mount=%s realm=%s art=%s:%d hover=%d top=%d ceiling=%d wanted=%d grounded=%d"), *MountName, *MountRealm,
+		MountArt.IsEmpty() ? TEXT("-") : *MountArt, bMountArt ? 1 : 0, static_cast<int32>(HoverHeight), static_cast<int32>(TopSpeed), static_cast<int32>(CeilingCm), static_cast<int32>(WantedHeight), bGrounded ? 1 : 0);
+}
+
 void ADaedalusGhost::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -377,16 +441,18 @@ void ADaedalusGhost::Tick(float DeltaSeconds)
 	const FVector Flat(Velocity.X, Velocity.Y, 0.f);
 	const FVector NewFlat = FMath::VInterpTo(Flat, Want, Dt, Controller ? 2.4f : 1.2f);
 
-	// Hover: trace down; spring to HoverHeight over ground, fall where there is none.
+	// Hover: trace down; spring to the wanted height over ground (HoverHeight, or Lift() for a flyer), fall where
+	// there is none.
 	FHitResult Ground;
 	FCollisionQueryParams Q(TEXT("GhostHover"), false, this);
 	if (Rider) Q.AddIgnoredActor(Rider);
 	const FVector Here = GetActorLocation();
-	bGrounded = GetWorld()->LineTraceSingleByChannel(Ground, Here, Here - FVector(0.f, 0.f, HoverHeight * 2.5f), ECC_Visibility, Q);
+	const float Target = CeilingCm > 0.f ? FMath::Clamp(WantedHeight, HoverHeight, CeilingCm) : HoverHeight;
+	bGrounded = GetWorld()->LineTraceSingleByChannel(Ground, Here, Here - FVector(0.f, 0.f, Target + HoverHeight * 2.5f), ECC_Visibility, Q);
 	float Vz = Velocity.Z;
 	if (bGrounded)
 	{
-		const float Gap = (Here.Z - Ground.ImpactPoint.Z) - HoverHeight;
+		const float Gap = (Here.Z - Ground.ImpactPoint.Z) - Target;
 		Vz = FMath::FInterpTo(Vz, -Gap * 6.f, Dt, 8.f);
 		LastGround = Here;
 	}

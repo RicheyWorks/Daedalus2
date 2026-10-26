@@ -1,0 +1,133 @@
+{
+  "schema": "daedalus.lantern-exploration-native-proof.v1",
+  "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+  "engine": "Unreal Engine5.8.4",
+  "scope": "One saved/reloaded owned scene, three actual movement legs, E pickup and normal-stop preservation.",
+  "native_route": [
+    {
+      "index": 0,
+      "from": [
+        -600.0,
+        0.0,
+        114.1500015258789
+      ],
+      "target": [
+        400,
+        400
+      ],
+      "seconds": 1.7119737868106166,
+      "speed": 650.0,
+      "game_start": 137.63813291490078,
+      "to": [
+        367.7380126577179,
+        387.09518767395707,
+        116.93541479110718
+      ],
+      "distance_cm": 1042.2857311999649,
+      "target_error_cm": 34.74723022693983,
+      "mode": "<MovementMode.MOVE_WALKING: 1>",
+      "control_state": "pos=368,387,117 yaw=22 pitch=-5 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+    },
+    {
+      "index": 1,
+      "from": [
+        367.7380126577179,
+        387.09518767395707,
+        116.93541479110718
+      ],
+      "target": [
+        1500,
+        -400
+      ],
+      "seconds": 2.176479913533509,
+      "speed": 650.0,
+      "game_start": 145.32999611645937,
+      "to": [
+        1471.7991155927575,
+        -380.3960538811789,
+        117.00116062164307
+      ],
+      "distance_cm": 1344.616571695433,
+      "target_error_cm": 34.345372101351494,
+      "mode": "<MovementMode.MOVE_WALKING: 1>",
+      "control_state": "pos=1472,-380,117 yaw=-35 pitch=-5 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+    },
+    {
+      "index": 2,
+      "from": [
+        1471.7991155927575,
+        -380.3960538811789,
+        117.00116062164307
+      ],
+      "target": [
+        2650,
+        400
+      ],
+      "seconds": 2.2291762093231005,
+      "speed": 650.0,
+      "game_start": 153.9436227157712,
+      "to": [
+        2621.8560606492165,
+        381.35851456941475,
+        115.25471782684326
+      ],
+      "distance_cm": 1379.4567769335672,
+      "target_error_cm": 33.757759126448285,
+      "mode": "<MovementMode.MOVE_WALKING: 1>",
+      "control_state": "pos=2622,381,115 yaw=34 pitch=-5 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+    }
+  ],
+  "pickup": {
+    "observed": true,
+    "remaining_charts": 0,
+    "foes": 0,
+    "control_state": "pos=2622,381,115 yaw=34 pitch=-15 speed=0 health=100 shield=100/100 weapon=SWORD armor=RECRUIT realm=WORLD-ZERO open=none injected=0"
+  },
+  "post_recovery": {
+    "PIE": false,
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard",
+    "encounters_before": 1,
+    "encounters_after": 1,
+    "dirty_preserved": {
+      "maps": [],
+      "content": [
+        "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/Materials/Prop_Realm_Cave_Floor_M1",
+        "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/Materials/Prop_Realm_Cave_Floor_M0"
+      ]
+    },
+    "ground_metres": [
+      104,
+      105
+    ],
+    "floor_instances": 273,
+    "physical_proxy_visible": false,
+    "collision": "<CollisionEnabled.QUERY_AND_PHYSICS: 3>",
+    "owned_materials": {
+      "GroundShade": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade",
+      "GroundSage": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage",
+      "TrailAmber": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_TrailAmber",
+      "BoundaryTeal": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal",
+      "LanternGold": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_LanternGold"
+    },
+    "originals_saved_discarded_or_reverted": false,
+    "editor_restarted": false,
+    "old_progress_backup_restored": false,
+    "route_and_pickup_repeated": false,
+    "native_queue_checked_by_wrapper": true
+  },
+  "original_saved_material_hashes_unchanged": true,
+  "compute_released": true,
+  "encounters_restored": 1,
+  "movement_or_pickup_replayed_during_recovery": false,
+  "source_tool_notes": [
+    "MaterialInstanceTools setters return null/void; actual values were verified with getters.",
+    "Ground-only traces ignore the exact chart actor; an initial downward ray correctly hit that pickup, not absent ground.",
+    "Each Python callback uses an isolated namespace; imports and syntax compilation belong in each dispatched cut.",
+    "Game-viewport UI captures use source-supported Shot SHOWUI through SystemLibrary.execute_console_command. PlayerController.console_command is not exposed in this build."
+  ],
+  "image_inspection": "Pending parent inspection of final gameplay PNG pixels; composition checkpoint images were actually inspected.",
+  "visual_bar_met": false,
+  "production_ready": false,
+  "new_Cpp_or_build": false,
+  "transport_recovery": "Same editor PID/generation was reconciled after exec-server loss; existing Play stopped normally. Transport failure alone was not an Unreal-crash diagnosis."
+}

@@ -1,0 +1,104 @@
+# SPDX-License-Identifier: MIT
+name: RPG remaining source checks
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/rpg_demo/**'
+      - 'data/rpg/**'
+      - '.github/workflows/rpg-source-remaining.yml'
+permissions:
+  contents: read
+jobs:
+  remaining-source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      # Explicitly admitted source/VM suites run serially with bounded heaps; no future-file glob.
+      # The generated diagnostic smoke follows these standalone suites, without a browser or native runtime.
+      - name: Ally spells
+        run: node --max-old-space-size=128 tools/rpg_demo/ally_spell_test.js
+      - name: Angler guide
+        run: node --max-old-space-size=128 tools/rpg_demo/angler_guide_test.js
+      - name: Battle charge cues
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_charge_cue_test.js
+      - name: Battle choice information
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_choice_info_test.js
+      - name: Battle items
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_items_test.js
+      - name: Battle readability
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_readability_test.js
+      - name: Battle stolen gold cues
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_stolen_gold_cue_test.js
+      - name: Battle target cards
+        run: node --max-old-space-size=128 tools/rpg_demo/battle_target_card_test.js
+      - name: Callsign input
+        run: node --max-old-space-size=128 tools/rpg_demo/callsign_test.js
+      - name: Character status
+        run: node --max-old-space-size=128 tools/rpg_demo/character_status_test.js
+      - name: Condition guide
+        run: node --max-old-space-size=128 tools/rpg_demo/condition_guide_test.js
+      - name: Defeat recovery
+        run: node --max-old-space-size=128 tools/rpg_demo/defeat_recovery_test.js
+      - name: Field actions
+        run: node --max-old-space-size=128 tools/rpg_demo/field_action_test.js
+      - name: Field interaction cues
+        run: node --max-old-space-size=128 tools/rpg_demo/field_interaction_cue_test.js
+      - name: Field menu
+        run: node --max-old-space-size=128 tools/rpg_demo/field_menu_test.js
+      - name: Field pack
+        run: node --max-old-space-size=128 tools/rpg_demo/field_pack_test.js
+      - name: Fishing transitions
+        run: node --max-old-space-size=128 tools/rpg_demo/fishing_transition_test.js
+      - name: Floor sketches
+        run: node --max-old-space-size=128 tools/rpg_demo/floor_sketch_test.js
+      - name: Folly progress
+        run: node --max-old-space-size=128 tools/rpg_demo/folly_progress_test.js
+      - name: Folly workshop
+        run: node --max-old-space-size=128 tools/rpg_demo/folly_workshop_test.js
+      - name: Formation view
+        run: node --max-old-space-size=128 tools/rpg_demo/formation_view_test.js
+      - name: Intro controls
+        run: node --max-old-space-size=128 tools/rpg_demo/intro_controls_test.js
+      - name: Journey map
+        run: node --max-old-space-size=128 tools/rpg_demo/journey_map_test.js
+      - name: Journey notebook
+        run: node --max-old-space-size=128 tools/rpg_demo/journey_notebook_test.js
+      - name: Journey pin
+        run: node --max-old-space-size=128 tools/rpg_demo/journey_pin_test.js
+      - name: Journey save
+        run: node --max-old-space-size=128 tools/rpg_demo/journey_save_test.js
+      - name: Level growth
+        run: node --max-old-space-size=128 tools/rpg_demo/level_growth_test.js
+      - name: Settings pause
+        run: node --max-old-space-size=128 tools/rpg_demo/settings_pause_test.js
+      - name: Shard hints
+        run: node --max-old-space-size=128 tools/rpg_demo/shard_hint_test.js
+      - name: Skiff reboarding
+        run: node --max-old-space-size=128 tools/rpg_demo/skiff_reboard_test.js
+      - name: Spell effects
+        run: node --max-old-space-size=128 tools/rpg_demo/spell_fx_test.js
+      - name: Stolen gold recovery
+        run: node --max-old-space-size=128 tools/rpg_demo/stolen_gold_recovery_test.js
+      - name: Storage failures
+        run: node --max-old-space-size=128 tools/rpg_demo/storage_failure_test.js
+      - name: Summon audition
+        run: node --max-old-space-size=128 tools/rpg_demo/summon_audition_test.js
+      - name: Summon book
+        run: node --max-old-space-size=128 tools/rpg_demo/summon_book_test.js
+      - name: Victory feedback
+        run: node --max-old-space-size=128 tools/rpg_demo/victory_feedback_test.js
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: Generate and check journey diagnostic
+        run: |
+          set -euo pipefail
+          preview_dir="$(mktemp -d "${RUNNER_TEMP}/journey-preview.XXXXXX")"
+          python -B tools/rpg_demo/journey_preview.py "$preview_dir"
+          node --max-old-space-size=128 tools/rpg_demo/journey_preview_smoke_test.js "$preview_dir/index.html"

@@ -19,7 +19,7 @@ import os
 
 import unreal
 
-_run = {"name": None, "gen": None, "handle": None, "frames": 0, "result": None, "error": None}
+_run = {"name": None, "gen": None, "handle": None, "frames": 0, "result": None, "error": None, "human": 0}
 
 
 # ---------------------------------------------------------------------------------------------------- the world
@@ -151,6 +151,25 @@ def _check(name, ok, detail=""):
     return {"check": name, "pass": bool(ok), "detail": detail}
 
 
+HUMAN_KEYS = ("LeftMouseButton", "RightMouseButton", "W", "A", "S", "D", "SpaceBar", "E", "Escape", "Tab", "I", "LeftShift",
+              "Gamepad_LeftX", "Gamepad_LeftY", "Gamepad_FaceButton_Bottom")
+
+
+def _human_input():
+    """True when a person is driving the Play window right now (23:37: Richey's mouse locked into the viewport
+    mid-run and the hero walked off the script). Checked every frame while a scenario runs."""
+    try:
+        pc = unreal.GameplayStatics.get_player_controller(world(), 0)
+        if not pc:
+            return False
+        for k in HUMAN_KEYS:
+            if pc.is_input_key_down(unreal.Key(k)):
+                return True
+    except Exception:
+        return False
+    return False
+
+
 def _tick(_dt):
     if _run["gen"] is None:
         return
@@ -158,6 +177,8 @@ def _tick(_dt):
         _finish(error="Play stopped")
         return
     _run["frames"] += 1
+    if _run["frames"] % 5 == 0 and _human_input():
+        _run["human"] += 1
     try:
         next(_run["gen"])
     except StopIteration as done:
@@ -174,6 +195,14 @@ def _finish(result=None, error=None):
         checks = result.get("checks", [])
         result["passed"] = sum(1 for c in checks if c["pass"])
         result["total"] = len(checks)
+        result["human_input_frames"] = _run["human"]
+        import time as _t
+        secs = max(_t.time() - _run.get("t0", _t.time()), 1e-3)
+        result["frames"] = _run["frames"]
+        result["seconds"] = round(secs, 1)
+        result["fps"] = round(_run["frames"] / secs, 1)   # 02:42: a slow run explains itself (3 fps = the editor throttle)
+        if _run["human"]:   # a person touched the controls: the numbers are not the scenario's
+            result["interrupted"] = "human input on %d sampled frames; rerun with the Play window unfocused" % _run["human"]
     _run["result"] = result
 
 
@@ -187,7 +216,8 @@ def play_scenario(p):
     if _run["handle"] is not None:
         unreal.unregister_slate_post_tick_callback(_run["handle"])
     full_speed()
-    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None)
+    import time as _t
+    _run.update(name=name, gen=fn(p or {}), frames=0, result=None, error=None, human=0, t0=_t.time())
     _run["handle"] = unreal.register_slate_post_tick_callback(_tick)
     return {"started": name}
 
@@ -760,7 +790,7 @@ def scenario_realm(p):
     walked = 0
     for way in ("right", "left", "down", "up"):   # the first way that isn't water or a wall
         h.realm_input("hold:" + way)
-        yield from _frames(30)
+        yield from _seconds(1.0)
         h.realm_input("release:" + way)
         yield from _frames(5)
         walked = int(_kv(h.realm_state()).get("steps", 0)) - steps0
@@ -1160,6 +1190,13 @@ def scenario_realm_switch(p):
     h = hero()
     start = h.realm_session_state()
     before = int(_kv(start).get("switches", "0")) if "switches=" in start else 0   # the session persists across runs
+    if "switches=" not in start:   # not started yet this Play: the count lives in the saved progress file
+        try:
+            import os, json
+            with open(os.path.join(unreal.Paths.project_saved_dir(), "Config", "DaedalusHero.json"), encoding="utf-8") as f:
+                before = int((json.load(f).get("realm_session", "") + " 0 0 0 0").split()[3])
+        except Exception:
+            before = 0
     g = h.switch_realm("gallery-city", "gate", "")
     cat_after_gate = h.inventory_catalog_name()
     landed = str(h.get_editor_property("landed_at"))
@@ -1276,7 +1313,294 @@ def scenario_stage(p):
     ]}
 
 
+def scenario_realm_ground(p):
+    """Every 3D realm is laid down (BASE-LAYER.md, Richey 2026-10-13): a gate lands the hero at the realm's gate
+    marker on its hub, the realm's cast stands there bound to its art, its creatures idle in the outer ring, the
+    kit is on the ground and the first rings of lands are down; home by gate at the end."""
+    h = hero()
+    w = world()
+    checks = []
+    for realm in ("GALLERY-CITY", "PARCELS", "BRICKS", "LABYRINTH"):
+        if h.realm_now() != "WORLD-ZERO":
+            h.switch_realm("world-zero", "gate", "")
+            yield from _frames(2)
+        r = h.switch_realm(realm.lower(), "gate", "")
+        yield from _frames(3)
+        tag = "Realm:" + realm
+        mine = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.Actor) if any(str(t) == tag for t in a.tags)]
+        kinds = {}
+        for a in mine:
+            k = "Talker" if a.get_class().get_name().startswith("DaedalusTalker") else next((str(t) for t in a.tags if str(t) in ("Hub", "Gate", "Spawn", "Dock", "SubDock", "Mount", "Kit", "Land", "Creature")), "other")
+            kinds[k] = kinds.get(k, 0) + 1
+        talkers = [a for a in mine if a.get_class().get_name().startswith("DaedalusTalker")]
+        with_art = sum(1 for t in talkers if t.state().endswith(":1"))
+        gate = next((a for a in mine if a.get_actor_label() == "Gate_" + realm), None)
+        dist = (h.get_actor_location() - gate.get_actor_location()).length() if gate else -1
+        landed = str(h.get_editor_property("landed_at"))
+        checks.append(_check("%s: the gate lands the hero at Gate_%s" % (realm, realm), r.startswith("ok") and landed == "Gate_" + realm and 0 <= dist < 600, "%s landed=%s dist=%.0f" % (r, landed, dist)))
+        checks.append(_check("%s: hub, 5 markers, 24 kit props, 160 lands are down" % realm, kinds.get("Hub", 0) == 1 and sum(kinds.get(k, 0) for k in ("Gate", "Spawn", "Dock", "SubDock", "Mount")) == 5 and kinds.get("Kit", 0) >= 24 and kinds.get("Land", 0) >= 160, str(kinds)))
+        checks.append(_check("%s: 12 talkers stand at the hub, every one wearing its art" % realm, len(talkers) == 12 and with_art == 12, "talkers=%d art=%d" % (len(talkers), with_art)))
+        checks.append(_check("%s: the bestiary idles in the outer ring" % realm, kinds.get("Creature", 0) >= 12, "creatures=%d" % kinds.get("Creature", 0)))
+    home = h.switch_realm("world-zero", "gate", "")
+    checks.append(_check("home by gate", home.startswith("ok"), home))
+    return {"checks": checks}
+
+
+def scenario_realm_host(p):
+    """The world actor follows the hero through the server's realm directory (DaedalusRealmDirectoryCore): after a
+    gate to Gallery City, the actor hosts the world the directory names for GALLERY-CITY. When the server has no
+    directory yet (old build), the checks say so instead of failing on a missing host."""
+    h = hero()
+    w = world()
+    wa = next(iter(unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusWorldActor)), None)
+    if not wa:
+        return {"checks": [_check("a DaedalusWorldActor is in the world", False, "none")]}
+    wa.load_directory()
+    for _ in range(90):
+        yield
+        if not wa.directory_state().startswith("directory=none why=not loaded"):
+            break
+    state = wa.directory_state()
+    served = state.startswith("directory=ok")
+    hosted = "GALLERY-CITY=" in state
+    if h.realm_now() != "WORLD-ZERO":
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    before = str(wa.get_editor_property("world_id"))
+    r = h.switch_realm("gallery-city", "gate", "")
+    yield from _frames(5)
+    after = str(wa.get_editor_property("world_id"))
+    h.switch_realm("world-zero", "gate", "")
+    yield from _frames(5)
+    home = str(wa.get_editor_property("world_id"))
+    return {"checks": [
+        _check("the directory was fetched (or the server said why not)", served or state.startswith("directory=none why=http"), state),
+        _check("the directory binds the five realms and the Ocean" if served else "no directory on this server build (skip)", (not served) or "unhosted=-" in state, state),
+        _check("the gate made the world actor host Gallery City's world" if hosted else "no Gallery host listed (skip)", (not hosted) or (r.startswith("ok") and after != before and after == wa.world_id_for_realm("GALLERY-CITY")), "%s -> %s (%s)" % (before, after, r)),
+        _check("home by gate returns the actor to World Zero's world" if hosted else "home by gate (skip host check)", (not hosted) or home == before, home),
+    ]}
+
+
+def scenario_mounts(p):
+    """Mounts per realm (BASE-LAYER row 9, DaedalusMountCore): in each 3D realm the called vehicle wears that
+    realm's mount art (drone, helicopter, plane, sky-strider), flies to a lifted height within its ceiling, and
+    World Zero still gives the hover bike."""
+    h = hero()
+    checks = []
+    want = {"GALLERY-CITY": "Mob_Gallery_GalleryDrone", "PARCELS": "Mob_Parcels_ParcelHelicopter", "BRICKS": "Mob_Bricks_BrickPlane", "LABYRINTH": "Mob_Lab_SkyStrider"}
+    for realm, art in want.items():
+        if h.realm_now() != "WORLD-ZERO":
+            h.switch_realm("world-zero", "gate", "")
+            yield from _frames(2)
+        h.switch_realm(realm.lower(), "gate", "")
+        yield from _frames(3)
+        g = h.spawn_vehicle()
+        yield from _frames(2)
+        st = g.mount_state() if g else "no vehicle"
+        checks.append(_check("%s: the vehicle wears %s" % (realm, art), g is not None and ("art=%s:1" % art) in st, st))
+        if g:
+            z0 = g.get_actor_location().z
+            g.lift(3000.0)
+            yield from _seconds(2.0)   # game time (45 frames at 46 fps was under a second: Gallery dz=0, 02:15)
+            z1 = g.get_actor_location().z
+            st2 = g.mount_state()
+            checks.append(_check("%s: it climbs when lifted, within its ceiling" % realm, z1 - z0 > 800.0 and "wanted=3000" in st2, "dz=%.0f %s" % (z1 - z0, st2)))
+            g.destroy_actor()
+    h.switch_realm("world-zero", "gate", "")
+    yield from _frames(3)
+    g = h.spawn_vehicle()
+    st = g.mount_state() if g else "no vehicle"
+    checks.append(_check("World Zero: the hover bike, ground-hugging", g is not None and "mount=hover bike" in st and "ceiling=0" in st, st))
+    if g:
+        g.destroy_actor()
+    return {"checks": checks}
+
+
+def scenario_portals(p):
+    """Walk-in crossings (BASE-LAYER row 10, ADaedalusRealmPortal): the hub's east gate takes the hero to Gallery
+    City by overlap alone, the cooldown keeps the landing gate from bouncing him back, Gallery's gate home returns
+    him, and a dock portal asks the Ocean (refused or accepted by the session rules, never a crash)."""
+    h = hero()
+    w = world()
+    portals = {a.get_actor_label(): a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusRealmPortal)}
+    checks = [_check("portals are laid in the world (hub gates + realm gates/docks)", len(portals) >= 4 + 3 * 4, str(len(portals)))]
+    if h.realm_now() != "WORLD-ZERO":
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    east = portals.get("Portal_WORLD-ZERO_to_GALLERY-CITY")
+    if east:
+        h.teleport(east.get_actor_location() + unreal.Vector(-700, 0, 0), 0.0, True)
+        yield from _seconds(3.5)   # the switch above set LastRealmSwitchAt: wait out the cooldown (02:15: 2 frames at 46 fps was not)
+        r = east.cross(h)   # the same path the overlap takes
+        yield from _frames(4)
+        checks.append(_check("the east gate carries the hero to Gallery City", r.startswith("ok WORLD-ZERO -> GALLERY-CITY") and h.realm_now() == "GALLERY-CITY", r))
+        home = portals.get("Portal_GALLERY-CITY_Gate")
+        early = home.cross(h) if home else "no portal"
+        checks.append(_check("the landing gate is on cooldown, so no bounce", early == "cooldown", early))
+        yield from _seconds(3.5)   # game time, not frames: 105 frames at 46 fps is under the 3 s cooldown
+        back = home.cross(h) if home else "no portal"
+        yield from _frames(3)
+        checks.append(_check("after the cooldown the gate takes him home", back.startswith("ok GALLERY-CITY -> WORLD-ZERO") and h.realm_now() == "WORLD-ZERO", back))
+    dock = portals.get("Portal_PARCELS_Dock")
+    if dock:
+        h.switch_realm("parcels", "gate", "")
+        yield from _seconds(3.5)
+        r = dock.cross(h)
+        yield from _frames(2)
+        checks.append(_check("a dock portal asks the session for the Ocean (boat)", r.startswith("ok PARCELS -> OCEAN") or r.startswith("refused"), r))
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    return {"checks": checks}
+
+
+def scenario_bestiary(p):
+    """The realm's bestiary (BASE-LAYER row 6, DaedalusBestiaryCore): packs spawned in Gallery City are gallery
+    creatures (kinds from the table) wearing Sol's skeletal art; back in World Zero the crystal kinds return."""
+    h = hero()
+    w = world()
+    checks = []
+    if h.realm_now() != "WORLD-ZERO":
+        h.switch_realm("world-zero", "gate", "")
+        yield from _frames(2)
+    h.switch_realm("gallery-city", "gate", "")
+    yield from _frames(4)
+    before = {a.get_name() for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget)}
+    made = sum(h.spawn_pack() for _ in range(3))
+    yield from _frames(4)
+    new = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget) if a.get_name() not in before]
+    kinds = sorted({str(a.get_editor_property("kind")) for a in new})
+    gallery = {"SMUDGELING", "THUMBTACK_BEETLE", "CANVAS_MOTH", "EASEL_STRIDER", "TURPENTINE_TOAD", "MOSAIC_HOUND", "GILDED_FRAME_MIMIC", "SENTINEL_BUST", "GREY_WASH"}
+    dressed = sum(1 for a in new if a.get_editor_property("skin_mesh") is not None)
+    checks.append(_check("packs spawn in Gallery City", made >= 2 and len(new) >= 2, "made=%d new=%d" % (made, len(new))))
+    checks.append(_check("every foe is a gallery creature from the bestiary", bool(kinds) and set(kinds) <= gallery, str(kinds)))
+    checks.append(_check("each wears its skeletal art (not the crystal)", new and dressed == len(new), "dressed=%d/%d" % (dressed, len(new))))
+    for a in new:
+        a.destroy_actor()
+    h.switch_realm("world-zero", "gate", "")
+    yield from _frames(4)
+    before = {a.get_name() for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget)}
+    h.spawn_pack()
+    yield from _frames(3)
+    home = [a for a in unreal.GameplayStatics.get_all_actors_of_class(w, unreal.DaedalusTarget) if a.get_name() not in before]
+    hk = sorted({str(a.get_editor_property("kind")) for a in home})
+    checks.append(_check("home, the server's crystal kinds are back", bool(hk) and not (set(hk) & gallery), str(hk)))
+    for a in home:
+        a.destroy_actor()
+    return {"checks": checks}
+
+
+TOUR_REALMS = ("WORLD-ZERO", "GALLERY-CITY", "PARCELS", "BRICKS", "LABYRINTH")
+TOUR_STOPS = ("Mount", "Dock", "SubDock", "Gate", "Spawn")
+
+
+def _tour_stops(realm):
+    """[(name, actor)] the airship must dock at in this realm: the realm's markers (Dock_<realm> etc.), or for World
+    Zero its portals (Portal_WORLD-ZERO_<Dock|SubDock|East...>) since the hub has no TargetPoint markers."""
+    out = []
+    if realm == "WORLD-ZERO":
+        for a in _all(unreal.DaedalusRealmPortal):
+            l = a.get_actor_label()
+            if l.startswith("Portal_WORLD-ZERO_"):
+                out.append((l.split("_", 2)[2], a))
+    else:
+        want = {"%s_%s" % (s, realm): s for s in TOUR_STOPS}
+        for a in _all(unreal.TargetPoint):
+            l = a.get_actor_label()
+            if l in want:
+                out.append((want[l], a))
+    out.sort(key=lambda t: t[0])
+    return out
+
+
+def _fly_to(g, pc, at, max_frames=9000, arrive_cm=1200.0):
+    """Steer the mounted vehicle at a world point (flat), boosting, until within arrive_cm or max_frames. Yields.
+    Returns (frames, final flat distance)."""
+    n = 0
+    while n < max_frames:
+        here = g.get_actor_location()
+        dx, dy = at.x - here.x, at.y - here.y
+        d = math.hypot(dx, dy)
+        if d < arrive_cm:
+            break
+        pc.set_control_rotation(unreal.Rotator(0.0, 0.0, math.degrees(math.atan2(dy, dx))))   # Rotator(roll, pitch, yaw)
+        g.drive(1.0, 0.0, d > 3000.0)
+        n += 1
+        yield
+    g.drive(0.0, 0.0, False)
+    here = g.get_actor_location()
+    return n, math.hypot(at.x - here.x, at.y - here.y)
+
+
+def scenario_airship(p):
+    """The airship tour (Richey 2026-10-13 23:57: "once all the islands are done we must prove our flying air ship
+    can fly and dock everywhere and explore the whole map"): in every realm the hero calls the realm's mount, gets
+    on, climbs, flies to each marker (Mount pad, Dock, SubDock, Gate, Spawn) and settles onto it; in World Zero it
+    also flies one long leg out over the islands to district 33's centre and back. Portals are switched off for the
+    tour so a landing at a dock does not teleport the ship mid-flight. The receipt lists every landing with its
+    distance, height over ground and frames flown."""
+    import daedalus_land_grid as G
+    import daedalus_districts as D
+    h = hero()
+    pc = controller()
+    checks, landings = [], []
+    portals = _all(unreal.DaedalusRealmPortal)
+    for a in portals:
+        a.set_actor_enable_collision(False)
+    try:
+        for realm in TOUR_REALMS:
+            if h.realm_now() != realm:
+                r = h.switch_realm(realm.lower(), "gate", "")
+                yield from _frames(4)
+                checks.append(_check("%s: the hero arrives for the tour" % realm, h.realm_now() == realm, r))
+                if h.realm_now() != realm:
+                    continue
+            stops = _tour_stops(realm)
+            checks.append(_check("%s: tour stops are laid (%d)" % (realm, len(stops)), len(stops) >= 2, ", ".join(s for s, _ in stops)))
+            for b in ghosts():
+                b.destroy_actor()
+            g = h.spawn_vehicle()
+            yield from _frames(2)
+            if not g:
+                checks.append(_check("%s: the mount answers the call" % realm, False, "no vehicle"))
+                continue
+            on = g.mount(h)   # not h.interact(): at a gate the nearest interactable can be an arcade cabinet (01:36, Twinwake)
+            yield from _frames(2)
+            st = g.mount_state()
+            checks.append(_check("%s: the hero is aboard %s" % (realm, st.split(" ")[0]), pc.get_controlled_pawn() == g, st))
+            g.lift(2500.0)
+            yield from _seconds(1.5)
+            legs = [(name, a.get_actor_location()) for name, a in stops]
+            if realm == "WORLD-ZERO":
+                hub_cm = __import__("daedalus_realm_ground").ORIGINS["WORLD-ZERO"]
+                cx, cy = G.cell(D.district_cells(33)[55])
+                far = unreal.Vector(hub_cm[0] + (cx - G.HUB) * G.PITCH_M * 100.0, hub_cm[1] + (cy - G.HUB) * G.PITCH_M * 100.0, 0.0)
+                legs.append(("District_33", far))
+                legs.append(("Spawn", stops[0][1].get_actor_location() if stops else g.get_actor_location()))
+            for name, at in legs:
+                z0 = g.get_actor_location().z
+                frames, d = yield from _fly_to(g, pc, at)
+                g.lift(0.0)   # settle onto the pad
+                yield from _seconds(2.0)
+                st = g.mount_state()
+                grounded = "grounded=1" in st
+                here = g.get_actor_location()
+                landings.append({"realm": realm, "stop": name, "dist_cm": round(d), "frames": frames, "z": round(here.z), "grounded": grounded})
+                checks.append(_check("%s: docked at %s" % (realm, name), d < 1500.0 and grounded, "d=%.0f frames=%d %s" % (d, frames, st)))
+                g.lift(2500.0)
+                yield from _seconds(1.0)
+            g.dismount()
+            yield from _frames(2)
+            g.destroy_actor()
+    finally:
+        for a in portals:
+            a.set_actor_enable_collision(True)
+    docked = sum(1 for l in landings if l["dist_cm"] < 1500 and l["grounded"])
+    checks.append(_check("the airship docked everywhere: %d/%d landings" % (docked, len(landings)), landings and docked == len(landings), str(landings)[:900]))
+    return {"checks": checks, "landings": landings}
+
+
 SCENARIOS = {
+    "airship": scenario_airship,
     "shoot": scenario_shoot,
     "views_layouts": scenario_views_layouts,
     "ghost": scenario_ghost,
@@ -1297,6 +1621,11 @@ SCENARIOS = {
     "dialogue": scenario_dialogue,
     "cast": scenario_cast,
     "realm_switch": scenario_realm_switch,
+    "realm_ground": scenario_realm_ground,
+    "realm_host": scenario_realm_host,
+    "mounts": scenario_mounts,
+    "portals": scenario_portals,
+    "bestiary": scenario_bestiary,
     "control": scenario_control,
     "stage": scenario_stage,
 }

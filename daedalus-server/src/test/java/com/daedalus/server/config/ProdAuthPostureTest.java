@@ -74,6 +74,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("prod")
 class ProdAuthPostureTest {
 
+    @org.springframework.test.context.DynamicPropertySource
+    static void isolateWorldStorage(org.springframework.test.context.DynamicPropertyRegistry registry) {
+        com.daedalus.server.IsolatedWorldStorage.register(registry);
+    }
+
+
     private enum Posture { PUBLIC, AUTHENTICATED }
 
     private static final String ID = "11111111-2222-3333-4444-555555555555";
@@ -91,7 +97,9 @@ class ProdAuthPostureTest {
 
     static {
         EXPECTED.put("POST /api/v1/audio/design", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/audio/herb-chord", Posture.AUTHENTICATED);
         EXPECTED.put("POST /api/v1/kennel/brew", Posture.AUTHENTICATED);
+        EXPECTED.put("POST /api/v1/brew/melody", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/inventory/" + ID + "/catalog", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/ocean/v1", Posture.AUTHENTICATED);
         EXPECTED.put("GET /api/v1/realms", Posture.AUTHENTICATED);

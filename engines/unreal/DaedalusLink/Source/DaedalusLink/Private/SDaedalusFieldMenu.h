@@ -9,7 +9,7 @@ class ADaedalusHero;
 class SBox;
 
 /**
- * The field menu (ADR-041), Halo Infinite's Campaign Menu: the View button (two boxes), Tab or M opens it over the
+ * The field menu (ADR-041), a modern console game's Campaign Menu: the View button (two boxes), Tab or M opens it over the
  * game. LB / RB switch tabs:
  *   MAP       the TacMap: every island seen from above, the hero as a marker that turns with him
  *   HERO      the hero's record (swings, down-thrust bounces, respawns, where he last stood)

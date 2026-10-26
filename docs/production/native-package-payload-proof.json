@@ -1,0 +1,116 @@
+{
+  "utc": "2026-10-14T12:38:15.480496+00:00",
+  "archive": "C:\\Unreal\\DaedalusRealm\\Saved\\Packages\\WZ-20261014-native\\Windows",
+  "uatExitCode": 0,
+  "cookStageArchiveSeconds": 166.76,
+  "payloadMethod": "Actual UnrealPak -Extract filtered plugin Content; SHA256/length compared to current11-file manifest",
+  "payload": [
+    {
+      "path": "Content/Inventory/bricks.dic",
+      "sha256": "b0b3d5ca191c5ea1e214ae37270e1abc067536fb9e28fe7e3015ac29ff0dd3cc",
+      "bytes": 1680,
+      "match": true
+    },
+    {
+      "path": "Content/Inventory/gallery-city.dic",
+      "sha256": "548b43ac43c1f463172bfefccafae3a5e6191a165117736f4485cc5f65238654",
+      "bytes": 1854,
+      "match": true
+    },
+    {
+      "path": "Content/Inventory/labyrinth.dic",
+      "sha256": "2362c6c058a67735c0a068d0d8a41f129bc6a86500c8b3c5a1c04ba653e2c15d",
+      "bytes": 1365,
+      "match": true
+    },
+    {
+      "path": "Content/Inventory/parcels.dic",
+      "sha256": "8162cb87ef1338f4a3d0a09e2b4769326cbbfecda9eec089af2e21737658fad4",
+      "bytes": 1747,
+      "match": true
+    },
+    {
+      "path": "Content/Inventory/world-zero.dic",
+      "sha256": "c03b45a0bf37455035e1684e241377000a3083510f477610c8b9aca1b9891714",
+      "bytes": 2135,
+      "match": true
+    },
+    {
+      "path": "Content/Casts/bricks.dcs",
+      "sha256": "787b2b77bc1ff6ed8458973612c6341b99e868e49a4b326dff1b08cad6564e03",
+      "bytes": 5142,
+      "match": true
+    },
+    {
+      "path": "Content/Casts/gallery-city.dcs",
+      "sha256": "cc8284aea2ecf29baaf5fe7a5264b5f0b1650b33cd11d8e210a07391efcfccaf",
+      "bytes": 5720,
+      "match": true
+    },
+    {
+      "path": "Content/Casts/labyrinth.dcs",
+      "sha256": "01ea21977bd8dcfe299273096d57d4edba4821b378fbd619a8c888b1ca4468e3",
+      "bytes": 5605,
+      "match": true
+    },
+    {
+      "path": "Content/Casts/parcels.dcs",
+      "sha256": "2787b33e7b4f166576724c463bf80fcfc31cb4f83add6c282cd291324ea2ec6d",
+      "bytes": 5607,
+      "match": true
+    },
+    {
+      "path": "Content/Casts/world-zero.dcs",
+      "sha256": "6b3c9f35d6845d48a674acc3984647b39f7e2528a829e719c149308f81c7b319",
+      "bytes": 4166,
+      "match": true
+    },
+    {
+      "path": "Content/Realm/realm-7.drr",
+      "sha256": "a48de4b11000485ceecd618c3d4f612e5e5923fff08fe3df4dde73cf795eb0b6",
+      "bytes": 21988,
+      "match": true
+    }
+  ],
+  "containers": [
+    {
+      "path": "DaedalusRealm/Content/Paks/DaedalusRealm-Windows.pak",
+      "bytes": 11787482,
+      "sha256": "5c680ffc8a50aae877520d208a9044effc51a86bc8e8b543762cfef8603d03ef"
+    },
+    {
+      "path": "DaedalusRealm/Content/Paks/DaedalusRealm-Windows.ucas",
+      "bytes": 357664256,
+      "sha256": "3c08a57194b34ac21ee610e47bdc94fff53179f0459380466e4358b183aa8a68"
+    },
+    {
+      "path": "DaedalusRealm/Content/Paks/DaedalusRealm-Windows.utoc",
+      "bytes": 1720715,
+      "sha256": "594cb3189b088c5fa9d328edeeba9bf3bd646a22e1fa80732dc920898683d39e"
+    },
+    {
+      "path": "DaedalusRealm/Content/Paks/global.ucas",
+      "bytes": 3349536,
+      "sha256": "740e9befe2e82ce84546ac5f4b7ed9a3c94b5888b8e540a06dd4672d0653756d"
+    },
+    {
+      "path": "DaedalusRealm/Content/Paks/global.utoc",
+      "bytes": 818,
+      "sha256": "6fbb9e2ac09cbf0c065488e53f4d822aaf12c539e349d773226f9b3f2b8a89f0"
+    }
+  ],
+  "stagesProven": [
+    "actual project Shipping compile/link",
+    "cook",
+    "stage",
+    "pak/iostore archive creation",
+    "11 nonasset runtime payloads byte-matched"
+  ],
+  "notProven": [
+    "packaged game launch",
+    "runtime inventory/dialogue/realm loading",
+    "walking",
+    "ownership/persistence/public hosting"
+  ],
+  "existingRealmLandRows": 34
+}

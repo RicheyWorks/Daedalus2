@@ -90,7 +90,7 @@ def hero_setup(p):
 
 def _register(bridge):
     bridge.register("daedalus.hero_setup", hero_setup,
-                    "Make Play spawn the Daedalus hero (walk, jump, dash, sword, Zelda II down-thrust) on an island: "
+                    "Make Play spawn the Daedalus hero (walk, jump, dash, sword, Lanternwild II down-thrust) on an island: "
                     "sets the GameMode Override and a PlayerStart on the ground", {"world": "str"})
     bridge.register("daedalus.import_world", import_world,
                     "Download a Daedalus World Package from its server, import it (chunks, materials, sky, ark, live "
@@ -109,6 +109,62 @@ def _register(bridge):
         daedalus_control.register(bridge)
     except Exception as e:  # console, input, goto, look, state, automation, log_report
         unreal.log_warning("Daedalus: control commands not loaded: %r" % (e,))
+    bridge.register("daedalus.steps", run_steps,
+                    "Run Python that defines steps(): a generator; the bridge advances it ONE STEP PER EDITOR TICK, so "
+                    "N heavy items (imports, saves) in one call never block the game thread (GPU watchdog, 2026-10-13). "
+                    "Each yielded value is collected; the return value is the result.",
+                    {"code": "str (required; defines steps())", "max_steps": "int (default 100000)", "budget_ms": "float (default 250: items per tick fill this budget)", "label": "str"})
+    try:
+        import daedalus_land_sync
+        bridge.register("daedalus.land_sync", lambda p: daedalus_land_sync.sync(str(p.get("realm", "WORLD-ZERO")), p.get("districts"), bool(p.get("apply", False))),
+                        "Reconcile the editor's lands with the server's land registry (apply=false: report only)",
+                        {"realm": "str (default WORLD-ZERO)", "districts": "[int] (default the hub districts)", "apply": "bool (default false)"})
+    except Exception as e:
+        unreal.log_warning("Daedalus: land sync not loaded: %r" % (e,))
+
+
+def run_steps(p):
+    """A generator command (claude_unreal_bridge steps generators once per tick): exec the code, take its
+    steps() generator, yield after every item. Collects each yielded value (truncated) and returns
+    {steps, seconds, yielded[-200:], result}. An exception in a step ends the run with the step count and the error
+    text, so the host knows how far it got."""
+    import time
+    import traceback
+    code = str(p.get("code", ""))
+    max_steps = int(p.get("max_steps", 100000))
+    budget = float(p.get("budget_ms", 250)) / 1000.0   # run items back to back until this much of the tick is spent
+    ns = {"unreal": unreal, "__name__": "daedalus_steps"}
+    exec(compile(code, "<daedalus.steps:%s>" % p.get("label", ""), "exec"), ns)
+    gen_fn = ns.get("steps")
+    if not callable(gen_fn):
+        raise ValueError("the code must define steps()")
+    gen = gen_fn()
+    out = {"steps": 0, "yielded": [], "result": None, "error": None}
+    t0 = time.time()
+    done = False
+    while not done and out["steps"] < max_steps:
+        t_tick = time.time()
+        while True:   # as many items as fit in the budget, then one editor tick (00:03: a throttled background
+            try:      # editor ticks every ~12 s, so one-item-per-tick was 12 s per district)
+                v = next(gen)
+            except StopIteration as stop:
+                out["result"] = stop.value
+                done = True
+                break
+            except Exception:
+                out["error"] = traceback.format_exc()[-1500:]
+                done = True
+                break
+            out["steps"] += 1
+            out["yielded"].append(str(v)[:300])
+            if len(out["yielded"]) > 200:
+                out["yielded"] = out["yielded"][-200:]
+            if time.time() - t_tick >= budget or out["steps"] >= max_steps:
+                break
+        if not done:
+            yield   # one editor tick: render, answer the GPU watchdog, take input
+    out["seconds"] = round(time.time() - t0, 1)
+    return out
 
 
 _state = {"handle": None, "ticks": 0}

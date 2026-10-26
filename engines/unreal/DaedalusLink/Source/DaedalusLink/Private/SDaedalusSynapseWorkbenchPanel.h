@@ -1,0 +1,83 @@
+// SPDX-License-Identifier: MIT
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Templates/Function.h"
+#include "Templates/Atomic.h"
+#include "Widgets/SCompoundWidget.h"
+
+class ADaedalusSynapseWorkbenchTerminal;
+class UDaedalusSynapseWorkbenchBridge;
+class SEditableTextBox;
+class SBox;
+class SWebBrowser;
+class IWebBrowserWindow;
+struct FWebNavigationRequest;
+
+enum class EDaedalusWorkbenchProfile : uint8 { Synapse, Fax };
+
+/** Native-only weak-owner callbacks. No script can choose a profile, URL, or binding. */
+struct FDaedalusWorkbenchPanelCallbacks
+{
+    TFunction<bool()> IsOwnerValid;
+    TFunction<bool(const FString&)> Pair;
+    TFunction<void()> Close;
+    TFunction<void()> Invalidate;
+    TFunction<FString()> GetMessage;
+    TFunction<void(const FString&)> SetMessage;
+};
+
+class SDaedalusSynapseWorkbenchPanel final : public SCompoundWidget
+{
+public:
+    SLATE_BEGIN_ARGS(SDaedalusSynapseWorkbenchPanel)
+        : _Workspace(nullptr), _Profile(EDaedalusWorkbenchProfile::Synapse), _NativeWorkspace(nullptr) {}
+        SLATE_ARGUMENT(TWeakObjectPtr<ADaedalusSynapseWorkbenchTerminal>, Terminal)
+        SLATE_ARGUMENT(UDaedalusSynapseWorkbenchBridge*, Workspace)
+        SLATE_ARGUMENT(EDaedalusWorkbenchProfile, Profile)
+        SLATE_ARGUMENT(UObject*, NativeWorkspace)
+        SLATE_ARGUMENT(TSharedPtr<FDaedalusWorkbenchPanelCallbacks>, Callbacks)
+    SLATE_END_ARGS()
+    void Construct(const FArguments& InArgs);
+    virtual ~SDaedalusSynapseWorkbenchPanel() override;
+    virtual bool SupportsKeyboardFocus() const override { return true; }
+    virtual FReply OnPreviewKeyDown(const FGeometry& Geometry, const FKeyEvent& Event) override;
+    bool Pair(const FString& Link);
+    void Shutdown();
+    void ClearPairingInput();
+    bool OwnsUserFocus(uint32 UserIndex) const;
+    bool HasApprovedDocument() const;
+    uint64 GetDocumentGeneration() const { return DocumentGeneration.Load(); }
+private:
+    FReply PairClicked();
+    FReply CloseClicked();
+    bool BeforeNavigate(const FString& Url, const FWebNavigationRequest& Request);
+    bool ResourceOverride(const FString& Method, const FString& Url, FString& Body);
+    void LoadingStarted();
+    void Loaded();
+    void Failed();
+    void Message(const TCHAR* Text);
+    bool AllowedResource(const FString& Url) const;
+    bool AllowedDocument(const FString& Url) const;
+    bool ParseLink(const FString& Link, FString& OutOrigin) const;
+    bool HasOwner() const;
+    FString OwnerMessage() const;
+    FString AppPath() const;
+    const TCHAR* BindingName() const;
+    TWeakObjectPtr<ADaedalusSynapseWorkbenchTerminal> Terminal;
+    TWeakObjectPtr<UObject> Workspace;
+    TSharedPtr<FDaedalusWorkbenchPanelCallbacks> Callbacks;
+    EDaedalusWorkbenchProfile Profile = EDaedalusWorkbenchProfile::Synapse;
+    TSharedPtr<SEditableTextBox> PairingInput;
+    TSharedPtr<SBox> PairingHost;
+    TSharedPtr<SBox> BrowserBox;
+    TSharedPtr<SWebBrowser> Browser;
+    TSharedPtr<IWebBrowserWindow> BrowserWindow;
+    FString Origin;
+    FString ContextId;
+    bool bStarted = false;
+    bool bClosing = false;
+    bool bApprovedNavigation = false;
+    TAtomic<bool> bFaxGrantRevoked{false};
+    TAtomic<uint64> DocumentGeneration{0};
+};

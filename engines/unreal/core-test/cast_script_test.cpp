@@ -42,6 +42,197 @@ int main(int argc, char** argv)
         Check("a bad pitch", !B.Parse("DCS 1\ncast X\nwho A\nvoice 12\nstep start\nsay hi\n", Err) && Err.find("0..11") != std::string::npos, Err);
     }
 
+    // ---- numeric arguments ignore repeated ASCII spaces; pipe-separated choices keep empty fields
+    {
+        const std::string Head = "DCS 1\ncast ARGUMENTS\nwho Guide\n";
+        const std::string Repeated = Head + "voice 7  1.05\nstep start\ngive TOKEN  2\nsay Ready.\nend\n";
+        Cast Numeric;
+        std::string E;
+        const bool Loaded = Numeric.Parse(Repeated, E);
+        Check("repeated-space numeric arguments parse", Loaded, E);
+        const Script* S = Loaded ? Numeric.Find("Guide") : nullptr;
+        Check("repeated spaces do not discard the requested voice rate", S && S->Pitch == 7 && S->Rate == 1.05);
+        Conversation C;
+        C.Bind(S);
+        const Beat First = C.Talk();
+        Check("repeated spaces preserve the requested gift amount", First.Text == "Ready."
+            && First.Gifts.size() == 1 && First.Gifts[0].first == "TOKEN" && First.Gifts[0].second == 2);
+        C.Talk();
+        const Beat Again = C.Talk();
+        Check("the parsed gift still emits only once across repeated talks", C.Has("gave_TOKEN")
+            && Again.Text == "Ready." && Again.Gifts.empty());
+
+        const std::string Defaults = Head + "voice 7\nstep start\ngive TOKEN\nsay Ready.\nend\n";
+        Cast Defaulted;
+        const bool DefaultLoaded = Defaulted.Parse(Defaults, E);
+        const Script* D = DefaultLoaded ? Defaulted.Find("Guide") : nullptr;
+        Conversation DefaultTalk;
+        DefaultTalk.Bind(D);
+        const Beat DefaultBeat = DefaultTalk.Talk();
+        Check("omitted voice rate and gift amount retain defaults of one", D && D->Pitch == 7 && D->Rate == 1.0
+            && DefaultBeat.Gifts.size() == 1 && DefaultBeat.Gifts[0].first == "TOKEN" && DefaultBeat.Gifts[0].second == 1, E);
+
+        for (const char* Rate : {"2.1", "0.49"})
+        {
+            Cast Bad;
+            const bool Refused = !Bad.Parse(Head + "voice 7  " + Rate + "\nstep start\nsay hi\nend\n", E);
+            Check(std::string("repeated-space out-of-range voice rate refuses: ") + Rate,
+                Refused && E.rfind("line 4:", 0) == 0 && E.find("rate is 0.5..2") != std::string::npos, E);
+        }
+        for (const char* Amount : {"1000", "0"})
+        {
+            Cast Bad;
+            const bool Refused = !Bad.Parse(Head + "step start\ngive TOKEN  " + Amount + "\nend\n", E);
+            Check(std::string("repeated-space out-of-range gift amount refuses: ") + Amount,
+                Refused && E.rfind("line 5:", 0) == 0 && E.find("1..999") != std::string::npos, E);
+        }
+
+        Cast BadChoice;
+        Check("an empty pipe-separated choice still refuses", !BadChoice.Parse(Head
+            + "step start\nask Choose? | First=start || Last=start\nend\n", E)
+            && E.rfind("line 5:", 0) == 0 && E.find("choice") != std::string::npos, E);
+
+        Cast Retained;
+        const bool Seeded = Retained.Parse(Defaults, E);
+        const bool Rejected = !Retained.Parse("DCS 1\ncast REPLACED\nwho Other\nstep start\ngive TOKEN  1000\nend\n", E);
+        const Script* Kept = Retained.Find("Guide");
+        Check("a refused repeated-space amount preserves the previous cast", Seeded && Rejected
+            && Retained.Realm == "ARGUMENTS" && Retained.Scripts.size() == 1 && Kept && Kept->Pitch == 7 && Kept->Rate == 1.0);
+    }
+
+    // ---- numeric tokens must parse completely; malformed/non-finite rates never reach dialogue rendering
+    {
+        const std::string Head = "DCS 1\ncast NUMBERS\nwho Guide\n";
+        std::string E;
+        for (const char* Pitch : {"frogs", "7cats"})
+        {
+            Cast Bad;
+            const bool Refused = !Bad.Parse(Head + "voice " + Pitch + "\nstep start\nsay hi\nend\n", E);
+            Check(std::string("a pitch must be a complete integer token: ") + Pitch,
+                Refused && E.rfind("line 4:", 0) == 0 && E.find("pitch is 0..11") != std::string::npos, E);
+        }
+        for (const char* Rate : {"nan", "NaN(payload)", "1.05x"})
+        {
+            Cast Bad;
+            const bool Refused = !Bad.Parse(Head + "voice 7 " + Rate + "\nstep start\nsay hi\nend\n", E);
+            Check(std::string("a voice rate must be a complete finite number: ") + Rate,
+                Refused && E.rfind("line 4:", 0) == 0 && E.find("rate is 0.5..2") != std::string::npos, E);
+        }
+        for (const char* Amount : {"2items", "2.5"})
+        {
+            Cast Bad;
+            const bool Refused = !Bad.Parse(Head + "step start\ngive TOKEN " + Amount + "\nend\n", E);
+            Check(std::string("a gift amount must be a complete integer token: ") + Amount,
+                Refused && E.rfind("line 5:", 0) == 0 && E.find("give amount is 1..999") != std::string::npos, E);
+        }
+
+        struct ValidVoice { const char* Arguments; int Pitch; double Rate; };
+        const ValidVoice Voices[] = {{"0 .5", 0, 0.5}, {"11 2", 11, 2.0}, {"7 1.05e0", 7, 1.05}};
+        for (const auto& Voice : Voices)
+        {
+            Cast Good;
+            const bool Loaded = Good.Parse(Head + "voice " + Voice.Arguments + "\nstep start\nsay hi\nend\n", E);
+            const Script* S = Loaded ? Good.Find("Guide") : nullptr;
+            Check(std::string("valid voice bounds and numeric forms retain their values: ") + Voice.Arguments,
+                S && S->Pitch == Voice.Pitch && S->Rate == Voice.Rate, E);
+        }
+        Cast Gift;
+        const bool Loaded = Gift.Parse(Head + "step start\ngive TOKEN +999\nend\n", E);
+        const Script* S = Loaded ? Gift.Find("Guide") : nullptr;
+        const Step* Start = S ? S->Find("start") : nullptr;
+        Check("an explicit plus sign and the inclusive gift maximum remain valid", Start && !Start->Nodes.empty()
+            && Start->Nodes[0].K == Node::Kind::Give && Start->Nodes[0].Text == "TOKEN" && Start->Nodes[0].Amount == 999, E);
+    }
+
+    // ---- restored cursors must be nonnegative before a conversation resumes
+    {
+        Cast Synthetic;
+        std::string E;
+        const bool Loaded = Synthetic.Parse("DCS 1\ncast RESTORE\nwho Guide\nstep start\ngive TOKEN 1\nsay Ready.\nend\n", E);
+        const Script* S = Loaded ? Synthetic.Find("Guide") : nullptr;
+        const Step* Start = S ? S->Find("start") : nullptr;
+        const bool ScriptReady = Start && Start->Nodes.size() == 3;
+        struct RestoreCase { const char* Saved; const char* Expected; const char* Label; };
+        const RestoreCase Cases[] = {
+            {"start:-1 gave_TOKEN remembered", "start:0", "negative cursor -1 restarts safely and retains gift suppression"},
+            {"start:-20 gave_TOKEN remembered", "start:0", "negative cursor -20 restarts safely and retains gift suppression"},
+            {"start:1 gave_TOKEN remembered", "start:1", "a valid saved cursor and flags retain their position"},
+            {"missing:1 gave_TOKEN remembered", "start:0", "an unknown step still falls back to start with flags intact"},
+            {"start gave_TOKEN remembered", "start:0", "legacy omitted-node saves still restore cursor zero and flags"}
+        };
+        for (const auto& Saved : Cases)
+        {
+            Conversation C;
+            C.Bind(S);
+            C.Restore(Saved.Saved);
+            // Both expected positions are known nonnegative nodes in this three-node script. Never resume a
+            // negative baseline cursor: a failed safety assertion must not cause an out-of-range Talk access.
+            const bool Safe = ScriptReady && C.Where() == Saved.Expected;
+            Beat B;
+            if (Safe) B = C.Talk();
+            Check(Saved.Label, Safe && C.Has("gave_TOKEN") && C.Has("remembered")
+                && !B.Over && B.Text == "Ready." && B.Gifts.empty(), E);
+        }
+    }
+
+    // ---- pending choices belong to the currently bound, unrestored conversation only
+    {
+        Cast Synthetic;
+        std::string E;
+        const bool Loaded = Synthetic.Parse("DCS 1\ncast LIFECYCLE\nwho A\nstep start\nask A question? | Continue=shared\nend\n"
+            "step shared\nsay A answer.\nend\nwho B\nstep start\nsay Greeting.\nask B question? | Proceed=shared\nend\n"
+            "step shared\ngive TOKEN 1\nsay Answer.\nend\n", E);
+        const Script* A = Loaded ? Synthetic.Find("A") : nullptr;
+        const Script* B = Loaded ? Synthetic.Find("B") : nullptr;
+        Conversation C;
+        C.Bind(A);
+        const Beat PendingA = C.Talk();
+        C.Bind(B);
+        const Beat StaleBind = C.Picked(0);
+        Check("binding another script invalidates the previous script's pending choice", A && B
+            && PendingA.Choices.size() == 1 && StaleBind.Over && StaleBind.Gifts.empty() && !C.Has("gave_TOKEN"), E);
+        const Beat Greeting = C.Talk();
+        const Beat Question = C.Talk();
+        const Beat Answer = C.Picked(0);
+        C.Talk();
+        const Beat AgainGreeting = C.Talk();
+        const Beat AgainQuestion = C.Talk();
+        const Beat AgainAnswer = C.Picked(0);
+        Check("the new script's own fresh choice still gives its token once", Greeting.Text == "Greeting."
+            && Question.Choices == std::vector<std::string>{"Proceed"} && Answer.Text == "Answer."
+            && Answer.Gifts.size() == 1 && Answer.Gifts[0].first == "TOKEN" && Answer.Gifts[0].second == 1
+            && AgainGreeting.Text == "Greeting." && AgainQuestion.Choices == std::vector<std::string>{"Proceed"}
+            && AgainAnswer.Text == "Answer." && AgainAnswer.Gifts.empty() && C.Has("gave_TOKEN"));
+
+        Conversation Restored;
+        Restored.Bind(B);
+        Restored.Talk();
+        const Beat PendingRestore = Restored.Talk();
+        Restored.Restore("start:0 remembered");
+        const Beat StaleRestore = Restored.Picked(0);
+        Check("restore invalidates an old pending choice and retains restored flags", B && PendingRestore.Choices.size() == 1
+            && StaleRestore.Over && StaleRestore.Gifts.empty() && Restored.Has("remembered") && !Restored.Has("gave_TOKEN"));
+        const Beat RestoredGreeting = Restored.Talk();
+        const Beat RestoredQuestion = Restored.Talk();
+        const Beat RestoredAnswer = Restored.Picked(0);
+        Check("fresh choices after restore still follow the script and emit the gift", RestoredGreeting.Text == "Greeting."
+            && RestoredQuestion.Choices == std::vector<std::string>{"Proceed"} && RestoredAnswer.Text == "Answer."
+            && RestoredAnswer.Gifts.size() == 1 && RestoredAnswer.Gifts[0].first == "TOKEN"
+            && RestoredAnswer.Gifts[0].second == 1 && Restored.Has("remembered") && Restored.Has("gave_TOKEN"));
+
+        Conversation Paid;
+        Paid.Bind(B);
+        Paid.Talk(); Paid.Talk();
+        Paid.Restore("start:0 remembered gave_TOKEN");
+        const Beat PaidStale = Paid.Picked(0);
+        const Beat PaidGreeting = Paid.Talk();
+        const Beat PaidQuestion = Paid.Talk();
+        const Beat PaidAnswer = Paid.Picked(0);
+        Check("clearing a restored pending choice preserves the existing gift guard", B && PaidStale.Over && PaidStale.Gifts.empty()
+            && PaidGreeting.Text == "Greeting." && PaidQuestion.Choices == std::vector<std::string>{"Proceed"}
+            && PaidAnswer.Text == "Answer." && PaidAnswer.Gifts.empty() && Paid.Has("remembered") && Paid.Has("gave_TOKEN"));
+    }
+
     // ---- Curator Vell: the quest branch, remembered across talks
     {
         Conversation C;
@@ -123,7 +314,7 @@ int main(int argc, char** argv)
         Bt = H.Talk();
         Check("and never twice", Bt.Gifts.empty() && Bt.Text.find("honey's holding") != std::string::npos, Bt.Text);
         // every gift in every cast names an item of that realm's catalog
-        for (const char* F : {"gallery-city", "parcels", "bricks", "labyrinth"})
+        for (const char* F : {"gallery-city", "parcels", "bricks", "labyrinth", "world-zero"})
         {
             Cast C;
             C.Parse(ReadAll(Dir + "/" + F + ".dcs"), E);
@@ -137,7 +328,7 @@ int main(int argc, char** argv)
     }
 
     // ---- every shipped cast parses, and each has a quest chain that sets a flag
-    for (const char* F : {"parcels", "bricks", "labyrinth"})
+    for (const char* F : {"parcels", "bricks", "labyrinth", "world-zero"})
     {
         Cast C;
         std::string E;
@@ -146,7 +337,26 @@ int main(int argc, char** argv)
         if (!Loaded) continue;
         int Flags = 0, Asks = 0;
         for (const Script& S : C.Scripts) for (const Step& T : S.Steps) for (const Node& N : T.Nodes) { Flags += N.K == Node::Kind::Set; Asks += N.K == Node::Kind::Ask; }
-        Check(std::string(F) + ": at least ten roles, flags and questions", C.Scripts.size() >= 10 && Flags >= 5 && Asks >= 8, std::to_string(C.Scripts.size()) + " " + std::to_string(Flags) + " " + std::to_string(Asks));
+        const bool Hub = std::string(F) == "world-zero";   // the six cross-realm NPCs (REALM-CASTS build order 1)
+        Check(std::string(F) + (Hub ? ": six cross-realm roles, flags and questions" : ": at least ten roles, flags and questions"),
+              (Hub ? C.Scripts.size() == 6 : C.Scripts.size() >= 10) && Flags >= 5 && Asks >= (Hub ? 6 : 8), std::to_string(C.Scripts.size()) + " " + std::to_string(Flags) + " " + std::to_string(Asks));
+    }
+    {
+        // Zee's stock follows the realms visited: the realm casts set visited_* and Zee reads them through the
+        // shared flags; the first matching branch wins, so the most recent realm must be tested first.
+        Cast Z;
+        std::string E;
+        Z.Parse(ReadAll(Dir + "/world-zero.dcs"), E);
+        const Script* S = Z.Find("Wandering Merchant Zee");
+        Conversation Fresh, Back;
+        bool ScriptFound = S != nullptr;
+        std::string First, Stock;
+        if (S)
+        {
+            Fresh.Bind(S); First = Fresh.Talk().Text;
+            Back.Bind(S); Back.Restore("start:0 visited_gallery"); Stock = Back.Talk().Text;
+        }
+        Check("Zee without travel has no stock; after the galleries, gallery goods", ScriptFound && First.find("Stock follows") != std::string::npos && Stock.find("galleries") != std::string::npos, First + " | " + Stock);
     }
     {
         // The Riddler's door and the Apprentice share a realm-wide flag: the host copies it in on bind.

@@ -1,0 +1,64 @@
+{
+    "run_pacific": "2026-10-19 01:55-01:58 PT",
+    "editor_pid": 23632,
+    "test_root": "/Game/Daedalus/Tests/InterchangeFixture20261019",
+    "A": {
+        "done_s": 18.229,
+        "objects": 3,
+        "tris": 132,
+        "dims_cm": [
+            52,
+            52,
+            50
+        ],
+        "convex": 1,
+        "sockets": 0,
+        "materials": [
+            "Prop_PracticeCrate_M0",
+            "Prop_PracticeCrate_M1"
+        ],
+        "material_parent": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS",
+        "base_color_linear": {
+            "M1": [
+                0.0658,
+                0.0718,
+                0.0939
+            ],
+            "M0": [
+                0.3297,
+                0.148,
+                0.0461
+            ]
+        },
+        "nanite": true,
+        "saved": true
+    },
+    "B": {
+        "done_s": 5.53,
+        "objects": 1,
+        "same_uobject": true,
+        "tris": 256,
+        "tris_expected": 264,
+        "dims_cm": [
+            52,
+            53,
+            50
+        ],
+        "convex": 1,
+        "convex_extent_cm": [
+            52,
+            53,
+            50
+        ],
+        "sockets": 0,
+        "material_refs_unchanged": true,
+        "new_assets": 0,
+        "saved": true
+    },
+    "fresh_reopen": "PENDING (batched restart slot, 48355)",
+    "corrections_20261019": {
+        "source": "PR #203, main a3a019b2 (live harness run)",
+        "sockets": "SOCKET_Top imports as socket Top. 'sockets: 0' above was a false negative: StaticMesh.Sockets is protected and the reader swallowed the error.",
+        "tris_B": "256 is the Nanite fallback (Auto). With Nanite off it's 264, matching the glTF."
+    }
+}

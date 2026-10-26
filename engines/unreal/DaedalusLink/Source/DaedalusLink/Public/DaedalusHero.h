@@ -38,11 +38,11 @@ struct FDaedalusFoeRule
  * The Daedalus hero (ADR-040, -041, -042): a blocky adventurer with a sword and a blaster, built in code so he needs
  * no assets.
  *
- * Views (R3 / D-pad up / V cycles; Settings > Video): FIRST PERSON with a centred reticle (Halo Infinite), OVER THE
- * SHOULDER with a shoulder swap (Gears of War; LB / D-pad down / C), and CLASSIC chase.
- * Weapons (Y / 1 / 2 / mouse wheel): the SWORD (Zelda II: swing, down-thrust in the air) and the BLASTER (hitscan
+ * Views (R3 / D-pad up / V cycles; Settings > Video): FIRST PERSON with a centred reticle , OVER THE
+ * SHOULDER with a shoulder swap (LB / D-pad down / C), and CLASSIC chase.
+ * Weapons (Y / 1 / 2 / mouse wheel): the SWORD (swing, down-thrust in the air) and the BLASTER (hitscan
  * from the reticle, heat and overheat, zoom on the aim button). Melee always swings the sword.
- * Controls: keyboard and mouse (raw mouse look), XInput pads with Halo Infinite's button layouts (Default, Bumper
+ * Controls: keyboard and mouse (raw mouse look), XInput pads with a modern console game's button layouts (Default, Bumper
  * Jumper, Bumper Ninja, Boxer, Green Thumb, Recon) and thumbstick layouts (Default, Southpaw, Legacy, Legacy
  * Southpaw), and generic USB pads (Switch Pro, N64) through RawInput and Saved/Config/DaedalusControllers.json.
  * See docs/controllers.md.
@@ -199,6 +199,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") bool Teleport(FVector Where, float Yaw, bool bSnap);
 	/** Where the last realm switch put the hero (a marker's label), empty when the realm has no markers. */
 	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Realm") FString LandedAt;
+	/** World time of the last successful realm switch: a portal at the landing marker must not take the hero
+	 *  straight back (it did: every gate bounced home within a frame, 2026-10-13 23:40). */
+	UPROPERTY(BlueprintReadOnly, Category = "Daedalus|Realm") double LastRealmSwitchAt = -1000.0;
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Realm") FString LandAt(const FString& Realm, const FString& Hint);
 	/** Point the camera: yaw/pitch in degrees (the control rotation). */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Control") void Look(float Yaw, float Pitch);

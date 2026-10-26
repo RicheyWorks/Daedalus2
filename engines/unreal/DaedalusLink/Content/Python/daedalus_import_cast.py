@@ -64,9 +64,13 @@ def plan(folder):
 
 
 def _stamp_of(asset_id, root=CAST_ROOT):
-    path = "%s/%s/%s" % (root, asset_id, asset_id)
-    data = unreal.EditorAssetLibrary.get_metadata_tag(unreal.load_asset(path), STAMP) if unreal.EditorAssetLibrary.does_asset_exist(path) else None
-    return data or ""
+    """The SHA stamped on the imported SkeletalMesh, wherever Interchange put it under <root>/<id>/ (it nests
+    <id>/<id>/SkeletalMeshes/<id>, so a fixed path missed and every run re-imported, 2026-10-13)."""
+    for a in _assets_under("%s/%s" % (root, asset_id)):
+        if a["class"] == "SkeletalMesh":
+            data = unreal.EditorAssetLibrary.get_metadata_tag(unreal.load_asset(a["path"]), STAMP)
+            return data or ""
+    return ""
 
 
 def import_one(asset_id, glb, sha, force=False, root=CAST_ROOT):

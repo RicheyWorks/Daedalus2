@@ -812,11 +812,11 @@ int main(int Argc, char** Argv)
         std::string E;
         La.Load(Text, E);
         Dismiss(La);
-        Check("the realm lists its lands", S.Lands.size() == 3 && S.Lands[1].Number == 1 && S.Lands[1].Owner == "HERO" && S.Lands[0].Owner.empty());
+        Check("the realm lists its lands (34 four-by-four plots on the FIELD, tools/realm/portal_lands.py)", S.Lands.size() == 34 && S.Lands[1].Number == 1 && S.Lands[1].Owner == "HERO" && S.Lands[0].Owner.empty());
         {
             Spec Bad;
             std::string E2;
-            Check("a land off its map is refused", !Bad.Parse(Text + "land 9 FIELD 62 62 4 4 -\n", E2) && E2.find("runs off") != std::string::npos, E2);
+            Check("a land off its map is refused", !Bad.Parse(Text + "land 900 FIELD 62 62 4 4 -\n", E2) && E2.find("runs off") != std::string::npos, E2);
             Check("a land numbered twice is refused", !Bad.Parse(Text + "land 1 FIELD 2 2 2 2 -\n", E2) && E2.find("twice") != std::string::npos, E2);
             Check("a land past 9999 is refused", !Bad.Parse(Text + "land 10000 FIELD 2 2 2 2 -\n", E2), E2);
         }

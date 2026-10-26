@@ -1,0 +1,48 @@
+{
+ "schema": "daedalus.decal/v1/set",
+ "asset": "Decal_Rock_Lichen",
+ "seed": 9191,
+ "generator": "tools/blender/decals/lichen_rosette.py",
+ "status": "NOT READY",
+ "clock": {
+  "lag": 8.0,
+  "fastRate": 0.6,
+  "fastYears": 50.0,
+  "slowRate": 0.3,
+  "minAge": 30,
+  "maxAge": 220,
+  "source": "LichenClock.Settings.DEFAULT (Daedalus2 1d8ebbe9)"
+ },
+ "max_diameter_mm": 78.6,
+ "sizes": {
+  "S": {
+   "asset": "Decal_Rock_Lichen_S",
+   "diameter_mm": 15.0,
+   "growth_years": 25.0,
+   "fall_age_years_zero_delay": 33.0,
+   "decal_cm": 2.0,
+   "texture_px": 128,
+   "manifest": "Decal_Rock_Lichen_S/Decal_Rock_Lichen_S.decal.json"
+  },
+  "M": {
+   "asset": "Decal_Rock_Lichen_M",
+   "diameter_mm": 30.0,
+   "growth_years": 50.0,
+   "fall_age_years_zero_delay": 58.0,
+   "decal_cm": 4.0,
+   "texture_px": 256,
+   "manifest": "Decal_Rock_Lichen_M/Decal_Rock_Lichen_M.decal.json"
+  },
+  "L": {
+   "asset": "Decal_Rock_Lichen_L",
+   "diameter_mm": 60.0,
+   "growth_years": 150.0,
+   "fall_age_years_zero_delay": 158.0,
+   "decal_cm": 8.0,
+   "texture_px": 512,
+   "manifest": "Decal_Rock_Lichen_L/Decal_Rock_Lichen_L.decal.json"
+  }
+ },
+ "scale_rule": "for a thallus of d mm use the nearest size and scale DecalSize Y/Z by d / diameter_mm (0.8-1.31x keeps texel density sane)",
+ "placement": "rock faces of the reused rock-kit boulders, X = surface normal, random roll 0-360; cluster 3-12 rosettes per boulder, the largest at the oldest (sun-facing) face"
+}

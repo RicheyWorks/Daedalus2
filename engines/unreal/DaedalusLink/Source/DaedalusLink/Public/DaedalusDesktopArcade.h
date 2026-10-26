@@ -101,7 +101,7 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void PostDuplicate(EDuplicateMode::Type DuplicateMode) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Desktop Arcade") FString InitialGameId = TEXT("pong");
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Desktop Arcade") FString InitialGameId = TEXT("twinwake");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Desktop Arcade") int32 InitialSeed = 730;
 	/** Saved per placed instance. Identity is independent of selected gameplay and future entitlement providers. */
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Daedalus|Desktop Arcade") FString CabinetId;
@@ -111,19 +111,33 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool StartGame(const FString& Id, int32 Seed);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void SetArcadeInput(const FDaedalusDesktopArcadeInput& Input);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void ClearArcadeInput();
+	/** Ordered non-repeat keyboard dispatch; 0..9 follow Game::SourceKeyDown. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void SubmitArcadeSourceKey(int32 Key);
+	/** Source controller A=0 / Start=1; true consumes the source action before generic pause. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SubmitArcadeSourceControllerButton(int32 Button);
+	/** Logical canvas pointer press: 0 left, 1 right, 2 middle. No time step or automatic resume. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SubmitArcadeSourcePointerButton(double X, double Y, int32 Button);
 	/** At most eight 1/60-second steps. Invalid/negative delta is ignored; stalled wall time is dropped. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") int32 AdvanceGame(double DeltaSeconds);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void RestartGame();
+	/** Start an unrevealed Beacon Sweep puzzle with a fresh seed at the current size. Saved board is kept. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool NewBeaconSweepPuzzle();
 	/** Star keeps advancing its own pause-menu input; generic games stop within Driver::Advance. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void PauseGame(bool bPaused);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FDaedalusDesktopArcadeState GetState() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<FDaedalusDesktopArcadeEntry> GetAvailableGames() const;
-	/** Star Shooter only: 0 Easy, 1 Medium, 2 Hard; accepted changes start a new run. */
+	/** Star/Mines: difficulty 0..2. Twinwake: 0 Match, 1 practice, 2 First to 5, 3 Target rally.
+	 * Football: 0 Match, 1 practice. Riftwing: 0 full run, 1 boss rehearsal.
+	 * Driftstone: 0 endless, 1 three waves, 2 flight practice. Ninja: 0 adventure, 1 terrace climb.
+	 * Ironwake: 0 full run, 1 target range. Glowtrail: 0 classic, 1 bonus fruit.
+	 * Threadlight: 0 original room, 1 Switchback. Changes start a new run. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SetGameOption(int32 Option);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") int32 GetGameOption() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FString GetCabinetId() const { return CabinetId; }
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FString GetSelectedGameId() const;
-	/** Continue the native Star DGS1 run. Invalid files leave the current session untouched. */
+	/** Save the current Beacon Sweep board to its separate local slot. Failed writes preserve the previous save. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SaveGame();
+	/** Continue Beacon Sweep when selected, otherwise the native Star run. Invalid files preserve the current session. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool ResumeGame();
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<int64> GetHighScores() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<FDaedalusDesktopArcadeHighScore> GetHighScoreRecords() const;
@@ -149,8 +163,11 @@ private:
 	void RecordScore();
 	bool ReadHighScoreRecords(TArray<FDaedalusDesktopArcadeHighScore>& Records) const;
 	bool WriteOwnedFile(const FString& Filename, const FString& Text) const;
+	void RefreshSavedRun();
+	FString SelectedSavePath() const;
 	static FString SaveDirectory();
 	static FString SavePath();
+	static FString BeaconSweepSavePath();
 	static FString ScoresPath();
 
 	daedalus::desktop::Driver Session;

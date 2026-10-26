@@ -41,6 +41,19 @@ struct DAEDALUSLINK_API FDaedalusJavaHand
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 Bet = 0;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Value = 0;
 };
+USTRUCT(BlueprintType)
+struct DAEDALUSLINK_API FDaedalusSudokuSavedGame
+{
+    GENERATED_BODY()
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") FString GameId;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Difficulty = 1;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 FilledCells = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 GivensCount = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int32 Lives = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 ElapsedSeconds = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bSolved = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bTimeUp = false;
+};
 /** Deliberately contains only presentation data. No credentials, puzzle solution, hole-card,
  * future-shoe cards, RNG, save paths, or Java Engine objects are reflected or replicated. */
 USTRUCT(BlueprintType)
@@ -74,6 +87,11 @@ struct DAEDALUSLINK_API FDaedalusJavaArcadeState
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 TimeLimitSeconds = 0;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 HintCount = 0;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 MoveCount = 0;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") TArray<FDaedalusSudokuSavedGame> SavedGames;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bSavedGamesLoaded = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bSavedGamesLoading = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") bool bSavedGamesReady = false;
+    UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") FString SavedGamesMessage;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") FString Phase;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 Bankroll = 0;
     UPROPERTY(BlueprintReadOnly, Category="Daedalus|Java Arcade") int64 PendingBet = 0;
@@ -115,6 +133,9 @@ public:
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool OpenSudokuGame(const FString& GameId);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool ResumeSudokuGame(const FString& GameId);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool SaveSudokuGame();
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool RefreshSavedSudokuGames();
+    UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool ResumeSavedSudokuGame(const FString& GameId);
+    UFUNCTION(BlueprintPure, Category="Daedalus|Java Arcade") bool CanResumeSavedSudokuGame(const FString& GameId) const;
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool SubmitSudokuMove(int32 Row, int32 Col, int32 Value);
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool SudokuUndo();
     UFUNCTION(BlueprintCallable, Category="Daedalus|Java Arcade") bool SudokuRedo();
@@ -141,9 +162,14 @@ protected:
     virtual void EndPlay(const EEndPlayReason::Type Reason) override;
 
 private:
-    enum class Operation : uint8 { None, SudokuBootstrap, SudokuCreate, SudokuRead, SudokuHint, SudokuSync, SudokuSave, SudokuResume, BlackjackCreate, BlackjackRead, BlackjackCommand, BlackjackClose };
+    enum class Operation : uint8 { None, SudokuBootstrap, SudokuCreate, SudokuRead, SudokuHint, SudokuSync, SudokuSave, SudokuResume, BlackjackCreate, BlackjackRead, BlackjackCommand, BlackjackClose, SudokuSavedBootstrap, SudokuSavedList };
     using FTicket = daedalus::java_arcade::Ticket;
     void CancelTransport(bool bForgetSecrets);
+    void CancelSavedReads(bool bClearCache);
+    bool SavedScopeValid() const;
+    bool SendSavedRead(Operation Op, const FString& Path, const FTicket& Ticket);
+    void FinishSavedRead(Operation Op, FTicket Ticket, const TSharedPtr<FJavaArcadeHttpTask, ESPMode::ThreadSafe>& Task);
+    void TickSavedReads(double Now);
     void StopSocket();
     bool CoreTick(float Delta);
     bool SendHttp(Operation Op, const FString& Verb, const FString& Path, const FString& Body, const FTicket& Ticket);
@@ -162,10 +188,21 @@ private:
     bool OtherOverlayOwnsInput() const;
 
     daedalus::java_arcade::SessionGuard Guard;
+    daedalus::java_arcade::SessionGuard SavedGamesGuard;
     daedalus::java_arcade::SudokuView Sudoku;
     daedalus::java_arcade::BlackjackView Blackjack;
     FDaedalusJavaArcadeState View;
     TSharedPtr<FJavaArcadeHttpTask, ESPMode::ThreadSafe> HttpTask;
+    TSharedPtr<FJavaArcadeHttpTask, ESPMode::ThreadSafe> SavedGamesTask;
+    Operation SavedLastReadOperation = Operation::None;
+    FString SavedOrigin;
+    FString SavedBootstrapOwner;
+    FString SavedCacheOwner;
+    TArray<FDaedalusSudokuSavedGame> SavedGames;
+    bool bSavedGamesLoaded = false;
+    bool bSavedGamesLoading = false;
+    bool bSavedGamesReady = false;
+    FString SavedGamesMessage;
     TSharedPtr<IWebSocket> Socket;
     TSharedPtr<FJavaArcadeSocketInbox, ESPMode::ThreadSafe> SocketInbox;
     Operation LastReadOperation = Operation::None;

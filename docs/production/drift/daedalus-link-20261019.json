@@ -1,0 +1,1363 @@
+{
+  "schema": "plugin-drift/v1",
+  "label": "DaedalusLink",
+  "generated_utc": "2026-10-19T07:34:34+00:00",
+  "live_root": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink",
+  "repo_root": "engines\\unreal\\DaedalusLink",
+  "repo_ref": "17e781a5459febf6202fad872b890c374641f81b",
+  "excluded_dirs": [
+    ".git",
+    "Binaries",
+    "DerivedDataCache",
+    "Intermediate",
+    "Saved",
+    "__pycache__"
+  ],
+  "counts": {
+    "identical": 173,
+    "eol_only": 0,
+    "differing": 13,
+    "live_only": 45,
+    "main_only": 4
+  },
+  "drift": true,
+  "files": {
+    "identical": [
+      {
+        "path": "Content/Casts/bricks.dcs",
+        "sha256": "787b2b77bc1ff6ed8458973612c6341b99e868e49a4b326dff1b08cad6564e03"
+      },
+      {
+        "path": "Content/Casts/gallery-city.dcs",
+        "sha256": "cc8284aea2ecf29baaf5fe7a5264b5f0b1650b33cd11d8e210a07391efcfccaf"
+      },
+      {
+        "path": "Content/Casts/labyrinth.dcs",
+        "sha256": "01ea21977bd8dcfe299273096d57d4edba4821b378fbd619a8c888b1ca4468e3"
+      },
+      {
+        "path": "Content/Casts/parcels.dcs",
+        "sha256": "2787b33e7b4f166576724c463bf80fcfc31cb4f83add6c282cd291324ea2ec6d"
+      },
+      {
+        "path": "Content/Casts/world-zero.dcs",
+        "sha256": "6b3c9f35d6845d48a674acc3984647b39f7e2528a829e719c149308f81c7b319"
+      },
+      {
+        "path": "Content/Inventory/bricks.dic",
+        "sha256": "b0b3d5ca191c5ea1e214ae37270e1abc067536fb9e28fe7e3015ac29ff0dd3cc"
+      },
+      {
+        "path": "Content/Inventory/gallery-city.dic",
+        "sha256": "548b43ac43c1f463172bfefccafae3a5e6191a165117736f4485cc5f65238654"
+      },
+      {
+        "path": "Content/Inventory/labyrinth.dic",
+        "sha256": "2362c6c058a67735c0a068d0d8a41f129bc6a86500c8b3c5a1c04ba653e2c15d"
+      },
+      {
+        "path": "Content/Inventory/parcels.dic",
+        "sha256": "8162cb87ef1338f4a3d0a09e2b4769326cbbfecda9eec089af2e21737658fad4"
+      },
+      {
+        "path": "Content/Inventory/world-zero.dic",
+        "sha256": "c03b45a0bf37455035e1684e241377000a3083510f477610c8b9aca1b9891714"
+      },
+      {
+        "path": "Content/Python/daedalus_bridge_commands.py",
+        "sha256": "331798a5df5ff5577ca11917717cb358a9fcf8ac484f7280119f03693e86242e"
+      },
+      {
+        "path": "Content/Python/daedalus_control.py",
+        "sha256": "068123e5f3966d26371e3294620e2c708f26cc6164a21319f8b56e47b090dc1f"
+      },
+      {
+        "path": "Content/Python/daedalus_districts.py",
+        "sha256": "3493fd57f618db8e33fb88e217cef1a9744f64804885ba5dcdc998a1431a62b7"
+      },
+      {
+        "path": "Content/Python/daedalus_dsb.py",
+        "sha256": "db38d090efc967277c8fdfb895f2fd1f4a7e2d6e5ea58725f2809ef8c382897c"
+      },
+      {
+        "path": "Content/Python/daedalus_import_cast.py",
+        "sha256": "7af8fa967767302ad55a5131c1ea567fd04f5bd053c6fbf8e8f5e3fe3d1b9391"
+      },
+      {
+        "path": "Content/Python/daedalus_island_recipe.py",
+        "sha256": "5d67d69aa4862f4148431ef75f18530ea07b0f5b49363e7cecb460d304d882c6"
+      },
+      {
+        "path": "Content/Python/daedalus_islands.py",
+        "sha256": "15220ee77b995daf57fa56ce8d2f5bfde50c2cb982eaf1a7787ec97358874038"
+      },
+      {
+        "path": "Content/Python/daedalus_land_grid.py",
+        "sha256": "38ae2270cf272d9d5bd7c306f87cbe777fc7752eeca6e9b4d963fd9585dcb09a"
+      },
+      {
+        "path": "Content/Python/daedalus_land_sync.py",
+        "sha256": "2bf3206dd2705d8813568beb89f933326856bf35875ccdd7534d1ce580e1003d"
+      },
+      {
+        "path": "Content/Python/daedalus_layout.py",
+        "sha256": "82c2853a4badffc841670dd4d607383da5da169fdae84ef22796cdacc132ee07"
+      },
+      {
+        "path": "Content/Python/daedalus_lod.py",
+        "sha256": "b09d3d95f93405bee616e4ab439ae8b4d4d9b9a622571c934815c808e1e36d00"
+      },
+      {
+        "path": "Content/Python/daedalus_nanite_materials.py",
+        "sha256": "8dbb2692f5ffe83e31ea32ffd58287e2fd55143be5c324081c1e18182dab1b0f"
+      },
+      {
+        "path": "Content/Python/daedalus_play.py",
+        "sha256": "186db633ecbe96707931bec68deeeb7b1d6854175cec4a1c928652f739c2ef99"
+      },
+      {
+        "path": "Content/Python/daedalus_plots.py",
+        "sha256": "87648f2ecd00bf97e2e8aecfda0c1f523f6196e9139e8a12fe3d0fa495d5e864"
+      },
+      {
+        "path": "Content/Python/daedalus_populate.py",
+        "sha256": "b575a5c2b9e9800f6ae153684a789c108b1c7ed8e8c614f5da78fe12a4d4f376"
+      },
+      {
+        "path": "Content/Python/daedalus_ram_audit.py",
+        "sha256": "5e0625df82d43321c65bc55b18dce682b5ef1f9ba1cfe91e0f9b49396c0b810b"
+      },
+      {
+        "path": "Content/Python/daedalus_realm_ground.py",
+        "sha256": "7e34224731a93577b365311273936f3afe7955000e2539bc92579b2a3d4e73ac"
+      },
+      {
+        "path": "Content/Python/daedalus_sky_director.py",
+        "sha256": "028c9506f07969a59f3f9499f4e84792482e9f66c99684470a1005655b7b5b28"
+      },
+      {
+        "path": "Content/Python/daedalus_view.py",
+        "sha256": "9fd6e15acb94a386b6ec6a11b67b81261bc8a68b5c1b0374043e90dd976f7792"
+      },
+      {
+        "path": "Content/Python/import_world_package.py",
+        "sha256": "59b13404568bcd9c4d9a3d37e3f1a7aa380aa5abbd8a67299c17fb108e0dd5c6"
+      },
+      {
+        "path": "Content/Python/init_unreal.py",
+        "sha256": "0c7664488e99c28963a8b773d8fece7aaeb067706ba514a231a4ad5f5034fd4e"
+      },
+      {
+        "path": "Content/Python/test_daedalus_districts.py",
+        "sha256": "316b0e4f8f9f05e61f76799f3123805187c01e8c75c4d1df8e2af7234622da86"
+      },
+      {
+        "path": "Content/Python/test_daedalus_dsb.py",
+        "sha256": "1ba3c6b2fe8d99000eb4f1707789879d481a79968055e0c2e88a9e5333132d88"
+      },
+      {
+        "path": "Content/Python/test_daedalus_import_cast.py",
+        "sha256": "e8eb98486e2f6d88d8b806ecd32c837c85c66117650c1b55e98e1c0277b62971"
+      },
+      {
+        "path": "Content/Python/test_daedalus_land_grid.py",
+        "sha256": "f1ca237dbada6aade4e3cac9b5db5dd52560c9088d58f4ea5d9bba4db2755e93"
+      },
+      {
+        "path": "Content/Python/test_daedalus_land_sync.py",
+        "sha256": "b7f49ec1e1441bc5d6d482b0d6eb459bd5abfe48c0414a0790906dfee5b98f2d"
+      },
+      {
+        "path": "Content/Python/test_daedalus_layout.py",
+        "sha256": "877e3bde07fffb9a16f7179d1ed3d16c4072dfca25c432d1a895125b0bd7bbc0"
+      },
+      {
+        "path": "Content/Python/test_daedalus_lod.py",
+        "sha256": "1274d5f94186252a936d502814f379a9ce8d5006084709b6a48634d148f99d19"
+      },
+      {
+        "path": "Content/Python/test_daedalus_plots.py",
+        "sha256": "72c2174e490f87bf55b46b9f9a98d3a57eca1a98faa5385b10c675b20e78aafd"
+      },
+      {
+        "path": "Content/Python/test_daedalus_populate.py",
+        "sha256": "34c971af33d5c6faee0e8b106ea2a759cb7f83f055f26c3e553a36a194753a3e"
+      },
+      {
+        "path": "Content/Python/test_daedalus_ram_audit.py",
+        "sha256": "2886b8a348f544f616c6c9745015158dcd97303afb8ec85d49d6316e2cbe8cc1"
+      },
+      {
+        "path": "Content/Python/test_daedalus_realm_ground.py",
+        "sha256": "50f4fb47de38d402c79b5b9393d8f18e9a0411fd8c597ff9d7d2debf9dd35faa"
+      },
+      {
+        "path": "Content/Python/test_sky_math.py",
+        "sha256": "0fb715e06ff2f2cddf07c1e0a813fa771b5175cb2e599d87f73b6f9dba9410fe"
+      },
+      {
+        "path": "Content/Python/wild_biomes_moods.csv",
+        "sha256": "ee06288ec3d86fba588366b2296940b7f763535c6b6a7dd1dcafda7fa27e0a10"
+      },
+      {
+        "path": "Content/Realm/realm-7.drr",
+        "sha256": "a48de4b11000485ceecd618c3d4f612e5e5923fff08fe3df4dde73cf795eb0b6"
+      },
+      {
+        "path": "DaedalusLink.uplugin",
+        "sha256": "02727987041d51d4af37f0b77c80f3d5adc2ab4e1b5f56764e75f0692343951c"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusBattlePresentation.cpp",
+        "sha256": "92c0f26aedea0629a62b519ae85ef2cbee9725ab46a0d6b2f49262b817b8f83e"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusCritter.cpp",
+        "sha256": "57a2a137752c5aca830c5c6cb6ae423b106cf17b570ca1ac4a8a8709efdb9ca3"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusDresser.cpp",
+        "sha256": "3f49015e07c6d3fc3cfd34addf1b52869af9847f5a6d893e76908e364529a1e6"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusEcology.cpp",
+        "sha256": "fe141658b011f86c012810b24eff2dfd6563a45ba33862910746c7273cfb0675"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusEncounters.cpp",
+        "sha256": "13456b86f46c688379d8c31a63c4b1798797e9334c498b51cf905b95a3eb3b6a"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusExplorationTerrain.cpp",
+        "sha256": "9d8693b42fc3aeaf7e0cc69d0abc836b86c797391f61df280c461a4e4da5162d"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusFilm.cpp",
+        "sha256": "bc498f0e556fced7e143dbd100572cdc1b30ca72574d57fb96bedad0b17907b4"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusGhost.cpp",
+        "sha256": "88d156bd9cb8971d0108358cdd3c560f12e0e6ee9dd86a3e6d65070a1d4b25e0"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusHero.cpp",
+        "sha256": "82f8d559a63c67ed278b5d57ffc5017e320838964d201e03dfbdd99d1cfb4ce5"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusHomestead.cpp",
+        "sha256": "9a806436c60df8d700c51b6acaf805333f2a477f30ef2bdbf374f562b1a17403"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusJavaArcade.cpp",
+        "sha256": "1de82930ee72211eaca9c4abefb02882bb312304fb04995b673da4d8ed52c869"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusLandDistrict.cpp",
+        "sha256": "45cf4efecccc814870bb3a13064a32408e6a9f66f33132a1a4cda4857aeed54b"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusLinkModule.cpp",
+        "sha256": "4702b6edb1d6d8dc8032588bc55307475dcf28ae023845de4c9bdb77042737bb"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusLocalAppLauncher.cpp",
+        "sha256": "f6295506acb156d49184641bfe5feb4b0eeca6c8dd5475a72fa88eb0e4126687"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusLocalAppLauncher.h",
+        "sha256": "7ce20207d318e790707dece9f67ce6709ea0d4716149962c02f75daa2c6664c6"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusLocalAppMachine.cpp",
+        "sha256": "ab97c41002b2649cdbf9b29a242444561fdb45c66d26bee68d3d4c31dca273a0"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusMob.cpp",
+        "sha256": "1142e16b8f5cf8b4456e5cbce6f207b11f0acc38197f368ad9df73ebaf6420fc"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusMoodVolume.cpp",
+        "sha256": "1a947d1b98b1c9e20e1ed816b3af64024fd268d242f6239a46267932c37ab387"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusNav.cpp",
+        "sha256": "06f038a1d938263d42443968599ecd01bb69ea5bda14f1a42e72810a219e036f"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusOceanDock.cpp",
+        "sha256": "8123589d60640557ab11253ddefca05026d94b3308c15061e358e545b5c62ff2"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusOceanHostClient.cpp",
+        "sha256": "1a502da0d0776de5691c5419688fb2ccae8ed05b2d4ed7da88d13e39391543f7"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusOceanInteractor.cpp",
+        "sha256": "f1bf51952c07d01d9ecfea2fe520922ceccb8ad40009694437f2d50fd4996c3e"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusOceanPalette.inl",
+        "sha256": "ad1ff4ba51fd0e236252eb566f11da66341e784492978d10f519b5e072f7e51b"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusOceanSectorView.cpp",
+        "sha256": "79c9a3a7931bad8620806408d3ab835e3df44c6cef44ae4594ff9d639e853c6f"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusOceanTravelComponent.cpp",
+        "sha256": "32ec5004810a0648de3c5cd65d148633fc8dd6b28e854141813cb488c5eb4869"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusOrrery.cpp",
+        "sha256": "9542a444d21f92ce601dfc0fb8605034c8b85cffa288164d8dc3d3b23be0bfd4"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusPhotoPdfMachine.cpp",
+        "sha256": "2ae74fee9698e2fc617be21eeef13e1a0c332d4f66e82aa8e63d8e71b00251ba"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusPickup.cpp",
+        "sha256": "2f83e899e13a77a3c7b946b858863814eb5c73d51713042351c03b0df13ce01e"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusRealmPortal.cpp",
+        "sha256": "4c84056b9490c8b9a0be122784d9e5a0ac8a6ce27cac1f5b85bf7607b9cb3d27"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusSettings.cpp",
+        "sha256": "b251a91ad193859775579093ae8ac4ddcf4d4dd8d315928de039938430803940"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusShiny.cpp",
+        "sha256": "880fafd05d5f5a3fcfc76cea75607e35089dc886ba83d89d5519a6ba73f71a91"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusSkyBridge.cpp",
+        "sha256": "dd579237091a2521bf2d4b2ef74fef78b53eab587b37b6165500406d49432638"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusSkyDirector.cpp",
+        "sha256": "a3fdb967218be6b01de319b7cba797871b665371c739bffbf7f05da78d67bb9e"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusSolReachJournal.cpp",
+        "sha256": "711a184ee255df4876f89131bf86b2099a6a48c3b5952aef2fa41e5e07492da0"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusStreamer.cpp",
+        "sha256": "208b2484f326e68ecf4a03987f47afe4925be8c04d4c5af88e4a86317e50ca7f"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusTactics.cpp",
+        "sha256": "528f4cca9cce857d920d77a3dc345d05477e7196d8aa75ce68cbaeef4b945a34"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusTalker.cpp",
+        "sha256": "e0170a0c5381db36b0d056a66f9e0110795e4bfb833c74dcef22b38e61b8b9ce"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusTarget.cpp",
+        "sha256": "8f600101af12b74bcf585dbf80e9f6382f6c65397e2ef32d6b894f1716bd4287"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusVoxelIsle.cpp",
+        "sha256": "63d76ee28ba0c945e9cdc665016733905e29cde30750b98038ea1946158014d6"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusWorldActor.cpp",
+        "sha256": "a7a66a379b97663676f3d132f7de0a04cb29315bebd07736ba1f06e88744a00c"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusDialogue.cpp",
+        "sha256": "1adfe8d0ac21aa984a4f383b85e0307e8bed8fea2f81c8deb7535c37304a7995"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusDialogue.h",
+        "sha256": "14877e072c7233c21249642f11a18288ac5bfeba4f8ce5c5cc270c7c856d391f"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusFieldMenu.cpp",
+        "sha256": "a367363a7dd68d73de6917f37c03d157537dafa1040295b296a4ba35e343266f"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusFieldMenu.h",
+        "sha256": "3a5e154c24feae1b629bc8da29e045d4a62c855e60826def9d0bab905d975b47"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusHud.cpp",
+        "sha256": "be682af2512a2a2c26e396a67c915a79c9fd022be9961bc65436bcfe91e3db50"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusHud.h",
+        "sha256": "b49b8c9bac27d9c2303ab61de3a8d9a83cb9f0927f0e04a487ff33e6f0474030"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusInventory.cpp",
+        "sha256": "cb78d44886e6c70bea9641b31f1989db457073c9e3be5cbbcba7bf8b1115d29f"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusInventory.h",
+        "sha256": "99c34688a9c03c6542e59050ac68a6f1594be0f127ca531d14ee72fcde50d52d"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp",
+        "sha256": "7264206ee93950115ac91c916bb576bc6811a7660a6236276354bfef68279c5b"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusJavaArcade.h",
+        "sha256": "5ba9ec7e169acb57f87dd590f042b8c52b4c4b293e350eae84368a3492247ca0"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusRealm.cpp",
+        "sha256": "93416c0dde4b2fd4b96b37d03f60135de7fa4e3f9a75dbd52c81dbaaafd274e8"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusRealm.h",
+        "sha256": "8344fc42399a1cc073cc75d7a129190a5945b80b4896c4c9ef9cf2d9577bb2dc"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusSettingsMenu.cpp",
+        "sha256": "064137e6d7aa657a6075730260f090d79f345386d43060e63e82602dcccb1bb3"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusSettingsMenu.h",
+        "sha256": "51ffe1b24159b5118ec0de1870aa47740fe28061bef6b9308b09404e28898b35"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/Tests/DaedalusBattleCastTest.cpp",
+        "sha256": "76d641f6ac39a688e8cfa7b018fdc9f8ce71ccd75df09312725afea82002c940"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/Tests/DaedalusOceanClientTest.cpp",
+        "sha256": "1c0a4d7bfdc0e6c649d171ebe191a503f1ef8e87f4f730e8712ee7f68fe6fc68"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/Tests/DaedalusOceanDockTest.cpp",
+        "sha256": "4d7a97ba2e06a0976a9d6045f85d37f5c578a9a87c3cf871671537da0645c070"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/Tests/DaedalusOceanHullTest.cpp",
+        "sha256": "8fecf66a43e761ee12c9b661956532e7a575a9878931893243ddafe0e807793f"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/Tests/DaedalusOceanTravelTest.cpp",
+        "sha256": "7cd8df97e665b91cf41c51bf6d2e850528cc0ce442d206399f66227681d3909e"
+      },
+      {
+        "path": "Source/DaedalusLink/Private/Tests/DaedalusOceanViewTest.cpp",
+        "sha256": "a8f90ea73cc58b353e6cce430ab79b68f4631e0e28353f7b108d2a640c158e47"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusAssetLodCore.h",
+        "sha256": "bf561043a19cc4908c7a9142ade40950b71fadee75f6eae5ae3905582b29ad8b"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusBattlePresentation.h",
+        "sha256": "824c0e96098d7f79ebe53f3c9303439d4745217e96bc566cfe99e63700093fe6"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusBattleStageCore.h",
+        "sha256": "460f75ecdb67313744ffc71305cf0a3103ff4b32a90237db621f5bc2b5cbab51"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusBestiaryCore.h",
+        "sha256": "74e66cb271e482024a78ca98704d0039f29c775104f5d0342ce5bb9ee6d7f96a"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusCastScriptCore.h",
+        "sha256": "d0af46e5877ce637fb859300e6b1a5bd72123b09071c250cb265fc726f9e3bca"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusCritter.h",
+        "sha256": "b0ffea1b357d9a821903c6187301cb7c1bc9a5f8fba268cb96e8fc29abe2b574"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusDialogueCore.h",
+        "sha256": "7f512da804e6d4dcde60c54a7453e97f74a37789ab62a11c9295c6a04125b5a4"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusDresser.h",
+        "sha256": "daba55c89838ac409a24bab10f09af41849f64a330cc6abf3223d818c7068797"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusEcology.h",
+        "sha256": "956b8b794f9cd17174e5a50d7af21665a85741547e06325434ad40174d6735ad"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusEcologyCore.h",
+        "sha256": "63327a045e9b4a2e299d2501bf6916e8a729d7bff5644a98c107e49f4b5f3f4d"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusEncounters.h",
+        "sha256": "27c232e7cadc8f2fbc59994c4b21ed2510dc70291de47c1f081a3c80a0637487"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusExplorationTerrain.h",
+        "sha256": "50281f3329fe34d2b776ae5923017da599572a6121048555c65af2baccfcb715"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusExplorationTerrainCore.h",
+        "sha256": "64852fa40cff6c3ef106e9bbc1bf875864d2e1336dbe999dc62f969400e74762"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusFilm.h",
+        "sha256": "37a566fb8feb79f49c7b46ad0733272f7f9b951c8c02c7400d23ea05f22fa4ed"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusGhost.h",
+        "sha256": "5dc18aaee5ce36dc8ca7d74fd427b2fdb3aa8a56343565852b3369c4c1bff3d5"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusHero.h",
+        "sha256": "0cb404faa6c6eb293c9346b797e6273c4d0b4ed6398480b7b84b7722ef07d170"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusHomestead.h",
+        "sha256": "c5c1e5f5c32c1402e1eb38713a5b12006b70b2c23881214216fa306dace67bca"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusInventoryCore.h",
+        "sha256": "b0ff4bf115b3e9a43453451dfe765f0062f527a3e3a1f51a82619cfe8dc989ae"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusJavaArcade.h",
+        "sha256": "5f381e5c487f0242f935bc8b490f269ab25ae1d1608d88528d29ad6b08d8cd63"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusLandDistrict.h",
+        "sha256": "8930360918e0a52d8202e2d8172b09173238c7d49aaeb90ec8675876ea37e2bf"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusLandGrid.h",
+        "sha256": "1483e59d9fe35cf706391d1c826d46480ec15b37349b94140726ad758db31c3e"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusLandRegistryCore.h",
+        "sha256": "b0c15ff7ae707eb7764a48f5e521c8f993955bf685097809bd160de1eff9d353"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusLinkModule.h",
+        "sha256": "8cab6b4a9ab8fd4ce5e9af6f0f5545d6dd047773d8cb3eab52d6894f2c0348da"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusLocalAppCore.h",
+        "sha256": "9b0cac30349f7b65915419141483d0812e3e04dead5af84703fd6b94d576928a"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusLocalAppMachine.h",
+        "sha256": "2c660a2406d28d904ea98b46d0c03c35b1f2a6949b6ac92ce31aa6f46bda4248"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusMeshCore.h",
+        "sha256": "0f0b6de54cad1a75d11cb10a36d3c2c9cf0207b517cfcaa5b8d4ff2af49bdf03"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusMob.h",
+        "sha256": "16c6d99267a53b801176d46ebbf00c7ecb6b6715343a018ee5530429acd7cf48"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusMoodVolume.h",
+        "sha256": "f45f4a4b5876c6ce65f95efe9c0a63f9162aaea43352f679936af38ff1dc3ea4"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusMountCore.h",
+        "sha256": "7499daafa527e54f070f492bdb44d0798fd1e7395bbd714c83e087b0e343c6dd"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusNav.h",
+        "sha256": "04669b2717a527b281ce128651cc62e7a4573bcefd68c67fe8d3f5c17e8b5a9a"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusOceanDock.h",
+        "sha256": "d41c3abc0f3cd2b6536b5181c6717896dc8b3f251bd0342b261f25e1825ba805"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusOceanHostClient.h",
+        "sha256": "cf90f6eb0b661b304816865410af248faaa3bda0f18b3153e2d9d0047b84c7a8"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusOceanInteractor.h",
+        "sha256": "e821e278e7fd327d61c2128de1bf2a66af726d604ab929cedd76302626679989"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusOceanSectorView.h",
+        "sha256": "1c8fe033d3da02893b576dd062056f1a9fce7a22d130b8368414d3e92b3795c2"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusOceanTravelComponent.h",
+        "sha256": "f1ab922737aa16a59bc4a916bebc89a17d26e19826e43536a9884c4e7e5ef7f5"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusOceanTravelCore.h",
+        "sha256": "5f679c238981495228935b755edae30bb6d5e181e9bf1270852a1d015812ea40"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusOrrery.h",
+        "sha256": "712fa49f121a007262076fb214c25f9bcb1733b1d935d949794d21236a9bf381"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusOrreryCore.h",
+        "sha256": "ddd9c5a7001e972cc097040e835c700ca5efb3602a32ef4b89a4d19a4e3c85f9"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusPhotoPdfCore.h",
+        "sha256": "27ed3263743d0e539cd9096d3e980bbf0ee501b4401fd693f834e431e930e02a"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusPhotoPdfMachine.h",
+        "sha256": "58d64ce14a5f10a2018d75db78a23e0da8771c769656b1db8d4c61d8d8354faf"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusPickup.h",
+        "sha256": "e296c3c7e6bb1508b55a2f5e3ecedb91a20b50b9b39224a59b9427c29119f691"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusPortalQuestCore.h",
+        "sha256": "b0a17ae24c7d72f03d7da6341483bda9ad82154b61883ac6c845fb584114b310"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusRealmCore.h",
+        "sha256": "e9cfc753e1f6a967c266b99a2dadaae9544ab1bf8642cc7836b618f0609f2498"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusRealmDirectoryCore.h",
+        "sha256": "fa4c01458560035cd2b245f0abf1a2cddf9f60f44cb29a1831a65193c6122ecb"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusRealmDraw.h",
+        "sha256": "d2e3929ed4bdc51cfbf8e6b52637760c77b2616d5326aed6f59799b524647672"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusRealmLook.h",
+        "sha256": "fc3da2288cd5550a6ff157dbb747159910b6e525c3d059d72accb574c1c79004"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusRealmPortal.h",
+        "sha256": "4f3c6d8a1747aacff9b48bb1d7ccba69482479d5a30bcaf757b47189d26b23fe"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusRealmSessionCore.h",
+        "sha256": "3eeeaad410678c3c7db4a120b544231cb089ed15449c3e1787ee9f68b1b7660c"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusRealmSpec.h",
+        "sha256": "f6e476868a694a286b15ef52bcc2b407d2d9ca644e41066c4e39f03287eda346"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusRealmSprites.h",
+        "sha256": "9d3b9bee3017e5de925ed034748cd85d098f66294ef01225c07a6859b826e4e2"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusSettings.h",
+        "sha256": "88568c06315024c4dd5ce2a0c971105564c5a2a321d8bb68127b9456df8bffa3"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusShiny.h",
+        "sha256": "55e99dd0cda2aaac67ca92fc609e28655924c0416f4d36ac7251b95355ab17fe"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusSkyBridge.h",
+        "sha256": "d10d433ba7b60ab23b14100a8edef7025be2c55680e806e1f08798f1835f2a0c"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusSkyDirector.h",
+        "sha256": "08602ce8204496eb0f81575f9e35fdb2384eed811952a0f58c190f27ba78114e"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusSolReachCore.h",
+        "sha256": "ac93488e682bddc138dbf9f72139fd42a8c16a183d21bc021fbf04b9428c8018"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusSolReachJournal.h",
+        "sha256": "7fa22baa639da7c8a3d169576a38814fcf946adb3415025ebbcb3bf0ab283298"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusStreamCore.h",
+        "sha256": "d5412674080463efe6c9a7f49646f301b1bacf5691b1414459a2bae3f2aa943a"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusStreamer.h",
+        "sha256": "1628aec435ca5d738ddd47c628bb01d1bf73c4546f8b4a8e13d7e43b1c342976"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusStreamingBudgetCore.h",
+        "sha256": "8916842540469039e81d82b2c211d72cf597be6e0eb1c838f674d411d21b0223"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusTactics.h",
+        "sha256": "1a04c86e0214dc62157552b192642d3cd98fb9b1b4bfd77fa8b2831df1a56d16"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusTacticsCore.h",
+        "sha256": "08896868a59868046b982b3914d73bab73c9b1d1851d594a32db21acedc79ee5"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusTalker.h",
+        "sha256": "7a12db5681b011bd61bbc37140c46b60996da668c0a2cc4640f0a9098446d672"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusTarget.h",
+        "sha256": "cb97f072b51739bac974f98573abd401f8dbd38d0cb1e587157abcea94745201"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusVoxelIsle.h",
+        "sha256": "a48fcd2ede6eae346346d875eabf9ca6abc4c2898e7d2f5ffbdf4f838fc37c02"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusVoxelIsleCore.h",
+        "sha256": "9cdc6ce32004a55e5e891857477e6fbcfe815b8007fd404915263e2e26c588b7"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusWorldActor.h",
+        "sha256": "8ea821779c6182aac817f2bb4b142a925090fd2db3a41f4b5bebe56f792e47af"
+      },
+      {
+        "path": "Source/DaedalusLink/Public/JavaArcade/DaedalusJavaArcadeProtocol.h",
+        "sha256": "9b819430250b9386e2686ebb423121ca733c0111585e453a49cfad557db6cba0"
+      }
+    ],
+    "eol_only": [],
+    "differing": [
+      {
+        "path": "Content/Python/daedalus_claude_islands.py",
+        "live": {
+          "sha256": "bcd2f6d820db258322cfda2917c96c40699d3d6eec90e25a81c3a233b313e62d",
+          "sha256_lf": "bcd2f6d820db258322cfda2917c96c40699d3d6eec90e25a81c3a233b313e62d",
+          "size": 8765,
+          "mtime": "2026-10-14T17:26:09+00:00"
+        },
+        "repo": {
+          "sha256": "82a5f61ee7595ae8a3aec095b1a8ca3c53ab087272514bfebc22c26223f8275f",
+          "sha256_lf": "82a5f61ee7595ae8a3aec095b1a8ca3c53ab087272514bfebc22c26223f8275f",
+          "size": 10542,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/DaedalusLink.Build.cs",
+        "live": {
+          "sha256": "c80a83ff690684f45a1fde2be07a4f29a76f875d330c5da84e50dddc05e51a63",
+          "sha256_lf": "c80a83ff690684f45a1fde2be07a4f29a76f875d330c5da84e50dddc05e51a63",
+          "size": 1641,
+          "mtime": "2026-10-15T09:44:14+00:00"
+        },
+        "repo": {
+          "sha256": "1c457f9d144da1707592f2aee26d6f2916c6f21e414f6c026c41331f8b63a338",
+          "sha256_lf": "1c457f9d144da1707592f2aee26d6f2916c6f21e414f6c026c41331f8b63a338",
+          "size": 1624,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusDesktopArcade.cpp",
+        "live": {
+          "sha256": "daf5016b309fe7f1176855fb664a58a16dc10b2f1b71bdea4b2aaa9b41fe6637",
+          "sha256_lf": "daf5016b309fe7f1176855fb664a58a16dc10b2f1b71bdea4b2aaa9b41fe6637",
+          "size": 21459,
+          "mtime": "2026-10-15T09:44:14+00:00"
+        },
+        "repo": {
+          "sha256": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9",
+          "sha256_lf": "a60c424c464d05810fe381e38d7de42a6417dd95b8f2275d88e9c84e5decaaa9",
+          "size": 19865,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusDesktopArcade.cpp",
+        "live": {
+          "sha256": "de7ab6ee612243993535ba61b638150c5cc673dc4111dc2d87af334ee8b4daaf",
+          "sha256_lf": "de7ab6ee612243993535ba61b638150c5cc673dc4111dc2d87af334ee8b4daaf",
+          "size": 30903,
+          "mtime": "2026-10-15T09:44:16+00:00"
+        },
+        "repo": {
+          "sha256": "1bfe44f19f6c26a99b04631e58fe3555eb905d221dfc95ed1f3fdc6b8fc105bf",
+          "sha256_lf": "1bfe44f19f6c26a99b04631e58fe3555eb905d221dfc95ed1f3fdc6b8fc105bf",
+          "size": 26287,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusDesktopArcade.h",
+        "live": {
+          "sha256": "d5b0e0d513bc4af9b04a94c001b992fd6d588ab15b0986b712d52402c7d6d1fd",
+          "sha256_lf": "d5b0e0d513bc4af9b04a94c001b992fd6d588ab15b0986b712d52402c7d6d1fd",
+          "size": 2635,
+          "mtime": "2026-10-15T09:44:16+00:00"
+        },
+        "repo": {
+          "sha256": "bbeb1ba0191730b193e7361ef9131499a9f3df8007e8680d578adbfa7d670ab1",
+          "sha256_lf": "bbeb1ba0191730b193e7361ef9131499a9f3df8007e8680d578adbfa7d670ab1",
+          "size": 2411,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusDesktopArcade.h",
+        "live": {
+          "sha256": "f7235d7c2e1db03e17d7593c3c782f83cac0a8994c1365512f64d100ca171a6b",
+          "sha256_lf": "f7235d7c2e1db03e17d7593c3c782f83cac0a8994c1365512f64d100ca171a6b",
+          "size": 10801,
+          "mtime": "2026-10-15T02:58:10+00:00"
+        },
+        "repo": {
+          "sha256": "6856255c9a0b7a590e410a8d4fcc4d090a98f379994977b97bb74227308d8f6a",
+          "sha256_lf": "6856255c9a0b7a590e410a8d4fcc4d090a98f379994977b97bb74227308d8f6a",
+          "size": 10397,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameRegistry.h",
+        "live": {
+          "sha256": "8c60d1666d7fd8741fee96183918b34ca7bc3eecae7a532f899e04a5417b1f9e",
+          "sha256_lf": "8c60d1666d7fd8741fee96183918b34ca7bc3eecae7a532f899e04a5417b1f9e",
+          "size": 7013,
+          "mtime": "2026-10-15T02:58:10+00:00"
+        },
+        "repo": {
+          "sha256": "2a494f53b50c4ab9339aa313230368634fd79fc79ae72310e39b39fd11598558",
+          "sha256_lf": "2a494f53b50c4ab9339aa313230368634fd79fc79ae72310e39b39fd11598558",
+          "size": 5871,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameTypes.h",
+        "live": {
+          "sha256": "cc719f177045b461f8cd7533135c731b02ae62b190dee047b1019518825efe76",
+          "sha256_lf": "cc719f177045b461f8cd7533135c731b02ae62b190dee047b1019518825efe76",
+          "size": 5326,
+          "mtime": "2026-10-15T02:58:10+00:00"
+        },
+        "repo": {
+          "sha256": "5665cdf879921a8421346d35cd58ac89ac7956970310e374d81a9c0811aef142",
+          "sha256_lf": "5665cdf879921a8421346d35cd58ac89ac7956970310e374d81a9c0811aef142",
+          "size": 4865,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMazeCore.h",
+        "live": {
+          "sha256": "1881dc01c3f2ce1da6c8fcd6e913f898764477b0ddaf0c493606cd8a14a90f34",
+          "sha256_lf": "1881dc01c3f2ce1da6c8fcd6e913f898764477b0ddaf0c493606cd8a14a90f34",
+          "size": 34177,
+          "mtime": "2026-10-15T02:58:10+00:00"
+        },
+        "repo": {
+          "sha256": "403cab699959075e55ff3065447d6105b05a98193845d75b088ae90574a24dd1",
+          "sha256_lf": "403cab699959075e55ff3065447d6105b05a98193845d75b088ae90574a24dd1",
+          "size": 25220,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPlatformersCore.h",
+        "live": {
+          "sha256": "5b4f666d36c04e6b3b19ba3ed608ebe30f207e26de29e19985971515ee2bac31",
+          "sha256_lf": "5b4f666d36c04e6b3b19ba3ed608ebe30f207e26de29e19985971515ee2bac31",
+          "size": 37416,
+          "mtime": "2026-10-15T02:58:10+00:00"
+        },
+        "repo": {
+          "sha256": "2eca2a6ae89dcfe328cb70bdf6caaf14944f859525e941f36fb580894e70e05a",
+          "sha256_lf": "2eca2a6ae89dcfe328cb70bdf6caaf14944f859525e941f36fb580894e70e05a",
+          "size": 27092,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopPongCore.h",
+        "live": {
+          "sha256": "dd748e33887b1f7dff6c5362443b65d881a96e2b3c96752e4e288c480e98563e",
+          "sha256_lf": "dd748e33887b1f7dff6c5362443b65d881a96e2b3c96752e4e288c480e98563e",
+          "size": 4628,
+          "mtime": "2026-10-15T02:58:10+00:00"
+        },
+        "repo": {
+          "sha256": "e282406b9acd43731c6cac137a0bf10b0501223a251a054ca52deb441737ee06",
+          "sha256_lf": "e282406b9acd43731c6cac137a0bf10b0501223a251a054ca52deb441737ee06",
+          "size": 2385,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopShootersCore.h",
+        "live": {
+          "sha256": "10b64b7493066e0feadccb08320a5c3595add2dffa84f1e87bc85d118b057c05",
+          "sha256_lf": "10b64b7493066e0feadccb08320a5c3595add2dffa84f1e87bc85d118b057c05",
+          "size": 54849,
+          "mtime": "2026-10-15T02:58:10+00:00"
+        },
+        "repo": {
+          "sha256": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09",
+          "sha256_lf": "df494a7426075399ee8ee290ff2d00d8d86ef168b116e91c3caef9f8555e9f09",
+          "size": 46562,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopSportsCore.h",
+        "live": {
+          "sha256": "c93a54bdb1d954595bf0db31be8cb20269e47a46693c7ce50066a3a0131a3934",
+          "sha256_lf": "c93a54bdb1d954595bf0db31be8cb20269e47a46693c7ce50066a3a0131a3934",
+          "size": 37344,
+          "mtime": "2026-10-15T02:58:10+00:00"
+        },
+        "repo": {
+          "sha256": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d",
+          "sha256_lf": "2005f6e818b4f66ec8c76d041317b414f8f383fabc2422d2f157fe8a816d876d",
+          "size": 25223,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      }
+    ],
+    "live_only": [
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusApprovedWorkspaceClient.cpp",
+        "live": {
+          "sha256": "ec8c43acc3f8a18c2f37b5fa6a208dd7af84801fbb0b4e8ed14b7fd66aa9db2c",
+          "sha256_lf": "ec8c43acc3f8a18c2f37b5fa6a208dd7af84801fbb0b4e8ed14b7fd66aa9db2c",
+          "size": 33354,
+          "mtime": "2026-10-15T09:44:14+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusApprovedWorkspaceTerminal.cpp",
+        "live": {
+          "sha256": "a9c8bf38b37133ad088e2658ad105f5bd54671f6410ca33a23a7837ea7562383",
+          "sha256_lf": "a9c8bf38b37133ad088e2658ad105f5bd54671f6410ca33a23a7837ea7562383",
+          "size": 10346,
+          "mtime": "2026-10-15T09:44:14+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusFaxPreparationClient.cpp",
+        "live": {
+          "sha256": "80ec7bf9d5192226e0b7582bbfcc503e50dd2e695dc853e51dbecf6e4351d9f6",
+          "sha256_lf": "80ec7bf9d5192226e0b7582bbfcc503e50dd2e695dc853e51dbecf6e4351d9f6",
+          "size": 32476,
+          "mtime": "2026-10-15T09:44:14+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusFaxPreparationTerminal.cpp",
+        "live": {
+          "sha256": "48ef26dd642c03588fb11e9311d774866236e66cecd6f0ea351bad81ad778c7a",
+          "sha256_lf": "48ef26dd642c03588fb11e9311d774866236e66cecd6f0ea351bad81ad778c7a",
+          "size": 11116,
+          "mtime": "2026-10-15T09:44:14+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusFaxWorkbenchFiles.cpp",
+        "live": {
+          "sha256": "be005cfaec53342c4af9fcc1859f3c9b7d146686cacdcc9a399adbedba5b51a8",
+          "sha256_lf": "be005cfaec53342c4af9fcc1859f3c9b7d146686cacdcc9a399adbedba5b51a8",
+          "size": 6312,
+          "mtime": "2026-10-15T09:44:14+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusFaxWorkbenchTerminal.cpp",
+        "live": {
+          "sha256": "725d88f6c7f9d9fb24a934ee3627402ad715cf1429fd27d37aa77639ca2522fa",
+          "sha256_lf": "725d88f6c7f9d9fb24a934ee3627402ad715cf1429fd27d37aa77639ca2522fa",
+          "size": 10455,
+          "mtime": "2026-10-15T09:44:14+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusImageOptimizerClient.cpp",
+        "live": {
+          "sha256": "b922cfea36f891f4136cd92aaeb34ba19c16942dbafa5af425f7cf294eaffc44",
+          "sha256_lf": "b922cfea36f891f4136cd92aaeb34ba19c16942dbafa5af425f7cf294eaffc44",
+          "size": 39977,
+          "mtime": "2026-10-15T09:44:14+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.cpp",
+        "live": {
+          "sha256": "14ff9de611db88330e6be8477aa99ac3ed1af589302deff2224702bdebe6e71b",
+          "sha256_lf": "14ff9de611db88330e6be8477aa99ac3ed1af589302deff2224702bdebe6e71b",
+          "size": 22992,
+          "mtime": "2026-10-15T09:44:15+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusImageOptimizerFiles.h",
+        "live": {
+          "sha256": "9b2993034c436c89bb14b952ecb9c4cc85e7f7a7bb11f3e73cef317a266216dd",
+          "sha256_lf": "9b2993034c436c89bb14b952ecb9c4cc85e7f7a7bb11f3e73cef317a266216dd",
+          "size": 1036,
+          "mtime": "2026-10-15T09:44:15+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusImageOptimizerTerminal.cpp",
+        "live": {
+          "sha256": "9d0f981d6c0a0845b71cef8db182ed693c81e7a2e7e02f9140772ee892f7e8d1",
+          "sha256_lf": "9d0f981d6c0a0845b71cef8db182ed693c81e7a2e7e02f9140772ee892f7e8d1",
+          "size": 12395,
+          "mtime": "2026-10-15T09:44:15+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusPhotoPdfClient.cpp",
+        "live": {
+          "sha256": "2154d35bb02c14b61f016972a76acea590b059ff20f987f4c22bf2a5d93c4357",
+          "sha256_lf": "2154d35bb02c14b61f016972a76acea590b059ff20f987f4c22bf2a5d93c4357",
+          "size": 33891,
+          "mtime": "2026-10-15T09:44:15+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.cpp",
+        "live": {
+          "sha256": "abd51f275442a5bb5428262a86414f30d0920cd22a11092215294c793a322223",
+          "sha256_lf": "abd51f275442a5bb5428262a86414f30d0920cd22a11092215294c793a322223",
+          "size": 24656,
+          "mtime": "2026-10-15T09:44:15+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusPhotoPdfFiles.h",
+        "live": {
+          "sha256": "95cdf8948e8db404712bbbcbdeef151ef8d88a41e89c72b907fa8074eed58564",
+          "sha256_lf": "95cdf8948e8db404712bbbcbdeef151ef8d88a41e89c72b907fa8074eed58564",
+          "size": 1476,
+          "mtime": "2026-10-15T09:44:15+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusPhotoPdfTerminal.cpp",
+        "live": {
+          "sha256": "1d42287ea3e24f8ad518f6fca6b71486fa0f05f9f5d0f81aa22a1f63c2e3bb0f",
+          "sha256_lf": "1d42287ea3e24f8ad518f6fca6b71486fa0f05f9f5d0f81aa22a1f63c2e3bb0f",
+          "size": 11845,
+          "mtime": "2026-10-15T09:44:15+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusSynapseClient.cpp",
+        "live": {
+          "sha256": "409c0718907ab08e51b0ed3853ed96fda4f1fa4625280219768f23a93e47f015",
+          "sha256_lf": "409c0718907ab08e51b0ed3853ed96fda4f1fa4625280219768f23a93e47f015",
+          "size": 34365,
+          "mtime": "2026-10-15T09:44:15+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusSynapseTerminal.cpp",
+        "live": {
+          "sha256": "9cce05db34c1d835a9651f6c130758dc07e47e00e502e5607d682b30cd4e77a9",
+          "sha256_lf": "9cce05db34c1d835a9651f6c130758dc07e47e00e502e5607d682b30cd4e77a9",
+          "size": 9226,
+          "mtime": "2026-10-15T09:44:15+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusSynapseWorkbenchFiles.cpp",
+        "live": {
+          "sha256": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a",
+          "sha256_lf": "69ea5bc27f92c4d7ff7b9a86bc2045180cbc5ed03754bbb31fe54164b67aa38a",
+          "size": 32907,
+          "mtime": "2026-10-15T09:44:16+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusSynapseWorkbenchTerminal.cpp",
+        "live": {
+          "sha256": "cc0c180050e78f4638e27e62de29d6d1914a59e80972eb1eeaf6cc8c21c591e1",
+          "sha256_lf": "cc0c180050e78f4638e27e62de29d6d1914a59e80972eb1eeaf6cc8c21c591e1",
+          "size": 9071,
+          "mtime": "2026-10-15T09:44:16+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusApprovedWorkspacePanel.cpp",
+        "live": {
+          "sha256": "2bd22af6210ecb6efc8a5505e70e859bb09eb0b574afd8af77c91e561359cf9a",
+          "sha256_lf": "2bd22af6210ecb6efc8a5505e70e859bb09eb0b574afd8af77c91e561359cf9a",
+          "size": 8091,
+          "mtime": "2026-10-15T09:44:16+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusApprovedWorkspacePanel.h",
+        "live": {
+          "sha256": "3e81d3bd34a3e6598614065b3c544289d3911b4109fcf550f88f6704a3bd623d",
+          "sha256_lf": "3e81d3bd34a3e6598614065b3c544289d3911b4109fcf550f88f6704a3bd623d",
+          "size": 1409,
+          "mtime": "2026-10-15T09:44:16+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusFaxPreparationPanel.cpp",
+        "live": {
+          "sha256": "c6716ac23175c99b5908108b2a2d54f3ad534b70fee770a9d3c350b84ddab208",
+          "sha256_lf": "c6716ac23175c99b5908108b2a2d54f3ad534b70fee770a9d3c350b84ddab208",
+          "size": 13969,
+          "mtime": "2026-10-15T09:44:16+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusFaxPreparationPanel.h",
+        "live": {
+          "sha256": "9536559a83fe68e0f09c09d2c63f8c8619d0a114198c51f333837bf3cd3ea4a9",
+          "sha256_lf": "9536559a83fe68e0f09c09d2c63f8c8619d0a114198c51f333837bf3cd3ea4a9",
+          "size": 1865,
+          "mtime": "2026-10-15T09:44:16+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusImageOptimizerPanel.cpp",
+        "live": {
+          "sha256": "e69e1011530cf23d8a2c823f4eebd99fc037fa25ce9dec843e7ba0cd27f8a502",
+          "sha256_lf": "e69e1011530cf23d8a2c823f4eebd99fc037fa25ce9dec843e7ba0cd27f8a502",
+          "size": 17281,
+          "mtime": "2026-10-15T09:44:16+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusImageOptimizerPanel.h",
+        "live": {
+          "sha256": "fbacf6f95ffe08a77b8f737fa5b6c6eaacdcfba51f9a234912be0d8eeeea3583",
+          "sha256_lf": "fbacf6f95ffe08a77b8f737fa5b6c6eaacdcfba51f9a234912be0d8eeeea3583",
+          "size": 1859,
+          "mtime": "2026-10-15T09:44:17+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusPhotoPdfPanel.cpp",
+        "live": {
+          "sha256": "a8f02526874be3fd4feb376b0abc63f080f7412237f838740c2c4558ecf58877",
+          "sha256_lf": "a8f02526874be3fd4feb376b0abc63f080f7412237f838740c2c4558ecf58877",
+          "size": 12230,
+          "mtime": "2026-10-15T09:44:17+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusPhotoPdfPanel.h",
+        "live": {
+          "sha256": "2e2a1cc24c397e7ac3fb5b8fbc4cf7c23001621589cfdea80c5a858ab84e0179",
+          "sha256_lf": "2e2a1cc24c397e7ac3fb5b8fbc4cf7c23001621589cfdea80c5a858ab84e0179",
+          "size": 1555,
+          "mtime": "2026-10-15T09:44:17+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusSynapsePanel.cpp",
+        "live": {
+          "sha256": "d4db126b34c5aa2689f39259751a1ee381a983ab36afdeaec10e0e1f949ea82b",
+          "sha256_lf": "d4db126b34c5aa2689f39259751a1ee381a983ab36afdeaec10e0e1f949ea82b",
+          "size": 12637,
+          "mtime": "2026-10-15T09:44:17+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusSynapsePanel.h",
+        "live": {
+          "sha256": "870b8fdf7b1d2e35aab5194c1ac0d7761989604f81d394dfd1d4a1c61dcd5877",
+          "sha256_lf": "870b8fdf7b1d2e35aab5194c1ac0d7761989604f81d394dfd1d4a1c61dcd5877",
+          "size": 1552,
+          "mtime": "2026-10-15T09:44:17+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.cpp",
+        "live": {
+          "sha256": "b99189232cb6f569dc92939b23ea18e94d9c3f624c9afbcad9a98208d779536c",
+          "sha256_lf": "b99189232cb6f569dc92939b23ea18e94d9c3f624c9afbcad9a98208d779536c",
+          "size": 19940,
+          "mtime": "2026-10-15T09:44:17+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Private/SDaedalusSynapseWorkbenchPanel.h",
+        "live": {
+          "sha256": "88d605b6c037bf105c6a39c79db57ad72b6f386f7c9d38abca2a2aba34f54b83",
+          "sha256_lf": "88d605b6c037bf105c6a39c79db57ad72b6f386f7c9d38abca2a2aba34f54b83",
+          "size": 3205,
+          "mtime": "2026-10-15T09:44:17+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusApprovedWorkspaceClient.h",
+        "live": {
+          "sha256": "5278cce771058b4602b27a7d93f93239b6eff65dcb14cc80a5164a3e84b8dc65",
+          "sha256_lf": "5278cce771058b4602b27a7d93f93239b6eff65dcb14cc80a5164a3e84b8dc65",
+          "size": 1251,
+          "mtime": "2026-10-15T09:44:17+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusApprovedWorkspaceTerminal.h",
+        "live": {
+          "sha256": "b47a259a5284a8dd6d233ac339515bdf7a72226230be876b3a724a8b61e71520",
+          "sha256_lf": "b47a259a5284a8dd6d233ac339515bdf7a72226230be876b3a724a8b61e71520",
+          "size": 3069,
+          "mtime": "2026-10-15T09:44:17+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusFaxPreparationClient.h",
+        "live": {
+          "sha256": "0e4b70434e3928c00bb4583dba6b535fbbdf0a5e9dcc1472522cf8866939d2d5",
+          "sha256_lf": "0e4b70434e3928c00bb4583dba6b535fbbdf0a5e9dcc1472522cf8866939d2d5",
+          "size": 1967,
+          "mtime": "2026-10-15T09:44:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusFaxPreparationTerminal.h",
+        "live": {
+          "sha256": "704d4850f9131c814faf5f0290e3146a658c027434b3092a4d9413f9e64e12e3",
+          "sha256_lf": "704d4850f9131c814faf5f0290e3146a658c027434b3092a4d9413f9e64e12e3",
+          "size": 2643,
+          "mtime": "2026-10-15T09:44:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusFaxWorkbenchFiles.h",
+        "live": {
+          "sha256": "fcd7573fca36b79dc5ec23512596aa00bdccee1d87518c98e22c3c92e5dec696",
+          "sha256_lf": "fcd7573fca36b79dc5ec23512596aa00bdccee1d87518c98e22c3c92e5dec696",
+          "size": 1539,
+          "mtime": "2026-10-15T09:44:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusFaxWorkbenchTerminal.h",
+        "live": {
+          "sha256": "b6d51313444b778e2b4603aed3b44f21426d1b02a6de4fa7898a67ce7a698749",
+          "sha256_lf": "b6d51313444b778e2b4603aed3b44f21426d1b02a6de4fa7898a67ce7a698749",
+          "size": 2150,
+          "mtime": "2026-10-15T09:44:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusImageOptimizerClient.h",
+        "live": {
+          "sha256": "32aa220245354e19bc9685560099fd89090566fea0b550906f236179cceda760",
+          "sha256_lf": "32aa220245354e19bc9685560099fd89090566fea0b550906f236179cceda760",
+          "size": 2732,
+          "mtime": "2026-10-15T09:44:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusImageOptimizerTerminal.h",
+        "live": {
+          "sha256": "318334446207d80ee26973e001b8d84e83728e03bdd70d69a701ed9a6baa1134",
+          "sha256_lf": "318334446207d80ee26973e001b8d84e83728e03bdd70d69a701ed9a6baa1134",
+          "size": 2757,
+          "mtime": "2026-10-15T09:44:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusPhotoPdfClient.h",
+        "live": {
+          "sha256": "0ca4841b7c9dab515b389be6654843daf8a38b630cfbb754016d491ff0c4f906",
+          "sha256_lf": "0ca4841b7c9dab515b389be6654843daf8a38b630cfbb754016d491ff0c4f906",
+          "size": 2012,
+          "mtime": "2026-10-15T09:44:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusPhotoPdfTerminal.h",
+        "live": {
+          "sha256": "9df9f9543efb95c7d7d9c0049ecea31cfb68658ab85ae4932e4d106e8d80ecb6",
+          "sha256_lf": "9df9f9543efb95c7d7d9c0049ecea31cfb68658ab85ae4932e4d106e8d80ecb6",
+          "size": 2636,
+          "mtime": "2026-10-15T09:44:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusSynapseClient.h",
+        "live": {
+          "sha256": "784c2e051ac8794375885b8ab89a3439c6c856fbb8319e1cdebd8dd9f912153b",
+          "sha256_lf": "784c2e051ac8794375885b8ab89a3439c6c856fbb8319e1cdebd8dd9f912153b",
+          "size": 1552,
+          "mtime": "2026-10-15T09:44:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusSynapseTerminal.h",
+        "live": {
+          "sha256": "ec1081a832fee09dfc8e8856d75db3e90cf76610e696348edd33ca1d5df9bb2d",
+          "sha256_lf": "ec1081a832fee09dfc8e8856d75db3e90cf76610e696348edd33ca1d5df9bb2d",
+          "size": 2303,
+          "mtime": "2026-10-15T09:44:19+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusSynapseWorkbenchFiles.h",
+        "live": {
+          "sha256": "d7fe20855feff89a1bd7a1f5ca12c5a91400906b7c2c6b5ba04cb21039a2f59c",
+          "sha256_lf": "d7fe20855feff89a1bd7a1f5ca12c5a91400906b7c2c6b5ba04cb21039a2f59c",
+          "size": 1876,
+          "mtime": "2026-10-15T09:44:19+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusSynapseWorkbenchTerminal.h",
+        "live": {
+          "sha256": "dde4e22229a2bfb07cf8deba34788743903ac571eb2b4d421acec9d713ac23bf",
+          "sha256_lf": "dde4e22229a2bfb07cf8deba34788743903ac571eb2b4d421acec9d713ac23bf",
+          "size": 2134,
+          "mtime": "2026-10-15T09:44:19+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopMinesweeperCore.h",
+        "live": {
+          "sha256": "5266529a0a63ba5d745a6a5798e05a8ccb5d91e0d42b0883c0d365c8d92a5582",
+          "sha256_lf": "5266529a0a63ba5d745a6a5798e05a8ccb5d91e0d42b0883c0d365c8d92a5582",
+          "size": 4773,
+          "mtime": "2026-10-15T02:58:10+00:00"
+        }
+      }
+    ],
+    "main_only": [
+      {
+        "path": "Source/DaedalusLink/Private/DaedalusTonic.cpp",
+        "repo": {
+          "sha256": "b97d0cebf22846e848dca0b19108664e9322caf20dad2af93c02a656cb5f395e",
+          "sha256_lf": "b97d0cebf22846e848dca0b19108664e9322caf20dad2af93c02a656cb5f395e",
+          "size": 14431,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusForgeGradesCore.h",
+        "repo": {
+          "sha256": "9fe7b7af404a8512cc11f1d8940953dcc1a166a9e3c35e68c7d37eda57a28d18",
+          "sha256_lf": "9fe7b7af404a8512cc11f1d8940953dcc1a166a9e3c35e68c7d37eda57a28d18",
+          "size": 2873,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusTonic.h",
+        "repo": {
+          "sha256": "f031abbffe19c486e4bb1e7b9e739a25b997702966a1a062bcd40e5886acef59",
+          "sha256_lf": "f031abbffe19c486e4bb1e7b9e739a25b997702966a1a062bcd40e5886acef59",
+          "size": 8004,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      },
+      {
+        "path": "Source/DaedalusLink/Public/DaedalusTonicCore.h",
+        "repo": {
+          "sha256": "01b7267d0029898fcb575b0c29cc0a6951605dd209e0428485c3f4fb5ebb9344",
+          "sha256_lf": "01b7267d0029898fcb575b0c29cc0a6951605dd209e0428485c3f4fb5ebb9344",
+          "size": 17136,
+          "mtime": "2026-10-19T07:32:18+00:00"
+        }
+      }
+    ]
+  }
+}
