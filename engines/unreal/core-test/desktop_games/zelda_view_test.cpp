@@ -154,6 +154,19 @@ void View() {
         }
         Check(Haft<Gold && Gold<F.Commands.size(),"the moblin spear keeps a dark edge on the road");
     }
+    const ZeldaGame::Enemy* Octo=nullptr;
+    for(const auto& E:G.GetEnemies()) if(E.Kind==ZeldaGame::EnemyKind::Octorok && E.Alive && E.X>600) Octo=&E;
+    Check(Octo!=nullptr,"an octorok stands in the pond");
+    if(Octo) {
+        std::size_t OctoRim=F.Commands.size(),OctoBody=F.Commands.size();
+        for(std::size_t N=0;N<F.Commands.size();++N) {
+            const auto& C=F.Commands[N];
+            if(C.Kind!=Shape::Circle || C.A.X!=Octo->X || C.A.Y!=Octo->Y) continue;
+            if(C.Size==12 && C.Tint.R==48 && C.Tint.G==12 && C.Tint.B==16) OctoRim=N;
+            if(C.Size==10 && C.Tint.R==200 && C.Tint.G==50 && C.Tint.B==50) OctoBody=N;
+        }
+        Check(OctoRim<OctoBody && OctoBody<F.Commands.size(),"the pond octorok keeps a dark rim on the water");
+    }
     const ZeldaGame::Enemy* Armos=nullptr;
     for(const auto& E:G.GetEnemies()) if(E.Kind==ZeldaGame::EnemyKind::Armos && E.Alive) Armos=&E;
     Check(Armos!=nullptr,"a living armos is on the fresh board");

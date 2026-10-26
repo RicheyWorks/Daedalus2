@@ -934,6 +934,7 @@ private:
     void Damage() { Hero.Health=std::max(0,Hero.Health-1); Hero.Invincible=45; if(Hero.Health==0) Over=true; }
     static void DrawEnemy(Frame& F,const Enemy& E) {
         if(E.Kind==EnemyKind::Octorok) {
+            F.AddCircle(E.X,E.Y,12,{48,12,16,255});
             F.AddCircle(E.X,E.Y,10,{200,50,50,255}); F.AddCircle(E.X,E.Y+1,6,{150,30,30,255});
             F.AddCircle(E.X-4,E.Y-2,3,White); F.AddCircle(E.X+4,E.Y-2,3,White);
             F.AddCircle(E.X-4,E.Y-2,1,Black); F.AddCircle(E.X+4,E.Y-2,1,Black);
