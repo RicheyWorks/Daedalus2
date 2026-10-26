@@ -82,6 +82,11 @@ void View() {
         if(C.A.Y==55 && C.Tint.R==0 && C.Tint.G==100 && C.Tint.B==0) Canopy=N;
     }
     Check(Edge<Canopy && Canopy<F.Commands.size(),"tree canopy keeps a light edge on the grass");
+    bool Trunk=false;
+    for(const auto& C:F.Commands)
+        if(C.Kind==Shape::Rectangle && C.A.X==38 && C.A.Y==85 && C.B.X==24 && C.B.Y==30
+            && C.Tint.R==92 && C.Tint.G==58 && C.Tint.B==24) Trunk=true;
+    Check(Trunk,"tree trunks are wood-colored on the grass");
     const ZeldaGame::Enemy* Moblin=nullptr;
     for(const auto& E:G.GetEnemies()) if(E.Kind==ZeldaGame::EnemyKind::Moblin && E.Alive) Moblin=&E;
     Check(Moblin!=nullptr,"a living moblin is on the fresh board");
