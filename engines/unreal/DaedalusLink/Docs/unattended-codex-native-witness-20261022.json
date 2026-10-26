@@ -1,0 +1,378 @@
+{
+  "schema": "daedalus.unattended-codex-native-witness.v1",
+  "utc": "2026-10-22T20:45:42.120849+00:00",
+  "state": "BOUNDED_ONE_PRIVATE_SOURCE_IMPORT_NATIVE_VALID_SAVED_READBACK_RESUME_STOP_PASS",
+  "source_base": "ad2fccb5f057442018fdb94b4fcf77570271f387",
+  "prior_CI": "9/9 PASS",
+  "profile": {
+    "name": "CodexModule_CopperPatina_BridgeCoupler_85000",
+    "source_sha256": "d09d0b1aaacea5d4474ed8745733cba69a9793172cd69c76a0fd44d78d118714",
+    "source_bytes": 19228,
+    "geometry": {
+      "triangles": 416,
+      "material_slots": 2,
+      "nanite": false,
+      "simple_collision": 0,
+      "qualified_bounds_m": [
+        4.0,
+        1.0,
+        0.5
+      ]
+    },
+    "palette": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour",
+    "policy": "Original prepared24 manifest, only this one selected module; no importer/validation/provenance weakening."
+  },
+  "actual_import": {
+    "api": "Existing daedalus_codex_prepared_assets.import_all -> AssetImportTask, replace_existingFalse; imports materials/texturesFalse; read-only existing palette bound.",
+    "effect_count": 1,
+    "native_intent_journals": [
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR1\\state\\native\\ea63456c-dff9-41fe-8dbd-e59c0bec09a5\\import\\native-substeps.jsonl"
+    ],
+    "original_report": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR1\\state\\native\\ea63456c-dff9-41fe-8dbd-e59c0bec09a5\\existing-importer-report.json",
+      "bytes": 2411,
+      "sha256": "c07c2267444d332a97e8e2bdf837e5f8ee98f957edf26897954746758dff458d"
+    },
+    "save_return": true,
+    "world_placed": 0,
+    "requested_options": {
+      "auto_generate_collision": false,
+      "build_nanite": false,
+      "combine_meshes": false,
+      "generate_lightmap_u_vs": false,
+      "import_materials": false,
+      "import_textures": false,
+      "vertex_color_import_option": "REPLACE"
+    },
+    "actual_property_readback": {
+      "auto_generate_collision": "unavailable",
+      "build_nanite": "unavailable",
+      "combine_meshes": "unavailable",
+      "generate_lightmap_u_vs": "unavailable",
+      "import_data_class": "InterchangeAssetImportData",
+      "nanite_enabled": false,
+      "vertex_color_import_option": "unavailable"
+    },
+    "unknown_flags_not_assumed_applied": true
+  },
+  "actual_native_validation": {
+    "calls": 1,
+    "intent_journals": [
+      "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR2\\state\\native\\ea63456c-dff9-41fe-8dbd-e59c0bec09a5\\validate\\native-substeps.jsonl"
+    ],
+    "envelope": {
+      "accepted": true,
+      "cancellation_observed": false,
+      "diagnostic": "Complete Valid result for every exact requested asset.",
+      "native_invoked": true,
+      "native_return": 0,
+      "snapshot_json": "{\"snapshot_kind\": \"explicit_native_members_not_mcp_schema\", \"requested_assets\": [\"/Game/Daedalus/Art/Islands/CodexContest/UnattendedWitness20261022/R1/Coupler/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000\"], \"native_return\": 0, \"results\": {\"NumRequested\": 1, \"NumExternalObjects\": 0, \"NumChecked\": 1, \"NumValid\": 1, \"NumInvalid\": 0, \"NumSkipped\": 0, \"NumWarnings\": 0, \"NumUnableToValidate\": 0, \"bAssetLimitReached\": false, \"AssetsDetails\": {\"/Game/Daedalus/Art/Islands/CodexContest/UnattendedWitness20261022/R1/Coupler/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/UnattendedWitness20261022/R1/Coupler/CodexModule_CopperPatina_BridgeCoupler_85000\", \"AssetName\": \"CodexModule_CopperPatina_BridgeCoupler_85000\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}}, \"ValidatorMessages\": []}, \"settings\": {\"bSkipExcludedDirectories\": false, \"bShowIfNoFailures\": false, \"bCollectPerAssetDetails\": true, \"ValidationUsecase\": \"EDataValidationUsecase::Script\", \"bLoadAssetsForValidation\": true, \"bUnloadAssetsLoadedForValidation\": false, \"bLoadExternalObjectsForValidation\": true, \"bCaptureAssetLoadLogs\": true, \"bCaptureLogsDuringValidation\": true, \"bCaptureWarningsDuringValidationAsErrors\": false, \"MaxAssetsToValidate\": 2, \"bValidateReferencersOfDeletedAssets\": false, \"bSilent\": true}, \"provenance\": {\"fresh_out_results\": \"attested\", \"native_invocation\": \"attested\", \"captured_at_utc\": \"2026-10-22T20:34:16.314Z\"}, \"native_runtime_qualified\": false, \"unknowns\": [\"native_runtime_unqualified\", \"official_mcp_callable_unverified\", \"tokenized_message_tokens_projected_to_text_only\", \"validator_statistics_not_captured\", \"settings_message_log_fields_not_captured\"]}",
+      "status": "Valid"
+    },
+    "capture": {
+      "editor": {
+        "pid": 21660,
+        "project": "C:/Unreal/DaedalusRealm/DaedalusRealm.uproject",
+        "start_utc": "2026-10-22T19:28:25.1856174Z",
+        "world": "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
+      },
+      "end_utc": "2026-10-22T20:34:16.314+00:00",
+      "operation_id": "ea63456c-dff9-41fe-8dbd-e59c0bec09a5",
+      "route": "existing:execute_python/DaedalusEditorAcceptanceLibrary.ValidateNamedAssets",
+      "start_utc": "2026-10-22T20:34:16.313+00:00"
+    },
+    "generic_runtime_qualified": false,
+    "native_global_notvalidated_coverage": false
+  },
+  "actual_asset": {
+    "paths": [
+      "/Game/Daedalus/Art/Islands/CodexContest/UnattendedWitness20261022/R1/Coupler/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000"
+    ],
+    "outputs": {
+      "/Game/Daedalus/Art/Islands/CodexContest/UnattendedWitness20261022/R1/Coupler/CodexModule_CopperPatina_BridgeCoupler_85000.CodexModule_CopperPatina_BridgeCoupler_85000": {
+        "bytes": 82007,
+        "path": "C:\\Unreal\\DaedalusRealm\\Content\\Daedalus\\Art\\Islands\\CodexContest\\UnattendedWitness20261022\\R1\\Coupler\\CodexModule_CopperPatina_BridgeCoupler_85000.uasset",
+        "sha256": "df42d7d0f85b6639234720c0d510986bf1f544e5b4b15ae78fdc9f7d1a74ead0"
+      }
+    },
+    "same_saved_hash_after_resume": true,
+    "scene_placement": false
+  },
+  "attempt_history": [
+    "First prepare refused seven-digit Windows UTC before native dispatch; numeric conversion fixed without changing identity string.",
+    "Exactly one actual import saved1mesh. New strict adapter package/object spelling assumption held after known saved report. Raw source/error/checkpoint preserved.",
+    "Minimal fix compares actual palette UObject; read-only owner reconciliation proved exact geometry/material/tags and unchanged9field baseline; no import/save repeat.",
+    "One actual native validation returned Valid/acceptedtrue/return0. Host bare Script assumption held it. Exact native EDataValidationUsecase::Script comparison fixed, bare alias refused.",
+    "Versioned explicit owner reconciliation consumed SAME unmodified native capture within300s, no retimestamp or native revalidation. Prior states preserved with resolution sidecars.",
+    "Fresh Python runner resumed DONE using guarded saved readback, with no second import/save/validation. STOP persisted and blocked resume before any native work; owned STOP cleared only after known terminal."
+  ],
+  "same_capture": {
+    "utc": "2026-10-22T20:36:31.311405+00:00",
+    "old": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR2\\state\\native\\ea63456c-dff9-41fe-8dbd-e59c0bec09a5.json",
+      "sha256": "388fb55750308e0d718e349d8c873df4b0a73b8d4890824d60883fbe65af7995",
+      "bytes": 3842
+    },
+    "new": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\state\\native\\ea63456c-dff9-41fe-8dbd-e59c0bec09a5.json",
+      "sha256": "388fb55750308e0d718e349d8c873df4b0a73b8d4890824d60883fbe65af7995",
+      "bytes": 3842
+    },
+    "byte_equal": true,
+    "retimestamped": false,
+    "new_native_imports": 0,
+    "new_native_validation_calls": 0,
+    "source_contract_correction": "Exact EDataValidationUsecase::Script; bare Script now refused."
+  },
+  "actual_accept_process": {
+    "utc": "2026-10-22T20:36:44.887276+00:00",
+    "exit_code": 0,
+    "known_terminal": true,
+    "stdout": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\accept-stdout.txt",
+      "sha256": "60609885ed9963f012dfe8ee50cd909668bb43a5a649e6c04a60937268f4e626",
+      "bytes": 300
+    },
+    "stderr": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\accept-stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "actual_resume_process": {
+    "utc": "2026-10-22T20:38:57.215115+00:00",
+    "exit_code": 0,
+    "known_terminal": true,
+    "stdout": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\resume-stdout.txt",
+      "sha256": "fceec78ae2f7990698f2f9b27d5d7ddb60e3eae90b1d5fcaa0a126fdbf7a73a2",
+      "bytes": 300
+    },
+    "stderr": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\resume-stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "stop_proof": {
+    "utc": "2026-10-22T20:38:44.395873+00:00",
+    "stop_exit": 0,
+    "stop_stdout": "{\n  \"state\": \"STOP_REQUESTED\",\n  \"active_call_killed\": false\n}\n",
+    "blocked_resume_exit": 2,
+    "blocked_resume_stderr": "{\"state\": \"HOLD\", \"error\": \"Stop persists; remove only this owned STOP file to explicitly resume\", \"retry_authorized\": false}\n",
+    "native_files_unchanged": true,
+    "stop_explicitly_cleared_after_known_terminal": true,
+    "imports": 0,
+    "native_calls": 0
+  },
+  "final_checkpoint": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\state\\items\\Coupler.json",
+    "bytes": 4313,
+    "sha256": "d98c1da045e452384923a3c1c783bc24ee79e9932ac32618202f9caf04826dc2"
+  },
+  "successful_native_guard_receipts": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR1\\state\\native\\read-850b9771e3d9413490ce8e05a089f835\\admit\\terminal.json",
+      "bytes": 3390,
+      "sha256": "a60403a5a50e89b7328d64a785075e14cf09c5a8db4216317e75346cbc6bf8f0"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR2\\ReadOnlySavedReconciliationR2\\terminal.json",
+      "bytes": 4160,
+      "sha256": "f883e80b217e55e6117e2110d1a5a3772d7238a379bd4a5722f21c66d275b024"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR2\\state\\native\\ea63456c-dff9-41fe-8dbd-e59c0bec09a5\\import\\terminal.json",
+      "bytes": 4595,
+      "sha256": "cfddd21472535c9adcb2ab9a26c50b226aff1fb3b573a76a1168efc77ccfb3bd"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR2\\state\\native\\ea63456c-dff9-41fe-8dbd-e59c0bec09a5\\validate\\terminal.json",
+      "bytes": 6487,
+      "sha256": "958d2016eee95d8ed468de9fa64f55093d25e8802f8c033dc38d6c6abda5ad93"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR2\\state\\native\\read-8aa410c1dba740929251e78feac0a27c\\admit\\terminal.json",
+      "bytes": 3391,
+      "sha256": "1701d8ed1240489fe5b4106a822ca6d925ca2479348cc1daaf1ee1fc6017e0dd"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\state\\native\\read-92258b7aafc54054a2938156878bfddb\\admit\\terminal.json",
+      "bytes": 3391,
+      "sha256": "c2fd1c961c01ce638f89b3f99634d0eb119c268e6ce3f942da19221ec40d8370"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\state\\native\\read-9375be3f1a1c4939b3c8a675fa61cce9\\admit\\terminal.json",
+      "bytes": 3391,
+      "sha256": "aa771ceda774c8ede27e6fb306a9d0e99ed0851812198efce3eb76a3cf64be3c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\state\\native\\read-cb7655b7dcc84b98bd45742e031f8d95\\verify\\terminal.json",
+      "bytes": 4160,
+      "sha256": "28f3e4a495b4c6d4a02479d58dd80ab4084c00594a39203c12a0012dd81617c6"
+    }
+  ],
+  "native_journals": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR1\\state\\native\\ea63456c-dff9-41fe-8dbd-e59c0bec09a5\\import\\native-substeps.jsonl",
+      "bytes": 3602,
+      "sha256": "56fdb7c59b2f6ca9afbd47cd087994c882c04c4b36269efe62065ff9249cba1b"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR1\\state\\native\\read-850b9771e3d9413490ce8e05a089f835\\admit\\native-substeps.jsonl",
+      "bytes": 2368,
+      "sha256": "28199c4d07be3e9898b75a6f4014a93847a87714d74394bdfc9e9bc89ce2a872"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR2\\ReadOnlySavedReconciliationR2\\native-substeps.jsonl",
+      "bytes": 2368,
+      "sha256": "28199c4d07be3e9898b75a6f4014a93847a87714d74394bdfc9e9bc89ce2a872"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR2\\state\\native\\ea63456c-dff9-41fe-8dbd-e59c0bec09a5\\validate\\native-substeps.jsonl",
+      "bytes": 4856,
+      "sha256": "a6b36874ce35aa296932ca1c425fa4cc0c6078c9a3d9eb5c50b8a2fcfdc11239"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR2\\state\\native\\read-8aa410c1dba740929251e78feac0a27c\\admit\\native-substeps.jsonl",
+      "bytes": 2368,
+      "sha256": "28199c4d07be3e9898b75a6f4014a93847a87714d74394bdfc9e9bc89ce2a872"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\state\\native\\read-92258b7aafc54054a2938156878bfddb\\admit\\native-substeps.jsonl",
+      "bytes": 2368,
+      "sha256": "28199c4d07be3e9898b75a6f4014a93847a87714d74394bdfc9e9bc89ce2a872"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\state\\native\\read-9375be3f1a1c4939b3c8a675fa61cce9\\admit\\native-substeps.jsonl",
+      "bytes": 2368,
+      "sha256": "28199c4d07be3e9898b75a6f4014a93847a87714d74394bdfc9e9bc89ce2a872"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\NativeR3\\state\\native\\read-cb7655b7dcc84b98bd45742e031f8d95\\verify\\native-substeps.jsonl",
+      "bytes": 2368,
+      "sha256": "28199c4d07be3e9898b75a6f4014a93847a87714d74394bdfc9e9bc89ce2a872"
+    }
+  ],
+  "preservation": {
+    "all_successful_guards_exact9native_baseline_equal": true,
+    "first_failed_call_after_context_not_available_then_readonly_reconciled": true,
+    "actor_count": 23099,
+    "scene_sha256": "1fa97f55a42900a7aeba329ffac5930f61ea3065ed441337b8671ae35239c8ae",
+    "original37_config_and_readonly_palette_hashes_match": true,
+    "camera_selection_dirty_state_preserved": true,
+    "editor_pid": 21660,
+    "editor_start_utc": "2026-10-22T19:28:25.1856174Z",
+    "engine_version": "5.8.4-58902052+++UE5+Release-5.8",
+    "source_binary_parity_unchanged": true,
+    "rebuilds": 0,
+    "editor_restarts": 0,
+    "compute_normally_released": true,
+    "current_custody": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\DeliveryNativeR1\\current-custody.json",
+      "bytes": 474,
+      "sha256": "452b92b2e17d305d32926f4885bdb938e01b67288ff56fed0c9797dd077bcc7f"
+    },
+    "Cursor_satellite_untouched": true
+  },
+  "tests": {
+    "command": "python -m unittest tools/unreal_mcp/test_unattended_ingestion.py tools/unreal_mcp/test_unattended_codex_adapter.py -v",
+    "passed": 28,
+    "exit_code": 0,
+    "seconds": 1.283,
+    "actual_tool_chunks": [
+      "4fae06",
+      "b78d54"
+    ],
+    "synthetic_tests_not_native": true,
+    "cases": "Actual abrupt two-child-process recovery; no duplicate effect; uncertainty/stop/locks/hash/namespace/owner/resource/tamper refusal; closed policy, real palette comparator, no validation/import replay, exact fully-qualified native usecase;7digitUTC identity."
+  },
+  "logs": {
+    "source": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Saved\\Logs\\DaedalusRealm.log",
+      "bytes": 430081,
+      "sha256": "e971437c11205bffe60a1e518a8f002f3270da5ab04285f086fee5987d80fc9b"
+    },
+    "interval": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\UnattendedRunner20261022\\DeliveryNativeR1\\native-output-interval.log",
+      "bytes": 12326,
+      "sha256": "a3aec3b3d968697be931334909022811a642d0b9e8d8d7847a121c7ca2bcbcc9"
+    },
+    "interval_lines": 88,
+    "warnings": 3,
+    "errors": 0,
+    "native_validation_asset_counts_are_separate": true,
+    "raw_logs_uploaded": false,
+    "clean_global_log_claimed": false
+  },
+  "timestamp_precision": "Actual Python datetime.now immediately around native call, timespec milliseconds, matching installed FDateTime::ToIso8601 DateTime.cpp216-218/281. No fabricated/retimestamped capture, fresh acceptance at original receipt age.",
+  "source_delivery": {
+    "new": [
+      "unattended_codex_adapter.py",
+      "unattended_codex_native.inc",
+      "test_unattended_codex_adapter.py"
+    ],
+    "fixed": [
+      "unattended_ingestion.utc_seconds supports Windows7digits while preserving exact identity",
+      "ValidationUsecase exact native qualified enum required"
+    ],
+    "unchanged": [
+      "Existing importer",
+      "Native C++ wrapper/serializer/consumer",
+      "Transport/server",
+      "Engine/project settings"
+    ],
+    "independent_code_reviewer_claimed": false
+  },
+  "capability_status": {
+    "offered": "One closed source/profile adapter and deterministic queue controls, no bulk selection.",
+    "installed": "Host source files on PC/repo; reused already installed UE5.8.4 native wrapper. No engine/plugin/tool installation.",
+    "connected": "Actual existing localhost9877 route bound to sole editor21660, guarded native reads/import/validation returned.",
+    "tested": "28offline plus one actual isolated import/save/nativeValid and saved resume/STOP proof; abrupt-process crash test synthetic only.",
+    "adopted": "This private fixture/profile only; not production backlog/overnight unattended use."
+  },
+  "epic_source_status": {
+    "installed_and_native_API_checked": "2026-10-22,UE5.8.4CL58902052",
+    "external_research": "Coordinator official-source pass2026-10-22; this operator did not repeat web scraping.",
+    "sources": [
+      "https://forums.unrealengine.com/t/5-8-4-hotfix-released/2842775",
+      "https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin/blob/main/.claude-plugin/plugin.json",
+      "https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin/commit/a6aa73ada02a",
+      "https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin/blob/main/skills/unreal-mcp/references/setup.md",
+      "https://github.com/EpicGames/BlenderTools/releases/tag/20231109043947"
+    ],
+    "findings": [
+      "5.8.4 hotfix announcedOct20; no newer hotfix found in checked indexes, partial/notexhaustive. Not all hotfix cases tested.",
+      "Official Claude companion3.1.1/a6aa73ada02a guidance permits independent overlap-safe calls; not a Codex plugin update. Keep conservative single-writer/conflicting/dependent operations serialized; main MCP remains Experimental.",
+      "Cached proxy catalog/status is not live editor readiness; require an actual read-only success. One connection direct OR proxy; optional Extras/Proxy existence must be verified. No proxy change/test here.",
+      "SendtoUnreal2.4.3 published matrixBlender3.3/3.6/UE5.3 is not UE5.8.4 compatibility proof; preserve Blender-first and do not install.",
+      "Private Epic engine GitHub404/full-note4MB fetch limit means coveragepartial. Offered/installed/connected/tested/adopted are separate."
+    ],
+    "canonical_checklist": "C:/Users/730ri/projects/bot-team/BOARD/ARCHITECTURE.md",
+    "all_Epic_updates_adopted": false,
+    "Codex_support_correction": "Actual official setup GenerateClientConfig All includes Codex .codex/config.toml. Underlying MCP and plainMIT skills unreal-mcp/create-toolset/unreal-skill are portable; Claude marketplace/SessionStart wrappers are not the whole capability. No config/plugin/access changes performed."
+  },
+  "limits": [
+    "Only immutable coupler profile/source and single editor generation; pinned retained local owner helpers/importer/24manifest/DLL required.",
+    "Save/readback same editor; no fresh-editor asset reload, compressed/visual/PBR/vertex-color-data/physics/playability or other-profile acceptance.",
+    "Some Interchange import flags unavailable; actual required geometry/material identity/Nanite/collision checked, no blind applied-options claim.",
+    "Global aggregate NotValidated native coverage remains blocked; refusal cases synthetic, not new native outcomes.",
+    "Production batch/overnight ingestion NOT started/adopted. No per-asset model/paid API, new service/credentials/access/settings/install.",
+    "Startup optimization/profiling deferred; signing-key production custody gap still unimplemented/unverified."
+  ],
+  "bounded_fixture_accepted": true,
+  "native_runtime_qualified": false,
+  "production_adoption": false,
+  "production_backlog_started": false,
+  "user_priority": {
+    "goal": "Unreal operating capabilities are top priority, not merely ingestion/checklist completion",
+    "closeout_only": true,
+    "next": "Audit actual Epic native tools/portable skills versus actual capability gaps before adding custom tools; no more ingestion infrastructure/game-slice work in this batch",
+    "terrain_optimization": "DEFERRED"
+  },
+  "connection_evidence": {
+    "existing_route": "Actual localhost127.0.0.1:9877 execute_python/sole editor21660; exact native guards and Valid response retained",
+    "native_toolset": "AutomationTestToolset GetTestStatus invoked as actual native prerequisite; raw current status not separately retained, no expanded toolset inventory claim",
+    "HTTP_MCP_8000": "No fresh discovery/readiness call in this batch; existing historical dated receipts do not prove current readiness. No new config/access/server action."
+  }
+}
