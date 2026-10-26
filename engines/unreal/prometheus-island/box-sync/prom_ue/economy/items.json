@@ -1,0 +1,150 @@
+{
+ "schema": "daedalus.economy/v0",
+ "items": [
+  {
+   "id": "ark_hull_plank",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "ark_lift_housing",
+   "tier": 4,
+   "stack": 64
+  },
+  {
+   "id": "blue_dye",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "bronze",
+   "tier": 3,
+   "stack": 64
+  },
+  {
+   "id": "bronze_pick",
+   "tier": 3,
+   "stack": 1
+  },
+  {
+   "id": "charcoal",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "copper",
+   "tier": 3,
+   "stack": 64
+  },
+  {
+   "id": "copper_ore",
+   "tier": 2,
+   "stack": 64
+  },
+  {
+   "id": "fiber",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "hardwood",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "leather",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "lift_crystal",
+   "tier": 4,
+   "stack": 64
+  },
+  {
+   "id": "nickel_iron",
+   "tier": 4,
+   "stack": 64
+  },
+  {
+   "id": "oil",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "pain_tonic",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "pet_harness",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "pitch",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "platinum",
+   "tier": 4,
+   "stack": 64
+  },
+  {
+   "id": "resin",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "rope",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "steel",
+   "tier": 4,
+   "stack": 64
+  },
+  {
+   "id": "steel_pick",
+   "tier": 4,
+   "stack": 1
+  },
+  {
+   "id": "tin",
+   "tier": 3,
+   "stack": 64
+  },
+  {
+   "id": "water",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "willow_bark",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "woad",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "wound_salve",
+   "tier": 1,
+   "stack": 64
+  },
+  {
+   "id": "wrought_iron",
+   "tier": 3,
+   "stack": 64
+  },
+  {
+   "id": "yarrow",
+   "tier": 1,
+   "stack": 64
+  }
+ ]
+}

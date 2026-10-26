@@ -5,14 +5,13 @@ package com.daedalus.server.controller;
 import com.daedalus.api.dto.MoveRequest;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.generators.RecursiveBacktrackerGenerator;
+import com.daedalus.model.GameSession;
 import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
 import com.daedalus.model.Point;
-import com.daedalus.server.service.AlgorithmCatalogService;
 import com.daedalus.server.service.GameSessionService;
 import com.daedalus.server.service.LeaderboardService;
 import com.daedalus.server.service.MazeGenerationService;
-import com.daedalus.server.service.MazeSolverService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -57,15 +58,7 @@ class MazeControllerJoinTest {
     }
 
     private MockMvc mvc(GameSessionService sessions) {
-        MazeController controller = new MazeController(
-                gen,
-                mock(MazeSolverService.class),
-                mock(AlgorithmCatalogService.class),
-                sessions,
-                mock(LeaderboardService.class),
-                mock(com.daedalus.server.service.LivingMazeService.class),
-                mock(com.daedalus.server.service.DailyMazeService.class),
-                mock(com.daedalus.server.service.TrafficService.class));
+        SessionController controller = new SessionController(gen, sessions);
         // The advice has to be registered here or a thrown ResourceNotFoundException
         // escapes as a servlet error instead of becoming the 404 this test is about.
         // ApiExceptionHandler's no-arg constructor exists for exactly this setup.
@@ -117,6 +110,40 @@ class MazeControllerJoinTest {
         sessions.tryMove(s.id(), grid, grid.goal());
 
         mvc(sessions).perform(post("/api/v1/session/" + s.id() + "/join").param("player", "Bob"))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("session-completed")))
+                .andExpect(jsonPath("$.title", equalTo("Session completed")));
+    }
+
+    @Test
+    void joiningAFullSessionAnswers409() throws Exception {
+        GameSessionService sessions =
+                new GameSessionService(event -> { }, mock(LeaderboardService.class), true);
+        var s = sessions.open(mazeId, "Alice", grid.start());
+        for (int i = 1; i < GameSession.MAX_PLAYERS; i++) {
+            sessions.join(s.id(), "p" + i, grid.start());
+        }
+
+        mvc(sessions).perform(post("/api/v1/session/" + s.id() + "/join").param("player", "overflow"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.kind", equalTo("session-full")))
+                .andExpect(jsonPath("$.title", equalTo("Session full")));
+    }
+
+    @Test
+    void joiningWhenTheMazeWasEvictedNamesJoinNotMoves() throws Exception {
+        // The session is open; the maze cache entry is gone. Until 2026-08-26 this 404 reused
+        // the move endpoint's sentence ("moves cannot be validated"), which sent a joiner
+        // looking at the wrong verb.
+        GameSessionService sessions =
+                new GameSessionService(event -> { }, mock(LeaderboardService.class), true);
+        var s = sessions.open(mazeId, "Alice", grid.start());
+        when(gen.find(any())).thenReturn(null);
+
+        mvc(sessions).perform(post("/api/v1/session/" + s.id() + "/join").param("player", "Bob"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.kind", equalTo("maze")))
+                .andExpect(jsonPath("$.detail", containsString("join")))
+                .andExpect(jsonPath("$.detail", not(containsString("moves"))));
     }
 }

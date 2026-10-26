@@ -27,6 +27,7 @@
     <properties>
         <java.version>21</java.version>
         <javafx.version>21.0.3</javafx.version>
+        <lwjgl.version>3.3.6</lwjgl.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,9 +40,10 @@
         <!-- Coverage ratchet (TESTING.md, gap P2): jacoco:check fails the build below this
              instruction-coverage ratio. Each module pins its own value 2-3 points below its
              measured coverage and raises it as coverage rises — never lower it to make a PR
-             pass. This default is only the floor a brand-new module starts from; exempt
-             modules (desktop, plugin-api) set 0.00 explicitly so the exemption is visible
-             code, not invisible absence. -->
+             pass. This default is only the floor a brand-new module starts from. Desktop
+             and plugin-api used to advertise a visible 0.00 exemption; they now carry
+             small real floors (0.09 / 0.11) with matching ceilings — a deletion guard,
+             not the absence of one. -->
         <jacoco.check.minimum>0.60</jacoco.check.minimum>
         <!-- How far coverage may rise above the floor before the ratchet demands a bump. -->
         <jacoco.check.headroom>0.03</jacoco.check.headroom>
@@ -54,9 +56,11 @@
     <modules>
         <module>daedalus-plugin-api</module>
         <module>daedalus-core</module>
+        <module>daedalus-wallet</module>
         <module>daedalus-plugin-runtime</module>
         <module>daedalus-server</module>
         <module>daedalus-desktop</module>
+        <module>daedalus-explore</module>
     </modules>
 
     <dependencyManagement>
@@ -74,12 +78,29 @@
             </dependency>
             <dependency>
                 <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-wallet</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- Ethereum signatures only (secp256k1, Keccak, EIP-55): the crypto module, not web3j core,
+                 so no OkHttp / RPC client comes along (ADR-028). -->
+            <dependency>
+                <groupId>org.web3j</groupId>
+                <artifactId>crypto</artifactId>
+                <version>4.12.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.daedalus</groupId>
                 <artifactId>daedalus-plugin-runtime</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.daedalus</groupId>
                 <artifactId>daedalus-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-explore</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

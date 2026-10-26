@@ -1,0 +1,29 @@
+{
+ "_note": "demo playthrough save: player-only facts the editor cannot see",
+ "teas": [
+  "ladder",
+  "climax"
+ ],
+ "survived": [
+  "windthrow"
+ ],
+ "bramble_choice": "goats",
+ "islet_species": [
+  "Grass",
+  "Pine",
+  "Willow",
+  "Oak"
+ ],
+ "burn_rate": 0.03,
+ "burn_cells": [],
+ "dam_cells": [
+  [
+   7,
+   6
+  ],
+  [
+   10,
+   6
+  ]
+ ]
+}

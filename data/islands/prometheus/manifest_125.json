@@ -1,0 +1,877 @@
+[
+{
+"i": 125,
+"name": "Water_StreamSeg_V17",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 126,
+"name": "Water_StreamSeg_V18",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 127,
+"name": "Water_StreamSeg_V19",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 128,
+"name": "Water_StreamSeg_V20",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 129,
+"name": "Water_StreamSeg_V21",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 130,
+"name": "Water_StreamSeg_V22",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 131,
+"name": "Water_StreamSeg_V23",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 132,
+"name": "Water_StreamSeg_V24",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 133,
+"name": "Water_StreamSeg_V25",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 134,
+"name": "Water_StreamSeg_V26",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 135,
+"name": "Water_StreamSeg_V27",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 136,
+"name": "Water_StreamSeg_V28",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 137,
+"name": "Water_StreamSeg_V29",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 138,
+"name": "Water_StreamSeg_V30",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 139,
+"name": "Water_StreamSeg_V31",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 140,
+"name": "Water_StreamSeg_V32",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 141,
+"name": "Water_StreamSeg_V33",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 142,
+"name": "Water_StreamSeg_V34",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 143,
+"name": "Water_StreamSeg_V35",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 144,
+"name": "Water_StreamSeg_V36",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 145,
+"name": "Water_StreamSeg_V37",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 146,
+"name": "Water_StreamSeg_V38",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 147,
+"name": "Water_StreamSeg_V39",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 148,
+"name": "Water_SpringBasin_V00",
+"cat": "water",
+"tris": 1244,
+"kind": "SpringBasin"
+},
+{
+"i": 149,
+"name": "Water_SpringBasin_V01",
+"cat": "water",
+"tris": 1244,
+"kind": "SpringBasin"
+},
+{
+"i": 150,
+"name": "Water_SpringBasin_V02",
+"cat": "water",
+"tris": 1244,
+"kind": "SpringBasin"
+},
+{
+"i": 151,
+"name": "Water_SpringBasin_V03",
+"cat": "water",
+"tris": 1244,
+"kind": "SpringBasin"
+},
+{
+"i": 152,
+"name": "Water_RainCatcher_V00",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 153,
+"name": "Water_RainCatcher_V01",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 154,
+"name": "Water_RainCatcher_V02",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 155,
+"name": "Water_RainCatcher_V03",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 156,
+"name": "Water_RainCatcher_V04",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 157,
+"name": "Water_RainCatcher_V05",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 158,
+"name": "Water_RainCatcher_V06",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 159,
+"name": "Water_RainCatcher_V07",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 160,
+"name": "Water_RainCatcher_V08",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 161,
+"name": "Water_RainCatcher_V09",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 162,
+"name": "Water_RainCatcher_V10",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 163,
+"name": "Water_RainCatcher_V11",
+"cat": "water",
+"tris": 118,
+"kind": "RainCatcher"
+},
+{
+"i": 164,
+"name": "Water_Cistern_V00",
+"cat": "water",
+"tris": 138,
+"kind": "Cistern"
+},
+{
+"i": 165,
+"name": "Water_Cistern_V01",
+"cat": "water",
+"tris": 138,
+"kind": "Cistern"
+},
+{
+"i": 166,
+"name": "Water_Cistern_V02",
+"cat": "water",
+"tris": 138,
+"kind": "Cistern"
+},
+{
+"i": 167,
+"name": "Water_Cistern_V03",
+"cat": "water",
+"tris": 138,
+"kind": "Cistern"
+},
+{
+"i": 168,
+"name": "Water_Cistern_V04",
+"cat": "water",
+"tris": 138,
+"kind": "Cistern"
+},
+{
+"i": 169,
+"name": "Water_Cistern_V05",
+"cat": "water",
+"tris": 138,
+"kind": "Cistern"
+},
+{
+"i": 170,
+"name": "Water_StillPart_V00",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 171,
+"name": "Water_StillPart_V01",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 172,
+"name": "Water_StillPart_V02",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 173,
+"name": "Water_StillPart_V03",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 174,
+"name": "Water_StillPart_V04",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 175,
+"name": "Water_StillPart_V05",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 176,
+"name": "Water_StillPart_V06",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 177,
+"name": "Water_StillPart_V07",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 178,
+"name": "Water_StillPart_V08",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 179,
+"name": "Water_StillPart_V09",
+"cat": "water",
+"tris": 24,
+"kind": "StillPart"
+},
+{
+"i": 180,
+"name": "Water_Pipe_V00",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 181,
+"name": "Water_Pipe_V01",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 182,
+"name": "Water_Pipe_V02",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 183,
+"name": "Water_Pipe_V03",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 184,
+"name": "Water_Pipe_V04",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 185,
+"name": "Water_Pipe_V05",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 186,
+"name": "Water_Pipe_V06",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 187,
+"name": "Water_Pipe_V07",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 188,
+"name": "Water_Pipe_V08",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 189,
+"name": "Water_Pipe_V09",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 190,
+"name": "Water_Pipe_V10",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 191,
+"name": "Water_Pipe_V11",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 192,
+"name": "Water_Pipe_V12",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 193,
+"name": "Water_Pipe_V13",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 194,
+"name": "Water_Pipe_V14",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 195,
+"name": "Water_Pipe_V15",
+"cat": "water",
+"tris": 36,
+"kind": "Pipe"
+},
+{
+"i": 196,
+"name": "Water_Trough_V00",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 197,
+"name": "Water_Trough_V01",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 198,
+"name": "Water_Trough_V02",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 199,
+"name": "Water_Trough_V03",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 200,
+"name": "Water_Trough_V04",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 201,
+"name": "Water_Trough_V05",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 202,
+"name": "Water_Trough_V06",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 203,
+"name": "Water_Trough_V07",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 204,
+"name": "Water_Trough_V08",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 205,
+"name": "Water_Trough_V09",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 206,
+"name": "Water_Trough_V10",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 207,
+"name": "Water_Trough_V11",
+"cat": "water",
+"tris": 12,
+"kind": "Trough"
+},
+{
+"i": 208,
+"name": "Stock_PenFence_V00",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 209,
+"name": "Stock_PenFence_V01",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 210,
+"name": "Stock_PenFence_V02",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 211,
+"name": "Stock_PenFence_V03",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 212,
+"name": "Stock_PenFence_V04",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 213,
+"name": "Stock_PenFence_V05",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 214,
+"name": "Stock_PenFence_V06",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 215,
+"name": "Stock_PenFence_V07",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 216,
+"name": "Stock_PenFence_V08",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 217,
+"name": "Stock_PenFence_V09",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 218,
+"name": "Stock_PenFence_V10",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 219,
+"name": "Stock_PenFence_V11",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 220,
+"name": "Stock_PenFence_V12",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 221,
+"name": "Stock_PenFence_V13",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 222,
+"name": "Stock_PenFence_V14",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 223,
+"name": "Stock_PenFence_V15",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 224,
+"name": "Stock_PenFence_V16",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 225,
+"name": "Stock_PenFence_V17",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 226,
+"name": "Stock_PenFence_V18",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 227,
+"name": "Stock_PenFence_V19",
+"cat": "stock",
+"tris": 48,
+"kind": "PenFence"
+},
+{
+"i": 228,
+"name": "Stock_Feeder_V00",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 229,
+"name": "Stock_Feeder_V01",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 230,
+"name": "Stock_Feeder_V02",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 231,
+"name": "Stock_Feeder_V03",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 232,
+"name": "Stock_Feeder_V04",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 233,
+"name": "Stock_Feeder_V05",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 234,
+"name": "Stock_Feeder_V06",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 235,
+"name": "Stock_Feeder_V07",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 236,
+"name": "Stock_Feeder_V08",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 237,
+"name": "Stock_Feeder_V09",
+"cat": "stock",
+"tris": 24,
+"kind": "Feeder"
+},
+{
+"i": 238,
+"name": "Stock_HayBale_V00",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 239,
+"name": "Stock_HayBale_V01",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 240,
+"name": "Stock_HayBale_V02",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 241,
+"name": "Stock_HayBale_V03",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 242,
+"name": "Stock_HayBale_V04",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 243,
+"name": "Stock_HayBale_V05",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 244,
+"name": "Stock_HayBale_V06",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 245,
+"name": "Stock_HayBale_V07",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 246,
+"name": "Stock_HayBale_V08",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 247,
+"name": "Stock_HayBale_V09",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 248,
+"name": "Stock_HayBale_V10",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+},
+{
+"i": 249,
+"name": "Stock_HayBale_V11",
+"cat": "stock",
+"tris": 60,
+"kind": "HayBale"
+}
+]

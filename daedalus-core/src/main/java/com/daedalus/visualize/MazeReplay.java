@@ -31,6 +31,10 @@ public final class MazeReplay {
 
     /** A solve plus the expansion order that produced it. */
     public record Replay(List<Point> path, List<Point> expansions) {
+        public Replay {
+            path = List.copyOf(path);
+            expansions = List.copyOf(expansions);
+        }
     }
 
     private MazeReplay() {

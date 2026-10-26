@@ -15,7 +15,9 @@ import com.daedalus.model.Point;
  *
  * <p>It is also allocation-free, which is the point. {@link MazeGrid#openNeighbors(Point)} builds a
  * fresh {@code ArrayList} on every call — in a search loop that is one short-lived list per node
- * expanded. Walking the wall flags directly into a caller-owned buffer removes that entirely.
+ * expanded. Walking the wall flags by coordinate into a caller-owned buffer removes that
+ * entirely. An earlier version of {@link #neighbors} still boxed a {@link Point} per hop;
+ * {@link MazeGrid#isOpen(int, int, Direction)} is what made the claim true.
  *
  * <p>Node ids are {@code row * cols + col}, matching {@code solver.GridIndex}, so ids are
  * interchangeable between the two.
@@ -49,14 +51,15 @@ public final class MazeGraph implements Graph {
     public int neighbors(int node, int[] out) {
         int row = node / cols;
         int col = node % cols;
-        Point here = new Point(row, col);
         int count = 0;
         for (Direction d : DIRECTIONS) {
-            if (grid.cell(here).isOpen(d)) {
-                Point next = here.step(d);
-                if (grid.inBounds(next)) {
-                    out[count++] = next.row() * cols + next.col();
-                }
+            if (!grid.isOpen(row, col, d)) {
+                continue;
+            }
+            int nr = row + d.dr();
+            int nc = col + d.dc();
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+                out[count++] = nr * cols + nc;
             }
         }
         return count;

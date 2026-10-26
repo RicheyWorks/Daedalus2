@@ -1,0 +1,601 @@
+# orrery_core_test.cpp --write: herbs (name hour constellation day), then BrewOf(a, b) for all 576 pairs
+herb Dawnthistle 6 Keeper 1
+herb Midnightmint 0 Keeper 0
+herb Sunsprig 8 Lantern 1
+herb Duskmallow 18 Lantern 0
+herb Orbitfern 9 Ark 1
+herb Moonvetch 21 Ark 0
+herb Eclipsebell 13 Shard 1
+herb Meteorsage 1 Shard 0
+herb Equinoxbalm 10 Wanderer 1
+herb Cometcress 3 Wanderer 0
+herb Heartstonebloom 7 Hearth 1
+herb Starsedge 22 Hearth 0
+herb Zenithclover 11 Spindle 1
+herb Nebulawort 23 Spindle 0
+herb Noonspire 12 Crown 1
+herb Polarisroot 2 Crown 0
+herb Driftfennel 16 Tide 1
+herb Nadirmoss 4 Tide 0
+herb Quasarthyme 14 Forge 1
+herb Twilightsorrel 19 Forge 0
+herb Solsticerue 15 Kite 1
+herb Auroraleaf 5 Kite 0
+herb Lunarlily 17 Loom 1
+herb Galaxygrass 20 Loom 0
+brew Dawnthistle Dawnthistle -
+brew Dawnthistle Midnightmint Keeper Brew
+brew Dawnthistle Sunsprig -
+brew Dawnthistle Duskmallow Eclipse Brew: Umbra
+brew Dawnthistle Orbitfern -
+brew Dawnthistle Moonvetch Eclipse Brew: Diamondring
+brew Dawnthistle Eclipsebell -
+brew Dawnthistle Meteorsage Eclipse Brew: Hybrid
+brew Dawnthistle Equinoxbalm -
+brew Dawnthistle Cometcress Eclipse Brew: Penumbra
+brew Dawnthistle Heartstonebloom -
+brew Dawnthistle Starsedge Eclipse Brew: Baileybeads
+brew Dawnthistle Zenithclover -
+brew Dawnthistle Nebulawort Eclipse Brew: Totality
+brew Dawnthistle Noonspire -
+brew Dawnthistle Polarisroot Eclipse Brew: Umbra
+brew Dawnthistle Driftfennel -
+brew Dawnthistle Nadirmoss Eclipse Brew: Corona
+brew Dawnthistle Quasarthyme -
+brew Dawnthistle Twilightsorrel Eclipse Brew: Penumbra
+brew Dawnthistle Solsticerue -
+brew Dawnthistle Auroraleaf Eclipse Brew: Diamondring
+brew Dawnthistle Lunarlily -
+brew Dawnthistle Galaxygrass Eclipse Brew: Corona
+brew Midnightmint Dawnthistle Keeper Brew
+brew Midnightmint Midnightmint -
+brew Midnightmint Sunsprig Eclipse Brew: Umbra
+brew Midnightmint Duskmallow -
+brew Midnightmint Orbitfern Eclipse Brew: Penumbra
+brew Midnightmint Moonvetch -
+brew Midnightmint Eclipsebell Eclipse Brew: Totality
+brew Midnightmint Meteorsage -
+brew Midnightmint Equinoxbalm Eclipse Brew: Corona
+brew Midnightmint Cometcress -
+brew Midnightmint Heartstonebloom Eclipse Brew: Hybrid
+brew Midnightmint Starsedge -
+brew Midnightmint Zenithclover Eclipse Brew: Diamondring
+brew Midnightmint Nebulawort -
+brew Midnightmint Noonspire Eclipse Brew: Baileybeads
+brew Midnightmint Polarisroot -
+brew Midnightmint Driftfennel Eclipse Brew: Umbra
+brew Midnightmint Nadirmoss -
+brew Midnightmint Quasarthyme Eclipse Brew: Annular
+brew Midnightmint Twilightsorrel -
+brew Midnightmint Solsticerue Eclipse Brew: Hybrid
+brew Midnightmint Auroraleaf -
+brew Midnightmint Lunarlily Eclipse Brew: Penumbra
+brew Midnightmint Galaxygrass -
+brew Sunsprig Dawnthistle -
+brew Sunsprig Midnightmint Eclipse Brew: Umbra
+brew Sunsprig Sunsprig -
+brew Sunsprig Duskmallow Lantern Brew
+brew Sunsprig Orbitfern -
+brew Sunsprig Moonvetch Eclipse Brew: Totality
+brew Sunsprig Eclipsebell -
+brew Sunsprig Meteorsage Eclipse Brew: Penumbra
+brew Sunsprig Equinoxbalm -
+brew Sunsprig Cometcress Eclipse Brew: Diamondring
+brew Sunsprig Heartstonebloom -
+brew Sunsprig Starsedge Eclipse Brew: Annular
+brew Sunsprig Zenithclover -
+brew Sunsprig Nebulawort Eclipse Brew: Hybrid
+brew Sunsprig Noonspire -
+brew Sunsprig Polarisroot Eclipse Brew: Corona
+brew Sunsprig Driftfennel -
+brew Sunsprig Nadirmoss Eclipse Brew: Baileybeads
+brew Sunsprig Quasarthyme -
+brew Sunsprig Twilightsorrel Eclipse Brew: Diamondring
+brew Sunsprig Solsticerue -
+brew Sunsprig Auroraleaf Eclipse Brew: Totality
+brew Sunsprig Lunarlily -
+brew Sunsprig Galaxygrass Eclipse Brew: Baileybeads
+brew Duskmallow Dawnthistle Eclipse Brew: Umbra
+brew Duskmallow Midnightmint -
+brew Duskmallow Sunsprig Lantern Brew
+brew Duskmallow Duskmallow -
+brew Duskmallow Orbitfern Eclipse Brew: Diamondring
+brew Duskmallow Moonvetch -
+brew Duskmallow Eclipsebell Eclipse Brew: Hybrid
+brew Duskmallow Meteorsage -
+brew Duskmallow Equinoxbalm Eclipse Brew: Baileybeads
+brew Duskmallow Cometcress -
+brew Duskmallow Heartstonebloom Eclipse Brew: Penumbra
+brew Duskmallow Starsedge -
+brew Duskmallow Zenithclover Eclipse Brew: Totality
+brew Duskmallow Nebulawort -
+brew Duskmallow Noonspire Eclipse Brew: Annular
+brew Duskmallow Polarisroot -
+brew Duskmallow Driftfennel Eclipse Brew: Corona
+brew Duskmallow Nadirmoss -
+brew Duskmallow Quasarthyme Eclipse Brew: Umbra
+brew Duskmallow Twilightsorrel -
+brew Duskmallow Solsticerue Eclipse Brew: Penumbra
+brew Duskmallow Auroraleaf -
+brew Duskmallow Lunarlily Eclipse Brew: Diamondring
+brew Duskmallow Galaxygrass -
+brew Orbitfern Dawnthistle -
+brew Orbitfern Midnightmint Eclipse Brew: Penumbra
+brew Orbitfern Sunsprig -
+brew Orbitfern Duskmallow Eclipse Brew: Diamondring
+brew Orbitfern Orbitfern -
+brew Orbitfern Moonvetch Ark Brew
+brew Orbitfern Eclipsebell -
+brew Orbitfern Meteorsage Eclipse Brew: Corona
+brew Orbitfern Equinoxbalm -
+brew Orbitfern Cometcress Eclipse Brew: Baileybeads
+brew Orbitfern Heartstonebloom -
+brew Orbitfern Starsedge Eclipse Brew: Hybrid
+brew Orbitfern Zenithclover -
+brew Orbitfern Nebulawort Eclipse Brew: Umbra
+brew Orbitfern Noonspire -
+brew Orbitfern Polarisroot Eclipse Brew: Diamondring
+brew Orbitfern Driftfennel -
+brew Orbitfern Nadirmoss Eclipse Brew: Totality
+brew Orbitfern Quasarthyme -
+brew Orbitfern Twilightsorrel Eclipse Brew: Baileybeads
+brew Orbitfern Solsticerue -
+brew Orbitfern Auroraleaf Eclipse Brew: Annular
+brew Orbitfern Lunarlily -
+brew Orbitfern Galaxygrass Eclipse Brew: Totality
+brew Moonvetch Dawnthistle Eclipse Brew: Diamondring
+brew Moonvetch Midnightmint -
+brew Moonvetch Sunsprig Eclipse Brew: Totality
+brew Moonvetch Duskmallow -
+brew Moonvetch Orbitfern Ark Brew
+brew Moonvetch Moonvetch -
+brew Moonvetch Eclipsebell Eclipse Brew: Corona
+brew Moonvetch Meteorsage -
+brew Moonvetch Equinoxbalm Eclipse Brew: Hybrid
+brew Moonvetch Cometcress -
+brew Moonvetch Heartstonebloom Eclipse Brew: Baileybeads
+brew Moonvetch Starsedge -
+brew Moonvetch Zenithclover Eclipse Brew: Umbra
+brew Moonvetch Nebulawort -
+brew Moonvetch Noonspire Eclipse Brew: Penumbra
+brew Moonvetch Polarisroot -
+brew Moonvetch Driftfennel Eclipse Brew: Totality
+brew Moonvetch Nadirmoss -
+brew Moonvetch Quasarthyme Eclipse Brew: Diamondring
+brew Moonvetch Twilightsorrel -
+brew Moonvetch Solsticerue Eclipse Brew: Baileybeads
+brew Moonvetch Auroraleaf -
+brew Moonvetch Lunarlily Eclipse Brew: Annular
+brew Moonvetch Galaxygrass -
+brew Eclipsebell Dawnthistle -
+brew Eclipsebell Midnightmint Eclipse Brew: Totality
+brew Eclipsebell Sunsprig -
+brew Eclipsebell Duskmallow Eclipse Brew: Hybrid
+brew Eclipsebell Orbitfern -
+brew Eclipsebell Moonvetch Eclipse Brew: Corona
+brew Eclipsebell Eclipsebell -
+brew Eclipsebell Meteorsage Shard Brew
+brew Eclipsebell Equinoxbalm -
+brew Eclipsebell Cometcress Eclipse Brew: Umbra
+brew Eclipsebell Heartstonebloom -
+brew Eclipsebell Starsedge Eclipse Brew: Diamondring
+brew Eclipsebell Zenithclover -
+brew Eclipsebell Nebulawort Eclipse Brew: Baileybeads
+brew Eclipsebell Noonspire -
+brew Eclipsebell Polarisroot Eclipse Brew: Hybrid
+brew Eclipsebell Driftfennel -
+brew Eclipsebell Nadirmoss Eclipse Brew: Penumbra
+brew Eclipsebell Quasarthyme -
+brew Eclipsebell Twilightsorrel Eclipse Brew: Umbra
+brew Eclipsebell Solsticerue -
+brew Eclipsebell Auroraleaf Eclipse Brew: Corona
+brew Eclipsebell Lunarlily -
+brew Eclipsebell Galaxygrass Eclipse Brew: Penumbra
+brew Meteorsage Dawnthistle Eclipse Brew: Hybrid
+brew Meteorsage Midnightmint -
+brew Meteorsage Sunsprig Eclipse Brew: Penumbra
+brew Meteorsage Duskmallow -
+brew Meteorsage Orbitfern Eclipse Brew: Corona
+brew Meteorsage Moonvetch -
+brew Meteorsage Eclipsebell Shard Brew
+brew Meteorsage Meteorsage -
+brew Meteorsage Equinoxbalm Eclipse Brew: Diamondring
+brew Meteorsage Cometcress -
+brew Meteorsage Heartstonebloom Eclipse Brew: Umbra
+brew Meteorsage Starsedge -
+brew Meteorsage Zenithclover Eclipse Brew: Baileybeads
+brew Meteorsage Nebulawort -
+brew Meteorsage Noonspire Eclipse Brew: Totality
+brew Meteorsage Polarisroot -
+brew Meteorsage Driftfennel Eclipse Brew: Penumbra
+brew Meteorsage Nadirmoss -
+brew Meteorsage Quasarthyme Eclipse Brew: Hybrid
+brew Meteorsage Twilightsorrel -
+brew Meteorsage Solsticerue Eclipse Brew: Umbra
+brew Meteorsage Auroraleaf -
+brew Meteorsage Lunarlily Eclipse Brew: Corona
+brew Meteorsage Galaxygrass -
+brew Equinoxbalm Dawnthistle -
+brew Equinoxbalm Midnightmint Eclipse Brew: Corona
+brew Equinoxbalm Sunsprig -
+brew Equinoxbalm Duskmallow Eclipse Brew: Baileybeads
+brew Equinoxbalm Orbitfern -
+brew Equinoxbalm Moonvetch Eclipse Brew: Hybrid
+brew Equinoxbalm Eclipsebell -
+brew Equinoxbalm Meteorsage Eclipse Brew: Diamondring
+brew Equinoxbalm Equinoxbalm -
+brew Equinoxbalm Cometcress Wanderer Brew
+brew Equinoxbalm Heartstonebloom -
+brew Equinoxbalm Starsedge Eclipse Brew: Umbra
+brew Equinoxbalm Zenithclover -
+brew Equinoxbalm Nebulawort Eclipse Brew: Penumbra
+brew Equinoxbalm Noonspire -
+brew Equinoxbalm Polarisroot Eclipse Brew: Baileybeads
+brew Equinoxbalm Driftfennel -
+brew Equinoxbalm Nadirmoss Eclipse Brew: Annular
+brew Equinoxbalm Quasarthyme -
+brew Equinoxbalm Twilightsorrel Eclipse Brew: Totality
+brew Equinoxbalm Solsticerue -
+brew Equinoxbalm Auroraleaf Eclipse Brew: Hybrid
+brew Equinoxbalm Lunarlily -
+brew Equinoxbalm Galaxygrass Eclipse Brew: Annular
+brew Cometcress Dawnthistle Eclipse Brew: Penumbra
+brew Cometcress Midnightmint -
+brew Cometcress Sunsprig Eclipse Brew: Diamondring
+brew Cometcress Duskmallow -
+brew Cometcress Orbitfern Eclipse Brew: Baileybeads
+brew Cometcress Moonvetch -
+brew Cometcress Eclipsebell Eclipse Brew: Umbra
+brew Cometcress Meteorsage -
+brew Cometcress Equinoxbalm Wanderer Brew
+brew Cometcress Cometcress -
+brew Cometcress Heartstonebloom Eclipse Brew: Corona
+brew Cometcress Starsedge -
+brew Cometcress Zenithclover Eclipse Brew: Annular
+brew Cometcress Nebulawort -
+brew Cometcress Noonspire Eclipse Brew: Hybrid
+brew Cometcress Polarisroot -
+brew Cometcress Driftfennel Eclipse Brew: Diamondring
+brew Cometcress Nadirmoss -
+brew Cometcress Quasarthyme Eclipse Brew: Penumbra
+brew Cometcress Twilightsorrel -
+brew Cometcress Solsticerue Eclipse Brew: Corona
+brew Cometcress Auroraleaf -
+brew Cometcress Lunarlily Eclipse Brew: Baileybeads
+brew Cometcress Galaxygrass -
+brew Heartstonebloom Dawnthistle -
+brew Heartstonebloom Midnightmint Eclipse Brew: Hybrid
+brew Heartstonebloom Sunsprig -
+brew Heartstonebloom Duskmallow Eclipse Brew: Penumbra
+brew Heartstonebloom Orbitfern -
+brew Heartstonebloom Moonvetch Eclipse Brew: Baileybeads
+brew Heartstonebloom Eclipsebell -
+brew Heartstonebloom Meteorsage Eclipse Brew: Umbra
+brew Heartstonebloom Equinoxbalm -
+brew Heartstonebloom Cometcress Eclipse Brew: Corona
+brew Heartstonebloom Heartstonebloom -
+brew Heartstonebloom Starsedge Hearth Brew
+brew Heartstonebloom Zenithclover -
+brew Heartstonebloom Nebulawort Eclipse Brew: Annular
+brew Heartstonebloom Noonspire -
+brew Heartstonebloom Polarisroot Eclipse Brew: Penumbra
+brew Heartstonebloom Driftfennel -
+brew Heartstonebloom Nadirmoss Eclipse Brew: Diamondring
+brew Heartstonebloom Quasarthyme -
+brew Heartstonebloom Twilightsorrel Eclipse Brew: Corona
+brew Heartstonebloom Solsticerue -
+brew Heartstonebloom Auroraleaf Eclipse Brew: Baileybeads
+brew Heartstonebloom Lunarlily -
+brew Heartstonebloom Galaxygrass Eclipse Brew: Diamondring
+brew Starsedge Dawnthistle Eclipse Brew: Baileybeads
+brew Starsedge Midnightmint -
+brew Starsedge Sunsprig Eclipse Brew: Annular
+brew Starsedge Duskmallow -
+brew Starsedge Orbitfern Eclipse Brew: Hybrid
+brew Starsedge Moonvetch -
+brew Starsedge Eclipsebell Eclipse Brew: Diamondring
+brew Starsedge Meteorsage -
+brew Starsedge Equinoxbalm Eclipse Brew: Umbra
+brew Starsedge Cometcress -
+brew Starsedge Heartstonebloom Hearth Brew
+brew Starsedge Starsedge -
+brew Starsedge Zenithclover Eclipse Brew: Penumbra
+brew Starsedge Nebulawort -
+brew Starsedge Noonspire Eclipse Brew: Corona
+brew Starsedge Polarisroot -
+brew Starsedge Driftfennel Eclipse Brew: Annular
+brew Starsedge Nadirmoss -
+brew Starsedge Quasarthyme Eclipse Brew: Baileybeads
+brew Starsedge Twilightsorrel -
+brew Starsedge Solsticerue Eclipse Brew: Totality
+brew Starsedge Auroraleaf -
+brew Starsedge Lunarlily Eclipse Brew: Hybrid
+brew Starsedge Galaxygrass -
+brew Zenithclover Dawnthistle -
+brew Zenithclover Midnightmint Eclipse Brew: Diamondring
+brew Zenithclover Sunsprig -
+brew Zenithclover Duskmallow Eclipse Brew: Totality
+brew Zenithclover Orbitfern -
+brew Zenithclover Moonvetch Eclipse Brew: Umbra
+brew Zenithclover Eclipsebell -
+brew Zenithclover Meteorsage Eclipse Brew: Baileybeads
+brew Zenithclover Equinoxbalm -
+brew Zenithclover Cometcress Eclipse Brew: Annular
+brew Zenithclover Heartstonebloom -
+brew Zenithclover Starsedge Eclipse Brew: Penumbra
+brew Zenithclover Zenithclover -
+brew Zenithclover Nebulawort Spindle Brew
+brew Zenithclover Noonspire -
+brew Zenithclover Polarisroot Eclipse Brew: Totality
+brew Zenithclover Driftfennel -
+brew Zenithclover Nadirmoss Eclipse Brew: Hybrid
+brew Zenithclover Quasarthyme -
+brew Zenithclover Twilightsorrel Eclipse Brew: Annular
+brew Zenithclover Solsticerue -
+brew Zenithclover Auroraleaf Eclipse Brew: Umbra
+brew Zenithclover Lunarlily -
+brew Zenithclover Galaxygrass Eclipse Brew: Hybrid
+brew Nebulawort Dawnthistle Eclipse Brew: Totality
+brew Nebulawort Midnightmint -
+brew Nebulawort Sunsprig Eclipse Brew: Hybrid
+brew Nebulawort Duskmallow -
+brew Nebulawort Orbitfern Eclipse Brew: Umbra
+brew Nebulawort Moonvetch -
+brew Nebulawort Eclipsebell Eclipse Brew: Baileybeads
+brew Nebulawort Meteorsage -
+brew Nebulawort Equinoxbalm Eclipse Brew: Penumbra
+brew Nebulawort Cometcress -
+brew Nebulawort Heartstonebloom Eclipse Brew: Annular
+brew Nebulawort Starsedge -
+brew Nebulawort Zenithclover Spindle Brew
+brew Nebulawort Nebulawort -
+brew Nebulawort Noonspire Eclipse Brew: Diamondring
+brew Nebulawort Polarisroot -
+brew Nebulawort Driftfennel Eclipse Brew: Hybrid
+brew Nebulawort Nadirmoss -
+brew Nebulawort Quasarthyme Eclipse Brew: Totality
+brew Nebulawort Twilightsorrel -
+brew Nebulawort Solsticerue Eclipse Brew: Annular
+brew Nebulawort Auroraleaf -
+brew Nebulawort Lunarlily Eclipse Brew: Umbra
+brew Nebulawort Galaxygrass -
+brew Noonspire Dawnthistle -
+brew Noonspire Midnightmint Eclipse Brew: Baileybeads
+brew Noonspire Sunsprig -
+brew Noonspire Duskmallow Eclipse Brew: Annular
+brew Noonspire Orbitfern -
+brew Noonspire Moonvetch Eclipse Brew: Penumbra
+brew Noonspire Eclipsebell -
+brew Noonspire Meteorsage Eclipse Brew: Totality
+brew Noonspire Equinoxbalm -
+brew Noonspire Cometcress Eclipse Brew: Hybrid
+brew Noonspire Heartstonebloom -
+brew Noonspire Starsedge Eclipse Brew: Corona
+brew Noonspire Zenithclover -
+brew Noonspire Nebulawort Eclipse Brew: Diamondring
+brew Noonspire Noonspire -
+brew Noonspire Polarisroot Crown Brew
+brew Noonspire Driftfennel -
+brew Noonspire Nadirmoss Eclipse Brew: Umbra
+brew Noonspire Quasarthyme -
+brew Noonspire Twilightsorrel Eclipse Brew: Hybrid
+brew Noonspire Solsticerue -
+brew Noonspire Auroraleaf Eclipse Brew: Penumbra
+brew Noonspire Lunarlily -
+brew Noonspire Galaxygrass Eclipse Brew: Umbra
+brew Polarisroot Dawnthistle Eclipse Brew: Umbra
+brew Polarisroot Midnightmint -
+brew Polarisroot Sunsprig Eclipse Brew: Corona
+brew Polarisroot Duskmallow -
+brew Polarisroot Orbitfern Eclipse Brew: Diamondring
+brew Polarisroot Moonvetch -
+brew Polarisroot Eclipsebell Eclipse Brew: Hybrid
+brew Polarisroot Meteorsage -
+brew Polarisroot Equinoxbalm Eclipse Brew: Baileybeads
+brew Polarisroot Cometcress -
+brew Polarisroot Heartstonebloom Eclipse Brew: Penumbra
+brew Polarisroot Starsedge -
+brew Polarisroot Zenithclover Eclipse Brew: Totality
+brew Polarisroot Nebulawort -
+brew Polarisroot Noonspire Crown Brew
+brew Polarisroot Polarisroot -
+brew Polarisroot Driftfennel Eclipse Brew: Corona
+brew Polarisroot Nadirmoss -
+brew Polarisroot Quasarthyme Eclipse Brew: Umbra
+brew Polarisroot Twilightsorrel -
+brew Polarisroot Solsticerue Eclipse Brew: Penumbra
+brew Polarisroot Auroraleaf -
+brew Polarisroot Lunarlily Eclipse Brew: Diamondring
+brew Polarisroot Galaxygrass -
+brew Driftfennel Dawnthistle -
+brew Driftfennel Midnightmint Eclipse Brew: Umbra
+brew Driftfennel Sunsprig -
+brew Driftfennel Duskmallow Eclipse Brew: Corona
+brew Driftfennel Orbitfern -
+brew Driftfennel Moonvetch Eclipse Brew: Totality
+brew Driftfennel Eclipsebell -
+brew Driftfennel Meteorsage Eclipse Brew: Penumbra
+brew Driftfennel Equinoxbalm -
+brew Driftfennel Cometcress Eclipse Brew: Diamondring
+brew Driftfennel Heartstonebloom -
+brew Driftfennel Starsedge Eclipse Brew: Annular
+brew Driftfennel Zenithclover -
+brew Driftfennel Nebulawort Eclipse Brew: Hybrid
+brew Driftfennel Noonspire -
+brew Driftfennel Polarisroot Eclipse Brew: Corona
+brew Driftfennel Driftfennel -
+brew Driftfennel Nadirmoss Tide Brew
+brew Driftfennel Quasarthyme -
+brew Driftfennel Twilightsorrel Eclipse Brew: Diamondring
+brew Driftfennel Solsticerue -
+brew Driftfennel Auroraleaf Eclipse Brew: Totality
+brew Driftfennel Lunarlily -
+brew Driftfennel Galaxygrass Eclipse Brew: Baileybeads
+brew Nadirmoss Dawnthistle Eclipse Brew: Corona
+brew Nadirmoss Midnightmint -
+brew Nadirmoss Sunsprig Eclipse Brew: Baileybeads
+brew Nadirmoss Duskmallow -
+brew Nadirmoss Orbitfern Eclipse Brew: Totality
+brew Nadirmoss Moonvetch -
+brew Nadirmoss Eclipsebell Eclipse Brew: Penumbra
+brew Nadirmoss Meteorsage -
+brew Nadirmoss Equinoxbalm Eclipse Brew: Annular
+brew Nadirmoss Cometcress -
+brew Nadirmoss Heartstonebloom Eclipse Brew: Diamondring
+brew Nadirmoss Starsedge -
+brew Nadirmoss Zenithclover Eclipse Brew: Hybrid
+brew Nadirmoss Nebulawort -
+brew Nadirmoss Noonspire Eclipse Brew: Umbra
+brew Nadirmoss Polarisroot -
+brew Nadirmoss Driftfennel Tide Brew
+brew Nadirmoss Nadirmoss -
+brew Nadirmoss Quasarthyme Eclipse Brew: Corona
+brew Nadirmoss Twilightsorrel -
+brew Nadirmoss Solsticerue Eclipse Brew: Diamondring
+brew Nadirmoss Auroraleaf -
+brew Nadirmoss Lunarlily Eclipse Brew: Totality
+brew Nadirmoss Galaxygrass -
+brew Quasarthyme Dawnthistle -
+brew Quasarthyme Midnightmint Eclipse Brew: Annular
+brew Quasarthyme Sunsprig -
+brew Quasarthyme Duskmallow Eclipse Brew: Umbra
+brew Quasarthyme Orbitfern -
+brew Quasarthyme Moonvetch Eclipse Brew: Diamondring
+brew Quasarthyme Eclipsebell -
+brew Quasarthyme Meteorsage Eclipse Brew: Hybrid
+brew Quasarthyme Equinoxbalm -
+brew Quasarthyme Cometcress Eclipse Brew: Penumbra
+brew Quasarthyme Heartstonebloom -
+brew Quasarthyme Starsedge Eclipse Brew: Baileybeads
+brew Quasarthyme Zenithclover -
+brew Quasarthyme Nebulawort Eclipse Brew: Totality
+brew Quasarthyme Noonspire -
+brew Quasarthyme Polarisroot Eclipse Brew: Umbra
+brew Quasarthyme Driftfennel -
+brew Quasarthyme Nadirmoss Eclipse Brew: Corona
+brew Quasarthyme Quasarthyme -
+brew Quasarthyme Twilightsorrel Forge Brew
+brew Quasarthyme Solsticerue -
+brew Quasarthyme Auroraleaf Eclipse Brew: Diamondring
+brew Quasarthyme Lunarlily -
+brew Quasarthyme Galaxygrass Eclipse Brew: Corona
+brew Twilightsorrel Dawnthistle Eclipse Brew: Penumbra
+brew Twilightsorrel Midnightmint -
+brew Twilightsorrel Sunsprig Eclipse Brew: Diamondring
+brew Twilightsorrel Duskmallow -
+brew Twilightsorrel Orbitfern Eclipse Brew: Baileybeads
+brew Twilightsorrel Moonvetch -
+brew Twilightsorrel Eclipsebell Eclipse Brew: Umbra
+brew Twilightsorrel Meteorsage -
+brew Twilightsorrel Equinoxbalm Eclipse Brew: Totality
+brew Twilightsorrel Cometcress -
+brew Twilightsorrel Heartstonebloom Eclipse Brew: Corona
+brew Twilightsorrel Starsedge -
+brew Twilightsorrel Zenithclover Eclipse Brew: Annular
+brew Twilightsorrel Nebulawort -
+brew Twilightsorrel Noonspire Eclipse Brew: Hybrid
+brew Twilightsorrel Polarisroot -
+brew Twilightsorrel Driftfennel Eclipse Brew: Diamondring
+brew Twilightsorrel Nadirmoss -
+brew Twilightsorrel Quasarthyme Forge Brew
+brew Twilightsorrel Twilightsorrel -
+brew Twilightsorrel Solsticerue Eclipse Brew: Corona
+brew Twilightsorrel Auroraleaf -
+brew Twilightsorrel Lunarlily Eclipse Brew: Baileybeads
+brew Twilightsorrel Galaxygrass -
+brew Solsticerue Dawnthistle -
+brew Solsticerue Midnightmint Eclipse Brew: Hybrid
+brew Solsticerue Sunsprig -
+brew Solsticerue Duskmallow Eclipse Brew: Penumbra
+brew Solsticerue Orbitfern -
+brew Solsticerue Moonvetch Eclipse Brew: Baileybeads
+brew Solsticerue Eclipsebell -
+brew Solsticerue Meteorsage Eclipse Brew: Umbra
+brew Solsticerue Equinoxbalm -
+brew Solsticerue Cometcress Eclipse Brew: Corona
+brew Solsticerue Heartstonebloom -
+brew Solsticerue Starsedge Eclipse Brew: Totality
+brew Solsticerue Zenithclover -
+brew Solsticerue Nebulawort Eclipse Brew: Annular
+brew Solsticerue Noonspire -
+brew Solsticerue Polarisroot Eclipse Brew: Penumbra
+brew Solsticerue Driftfennel -
+brew Solsticerue Nadirmoss Eclipse Brew: Diamondring
+brew Solsticerue Quasarthyme -
+brew Solsticerue Twilightsorrel Eclipse Brew: Corona
+brew Solsticerue Solsticerue -
+brew Solsticerue Auroraleaf Kite Brew
+brew Solsticerue Lunarlily -
+brew Solsticerue Galaxygrass Eclipse Brew: Diamondring
+brew Auroraleaf Dawnthistle Eclipse Brew: Diamondring
+brew Auroraleaf Midnightmint -
+brew Auroraleaf Sunsprig Eclipse Brew: Totality
+brew Auroraleaf Duskmallow -
+brew Auroraleaf Orbitfern Eclipse Brew: Annular
+brew Auroraleaf Moonvetch -
+brew Auroraleaf Eclipsebell Eclipse Brew: Corona
+brew Auroraleaf Meteorsage -
+brew Auroraleaf Equinoxbalm Eclipse Brew: Hybrid
+brew Auroraleaf Cometcress -
+brew Auroraleaf Heartstonebloom Eclipse Brew: Baileybeads
+brew Auroraleaf Starsedge -
+brew Auroraleaf Zenithclover Eclipse Brew: Umbra
+brew Auroraleaf Nebulawort -
+brew Auroraleaf Noonspire Eclipse Brew: Penumbra
+brew Auroraleaf Polarisroot -
+brew Auroraleaf Driftfennel Eclipse Brew: Totality
+brew Auroraleaf Nadirmoss -
+brew Auroraleaf Quasarthyme Eclipse Brew: Diamondring
+brew Auroraleaf Twilightsorrel -
+brew Auroraleaf Solsticerue Kite Brew
+brew Auroraleaf Auroraleaf -
+brew Auroraleaf Lunarlily Eclipse Brew: Annular
+brew Auroraleaf Galaxygrass -
+brew Lunarlily Dawnthistle -
+brew Lunarlily Midnightmint Eclipse Brew: Penumbra
+brew Lunarlily Sunsprig -
+brew Lunarlily Duskmallow Eclipse Brew: Diamondring
+brew Lunarlily Orbitfern -
+brew Lunarlily Moonvetch Eclipse Brew: Annular
+brew Lunarlily Eclipsebell -
+brew Lunarlily Meteorsage Eclipse Brew: Corona
+brew Lunarlily Equinoxbalm -
+brew Lunarlily Cometcress Eclipse Brew: Baileybeads
+brew Lunarlily Heartstonebloom -
+brew Lunarlily Starsedge Eclipse Brew: Hybrid
+brew Lunarlily Zenithclover -
+brew Lunarlily Nebulawort Eclipse Brew: Umbra
+brew Lunarlily Noonspire -
+brew Lunarlily Polarisroot Eclipse Brew: Diamondring
+brew Lunarlily Driftfennel -
+brew Lunarlily Nadirmoss Eclipse Brew: Totality
+brew Lunarlily Quasarthyme -
+brew Lunarlily Twilightsorrel Eclipse Brew: Baileybeads
+brew Lunarlily Solsticerue -
+brew Lunarlily Auroraleaf Eclipse Brew: Annular
+brew Lunarlily Lunarlily -
+brew Lunarlily Galaxygrass Loom Brew
+brew Galaxygrass Dawnthistle Eclipse Brew: Corona
+brew Galaxygrass Midnightmint -
+brew Galaxygrass Sunsprig Eclipse Brew: Baileybeads
+brew Galaxygrass Duskmallow -
+brew Galaxygrass Orbitfern Eclipse Brew: Totality
+brew Galaxygrass Moonvetch -
+brew Galaxygrass Eclipsebell Eclipse Brew: Penumbra
+brew Galaxygrass Meteorsage -
+brew Galaxygrass Equinoxbalm Eclipse Brew: Annular
+brew Galaxygrass Cometcress -
+brew Galaxygrass Heartstonebloom Eclipse Brew: Diamondring
+brew Galaxygrass Starsedge -
+brew Galaxygrass Zenithclover Eclipse Brew: Hybrid
+brew Galaxygrass Nebulawort -
+brew Galaxygrass Noonspire Eclipse Brew: Umbra
+brew Galaxygrass Polarisroot -
+brew Galaxygrass Driftfennel Eclipse Brew: Baileybeads
+brew Galaxygrass Nadirmoss -
+brew Galaxygrass Quasarthyme Eclipse Brew: Corona
+brew Galaxygrass Twilightsorrel -
+brew Galaxygrass Solsticerue Eclipse Brew: Diamondring
+brew Galaxygrass Auroraleaf -
+brew Galaxygrass Lunarlily Loom Brew
+brew Galaxygrass Galaxygrass -

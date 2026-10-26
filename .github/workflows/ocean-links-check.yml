@@ -1,0 +1,48 @@
+name: Ocean link source validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/ocean/links_check.py'
+      - 'data/ocean/links.json'
+      - 'data/ocean/tidepen.json'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusRealmSessionCore.h'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusOceanTravelCore.h'
+      - 'daedalus-core/src/main/java/com/daedalus/world/ocean/OceanTerrain.java'
+      - 'daedalus-core/src/main/java/com/daedalus/world/ocean/TidePenGate.java'
+      - 'tools/blender/voxel_creatures.py'
+      - 'tools/blender/voxel_aquatic.py'
+      - '.github/workflows/ocean-links-check.yml'
+  pull_request:
+    paths:
+      - 'tools/ocean/links_check.py'
+      - 'data/ocean/links.json'
+      - 'data/ocean/tidepen.json'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusRealmSessionCore.h'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusOceanTravelCore.h'
+      - 'daedalus-core/src/main/java/com/daedalus/world/ocean/OceanTerrain.java'
+      - 'daedalus-core/src/main/java/com/daedalus/world/ocean/TidePenGate.java'
+      - 'tools/blender/voxel_creatures.py'
+      - 'tools/blender/voxel_aquatic.py'
+      - '.github/workflows/ocean-links-check.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        python: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Check current source inputs
+        run: python -B tools/ocean/links_check.py
+      - name: Verify existing refusal canaries
+        run: python -B tools/ocean/links_check.py --self-test

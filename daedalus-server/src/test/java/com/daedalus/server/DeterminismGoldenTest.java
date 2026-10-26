@@ -120,12 +120,27 @@ class DeterminismGoldenTest {
     }
 
     private String raw(HttpMethod method, String uri, String body) {
-        var spec = client().method(method).uri(uri);
-        var result = (body == null ? spec.exchange()
-                : spec.contentType(MediaType.APPLICATION_JSON).body(body).exchange())
-                .returnResult(String.class);
-        var chunks = result.getResponseBody();
-        return chunks == null ? "" : String.join("", chunks);
+        // First Identify trains off-thread and 503s until the centroids publish. Hashing
+        // that warming body would look like fingerprint drift across a restart.
+        long deadline = System.nanoTime() + java.time.Duration.ofSeconds(60).toNanos();
+        while (true) {
+            var spec = client().method(method).uri(uri);
+            var result = (body == null ? spec.exchange()
+                    : spec.contentType(MediaType.APPLICATION_JSON).body(body).exchange())
+                    .returnResult(String.class);
+            var chunks = result.getResponseBody();
+            String text = chunks == null ? "" : String.join("", chunks);
+            if (result.getStatus().value() != 503
+                    || System.nanoTime() >= deadline) {
+                return text;
+            }
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException("interrupted waiting for " + uri, e);
+            }
+        }
     }
 
     /** Recursively drop the volatile fields and sort keys, so the digest is order-independent. */

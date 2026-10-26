@@ -1,0 +1,31 @@
+{
+  "source_head": "7aefd23e64c1871710ba15ff89e743b57872fb8f",
+  "source_sha256": {
+    "daedalus-server/src/main/java/com/daedalus/server/service/RealmDirectoryService.java": "a4ca47b1d00176be9a0d049b12f1f70ce25d5866b9f81b099befdb3b8f85fab2",
+    "daedalus-server/src/main/java/com/daedalus/server/controller/RealmDirectoryController.java": "1e87492814ce0e716785a4adb1767e80846b6cebdf87a84018599870cef9c4a2",
+    "daedalus-server/src/main/java/com/daedalus/server/config/ProdSecurityConfig.java": "1d028ed7b73d2e84ab2f200585c9a1512900e1c66472f5fda17506ce984ccb91",
+    "daedalus-server/src/test/java/com/daedalus/server/service/RealmDirectoryServiceTest.java": "6bf9b285aff5be7ac60860f28b15cfcee39662a49803923972ecbcbae1f83656",
+    "daedalus-server/src/test/java/com/daedalus/server/controller/RealmDirectoryControllerTest.java": "3e13511b96e1be961826bab275bac82e1e5c5696822ec4a3bd63de6441ecffbf",
+    "daedalus-server/src/test/java/com/daedalus/server/service/OceanHostHttpRestartTest.java": "9ec388de84a0ab04f211b4040b4de04c004b165bd2c8a3593a645080b7cc4fcc",
+    "daedalus-server/src/test/java/com/daedalus/server/config/ProdAuthPostureTest.java": "2800825ed7e67d1b83f001d573feae819bb860ea49d945730cc964c42005aeb5"
+  },
+  "scope": "Authenticated single-server provider discovery and advertised Ocean chunk read. No travel, Unreal load or public hosting claim.",
+  "focused": {
+    "seconds": 46.273,
+    "test_summary_counts": [
+      13
+    ],
+    "log_sha256": "16d3eb6459238c40d468551d843b361abe05a21c8e679bf2b133d2464086d64c"
+  },
+  "verify": {
+    "seconds": 179.0,
+    "test_summary_counts": [
+      719,
+      26,
+      8,
+      33,
+      799
+    ],
+    "log_sha256": "c96044fe03665d3c0eee68da2f09e6acf70c4793dad6a28f050bb3e276e56a7a"
+  }
+}

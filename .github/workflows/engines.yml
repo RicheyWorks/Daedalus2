@@ -1,0 +1,118 @@
+# SPDX-License-Identifier: MIT
+#
+# Engines (ADR-032): the Unreal plugin's engine-free mesher must agree with the Java mesher bit for bit
+# (the committed fixture, written by MeshFixtureTest), the import script must check packages, and the
+# PowerShell setup must run its plan on Windows. No Unreal Engine here: that is checked on a real install.
+
+name: Engines
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+  pull_request:
+    # Match the approved cabinet dependency stack as well as main.
+    branches: [ main, codex/realm-production-queue ]
+    paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
+
+concurrency:
+  group: engines-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  mesh-parity:
+    name: C++ mesher parity (gcc, clang)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: engines/unreal/core-test
+    steps:
+      - uses: actions/checkout@v4
+      - name: gcc
+        run: g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
+      - name: clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
+      - name: battlefield ecology DBE 1 reader (ADR-061)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public ecology_core_test.cpp -o ecology_core_test && ./ecology_core_test
+      - name: Kennel Isle TONIC 1 trough core (request, reply parser, trough, effect ledger; fixtures from docs/contracts/tonic-v1)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public tonic_core_test.cpp -o tonic_core_test && ./tonic_core_test ../../../docs/contracts/tonic-v1
+      - name: Kennel Isle care core (G84 DaedalusKennelCore.h replays the Java bond/training/growth parity table)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_core_test.cpp -o kennel_core_test && ./kennel_core_test kennel_parity.txt
+      - name: Kennel Isle pet core for the UE binding (G102 DaedalusKennelPetCore.h; EndDay == G84 rules, seeded drills, tags)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_pet_core_test.cpp -o kennel_pet_core_test && ./kennel_pet_core_test
+      - name: Kennel Isle pet core, clang (G102)
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public kennel_pet_core_test.cpp -o kennel_pet_core_test_clang && ./kennel_pet_core_test_clang
+      - name: Kennel Isle muster core (G128 DaedalusKennelMusterCore.h replays the Java G107 roster parity table)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_muster_core_test.cpp -o kennel_muster_core_test && ./kennel_muster_core_test kennel_muster_parity.txt
+      - name: Kennel Isle muster core, clang (G128)
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public kennel_muster_core_test.cpp -o kennel_muster_core_test_clang && ./kennel_muster_core_test_clang kennel_muster_parity.txt
+      - name: Kennel Isle voyage + landfall core (G154 DaedalusKennelVoyageCore.h replays the Java G140/G147 parity table)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_voyage_core_test.cpp -o kennel_voyage_core_test && ./kennel_voyage_core_test kennel_voyage_parity.txt
+      - name: Kennel Isle voyage + landfall core, clang (G154)
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public kennel_voyage_core_test.cpp -o kennel_voyage_core_test_clang && ./kennel_voyage_core_test_clang kennel_voyage_parity.txt
+      - name: LAB03 Echo Bell gate session (AEchoBellGate cue scheduling, taps, judge, retry; replays docs/contracts/echo-bell-v1 CUE-SHEET.md + peals.ebg)
+        run: |
+          cmp echo_bell/DaedalusEchoBellCore.h ../DaedalusLink/Source/DaedalusLink/Public/DaedalusEchoBellCore.h
+          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public echo_bell/echo_bell_gate_session_test.cpp -o echo_bell_gate_session_test && ./echo_bell_gate_session_test ../../../docs/contracts/echo-bell-v1/CUE-SHEET.md ../../../docs/contracts/echo-bell-v1/peals.ebg
+      - name: import script compiles and refuses a non-package
+        run: |
+          python3 -m py_compile ../DaedalusLink/Content/Python/import_world_package.py ../DaedalusLink/Content/Python/daedalus_view.py ../DaedalusLink/Content/Python/init_unreal.py ../DaedalusLink/Content/Python/daedalus_bridge_commands.py live_parity.py
+          echo nope > bad.zip
+          if python3 ../DaedalusLink/Content/Python/import_world_package.py bad.zip; then exit 1; fi
+      - name: the import verifier can say no
+        run: python3 verify_judge_test.py
+      - name: runtime data verifier refuses incomplete staging evidence
+        run: python3 ../../../tools/unreal/test_runtime_data.py
+      - name: realm base-layer cores (land grid, land registry seam, realm session) and their Python twins
+        run: |
+          for t in land_grid_test land_registry_test realm_directory_test realm_session_test mount_core_test bestiary_core_test; do
+            g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public $t.cpp -o $t && ./$t | tail -1
+          done
+          cd ../DaedalusLink/Content/Python
+          for t in test_daedalus_land_grid test_daedalus_layout test_daedalus_plots test_daedalus_realm_ground test_daedalus_land_sync test_daedalus_districts; do
+            python3 $t.py | tail -1
+          done
+      - name: realm deed writer order and committed fixture
+        working-directory: tools/realm
+        run: |
+          python3 test_portal_lands.py
+          python3 portal_lands.py --check
+      - name: the Claude Unreal connector, end to end against a stand-in editor
+        run: |
+          C=../../../connectors/claude-unreal-connector
+          python3 -m py_compile $C/plugin/ClaudeUnrealBridge/Content/Python/*.py $C/clients/python/unreal_client.py
+          (python3 $C/tests/host.py 9911 60 &) ; sleep 2
+          node $C/tests/client.js 9911
+      - name: DaedalusLink adds its commands through the connector's register()
+        run: python3 bridge_commands_test.py
+
+  setup-plan:
+    name: setup-unreal.ps1 plan (Windows)
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: parse
+        shell: pwsh
+        run: |
+          $e = $null
+          [System.Management.Automation.Language.Parser]::ParseFile("$PWD\engines\unreal\setup-unreal.ps1", [ref]$null, [ref]$e) | Out-Null
+          if ($e.Count) { $e; exit 1 }
+      - name: plan only
+        shell: pwsh
+        run: .\engines\unreal\setup-unreal.ps1 -Project "$env:RUNNER_TEMP\Realm\Realm.uproject" -SkipPackage -WhatIfOnly
+      - name: preserve GameFeatureData config arrays
+        # Config helper tests do not invoke the installer or touch an editor.
+        shell: powershell
+        run: .\engines\unreal\core-test\game_feature_config_test.ps1
+      - name: project and plugin, for real
+        shell: powershell
+        run: |
+          .\engines\unreal\setup-unreal.ps1 -Project "$env:RUNNER_TEMP\Realm\Realm.uproject" -SkipPackage
+          $up = Get-Content "$env:RUNNER_TEMP\Realm\Realm.uproject" -Raw | ConvertFrom-Json
+          if (-not ($up.Plugins | Where-Object { $_.Name -eq "DaedalusLink" -and $_.Enabled })) { throw "plugin not enabled" }
+          if (-not (Test-Path "$env:RUNNER_TEMP\Realm\Plugins\DaedalusLink\DaedalusLink.uplugin")) { throw "plugin not copied" }

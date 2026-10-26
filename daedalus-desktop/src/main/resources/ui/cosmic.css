@@ -1,25 +1,52 @@
-/* Cosmic theme — dark navy + cyan accents. Pairs with CosmicTheme.java's
-   color palette so the canvas renderer (which reads tokens off the Theme bean)
-   harmonizes with the JavaFX controls (which read this stylesheet). */
+/* Cosmic theme — same void / mint / coral tokens as the web UI. Pairs with
+   CosmicTheme.java's canvas palette so the desktop shell and the web painter
+   are one product. */
 
 .root {
-    -fx-background-color: #0a0e27;
+    /* Body wash uses the well's 1200px and 700px radii. */
+    -fx-background-color: transparent;
     -fx-font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
     -fx-font-size: 13px;
+    -fx-highlight-fill: rgba(153, 111, 49, 0.35);
+    -fx-highlight-text-fill: #f2ead8;
+    -fx-font-smoothing-type: gray;
+    -fx-text-fill: #f2ead8;
+    -fx-cursor: default;
 }
 
 /* ---------- toolbar ---------- */
 
 .toolbar {
-    -fx-background-color: #14193e;
-    -fx-border-color: transparent transparent #2a3270 transparent;
+    -fx-background-color: rgba(12, 9, 8, 0.92);
+    -fx-border-color: transparent transparent rgba(153, 111, 49, 0.45) transparent;
     -fx-border-width: 0 0 1 0;
+    -fx-cursor: default;
+}
+.toolbar .brand {
+    -fx-font-family: "Bahnschrift", "Avenir Next Condensed", "Trebuchet MS", "Segoe UI";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    /* 0.22em of the 18px well header — same tracking as header h1. */
+    -fx-spacing: 3.96px;
+    /* font: 700 18px/1 — the name sits in that line box. */
+    -fx-min-height: 18px;
+    -fx-pref-height: 18px;
+    -fx-max-height: 18px;
+    -fx-alignment: center-left;
+    -fx-text-fill: #f2ead8;
+    -fx-padding: 0 0 0 2;
+    -fx-effect: dropshadow(one-pass-box, rgba(58, 182, 117, 0.28), 14, 0.45, 0, 0);
+    -fx-cursor: default;
+}
+.toolbar .brand .text {
+    -fx-fill: #f2ead8;
 }
 .toolbar .label {
-    -fx-text-fill: #c0d0ff;
+    -fx-text-fill: #b09a72;
+    -fx-cursor: default;
 }
 .toolbar .separator .line {
-    -fx-border-color: #2a3270;
+    -fx-border-color: rgba(153, 111, 49, 0.28);
     -fx-border-width: 0 0 0 1;
 }
 
@@ -29,64 +56,205 @@
 .text-field,
 .spinner,
 .spinner .text-field {
-    -fx-background-color: #1d2456;
-    -fx-text-fill: #ffffff;
-    -fx-prompt-text-fill: #6e7ab8;
-    -fx-background-radius: 4;
-    -fx-border-color: #2a3270;
-    -fx-border-radius: 4;
+    -fx-background-color: #07090c;
+    -fx-text-fill: #e8eef4;
+    -fx-prompt-text-fill: #7d8894;
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(184, 133, 56, 0.28);
+    -fx-border-radius: 6;
 }
 .combo-box:focused,
 .text-field:focused,
 .spinner:focused,
 .spinner .text-field:focused {
-    -fx-border-color: #5a8cff;
+    -fx-border-color: rgba(184, 133, 56, 0.85);
 }
 .combo-box .list-cell,
 .combo-box-popup .list-view {
-    -fx-background-color: #1d2456;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: #10151b;
+    -fx-text-fill: #e8eef4;
 }
 .combo-box-popup .list-view .list-cell:hover,
 .combo-box-popup .list-view .list-cell:filled:selected {
-    -fx-background-color: #3d4a99;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: #1a222b;
+    -fx-text-fill: #e8eef4;
 }
 
 /* ---------- buttons ---------- */
 
 .button {
-    -fx-background-color: #2a3270;
-    -fx-text-fill: #ffffff;
-    -fx-background-radius: 4;
-    -fx-padding: 6 14 6 14;
+    -fx-background-color: #1a222b;
+    -fx-text-fill: #e8eef4;
+    -fx-background-radius: 7;
+    -fx-border-color: rgba(184, 133, 56, 0.32);
+    -fx-border-radius: 7;
+    -fx-padding: 4 10 4 10;
     -fx-cursor: hand;
 }
 .button:hover {
-    -fx-background-color: #3d4a99;
+    -fx-background-color: #232c36;
+    -fx-border-color: #3ee08f;
 }
 .button:default {
-    -fx-background-color: #5a8cff;
-    -fx-text-fill: #0a0e27;
+    -fx-background-color: #3ee08f;
+    -fx-text-fill: #08130d;
     -fx-font-weight: bold;
 }
 .button:default:hover {
-    -fx-background-color: #7ba6ff;
+    -fx-background-color: #55e79c;
+}
+
+.check-box {
+    -fx-text-fill: #7d8894;
+}
+.check-box .box {
+    -fx-background-color: #07090c;
+    -fx-border-color: rgba(184, 133, 56, 0.28);
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+.check-box:selected .box {
+    -fx-background-color: #3ee08f;
+    -fx-border-color: #3ee08f;
+}
+.check-box:selected .mark {
+    -fx-background-color: #08130d;
 }
 
 /* ---------- canvas pane + status bar ---------- */
 
 .canvas-pane {
-    -fx-background-color: #0a0e27;
+    /* Void seat. The stage ellipse is painted on the canvas. */
+    -fx-background-color: #0c0908;
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(16, 11, 8, 0.95), rgba(153, 111, 49, 0.55);
+    -fx-border-width: 1, 1;
+    -fx-border-insets: 0, 1;
+    -fx-border-radius: 10, 9;
+    /* Same inset void shade as web #stage — the board sinks into the well. */
+    -fx-effect: innershadow(gaussian, rgba(12, 9, 8, 0.35), 48, 0.0, 0, 0);
+    -fx-focus-color: rgba(153, 111, 49, 0.85);
+    -fx-faint-focus-color: rgba(153, 111, 49, 0.25);
+    -fx-cursor: default;
+}
+
+.board {
+    -fx-background-color: #16120e;
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(16, 11, 8, 0.85), rgba(153, 111, 49, 0.42);
+    -fx-border-width: 1, 1;
+    -fx-border-insets: 0, 1;
+    -fx-border-radius: 10, 9;
+}
+
+.exports {
+    -fx-padding: 0;
+    -fx-cursor: default;
+}
+.exports .button {
+    -fx-background-color: rgba(16, 11, 8, 0.78);
+    -fx-text-fill: #b09a72;
+    -fx-font-size: 11px;
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(153, 111, 49, 0.36);
+    -fx-border-radius: 6;
+}
+.exports .button:hover {
+    -fx-background-color: #1a1610;
+    -fx-border-color: rgba(153, 111, 49, 0.85);
+    -fx-text-fill: #f2ead8;
+    -fx-effect: dropshadow(one-pass-box, rgba(153, 111, 49, 0.18), 12, 0.4, 0, 0);
+}
+.exports .button .export-glyph {
+    -fx-fill: #b09a72;
+}
+.exports .button:hover .export-glyph {
+    -fx-fill: #f2ead8;
+}
+
+.legend {
+    -fx-padding: 22 14 10 14;
+    -fx-background-color: linear-gradient(to bottom, rgba(16, 11, 8, 0), rgba(16, 11, 8, 0.55) 35%, rgba(16, 11, 8, 0.92));
+    -fx-cursor: default;
+}
+.legend .label {
+    -fx-text-fill: #b09a72;
+    -fx-font-family: "Bahnschrift", "Segoe UI", sans-serif;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-cursor: default;
+    /* Fill edge to the word is 5px; the outside ring occupies 1.5 of that. */
+    -fx-graphic-text-gap: 3.5px;
+}
+.legend .legend-cluster {
+    /* Last swatch in a cluster has margin-right: 0 on the well. */
+    -fx-graphic-text-gap: -1.5;
 }
 
 .status-bar {
-    -fx-background-color: #14193e;
-    -fx-border-color: #2a3270 transparent transparent transparent;
+    -fx-background-color: rgba(12, 9, 8, 0.92);
+    -fx-border-color: rgba(153, 111, 49, 0.45) transparent transparent transparent;
     -fx-border-width: 1 0 0 0;
+    -fx-cursor: default;
 }
 .status-bar .label {
-    -fx-text-fill: #c0d0ff;
-    -fx-font-family: "Cascadia Code", "Consolas", "Menlo", monospace;
+    -fx-text-fill: #b09a72;
+    -fx-font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
     -fx-font-size: 12px;
+    -fx-cursor: default;
+    /* #status inherits the page face at 12px/1.5. */
+    -fx-min-height: 18px;
+    -fx-pref-height: 18px;
+    -fx-alignment: center-left;
+}
+.status-bar .label.world-place {
+    -fx-text-fill: #94612e;
+}
+.status-bar .status-line {
+    -fx-border-color: transparent transparent transparent rgba(153, 111, 49, 0.28);
+    -fx-border-width: 0 0 0 2;
+    -fx-padding: 0 0 0 8;
+}
+
+/* Same thin gold thumb as the well scrollbar. */
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical {
+    -fx-pref-width: 8px;
+}
+.scroll-bar:horizontal {
+    -fx-pref-height: 8px;
+}
+.scroll-bar:vertical .track,
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track-background,
+.scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(153, 111, 49, 0.45);
+    -fx-background-insets: 0;
+    -fx-background-radius: 4;
+}
+.scroll-bar:vertical:hover .thumb,
+.scroll-bar:horizontal:hover .thumb {
+    -fx-background-color: rgba(153, 111, 49, 0.65);
+}
+.scroll-bar:vertical .thumb:pressed,
+.scroll-bar:horizontal .thumb:pressed {
+    -fx-background-color: rgba(153, 111, 49, 0.85);
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button,
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
 }

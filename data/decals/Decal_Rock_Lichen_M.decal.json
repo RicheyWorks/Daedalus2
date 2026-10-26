@@ -1,0 +1,87 @@
+{
+ "schema": "daedalus.decal/v1",
+ "asset": "Decal_Rock_Lichen_M",
+ "seed": 9191,
+ "generator": "tools/blender/decals/lichen_rosette.py",
+ "status": "NOT READY",
+ "textures": {
+  "BaseColor": {
+   "file": "T_Decal_Rock_Lichen_M_BC.png",
+   "size": [
+    256,
+    256
+   ],
+   "srgb": true,
+   "compression": "TC_Default",
+   "sha12": "51015544cb29"
+  },
+  "Normal": {
+   "file": "T_Decal_Rock_Lichen_M_N.png",
+   "size": [
+    256,
+    256
+   ],
+   "srgb": false,
+   "compression": "TC_Normalmap",
+   "green": "DirectX (UE native, no flip)",
+   "sha12": "d27b247d300b"
+  },
+  "Opacity": {
+   "file": "T_Decal_Rock_Lichen_M_M.png",
+   "size": [
+    256,
+    256
+   ],
+   "srgb": false,
+   "compression": "TC_Grayscale",
+   "sha12": "d23e8d9bab41"
+  }
+ },
+ "material": {
+  "name": "MI_Decal_Rock_Lichen_M",
+  "parent": "M_Decal_RockLichen (Deferred Decal master)",
+  "domain": "DeferredDecal",
+  "blend_mode": "Translucent",
+  "decal_response": "ColorNormalRoughness",
+  "params": {
+   "BaseColorTex": "T_Decal_Rock_Lichen_M_BC.png",
+   "NormalTex": "T_Decal_Rock_Lichen_M_N.png",
+   "OpacityTex": "T_Decal_Rock_Lichen_M_M.png",
+   "BaseColorTint": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "NormalStrength": 1.0,
+   "Roughness": 0.85,
+   "OpacityPower": 1.0,
+   "OpacityContrast": 1.0,
+   "Desaturate": 0.0
+  },
+  "wiring": "BaseColor = desaturate(BaseColorTex.rgb * BaseColorTint, Desaturate); Normal = FlattenNormal(NormalTex, 1-NormalStrength); Roughness = Roughness; Opacity = saturate(pow(OpacityTex.r, OpacityPower) * OpacityContrast)"
+ },
+ "projection": {
+  "size_cm": [
+   2.0,
+   4.0,
+   4.0
+  ],
+  "ue_DecalSize_half_extent": [
+   1.0,
+   2.0,
+   2.0
+  ],
+  "axes": "project along local -X into the rock; texture U = +Y, V = -Z (any roll)",
+  "placement": "rock faces of the reused rock-kit boulders, X = surface normal, random roll 0-360; cluster 3-12 rosettes per boulder, the largest at the oldest (sun-facing) face",
+  "mesh": null
+ },
+ "relief_cm": 0.034999999999999996,
+ "lichen": {
+  "size": "M",
+  "diameter_mm": 30.0,
+  "growth_years": 50.0,
+  "fall_age_years_zero_delay": 58.0,
+  "px_per_mm": 6.4,
+  "fill": 0.75
+ }
+}

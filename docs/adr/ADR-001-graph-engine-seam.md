@@ -418,26 +418,34 @@ uses this exact selection rule to place landmarks. This directly serves the visi
 edge placement" and "rack & AZ placement" use cases.
 
 **2. Max-flow with real capacities — Ch. 26.**
-`MazeFlow` currently models unit-capacity passages. Generalising to integer capacities turns
-min-cut into **bisection bandwidth** — the actual throughput ceiling between two halves of a
-topology, and the number a capacity planner wants. Same machinery, strictly more useful.
+~~`MazeFlow` currently models unit-capacity passages.~~ **Shipped 2026-08-17** as
+`minCut(grid, source, sink, PassageCapacity)` — see
+[ADR-009](ADR-009-capacitated-max-flow.md). The no-arg overloads stay unit-capacity so
+`GET /analysis` keeps counting chokepoints; a real capacity function turns `cutSize` into
+bisection bandwidth. Weights are still costs, not capacities.
 
 **3. Bipartite matching — Ch. 26 via max-flow.**
-The one classical algorithm whose shape *does* match `RoutingStrategy`: assigning a batch of
-requests to servers under per-server capacity is bipartite b-matching. Unlike A\*, this
-answers a selection question, and it is the principled version of "least connections" when
-you are placing many requests at once rather than one at a time.
+~~The one classical algorithm whose shape *does* match `RoutingStrategy`.~~ **Shipped
+2026-08-17** as `BipartiteMatching` — see [ADR-010](ADR-010-bipartite-matching.md).
+The LoadBalancerPro strategy seam is still closed (#527); this is the offline
+primitive, the same posture as capacitated flow. First-fit is not a substitute —
+the test that pins the class is the fixture first-fit gets wrong.
 
 **4. Bellman-Ford and Johnson — Ch. 24, Ch. 25.**
-Real latency graphs are **asymmetric** (`d(u,v) ≠ d(v,u)`), which every current solver
-assumes away. Johnson's reweighting also makes all-pairs tractable on sparse directed
-graphs — the honest version of `DistanceOracle` for topologies too large for its V² table.
+~~Real latency graphs are asymmetric; Johnson makes all-pairs tractable on sparse
+directed graphs.~~ **Declined 2026-08-17** — see
+[ADR-013](ADR-013-bellman-ford-johnson.md). API weights are costs in
+`[1, 1000]`; core rejects negatives. Bellman-Ford on that graph is a slower
+Dijkstra. Johnson without negatives is n Dijkstra, slower than the already-dormant
+`DistanceOracle` (n BFS). Re-fire if a directed latency graph with signed or
+asymmetric hops appears.
 
 **5. Incremental shortest paths — Ch. 24, extended.**
-The live-routing mode implies weights that change continuously. Recomputing Dijkstra per
-update is the naive answer; incremental/dynamic SSSP (D\*Lite-style) repairs only the
-affected subtree. This is the single largest algorithmic gap between "batch topology tool"
-and "data plane", and should be measured before it is assumed necessary.
+~~Recomputing Dijkstra per update is the naive answer.~~ **Measured 2026-08-17 and
+declined** — see [ADR-011](ADR-011-incremental-sssp.md). A full Dijkstra after a
+living tick is 50–200 µs at the sizes the API serves, 2 ms worst at 128², against a
+2 s ticker. D\*Lite cannot pay for its surface on a 200 µs baseline. Re-fire if the
+tick becomes a data-plane interval or someone regularly solves ≥256² living mazes.
 
 **6. Order statistics — CSRBT, not CLRS Ch. 9.**
 Selecting the p95 server does not need a new selection algorithm; CSRBT already maintains

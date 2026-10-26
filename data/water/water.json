@@ -1,0 +1,91 @@
+{
+ "schema": "daedalus.water/v0",
+ "sources": [
+  {
+   "id": "well",
+   "art": "Prop_WaterWellhead_*",
+   "build": {
+    "hardwood": 10,
+    "rope": 2,
+    "pitch": 4
+   },
+   "yield": "unlimited dirty_water, 1 per 2s",
+   "quality": "dirty"
+  },
+  {
+   "id": "spring",
+   "art": "natural, 3-6 per island (hot springs on Hephaestus Island)",
+   "yield": "clean_water",
+   "quality": "clean"
+  },
+  {
+   "id": "rain_catch",
+   "art": "Prop_WaterRainCatch_*",
+   "yield": "+1 clean_water/min while raining (oddsreaper weather), cap 20",
+   "quality": "clean"
+  },
+  {
+   "id": "sea/lake",
+   "yield": "salt_water",
+   "quality": "salty"
+  }
+ ],
+ "purification": [
+  {
+   "method": "boil",
+   "station": "Prop_WaterBoiler_* or campfire+Prop_WaterBucket_*",
+   "in": "dirty_water",
+   "out": "water",
+   "time_s": 10
+  },
+  {
+   "method": "filter",
+   "art": "Prop_WaterFilter_*",
+   "in": "dirty_water",
+   "out": "water",
+   "needs": {
+    "charcoal": 1,
+    "per": 10
+   }
+  },
+  {
+   "method": "still",
+   "art": "Prop_WaterStill_*",
+   "in": "salt_water",
+   "out": [
+    "water",
+    "salt"
+   ],
+   "time_s": 20
+  },
+  {
+   "method": "herb",
+   "in": "dirty_water + herb with 'purify' essence",
+   "out": "water"
+  }
+ ],
+ "drinking": {
+  "water": {
+   "thirst": 35
+  },
+  "dirty_water": {
+   "thirst": 20,
+   "sick_chance": 0.3,
+   "sick": "hunger drain x2 for 120s"
+  },
+  "salt_water": {
+   "thirst": -10
+  },
+  "tea": {
+   "thirst": 30
+  }
+ },
+ "containers": {
+  "Prop_WaterCanteen_*": 5,
+  "Prop_WaterBucket_*": 3,
+  "Prop_WaterBarrel_*": 40,
+  "Prop_WaterCistern_*": 200
+ },
+ "survival_link": "thirst stat in data/survival/stats.json (drain 0.08/s, damage at 0); consumables there map 'water' -> +35 thirst"
+}
+

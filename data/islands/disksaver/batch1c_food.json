@@ -1,0 +1,37 @@
+[
+ {
+  "asset": "Item_DS_Food_Egg",
+  "kind": "item",
+  "size": "~0.3 m",
+  "tris": 36,
+  "max_dim_m": 0.26
+ },
+ {
+  "asset": "Item_DS_Food_GoatMilk",
+  "kind": "item",
+  "size": "~0.3 m",
+  "tris": 36,
+  "max_dim_m": 0.26
+ },
+ {
+  "asset": "Item_DS_Food_Stew",
+  "kind": "item",
+  "size": "~0.3 m",
+  "tris": 36,
+  "max_dim_m": 0.26
+ },
+ {
+  "asset": "Item_DS_Food_HerbTea",
+  "kind": "item",
+  "size": "~0.3 m",
+  "tris": 36,
+  "max_dim_m": 0.26
+ },
+ {
+  "asset": "Item_DS_Food_Bread",
+  "kind": "item",
+  "size": "~0.3 m",
+  "tris": 36,
+  "max_dim_m": 0.26
+ }
+]

@@ -3,25 +3,34 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
 
 <!--
     Main desktop layout. Three regions:
 
-      - top:    toolbar (generator picker + grid dimensions + seed + Generate)
-      - center: a Pane that holds a Canvas; canvas is sized to fill the pane
+      - top:    compact toolbar (generator, grid, seed, Generate, solver)
+      - center: canvas pane; legend overlays the well and does not steal height
       - bottom: status bar (last action + timing)
 
     Controller is wired by Spring (DaedalusPrimaryStage's controller factory).
-    The canvas itself doesn't auto-resize — MainController binds it to
-    canvasParent's width/height and redraws on change.
+    The canvas itself doesn't auto-resize — MainController sizes the
+    backing store to the pane times the window output scale and redraws.
 -->
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -29,27 +38,51 @@
             styleClass="root">
 
     <top>
-        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="toolbar">
+        <HBox spacing="4" alignment="CENTER_LEFT" styleClass="toolbar">
             <padding>
-                <Insets top="10" right="12" bottom="10" left="12"/>
+                <Insets top="10" right="8" bottom="10" left="8"/>
             </padding>
 
-            <Label text="Generator:"/>
-            <ComboBox fx:id="generatorChoice" prefWidth="240"/>
+            <HBox styleClass="brand" alignment="CENTER_LEFT">
+                <HBox.margin>
+                    <Insets right="10"/>
+                </HBox.margin>
+                <Text text="D"/>
+                <Text text="A"/>
+                <Text text="E"/>
+                <Text text="D"/>
+                <Text text="A"/>
+                <Text text="L"/>
+                <Text text="U"/>
+                <Text text="S"/>
+            </HBox>
+            <Separator orientation="VERTICAL"/>
+
+            <ComboBox fx:id="generatorChoice" prefWidth="88" maxWidth="88">
+                <tooltip><Tooltip text="Generator"/></tooltip>
+            </ComboBox>
+
+            <Spinner fx:id="rowsSpinner" prefWidth="58" editable="true">
+                <tooltip><Tooltip text="Rows"/></tooltip>
+            </Spinner>
+            <Spinner fx:id="colsSpinner" prefWidth="58" editable="true">
+                <tooltip><Tooltip text="Cols"/></tooltip>
+            </Spinner>
+            <Spinner fx:id="hotspotSpinner" prefWidth="46" editable="true">
+                <tooltip><Tooltip text="Hot spots"/></tooltip>
+            </Spinner>
+            <Spinner fx:id="hotspotCostSpinner" prefWidth="50" editable="true">
+                <tooltip><Tooltip text="Spot cost"/></tooltip>
+            </Spinner>
+            <ComboBox fx:id="braidChoice" prefWidth="56" maxWidth="56">
+                <tooltip><Tooltip text="Braid"/></tooltip>
+            </ComboBox>
 
             <Separator orientation="VERTICAL"/>
 
-            <Label text="Rows:"/>
-            <Spinner fx:id="rowsSpinner" prefWidth="80" editable="true"/>
-            <Label text="Cols:"/>
-            <Spinner fx:id="colsSpinner" prefWidth="80" editable="true"/>
-
-            <Separator orientation="VERTICAL"/>
-
-            <Label text="Seed:"/>
-            <TextField fx:id="seedField" prefWidth="140" promptText="auto"/>
-
-            <Separator orientation="VERTICAL"/>
+            <TextField fx:id="seedField" prefWidth="52" promptText="seed">
+                <tooltip><Tooltip text="Seed (blank = random)"/></tooltip>
+            </TextField>
 
             <Button fx:id="generateButton"
                     text="Generate"
@@ -58,25 +91,513 @@
 
             <Separator orientation="VERTICAL"/>
 
-            <Label text="Solver:"/>
-            <ComboBox fx:id="solverChoice" prefWidth="180"/>
+            <ComboBox fx:id="solverChoice" prefWidth="80" maxWidth="80">
+                <tooltip><Tooltip text="Solver"/></tooltip>
+            </ComboBox>
             <Button fx:id="solveButton" text="Solve" onAction="#onSolve"/>
             <Button fx:id="resetButton" text="Reset" onAction="#onReset"/>
+            <CheckBox fx:id="fogToggle" text="Fog" onAction="#onFog">
+                <tooltip><Tooltip text="Fog of war — walk reveals the dungeon"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="heatToggle" text="Heat" onAction="#onHeat">
+                <tooltip><Tooltip text="Distance from the goal"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="cutsToggle" text="Cuts" onAction="#onCuts">
+                <tooltip><Tooltip text="Min-cut chokepoints and dead ends"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="hardestToggle" text="Long" onAction="#onHardest">
+                <tooltip><Tooltip text="Hardest simple route"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="sanctuaryToggle" text="Safe" onAction="#onSanctuaries">
+                <tooltip><Tooltip text="Sanctuaries — k-center safe points"/></tooltip>
+            </CheckBox>
+            <ComboBox fx:id="lensChoice" prefWidth="64" maxWidth="64" onAction="#onLens">
+                <tooltip><Tooltip text="Heuristic lens — must / tie / never"/></tooltip>
+            </ComboBox>
+            <CheckBox fx:id="raceToggle" text="Race" onAction="#onRace">
+                <tooltip><Tooltip text="Selected solver vs a rival, same arena as the web"/></tooltip>
+            </CheckBox>
+            <CheckBox fx:id="huntToggle" text="Hunt" onAction="#onHunt">
+                <tooltip><Tooltip text="Waypoint hunt — collect the coins"/></tooltip>
+            </CheckBox>
         </HBox>
     </top>
 
     <center>
-        <Pane fx:id="canvasParent" styleClass="canvas-pane">
+        <StackPane fx:id="boardPane" styleClass="board">
+            <BorderPane.margin>
+                <Insets top="16" right="20" bottom="28" left="20"/>
+            </BorderPane.margin>
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+            <Pane fx:id="canvasParent" styleClass="canvas-pane">
             <Canvas fx:id="canvas"/>
+            <FlowPane fx:id="legendBox" hgap="12.5" vgap="14" alignment="CENTER" styleClass="legend"
+                      managed="false" mouseTransparent="true" visible="false">
+                <Label text="floor">
+                    <graphic>
+                        <Rectangle width="10" height="10" stroke="rgba(198,190,174,0.28)"
+                                   strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#484339"/>
+                                        <Stop offset="1.0" color="#2a2218"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label text="wall / rock">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
+                                   arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#19140f"/>
+                                        <Stop offset="1.0" color="#15110d"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendStart" text="start">
+                    <graphic>
+                        <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#3ab675"/>
+                                        <Stop offset="1.0" color="#1e8a58"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Circle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendGoal" text="goal">
+                    <graphic>
+                        <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#d04e4f"/>
+                                        <Stop offset="1.0" color="#c4383c"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Circle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendPath" text="solver path" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
+                                   arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#7997cc"/>
+                                        <Stop offset="1.0" color="#3a5888"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendHotspot" text="hot spot" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(188,64,65,0.35)" strokeType="OUTSIDE" strokeWidth="1.5"
+                                   arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="rgba(188,64,65,0.5)"/>
+                                        <Stop offset="1.0" color="rgba(106,32,36,0.5)"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendPlayer" text="players" styleClass="legend-cluster"
+                       managed="false" visible="false">
+                    <graphic>
+                        <HBox spacing="2">
+                            <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#c89e3f"/>
+                                            <Stop offset="1.0" color="#8a6418"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Circle>
+                            <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#be7256"/>
+                                            <Stop offset="1.0" color="#8a3828"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Circle>
+                            <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#be8450"/>
+                                            <Stop offset="1.0" color="#8a5020"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Circle>
+                            <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#99844a"/>
+                                            <Stop offset="1.0" color="#6a5420"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Circle>
+                        </HBox>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendChoke" text="chokepoint" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
+                                   arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#9f6544"/>
+                                        <Stop offset="1.0" color="#6a4030"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendDeadend" text="dead end" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
+                                   arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#a58b63"/>
+                                        <Stop offset="1.0" color="#6a5438"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendHardest" text="hardest" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(200,158,63,0.35)" strokeType="OUTSIDE" strokeWidth="1.5"
+                                   arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#c6a441"/>
+                                        <Stop offset="1.0" color="#8a6820"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendTour" text="tour" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(200,158,63,0.35)" strokeType="OUTSIDE" strokeWidth="1.5"
+                                   arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#af9158"/>
+                                        <Stop offset="1.0" color="#6a5428"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendSanctuary" text="sanctuary" managed="false" visible="false">
+                    <graphic>
+                        <Circle radius="5" stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#758c44"/>
+                                        <Stop offset="1.0" color="#4e6a28"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Circle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendLens" text="lens" styleClass="legend-cluster"
+                       managed="false" visible="false">
+                    <graphic>
+                        <HBox spacing="2">
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#e5484d"/>
+                                            <Stop offset="1.0" color="#6a2024"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#f2c94c"/>
+                                            <Stop offset="1.0" color="#8a6820"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#8aaa50"/>
+                                            <Stop offset="1.0" color="#4e6a28"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                        </HBox>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendWaypoint" text="waypoint" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="8" height="8" rotate="45"
+                                   stroke="rgba(200,158,63,0.35)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#c6a441"/>
+                                        <Stop offset="1.0" color="#8a6820"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendRace" text="arena" styleClass="legend-cluster"
+                       managed="false" visible="false">
+                    <graphic>
+                        <HBox spacing="2">
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#7997cc"/>
+                                            <Stop offset="1.0" color="#3a5888"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#c49425"/>
+                                            <Stop offset="1.0" color="#8a6018"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                        </HBox>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendGhost" text="ghost" managed="false" visible="false">
+                    <graphic>
+                        <Circle radius="5" opacity="0.6"
+                                stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#beb6ab"/>
+                                        <Stop offset="1.0" color="#6a6258"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Circle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendFog" text="unseen (fog)" managed="false" visible="false">
+                    <graphic>
+                        <Rectangle width="10" height="10"
+                                   stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5"
+                                   arcWidth="6" arcHeight="6">
+                            <fill>
+                                <RadialGradient centerX="0.45" centerY="0.40" radius="0.813941"
+                                                proportional="true">
+                                    <stops>
+                                        <Stop offset="0.28" color="#16120e"/>
+                                        <Stop offset="1.0" color="#0c0908"/>
+                                    </stops>
+                                </RadialGradient>
+                            </fill>
+                        </Rectangle>
+                    </graphic>
+                </Label>
+                <Label fx:id="legendCompare" text="compare" styleClass="legend-cluster"
+                       managed="false" visible="false">
+                    <graphic>
+                        <HBox spacing="2">
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#7997cc"/>
+                                            <Stop offset="1.0" color="#3a5888"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#c49425"/>
+                                            <Stop offset="1.0" color="#8a6018"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#bc4041"/>
+                                            <Stop offset="1.0" color="#6a2024"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#758c44"/>
+                                            <Stop offset="1.0" color="#4e6a28"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#9f6544"/>
+                                            <Stop offset="1.0" color="#6a4030"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                            <Rectangle width="6" height="10"
+                                       stroke="rgba(198,190,174,0.28)" strokeType="OUTSIDE" strokeWidth="1.5" arcWidth="6" arcHeight="6">
+                                <fill>
+                                    <RadialGradient centerX="0.45" centerY="0.40" radius="1.141271"
+                                                    proportional="true">
+                                        <stops>
+                                            <Stop offset="0.28" color="#af9158"/>
+                                            <Stop offset="1.0" color="#6a5428"/>
+                                        </stops>
+                                    </RadialGradient>
+                                </fill>
+                            </Rectangle>
+                        </HBox>
+                    </graphic>
+                </Label>
+            </FlowPane>
+            <HBox fx:id="exportBox" spacing="8" alignment="CENTER_RIGHT" styleClass="exports"
+                  managed="false" visible="false">
+                <CheckBox fx:id="liveToggle" text="Live" onAction="#onLive">
+                    <tooltip><Tooltip text="Bring the maze to life — same erosion ticks as the web"/></tooltip>
+                </CheckBox>
+                <CheckBox fx:id="hardToggle" text="Hard">
+                    <tooltip><Tooltip text="Harden — close extra passages each Live tick (ADR-008)"/></tooltip>
+                </CheckBox>
+                <CheckBox fx:id="jamToggle" text="Jam" onAction="#onJam">
+                    <tooltip><Tooltip text="Simulate traffic — walked cells bloom cost, then cool off"/></tooltip>
+                </CheckBox>
+                <CheckBox fx:id="allToggle" text="All" onAction="#onAll">
+                    <tooltip><Tooltip text="Compare all solvers — overlapping routes are consensus"/></tooltip>
+                </CheckBox>
+                <Button fx:id="pngButton" text="PNG" onAction="#onExportPng">
+                    <tooltip><Tooltip text="Save the dungeon as a PNG"/></tooltip>
+                </Button>
+            </HBox>
         </Pane>
+        </StackPane>
     </center>
 
     <bottom>
         <HBox spacing="8" alignment="CENTER_LEFT" styleClass="status-bar">
             <padding>
-                <Insets top="6" right="12" bottom="6" left="12"/>
+                <Insets top="8" right="10" bottom="4" left="10"/>
             </padding>
-            <Label fx:id="statusLabel" text="Ready — pick a generator and click Generate."/>
+            <Label fx:id="statusLabel" styleClass="status-line" text="Ready — pick a generator and click Generate."/>
+            <Label fx:id="worldLabel" text="world-zero · listening"/>
         </HBox>
     </bottom>
 </BorderPane>

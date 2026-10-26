@@ -45,14 +45,28 @@ MUT = [
      "            if (from == null) return false;",
      "            if (false) return false;"),
     (SVC, "illegal steps are accepted (walls ignored)",
-     "            if (!grid.openNeighbors(from).contains(to)) return false;",
+     "            if (!live.openNeighbors(from).contains(to)) return false;",
      "            if (false) return false;"),
+    (SVC, "a living replace is ignored (stale snapshot used)",
+     "            MazeGrid live = grid;\n"
+     "            if (mazes != null) {\n"
+     "                MazeGenerationService.Cached cached = mazes.find(s.mazeId());\n"
+     "                if (cached == null) {\n"
+     "                    return false;\n"
+     "                }\n"
+     "                live = cached.grid();\n"
+     "            }",
+     "            MazeGrid live = grid;"),
     (SVC, "join ignores the multiplayer flag",
      "        if (!multiplayer) return null;",
      "        if (false) return null;"),
     (SVC, "join admits players into a finished session",
-     "            if (s.completed()) return null;",
-     "            if (false) return null;"),
+     "            if (s.completed()) {\n"
+     "                throw new JoinRefusedException(JoinRefusedException.Reason.COMPLETED);\n"
+     "            }",
+     "            if (false) {\n"
+     "                throw new JoinRefusedException(JoinRefusedException.Reason.COMPLETED);\n"
+     "            }"),
     (SVC, "the session store loses its size bound",
      "                .maximumSize(maxSessions)\n",
      ""),
@@ -60,13 +74,16 @@ MUT = [
      "                .expireAfterAccess(idleTtl)\n",
      ""),
     (SVC, "the score floor is removed (negative scores)",
-     "        long score = Math.max(0, 100_000 - s.moveCount() * 10 - elapsed / 100);",
-     "        long score = 100_000 - s.moveCount() * 10 - elapsed / 100;"),
+     "        long score = Math.max(0, 100_000 - hops * 10 - elapsed / 100);",
+     "        long score = 100_000 - hops * 10 - elapsed / 100;"),
+    (SVC, "a joiner finish is credited to the opener",
+     "                s.id(), s.mazeId(), winner, score, hops, elapsed,",
+     "                s.id(), s.mazeId(), s.playerName(), score, hops, elapsed,"),
 ]
 
 CLASSES = ("GameSessionServiceConcurrencyTest", "SessionLockIsolationTest",
            "GameSessionMultiplayerTest", "BoundedStoresTest", "MazeControllerJoinTest",
-           "GhostServiceTest")
+           "GhostServiceTest", "GameSessionLiveGridTest")
 TESTS = ",".join(CLASSES)
 
 

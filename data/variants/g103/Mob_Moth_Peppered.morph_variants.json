@@ -1,0 +1,100 @@
+{
+ "schema": "bb-material-variants/1",
+ "asset": "Mob_Moth_Peppered",
+ "slot": "Morph",
+ "slot_index": 0,
+ "untouched_slots": [
+  "eyes / legs / antennae"
+ ],
+ "gap": "G103 (pythagoras 49770, code 9fcb07bd com.daedalus.world.battlefield.SootMoths)",
+ "status": "NOT READY",
+ "parent_material": {
+  "name": "M_MothPeppered (UE side)",
+  "graph": "BaseColor = lerp(MorphBase, Pepper, PepperMask(uv) * PepperAmount); Roughness = Roughness"
+ },
+ "params": {
+  "MorphBase": "vector, linear",
+  "Pepper": "vector, linear",
+  "PepperAmount": "scalar 0..1",
+  "Roughness": "scalar",
+  "PepperMask": "texture, greyscale, sRGB off"
+ },
+ "mask": {
+  "file": "T_Mob_Moth_Peppered_PepperMask.png",
+  "sha256": "5ea890f290fd6d09e97881c548044a000a751eef41765e6b4022f02bf5e4e2ef",
+  "format": "PNG 8-bit greyscale, white = pepper",
+  "uv": "no mesh UVs: top-down projection in UE mesh space",
+  "u": {
+   "axis": "X",
+   "min_cm": -2.25,
+   "size_cm": 4.5
+  },
+  "v": {
+   "axis": "Y",
+   "min_cm": -1.41,
+   "size_cm": 2.88
+  },
+  "material_hint": "uv = ((LocalPosition.X - u.min) / u.size, (LocalPosition.Y - v.min) / v.size); clamp. Wings flap in Flutter: use the reference (bind) pose position (PreSkinnedLocalPosition) so the pattern sticks to the wing."
+ },
+ "instances": {
+  "MI_Mob_Moth_Peppered_Pale": {
+   "parent": "M_MothPeppered",
+   "morph": "Pale",
+   "genotype": "dd (typica)",
+   "share_in_code": "pale share = (1 - q)^2",
+   "params": {
+    "MorphBase": {
+     "srgb_hex": "E4DED0",
+     "linear_rgba": [
+      0.775822,
+      0.730461,
+      0.630757,
+      1.0
+     ]
+    },
+    "Pepper": {
+     "srgb_hex": "24211E",
+     "linear_rgba": [
+      0.017642,
+      0.015209,
+      0.012983,
+      1.0
+     ]
+    },
+    "PepperAmount": 1.0,
+    "Roughness": 0.85,
+    "PepperMask": "T_Mob_Moth_Peppered_PepperMask.png"
+   }
+  },
+  "MI_Mob_Moth_Peppered_Dark": {
+   "parent": "M_MothPeppered",
+   "morph": "Dark",
+   "genotype": "DD or Dd (carbonaria, D dominant)",
+   "share_in_code": "dark share = 1 - (1 - q)^2",
+   "params": {
+    "MorphBase": {
+     "srgb_hex": "2B2825",
+     "linear_rgba": [
+      0.024158,
+      0.021219,
+      0.0185,
+      1.0
+     ]
+    },
+    "Pepper": {
+     "srgb_hex": "161412",
+     "linear_rgba": [
+      0.008023,
+      0.006995,
+      0.006049,
+      1.0
+     ]
+    },
+    "PepperAmount": 0.3,
+    "Roughness": 0.8,
+    "PepperMask": "T_Mob_Moth_Peppered_PepperMask.png"
+   }
+  }
+ },
+ "spawn": "per moth: morph = Dark with probability SootMoths dark share (1 - (1 - q)^2), else Pale"
+}

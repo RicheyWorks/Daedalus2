@@ -46,12 +46,12 @@ class MazeGenerationServiceFallbackTest {
         // Cached returned by fallback() is the binary-tree one.
         Method fallback = MazeGenerationService.class
                 .getDeclaredMethod("fallback", String.class, int.class, int.class, long.class,
-                        java.util.List.class, Throwable.class);
+                        java.util.List.class, double.class, Throwable.class);
         fallback.setAccessible(true);
 
         MazeGenerationService.Cached cached =
                 (MazeGenerationService.Cached) fallback.invoke(service,
-                        "some-broken-generator", 5, 5, 42L, null,
+                        "some-broken-generator", 5, 5, 42L, null, 0.0,
                         new RuntimeException("breaker open"));
 
         assertThat(cached).isNotNull();

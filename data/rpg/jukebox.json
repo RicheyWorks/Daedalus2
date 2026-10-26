@@ -1,0 +1,282 @@
+{
+ "schema": "daedalus.jukebox-cues/v1",
+ "source": "tools/blender/rpg_audio.py",
+ "contract": "SDaedalusRealm POSTs {cue, changed, sfx} to the daedalus.Jukebox URL (ADR-052); this pack maps them to files",
+ "root": "engines/unreal/art/claude-audio",
+ "realms": {
+  "portal": {
+   "sample_rate": 22050,
+   "channels": 1,
+   "cues": {
+    "FIELD": {
+     "file": "portal/Music_Overworld.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 682838,
+     "bpm": 124
+    },
+    "TOWN": {
+     "file": "portal/Music_Town.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 846720,
+     "bpm": 100
+    },
+    "CASTLE": {
+     "file": "portal/Music_Castle.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 1008000,
+     "bpm": 84
+    },
+    "CAVE": {
+     "file": "portal/Music_Dungeon.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 1058400,
+     "bpm": 80
+    },
+    "BATTLE": {
+     "file": "portal/Music_Battle.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 542769,
+     "bpm": 156
+    },
+    "BOSS": {
+     "file": "portal/Music_Boss.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 504000,
+     "bpm": 168
+    },
+    "VICTORY": {
+     "file": "portal/Music_Victory.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 311294,
+     "bpm": 136
+    },
+    "DEFEAT": {
+     "file": "portal/Music_GameOver.wav",
+     "loop": false,
+     "loop_start": 0,
+     "loop_end": null,
+     "bpm": 66
+    },
+    "INN": {
+     "file": "portal/Music_Inn.wav",
+     "loop": false,
+     "loop_start": 0,
+     "loop_end": null,
+     "bpm": 96
+    },
+    "TITLE": {
+     "file": "portal/Music_Title.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 920347,
+     "bpm": 92
+    }
+   },
+   "events": {
+    "TICK": "portal/Sfx_Cursor.wav",
+    "PICK": "portal/Sfx_Confirm.wav",
+    "PAGE": "portal/Sfx_Page.wav",
+    "OPEN": "portal/Sfx_Open.wav",
+    "BUMP": "portal/Sfx_Bump.wav",
+    "CHEST": "portal/Sfx_Chest.wav",
+    "LOCKED": "portal/Sfx_Locked.wav",
+    "DOOR": "portal/Sfx_Door.wav",
+    "STAIRS": "portal/Sfx_Stairs.wav",
+    "ENTER": "portal/Sfx_Enter.wav",
+    "PORTAL": "portal/Sfx_Portal.wav",
+    "HURT": "portal/Sfx_Hurt.wav",
+    "BLESS": "portal/Sfx_Bless.wav",
+    "BUY": "portal/Sfx_Coin.wav",
+    "INN": "portal/Sfx_Rest.wav",
+    "TORCH": "portal/Sfx_Torch.wav",
+    "WINGS": "portal/Sfx_Wings.wav",
+    "ITEM": "portal/Sfx_Item.wav",
+    "SPELL": "portal/Sfx_Cast.wav",
+    "EQUIP": "portal/Sfx_Equip.wav",
+    "AMBUSH": "portal/Sfx_Ambush.wav",
+    "SHINY": "portal/Sfx_Shiny.wav",
+    "LAND": "portal/Sfx_Land.wav",
+    "DEED": "portal/Sfx_Deed.wav",
+    "EGG": "portal/Sfx_Egg.wav",
+    "HATCH": "portal/Sfx_Hatch.wav",
+    "CALL": "portal/Sfx_Call.wav",
+    "CRIT": "portal/Sfx_Critical.wav",
+    "DEFEAT": "portal/Sfx_Down.wav",
+    "FALL": "portal/Sfx_Fall.wav",
+    "LEVEL": "portal/Sfx_LevelUp.wav",
+    "MISS": "portal/Sfx_Miss.wav",
+    "POISON": "portal/Sfx_Poison.wav",
+    "RUN": "portal/Sfx_Escape.wav",
+    "SPORES": "portal/Sfx_Spores.wav",
+    "SWING": "portal/Sfx_Swing.wav",
+    "VICTORY": "portal/Sfx_Win.wav",
+    "ZAP": "portal/Sfx_Zap.wav",
+    "HIT": "portal/Sfx_Hit.wav",
+    "HEAL": "portal/Sfx_Heal.wav",
+    "ENCOUNTER": "portal/Sfx_Encounter.wav",
+    "CANCEL": "portal/Sfx_Cancel.wav",
+    "BLIP:0": "portal/Sfx_Blip_0.wav",
+    "BLIP:1": "portal/Sfx_Blip_1.wav",
+    "BLIP:2": "portal/Sfx_Blip_2.wav",
+    "BLIP:3": "portal/Sfx_Blip_3.wav",
+    "BLIP:4": "portal/Sfx_Blip_4.wav",
+    "BLIP:5": "portal/Sfx_Blip_5.wav",
+    "BLIP:6": "portal/Sfx_Blip_6.wav",
+    "BLIP:7": "portal/Sfx_Blip_7.wav",
+    "BLIP:8": "portal/Sfx_Blip_8.wav",
+    "BLIP:9": "portal/Sfx_Blip_9.wav",
+    "BLIP:10": "portal/Sfx_Blip_10.wav",
+    "BLIP:11": "portal/Sfx_Blip_11.wav"
+   },
+   "touring_cues": [
+    "FIELD",
+    "TOWN",
+    "INN"
+   ]
+  },
+  "prism": {
+   "sample_rate": 32000,
+   "channels": 2,
+   "cues": {
+    "FIELD": {
+     "file": "prism/Music_Overworld.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 990967,
+     "bpm": 124
+    },
+    "TOWN": {
+     "file": "prism/Music_Town.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 1228800,
+     "bpm": 100
+    },
+    "CASTLE": {
+     "file": "prism/Music_Castle.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 1462857,
+     "bpm": 84
+    },
+    "CAVE": {
+     "file": "prism/Music_Dungeon.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 1536000,
+     "bpm": 80
+    },
+    "BATTLE": {
+     "file": "prism/Music_Battle.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 787692,
+     "bpm": 156
+    },
+    "BOSS": {
+     "file": "prism/Music_Boss.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 731428,
+     "bpm": 168
+    },
+    "VICTORY": {
+     "file": "prism/Music_Victory.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 451764,
+     "bpm": 136
+    },
+    "DEFEAT": {
+     "file": "prism/Music_GameOver.wav",
+     "loop": false,
+     "loop_start": 0,
+     "loop_end": null,
+     "bpm": 66
+    },
+    "INN": {
+     "file": "prism/Music_Inn.wav",
+     "loop": false,
+     "loop_start": 0,
+     "loop_end": null,
+     "bpm": 96
+    },
+    "TITLE": {
+     "file": "prism/Music_Title.wav",
+     "loop": true,
+     "loop_start": 0,
+     "loop_end": 1335652,
+     "bpm": 92
+    }
+   },
+   "events": {
+    "TICK": "prism/Sfx_Cursor.wav",
+    "PICK": "prism/Sfx_Confirm.wav",
+    "PAGE": "prism/Sfx_Page.wav",
+    "OPEN": "prism/Sfx_Open.wav",
+    "BUMP": "prism/Sfx_Bump.wav",
+    "CHEST": "prism/Sfx_Chest.wav",
+    "LOCKED": "prism/Sfx_Locked.wav",
+    "DOOR": "prism/Sfx_Door.wav",
+    "STAIRS": "prism/Sfx_Stairs.wav",
+    "ENTER": "prism/Sfx_Enter.wav",
+    "PORTAL": "prism/Sfx_Portal.wav",
+    "HURT": "prism/Sfx_Hurt.wav",
+    "BLESS": "prism/Sfx_Bless.wav",
+    "BUY": "prism/Sfx_Coin.wav",
+    "INN": "prism/Sfx_Rest.wav",
+    "TORCH": "prism/Sfx_Torch.wav",
+    "WINGS": "prism/Sfx_Wings.wav",
+    "ITEM": "prism/Sfx_Item.wav",
+    "SPELL": "prism/Sfx_Cast.wav",
+    "EQUIP": "prism/Sfx_Equip.wav",
+    "AMBUSH": "prism/Sfx_Ambush.wav",
+    "SHINY": "prism/Sfx_Shiny.wav",
+    "LAND": "prism/Sfx_Land.wav",
+    "DEED": "prism/Sfx_Deed.wav",
+    "EGG": "prism/Sfx_Egg.wav",
+    "HATCH": "prism/Sfx_Hatch.wav",
+    "CALL": "prism/Sfx_Call.wav",
+    "CRIT": "prism/Sfx_Critical.wav",
+    "DEFEAT": "prism/Sfx_Down.wav",
+    "FALL": "prism/Sfx_Fall.wav",
+    "LEVEL": "prism/Sfx_LevelUp.wav",
+    "MISS": "prism/Sfx_Miss.wav",
+    "POISON": "prism/Sfx_Poison.wav",
+    "RUN": "prism/Sfx_Escape.wav",
+    "SPORES": "prism/Sfx_Spores.wav",
+    "SWING": "prism/Sfx_Swing.wav",
+    "VICTORY": "prism/Sfx_Win.wav",
+    "ZAP": "prism/Sfx_Zap.wav",
+    "HIT": "prism/Sfx_Hit.wav",
+    "HEAL": "prism/Sfx_Heal.wav",
+    "ENCOUNTER": "prism/Sfx_Encounter.wav",
+    "CANCEL": "prism/Sfx_Cancel.wav",
+    "BLIP:0": "prism/Sfx_Blip_0.wav",
+    "BLIP:1": "prism/Sfx_Blip_1.wav",
+    "BLIP:2": "prism/Sfx_Blip_2.wav",
+    "BLIP:3": "prism/Sfx_Blip_3.wav",
+    "BLIP:4": "prism/Sfx_Blip_4.wav",
+    "BLIP:5": "prism/Sfx_Blip_5.wav",
+    "BLIP:6": "prism/Sfx_Blip_6.wav",
+    "BLIP:7": "prism/Sfx_Blip_7.wav",
+    "BLIP:8": "prism/Sfx_Blip_8.wav",
+    "BLIP:9": "prism/Sfx_Blip_9.wav",
+    "BLIP:10": "prism/Sfx_Blip_10.wav",
+    "BLIP:11": "prism/Sfx_Blip_11.wav"
+   },
+   "touring_cues": [
+    "FIELD",
+    "TOWN",
+    "INN"
+   ]
+  }
+ }
+}

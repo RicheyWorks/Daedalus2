@@ -1,0 +1,103 @@
+{
+  "script": "engines\\unreal\\DaedalusLink\\Content\\Casts\\parcels.dcs",
+  "script_sha256": "2787b33e7b4f166576724c463bf80fcfc31cb4f83add6c282cd291324ea2ec6d",
+  "bindings": [
+    {
+      "native_who": "Postmaster Grue",
+      "asset_id": "Mob_Parcels_PostmasterGrue",
+      "file": "Mob_Parcels_PostmasterGrue.glb",
+      "sha256": "cc9275a50174767d6064b410da673c812eea992c9a6575d94b6518912034345c",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Plot Surveyor Ilka",
+      "asset_id": "Mob_Parcels_PlotSurveyorIlka",
+      "file": "Mob_Parcels_PlotSurveyorIlka.glb",
+      "sha256": "6dc02e93053d5fc156e68d68745c0ca2b9c70334a7fffcfc7b917d330d53d364",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Fence Smith",
+      "asset_id": "Mob_Parcels_FenceSmith",
+      "file": "Mob_Parcels_FenceSmith.glb",
+      "sha256": "c3c21555e0ed5cf354c44a5097e477dc3c387cceca78c191fb2aac2b887ffcae",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Seed Broker Ott",
+      "asset_id": "Mob_Parcels_SeedBrokerOtt",
+      "file": "Mob_Parcels_SeedBrokerOtt.glb",
+      "sha256": "ba6f0121e58e93c664487bdbbe913de53b943cdc50f55ee35363e22324de9c55",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Scarecrow Elder",
+      "asset_id": "Mob_Parcels_ScarecrowElder",
+      "file": "Mob_Parcels_ScarecrowElder.glb",
+      "sha256": "072136d18cd624b7449acf69a1e126443ace76e47943123b82b8e5722159aa28",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Helipad Chief Rosa",
+      "asset_id": "Mob_Parcels_HelipadChiefRosa",
+      "file": "Mob_Parcels_HelipadChiefRosa.glb",
+      "sha256": "8f66d723b6da8197eeff1e86740ad3e1c42a446aab940349fa90dd0c6a4fae34",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Milk Cart Twins",
+      "asset_id": "Mob_Parcels_MilkCartTwins",
+      "file": "Mob_Parcels_MilkCartTwins.glb",
+      "sha256": "dc3fd8dfd5dc8edad794d5b7e0b4bd8ae864f59b3cef1464b3e95a20f5caa5a5",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Lost-Letter Ghost",
+      "asset_id": "Mob_Parcels_LostLetterCourier",
+      "file": "Mob_Parcels_LostLetterCourier.glb",
+      "sha256": "b955a27486c3f020fc7e535fa6417dd0b0c6c255352662e44775c832a7fa243c",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Beekeeper Hollis",
+      "asset_id": "Mob_Parcels_BeekeeperHollis",
+      "file": "Mob_Parcels_BeekeeperHollis.glb",
+      "sha256": "e76bdb218217fce1de5b68c338680041c2f2f1e739065f09c648062d61e8aa25",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Auction Crow",
+      "asset_id": "Mob_Parcels_AuctionCrow",
+      "file": "Mob_Parcels_AuctionCrow.glb",
+      "sha256": "49821ce09034ff47180e0eccdf52fbfbdd2fd09e6cfb1c756d656462fdda1c3c",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Weather Vane Keeper",
+      "asset_id": "Mob_Parcels_WeatherVaneKeeper",
+      "file": "Mob_Parcels_WeatherVaneKeeper.glb",
+      "sha256": "1013286ffb4fc52965e77f88dd8633d37c988911c68cc97007d0f2f22f7b6e11",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    },
+    {
+      "native_who": "Neighbour Feud Pair",
+      "asset_id": "Mob_Parcels_NeighbourFeudPair",
+      "file": "Mob_Parcels_NeighbourFeudPair.glb",
+      "sha256": "2651571ddbd7a1c629f8f7ce19ed9b3842ccbfb8e8153dc16c8c47df977a0cd4",
+      "rig": "ParcelsHumanoidV1",
+      "status": "Native binding pending"
+    }
+  ],
+  "hero_binding": "Separate player binding; not a DCS role"
+}

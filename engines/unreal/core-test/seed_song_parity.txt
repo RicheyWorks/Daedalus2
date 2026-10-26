@@ -1,0 +1,393 @@
+# seed_song_core_test.cpp --write: G33 Seed-Song Spring parity (unreal-epic-boss). 20 seeds x 12 records, 12 springs, 10 scripted chapters.
+rec s=0 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=0 t=1 missing=2 heard=Doleaf|Mimint|Solthorn home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=0 t=2 missing=1 heard=Rebell|Mimint|Fasage|Lavine home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, Lavine, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=0 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=0 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=0 t=5 missing=1 heard=Solthorn|Fasage|Rebell home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=0 t=6 missing=1 heard=Doleaf|Sharpcress|Mimint|Fasage home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, Fasage, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=0 t=7 missing=1 heard=Fasage|Mimint|Sharpcress home=0 | This is arabic_takht. I hear Fasage, Mimint, Sharpcress, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=0 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=0 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=0 t=10 missing=1 heard=Doleaf|Solthorn|Rebell|Lavine home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, Lavine, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=0 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=1 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=1 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=1 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=1 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=1 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=1 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=1 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=1 t=7 missing=1 heard=Fasage|Mimint|Sharpcress home=0 | This is arabic_takht. I hear Fasage, Mimint, Sharpcress, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=1 t=8 missing=1 heard=Rebell|Flatfern|Fasage|Flatfern home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, Flatfern, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=1 t=9 missing=1 heard=Doleaf|Flatfern|Hushmoss home=0 | This is balkan_brass. I hear Doleaf, Flatfern, Hushmoss, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=1 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=1 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=2 t=0 missing=1 heard=Solthorn|Lavine|Tisquill home=1 | This is american_old_time. I hear Solthorn, Lavine, Tisquill, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=2 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=2 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=2 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=2 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=2 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=2 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=2 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=2 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=2 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=2 t=10 missing=1 heard=Doleaf|Solthorn|Rebell|Lavine home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, Lavine, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=2 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=3 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=3 t=1 missing=2 heard=Doleaf|Mimint|Solthorn home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=3 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=3 t=3 missing=2 heard=Doleaf|Rebell|Mimint home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=3 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=3 t=5 missing=1 heard=Solthorn|Fasage|Rebell home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=3 t=6 missing=1 heard=Doleaf|Sharpcress|Mimint|Fasage home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, Fasage, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=3 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=3 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=3 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=3 t=10 missing=1 heard=Doleaf|Solthorn|Rebell|Lavine home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, Lavine, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=3 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=4 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=4 t=1 missing=2 heard=Doleaf|Mimint|Solthorn home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=4 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=4 t=3 missing=2 heard=Doleaf|Rebell|Mimint home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=4 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=4 t=5 missing=1 heard=Solthorn|Fasage|Rebell home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=4 t=6 missing=1 heard=Doleaf|Sharpcress|Mimint|Fasage home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, Fasage, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=4 t=7 missing=1 heard=Fasage|Mimint|Sharpcress home=0 | This is arabic_takht. I hear Fasage, Mimint, Sharpcress, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=4 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=4 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=4 t=10 missing=1 heard=Doleaf|Solthorn|Rebell|Lavine home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, Lavine, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=4 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=5 t=0 missing=1 heard=Solthorn|Lavine|Tisquill home=1 | This is american_old_time. I hear Solthorn, Lavine, Tisquill, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=5 t=1 missing=2 heard=Doleaf|Mimint|Solthorn home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=5 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=5 t=3 missing=2 heard=Doleaf|Rebell|Mimint home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=5 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=5 t=5 missing=1 heard=Solthorn|Fasage|Rebell home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=5 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=5 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=5 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=5 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=5 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=5 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=6 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=6 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=6 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=6 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=6 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=6 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=6 t=6 missing=1 heard=Doleaf|Sharpcress|Mimint|Fasage home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, Fasage, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=6 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=6 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=6 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=6 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=6 t=11 missing=2 heard=Solthorn|Gloryroot|Tisquill home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=7 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=7 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=7 t=2 missing=1 heard=Rebell|Mimint|Fasage|Lavine home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, Lavine, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=7 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=7 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=7 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=7 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=7 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=7 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=7 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=7 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=7 t=11 missing=2 heard=Solthorn|Gloryroot|Tisquill home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=8 t=0 missing=1 heard=Solthorn|Lavine|Tisquill home=1 | This is american_old_time. I hear Solthorn, Lavine, Tisquill, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=8 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=8 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=8 t=3 missing=2 heard=Doleaf|Rebell|Mimint home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=8 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=8 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=8 t=6 missing=1 heard=Doleaf|Sharpcress|Mimint|Fasage home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, Fasage, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=8 t=7 missing=1 heard=Fasage|Mimint|Sharpcress home=0 | This is arabic_takht. I hear Fasage, Mimint, Sharpcress, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=8 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=8 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=8 t=10 missing=1 heard=Doleaf|Solthorn|Rebell|Lavine home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, Lavine, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=8 t=11 missing=2 heard=Solthorn|Gloryroot|Tisquill home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=9 t=0 missing=1 heard=Solthorn|Lavine|Tisquill home=1 | This is american_old_time. I hear Solthorn, Lavine, Tisquill, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=9 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=9 t=2 missing=1 heard=Rebell|Mimint|Fasage|Lavine home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, Lavine, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=9 t=3 missing=2 heard=Doleaf|Rebell|Mimint home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=9 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=9 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=9 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=9 t=7 missing=1 heard=Fasage|Mimint|Sharpcress home=0 | This is arabic_takht. I hear Fasage, Mimint, Sharpcress, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=9 t=8 missing=1 heard=Rebell|Flatfern|Fasage|Flatfern home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, Flatfern, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=9 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=9 t=10 missing=1 heard=Doleaf|Solthorn|Rebell|Lavine home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, Lavine, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=9 t=11 missing=2 heard=Solthorn|Gloryroot|Tisquill home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=10 t=0 missing=1 heard=Solthorn|Lavine|Tisquill home=1 | This is american_old_time. I hear Solthorn, Lavine, Tisquill, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=10 t=1 missing=2 heard=Doleaf|Mimint|Solthorn home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=10 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=10 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=10 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=10 t=5 missing=1 heard=Solthorn|Fasage|Rebell home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=10 t=6 missing=1 heard=Doleaf|Sharpcress|Mimint|Fasage home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, Fasage, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=10 t=7 missing=1 heard=Fasage|Mimint|Sharpcress home=0 | This is arabic_takht. I hear Fasage, Mimint, Sharpcress, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=10 t=8 missing=1 heard=Rebell|Flatfern|Fasage|Flatfern home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, Flatfern, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=10 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=10 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=10 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=11 t=0 missing=1 heard=Solthorn|Lavine|Tisquill home=1 | This is american_old_time. I hear Solthorn, Lavine, Tisquill, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=11 t=1 missing=2 heard=Doleaf|Mimint|Solthorn home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=11 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=11 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=11 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=11 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=11 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=11 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=11 t=8 missing=1 heard=Rebell|Flatfern|Fasage|Flatfern home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, Flatfern, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=11 t=9 missing=1 heard=Doleaf|Flatfern|Hushmoss home=0 | This is balkan_brass. I hear Doleaf, Flatfern, Hushmoss, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=11 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=11 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=12 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=12 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=12 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=12 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=12 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=12 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=12 t=6 missing=1 heard=Doleaf|Sharpcress|Mimint|Fasage home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, Fasage, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=12 t=7 missing=1 heard=Fasage|Mimint|Sharpcress home=0 | This is arabic_takht. I hear Fasage, Mimint, Sharpcress, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=12 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=12 t=9 missing=1 heard=Doleaf|Flatfern|Hushmoss home=0 | This is balkan_brass. I hear Doleaf, Flatfern, Hushmoss, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=12 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=12 t=11 missing=2 heard=Solthorn|Gloryroot|Tisquill home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=13 t=0 missing=1 heard=Solthorn|Lavine|Tisquill home=1 | This is american_old_time. I hear Solthorn, Lavine, Tisquill, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=13 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=13 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=13 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=13 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=13 t=5 missing=1 heard=Solthorn|Fasage|Rebell home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=13 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=13 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=13 t=8 missing=1 heard=Rebell|Flatfern|Fasage|Flatfern home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, Flatfern, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=13 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=13 t=10 missing=1 heard=Doleaf|Solthorn|Rebell|Lavine home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, Lavine, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=13 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=14 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=14 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=14 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=14 t=3 missing=2 heard=Doleaf|Rebell|Mimint home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=14 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=14 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=14 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=14 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=14 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=14 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=14 t=10 missing=1 heard=Doleaf|Solthorn|Rebell|Lavine home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, Lavine, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=14 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=15 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=15 t=1 missing=2 heard=Doleaf|Mimint|Solthorn home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=15 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=15 t=3 missing=2 heard=Doleaf|Rebell|Mimint home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=15 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=15 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=15 t=6 missing=1 heard=Doleaf|Sharpcress|Mimint|Fasage home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, Fasage, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=15 t=7 missing=1 heard=Fasage|Mimint|Sharpcress home=0 | This is arabic_takht. I hear Fasage, Mimint, Sharpcress, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=15 t=8 missing=1 heard=Rebell|Flatfern|Fasage|Flatfern home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, Flatfern, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=15 t=9 missing=1 heard=Doleaf|Flatfern|Hushmoss home=0 | This is balkan_brass. I hear Doleaf, Flatfern, Hushmoss, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=15 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=15 t=11 missing=2 heard=Solthorn|Gloryroot|Tisquill home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=16 t=0 missing=1 heard=Solthorn|Lavine|Tisquill home=1 | This is american_old_time. I hear Solthorn, Lavine, Tisquill, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=16 t=1 missing=2 heard=Doleaf|Mimint|Solthorn home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=16 t=2 missing=1 heard=Rebell|Mimint|Fasage|Lavine home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, Lavine, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=16 t=3 missing=2 heard=Doleaf|Rebell|Mimint home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=16 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=16 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=16 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=16 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=16 t=8 missing=1 heard=Rebell|Flatfern|Fasage|Flatfern home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, Flatfern, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=16 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=16 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=16 t=11 missing=2 heard=Solthorn|Gloryroot|Tisquill home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=17 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=17 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=17 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=17 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=17 t=4 missing=2 heard=Lavine|Doleaf home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=17 t=5 missing=1 heard=Solthorn|Fasage|Rebell home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=17 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=17 t=7 missing=1 heard=Fasage|Mimint|Sharpcress home=0 | This is arabic_takht. I hear Fasage, Mimint, Sharpcress, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=17 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=17 t=9 missing=1 heard=Doleaf|Flatfern|Hushmoss home=0 | This is balkan_brass. I hear Doleaf, Flatfern, Hushmoss, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=17 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=17 t=11 missing=2 heard=Solthorn|Gloryroot|Tisquill home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=18 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=18 t=1 missing=2 heard=Doleaf|Mimint|Solthorn home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=18 t=2 missing=2 heard=Rebell|Mimint|Fasage home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=18 t=3 missing=2 heard=Doleaf|Rebell|Mimint home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=18 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=18 t=5 missing=1 heard=Solthorn|Fasage|Rebell home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=18 t=6 missing=1 heard=Doleaf|Sharpcress|Mimint|Fasage home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, Fasage, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=18 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=18 t=8 missing=2 heard=Rebell|Flatfern|Fasage home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=18 t=9 missing=2 heard=Doleaf|Flatfern home=0 | This is balkan_brass. I hear Doleaf, Flatfern, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=18 t=10 missing=2 heard=Doleaf|Solthorn|Rebell home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=18 t=11 missing=1 heard=Solthorn|Gloryroot|Tisquill|Doleaf home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, Doleaf, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=19 t=0 missing=2 heard=Solthorn|Lavine home=1 | This is american_old_time. I hear Solthorn, Lavine, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=19 t=1 missing=1 heard=Doleaf|Mimint|Solthorn|Mimint home=1 | This is alpine. I hear Doleaf, Mimint, Solthorn, Mimint, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=19 t=2 missing=1 heard=Rebell|Mimint|Fasage|Lavine home=1 | This is celtic_pipes. I hear Rebell, Mimint, Fasage, Lavine, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=19 t=3 missing=1 heard=Doleaf|Rebell|Mimint|Solthorn home=1 | This is gamelan. I hear Doleaf, Rebell, Mimint, Solthorn, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=19 t=4 missing=1 heard=Lavine|Doleaf|Rebell home=0 | This is andean_pan_pipes. I hear Lavine, Doleaf, Rebell, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=19 t=5 missing=2 heard=Solthorn|Fasage home=0 | This is appalachian_high_lonesome. I hear Solthorn, Fasage, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=19 t=6 missing=2 heard=Doleaf|Sharpcress|Mimint home=1 | This is arabic_maqam. I hear Doleaf, Sharpcress, Mimint, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+rec s=19 t=7 missing=2 heard=Fasage|Mimint home=0 | This is arabic_takht. I hear Fasage, Mimint, then the scratch eats 2 notes. It does not come home; it ends somewhere new.
+rec s=19 t=8 missing=1 heard=Rebell|Flatfern|Fasage|Flatfern home=1 | This is armenian_duduk. I hear Rebell, Flatfern, Fasage, Flatfern, then the scratch eats 1 note. It wants to come home: it ends on the note it began with.
+rec s=19 t=9 missing=1 heard=Doleaf|Flatfern|Hushmoss home=0 | This is balkan_brass. I hear Doleaf, Flatfern, Hushmoss, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=19 t=10 missing=1 heard=Doleaf|Solthorn|Rebell|Lavine home=0 | This is baroque_counterpoint. I hear Doleaf, Solthorn, Rebell, Lavine, then the scratch eats 1 note. It does not come home; it ends somewhere new.
+rec s=19 t=11 missing=2 heard=Solthorn|Gloryroot|Tisquill home=1 | This is cairo_orchestra. I hear Solthorn, Gloryroot, Tisquill, then the scratch eats 2 notes. It wants to come home: it ends on the note it began with.
+spring spring_1 Homestead Well 4
+spring spring_2 Reed Seep 4
+spring spring_3 Ferry Steps 4
+spring spring_4 Goat Ledge 5
+spring spring_5 Old Ark Keel 5
+spring spring_6 Bell Hollow 5
+spring spring_7 Mist Stair 6
+spring spring_8 Lantern Pool 6
+spring spring_9 Broken Choir 6
+spring spring_10 Cloudfoot 7
+spring spring_11 Needle Falls 7
+spring spring_12 Summit Basin 7
+run s=0 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=0 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=0 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=0 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=0 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=0 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=0 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=0 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=0 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=0 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=0 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=0 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=0 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=0 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.
+run s=1 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=1 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=1 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=1 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=1 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=1 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=1 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=1 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=1 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=1 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=1 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=1 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=1 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=1 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.
+run s=2 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=2 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=2 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=2 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=2 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=2 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=2 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=2 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=2 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=2 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=2 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=2 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=2 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=2 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.
+run s=3 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=3 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=3 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=3 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=3 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=3 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=3 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=3 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=3 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=3 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=3 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=3 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=3 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=3 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.
+run s=4 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=4 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=4 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=4 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=4 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=4 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=4 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=4 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=4 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=4 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=4 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=4 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=4 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=4 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.
+run s=5 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=5 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=5 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=5 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=5 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=5 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=5 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=5 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=5 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=5 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=5 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=5 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=5 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=5 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.
+run s=6 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=6 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=6 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=6 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=6 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=6 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=6 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=6 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=6 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=6 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=6 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=6 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=6 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=6 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.
+run s=7 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=7 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=7 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=7 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=7 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=7 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=7 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=7 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=7 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=7 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=7 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=7 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=7 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=7 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.
+run s=8 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=8 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=8 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=8 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=8 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=8 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=8 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=8 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=8 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=8 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=8 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=8 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=8 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=8 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.
+run s=9 i=0 a=- b=RESTORED spring=spring_1 tally=1,0,1,0 q=0/1 keeper=The water at Homestead Well runs clear again. 1 of 12 records sing whole.
+run s=9 i=1 a=RESTORED b=ALREADY_RESTORED spring=- tally=2,0,2,0 q=0/2 keeper=The water at Reed Seep runs clear again. 2 of 12 records sing whole.
+run s=9 i=2 a=- b=RESTORED spring=spring_3 tally=3,0,3,0 q=1/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=You hear that? The springs are humming the old tunes back. The arks would be proud. Keep the choir: every record you mend wakes another spring. | tally=3,0,3,1 q=3/0 keeper=The water at Ferry Steps runs clear again. 3 of 12 records sing whole.
+run s=9 i=3 a=- b=RESTORED spring=spring_4 tally=4,0,4,1 q=3/0 keeper=The water at Goat Ledge runs clear again. 4 of 12 records sing whole.
+run s=9 i=4 a=NEEDLE_SKIPS b=RESTORED spring=spring_5 tally=5,1,5,1 q=3/0 keeper=The water at Old Ark Keel runs clear again. 5 of 12 records sing whole.
+run s=9 i=5 a=- b=RESTORED spring=spring_6 tally=6,1,6,1 q=3/0 keeper=The water at Bell Hollow runs clear again. 6 of 12 records sing whole.
+run s=9 i=6 a=- b=RESTORED spring=spring_7 tally=7,1,7,1 q=3/0 keeper=The water at Mist Stair runs clear again. 7 of 12 records sing whole.
+run s=9 i=7 a=NEEDLE_SKIPS b=RESTORED spring=spring_8 tally=8,2,8,1 q=3/0 draw=CLEAN:water:4 far=CLOUDY:raw_water:7 talk=The water at Lantern Pool runs clear again. 8 of 12 records sing whole. | tally=8,2,8,2 q=3/0 keeper=The water at Lantern Pool runs clear again. 8 of 12 records sing whole.
+run s=9 i=8 a=- b=RESTORED spring=spring_9 tally=9,2,9,2 q=3/0 keeper=The water at Broken Choir runs clear again. 9 of 12 records sing whole.
+run s=9 i=9 a=- b=RESTORED spring=spring_10 tally=10,2,10,2 q=3/0 keeper=The water at Cloudfoot runs clear again. 10 of 12 records sing whole.
+run s=9 i=10 a=NEEDLE_SKIPS b=RESTORED spring=spring_11 tally=11,3,11,2 q=3/0 keeper=The water at Needle Falls runs clear again. 11 of 12 records sing whole.
+run s=9 i=11 a=- b=RESTORED spring=spring_12 tally=12,3,12,2 q=3/0 keeper=Every spring on the island runs clean. The choir is whole.
+edge s=9 dup=DUPLICATE unknown=UNKNOWN_RECORD already=ALREADY_RESTORED blank=IGNORED unknownSpring=UNKNOWN_SPRING drawDup=DUPLICATE questDone=1
+fresh s=9 noRecord=NO_RECORD missingHerbs=MISSING_HERBS cloudy=CLOUDY keeper=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing. talk=The arks sang these records into the seed vaults. The shattering scratched every one. Bring me a record and brew what it can't sing.

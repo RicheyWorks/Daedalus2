@@ -1,0 +1,453 @@
+{
+  "schema": "daedalus.startup-insights-retained-evidence.v1",
+  "utc": "2026-10-22T02:22:28.217286+00:00",
+  "state": "FUNCTION_LEVEL_BOTTLENECK_RECONFIRMED_ACTOR_IDENTITIES_UNBOUND",
+  "prior_hlod_proof_head": "460fdb829b80e5804b35371c3a27b39133a32c12",
+  "prior_hlod_all9_ci_pass": true,
+  "source_code_changed": false,
+  "recorded_startup": {
+    "log_path": "C:\\Unreal\\DaedalusRealm\\Saved\\Logs\\DaedalusRealm.log",
+    "captured_prefix": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupOfflineAnalysisR5\\startup-log-prefix.log",
+      "bytes": 355911,
+      "sha256": "8b56afae24ea4b31d4078289e4a197ad666700c9b329444e4d149dd8c1d0d3ba"
+    },
+    "editor_pid": 45296,
+    "editor_start_utc": "2026-10-21T01:32:05.5884565Z",
+    "startup_complete_utc": "2026-10-21T01:34:08.416000+00:00",
+    "actual_launch_to_startup_seconds": 122.827544,
+    "start_time_seconds": 0,
+    "end_time_seconds": 138,
+    "margin_seconds": 15,
+    "event_lines": [
+      "[2026.10.21-01.32.18:538][  0]LogInit: Display: Engine is initialized. Leaving FEngineLoop::Init()",
+      "[2026.10.21-01.32.18:541][  0]Cmd: MAP LOAD FILE=\"../../../../../../Unreal/DaedalusRealm/Content/Daedalus/DaedalusWorld.umap\" TEMPLATE=0 SHOWPROGRESS=0 FEATURELEVEL=3",
+      "[2026.10.21-01.34.08:416][  0]LogStall: Startup complete."
+    ],
+    "alignment_limit": "Log UTC is bound to the actual process. Export timestamps are trace-relative seconds; exact trace-zero/UTC equality is not attested. Events intersecting this interval retain unclipped timestamps/durations."
+  },
+  "input_pins": {
+    "trace": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task\\startup-attribution-next-required-20261021\\startup-required-material-reopen.utrace",
+      "bytes": 122197514,
+      "sha256": "c46c3697cfd8d7834420b8a6bed628355b11746f56f60c67bad2affd430d63ba"
+    },
+    "events": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupOfflineAnalysisR5\\startup-game-events.csv",
+      "bytes": 611092380,
+      "sha256": "76abe4a75a28c675118aa2757182faa9864105a248494fcd98d3a1923f85ac65"
+    },
+    "timers": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupOfflineAnalysisR5\\timers.csv",
+      "bytes": 62157488,
+      "sha256": "46e1e1c4b0cbd53e44c32eacfe0e22a145c4a87e003dd7c84656937ffbffe03c"
+    },
+    "old_result": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\startup-attribution-result-r5.json",
+      "bytes": 39690,
+      "sha256": "dc8dda09186eededc2bf4f289763210055873eb16caccdd87d7bec7af8f06ed6"
+    },
+    "analysis_log": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupOfflineAnalysisR5\\analysis.log",
+      "bytes": 43881,
+      "sha256": "a50ad6143737b6e96bba265f6e0bdceb8c473622691368d3d11172d5d569f6a7"
+    },
+    "response": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\ChainStartupOfflineAnalysisR5\\export.rsp",
+      "bytes": 1293,
+      "sha256": "4d0a5a28a0cb8811f8e0f836684b08f803a610ebe3b72bd688fd1210cc19b3d3"
+    }
+  },
+  "retained_event_recheck": {
+    "game_thread_rows": 6665113,
+    "reconstruction_events": 23318,
+    "four_dominant_calls": [
+      {
+        "ThreadId": "2",
+        "ThreadName": "GameThread",
+        "TimerId": "12644",
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": "17.7752695",
+        "EndTime": "40.2297006",
+        "Duration": "22.454431100",
+        "Depth": "4"
+      },
+      {
+        "ThreadId": "2",
+        "ThreadName": "GameThread",
+        "TimerId": "12644",
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": "40.2297683",
+        "EndTime": "61.916099",
+        "Duration": "21.686330700",
+        "Depth": "4"
+      },
+      {
+        "ThreadId": "2",
+        "ThreadName": "GameThread",
+        "TimerId": "12644",
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": "61.9161833",
+        "EndTime": "83.5951073",
+        "Duration": "21.678924000",
+        "Depth": "4"
+      },
+      {
+        "ThreadId": "2",
+        "ThreadName": "GameThread",
+        "TimerId": "12644",
+        "TimerName": "AActor::RerunConstructionScripts",
+        "StartTime": "83.5951795",
+        "EndTime": "105.216281",
+        "Duration": "21.621101400",
+        "Depth": "4"
+      }
+    ],
+    "four_actor_paths": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "nonoverlapping_total_seconds_decimal": "87.440787200",
+    "input_trace_and_events_hashes_unchanged_after": true,
+    "static_timer": {
+      "Id": "12644",
+      "Type": "CPU",
+      "Name": "AActor::RerunConstructionScripts",
+      "File": "D:\\build\\++UE5\\Sync\\Engine\\Source\\Runtime\\Engine\\Private\\ActorConstruction.cpp",
+      "Line": "271"
+    },
+    "child_scopes": [
+      {
+        "event_start": 17.7752695,
+        "child_events": 34,
+        "timer_names": {
+          "TerrainSurface": 1,
+          "UWorld::UpdateCullDistanceVolumes": 1,
+          "UActorComponent::RecreatePhysicsState": 2,
+          "UActorComponent::DestroyPhysicsState": 2,
+          "UActorComponent::CreatePhysicsState": 2,
+          "UActorComponent::OnCreatePhysicsState": 2,
+          "CreatePhysicsShapesAndActors": 2,
+          "FPhysInterface_Chaos::AddGeometry": 2,
+          "FChaosScene::AddActorsToScene_AssumesLocked": 2,
+          "ShouldSkipDDC": 1,
+          "BodySetupDDCFetch": 1,
+          "DDC_GetSynchronous": 1,
+          "DDC_Get": 1,
+          "PakFileDDC_GetValue": 1,
+          "ZenDDC::GetValue": 1,
+          "DDC_Build": 1,
+          "FChaosDerivedDataCooker::Build": 1,
+          "UBodySetup::GetCookInfo": 1,
+          "DDC_Put": 1,
+          "FBlockEncoder.Compress": 1,
+          "ParallelFor": 1,
+          "FWaitingQueue_Unpark_SignalWaitingThread": 1,
+          "FBlockEncoder.RawHash": 1,
+          "BlockEncoder.Compress.PF": 1,
+          "Oodle.Encode": 2,
+          "ParallelFor.Wait": 1
+        },
+        "named_object_events": []
+      },
+      {
+        "event_start": 40.2297683,
+        "child_events": 34,
+        "timer_names": {
+          "TerrainSurface": 1,
+          "UWorld::UpdateCullDistanceVolumes": 1,
+          "UActorComponent::RecreatePhysicsState": 2,
+          "UActorComponent::DestroyPhysicsState": 2,
+          "UActorComponent::CreatePhysicsState": 2,
+          "UActorComponent::OnCreatePhysicsState": 2,
+          "CreatePhysicsShapesAndActors": 2,
+          "FPhysInterface_Chaos::AddGeometry": 2,
+          "FChaosScene::AddActorsToScene_AssumesLocked": 2,
+          "ShouldSkipDDC": 1,
+          "BodySetupDDCFetch": 1,
+          "DDC_GetSynchronous": 1,
+          "DDC_Get": 1,
+          "PakFileDDC_GetValue": 1,
+          "ZenDDC::GetValue": 1,
+          "DDC_Build": 1,
+          "FChaosDerivedDataCooker::Build": 1,
+          "UBodySetup::GetCookInfo": 1,
+          "DDC_Put": 1,
+          "FBlockEncoder.Compress": 1,
+          "ParallelFor": 1,
+          "FWaitingQueue_Unpark_SignalWaitingThread": 1,
+          "FBlockEncoder.RawHash": 1,
+          "BlockEncoder.Compress.PF": 1,
+          "Oodle.Encode": 2,
+          "ParallelFor.Wait": 1
+        },
+        "named_object_events": []
+      },
+      {
+        "event_start": 61.9161833,
+        "child_events": 34,
+        "timer_names": {
+          "TerrainSurface": 1,
+          "UWorld::UpdateCullDistanceVolumes": 1,
+          "UActorComponent::RecreatePhysicsState": 2,
+          "UActorComponent::DestroyPhysicsState": 2,
+          "UActorComponent::CreatePhysicsState": 2,
+          "UActorComponent::OnCreatePhysicsState": 2,
+          "CreatePhysicsShapesAndActors": 2,
+          "FPhysInterface_Chaos::AddGeometry": 2,
+          "FChaosScene::AddActorsToScene_AssumesLocked": 2,
+          "ShouldSkipDDC": 1,
+          "BodySetupDDCFetch": 1,
+          "DDC_GetSynchronous": 1,
+          "DDC_Get": 1,
+          "PakFileDDC_GetValue": 1,
+          "ZenDDC::GetValue": 1,
+          "DDC_Build": 1,
+          "FChaosDerivedDataCooker::Build": 1,
+          "UBodySetup::GetCookInfo": 1,
+          "DDC_Put": 1,
+          "FBlockEncoder.Compress": 1,
+          "ParallelFor": 1,
+          "FWaitingQueue_Unpark_SignalWaitingThread": 1,
+          "FBlockEncoder.RawHash": 1,
+          "BlockEncoder.Compress.PF": 1,
+          "Oodle.Encode": 2,
+          "ParallelFor.Wait": 1
+        },
+        "named_object_events": []
+      },
+      {
+        "event_start": 83.5951795,
+        "child_events": 34,
+        "timer_names": {
+          "TerrainSurface": 1,
+          "UWorld::UpdateCullDistanceVolumes": 1,
+          "UActorComponent::RecreatePhysicsState": 2,
+          "UActorComponent::DestroyPhysicsState": 2,
+          "UActorComponent::CreatePhysicsState": 2,
+          "UActorComponent::OnCreatePhysicsState": 2,
+          "CreatePhysicsShapesAndActors": 2,
+          "FPhysInterface_Chaos::AddGeometry": 2,
+          "FChaosScene::AddActorsToScene_AssumesLocked": 2,
+          "ShouldSkipDDC": 1,
+          "BodySetupDDCFetch": 1,
+          "DDC_GetSynchronous": 1,
+          "DDC_Get": 1,
+          "PakFileDDC_GetValue": 1,
+          "ZenDDC::GetValue": 1,
+          "DDC_Build": 1,
+          "FChaosDerivedDataCooker::Build": 1,
+          "UBodySetup::GetCookInfo": 1,
+          "DDC_Put": 1,
+          "FBlockEncoder.Compress": 1,
+          "ParallelFor": 1,
+          "FWaitingQueue_Unpark_SignalWaitingThread": 1,
+          "FBlockEncoder.RawHash": 1,
+          "BlockEncoder.Compress.PF": 1,
+          "Oodle.Encode": 2,
+          "ParallelFor.Wait": 1
+        },
+        "named_object_events": []
+      }
+    ],
+    "inclusive_scope_statistics": {
+      "UEditorEngine::Map_Load": {
+        "Name": "UEditorEngine::Map_Load",
+        "Count": "1",
+        "C.Avg": "1.000000",
+        "Incl": "108.994696",
+        "I.Min": "108.994696",
+        "I.Max": "108.994696",
+        "I.Avg": "108.994696",
+        "I.Med": "108.994696",
+        "Excl": "0.058598",
+        "E.Min": "0.058598",
+        "E.Max": "0.058598",
+        "E.Avg": "0.058598",
+        "E.Med": "0.058598"
+      },
+      "ULevel::IncrementalUpdateComponents": {
+        "Name": "ULevel::IncrementalUpdateComponents",
+        "Count": "216",
+        "C.Avg": "216.000000",
+        "Incl": "90.834648",
+        "I.Min": "0.000157",
+        "I.Max": "87.851089",
+        "I.Avg": "0.420531",
+        "I.Med": "0.000157",
+        "Excl": "0.008388",
+        "E.Min": "0.000001",
+        "E.Max": "0.003108",
+        "E.Avg": "0.000039",
+        "E.Med": "0.000001"
+      },
+      "AActor::RerunConstructionScripts": {
+        "Name": "AActor::RerunConstructionScripts",
+        "Count": "23318",
+        "C.Avg": "23318.000000",
+        "Incl": "89.708516",
+        "I.Min": "0.000003",
+        "I.Max": "22.454431",
+        "I.Avg": "0.003847",
+        "I.Med": "0.000003",
+        "Excl": "87.468503",
+        "E.Min": "0.000002",
+        "E.Max": "22.356010",
+        "E.Avg": "0.003751",
+        "E.Med": "0.000002"
+      },
+      "UWorld::UpdateWorldComponents": {
+        "Name": "UWorld::UpdateWorldComponents",
+        "Count": "2",
+        "C.Avg": "2.000000",
+        "Incl": "87.853601",
+        "I.Min": "0.000370",
+        "I.Max": "87.853230",
+        "I.Avg": "43.926800",
+        "I.Med": "87.409529",
+        "Excl": "0.000098",
+        "E.Min": "0.000045",
+        "E.Max": "0.000053",
+        "E.Avg": "0.000049",
+        "E.Med": "0.000053"
+      },
+      "UWorld::FlushLevelStreaming": {
+        "Name": "UWorld::FlushLevelStreaming",
+        "Count": "2",
+        "C.Avg": "2.000000",
+        "Incl": "15.398440",
+        "I.Min": "0.000016",
+        "I.Max": "15.398424",
+        "I.Avg": "7.699220",
+        "I.Med": "15.320654",
+        "Excl": "0.000027",
+        "E.Min": "0.000012",
+        "E.Max": "0.000015",
+        "E.Avg": "0.000013",
+        "E.Med": "0.000014"
+      }
+    },
+    "warning": "Nested inclusive costs overlap: do not sum them as independent startup costs. Exclusive reconstruction time does not attribute the virtual OnConstruction body."
+  },
+  "actor_attribution": {
+    "complete": false,
+    "receiver_identity_join": null,
+    "precise_missing_fact": "One actual receiver path/class/level joined to each measured RerunConstructionScripts begin/end interval.",
+    "export_columns": [
+      "ThreadId",
+      "ThreadName",
+      "TimerId",
+      "TimerName",
+      "StartTime",
+      "EndTime",
+      "Duration",
+      "Depth"
+    ],
+    "native_scope_source": {
+      "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Engine\\Private\\ActorConstruction.cpp",
+      "line": 271,
+      "emits_actor_identity": false
+    },
+    "candidate_only": "All four calls contain TerrainSurface and physics/DDC child scopes; the current project source creates TerrainSurface in ADaedalusExplorationTerrain. This is a source seam to instrument, not proof of class or four instance identities.",
+    "named_serialization_limit": "A later named DaedalusVoxelIsle_0.Surface serialization scope at109.676153-111.111344 seconds is outside the four intervals (last ends105.216281). It does not identify or implicate their receivers.",
+    "raw_trace_limit": "No supported raw object-to-CPU ownership join has been established; no assertion that all possible raw providers can never corroborate identity."
+  },
+  "source_pins": [
+    {
+      "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Engine\\Private\\ActorConstruction.cpp",
+      "bytes": 55889,
+      "sha256": "d9ad365812d6d5ca3b9a82fa1bc8d4173723dafcd1668088474f483a27b68acc"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\StartupUcsAttributionObserver.cpp",
+      "bytes": 7720,
+      "sha256": "f36ea96464ef5536bac349e3a5d0ffca4a0ba1c071a721acc811539b94342025"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\StartupUcsAttributionObserver.h",
+      "bytes": 1861,
+      "sha256": "1cb4854bd5cbeffa28a453bb5802919fded238cb084184f7da6c41e1fab753ef"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\epic-integration-sprint-worktree\\engines\\unreal\\DaedalusLink\\Source\\DaedalusLink\\Private\\DaedalusExplorationTerrain.cpp",
+      "bytes": 2720,
+      "sha256": "9d8693b42fc3aeaf7e0cc69d0abc836b86c797391f61df280c461a4e4da5162d"
+    }
+  ],
+  "existing_observer": {
+    "mode": "Opt-in Blueprint UserConstructionScript context callbacks, WITH_EDITOR && DO_BLUEPRINT_GUARD.",
+    "filter": "Exact function UserConstructionScript; actor IsRunningUserConstructionScript; exact DaedalusWorld.",
+    "max_observations": 64,
+    "admission_seconds": 240,
+    "duration_limit": "Its CPU markers cover callback boundaries only, not whole native reconstruction.",
+    "retained_editor": 45060,
+    "attached": true,
+    "begin_end_observations": 0,
+    "no_matches_limit": "Attachment and zero matches do not establish absence of reconstruction or the reason the filter did not match."
+  },
+  "reproducible_offline_recipe": {
+    "installed_tool": "C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealInsights.exe",
+    "version_for_retained_editor": "5.8.4 CL58902052",
+    "closed_trace_sha256": "c46c3697cfd8d7834420b8a6bed628355b11746f56f60c67bad2affd430d63ba",
+    "source_verified_recipe_pin": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialFactorAdmission20261019\\startup-offline-insights-source-recipe-r5.json",
+      "bytes": 13076,
+      "sha256": "c3fb69063b9bbadf6159689813cc9d30dd19161ba43ab7947e348b164907c99a"
+    },
+    "command_arguments": [
+      "-OpenTraceFile=<exact closed trace>",
+      "-AutoQuit",
+      "-NoUI",
+      "-ABSLOG=<new owned output>/analysis.log",
+      "-ExecOnAnalysisCompleteCmd=@=<new owned output>/export.rsp"
+    ],
+    "actual_retained_response_file": "TimingInsights.ExportThreads \"C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/MaterialFactorAdmission20261019/ChainStartupOfflineAnalysisR5/threads.csv\"\nTimingInsights.ExportTimers \"C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/MaterialFactorAdmission20261019/ChainStartupOfflineAnalysisR5/timers.csv\" -ShowFormatInTimerNames=true\nTimingInsights.ExportTimerStatistics \"C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/MaterialFactorAdmission20261019/ChainStartupOfflineAnalysisR5/startup-top100-all.csv\" -threads=* -startTime=0 -endTime=138 -maxTimerCount=100 -sortBy=TotalInclusiveTime -sortOrder=Descending\nTimingInsights.ExportTimerStatistics \"C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/MaterialFactorAdmission20261019/ChainStartupOfflineAnalysisR5/startup-top100-game.csv\" -threads=GameThread -startTime=0 -endTime=138 -maxTimerCount=100 -sortBy=TotalInclusiveTime -sortOrder=Descending\nTimingInsights.ExportTimingEvents \"C:/Users/730ri/Documents/Codex/2026-10-14/task-2/native-ingestion/MaterialFactorAdmission20261019/ChainStartupOfflineAnalysisR5/startup-game-events.csv\" -columns=ThreadId,ThreadName,TimerId,TimerName,StartTime,EndTime,Duration,Depth -threads=GameThread -timers=* -startTime=0 -endTime=138\n",
+    "invocation": "Use the existing reviewed host wrapper with shell=False and the ordinary serialized compute/resource admission. Do not reuse consumed output/journals.",
+    "limits": [
+      "Full trace parses before filtered export; interval/row export limits do not cap analyzer memory.",
+      "Use actual event rows for four intervals; events intersecting an export interval retain unclipped times/durations.",
+      "Timer-statistics timer/column filters are not implemented in the installed exporter; filtered tables may include GPU rows.",
+      "Trace-relative zero is not attested equal to process/log UTC.",
+      "Use only a necessary future capture; a current idle trace cannot recover historical receiver identities."
+    ]
+  },
+  "analysis_qualification": {
+    "clean": false,
+    "native_runtime_qualified": false,
+    "historical_failure": "Original analyzer emitted 25251 allocation-tag errors (100 detailed), CPU metadata/region warnings; host memory monitor crossed unchanged floor. Analyzer terminal absence/normal exit log retained, but exit code not retained.",
+    "current_recheck": "Streamed existing CSV and verified original source file hashes. No new analyzer run; does not retroactively qualify historical analysis."
+  },
+  "next_smallest_action": {
+    "when": "During the next already-required reopen, not a new benchmark restart.",
+    "required_source_step": "Add a bounded read-only actor-aware native construction duration/identity seam, initially covering the evidenced TerrainSurface source candidate and preserving uncertainty for unmatched calls. Pair full path/class/level and begin/end with the CPU trace. Script-only callbacks cannot close this native scope gap.",
+    "limits": "Source review and current actor ownership/identity binding before adoption; no engine edits, actor algorithm rewrite, production setting change, broad optimization or invented historical mapping.",
+    "done_this_batch": false
+  },
+  "preservation": {
+    "editor_calls": 0,
+    "new_analyzer_processes": 0,
+    "new_captures": 0,
+    "restarts": 0,
+    "protected_original_source_saved_file_pins_unchanged": 35,
+    "owned_hlod_saved_file_pins_unchanged": 2,
+    "engine_source_and_plugin_source_unchanged": true,
+    "no_settings_floor_or_Cursor_changes": true,
+    "native_scene_camera_requeried": false,
+    "last_native_like_for_like_preservation": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\HLODStreamingWitness20261021\\FixtureRoundtripR1\\fresh-reopen-pass.json",
+      "bytes": 5716,
+      "sha256": "0d96f14503d83c9eec4242e234d4871e2ffa88a5352c39c2cf48625d6423615d"
+    },
+    "normal_compute_release": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\StartupInsightsEvidence20261022\\normal-compute-release.json",
+      "bytes": 455,
+      "sha256": "714681a2ac8f31f7ecff7ef1515af6e99ed144d3c3eaa74c2c92b79fbfd7e86c"
+    }
+  },
+  "startup_fixed": false,
+  "individual_actor_root_cause_proven": false,
+  "python_crash_root_cause_fixed": false,
+  "production_optimization_accepted": false
+}

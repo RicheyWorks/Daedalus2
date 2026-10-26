@@ -5,6 +5,7 @@ package com.daedalus.server.service;
 import com.daedalus.api.dto.Hotspot;
 import com.daedalus.engine.Braider;
 import com.daedalus.engine.MazeGrid;
+import com.daedalus.engine.Sealer;
 import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.engine.generators.BinaryTreeGenerator;
 import com.daedalus.engine.generators.GeneratorRegistry;
@@ -151,6 +152,41 @@ class LivingMazeServiceTest {
     }
 
     @Test
+    void twoFirstStartsCannotBothClaimTheLastSlot() throws Exception {
+        var a = gen.generate("recursive-backtracker", 10, 10, 1L);
+        var b = gen.generate("recursive-backtracker", 10, 10, 2L);
+        service(Duration.ofSeconds(10), 1);
+        var go = new java.util.concurrent.CountDownLatch(1);
+        var accepted = new java.util.concurrent.atomic.AtomicInteger();
+        var refused = new java.util.concurrent.atomic.AtomicInteger();
+        try (var pool = java.util.concurrent.Executors.newFixedThreadPool(2)) {
+            var first = pool.submit(() -> raceStart(a.metadata().id(), go, accepted, refused));
+            var second = pool.submit(() -> raceStart(b.metadata().id(), go, accepted, refused));
+            go.countDown();
+            first.get(2, java.util.concurrent.TimeUnit.SECONDS);
+            second.get(2, java.util.concurrent.TimeUnit.SECONDS);
+        }
+        assertThat(accepted.get()).as("exactly one first start owns the only slot").isEqualTo(1);
+        assertThat(refused.get()).isEqualTo(1);
+        assertThat(living.liveCount()).isEqualTo(1);
+    }
+
+    private void raceStart(UUID id, java.util.concurrent.CountDownLatch go,
+                           java.util.concurrent.atomic.AtomicInteger accepted,
+                           java.util.concurrent.atomic.AtomicInteger refused) {
+        try {
+            go.await();
+            living.start(id, 5, 1L);
+            accepted.incrementAndGet();
+        } catch (LivingMazeService.CapacityExceededException e) {
+            refused.incrementAndGet();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
+
+    @Test
     void weightedMazesStayWeightedAndDriftedCostsStayInTheApiDomain() {
         var cached = gen.generate("recursive-backtracker", 10, 10, 8L,
                 List.of(new Hotspot(2, 2, 999.0), new Hotspot(5, 5, 1.5)));
@@ -171,6 +207,29 @@ class LivingMazeServiceTest {
                     .as("the response-facing hotspot list mirrors the grid's live weights")
                     .isEqualTo(h.cost());
         }
+    }
+
+    @Test
+    void hardeningClosesLoopsWithoutDisconnectingAnyone() {
+        var cached = gen.generate("recursive-backtracker", 12, 12, 42L);
+        UUID id = cached.metadata().id();
+        Braider.braid(cached.grid(), 1.0, 11L);
+        int extras = Sealer.closablePassages(cached.grid()).size();
+        assertThat(extras).isPositive();
+
+        // Erosion off, full seal: extras come off, the habitable graph stays one piece.
+        living = new LivingMazeService(gen, published::add, new SimpleMeterRegistry(),
+                FAST_TICK, 240, 8, 0.0, 1.0);
+        living.start(id, 8, 7L);
+        awaitUntil(() -> living.liveCount() == 0, "the hardening run to finish");
+
+        MazeGrid after = gen.find(id).grid();
+        assertThat(Sealer.closablePassages(after)).isEmpty();
+        assertThat(new BfsSolver().solve(after, after.start(), after.goal(), new MazeStats()))
+                .isNotEmpty();
+        assertThat(mutationEvents().stream().mapToInt(MazeMutatedEvent::wallsClosed).sum())
+                .as("erosion is off, so the extras present at start are exactly what closed")
+                .isEqualTo(extras);
     }
 
     @Test

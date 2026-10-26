@@ -1,0 +1,119 @@
+mural s=0 seed=0 w=1 h=1 subject=Mob_Gallery_PaperCrane colours=YELLOW cells=Y
+mural s=1 seed=999999999 w=2 h=6 subject=Mob_Gallery_Inkpup colours=YELLOW,ORANGE,GREEN cells=GOOOOGOYGOYG
+mural s=2 seed=658697915 w=3 h=11 subject=Mob_Gallery_BrushtailSquirrel colours=BLUE,ORANGE cells=OBOOOOBBOBOOBBOBBOOOBOOBBBBOBOBBB
+mural s=3 seed=488046866 w=4 h=4 subject=Mob_Gallery_CrayonGecko colours=RED,VIOLET cells=RVVRRRRRRRVRRRVR
+mural s=4 seed=317395817 w=5 h=9 subject=Mob_Gallery_BrushtailSquirrel colours=ORANGE,VIOLET cells=VOOVVVOOOOOVVVOVVVOVVVOVVOVVVOVVVOVVVOVVOVOOV
+mural s=5 seed=146744768 w=6 h=2 subject=Mob_Gallery_CrayonGecko colours=RED,YELLOW,GREEN cells=YYGRRRYYGGYY
+mural s=6 seed=976093719 w=7 h=7 subject=Mob_Gallery_Inkpup colours=RED,BLUE cells=BRBRBBBRBBBBRBBBBBBRBBBRRBRRBBBBBRRRRRBBBBBBBRRBR
+mural s=7 seed=805442670 w=8 h=12 subject=Mob_Gallery_PaperCrane colours=RED,BLUE,ORANGE,GREEN cells=RGBRROBBRBOGOBGBBBOOBRGGRROBBOBBOOGRBROBBRGBGRRBOORGRBBOOORGRRROGGGBGRRGROBGOGOOBOBOBBBBOBRBBRRB
+mural s=8 seed=634791621 w=9 h=5 subject=Mob_Gallery_Inkpup colours=YELLOW,BLUE,ORANGE,GREEN cells=OYOBGOGYOBOYOBGOGYGOGBOYBOGOOOGGYOOYOYBOYOOGG
+mural s=9 seed=464140572 w=10 h=10 subject=Mob_Gallery_PaperCrane colours=RED,YELLOW,BLUE,ORANGE cells=YOYYYOYOOYOBYRYYOBYRRBBBRROBBYBOBBRYYBORYRYBYOOBBYBOOOBRRORYRYROROYRYOOOBORBYOBOBYOOOOYBBBYRYOYROOOR
+mural s=10 seed=293489523 w=11 h=3 subject=Mob_Gallery_Inkpup colours=RED,BLUE cells=RRBRBBRRBBBRRBRRBBRRRRRRBRBRBBBBB
+mural s=11 seed=122838474 w=12 h=8 subject=Mob_Gallery_PaperCrane colours=ORANGE,VIOLET cells=OVOVVVVVVVVVVVOVVVOVOOOOOVVOVVOOOVVVOVOVVOOOOOVVOOOOVOVVOOOOVVVOVVVOVOVVOVVOOOOVVVVVVOVVOOVOOOVV
+mural s=12 seed=952187425 w=1 h=1 subject=Mob_Gallery_PrismFinch colours=YELLOW cells=Y
+mural s=13 seed=781536376 w=2 h=6 subject=Mob_Gallery_LampMoth colours=BLUE,ORANGE,VIOLET cells=VOOOOBOVBOBV
+mural s=14 seed=610885327 w=3 h=11 subject=Mob_Gallery_PrismFinch colours=YELLOW,BLUE,ORANGE,GREEN cells=OGBYOBGGGGGBGBYYBBOYGYOOYBYOOOBYO
+mural s=15 seed=440234278 w=4 h=4 subject=Mob_Gallery_LampMoth colours=RED,YELLOW,GREEN,VIOLET cells=GRYVRYYVRVYRGGVR
+mural s=16 seed=269583229 w=5 h=9 subject=Mob_Gallery_PrismFinch colours=YELLOW,ORANGE cells=YOYYYOOOOYYYYYYYOYOYOYYYOYOOYYYYYYYYOYYYOOOOY
+mural s=17 seed=98932180 w=6 h=2 subject=Mob_Gallery_LampMoth colours=YELLOW,BLUE cells=YBYBYBBYYYYY
+mural s=18 seed=928281131 w=7 h=7 subject=Mob_Gallery_BrushtailSquirrel colours=YELLOW,ORANGE,VIOLET cells=VVVOVVVOOYOVOVOYVYOVVVYYVYVYYYOOOOVYYVYYOVYOVVVVO
+mural s=19 seed=757630082 w=8 h=12 subject=Mob_Gallery_CrayonGecko colours=YELLOW,BLUE,GREEN cells=BYBBYYGGYGBYGYBGBYBBGBYBGGBGGYYYBGGYGGBBGGBYYGGYBGBBYBYBGGGYGBYYYBYBBYBYGYYGBGBGGBYBBGBBGGGGYYYY
+mural s=20 seed=586979033 w=9 h=5 subject=Mob_Gallery_BrushtailSquirrel colours=RED,YELLOW,ORANGE,GREEN cells=RRGRRYYORGOGOGGOGYYYGYYOYYRGYGGGRYRRGORRGOGOR
+mural s=21 seed=416327984 w=10 h=10 subject=Mob_Gallery_CrayonGecko colours=RED,VIOLET cells=VRVVVRVVRVRRRVRRRRRVRRVVVRVVVRVVRVVRRVRRRVRVRRRRVVVVRVVVRVRVRVRRRVRRVRVRVRRVVRVVRVVRRRVRVVRVRVVVRVRR
+mural s=22 seed=245676935 w=11 h=3 subject=Mob_Gallery_BrushtailSquirrel colours=RED,BLUE,GREEN cells=GBGGGGBRGRBGBGRGGGRGBRGBBBGBRRRRR
+mural s=23 seed=75025886 w=12 h=8 subject=Mob_Gallery_CrayonGecko colours=ORANGE,GREEN,VIOLET cells=VGOVVGOVOOGGGVOOGVVGVGVGGGGOOGOOGOGVGVOOVOOVVOGVVVGGOGGVVVGGOGOGVGGOGGGVOGVVVVOOGOOVGVVVGVGOGOVG
+grind s=0 seed=101 results=OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT
+mix s=0 VIOLET -> NOT_KNOWN
+paint s=0 0 0 VIOLET -> NO_PIGMENT st=DRAINED pm=0 smudges=0
+paint s=0 1 0 RED -> SMUDGED st=DRAINED pm=0 smudges=1
+wash s=0 1 0 -> WASHED again=NOTHING_TO_WASH
+paint s=0 0 1 YELLOW -> SMUDGED st=DRAINED pm=0 smudges=2
+wash s=0 0 1 -> WASHED again=NOTHING_TO_WASH
+paint s=0 1 1 BLUE -> SMUDGED st=DRAINED pm=0 smudges=3
+wash s=0 1 1 -> WASHED again=NOTHING_TO_WASH
+end s=0 units=0,0,0,1,1,0 strokes=0,0,0,0,0,0 abilities= reveal=refused st=DRAINED
+grind s=1 seed=15485964 results=OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT,OK,OK,OK
+mix s=1 VIOLET -> NOT_KNOWN
+paint s=1 0 0 RED -> SMUDGED st=DRAINED pm=0 smudges=1
+wash s=1 0 0 -> WASHED again=NOTHING_TO_WASH
+paint s=1 1 0 YELLOW -> SMUDGED st=DRAINED pm=0 smudges=2
+wash s=1 1 0 -> WASHED again=NOTHING_TO_WASH
+paint s=1 2 0 BLUE -> SMUDGED st=DRAINED pm=0 smudges=3
+wash s=1 2 0 -> WASHED again=NOTHING_TO_WASH
+paint s=1 0 1 ORANGE -> SMUDGED st=DRAINED pm=0 smudges=4
+wash s=1 0 1 -> WASHED again=NOTHING_TO_WASH
+paint s=1 1 1 GREEN -> SMUDGED st=DRAINED pm=0 smudges=5
+wash s=1 1 1 -> WASHED again=NOTHING_TO_WASH
+paint s=1 2 1 VIOLET -> NO_PIGMENT st=DRAINED pm=0 smudges=5
+paint s=1 0 2 RED -> SMUDGED st=DRAINED pm=0 smudges=6
+wash s=1 0 2 -> WASHED again=NOTHING_TO_WASH
+paint s=1 1 2 YELLOW -> RESTORED st=RESTORING pm=111 smudges=6
+paint s=1 2 2 BLUE -> SMUDGED st=RESTORING pm=111 smudges=7
+wash s=1 2 2 -> WASHED again=NOTHING_TO_WASH
+end s=1 units=0,0,0,0,0,0 strokes=0,1,0,0,0,0 abilities= reveal=refused st=RESTORING
+grind s=2 seed=30971827 results=OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT,OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT
+mix s=2 VIOLET -> NOT_KNOWN
+paint s=2 0 0 YELLOW -> SMUDGED st=DRAINED pm=0 smudges=1
+wash s=2 0 0 -> WASHED again=NOTHING_TO_WASH
+paint s=2 1 0 BLUE -> SMUDGED st=DRAINED pm=0 smudges=2
+wash s=2 1 0 -> WASHED again=NOTHING_TO_WASH
+paint s=2 2 0 ORANGE -> SMUDGED st=DRAINED pm=0 smudges=3
+wash s=2 2 0 -> WASHED again=NOTHING_TO_WASH
+paint s=2 3 0 GREEN -> SMUDGED st=DRAINED pm=0 smudges=4
+wash s=2 3 0 -> WASHED again=NOTHING_TO_WASH
+paint s=2 0 1 VIOLET -> NO_PIGMENT st=DRAINED pm=0 smudges=4
+paint s=2 1 1 RED -> SMUDGED st=DRAINED pm=0 smudges=5
+wash s=2 1 1 -> WASHED again=NOTHING_TO_WASH
+paint s=2 2 1 YELLOW -> SMUDGED st=DRAINED pm=0 smudges=6
+wash s=2 2 1 -> WASHED again=NOTHING_TO_WASH
+paint s=2 3 1 BLUE -> SMUDGED st=DRAINED pm=0 smudges=7
+wash s=2 3 1 -> WASHED again=NOTHING_TO_WASH
+end s=2 units=1,0,0,1,1,0 strokes=0,0,0,0,0,0 abilities= reveal=refused st=DRAINED
+grind s=3 seed=46457690 results=OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT,OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT,OK,OK,OK
+mix s=3 VIOLET -> NOT_KNOWN
+paint s=3 0 0 BLUE -> SMUDGED st=DRAINED pm=0 smudges=1
+wash s=3 0 0 -> WASHED again=NOTHING_TO_WASH
+paint s=3 1 0 ORANGE -> SMUDGED st=DRAINED pm=0 smudges=2
+wash s=3 1 0 -> WASHED again=NOTHING_TO_WASH
+paint s=3 0 1 GREEN -> SMUDGED st=DRAINED pm=0 smudges=3
+wash s=3 0 1 -> WASHED again=NOTHING_TO_WASH
+paint s=3 1 1 VIOLET -> NO_PIGMENT st=DRAINED pm=0 smudges=3
+paint s=3 0 2 RED -> SMUDGED st=DRAINED pm=0 smudges=4
+wash s=3 0 2 -> WASHED again=NOTHING_TO_WASH
+paint s=3 1 2 YELLOW -> SMUDGED st=DRAINED pm=0 smudges=5
+wash s=3 1 2 -> WASHED again=NOTHING_TO_WASH
+end s=3 units=2,2,2,1,1,0 strokes=0,0,0,0,0,0 abilities= reveal=refused st=DRAINED
+grind s=4 seed=61943553 results=OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT,OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT,OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT
+mix s=4 VIOLET -> NOT_KNOWN
+paint s=4 0 0 ORANGE -> SMUDGED st=DRAINED pm=0 smudges=1
+wash s=4 0 0 -> WASHED again=NOTHING_TO_WASH
+paint s=4 1 0 GREEN -> RESTORED st=RESTORING pm=166 smudges=1
+paint s=4 2 0 VIOLET -> NO_PIGMENT st=RESTORING pm=166 smudges=1
+paint s=4 0 1 RED -> SMUDGED st=RESTORING pm=166 smudges=2
+wash s=4 0 1 -> WASHED again=NOTHING_TO_WASH
+paint s=4 1 1 YELLOW -> RESTORED st=RESTORING pm=333 smudges=2
+paint s=4 2 1 BLUE -> SMUDGED st=RESTORING pm=333 smudges=3
+wash s=4 2 1 -> WASHED again=NOTHING_TO_WASH
+end s=4 units=2,2,2,2,2,0 strokes=0,1,0,0,1,0 abilities= reveal=refused st=RESTORING
+grind s=5 seed=77429416 results=OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT,OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT,OK,OK,OK,OK,OK,UNKNOWN_INGREDIENT,OK,OK,OK
+mix s=5 VIOLET -> NOT_KNOWN
+paint s=5 0 0 GREEN -> SMUDGED st=DRAINED pm=0 smudges=1
+wash s=5 0 0 -> WASHED again=NOTHING_TO_WASH
+paint s=5 1 0 VIOLET -> NO_PIGMENT st=DRAINED pm=0 smudges=1
+paint s=5 2 0 RED -> SMUDGED st=DRAINED pm=0 smudges=2
+wash s=5 2 0 -> WASHED again=NOTHING_TO_WASH
+paint s=5 3 0 YELLOW -> SMUDGED st=DRAINED pm=0 smudges=3
+wash s=5 3 0 -> WASHED again=NOTHING_TO_WASH
+paint s=5 0 1 BLUE -> RESTORED st=RESTORING pm=83 smudges=3
+paint s=5 1 1 ORANGE -> RESTORED st=RESTORING pm=166 smudges=3
+paint s=5 2 1 GREEN -> SMUDGED st=RESTORING pm=166 smudges=4
+wash s=5 2 1 -> WASHED again=NOTHING_TO_WASH
+paint s=5 3 1 VIOLET -> NO_PIGMENT st=RESTORING pm=166 smudges=4
+paint s=5 0 2 RED -> SMUDGED st=RESTORING pm=166 smudges=5
+wash s=5 0 2 -> WASHED again=NOTHING_TO_WASH
+paint s=5 1 2 YELLOW -> SMUDGED st=RESTORING pm=166 smudges=6
+wash s=5 1 2 -> WASHED again=NOTHING_TO_WASH
+paint s=5 2 2 BLUE -> SMUDGED st=RESTORING pm=166 smudges=7
+wash s=5 2 2 -> WASHED again=NOTHING_TO_WASH
+paint s=5 3 2 ORANGE -> RESTORED st=RESTORING pm=250 smudges=7
+end s=5 units=2,2,2,1,1,0 strokes=0,0,1,2,0,0 abilities= reveal=refused st=RESTORING
