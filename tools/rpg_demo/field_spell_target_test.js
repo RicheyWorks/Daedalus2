@@ -150,7 +150,7 @@ check("Back plus Confirm returns to the original spell book and cannot cast on t
   const s = learnRestore(earned(session())), m = openTarget(s, "Restore"), spell = m.spell, who = m.who, index = m.ii; select(s, 7); const before = s.resources();
   s.tick("b", "a"); assert.equal(m.sub, "magic"); assert.equal(m.who, who); assert.equal(m.ii, index); assert.equal(m.spell, spell); assert.equal(s.resources(), before);
   s.tick(); assert.equal(m.sub, "magic"); assert.equal(s.resources(), before); assert.equal(s.c.pressed.a, false);
-  s.draw(); assert.ok(s.paints.some(p => p.kind === "window" && p.x === 20 && p.y === 60 && p.w === 220 && p.h === 112));
+  s.draw(); assert.ok(s.paints.some(p => p.kind === "text" && p.label === "MAGIC" && p.x === 12 && p.y === 10)); assert.ok(!s.paints.some(p => p.kind === "window" && p.x === 20 && p.y === 60)); // Prismheart Back returns to the readable field spellbook, not the legacy popup
 });
 check("battle-only Ward stays in the original spell book and cannot enter the new target view", () => {
   const s = session(); openTarget(s); s.tick("b"); const m = s.api.menu(); s.tick("down"); assert.equal(s.api.fieldSpells(s.api.roster()[m.who])[m.ii].name, "Ward");

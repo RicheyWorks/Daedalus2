@@ -41,7 +41,7 @@ function session(production = source) {
       world_tiles: Object.fromEntries(worldData.tiles.filter(t => t.realm === "prism").map(t => [t.tile,t])),
       town: clone(townData.demo_towns.prism), town_tiles: Object.fromEntries(townData.tiles.filter(t => t.realm === "prism").map(t => [t.tile,t])),
       interiors: clone(interiors.interiors.prism), interior_tiles: Object.fromEntries(interiors.tiles.filter(t => t.realm === "prism").map(t => [t.tile,t])),
-      village: clone(data("prism-village")), frames: {}, menus: clone(data("menus").layouts.prism), zones: {}, sky_caches: [],
+      village: clone(data("prism-village")), frames: {}, rects: { sprites: {} }, menus: clone(data("menus").layouts.prism), zones: {}, sky_caches: [],
       backdrop_for_zone: { ruins: "ruins", sewer: "sewer" }, foes: {}, spells: clone(data("spells").spells.filter(s => s.realm === "prism")) },
     T: 16, W: 320, H: 224, PAD: null, window: {}, pressed: {}, held: {}, now: 0,
     performance: { now: () => c.now }, sfx: x => sounds.push(x), cue() {}, toast: (...x) => notices.push(x),
@@ -123,12 +123,12 @@ check("eight-member ORDER moves Brannoc into battle with equipment unchanged", (
   s.api.openMenu();s.api.menu().sub="order";s.api.menu().pick=-1;s.api.menu().ii=7;s.tap("a");s.api.menu().ii=0;s.tap("a");
   assert.equal(s.api.party()[0],brannoc);assert.equal(JSON.stringify(brannoc.equip),equip);assert.equal(s.api.reserve().length,4);
 });
-check("actual ORDER paint keeps all seven/eight rows and selected cursor clear of feedback", () => {
+check("actual ORDER paint shows all seven/eight members in the formation view and the selected cursor above the detail panel", () => {
   for(const n of [7,8]){const s=earn(session());if(n===8)s.api.recruit(dungeons[4].name);s.api.openMenu();const menu=s.api.menu();menu.sub="order";menu.ii=n-1;menu.pick=-1;menu.msg="CHOOSE TWO TO SWAP.";
-    s.api.drawMenu();assert.equal(s.api.rowH(),22);const panel=s.draws.findLastIndex(d=>d.kind==="window"&&d.y===190);assert.ok(panel>=0);
-    for(let i=0;i<n;i++){const m=s.api.roster()[i],y=s.api.rowY(i);for(const [value,dy] of [[m.name.toUpperCase(),2],[m.hp+"/"+m.max,14]]){
-      const at=s.draws.findIndex(d=>d.kind==="text"&&d.value===value&&d.y===y+dy&&d.x===40);assert.ok(at>=0&&at<panel);assert.ok(y+dy+8<190);}
-    }const cursor=s.draws.find(d=>d.kind==="cursor"&&d.y===s.api.rowY(n-1)+2);assert.ok(cursor&&cursor.y+8<190);
+    // ORDER now paints the FORMATION view (front and reserve columns, four rows each, detail panel from y 154); formation_view_test covers its layout.
+    s.api.drawMenu();assert.equal(s.api.rowH(),22);assert.ok(s.draws.some(d=>d.kind==="text"&&d.value==="FORMATION"));
+    for(let i=0;i<n;i++){const m=s.api.roster()[i];assert.ok(s.draws.some(d=>d.kind==="text"&&d.value===m.name.toUpperCase()&&d.y<154),m.name);}
+    const cursor=s.draws.find(d=>d.kind==="cursor"&&d.x===170);assert.ok(cursor&&cursor.y+20<154);
   }
   const s=session();assert.equal(s.api.rowH(),52);s.api.recruit(dungeons[0].name);assert.equal(s.api.rowH(),30);s.api.recruit(dungeons[1].name);assert.equal(s.api.rowH(),30);
 });
