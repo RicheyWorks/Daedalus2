@@ -118,6 +118,13 @@ navigation from the cabinet controls. Their rows wrap to the allotted width.
 Source review covers wiring/save preservation; native layout and controller
 traversal across sizes and Continue still require acceptance.
 
+**New puzzle** starts an unrevealed board at the current size with a fresh native
+seed. **Restart**, including result replay, retains the current seed and size;
+the first revealed cell also affects the planted layout. New puzzle leaves the
+saved slot unchanged. Continue can still restore that older board exactly, and
+Restart then follows the restored seed. The New puzzle button uses the existing
+native focus navigation and does not reuse a gameplay pad shortcut.
+
 The native board also accepts **left click to reveal**, **right click to toggle a
 flag**, and **middle click to chord** an open number. Chording keeps the existing
 matching-flag rule; matching flags can still be wrong. Clicks select the rendered
@@ -183,6 +190,107 @@ Unreal animation blending, materials, interactions and gameplay polish. A mesh e
 does not prove rig compatibility, animation playback, collisions or gameplay. Existing Daedalus
 limits remain metres, applied scale,
 bottom-center origin, -Y front, blocky/beveled forms and bounded material/triangle budgets.
+
+Pong also offers an optional **Rally practice** mode through two native toggle
+buttons. A larger paddle, slower ball and full-height return wall support a
+player-only rally count and session best. Misses keep the best, reset the rally
+and give a two-second preparation window; Space / pad A can serve early. Every
+five player returns earns a brief celebration without ending play. The counters
+occupy a separate strip above the court. Restart or a mode change starts a new
+session; the best is not persisted. Selecting the active mode does not restart.
+The default **Match** retains its source rules, endless score and original frame.
+Mode selection uses existing SetGameOption, native checked state and focus/input
+cleanup; no new actor API, save format or assets are introduced. Native toggle,
+viewport/focus/controller and difficulty/feel acceptance remains unverified.
+
+Driftstone Patrol also supports **K / left trigger to brake**. Braking slows drift
+to rest and takes priority over thrust; turning and firing remain available. Blue
+ship fins and a live BRAKING cue show the action. Pad B keeps its fire binding.
+Reset, respawn and focus/input cleanup retain the existing lifecycle. The original
+coasting/thrust rules apply when not braking; Sega and Star behavior is unchanged.
+Native trigger/focus and actual flight feel still require acceptance.
+
+The desktop Dungeon cabinet's existing **Threadlight** chapter has an optional
+dotted trail, toggled with **Shift / pad Y** (V / LB also work). It follows the
+required NEXT lantern and finally EXIT, helping a player learn the room without
+automatically moving or lighting anything. **J/Space / pad A/X** still lights a
+nearby target; **K/Enter / pad B** resets the circuit. The guide starts off, resets
+off, and cannot begin the clock by itself. Movement, seed order, completion and
+progress rules are retained. This is a desktop cabinet feature, separate from
+the world Dungeon realm. Native font/layout, physical input and playtest acceptance
+remain pending.
+
+Threadlight's **Next circuit** cabinet button visits all six authored lantern
+orders, wrapping after circuit 6. The existing progress line identifies the current
+circuit. Starting the next order clears the current circuit's lights, clock and
+trail; **Restart / K / Enter / pad B** replays the selected order. Nothing advances
+automatically on completion. This uses the cabinet's existing start-game lifecycle;
+native button navigation, focus and layout acceptance remain unverified.
+
+Football also offers **Target practice** beside its default Match mode. Clear
+three glowing goal pockets by moving around the ball to aim and pressing
+**J/Space / pad A/X** to kick. There is no opponent or running match clock. Misses
+keep cleared targets and set up another ball; **K/Enter / pad B** sets up the same
+target immediately. After three targets, a fresh kick starts another round.
+The mode uses existing ball physics and native checked controls. Changing mode
+or Restart clears session progress; selecting the active mode keeps it. It adds
+no durable score/save or reward. Native layout, controller/focus and play feel
+still require acceptance.
+
+Shadow Ninja gives jump presses a small timing allowance: about 100 ms after
+leaving a ledge, or before landing when the air jump is already used. Early taps
+wait for a ground jump; available double jumps remain immediate. Wall jumps still
+need a fresh press. The same Space / pad A controls and jump impulses remain;
+holding Jump does not repeat landing hops. Reset clears the timing state. Native
+controller feel and integration remain unverified.
+
+Shadow Ninja's ordinary enemies show compact **health pips** above their existing
+silhouette: two for walkers, four for jumpers. A surviving hit empties a pip,
+making damage visible without another helper label. Sword, star, spin, scoring
+and movement rules are retained. Native cue size, contrast and play acceptance
+remain unverified.
+
+Glowtrail Chase's matching blue openings in the central passage connect across
+the 560-pixel maze. Movement continues through either opening with its overshoot;
+pursuers can follow, and contact/dot collection remains continuous across the seam.
+Other walls stay solid. Mirrored silhouettes and gate marks explain the route
+without new controls. This native extension preserves the map, all 304 dots and
+existing score/life/power/respawn rules; pinned source fixtures retain their
+original boundary behavior. Native visual/input and chase feel remain unverified.
+
+Ironwake Advance likewise accepts a jump shortly after stepping off a platform,
+while keeping its existing held-jump landing hops, crouch restriction and jump
+trajectory. The allowance expires after six decisions and is consumed by a jump;
+accepted damage and new runs clear it. No new controls or mode are needed. Native
+input/feel acceptance remains pending.
+
+Courtyard Clash marks the current automatic throw target with side chevrons and
+its C1/C2/C3 number in the existing readiness line. The nearest living opponent
+is selected by the unchanged throw rule. A muted cue during cooldown is a current
+snapshot; moving players and country supers can change the eventual flight. It
+adds no control or gameplay rule. Native readability/feel acceptance is pending.
+
+After Courtyard Clash's fourth round, the **tournament scorecard** declares the
+overall win, opponent win or draw from the existing cumulative match wins. Large
+counts and four-segment bars distinguish your chosen country from all opponents;
+the smaller last-match line preserves who won that match. Earlier-round results
+and all play/scoring rules are retained. A fresh continue press still returns to
+title, and confirming a country starts a new tournament. Native font/layout and
+physical input acceptance remain unverified.
+
+Riftwing Vanguard offers **Boss rehearsal** beside its default Full run. The same
+20-HP boss arrives immediately, with the normal starting ship and score zero;
+regular enemies still provide pressure. Full run keeps its 1500-point entry.
+Rehearsal has clear mode/result cues and retains the usual shooting, pickups,
+damage and earned score rules. Restart or a fresh result retry keeps the mode;
+changing modes starts over. Native controls/layout and play feel remain unverified.
+
+Pong's optional **First to 5** offers a short match beside endless Match and Rally
+practice. The existing match physics and controls apply; the fifth point brings
+a frozen result and a deliberate fresh Space / pad A rematch. Scores sit above
+the court. R/Restart keeps the selected mode, and choosing an already selected
+mode keeps the current game. No result persistence is added. Native focus/layout
+and human play feel remain unverified.
 
 ## Evidence stages and acceptance
 

@@ -55,6 +55,7 @@ public:
         double X=400,Y=300,Angle=-90,Vx=0,Vy=0;
         bool Thrust=false;
         int Cooldown=0;
+        bool Braking=false;
         void Update(const Input& I,int HatX=0,int HatY=0) {
             if(I.Left) Angle-=5;
             if(I.Right) Angle+=5;
@@ -62,9 +63,16 @@ public:
             HatX+=(I.PadRight?1:0)-(I.PadLeft?1:0);
             HatY+=(I.PadUp?1:0)-(I.PadDown?1:0);
             if(HatX<0) Angle-=5;else if(HatX>0) Angle+=5;
-            Thrust=I.Up || shooter_detail::DeadAxis(I.AxisY)<-0.4 || HatY>0;
+            Braking=I.Action || I.ActionPressed;
+            Thrust=!Braking && (I.Up || shooter_detail::DeadAxis(I.AxisY)<-0.4 || HatY>0);
             if(Thrust) { const double R=shooter_detail::Radians(Angle); Vx+=std::cos(R)*0.15; Vy+=std::sin(R)*0.15; }
-            Vx*=0.985; Vy*=0.985; X+=Vx; Y+=Vy;
+            Vx*=0.985; Vy*=0.985;
+            if(Braking) {
+                Vx*=0.8;Vy*=0.8;
+                if(std::abs(Vx)<0.02) Vx=0;
+                if(std::abs(Vy)<0.02) Vy=0;
+            }
+            X+=Vx; Y+=Vy;
             shooter_detail::Wrap(X,800); shooter_detail::Wrap(Y,600);
             if(Cooldown>0) --Cooldown;
             // Keep trig arguments precise through very long sessions; equivalent rotation.
@@ -181,6 +189,11 @@ public:
             Outline(F,{{Player.X+15*std::cos(R),Player.Y+15*std::sin(R)},
                 {Player.X+10*std::cos(R+2.5),Player.Y+10*std::sin(R+2.5)},
                 {Player.X+10*std::cos(R-2.5),Player.Y+10*std::sin(R-2.5)}},White);
+            if(Player.Braking) for(int Side:{-1,1}) {
+                const double Sx=-std::sin(R)*Side*16,Sy=std::cos(R)*Side*16;
+                F.AddLine(Player.X+Sx-8*std::cos(R),Player.Y+Sy-8*std::sin(R),
+                    Player.X+Sx+4*std::cos(R),Player.Y+Sy+4*std::sin(R),LightBlue,3);
+            }
             if(Player.Thrust) F.AddTriangle({Player.X-12*std::cos(R),Player.Y-12*std::sin(R)},
                 {Player.X-4*std::cos(R+2.2),Player.Y-4*std::sin(R+2.2)},
                 {Player.X-4*std::cos(R-2.2),Player.Y-4*std::sin(R-2.2)},Yellow);
@@ -197,11 +210,12 @@ public:
         F.AddText(30,42,"ROCKS: "+std::to_string(GetRockCount())+"   UFOs: "+std::to_string(GetUfoCount()),White,16);
         F.AddText(30,65,"FIRE: "+FireNote(),IsFireReady()?Green:Yellow,15);
         if(!Over) {
+            if(Player.Braking) F.AddText(420,42,"BRAKING",LightBlue,17);
             F.AddText(420,65,ProtectionNote(),RespawnGrace>0?Cyan:White,15);
             if(RespawnGrace>0) Ellipse(F,Player.X,Player.Y,23,23,Cyan);
         }
         F.AddText(30,548,"Clear all rocks to advance; larger rocks split into two.",White,15);
-        F.AddText(30,572,"Left/Right: turn   Up: thrust   Space/J/Z or pad: hold fire",White,15);
+        F.AddText(30,572,"Left/Right: turn   Up: thrust   K/LT: brake   Space/pad: fire",White,15);
         if(Over) {
             F.AddRect(170,225,460,115,{15,20,35,235});
             F.AddText(285,238,"GAME OVER",Red,40);
@@ -212,7 +226,7 @@ public:
     Status GetStatus() const override {
         if(Over) return {Score,Lives,true,false,"Game over at wave "+std::to_string(Level)+"; pad A/Start, Enter/Space or R/Restart to retry"};
         return {Score,Lives,false,false,"Wave "+std::to_string(Level)+"; rocks "+std::to_string(GetRockCount())+"; UFOs "+std::to_string(GetUfoCount())+
-            "; "+ProtectionNote()+"; fire "+FireNote()+"; turn / thrust / hold fire"};
+            "; "+ProtectionNote()+"; fire "+FireNote()+(Player.Braking?"; BRAKING":"")+"; turn / thrust / K-LT brake / hold fire"};
     }
 private:
     Random Rng; Ship Player; std::vector<Rock> Rocks; std::vector<Bullet> Bullets; std::vector<Ufo> Ufos;
@@ -311,7 +325,13 @@ public:
         SessionSeed=Seed;
         Rng.Seed(Seed); Pilot=Player{}; Score=0; SpawnTimer=0; Over=false; Won=false; BossActive=false; Boss=Enemy{};
         Bullets.clear(); Enemies.clear(); Powerups.clear(); shooter_detail::MakeStars(Stars,Rng);
+        if(Option==1) StartBoss();
     }
+    bool SetOption(int Value,std::uint32_t Seed) override {
+        if(Value<0 || Value>1) return false;
+        Option=Value;Reset(Seed);return true;
+    }
+    int GetOption() const override { return Option; }
     bool SourceControllerButton(int Button) override {
         if((Over || Won) && (Button==0 || Button==1)) {Reset(SessionSeed);return true;}
         return false;
@@ -354,7 +374,7 @@ public:
         if(!Over) {
             for(auto& P:Powerups) if(P.Alive && Distance(Pilot.X,Pilot.Y,P.X,P.Y)<18) {ApplyPower(Pilot,P.Kind);P.Alive=false;}
         }
-        if(Score>=1500 && !BossActive && !Won) { Boss={750,300,1.5,20,60,true,true}; BossActive=true; }
+        if(Score>=1500 && !BossActive && !Won) StartBoss();
         if(BossActive) {
             Boss.Update(Pilot); Boss.X=std::max(600.0,Boss.X);
             if(Boss.Health<=0) { BossActive=false; shooter_detail::AddScore(Score,500); Won=true; }
@@ -382,7 +402,7 @@ public:
         if(BossActive) {DrawEnemy(Boss);F.AddRect(Boss.X-30,Boss.Y-40,60,6,Red);F.AddRect(Boss.X-30,Boss.Y-40,60*Clamp(Boss.Health/20.0,0,1),6,Green);}
         F.AddText(30,20,"SCORE: "+std::to_string(Score)); F.AddText(660,20,"LIVES: "+std::to_string(Pilot.Lives),Red);
         F.AddText(350,20,"POWER: "+std::to_string(Pilot.Power),Yellow,18);
-        F.AddText(30,45,"ENEMIES: "+std::to_string(GetEnemyCount())+"   PICKUPS: "+std::to_string(GetPickupCount()),White,15);
+        F.AddText(30,45,std::string(Option==1?"REHEARSAL | ENEMIES: ":"ENEMIES: ")+std::to_string(GetEnemyCount())+"   PICKUPS: "+std::to_string(GetPickupCount()),White,15);
         F.AddText(420,45,BossNote(),BossActive?Red:Yellow,15);
         F.AddText(30,67,"FIRE: "+FireNote()+"   SHOT: "+ShotName(),IsFireReady()?Green:Yellow,15);
         F.AddText(30,89,"SPEED: "+std::to_string(static_cast<int>(Pilot.Speed))+"/8   "+ProtectionNote(),Cyan,15);
@@ -390,23 +410,27 @@ public:
         F.AddText(30,572,"WASD/arrows, D-pad or stick: move   Space/J/Z/pad: hold fire",White,15);
         if(Over || Won) {
             F.AddRect(145,225,510,120,{15,20,40,235});
-            const std::string Result=Over?(Won?"BOSS DOWN / SHIP LOST":"GAME OVER"):"BOSS DEFEATED!";
+            const std::string Result=Over?(Won?"BOSS DOWN / SHIP LOST":(Option==1?"REHEARSAL ENDED":"GAME OVER"))
+                :(Option==1?"REHEARSAL COMPLETE!":"BOSS DEFEATED!");
             F.AddText(175,238,Result,Over?Red:Green,30);
             F.AddText(175,285,"Final score: "+std::to_string(Score),White,20);
             F.AddText(175,315,"Pad A/Start, Enter/Space or R/Restart: retry",Cyan,17);
         }
     }
     Status GetStatus() const override {
-        if(Over || Won) return {Score,Pilot.Lives,Over,Won,(Over?(Won?"Boss defeated; ship lost":"Game over"):"Boss defeated")+
+        const std::string Mode=Option==1?"Boss rehearsal; ":"";
+        if(Over || Won) return {Score,Pilot.Lives,Over,Won,Mode+(Over?(Won?"Boss defeated; ship lost":"Game over"):"Boss defeated")+
             std::string("; final score ")+std::to_string(Score)+"; pad A/Start, Enter/Space or R/Restart to retry"};
-        return {Score,Pilot.Lives,false,false,BossNote()+"; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+
+        return {Score,Pilot.Lives,false,false,Mode+BossNote()+"; enemies "+std::to_string(GetEnemyCount())+"; pickups "+std::to_string(GetPickupCount())+
             "; "+ShotName()+"; speed "+std::to_string(static_cast<int>(Pilot.Speed))+"/8; "+ProtectionNote()+"; fire "+FireNote()};
     }
 private:
     Random Rng; Player Pilot; Enemy Boss; std::vector<Bullet> Bullets; std::vector<Enemy> Enemies; std::vector<Powerup> Powerups;
     std::uint32_t SessionSeed=730;
+    int Option=0;
     std::array<shooter_detail::Star,80> Stars{};
     std::int64_t Score=0; int SpawnTimer=0; bool Over=false,Won=false,BossActive=false;
+    void StartBoss() { Boss={750,300,1.5,20,60,true,true};BossActive=true; }
     static const char* PickupName(PowerKind Kind) { return Kind==PowerKind::Power?"POWER":(Kind==PowerKind::Speed?"SPEED":"LIFE"); }
     std::string ShotName() const { return Pilot.Power==1?"NORMAL":(Pilot.Power==2?"DOUBLE":"SPREAD"); }
     std::string ProtectionNote() const {

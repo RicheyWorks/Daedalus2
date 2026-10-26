@@ -45,6 +45,95 @@ bracket, multiplayer or persistent leaderboard feature.
 
 ## Deliberate changes
 
+### Courtyard throw target
+
+Human possession now shows small inward chevrons at the current nearest living
+opponent and names its C1/C2/C3 slot in the existing readiness line. The cue uses
+the same Nearest selector as AimAndThrow, including its stable lower-index ties.
+It follows the actual quantized/airborne drawing position. Ready throws use cyan;
+cooldown snapshots are muted. It is suppressed for nonplaying phases, CPU/loose/
+airborne balls, invalid possession and no living opponent. The title's former
+edition tagline instead teaches the automatic target rule; no extra helper row.
+
+This is a current selection, not a lock or predicted trajectory. Fresh presses
+select before movement; held rethrows can select later in the step. Country supers
+still change throw vectors and friendly hits remain possible. Rendering/status
+do not mutate game data or consume randomness. No controls, AI, physics, charge,
+scoring, tournament or save behavior changes. Football is unchanged.
+
+`desktop_dodge_target` / `dodge_target_test.cpp` passed 233/233 strict single-TU
+MSVC checks: all three holders, stable ties/dead/moving targets, suppression,
+cooldown styling, quantized airborne alignment/layering and actual fresh normal
+throw direction. Extra rendering/status calls preserve paired future state for
+24 steps across all eight countries. No old physics fixtures or full sports suite
+rerun, no engine build/editor/native acceptance. Visibility at native scale and
+human interpretation of a changing target remain unverified.
+
+### Courtyard tournament finish
+
+After round four, a dedicated scorecard declares the overall tournament win,
+opponent win or draw from the existing cumulative match wins. Each team has a
+large count and a four-segment win bar. The opponent panel represents all four
+opponents, while the smaller last-match line still names the final country and
+match winner. Earlier round results retain their existing match headline.
+
+This fixes the misleading final presentation where a 1-3 tournament could end
+under a large last-match victory headline. Status includes the overall result but
+retains its match-based Over/Won flags. No score, phase, RNG, physics, opponent
+selection, continuation or saved-data behavior changes. A fresh result press still
+returns to title; country confirmation starts a new four-round score.
+
+The focused `desktop_dodge_tournament` / `dodge_tournament_test.cpp` checks actual
+four-round settlement, including opposite final-match/tournament outcomes and a
+2-2 draw, earlier rounds, terminal freeze/pure presentation and clean new play.
+Native font/layout, controller and human acceptance remain pending.
+
+Strict serial single-TU MSVC C++17 passed 145/145 focused checks: 3-1 with a final
+loss, 1-3 with a final win, 2-2 draw and both sweeps, all through actual lethal Step
+settlement; earlier-result headings and match flags, bars, held terminal freeze,
+read purity and paired fresh-country future state. No prior sports bulk or source
+oracle was rerun. This presentation slice leaves gameplay implementations intact.
+
+### Football target practice
+
+An optional Target practice mode uses the existing movement, directional kick,
+ball drag/bounce and human deflection. Match remains the default with its original
+90-second CPU duel. Native checked Match / Target practice controls reuse the
+cabinet's existing SetGameOption path. Selecting the active mode is a no-op;
+changing mode or Restart starts over. Reset retains the selected mode.
+
+Practice places the ball at (600,300) and the player behind it at (560,300), with
+no CPU or running match clock. Move around the ball to aim, then press J/Space
+or pad A/X. The three goal pockets are center, upper, lower; the required pocket
+glows gold and cleared pockets turn mint. One kick launches each attempt. A goal
+within 22 pixels of the required pocket clears it; other goals, own goals and
+settled shots produce a friendly retry without losing cleared targets. Flight
+settles at speed <=0.12 or 240 steps, so a shot that stops short cannot stall.
+The ordinary source goal boundaries remain strict (220 < Y < 380).
+
+Result feedback lasts 60 steps, then sets up the next ball automatically. A fresh
+kick/Action press skips that wait to aiming without kicking. K/Enter or pad B
+also sets up the same target again during a live shot. Clearing all three ends
+the round; a fresh kick/Action starts a clean practice round. Held buttons alone
+cannot replay or repeatedly kick. Progress is session-only, with no persistent
+best, new save format, leaderboard, loss state or invented rewards.
+
+The aim cue shows the initial kick direction; player contact can still deflect
+the ball during flight. This original practice loop is a native extension, not
+a Python parity claim. Dodge Ball remains unchanged. Native mode focus, actual
+font/layout, controller and play feel remain acceptance work.
+
+`desktop_football_practice` / `football_practice_test.cpp` passed 370/370 strict
+single-TU MSVC checks, including only the 74 existing Football source cases from
+`sports_parity.txt`, a real three-pocket route with settled/off-target retries,
+mode/input/pause/reset checks and the default match ending after 5,401 steps.
+The same test with the exact prior Sports header at `66b042f2b` passed 322/352,
+with thirty expected failures; absent practice ends the route section early.
+Dodge Ball's normalized 454-line suffix is unchanged. No fixture regenerated,
+full sports suite, Unreal build, editor or runtime acceptance was performed.
+
+### Source repairs and limits
+
 - **Stalled loose-ball repair:** source side limits `x<=360` / `x>=440` and pickup
   distance `<24` make a stationary ball in `[384,416]` unreachable. Only an
   unowned, nonairborne ball in that strip moves to reachable `x=380` or `420`.

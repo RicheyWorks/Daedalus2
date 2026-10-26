@@ -34,6 +34,8 @@ struct ContraPlayer {
     bool FacingRight=true,OnGround=false,Crouching=false;
     int Lives=3,Cooldown=0,FireRate=8,SpreadTimer=0,Invincible=0;
     std::int64_t Score=0; bool Spread=false;
+    static constexpr int GroundGraceMaxFrames=6;
+    int GroundGraceFrames=0; // Appended; keep the source state/aggregate order.
     Rect GetRect() const { return PixelRect(X,Y,32,Crouching ? 24 : 48); }
     template<class Platforms>
     void Update(const Input& I,const Platforms& P,double CameraX) {
@@ -45,7 +47,10 @@ struct ContraPlayer {
         X+=Dx;
         Crouching=I.Down || StickY>.5;
         const int H=Crouching ? 24 : 48;
-        if((I.Jump || I.JumpPressed) && OnGround && !Crouching) { VY=-13; OnGround=false; }
+        const bool WasGrounded=OnGround;
+        if(WasGrounded) GroundGraceFrames=GroundGraceMaxFrames;
+        const bool Jumped=(I.Jump || I.JumpPressed) && (OnGround || GroundGraceFrames>0) && !Crouching;
+        if(Jumped) { VY=-13; OnGround=false; GroundGraceFrames=0; }
         VY+=.6; Y+=VY; OnGround=false;
         const Rect BeforeGround=GetRect();
         if(Y+H>=520) { Y=520-H; VY=0; OnGround=true; }
@@ -53,6 +58,10 @@ struct ContraPlayer {
             if(BeforeGround.Overlaps(Platform) && VY>=0 && Y+H-VY<=Platform.Y+5) {
                 Y=Platform.Y-H; VY=0; OnGround=true;
             }
+        }
+        if(!Jumped) {
+            if(OnGround) GroundGraceFrames=GroundGraceMaxFrames;
+            else if(!WasGrounded && GroundGraceFrames>0) --GroundGraceFrames;
         }
         X=std::max(X,CameraX+50);
         if(Cooldown>0) --Cooldown;
@@ -104,6 +113,10 @@ struct NinjaPlayer {
     bool OnGround=true; int Facing=1,AttackCooldown=0,Health=5,Invincible=0;
     bool DoubleJump=false; int Spinning=0,SpinCooldown=0;
     bool OnWall=false; int WallDir=0; bool JumpWasDown=false;
+    // Six fixed steps (100ms): a slightly late ledge press or early landing tap.
+    // Append state so existing aggregate initializers retain their field order.
+    static constexpr int JumpForgivenessFrames=6;
+    int GroundGraceFrames=0,JumpBufferFrames=0;
     template<class Platforms>
     void Update(const Input& I,const Platforms& P,double HatX=0,double HatY=0) {
         double Dx=0;
@@ -118,9 +131,17 @@ struct NinjaPlayer {
         const bool JumpDown=I.Jump || I.JumpPressed;
         const bool JumpPressed=I.JumpPressed || (JumpDown && !JumpWasDown);
         JumpWasDown=JumpDown;
+        const bool WasGrounded=OnGround;
+        if(WasGrounded) GroundGraceFrames=JumpForgivenessFrames;
+        if(JumpPressed) JumpBufferFrames=JumpForgivenessFrames;
+        bool Jumped=false;
         VY=std::min(VY+.6,12.0);
-        if(JumpPressed && OnGround) { VY=-11; OnGround=false; DoubleJump=true; }
-        else if(JumpPressed && !OnGround && DoubleJump) { VY=-9; DoubleJump=false; }
+        // Keep the original physical wall jump's movement/priority on arrival.
+        const bool ReachesWall=X+VX<=35 || X+VX>=765;
+        if(JumpBufferFrames>0 && (OnGround || (GroundGraceFrames>0 && !ReachesWall))) {
+            VY=-11; OnGround=false; DoubleJump=true; Jumped=true;
+        }
+        else if(JumpPressed && !OnGround && DoubleJump) { VY=-9; DoubleJump=false; Jumped=true; }
         const double OldY=Y; X+=VX; Y+=VY; X=Clamp(X,30,770);
         OnGround=false;
         for(const auto& Platform:P) {
@@ -131,12 +152,24 @@ struct NinjaPlayer {
                 Y=Platform.Y; VY=0; OnGround=true; DoubleJump=false; break;
             }
         }
+        if(OnGround && JumpBufferFrames>0 && !Jumped) {
+            // A consumed air jump stays immediate. Only an otherwise unavailable
+            // press waits for landing, then begins the normal ground-jump motion.
+            VY=-11; Y+=VY; OnGround=false; DoubleJump=true; Jumped=true;
+        }
         OnWall=false;
         if(!OnGround && (X<=35 || X>=765)) {
             OnWall=true; WallDir=X<=35?-1:1; VY=std::min(VY,1.0); DoubleJump=true;
             if(I.Up || Sy<-.3 || HatY>0) Y-=3;
             if(I.Down || Sy>.3 || HatY<0) Y+=3;
-            if(JumpPressed) { VX=-WallDir*7; VY=-10; OnWall=false; X-=WallDir*10; }
+            // Queued landing taps must not become delayed wall/air actions.
+            if(JumpPressed) { VX=-WallDir*7; VY=-10; OnWall=false; X-=WallDir*10; Jumped=true; }
+        }
+        if(Jumped || OnWall) GroundGraceFrames=JumpBufferFrames=0;
+        else {
+            if(OnGround) GroundGraceFrames=JumpForgivenessFrames;
+            else if(!WasGrounded && GroundGraceFrames>0) --GroundGraceFrames;
+            if(JumpBufferFrames>0) --JumpBufferFrames;
         }
         if(Y>540) Health=0;
         if(AttackCooldown>0) --AttackCooldown;
@@ -213,6 +246,7 @@ class ContraGame final : public Game {
     }
     void Hurt() {
         if(Player.Invincible>0 || Over) return;
+        Player.GroundGraceFrames=0;
         --Player.Lives; Player.Invincible=90; Explode(Player.X+16,Player.Y+20);
         if(Player.Lives<=0) { Player.Lives=0; Over=true; }
     }
@@ -242,7 +276,7 @@ class ContraGame final : public Game {
     std::string JumpReadiness() const {
         if(Over) return "JUMP: run ended";
         if(Player.Crouching) return "JUMP: release crouch";
-        return Player.OnGround ? "JUMP: ready (hold repeats on landing)" : "JUMP: airborne; land to jump again";
+        return Player.OnGround || Player.GroundGraceFrames>0 ? "JUMP: ready (hold repeats on landing)" : "JUMP: airborne; land to jump again";
     }
     std::string ProtectionText() const {
         if(Player.Invincible==1) return "PROTECTION expires next live step";
@@ -386,6 +420,7 @@ public:
         for(auto& P:Particles) { P.X+=P.VX; P.Y+=P.VY; P.VY+=.2; --P.Life; }
         Particles.erase(std::remove_if(Particles.begin(),Particles.end(),[](const auto& P){return P.Life<=0;}),Particles.end());
         if(Player.Y>650) {
+            Player.GroundGraceFrames=0; // Relocation still happens when Hurt is invincibility-guarded.
             Hurt(); Player.Y=450; Player.VY=-8; Player.X=std::max(100.0,Player.X-100);
         }
     }
@@ -661,6 +696,12 @@ public:
         for(const auto& E:Enemies) {
             if(E.Jumper) F.AddCircle(E.X,E.Y,15,{150,50,50,255});
             else { F.AddRect(E.X-10,E.Y-18,20,26,{220,50,50,255}); F.AddCircle(E.X,E.Y-22,7,{200,100,100,255}); }
+            // Ordinary hits already change Health; keep surviving damage visible.
+            const int MaxHealth=E.Jumper?4:2;
+            const double Top=E.Y-(E.Jumper?28:42);
+            F.AddRect(E.X-MaxHealth*4-1,Top,MaxHealth*8+2,9,{20,20,40,255});
+            for(int N=0;N<MaxHealth;++N) F.AddRect(E.X-MaxHealth*4+1+N*8,Top+2,6,5,
+                N<E.Health?Color{255,215,100,255}:Color{70,70,90,255});
         }
         for(const auto& A:Attacks) {
             if(!A.Star) F.AddLine(A.X,A.Y,A.X+A.Direction*20,A.Y,{255,200,50,255},5);
@@ -696,7 +737,7 @@ public:
     }
 private:
     std::string ReadinessText() const {
-        const std::string Jump=Player.OnWall?"wall jump":(Player.OnGround?"ground jump":(Player.DoubleJump?"air jump ready":"air jump used"));
+        const std::string Jump=Player.OnWall?"wall jump":(Player.OnGround || Player.GroundGraceFrames>0?"ground jump":(Player.DoubleJump?"air jump ready":"air jump used"));
         const std::string Spin=Player.Spinning>0?"spinning":(Player.SpinCooldown>0?"spin wait "+std::to_string(Player.SpinCooldown)
             :(!Player.OnGround?"spin needs ground":"spin ready"));
         const std::string AttackState=Attacks.size()>=MaxAttacks?"attacks full":(Player.AttackCooldown>0?"sword/star wait "+std::to_string(Player.AttackCooldown):"sword/star ready");

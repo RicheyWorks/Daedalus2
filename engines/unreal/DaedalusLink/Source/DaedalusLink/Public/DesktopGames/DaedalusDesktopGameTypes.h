@@ -98,7 +98,8 @@ public:
 class Random {
     std::uint32_t State = 730;
 public:
-    void Seed(std::uint32_t Value) { State=Value ? Value : 0x6d2b79f5u; }
+    static std::uint32_t InitialState(std::uint32_t Value) { return Value ? Value : 0x6d2b79f5u; }
+    void Seed(std::uint32_t Value) { State=InitialState(Value); }
     std::uint32_t Next() { State^=State<<13; State^=State>>17; State^=State<<5; return State; }
     double Unit() { return static_cast<double>(Next()) / 4294967296.0; }
     int Int(int Low,int High) { return High<=Low ? Low : Low+static_cast<int>(Next()%static_cast<std::uint32_t>(High-Low+1)); }

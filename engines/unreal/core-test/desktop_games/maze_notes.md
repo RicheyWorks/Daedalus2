@@ -50,13 +50,68 @@ the shared 4,096-command cap. Animation phases are bounded.
 
 **Dungeon:** exact seven source rows, 40-pixel tiles, starting green 40x40 box at
 `(80,80)`, 5 pixels per frame per digital axis, and X-before-Y movement. The source
-is a movement prototype, with no enemies, score, or win condition; none was
-invented. Repairs: the source's rows have different lengths and `is_wall` can
+is a movement prototype, with no enemies, score, or win condition. The existing
+native Threadlight chapter adds three ordered lanterns and an exit within that
+room; it is an original extension, not source parity. It awards no score or realm
+reward. Repairs: the source's rows have different lengths and `is_wall` can
 index beyond a row/map; missing cells and out-of-range positions are solid.
 Collision checks all corners of the player box rather than only its top-left
 point, preventing overlap with walls. Left-stick movement is an adapter
 enhancement. Rendering missing cells as solid also fills the original blank
 right-hand margin.
+
+### Selecting Threadlight circuits
+
+The cabinet's focusable **Next circuit** button starts the next of the six existing
+lantern orders, wrapping from circuit 6 to 1. The current circuit number appears in
+the existing progress/status text. Restart and the original Action reset replay the
+selected order. Switching is deliberate, never automatic on completion, and clears
+the current lights, clock and optional trail. This is a desktop-only choice, not a
+world Dungeon quest, save or reward.
+
+`DungeonGame::NextCircuitSeed` converts any uint32 seed to a canonical next-order
+seed in 0..5 rather than incrementing a possibly signed host seed. Slate rechecks
+the active game and pending-save fence, then calls the existing `StartGame` path;
+it returns play focus only after success. The actor's normal seed/input/pause
+lifecycle is reused without new actor API or persistence changes.
+
+`desktop_dungeon_circuit` / `dungeon_circuit_test.cpp` checks the six order choices,
+full-width seeds, changed second lantern after Hall, fresh-circuit reset and
+same-circuit replay via public input/Driver. It does not rerun the trail navigation
+suite or establish native button, controller/focus or play-feel acceptance.
+
+Strict serial single-TU MSVC C++17 passed 181/181 focused checks. The previous
+trail/navigation and source-parity suites were not rerun; movement, lighting,
+completion, timer and reset implementations are unchanged. Native acceptance is
+still pending.
+
+### Optional Threadlight trail
+
+Shift / pad Y (also the existing V / LB aliases) toggles a quiet dotted route to
+the lantern marked NEXT, then EXIT after all three are lit. The route starts off;
+reset returns it to off. It never moves the player or lights a target. J/Space or
+pad A/X still performs each interaction; K/Enter or pad B still resets the circuit.
+Toggling alone does not start the clock. Once movement or interaction has started,
+a toggle consumes its ordinary simulation frame. Completion freezes the trail
+with the rest of the chapter until a deliberate reset.
+
+A bounded four-neighbour search uses at most 140 player-sized anchors and checks
+the full 40x40 box. An unaligned position connects safely to its lower grid anchor
+by decreasing X then Y. Dots are drawn behind the hero and lanterns. The guide is
+derived during rendering and has no saved data, RNG, auto-interaction, movement
+rule or world Dungeon dependency. Pac-Man and Zelda remain unchanged.
+
+`desktop_dungeon_trail` / `dungeon_trail_test.cpp` follows the rendered route using
+ordinary movement across all six seed orders, explicitly lights each lantern and
+EXIT, and compares guide-on/off progress. It also covers an unaligned connector,
+wrong-order interaction, render purity, toggling, timer/reset priority, completion
+and Driver pause/held-input edges. This focused portable check does not establish
+native layout, controller or human navigation acceptance.
+
+Strict single-TU MSVC C++17 passed 236/236 checks. The unchanged test compiled
+against the exact prior Maze header at `0b1b95038` passed 14/28, with fourteen
+expected failures; absent paths stop traversal sections early. No fixtures were
+regenerated. The normalized Pac-Man/Zelda suffix remains identical (472 lines).
 
 **Pac-Man:** all 31x28 source map characters and 304 dot coordinates are retained,
 as are the 2.5-pixel player and 2-pixel ghost speeds, buffered directions, digital
@@ -83,13 +138,54 @@ The source has defects that prevent its advertised loop:
 - Restart now recreates dots and pellets; the source removes them from globals
   permanently. End-screen keyboard restart is repaired. A stacked collision
   consumes at most one life in a frame, and defeat cannot be overwritten by a
-  simultaneous win. There is no new tunnel-warp mechanic.
+  simultaneous win. The source view retains its blocked outer boundary; native
+  play's paired passage is described below.
 
 Ghost direction choices are injected in source fixture cases. Runtime uses the
 common portable RNG, with uniform direction shuffling, and does not reproduce
 Python's seeded random stream or call-consumption order. Ghost respawn retains
 the source's frightened-state behavior; it is not presented as original arcade
 AI or ghost behavior.
+
+### Glowtrail's paired passage
+
+The two outer openings in row 14 now connect in native play. Walk through either
+matching blue gate to emerge on the other side. Player and living pursuers use
+the same 560-pixel maze period and keep movement overshoot; the 800-pixel frame
+and sidebar at X580 are separate presentation space. No new action or mode is
+needed. This is an original native extension, not source replay equivalence.
+
+Only a whole quantized 16x16 collision box fitting row 14 may use the passage.
+Adjacent walls and ordinary out-of-map lookups stay solid. Candidate positions
+are bounded around the seam, so distant invalid test actors cannot fold into the
+maze. Player turn probes, ghost choices and actual movement share that rule.
+Ghost chase still compares ordinary coordinates; no new AI/pathfinding or RNG
+draws are added.
+
+Contact uses the original rectangle overlap plus the translated opposite-edge
+rectangle for eligible actors. Pickups retain their strict 12-pixel Euclidean
+radius with periodic horizontal distance in the passage. Map characters, all
+304 dots, scores, lives, power/grace timers, one-lethal-hit settlement, respawn,
+completion and seeded replay rules remain intact. Dead ghosts remain stationary.
+
+Matching gate brackets render behind dots and actors; mirrored silhouettes make
+the crossing continuous. The existing canvas clips the frame's left boundary.
+A black gutter mask follows all actors and precedes the sidebar, clipping right
+overflow with existing draw commands. No new native renderer, art or asset needed.
+
+Pure-source helper calls explicitly disable both RepairDoor and UseTunnels.
+The pinned fixture contents are unchanged; native defaults enable the repaired
+maze and passage. Source-only evidence remains separate from native rendering,
+physical input and human chase/escape acceptance.
+
+`desktop_pacman_tunnel` / `pacman_tunnel_test.cpp` passed 108/108 strict single-TU
+MSVC checks, including the 60 PAC-only pinned source cases in disabled mode.
+Focused native cases cover two-way overshoot/probes, row/candidate fences,
+quantized seam contact, ordinary off-passage contact, damage/capture/grace,
+strict circular pickup distance and both edge dots once, unchanged RNG call
+counts, dead actors, terminal/reset behavior and presentation/mask order/purity.
+No broad maze suite, repeated full-map traversal, old-header proof, fixture
+regeneration or engine/editor/native playtest ran for this extension.
 
 **Zelda:** source Link spawn `(400,450)`, speed 3.5, six half-hearts, source 0.707
 diagonal scale and two-level stick deadzone, directional attack rectangles,

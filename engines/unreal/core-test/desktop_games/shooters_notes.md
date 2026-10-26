@@ -34,6 +34,35 @@ Preserved player clamping and axis override, power levels 1/2/3 with correspondi
 
 The canonical source has no `draw_text` implementation and never tests a projectile against its separate boss, making the intended win unreachable. The native rendering contract fixes the text failure; boss bullet and contact collisions are now connected. At 1500 points the 20-HP chaser boss enters and stays in the right-side engagement region instead of drifting permanently off-screen. Defeat awards 500 points and ends in victory. Held fire and keyboard restart through the shared host are usability enhancements. Single-use projectiles and one life loss per frame fix overlapping-hit defects.
 
+### Optional Riftwing boss rehearsal
+
+Riftwing Vanguard (the Sega core) offers **Full run / Boss rehearsal** through the
+cabinet's existing checked mode controls. Full run remains option 0 and reaches
+the boss at 1500 real points. Option 1 starts that same 20-HP boss immediately,
+with score zero, three lives and the ordinary weapon/speed. Regular enemies,
+powerup drops, boss pursuit, collisions and shooting keep their existing rules;
+enemies continue arriving throughout the encounter.
+
+Both paths use the same boss initializer. Rehearsal victory earns the existing
+500 boss points after real damage. The existing
+enemies HUD row marks REHEARSAL, and its result names completion/end. Restart and
+fresh terminal retry retain the selected mode and seed. Choosing the active native
+mode preserves progress; changing mode deliberately starts over. There is no new
+save, leaderboard, actor implementation or framework. Native focus, layout and
+human difficulty/feel remain unverified.
+
+`desktop_sega_boss_rehearsal` / `sega_boss_rehearsal_test.cpp` is the focused mode,
+boss settlement, default-entry and lifecycle regression; prior broad shooter and
+replay/source suites are separate evidence.
+
+Strict serial single-TU MSVC C++17 passed 52/52 focused checks. One public-input
+held-fire rehearsal at seed 730 won after 180 steps with score 600 and three lives.
+Controlled real projectile Steps verified all twenty boss hits and the original
+500 boss award; the short public route also earned one ordinary enemy kill. Mode
+validation, unchanged full-run 1499/1500 entry, mutual loss, retry and Driver input/
+time/pause cleanup passed. No broad shooter suite or old replay proof was rerun;
+native integration and human play remain unverified.
+
 ## Star Shooter
 
 Preserved latest features include Easy/Medium/Hard configurations; Python ties-to-even health rounding; speed/shoot/dive scaling; normal twin and triple shots; permanent-until-reset powerups; shield hit behavior; bee/butterfly/cruiser enemy data; wave-dependent weighted groups; cruiser escorts and doubled cruiser points when escorts are killed; straight and zigzag dives with distinct points; enemies' three shot patterns; 20-second wave progression and spawn-rate floor 28; every-fifth-wave bosses; spread/ring/aimed boss patterns; 66% enrage and 33% berserk thresholds and once-only summons; boss charges/returns; 1000 boss points, cleanup of boss shots, reset of player powerups and three replacement drops; pause and source-shaped lightweight save state.
@@ -121,3 +150,34 @@ renders the menu and resumes on fresh confirmation. The focused target now passe
 110/110 checks. Restoring only the old render condition passed107/110, failing the
 three difficulty-specific final-frame assertions. No other pause or save lifecycle
 code changed; native focus-loss presentation still needs live acceptance.
+
+## Driftstone Patrol brake control
+
+Asteroids adds K / left-trigger braking through the existing Action/ActionPressed
+input. It suppresses thrust while preserving turning, firing, cooldown and wrap.
+After original0.985 coasting drag, braking applies0.8 extra damping and snaps each
+component below0.02 to rest before movement. Releasing returns to original flight
+behavior. Unbraked physics and the other two shooter classes are unchanged.
+
+Two blue ship fins and an active BRAKING cue acknowledge the action without adding
+a menu. Reset/respawn clear it; terminal status and rendering suppress the active
+cue. The native mapper explicitly assigns K/LT only for Asteroids, keeping pad B
+and every existing fire binding intact. Left-trigger state uses the same finite/
+clamped input and lifecycle reset path as the existing right trigger. No actor API,
+portable input fields, save format, original Python script or fixture changes.
+
+The focused target desktop_asteroids_brake runs asteroids_brake_test.cpp with the
+existing shooters_parity.txt: only its81 AST_SHIP source cases plus braking/control
+fixtures, real early-game feedback/fire and a bounded6000-step respawn/result loop.
+It does not execute Sega/Star fixtures or the broad shooter suite. Test execution
+and old-header proof results are recorded in the private campaign handoff; native
+trigger/focus/held-button/viewport/human-flight acceptance remains separate.
+
+Strict single-TU MSVC /W4 /WX /permissive- passed607/607 assertions, including all
+81 unchanged AST_SHIP cases and a real terminal at566 idle steps. The exact
+pre-feature header at d30fb8dc5 passed593/607, with14 expected brake failures.
+Only an isolated header overlay was used; repository sources were not reverted.
+The normalized Sega/Star suffix is identical to that predecessor. One initial
+compile was deferred by the RAM guard before the compiler started; after other
+source work, a fresh guard passed and the check ran once. No engine build or
+broader shooter suite was executed.

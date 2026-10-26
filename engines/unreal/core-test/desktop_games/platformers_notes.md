@@ -48,6 +48,82 @@ Shadow Ninja preserves start at (175,380), feet-based platform collision and its
 
 ## Repairs and deliberate adaptations
 
+### Ironwake ledge timing
+
+The existing held-jump landing hop remains unchanged. A short ground-grace window
+also accepts a jump during the six decisions after stepping off a platform, using
+the same -13 impulse and subsequent 0.6 gravity. Crouching still prevents jumping.
+Airborne and crouched decisions expire the window; a successful jump consumes it,
+so holding Jump cannot grant another airborne jump. No landing queue or new input
+edge rule is introduced.
+
+The appended counter resets with the player. Accepted damage clears it after the
+existing invincibility/terminal guard; a rejected protected hit does not erase it.
+The existing fallback relocation also clears it independently of that guard.
+Title/start/replay still use the same Reset path and preserve their original lives
+and cheat-prefix behavior. The current readiness line recognizes grace without
+adding labels. This timing allowance is a native extension, not Python parity.
+
+`desktop_contra_ledge` / `contra_ledge_grace_test.cpp` passed 743/743 strict
+single-TU MSVC checks, including only the 51 existing CSTEP cases and their
+original thirteen fields. Focused cases cover actual walkoff/expiry, crouch,
+no second airborne jump, unchanged held landing hops/camera precedence, enemy
+and projectile damage, rejected protected Hurt, readiness, Reset/title/start/
+controller replay and terminal freeze. The dormant fall relocation cleanup was
+source-reviewed; no test-only seam was added to force that path.
+An initial compile stopped on the test fixture's global name shadowing a template
+loop variable; renaming that fixture fixed it without changing warnings or game
+code. No runtime assertions ran before that correction. No full platformer suite,
+fixture regeneration, repeated replay proof, engine build or native playtest.
+
+### Shadow Ninja jump timing
+
+The native cabinet accepts a slightly late ledge press and a slightly early
+landing tap without changing the ground/double/wall impulses or controls. Ground
+grace lasts six decisions after the first unsupported step. A fresh unavailable
+jump remains queued for six fixed steps including its press step. At 60 Hz each
+window is about 100 ms. Ground/grace jumps use -11; an ordinary available double
+jump stays immediate at -9 and the wall jump keeps its source -10/7/push behavior.
+
+The queue is ground-only. If it reaches a normal landing, the source collision
+snaps the feet to the platform, then the usual -11 upward movement begins in that
+same update. The existing landing band is unchanged. A queued press cannot become
+a delayed double or wall jump. Successful jumps and wall attachment clear both
+windows; holding Jump cannot refresh either queue or chain another landing hop.
+Reset clears the appended player counters and terminal simulation remains frozen.
+The existing readiness line recognizes ground grace without adding helper labels.
+These timing windows are a native extension, not Python source parity.
+
+No new action, mode, reflected API, actor/save change, engine framework or asset is
+introduced. Focus/pause and physical button feel remain native acceptance work.
+
+`desktop_ninja_jump` / `ninja_jump_forgiveness_test.cpp` passed 1,360/1,360 strict
+single-TU MSVC C++17 checks. This includes only the 83 existing NSTEP fixtures and
+their original fifteen fields, plus grace/buffer boundaries, an actual spent air
+jump and early landing tap, held expiry, wall cancellation, wall-entry priority,
+Reset and Driver pause/input checks. The six-step window does not pre-empt a
+physical wall arrival. No original fixture regenerated, broad platformer suite,
+repeated replay proof, engine build or native playtest was run for this change.
+
+### Shadow Ninja enemy health cues
+
+Ordinary enemies now carry compact health pips above their existing silhouette:
+two for walkers and four for jumpers, matching the existing spawn health. Gold
+pips empty after a sword, star or spin hit, making surviving damage visible. The
+cue follows each enemy's current position; defeated enemies and their pips leave
+together. There is no new helper label, hit timer, saved field, RNG draw or combat
+rule. Player readiness, boss health, scoring, movement and replay are retained.
+
+`desktop_ninja_enemy_health` / `ninja_enemy_health_test.cpp` passed 58/58 strict
+serial single-TU MSVC C++17 checks: full/partial health, retained silhouettes,
+moving coordinates, actual sword/star/spin damage, lethal removal and scores,
+presentation purity, 24 paired future steps and Reset cleanup. It uses the existing
+test seam. No broad platformer suite or repeated source/replay proof was run for
+this render-only slice. Native cue size, contrast, overlap and human play
+acceptance remain unverified.
+
+### Other source repairs
+
 - One coherent CONTRA core replaces the concatenated/unreachable script structure. New and restarted sessions share the last revision's two-enemy start and pickup at (620,350), fixing its inconsistent three-enemy restart initializer.
 - A final CONTRA boss spawn has a once-only encounter flag; the original final-spawn block recreated a final boss after every death. Normal stage-driven boss spawning is retained. The source distance victory rule remains intact.
 - Terminal state is immutable until `Reset`; lethal damage cannot be followed by a later same-frame pickup or victory that reverses death. Shadow Ninja now enters game over immediately when boss damage reduces health to zero, instead of waiting for the next frame.

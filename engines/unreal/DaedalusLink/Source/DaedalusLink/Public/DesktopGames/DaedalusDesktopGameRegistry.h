@@ -15,8 +15,8 @@ inline const std::vector<Entry>& Catalog() {
     static const std::vector<Entry> Entries{
         {"minesweeper","Minesweeper","Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord"},
         {"pong","Twinwake Volley","A fast duel across the twinwake court. Up/Down or left stick: paddle"},
-        {"dungeon","Dungeon Prototype","Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick"},
-        {"asteroids","Driftstone Patrol","Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; J/X: shoot"},
+        {"dungeon","Dungeon Prototype","Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick; Shift/pad Y: trail"},
+        {"asteroids","Driftstone Patrol","Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot"},
         {"football","Football / Soccer","A ninety-second duel on the Daedalus pitch. Move: WASD/arrows or left stick; J/X: kick"},
         {"pacman","Glowtrail Chase","Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick"},
         {"sega_shooter","Riftwing Vanguard","Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot"},
@@ -66,6 +66,14 @@ public:
     void Restart() {
         if(!Active) return;
         Active->Reset(Seed); Controls={}; PendingSeconds=0; StepCount=0; Paused=false; Refresh();
+    }
+    // Explicit fresh puzzle, separate from same-seed Restart. Never writes a saved board.
+    bool NewMinesweeperPuzzle(std::uint32_t SeedCandidate) {
+        if(!Active || Id!="minesweeper" || HasSaveRequest()) return false;
+        // Keep native int32 seed presentation nonnegative. Existing uint32 saves stay readable.
+        std::uint32_t NextSeed=SeedCandidate&0x7fffffffu;
+        if(Random::InitialState(NextSeed)==Random::InitialState(Seed)) NextSeed=(NextSeed+1u)&0x7fffffffu;
+        Seed=NextSeed;Restart();return true;
     }
     void SetInput(const Input& New) {
         Input Next=New; Next.AxisX=Axis(Next.AxisX); Next.AxisY=Axis(Next.AxisY);

@@ -120,11 +120,14 @@ public:
 	/** At most eight 1/60-second steps. Invalid/negative delta is ignored; stalled wall time is dropped. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") int32 AdvanceGame(double DeltaSeconds);
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void RestartGame();
+	/** Start an unrevealed Minesweeper puzzle with a fresh seed at the current size. Saved board is kept. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool NewMinesweeperPuzzle();
 	/** Star keeps advancing its own pause-menu input; generic games stop within Driver::Advance. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void PauseGame(bool bPaused);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FDaedalusDesktopArcadeState GetState() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<FDaedalusDesktopArcadeEntry> GetAvailableGames() const;
-	/** Star: 0 Easy, 1 Medium, 2 Hard. Minesweeper: 0 Beginner, 1 Intermediate, 2 Expert. Changes start a new run. */
+	/** Star/Mines: difficulty 0..2. Pong: 0 Match, 1 practice, 2 First to 5.
+	 * Football: 0 Match, 1 practice. Sega: 0 full run, 1 boss rehearsal. Changes start a new run. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SetGameOption(int32 Option);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") int32 GetGameOption() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FString GetCabinetId() const { return CabinetId; }

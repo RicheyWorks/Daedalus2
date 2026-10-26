@@ -43,6 +43,7 @@ private:
 	FReply BrowseCatalog();
 	FReply SwitchGame();
 	FReply KeepPlaying();
+	FReply NextCircuit();
 	TSharedRef<SWidget> GameHelpPanel();
 	FReply ShowGameHelp();
 	FReply DismissGameHelp(bool bResume);
@@ -65,11 +66,16 @@ private:
 	FText LeaderboardText() const;
 	FText MinesweeperDifficultyText() const;
 	EVisibility StarVisibility() const;
+	EVisibility PongVisibility() const;
+	EVisibility FootballVisibility() const;
+	EVisibility SegaVisibility() const;
+	EVisibility DungeonVisibility() const;
 	EVisibility MinesweeperVisibility() const;
 	EVisibility LeaderboardVisibility() const;
 	TSharedRef<SWidget> MakeGameRow(TSharedPtr<FString> Item) const;
 	void SelectCatalogChoice(TSharedPtr<FString> Item, ESelectInfo::Type Selection);
 	TSharedRef<SWidget> MakeAction(const TCHAR* Label, FSimpleDelegate Action, bool bReplacesRun = false, bool bFocusable = false);
+	TSharedRef<SWidget> MakeMode(const TCHAR* GameId, const TCHAR* Label, int32 Option, const TCHAR* Warning);
 
 	TWeakObjectPtr<ADaedalusDesktopArcade> Game;
 	FTSTicker::FDelegateHandle CoreTickHandle;
@@ -88,5 +94,6 @@ private:
 	float StickX = 0.f;
 	float StickY = 0.f;
 	float RightTrigger = 0.f;
+	float LeftTrigger = 0.f;
 	bool bHadFocus = true;
 };
