@@ -301,6 +301,25 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "reedbeat",
+      "title": "Reedbeat",
+      "summary": "Strike the reed when it glows. J/Space or pad A: strike",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"reedbeat\", Seed)",
+      "portable_tests": [
+        "desktop_reedbeat"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "hints",
+        "options",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
