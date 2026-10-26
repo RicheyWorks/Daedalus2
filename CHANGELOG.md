@@ -10,6 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Scoreboard hook.** Every desktop cabinet reports `Status.Score` through the catalog `scoreboard` capability. The number stays inside the range the arcade host already shows. Save files are unchanged.
 - **Reedbeat.** A rhythm round. Option 0 is eight short glows and option 1 is a four-note practice with a wider glow. Strike on the glow; early taps count as misses. A cream hint and a cyan cue sit on the bottom edge.
 - **Gloam Latch.** A lamp puzzle. Option 0 is 5x5 and option 1 is a 3x3 practice board. Flipping a lamp also flips its neighbors, and every seed starts from a board that can be darkened. A cream hint and a cyan flip cue sit on the bottom edge.
 - **Riftwing Vanguard hints.** A cream hint and a cyan fire cue sit under the speed line. Boss rehearsal names the boss in that hint. Controls and the status note are unchanged.

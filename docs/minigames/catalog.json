@@ -24,7 +24,8 @@
         "hints",
         "options",
         "pointer",
-        "save_restore"
+        "save_restore",
+        "scoreboard"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -49,7 +50,8 @@
         "fresh_pad_replay",
         "hints",
         "options",
-        "save_restore"
+        "save_restore",
+        "scoreboard"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -73,7 +75,8 @@
         "focus_freeze",
         "hints",
         "options",
-        "save_restore"
+        "save_restore",
+        "scoreboard"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -97,6 +100,7 @@
         "hints",
         "options",
         "save_restore",
+        "scoreboard",
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
@@ -117,7 +121,8 @@
         "focus_freeze",
         "fresh_pad_replay",
         "options",
-        "save_restore"
+        "save_restore",
+        "scoreboard"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -142,7 +147,8 @@
         "focus_freeze",
         "fresh_pad_replay",
         "options",
-        "save_restore"
+        "save_restore",
+        "scoreboard"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -168,6 +174,7 @@
         "hints",
         "options",
         "save_restore",
+        "scoreboard",
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
@@ -191,6 +198,7 @@
         "fresh_pad_replay",
         "options",
         "save_restore",
+        "scoreboard",
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
@@ -211,7 +219,8 @@
         "core_pause",
         "focus_freeze",
         "options",
-        "save_restore"
+        "save_restore",
+        "scoreboard"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -235,7 +244,8 @@
         "focus_freeze",
         "hints",
         "options",
-        "save_restore"
+        "save_restore",
+        "scoreboard"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -256,6 +266,7 @@
         "fresh_pad_replay",
         "options",
         "save_restore",
+        "scoreboard",
         "source_keys",
         "title_screen"
       ],
@@ -279,7 +290,8 @@
         "focus_freeze",
         "hints",
         "options",
-        "save_restore"
+        "save_restore",
+        "scoreboard"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -298,6 +310,7 @@
         "focus_freeze",
         "hints",
         "options",
+        "scoreboard",
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
@@ -317,6 +330,7 @@
         "focus_freeze",
         "hints",
         "options",
+        "scoreboard",
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
