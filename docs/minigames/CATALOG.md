@@ -9,17 +9,17 @@ batched rebuild under the editor custodian.
 | id | title | portable tests |
 |---|---|---|
 | `minesweeper` | Minesweeper | 5 |
-| `pong` | Twinwake Volley | 6 |
+| `twinwake` | Twinwake Volley | 6 |
 | `dungeon` | Dungeon Prototype | 5 |
-| `asteroids` | Driftstone Patrol | 4 |
+| `driftstone` | Driftstone Patrol | 4 |
 | `football` | Football / Soccer | 3 |
-| `pacman` | Glowtrail Chase | 7 |
-| `sega_shooter` | Riftwing Vanguard | 6 |
-| `shadow_ninja` | Shadow Ninja | 5 |
+| `glowtrail` | Glowtrail Chase | 7 |
+| `riftwing` | Riftwing Vanguard | 6 |
+| `emberstep` | Emberstep Ascent | 5 |
 | `star_shooter` | Star Shooter | 3 |
 | `dodge_ball` | Courtyard Clash | 6 |
-| `contra` | Ironwake Advance | 3 |
-| `zelda` | Lanternwild Quest | 3 |
+| `ironwake` | Ironwake Advance | 3 |
+| `lanternwild` | Lanternwild Quest | 3 |
 
 ## Capabilities
 
@@ -29,17 +29,17 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | hints | action_cue | save_restore |
 |---|---|---|---|---|---|---|---|---|---|---|
 | `minesweeper` | yes |  | yes |  | yes |  | yes |  |  | yes |
-| `pong` | yes |  | yes |  |  |  | yes |  |  | yes |
+| `twinwake` | yes |  | yes |  |  |  | yes |  |  | yes |
 | `dungeon` | yes |  |  |  |  |  | yes | yes | yes | yes |
-| `asteroids` | yes |  | yes | yes |  |  | yes |  |  | yes |
+| `driftstone` | yes |  | yes | yes |  |  | yes |  |  | yes |
 | `football` | yes |  | yes |  |  |  | yes |  |  | yes |
-| `pacman` | yes |  | yes |  |  |  | yes |  |  | yes |
-| `sega_shooter` | yes |  | yes | yes |  |  | yes |  |  | yes |
-| `shadow_ninja` | yes |  | yes | yes |  |  | yes |  |  | yes |
+| `glowtrail` | yes |  | yes |  |  |  | yes |  |  | yes |
+| `riftwing` | yes |  | yes | yes |  |  | yes |  |  | yes |
+| `emberstep` | yes |  | yes | yes |  |  | yes |  |  | yes |
 | `star_shooter` | yes |  |  |  |  | yes | yes |  |  | yes |
 | `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes | yes |
-| `contra` | yes | yes | yes | yes |  |  | yes |  |  | yes |
-| `zelda` | yes |  |  |  |  |  | yes | yes | yes | yes |
+| `ironwake` | yes | yes | yes | yes |  |  | yes |  |  | yes |
+| `lanternwild` | yes |  |  |  |  |  | yes | yes | yes | yes |
 
 ## Java cabinets
 

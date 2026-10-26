@@ -6,12 +6,12 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop { namespace platformers {
 struct TestAccess {
-    static void Fall(ShadowNinjaGame& G) {
+    static void Fall(EmberstepGame& G) {
         auto& P=G.Player;P.Y=541;P.VY=1;P.OnGround=P.DoubleJump=P.OnWall=false;P.JumpWasDown=true;
         P.GroundGraceFrames=P.JumpBufferFrames=0;P.AttackCooldown=0;
     }
-    static std::uint32_t NextRandom(const ShadowNinjaGame& G) {auto R=G.Rng;return R.Next();}
-    static std::string Snapshot(const ShadowNinjaGame& G) {
+    static std::uint32_t NextRandom(const EmberstepGame& G) {auto R=G.Rng;return R.Next();}
+    static std::string Snapshot(const EmberstepGame& G) {
         std::ostringstream O;O.precision(17);const auto& P=G.Player;
         O<<G.GetOption()<<' '<<G.CourseStage<<' '<<G.SessionSeed<<' '<<G.Score<<' '<<G.Over<<' '<<G.Won<<' '<<G.BossActive<<' '<<G.SpawnTimer<<' '<<G.BossPulseCueFrames;
         O<<' '<<P.X<<' '<<P.Y<<' '<<P.VX<<' '<<P.VY<<' '<<P.OnGround<<' '<<P.Facing<<' '<<P.AttackCooldown<<' '<<P.Health<<' '<<P.Invincible
@@ -27,7 +27,7 @@ struct TestAccess {
 };
 }}}
 namespace {
-using Ninja=ShadowNinjaGame;
+using Ninja=EmberstepGame;
 using Access=platformers::TestAccess;
 int Checks=0,Failed=0;
 void Check(bool Ok,const std::string& Why) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<Why<<'\n';}}
@@ -98,7 +98,7 @@ void ResultAndDriver(const Ninja& Complete) {
     Check(Access::Snapshot(G)==Before&&SameFrame(F,Again),"completion freezes all movement combat score and goal state until an explicit retry");
     Check(G.SourceControllerButton(0)&&G.GetOption()==1&&Access::Snapshot(G)==Access::Snapshot(Course()),"fresh controller retry retains course and clears completion");
     G=Complete;Check(G.SourceKeyDown(7)&&Access::Snapshot(G)==Access::Snapshot(Course()),"fresh Space retry also starts the same course cleanly");
-    Driver D;Check(D.Select("shadow_ninja",730),"Driver opens the existing Ninja engine");D.Advance(Driver::StepSeconds*2.5);Input Stale;Stale.Right=Stale.Jump=Stale.JumpPressed=Stale.FirePressed=true;D.SetInput(Stale);
+    Driver D;Check(D.Select("emberstep",730),"Driver opens the existing Ninja engine");D.Advance(Driver::StepSeconds*2.5);Input Stale;Stale.Right=Stale.Jump=Stale.JumpPressed=Stale.FirePressed=true;D.SetInput(Stale);
     Check(D.SetOption(1)&&D.GetOption()==1&&D.Ticks()==0&&D.Advance(Driver::StepSeconds*.5)==0,"course selection clears old input and partial time");
     auto Expected=Course();Expected.Step({});Expected.Render(F);Check(D.Advance(Driver::StepSeconds*.5)==1&&SameFrame(D.GetFrame(),F),"first course step has no old jump attack or movement");
     D.SetPaused(true);D.SetInput(Stale);D.Restart();Expected=Course();Expected.Render(F);

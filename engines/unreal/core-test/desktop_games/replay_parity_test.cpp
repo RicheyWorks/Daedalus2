@@ -3,7 +3,7 @@
 // SourceControllerButton. A finished run must hold on idle and held buttons, and
 // restart only on a fresh press (FirePressed / JumpPressed / ActionPressed, which
 // the host raises for keyboard and pad A/B alike).
-// catalog-capability: fresh_pad_replay: pong football pacman
+// catalog-capability: fresh_pad_replay: twinwake football glowtrail
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <string>
@@ -11,7 +11,7 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop {
 struct MazeTestAccess {
-    static void End(PacmanGame& G,bool Won) {G.Over=!Won;G.Won=Won;G.Score=1234;G.Lives=Won?2:0;}
+    static void End(GlowtrailGame& G,bool Won) {G.Over=!Won;G.Won=Won;G.Score=1234;G.Lives=Won?2:0;}
 };
 }}  // namespace daedalus::desktop
 
@@ -22,11 +22,11 @@ Input Held() {Input I;I.Fire=true;I.Jump=true;I.Action=true;I.Up=true;return I;}
 Input Fresh(int Kind) {Input I;if(Kind==0) I.FirePressed=true;else if(Kind==1) I.JumpPressed=true;else I.ActionPressed=true;return I;}
 const char* KindName(int Kind) {return Kind==0?"fire":(Kind==1?"jump":"action");}
 
-void Pong() {
+void Twinwake() {
     for(int Mode:{2,3}) for(int Kind=0;Kind<3;++Kind) {
-        PongGame G;G.SetOption(Mode,1);
+        TwinwakeGame G;G.SetOption(Mode,1);
         G.S.PlayerScore=5;G.S.ComputerScore=2;
-        const std::string Tag=std::string("pong mode ")+std::to_string(Mode)+" "+KindName(Kind)+": ";
+        const std::string Tag=std::string("twinwake mode ")+std::to_string(Mode)+" "+KindName(Kind)+": ";
         Check(G.GetStatus().Over,Tag+"finished run reports over");
         const double Y=G.S.PlayerY;
         for(int N=0;N<30;++N) G.Step(Input{});
@@ -56,10 +56,10 @@ void Football() {
     Check(J.GetStatus().Over,"football: jump press alone does not restart (documented key set)");
 }
 
-void Pacman() {
+void Glowtrail() {
     for(bool Won:{false,true}) for(int Kind=0;Kind<3;++Kind) {
-        PacmanGame G;G.Reset(77);MazeTestAccess::End(G,Won);
-        const std::string Tag=std::string("pacman ")+(Won?"won ":"lost ")+KindName(Kind)+": ";
+        GlowtrailGame G;G.Reset(77);MazeTestAccess::End(G,Won);
+        const std::string Tag=std::string("glowtrail ")+(Won?"won ":"lost ")+KindName(Kind)+": ";
         Check(G.GetStatus().Over || G.GetStatus().Won,Tag+"finished run reports over or won");
         Check(G.GetStatus().Won==Won,Tag+"win flag matches");
         for(int N=0;N<30;++N) G.Step(Input{});
@@ -68,14 +68,14 @@ void Pacman() {
         G.Step(Fresh(Kind));
         const auto S=G.GetStatus();
         Check(!S.Over && !S.Won && S.Score==0 && S.Lives==3,Tag+"fresh press replays a full run");
-        PacmanGame Ref;Ref.Reset(77);
+        GlowtrailGame Ref;Ref.Reset(77);
         Check(S.Note==Ref.GetStatus().Note,Tag+"replay uses the session seed");
     }
 }
 }  // namespace
 
 int main() {
-    Pong();Football();Pacman();
+    Twinwake();Football();Glowtrail();
     std::cout<<"replay parity: "<<(Checks-Failed)<<"/"<<Checks<<" checks\n";
     return Failed==0?0:1;
 }

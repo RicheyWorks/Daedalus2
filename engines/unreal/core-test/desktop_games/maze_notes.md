@@ -8,13 +8,13 @@ The Desktop originals were read only and remain unchanged.
 | Family | Canonical path relative to `C:\Users\730ri\OneDrive\Desktop` | SHA-256 |
 | --- | --- | --- |
 | Dungeon Prototype | `PythonGames\main.py` | `cbf19aa131cfe9815f36ef4812638cf0992141666d4eb3a0fce0b92e662e99a4` |
-| Pac-Man | `pacman.py` | `6cad8d138888c7a18d80e0e034546a49e57618610ac3e5dcce9886a7358ad8ed` |
-| Zelda adventure prototype | `zelda.py` | `713f6de7c27a92d65fdedd77a6c15a7e80a964d098d5ba209dbf32e648cc9bdd` |
+| Glowtrail | `pacman.py` | `6cad8d138888c7a18d80e0e034546a49e57618610ac3e5dcce9886a7358ad8ed` |
+| Lanternwild adventure prototype | `zelda.py` | `713f6de7c27a92d65fdedd77a6c15a7e80a964d098d5ba209dbf32e648cc9bdd` |
 
 ## Native bindings
 
 `DesktopGames/DaedalusDesktopMazeCore.h` defines
-`daedalus::desktop::DungeonGame`, `PacmanGame`, and `ZeldaGame`, each implementing
+`daedalus::desktop::DungeonGame`, `GlowtrailGame`, and `LanternwildGame`, each implementing
 the common `Game` interface. `Reset(seed)` starts a fresh playable session;
 `Step(Input)` advances exactly one source-style 60 Hz frame; `Render(Frame&)`
 provides bounded procedural draw commands; `GetStatus()` provides score, lives
@@ -22,21 +22,21 @@ or health, terminal flags, and a control note. There are no Unreal types,
 Pygame imports, asset loads, persistence, threads, or unbounded event loops.
 
 Directions use `Left/Right/Up/Down`, direct `PadLeft/PadRight/PadUp/PadDown`, and
-sanitized `AxisX/AxisY`. Pac-Man merges direct hats with the existing digital tests,
+sanitized `AxisX/AxisY`. Glowtrail merges direct hats with the existing digital tests,
 retaining right/down last-test precedence and dominant-axis analog override.
-`pacman_input_test.cpp` / target `desktop_pacman_input` checks the direct player
+`glowtrail_input_test.cpp` / target `desktop_glowtrail_input` checks the direct player
 contract and a bounded 96-frame game/Driver route; no native Blueprint acceptance
-is inferred. Zelda's sword is
+is inferred. Lanternwild's sword is
 an edge action: `FirePressed`, `ActionPressed`, or `JumpPressed`. The attack
 executes before player movement, matching the source KEYDOWN order, and has the
-source 18-frame cooldown. Pac-Man and Zelda accept one of those press events to
+source 18-frame cooldown. Glowtrail and Lanternwild accept one of those press events to
 restart after win or game over; held buttons alone do not restart. Dungeon's
 `ActionPressed` resets its prototype. The Daedalus adapter chooses/starts the
 game instead of reproducing the Python standalone TITLE screen.
 
-Pac-Man and Zelda's cabinet prompts name the physical bindings: pad A, Space,
+Glowtrail and Lanternwild's cabinet prompts name the physical bindings: pad A, Space,
 Enter or R/Restart replays a completed/lost run with its original seed. Pad A,
-Space or Enter also triggers Zelda's sword during play. Start keeps its existing
+Space or Enter also triggers Lanternwild's sword during play. Start keeps its existing
 pause/resume role; no terminal retry binding or simulation rule was added.
 
 ### Optional Lanternwild hold-to-swing assist
@@ -59,7 +59,7 @@ there is no new HUD row, game mode or host API. Native control text uses existin
 key mappings; no input adapter, actor, registry or shared builder edit is needed.
 Native controls/focus, footer fit and human timing remain unverified.
 
-`desktop_zelda_sword_assist` / `zelda_sword_assist_test.cpp` passed 127/127 strict
+`desktop_lanternwild_sword_assist` / `lanternwild_sword_assist_test.cpp` passed 127/127 strict
 single-TU MSVC C++17 checks. Assisted held aliases match manual fresh swings at the
 18-step cadence, including complete world/RNG state. A prepared encounter retains
 the four original enemy kinds/HP/timers: real attack-before-movement kills three,
@@ -70,9 +70,9 @@ preserves preference, and Driver pause/catch-up/restart/new selection clean inpu
 No old broad maze or terminal suite was repeated; no native execution is implied.
 
 Snapshots are available through const getters. Internal boundary cases in the
-native tests use a test peer, not an exposed mutable gameplay API. Zelda retains
+native tests use a test peer, not an exposed mutable gameplay API. Lanternwild retains
 four source enemies, at most 128 rocks and 16 collectibles; its actual repaired
-session can create at most nine collectibles. Pac-Man has four ghosts and a
+session can create at most nine collectibles. Glowtrail has four ghosts and a
 fixed 304-collectible array represented by a bounded vector. Render commands use
 the shared 4,096-command cap. Animation phases are bounded.
 
@@ -129,7 +129,7 @@ A bounded four-neighbour search uses at most 140 player-sized anchors and checks
 the full 40x40 box. An unaligned position connects safely to its lower grid anchor
 by decreasing X then Y. Dots are drawn behind the hero and lanterns. The guide is
 derived during rendering and has no saved data, RNG, auto-interaction, movement
-rule or world Dungeon dependency. Pac-Man and Zelda remain unchanged.
+rule or world Dungeon dependency. Glowtrail and Lanternwild remain unchanged.
 
 `desktop_dungeon_trail` / `dungeon_trail_test.cpp` follows the rendered route using
 ordinary movement across all six seed orders, explicitly lights each lantern and
@@ -141,7 +141,7 @@ native layout, controller or human navigation acceptance.
 Strict single-TU MSVC C++17 passed 236/236 checks. The unchanged test compiled
 against the exact prior Maze header at `0b1b95038` passed 14/28, with fourteen
 expected failures; absent paths stop traversal sections early. No fixtures were
-regenerated. The normalized Pac-Man/Zelda suffix remains identical (472 lines).
+regenerated. The normalized Glowtrail/Lanternwild suffix remains identical (472 lines).
 
 ### Threadlight Switchback room
 
@@ -174,7 +174,7 @@ real unaligned connector safety, completion/reset priority, pure reads and Drive
 room/seed/circuit cleanup. Host-style Select then option restore is emulated,
 not claimed as native execution. No Original-room traversal or old suite repeated.
 
-**Pac-Man:** all 31x28 source map characters and 304 dot coordinates are retained,
+**Glowtrail:** all 31x28 source map characters and 304 dot coordinates are retained,
 as are the 2.5-pixel player and 2-pixel ghost speeds, buffered directions, digital
 direction precedence, dominant-axis stick directions, mouth cycle, four ghost
 colors, 5% random-turn and 60% unfrightened-chase probabilities, 300-frame
@@ -236,7 +236,7 @@ visibility function, with active-mode no-op and explicit reset. No actor/input A
 registry, shared builder, save/realm or new rendering framework is involved.
 Native controls, viewport fit and human routing/time pressure remain unverified.
 
-`desktop_pacman_fruit` / `pacman_fruit_test.cpp` passed 36/36 strict single-TU
+`desktop_glowtrail_fruit` / `glowtrail_fruit_test.cpp` passed 36/36 strict single-TU
 MSVC C++17 checks. A consistent75-dot progress fixture leaves all304 authored
 pellets represented, then real dot76 consumption spawns fruit. A fixed120-step
 public-input corridor route from the untouched normal spawn collects it, earning
@@ -278,8 +278,8 @@ The pinned fixture contents are unchanged; native defaults enable the repaired
 maze and passage. Source-only evidence remains separate from native rendering,
 physical input and human chase/escape acceptance.
 
-When the paired passage was introduced, `desktop_pacman_tunnel` /
-`pacman_tunnel_test.cpp` passed 108/108 strict single-TU MSVC checks, including
+When the paired passage was introduced, `desktop_glowtrail_tunnel` /
+`glowtrail_tunnel_test.cpp` passed 108/108 strict single-TU MSVC checks, including
 the 60 PAC-only pinned source cases in disabled mode.
 Focused native cases cover two-way overshoot/probes, row/candidate fences,
 quantized seam contact, ordinary off-passage contact, damage/capture/grace,
@@ -302,7 +302,7 @@ Frightened/random steering, chase probability, recovery timing and the five rand
 draws per living ghost are retained. There is no pathfinder, new game state, map,
 score/life rule, input or rendering change. The paired-passage test's one deliberate
 raw-pursuit expectation is updated to the new native direction. Pinned fixtures
-are untouched. `desktop_pacman_pursuit` / `pacman_pursuit_test.cpp` targets this
+are untouched. `desktop_glowtrail_pursuit` / `glowtrail_pursuit_test.cpp` targets this
 correction; the prior full tunnel/source suite is separate historical evidence.
 Native chase difficulty, visual continuity and human play acceptance are pending.
 
@@ -313,13 +313,13 @@ unrelated progress intact. The old tunnel target's one native-pursuit expectatio
 was updated; its 60 disabled-mode source cases and broad suite were not rerun.
 No fixture changed, engine build or native playtest was performed.
 
-**Zelda:** source Link spawn `(400,450)`, speed 3.5, six half-hearts, source 0.707
+**Lanternwild:** source Link spawn `(400,450)`, speed 3.5, six half-hearts, source 0.707
 diagonal scale and two-level stick deadzone, directional attack rectangles,
 18-frame attack cooldown, 45-frame damage grace, immediate sword collision,
 octorok shooting/random movement, two-hit chasing moblin, near-player charging
 armos, rocks at 2.5 pixels per frame, source four-enemy roster and positions,
-initial three rupees and heart, +50 enemy score, 40% rupee drop chance, +10
-rupee score, and heart +2 clamped at six are preserved. Map trees, rocks, water
+initial three glints and heart, +50 enemy score, 40% glint drop chance, +10
+glint score, and heart +2 clamped at six are preserved. Map trees, rocks, water
 and cave remain decorative, as in the source. **The shield is decorative in the
 source; no damage-blocking shield mechanic was invented.**
 
@@ -343,7 +343,7 @@ It selects reviewed numeric class methods and `is_wall` through AST, then uses
 controlled rectangle, key and random stubs. It does not import Pygame, launch
 the source scripts, create displays, run their main/event loops or install
 dependencies. The 239 source cases include exact map rows, safe wall lookups,
-Pac movement/collision/ghost choice cases, and Zelda movement, attack rectangles,
+Pac movement/collision/ghost choice cases, and Lanternwild movement, attack rectangles,
 enemy movement and projectile bounds. They do not claim equivalence of the
 entire Python main loop or seeded RNG.
 
@@ -353,7 +353,7 @@ terminal freezes, resets, finite bounded rendering and sixteen 3,000-frame
 sessions. A complete native Pac traversal collects all 304 items with exact
 3,200 score and a single win. That traversal isolates ghosts outside the map
 to test movement/scoring solvability; live adversarial ghost play remains a
-separate acceptance check. Zelda's native combat replay exercises the source
+separate acceptance check. Lanternwild's native combat replay exercises the source
 four-enemy health roster, final-enemy key, victory, and restart through actual
 `Step` calls from controlled collision positions.
 
@@ -374,14 +374,14 @@ a pixel-identical screen replay.
 - Dungeon: an unadorned bright-green 40x40 player square against gray dungeon
   walls; no source character face, costume, or backstory exists. A character
   interpretation needs design selection rather than a claim of preserved detail.
-- Pac-Man: yellow disk with directional animated mouth; red, pink, cyan and
+- Glowtrail: yellow disk with directional animated mouth; red, pink, cyan and
   orange rounded ghosts with white eyes, blue while frightened. These reference
   recognizable branded characters. Do not label them original Daedalus art or
   presume permission for public branded asset distribution.
-- Zelda: source Link has green tunic and pointed green hat, peach face, small
+- Lanternwild: source Link has green tunic and pointed green hat, peach face, small
   black eyes, steel sword with gold tip and gray shield; enemies are red
   octorok, green/brown moblin and gray armored armos. These are explicitly
-  Zelda-inspired branded identities. Blender should preserve the actual source
+  Lanternwild-inspired branded identities. Blender should preserve the actual source
   references for scoped review while flagging provenance before public assets;
   it should not silently substitute a wholly different character.
 
@@ -393,26 +393,26 @@ compile result, or live playtest approval supplied by this core port.
 
 ## Power-window display
 
-Pacman's sidebar and status show how many living pursuers are frightened and the
+Glowtrail's sidebar and status show how many living pursuers are frightened and the
 ceiling seconds until the first of them recovers. Dead pursuers are excluded;
 mixed timers use the shortest active timer. A steady final-second cue replaces
 surprise expiry without changing the source 300-step effect, AI or collision rules.
 Terminal results hide live countdowns. Presentation calls do not advance simulation.
 
-`desktop_pacman_power` / `pacman_power_test.cpp` passed 34/34 checks with strict
+`desktop_glowtrail_power` / `glowtrail_power_test.cpp` passed 34/34 checks with strict
 single-TU MSVC C++17. It covers mixed/dead states, timer boundaries, a real power
 pickup through 300 active steps, repeated presentation purity and future RNG/state.
 A controlled MAX-instead-of-MIN timer variant failed seven checks as expected.
 This offline evidence does not establish native layout or human playtest acceptance.
 
-## Zelda lethal projectile settlement
+## Lanternwild lethal projectile settlement
 
 After projectile cleanup, a lethal hit now ends the live step before overlapping
 pickups can heal, award trinkets or grant a key. Nonlethal projectile pickups and
 the existing pickup-before-enemy-contact order are preserved. A defeated run cannot
 show positive health from a same-step heart; no collision/AI/reward rule is replaced.
 
-`desktop_zelda_terminal` / `zelda_terminal_test.cpp` passed46/46 strict single-TU
+`desktop_lanternwild_terminal` / `lanternwild_terminal_test.cpp` passed46/46 strict single-TU
 MSVC checks. Small authored heart/trinket and last-enemy key fixtures use a real
 2.5px rock arrival, plus nonlethal companions, cleanup, terminal freeze and fresh
 replay/reset. The same test against the prior header passed40/46 and failed6

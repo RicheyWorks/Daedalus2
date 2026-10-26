@@ -66,13 +66,13 @@ private:
 	FText LeaderboardText() const;
 	FText MinesweeperDifficultyText() const;
 	EVisibility StarVisibility() const;
-	EVisibility PongVisibility() const;
+	EVisibility TwinwakeVisibility() const;
 	EVisibility FootballVisibility() const;
-	EVisibility SegaVisibility() const;
-	EVisibility AsteroidsVisibility() const;
+	EVisibility RiftwingVisibility() const;
+	EVisibility DriftstoneVisibility() const;
 	EVisibility NinjaVisibility() const;
-	EVisibility ContraVisibility() const;
-	EVisibility PacmanVisibility() const;
+	EVisibility IronwakeVisibility() const;
+	EVisibility GlowtrailVisibility() const;
 	EVisibility DungeonVisibility() const;
 	EVisibility MinesweeperVisibility() const;
 	EVisibility LeaderboardVisibility() const;

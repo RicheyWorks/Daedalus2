@@ -15,18 +15,40 @@ struct SaveSlot { const char* Id; const char* File; SaveStyle Style; };
 inline constexpr std::array<SaveSlot,12> SaveSlots{{
     {"minesweeper","minesweeper.dgs",SaveStyle::Manual},
     {"star_shooter","star_shooter.dgs",SaveStyle::SourceMenu},
-    {"pong","pong.dgs",SaveStyle::Manual},
+    {"twinwake","twinwake.dgs",SaveStyle::Manual},
     {"football","football.dgs",SaveStyle::Manual},
-    {"pacman","pacman.dgs",SaveStyle::Manual},
+    {"glowtrail","glowtrail.dgs",SaveStyle::Manual},
     {"dungeon","dungeon.dgs",SaveStyle::Manual},
-    {"zelda","zelda.dgs",SaveStyle::Manual},
-    {"asteroids","asteroids.dgs",SaveStyle::Manual},
-    {"sega_shooter","sega_shooter.dgs",SaveStyle::Manual},
-    {"shadow_ninja","shadow_ninja.dgs",SaveStyle::Manual},
+    {"lanternwild","lanternwild.dgs",SaveStyle::Manual},
+    {"driftstone","driftstone.dgs",SaveStyle::Manual},
+    {"riftwing","riftwing.dgs",SaveStyle::Manual},
+    {"emberstep","emberstep.dgs",SaveStyle::Manual},
     {"dodge_ball","dodge_ball.dgs",SaveStyle::Manual},
-    {"contra","contra.dgs",SaveStyle::Manual},
+    {"ironwake","ironwake.dgs",SaveStyle::Manual},
 }};
-inline const SaveSlot* FindSaveSlot(const std::string& Id) {
+// Original names replaced the earlier working ids (2026-10-25). Old ids still resolve, and a
+// save written under the old file name is still offered by Continue until the new file exists.
+struct GameAlias { const char* OldId; const char* Id; const char* OldFile; };
+inline constexpr std::array<GameAlias,7> GameAliases{{
+    {"zelda","lanternwild","zelda.dgs"},
+    {"contra","ironwake","contra.dgs"},
+    {"sega_shooter","riftwing","sega_shooter.dgs"},
+    {"asteroids","driftstone","asteroids.dgs"},
+    {"pacman","glowtrail","pacman.dgs"},
+    {"pong","twinwake","pong.dgs"},
+    {"shadow_ninja","emberstep","shadow_ninja.dgs"},
+}};
+inline std::string CanonicalGameId(const std::string& Id) {
+    for(const GameAlias& Alias:GameAliases) if(Id==Alias.OldId) return Alias.Id;
+    return Id;
+}
+inline const char* LegacySaveFileFor(const std::string& Id) {
+    const std::string Canonical=CanonicalGameId(Id);
+    for(const GameAlias& Alias:GameAliases) if(Canonical==Alias.Id) return Alias.OldFile;
+    return nullptr;
+}
+inline const SaveSlot* FindSaveSlot(const std::string& RawId) {
+    const std::string Id=CanonicalGameId(RawId);
     for(const SaveSlot& Slot:SaveSlots) if(Id==Slot.Id) return &Slot;
     return nullptr;
 }

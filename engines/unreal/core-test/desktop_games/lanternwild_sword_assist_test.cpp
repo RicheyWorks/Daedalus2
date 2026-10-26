@@ -6,12 +6,12 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop {
 struct MazeTestAccess {
-    static void Trinket(ZeldaGame& G) {G.Hero.X=250;G.Hero.Y=280;G.Hero.AttackTimer=5;G.Hero.Attacking=true;}
-    static void Roster(ZeldaGame& G) {G.Hero.Face=ZeldaGame::Facing::Right;for(auto& E:G.Enemies) {E.X=440;E.Y=450;}}
-    static std::string Snapshot(const ZeldaGame& G,bool Preference=true) {
+    static void Trinket(LanternwildGame& G) {G.Hero.X=250;G.Hero.Y=280;G.Hero.AttackTimer=5;G.Hero.Attacking=true;}
+    static void Roster(LanternwildGame& G) {G.Hero.Face=LanternwildGame::Facing::Right;for(auto& E:G.Enemies) {E.X=440;E.Y=450;}}
+    static std::string Snapshot(const LanternwildGame& G,bool Preference=true) {
         std::ostringstream O;O.precision(17);if(Preference) O<<G.IsSwordAssistEnabled()<<' ';
         O<<G.SessionSeed<<' '<<G.Score<<' '<<G.Keys<<' '<<G.KeySpawned<<' '<<G.Over<<' '<<G.Won<<' '<<G.MessageTimer<<' '<<G.Message;
-        const auto& P=G.Hero;O<<' '<<P.X<<' '<<P.Y<<' '<<P.Health<<' '<<P.MaxHealth<<' '<<P.AttackTimer<<' '<<P.Invincible<<' '<<P.Rupees<<' '<<static_cast<int>(P.Face)<<' '<<P.Attacking;
+        const auto& P=G.Hero;O<<' '<<P.X<<' '<<P.Y<<' '<<P.Health<<' '<<P.MaxHealth<<' '<<P.AttackTimer<<' '<<P.Invincible<<' '<<P.Glints<<' '<<static_cast<int>(P.Face)<<' '<<P.Attacking;
         for(const auto& E:G.Enemies) O<<' '<<E.X<<' '<<E.Y<<' '<<static_cast<int>(E.Kind)<<' '<<E.Health<<' '<<E.ShootTimer<<' '<<E.HitFlash<<' '<<E.Alive;
         O<<' '<<G.Projectiles.size();for(const auto& Pj:G.Projectiles) O<<' '<<Pj.X<<' '<<Pj.Y<<' '<<Pj.Dx<<' '<<Pj.Dy<<' '<<Pj.Alive;
         O<<' '<<G.Collectibles.size();for(const auto& C:G.Collectibles) O<<' '<<C.X<<' '<<C.Y<<' '<<static_cast<int>(C.Kind)<<' '<<C.Bob;
@@ -20,7 +20,7 @@ struct MazeTestAccess {
 };
 }}
 namespace {
-using Zelda=ZeldaGame;
+using Lanternwild=LanternwildGame;
 using Access=MazeTestAccess;
 int Checks=0,Failed=0;
 void Check(bool Ok,const std::string& Why) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<Why<<'\n';}}
@@ -38,10 +38,10 @@ bool SameFrame(const Frame& A,const Frame& B) {
 }
 void AliasesAndCadence() {
     for(int Alias=0;Alias<3;++Alias) {
-        Zelda Off;Off.Reset(730);for(int N=0;N<36;++N) Off.Step(Sword(Alias));
+        Lanternwild Off;Off.Reset(730);for(int N=0;N<36;++N) Off.Step(Sword(Alias));
         Check(!Off.IsSwordAssistEnabled()&&Off.GetPlayer().AttackTimer==0&&!Off.GetPlayer().Attacking,"default held Fire Action and Jump aliases never swing");
         Off.Step(Sword(Alias,true));Check(Off.GetPlayer().AttackTimer==17&&Off.GetPlayer().Attacking,"each fresh alias retains its original attack and same-frame timer tick with assist off");
-        Zelda On;On.Reset(730);int Attacks=0;
+        Lanternwild On;On.Reset(730);int Attacks=0;
         for(int N=0;N<55;++N) {
             Input I=Sword(Alias);I.DashPressed=N==0;On.Step(I);const int Timer=On.GetPlayer().AttackTimer;
             if(Timer==17) ++Attacks;
@@ -50,16 +50,16 @@ void AliasesAndCadence() {
         Check(On.IsSwordAssistEnabled()&&Attacks==4,"toggle applies before held request and each held alias repeats without extra swings");
         On.Reset(99);Check(On.IsSwordAssistEnabled()&&On.GetPlayer().AttackTimer==0&&On.GetStatus().Score==0&&On.GetKeys()==0,"Reset clears the run while preserving the selected sword preference");
     }
-    Zelda Fresh;Check(!Fresh.IsSwordAssistEnabled(),"fresh game object defaults sword assist off");
+    Lanternwild Fresh;Check(!Fresh.IsSwordAssistEnabled(),"fresh game object defaults sword assist off");
 }
 void ToggleProgressAndParity() {
-    Zelda G;G.Reset(730);Access::Trinket(G);G.Step({});Check(G.GetPlayer().Rupees==1&&G.GetStatus().Score==10&&G.GetPlayer().AttackTimer==4,"toggle fixture collects an authored trinket through normal pickup logic");
+    Lanternwild G;G.Reset(730);Access::Trinket(G);G.Step({});Check(G.GetPlayer().Glints==1&&G.GetStatus().Score==10&&G.GetPlayer().AttackTimer==4,"toggle fixture collects an authored trinket through normal pickup logic");
     auto Plain=G;G.Step(Toggle());Plain.Step({});
     Check(G.IsSwordAssistEnabled()&&G.GetPlayer().AttackTimer==3&&Access::Snapshot(G,false)==Access::Snapshot(Plain,false),"toggle retains progress cooldown seed and the ordinary world step");
     Input HeldToggle;HeldToggle.Dash=true;for(int N=0;N<8;++N) {G.Step(HeldToggle);Plain.Step({});}
     Check(G.IsSwordAssistEnabled()&&Access::Snapshot(G,false)==Access::Snapshot(Plain,false),"held toggle cannot flip the preference repeatedly");
     G.Step(Toggle());Plain.Step({});Check(!G.IsSwordAssistEnabled()&&Access::Snapshot(G,false)==Access::Snapshot(Plain,false),"next fresh toggle disables assist without restarting progress");
-    Zelda Assisted,Manual;Assisted.Reset(730);Manual.Reset(730);Assisted.Step(Toggle());Manual.Step({});
+    Lanternwild Assisted,Manual;Assisted.Reset(730);Manual.Reset(730);Assisted.Step(Toggle());Manual.Step({});
     for(int N=0;N<72;++N) {
         Input I;I.Right=N<8;I.Up=N>=8&&N<16;I.Down=N>=16&&N<24;Input Fresh=I;I.Fire=true;Fresh.FirePressed=N%18==0;
         Assisted.Step(I);Manual.Step(Fresh);
@@ -71,25 +71,25 @@ void ToggleProgressAndParity() {
     for(int N=0;N<8;++N) {Assisted.Step({});Manual.Step({});}
     Check(Access::Snapshot(Assisted,false)==Access::Snapshot(Manual,false),"equivalent manual and assisted play preserve future random decisions after release");
 }
-bool OriginalRosterRoute(Zelda& Victory) {
-    Zelda G;G.Reset(730);Access::Roster(G);Input First=Sword(0);First.DashPressed=true;First.Left=true;G.Step(First);
-    Check(G.IsSwordAssistEnabled()&&G.GetPlayer().X==396.5&&G.GetPlayer().Face==Zelda::Facing::Left&&G.LivingEnemyCount()==1&&G.GetEnemies()[1].Health==1&&G.GetStatus().Score==150,"assisted swing hits the original roster to the right before Left movement changes facing");
+bool OriginalRosterRoute(Lanternwild& Victory) {
+    Lanternwild G;G.Reset(730);Access::Roster(G);Input First=Sword(0);First.DashPressed=true;First.Left=true;G.Step(First);
+    Check(G.IsSwordAssistEnabled()&&G.GetPlayer().X==396.5&&G.GetPlayer().Face==Lanternwild::Facing::Left&&G.LivingEnemyCount()==1&&G.GetEnemies()[1].Health==1&&G.GetStatus().Score==150,"assisted swing hits the original roster to the right before Left movement changes facing");
     Input Restore=Sword(0);Restore.Right=true;G.Step(Restore);int Steps=2;
     while(G.LivingEnemyCount()>0&&Steps<36) {G.Step(Sword(0));++Steps;}
     Check(Steps==19&&G.LivingEnemyCount()==0&&G.GetStatus().Score==200&&G.HasGroundKey()&&G.GetKeys()==0&&!G.GetStatus().Won,"second original-cadence hit defeats the original two-health Moblin and reveals a real uncollected key");
     if(G.LivingEnemyCount()!=0||!G.HasGroundKey()) return false;
     Input Collect;Collect.Right=true;G.Step(Collect);
-    Check(G.GetStatus().Won&&!G.GetStatus().Over&&G.GetKeys()==1&&!G.HasGroundKey()&&G.GetStatus().Score==200+10*G.GetPlayer().Rupees,"normal Right movement collects the spawned key and completes the original victory rule");
+    Check(G.GetStatus().Won&&!G.GetStatus().Over&&G.GetKeys()==1&&!G.HasGroundKey()&&G.GetStatus().Score==200+10*G.GetPlayer().Glints,"normal Right movement collects the spawned key and completes the original victory rule");
     std::cout<<"Assisted original roster: "<<Steps<<" combat steps then one key-collection step\n";Victory=G;return G.GetStatus().Won;
 }
-void TerminalAndDriver(const Zelda& Victory) {
+void TerminalAndDriver(const Lanternwild& Victory) {
     auto G=Victory;const auto Before=Access::Snapshot(G);Frame F,Again;G.Render(F);Input Held;Held.Right=Held.Fire=Held.Action=Held.Jump=Held.Dash=true;Held.DashPressed=true;
     for(int N=0;N<8;++N) G.Step(Held);
     G.Render(Again);
     Check(Access::Snapshot(G)==Before&&SameFrame(F,Again)&&G.IsSwordAssistEnabled(),"terminal handling freezes held attacks movement and toggle without replaying or changing preference");
     Input Retry;Retry.FirePressed=Retry.DashPressed=true;G.Step(Retry);auto Expected=Victory;Expected.Reset(730);
     Check(G.IsSwordAssistEnabled()&&G.GetPlayer().AttackTimer==0&&Access::Snapshot(G)==Access::Snapshot(Expected),"fresh retry preserves preference and returns before toggling or implicitly swinging");
-    Driver D;Check(D.Select("zelda",730),"Driver selects the existing Lanternwild engine");Zelda Model;Model.Reset(730);D.SetInput(Toggle());D.Advance(Driver::StepSeconds*2.5);Model.Step(Toggle());Model.Step({});Model.Render(F);
+    Driver D;Check(D.Select("lanternwild",730),"Driver selects the existing Lanternwild engine");Lanternwild Model;Model.Reset(730);D.SetInput(Toggle());D.Advance(Driver::StepSeconds*2.5);Model.Step(Toggle());Model.Step({});Model.Render(F);
     Check(SameFrame(D.GetFrame(),F)&&Model.IsSwordAssistEnabled(),"catch-up consumes one fresh assist toggle edge");
     const auto Paused=D.GetFrame();Input Queued=Toggle();Queued.Fire=Queued.FirePressed=true;D.SetPaused(true);D.SetInput(Queued);
     Check(D.Advance(Driver::StepSeconds*8)==0&&SameFrame(Paused,D.GetFrame()),"pause freezes queued preference and sword input");
@@ -99,12 +99,12 @@ void TerminalAndDriver(const Zelda& Victory) {
     D.SetInput(Queued);D.Restart();Model.Reset(730);Model.Render(F);
     Check(D.Ticks()==0&&!D.IsPaused()&&SameFrame(D.GetFrame(),F)&&Model.IsSwordAssistEnabled(),"same-cabinet Driver Restart keeps assist while clearing queued input and run state");
     D.Advance(Driver::StepSeconds);Model.Step({});Model.Render(F);Check(SameFrame(D.GetFrame(),F),"restart prevents stale held input from swinging or toggling immediately");
-    D.SetInput(Queued);Check(D.Select("zelda",730),"fresh selection creates a new cabinet instance");Zelda Fresh;Fresh.Reset(730);Fresh.Render(F);
+    D.SetInput(Queued);Check(D.Select("lanternwild",730),"fresh selection creates a new cabinet instance");Lanternwild Fresh;Fresh.Reset(730);Fresh.Render(F);
     Check(SameFrame(D.GetFrame(),F)&&!Fresh.IsSwordAssistEnabled(),"new Driver Select defaults assist off instead of retaining another instance's preference");
     D.Advance(Driver::StepSeconds);Fresh.Step({});Fresh.Render(F);Check(SameFrame(D.GetFrame(),F),"fresh selection also clears queued sword and toggle input");
 }
 }
 int main() {
-    AliasesAndCadence();ToggleProgressAndParity();Zelda Victory;if(OriginalRosterRoute(Victory)) TerminalAndDriver(Victory);
-    std::cout<<"Zelda sword assist: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
+    AliasesAndCadence();ToggleProgressAndParity();Lanternwild Victory;if(OriginalRosterRoute(Victory)) TerminalAndDriver(Victory);
+    std::cout<<"Lanternwild sword assist: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
 }

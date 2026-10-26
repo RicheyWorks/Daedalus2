@@ -118,7 +118,7 @@ void WinAndDriver() {
     Check(After[3]=="4" && After[4]=="4" && Bits(After,40)==4 && After[5]=="0","accepted pointer clears stale navigation and flag edges across catch-up");
     D.SetInput(Pending);D.Advance(Driver::StepSeconds);
     Check(Fields(D.CaptureSave())[3]=="5","a fresh keyboard action still works after mouse input");
-    Check(D.Select("pong",730) && !D.SourcePointerButton(P.X,P.Y,0) && D.Ticks()==0,"other existing games keep their unsupported pointer behavior");
+    Check(D.Select("twinwake",730) && !D.SourcePointerButton(P.X,P.Y,0) && D.Ticks()==0,"other existing games keep their unsupported pointer behavior");
 }
 }
 int main() {

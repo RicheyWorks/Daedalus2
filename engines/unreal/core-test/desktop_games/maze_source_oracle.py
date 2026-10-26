@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pinned-source oracle for Desktop Dungeon, Pac-Man and Zelda numeric rules.
+"""Pinned-source oracle for Desktop Dungeon, Glowtrail and Lanternwild numeric rules.
 
 Only reviewed AST-selected class methods and is_wall execute with controlled
 Rect, input and random stubs. No source imports, pygame, display, device access,
@@ -14,8 +14,8 @@ from types import SimpleNamespace
 
 PINS = {
     "dungeon": "cbf19aa131cfe9815f36ef4812638cf0992141666d4eb3a0fce0b92e662e99a4",
-    "pacman": "6cad8d138888c7a18d80e0e034546a49e57618610ac3e5dcce9886a7358ad8ed",
-    "zelda": "713f6de7c27a92d65fdedd77a6c15a7e80a964d098d5ba209dbf32e648cc9bdd",
+    "glowtrail": "6cad8d138888c7a18d80e0e034546a49e57618610ac3e5dcce9886a7358ad8ed",
+    "lanternwild": "713f6de7c27a92d65fdedd77a6c15a7e80a964d098d5ba209dbf32e648cc9bdd",
 }
 KEY_NAMES = ("K_LEFT", "K_a", "K_RIGHT", "K_d", "K_UP", "K_w", "K_DOWN", "K_s")
 PG = SimpleNamespace(**{name: i for i, name in enumerate(KEY_NAMES)})
@@ -102,11 +102,11 @@ def row(*values):
 
 def generate(desktop):
     d = reviewed_env(desktop/"PythonGames"/"main.py", "dungeon", {}, ("is_wall",))
-    p = reviewed_env(desktop/"pacman.py", "pacman", {
-        "PacMan": ("__init__", "update", "collides", "get_rect"),
+    p = reviewed_env(desktop/"pacman.py", "glowtrail", {
+        "Glowtrail": ("__init__", "update", "collides", "get_rect"),
         "Ghost": ("__init__", "update", "collides", "get_rect"),
     })
-    z = reviewed_env(desktop/"zelda.py", "zelda", {
+    z = reviewed_env(desktop/"zelda.py", "lanternwild", {
         "Link": ("__init__", "update", "attack", "get_rect", "get_attack_rect"),
         "Enemy": ("__init__", "update", "get_rect"),
         "Projectile": ("__init__", "update", "get_rect"),
@@ -134,7 +134,7 @@ def generate(desktop):
         ("wall_up",30,30,0,-1,0,-1,0,0,0,1,0,0,0,12),
     ]
     for name,x,y,dx,dy,nx,ny,mouth,left,right,up,down,ax,ay,steps in player_cases:
-        hero=p["PacMan"](); hero.x=x; hero.y=y; hero.dir=(dx,dy); hero.next_dir=(nx,ny); hero.mouth=mouth
+        hero=p["Glowtrail"](); hero.x=x; hero.y=y; hero.dir=(dx,dy); hero.next_dir=(nx,ny); hero.mouth=mouth
         p["get_axis"] = lambda a, vx=ax, vy=ay: vx if a==0 else vy
         for _ in range(steps):
             hero.update(keys(left,right,up,down))
@@ -142,7 +142,7 @@ def generate(desktop):
                          hero.x,hero.y,*hero.dir,*hero.next_dir,hero.mouth))
     # Collision fixtures include pygame's fractional-coordinate truncation.
     for x,y in [(280,460),(290,470),(30,30),(22.5,30),(22,30),(21.9,30),(190,290),(190,270),(250,290),(10,290),(550,290)]:
-        hero=p["PacMan"](); lines.append(row("PAC_COLLISION",x,y,hero.collides(x,y)))
+        hero=p["Glowtrail"](); lines.append(row("PAC_COLLISION",x,y,hero.collides(x,y)))
     ghost_cases=[
         ("horizontal_chase",290,470,1,0,1,0,0,390,470,0.9,0.1),
         ("vertical_chase",30,110,1,0,1,0,0,30,210,0.9,0.1),
@@ -155,7 +155,7 @@ def generate(desktop):
     ]
     for name,x,y,dx,dy,alive,frightened,timer,px,py,turn,chase in ghost_cases:
         ghost=p["Ghost"](x,y,(255,0,0),"Blinky"); ghost.dir=(dx,dy); ghost.alive=bool(alive); ghost.frightened=bool(frightened); ghost.frightened_timer=timer
-        hero=p["PacMan"](); hero.x=px; hero.y=py; p["random"]=FixedRandom((turn,chase))
+        hero=p["Glowtrail"](); hero.x=px; hero.y=py; p["random"]=FixedRandom((turn,chase))
         ghost.update(hero,[])
         lines.append(row("PAC_GHOST",name,x,y,dx,dy,alive,frightened,timer,px,py,turn,chase,
                          ghost.x,ghost.y,*ghost.dir,ghost.alive,ghost.frightened,ghost.frightened_timer))
@@ -176,13 +176,13 @@ def generate(desktop):
         hero=z["Link"](); hero.x=x; hero.y=y; hero.facing=face_names[face]; hero.attack_timer=at; hero.invincible=inv; hero.attacking=bool(attacking)
         z["get_axis"] = lambda a,vx=ax,vy=ay: (vx if abs(vx)>0.15 else 0) if a==0 else (vy if abs(vy)>0.15 else 0)
         for _ in range(steps): hero.update(keys(left,right,up,down))
-        lines.append(row("ZELDA_PLAYER",name,x,y,face,at,inv,attacking,left,right,up,down,ax,ay,steps,
+        lines.append(row("LANTERNWILD_PLAYER",name,x,y,face,at,inv,attacking,left,right,up,down,ax,ay,steps,
                          hero.x,hero.y,face_names.index(hero.facing),hero.attack_timer,hero.invincible,hero.attacking))
     for face in range(4):
         for at in (0,1,18):
             hero=z["Link"](); hero.x=400.75; hero.y=450.75; hero.facing=face_names[face]; hero.attack_timer=at
             success=hero.attack(); r=hero.get_attack_rect()
-            lines.append(row("ZELDA_ATTACK",face,at,hero.x,hero.y,success,hero.attack_timer,hero.attacking,r.x,r.y,r.w,r.h))
+            lines.append(row("LANTERNWILD_ATTACK",face,at,hero.x,hero.y,success,hero.attack_timer,hero.attacking,r.x,r.y,r.w,r.h))
     enemy_cases=[("moblin_far","moblin",550,200,400,450), ("moblin_zero","moblin",400,450,400,450),
                  ("moblin_bounds","moblin",29,29,20,20), ("armos_far","armos",300,380,400,450),
                  ("armos_near","armos",300,380,340,400), ("armos_at_threshold","armos",300,380,420,380),
@@ -190,11 +190,11 @@ def generate(desktop):
     for name,kind,x,y,px,py in enemy_cases:
         z["random"]=FixedRandom((0.9,)); enemy=z["Enemy"](x,y,kind); enemy.hit_flash=12; enemy.shoot_timer=60
         hero=z["Link"]();hero.x=px;hero.y=py;result=enemy.update(hero)
-        lines.append(row("ZELDA_ENEMY",name,("octorok","moblin","armos").index(kind),x,y,px,py,
+        lines.append(row("LANTERNWILD_ENEMY",name,("octorok","moblin","armos").index(kind),x,y,px,py,
                          enemy.x,enemy.y,enemy.health,enemy.shoot_timer,enemy.hit_flash,result=="shoot"))
     for x,y,dx,dy in [(400,300,2.5,0),(799,300,2.5,0),(1,300,-2.5,0),(400,1,0,-2.5),(400,599,0,2.5),(400,300,0,0),(2.5,20,-2.5,0)]:
         projectile=z["Projectile"](x,y,dx,dy);projectile.update(); r=projectile.get_rect()
-        lines.append(row("ZELDA_PROJECTILE",x,y,dx,dy,projectile.x,projectile.y,projectile.alive,r.x,r.y,r.w,r.h))
+        lines.append(row("LANTERNWILD_PROJECTILE",x,y,dx,dy,projectile.x,projectile.y,projectile.alive,r.x,r.y,r.w,r.h))
     return "\n".join(lines)+"\n"
 
 

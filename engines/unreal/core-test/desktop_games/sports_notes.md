@@ -7,7 +7,7 @@ Original Desktop files are unchanged. The latest source revision is the baseline
 | Game | Canonical local source | Modified UTC | SHA256 |
 | --- | --- | --- | --- |
 | Football | `C:\Users\730ri\OneDrive\Desktop\football_pygame_ce.py` | 2026-05-02 08:11:27 | `7b013f8151aa1c815ba0947c2d5d39cf559467106cde60aacca29df936ca3ebe` |
-| Super Dodge Ball Tournament | `C:\Users\730ri\OneDrive\Desktop\super_dodge_ball_fixed.py` | 2026-05-02 08:24:56 | `359b4bc045b00186e9d3ee915863de214453b22df8b81a881402ee6b49d21cb6` |
+| Courtyard Clash Tournament | `C:\Users\730ri\OneDrive\Desktop\super_dodge_ball_fixed.py` | 2026-05-02 08:24:56 | `359b4bc045b00186e9d3ee915863de214453b22df8b81a881402ee6b49d21cb6` |
 
 The older Dodge Ball file is `super_dodge_ball.py` (2026-05-01 02:57:36 UTC).
 Its features are not substituted for the later fixed revision.

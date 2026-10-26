@@ -7,7 +7,7 @@ using namespace daedalus::desktop;
 namespace {
 int Checks=0,Failed=0;
 void Check(bool Ok,const char* What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
-bool SameState(const PongGame::State& A,const PongGame::State& B) {
+bool SameState(const TwinwakeGame::State& A,const TwinwakeGame::State& B) {
     return A.PlayerY==B.PlayerY && A.ComputerY==B.ComputerY && A.BallX==B.BallX && A.BallY==B.BallY
         && A.BallVX==B.BallVX && A.BallVY==B.BallVY && A.PlayerScore==B.PlayerScore && A.ComputerScore==B.ComputerScore
         && A.ServeFrames==B.ServeFrames && A.ContactFrames==B.ContactFrames && A.PointFrames==B.PointFrames
@@ -50,17 +50,17 @@ bool HasRect(const Frame& F,double X,double Y,double W,double H) {
     for(const auto& C:F.Commands) if(C.Kind==Shape::Rectangle && C.A.X==X && C.A.Y==Y && C.B.X==W && C.B.Y==H) return true;
     return false;
 }
-PongGame Practice() {
-    PongGame G;Game& Core=G;Core.SetOption(1,730);return G;
+TwinwakeGame Practice() {
+    TwinwakeGame G;Game& Core=G;Core.SetOption(1,730);return G;
 }
-PongGame PlayerContact(const Input& I={},double PlayerY=250,double BallY=300,double BallVY=2,
+TwinwakeGame PlayerContact(const Input& I={},double PlayerY=250,double BallY=300,double BallVY=2,
     std::uint32_t Rally=0,std::uint32_t Best=0) {
     auto G=Practice();G.S.ServeFrames=0;G.S.PlayerY=PlayerY;
     G.S.BallX=65;G.S.BallY=BallY;G.S.BallVX=-4;G.S.BallVY=BallVY;
     G.S.Rally=Rally;G.S.BestRally=Best;G.Step(I);return G;
 }
 void Modes() {
-    PongGame G;Game& Core=G;
+    TwinwakeGame G;Game& Core=G;
     Check(Core.GetOption()==0,"match remains the default mode");
     Check(Core.SetOption(1,730) && Core.GetOption()==1,"existing virtual option API selects rally practice");
     Check(G.S.ServeFrames==120 && G.S.BallVX==-4 && G.S.BallVY==2,"practice starts with gentle leftward ball and preparation window");
@@ -74,7 +74,7 @@ void Modes() {
     G.S.Rally=3;G.S.BestRally=9;G.Reset(123);
     Check(Core.GetOption()==1 && G.S.ServeFrames==120 && G.S.Rally==0 && G.S.BestRally==0,
         "Restart retains practice mode while starting a fresh session best");
-    Check(Core.SetOption(0,123) && Core.GetOption()==0 && SameState(G.S,PongGame::State{}),"switching to match restores its established initial state");
+    Check(Core.SetOption(0,123) && Core.GetOption()==0 && SameState(G.S,TwinwakeGame::State{}),"switching to match restores its established initial state");
     Frame Match;G.Render(Match);
     Check(Match.Width==800 && Match.Height==600 && Match.Commands.size()==6,"default match keeps its original opening frame");
     Check(Core.SetOption(1,123) && G.S.ServeFrames==120 && G.S.Rally==0 && G.S.BestRally==0,"returning to practice resets the session deliberately");
@@ -170,7 +170,7 @@ void Presentation() {
     Check(StatusBefore.Score==3 && Lower(StatusBefore.Note).find("practice")!=std::string::npos,"status reports current practice returns and names its mode");
 }
 void DriverModeChange() {
-    Driver D;Check(D.Select("pong",730),"driver opens existing Pong engine");
+    Driver D;Check(D.Select("twinwake",730),"driver opens existing Twinwake engine");
     D.Advance(Driver::StepSeconds*2);D.Advance(Driver::StepSeconds*0.5);
     Input Stale;Stale.Down=Stale.FirePressed=Stale.JumpPressed=Stale.ActionPressed=true;D.SetInput(Stale);
     Check(D.SetOption(1) && D.GetOption()==1 && D.GetSeed()==730 && D.Ticks()==0,"mode selection keeps driver seed and resets fixed-step accounting");
@@ -202,6 +202,6 @@ void RealOpeningLoop() {
 }
 int main() {
     Modes();CountdownAndMovement();ContactsAndSpin();WallAndRetry();Presentation();DriverModeChange();RealOpeningLoop();
-    std::cout<<"Pong practice: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
+    std::cout<<"Twinwake practice: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
     return Failed?1:0;
 }

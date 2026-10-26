@@ -30,10 +30,10 @@ OUT_MD = ROOT / "docs/minigames/CATALOG.md"
 
 # Test-file prefixes per game id (shared-family suites included).
 TEST_PREFIX = {
-    "dungeon": ["dungeon", "maze"], "pacman": ["pacman", "maze"],
-    "asteroids": ["asteroids", "shooters"], "sega_shooter": ["sega", "shooter", "shooters"],
-    "star_shooter": ["star", "shooters"], "shadow_ninja": ["ninja", "platformers"],
-    "contra": ["contra", "platformers"], "zelda": ["zelda", "platformers"],
+    "dungeon": ["dungeon", "maze"], "glowtrail": ["glowtrail", "maze"],
+    "driftstone": ["driftstone", "shooters"], "riftwing": ["riftwing", "shooter", "shooters"],
+    "star_shooter": ["star", "shooters"], "emberstep": ["ninja", "platformers"],
+    "ironwake": ["ironwake", "platformers"], "lanternwild": ["lanternwild", "platformers"],
     "football": ["football", "sports"], "dodge_ball": ["dodge", "sports"],
 }
 

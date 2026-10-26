@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-// Checkpoint saves for Threadlight Dungeon (DDS1) and Lanternwild Quest / zelda (DZS1).
-// catalog-capability: save_restore: dungeon zelda
+// Checkpoint saves for Threadlight Dungeon (DDS1) and Lanternwild Quest / lanternwild (DZS1).
+// catalog-capability: save_restore: dungeon lanternwild
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <string>
@@ -13,8 +13,8 @@ struct MazeTestAccess {
         G.LitCount=Count;G.TrailEnabled=Trail;G.RunFrames=Frames;G.Started=true;
     }
     static void FinishDungeon(DungeonGame& G) {G.Complete=true;}
-    static void ZeldaStats(ZeldaGame& G,std::int64_t Score,int Health,int Rupees) {G.Score=Score;G.Hero.Health=Health;G.Hero.Rupees=Rupees;}
-    static void EndZelda(ZeldaGame& G,bool Won) {G.Over=!Won;G.Won=Won;}
+    static void LanternwildStats(LanternwildGame& G,std::int64_t Score,int Health,int Glints) {G.Score=Score;G.Hero.Health=Health;G.Hero.Glints=Glints;}
+    static void EndLanternwild(LanternwildGame& G,bool Won) {G.Over=!Won;G.Won=Won;}
 };
 }}  // namespace daedalus::desktop
 namespace {
@@ -45,32 +45,32 @@ void Dungeon() {
     }
 }
 
-void Zelda() {
+void Lanternwild() {
     for(int Mode=0;Mode<2;++Mode) {
-        ZeldaGame G;G.SetOption(Mode,6);MazeTestAccess::ZeldaStats(G,350,4,7);
+        LanternwildGame G;G.SetOption(Mode,6);MazeTestAccess::LanternwildStats(G,350,4,7);
         G.Step([] {Input I;I.DashPressed=true;return I;}());
         const std::string Save=G.SaveState();
-        const std::string Tag="zelda mode "+std::to_string(Mode)+": ";
+        const std::string Tag="lanternwild mode "+std::to_string(Mode)+": ";
         Check(Save.rfind("DZS1 ",0)==0,Tag+"payload is DZS1");
-        ZeldaGame H;
+        LanternwildGame H;
         Check(H.RestoreState(Save,6),Tag+"restores");
         Check(H.GetOption()==Mode && H.GetStatus().Score==350 && H.GetStatus().Lives==4,Tag+"option, score and health restored");
         Check(H.IsSwordAssistEnabled()==G.IsSwordAssistEnabled(),Tag+"live assist toggle restored");
         Check(H.SaveState()==Save,Tag+"round trip");
-        ZeldaGame Fresh;Fresh.SetOption(Mode,6);
+        LanternwildGame Fresh;Fresh.SetOption(Mode,6);
         Check(H.GetStatus().Note.find("Enemies left: 4/4")!=std::string::npos,Tag+"fresh roster");
         (void)Fresh;
     }
-    for(bool Won:{false,true}) {ZeldaGame E;MazeTestAccess::EndZelda(E,Won);Check(E.SaveState().empty(),"finished zelda is not saved");}
+    for(bool Won:{false,true}) {LanternwildGame E;MazeTestAccess::EndLanternwild(E,Won);Check(E.SaveState().empty(),"finished lanternwild is not saved");}
     for(const char* Bad:{"","DZS2 0 0 6 0 0","DZS1 0 0 6 0","DZS1 0 0 6 0 0 x","DZS1 2 0 6 0 0","DZS1 0 -1 6 0 0",
                          "DZS1 0 0 0 0 0","DZS1 0 0 7 0 0","DZS1 0 0 6 -1 0","DZS1 0 0 6 0 2","DZS1 0 1000000001 6 0 0"}) {
-        ZeldaGame G;G.SetOption(1,3);MazeTestAccess::ZeldaStats(G,10,5,1);
-        Check(!G.RestoreState(Bad,3) && G.GetOption()==1 && G.GetStatus().Score==10,std::string("zelda rejects '")+Bad+"'");
+        LanternwildGame G;G.SetOption(1,3);MazeTestAccess::LanternwildStats(G,10,5,1);
+        Check(!G.RestoreState(Bad,3) && G.GetOption()==1 && G.GetStatus().Score==10,std::string("lanternwild rejects '")+Bad+"'");
     }
 }
 
 void ThroughDriver() {
-    for(const char* Id:{"dungeon","zelda"}) {
+    for(const char* Id:{"dungeon","lanternwild"}) {
         Driver D;D.Select(Id,3);Input I;I.Right=true;D.SetInput(I);
         for(int N=0;N<20;++N) D.Advance(Driver::StepSeconds);
         const std::string Save=D.CaptureSave();
@@ -81,7 +81,7 @@ void ThroughDriver() {
 }  // namespace
 
 int main() {
-    Dungeon();Zelda();ThroughDriver();
+    Dungeon();Lanternwild();ThroughDriver();
     std::cout<<"maze saves: "<<(Checks-Failed)<<"/"<<Checks<<" checks\n";
     return Failed==0?0:1;
 }

@@ -101,7 +101,7 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void PostDuplicate(EDuplicateMode::Type DuplicateMode) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Desktop Arcade") FString InitialGameId = TEXT("pong");
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Desktop Arcade") FString InitialGameId = TEXT("twinwake");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Daedalus|Desktop Arcade") int32 InitialSeed = 730;
 	/** Saved per placed instance. Identity is independent of selected gameplay and future entitlement providers. */
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Daedalus|Desktop Arcade") FString CabinetId;
@@ -126,9 +126,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") void PauseGame(bool bPaused);
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") FDaedalusDesktopArcadeState GetState() const;
 	UFUNCTION(BlueprintPure, Category = "Daedalus|Desktop Arcade") TArray<FDaedalusDesktopArcadeEntry> GetAvailableGames() const;
-	/** Star/Mines: difficulty 0..2. Pong: 0 Match, 1 practice, 2 First to 5, 3 Target rally.
-	 * Football: 0 Match, 1 practice. Sega: 0 full run, 1 boss rehearsal.
-	 * Asteroids: 0 endless, 1 three waves, 2 flight practice. Ninja: 0 adventure, 1 terrace climb.
+	/** Star/Mines: difficulty 0..2. Twinwake: 0 Match, 1 practice, 2 First to 5, 3 Target rally.
+	 * Football: 0 Match, 1 practice. Riftwing: 0 full run, 1 boss rehearsal.
+	 * Driftstone: 0 endless, 1 three waves, 2 flight practice. Ninja: 0 adventure, 1 terrace climb.
 	 * Ironwake: 0 full run, 1 target range. Glowtrail: 0 classic, 1 bonus fruit.
 	 * Threadlight: 0 original room, 1 Switchback. Changes start a new run. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus|Desktop Arcade") bool SetGameOption(int32 Option);

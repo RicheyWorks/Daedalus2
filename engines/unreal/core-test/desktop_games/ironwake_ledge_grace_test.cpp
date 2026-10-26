@@ -7,18 +7,18 @@
 using namespace daedalus::desktop;
 namespace daedalus { namespace desktop { namespace platformers {
 struct TestAccess {
-    static ContraPlayer& PlayerOf(ContraGame& G) {return G.Player;}
-    static void Encounter(ContraGame& G,bool Projectile) {
+    static IronwakePlayer& PlayerOf(IronwakeGame& G) {return G.Player;}
+    static void Encounter(IronwakeGame& G,bool Projectile) {
         G.Enemies.clear();G.Bullets.clear();G.EnemyBullets.clear();G.Powerups.clear();
         if(Projectile) G.EnemyBullets.push_back({210,365,0,0,60});
         else G.Enemies.push_back({200,350,0,1,60,1});
     }
-    static void Hurt(ContraGame& G) {G.Hurt();}
-    static void Terminal(ContraGame& G) {G.Over=true;G.Player.Lives=0;}
+    static void Hurt(IronwakeGame& G) {G.Hurt();}
+    static void Terminal(IronwakeGame& G) {G.Over=true;G.Player.Lives=0;}
 };
 }}}
 namespace {
-using Player=platformers::ContraPlayer;
+using Player=platformers::IronwakePlayer;
 const std::vector<Rect> LandingPad{{100,400,100,20}},Empty;
 int Checks=0,Failed=0;
 void Check(bool Ok,const std::string& What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
@@ -56,7 +56,7 @@ void SourceSteps(const char* Filename) {
         if(Frames<0||Frames>6000) {Check(false,"CSTEP bounded frame count");continue;}
         Input I;I.Left=(Keys&1)!=0;I.Right=(Keys&2)!=0;I.Down=(Keys&4)!=0||V[19]!=0;I.Jump=(Keys&8)!=0||V[20]!=0;
         I.AxisX=V[17];I.AxisY=V[18];std::vector<Rect> Platforms;
-        if(Preset==1) Platforms.assign(platformers::ContraPlatforms().begin(),platformers::ContraPlatforms().end());
+        if(Preset==1) Platforms.assign(platformers::IronwakePlatforms().begin(),platformers::IronwakePlatforms().end());
         else if(Preset==2) Platforms=LandingPad;
         for(int F=0;F<Frames;++F) P.Update(I,Platforms,V[15]);
         const auto Actual=OriginalState(P);
@@ -92,7 +92,7 @@ void GraceWindow() {
     Check(P.X==230&&P.VY>0,"camera clamp retains source precedence during ledge grace");
 }
 void DamageAndReadiness() {
-    ContraGame G;Frame F;platformers::TestAccess::PlayerOf(G)=WalkedOff();G.Render(F);
+    IronwakeGame G;Frame F;platformers::TestAccess::PlayerOf(G)=WalkedOff();G.Render(F);
     Check(HasText(F,"JUMP: ready"),"readiness names a currently usable ledge jump");
     for(bool Projectile:{false,true}) {
         G.Reset(730);platformers::TestAccess::PlayerOf(G)=WalkedOff();platformers::TestAccess::Encounter(G,Projectile);G.Step({});
@@ -108,7 +108,7 @@ void DamageAndReadiness() {
     Check(HasText(F,"JUMP: airborne"),"expired grace uses ordinary airborne readiness");
 }
 void Lifecycle() {
-    ContraGame G;platformers::TestAccess::PlayerOf(G)=WalkedOff();Check(CanLateJump(G.GetPlayer()),"lifecycle fixture contains real warm grace");
+    IronwakeGame G;platformers::TestAccess::PlayerOf(G)=WalkedOff();Check(CanLateJump(G.GetPlayer()),"lifecycle fixture contains real warm grace");
     G.Reset(730);Check(!CanLateJump(G.GetPlayer()),"Reset clears the previous run's grace");
     platformers::TestAccess::PlayerOf(G)=WalkedOff();G.EnterTitle();
     Check(G.IsAtTitle()&&!CanLateJump(G.GetPlayer()),"entering title clears gameplay grace");
@@ -122,7 +122,7 @@ void Lifecycle() {
 }
 }
 int main(int Argc,char** Argv) {
-    if(Argc!=2) {std::cerr<<"Usage: contra_ledge_grace_test <platformers_parity.txt>\n";return 2;}
+    if(Argc!=2) {std::cerr<<"Usage: ironwake_ledge_grace_test <platformers_parity.txt>\n";return 2;}
     SourceSteps(Argv[1]);GraceWindow();DamageAndReadiness();Lifecycle();
-    std::cout<<"Contra ledge grace: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
+    std::cout<<"Ironwake ledge grace: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";return Failed?1:0;
 }
