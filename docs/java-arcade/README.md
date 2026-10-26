@@ -41,12 +41,36 @@ payments or multiplayer authentication.
    username/password or the Blackjack launch bearer. Masked fields clear after
    configuration; secrets are private transient memory, never actor properties,
    DTO fields, save data or logs. Close/property changes forget them.
-5. Sudoku: create a difficulty 1–5 board, or open/resume an explicit own game ID;
+   Rejected field validation appears beside the account controls and leaves the
+   existing session intact. Live waiting, failure and recovery status stays visible;
+   a successful configuration clears the field error.
+5. Sudoku: create a difficulty 1–5 board, refresh saved games and explicitly resume
+   a selected board, or open/resume an explicit own game ID;
    select cells and enter/erase digits, undo/redo, save or refresh. Hint is an
    explicit button and may spend the Java account's existing virtual gems.
+   A solved or expired board shows Java's result with Save, Refresh, Review board
+   and New classic puzzle (same difficulty). Save explicitly before starting
+   another puzzle. Enter / pad A from the finished board focuses result controls;
+   arrows / D-pad still review cells. A result is revealed once after a reconciled
+   board arrives; refreshing or saving does not pull the view away from review.
+   Hint requests keep board feedback in view while Java replies. Read board
+   feedback, F7 or right-stick click revisits the current outcome and last hint
+   without requesting or charging for another hint. Failed requests keep their
+   current status above any retained earlier hint.
    Blackjack: create a session, choose Java-approved chips, deal, hit, stand,
    double, split, surrender, choose insurance, or end the session. Credits are
    simulated, initially 1000, and cannot be cashed out.
+   Enter / pad A from the board focuses an available table control on release;
+   a fresh second press activates it. Deal and Hit are preferred when Java allows
+   them; native navigation reaches the other enabled choices. Holding the first
+   press sends no command. Busy/uncertain states retain the existing wait/recovery
+   flow, and a changed session cancels the focus handoff. Pad B still returns to
+   cabinet controls.
+   Expand Change table options for explicit rule Enable/Disable, deck-count and
+   split-hand-limit commands. Each is gated by Java's current legal actions;
+   apply one choice and wait for its reply. Return to table resumes play shortcuts
+   and reveals the active table or recovery message. These controls show commands, with no
+   checked values or assumed defaults because the visible snapshot omits settings.
 
 Blackjack build and launch (from its repository):
 
@@ -79,6 +103,19 @@ WebSocket API cannot disable redirects publicly, so its exact derived local
 origin is limited to the verified direct Sudoku endpoint. This is not a remote
 or untrusted-host transport guarantee.
 
+The Sudoku saved-board picker uses a separate bounded read channel with the same
+guard and HTTP worker. It resolves the current account with `GET /api/session`,
+then requests `GET /api/game/saved?limit=10`. It validates every complete board,
+rejects mixed owners or duplicate IDs, and publishes only ID/progress metadata.
+The complete list has a 640 KiB response cap; bootstrap and live-board reads retain
+their existing 64 KiB cap. Row count and JSON depth remain bounded.
+The service contract provides no ordering or pagination guarantee; manual game-ID
+entry remains available. Loading, errors and a confirmed empty list have distinct
+messages. Choosing an item does not resume it. Explicit resume requires current
+list membership and an idle board channel with no unresolved mutation outcome.
+Browsing leaves the current board, socket, cookies and reconciliation guard intact.
+Changing credentials, game or origin invalidates cached metadata and old replies.
+
 Sudoku reuses its existing REST/raw-WebSocket service. It has no request IDs or
 revision receipt, and `oldVal` is not compare-and-swap. After a normal move plus
 sync, board traffic triggers a fresh correlated read-only HTTP snapshot; a board
@@ -100,10 +137,11 @@ cannot be reached, its sessions expire after 15 idle minutes or one hour absolut
 - Standalone local overlay and placeholder mesh only. Disposable local Java
   service checks and isolated DLL linking are recorded in the follow-up;
   editor import, packaged runtime, multiplayer and in-world acceptance are pending.
-- Sudoku saved-list picker, pencil toggle, auto-solve, competitive and spectator
-  UI are deferred. Explicit own save/resume IDs work through existing endpoints.
-- Blackjack rule/deck/split-limit Blueprint calls exist, with their Slate settings
-  UI deferred. 21+3, chatter, achievements and persistence are not exposed.
+- Sudoku pencil toggle, auto-solve, competitive and spectator UI are deferred.
+  Saved-list browsing and explicit own save/resume IDs use existing endpoints.
+- Blackjack rule/deck/split-limit commands are available in Slate; confirmed
+  current-value display needs a settings readback contract. 21+3, chatter,
+  achievements and persistence are not exposed.
 - No account provider, Java runtime bundling or service deployment is included.
 - The native actor requires installed UE modules WebSockets and engine libcurl.
 
@@ -127,6 +165,11 @@ At publication, Blackjack Actions run
 [38452658577](https://github.com/RicheyWorks/BlackJackPro/actions/runs/38452658577)
 was blocked before runner execution by GitHub billing/spending limits; no remote
 green result is claimed. Native final-head CI is recorded in the PR handoff.
+
+The later saved-picker slice has a separate `sudoku_saved_games` portable target
+covering account-scoped, atomic metadata projection. Its offline checks do not
+exercise Unreal JSON callbacks, Slate, authentication or the live Java service;
+those need native acceptance before activating the picker.
 
 ## Blender and acceptance handoff
 
