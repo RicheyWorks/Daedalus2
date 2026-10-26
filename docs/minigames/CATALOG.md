@@ -37,9 +37,9 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `sega_shooter` | yes |  | yes | yes |  |  |  |
 | `shadow_ninja` | yes |  | yes | yes |  |  |  |
 | `star_shooter` | yes |  |  |  |  | yes | yes |
-| `dodge_ball` |  |  |  |  |  |  |  |
+| `dodge_ball` | yes |  |  |  |  |  |  |
 | `contra` | yes | yes | yes | yes |  |  |  |
-| `zelda` |  |  |  |  |  |  |  |
+| `zelda` | yes |  |  |  |  |  |  |
 
 ## Java cabinets
 

@@ -188,7 +188,9 @@
         "desktop_dodge_tournament",
         "desktop_sports"
       ],
-      "capabilities": [],
+      "capabilities": [
+        "options"
+      ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
     {
@@ -221,7 +223,9 @@
         "desktop_zelda_sword_assist",
         "desktop_zelda_terminal"
       ],
-      "capabilities": [],
+      "capabilities": [
+        "options"
+      ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
