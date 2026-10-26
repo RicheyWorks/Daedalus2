@@ -38,7 +38,7 @@ public record Hero(String name, int exp, int attack, int magic, int life, int be
         return exp >= HeroRules.cost(stat, level(stat));
     }
 
-    /** Raise {@code stat}; the experience goes back to zero (Zelda II). Unchanged when it cannot be raised. */
+    /** Raise {@code stat}; the experience goes back to zero. Unchanged when it cannot be raised. */
     public Hero raise(HeroRules.Stat stat) {
         if (!canRaise(stat)) {
             return this;
@@ -47,7 +47,7 @@ public record Hero(String name, int exp, int attack, int magic, int life, int be
                 magic + (stat == HeroRules.Stat.MAGIC ? 1 : 0), life + (stat == HeroRules.Stat.LIFE ? 1 : 0), beaten);
     }
 
-    /** Fall in battle: unspent experience is lost (Zelda II). Levels stay. */
+    /** Fall in battle: unspent experience is lost. Levels stay. */
     public Hero fall() {
         return new Hero(name, 0, attack, magic, life, beaten);
     }

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""One settings schema for every Daedalus client, laid out like Halo Infinite's settings.
+"""One settings schema for every Daedalus client, laid out like a modern console game's settings.
 
     python tools/settings/build_schema.py           # write data/settings/settings-schema.json (+ web copy)
     python tools/settings/build_schema.py --check   # fail if the schema and the native C++ disagree
@@ -8,7 +8,7 @@ Source of truth for every row the Unreal client already has is the C++ itself: t
 engines/unreal/.../DaedalusSettings.cpp (ids, kinds, defaults, ranges, choices, help) and the button / thumbstick
 layout tables in DaedalusHero.cpp (PadButtons, the RebuildBindings stick switch). Nothing there is retyped here.
 New rows (the Audio tab, trigger and outer/axial stick dead zones, confirm button, text size ...) live in
-schema_source.py with the consumers that read them. Tabs, their order and their sections follow Halo Infinite:
+schema_source.py with the consumers that read them. Tabs, their order and their sections follow Console standard:
 Controller, Keyboard/Mouse, Video, Audio, Gameplay, Accessibility.
 
 Saved values use the native format everywhere: a flat {"Id": number} object (Saved/Config/DaedalusSettings.json in
@@ -160,7 +160,7 @@ def build():
         "fixed": {a: UE_TO_POS.get(k, k) for a, k in extra},
         "source": "DaedalusHero.cpp PadButtons() and RebuildBindings()",
     }
-    schema = {"schema": "daedalus.settings-schema/v1", "layout_of": "Halo Infinite (Controller, Keyboard/Mouse, Video, Audio, Gameplay, Accessibility)",
+    schema = {"schema": "daedalus.settings-schema/v1", "layout_of": "Console standard (Controller, Keyboard/Mouse, Video, Audio, Gameplay, Accessibility)",
               "storage": {"unreal": "Saved/Config/DaedalusSettings.json", "web": "localStorage daedalus.settings", "format": "flat {\"Id\": number}"},
               "tabs": [{"id": t["id"], "sections": [s["name"] for s in t["sections"]]} for t in SS.TABS],
               "native_tabs": native_tabs, "rows": rows, "layouts": layouts, "research": SS.RESEARCH}
@@ -186,10 +186,10 @@ def main():
     per_tab = {t["id"]: sum(1 for r in rows if r["tab"] == t["id"]) for t in schema["tabs"]}
     moved = [r["id"] + " " + "/".join(r["native_place"]) + " -> " + r["tab"] + "/" + r["section"] for r in rows if r.get("native_place")]
     print("rows %d (native %d, new %d) per tab %s" % (len(rows), sum(r["native"] for r in rows), sum(not r["native"] for r in rows), per_tab))
-    print("native tabs %s; Infinite tabs %s" % (schema["native_tabs"], [t["id"] for t in schema["tabs"]]))
+    print("native tabs %s; console tabs %s" % (schema["native_tabs"], [t["id"] for t in schema["tabs"]]))
     print("button layouts %s; stick layouts %s" % (list(schema["layouts"]["buttons"]), list(schema["layouts"]["sticks"])))
     if moved:
-        print("native rows placed differently from the C++ (Infinite placement):", moved)
+        print("native rows placed differently from the C++ (console placement):", moved)
     for p in problems:
         print("PROBLEM", p)
     print("SETTINGS SCHEMA", "OK" if not problems else "FAIL")

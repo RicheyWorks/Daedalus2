@@ -288,9 +288,9 @@ public consumers).
 | `GET` | `/api/v1/world/{id}/islands` | public | Raised islands: lane slot, origin, seed and traits (ADR-018), and who owns each and whom they let build (ADR-026) |
 | `GET` | `/api/v1/world/{id}/plots` | public | A Parcels world's 60 plots: footprint, height limit, what each opened with, owner and builders; the plaza and the helipad (ADR-033). Plots are claimed through `/islands/{n}/claim` |
 | `GET` | `/api/v1/hero` | required | Your hero (ADR-037): unspent EXP, Attack/Magic/Life levels 1–8, what the next of each costs, which can be raised now, and what they mean (hearts, magic, damage) |
-| `GET` | `/api/v1/hero/rules` | public | The foes (life, power, EXP, reach, guard, strike, a shifting shield, speed) and the Zelda II level costs every client plays by (ADR-037) |
+| `GET` | `/api/v1/hero/rules` | public | The foes (life, power, EXP, reach, guard, strike, a shifting shield, speed) and the level costs every client plays by (ADR-037) |
 | `POST` | `/api/v1/hero/defeat` | required | Report a foe beaten; the server adds that foe's EXP from its own table. TOO_FAST when two fall quicker than a sword swings |
-| `POST` | `/api/v1/hero/raise` | required | Spend EXP on ATTACK, MAGIC or LIFE; EXP resets to zero (Zelda II). NOT_ENOUGH otherwise |
+| `POST` | `/api/v1/hero/raise` | required | Spend EXP on ATTACK, MAGIC or LIFE; EXP resets to zero. NOT_ENOUGH otherwise |
 | `POST` | `/api/v1/hero/fall` | required | Fall in battle: unspent EXP is lost; levels stay |
 | `GET` | `/api/v1/world/{id}/gallery` | public | A Gallery City's parcels (footprint, height, address, gallery or open, owner, builders), named streets, the Origin plaza and the drone pad (ADR-035). Parcels are claimed through `/islands/{n}/claim` |
 | `GET` | `/api/v1/world/{id}/art` | public | Every frame on a wall in a Gallery City: position, facing, size, seed, title, generator, who hung it, its parcel's address, and its image (ADR-035) |

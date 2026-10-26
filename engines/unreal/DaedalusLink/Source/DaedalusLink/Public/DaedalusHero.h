@@ -38,11 +38,11 @@ struct FDaedalusFoeRule
  * The Daedalus hero (ADR-040, -041, -042): a blocky adventurer with a sword and a blaster, built in code so he needs
  * no assets.
  *
- * Views (R3 / D-pad up / V cycles; Settings > Video): FIRST PERSON with a centred reticle (Halo Infinite), OVER THE
- * SHOULDER with a shoulder swap (Gears of War; LB / D-pad down / C), and CLASSIC chase.
- * Weapons (Y / 1 / 2 / mouse wheel): the SWORD (Zelda II: swing, down-thrust in the air) and the BLASTER (hitscan
+ * Views (R3 / D-pad up / V cycles; Settings > Video): FIRST PERSON with a centred reticle , OVER THE
+ * SHOULDER with a shoulder swap (LB / D-pad down / C), and CLASSIC chase.
+ * Weapons (Y / 1 / 2 / mouse wheel): the SWORD (swing, down-thrust in the air) and the BLASTER (hitscan
  * from the reticle, heat and overheat, zoom on the aim button). Melee always swings the sword.
- * Controls: keyboard and mouse (raw mouse look), XInput pads with Halo Infinite's button layouts (Default, Bumper
+ * Controls: keyboard and mouse (raw mouse look), XInput pads with a modern console game's button layouts (Default, Bumper
  * Jumper, Bumper Ninja, Boxer, Green Thumb, Recon) and thumbstick layouts (Default, Southpaw, Legacy, Legacy
  * Southpaw), and generic USB pads (Switch Pro, N64) through RawInput and Saved/Config/DaedalusControllers.json.
  * See docs/controllers.md.
