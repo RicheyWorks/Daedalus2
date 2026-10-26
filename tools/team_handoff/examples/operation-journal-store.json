@@ -1,0 +1,18 @@
+{
+  "schema": "daedalus.operation-journal-store.v1",
+  "identity": {
+    "owner": "fixture-owner",
+    "session": "fixture-session",
+    "host": "fixture-host"
+  },
+  "window": {
+    "start_utc": "2026-10-26T10:00:00Z",
+    "deadline_utc": "2026-10-26T11:00:00Z"
+  },
+  "scope": {
+    "kind": "declared-store-only",
+    "id": "fixture-operation-boundary"
+  },
+  "created_utc": "2026-10-26T10:00:00Z",
+  "authority_ref": "fixture-original-assignment"
+}

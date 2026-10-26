@@ -239,6 +239,120 @@ metadata, source completeness and journal completeness remain declared facts
 requiring trusted integration. The adapter performs no process, resource,
 broker, editor, build or custody calls.
 
+## Durable private operation journal
+
+`operation_journal` provides an offline persistence seam for a future guarded
+producer. It dispatches no work. A private store binds the declared owner/session/
+host, original window, authority reference and logical scope. Intent binds a
+stable key and operation ID, original timestamp, logical inputs/outputs, stable
+target IDs and an optional predecessor artifact digest. That predecessor is a
+source/checkpoint pin, not a request to refresh the journal head.
+
+The synchronous first `intent()` call may return `dispatch_granted: true` only
+after an exclusive durable key reservation, retained input bytes, immutable intent
+event and current-pointer publication. This is a **local once-only gate**, not
+permission to operate an editor or proof of exactly-once native effects. The
+future caller must still satisfy its existing authority, custody, runtime,
+generation, immutable-input, deadline and resource/native guards. Every journal
+response retains `may_execute: false`.
+
+A lost response consumes the reservation. A duplicate intent, `inspect`, or
+`recover` never returns another grant. Changing a nonce/key cannot evade existing
+operation, logical-effect, target or output bindings; normalized aliases are
+rejected within and across intents. Never recover by creating a replacement
+store or deleting a reservation. Deduplication is scoped to the retained private
+store, not independently created stores or external/native execution.
+
+```sh
+python -m tools.team_handoff.cli journal-create --store /tmp/operation-demo --config tools/team_handoff/examples/operation-journal-store.json
+python -m tools.team_handoff.cli journal-intent --store /tmp/operation-demo --request tools/team_handoff/examples/operation-journal-intent.json --evidence-root tools/team_handoff/examples
+python -m tools.team_handoff.cli journal-record --store /tmp/operation-demo --request tools/team_handoff/examples/operation-journal-result.json --evidence-root tools/team_handoff/examples
+python -m tools.team_handoff.cli journal-record --store /tmp/operation-demo --request tools/team_handoff/examples/operation-journal-save.json --evidence-root tools/team_handoff/examples
+python -m tools.team_handoff.cli journal-record --store /tmp/operation-demo --request tools/team_handoff/examples/operation-journal-readback.json --evidence-root tools/team_handoff/examples
+python -m tools.team_handoff.cli journal-inspect --store /tmp/operation-demo
+python -m tools.team_handoff.cli journal-inventory --store /tmp/operation-demo --through-utc 2026-10-26T10:05:00Z
+```
+
+These commands operate only on synthetic fixed-time examples; substitute a fresh
+temporary store on Windows. The result/save/readback examples record supplied
+facts and do not cause their apparent native actions. Public library functions
+are `create`, `intent`, `record`, `cover`, `inspect`, `recover` and `inventory`.
+Write/consistent-inspection responses exit `0`, held inspection/inventory exits
+`3`, and malformed input, conflicts or integrity/I/O failures exit `2` with a
+structured diagnostic. An exact duplicate is acknowledged without another grant;
+changing its original timestamp or evidence is a conflict.
+
+Result, save and readback are distinct immutable stages. A successful result is
+not a saved boundary. Saved reconciliation requires the original response, a
+separate save proof, exact retained native/ledger bytes, and a matching readback
+proof linked to every prior witness and stable target. The supported saved-world
+shape requires clean saved native facts, no Play/import/pending sequence, matching
+world/ledger references, integer counts and a world among the reserved logical
+outputs. These are checks of supplied receipts, not live native acceptance.
+No-effect reconciliation likewise requires an explicit matching result and
+readback; silence is insufficient. Unknown/partial results, saves or readbacks
+remain held. Version 1 never overwrites an uncertain stage with a later success;
+broader reconciliation requires a separately reviewed contract and real evidence.
+
+```text
+private-store/
+  store.json                    immutable original configuration
+  current.json                  config digest + selected sequence/event digest
+  reservations/<key-hash>.json   permanent original intent/effect binding
+  events/<sequence>-<hash>.json  immutable hash-linked event and receipt bytes
+  .publish.lock                 existing private cooperative OS-lock pattern
+```
+
+Original receipt bytes are embedded as hash-checked base64 in their events;
+logical/physical receipt references are data, and only explicit relative input
+paths are read. Whole-set byte checks bracket each receipt capture. Inputs must
+be quiescent immutable exports; endpoint checks cannot fence a separate writer
+or detect arbitrary ABA replacement. Output is confined to the explicit store.
+The fixed profile allows 512 KiB per receipt, 1 MiB of evidence per event,
+128 reservations, 512 events and 32 MiB per store, with bounded flat inspection.
+Oversized or incomplete data fails closed; no flags weaken shared resource floors.
+Do not journal credentials or secrets.
+
+Publication reuses the existing exclusive-write/fsync/OS-lock/pointer-last
+helpers. A crash can retain a partial reservation/event or a complete unpublished
+event. `journal-recover --store ...` selects only an unambiguous complete chain
+whose reservations, original bytes and state transitions already validate. It
+returns no grant. A reservation with missing proof, corrupted selected history or
+an ambiguous branch stays held; recovery never deletes, force-clears, reconstructs
+or labels it effect-free. Pointer temporaries are retained diagnostics. This
+cooperative local protocol has no hostile-writer fencing, network-filesystem or
+whole-machine power-loss guarantee.
+
+`inventory()` emits `daedalus.source-operation-journal.v1` with original event
+times/window and explicit scope. By default `complete: false` and
+`scope.kind: declared-store-only` remain true even when all known operations are
+reconciled: a directory scan cannot establish all producer dispatches. An optional
+`cover()`/`journal-cover` request retains an explicit coverage proof bound to the
+exact prior head, session/window, scope, authority reference, keys and cutoff.
+The synthetic `operation-journal-coverage.json` demonstrates that contract. Only
+consistent resolved history plus that explicit assertion can export
+`complete: true`; scope then says `producer-session-declared` and
+`verification: caller-attestation-only`. Later events or an uncovered cutoff make
+it incomplete again. This does not install or verify a trusted live coverage
+provider, grant authority, or turn a caller assertion into observed fact.
+
+The legacy source-snapshot format has a specific compatibility meaning: a
+reconciled saved operation exports `intent_sha256` as its **final ledger witness**
+and `result_sha256` as its **saved native witness**. Those fields are not the
+genuine pre-dispatch intent digest or original returned-response digest. The
+original intent, response, save and readback remain separately hash-linked in the
+retained journal and are exposed by inspection. Preserve the private store and
+its configuration/head hashes along with exported inventory and sealed/capture
+receipts; the inventory alone is not the full original event history.
+
+Future caller adoption must persist intent first, use only its first synchronous
+grant under the existing producer guards, retain actual result/save/readback
+receipts, record them in original order, then export/capture/seal the boundary.
+An operation may finish closeout after its original deadline; that never resets
+the window or admits a new intent. The offline library uses supplied event times
+and never substitutes observation time or probes a process. Existing producers,
+R22 packets, locks and native workflows are unchanged by this source capability.
+
 ## Remaining production integration
 
 1. Have the existing sole producer call `seal` at coherent healthy boundaries with
