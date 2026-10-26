@@ -19,7 +19,7 @@ const source = [line("const CHARS ="), line("const hit ="), line("function clear
   between("const START_LEVEL =", "/* Recruits:"), between("function recruitsFor(", "function recruitBeaten("),
   line("const atkOf ="), line("const defOf ="), line("const spellOf ="),
   between("let menu = null;", "function drawPartyRows("), between("let shop = null;", "/* ---------- field ---------- */"),
-  between("function spellHint(", "function drawBattle("),
+  between("function spellHint(", "function drawBattle("), between("function titlePrompt(", "function drawTitle("),
   "this.api = { start: () => { party = buildParty(); }, recruit, roster, openShop, shopTick, drawShop, buy, shopGearChoice, atkOf, defOf, atkWith, defWith, " +
   "openMenu, menuTick, party: () => party, reserve: () => reserve, bag: () => bag, shop: () => shop, menu: () => menu, commands: MENU_CMDS, " +
   "gold: () => gold, setGold: n => { gold = n; }, chars: CHARS, snapshot: () => ({ party, reserve, bag, gold, shop, menu, data: D, pressed }) };"
@@ -28,9 +28,9 @@ let checks = 0;
 function check(label, fn) { try { fn(); checks++; } catch (error) { error.message = label + ": " + error.message; throw error; } }
 function session(width = 320, realm = "prism", productionSource = source) {
   const draws = [], sounds = [], pressed = { a: false, b: false, start: false, up: false, down: false, left: false, right: false };
-  const c = { D: { party: clone(parties[realm]), gear: clone(gear), interiors: clone(interiors[realm]), menus: clone(menus[realm]),
+  const c = { D: { realm_key: realm, party: clone(parties[realm]), gear: clone(gear), interiors: clone(interiors[realm]), menus: clone(menus[realm]),
       spells: clone(spells.filter(sp => sp.realm === realm)), ...(realm === "portal" ? { realm_profile: { start_level: 1 } } : {}) },
-    W: width, H: 224, B: null, map: { kind: "interior" }, mode: "field", pressed, state: { beaten: new Set() },
+    W: width, H: 224, B: null, PAD: null, map: { kind: "interior" }, mode: "field", pressed, state: { beaten: new Set() },
     drawField() {}, say() {}, sfx: sound => sounds.push(sound), g: { fillStyle: "", fillRect() {} },
     clamp: (n, lo, hi) => Math.max(lo, Math.min(hi, n)), tw: label => String(label).length * 6,
     win: (...rect) => draws.push({ kind: "window", rect }), cursor: (x, y) => draws.push({ kind: "cursor", x, y }),
@@ -51,25 +51,38 @@ function select(s, name) {
 }
 function preview(s, name, expectedText) {
   const item = select(s, name), choice = s.api.shopGearChoice(item), raw = item.attack ? "ATTACK " + item.attack : "DEFENCE " + item.defence;
-  s.draw(); const footer = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 204); assert.ok(footer);
-  if (expectedText) assert.equal(footer.label, expectedText);
-  if (!choice.who) assert.equal(footer.label, raw + " / INTO BAG");
+  const prism = s.c.D.realm_key === "prism";
+  s.draw(); const footer = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === (prism ? 190 : 204)); assert.ok(footer);
+  if (prism) {
+    assert.ok(s.draws.some(d => d.kind === "text" && d.x === 12 && d.y === 166 && d.label === name.toUpperCase()));
+    assert.ok(s.draws.some(d => d.kind === "text" && d.x === 12 && d.y === 178 && d.label === raw), "raw gear value stays separate from the recipient/totals");
+  }
+  if (expectedText) assert.equal(footer.label, prism ? "NEXT BUY: " + expectedText.slice((raw + " / ").length) + (expectedText.endsWith("INTO BAG") ? "." : "") : expectedText);
+  if (!choice.who) assert.equal(footer.label, prism ? "NEXT BUY: INTO BAG." : raw + " / INTO BAG");
   else {
     const before = choice.slot === "weapon" ? s.api.atkOf(choice.who) : s.api.defOf(choice.who);
     const after = choice.slot === "weapon" ? s.api.atkWith(choice.who, name) : s.api.defWith(choice.who, { ...choice.who.equip, [choice.slot]: name });
     const detail = " " + (choice.slot === "weapon" ? "ATK" : "DEF") + " " + before + ">" + after;
-    assert.ok(footer.label.startsWith(raw + " / ") && footer.label.endsWith(detail));
-    const shown = footer.label.slice((raw + " / ").length, -detail.length);
-    assert.ok(shown.length > 0 && choice.who.name.toUpperCase().startsWith(shown), "only the display recipient may be shortened");
+    const prefix = prism ? "NEXT BUY: " : raw + " / "; assert.ok(footer.label.startsWith(prefix) && footer.label.endsWith(detail));
+    const shown = footer.label.slice(prefix.length, -detail.length), portion = prism ? shown.replace(/\.\.\.$/, "") : shown;
+    assert.ok(portion.length > 0 && choice.who.name.toUpperCase().startsWith(portion), "only the display recipient may be shortened");
   }
-  assert.ok(footer.x + s.c.tw(footer.label) <= s.c.W - 12 && footer.y + 8 <= 212, "raw value, recipient and full stat change fit the existing footer");
+  assert.ok(footer.x + s.c.tw(footer.label) <= s.c.W - 12 && footer.y + 8 <= 212, "recipient and full stat change fit the footer");
   assert.ok(Array.from(footer.label).every(ch => s.api.chars.includes(ch)), "footer uses supported bitmap font glyphs");
-  const shop = s.api.shop(), y = 38 + (shop.idx - shop.top) * 16;
+  const shop = s.api.shop(), y = (prism ? 40 : 38) + (shop.idx - shop.top) * (prism ? 14 : 16);
   const row = s.draws.find(d => d.kind === "text" && d.x === 24 && d.y === y); assert.ok(row && name.toUpperCase().startsWith(row.label));
   assert.equal(row.color, item.price > s.api.gold() ? "#808090" : "#ffffff", "physical stock keeps its affordability-only color");
-  assert.ok(s.draws.some(d => d.kind === "text" && d.label === String(item.price) && d.y === y && d.x === s.c.W - 102 - s.c.tw(item.price)));
-  assert.ok(s.draws.some(d => d.kind === "text" && d.y === 190 && d.label === shop.msg.toUpperCase()));
-  assert.ok(s.draws.some(d => d.kind === "text" && d.y === 37 && d.label === String(s.api.gold()) && d.x === s.c.W - 10 - s.c.tw(s.api.gold())));
+  const price = String(item.price) + (prism ? "G" : "");
+  assert.ok(s.draws.some(d => d.kind === "text" && d.label === price && d.y === y && d.x === s.c.W - (prism ? 12 : 102) - s.c.tw(price)));
+  if (prism) {
+    const cash = "GOLD " + s.api.gold(); assert.ok(s.draws.some(d => d.kind === "text" && d.y === 18 && d.label === cash && d.x === s.c.W - 12 - s.c.tw(cash)));
+    const neutral = /^(WHAT WOULD YOU LIKE\?|WHAT WILL YOU SELL\?|NOTHING I CAN BUY FROM YOU\.)/.test(shop.msg);
+    if (shop.msg && !neutral) { const note = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 202); assert.ok(note); assert.ok(("LAST: " + shop.msg).toUpperCase().startsWith(note.label.replace(/\.\.\.$/, ""))); }
+    else if (item.price > s.api.gold()) assert.ok(s.draws.some(d => d.kind === "text" && d.y === 202 && d.label === "NOT ENOUGH GOLD."));
+  } else {
+    assert.ok(s.draws.some(d => d.kind === "text" && d.y === 190 && d.label === shop.msg.toUpperCase()));
+    assert.ok(s.draws.some(d => d.kind === "text" && d.y === 37 && d.label === String(s.api.gold()) && d.x === s.c.W - 10 - s.c.tw(s.api.gold())));
+  }
   return { item, choice, footer };
 }
 function orderSwap(s, first, second) {
@@ -127,8 +140,8 @@ check("only the displayed name is shortened to keep raw and total stats complete
   assert.ok(p.footer.label.length <= 38 && !p.footer.label.includes(before)); assert.ok(p.footer.label.endsWith(" ATK 54>68"));
 });
 check("controlled former raw-only physical footer fails the recipient/stat preview assertion", () => {
-  const a = source.indexOf('  } else if (it.attack || it.defence) {', source.indexOf("function drawShop()")), b = source.indexOf('  text(d, 12, 204', a); assert.ok(a >= 0 && b > a);
-  const legacy = source.slice(0, a) + "  }\n" + source.slice(b), s = session(320, "prism", legacy).enter();
+  const context = '        context = "NEXT BUY: " + fit(who.name, columns - 10 - totals.length) + totals;'; assert.ok(source.includes(context));
+  const legacy = source.replace(context, '        context = "";'), s = session(320, "prism", legacy).enter();
   assert.throws(() => preview(s, "Steel Saber", "ATTACK 20 / CORIN ATK 54>68"), assert.AssertionError);
 });
 const inline = html.match(/<script>\s*([\s\S]*?)<\/script>/); assert.ok(inline);

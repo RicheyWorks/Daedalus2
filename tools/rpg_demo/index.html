@@ -778,6 +778,8 @@ function shopTick() {
   if (shop.tab === "sell") {
     const list = sellList(), n = list.length;
     if (n) {
+      // Match Prism's local paint selection before navigation; the shared Portal input path stays as authored.
+      if ((D.realm_key || "prism") === "prism") shop.idx = Math.min(shop.idx, n - 1);
       if (hit("up")) { shop.idx = (shop.idx + n - 1) % n; sfx("TICK"); }
       if (hit("down")) { shop.idx = (shop.idx + 1) % n; sfx("TICK"); }
       shop.idx = Math.min(shop.idx, n - 1); shop.top = clamp(shop.top, shop.idx - 7, shop.idx);
@@ -791,7 +793,59 @@ function shopTick() {
   shop.top = clamp(shop.top, shop.idx - 7, shop.idx);
   if (hit("a")) buy(shop.stock[shop.idx]);
 }
+function drawPrismShop() {
+  const selling = shop.tab === "sell", magic = shop.kind === "magic", entries = selling ? sellList().map(name => ({ name, price: sellPrice(name) })) : shop.stock;
+  // A final sale can shrink the list before the next input tick normalizes its cursor. Paint a local view only.
+  const selected = entries.length ? clamp(shop.idx, 0, entries.length - 1) : -1;
+  const top = selected < 0 ? 0 : clamp(shop.top, Math.max(0, selected - 7), Math.min(selected, Math.max(0, entries.length - 8)));
+  const columns = Math.floor((W - 24) / 6), fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const money = value => value > 999999 ? "999999+" : String(value), number = value => value > 9999 ? "9999+" : String(value), qty = value => value > 999 ? "999+" : String(value);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 32); g.fillRect(0, 160, W, H - 160);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 31, W, 1); g.fillRect(0, 159, W, 1);
+  text(({ item: "ITEM SHOP", weapon: "WEAPONS", armor: "ARMOUR", magic: "MAGIC" })[shop.kind] || "SHOP", 12, 6, "#fff070");
+  if (magic) text("BUY ONLY", W - 60, 6, "#a0d8f8");
+  else { text("LEFT/RIGHT:", W - 132, 6, "#a0a8c0"); text("BUY", W - 60, 6, selling ? "#808090" : "#ffffff"); text("/", W - 42, 6, "#a0a8c0"); text("SELL", W - 36, 6, selling ? "#ffffff" : "#808090"); }
+  text("UP/DOWN: CHOOSE", 12, 18, "#a0a8c0"); const cash = "GOLD " + money(gold); text(cash, W - 12 - tw(cash), 18, "#fff070");
+  entries.slice(top, top + 8).forEach((it, i) => {
+    const index = top + i, y = 40 + i * 14, price = money(it.price) + "G", priceX = W - 12 - tw(price), count = selling ? " X" + qty(bag[it.name]) : "";
+    const sp = !selling && magic ? spellOf(it.name) : null, caster = sp && magicShopCaster(sp), available = selling || it.price <= gold && (!magic || caster && !caster.spells.includes(sp.name));
+    if (index === selected) { g.fillStyle = "#26344c"; g.fillRect(12, y - 3, W - 24, 12); cursor(10, y); }
+    const color = available ? "#ffffff" : "#808090"; text(fit(it.name, Math.floor((priceX - 36) / 6) - count.length) + count, 24, y, color); text(price, priceX, y, color);
+  });
+  if (selected < 0) text(selling ? "NO BAG ITEMS TO SELL." : "NO STOCK AVAILABLE.", 24, 52, "#a0a8c0");
+  if (entries.length) text((top + 1) + "-" + Math.min(top + 8, entries.length) + "/" + entries.length, 12, 148, "#a0a8c0");
+  const it = selected >= 0 ? entries[selected] : null, sp = it && !selling && magic ? spellOf(it.name) : null, caster = sp && magicShopCaster(sp);
+  text(fit(it ? it.name : selling ? "NOTHING TO SELL." : "NO STOCK AVAILABLE."), 12, 166);
+  let facts = "", context = "", note = "", ready = !!it;
+  if (it && selling) { facts = "HALF PRICE: " + money(it.price) + "G / BAG " + qty(bag[it.name]); context = "BAG ITEMS ONLY. WORN GEAR IS KEPT."; }
+  else if (it) {
+    ready = gold >= it.price && (!magic || !!caster && !caster.spells.includes(sp.name));
+    if (magic) {
+      facts = sp ? number(sp.mp) + "MP PER CAST / " + spellHint(sp) : "NO CASTING DETAILS AVAILABLE.";
+      const known = caster && caster.spells.includes(sp.name), suffix = known ? " / KNOWN" : "";
+      context = !sp ? "LESSON UNAVAILABLE IN THIS BUILD." : caster ? "LEARNS: " + fit(caster.name, columns - 8 - suffix.length) + suffix : "NO COMPANION CAN LEARN THIS.";
+    } else {
+      facts = it.effect ? GEAR[it.name] ? itemLine(it.name) : it.effect : it.attack ? "ATTACK " + number(it.attack) : it.defence ? "DEFENCE " + number(it.defence) : "";
+      const choice = shopGearChoice(it);
+      if (choice && choice.who) {
+        const { slot, who } = choice, before = slot === "weapon" ? atkOf(who) : defOf(who), after = slot === "weapon" ? atkWith(who, it.name) : defWith(who, { ...who.equip, [slot]: it.name });
+        const totals = " " + (slot === "weapon" ? "ATK" : "DEF") + " " + number(before) + ">" + number(after);
+        context = "NEXT BUY: " + fit(who.name, columns - 10 - totals.length) + totals;
+        if (who.equip[slot]) note = "WORN GEAR RETURNS TO THE BAG.";
+      } else context = "NEXT BUY: INTO BAG.";
+    }
+    // This describes the same gold-first refusal as buy(), without changing its transaction or input rules.
+    if (gold < it.price) note = "NOT ENOUGH GOLD.";
+    else if (magic && sp && (!caster || caster.spells.includes(sp.name))) note = caster ? "ALREADY KNOWN. NO GOLD IS SPENT." : "NO LEARNER. NO GOLD IS SPENT.";
+  }
+  const neutral = !shop.msg || /^(WHAT WOULD YOU LIKE\?|WHAT WILL YOU SELL\?|NOTHING I CAN BUY FROM YOU\.)/.test(shop.msg);
+  if (!neutral) note = "LAST: " + shop.msg;
+  if (facts) text(fit(facts), 12, 178, "#a0a8c0"); if (context) text(fit(context), 12, 190, "#a0d8f8"); if (note) text(fit(note), 12, 202, "#fff070");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + (selling ? ": SELL ONE" : magic ? ": LEARN" : ": BUY ONE"), 12, 214, ready ? "#fff070" : "#808090"); const leave = back + ": LEAVE"; text(leave, W - 12 - tw(leave), 214, "#a0d8f8");
+}
 function drawShop() {
+  if ((D.realm_key || "prism") === "prism") return drawPrismShop();
   drawField();
   const title = ({ item: "ITEM SHOP", weapon: "WEAPONS", armor: "ARMOUR", magic: "MAGIC" })[shop.kind];
   win(0, 0, W, 26); text(title, 12, 9, "#fff070");

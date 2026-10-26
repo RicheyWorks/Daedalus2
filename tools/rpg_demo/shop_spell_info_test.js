@@ -19,18 +19,18 @@ const line = prefix => { const found = html.split(/\r?\n/).find(s => s.startsWit
 const source = [line("const CHARS ="), line("const hit ="), line("function clearActionButtons()"),
   between("const START_LEVEL =", "/* Recruits:"), between("function recruitsFor(", "function recruitBeaten("),
   line("const spellOf ="), line("const WEAPON_KIND ="), line("const SLOTS ="), line("const atkOf ="), line("const defOf ="), line("const atkWith ="), line("const defWith ="), between("const ITEM_KINDS =", "function menuTick()"),
-  between("let shop = null;", "/* ---------- field ---------- */"), between("function spellHint(", "function drawBattle("),
+  between("let shop = null;", "/* ---------- field ---------- */"), between("function spellHint(", "function drawBattle("), between("function titlePrompt(", "function drawTitle("),
   "this.api = { start: () => { party = buildParty(); }, roster, recruit, openShop, shopTick, drawShop, buy, magicShopCaster, spellHint, itemLine, " +
-  "party: () => party, reserve: () => reserve, shop: () => shop, gold: () => gold, setGold: n => { gold = n; }, chars: CHARS, " +
+  "party: () => party, reserve: () => reserve, shop: () => shop, gold: () => gold, setGold: n => { gold = n; }, sellList, sellPrice, chars: CHARS, " +
   "snapshot: () => ({ party, reserve, bag, gold, shop, data: D, pressed }) };"
 ].join("\n");
 let checks = 0;
 function check(label, fn) { try { fn(); checks++; } catch (error) { error.message = label + ": " + error.message; throw error; } }
 function session(width = 320, productionSource = source) {
   const draws = [], sounds = [], pressed = { a: false, b: false, start: false, up: false, down: false, left: false, right: false }, known = new Set(parties.prism.members.flatMap(m => m.spells));
-  const c = { D: { party: clone(parties.prism), gear: clone(gear), interiors: clone(interiors.prism),
+  const c = { D: { realm_key: "prism", party: clone(parties.prism), gear: clone(gear), interiors: clone(interiors.prism),
       spells: clone(allSpells.filter(s => s.realm === "prism" && (known.has(s.name) || s.tier <= 2))) },
-    W: width, H: 224, map: { kind: "interior" }, mode: "field", B: null, pressed,
+    W: width, H: 224, map: { kind: "interior" }, mode: "field", B: null, PAD: null, pressed,
     state: { beaten: new Set() }, drawField() {}, sfx: sound => sounds.push(sound), say() {},
     clamp: (n, lo, hi) => Math.max(lo, Math.min(hi, n)), tw: label => String(label).length * 6,
     win: (...rect) => draws.push({ kind: "window", rect }), cursor: (x, y) => draws.push({ kind: "cursor", x, y }),
@@ -55,20 +55,30 @@ function preview(s, name, allowTruncation = false) {
   const caster = roster.find(m => m.job === (sp.target === "ally" ? "Lightmender" : "Runecaster"));
   assert.equal(s.api.magicShopCaster(sp), caster, "preview and purchase use the original first whole-roster recipient");
   const known = caster && caster.spells.includes(sp.name), shop = s.api.shop(); s.draw();
-  const footer = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 204); assert.ok(footer);
-  const parts = footer.label.match(/^([^:]+): (.+)$/); assert.ok(parts, "the preview identifies a recipient before its complete casting details");
-  const recipient = caster ? caster.name.toUpperCase() : "NO CASTER";
-  if (allowTruncation) assert.ok(recipient.startsWith(parts[1]) && parts[1].length > 0); else assert.equal(parts[1], recipient);
-  assert.equal(parts[2], s.api.spellHint(sp) + " " + sp.mp + "MP" + (known ? " KNOWN" : ""));
-  assert.ok(footer.x + s.c.tw(footer.label) <= s.c.W - 12 && footer.y + 8 <= 212, "the full hint, MP and known state fit the existing single-line footer");
-  assert.ok(Array.from(footer.label).every(char => s.api.chars.includes(char)), "all preview glyphs exist in the current font");
-  const rowY = 38 + (shop.idx - shop.top) * 16, row = s.draws.find(d => d.kind === "text" && d.x === 24 && d.y === rowY);
+  const footer = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 190), facts = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 178); assert.ok(footer && facts);
+  assert.ok(s.draws.some(d => d.kind === "text" && d.x === 12 && d.y === 166 && d.label === name.toUpperCase()));
+  assert.equal(facts.label, sp.mp + "MP PER CAST / " + s.api.spellHint(sp));
+  if (!caster) assert.equal(footer.label, "NO COMPANION CAN LEARN THIS.");
+  else {
+    const prefix = "LEARNS: ", suffix = known ? " / KNOWN" : ""; assert.ok(footer.label.startsWith(prefix) && (!suffix || footer.label.endsWith(suffix)));
+    const shown = footer.label.slice(prefix.length, suffix ? -suffix.length : undefined), portion = shown.replace(/\.\.\.$/, ""), recipient = caster.name.toUpperCase();
+    if (allowTruncation) assert.ok(portion.length > 0 && recipient.startsWith(portion)); else assert.equal(shown, recipient);
+  }
+  for (const detail of [footer, facts]) {
+    assert.ok(detail.x + s.c.tw(detail.label) <= s.c.W - 12 && detail.y + 8 <= 212, "full casting facts and recipient/KNOWN use separate bounded rows");
+    assert.ok(Array.from(detail.label).every(char => s.api.chars.includes(char)), "all preview glyphs exist in the current font");
+  }
+  const rowY = 40 + (shop.idx - shop.top) * 14, row = s.draws.find(d => d.kind === "text" && d.x === 24 && d.y === rowY);
   assert.ok(row && name.toUpperCase().startsWith(row.label));
   assert.equal(row.color, item.price > s.api.gold() || !caster || known ? "#808090" : "#ffffff", "row availability matches gold and learning eligibility, independently of current casting MP");
-  assert.ok(s.draws.some(d => d.kind === "text" && d.label === String(item.price) && d.y === rowY && d.x === s.c.W - 102 - s.c.tw(item.price)));
-  assert.ok(s.draws.some(d => d.kind === "cursor" && d.x === 10 && d.y === rowY && rowY >= 38 && rowY <= 150));
-  assert.ok(s.draws.some(d => d.kind === "text" && d.label === shop.msg.toUpperCase() && d.y === 190));
-  assert.ok(s.draws.some(d => d.kind === "text" && d.label === String(s.api.gold()) && d.y === 37 && d.x === s.c.W - 10 - s.c.tw(s.api.gold())));
+  const price = item.price + "G", cash = "GOLD " + s.api.gold();
+  assert.ok(s.draws.some(d => d.kind === "text" && d.label === price && d.y === rowY && d.x === s.c.W - 12 - s.c.tw(price)));
+  assert.ok(s.draws.some(d => d.kind === "cursor" && d.x === 10 && d.y === rowY && rowY >= 40 && rowY <= 138));
+  assert.ok(s.draws.some(d => d.kind === "text" && d.label === cash && d.y === 18 && d.x === s.c.W - 12 - s.c.tw(cash)));
+  const neutral = /^(WHAT WOULD YOU LIKE\?|WHAT WILL YOU SELL\?|NOTHING I CAN BUY FROM YOU\.)/.test(shop.msg), note = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 202);
+  if (shop.msg && !neutral) { assert.ok(note); assert.ok(("LAST: " + shop.msg).toUpperCase().startsWith(note.label.replace(/\.\.\.$/, ""))); }
+  else if (item.price > s.api.gold()) assert.equal(note.label, "NOT ENOUGH GOLD.");
+  else if (!caster || known) assert.equal(note.label, caster ? "ALREADY KNOWN. NO GOLD IS SPENT." : "NO LEARNER. NO GOLD IS SPENT.");
   return { item, sp, caster, known, footer, row };
 }
 for (const width of [320, 256]) check("all34 authored lessons preview and learn through the actual shop at " + width, () => {
@@ -109,22 +119,25 @@ check("an unknown unaffordable lesson still previews its real recipient and cast
   const before = JSON.stringify(s.api.roster()); s.tick("a"); assert.equal(s.api.shop().msg, "NOT ENOUGH GOLD."); assert.equal(JSON.stringify(s.api.roster()), before);
 });
 for (const width of [320, 256]) check("long displayed recipient preserves full hint and KNOWN at " + width, () => {
-  const s = session(width), caster = s.api.roster().find(m => m.job === "Runecaster"); caster.name = "STARLIGHTSAGE";
+  const s = session(width), caster = s.api.roster().find(m => m.job === "Runecaster"), alias = "STARLIGHTSAGE".repeat(3); caster.name = alias;
   select(s, "Leech"); s.tick("a"); const before = JSON.stringify(s.api.roster()), p = preview(s, "Leech", true);
-  assert.equal(caster.name, "STARLIGHTSAGE"); assert.equal(JSON.stringify(s.api.roster()), before);
-  if (width === 256) assert.ok(p.footer.label.split(":")[0].length < caster.name.length, "only the displayed name is shortened when needed");
+  assert.equal(caster.name, alias); assert.equal(JSON.stringify(s.api.roster()), before);
+  assert.ok(p.footer.label.slice("LEARNS: ".length, -" / KNOWN".length).endsWith("..."), "only the displayed name is shortened when needed");
 });
 for (const [store, name] of [["Item", "Herb Tonic"], ["Weapon", "Steel Saber"]]) check(store + " shop preserves item/gear details, tabs and affordability", () => {
   const s = session(256); s.enter(store); const item = select(s, name); s.draw();
-  const footer = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 204);
-  assert.equal(footer.label, item.effect ? s.api.itemLine(name) : "ATTACK " + item.attack + " / CORIN ATK 54>68");
-  assert.ok(s.draws.some(d => d.kind === "text" && d.label === "BUY" && d.y === 9)); assert.ok(s.draws.some(d => d.kind === "text" && d.label === "SELL" && d.y === 9));
+  const footer = s.draws.find(d => d.kind === "text" && d.x === 12 && d.y === 178);
+  assert.equal(footer.label, item.effect ? s.api.itemLine(name) : "ATTACK " + item.attack);
+  if (!item.effect) assert.ok(s.draws.some(d => d.kind === "text" && d.x === 12 && d.y === 190 && d.label === "NEXT BUY: CORIN ATK 54>68"));
+  assert.ok(s.draws.some(d => d.kind === "text" && d.label === "BUY" && d.y === 6)); assert.ok(s.draws.some(d => d.kind === "text" && d.label === "SELL" && d.y === 6));
   s.tick("right"); assert.equal(s.api.shop().tab, "sell"); s.draw();
-  assert.ok(s.draws.some(d => d.kind === "text" && d.y === 204 && d.label === "SELLS FOR HALF ITS PRICE."));
+  const sold = s.api.sellList()[s.api.shop().idx], count = s.api.snapshot().bag[sold];
+  assert.ok(s.draws.some(d => d.kind === "text" && d.y === 178 && d.label === "HALF PRICE: " + s.api.sellPrice(sold) + "G / BAG " + count));
+  assert.ok(s.draws.some(d => d.kind === "text" && d.y === 190 && d.label === "BAG ITEMS ONLY. WORN GEAR IS KEPT."));
 });
 check("controlled previous element-only footer fails the same recipient/details assertion", () => {
-  const a = source.indexOf('  if (shop.kind === "magic") {', source.indexOf("function drawShop()")), b = source.indexOf("  text(d, 12, 204", a); assert.ok(a >= 0 && b > a);
-  const s = session(320, source.slice(0, a) + source.slice(b));
+  const facts = '      facts = sp ? number(sp.mp) + "MP PER CAST / " + spellHint(sp) : "NO CASTING DETAILS AVAILABLE.";'; assert.ok(source.includes(facts));
+  const s = session(320, source.replace(facts, '      facts = sp ? (sp.element + " MAGIC").toUpperCase() : "";'));
   assert.throws(() => preview(s, "Splash"), assert.AssertionError);
 });
 const inline = html.match(/<script>\s*([\s\S]*?)<\/script>/); assert.ok(inline);
