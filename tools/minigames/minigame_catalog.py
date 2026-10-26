@@ -89,6 +89,7 @@ CAPABILITIES = {
     "source_keys": ("SourceKeyDown",),
     "pointer": ("SourcePointerButton",),
     "core_pause": ("OwnPause",),
+    "focus_freeze": (),  # test-only: proven by focus_freeze_test.cpp
     "save_restore": ("SaveState", "RestoreState"),
 }
 
@@ -125,7 +126,7 @@ def parse_capabilities():
         for i in range(1, len(parts), 2):
             body = parts[i + 1]
             got = set(re.findall(r"(\w+)\([^)]*\)\s*(?:const\s*)?override", body))
-            caps[parts[i]] = sorted(k for k, need in CAPABILITIES.items() if all(n in got for n in need))
+            caps[parts[i]] = sorted(k for k, need in CAPABILITIES.items() if need and all(n in got for n in need))
     return caps
 
 
