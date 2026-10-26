@@ -59,13 +59,15 @@
         "desktop_dungeon_circuit",
         "desktop_dungeon_switchback",
         "desktop_dungeon_trail",
-        "desktop_maze"
+        "desktop_maze",
+        "desktop_maze_saves"
       ],
       "option_count": 2,
       "capabilities": [
         "focus_freeze",
         "hints",
-        "options"
+        "options",
+        "save_restore"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
@@ -118,6 +120,7 @@
       "start": "StartGame(\"pacman\", Seed)",
       "portable_tests": [
         "desktop_maze",
+        "desktop_maze_saves",
         "desktop_pacman_fruit",
         "desktop_pacman_input",
         "desktop_pacman_power",
@@ -255,7 +258,8 @@
       "capabilities": [
         "focus_freeze",
         "hints",
-        "options"
+        "options",
+        "save_restore"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
