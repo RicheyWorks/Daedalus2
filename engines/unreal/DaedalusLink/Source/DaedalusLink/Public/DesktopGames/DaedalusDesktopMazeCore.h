@@ -863,6 +863,7 @@ public:
             Out.AddText(280,270,Won ? "VICTORY!" : "GAME OVER",maze::Yellow,38);
             Out.AddText(195,325,"Pad A / Space / Enter / R: replay",White,17);
         }
+        Out.AddRect(0,70,800,26,{8,36,16,255});
         Out.AddText(10,78,HintLine(),Color{255,236,180,255},14);
         Out.AddText(520,78,ActionCue(),Color{120,225,255,255},14);
     }

@@ -56,6 +56,14 @@ void View() {
             && C.Tint.R==24 && C.Tint.G==16 && C.Tint.B==8) Door=N;
     }
     Check(Wall<Door && Door<F.Commands.size(),"the cabin keeps a door on its wall");
+    std::size_t Plate=F.Commands.size(),Hint=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind==Shape::Rectangle && C.A.X==0 && C.A.Y==70 && C.B.X==800 && C.B.Y==26
+            && C.Tint.R==8 && C.Tint.G==36 && C.Tint.B==16) Plate=N;
+        if(C.Kind==Shape::Text && C.A.Y==78 && C.Label.rfind("HINT",0)==0) Hint=N;
+    }
+    Check(Plate<Hint && Hint<F.Commands.size(),"the hint sits on a dark plate over the trees");
     std::size_t Brim=F.Commands.size(),Cap=F.Commands.size();
     for(std::size_t N=0;N<F.Commands.size();++N) {
         const auto& C=F.Commands[N];
