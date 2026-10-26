@@ -28,6 +28,16 @@ void View() {
         if(Tunic(F.Commands[N],P)) Body=N;
     }
     Check(Rim<Body && Body<F.Commands.size(),"dark outline draws behind the tunic");
+    std::size_t Brim=F.Commands.size(),Cap=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Triangle || C.B.X!=P.X) continue;
+        if(C.A.X==P.X-10 && C.A.Y==P.Y-16 && C.B.Y==P.Y-32
+            && C.Tint.R==12 && C.Tint.G==40 && C.Tint.B==12) Brim=N;
+        if(C.A.X==P.X-8 && C.A.Y==P.Y-16 && C.B.Y==P.Y-28
+            && C.Tint.R==50 && C.Tint.G==150 && C.Tint.B==50) Cap=N;
+    }
+    Check(Brim<Cap && Cap<F.Commands.size(),"hat keeps a dark brim on the grass");
     std::size_t RockRim=F.Commands.size(),Rock=F.Commands.size();
     for(std::size_t N=0;N<F.Commands.size();++N) {
         const auto& C=F.Commands[N];
