@@ -19,6 +19,14 @@ def alias_bytes(data, old, new, expected):
     if kind != b'JSON' or length % 4 or 20 + length > len(data):
         raise ValueError('invalid JSON chunk')
     doc = json.loads(data[20:20+length])
+    # Refuse a new alias that would shadow an unrelated existing identity.
+    for group in ('nodes', 'skins', 'meshes'):
+        items = doc.get(group, [])
+        targets = {new + item['name'][len(old):] for item in items
+                   if item.get('name') in (old, old + '_Rig')}
+        if any(item.get('name') in targets and item.get('name') not in (old, old + '_Rig')
+               for item in items):
+            raise ValueError('destination name already present in GLB ' + group)
     changed = 0
     for group in ('nodes', 'skins', 'meshes'):
         for item in doc.get(group, []):

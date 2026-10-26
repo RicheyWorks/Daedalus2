@@ -34,15 +34,15 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | hub = persistent level footprint centre (14850,-9500) cm, 432 m square; cells 49..51 reserved |
 | 2 | Terrain host | **done** | Fable | DaedalusWorld persistent level, 1863 static meshes, PCG |
-| 3 | Lands laid down | **partial** | Fable | 14 team islands on estates deeds 9..59 (dab971586, 7552 actors, undo table saved). Missing: plot markers for the rest of ring 1..N |
+| 3 | Lands laid down | **done** | Fable | 9,091 islands: 89 labelled Land_ slabs (rings 1-6) + 100 instanced districts (finish_world_zero 00:50), dressed as asteroid fragments (own height +-40 m, 8-20 m thick, rock underside, 2,255 kit props; dress_islands 01:27); the 14 team estates hold the other cells. Ledger docs/production/lands/world-zero.json |
 | 4 | Mint row | **missing** | Sol | contract signs `to,slot,seed,radius,deadline` only, 64 slots, no realm/estate/egg fields (29124). Needs realm-aware mint design |
-| 5 | Cast | **partial** | Fable/Sol | Keeper Ostra speaks via dialogue; no `world-zero.dcs` (cross-realm NPCs in REALM-CASTS §165 unbound) |
+| 5 | Cast | **partial** | Fable/Sol | `world-zero.dcs`: the six cross-realm NPCs (Ferryman Bram, Rainbow Painter, Merchant Zee with stock by realm visited, Heartstone Seeker Captain, Courier of Worlds, Tugboat Balloonist); lay_cast rings them round the PlayerStart; art: Sol to export Mob_Zero_* (6) |
 | 6 | Creatures | **partial** | Fable | Encounters spawn foes (AlwaysSpawn); 10 enemy candidates validated of 500 |
 | 7 | Items | **done** | Fable | `world-zero.dic` 14 items |
 | 8 | Dialogue theme | **done** | Fable | `zero` |
 | 9 | Mounts | **partial** | Sol | boats/subs at docks (OCE01..03), no land mount |
-| 10 | Docks / gates | **partial** | Fable | rainbow gates to 4 realms (ADR-053) as TargetPoints; HasDocks=true in Session table, no dock actors placed |
-| 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumer `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
+| 10 | Docks / gates | **partial** | Fable | four `ADaedalusRealmPortal` gates 40 m E/W/N/S of the PlayerStart (one per realm) + boat pier and sub airlock portals to OCEAN, laid by `lay_portals('WORLD-ZERO')`; Ocean landing markers at Poot's harbor docks (`lay_ocean_markers`); build + editor turn pending |
+| 11 | Server endpoints | **partial** | Sol/Fable | `/api/v1/realms` merged (PR80); land districts `/api/v1/realms/{R}/lands?district=` in PR85; consumers `DaedalusRealmDirectoryCore.h` (WorldActor LoadDirectory/TravelToRealm: a gate makes the actor host the directory's world) + `DaedalusLandRegistryCore.h` + `daedalus_land_sync.py` (bridge `daedalus.land_sync`): agree/moved/only-server/only-editor/reserved, editor follows the server's cell, nothing deleted |
 | 12 | Play proof | **done** | Fable | realm 10/10, inventory 10/10, dialogue 7/7, realm_switch 9/9 |
 
 ## GALLERY-CITY (catalog `gallery-city`, theme `gallery`, mount drone)
@@ -51,14 +51,14 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
 | 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (24 modular props validated (GAL02), no streamed ground ); district ground tiles still to lay |
-| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
+| 3 | Lands | **done** | Fable | 9,991 lands: 160 labelled Land_ slabs (rings 1-6) + 100 instanced districts incl. the hub districts' free cells (fill_hub_districts 01:52), dressed with 2,452 kit props (dress_islands). Ledger docs/production/lands/<realm>.json |
 | 4 | Mint row | **missing** | Sol | see WORLD-ZERO 4 |
 | 5 | Cast | **done** | Fable | `gallery-city.dcs` 12 roles/44 steps; 13 Mob_Gallery_* imported, Talkers bound (CAST-IMPORT) |
-| 6 | Creatures | **partial** | Sol | 19 creature/mount/pet visuals validated (GAL01); not spawned |
+| 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
 | 7 | Items | **done** | Fable | `gallery-city.dic` 13 items |
 | 8 | Dialogue theme | **done** | Fable | `gallery` |
-| 9 | Mounts | **missing** | Sol/Fable | drone art validated, no possession |
-| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
+| 9 | Mounts | **partial** | Fable | `DaedalusMountCore` profile (gallery drone, ceiling 120 m); the called vehicle wears Mob_Gallery_GalleryDrone and flies (Ghost::Wear/Lift); `mounts` scenario; build pending |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame/BoatDock/Airlock at the markers; `ADaedalusRealmPortal` walk-in boxes at Gate (home), Dock (boat→OCEAN), SubDock (sub→OCEAN) with cooldown; hero lands at `Gate_<Realm>` (LandAt); `portals` scenario; Ocean side: Sol's dock ids |
 | 11 | Server endpoints | **partial** | Sol | PR80 row |
 | 12 | Play proof | **partial** | Fable | cast 8/8 (talk), no walk-the-realm scenario |
 
@@ -68,14 +68,14 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
 | 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (23 props + AMF trough (PAR02), no ground ); district ground tiles still to lay |
-| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
+| 3 | Lands | **done** | Fable | 9,991 lands: 160 labelled Land_ slabs (rings 1-6) + 100 instanced districts incl. the hub districts' free cells (fill_hub_districts 01:52), dressed with 2,452 kit props (dress_islands). Ledger docs/production/lands/<realm>.json |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `parcels.dcs` 12/46; GLBs in `Codex\2026-10-13\parcels-buildout\cast` NOT imported yet |
-| 6 | Creatures | **partial** | Sol | 32 role models validated (PAR01) |
+| 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
 | 7 | Items | **done** | Fable | `parcels.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `parcels` |
-| 9 | Mounts | **missing** | Sol/Fable | helicopter + helipad art only |
-| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
+| 9 | Mounts | **partial** | Fable | profile parcel helicopter (ceiling 200 m), wears Mob_Parcels_ParcelHelicopter |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame/BoatDock/Airlock at the markers; `ADaedalusRealmPortal` walk-in boxes at Gate (home), Dock (boat→OCEAN), SubDock (sub→OCEAN) with cooldown; hero lands at `Gate_<Realm>` (LandAt); `portals` scenario; Ocean side: Sol's dock ids |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
 
@@ -85,14 +85,14 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
 | 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (24 modular props (BRK02): meadow, road, runway, workshop ); district ground tiles still to lay |
-| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
+| 3 | Lands | **done** | Fable | 9,991 lands: 160 labelled Land_ slabs (rings 1-6) + 100 instanced districts incl. the hub districts' free cells (fill_hub_districts 01:52), dressed with 2,452 kit props (dress_islands). Ledger docs/production/lands/<realm>.json |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `bricks.dcs` 12/45; `bricks-buildout\cast` NOT imported yet |
-| 6 | Creatures | **partial** | Sol | 32 role models (BRK01) |
+| 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
 | 7 | Items | **done** | Fable | `bricks.dic` 13 |
 | 8 | Dialogue theme | **done** | Fable | `bricks` |
-| 9 | Mounts | **missing** | Sol/Fable | plane, hover cart (BRK03) art only |
-| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
+| 9 | Mounts | **partial** | Fable | profile brick plane (fastest, ceiling 240 m), wears Mob_Bricks_BrickPlane; hover cart later |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame/BoatDock/Airlock at the markers; `ADaedalusRealmPortal` walk-in boxes at Gate (home), Dock (boat→OCEAN), SubDock (sub→OCEAN) with cooldown; hero lands at `Gate_<Realm>` (LandAt); `portals` scenario; Ocean side: Sol's dock ids |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
 
@@ -102,14 +102,14 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | origin in `daedalus_realm_ground.ORIGINS` (40 km from World Zero), 3x3 hub estate (768 m slab), markers Spawn/Gate/Dock/SubDock/Mount (2ec591291) |
 | 2 | Terrain host | **partial** | Fable/Sol | hub slab + the whole environment kit imported to `/Game/Daedalus/Art/Env/<Realm>/` and standing on it (32 props (incl. 12 Halloween, LAB09), Wall4m, FoldingMaze ); district ground tiles still to lay |
-| 3 | Lands | **partial** | Fable | 160 plots laid down (rings 1-6, deeds 9..168) as `Land_<Realm>_<n>` slabs + signs; rings 7-49 to follow once the mint shape is known |
+| 3 | Lands | **done** | Fable | 9,991 lands: 160 labelled Land_ slabs (rings 1-6) + 100 instanced districts incl. the hub districts' free cells (fill_hub_districts 01:52), dressed with 2,452 kit props (dress_islands). Ledger docs/production/lands/<realm>.json |
 | 4 | Mint row | **missing** | Sol | |
 | 5 | Cast | **partial** | Fable | `labyrinth.dcs` 12/46; 35 Mob_Lab_* GLBs exported, not imported |
-| 6 | Creatures | **partial** | Sol | plants LAB10 policy tested |
+| 6 | Creatures | **partial** | Fable/Sol | bestiary placed at the hub ring; `DaedalusBestiaryCore` table (8-9 foes + boss, weighted) drives Encounters in the realm, foes wear the skeletal art (Target::DressSkeletal); `bestiary` scenario; build pending |
 | 7 | Items | **done** | Fable | `labyrinth.dic` 10 (chalk charges LAB01 core tested) |
 | 8 | Dialogue theme | **done** | Fable | `labyrinth` |
-| 9 | Mounts | **missing** | Sol/Fable | sky-strider (LAB05) |
-| 10 | Docks / gates | **partial** | Fable | RainbowFrame at the gate marker, BoatDock/Airlock at the dock markers, mount station at the west edge; hero SwitchRealm must teleport to `Gate_<Realm>` (next) |
+| 9 | Mounts | **partial** | Fable | profile sky-strider (ceiling 60 m), wears Mob_Lab_SkyStrider |
+| 10 | Docks / gates | **partial** | Fable | RainbowFrame/BoatDock/Airlock at the markers; `ADaedalusRealmPortal` walk-in boxes at Gate (home), Dock (boat→OCEAN), SubDock (sub→OCEAN) with cooldown; hero lands at `Gate_<Realm>` (LandAt); `portals` scenario; Ocean side: Sol's dock ids |
 | 11 | Server endpoints | **partial** | Sol | |
 | 12 | Play proof | **missing** | Fable | |
 
@@ -119,7 +119,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 |---|-------|-------|-------|----------------|
 | 1 | Grid + hub | **done** | Fable | DRR maps; `land <n> <map> <x> <y> <w> <h> <owner>` rows (realm-7: lands 0/1/2) |
 | 2 | Terrain host | **done** | Fable | DRR tile maps |
-| 3 | Lands | **partial** | Fable | 3 lands in realm-7; the rest of the maps need `land` rows |
+| 3 | Lands | **done** | Fable | 34 four-by-four plots on the FIELD (every open block, nearest the hero's plot first) by `tools/realm/portal_lands.py`, idempotent, checked in CI; towns/caves are not plots |
 | 4 | Mint row | **partial** | Sol/Fable | PORT12 Java egg + DRR parity tested; ownership authority pending; DRAGON_EGG→DRAKE done in core |
 | 5 | Cast | **done** | Fable | 12 town NPCs (PORT03), queen, inn, shops in DRR |
 | 6 | Creatures | **done** | Fable | 15 RetroMonster keys, shiny, 77 character exports validated |
@@ -143,7 +143,7 @@ merge queue), **Poot** (cabinets, photo/image objects).
 | 7 | Items | **missing** | Fable | no `ocean.dic` (Session table names catalog `ocean`; server loads 5 catalogs) |
 | 8 | Dialogue theme | **partial** | Fable | `ocean` theme name only |
 | 9 | Mounts | **partial** | Sol | skiff + submarine: boarding, propulsion, hull, exit verified in network tests; rendered piloting pending |
-| 10 | Docks / gates | **partial** | Sol | dock interaction verified headless; REALM transfer pending; shore return rule in Session core |
+| 10 | Docks / gates | **partial** | Sol/Fable | dock interaction verified headless; Spawn/Dock/SubDock markers at the harbor so a boat from any realm lands on the pier (LandAt); shore return rule in Session core; Sol's vessel possession on arrival pending |
 | 11 | Server endpoints | **done** | Sol | OCEAN-HOST-API (auth sector reads, quotas, URL check) |
 | 12 | Play proof | **partial** | Sol | 27 verified runs, 5 pending (HW, REALM, ART, AUTH, HOST) |
 
@@ -180,7 +180,8 @@ warning (Prop_Gallery_Ramp degenerate tangents, Sol's export).
 1. ~~World Zero plot markers~~ done; ~~Gallery/Parcels/Bricks/Labyrinth hub + kit + lands~~ done (table above).
 1b. Hero `SwitchRealm` lands at `Gate_<Realm>`/`Spawn_<Realm>`; WorldActor streams by realm origin. Fable.
 2. Realm-aware mint design + `/api/v1/lands?realm=` endpoint. Sol. Fable consumes it in WorldActor.
-3. District ground tiles (floor/field/meadow/road modules on the 2 m snap) over the hub districts. Fable + Sol.
+3. District sublevels: `daedalus_districts.steps(realm)` moves each realm's lands into `Realms/<R>/D<dd>` Dynamic sublevels and the hub kit into `<R>_Hub`, listed in islands.json for UDaedalusStreamer — the prerequisite for rings 7..49. Fable (tool on main, editor turn pending).
+3b. District ground tiles (floor/field/meadow/road modules on the 2 m snap) over the hub districts. Fable + Sol.
 4. Import Parcels/Bricks/Labyrinth casts (tool exists: `tools/unreal_play/import_cast.py`). Fable.
 5. Repeat 3 for Parcels, Bricks, Labyrinth. Mounts after ground.
 6. `ocean.dic` + Ocean role target. Fable / Sol.

@@ -7,6 +7,7 @@ tab TOOLS
 tab ARMOR
 tab CUBES
 tab KEYS
+tab WARES
 slot HAND
 slot BODY
 item SWORD TOOLS HAND EQUIP,INSPECT Sword
@@ -37,3 +38,11 @@ item SAND CUBES - PLACE,DROP,SPLIT Sand Cube
 detail SAND Falls when nothing holds it.
 item GATE_KEY KEYS - INSPECT Gate Key
 detail GATE_KEY Opens one of the three rainbow gates off World Zero.
+item ZEE_BRUSH WARES - INSPECT Gallery Brush
+detail ZEE_BRUSH Zee's stock after the galleries: a curator's brush, bristles still blue.
+item ZEE_HONEY WARES - INSPECT Parcels Honey
+detail ZEE_HONEY A jar from Beekeeper Hollis's hives, by way of Zee's cart.
+item ZEE_STUD WARES - INSPECT Brick Stud
+detail ZEE_STUD One stud, sorted by colour by the Builder Kids' Club. Twice.
+item ZEE_CHALK WARES - INSPECT Labyrinth Chalk
+detail ZEE_CHALK A stick of route chalk. Marks fade when the maze folds.

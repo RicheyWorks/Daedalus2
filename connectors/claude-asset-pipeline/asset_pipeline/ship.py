@@ -14,8 +14,10 @@
 Both editors must run on the same computer, because Unreal reads the file Blender wrote.
 """
 import argparse
+import hashlib
 import json
 import os
+import shutil
 import sys
 import tempfile
 import time
@@ -109,6 +111,27 @@ def judge(sent, witness, made):
 UNREAL_TIMEOUT = 300
 
 
+def fingerprint(path):
+    """Bind a queued artifact to bytes, not just its reusable filename."""
+    digest = hashlib.sha256()
+    size = 0
+    with open(path, "rb") as source:
+        for chunk in iter(lambda: source.read(1 << 20), b""):
+            digest.update(chunk)
+            size += len(chunk)
+    return {"sha256": digest.hexdigest(), "bytes": size}
+
+
+def witness(report):
+    before = fingerprint(report["path"])
+    report["file"] = glb.summarize(report["path"])
+    after = fingerprint(report["path"])
+    if before != after:
+        raise ValueError("asset changed while collecting export witness; re-export before import")
+    report["artifact"] = after
+    return report
+
+
 def export(name, objects=None, folder=None, blender=wire.BLENDER, timeout=600):
     """The Blender half: the .glb, what Blender says it sent, and the file's own witness."""
     folder = folder or os.path.join(tempfile.gettempdir(), "daedalus-pipeline")
@@ -117,7 +140,7 @@ def export(name, objects=None, folder=None, blender=wire.BLENDER, timeout=600):
     report["blender"] = wire.obj(wire.call(blender, "execute_code", timeout=timeout, side="Blender",
                                            code=sides.script(sides.BLENDER_EXPORT, path=path, objects=objects or [])),
                                  "Blender", "the .glb export")
-    report["file"] = glb.summarize(path)
+    witness(report)
     report["exported_s"] = round(time.time() - report["started"], 2)
     return report
 
@@ -126,17 +149,45 @@ def prebuilt(name, glb_path, sent):
     """The Blender half done elsewhere (a cloud Blender, ADR-058): a .glb and Blender's own report of what it sent
     (the same fields BLENDER_EXPORT reports), checked against the file's witness exactly as a live export is."""
     report = {"name": name, "path": os.path.abspath(glb_path), "started": time.time(), "blender": sent,
-              "file": glb.summarize(glb_path), "exported_s": 0.0, "prebuilt": True}
+              "exported_s": 0.0, "prebuilt": True}
+    witness(report)
     return report
+
+
+def import_snapshot(path, expected):
+    """Keep a private copy alive even when a bridge timeout leaves work running."""
+    root = os.path.join(tempfile.gettempdir(), "daedalus-pipeline", "import-snapshots")
+    os.makedirs(root, exist_ok=True)
+    folder = tempfile.mkdtemp(prefix=expected["sha256"][:16] + "-", dir=root)
+    snapshot = os.path.join(folder, os.path.basename(path))
+    shutil.copyfile(path, snapshot)
+    if fingerprint(snapshot) != expected:
+        raise ValueError("asset changed while creating import snapshot; re-export before import")
+    return snapshot
 
 
 def land(report, dest="/Game/Daedalus/Assets", save=True, unreal=wire.UNREAL, timeout=UNREAL_TIMEOUT):
     """The Unreal half: import the exported file, then judge all three sides."""
+    expected = report.get("artifact")
+    current = fingerprint(report["path"])
+    if expected is not None and current != expected:
+        raise ValueError("asset bytes changed after export; re-export before Unreal import")
+    if expected is None:
+        if glb.summarize(report["path"]) != report["file"]:
+            raise ValueError("legacy asset witness changed; re-export before Unreal import")
+        report["artifact_binding"] = "legacy-structure-only"
+    else:
+        report["artifact_binding"] = "export-sha256"
+    snapshot = import_snapshot(report["path"], current)
+    report["import_artifact"] = current
+    report["import_path"] = snapshot
     report["dest"] = dest + "/" + report["name"]
     t = time.time()
+    report["import_state"] = "outcome-unknown"
     made = wire.call(unreal, "execute_python", timeout=timeout, side="Unreal", unattended=False,
                      bridge_timeout=timeout,
-                     code=sides.script(sides.UNREAL_IMPORT, path=report["path"], dest=report["dest"], save=save))
+                     code=sides.script(sides.UNREAL_IMPORT, path=snapshot, artifact=current, dest=report["dest"], save=save))
+    report["import_state"] = "reply-received"
     made = wire.obj(made, "Unreal", "the import")
     checks = judge(report["blender"], report["file"], made)
     report.update(ok=all(c["ok"] for c in checks), checks=checks, unreal=made, imported_s=round(time.time() - t, 2),
@@ -153,6 +204,21 @@ def ship(name, objects=None, dest="/Game/Daedalus/Assets", folder=None, save=Tru
 ship.export, ship.land, ship.prebuilt = export, land, prebuilt   # the watcher overlaps the halves: Blender exports the next asset while Unreal imports this one
 
 
+def write_report(path, report):
+    """Publish complete JSON; an interrupted write must not destroy the prior receipt."""
+    folder = os.path.dirname(os.path.abspath(path))
+    fd, temporary = tempfile.mkstemp(prefix=".pipeline-report-", suffix=".tmp", dir=folder)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            json.dump(report, stream, indent=2)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--name", required=True, help="asset name: the .glb file and the Unreal folder")
@@ -164,18 +230,25 @@ def main(argv=None):
     ap.add_argument("--blender-port", type=int, default=wire.BLENDER[1])
     ap.add_argument("--unreal-port", type=int, default=wire.UNREAL[1])
     a = ap.parse_args(argv)
+    r = {"name": a.name, "phase": "export", "ok": False}
     try:
-        r = ship(a.name, [o for o in a.objects.split(",") if o], a.dest, a.folder, not a.no_save,
-                 (wire.BLENDER[0], a.blender_port), (wire.UNREAL[0], a.unreal_port))
+        r = export(a.name, [o for o in a.objects.split(",") if o], a.folder,
+                   (wire.BLENDER[0], a.blender_port))
+        r["phase"] = "import"
+        land(r, a.dest, not a.no_save, (wire.UNREAL[0], a.unreal_port))
+        r["phase"] = "verified"
     except (wire.BridgeError, OSError, ValueError) as e:
+        r.update(ok=False, error={"type": type(e).__name__, "message": str(e)},
+                 retry="Do not repeat an import with unknown outcome; inspect the original job and retained snapshot first.")
+        if a.report:
+            write_report(a.report, r)
         print("FAIL  %s" % e)
         return 2
     for c in r["checks"]:
         print("%-4s  %-46s %s" % ("ok" if c["ok"] else "FAIL", c["check"], c["detail"]))
     print("%s  %s -> %s in %.1fs" % ("SHIPPED" if r["ok"] else "REJECTED", r["path"], r["dest"], r["seconds"]))
     if a.report:
-        with open(a.report, "w") as f:
-            json.dump(r, f, indent=2)
+        write_report(a.report, r)
     return 0 if r["ok"] else 1
 
 

@@ -1,10 +1,10 @@
 name: Java arcade adapters
 on:
   pull_request:
-    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**JavaArcade*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/**", "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs", "engines/unreal/core-test/java_arcade/**", "docs/java-arcade/**", ".github/workflows/java-arcade.yml"]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**JavaArcade*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/**", "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs", "engines/unreal/core-test/java_arcade/**", "docs/java-arcade/**", "tools/minigames/**", "docs/minigames/**", ".github/workflows/java-arcade.yml"]
   push:
     branches: [main]
-    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**JavaArcade*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/**", "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs", "engines/unreal/core-test/java_arcade/**", "docs/java-arcade/**", ".github/workflows/java-arcade.yml"]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**JavaArcade*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/**", "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs", "engines/unreal/core-test/java_arcade/**", "docs/java-arcade/**", "tools/minigames/**", "docs/minigames/**", ".github/workflows/java-arcade.yml"]
 permissions:
   contents: read
 concurrency:
@@ -38,6 +38,8 @@ jobs:
       - name: Configure MSVC
         if: runner.os == 'Windows'
         run: cmake -S engines/unreal/core-test/java_arcade -B java-arcade-build
+      - name: Minigame catalog (Java cabinets) is current
+        run: python tools/minigames/minigame_catalog.py --check
       - name: Compile
         run: cmake --build java-arcade-build --config Debug
       - name: Verify lifecycle and typed state policy

@@ -1,0 +1,769 @@
+{
+ "Pythagoras": {
+  "actors": 2552,
+  "centre_cm": [
+   30369,
+   23895
+  ],
+  "radius_m": 938.8,
+  "families": {
+   "tree": 288,
+   "other": 321,
+   "grass": 500,
+   "fern": 905,
+   "bush": 457,
+   "water": 26,
+   "fence": 17,
+   "rock": 20,
+   "mushroom": 9,
+   "light": 3,
+   "ground": 6
+  },
+  "per_1000m2": {
+   "tree": 0.1,
+   "other": 0.12,
+   "grass": 0.18,
+   "fern": 0.33,
+   "bush": 0.17,
+   "water": 0.01,
+   "fence": 0.01,
+   "rock": 0.01,
+   "mushroom": 0.0,
+   "light": 0.0,
+   "ground": 0.0
+  },
+  "top_meshes": [
+   [
+    "Prop_Fern_Bracken",
+    757
+   ],
+   [
+    "Prop_Shrub_Fern",
+    378
+   ],
+   [
+    "Prop_Grass_MeadowGrass",
+    120
+   ],
+   [
+    "Prop_Grass_Sedge",
+    91
+   ],
+   [
+    "Prop_Berry_Blackberry",
+    76
+   ],
+   [
+    "Prop_Tree_Pine_Mature",
+    65
+   ],
+   [
+    "Prop_Tree_Oak_Mature",
+    59
+   ],
+   [
+    "Prop_Grass_TallGrass",
+    59
+   ],
+   [
+    "Prop_Tree_Pine_Young",
+    32
+   ],
+   [
+    "Prop_Tree_Oak_Young",
+    29
+   ],
+   [
+    "Prop_Ground_PYT_MeadowGrass_V04",
+    27
+   ],
+   [
+    "Prop_Ground_PYT_MeadowGrass_V09",
+    24
+   ],
+   [
+    "Prop_Ground_PYT_MeadowGrass_V03",
+    24
+   ],
+   [
+    "Prop_Ground_PYT_MeadowGrass_V10",
+    21
+   ],
+   [
+    "Prop_Ground_PYT_Fern_V04",
+    21
+   ]
+  ],
+  "z_span_m": 104.0
+ },
+ "Codex": {
+  "actors": 4,
+  "centre_cm": [
+   30535,
+   67548
+  ],
+  "radius_m": 818.9,
+  "families": {
+   "other": 4
+  },
+  "per_1000m2": {
+   "other": 0.0
+  },
+  "top_meshes": [
+   [
+    "Cube",
+    3
+   ],
+   [
+    "SolTest2_20261012_Sign",
+    1
+   ]
+  ],
+  "z_span_m": 38.6
+ },
+ "Claude": {
+  "actors": 378,
+  "centre_cm": [
+   -52807,
+   3910
+  ],
+  "radius_m": 3123.6,
+  "families": {
+   "ground": 154,
+   "water": 45,
+   "tree": 45,
+   "flower": 45,
+   "rock": 44,
+   "crystal": 45
+  },
+  "per_1000m2": {
+   "ground": 0.01,
+   "water": 0.0,
+   "tree": 0.0,
+   "flower": 0.0,
+   "rock": 0.0,
+   "crystal": 0.0
+  },
+  "top_meshes": [
+   [
+    "Island_C240_island",
+    1
+   ],
+   [
+    "Island_C240_water",
+    1
+   ],
+   [
+    "Island_C240_trees",
+    1
+   ],
+   [
+    "Island_C240_cottage",
+    1
+   ],
+   [
+    "Island_C240_flowers",
+    1
+   ],
+   [
+    "Island_C240_rocks",
+    1
+   ],
+   [
+    "Island_C240_crystals",
+    1
+   ],
+   [
+    "Island_C240_clouds",
+    1
+   ],
+   [
+    "Island_C241_island",
+    1
+   ],
+   [
+    "Island_C241_water",
+    1
+   ],
+   [
+    "Island_C241_trees",
+    1
+   ],
+   [
+    "Island_C241_cottage",
+    1
+   ],
+   [
+    "Island_C241_flowers",
+    1
+   ],
+   [
+    "Island_C241_rocks",
+    1
+   ],
+   [
+    "Island_C241_crystals",
+    1
+   ]
+  ],
+  "z_span_m": 71.5
+ },
+ "OddsReaper": {
+  "actors": 593,
+  "centre_cm": [
+   27851,
+   -74573
+  ],
+  "radius_m": 105.4,
+  "families": {
+   "building": 29,
+   "other": 423,
+   "light": 48,
+   "crystal": 32,
+   "tree": 24,
+   "rock": 35,
+   "water": 2
+  },
+  "per_1000m2": {
+   "building": 0.83,
+   "other": 12.12,
+   "light": 1.38,
+   "crystal": 0.92,
+   "tree": 0.69,
+   "rock": 1.0,
+   "water": 0.06
+  },
+  "top_meshes": [
+   [
+    "Prop_OR_Lantern_00",
+    15
+   ],
+   [
+    "Prop_OR_Lantern_01",
+    3
+   ],
+   [
+    "Prop_OR_Lantern_02",
+    3
+   ],
+   [
+    "Prop_OR_Lantern_03",
+    3
+   ],
+   [
+    "Prop_OR_Lantern_04",
+    3
+   ],
+   [
+    "Prop_OR_Lantern_05",
+    3
+   ],
+   [
+    "Prop_OR_Lantern_06",
+    3
+   ],
+   [
+    "Prop_OR_Lantern_07",
+    3
+   ],
+   [
+    "Prop_OR_Lantern_08",
+    3
+   ],
+   [
+    "Prop_OR_Lantern_09",
+    3
+   ],
+   [
+    "Prop_OR_Roulette_03",
+    2
+   ],
+   [
+    "Prop_OR_FeltTable_00",
+    2
+   ],
+   [
+    "Prop_OR_FeltTable_01",
+    2
+   ],
+   [
+    "Prop_OR_FeltTable_02",
+    2
+   ],
+   [
+    "Prop_OR_FeltTable_03",
+    2
+   ]
+  ],
+  "z_span_m": 54.2
+ },
+ "Hephaestus": {
+  "actors": 208,
+  "centre_cm": [
+   92265,
+   43604
+  ],
+  "radius_m": 439.2,
+  "families": {
+   "other": 154,
+   "light": 3,
+   "rock": 7,
+   "fence": 17,
+   "building": 1,
+   "grass": 3,
+   "water": 22,
+   "fern": 1
+  },
+  "per_1000m2": {
+   "other": 0.25,
+   "light": 0.0,
+   "rock": 0.01,
+   "fence": 0.03,
+   "building": 0.0,
+   "grass": 0.0,
+   "water": 0.04,
+   "fern": 0.0
+  },
+  "top_meshes": [
+   [
+    "Prop_RanchFencePost_Wood",
+    8
+   ],
+   [
+    "Prop_RanchFenceRail_Wood",
+    8
+   ],
+   [
+    "Prop_ForgeObsidianSpire_Basalt",
+    7
+   ],
+   [
+    "Prop_WaterPipe_Iron",
+    6
+   ],
+   [
+    "Prop_LavaLantern",
+    3
+   ],
+   [
+    "Prop_ForgeLavaRock_Basalt",
+    3
+   ],
+   [
+    "Prop_ArkRivetCrate",
+    3
+   ],
+   [
+    "Mob_Chicken_Body",
+    3
+   ],
+   [
+    "Mob_Chicken_Head",
+    3
+   ],
+   [
+    "Mob_Chicken_WingL",
+    3
+   ],
+   [
+    "Mob_Chicken_WingR",
+    3
+   ],
+   [
+    "Mob_Goat_Body",
+    3
+   ],
+   [
+    "Mob_Goat_Head",
+    3
+   ],
+   [
+    "Mob_Goat_LegBL",
+    3
+   ],
+   [
+    "Mob_Goat_LegBR",
+    3
+   ]
+  ],
+  "z_span_m": 100.0
+ },
+ "DiskSaver": {
+  "actors": 199,
+  "centre_cm": [
+   -10518,
+   -86220
+  ],
+  "radius_m": 39.5,
+  "families": {
+   "other": 112,
+   "rock": 17,
+   "water": 8,
+   "building": 2,
+   "fence": 18,
+   "grass": 9,
+   "flower": 5,
+   "tree": 28
+  },
+  "per_1000m2": {
+   "other": 22.89,
+   "rock": 3.47,
+   "water": 1.63,
+   "building": 0.41,
+   "fence": 3.68,
+   "grass": 1.84,
+   "flower": 1.02,
+   "tree": 5.72
+  },
+  "top_meshes": [
+   [
+    "Cube",
+    24
+   ],
+   [
+    "Prop_DS_Fence_Seg_00",
+    16
+   ],
+   [
+    "Plane",
+    6
+   ],
+   [
+    "Prop_DS_Tree_08",
+    5
+   ],
+   [
+    "Prop_DS_Tree_13",
+    5
+   ],
+   [
+    "Prop_DS_Tree_18",
+    5
+   ],
+   [
+    "Prop_DS_Tree_23",
+    5
+   ],
+   [
+    "Prop_DS_Rock_06",
+    4
+   ],
+   [
+    "Prop_DS_Rock_14",
+    4
+   ],
+   [
+    "Prop_DS_Rock_22",
+    4
+   ],
+   [
+    "Prop_DS_Rock_30",
+    4
+   ],
+   [
+    "Prop_DS_Tree_28",
+    4
+   ],
+   [
+    "Prop_DS_Tree_33",
+    4
+   ],
+   [
+    "Prop_DS_Crop_Clover_S2_V0",
+    3
+   ],
+   [
+    "Prop_DS_Crop_Clover_S3_V0",
+    3
+   ]
+  ],
+  "z_span_m": 16.1
+ },
+ "AMF": {
+  "actors": 372,
+  "centre_cm": [
+   -333304,
+   -222309
+  ],
+  "radius_m": 41149.0,
+  "families": {
+   "other": 271,
+   "water": 29,
+   "building": 11,
+   "fence": 13,
+   "grass": 9,
+   "fern": 3,
+   "bush": 12,
+   "rock": 17,
+   "light": 6,
+   "ground": 1
+  },
+  "per_1000m2": {
+   "other": 0.0,
+   "water": 0.0,
+   "building": 0.0,
+   "fence": 0.0,
+   "grass": 0.0,
+   "fern": 0.0,
+   "bush": 0.0,
+   "rock": 0.0,
+   "light": 0.0,
+   "ground": 0.0
+  },
+  "top_meshes": [
+   [
+    "Prop_Live_AMF_Fence_V1",
+    12
+   ],
+   [
+    "Prop_Dress_AMF_Bush_V1",
+    12
+   ],
+   [
+    "Prop_Dress_AMF_Rock_V1",
+    12
+   ],
+   [
+    "Prop_Water_AMF_PipeStraight_V1",
+    8
+   ],
+   [
+    "Plane",
+    7
+   ],
+   [
+    "Prop_Dress_AMF_Lantern_V1",
+    6
+   ],
+   [
+    "Prop_Water_AMF_Trough_V1",
+    5
+   ],
+   [
+    "Prop_Pet_AMF_Kennel_V1",
+    4
+   ],
+   [
+    "Prop_Pet_AMF_Bed_V1",
+    4
+   ],
+   [
+    "Prop_Pet_AMF_Bowl_V1",
+    4
+   ],
+   [
+    "Prop_Live_AMF_HayBale_V1",
+    4
+   ],
+   [
+    "Prop_Water_AMF_RainCatcher_V1",
+    3
+   ],
+   [
+    "Prop_Herb_AMF_Barkbalm_V1",
+    3
+   ],
+   [
+    "Prop_Herb_AMF_Pawmint_V1",
+    3
+   ],
+   [
+    "Prop_Herb_AMF_Howlroot_V1",
+    3
+   ]
+  ],
+  "z_span_m": 48.0
+ },
+ "BlenderBoss": {
+  "actors": 1005,
+  "centre_cm": [
+   22244,
+   46851
+  ],
+  "radius_m": 105.8,
+  "families": {
+   "ground": 6,
+   "tree": 200,
+   "other": 576,
+   "grass": 2,
+   "bush": 1,
+   "water": 2,
+   "flower": 70,
+   "crystal": 7,
+   "rock": 76,
+   "building": 2,
+   "path": 20,
+   "fence": 20,
+   "light": 23
+  },
+  "per_1000m2": {
+   "ground": 0.17,
+   "tree": 5.69,
+   "other": 16.39,
+   "grass": 0.06,
+   "bush": 0.03,
+   "water": 0.06,
+   "flower": 1.99,
+   "crystal": 0.2,
+   "rock": 2.16,
+   "building": 0.06,
+   "path": 0.57,
+   "fence": 0.57,
+   "light": 0.65
+  },
+  "top_meshes": [
+   [
+    "Prop_Tree_Bamboo_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Banana_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Baobab_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Birch_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Cedar_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Cherry_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Coconut_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Cypress_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Ironwood_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Joshua_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Kapok_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Kelp_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Larch_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Mangrove_Mature",
+    10
+   ],
+   [
+    "Prop_Tree_Maple_Mature",
+    10
+   ]
+  ],
+  "z_span_m": 130.0
+ },
+ "Grok": {
+  "actors": 932,
+  "centre_cm": [
+   -36065,
+   67867
+  ],
+  "radius_m": 125.2,
+  "families": {
+   "other": 550,
+   "grass": 14,
+   "flower": 103,
+   "rock": 83,
+   "water": 11,
+   "fence": 105,
+   "light": 36,
+   "tree": 30
+  },
+  "per_1000m2": {
+   "other": 11.17,
+   "grass": 0.28,
+   "flower": 2.09,
+   "rock": 1.69,
+   "water": 0.22,
+   "fence": 2.13,
+   "light": 0.73,
+   "tree": 0.61
+  },
+  "top_meshes": [
+   [
+    "Prop_Fence",
+    95
+   ],
+   [
+    "Prop_Aqua_Cattail",
+    28
+   ],
+   [
+    "Cube",
+    26
+   ],
+   [
+    "Prop_ForgeLavaRock_Basalt",
+    25
+   ],
+   [
+    "Prop_ForgeLavaRock_Iron",
+    23
+   ],
+   [
+    "Cylinder",
+    20
+   ],
+   [
+    "Prop_ForgeLavaRock_Obsidian",
+    20
+   ],
+   [
+    "Prop_Lantern",
+    18
+   ],
+   [
+    "Prop_ForgeLavaRock_Stone",
+    15
+   ],
+   [
+    "Prop_Herb_Mint",
+    14
+   ],
+   [
+    "Prop_Herb_Chamomile",
+    14
+   ],
+   [
+    "Prop_Herb_Ginger",
+    14
+   ],
+   [
+    "Prop_Herb_Lavender",
+    14
+   ],
+   [
+    "Prop_Herb_Sage",
+    14
+   ],
+   [
+    "Prop_Herb_Basil",
+    14
+   ]
+  ],
+  "z_span_m": 40.6
+ }
+}

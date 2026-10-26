@@ -66,6 +66,21 @@ public:
 	/** For the harness: drive for one frame as if the stick were at (Forward, Right), -1..1. */
 	UFUNCTION(BlueprintCallable, Category = "Daedalus") void Drive(float Forward, float Right, bool bBoost);
 
+	/** Become the realm's mount (DaedalusMountCore: drone, helicopter, plane, sky-strider; World Zero's bike for
+	 *  the rest): the profile's hover/top/boost/ceiling, and Sol's rigged art on the frame when it is imported
+	 *  (the cube bike shows otherwise). Returns what it became. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Mount") FString Wear(const FString& Realm);
+	/** Ask a flying mount for a height over the ground (cm); clamped to the profile. Ground-huggers ignore it. */
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Mount") void Lift(float OverGroundCm);
+	UFUNCTION(BlueprintCallable, Category = "Daedalus|Mount") FString MountState() const;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Mount") FString MountRealm = TEXT("WORLD-ZERO");
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Mount") FString MountName = TEXT("hover bike");
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Mount") FString MountArt;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Mount") bool bMountArt = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Mount") float CeilingCm = 0.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Mount") float WantedHeight = 0.f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Daedalus|Mount") TObjectPtr<class USkeletalMeshComponent> Skin;
+
 protected:
 	virtual void BeginPlay() override;
 

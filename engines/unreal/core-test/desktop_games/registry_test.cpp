@@ -8,7 +8,7 @@ int main() {
     int checks=0,failed=0;
     auto check=[&](bool ok,const char* what) {++checks; if(!ok) {++failed;std::cerr<<"FAIL "<<what<<'\n';}};
     std::set<std::string> ids;
-    check(Catalog().size()==11,"all eleven canonical game families registered");
+    check(Catalog().size()==13,"all thirteen game families registered (twelve canonical + beacon_sweep)");
     for(const Entry& e:Catalog()) {
         check(ids.insert(e.Id).second,"catalog IDs unique");
         auto game=CreateGame(e.Id); check(bool(game),"registered factory exists");
@@ -20,13 +20,13 @@ int main() {
         game->Render(frame); check(frame.Commands.size()<=Frame::MaxCommands,"long-run rendering remains bounded");
         game->Reset(730); check(!game->GetStatus().Over,"restart clears terminal state");
     }
-    Driver d; check(d.Select("pong",730),"driver selects source Pong");
+    Driver d; check(d.Select("twinwake",730),"driver selects source Twinwake");
     check(d.Advance(0.1)==6 && d.Ticks()==6,"fixed-step cadence");
     const auto ticks=d.Ticks();check(d.Advance(1000)==8 && d.Ticks()==ticks+8,"hitch catch-up bounded");
-    check(!d.Select("not-a-game",0) && d.ActiveId()=="pong","invalid selection preserves current game");
+    check(!d.Select("not-a-game",0) && d.ActiveId()=="twinwake","invalid selection preserves current game");
     const auto before=d.Ticks();d.SetPaused(true);check(d.Advance(1)==0 && d.Ticks()==before,"pause does not age rules");
     d.SetPaused(false);check(d.Advance(-1)==0 && d.Advance(std::numeric_limits<double>::quiet_NaN())==0,"invalid elapsed rejected");
-    d.Restart();check(d.Ticks()==0 && d.ActiveId()=="pong" && !d.IsPaused(),"restart resets driver lifecycle");
+    d.Restart();check(d.Ticks()==0 && d.ActiveId()=="twinwake" && !d.IsPaused(),"restart resets driver lifecycle");
     const Frame& picture=d.GetFrame();check(picture.Commands.size()==6,"restart creates source initial picture");
     std::cout<<"Desktop registry: "<<checks-failed<<'/'<<checks<<" checks passed\n";return failed ? 1 : 0;
 }

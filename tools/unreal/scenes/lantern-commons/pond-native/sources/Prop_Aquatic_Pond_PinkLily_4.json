@@ -1,0 +1,26 @@
+{
+ "name": "Prop_Aquatic_Pond_PinkLily_4",
+ "species": "PinkLily",
+ "family": "pond",
+ "stage": "Flowering",
+ "stage_index": 4,
+ "voxel_cm": 5.0,
+ "voxels": 149,
+ "pivot": "waterline",
+ "height_m": 0.15,
+ "depth_below_pivot_m": 0.25,
+ "uses": {
+  "fish": [
+   "ember_koi"
+  ],
+  "cover": "frogs",
+  "goods": [
+   "dye_pink@craft"
+  ],
+  "islands": [
+   "meadow",
+   "mire"
+  ]
+ },
+ "source": "tools/blender/voxel_aquatic.py"
+}

@@ -22,7 +22,10 @@ class BridgeError(Exception):
 
 
 def call(addr, command, timeout=600, side="bridge", **params):
-    """Send one command to the bridge at addr=(host, port) and return its result."""
+    """Send one command to the bridge at addr=(host, port) and return its result. `timeout` is both the socket
+    wait and the bridge's own bridge_timeout (default 1800 s there): a 75-minute steps() job got 'the editor did
+    not run the command in time' at exactly 30 minutes while the editor kept running it (2026-10-13 23:24)."""
+    params.setdefault("bridge_timeout", float(timeout))
     with socket.create_connection(addr, timeout=timeout) as s:
         s.sendall((json.dumps({"id": 1, "type": command, "params": params}) + "\n").encode("utf-8"))
         data = b""

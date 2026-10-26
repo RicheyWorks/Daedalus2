@@ -157,7 +157,7 @@ def load_rules(desktop, filename):
         candidates = [node for node in ast.walk(main) if isinstance(node, ast.If)
                       and ast.unparse(node.test) == "p.kind == 'power'"]
         if len(candidates) != 1:
-            raise ValueError("Sega powerup effect fragment is not unique")
+            raise ValueError("Riftwing powerup effect fragment is not unique")
         effect = ast.FunctionDef(name="apply_power", args=ast.arguments(
             posonlyargs=[], args=[ast.arg(arg="p"), ast.arg(arg="player")],
             kwonlyargs=[], kw_defaults=[], defaults=[]),
@@ -272,8 +272,8 @@ def asteroid_fixtures(rules, inputs, output):
                         (rock.x, rock.y, rock.angle, rock.radius, len(rock.split())))
 
 
-def sega_fixtures(rules, inputs, output):
-    output.schema("SEGA_PLAYER", "x y speed cooldown invincible keymask ax ay frames", "x y speed cooldown invincible")
+def riftwing_fixtures(rules, inputs, output):
+    output.schema("RIFTWING_PLAYER", "x y speed cooldown invincible keymask ax ay frames", "x y speed cooldown invincible")
     controls = [(1, 0, 0), (2, 0, 0), (3, 0, 0), (4, 0, 0), (64, 0, 0),
                 (68, 0, 0), (1, 0.2, 0.2), (1, 0.2001, 0), (2, -0.5, 0.5), (128, 0, 0)]
     for x, y, speed, cd, inv in ((150, 300, 5, 0, 0), (30, 20, 8, 6, 60), (750, 580, 5, 1, 1)):
@@ -284,17 +284,17 @@ def sega_fixtures(rules, inputs, output):
                 inputs.mask, inputs.axes = mask, (ax, ay)
                 for _ in range(frames):
                     player.update(inputs.keys())
-                output.emit("SEGA_PLAYER", (x, y, speed, cd, inv, mask, ax, ay, frames),
+                output.emit("RIFTWING_PLAYER", (x, y, speed, cd, inv, mask, ax, ay, frames),
                             (player.x, player.y, player.speed, player.shoot_cooldown, player.invincible))
-    output.schema("SEGA_SHOT", "x y power cooldown", "count cooldown [x y speed dy]x3 (zero padded)")
+    output.schema("RIFTWING_SHOT", "x y power cooldown", "count cooldown [x y speed dy]x3 (zero padded)")
     for power in (1, 2, 3):
         for cd in (0, 1, 6):
             player = rules["Player"]()
             player.power_level, player.shoot_cooldown = power, cd
             bullets = player.shoot()
-            output.emit("SEGA_SHOT", (player.x, player.y, power, cd),
+            output.emit("RIFTWING_SHOT", (player.x, player.y, power, cd),
                         (len(bullets), player.shoot_cooldown, *packed_bullets(bullets, 3, ("speed", "dy"))))
-    output.schema("SEGA_ENEMY", "kind x y speed timer player_y frames (basic=0 chaser=1)", "x y health timer")
+    output.schema("RIFTWING_ENEMY", "kind x y speed timer player_y frames (basic=0 chaser=1)", "x y health timer")
     for kind_index, kind in enumerate(("basic", "chaser")):
         for player_y in (20, 300, 580):
             for frames in (1, 8, 60):
@@ -304,9 +304,9 @@ def sega_fixtures(rules, inputs, output):
                 player.y = player_y
                 for _ in range(frames):
                     enemy.update(player)
-                output.emit("SEGA_ENEMY", (kind_index, 820, 100, 3.25, 2, player_y, frames),
+                output.emit("RIFTWING_ENEMY", (kind_index, 820, 100, 3.25, 2, player_y, frames),
                             (enemy.x, enemy.y, enemy.health, enemy.shoot_timer))
-    output.schema("SEGA_POWER", "kind power speed lives x y frames (power=0 speed=1 life=2)", "power speed lives x y")
+    output.schema("RIFTWING_POWER", "kind power speed lives x y frames (power=0 speed=1 life=2)", "power speed lives x y")
     for kind_index, kind in enumerate(("power", "speed", "life")):
         for power, speed, lives in ((1, 5, 3), (3, 8, 5), (2, 7, 4)):
             player = rules["Player"]()
@@ -316,15 +316,15 @@ def sega_fixtures(rules, inputs, output):
             rules["apply_power"](pu, player)
             for _ in range(8):
                 pu.update()
-            output.emit("SEGA_POWER", (kind_index, power, speed, lives, 300, 200, 8),
+            output.emit("RIFTWING_POWER", (kind_index, power, speed, lives, 300, 200, 8),
                         (player.power_level, player.speed, player.lives, pu.x, pu.y))
-    output.schema("SEGA_BULLET", "x y speed dy frames", "x y")
+    output.schema("RIFTWING_BULLET", "x y speed dy frames", "x y")
     for speed, dy in ((10, 0), (9, -1.5), (9, 1.5)):
         for frames in (1, 8, 60):
             bullet = rules["Bullet"](170, 300, speed, dy)
             for _ in range(frames):
                 bullet.update()
-            output.emit("SEGA_BULLET", (170, 300, speed, dy, frames), (bullet.x, bullet.y))
+            output.emit("RIFTWING_BULLET", (170, 300, speed, dy, frames), (bullet.x, bullet.y))
 
 
 def star_fixtures(rules, inputs, supplied_random, output):
@@ -472,7 +472,7 @@ def main():
     rules, inputs, random = load_rules(args.desktop_dir, "asteroids_pygame_ce.py")
     asteroid_fixtures(rules, inputs, output)
     rules, inputs, random = load_rules(args.desktop_dir, "sega_space_shooter.py")
-    sega_fixtures(rules, inputs, output)
+    riftwing_fixtures(rules, inputs, output)
     rules, inputs, random = load_rules(args.desktop_dir, "star_shootergpt1_fixed.py")
     star_fixtures(rules, inputs, random, output)
     output.write(args.output)

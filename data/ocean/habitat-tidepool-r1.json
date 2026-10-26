@@ -1,0 +1,48 @@
+{
+ "schema": "daedalus.aquatic-habitat/v1",
+ "id": "habitat-tidepool-r1",
+ "version": 1,
+ "status": "proposal (PootScoot 32345): ONE bounded habitat. Data only; no host loads it; no biology simulation claim. Numbers marked owner-proposed are Claude's, not approved.",
+ "realm": "OCEAN",
+ "land": "ocean-tidepen-r1",
+ "residents_from": "data/ocean/tidepen.json residents",
+ "frame": "depths in metres below the water surface at the NORMAL state; positive = underwater",
+ "zones": [
+  {"id": "shallow", "base_depth_m": 0.5, "cover": false, "plants": ["Seagrass", "SeaLettuce"], "note": "sunlit flats by the care station"},
+  {"id": "deep", "base_depth_m": 2.2, "cover": false, "plants": ["Bladderwrack"], "note": "the pen's centre basin"},
+  {"id": "refuge", "base_depth_m": 1.4, "cover": true, "plants": ["RedDulse", "SeaLettuce", "Seagrass"], "note": "rock overhang; stays wet at low water"}
+ ],
+ "water_states": [
+  {"id": "low", "offset_m": -0.7, "note": "ebb: the shallow flats drain"},
+  {"id": "normal", "offset_m": 0.0},
+  {"id": "high", "offset_m": 0.6, "note": "flood: everything reachable"}
+ ],
+ "wet_min_m": 0.3,
+ "stats_note": "health and wariness are owner-proposed per-species defaults; rarity, temperament, size and r/K strategy are NOT stored here: they are read from the species canon row named by canon (daedalus-core ecology species.tsv)",
+ "residents": [
+  {"species": "sea_turtle", "canon": null, "canon_gap": "no MARINE turtle row in species.tsv (turtle/snapper/box_turtle are MEADOW/POND); owner must add one or keep it uncanonised",
+   "stats": {"health": 40, "wariness": 3},
+   "zones": {"low": ["deep", "refuge"], "normal": ["deep", "shallow"], "high": ["shallow", "deep"]},
+   "behaviours": [{"id": "idle", "clip": "Idle"}, {"id": "swim", "clip": "Walk"}, {"id": "feed", "clip": "Action", "eats": "Seagrass"}]},
+  {"species": "seahorse", "canon": "seahorse",
+   "stats": {"health": 10, "wariness": 4},
+   "zones": {"low": ["refuge"], "normal": ["refuge", "shallow"], "high": ["shallow", "refuge"]},
+   "behaviours": [{"id": "idle", "clip": "Idle"}, {"id": "swim", "clip": "Walk"}, {"id": "feed", "clip": "Action", "eats": "SeaLettuce"}]},
+  {"species": "crab", "canon": "fiddler_crab",
+   "stats": {"health": 15, "wariness": 2},
+   "zones": {"low": ["refuge", "deep"], "normal": ["deep", "refuge"], "high": ["deep"]},
+   "behaviours": [{"id": "idle", "clip": "Idle"}, {"id": "swim", "clip": "Walk"}, {"id": "feed", "clip": "Action", "eats": "Bladderwrack"}]},
+  {"species": "starfish", "canon": "sea_star",
+   "stats": {"health": 12, "wariness": 1},
+   "zones": {"low": ["refuge"], "normal": ["refuge"], "high": ["refuge", "shallow"]},
+   "behaviours": [{"id": "idle", "clip": "Idle"}, {"id": "swim", "clip": "Walk"}, {"id": "feed", "clip": "Action", "eats": "RedDulse"}]}
+ ],
+ "interactions": [
+  {"id": "observe", "status": "proposal", "authority": "none (client view)"},
+  {"id": "feed", "status": "decision exists", "authority": "TidePenGate FEED (always allowed); care event recording needs a host action"},
+  {"id": "leave_wild", "status": "decision exists", "authority": "TidePenGate LEAVE_WILD (always allowed)"},
+  {"id": "catch", "status": "decision exists", "authority": "TidePenGate CAPTURE (needs settled_care); no host action"},
+  {"id": "befriend", "status": "planned", "authority": "UNKNOWN owner (absent, see sea-sources.json)"},
+  {"id": "evolve", "status": "planned", "authority": "UNKNOWN owner (absent, see sea-sources.json)"}
+ ]
+}

@@ -89,7 +89,7 @@ class HeroControllerTest {
         JsonNode up = send("raise", "{\"stat\":\"LIFE\",\"actorId\":\"link\"}");
         assertThat(up.get("result").asText()).isEqualTo("RAISED");
         assertThat(up.get("life").asInt()).isEqualTo(2);
-        assertThat(up.get("exp").asInt()).as("Zelda II: back to zero").isZero();
+        assertThat(up.get("exp").asInt()).as("back to zero").isZero();
         assertThat(up.get("maxLife").asInt()).isEqualTo(8);
         assertThat(up.get("nextLife").asInt()).isEqualTo(150);
     }

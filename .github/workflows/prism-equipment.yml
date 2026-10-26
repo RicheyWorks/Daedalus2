@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: MIT
+name: Prismheart equipment checks
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/rpg_demo/index.html'
+      - 'tools/rpg_demo/equipment_menu_test.js'
+      - 'tools/rpg_demo/equipment_fitting_test.js'
+      - 'tools/rpg_demo/journey-save.js'
+      - 'data/rpg/party.json'
+      - 'data/rpg/interiors.json'
+      - '.github/workflows/prism-equipment.yml'
+permissions:
+  contents: read
+jobs:
+  equipment-source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      # Existing VM checks use source and catalog fixtures only, without real storage or a browser.
+      - name: Equipment menu inventory transactions
+        run: node --max-old-space-size=128 tools/rpg_demo/equipment_menu_test.js
+      - name: Equipment fitting and exact previews
+        run: node --max-old-space-size=128 tools/rpg_demo/equipment_fitting_test.js

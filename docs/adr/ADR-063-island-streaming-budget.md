@@ -39,3 +39,8 @@ Build the C++ test:
 A UE component reads the DSB 1 file for the realm, calls `Pick` as the player moves, and loads/unloads island
 sublevels from the flags; the proof is a capture (tools/capture) showing the resident count and RAM staying under
 budget while flying across islands. DiskSaver Island is the natural first test cell.
+
+## Addendum 2026-10-18: manifest generator
+`tools/streaming/dsb_manifest.py` writes `data/islands/streaming.dsb` from the island layouts (cell origin from
+`origin_cm`, cost estimated from placement counts unless an island pins measured numbers). `tools/streaming/dsb.py`
+is a Python port checked against the same parity file. See `tools/streaming/README.md`.

@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Coral Wear
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/coral_wear.py'
+      - 'tools/streaming/coral_wear_test.py'
+      - 'data/islands/disk-saver/coral-wear-v1.json'
+      - 'data/islands/disk-saver/tide-chart-v1.json'
+      - '.github/workflows/coral-wear.yml'
+permissions:
+  contents: read
+jobs:
+  coral-wear:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G78 Coral Wear rules (wear, retire, static leveling ladder, G70 tie-in)
+        run: python -m unittest tools/streaming/coral_wear_test.py -v
+      - name: CLI smoke (leveling keeper wins)
+        run: python tools/streaming/coral_wear.py data/islands/disk-saver/coral-wear-v1.json

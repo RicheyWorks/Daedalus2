@@ -26,7 +26,11 @@
 // again unless an 'if' sends it on. Pure C++17; core-test/cast_script_test.cpp proves it.
 
 #include <algorithm>
+#include <cerrno>
 #include <cctype>
+#include <cmath>
+#include <cstdlib>
+#include <limits>
 #include <map>
 #include <set>
 #include <string>
@@ -83,6 +87,31 @@ struct Cast
         Out.push_back(Trim(Cur));
         return Out;
     }
+    // Numeric argument lists ignore repeated spaces. Pipe-separated choices must keep empty fields.
+    static std::vector<std::string> Arguments(const std::string& S)
+    {
+        std::vector<std::string> F = Split(S, ' ');
+        F.erase(std::remove(F.begin(), F.end(), std::string()), F.end());
+        return F;
+    }
+    static bool IntegerArgument(const std::string& S, int Min, int Max, int& Out)
+    {
+        char* End = nullptr;
+        errno = 0;
+        const long Value = std::strtol(S.c_str(), &End, 10);
+        if (S.empty() || End != S.c_str() + S.size() || errno == ERANGE || Value < Min || Value > Max) return false;
+        Out = static_cast<int>(Value);
+        return true;
+    }
+    static bool RateArgument(const std::string& S, double& Out)
+    {
+        char* End = nullptr;
+        errno = 0;
+        const double Value = std::strtod(S.c_str(), &End);
+        if (S.empty() || End != S.c_str() + S.size() || errno == ERANGE || !std::isfinite(Value) || Value < 0.5 || Value > 2.0) return false;
+        Out = Value;
+        return true;
+    }
     static bool IsId(const std::string& S)
     {
         if (S.empty() || S.size() > 32) return false;
@@ -125,12 +154,10 @@ struct Cast
             if (!Cur) return Fail(I, "'" + K + "' before any 'who'");
             if (K == "voice")
             {
-                const std::vector<std::string> F = Split(Rest, ' ');
+                const std::vector<std::string> F = Arguments(Rest);
                 if (F.empty() || F[0].empty()) return Fail(I, "voice needs a pitch");
-                Cur->Pitch = std::atoi(F[0].c_str());
-                if (Cur->Pitch < 0 || Cur->Pitch > 11) return Fail(I, "pitch is 0..11");
-                if (F.size() > 1 && !F[1].empty()) Cur->Rate = std::atof(F[1].c_str());
-                if (Cur->Rate < 0.5 || Cur->Rate > 2.0) return Fail(I, "rate is 0.5..2");
+                if (!IntegerArgument(F[0], 0, 11, Cur->Pitch)) return Fail(I, "pitch is 0..11");
+                if (F.size() > 1 && !RateArgument(F[1], Cur->Rate)) return Fail(I, "rate is 0.5..2");
                 continue;
             }
             if (K == "step")
@@ -166,11 +193,10 @@ struct Cast
             else if (K == "end") { N.K = Node::Kind::End; }
             else if (K == "give")
             {
-                const std::vector<std::string> F = Split(Rest, ' ');
+                const std::vector<std::string> F = Arguments(Rest);
                 if (F.empty() || !IsId(F[0])) return Fail(I, "give needs an item id");
                 N.K = Node::Kind::Give; N.Text = F[0];
-                N.Amount = F.size() > 1 && !F[1].empty() ? std::atoi(F[1].c_str()) : 1;
-                if (N.Amount < 1 || N.Amount > 999) return Fail(I, "give amount is 1..999");
+                if (F.size() > 1 && !IntegerArgument(F[1], 1, 999, N.Amount)) return Fail(I, "give amount is 1..999");
             }
             else if (K == "if")
             {
@@ -216,7 +242,7 @@ struct Beat
 class Conversation
 {
 public:
-    void Bind(const Script* S) { Sc = S; StepId = "start"; Node = 0; }
+    void Bind(const Script* S) { Sc = S; StepId = "start"; Node = 0; LastAsk.clear(); }
     const Script* Bound() const { return Sc; }
     const std::set<std::string>& Flags() const { return Set; }
     bool Has(const std::string& Flag) const { return Set.count(Flag) > 0; }
@@ -249,6 +275,7 @@ public:
     }
     void Restore(const std::string& Text)
     {
+        LastAsk.clear();
         Set.clear();
         std::string Tok;
         bool First = true;
@@ -258,7 +285,14 @@ public:
             {
                 if (!Tok.empty())
                 {
-                    if (First) { const size_t C = Tok.find(':'); StepId = Tok.substr(0, C); Node = C == std::string::npos ? 0 : std::atoi(Tok.c_str() + C + 1); First = false; }
+                    if (First)
+                    {
+                        const size_t C = Tok.find(':');
+                        StepId = Tok.substr(0, C);
+                        Node = 0; // A malformed saved cursor restarts its step; flags still restore below.
+                        if (C != std::string::npos) Cast::IntegerArgument(Tok.substr(C + 1), 0, std::numeric_limits<int>::max(), Node);
+                        First = false;
+                    }
                     else Set.insert(Tok);
                 }
                 Tok.clear();

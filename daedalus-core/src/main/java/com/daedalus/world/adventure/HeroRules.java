@@ -3,25 +3,25 @@
 package com.daedalus.world.adventure;
 
 /**
- * The numbers of the Zelda II game (ADR-037), in one place for the server and every client.
+ * The numbers of the hero game (ADR-037), in one place for the server and every client.
  *
  * <p><b>Levels are a choice, and they never stop.</b> A hero has three levels, Attack, Magic and Life, each
  * from 1 up, with no ceiling ("some people will want to grind experience; we have no max level"). Experience
  * piles up from every foe beaten; when it reaches the cost of raising any one of them, the hero may choose
- * which, and the experience goes back to zero, exactly as in Zelda II. The first seven costs of each are
- * Zelda II's (Life cheapest, Attack dearest); past them, each level costs half again the one before.
+ * which, and the experience goes back to zero, by design. The first seven costs of each are
+ * from the fixed table (Life cheapest, Attack dearest); past them, each level costs half again the one before.
  *
  * <p><b>What a level does.</b> Attack is the damage of a thrust. Life is hearts: three, and one more per
  * level, and a Life level also blunts a foe's blow. Magic is the size of the magic meter, which pays for
- * Heal. A fall in battle costs all unspent experience, again as in Zelda II.
+ * Heal. A fall in battle costs all unspent experience, by design.
  */
 public final class HeroRules {
 
-    /** Levels whose costs are Zelda II's own; beyond {@code TABLE_LEVELS} each costs half again the last. */
+    /** Levels whose costs come from the fixed table; beyond {@code TABLE_LEVELS} each costs half again the last. */
     public static final int TABLE_LEVELS = 8;
     /** No level costs more than this, so experience (an int) can always reach it. */
     public static final int COST_CEILING = 1_000_000_000;
-    /** Zelda II's experience costs to reach levels 2..8. */
+    /** The experience costs to reach levels 2..8. */
     private static final int[] ATTACK = {200, 500, 1000, 2000, 3000, 5000, 8000};
     private static final int[] MAGIC = {100, 300, 700, 1200, 2200, 3500, 6000};
     private static final int[] LIFE = {50, 150, 400, 800, 1500, 2500, 4000};

@@ -1,0 +1,428 @@
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V11.fbx'
+export finished in 0.0051 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V12.fbx'
+export finished in 0.0045 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V13.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V14.fbx'
+export finished in 0.0051 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V15.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V16.fbx'
+export finished in 0.0038 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V17.fbx'
+export finished in 0.0046 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V18.fbx'
+export finished in 0.0035 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V19.fbx'
+export finished in 0.0030 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V20.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V21.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V22.fbx'
+export finished in 0.0046 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V23.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V24.fbx'
+export finished in 0.0045 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V25.fbx'
+export finished in 0.0047 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V26.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V27.fbx'
+export finished in 0.0050 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V28.fbx'
+export finished in 0.0060 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V29.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V30.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V31.fbx'
+export finished in 0.0050 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V32.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V33.fbx'
+export finished in 0.0065 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V34.fbx'
+export finished in 0.0055 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V35.fbx'
+export finished in 0.0035 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V36.fbx'
+export finished in 0.0044 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V37.fbx'
+export finished in 0.0039 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V38.fbx'
+export finished in 0.0059 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V39.fbx'
+export finished in 0.0032 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V40.fbx'
+export finished in 0.0041 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V41.fbx'
+export finished in 0.0038 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V42.fbx'
+export finished in 0.0036 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V43.fbx'
+export finished in 0.0048 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V44.fbx'
+export finished in 0.0042 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V45.fbx'
+export finished in 0.0046 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V46.fbx'
+export finished in 0.0061 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V47.fbx'
+export finished in 0.0051 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V48.fbx'
+export finished in 0.0044 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V49.fbx'
+export finished in 0.0036 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V50.fbx'
+export finished in 0.0046 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V51.fbx'
+export finished in 0.0043 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V52.fbx'
+export finished in 0.0051 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V53.fbx'
+export finished in 0.0042 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V54.fbx'
+export finished in 0.0033 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V55.fbx'
+export finished in 0.0043 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V56.fbx'
+export finished in 0.0049 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V57.fbx'
+export finished in 0.0046 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V58.fbx'
+export finished in 0.0059 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Rock_Basalt_V59.fbx'
+export finished in 0.0048 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V00.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V01.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V02.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V03.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V04.fbx'
+export finished in 0.0088 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V05.fbx'
+export finished in 0.0054 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V06.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V07.fbx'
+export finished in 0.0056 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V08.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V09.fbx'
+export finished in 0.0037 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V10.fbx'
+export finished in 0.0048 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V11.fbx'
+export finished in 0.0075 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V12.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V13.fbx'
+export finished in 0.0093 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V14.fbx'
+export finished in 0.0080 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V15.fbx'
+export finished in 0.0046 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V16.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V17.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V18.fbx'
+export finished in 0.0048 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V19.fbx'
+export finished in 0.0085 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V20.fbx'
+export finished in 0.0070 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V21.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V22.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V23.fbx'
+export finished in 0.0057 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V24.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V25.fbx'
+export finished in 0.0048 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V26.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V27.fbx'
+export finished in 0.0070 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V28.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Tree_Spruce_V29.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V00.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V01.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V02.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V03.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V04.fbx'
+export finished in 0.0058 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V05.fbx'
+export finished in 0.0035 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V06.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V07.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V08.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V09.fbx'
+export finished in 0.0046 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V10.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V11.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V12.fbx'
+export finished in 0.0039 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V13.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V14.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V15.fbx'
+export finished in 0.0049 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V16.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V17.fbx'
+export finished in 0.0065 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V18.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Fungus_Shelf_V19.fbx'
+export finished in 0.0041 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V00.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V01.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V02.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V03.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V04.fbx'
+export finished in 0.0044 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V05.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V06.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V07.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V08.fbx'
+export finished in 0.0020 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V09.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V10.fbx'
+export finished in 0.0043 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Vinyl_V11.fbx'
+export finished in 0.0039 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_PressPlate_V00.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_PressPlate_V01.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_PressPlate_V02.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_PressPlate_V03.fbx'
+export finished in 0.0044 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Speaker_V00.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Speaker_V01.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Speaker_V02.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Speaker_V03.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Speaker_V04.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Speaker_V05.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Lantern_V00.fbx'
+export finished in 0.0036 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Lantern_V01.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Lantern_V02.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Music_Lantern_V03.fbx'
+export finished in 0.0031 sec.
+BUILT 375 125
+Blender 4.3.1 (hash 33d812126174 built 2024-12-10 10:08:19)
+
+Blender quit

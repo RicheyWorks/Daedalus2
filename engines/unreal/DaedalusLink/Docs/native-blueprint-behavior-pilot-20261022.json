@@ -1,0 +1,343 @@
+{
+  "schema": "daedalus.native-blueprint-behavior-pilot.v1",
+  "utc": "2026-10-22T21:27:40.548276+00:00",
+  "state": "BOUNDED_NATIVE_AUTHORING_SAVE_RELOAD_BEHAVIOR_PASS",
+  "engine_version": "5.8.4-58902052+++UE5+Release-5.8",
+  "pid": 21660,
+  "editor_launch": {
+    "utc": "2026-10-22T19:28:25.295382+00:00",
+    "start_utc": "2026-10-22T19:28:25.1856174Z",
+    "pid": 21660,
+    "binary": {
+      "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+      "sha256": "e2ba4f1fa7d720d8c8ec201111fa42b53885fe3f56f05d444785ab4d205e941f",
+      "bytes": 10817024
+    },
+    "native_ready_proven": false,
+    "terrain_diagnostic_opt_in": false
+  },
+  "tools": "Installed Epic BlueprintTools via existing ToolsetRegistry.ExecuteTool and authorized bridge9877; no HTTP/config change",
+  "installed_blueprint_tools": 53,
+  "installed_skill": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\NativeBlueprintPilot20261022\\installed-blueprint-skill.json",
+    "bytes": 2009,
+    "sha256": "18c5e5458c27d19eddffc8999f15c8763499b4199ffc2066aaabc9a92078d5be"
+  },
+  "native_skill": "/EditorToolset/Python/editor_toolset/skills/blueprint_basics_PY.BlueprintBasicsSkill",
+  "asset": {
+    "refPath": "/Game/CodexToolEvaluation/NativeBlueprintPilot/R1/BP_InteractionProbe.BP_InteractionProbe"
+  },
+  "graph": {
+    "refPath": "/Game/CodexToolEvaluation/NativeBlueprintPilot/R1/BP_InteractionProbe.BP_InteractionProbe:EvaluateProbe"
+  },
+  "parent_class": "/Script/Engine.Actor",
+  "input": "Value:int32",
+  "output": "Result:int32",
+  "semantics": "Value<0 ->0; Value>100 ->201; otherwise2*Value+1",
+  "dsl": "(fn EvaluateProbe (Value)\n  (if (< Value 0)\n    (return 0)\n    (elif (> Value 100)\n      (return 201)\n      (else\n        (return (+ (* Value 2) 1))))))",
+  "discovered_operator_pins": [
+    {
+      "type_id": "Utilities|Operators|Less(<)",
+      "inputs": [
+        [
+          "A",
+          "Wildcard"
+        ],
+        [
+          "B",
+          "Wildcard"
+        ]
+      ],
+      "outputs": [
+        [
+          "ReturnValue",
+          "Boolean"
+        ]
+      ]
+    },
+    {
+      "type_id": "Utilities|Operators|Greater(>)",
+      "inputs": [
+        [
+          "A",
+          "Wildcard"
+        ],
+        [
+          "B",
+          "Wildcard"
+        ]
+      ],
+      "outputs": [
+        [
+          "ReturnValue",
+          "Boolean"
+        ]
+      ]
+    },
+    {
+      "type_id": "Utilities|Operators|Multiply",
+      "inputs": [
+        [
+          "A",
+          "Wildcard"
+        ],
+        [
+          "B",
+          "Wildcard"
+        ]
+      ],
+      "outputs": [
+        [
+          "ReturnValue",
+          "Wildcard"
+        ]
+      ]
+    },
+    {
+      "type_id": "Utilities|Operators|Add",
+      "inputs": [
+        [
+          "A",
+          "Wildcard"
+        ],
+        [
+          "B",
+          "Wildcard"
+        ]
+      ],
+      "outputs": [
+        [
+          "ReturnValue",
+          "Wildcard"
+        ]
+      ]
+    },
+    {
+      "type_id": "Utilities|FlowControl|Branch",
+      "inputs": [
+        [
+          "execute",
+          "Exec"
+        ],
+        [
+          "Condition",
+          "Boolean"
+        ]
+      ],
+      "outputs": [
+        [
+          "then",
+          "Exec"
+        ],
+        [
+          "else",
+          "Exec"
+        ]
+      ]
+    }
+  ],
+  "graph_readback": {
+    "nodes": 14,
+    "type_ids": [
+      "|EvaluateProbe",
+      "Math|Integer|integer<integer",
+      "Math|Integer|MakeLiteralInt",
+      "Utilities|FlowControl|Branch",
+      "|ReturnNode",
+      "Math|Integer|integer>integer",
+      "Math|Integer|MakeLiteralInt",
+      "Utilities|FlowControl|Branch",
+      "|ReturnNode",
+      "|ReturnNode",
+      "Math|Integer|int*int",
+      "Math|Integer|MakeLiteralInt",
+      "Math|Integer|int+int",
+      "Math|Integer|MakeLiteralInt"
+    ],
+    "links_defaults_types_positions_equal_after_reload": true,
+    "full_before": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\NativeBlueprintPilot20261022\\AuthorCompileExecuteSaveR1-result.json",
+      "bytes": 40085,
+      "sha256": "3a8b7a764f1beafebf58584844c940c61f26db559a84482b3d73cfed155b0643"
+    },
+    "full_after": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\NativeBlueprintPilot20261022\\CleanReloadExecuteReadbackR1-result.json",
+      "bytes": 37982,
+      "sha256": "94845357f645bc4accdda64ae07fb8955e7bda7b388037cb8d6c45cad9e94b67"
+    }
+  },
+  "compiled_status": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+  "execution_api": "Existing UObject.call_method on the generated CDO; no custom C++ helper/PIE",
+  "before_save_cases": [
+    {
+      "input": -2147483648,
+      "expected": 0,
+      "actual": 0
+    },
+    {
+      "input": -5,
+      "expected": 0,
+      "actual": 0
+    },
+    {
+      "input": -1,
+      "expected": 0,
+      "actual": 0
+    },
+    {
+      "input": 0,
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "input": 1,
+      "expected": 3,
+      "actual": 3
+    },
+    {
+      "input": 7,
+      "expected": 15,
+      "actual": 15
+    },
+    {
+      "input": 37,
+      "expected": 75,
+      "actual": 75
+    },
+    {
+      "input": 100,
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "input": 101,
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "input": 2147483647,
+      "expected": 201,
+      "actual": 201
+    }
+  ],
+  "after_clean_reload_cases": [
+    {
+      "input": -2147483648,
+      "expected": 0,
+      "actual": 0
+    },
+    {
+      "input": -5,
+      "expected": 0,
+      "actual": 0
+    },
+    {
+      "input": -1,
+      "expected": 0,
+      "actual": 0
+    },
+    {
+      "input": 0,
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "input": 1,
+      "expected": 3,
+      "actual": 3
+    },
+    {
+      "input": 7,
+      "expected": 15,
+      "actual": 15
+    },
+    {
+      "input": 37,
+      "expected": 75,
+      "actual": 75
+    },
+    {
+      "input": 100,
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "input": 101,
+      "expected": 201,
+      "actual": 201
+    },
+    {
+      "input": 2147483647,
+      "expected": 201,
+      "actual": 201
+    }
+  ],
+  "actual_successful_function_evaluations": 20,
+  "negative": {
+    "exception": "TypeError",
+    "message": "Actor: Failed to convert parameter 'value' when calling function 'BP_InteractionProbe_C.EvaluateProbe' on 'Default__BP_InteractionProbe_C'\n  TypeError: NativizeProperty: Cannot nativize 'str' as 'Value' (IntProperty)\n    TypeError: Nativize: Cannot nativize 'str' as 'int32'"
+  },
+  "saved_asset": {
+    "path": "C:\\Unreal\\DaedalusRealm\\Content\\CodexToolEvaluation\\NativeBlueprintPilot\\R1\\BP_InteractionProbe.uasset",
+    "bytes": 53898,
+    "sha256": "7f35e40fa081ddefa471e1144f6e627c155ab70d7aa66cc54194edd19e1bbd67"
+  },
+  "saved_bytes_equal_after_reload": true,
+  "reload": {
+    "any_reloaded": true,
+    "error": ""
+  },
+  "fresh_process_reopen": false,
+  "attempt_history": [
+    {
+      "stage": "SkillAndVacancyR1",
+      "outcome": "GetSkills succeeded; AssetTools.exists rejected asset_path before invocation because schema requires path. No mutation.",
+      "full_journal": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\NativeBlueprintPilot20261022\\SkillAndVacancyR1\\native-substeps.jsonl",
+        "bytes": 4308,
+        "sha256": "cbbe3add2fc87b40ad4aa0a0224b74abb541272567ee79a35f9469151b8200ce"
+      }
+    },
+    {
+      "stage": "CorrectedVacancyR2",
+      "outcome": "Schema-correct path request succeeded, private destination vacant, protected baseline equal."
+    },
+    {
+      "stage": "AuthorCompileExecuteSaveR1",
+      "outcome": "One new Blueprint/function, discovered5operators/pins, DSL transpilation+compile succeeded,10cases passed, savedonlyownedasset."
+    },
+    {
+      "stage": "CleanReloadExecuteReadbackR1",
+      "outcome": "One clean owned package reload, exact14node readback,10cases repeated, invalid integer rejected, saved bytes unchanged."
+    }
+  ],
+  "preservation": {
+    "all9_native_baseline_fields_equal": true,
+    "protected37_and_original_project_config_hashes_equal": true,
+    "world_actor_count": null,
+    "world_camera_selection_preserved": true,
+    "dirty_packages_after": false,
+    "compute_normally_released": true,
+    "sole_editor_retained": 21660,
+    "new_editors_builds_or_restarts": 0,
+    "HTTP_or_security_settings_changed": false,
+    "Cursor_satellite_untouched": true
+  },
+  "capability": {
+    "offered": true,
+    "installed": true,
+    "connected": true,
+    "tested": "Native authoring of one bounded branching/arithmetic int32 behavior function, execution and same-process disk reload.",
+    "adopted": "Reusable isolated BlueprintTools behavior-graph recipe; not a general53tool or production gameplay qualification."
+  },
+  "limits": [
+    "No PIE/production gameplay, replication, latent/timeline/component interactions, arbitrary class/function safety or performance acceptance.",
+    "No fresh-editor reopen was required or performed. Save/clean-package reload is proven.",
+    "Graph writing can partially mutate on failure; use new owned assets/copies and reconcile, never assume rollback.",
+    "DirectHTTP8000 remains not connected; globalNotValidated and broader material/animation/UI authoring remain unproved."
+  ],
+  "custom_authoring_implementation_added": false,
+  "bounded_behavior_pilot_accepted": true,
+  "native_runtime_qualified": false,
+  "production_gameplay_accepted": false
+}

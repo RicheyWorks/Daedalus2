@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /** A small, strict JSON reader (objects, arrays, strings, numbers, booleans, null) so the core stays JDK-only. */
-final class MiniJson {
+public final class MiniJson {
     private final String s;
     private int i;
 
@@ -17,7 +17,7 @@ final class MiniJson {
     }
 
     /** Parses {@code text} into Map, List, String, Double, Boolean or null. */
-    static Object parse(String text) {
+    public static Object parse(String text) {
         MiniJson p = new MiniJson(text);
         p.ws();
         Object v = p.value();

@@ -236,3 +236,57 @@ new actor roles distinctly (OceanDockControl versus OceanDock data) and preserve
 established data APIs. A full reflection build caught this before publication.
 
 
+
+## Local commits and handoff packets are not integration (2026-10-25)
+
+> "Local commits and handoff packets are checkpoints, not completed integration. Every batch must have a named integration owner and tracked dependency order through push, PR, required checks, merge and applicable runtime acceptance. Never report 'landed' without verifying the remote commit. If a stage is blocked, record the exact blocker and next action instead of letting handoffs accumulate." (RicheyWorks)
+
+**What happened.** origin/main did not move from aee28b75d (2026-10-19 07:41 PT) until 2026-10-25. Workers saved isolated local commits and handoff packets under "no push or merge" instructions, and nobody scheduled the integration step afterwards, so work piled up in local worktrees and packets for six days.
+
+**The lesson.** When a task says "no push or merge", the coordinator must schedule the integration step (push, PR, CI, merge) as a tracked item and track its status through to main. Every worker handoff names its branch, SHA and integration owner. A weekly or per-handoff check compares origin/main against local branches and worktrees.
+
+**Evidence.** Integration resumed with #410 (e476012c) and #417 (466b0a94).
+
+<!-- codex-integration-custody-stage-sync-20261026 -->
+## Completion includes lease release and a verified handoff (2026-10-26)
+
+A producer's stopped process and saved final boundary did not, by themselves,
+release its owned resource leases. The original owner had to stop renewal,
+normally release its own leases and deliver a verified handoff before the next
+custodian could take over. An old owner name, expired lease or empty lock table
+does not grant another worker authority to use the editor or resume production.
+
+Every operational completion record must distinguish process exit, saved output,
+the exact failed or uncertain operation, owned-lease release and the next owner's
+verified handoff. Keep warnings, failed attempts and partial effects intact; a
+generic exit warning alone does not identify a failed asset operation. Never
+force-release a foreign lease or edit lock files to make a checkpoint look done.
+
+**This supersedes the older “When a window won't close, force it” advice above.**
+That historical entry grants no authority to force-close an editor or discard
+unsaved state, and its claim that nothing valuable is lost must not be used as a
+preservation guarantee. The current verified custodian must reconcile saves,
+pending or uncertain operations and ownership before an editor transition.
+
+## Reconcile merged source with the actual native build (2026-10-26)
+
+The owner's rebuild-4 report binds its build to main `e22a493d` plus the fix later
+merged in [PR464](https://github.com/RicheyWorks/Daedalus2/pull/464). The first UBT
+pass failed on two C4458 shadowing errors; the second passed with zero errors.
+After normal editor replacement, the owner reported 30/30 new classes loading,
+PIE off and clean packages. Those are compile/load observations, not blanket
+gameplay, input, save/recovery, collision or visual acceptance.
+
+The same report identified [PR450](https://github.com/RicheyWorks/Daedalus2/pull/450)'s
+MazeCore change as source-only because it merged during the rebuild window.
+Track that delta explicitly for the next custodian's batch. Do not label all of
+main installed, repeat an old build as current proof, or resume ingestion from a
+green CI result. Reconcile monitor targets under their existing owner too.
+
+For each batch retain exact source and merge identities, check results, the
+installed-build checkpoint, per-feature acceptance and remaining source delta.
+The [realm reconciliation](realms/REALM-DEPENDENCIES-20261026.md) demonstrates why
+transfer ancestry, actual packet/API prerequisites and native acceptance must
+remain separate. This lesson changes documentation only; it grants no custody,
+restart, lease, ingestion or financial authority.
+<!-- codex-integration-custody-stage-sync-20261026:end -->

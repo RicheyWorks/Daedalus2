@@ -17,7 +17,7 @@ import math
 import daedalus_land_grid as G
 
 LAND_M = 92.0        # launch size of a land (ADR-065 rule 8)
-SLAB_M = 2.0
+SLAB_M = 12.0        # a plot is a solid floating slab of ground (the asteroid's pieces), not a sheet
 CUBE = "/Engine/BasicShapes/Cube.Cube"        # 100 cm a side
 FOLDER = "Lands"
 
@@ -60,6 +60,30 @@ def plan(rings=6, estates=(), hub_cells=(), hub_cm=(0.0, 0.0), ground_cm=0.0, pi
 
 # ---- editor side ----------------------------------------------------------------------------------------------
 
+def _labels_cache(sub=None):
+    """{label} of every actor; a fresh scan each call (cheap enough: ~12k actors in ~50 ms)."""
+    import unreal
+    sub = sub or unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
+    return {a.get_actor_label() for a in sub.get_all_level_actors()}
+
+
+def save_packages_proven(pkgs):
+    """Save these packages and prove each by its file mtime; raises naming any that was not written."""
+    import os
+    import time
+    import unreal
+    t0 = time.time()
+    ok = unreal.EditorLoadingAndSavingUtils.save_packages(list(pkgs), only_dirty=False)
+    stale = []
+    for pk in pkgs:
+        fn = unreal.Paths.convert_relative_path_to_full(unreal.PackageTools.package_name_to_filename(pk.get_name(), ".umap"))
+        if not os.path.exists(fn) or os.path.getmtime(fn) < t0 - 1.0:
+            stale.append(pk.get_name())
+    if not ok or stale:
+        raise RuntimeError("not written: ok=%s %s" % (ok, stale))
+    return round(time.time() - t0, 1)
+
+
 def save_world():
     """Save the persistent level explicitly and prove it by the .umap mtime (save_dirty_packages can clear the
     dirty flag without writing, 2026-10-13). Returns the seconds the save took."""
@@ -72,7 +96,12 @@ def save_world():
     t0 = time.time()
     ok = unreal.EditorLoadingAndSavingUtils.save_packages([pk], only_dirty=False)
     if not ok or not os.path.exists(fn) or os.path.getmtime(fn) < t0 - 1.0:
-        raise RuntimeError("the persistent level was not written: ok=%s %s" % (ok, fn))
+        # 02:20: ok=False while the editor's own autosave ("Auto-saving out of date packages") was running; one retry
+        time.sleep(8.0)
+        t0 = time.time()
+        ok = unreal.EditorLoadingAndSavingUtils.save_packages([pk], only_dirty=False)
+        if not ok or not os.path.exists(fn) or os.path.getmtime(fn) < t0 - 1.0:
+            raise RuntimeError("the persistent level was not written (twice; autosave running?): ok=%s %s" % (ok, fn))
     return round(time.time() - t0, 1)
 
 def _editor_inputs():
