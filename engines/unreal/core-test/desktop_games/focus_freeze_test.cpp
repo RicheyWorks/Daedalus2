@@ -3,7 +3,7 @@
 // freeze (no simulation, unchanged picture and status, source buttons ignored,
 // held input dropped) and resume cleanly on SetPaused(false). Games that own
 // their pause (OwnPause) freeze through the core instead of the driver.
-// catalog-capability: focus_freeze: minesweeper pong dungeon asteroids football pacman sega_shooter shadow_ninja star_shooter dodge_ball contra zelda
+// catalog-capability: focus_freeze: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <string>
@@ -50,8 +50,8 @@ void Freeze(const std::string& Id) {
 }  // namespace
 
 int main() {
-    for(const char* Id:{"minesweeper","pong","dungeon","asteroids","football","pacman","sega_shooter",
-                        "shadow_ninja","star_shooter","dodge_ball","contra","zelda"}) Freeze(Id);
+    for(const char* Id:{"beacon_sweep","twinwake","dungeon","driftstone","football","glowtrail","riftwing",
+                        "emberstep","star_shooter","dodge_ball","ironwake","lanternwild"}) Freeze(Id);
     Driver None;Check(!None.Select("not_a_game",1),"unknown id refused");
     std::cout<<"focus freeze: "<<(Checks-Failed)<<"/"<<Checks<<" checks\n";
     return Failed==0?0:1;

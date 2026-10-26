@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * The Zelda II rules (ADR-037): high and low decide every exchange; experience is spent on the level the
+ * The hero rules (ADR-037): high and low decide every exchange; experience is spent on the level the
  * player chooses and resets to zero; a fall costs unspent experience; each level does what it says.
  */
 class HeroRulesTest {
@@ -42,7 +42,7 @@ class HeroRulesTest {
         assertThat(h.raise(HeroRules.Stat.MAGIC)).as("not enough: unchanged").isEqualTo(h);
         Hero up = h.raise(HeroRules.Stat.LIFE);
         assertThat(up.life()).isEqualTo(2);
-        assertThat(up.exp()).as("Zelda II: back to zero").isZero();
+        assertThat(up.exp()).as("back to zero").isZero();
         assertThat(up.beaten()).isEqualTo(1);
         Hero twice = up.beat(FoeKind.STONE_KNIGHT).beat(FoeKind.STONE_KNIGHT).beat(FoeKind.SHARDBACK);
         assertThat(twice.exp()).isEqualTo(105);
@@ -52,12 +52,12 @@ class HeroRulesTest {
     }
 
     @Test
-    void theCostsAreZeldaIIsAndTheLevelsDoWhatTheySay() {
+    void theCostsFollowTheTableAndTheLevelsDoWhatTheySay() {
         assertThat(HeroRules.cost(HeroRules.Stat.LIFE, 1)).isEqualTo(50);
         assertThat(HeroRules.cost(HeroRules.Stat.MAGIC, 1)).isEqualTo(100);
         assertThat(HeroRules.cost(HeroRules.Stat.ATTACK, 1)).isEqualTo(200);
         assertThat(HeroRules.cost(HeroRules.Stat.ATTACK, 7)).isEqualTo(8000);
-        assertThat(HeroRules.cost(HeroRules.Stat.ATTACK, 8)).as("no top: half again past Zelda II's table").isEqualTo(12000);
+        assertThat(HeroRules.cost(HeroRules.Stat.ATTACK, 8)).as("no top: half again past the cost table").isEqualTo(12000);
         assertThat(HeroRules.cost(HeroRules.Stat.LIFE, 9)).isEqualTo(9000);
         assertThat(HeroRules.cost(HeroRules.Stat.ATTACK, 500)).as("never overflows").isEqualTo(HeroRules.COST_CEILING);
         for (int l = 1; l < 40; l++) {

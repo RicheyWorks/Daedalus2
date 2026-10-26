@@ -13,7 +13,7 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { meshChunk } from "/realm-mesh.js";
 import "/controllers/daedalus-pad.js";          // shared controller layer (window.DaedalusPad), see docs/controllers.md
-import "/settings/daedalus-settings.js";        // shared settings + Halo Infinite-style panel (window.DaedalusSettings)
+import "/settings/daedalus-settings.js";        // shared settings + console-style panel (window.DaedalusSettings)
 
 // Which world this page shows (ADR-030): ?world=<id>, World Zero by default.
 const WORLD = (() => {
@@ -2150,7 +2150,7 @@ function droneModel() {
 }
 
 // ---------------------------------------------------------------- the fight (ADR-037)
-// Zelda II, in three dimensions. Standing, you thrust high and your shield covers high; crouching (C, or
+// High and low sword play, in three dimensions. Standing, you thrust high and your shield covers high; crouching (C, or
 // hold Crouch) you thrust low, your shield covers low, and you cannot walk. Foes guard a height and strike
 // at one: a shardback's shell guards high, a dust wisp floats too high for a low thrust, a stone knight's
 // shield moves and it strikes wherever it is not guarding. A hit knocks you back and leaves you blinking
@@ -2679,7 +2679,7 @@ function playStep(dt) {
   const len = Math.hypot(ix, iz);
   if (len > 1) { ix /= len; iz /= len; }
   const want = right.multiplyScalar(ix).add(fwd.multiplyScalar(iz));
-  const speed = HERO.stance === "LOW" ? 0 : RUN_SPEED;          // crouched, you hold your ground (Zelda II)
+  const speed = HERO.stance === "LOW" ? 0 : RUN_SPEED;          // crouched, you hold your ground
   AVATAR.vel.x = want.x * speed + HERO.knock.x;
   AVATAR.vel.z = want.z * speed + HERO.knock.z;
   HERO.knock.multiplyScalar(Math.pow(0.004, dt));
@@ -2731,7 +2731,7 @@ function die() {
 }
 // ---------------------------------------------------------------- Settings and controllers (shared modules)
 // One settings schema for every client (data/settings/settings-schema.json, built from the Unreal settings code),
-// laid out like Halo Infinite. The pad follows the same Button Layout / Thumbstick Layout tables as the Unreal hero:
+// laid out like a modern console game. The pad follows the same Button Layout / Thumbstick Layout tables as the Unreal hero:
 // Jump, Attack and Melee (thrust), Aim (hold your ground), Interact (heal). Menu opens Settings; View enters or leaves
 // play. Look uses the hero's numbers: 200 deg/s at sensitivity 5, invert, and look acceleration.
 var SETTINGS = window.DaedalusSettings ? window.DaedalusSettings.create({ schema: "/settings/settings-schema.json" }) : null;

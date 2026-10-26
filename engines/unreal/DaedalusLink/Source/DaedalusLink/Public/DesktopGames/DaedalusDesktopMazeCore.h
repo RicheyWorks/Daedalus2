@@ -273,7 +273,7 @@ private:
     Player Hero;
     std::uint32_t SessionSeed=0;
     std::array<int,LanternCount> Order{{0,1,2}};
-    friend struct MazeTestAccess; // Controlled test seam, as for Pac-Man and Zelda.
+    friend struct MazeTestAccess; // Controlled test seam, as for Glowtrail and Lanternwild.
     std::array<bool,LanternCount> Lit{};
     int LitCount=0, NoticeFrames=0,Option=0;
     std::uint64_t RunFrames=0;
@@ -281,7 +281,7 @@ private:
     std::string Notice;
 };
 
-class PacmanGame final : public Game {
+class GlowtrailGame final : public Game {
 public:
     static constexpr int Tile=20, Columns=28, Rows=31;
     static constexpr int RespawnGraceFrames=90; // Native rule extension after a nonterminal death.
@@ -420,7 +420,7 @@ public:
         B.X-=2*Columns*Tile;
         return A.Overlaps(B);
     }
-    PacmanGame() { Reset(730); }
+    GlowtrailGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed; Rng.Seed(Seed); Hero={}; Score=0; Lives=3; Over=false; Won=false; Level=1; RespawnFrames=0;
         Pellets.clear();
@@ -638,15 +638,15 @@ private:
     }
 };
 
-class ZeldaGame final : public Game {
+class LanternwildGame final : public Game {
 public:
     enum class Facing { Right, Left, Up, Down };
     enum class EnemyKind { Octorok, Moblin, Armos };
-    enum class PickupKind { Rupee, Heart, Key };
+    enum class PickupKind { Glint, Heart, Key };
     static constexpr std::size_t MaxProjectiles=128, MaxCollectibles=16;
     struct Player {
         double X=400, Y=450;
-        int Health=6, MaxHealth=6, AttackTimer=0, Invincible=0, Rupees=0;
+        int Health=6, MaxHealth=6, AttackTimer=0, Invincible=0, Glints=0;
         Facing Face=Facing::Down;
         bool Attacking=false;
         Rect GetRect() const { return maze::PixelRect(X-10,Y-10,20,24); }
@@ -714,11 +714,11 @@ public:
     };
     struct Collectible {
         double X=0, Y=0;
-        PickupKind Kind=PickupKind::Rupee;
+        PickupKind Kind=PickupKind::Glint;
         double Bob=0;
         Rect GetRect() const { return maze::PixelRect(X-8,Y-8,16,16); }
     };
-    ZeldaGame() { Reset(730); }
+    LanternwildGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         // Preserve the player's optional control preference across same-cabinet retries.
         SessionSeed=Seed; Rng.Seed(Seed); Hero={}; Score=0; Keys=0; KeySpawned=false; Over=false; Won=false;
@@ -726,8 +726,8 @@ public:
         Enemies={{{200,150,EnemyKind::Octorok,1,Rng.Int(60,120)},
                   {550,200,EnemyKind::Moblin,2,0}, {300,380,EnemyKind::Armos,1,0},
                   {620,350,EnemyKind::Octorok,1,Rng.Int(60,120)}}};
-        AddPickup(250,280,PickupKind::Rupee); AddPickup(500,150,PickupKind::Rupee);
-        AddPickup(150,420,PickupKind::Heart); AddPickup(680,280,PickupKind::Rupee);
+        AddPickup(250,280,PickupKind::Glint); AddPickup(500,150,PickupKind::Glint);
+        AddPickup(150,420,PickupKind::Heart); AddPickup(680,280,PickupKind::Glint);
     }
     // Option 1 presets held-sword assistance for cabinets that want it on from the start.
     // Shift/pad Y still toggles it live; option 0 keeps the original fresh-press default.
@@ -748,7 +748,7 @@ public:
                 --E.Health; E.HitFlash=12;
                 if(E.Health<=0) {
                     E.Alive=false; Score+=50; LastDefeated={E.X,E.Y};
-                    if(Rng.Unit()<0.4) AddPickup(E.X,E.Y,PickupKind::Rupee);
+                    if(Rng.Unit()<0.4) AddPickup(E.X,E.Y,PickupKind::Glint);
                 }
             }
             if(!KeySpawned && AllEnemiesDead()) {
@@ -774,7 +774,7 @@ public:
         for(auto It=Collectibles.begin();It!=Collectibles.end();) {
             It->Bob=std::fmod(It->Bob+0.1,6.283185307179586); // bounded animation phase
             if(It->GetRect().Overlaps(Hero.GetRect())) {
-                if(It->Kind==PickupKind::Rupee) { ++Hero.Rupees; Score+=10; Message="+1 Trinket"; }
+                if(It->Kind==PickupKind::Glint) { ++Hero.Glints; Score+=10; Message="+1 Trinket"; }
                 else if(It->Kind==PickupKind::Heart) { Hero.Health=std::min(Hero.MaxHealth,Hero.Health+2); Message="+1 Heart"; }
                 else { ++Keys; Message="Key Found!"; }
                 MessageTimer=40; It=Collectibles.erase(It);
@@ -803,7 +803,7 @@ public:
     std::string SaveState() const override {
         if(Over || Won) return {};
         return "DZS1 "+std::to_string(Option)+" "+std::to_string(Score)+" "+std::to_string(Hero.Health)
-            +" "+std::to_string(Hero.Rupees)+" "+(SwordAssist?"1":"0");
+            +" "+std::to_string(Hero.Glints)+" "+(SwordAssist?"1":"0");
     }
     bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
         if(Payload.size()>128) return false;
@@ -813,7 +813,7 @@ public:
         if(Mode<0 || Mode>1 || Points<0 || Points>1000000000LL || Life<1 || Life>Fresh.MaxHealth
             || Trinkets<0 || Trinkets>1000000LL || (Assist!=0 && Assist!=1)) return false;
         Option=static_cast<int>(Mode);Reset(Seed);
-        Score=Points;Hero.Health=static_cast<int>(Life);Hero.Rupees=static_cast<int>(Trinkets);SwordAssist=Assist==1;
+        Score=Points;Hero.Health=static_cast<int>(Life);Hero.Glints=static_cast<int>(Trinkets);SwordAssist=Assist==1;
         return true;
     }
     void Render(Frame& Out) const override {
@@ -840,7 +840,7 @@ public:
         }
         for(const auto& C:Collectibles) {
             const double X=C.X, Y=C.Y+std::sin(C.Bob)*3;
-            if(C.Kind==PickupKind::Rupee) {
+            if(C.Kind==PickupKind::Glint) {
                 Out.AddTriangle({X,Y-10},{X-7,Y},{X+7,Y},{12,40,12,255});
                 Out.AddTriangle({X,Y+10},{X-7,Y},{X+7,Y},{12,40,12,255});
                 Out.AddTriangle({X,Y-8},{X-5,Y},{X+5,Y},{50,200,100,255});
@@ -859,7 +859,7 @@ public:
         }
         DrawPlayer(Out,Hero);
         Out.AddRect(0,4,800,48,{8,36,16,255});
-        Out.AddText(10,10,"HEALTH "+std::to_string(Hero.Health)+"/"+std::to_string(Hero.MaxHealth)+"  TRINKETS "+std::to_string(Hero.Rupees)+"  KEY "+std::to_string(Keys));
+        Out.AddText(10,10,"HEALTH "+std::to_string(Hero.Health)+"/"+std::to_string(Hero.MaxHealth)+"  TRINKETS "+std::to_string(Hero.Glints)+"  KEY "+std::to_string(Keys));
         Out.AddText(10,35,ObjectiveText(),White,15);
         if(MessageTimer>0) {
             Out.AddRect(280,50,280,28,{8,36,16,255});

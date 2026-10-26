@@ -3,12 +3,14 @@
 #include "DaedalusDesktopGameTypes.h"
 #include <array>
 #include <limits>
+#include <sstream>
+#include <string>
 
 namespace daedalus { namespace desktop { namespace platformers {
 struct TestAccess;
 // Latest Desktop sources, selected by the user. See platformers_notes.md for
 // source hashes, original defects, source parity and deliberate adaptations.
-inline const std::array<Rect,5>& ContraPlatforms() {
+inline const std::array<Rect,5>& IronwakePlatforms() {
     static const std::array<Rect,5> P{{{300,420,120,20},{500,320,80,20},
         {650,440,100,20},{900,380,150,20},{1100,300,60,20}}}; return P;
 }
@@ -25,11 +27,11 @@ inline bool PixelContains(const Rect& R,double X,double Y) {
 inline void AddScore(std::int64_t& Score,int Amount) {
     Score=std::min(Score,std::numeric_limits<std::int64_t>::max()-Amount)+Amount;
 }
-struct ContraBullet {
+struct IronwakeBullet {
     double X=0,Y=0,VX=0,VY=0; int Life=60;
     void Update() { X+=VX; Y+=VY; --Life; }
 };
-struct ContraPlayer {
+struct IronwakePlayer {
     double X=100,Y=480,VY=0;
     bool FacingRight=true,OnGround=false,Crouching=false;
     int Lives=3,Cooldown=0,FireRate=8,SpreadTimer=0,Invincible=0;
@@ -68,7 +70,7 @@ struct ContraPlayer {
         if(SpreadTimer>0 && --SpreadTimer==0) Spread=false;
         if(Invincible>0) --Invincible;
     }
-    void Shoot(std::vector<ContraBullet>& Bullets) {
+    void Shoot(std::vector<IronwakeBullet>& Bullets) {
         if(Cooldown>0 || Bullets.size()+ (Spread?3u:1u)>96) return;
         Cooldown=FireRate;
         const double StartX=X+(FacingRight?32:0),StartY=Y+(Crouching?16:24);
@@ -81,14 +83,14 @@ struct ContraPlayer {
         } else Bullets.push_back({StartX,StartY,12.0*D,0,60});
     }
 };
-struct ContraEnemy {
+struct IronwakeEnemy {
     double X=0,Y=470,VX=-2; int Health=1,ShootTimer=60,Kind=0;
     int Width() const { return Kind==2?60:28; }
     int Height() const { return Kind==2?70:40; }
     Rect GetRect() const { return PixelRect(X,Y,Width(),Height()); }
     // Random results are arguments: deterministic source fixtures can inject
     // exact Python decisions without coupling rules to either random generator.
-    void Update(const ContraPlayer& P,std::vector<ContraBullet>& Bullets,
+    void Update(const IronwakePlayer& P,std::vector<IronwakeBullet>& Bullets,
                 bool Turn,int NextShootTimer) {
         if(Health<=0) return;
         X+=VX;
@@ -101,7 +103,7 @@ struct ContraEnemy {
         if(Kind==2) VX=X>P.X+200?-1.5:(X<P.X-100?1.5:0);
     }
 };
-struct ContraPowerup { double X=0,Y=0,Bob=0; bool Rapid=false; };
+struct IronwakePowerup { double X=0,Y=0,Bob=0; bool Rapid=false; };
 struct Particle { double X=0,Y=0,VX=0,VY=0; int Life=0; Color Tint; };
 
 struct NinjaAttack {
@@ -221,12 +223,12 @@ struct NinjaBoss {
 }}} // daedalus::desktop::platformers
 
 namespace daedalus { namespace desktop {
-class ContraGame final : public Game {
+class IronwakeGame final : public Game {
     friend struct platformers::TestAccess;
-    platformers::ContraPlayer Player;
-    std::vector<platformers::ContraBullet> Bullets,EnemyBullets;
-    std::vector<platformers::ContraEnemy> Enemies;
-    std::vector<platformers::ContraPowerup> Powerups;
+    platformers::IronwakePlayer Player;
+    std::vector<platformers::IronwakeBullet> Bullets,EnemyBullets;
+    std::vector<platformers::IronwakeEnemy> Enemies;
+    std::vector<platformers::IronwakePowerup> Powerups;
     std::vector<platformers::Particle> Particles;
     Random Rng,CosmeticRng;
     double CameraX=0,Progress=0;
@@ -305,7 +307,7 @@ class ContraGame final : public Game {
 public:
     static constexpr std::size_t MaxBullets=96,MaxEnemies=6,MaxParticles=160;
     static constexpr double FinishX=2800;
-    ContraGame() { Reset(730); }
+    IronwakeGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed;AtTitle=false;
         Player={}; Bullets.clear(); EnemyBullets.clear(); Enemies.clear(); Powerups.clear(); Particles.clear();
@@ -323,6 +325,23 @@ public:
     }
     int GetOption() const override { return Option; }
     int GetRangeHits() const { return RangeStage; }
+    // Checkpoint save: mode, score, lives, spread gun and range hits (option 1).
+    // Restore starts a fresh stage from the left edge. Title and finished runs are not saved.
+    std::string SaveState() const override {
+        if(AtTitle || Over || Won) return {};
+        return "DCS1 "+std::to_string(Option)+" "+std::to_string(Player.Score)+" "+std::to_string(Player.Lives)+" "
+            +(Player.Spread?"1":"0")+" "+std::to_string(RangeStage);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mode=-1,Points=-1,Left=-1,Gun=-1,Hits=-1;
+        if(!(In>>Version>>Mode>>Points>>Left>>Gun>>Hits) || Version!="DCS1" || (In>>Extra)) return false;
+        if(Mode<0 || Mode>1 || Points<0 || Points>1000000000000LL || Left<1 || Left>99 || Gun<0 || Gun>1
+            || Hits<0 || Hits>(Mode==1?static_cast<long long>(RangeTargets.size())-1:0)) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);
+        Player.Score=Points;Player.Lives=static_cast<int>(Left);Player.Spread=Gun==1;RangeStage=static_cast<int>(Hits);
+        return true;
+    }
     // Optional cabinet lifecycle/key seam. The host dispatches ordered raw
     // keyboard events before its next fixed Step; held input remains movement.
     // Keys: 0..5 = Up,Down,Left,Right,B,A; 6 Enter; 7 Space; 8 R; 9 other.
@@ -387,7 +406,7 @@ public:
         }
         Previous=Controls;
         if(Controls.FirePressed) Player.Shoot(Bullets);
-        Player.Update(Controls,platformers::ContraPlatforms(),CameraX);
+        Player.Update(Controls,platformers::IronwakePlatforms(),CameraX);
         if(Controls.Fire || Controls.FirePressed) Player.Shoot(Bullets);
         const double Target=std::max(0.0,Player.X-350);
         CameraX=CameraX*.85+Target*.15;
@@ -457,7 +476,7 @@ public:
             : "IRONWAKE ADVANCE | "+GoalText()+" | "+FireReadiness()+(Player.Invincible>0 ? " | "+ProtectionText() : "");
         return {Player.Score,Player.Lives,Over,Won,Note};
     }
-    const platformers::ContraPlayer& GetPlayer() const { return Player; }
+    const platformers::IronwakePlayer& GetPlayer() const { return Player; }
     double GetCameraX() const { return CameraX; }
     std::size_t BulletCount() const { return Bullets.size()+EnemyBullets.size(); }
     std::size_t EnemyCount() const { return Enemies.size(); }
@@ -485,7 +504,7 @@ public:
             F.AddTriangle({X-20,350},{X+20,280},{X+60,350},{0,100,0,255});
         }
         F.AddRect(0,520,800,80,{139,69,19,255}); F.AddRect(0,520,800,12,{34,139,34,255});
-        for(const auto& P:platformers::ContraPlatforms()) {
+        for(const auto& P:platformers::IronwakePlatforms()) {
             const double X=P.X-CameraX;
             if(X>-150 && X<900) { F.AddRect(X,P.Y,P.W,P.H,{101,67,33,255}); F.AddRect(X,P.Y,P.W,6,{34,139,34,255}); }
         }
@@ -581,7 +600,7 @@ private:
     }
 };
 
-class ShadowNinjaGame final : public Game {
+class EmberstepGame final : public Game {
     friend struct platformers::TestAccess;
     platformers::NinjaPlayer Player;
     std::vector<platformers::NinjaAttack> Attacks;
@@ -623,13 +642,33 @@ class ShadowNinjaGame final : public Game {
 public:
     static constexpr std::size_t MaxAttacks=64,MaxEnemies=5;
     static constexpr int BossScoreThreshold=1200,PulseReceiptFrames=8;
-    ShadowNinjaGame() { Reset(730); }
+    EmberstepGame() { Reset(730); }
     void Reset(std::uint32_t Seed) override {
         SessionSeed=Seed;
         Player={}; Attacks.clear(); Enemies.clear(); Gold.clear(); Boss={};
         BossActive=false; Over=false; Won=false; SpawnTimer=0; BossPulseCueFrames=0; Score=0; CourseStage=0; Previous={}; Rng.Seed(Seed);
         if(Option==1) Gold.push_back(CourseLights.front());
         else for(int I=0;I<5;++I) Gold.push_back({static_cast<double>(Rng.Int(80,700)),static_cast<double>(Rng.Int(200,400))});
+    }
+    // Checkpoint save: mode, score, health and terrace lights (option 1). Restore
+    // starts a fresh field, or stands on the last lit terrace. Finished runs are not saved.
+    std::string SaveState() const override {
+        if(Over || Won) return {};
+        return "DNS1 "+std::to_string(Option)+" "+std::to_string(Score)+" "+std::to_string(Player.Health)+" "+std::to_string(CourseStage);
+    }
+    bool RestoreState(const std::string& Payload,std::uint32_t Seed) override {
+        if(Payload.size()>128) return false;
+        std::istringstream In(Payload);std::string Version,Extra;long long Mode=-1,Points=-1,Life=-1,Stage=-1;
+        if(!(In>>Version>>Mode>>Points>>Life>>Stage) || Version!="DNS1" || (In>>Extra)) return false;
+        if(Mode<0 || Mode>1 || Points<0 || Points>1000000000000LL || Life<1 || Life>platformers::NinjaPlayer{}.Health
+            || Stage<0 || Stage>(Mode==1?static_cast<long long>(CourseLights.size())-1:0)) return false;
+        Option=static_cast<int>(Mode);Reset(Seed);
+        Score=Points;Player.Health=static_cast<int>(Life);CourseStage=static_cast<int>(Stage);
+        if(Option==1 && CourseStage>0) {
+            const Vec Anchor=CourseAnchors[static_cast<std::size_t>(CourseStage)];
+            Player.X=Anchor.X;Player.Y=Anchor.Y;Gold.front()=CourseLights[static_cast<std::size_t>(CourseStage)];
+        }
+        return true;
     }
     bool SetOption(int Value,std::uint32_t Seed) override {
         if(Value<0 || Value>1) return false;

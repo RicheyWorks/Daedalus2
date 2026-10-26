@@ -24,20 +24,20 @@ for copied/OneDrive files. Full SHA-256 pins are in `desktop-games-sources.json`
 
 | ID | Canonical source | Latest evidence | Port owner / backlog |
 | --- | --- | --- | --- |
-| pong | `pong (1).py` | May 1 04:32 UTC; adds controller to earlier `pong.py` | Pilot; root |
+| twinwake | `twinwake (1).py` | May 1 04:32 UTC; adds controller to earlier `pong.py` | Pilot; root |
 | dungeon | `PythonGames/main.py` | Sole script, April 25 | Maze slice |
-| asteroids | `asteroids_pygame_ce.py` | May 2 08:17; later than `(1)`, adds controller | Shooter slice |
+| driftstone | `asteroids_pygame_ce.py` | May 2 08:17; later than `(1)`, adds controller | Shooter slice |
 | football | `football_pygame_ce.py` | Sole script, May 2 | Sports slice |
-| pacman | `pacman.py` | Sole script, May 1 | Maze slice |
-| sega_shooter | `sega_space_shooter.py` | Sole script, May 1 | Shooter slice |
-| shadow_ninja | `shadow_ninja_platform_fixed.py` | May 2 08:22; after numbered revisions, platform/spawn fixes | Platformer slice |
+| glowtrail | `pacman.py` | Sole script, May 1 | Maze slice |
+| riftwing | `sega_space_shooter.py` | Sole script, May 1 | Shooter slice |
+| emberstep | `shadow_ninja_platform_fixed.py` | May 2 08:22; after numbered revisions, platform/spawn fixes | Platformer slice |
 | star_shooter | `star_shootergpt1_fixed.py` | April 29; after all six other revisions, save-state restoration added | Shooter slice |
 | dodge_ball | `super_dodge_ball_fixed.py` | May 2 08:24; after earlier tournament script | Sports slice |
-| contra | `contra.py` | Sole file contains two full versions; later controller version is canonical | Platformer slice |
-| zelda | `zelda.py` | Sole script, May 1 | Maze slice |
+| ironwake | `contra.py` | Sole file contains two full versions; later controller version is canonical | Platformer slice |
+| lanternwild | `zelda.py` | Sole script, May 1 | Maze slice |
 
 All are Python/Pygame; many source headers specify Pygame CE. The `(1)/(2)/(3)` and
-`fixed` scripts are revisions, not extra games. The unrelated ComputerPets/Minesweeper
+`fixed` scripts are revisions, not extra games. The unrelated ComputerPets/Beacon Sweep
 work is not a substitute for this collection. The native catalog contains these eleven games.
 The user's next requested additions are SudokuPro and BlackJackPro: thirteen requested game
 families in total, with the two Java additions assessed separately below.
@@ -98,17 +98,17 @@ refuses writing. New/restarted native runs deliberately retain the previous save
 new-game path deletes it. The port never reads or overwrites the Python originals' home save files.
 Per-game controls/features and intentional repairs are documented with each test family.
 
-## Minesweeper saved boards
+## Beacon Sweep saved boards
 
-The existing native Minesweeper now has **Save board**, **Continue saved board** and
+The existing native Beacon Sweep now has **Save board**, **Continue saved board** and
 **Save & Close** in its cabinet. Save & Close leaves the cabinet open if writing fails.
 Plain Close, Restart and game selection leave the previous saved board unchanged;
 Continue explicitly replaces the current board. One local slot is shared by this
-installation's Minesweeper cabinets, separate from Star Shooter's files.
+installation's Beacon Sweep cabinets, separate from Star Shooter's files.
 F5 saves and F9 continues the saved board. While paused, gamepad X saves and Y
 continues the saved board; P / Start returns to play.
 
-The Minesweeper cabinet also exposes the engine's three existing **New board**
+The Beacon Sweep cabinet also exposes the engine's three existing **New board**
 presets: 9 x 9 with 10 mines, 16 x 16 with 40, and 30 x 16 with 99. The current preset
 comes from the actor's active option, including after Continue. Selecting any
 preset, even the current one, starts a fresh board at the retained seed. Save
@@ -134,7 +134,7 @@ clicks; resume or start another board explicitly. Keyboard/gamepad actions remai
 available. Each accepted mouse press clears prior held inputs and acts once,
 without adding a timer step or changing first-reveal safety.
 
-Minesweeper also uses the native **How to play** panel (F1 / left-stick click).
+Beacon Sweep also uses the native **How to play** panel (F1 / left-stick click).
 Readable sections explain the clear-every-safe-cell goal, safe opening, diagonal
 number clues, flood reveal, optional flags, the estimated mine counter, chording
 risks, mouse/keyboard/controller controls and exact-board save/continue. The
@@ -145,7 +145,7 @@ Help is tied to the game that opened it and closes if the active game changes;
 it cannot resume a different game. No game rules, timer or save records change.
 Native guide layout/focus, mixed input and save/continue acceptance remain pending.
 
-`Saved/DaedalusDesktopGames/minesweeper.dgs` stores the exact board, flags, selected
+`Saved/DaedalusDesktopGames/beacon_sweep.dgs` stores the exact board, flags, selected
 cell, difficulty, active timer and original seed in a bounded versioned `DGM1` record.
 Saving before the first reveal retains its deterministic 3x3 safe opening. Continue
 does not add elapsed wall time or restore held inputs. Won and lost boards retain
@@ -155,13 +155,13 @@ zero-tick result also roundtrips in the same `DGM1` format.
 
 The focused portable test covers all difficulties, pre-reveal and planted roundtrips,
 continued play through completion/loss, refused saves, input cleanup and Star save
-compatibility. See [Minesweeper notes](../engines/unreal/core-test/desktop_games/minesweeper_notes.md)
+compatibility. See [Beacon Sweep notes](../engines/unreal/core-test/desktop_games/beacon_sweep_notes.md)
 for format and reproduction. Unreal compilation, native filesystem failure handling
 and live Slate controls remain acceptance work; portable checks do not prove them.
 
-## Pong pilot parity and polish
+## Twinwake pilot parity and polish
 
-The oracle reads the pinned latest `pong (1).py`, reviews/extracts only its numeric update
+The oracle reads the pinned latest `twinwake (1).py`, reviews/extracts only its numeric update
 statements and executes those statements with synthetic keys/controller values. It never
 imports Pygame, opens a display, runs the original loop or reads user save data.
 Eleven source cases cover keyboard, both keys, analog/deadzone, sequential AI movement,
@@ -170,18 +170,18 @@ first contacts and scoring. C++ matches those states exactly.
 Intentional enhancements: keyboard overshoot clamps to the playfield, collision direction
 guards prevent repeated paddle/wall flip-flops, counters saturate instead of overflowing,
 and the host supplies explicit pause/restart/close cleanup. No artificial winning threshold
-is added to the source's endless Pong match. These repairs are tested separately from parity.
+is added to the source's endless Twinwake match. These repairs are tested separately from parity.
 
 ## Source identity and Blender handoff
 
 The scripts draw procedural ships, characters, particles and maps; inspected code does not
 load external sprite/model assets. No original Blender meshes or rigs were supplied.
-Use source palettes/silhouettes as gameplay references: Contra's
-blue-shirt/bandana gunner; Shadow Ninja's dark mask/outfit and sword/stars; football and
-dodge-ball team colors; source ship/UFO/boss silhouettes. Pong and the dungeon prototype
+Use source palettes/silhouettes as gameplay references: Ironwake's
+blue-shirt/bandana gunner; Emberstep Ascent's dark mask/outfit and sword/stars; football and
+dodge-ball team colors; source ship/UFO/boss silhouettes. Twinwake and the dungeon prototype
 need no invented character model.
 
-CONTRA, Pac-Man and Zelda are explicitly branded source references. Their names/likenesses
+IRONWAKE, Glowtrail and Lanternwild are explicitly branded source references. Their names/likenesses
 are not claimed as original RicheyWorks characters; external asset rights/provenance were
 not supplied. The native drawing adapter is a provisional source-faithful reference, not a
 claim of cleared production art. Blender creates original production characters/cabinets and
@@ -191,7 +191,7 @@ does not prove rig compatibility, animation playback, collisions or gameplay. Ex
 limits remain metres, applied scale,
 bottom-center origin, -Y front, blocky/beveled forms and bounded material/triangle budgets.
 
-Pong also offers an optional **Rally practice** mode through two native toggle
+Twinwake also offers an optional **Rally practice** mode through two native toggle
 buttons. A larger paddle, slower ball and full-height return wall support a
 player-only rally count and session best. Misses keep the best, reset the rally
 and give a two-second preparation window; Space / pad A can serve early. Every
@@ -207,7 +207,7 @@ Driftstone Patrol also supports **K / left trigger to brake**. Braking slows dri
 to rest and takes priority over thrust; turning and firing remain available. Blue
 ship fins and a live BRAKING cue show the action. Pad B keeps its fire binding.
 Reset, respawn and focus/input cleanup retain the existing lifecycle. The original
-coasting/thrust rules apply when not braking; Sega and Star behavior is unchanged.
+coasting/thrust rules apply when not braking; Riftwing and Star behavior is unchanged.
 Native trigger/focus and actual flight feel still require acceptance.
 
 The desktop Dungeon cabinet's existing **Threadlight** chapter has an optional
@@ -237,20 +237,20 @@ or Restart clears session progress; selecting the active mode keeps it. It adds
 no durable score/save or reward. Native layout, controller/focus and play feel
 still require acceptance.
 
-Shadow Ninja gives jump presses a small timing allowance: about 100 ms after
+Emberstep Ascent gives jump presses a small timing allowance: about 100 ms after
 leaving a ledge, or before landing when the air jump is already used. Early taps
 wait for a ground jump; available double jumps remain immediate. Wall jumps still
 need a fresh press. The same Space / pad A controls and jump impulses remain;
 holding Jump does not repeat landing hops. Reset clears the timing state. Native
 controller feel and integration remain unverified.
 
-Shadow Ninja's ordinary enemies show compact **health pips** above their existing
+Emberstep Ascent's ordinary enemies show compact **health pips** above their existing
 silhouette: two for walkers, four for jumpers. A surviving hit empties a pip,
 making damage visible without another helper label. Sword, star, spin, scoring
 and movement rules are retained. Native cue size, contrast and play acceptance
 remain unverified.
 
-Shadow Ninja also offers **Terrace climb**, an optional three-light practice route
+Emberstep Ascent also offers **Terrace climb**, an optional three-light practice route
 through its existing room. Two terrace jumps lead to a wall-climb finish. Pit falls
 return to the last terrace while keeping collected lights; a lower-platform landing
 still uses ordinary movement. The same jump and wall controls apply. The course
@@ -384,7 +384,7 @@ Rehearsal has clear mode/result cues and retains the usual shooting, pickups,
 damage and earned score rules. Restart or a fresh result retry keeps the mode;
 changing modes starts over. Native controls/layout and play feel remain unverified.
 
-Pong's optional **First to 5** offers a short match beside endless Match and Rally
+Twinwake's optional **First to 5** offers a short match beside endless Match and Rally
 practice. The existing match physics and controls apply; the fifth point brings
 a frozen result and a deliberate fresh Space / pad A rematch. Scores sit above
 the court. R/Restart keeps the selected mode, and choosing an already selected
@@ -396,7 +396,7 @@ and human play feel remain unverified.
 The inventory and actual source hashes are recorded; native tests, source oracle cases,
 Unreal UHT/object/reflection compile, plugin link/load and live gameplay are separate stages.
 All six strict local MSVC suites passed. The five source fixture families contain 1,507 reviewed
-source cases (11 Pong, 239 maze, 299 sports, 323 platformers, 635 shooters), with controlled
+source cases (11 Twinwake, 239 maze, 299 sports, 323 platformers, 635 shooters), with controlled
 providers rather than whole original Python loops. Six cosmetic Star particle-count fields are
 excluded from parity. Deterministic native replay uses its own RNG, not Python's random stream.
 Isolated Unreal 5.8.3 UHT, actor/widget object compilation and actual generated reflection object
@@ -427,7 +427,7 @@ is implemented. Playtest access remains available without token ownership.
 
 ## Pilot and remaining effort
 
-Pong is the smallest useful playable pilot: one arena, two paddles, a ball, score and controller
+Twinwake is the smallest useful playable pilot: one arena, two paddles, a ball, score and controller
 input, with no character rig or external asset dependency. It proves cabinet interaction,
 input isolation, frame presentation and exit cleanup before character-heavy games are accepted.
 The other native cores are available in the same catalog, but every game still needs live
@@ -435,10 +435,10 @@ acceptance against its latest-specific actions and repaired source defects.
 
 | Work | Relative remaining effort | Evidence / dependency |
 | --- | --- | --- |
-| Pong cabinet pilot | Smallest | Core source parity; cabinet placement and live input/exit acceptance remain |
-| Dungeon, Asteroids, Football | Small to medium | Procedural geometry and compact rules; no imported source meshes |
-| Maze, Zelda, Sega, Dodge Ball | Medium | Map/collision or boss/tournament paths and game-specific controls |
-| Contra, Shadow Ninja, Star Shooter | Larger | Compound actions, bosses, animation needs; Star settings/save/menu/leaderboard |
+| Twinwake cabinet pilot | Smallest | Core source parity; cabinet placement and live input/exit acceptance remain |
+| Dungeon, Driftstone, Football | Small to medium | Procedural geometry and compact rules; no imported source meshes |
+| Maze, Lanternwild, Riftwing, Dodge Ball | Medium | Map/collision or boss/tournament paths and game-specific controls |
+| Ironwake, Emberstep Ascent, Star Shooter | Larger | Compound actions, bosses, animation needs; Star settings/save/menu/leaderboard |
 | Original Blender production art | Separate asset work | No supplied rigs; silhouette, materials, rig/animation budgets need owner acceptance |
 | Multiplayer/world-screen cabinet | Separate runtime work | Current overlay is standalone-only and pauses its local world |
 

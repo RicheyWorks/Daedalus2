@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Short action chips beside the hint line. The chip names the immediate action
 // and stays out of score, movement, and saved status text.
-// catalog-capability: action_cue: dungeon dodge_ball zelda
+// catalog-capability: action_cue: dungeon dodge_ball lanternwild
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -40,8 +40,8 @@ void DodgeCues() {
     G.Data.Round=4;
     Check(G.ActionCue()=="CUE New score","finished tournament cues a new score");
 }
-void ZeldaCues() {
-    ZeldaGame G;
+void LanternwildCues() {
+    LanternwildGame G;
     Expect(G,"CUE Swing","fresh quest cues one swing");
     Input Swing;Swing.FirePressed=true;G.Step(Swing);
     Check(G.ActionCue()=="CUE Wait","a swing cues the recovery wait");
@@ -49,7 +49,7 @@ void ZeldaCues() {
 }
 
 int main() {
-    try { DungeonCues();DodgeCues();ZeldaCues(); }
+    try { DungeonCues();DodgeCues();LanternwildCues(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

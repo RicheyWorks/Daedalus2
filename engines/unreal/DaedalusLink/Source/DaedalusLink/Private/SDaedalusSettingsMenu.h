@@ -10,7 +10,7 @@ class SVerticalBox;
 class SHorizontalBox;
 
 /**
- * The pause menu and its settings (ADR-041), laid out like Halo Infinite's. Pausing shows only a short list
+ * The pause menu and its settings (ADR-041), laid out like a modern console game's. Pausing shows only a short list
  * (Resume, Settings, Respawn); choosing Settings opens the settings page: a tab ribbon across the top (LB / RB or Q / E),
  * a scrolling list of rows (up / down), each adjusted in place (left / right, A to flip), a panel on the right that
  * explains the selected row, and button hints along the bottom. Every change is applied and saved at once.
@@ -55,7 +55,7 @@ private:
 	bool bInSettings = false;
 	int32 PauseRow = 0;
 	void PauseSelect();
-	int32 Tab = 0;   // opens on CONTROLLER, as Halo Infinite does on a pad
+	int32 Tab = 0;   // opens on CONTROLLER, as console standard does on a pad
 	int32 Row = 0;
 	TArray<int32> Rows;
 	TArray<TSharedPtr<SWidget>> RowWidgets;

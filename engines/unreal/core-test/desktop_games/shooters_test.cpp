@@ -81,7 +81,7 @@ template<class Bullet, class Velocity> std::vector<double> ShotResult(
 
 std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<double>& V) {
     if (Label == "AST_SHIP") {
-        Need(V, 12, Label); AsteroidsGame::Ship S;
+        Need(V, 12, Label); DriftstoneGame::Ship S;
         S.X=V[0]; S.Y=V[1]; S.Angle=V[2]; S.Vx=V[3]; S.Vy=V[4]; S.Cooldown=static_cast<int>(V[5]);
         const Input I=DecodeInput(V[6], V[7], V[8]);
         for (int N=0; N<static_cast<int>(V[11]); ++N) {
@@ -90,53 +90,53 @@ std::vector<double> ExecuteFixture(const std::string& Label, const std::vector<d
         return {S.X,S.Y,S.Angle,S.Vx,S.Vy,Number(S.Cooldown),Number(S.Thrust)};
     }
     if (Label == "AST_SHOT") {
-        Need(V, 4, Label); AsteroidsGame::Ship S; AsteroidsGame::Bullet B;
+        Need(V, 4, Label); DriftstoneGame::Ship S; DriftstoneGame::Bullet B;
         S.X=V[0]; S.Y=V[1]; S.Angle=V[2]; S.Cooldown=static_cast<int>(V[3]);
-        const bool Shot=AsteroidsGame::Shoot(S,B);
+        const bool Shot=DriftstoneGame::Shoot(S,B);
         if (!Shot) return {0,Number(S.Cooldown),0,0,0,0,0};
-        Check(B.PlayerOwned, "asteroids player shot ownership");
+        Check(B.PlayerOwned, "driftstone player shot ownership");
         return {1,Number(S.Cooldown),B.X,B.Y,B.Vx,B.Vy,Number(B.Life)};
     }
     if (Label == "AST_BULLET") {
-        Need(V, 5, Label); auto B=AsteroidsGame::Bullet::At(V[0],V[1],V[2]); B.Life=static_cast<int>(V[3]);
+        Need(V, 5, Label); auto B=DriftstoneGame::Bullet::At(V[0],V[1],V[2]); B.Life=static_cast<int>(V[3]);
         for (int N=0; N<static_cast<int>(V[4]); ++N) { B.Update(); }
         return {B.X,B.Y,B.Vx,B.Vy,Number(B.Life)};
     }
     if (Label == "AST_ROCK") {
-        Need(V, 8, Label); AsteroidsGame::Rock R;
+        Need(V, 8, Label); DriftstoneGame::Rock R;
         R.X=V[0];R.Y=V[1];R.Size=static_cast<int>(V[2]);R.Vx=V[3];R.Vy=V[4];R.Angle=V[5];R.Rotation=V[6];
         for (int N=0; N<static_cast<int>(V[7]); ++N) { R.Update(); }
         return {R.X,R.Y,R.Angle,R.Radius(),Number(R.SplitCount())};
     }
-    if (Label == "SEGA_PLAYER") {
-        Need(V, 9, Label); SegaShooterGame::Player P;
+    if (Label == "RIFTWING_PLAYER") {
+        Need(V, 9, Label); RiftwingGame::Player P;
         P.X=V[0];P.Y=V[1];P.Speed=V[2];P.Cooldown=static_cast<int>(V[3]);P.Invincible=static_cast<int>(V[4]);
         const Input I=DecodeInput(V[5],V[6],V[7]);
         for (int N=0; N<static_cast<int>(V[8]); ++N) { P.Update(I); }
         return {P.X,P.Y,P.Speed,Number(P.Cooldown),Number(P.Invincible)};
     }
-    if (Label == "SEGA_SHOT") {
-        Need(V, 4, Label); SegaShooterGame::Player P;
+    if (Label == "RIFTWING_SHOT") {
+        Need(V, 4, Label); RiftwingGame::Player P;
         P.X=V[0];P.Y=V[1];P.Power=static_cast<int>(V[2]);P.Cooldown=static_cast<int>(V[3]);
         const auto Shots=P.Shoot();
-        return ShotResult(Shots,P.Cooldown,3,[](const SegaShooterGame::Bullet& B){return Vec{B.Vx,B.Vy};});
+        return ShotResult(Shots,P.Cooldown,3,[](const RiftwingGame::Bullet& B){return Vec{B.Vx,B.Vy};});
     }
-    if (Label == "SEGA_ENEMY") {
-        Need(V, 7, Label); SegaShooterGame::Enemy E; SegaShooterGame::Player P;
+    if (Label == "RIFTWING_ENEMY") {
+        Need(V, 7, Label); RiftwingGame::Enemy E; RiftwingGame::Player P;
         E.Chaser=V[0]!=0;E.Health=E.Chaser?4:2;E.X=V[1];E.Y=V[2];E.Speed=V[3];E.ShootTimer=static_cast<int>(V[4]);P.Y=V[5];
         for (int N=0; N<static_cast<int>(V[6]); ++N) { E.Update(P); }
         return {E.X,E.Y,Number(E.Health),Number(E.ShootTimer)};
     }
-    if (Label == "SEGA_POWER") {
-        Need(V, 7, Label); SegaShooterGame::Player P; SegaShooterGame::Powerup U;
-        U.Kind=static_cast<SegaShooterGame::PowerKind>(static_cast<int>(V[0]));
+    if (Label == "RIFTWING_POWER") {
+        Need(V, 7, Label); RiftwingGame::Player P; RiftwingGame::Powerup U;
+        U.Kind=static_cast<RiftwingGame::PowerKind>(static_cast<int>(V[0]));
         P.Power=static_cast<int>(V[1]);P.Speed=V[2];P.Lives=static_cast<int>(V[3]);U.X=V[4];U.Y=V[5];
-        SegaShooterGame::ApplyPower(P,U.Kind);
+        RiftwingGame::ApplyPower(P,U.Kind);
         for (int N=0; N<static_cast<int>(V[6]); ++N) { U.Update(); }
         return {Number(P.Power),P.Speed,Number(P.Lives),U.X,U.Y};
     }
-    if (Label == "SEGA_BULLET") {
-        Need(V, 5, Label); SegaShooterGame::Bullet B{V[0],V[1],V[2],V[3],true};
+    if (Label == "RIFTWING_BULLET") {
+        Need(V, 5, Label); RiftwingGame::Bullet B{V[0],V[1],V[2],V[3],true};
         for (int N=0; N<static_cast<int>(V[4]); ++N) { B.Update(); }
         return {B.X,B.Y};
     }
@@ -231,7 +231,7 @@ void SourceFixtures(const char* Filename) {
     std::ifstream File(Filename); Check(static_cast<bool>(File), "source fixture exists");
     if (!File) return;
     const std::map<std::string,int> ExpectedCounts={{"AST_SHIP",81},{"AST_SHOT",15},{"AST_BULLET",20},{"AST_ROCK",6},
-        {"SEGA_PLAYER",60},{"SEGA_SHOT",9},{"SEGA_ENEMY",18},{"SEGA_POWER",9},{"SEGA_BULLET",9},
+        {"RIFTWING_PLAYER",60},{"RIFTWING_SHOT",9},{"RIFTWING_ENEMY",18},{"RIFTWING_POWER",9},{"RIFTWING_BULLET",9},
         {"STAR_PLAYER",42},{"STAR_SHOT",6},{"STAR_HIT",6},{"STAR_WANTS",8},{"STAR_STATS",135},
         {"STAR_ENEMY_SHOT",6},{"STAR_DIVE",18},{"STAR_BOSS",72},{"STAR_BOSS_SHOT",72},{"STAR_BOSS_MOVE",7},
         {"STAR_POWER",12},{"STAR_BULLET",24}};
@@ -439,8 +439,8 @@ void SerializedHostContract() {
     }
     Check(Receiver.RestoreState("DGS1 0 1 28 1 0 0 0 0 0",10),"serialized valid lower boundaries");
     Check(Receiver.RestoreState("DGS1 1000000000000 1000000 135 99 1 1 1 2 1",10),"serialized valid upper boundaries");
-    AsteroidsGame Asteroids;Game& NoPersistence=Asteroids;NoPersistence.Reset(10);
-    Check(NoPersistence.SaveState().empty() && !NoPersistence.RestoreState(Payload,10),"nonpersisted family rejects Star payload");
+    DriftstoneGame Driftstone;Game& NoPersistence=Driftstone;NoPersistence.Reset(10);
+    Check(NoPersistence.SaveState().rfind("DAS1 ",0)==0 && !NoPersistence.RestoreState(Payload,10),"driftstone saves its own DAS1 checkpoint and rejects Star payload");
     for (int Option=0;Option<=2;++Option) {
         Check(Receiver.SetOption(Option,84) && Receiver.GetOption()==Option,"host difficulty selection accepts source mode");
         const auto Mode=static_cast<StarGame::Difficulty>(Option);const auto Configuration=StarGame::Config(Mode);
@@ -456,21 +456,21 @@ void SerializedHostContract() {
 
 void CombinedDeviceInput() {
     Input I;I.Left=true;I.PadLeft=true;I.PadUp=true;I.AxisX=0.5;
-    AsteroidsGame::Ship S;S.Update(I);
+    DriftstoneGame::Ship S;S.Update(I);
     Check(S.Angle==-97 && S.Thrust,"ship preserves simultaneous keyboard, stick and D-pad source input");
-    AsteroidsGame Full;Full.Reset(731);Full.Step(I);
+    DriftstoneGame Full;Full.Reset(731);Full.Step(I);
     Check(Full.GetShip().Angle==S.Angle && Full.GetShip().Thrust==S.Thrust
-        && Full.GetShip().X==S.X && Full.GetShip().Y==S.Y,"full Asteroids step binds independent device inputs");
-    I={};I.PadLeft=true;I.PadRight=true;I.PadUp=true;I.PadDown=true;S=AsteroidsGame::Ship{};S.Update(I);
+        && Full.GetShip().X==S.X && Full.GetShip().Y==S.Y,"full Driftstone step binds independent device inputs");
+    I={};I.PadLeft=true;I.PadRight=true;I.PadUp=true;I.PadDown=true;S=DriftstoneGame::Ship{};S.Update(I);
     Check(S.Angle==-90 && !S.Thrust,"opposed D-pad directions cancel");
-    I={};I.Left=true;I.Right=true;I.PadRight=true;S=AsteroidsGame::Ship{};S.Update(I);
+    I={};I.Left=true;I.Right=true;I.PadRight=true;S=DriftstoneGame::Ship{};S.Update(I);
     Check(S.Angle==-85,"keyboard opposites cancel before independent D-pad rotation");
 }
 
-void SegaPlayableWin() {
+void RiftwingPlayableWin() {
     bool Won=false;std::int64_t BestScore=0;int WinningSeed=0,WinningFrames=0;std::int64_t FinalScore=0;
     for (int Seed=1;Seed<=32 && !Won;++Seed) {
-        SegaShooterGame G;G.Reset(static_cast<std::uint32_t>(Seed));
+        RiftwingGame G;G.Reset(static_cast<std::uint32_t>(Seed));
         for (int Tick=0;Tick<18000;++Tick) {
             Frame Visible;G.Render(Visible);const auto& P=G.GetPlayer();double TargetY=300,NearestX=10000;
             for (const auto& C:Visible.Commands) {
@@ -485,30 +485,30 @@ void SegaPlayableWin() {
             G.Step(I);const auto StatusValue=G.GetStatus();BestScore=std::max(BestScore,StatusValue.Score);
             if (StatusValue.Won) {
                 Won=true;WinningSeed=Seed;WinningFrames=Tick+1;FinalScore=StatusValue.Score;
-                Check(!StatusValue.Over && !G.HasBoss() && StatusValue.Score>=2000,"whole-game Sega boss victory and score");
+                Check(!StatusValue.Over && !G.HasBoss() && StatusValue.Score>=2000,"whole-game Riftwing boss victory and score");
                 Frame WinFrame,After;G.Render(WinFrame);
                 for (int N=0;N<240;++N) { G.Step(I); }
-                G.Render(After);Check(SameFrame(WinFrame,After) && G.GetStatus().Score==FinalScore,"Sega boss reward and win run once");
+                G.Render(After);Check(SameFrame(WinFrame,After) && G.GetStatus().Score==FinalScore,"Riftwing boss reward and win run once");
                 break;
             }
             if (StatusValue.Over) break;
         }
     }
-    Check(Won,"render-driven Sega pilot can reach native boss victory");
-    std::cout << "Sega playable bot: " << (Won?"won":"no victory") << ", seed " << WinningSeed << ", frames "
+    Check(Won,"render-driven Riftwing pilot can reach native boss victory");
+    std::cout << "Riftwing playable bot: " << (Won?"won":"no victory") << ", seed " << WinningSeed << ", frames "
               << WinningFrames << ", best score " << BestScore << '\n';
 }
 } // namespace
 
 int main(int Argc,char** Argv) {
     SourceFixtures(Argc>1?Argv[1]:"shooters_parity.txt");
-    Replay<AsteroidsGame>("Asteroids",AsteroidsGame::MaxBullets+AsteroidsGame::MaxRocks+AsteroidsGame::MaxUfos,20000);
-    Replay<SegaShooterGame>("Sega shooter",SegaShooterGame::MaxBullets+SegaShooterGame::MaxEnemies+SegaShooterGame::MaxPowerups+1,20000);
+    Replay<DriftstoneGame>("Driftstone",DriftstoneGame::MaxBullets+DriftstoneGame::MaxRocks+DriftstoneGame::MaxUfos,20000);
+    Replay<RiftwingGame>("Riftwing shooter",RiftwingGame::MaxBullets+RiftwingGame::MaxEnemies+RiftwingGame::MaxPowerups+1,20000);
     Replay<StarGame>("Star shooter",StarGame::MaxBullets+StarGame::MaxEnemies+StarGame::MaxPowerups+StarGame::MaxEffects+StarGame::MaxPopups+1,20000);
     StarLifecycle();
     SerializedHostContract();
     CombinedDeviceInput();
-    SegaPlayableWin();
+    RiftwingPlayableWin();
     std::cout << "Shooters: " << Checks-Failures << '/' << Checks << " checks passed\n";
     return Failures?1:0;
 }

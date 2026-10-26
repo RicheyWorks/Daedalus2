@@ -48,9 +48,9 @@ template<class T> void IdleLoss(const char* Name,std::uint32_t Seed) {
     std::cout<<Name<<" idle loss at "<<Steps<<" steps, seed "<<Seed<<'\n';
     if(G.GetStatus().Over) Retry(G,Seed);
 }
-void SegaVictory() {
+void RiftwingVictory() {
     // Existing documented pilot, restricted to its known seed and 1,200 steps.
-    SegaShooterGame G;G.Reset(1);int Steps=0;
+    RiftwingGame G;G.Reset(1);int Steps=0;
     while(!G.GetStatus().Won && !G.GetStatus().Over && Steps<1200) {
         Frame Visible;G.Render(Visible);const auto& P=G.GetPlayer();double TargetY=300,NearestX=10000;
         for(const auto& C:Visible.Commands) {
@@ -63,26 +63,26 @@ void SegaVictory() {
         Input I;I.Fire=true;I.Right=P.X<TargetX-2;I.Left=P.X>TargetX+2;I.Down=P.Y<TargetY-2;I.Up=P.Y>TargetY+2;
         G.Step(I);++Steps;
     }
-    Check(G.GetStatus().Won && !G.GetStatus().Over,"documented pilot reaches a distinct real Sega victory");
-    std::cout<<"Sega victory at "<<Steps<<" steps\n";
+    Check(G.GetStatus().Won && !G.GetStatus().Over,"documented pilot reaches a distinct real Riftwing victory");
+    std::cout<<"Riftwing victory at "<<Steps<<" steps\n";
     if(G.GetStatus().Won) Retry(G,1);
 }
 void DriverReplay() {
-    Driver G;Check(G.Select("asteroids",730),"driver selects Asteroids");
+    Driver G;Check(G.Select("driftstone",730),"driver selects Driftstone");
     int Steps=0;
     while(!G.GetStatus().Over && Steps<6000) {G.Advance(Driver::StepSeconds);++Steps;}
     Check(G.GetStatus().Over,"driver reaches bounded terminal state");
     if(!G.GetStatus().Over) return;
     Input Pending;Pending.FirePressed=true;G.SetInput(Pending);
     Check(G.SourceControllerButton(1),"driver consumes terminal Start before generic pause");
-    Driver Fresh;Fresh.Select("asteroids",730);
+    Driver Fresh;Fresh.Select("driftstone",730);
     G.Advance(Driver::StepSeconds);Fresh.Advance(Driver::StepSeconds);
     Check(!G.IsPaused() && SameFrame(G.GetFrame(),Fresh.GetFrame()),"driver replay clears old semantic edges");
 }
 }
 int main() {
-    for(std::uint32_t Seed:{0u,730u,UINT32_MAX}) {IdleLoss<AsteroidsGame>("Asteroids",Seed);IdleLoss<SegaShooterGame>("Sega",Seed);}
-    SegaVictory();DriverReplay();
+    for(std::uint32_t Seed:{0u,730u,UINT32_MAX}) {IdleLoss<DriftstoneGame>("Driftstone",Seed);IdleLoss<RiftwingGame>("Riftwing",Seed);}
+    RiftwingVictory();DriverReplay();
     std::cout<<"Shooter terminal replay: "<<Checks-Failed<<'/'<<Checks<<" checks passed\n";
     return Failed?1:0;
 }

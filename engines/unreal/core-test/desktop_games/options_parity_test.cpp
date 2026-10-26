@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Cabinet options for Lanternwild Quest (zelda) and Courtyard Clash (dodge_ball).
+// Cabinet options for Lanternwild Quest (lanternwild) and Courtyard Clash (dodge_ball).
 // Option 0 must match the original default exactly; other options are presets.
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
@@ -11,21 +11,21 @@ int Checks=0,Failed=0;
 void Check(bool Ok,const std::string& What) {++Checks;if(!Ok){++Failed;std::cerr<<"FAIL "<<What<<'\n';}}
 Input Dash() {Input I;I.DashPressed=true;return I;}
 
-void Zelda() {
-    ZeldaGame Default;Default.Reset(9);
-    ZeldaGame Zero;Check(Zero.SetOption(0,9),"zelda option 0 accepted");
-    Check(Zero.GetOption()==0 && !Zero.IsSwordAssistEnabled(),"zelda option 0 keeps fresh-press sword");
-    Check(Zero.GetStatus().Note==Default.GetStatus().Note,"zelda option 0 matches the default run");
-    ZeldaGame A;Check(A.SetOption(1,9),"zelda option 1 accepted");
-    Check(A.GetOption()==1 && A.IsSwordAssistEnabled(),"zelda option 1 starts with sword assist");
+void Lanternwild() {
+    LanternwildGame Default;Default.Reset(9);
+    LanternwildGame Zero;Check(Zero.SetOption(0,9),"lanternwild option 0 accepted");
+    Check(Zero.GetOption()==0 && !Zero.IsSwordAssistEnabled(),"lanternwild option 0 keeps fresh-press sword");
+    Check(Zero.GetStatus().Note==Default.GetStatus().Note,"lanternwild option 0 matches the default run");
+    LanternwildGame A;Check(A.SetOption(1,9),"lanternwild option 1 accepted");
+    Check(A.GetOption()==1 && A.IsSwordAssistEnabled(),"lanternwild option 1 starts with sword assist");
     A.Reset(9);
     Check(A.IsSwordAssistEnabled() && A.GetOption()==1,"assist preset survives a retry");
     A.Step(Dash());
     Check(!A.IsSwordAssistEnabled(),"live toggle still turns assist off");
     Check(A.GetOption()==1,"option records the cabinet preset, not the live toggle");
     Check(A.SetOption(0,9) && !A.IsSwordAssistEnabled(),"switching back to option 0 clears assist");
-    Check(!A.SetOption(2,9) && !A.SetOption(-1,9) && A.GetOption()==0,"out-of-range zelda option refused");
-    Game& Core=A;Check(Core.SetOption(1,9) && Core.GetOption()==1,"zelda option reachable through Game");
+    Check(!A.SetOption(2,9) && !A.SetOption(-1,9) && A.GetOption()==0,"out-of-range lanternwild option refused");
+    Game& Core=A;Check(Core.SetOption(1,9) && Core.GetOption()==1,"lanternwild option reachable through Game");
 }
 
 void Dodge() {
@@ -48,7 +48,7 @@ void Dodge() {
 }  // namespace
 
 int main() {
-    Zelda();Dodge();
+    Lanternwild();Dodge();
     std::cout<<"options parity: "<<(Checks-Failed)<<"/"<<Checks<<" checks\n";
     return Failed==0?0:1;
 }

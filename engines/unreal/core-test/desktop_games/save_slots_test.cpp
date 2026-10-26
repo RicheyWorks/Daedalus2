@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Host save-slot table: every slot is a real save-capable game with a unique,
-// safe file name; Minesweeper and Star keep their original files and styles;
+// safe file name; Beacon Sweep and Star keep their original files and styles;
 // unslotted games keep the legacy Star fallback; manual slots round-trip a
 // started run through the same Driver path the host uses for Continue.
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
@@ -34,15 +34,29 @@ int main() {
         Driver D;D.Select(Id,11);
         Input Start;Start.FirePressed=true;Start.JumpPressed=true;D.SetInput(Start);
         for(int N=0;N<20;++N) D.Advance(Driver::StepSeconds);
+        // Title screens and menus (Ironwake, Dodge Ball country select) need fresh presses.
+        for(int Press=0;Press<6 && D.CaptureSave().empty();++Press) {
+            D.ClearInput();for(int N=0;N<3;++N) D.Advance(Driver::StepSeconds);
+            D.SetInput(Start);D.SourceControllerButton(0);for(int N=0;N<3;++N) D.Advance(Driver::StepSeconds);
+        }
         const std::string Save=D.CaptureSave();
         Check(!Save.empty() && Save.size()<=4096,Id+": started run produces a bounded save");
         Driver E;
         Check(E.Select(ResumeGameId(Id),11) && E.RestoreSave(Save),Id+": Continue path restores the save");
         Check(E.CaptureSave()==Save,Id+": Continue path round-trips");
     }
-    Check(std::string(SaveFileFor("minesweeper"))=="minesweeper.dgs" && SupportsManualSave("minesweeper"),"minesweeper unchanged: manual, minesweeper.dgs");
+    Check(std::string(SaveFileFor("beacon_sweep"))=="beacon_sweep.dgs" && SupportsManualSave("beacon_sweep"),"beacon_sweep unchanged: manual, beacon_sweep.dgs");
     Check(std::string(SaveFileFor("star_shooter"))=="star_shooter.dgs" && !SupportsManualSave("star_shooter"),"star unchanged: source menu only, star_shooter.dgs");
-    for(const char* Id:{"asteroids","sega_shooter","shadow_ninja","dodge_ball","contra","","nope"}) {
+    for(const GameAlias& Alias:GameAliases) {
+        const std::string Old=Alias.OldId,New=Alias.Id;
+        Check(CanonicalGameId(Old)==New && CanonicalGameId(New)==New,Old+": old id resolves to "+New);
+        Check(FindSaveSlot(Old)==FindSaveSlot(New) && FindSaveSlot(New)!=nullptr,Old+": old id finds the renamed slot");
+        Check(std::string(SaveFileFor(New))==New+".dgs" && std::string(LegacySaveFileFor(Old))==Old+".dgs",New+": new file, legacy file kept readable");
+        Check(CreateGame(Old)!=nullptr,Old+": old id still creates the game");
+        Driver D;Check(D.Select(Old,4) && D.ActiveId()==New,Old+": driver reports the new id");
+    }
+    Check(LegacySaveFileFor("star_shooter")==nullptr && CanonicalGameId("dodge_ball")=="dodge_ball","unrenamed games have no alias");
+    for(const char* Id:{"","nope"}) {
         Check(!FindSaveSlot(Id) && !SupportsManualSave(Id),std::string(Id)+": no slot, no manual save");
         Check(std::string(ResumeGameId(Id))=="star_shooter" && std::string(SaveFileFor(Id))=="star_shooter.dgs",std::string(Id)+": keeps legacy Star fallback");
     }
