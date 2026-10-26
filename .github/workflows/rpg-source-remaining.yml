@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '24'
       # Explicitly admitted source/VM suites run serially with bounded heaps; no future-file glob.
-      # journey_preview_smoke_test.js requires generated HTML and is outside this source-only job.
+      # The generated diagnostic smoke follows these standalone suites, without a browser or native runtime.
       - name: Ally spells
         run: node --max-old-space-size=128 tools/rpg_demo/ally_spell_test.js
       - name: Angler guide
@@ -93,3 +93,12 @@ jobs:
         run: node --max-old-space-size=128 tools/rpg_demo/summon_book_test.js
       - name: Victory feedback
         run: node --max-old-space-size=128 tools/rpg_demo/victory_feedback_test.js
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: Generate and check journey diagnostic
+        run: |
+          set -euo pipefail
+          preview_dir="$(mktemp -d "${RUNNER_TEMP}/journey-preview.XXXXXX")"
+          python -B tools/rpg_demo/journey_preview.py "$preview_dir"
+          node --max-old-space-size=128 tools/rpg_demo/journey_preview_smoke_test.js "$preview_dir/index.html"
