@@ -18,8 +18,10 @@
       ],
       "option_count": 3,
       "capabilities": [
+        "action_cue",
         "focus_freeze",
         "fresh_pad_replay",
+        "hints",
         "options",
         "pointer",
         "save_restore"
@@ -42,8 +44,10 @@
       ],
       "option_count": 4,
       "capabilities": [
+        "action_cue",
         "focus_freeze",
         "fresh_pad_replay",
+        "hints",
         "options",
         "save_restore"
       ],
@@ -87,8 +91,10 @@
       ],
       "option_count": 3,
       "capabilities": [
+        "action_cue",
         "focus_freeze",
         "fresh_pad_replay",
+        "hints",
         "options",
         "save_restore",
         "source_keys"
@@ -156,8 +162,10 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "action_cue",
         "focus_freeze",
         "fresh_pad_replay",
+        "hints",
         "options",
         "save_restore",
         "source_keys"

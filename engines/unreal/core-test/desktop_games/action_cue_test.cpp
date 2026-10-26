@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Short action chips beside the hint line. The chip names the immediate action
 // and stays out of score, movement, and saved status text.
-// catalog-capability: action_cue: dungeon dodge_ball lanternwild
+// catalog-capability: action_cue: beacon_sweep driftstone dungeon dodge_ball lanternwild riftwing twinwake
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -40,6 +40,29 @@ void DodgeCues() {
     G.Data.Round=4;
     Check(G.ActionCue()=="CUE New score","finished tournament cues a new score");
 }
+void BeaconCues() {
+    BeaconSweepGame G;G.Reset(730);
+    Expect(G,"CUE Reveal","fresh board cues a reveal");
+    Input Flag;Flag.ActionPressed=true;G.Step(Flag);
+    Check(G.ActionCue()=="CUE Unflag","a flag cues unflag");
+}
+void DriftstoneCues() {
+    DriftstoneGame G;G.Reset(730);
+    Expect(G,"CUE Fire","fresh patrol cues fire");
+    Check(G.SetOption(2,730),"flight practice opens");
+    Expect(G,"CUE Dock","flight practice cues the dock");
+}
+void RiftwingCues() {
+    RiftwingGame G;G.Reset(730);
+    Expect(G,"CUE Fire","fresh run cues fire");
+    Check(G.SetOption(1,730),"rehearsal opens");
+    Expect(G,"CUE Fire","rehearsal still cues fire");
+}
+void TwinwakeCues() {
+    TwinwakeGame G;
+    Check(G.SetOption(1,730),"practice mode opens");
+    Expect(G,"CUE Serve","practice cues the serve");
+}
 void LanternwildCues() {
     LanternwildGame G;
     Expect(G,"CUE Swing","fresh quest cues one swing");
@@ -49,7 +72,7 @@ void LanternwildCues() {
 }
 
 int main() {
-    try { DungeonCues();DodgeCues();LanternwildCues(); }
+    try { BeaconCues();DriftstoneCues();DungeonCues();DodgeCues();LanternwildCues();RiftwingCues();TwinwakeCues(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

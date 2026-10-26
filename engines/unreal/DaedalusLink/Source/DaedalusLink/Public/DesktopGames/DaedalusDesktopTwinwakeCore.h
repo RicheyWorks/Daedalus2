@@ -141,6 +141,20 @@ public:
         else if(S.PointFrames>0) Note+=S.LastPoint>0?"; your point":"; CPU point";
         return {S.PlayerScore,0,false,false,Note}; // Preserve the endless source match.
     }
+    std::string HintLine() const {
+        if(TargetRally()) return TargetRallyOver()?"HINT Space or R plays the windows again."
+            :"HINT Hit the gold window. Move as you meet the ball.";
+        if(QuickMatch()) return QuickMatchOver()?"HINT Space or R starts the rematch."
+            :"HINT First to 5. Move as you meet the ball.";
+        if(Practice()) return "HINT Move as you meet the ball to bend it.";
+        if(S.ServeFrames>0) return "HINT Fire or Jump serves before the wait ends.";
+        return "HINT Move as you meet the ball to add spin.";
+    }
+    std::string ActionCue() const {
+        if(TargetRallyOver() || QuickMatchOver()) return "CUE Replay";
+        if(S.ServeFrames>0) return "CUE Serve";
+        return "CUE Spin";
+    }
     void Render(Frame& Out) const override {
         if(Practice()) {RenderPractice(Out);return;}
         if(QuickMatch()) {RenderQuickMatch(Out);return;}
@@ -154,6 +168,8 @@ public:
         if(S.Rally>0 || S.BestRally>0 || S.ServeFrames>0 || S.PointFrames>0) {
             Out.AddText(250,70,"Rally "+std::to_string(S.Rally)+"   Best "+std::to_string(S.BestRally),White,18);
             Out.AddText(250,98,"Move paddle at impact to add spin",White,14);
+            Out.AddText(250,122,HintLine(),{255,236,180,255},14);
+            Out.AddText(560,122,ActionCue(),{120,225,255,255},16);
         }
         if(S.ServeFrames>0) {
             Out.AddText(220,410,S.LastPoint>0?"Your point. Ready for the next rally.":"CPU point. Ready for the next rally.",White,18);
@@ -198,6 +214,8 @@ private:
         const bool ShowTargetHit=TargetRally() && !TargetRallyOver() && S.PointFrames>0 && S.LastPoint>0;
         Out.AddText(430,50,ShowTargetHit?"Window "+std::to_string(S.PlayerScore)+" cleared":"Session best "+std::to_string(S.BestRally),Gold,24);
         Out.AddText(24,91,TargetRally()?"Hit the GOLD window. Move at impact to add spin; cleared targets stay.":"Move at impact to bend the ball.",Quiet,16);
+        Out.AddText(24,104,HintLine(),{255,236,180,255},12);
+        Out.AddText(620,104,ActionCue(),{120,225,255,255},14);
         if(TargetRallyOver()) {
             Out.AddRect(180,330,440,140,{12,24,39,245});
             Out.AddText(230,352,"Three windows cleared!",Gold,26);
@@ -222,6 +240,8 @@ private:
         Out.AddText(210,15,"YOU "+std::to_string(S.PlayerScore),White,30);
         Out.AddText(480,15,"CPU "+std::to_string(S.ComputerScore),White,30);
         Out.AddText(350,58,"FIRST TO 5",Gold,16);
+        Out.AddText(24,72,HintLine(),{255,236,180,255},12);
+        Out.AddText(640,72,ActionCue(),{120,225,255,255},14);
         if(QuickMatchOver()) {
             Out.AddRect(180,CourtTop+210,440,140,Panel);
             Out.AddText(240,CourtTop+230,S.PlayerScore>=5?"You reached 5!":"CPU reached 5.",Gold,28);
