@@ -515,7 +515,10 @@ public:
         // Source map is 620 pixels tall but its 600-pixel viewport clipped the bottom wall.
         Out.Clear(800,660,Black);
         for(int Row=0;Row<Rows;++Row) for(int Col=0;Col<Columns;++Col)
-            if(IsWall(Col,Row)) Out.AddRect(Col*Tile,Row*Tile,Tile,Tile,maze::Wall);
+            if(IsWall(Col,Row)) {
+                Out.AddRect(Col*Tile,Row*Tile,Tile,Tile,maze::Wall);
+                Out.AddRect(Col*Tile,Row*Tile,Tile,4,{110,150,255,255});
+            }
         const Color Gate{80,200,255,255};
         for(int Side=0;Side<2;++Side) {
             const double X=Side==0 ? 1 : Columns*Tile-7;

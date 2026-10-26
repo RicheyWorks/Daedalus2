@@ -32,6 +32,20 @@ void Pellets() {
     }
     Check(Powers==4 && Dots>0,"four gold power pellets stay distinct from white dots");
 }
+void WallCap() {
+    PacmanGame G;
+    Check(PacmanGame::IsWall(0,0),"the corner cell is a wall");
+    Frame F;G.Render(F);
+    std::size_t Full=F.Commands.size(),Cap=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Rectangle || C.A.X!=0 || C.A.Y!=0) continue;
+        if(C.B.X==PacmanGame::Tile && C.B.Y==PacmanGame::Tile && C.Tint.R==0 && C.Tint.G==0 && C.Tint.B==180) Full=N;
+        if(C.B.X==PacmanGame::Tile && C.B.Y==4 && C.Tint.R==110 && C.Tint.G==150 && C.Tint.B==255) Cap=N;
+    }
+    Check(Full<Cap && Cap<F.Commands.size(),"maze walls keep a light top edge");
+    Check(F.Commands.size()<Frame::MaxCommands,"wall edges stay inside the frame budget");
+}
 void HeroRing() {
     PacmanGame G;
     const auto& P=G.GetPlayer();
@@ -73,7 +87,7 @@ void Fright() {
 }
 
 int main() {
-    try { Pellets();HeroRing();GhostRim();Fright(); }
+    try { Pellets();WallCap();HeroRing();GhostRim();Fright(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
