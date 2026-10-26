@@ -11,8 +11,8 @@ come up with, as long as it is original.
 **Daedalus is a huge voxel multiverse.** It is many worlds, each with its own look and kind of play, and you
 **warp** between them through sky gates and portals:
 - **Sky Islands and Lands**: Minecraft / Sandbox style. The pieces of a shattered planet, with caves, ores and arks.
-  Live in Unreal.
-- **The Portal Realm**: an original 8-bit RPG, with towns, a castle, keys, chests and a dark cave. Live in Unreal.
+  Implemented in Unreal.
+- **The Portal Realm**: an original 8-bit RPG, with towns, a castle, keys, chests and a dark cave. Implemented in Unreal.
 - **Parcels**: Decentraland style.
 - **Bricks**: Roblox style.
 - **Gallery City**: Cryptovoxels style.
@@ -27,6 +27,24 @@ islands. Ownership lives on a public chain.
 **Building for it, or picking a realm for your island or items? Read [`docs/REALMS.md`](./docs/REALMS.md) first.**
 It lists every realm, what is built, what art fits, where the details are, and the naming rules: original
 names only.
+
+## Integration and native status — 26 October 2026
+
+Repository integration and the installed Unreal build have separate checkpoints.
+The saved rebuild-4 report below is an owner-reported native snapshot; later main
+commits do not automatically become installed or gameplay-accepted.
+
+| Stage | Recorded outcome | Remaining boundary |
+|---|---|---|
+| Realm source integration | Selected Gallery, Bricks and Parcels tranches are merged; [PR463](https://github.com/RicheyWorks/Daedalus2/pull/463) records 16 original/integrated patch pairs and their dependencies. | Remaining packets and held gates are listed in the [realm guide](docs/realms/REALM-DEPENDENCIES-20261026.md). |
+| Batched native rebuild 4 | Owner reports main `e22a493d` plus the [PR464 fix](https://github.com/RicheyWorks/Daedalus2/pull/464): second UBT pass succeeded with zero errors, followed by a normal reopen and 30/30 new classes loading. | This proves the reported compile/load stage, not every feature's input, rendering, collision, persistence or gameplay. The failed first pass remains recorded. |
+| Source merged during that window | [PR450](https://github.com/RicheyWorks/Daedalus2/pull/450)'s `DaedalusDesktopMazeCore.h` was the source/install mismatch recorded after rebuild 4. | It remained source-only at that checkpoint and needs the next owner-controlled rebuild. |
+| Custody and production | The owner completed the handoff and normally released both resource leases; ingestion remained paused. | A release, successful build or empty lock table is not authority to claim the editor or resume ingestion. Monitor target reconciliation remained pending in that report. |
+
+Use the current verified custodian and saved per-feature receipts for subsequent
+work. Keep source/CI, merged, installed, reflected and actual runtime acceptance
+distinct; [AGENTS.md](AGENTS.md) and the [lessons](docs/LESSONS-LEARNED.md) describe
+the handoff and preservation rules. This documentation performs no native action.
 
 ## The engine underneath
 

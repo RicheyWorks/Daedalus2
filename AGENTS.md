@@ -37,3 +37,32 @@ material/colour and save outcomes needed for the content. Use Unreal's explicit
 native pipeline options when a convenience tool omits an essential setting; do
 not replace native ingestion with another framework. Reconcile partial/uncertain
 effects before retrying and correct only owned assets with recoverable evidence.
+
+## Integration stages and native custody
+
+Claim exact file paths with the current coordinator and use an isolated worktree.
+Preserve existing checkouts, uncommitted work and other teams' claims. The shared
+BOARD plan and workflow guide retain their own writers; repository documentation
+does not authorize changing those live coordination files.
+
+Report saved, committed, pushed, PR/checks, merged and native acceptance as separate
+stages, with exact source/merge identities and applicable evidence. A merge or
+portable test does not establish installed-plugin parity, native class loading,
+gameplay, file I/O or saved/reopened behavior. Check the current source-to-native
+delta and per-feature acceptance before claiming a batch complete. Reuse the
+[realm dependency reconciliation](docs/realms/REALM-DEPENDENCIES-20261026.md)
+rather than replaying every transfer-bundle ancestor.
+
+Native builds, editor actions and shared resource jobs belong to the currently
+verified sole custodian. Historical owner names, stale process IDs, empty locks and lease
+expiry do not grant custody. Coordinate compatible source changes into the owner's
+batched rebuild and preserve any active hold; source work does not resume ingestion.
+Historical recovery advice does not authorize force-closing an editor or discarding
+unsaved state. The verified custodian must reconcile saves, pending operations and
+ownership before an editor transition.
+
+At an operational checkpoint, stop the owned producer and its lease renewals,
+preserve warnings/failed attempts/partial effects, normally release only owned
+leases and verify the next owner's handoff. Record process exit separately from
+the named failed or uncertain operation. Do not force-release a foreign lease,
+edit lock files or discard failure evidence to manufacture completion.
