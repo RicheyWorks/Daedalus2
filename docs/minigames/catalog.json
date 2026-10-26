@@ -175,5 +175,51 @@
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
+  ],
+  "java_cabinets": [
+    {
+      "id": "sudoku",
+      "title": "SudokuPro",
+      "summary": "Account-scoped Sudoku boards with pencil notes, hints and saved boards.",
+      "host": "ADaedalusJavaArcade",
+      "game_enum": "EDaedalusJavaGame::Sudoku",
+      "source_repo": "RicheyWorks/sudokupro",
+      "requires": "local Java game service (rules stay in Java)",
+      "portable_tests": [
+        "java_arcade_protocol",
+        "sudoku_saved_games"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "blackjack",
+      "title": "BlackJackPro",
+      "summary": "Blackjack table with Java-approved actions, table options and recovery context.",
+      "host": "ADaedalusJavaArcade",
+      "game_enum": "EDaedalusJavaGame::Blackjack",
+      "source_repo": "RicheyWorks/BlackJackPro",
+      "requires": "local Java game service (rules stay in Java)",
+      "portable_tests": [
+        "java_arcade_protocol"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
+      "actions": [
+        "bet",
+        "clearBet",
+        "rebet",
+        "deal",
+        "hit",
+        "stand",
+        "double",
+        "split",
+        "surrender",
+        "insurance",
+        "setRule",
+        "setDecks",
+        "setSplitLimit",
+        "reload",
+        "newSession"
+      ]
+    }
   ]
 }

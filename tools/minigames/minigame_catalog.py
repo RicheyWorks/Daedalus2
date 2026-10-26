@@ -8,7 +8,8 @@ realms) and docs/minigames/CATALOG.md (human index).
   python tools/minigames/minigame_catalog.py           # regenerate
   python tools/minigames/minigame_catalog.py --check   # CI: fail on drift or gaps
 
-Checks: every listed game has a factory and vice versa, every *_test.cpp in
+Checks: every Java cabinet enum value has metadata and registered tests,
+every listed game has a factory and vice versa, every *_test.cpp in
 desktop_games is registered in CMake, every game has a portable test, and the
 generated files are current. Stdlib only. No Unreal, no build.
 """
@@ -20,6 +21,9 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 REG = ROOT / "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/DaedalusDesktopGameRegistry.h"
 TESTS = ROOT / "engines/unreal/core-test/desktop_games"
+JAVA_HDR = ROOT / "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h"
+JAVA_PROTO = ROOT / "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/DaedalusJavaArcadeProtocol.h"
+JAVA_TESTS = ROOT / "engines/unreal/core-test/java_arcade/CMakeLists.txt"
 OUT_JSON = ROOT / "docs/minigames/catalog.json"
 OUT_MD = ROOT / "docs/minigames/CATALOG.md"
 
@@ -31,6 +35,49 @@ TEST_PREFIX = {
     "contra": ["contra", "platformers"], "zelda": ["zelda", "platformers"],
     "football": ["football", "sports"], "dodge_ball": ["dodge", "sports"],
 }
+
+
+# Java cabinets: rules stay in the owning Java service; the cabinet only talks to it.
+JAVA_META = {
+    "Sudoku": {"id": "sudoku", "title": "SudokuPro", "source_repo": "RicheyWorks/sudokupro",
+               "summary": "Account-scoped Sudoku boards with pencil notes, hints and saved boards.",
+               "tests": ["java_arcade_protocol", "sudoku_saved_games"]},
+    "Blackjack": {"id": "blackjack", "title": "BlackJackPro", "source_repo": "RicheyWorks/BlackJackPro",
+                  "summary": "Blackjack table with Java-approved actions, table options and recovery context.",
+                  "tests": ["java_arcade_protocol"]},
+}
+
+
+def parse_java(errors):
+    hdr = JAVA_HDR.read_text(encoding="utf-8")
+    m = re.search(r"enum class EDaedalusJavaGame\s*:\s*uint8\s*\{([^}]*)\}", hdr)
+    values = [v.strip().split("=")[0].strip() for v in m.group(1).split(",") if v.strip()] if m else []
+    if not values:
+        errors.append("EDaedalusJavaGame enum not found")
+    tests = set(re.findall(r"add_executable\((\w+)", JAVA_TESTS.read_text(encoding="utf-8")))
+    proto = JAVA_PROTO.read_text(encoding="utf-8")
+    am = re.search(r'return A == "bet"(.*?);', proto, re.S)
+    bj_actions = re.findall(r'"(\w+)"', 'A == "bet"' + am.group(1)) if am else []
+    out = []
+    for v in values:
+        meta = JAVA_META.get(v)
+        if not meta:
+            errors.append(f"Java cabinet '{v}' has no catalog metadata in minigame_catalog.py")
+            continue
+        for t in meta["tests"]:
+            if t not in tests:
+                errors.append(f"Java cabinet '{v}' test '{t}' is not in java_arcade/CMakeLists.txt")
+        entry = {"id": meta["id"], "title": meta["title"], "summary": meta["summary"],
+                 "host": "ADaedalusJavaArcade", "game_enum": f"EDaedalusJavaGame::{v}",
+                 "source_repo": meta["source_repo"], "requires": "local Java game service (rules stay in Java)",
+                 "portable_tests": sorted(meta["tests"]),
+                 "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"}
+        if v == "Blackjack":
+            entry["actions"] = bj_actions
+        out.append(entry)
+    for v in sorted(set(JAVA_META) - set(values)):
+        errors.append(f"catalog metadata '{v}' has no EDaedalusJavaGame value")
+    return out
 
 
 def parse_registry(text):
@@ -79,12 +126,14 @@ def build():
             "portable_tests": tests,
             "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
         })
+    java = parse_java(errors)
     data = {
         "schema": "daedalus.minigames.catalog/v1",
         "generated_by": "tools/minigames/minigame_catalog.py",
         "realm_placement": ("Spawn one ADaedalusDesktopArcade cabinet per entry, or one cabinet with a picker; "
                             "call StartGame(id, seed) on use. Derive the seed from realm id + player for repeatable runs."),
         "games": games,
+        "java_cabinets": java,
     }
     md = [
         "# Minigame catalog", "",
@@ -96,7 +145,12 @@ def build():
     ]
     for g in games:
         md.append(f"| `{g['id']}` | {g['title']} | {len(g['portable_tests'])} |")
-    md += ["", "Java arcade cabinets (Sudoku, Blackjack) are hosted by `ADaedalusJavaArcade`; see `docs/java-arcade/README.md`.", ""]
+    md += ["", "## Java cabinets", "",
+           "Hosted by `ADaedalusJavaArcade`; rules stay in the owning Java service. See `docs/java-arcade/README.md`.", "",
+           "| id | title | enum | source | portable tests |", "|---|---|---|---|---|"]
+    for j in java:
+        md.append(f"| `{j['id']}` | {j['title']} | `{j['game_enum']}` | {j['source_repo']} | {len(j['portable_tests'])} |")
+    md.append("")
     return json.dumps(data, indent=2) + "\n", "\n".join(md), errors
 
 
@@ -118,7 +172,8 @@ def main():
     OUT_MD.write_text(md, encoding="utf-8", newline="\n")
     for e in errors:
         print("WARN:", e)
-    print(f"wrote {len(json.loads(js)['games'])} games")
+    d = json.loads(js)
+    print(f"wrote {len(d['games'])} games, {len(d['java_cabinets'])} java cabinets")
     return 0
 
 

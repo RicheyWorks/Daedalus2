@@ -21,4 +21,11 @@ batched rebuild under the editor custodian.
 | `contra` | Ironwake Advance | 3 |
 | `zelda` | Lanternwild Quest | 3 |
 
-Java arcade cabinets (Sudoku, Blackjack) are hosted by `ADaedalusJavaArcade`; see `docs/java-arcade/README.md`.
+## Java cabinets
+
+Hosted by `ADaedalusJavaArcade`; rules stay in the owning Java service. See `docs/java-arcade/README.md`.
+
+| id | title | enum | source | portable tests |
+|---|---|---|---|---|
+| `sudoku` | SudokuPro | `EDaedalusJavaGame::Sudoku` | RicheyWorks/sudokupro | 2 |
+| `blackjack` | BlackJackPro | `EDaedalusJavaGame::Blackjack` | RicheyWorks/BlackJackPro | 1 |
