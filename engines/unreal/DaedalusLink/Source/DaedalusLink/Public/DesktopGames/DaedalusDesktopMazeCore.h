@@ -831,6 +831,8 @@ public:
         for(const auto& C:Collectibles) {
             const double X=C.X, Y=C.Y+std::sin(C.Bob)*3;
             if(C.Kind==PickupKind::Rupee) {
+                Out.AddTriangle({X,Y-10},{X-7,Y},{X+7,Y},{12,40,12,255});
+                Out.AddTriangle({X,Y+10},{X-7,Y},{X+7,Y},{12,40,12,255});
                 Out.AddTriangle({X,Y-8},{X-5,Y},{X+5,Y},{50,200,100,255});
                 Out.AddTriangle({X,Y+8},{X-5,Y},{X+5,Y},{30,150,70,255});
             } else if(C.Kind==PickupKind::Heart) {

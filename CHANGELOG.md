@@ -11,7 +11,7 @@ under the `_migration/` portfolios.
 ### Added
 
 - **Dungeon cabinet view.** White corner marks draw after the lanterns and the exit, so the player tile stays visible when it overlaps them. The sealed exit label is white on the gray door, dim lantern numbers are white on the gray glass, and original-room walls keep a light top edge so they separate from that glass. Movement and controls are unchanged.
-- **Lanternwild view.** The hero tunic and head get a dark outline so they read on the green ground. Rocks keep a dark rim on the grass, tree canopies keep a light edge, the moblin keeps a dark body so its green tunic reads on the grass, the armos keeps a dark rim behind its gray stone, and enemy shots keep a dark rim on the grass. Controls are unchanged.
+- **Lanternwild view.** The hero tunic and head get a dark outline so they read on the green ground. Rocks keep a dark rim on the grass, tree canopies keep a light edge, the moblin keeps a dark body so its green tunic reads on the grass, the armos keeps a dark rim behind its gray stone, enemy shots keep a dark rim on the grass, and trinkets keep a dark edge so the green gems read on the grass. Controls are unchanged.
 - **Glowtrail view.** Power pellets are gold, frightened ghosts are pale with a white halo so they read against the blue walls, and the hero keeps a dark ring behind the yellow body. Controls are unchanged.
 
 - **Combat and EXP (ADR-037).**

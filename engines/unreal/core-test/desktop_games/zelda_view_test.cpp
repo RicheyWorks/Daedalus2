@@ -75,6 +75,23 @@ void View() {
         Check(Shade<Stone && Stone<F.Commands.size(),"armos keeps a dark rim behind the gray stone");
     }
 }
+void Rupee() {
+    ZeldaGame G;
+    const ZeldaGame::Collectible* Gem=nullptr;
+    for(const auto& C:G.GetCollectibles()) if(C.Kind==ZeldaGame::PickupKind::Rupee) { Gem=&C; break; }
+    Check(Gem!=nullptr,"a trinket is on the fresh board");
+    if(!Gem) return;
+    const double Y=Gem->Y+std::sin(Gem->Bob)*3;
+    Frame F;G.Render(F);
+    std::size_t Edge=F.Commands.size(),GemTop=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Triangle || C.A.X!=Gem->X) continue;
+        if(C.A.Y==Y-10 && C.Tint.R==12 && C.Tint.G==40 && C.Tint.B==12) Edge=N;
+        if(C.A.Y==Y-8 && C.Tint.R==50 && C.Tint.G==200 && C.Tint.B==100) GemTop=N;
+    }
+    Check(Edge<GemTop && GemTop<F.Commands.size(),"trinket keeps a dark edge on the grass");
+}
 void Shot() {
     ZeldaGame G;
     for(int N=0;N<160 && G.GetProjectiles().empty();++N) G.Step({});
@@ -94,7 +111,7 @@ void Shot() {
 }
 
 int main() {
-    try { View();Shot(); }
+    try { View();Rupee();Shot(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
