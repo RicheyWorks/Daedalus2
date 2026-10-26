@@ -94,7 +94,8 @@ void LocalQualification(const std::array<Asteroids,3>& Stages) {
 }
 void FinalAndDriver(const Asteroids& Complete) {
     auto G=Complete;const auto Before=Access::Snapshot(G);Frame F,Again;G.Render(F);Input Held;Held.Up=Held.Right=Held.Fire=Held.Action=true;Held.FirePressed=Held.ActionPressed=true;
-    for(int N=0;N<8;++N) G.Step(Held);G.Render(Again);Check(Access::Snapshot(G)==Before&&SameFrame(F,Again),"completed practice freezes turning thrust brake fire and all feedback state");
+    for(int N=0;N<8;++N) G.Step(Held);
+    G.Render(Again);Check(Access::Snapshot(G)==Before&&SameFrame(F,Again),"completed practice freezes turning thrust brake fire and all feedback state");
     Check(G.SourceControllerButton(0)&&G.GetOption()==2&&Access::Snapshot(G)==Access::Snapshot(Practice()),"fresh controller retry keeps practice and resets the original seeded route");
     G=Complete;Check(G.SourceKeyDown(7)&&Access::Snapshot(G)==Access::Snapshot(Practice()),"fresh Space retry restores the same clean practice opening");
     Driver D;Check(D.Select("asteroids",730),"Driver opens the existing Asteroids engine");D.Advance(Driver::StepSeconds*2.5);Input Stale;Stale.Up=Stale.Fire=Stale.FirePressed=Stale.Action=true;D.SetInput(Stale);

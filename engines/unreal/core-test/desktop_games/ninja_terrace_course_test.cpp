@@ -53,12 +53,14 @@ bool PublicRoute(std::array<Ninja,3>& Stages,Ninja& Finished) {
     Input Jump=Right;Jump.Jump=Jump.JumpPressed=true;Step(Jump);
     for(int N=0;N<60&&G.GetStatus().Score<50;++N) Step(Right);
     Check(G.GetStatus().Score==50&&G.GetPlayer().OnGround&&G.GoldCount()==1&&SamePoint(Goal(G),{640,210}),"one fresh ground jump and normal movement light the first goal and reveal the second");
-    if(G.GetStatus().Score!=50) return false;Stages[1]=G;
+    if(G.GetStatus().Score!=50) return false;
+    Stages[1]=G;
     for(int N=0;N<30&&G.GetPlayer().X<445;++N) Step(Right);
     Check(G.GetPlayer().X==445&&G.GetPlayer().OnGround,"ordinary movement reaches the second jumping ledge");Step(Jump);
     for(int N=0;N<60&&G.GetStatus().Score<100;++N) Step(Right);
     Check(G.GetStatus().Score==100&&G.GetPlayer().OnGround&&G.GoldCount()==1&&SamePoint(Goal(G),{765,140}),"second ground jump lights the upper terrace with only the wall goal remaining");
-    if(G.GetStatus().Score!=100) return false;Stages[2]=G;
+    if(G.GetStatus().Score!=100) return false;
+    Stages[2]=G;
     Input Climb=Right;Climb.Up=true;for(int N=0;N<140&&!G.GetStatus().Over;++N) Step(Climb);
     const auto S=G.GetStatus();Check(S.Score==150&&S.Won&&S.Over&&G.GoldCount()==0&&G.EnemyCount()==0&&!G.HasBoss()&&Steps<=303,"public jumps and wall climb collect all three lights for exactly 150 points without combat");
     std::cout<<"Terrace public route: "<<Steps<<" steps, score "<<S.Score<<", health "<<S.Lives<<'\n';Finished=G;return S.Won&&S.Score==150;

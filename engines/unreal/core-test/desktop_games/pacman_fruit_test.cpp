@@ -8,7 +8,8 @@ namespace daedalus { namespace desktop {
 struct MazeTestAccess {
     static void IsolateGhosts(PacmanGame& G) {for(auto& E:G.Ghosts) {E.X=E.Y=-1000;E.Alive=true;E.Frightened=false;E.FrightenedTimer=0;}}
     static void Progress(PacmanGame& G,int Eaten,bool LeaveHeroDot=false) {
-        for(auto& P:G.Pellets) P.Alive=true;int Taken=0;
+        for(auto& P:G.Pellets) P.Alive=true;
+        int Taken=0;
         const auto Take=[&](PacmanGame::Pellet& P){if(P.Alive&&Taken<Eaten) {P.Alive=false;++Taken;}};
         if(!LeaveHeroDot) for(auto& P:G.Pellets) if(PacmanGame::DistanceToPellet(G.Hero,P)<12) Take(P);
         for(auto& P:G.Pellets) if(!LeaveHeroDot||PacmanGame::DistanceToPellet(G.Hero,P)>=12) Take(P);
@@ -81,7 +82,8 @@ void QueueAndBoundaries(const Pac& Spawned) {
     auto G=Queued;Access::At(G,Pac::FruitSpot.X,Pac::FruitSpot.Y);const auto Before=G;G.Step({});
     Check(G.FruitsCollected()==1&&!G.IsFruitActive()&&Access::Pending(G)&&G.GetStatus().Score==Before.GetStatus().Score+DotPoints(Before,G)+100,"collecting the old fruit cannot replace it in the same step");
     G.Step({});Check(G.FruitsCollected()==2&&!G.IsFruitActive()&&!Access::Pending(G),"queued successor may spawn and collect on the following live step");
-    for(int N=0;N<8;++N) G.Step({});Check(G.FruitsCollected()==2&&!G.IsFruitActive()&&Access::Issued(G)==2,"both one-shot milestones are finite");
+    for(int N=0;N<8;++N) G.Step({});
+    Check(G.FruitsCollected()==2&&!G.IsFruitActive()&&Access::Issued(G)==2,"both one-shot milestones are finite");
     G=Queued;Access::LastFrames(G,1);G.Step({});Check(!G.IsFruitActive()&&G.FruitFramesRemaining()==0&&Access::Pending(G),"expiry leaves the queued successor waiting for a new idle-start step");
     G.Step({});Check(G.IsFruitActive()&&G.FruitFramesRemaining()==1200&&!Access::Pending(G),"idle-start successor receives its own full lifetime");
     G=Spawned;Access::LastFrames(G,2);G.Step({});Check(G.IsFruitActive()&&G.FruitFramesRemaining()==1,"retained real spawn ticks its penultimate active frame");
@@ -107,7 +109,8 @@ void CollisionAndResults(const Pac& Spawned,Pac& Result) {
 }
 void ResultAndDriver(const Pac& Result) {
     auto G=Result;const auto Before=Access::Snapshot(G);Frame F,Again;G.Render(F);Input Held;Held.Up=Held.Right=Held.Fire=Held.Jump=Held.Action=true;Held.DashPressed=true;
-    for(int N=0;N<8;++N) G.Step(Held);G.Render(Again);Check(Access::Snapshot(G)==Before&&SameFrame(F,Again),"result freezes hidden fruit state alongside held movement and timers");
+    for(int N=0;N<8;++N) G.Step(Held);
+    G.Render(Again);Check(Access::Snapshot(G)==Before&&SameFrame(F,Again),"result freezes hidden fruit state alongside held movement and timers");
     Input Retry;Retry.FirePressed=true;G.Step(Retry);Check(G.GetOption()==1&&Access::Snapshot(G)==Access::Snapshot(Bonus()),"fresh semantic replay keeps Bonus mode and clears both opportunities");
     Driver D;Check(D.Select("pacman",730)&&D.GetOption()==0,"Driver defaults a new Glowtrail cabinet to Classic");D.Advance(Driver::StepSeconds*2.5);Input Stale;Stale.Right=Stale.FirePressed=true;D.SetInput(Stale);
     Check(D.SetOption(1)&&D.GetOption()==1&&D.Ticks()==0&&D.Advance(Driver::StepSeconds*.5)==0,"Bonus selection clears pending input and old partial time");

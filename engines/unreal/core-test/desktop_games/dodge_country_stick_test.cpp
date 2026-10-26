@@ -30,7 +30,8 @@ void TitleEntry() {
 void HysteresisAndWrap() {
     auto G=ButtonEntry();Stick(G,0,.6);Check(Selected(G,0),"exact engage boundary does not choose a country");
     Stick(G,0,.600001);Check(Selected(G,1),"first tilt strictly beyond engage boundary selects down once");
-    for(int N=0;N<8;++N) Stick(G,0,.9);Check(Selected(G,1),"holding the stick never autorepeats");
+    for(int N=0;N<8;++N) Stick(G,0,.9);
+    Check(Selected(G,1),"holding the stick never autorepeats");
     Stick(G,0,-.9);Check(Selected(G,1),"opposite tilt without neutral does not choose another country");
     for(double Y:{.4,.300001,-.300001,-.6,-.9}) Stick(G,0,Y);
     Check(Selected(G,1),"jitter outside release threshold neither rearms nor repeats");

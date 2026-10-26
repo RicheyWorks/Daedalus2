@@ -55,7 +55,8 @@ bool SafeDots(const std::vector<Vec>& P) {
     if(P.empty()||P.size()>Dungeon::Columns*Dungeon::Rows*4+3) return false;
     for(std::size_t N=0;N<P.size();++N) {
         if(!std::isfinite(P[N].X)||!std::isfinite(P[N].Y)||Dungeon::Collides(P[N].X-20,P[N].Y-20,1)) return false;
-        if(N==0) continue;const Vec A=P[N-1],B=P[N];const double Dx=B.X-A.X,Dy=B.Y-A.Y;
+        if(N==0) continue;
+        const Vec A=P[N-1],B=P[N];const double Dx=B.X-A.X,Dy=B.Y-A.Y;
         if((!Close(Dx,0)&&!Close(Dy,0))||std::abs(Dx)+std::abs(Dy)<=0||std::abs(Dx)+std::abs(Dy)>10.000001) return false;
         for(int S=1;S<4;++S) if(Dungeon::Collides(A.X+Dx*S/4-20,A.Y+Dy*S/4-20,1)) return false;
     }return true;
@@ -127,7 +128,8 @@ void Circuit(std::uint32_t Seed) {
     }
     RouteSteps+=Steps;Check(G.GetStatus().Over&&G.GetStatus().Won&&G.GetStatus().Score==0&&G.GetCircuitStage()==Dungeon::CircuitStage::Complete,"each of six new-room orders completes with no invented reward");
     const auto Complete=G;Frame F;G.Render(F);const auto Picture=F;Input Held;Held.Up=Held.Fire=Held.Jump=Held.Dash=true;Held.FirePressed=Held.DashPressed=true;
-    for(int N=0;N<4;++N) G.Step(Held);G.Render(F);Check(SamePlay(G,Complete)&&SameFrame(F,Picture)&&Dots(F).empty(),"completion freezes guide and movement until explicit replay");
+    for(int N=0;N<4;++N) G.Step(Held);
+    G.Render(F);Check(SamePlay(G,Complete)&&SameFrame(F,Picture)&&Dots(F).empty(),"completion freezes guide and movement until explicit replay");
     Input Reset;Reset.ActionPressed=Reset.FirePressed=Reset.DashPressed=Reset.Right=true;G.Step(Reset);G.Render(F);
     Check(G.GetOption()==1&&G.GetLitCount()==0&&G.GetElapsedFrames()==0&&SameFrame(F,FreshFrame(Seed)),"Action reset retains room and circuit with priority over movement interaction and trail");
 }

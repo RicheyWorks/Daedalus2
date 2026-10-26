@@ -66,13 +66,15 @@ void OriginalDecisionGates() {
 void RandomAndGameStep() {
     PacmanGame::Player P;P.X=550;P.Y=290;Random SeamRandom,OrdinaryRandom,Expected;SeamRandom.Seed(730);OrdinaryRandom=Expected=SeamRandom;
     auto Seam=At(.5),Ordinary=At(130);Seam.Update(P,SeamRandom);Ordinary.Update(P,OrdinaryRandom);
-    for(int N=0;N<5;++N) Expected.Next();const auto Sixth=Expected.Next();
+    for(int N=0;N<5;++N) Expected.Next();
+    const auto Sixth=Expected.Next();
     Check(SeamRandom.Next()==Sixth&&OrdinaryRandom.Next()==Sixth,"actual alive updates retain exactly two samples plus three shuffle draws");
     auto Dead=At(.5);Dead.Alive=false;Dead.Frightened=true;Dead.FrightenedTimer=3;Random R;R.Seed(730);Expected=R;Dead.Update(P,R);
     Check(R.Next()==Expected.Next()&&Dead.FrightenedTimer==3&&Dead.X==.5,"actual dead update consumes neither RNG nor timer");
     PacmanGame G;MazeTestAccess::Crossing(G);Expected.Seed(0x80000000u);const double Turn=Expected.Unit(),Chase=Expected.Unit();
     Check(Turn>=.05&&Chase<.6,"full-game fixture uses normal nonturning chase samples");
-    for(int N=0;N<3;++N) Expected.Next();const auto Next=Expected.Next();G.Step({});const auto& E=G.GetGhosts()[0];
+    for(int N=0;N<3;++N) Expected.Next();
+    const auto Next=Expected.Next();G.Step({});const auto& E=G.GetGhosts()[0];
     Position(E,558.5,290,-1,0,"full game Step uses passage pursuit rather than continuing away from the player");
     Check(G.GetPlayer().X==530&&G.GetPlayer().Y==290&&G.GetStatus().Lives==3&&G.GetStatus().Score==0&&G.DotsLeft()==1&&E.Alive,"crossing preserves unrelated collectible, player and progress");
     Check(MazeTestAccess::NextRandom(G)==Next,"full-game crossing consumes the original five ghost random draws only");

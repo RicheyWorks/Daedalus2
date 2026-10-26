@@ -84,7 +84,8 @@ bool OriginalRosterRoute(Zelda& Victory) {
 }
 void TerminalAndDriver(const Zelda& Victory) {
     auto G=Victory;const auto Before=Access::Snapshot(G);Frame F,Again;G.Render(F);Input Held;Held.Right=Held.Fire=Held.Action=Held.Jump=Held.Dash=true;Held.DashPressed=true;
-    for(int N=0;N<8;++N) G.Step(Held);G.Render(Again);
+    for(int N=0;N<8;++N) G.Step(Held);
+    G.Render(Again);
     Check(Access::Snapshot(G)==Before&&SameFrame(F,Again)&&G.IsSwordAssistEnabled(),"terminal handling freezes held attacks movement and toggle without replaying or changing preference");
     Input Retry;Retry.FirePressed=Retry.DashPressed=true;G.Step(Retry);auto Expected=Victory;Expected.Reset(730);
     Check(G.IsSwordAssistEnabled()&&G.GetPlayer().AttackTimer==0&&Access::Snapshot(G)==Access::Snapshot(Expected),"fresh retry preserves preference and returns before toggling or implicitly swinging");

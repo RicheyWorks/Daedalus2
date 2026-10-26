@@ -40,7 +40,8 @@ bool SameFrame(const Frame& A,const Frame& B) {
     }return true;
 }
 bool SameShots(const std::vector<platformers::ContraBullet>& A,const std::vector<platformers::ContraBullet>& B) {
-    if(A.size()!=B.size()) return false;for(std::size_t N=0;N<A.size();++N) if(A[N].X!=B[N].X||A[N].Y!=B[N].Y||A[N].VX!=B[N].VX||A[N].VY!=B[N].VY||A[N].Life!=B[N].Life) return false;return true;
+    if(A.size()!=B.size()) return false;
+    for(std::size_t N=0;N<A.size();++N) if(A[N].X!=B[N].X||A[N].Y!=B[N].Y||A[N].VX!=B[N].VX||A[N].VY!=B[N].VY||A[N].Life!=B[N].Life) return false;return true;
 }
 Contra Range(std::uint32_t Seed=730) {Contra G;G.SetOption(1,Seed);return G;}
 void ModesAndPhysics() {
@@ -51,7 +52,8 @@ void ModesAndPhysics() {
     G=Range();auto Player=G.GetPlayer();std::vector<platformers::ContraBullet> Bullets;double Camera=0;
     for(int N=0;N<12;++N) {
         Input I;I.Right=N<4;I.Jump=I.JumpPressed=N==4;I.Down=N>=8;I.Fire=true;I.FirePressed=N==0;
-        if(I.FirePressed) Player.Shoot(Bullets);Player.Update(I,platformers::ContraPlatforms(),Camera);if(I.Fire||I.FirePressed) Player.Shoot(Bullets);
+        if(I.FirePressed) Player.Shoot(Bullets);
+        Player.Update(I,platformers::ContraPlatforms(),Camera);if(I.Fire||I.FirePressed) Player.Shoot(Bullets);
         Camera=Camera*.85+std::max(0.0,Player.X-350)*.15;for(auto& B:Bullets) B.Update();
         Bullets.erase(std::remove_if(Bullets.begin(),Bullets.end(),[&](const auto& B){return B.Life<=0||B.X>Camera+900||B.X<Camera-100;}),Bullets.end());G.Step(I);
         Check(G.GetRangeHits()==0&&Access::PlayerCode(G.GetPlayer())==Access::PlayerCode(Player)&&SameShots(Access::Shots(G),Bullets)&&G.GetCameraX()==Camera,"range reuses exact player shoot update camera and projectile expiry order");
@@ -97,7 +99,8 @@ void TitleAndRetry(const Contra& Complete) {
     Check(G.IsAtTitle()&&G.GetStatus().Lives==30,"original keyboard title code still selects thirty lives");
     Check(G.SourceControllerButton(0)&&!G.IsAtTitle()&&G.GetOption()==1&&G.GetStatus().Lives==30&&G.GetRangeHits()==0&&G.BulletCount()==0,"raw title start retains chosen lives and selected range without implicitly shooting");
     G=Complete;const auto Before=Access::Snapshot(G);Frame F,Again;G.Render(F);Held.Right=Held.Down=Held.Action=Held.Dash=true;Held.FirePressed=Held.JumpPressed=true;
-    for(int N=0;N<8;++N) G.Step(Held);G.Render(Again);Check(Access::Snapshot(G)==Before&&SameFrame(F,Again),"completed range freezes held and semantic input with all bullets and feedback");
+    for(int N=0;N<8;++N) G.Step(Held);
+    G.Render(Again);Check(Access::Snapshot(G)==Before&&SameFrame(F,Again),"completed range freezes held and semantic input with all bullets and feedback");
     Check(G.SourceControllerButton(0)&&G.GetOption()==1&&Access::Snapshot(G)==Access::Snapshot(Range()),"fresh controller retry preserves range and resets the original seed");
     G=Complete;G.SourceKeyDown(6);auto Expected=Range();Expected.SourceKeyDown(9);
     Check(G.GetOption()==1&&!G.GetStatus().Over&&G.GetRangeHits()==0&&G.GetPlayer().Lives==3&&G.BulletCount()==0&&Access::Snapshot(G)==Access::Snapshot(Expected),"fresh Enter retry keeps range through the existing named-key lifecycle");

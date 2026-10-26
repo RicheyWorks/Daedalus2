@@ -25,7 +25,8 @@ struct AsteroidsTestAccess {
         O<<' '<<G.Rocks.size();for(const auto& A:G.Rocks) {O<<' '<<A.X<<' '<<A.Y<<' '<<A.Vx<<' '<<A.Vy<<' '<<A.Angle<<' '<<A.Rotation<<' '<<A.Size;for(double V:A.Shape) O<<' '<<V;}
         O<<' '<<G.Bullets.size();for(const auto& B:G.Bullets) O<<' '<<B.X<<' '<<B.Y<<' '<<B.Vx<<' '<<B.Vy<<' '<<B.Life<<' '<<B.PlayerOwned;
         O<<' '<<G.Ufos.size();for(const auto& U:G.Ufos) O<<' '<<U.X<<' '<<U.Y<<' '<<U.Vx<<' '<<U.ShootTimer;
-        for(const auto& S:G.Stars) O<<' '<<S.X<<' '<<S.Y<<' '<<S.Speed;return O.str();
+        for(const auto& S:G.Stars) O<<' '<<S.X<<' '<<S.Y<<' '<<S.Speed;
+        return O.str();
     }
 };
 }}
@@ -88,7 +89,8 @@ void ActualVoyage() {
     Frame F;Voyage.Render(F);Check(Text(F,"THREE WAVES CLEARED!")&&Text(F,"Pad A")&&Text(F,"Enter")&&Text(F,"R/Restart")&&!Voyage.IsFireReady(),"finish presents completion and existing retry controls while firing is disabled");
     const auto Frozen=Access::Snapshot(Voyage);const auto Picture=F;const auto Note=Voyage.GetStatus().Note;
     Input Held;Held.Up=Held.Right=Held.Fire=Held.Action=true;Held.FirePressed=Held.ActionPressed=true;
-    for(int N=0;N<6;++N) Voyage.Step(Held);Voyage.Render(F);
+    for(int N=0;N<6;++N) Voyage.Step(Held);
+    Voyage.Render(F);
     Check(Access::Snapshot(Voyage)==Frozen&&SameFrame(Picture,F)&&Voyage.GetStatus().Note==Note,"won state freezes movement bullets UFOs timers score and presentation");
     for(bool Controller:{false,true}) {
         auto Replay=Voyage;const bool Retried=Controller?Replay.SourceControllerButton(0):Replay.SourceKeyDown(6);AsteroidsGame Fresh;Fresh.SetOption(1,730);
