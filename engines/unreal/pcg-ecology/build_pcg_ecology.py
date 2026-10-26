@@ -118,13 +118,13 @@ R["level"] = step("level + generate", level)
 # 5. offscreen screenshot via SceneCapture2D
 def shot():
     eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
-    rt = unreal.RenderingLibrary.create_render_target2d(unreal.EditorLevelLibrary.get_editor_world(), 1600, 900, unreal.TextureRenderTargetFormat.RTF_RGBA8)
+    rt = unreal.RenderingLibrary.create_render_target2d(unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world(), 1600, 900, unreal.TextureRenderTargetFormat.RTF_RGBA8)
     cap = eas.spawn_actor_from_class(unreal.SceneCapture2D, unreal.Vector(-3500, -3500, 5500), unreal.Rotator(roll=0, pitch=-35, yaw=45))
     c = cap.get_component_by_class(unreal.SceneCaptureComponent2D)
     c.set_editor_property("texture_target", rt); c.set_editor_property("capture_source", unreal.SceneCaptureSource.SCS_FINAL_COLOR_LDR)
     c.set_editor_property("fov_angle", 60.0)
     c.capture_scene()
-    unreal.RenderingLibrary.export_render_target(unreal.EditorLevelLibrary.get_editor_world(), rt, OUT, "pcg_ecology.png")
+    unreal.RenderingLibrary.export_render_target(unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world(), rt, OUT, "pcg_ecology.png")
     eas.destroy_actor(cap)
     return os.path.join(OUT, "pcg_ecology.png")
 if "-nullrhi" not in unreal.SystemLibrary.get_command_line().lower():
