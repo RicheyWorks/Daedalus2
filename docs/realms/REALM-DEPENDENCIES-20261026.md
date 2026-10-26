@@ -3,8 +3,9 @@
 The selected Gallery, Bricks and Parcels tranches are on main. They do not need
 the blanket “31-commit dependency” replay. This is a source reconciliation at
 main `642f75275f8f1907331a92e6746f72ec37fa367a`, not native acceptance or a new
-gameplay assignment. Unreal Epic Boss retains source integration; codex-play-guard
-retains native custody. Current editor, ingestion and heavy-job holds still apply.
+gameplay assignment. Unreal Epic Boss retains source integration. Native work
+requires the currently verified sole editor custodian; this snapshot grants no
+custody. Current editor, ingestion and heavy-job holds still apply.
 
 ## Verified integration
 
@@ -143,3 +144,8 @@ real input/file I/O/collision/rendering, saved/reopened behavior and cooking are
 separate stages. This reconciliation establishes none of the latter stages.
 Current source handoffs and the saved sole-writer checkpoint must be reconciled
 by their owners before native dispatch.
+
+Custody is separate from packet authorship. The original source handoffs name
+codex-play-guard; the later 08:15 UTC coordination record names Boss, with handoff
+54240 and claims 54245/54246. Reconcile the current verified handoff rather than
+automatically assigning native authority to the owner named in an old packet.

@@ -137,7 +137,7 @@ class RealmDependencies(unittest.TestCase):
         self.assertEqual(self.data["evidence_kind"], "source_reconciliation")
         self.assertIs(self.data["native_acceptance_established"], False)
         self.assertEqual(self.data["integration_owner"], "unreal-epic-boss")
-        self.assertEqual(self.data["native_owner"], "codex-play-guard")
+        self.assertEqual(self.data["native_owner"], "current verified editor custodian")
 
 
 class IncludeResolverRegressions(unittest.TestCase):
