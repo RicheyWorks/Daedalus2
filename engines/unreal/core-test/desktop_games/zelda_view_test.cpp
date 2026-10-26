@@ -293,6 +293,14 @@ void Key() {
         if(C.Size==6 && C.Tint.R==255 && C.Tint.G==215 && C.Tint.B==0) Bow=N;
     }
     Check(Rim<Bow && Bow<F.Commands.size(),"the key keeps a dark rim on the road");
+    std::size_t TagPlate=F.Commands.size(),Tag=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind==Shape::Rectangle && C.A.X==K.X-12 && C.A.Y==Y+8 && C.B.X==34 && C.B.Y==16
+            && C.Tint.R==8 && C.Tint.G==36 && C.Tint.B==16) TagPlate=N;
+        if(C.Kind==Shape::Text && C.Label=="KEY" && C.A.X==K.X-10) Tag=N;
+    }
+    Check(TagPlate<Tag && Tag<F.Commands.size(),"the key label sits on a dark plate");
 }
 }
 

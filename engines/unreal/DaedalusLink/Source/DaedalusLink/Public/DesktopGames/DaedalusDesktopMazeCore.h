@@ -853,6 +853,7 @@ public:
             } else {
                 Out.AddCircle(X,Y,8,{24,28,16,255}); Out.AddRect(X+2,Y-4,14,8,{24,28,16,255});
                 Out.AddCircle(X,Y,6,{255,215,0,255}); Out.AddRect(X+3,Y-3,12,6,{255,215,0,255});
+                Out.AddRect(X-12,Y+8,34,16,{8,36,16,255});
                 Out.AddText(X-10,Y+11,"KEY",maze::Yellow,12);
             }
         }
