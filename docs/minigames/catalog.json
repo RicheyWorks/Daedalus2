@@ -376,6 +376,29 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "cairnwell",
+      "title": "Cairnwell",
+      "summary": "Stack stones in the well. Left/Right or stick: slide; Down: drop",
+      "how_to_play": "HOW Slide the falling stone and clear a full layer.",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"cairnwell\", Seed)",
+      "portable_tests": [
+        "desktop_cairnwell"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "options",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [

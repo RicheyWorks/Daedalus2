@@ -10,6 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Cairnwell.** A stacking well. Option 0 is six columns and option 1 is a four-column practice with a slower fall. Slide a single stone; a full layer sinks away. A cream hint, a cyan slide cue, and the access plate sit on the bottom edge.
 - **Controller and accessibility marks.** Every desktop cabinet draws a key hint and a contrast mark on a dark plate. ACT is a cream plus and WAIT is a cyan bar, so colour is not the only signal. The plate is drawn after Beacon Sweep cells, and the mark uses rectangles so Glowtrail passage order stays intact. The Twinwake match opening stays six draw commands.
 - **How to play.** Every desktop cabinet has one original how-to line in the catalog and on the frame. The Twinwake match opening stays six draw commands; practice shows that line.
 - **Scoreboard hook.** Every desktop cabinet reports `Status.Score` through the catalog `scoreboard` capability. The number stays inside the range the arcade host already shows. Save files are unchanged.

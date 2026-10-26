@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Short action chips beside the hint line. The chip names the immediate action
 // and stays out of score, movement, and saved status text.
-// catalog-capability: action_cue: beacon_sweep driftstone dungeon dodge_ball gloam_latch lanternwild reedbeat riftwing twinwake
+// catalog-capability: action_cue: beacon_sweep cairnwell driftstone dungeon dodge_ball gloam_latch lanternwild reedbeat riftwing twinwake
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -58,6 +58,10 @@ void RiftwingCues() {
     Check(G.SetOption(1,730),"rehearsal opens");
     Expect(G,"CUE Fire","rehearsal still cues fire");
 }
+void CairnwellCues() {
+    CairnwellGame G;G.Reset(730);
+    Expect(G,"CUE Slide","a fresh well cues a slide");
+}
 void ReedbeatCues() {
     ReedbeatGame G;G.Reset(730);
     Expect(G,"CUE Wait","a fresh round waits to strike");
@@ -80,7 +84,7 @@ void LanternwildCues() {
 }
 
 int main() {
-    try { BeaconCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();ReedbeatCues();RiftwingCues();TwinwakeCues(); }
+    try { BeaconCues();CairnwellCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();ReedbeatCues();RiftwingCues();TwinwakeCues(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

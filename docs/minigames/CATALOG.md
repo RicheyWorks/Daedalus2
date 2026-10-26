@@ -22,6 +22,7 @@ batched rebuild under the editor custodian.
 | `lanternwild` | Lanternwild Quest | 4 |
 | `gloam_latch` | Gloam Latch | 1 |
 | `reedbeat` | Reedbeat | 1 |
+| `cairnwell` | Cairnwell | 1 |
 
 ## How to play
 
@@ -43,6 +44,7 @@ One original line per game, read from `HowToLine()`.
 | `lanternwild` | HOW Explore, swing once, and recover the key. |
 | `gloam_latch` | HOW Flip a lamp and its neighbors until the board is dark. |
 | `reedbeat` | HOW Strike while the reed is bright. |
+| `cairnwell` | HOW Slide the falling stone and clear a full layer. |
 
 ## Capabilities
 
@@ -65,6 +67,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `lanternwild` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes |
 | `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes |  |
 | `reedbeat` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes |  |
+| `cairnwell` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes |  |
 
 ## Java cabinets
 
