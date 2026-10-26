@@ -236,3 +236,13 @@ new actor roles distinctly (OceanDockControl versus OceanDock data) and preserve
 established data APIs. A full reflection build caught this before publication.
 
 
+
+## Local commits and handoff packets are not integration (2026-10-25)
+
+> "Local commits and handoff packets are checkpoints, not completed integration. Every batch must have a named integration owner and tracked dependency order through push, PR, required checks, merge and applicable runtime acceptance. Never report 'landed' without verifying the remote commit. If a stage is blocked, record the exact blocker and next action instead of letting handoffs accumulate." (RicheyWorks)
+
+**What happened.** origin/main did not move from aee28b75d (2026-10-19 07:41 PT) until 2026-10-25. Workers saved isolated local commits and handoff packets under "no push or merge" instructions, and nobody scheduled the integration step afterwards, so work piled up in local worktrees and packets for six days.
+
+**The lesson.** When a task says "no push or merge", the coordinator must schedule the integration step (push, PR, CI, merge) as a tracked item and track its status through to main. Every worker handoff names its branch, SHA and integration owner. A weekly or per-handoff check compares origin/main against local branches and worktrees.
+
+**Evidence.** Integration resumed with #410 (e476012c) and #417 (466b0a94).
