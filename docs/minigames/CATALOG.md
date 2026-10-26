@@ -10,16 +10,16 @@ batched rebuild under the editor custodian.
 |---|---|---|
 | `beacon_sweep` | Beacon Sweep | 5 |
 | `twinwake` | Twinwake Volley | 6 |
-| `dungeon` | Dungeon Prototype | 5 |
+| `dungeon` | Dungeon Prototype | 6 |
 | `driftstone` | Driftstone Patrol | 4 |
 | `football` | Football / Soccer | 3 |
-| `glowtrail` | Glowtrail Chase | 7 |
+| `glowtrail` | Glowtrail Chase | 8 |
 | `riftwing` | Riftwing Vanguard | 6 |
 | `emberstep` | Emberstep Ascent | 5 |
 | `star_shooter` | Star Shooter | 3 |
 | `dodge_ball` | Courtyard Clash | 6 |
 | `ironwake` | Ironwake Advance | 3 |
-| `lanternwild` | Lanternwild Quest | 3 |
+| `lanternwild` | Lanternwild Quest | 4 |
 
 ## Capabilities
 

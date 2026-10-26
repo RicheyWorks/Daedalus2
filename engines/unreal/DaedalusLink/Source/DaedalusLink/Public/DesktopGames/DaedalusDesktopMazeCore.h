@@ -137,7 +137,7 @@ public:
         for(int Y=0;Y<Rows;++Y) for(int X=0;X<Columns;++X)
             if(IsWall(X,Y,Option)) {
                 Out.AddRect(X*Tile,Y*Tile,Tile,Tile,Option==1?Color{110,83,55,255}:Color{100,100,100,255});
-                if(Option==1) Out.AddRect(X*Tile,Y*Tile,Tile,6,{160,125,72,255});
+                Out.AddRect(X*Tile,Y*Tile,Tile,6,Option==1?Color{160,125,72,255}:Color{176,176,176,255});
             }
         if(TrailEnabled && !Complete) {
             const auto Path=TrailPath();
@@ -157,15 +157,20 @@ public:
             const Vec P=Lanterns[static_cast<std::size_t>(L)];
             const bool Next=LitCount<LanternCount && Order[static_cast<std::size_t>(LitCount)]==L;
             const Color Tint=Lit[static_cast<std::size_t>(L)]?Color{90,220,160,255}:(Next?maze::Yellow:Color{120,135,155,255});
+            Out.AddCircle(P.X,P.Y,19,{24,28,40,255});
             Out.AddCircle(P.X,P.Y,16,Tint);
             int Number=1;
             for(int N=0;N<LanternCount;++N) if(Order[static_cast<std::size_t>(N)]==L) Number=N+1;
-            Out.AddText(P.X-5,P.Y-10,std::to_string(Number),Black,17);
+            const bool Dim=!Lit[static_cast<std::size_t>(L)] && !Next;
+            Out.AddText(P.X-5,P.Y-10,std::to_string(Number),Dim?White:Black,17);
             if(Lit[static_cast<std::size_t>(L)]) Out.AddText(P.X-14,P.Y+18,"LIT",White,12);
             else if(Next) Out.AddText(P.X-18,P.Y+18,"NEXT",White,12);
         }
-        Out.AddRect(Exit.X-16,Exit.Y-16,32,32,LitCount==LanternCount?Color{80,200,255,255}:Color{95,100,120,255});
-        Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",Black,12);
+        const bool ExitOpen=LitCount==LanternCount;
+        Out.AddRect(Exit.X-20,Exit.Y-20,40,40,{24,28,40,255});
+        Out.AddRect(Exit.X-16,Exit.Y-16,32,32,ExitOpen?Color{80,200,255,255}:Color{95,100,120,255});
+        Out.AddText(Exit.X-15,Exit.Y-8,"EXIT",ExitOpen?Black:White,12);
+        DrawHeroMark(Out);
         const std::string Circuit=std::string(Option==1?"Switchback | ":"")+"Circuit "+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size());
         const std::string Progress=Circuit+(Complete?" clear in "+std::to_string(RunFrames/60)+"s. K/Enter/pad B or R: replay."
             :(LitCount==LanternCount?": exit unsealed. Approach EXIT and light it."
@@ -185,6 +190,17 @@ public:
         if(Complete) return "CUE Replay";
         if(LitCount==LanternCount) return "CUE Exit";
         return "CUE Next lantern";
+    }
+    // White corners paint after lanterns and the exit so the player tile stays
+    // readable when it overlaps them. The green body stays underneath.
+    void DrawHeroMark(Frame& Out) const {
+        const double X=Hero.X, Y=Hero.Y;
+        const Color Ink{255,255,255,255};
+        constexpr double Arm=8, Thick=3;
+        Out.AddRect(X,Y,Arm,Thick,Ink); Out.AddRect(X,Y,Thick,Arm,Ink);
+        Out.AddRect(X+Tile-Arm,Y,Arm,Thick,Ink); Out.AddRect(X+Tile-Thick,Y,Thick,Arm,Ink);
+        Out.AddRect(X,Y+Tile-Thick,Arm,Thick,Ink); Out.AddRect(X,Y+Tile-Arm,Thick,Arm,Ink);
+        Out.AddRect(X+Tile-Arm,Y+Tile-Thick,Arm,Thick,Ink); Out.AddRect(X+Tile-Thick,Y+Tile-Arm,Thick,Arm,Ink);
     }
     Status GetStatus() const override {
         std::string Text=std::string(Option==1?"Threadlight Switchback circuit ":"Threadlight circuit ")+std::to_string(CircuitNumber(SessionSeed))+"/"+std::to_string(Routes.size())+": ";
@@ -501,14 +517,17 @@ public:
         // Source map is 620 pixels tall but its 600-pixel viewport clipped the bottom wall.
         Out.Clear(800,660,Black);
         for(int Row=0;Row<Rows;++Row) for(int Col=0;Col<Columns;++Col)
-            if(IsWall(Col,Row)) Out.AddRect(Col*Tile,Row*Tile,Tile,Tile,maze::Wall);
+            if(IsWall(Col,Row)) {
+                Out.AddRect(Col*Tile,Row*Tile,Tile,Tile,maze::Wall);
+                Out.AddRect(Col*Tile,Row*Tile,Tile,4,{110,150,255,255});
+            }
         const Color Gate{80,200,255,255};
         for(int Side=0;Side<2;++Side) {
             const double X=Side==0 ? 1 : Columns*Tile-7;
             Out.AddRect(X,14*Tile+2,6,2,Gate); Out.AddRect(X,15*Tile-4,6,2,Gate);
             Out.AddRect(Side==0 ? X : X+4,14*Tile+2,2,16,Gate);
         }
-        for(const auto& P:Pellets) if(P.Alive) Out.AddCircle(P.X,P.Y,P.Power ? 6 : 3,White);
+        for(const auto& P:Pellets) if(P.Alive) Out.AddCircle(P.X,P.Y,P.Power ? 6 : 3,P.Power ? Color{255,204,40,255} : White);
         if(IsFruitActive()) {
             const double X=FruitSpot.X,Y=FruitSpot.Y;
             Out.AddCircle(X,Y,11,{95,50,40,255});
@@ -521,6 +540,7 @@ public:
         const double Mouth=(30+std::abs(std::sin(Hero.Mouth/5.0)*25))*3.141592653589793/180;
         const auto DrawHero=[&](double X) {
             if(ShowGrace) Out.AddCircle(X,Hero.Y,14,{80,200,255,255});
+            Out.AddCircle(X,Hero.Y,12,{24,24,24,255});
             Out.AddCircle(X,Hero.Y,10,maze::Yellow);
             Out.AddTriangle({X,Hero.Y},{X+10*std::cos(Angle-Mouth),Hero.Y+10*std::sin(Angle-Mouth)},
                 {X+10*std::cos(Angle+Mouth),Hero.Y+10*std::sin(Angle+Mouth)},Black);
@@ -532,11 +552,14 @@ public:
             else if(Hero.X+Extent>Columns*Tile) DrawHero(Hero.X-Columns*Tile);
         }
         for(const auto& G:Ghosts) if(G.Alive) {
-            const Color C=G.Frightened ? Color{0,0,200,255} : G.Tint;
+            const Color C=G.Frightened ? Color{190,210,255,255} : G.Tint;
             const auto DrawGhost=[&](double X) {
+                Out.AddCircle(X,G.Y,12,{12,16,48,255});
+                if(G.Frightened) Out.AddCircle(X,G.Y,11,White);
                 Out.AddCircle(X,G.Y,9,C); Out.AddRect(X-9,G.Y,18,8,C);
+                Out.AddCircle(X-4,G.Y-3,4,{24,28,48,255}); Out.AddCircle(X+4,G.Y-3,4,{24,28,48,255});
                 Out.AddCircle(X-4,G.Y-3,3,White); Out.AddCircle(X+4,G.Y-3,3,White);
-                Out.AddCircle(X-4,G.Y-3,1,Black); Out.AddCircle(X+4,G.Y-3,1,Black);
+                Out.AddCircle(X-4,G.Y-3,2,Black); Out.AddCircle(X+4,G.Y-3,2,Black);
             };
             DrawGhost(G.X);
             if(IsTunnelActor(G.X,G.Y)) {
@@ -795,35 +818,54 @@ public:
     }
     void Render(Frame& Out) const override {
         Out.Clear(800,600,{34,139,34,255});
+        Out.AddRect(96,196,608,88,{120,86,48,255}); Out.AddRect(346,96,88,408,{120,86,48,255});
         Out.AddRect(100,200,600,80,{210,180,140,255}); Out.AddRect(350,100,80,400,{210,180,140,255});
         for(const Vec T:std::array<Vec,6>{{{50,80},{120,60},{650,90},{720,70},{80,480},{700,450}}}) {
-            Out.AddRect(T.X-12,T.Y+5,24,30,{0,80,0,255});
+            Out.AddRect(T.X-12,T.Y+5,24,30,{92,58,24,255});
+            Out.AddTriangle({T.X,T.Y-28},{T.X-23,T.Y+7},{T.X+23,T.Y+7},{170,220,90,255});
             Out.AddTriangle({T.X,T.Y-25},{T.X-20,T.Y+5},{T.X+20,T.Y+5},{0,100,0,255});
         }
         for(const Vec R:std::array<Vec,4>{{{200,150},{580,180},{180,380},{620,420}}}) {
+            Out.AddCircle(R.X,R.Y,16,{24,24,24,255});
             Out.AddCircle(R.X,R.Y,14,{128,128,128,255}); Out.AddCircle(R.X,R.Y,9,{100,100,100,255});
         }
+        Out.AddCircle(610,355,62,{12,64,28,255});
         Out.AddCircle(610,355,55,{30,144,255,255}); Out.AddCircle(610,355,42,{20,100,180,255});
         Out.AddRect(380,80,40,50,{60,40,20,255}); Out.AddTriangle({380,80},{400,50},{420,80},{40,30,10,255});
+        Out.AddRect(394,104,12,26,{24,16,8,255});
         for(const auto& E:Enemies) if(E.Alive) DrawEnemy(Out,E);
-        for(const auto& P:Projectiles) { Out.AddCircle(P.X,P.Y,5,{128,128,128,255}); Out.AddCircle(P.X,P.Y,3,{80,80,80,255}); }
+        for(const auto& P:Projectiles) {
+            Out.AddCircle(P.X,P.Y,7,{24,24,24,255});
+            Out.AddCircle(P.X,P.Y,5,{128,128,128,255}); Out.AddCircle(P.X,P.Y,3,{80,80,80,255});
+        }
         for(const auto& C:Collectibles) {
             const double X=C.X, Y=C.Y+std::sin(C.Bob)*3;
             if(C.Kind==PickupKind::Glint) {
+                Out.AddTriangle({X,Y-10},{X-7,Y},{X+7,Y},{12,40,12,255});
+                Out.AddTriangle({X,Y+10},{X-7,Y},{X+7,Y},{12,40,12,255});
                 Out.AddTriangle({X,Y-8},{X-5,Y},{X+5,Y},{50,200,100,255});
                 Out.AddTriangle({X,Y+8},{X-5,Y},{X+5,Y},{30,150,70,255});
             } else if(C.Kind==PickupKind::Heart) {
+                Out.AddCircle(X-4,Y-3,7,{80,12,16,255}); Out.AddCircle(X+4,Y-3,7,{80,12,16,255});
+                Out.AddTriangle({X-11,Y-2},{X+11,Y-2},{X,Y+10},{80,12,16,255});
                 Out.AddCircle(X-4,Y-3,5,{255,50,50,255}); Out.AddCircle(X+4,Y-3,5,{255,50,50,255});
                 Out.AddTriangle({X-9,Y-2},{X+9,Y-2},{X,Y+8},{255,50,50,255});
             } else {
+                Out.AddCircle(X,Y,8,{24,28,16,255}); Out.AddRect(X+2,Y-4,14,8,{24,28,16,255});
                 Out.AddCircle(X,Y,6,{255,215,0,255}); Out.AddRect(X+3,Y-3,12,6,{255,215,0,255});
+                Out.AddRect(X-12,Y+8,34,16,{8,36,16,255});
                 Out.AddText(X-10,Y+11,"KEY",maze::Yellow,12);
             }
         }
         DrawPlayer(Out,Hero);
+        Out.AddRect(0,4,800,48,{8,36,16,255});
         Out.AddText(10,10,"HEALTH "+std::to_string(Hero.Health)+"/"+std::to_string(Hero.MaxHealth)+"  TRINKETS "+std::to_string(Hero.Glints)+"  KEY "+std::to_string(Keys));
         Out.AddText(10,35,ObjectiveText(),White,15);
-        if(MessageTimer>0) Out.AddText(330,58,Message,maze::Yellow,18);
+        if(MessageTimer>0) {
+            Out.AddRect(280,50,280,28,{8,36,16,255});
+            Out.AddText(330,58,Message,maze::Yellow,18);
+        }
+        Out.AddRect(0,552,800,48,{8,36,16,255});
         Out.AddText(10,559,"SCORE "+std::to_string(Score)+" | "+CombatText(),White,13);
         Out.AddText(10,582,(Over || Won)?"Run ended. Pad A / Space / Enter / R: replay."
             :std::string("Move: keys/stick/hat | Sword: Space/J/pad A/X | Shift/pad Y: toggle assist ")+(SwordAssist?"ON":"OFF")+" | R: restart.",White,12);
@@ -832,6 +874,7 @@ public:
             Out.AddText(280,270,Won ? "VICTORY!" : "GAME OVER",maze::Yellow,38);
             Out.AddText(195,325,"Pad A / Space / Enter / R: replay",White,17);
         }
+        Out.AddRect(0,70,800,26,{8,36,16,255});
         Out.AddText(10,78,HintLine(),Color{255,236,180,255},14);
         Out.AddText(520,78,ActionCue(),Color{120,225,255,255},14);
     }
@@ -892,32 +935,58 @@ private:
     void Damage() { Hero.Health=std::max(0,Hero.Health-1); Hero.Invincible=45; if(Hero.Health==0) Over=true; }
     static void DrawEnemy(Frame& F,const Enemy& E) {
         if(E.Kind==EnemyKind::Octorok) {
+            F.AddCircle(E.X,E.Y,12,{48,12,16,255});
             F.AddCircle(E.X,E.Y,10,{200,50,50,255}); F.AddCircle(E.X,E.Y+1,6,{150,30,30,255});
             F.AddCircle(E.X-4,E.Y-2,3,White); F.AddCircle(E.X+4,E.Y-2,3,White);
-            F.AddCircle(E.X-4,E.Y-2,1,Black); F.AddCircle(E.X+4,E.Y-2,1,Black);
+            F.AddCircle(E.X-4,E.Y-2,2,Black); F.AddCircle(E.X+4,E.Y-2,2,Black);
         } else if(E.Kind==EnemyKind::Moblin) {
-            F.AddRect(E.X-10,E.Y-12,20,24,{80,120,80,255}); F.AddCircle(E.X,E.Y-12,7,{200,180,150,255});
+            F.AddRect(E.X-12,E.Y-14,24,28,{16,36,16,255});
+            F.AddRect(E.X-10,E.Y-12,20,24,{80,120,80,255});
+            F.AddCircle(E.X,E.Y-12,9,{48,32,16,255});
+            F.AddCircle(E.X,E.Y-12,7,{200,180,150,255});
+            F.AddCircle(E.X-3,E.Y-13,2,Black); F.AddCircle(E.X+3,E.Y-13,2,Black);
+            F.AddTriangle({E.X-11,E.Y-10},{E.X-22,E.Y},{E.X-11,E.Y+10},{48,32,12,255});
             F.AddTriangle({E.X-12,E.Y-8},{E.X-18,E.Y},{E.X-12,E.Y+8},{255,200,50,255});
         } else {
+            F.AddRect(E.X-14,E.Y-16,28,32,{24,24,24,255});
             F.AddRect(E.X-12,E.Y-14,24,28,{128,128,128,255}); F.AddRect(E.X-8,E.Y-10,16,20,{100,100,100,255});
+            F.AddCircle(E.X,E.Y-4,7,{24,24,24,255});
             F.AddCircle(E.X,E.Y-4,5,{220,220,220,255});
+            F.AddCircle(E.X,E.Y-4,2,Black);
         }
         if(E.HitFlash>0) { F.AddLine(E.X-14,E.Y-16,E.X+14,E.Y-16,White,2); F.AddLine(E.X-14,E.Y+16,E.X+14,E.Y+16,White,2); }
-        if(E.Kind==EnemyKind::Moblin) F.AddText(E.X-15,E.Y-33,"HP "+std::to_string(E.Health),White,12);
+        if(E.Kind==EnemyKind::Moblin) {
+            F.AddRect(E.X-18,E.Y-36,40,16,{8,36,16,255});
+            F.AddText(E.X-15,E.Y-33,"HP "+std::to_string(E.Health),White,12);
+        }
     }
     static void DrawPlayer(Frame& F,const Player& P) {
         const Color Tunic{50,150,50,255}, Gold{255,215,0,255}, Steel{200,200,220,255};
+        const Color Outline{12,40,12,255};
+        F.AddRect(P.X-10,P.Y-6,20,24,Outline); F.AddCircle(P.X,P.Y-11,9,Outline);
         F.AddRect(P.X-8,P.Y-4,16,20,Tunic); F.AddCircle(P.X,P.Y-11,7,{255,218,185,255});
+        F.AddTriangle({P.X-10,P.Y-16},{P.X,P.Y-32},{P.X+10,P.Y-16},Outline);
         F.AddTriangle({P.X-8,P.Y-16},{P.X,P.Y-28},{P.X+8,P.Y-16},Tunic);
-        F.AddCircle(P.X-3,P.Y-13,1,Black); F.AddCircle(P.X+3,P.Y-13,1,Black);
+        F.AddCircle(P.X-3,P.Y-13,2,Black); F.AddCircle(P.X+3,P.Y-13,2,Black);
         if(P.Attacking) {
-            if(P.Face==Facing::Right) { F.AddLine(P.X+8,P.Y-5,P.X+28,P.Y-5,Steel,4); F.AddTriangle({P.X+28,P.Y-8},{P.X+35,P.Y-5},{P.X+28,P.Y-2},Gold); }
-            else if(P.Face==Facing::Left) { F.AddLine(P.X-8,P.Y-5,P.X-28,P.Y-5,Steel,4); F.AddTriangle({P.X-28,P.Y-8},{P.X-35,P.Y-5},{P.X-28,P.Y-2},Gold); }
-            else if(P.Face==Facing::Up) { F.AddLine(P.X,P.Y-18,P.X,P.Y-38,Steel,4); F.AddTriangle({P.X-4,P.Y-38},{P.X,P.Y-45},{P.X+4,P.Y-38},Gold); }
-            else { F.AddLine(P.X,P.Y+12,P.X,P.Y+32,Steel,4); F.AddTriangle({P.X-4,P.Y+32},{P.X,P.Y+40},{P.X+4,P.Y+32},Gold); }
+            const auto Swing=[&](double X,double Y,double X2,double Y2) {
+                F.AddLine(X,Y,X2,Y2,{24,28,40,255},6);
+                F.AddLine(X,Y,X2,Y2,Steel,4);
+            };
+            const auto Tip=[&](Vec A,Vec B,Vec C,Vec ShadeA,Vec ShadeB,Vec ShadeC) {
+                F.AddTriangle(ShadeA,ShadeB,ShadeC,{48,32,12,255});
+                F.AddTriangle(A,B,C,Gold);
+            };
+            if(P.Face==Facing::Right) { Swing(P.X+8,P.Y-5,P.X+28,P.Y-5); Tip({P.X+28,P.Y-8},{P.X+35,P.Y-5},{P.X+28,P.Y-2},{P.X+26,P.Y-10},{P.X+39,P.Y-5},{P.X+26,P.Y}); }
+            else if(P.Face==Facing::Left) { Swing(P.X-8,P.Y-5,P.X-28,P.Y-5); Tip({P.X-28,P.Y-8},{P.X-35,P.Y-5},{P.X-28,P.Y-2},{P.X-26,P.Y-10},{P.X-39,P.Y-5},{P.X-26,P.Y}); }
+            else if(P.Face==Facing::Up) { Swing(P.X,P.Y-18,P.X,P.Y-38); Tip({P.X-4,P.Y-38},{P.X,P.Y-45},{P.X+4,P.Y-38},{P.X-6,P.Y-36},{P.X,P.Y-49},{P.X+6,P.Y-36}); }
+            else { Swing(P.X,P.Y+12,P.X,P.Y+32); Tip({P.X-4,P.Y+32},{P.X,P.Y+40},{P.X+4,P.Y+32},{P.X-6,P.Y+30},{P.X,P.Y+44},{P.X+6,P.Y+30}); }
         } else {
+            const bool Side=P.Face==Facing::Right || P.Face==Facing::Left;
             const double X=P.Face==Facing::Right ? P.X-12 : P.Face==Facing::Left ? P.X+4 : P.X-6;
-            F.AddRect(X,P.Y-2,P.Face==Facing::Right || P.Face==Facing::Left ? 8 : 12,P.Face==Facing::Right || P.Face==Facing::Left ? 14 : 8,{180,180,200,255});
+            const double W=Side?8:12, H=Side?14:8;
+            F.AddRect(X-1,P.Y-3,W+2,H+2,{24,28,40,255});
+            F.AddRect(X,P.Y-2,W,H,{180,180,200,255});
         }
         if(P.Invincible>0 && (P.Invincible/4)%2==0) F.AddCircle(P.X,P.Y,18,{255,255,255,90});
     }

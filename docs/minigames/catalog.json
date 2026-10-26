@@ -59,6 +59,7 @@
         "desktop_dungeon_circuit",
         "desktop_dungeon_switchback",
         "desktop_dungeon_trail",
+        "desktop_dungeon_view",
         "desktop_maze",
         "desktop_maze_saves"
       ],
@@ -126,6 +127,7 @@
         "desktop_glowtrail_power",
         "desktop_glowtrail_pursuit",
         "desktop_glowtrail_tunnel",
+        "desktop_glowtrail_view",
         "desktop_maze",
         "desktop_maze_saves"
       ],
@@ -260,6 +262,7 @@
       "portable_tests": [
         "desktop_lanternwild_sword_assist",
         "desktop_lanternwild_terminal",
+        "desktop_lanternwild_view",
         "desktop_platformers"
       ],
       "option_count": 2,
