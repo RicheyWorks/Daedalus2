@@ -28,6 +28,16 @@ void View() {
         if(Tunic(F.Commands[N],P)) Body=N;
     }
     Check(Rim<Body && Body<F.Commands.size(),"dark outline draws behind the tunic");
+    std::size_t Border=F.Commands.size(),Road=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Rectangle) continue;
+        if(C.A.X==96 && C.A.Y==196 && C.B.X==608 && C.B.Y==88
+            && C.Tint.R==120 && C.Tint.G==86 && C.Tint.B==48) Border=N;
+        if(C.A.X==100 && C.A.Y==200 && C.B.X==600 && C.B.Y==80
+            && C.Tint.R==210 && C.Tint.G==180 && C.Tint.B==140) Road=N;
+    }
+    Check(Border<Road && Road<F.Commands.size(),"the cross road keeps a dark border on the grass");
     std::size_t Brim=F.Commands.size(),Cap=F.Commands.size();
     for(std::size_t N=0;N<F.Commands.size();++N) {
         const auto& C=F.Commands[N];
