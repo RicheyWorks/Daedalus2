@@ -28,6 +28,14 @@ void View() {
         if(Tunic(F.Commands[N],P)) Body=N;
     }
     Check(Rim<Body && Body<F.Commands.size(),"dark outline draws behind the tunic");
+    std::size_t RockRim=F.Commands.size(),Rock=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Circle || C.A.X!=200 || C.A.Y!=150) continue;
+        if(C.Size==16 && C.Tint.R==24 && C.Tint.G==24 && C.Tint.B==24) RockRim=N;
+        if(C.Size==14 && C.Tint.R==128 && C.Tint.G==128 && C.Tint.B==128) Rock=N;
+    }
+    Check(RockRim<Rock && Rock<F.Commands.size(),"rock keeps a dark rim on the grass");
 }
 }
 

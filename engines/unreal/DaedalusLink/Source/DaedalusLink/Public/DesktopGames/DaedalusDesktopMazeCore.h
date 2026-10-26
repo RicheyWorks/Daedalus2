@@ -816,6 +816,7 @@ public:
             Out.AddTriangle({T.X,T.Y-25},{T.X-20,T.Y+5},{T.X+20,T.Y+5},{0,100,0,255});
         }
         for(const Vec R:std::array<Vec,4>{{{200,150},{580,180},{180,380},{620,420}}}) {
+            Out.AddCircle(R.X,R.Y,16,{24,24,24,255});
             Out.AddCircle(R.X,R.Y,14,{128,128,128,255}); Out.AddCircle(R.X,R.Y,9,{100,100,100,255});
         }
         Out.AddCircle(610,355,55,{30,144,255,255}); Out.AddCircle(610,355,42,{20,100,180,255});
