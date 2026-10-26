@@ -113,3 +113,22 @@ counts, explicit/unknown dimensions, duplicate provenance, deterministic bytes,
 refusals, fresh outputs, partial-write reporting, CSV safety, both schemas, and
 the CLI under the interpreter running the tests. CI runs Python 3.10 on Linux
 and Windows serially. No test requires Unreal, private assets or network calls.
+
+## Scoped static analysis
+
+The separate `World census static analysis` CI gate checks this namespace's
+Python files, including its existing tests, with Ruff 0.17.2 and a Python 3.10
+target. From the repository root, in your Python environment:
+
+```sh
+python -m pip install --only-binary=:all: ruff==0.17.2
+python -m ruff check --config tools/world_census/ruff.toml --show-files tools/world_census
+python -m ruff check --config tools/world_census/ruff.toml tools/world_census
+```
+
+The namespace-local config requires that exact Ruff version and explicitly
+selects `E4`, `E7`, `E9`, and `F`: import/statement errors and Pyflakes checks
+such as undefined names, unused imports/locals, and repeated dictionary keys.
+The scope command lists the checked files. Lint findings fail the gate; no
+blanket suppressions, automatic fixes, or formatting run. The existing offline
+contract and CLI test workflow remains the behavior gate.
