@@ -20,11 +20,12 @@ on:
     # Validate approved integration stacks before their parent merges.
     branches: [ main, codex/realm-production-queue ]
 
-# Cancel in-flight runs on the same ref when a new push lands — saves CI
-# minutes on rapid pushes / rebases.
+# Cancel superseded pull_request runs on the same ref (saves CI minutes on
+# rapid pushes / rebases), but never cancel push runs on main: every merge
+# must finish its own run so main always has a completed result.
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # contents: write is needed only by the coverage-badge commit step on main.
 permissions:
@@ -50,6 +51,10 @@ jobs:
       - name: Plugin host shutdown on Windows
         shell: bash
         run: mvn -B -ntp -pl daedalus-server -am test -Dtest=PluginHostShutdownTest -Dsurefire.failIfNoSpecifiedTests=false
+      - name: Minimal Unreal packaging fixture scope guards
+        run: python -m unittest discover -s tools/unreal/packaging-witness -p test_prepare_fixture.py -v
+      - name: Unattended ingestion checkpoint and refusal guards
+        run: python -m unittest tools/unreal_mcp/test_unattended_ingestion.py tools/unreal_mcp/test_unattended_codex_adapter.py -v
 
   build:
     name: Build & test
@@ -169,7 +174,19 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add .github/badges
             git commit -m "chore: update coverage badge [skip ci]"
-            git push
+            # Main runs are no longer cancelled by the next merge, so main may have
+            # moved on while this run was testing. Rebase the badge commit onto the
+            # latest main and retry; the badge is cosmetic, so never fail the build
+            # over it (the next main run refreshes it).
+            ok=0
+            for i in 1 2 3; do
+              if git pull --rebase --quiet origin main && git push; then ok=1; break; fi
+              git rebase --abort 2>/dev/null || true
+              sleep $((i * 5))
+            done
+            if [[ $ok -ne 1 ]]; then
+              echo "::warning::coverage badge not pushed (main moved on); the next main run refreshes it"
+            fi
           else
             echo "Badge unchanged — nothing to commit."
           fi

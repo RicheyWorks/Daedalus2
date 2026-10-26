@@ -1,0 +1,2653 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_Jetty",
+   "kind": "Prop",
+   "seed": 13939,
+   "spec": {
+    "gap": "G139",
+    "ask": "youtube-master 50117",
+    "lod": "LOD0/1",
+    "style": "G66 stall palette (ytm_g66)",
+    "size_m": "3.0 x 1.6 m section, deck top 1.2 m",
+    "tri_cap": 3500,
+    "collision": "UCX deck + piles + posts",
+    "sockets": [
+     "End_A",
+     "End_B",
+     "Mooring_L",
+     "Mooring_R"
+    ],
+    "chain": "End_A of the next section on End_B",
+    "mooring": "G119 convention: tie Prop_Sky_Raft SOCKET_Mooring to SOCKET_Mooring_L/R (0.3 m above the deck, forward = outboard)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Jetty_M0",
+     "colour": "jetty planks / posts (G66 stall timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Jetty_M1",
+     "colour": "piles / stringers (wet timber)",
+     "hex": "4E3A28",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_Jetty_M2",
+     "colour": "iron cleats",
+     "hex": "3A3A3E",
+     "roughness": 0.5,
+     "metallic": 0.7,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_Jetty_M3",
+     "colour": "rope coil",
+     "hex": "C98A3A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Jetty",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plank00",
+       "shape": "box",
+       "size": [
+        1.62854,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        -0.0006,
+        -1.375,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank01",
+       "shape": "box",
+       "size": [
+        1.58509,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        0.0061,
+        -1.125,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank02",
+       "shape": "box",
+       "size": [
+        1.60502,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        -0.0025,
+        -0.875,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank03",
+       "shape": "box",
+       "size": [
+        1.5848,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        -0.0067,
+        -0.625,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank04",
+       "shape": "box",
+       "size": [
+        1.58262,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        -0.0053,
+        -0.375,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank05",
+       "shape": "box",
+       "size": [
+        1.62222,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        0.0069,
+        -0.125,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank06",
+       "shape": "box",
+       "size": [
+        1.5791,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        0.0061,
+        0.125,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank07",
+       "shape": "box",
+       "size": [
+        1.61321,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        -0.0085,
+        0.375,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank08",
+       "shape": "box",
+       "size": [
+        1.57063,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        -0.0004,
+        0.625,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank09",
+       "shape": "box",
+       "size": [
+        1.62829,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        0.0035,
+        0.875,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank10",
+       "shape": "box",
+       "size": [
+        1.60806,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        0.0019,
+        1.125,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank11",
+       "shape": "box",
+       "size": [
+        1.62778,
+        0.23,
+        0.05
+       ],
+       "centre": [
+        0.0041,
+        1.375,
+        1.175
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "StringerL",
+       "shape": "box",
+       "size": [
+        0.1,
+        3.0,
+        0.14
+       ],
+       "centre": [
+        -0.65,
+        0,
+        1.08
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "PileL0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.11,
+       "length": 1.15,
+       "centre": [
+        -0.65,
+        -1.25,
+        0.575
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "segments": 5
+       }
+      },
+      {
+       "name": "PileL1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.11,
+       "length": 1.15,
+       "centre": [
+        -0.65,
+        1.25,
+        0.575
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "segments": 5
+       }
+      },
+      {
+       "name": "BraceL",
+       "shape": "box",
+       "size": [
+        0.05,
+        2.4,
+        0.08
+       ],
+       "centre": [
+        -0.72,
+        0,
+        0.55
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        11.768,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "StringerR",
+       "shape": "box",
+       "size": [
+        0.1,
+        3.0,
+        0.14
+       ],
+       "centre": [
+        0.65,
+        0,
+        1.08
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "PileR0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.11,
+       "length": 1.15,
+       "centre": [
+        0.65,
+        -1.25,
+        0.575
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "segments": 5
+       }
+      },
+      {
+       "name": "PileR1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.11,
+       "length": 1.15,
+       "centre": [
+        0.65,
+        1.25,
+        0.575
+       ],
+       "slot": 1,
+       "segments": 8,
+       "lod1": {
+        "segments": 5
+       }
+      },
+      {
+       "name": "BraceR",
+       "shape": "box",
+       "size": [
+        0.05,
+        2.4,
+        0.08
+       ],
+       "centre": [
+        0.72,
+        0,
+        0.55
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        11.768,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "MoorPostL",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.075,
+       "r2": 0.07,
+       "length": 0.55,
+       "centre": [
+        -0.74,
+        0.0,
+        1.475
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "segments": 5
+       }
+      },
+      {
+       "name": "MoorCapL",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.085,
+       "r2": 0.085,
+       "length": 0.04,
+       "centre": [
+        -0.74,
+        0.0,
+        1.77
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "CleatL",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.26,
+        0.035
+       ],
+       "centre": [
+        -0.825,
+        0.0,
+        1.5
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "MoorPostR",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.075,
+       "r2": 0.07,
+       "length": 0.55,
+       "centre": [
+        0.74,
+        0.0,
+        1.475
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "segments": 5
+       }
+      },
+      {
+       "name": "MoorCapR",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.085,
+       "r2": 0.085,
+       "length": 0.04,
+       "centre": [
+        0.74,
+        0.0,
+        1.77
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "CleatR",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.26,
+        0.035
+       ],
+       "centre": [
+        0.825,
+        0.0,
+        1.5
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    },
+    {
+     "name": "Prop_YTM_Jetty_Rope",
+     "parent": "Prop_YTM_Jetty",
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "rope coils",
+     "parts": [
+      {
+       "name": "CoilL",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.1,
+       "length": 0.05,
+       "centre": [
+        -0.52,
+        0.35,
+        1.225
+       ],
+       "slot": 3,
+       "segments": 10,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "CoilR",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.1,
+       "length": 0.05,
+       "centre": [
+        0.52,
+        0.35,
+        1.225
+       ],
+       "slot": 3,
+       "segments": 10,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_End_A",
+     "location": [
+      0,
+      -1.5,
+      1.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.2,
+      1.5
+     ]
+    },
+    {
+     "name": "SOCKET_End_B",
+     "location": [
+      0,
+      1.5,
+      1.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.2,
+      -1.5
+     ]
+    },
+    {
+     "name": "SOCKET_Mooring_L",
+     "location": [
+      -0.85,
+      0.0,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      -1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      -0.85,
+      1.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Mooring_R",
+     "location": [
+      0.85,
+      0.0,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      0.85,
+      1.5,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_Jetty_00",
+     "shape": "box",
+     "size": [
+      1.6,
+      3.0,
+      0.2
+     ],
+     "centre": [
+      0,
+      0,
+      1.1
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_Jetty_01",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.11,
+     "r2": 0.11,
+     "length": 1.0,
+     "centre": [
+      -0.65,
+      -1.25,
+      0.5
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_Jetty_02",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.11,
+     "r2": 0.11,
+     "length": 1.0,
+     "centre": [
+      -0.65,
+      1.25,
+      0.5
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_Jetty_03",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.11,
+     "r2": 0.11,
+     "length": 1.0,
+     "centre": [
+      0.65,
+      -1.25,
+      0.5
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_Jetty_04",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.11,
+     "r2": 0.11,
+     "length": 1.0,
+     "centre": [
+      0.65,
+      1.25,
+      0.5
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_Jetty_05",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.085,
+     "r2": 0.085,
+     "length": 0.59,
+     "centre": [
+      -0.74,
+      0.0,
+      1.495
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_Jetty_06",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.085,
+     "r2": 0.085,
+     "length": 0.59,
+     "centre": [
+      0.74,
+      0.0,
+      1.495
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "off_centre_ok": "rope coils and brace sit off the axis; origin = deck centre under the pile feet",
+   "predicted": {
+    "triangles": 512,
+    "lod1_triangles": 312,
+    "lod1_ratio": 0.609,
+    "objects": {
+     "Prop_YTM_Jetty": 440,
+     "Prop_YTM_Jetty_Rope": 72
+    },
+    "bounds_min": [
+     -0.85,
+     -1.5,
+     0.0
+    ],
+    "bounds_max": [
+     0.85,
+     1.5,
+     1.79
+    ],
+    "dimensions": [
+     1.7,
+     3.0,
+     1.79
+    ],
+    "collision_tris": 180
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7d078651294cb25ac456f42706368a9a9cbcb34377fbfde58bd35189eaafe3a0"
+  },
+  {
+   "asset": "Prop_YTM_VoiceStaff",
+   "kind": "Prop",
+   "seed": 13939,
+   "spec": {
+    "gap": "G139",
+    "ask": "youtube-master 50117",
+    "lod": "LOD0/1",
+    "style": "G66 stall palette (ytm_g66)",
+    "size_m": "1.2 x 0.62 m board, 1.37 m tall",
+    "tri_cap": 3000,
+    "collision": "UCX board + legs",
+    "sockets": [
+     "Peg_<r>_<c> x32",
+     "Row_0..3",
+     "Clash"
+    ],
+    "reuse": "G119 peg system (sky_g119) + peg mesh Prop_Census_Peg",
+    "code": "MAX_VOICES 4 rows (row 0 lead), entry delay 0-7 beats by column; interval = peg MI colour",
+    "peg_colours": {
+     "0": "C98A3A",
+     "3": "6E7F99",
+     "4": "E3C25A",
+     "5": "3F8A8C",
+     "7": "E8DCC4",
+     "8": "7FE3FF",
+     "9": "C4281C"
+    }
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_VoiceStaff_M0",
+     "colour": "staff board (G66 stall timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_VoiceStaff_M1",
+     "colour": "label strips (G66 sign board)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_VoiceStaff_M2",
+     "colour": "holes / stave ink",
+     "hex": "2A2420",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_VoiceStaff",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Board",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.05,
+        0.62
+       ],
+       "centre": [
+        0,
+        0,
+        1.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Board_L1",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.05,
+        0.62
+       ],
+       "centre": [
+        0,
+        0,
+        1.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Stave0",
+       "shape": "box",
+       "size": [
+        0.88,
+        0.003,
+        0.006
+       ],
+       "centre": [
+        0.08,
+        -0.0265,
+        1.21
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RowLabel0",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.008,
+        0.07
+       ],
+       "centre": [
+        -0.49,
+        -0.029,
+        1.21
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stave1",
+       "shape": "box",
+       "size": [
+        0.88,
+        0.003,
+        0.006
+       ],
+       "centre": [
+        0.08,
+        -0.0265,
+        1.09
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RowLabel1",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.008,
+        0.07
+       ],
+       "centre": [
+        -0.49,
+        -0.029,
+        1.09
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stave2",
+       "shape": "box",
+       "size": [
+        0.88,
+        0.003,
+        0.006
+       ],
+       "centre": [
+        0.08,
+        -0.0265,
+        0.97
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RowLabel2",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.008,
+        0.07
+       ],
+       "centre": [
+        -0.49,
+        -0.029,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stave3",
+       "shape": "box",
+       "size": [
+        0.88,
+        0.003,
+        0.006
+       ],
+       "centre": [
+        0.08,
+        -0.0265,
+        0.85
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RowLabel3",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.008,
+        0.07
+       ],
+       "centre": [
+        -0.49,
+        -0.029,
+        0.85
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "ClashStrip",
+       "shape": "box",
+       "size": [
+        0.88,
+        0.008,
+        0.05
+       ],
+       "centre": [
+        0.08,
+        -0.029,
+        1.32
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "BeatTick0",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.003,
+        0.03
+       ],
+       "centre": [
+        -0.3225,
+        -0.0265,
+        0.79
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BeatTick1",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.003,
+        0.018
+       ],
+       "centre": [
+        -0.2075,
+        -0.0265,
+        0.79
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BeatTick2",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.003,
+        0.018
+       ],
+       "centre": [
+        -0.0925,
+        -0.0265,
+        0.79
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BeatTick3",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.003,
+        0.018
+       ],
+       "centre": [
+        0.0225,
+        -0.0265,
+        0.79
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BeatTick4",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.003,
+        0.03
+       ],
+       "centre": [
+        0.1375,
+        -0.0265,
+        0.79
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BeatTick5",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.003,
+        0.018
+       ],
+       "centre": [
+        0.2525,
+        -0.0265,
+        0.79
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BeatTick6",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.003,
+        0.018
+       ],
+       "centre": [
+        0.3675,
+        -0.0265,
+        0.79
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "BeatTick7",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.003,
+        0.018
+       ],
+       "centre": [
+        0.4825,
+        -0.0265,
+        0.79
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Hole0_0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.3225,
+        -0.0265,
+        1.21
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole0_1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.2075,
+        -0.0265,
+        1.21
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole0_2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.0925,
+        -0.0265,
+        1.21
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole0_3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.0225,
+        -0.0265,
+        1.21
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole0_4",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.1375,
+        -0.0265,
+        1.21
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole0_5",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.2525,
+        -0.0265,
+        1.21
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole0_6",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.3675,
+        -0.0265,
+        1.21
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole0_7",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.4825,
+        -0.0265,
+        1.21
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole1_0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.3225,
+        -0.0265,
+        1.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole1_1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.2075,
+        -0.0265,
+        1.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole1_2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.0925,
+        -0.0265,
+        1.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole1_3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.0225,
+        -0.0265,
+        1.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole1_4",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.1375,
+        -0.0265,
+        1.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole1_5",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.2525,
+        -0.0265,
+        1.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole1_6",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.3675,
+        -0.0265,
+        1.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole1_7",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.4825,
+        -0.0265,
+        1.09
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole2_0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.3225,
+        -0.0265,
+        0.97
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole2_1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.2075,
+        -0.0265,
+        0.97
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole2_2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.0925,
+        -0.0265,
+        0.97
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole2_3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.0225,
+        -0.0265,
+        0.97
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole2_4",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.1375,
+        -0.0265,
+        0.97
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole2_5",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.2525,
+        -0.0265,
+        0.97
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole2_6",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.3675,
+        -0.0265,
+        0.97
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole2_7",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.4825,
+        -0.0265,
+        0.97
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole3_0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.3225,
+        -0.0265,
+        0.85
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole3_1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.2075,
+        -0.0265,
+        0.85
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole3_2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        -0.0925,
+        -0.0265,
+        0.85
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole3_3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.0225,
+        -0.0265,
+        0.85
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole3_4",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.1375,
+        -0.0265,
+        0.85
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole3_5",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.2525,
+        -0.0265,
+        0.85
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole3_6",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.3675,
+        -0.0265,
+        0.85
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Hole3_7",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.0192,
+       "r2": 0.0192,
+       "length": 0.003,
+       "centre": [
+        0.4825,
+        -0.0265,
+        0.85
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "LegL",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        1.308
+       ],
+       "centre": [
+        -0.52,
+        0.06,
+        0.654
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FootL",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.5,
+        0.06
+       ],
+       "centre": [
+        -0.52,
+        0.06,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "LegR",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        1.308
+       ],
+       "centre": [
+        0.52,
+        0.06,
+        0.654
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "FootR",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.5,
+        0.06
+       ],
+       "centre": [
+        0.52,
+        0.06,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Peg_0_0",
+     "location": [
+      -0.3225,
+      -0.025,
+      1.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.3225,
+      1.21,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_0_1",
+     "location": [
+      -0.2075,
+      -0.025,
+      1.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.2075,
+      1.21,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_0_2",
+     "location": [
+      -0.0925,
+      -0.025,
+      1.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.0925,
+      1.21,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_0_3",
+     "location": [
+      0.0225,
+      -0.025,
+      1.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.0225,
+      1.21,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_0_4",
+     "location": [
+      0.1375,
+      -0.025,
+      1.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.1375,
+      1.21,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_0_5",
+     "location": [
+      0.2525,
+      -0.025,
+      1.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.2525,
+      1.21,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_0_6",
+     "location": [
+      0.3675,
+      -0.025,
+      1.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.3675,
+      1.21,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_0_7",
+     "location": [
+      0.4825,
+      -0.025,
+      1.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.4825,
+      1.21,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_1_0",
+     "location": [
+      -0.3225,
+      -0.025,
+      1.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.3225,
+      1.09,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_1_1",
+     "location": [
+      -0.2075,
+      -0.025,
+      1.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.2075,
+      1.09,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_1_2",
+     "location": [
+      -0.0925,
+      -0.025,
+      1.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.0925,
+      1.09,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_1_3",
+     "location": [
+      0.0225,
+      -0.025,
+      1.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.0225,
+      1.09,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_1_4",
+     "location": [
+      0.1375,
+      -0.025,
+      1.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.1375,
+      1.09,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_1_5",
+     "location": [
+      0.2525,
+      -0.025,
+      1.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.2525,
+      1.09,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_1_6",
+     "location": [
+      0.3675,
+      -0.025,
+      1.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.3675,
+      1.09,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_1_7",
+     "location": [
+      0.4825,
+      -0.025,
+      1.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.4825,
+      1.09,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_2_0",
+     "location": [
+      -0.3225,
+      -0.025,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.3225,
+      0.97,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_2_1",
+     "location": [
+      -0.2075,
+      -0.025,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.2075,
+      0.97,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_2_2",
+     "location": [
+      -0.0925,
+      -0.025,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.0925,
+      0.97,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_2_3",
+     "location": [
+      0.0225,
+      -0.025,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.0225,
+      0.97,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_2_4",
+     "location": [
+      0.1375,
+      -0.025,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.1375,
+      0.97,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_2_5",
+     "location": [
+      0.2525,
+      -0.025,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.2525,
+      0.97,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_2_6",
+     "location": [
+      0.3675,
+      -0.025,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.3675,
+      0.97,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_2_7",
+     "location": [
+      0.4825,
+      -0.025,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.4825,
+      0.97,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_3_0",
+     "location": [
+      -0.3225,
+      -0.025,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.3225,
+      0.85,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_3_1",
+     "location": [
+      -0.2075,
+      -0.025,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.2075,
+      0.85,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_3_2",
+     "location": [
+      -0.0925,
+      -0.025,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      -0.0925,
+      0.85,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_3_3",
+     "location": [
+      0.0225,
+      -0.025,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.0225,
+      0.85,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_3_4",
+     "location": [
+      0.1375,
+      -0.025,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.1375,
+      0.85,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_3_5",
+     "location": [
+      0.2525,
+      -0.025,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.2525,
+      0.85,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_3_6",
+     "location": [
+      0.3675,
+      -0.025,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.3675,
+      0.85,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_3_7",
+     "location": [
+      0.4825,
+      -0.025,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0.4825,
+      0.85,
+      0.025
+     ]
+    },
+    {
+     "name": "SOCKET_Row_0",
+     "location": [
+      -0.49,
+      -0.0335,
+      1.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.49,
+      1.21,
+      0.0335
+     ]
+    },
+    {
+     "name": "SOCKET_Row_1",
+     "location": [
+      -0.49,
+      -0.0335,
+      1.09
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.49,
+      1.09,
+      0.0335
+     ]
+    },
+    {
+     "name": "SOCKET_Row_2",
+     "location": [
+      -0.49,
+      -0.0335,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.49,
+      0.97,
+      0.0335
+     ]
+    },
+    {
+     "name": "SOCKET_Row_3",
+     "location": [
+      -0.49,
+      -0.0335,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.49,
+      0.85,
+      0.0335
+     ]
+    },
+    {
+     "name": "SOCKET_Clash",
+     "location": [
+      0.08,
+      -0.0335,
+      1.32
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.08,
+      1.32,
+      0.0335
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_VoiceStaff_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.13,
+      0.62
+     ],
+     "centre": [
+      0,
+      0.03,
+      1.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_VoiceStaff_01",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.5,
+      0.75
+     ],
+     "centre": [
+      0,
+      0.06,
+      0.375
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "off_centre_ok": "feet reach back (+Y) for balance (as Prop_Census_Board); origin = under the board face",
+   "predicted": {
+    "triangles": 1192,
+    "lod1_triangles": 504,
+    "lod1_ratio": 0.423,
+    "objects": {
+     "Prop_YTM_VoiceStaff": 1192
+    },
+    "bounds_min": [
+     -0.6,
+     -0.19,
+     0.0
+    ],
+    "bounds_max": [
+     0.6,
+     0.31,
+     1.37
+    ],
+    "dimensions": [
+     1.2,
+     0.5,
+     1.37
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7a5b38445730fc4ea87cbb00c6f4d776fe81150186cffca0c6b200d8a95d9e92"
+  }
+ ]
+}

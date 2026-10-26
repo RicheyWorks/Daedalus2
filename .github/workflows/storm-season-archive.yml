@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: MIT
+name: Storm Season Archive
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/storm_season_archive.py'
+      - 'tools/streaming/storm_season_archive_test.py'
+      - 'data/islands/disk-saver/storm-season-archive-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - 'tools/streaming/bloom_buoys.py'
+      - 'data/islands/disk-saver/bloom-buoys-v1.json'
+      - 'tools/streaming/hash_ring_atolls.py'
+      - 'data/islands/disk-saver/hash-ring-atolls-v1.json'
+      - 'tools/streaming/quorum_quays.py'
+      - 'data/islands/disk-saver/quorum-quays-v1.json'
+      - 'tools/streaming/snapshot_shells.py'
+      - 'data/islands/disk-saver/snapshot-shells-v1.json'
+      - 'tools/streaming/garbage_gulls.py'
+      - 'data/islands/disk-saver/garbage-gulls-v1.json'
+      - 'tools/streaming/prefetch_pelicans.py'
+      - 'data/islands/disk-saver/prefetch-pelicans-v1.json'
+      - 'tools/streaming/breakwater_queue.py'
+      - 'data/islands/disk-saver/breakwater-queue-v1.json'
+      - '.github/workflows/storm-season-archive.yml'
+permissions:
+  contents: read
+jobs:
+  storm-season-archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G136 Storm Season Archive chapter (seven landed acts read-only, audit, SHA-256 chain, G12 receipt)
+        run: python -m unittest tools/streaming/storm_season_archive_test.py -v
+      - name: CLI smoke (all tuned is gold)
+        run: python tools/streaming/storm_season_archive.py data/islands/disk-saver/storm-season-archive-v1.json

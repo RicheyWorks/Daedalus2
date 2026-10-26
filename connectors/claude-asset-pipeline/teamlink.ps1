@@ -4,11 +4,15 @@
 #   .\teamlink.ps1 -Start     start the broker on 127.0.0.1:9890 (log: bot-team\link\log.jsonl)
 #   .\teamlink.ps1 -Status    is it up, who is alive on it, the last messages
 #   .\teamlink.ps1 -Ping      a live round trip to the Unreal team's watcher (or -To blender-team)
+#   .\teamlink.ps1 -Watch    health observer; state changes + 5-minute heartbeat, no auto-restart
 #   .\teamlink.ps1 -Stop      stop it
 #
 # Same launch rules as art-queue.ps1: WMI so it outlives the calling shell, run from the repo, minimized window.
-param([switch]$Start, [switch]$Stop, [switch]$Status, [switch]$Ping, [string]$To = "unreal-team",
-      [string]$Folder = (Join-Path $env:USERPROFILE "projects\bot-team\link"))
+param([switch]$Start, [switch]$Stop, [switch]$Status, [switch]$Ping, [switch]$Watch, [string]$To = "unreal-team",
+      [string]$Folder = (Join-Path $env:USERPROFILE "projects\bot-team\link"),
+      [ValidateRange(1,60)][int]$IntervalSeconds = 5,
+      [ValidateRange(30,3600)][int]$HeartbeatSeconds = 300,
+      [ValidateRange(0,1000000)][int]$Checks = 0)
 $Here = $PSScriptRoot
 $Log = Join-Path $env:LOCALAPPDATA "Daedalus\jobs\teamlink.log"
 New-Item -ItemType Directory -Force -Path (Split-Path $Log), $Folder | Out-Null
@@ -19,6 +23,28 @@ function Alive {
 }
 function Get($path) {
     try { Invoke-RestMethod -Uri "http://127.0.0.1:9890$path" -TimeoutSec 5 } catch { $null }
+}
+
+if ($Watch) {
+    # Observe only. Never restart on an observation timeout or replay messages.
+    $previous = "unknown"; $lastHeartbeat = [DateTime]::MinValue; $observations = 0
+    do {
+        $h = Get "/health"
+        $state = if ($h -and $h.ok -eq $true) { "up" } else { "unavailable" }
+        $now = [DateTime]::UtcNow
+        if ($state -ne $previous -or ($now - $lastHeartbeat).TotalSeconds -ge $HeartbeatSeconds) {
+            if ($state -eq "up") {
+                "hub watch: up last=$($h.last) pid=$($h.pid) since=$($h.since) observed=$($now.ToString('o'))"
+            } else {
+                "hub watch: unavailable; observation failed, process outcome unknown; no restart attempted observed=$($now.ToString('o'))"
+            }
+            $lastHeartbeat = $now
+        }
+        $previous = $state; $observations++
+        if ($Checks -gt 0 -and $observations -ge $Checks) { break }
+        Start-Sleep -Seconds $IntervalSeconds
+    } while ($true)
+    if ($previous -eq "up") { exit 0 } else { exit 2 }
 }
 
 if ($Start) {

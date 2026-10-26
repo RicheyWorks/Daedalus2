@@ -45,18 +45,22 @@ def _cost_fns():
 
 
 def _streaming_levels(world):
-    """The world's streaming levels. UE 5.8 Python has no World.get_streaming_levels(); the property works everywhere."""
-    try:
-        return list(world.get_editor_property("streaming_levels") or [])
-    except Exception:
-        return list(world.get_streaming_levels())
+    """The world's streaming levels. UE 5.8 Python exposes neither World.streaming_levels nor
+    get_streaming_levels(): the loaded ULevels come from EditorLevelUtils.get_levels, each mapped to its
+    ULevelStreaming by GameplayStatics.get_streaming_level(world, package)."""
+    out = []
+    for lv in unreal.EditorLevelUtils.get_levels(world):
+        sl = unreal.GameplayStatics.get_streaming_level(world, str(lv.get_outermost().get_name()))
+        if sl is not None:
+            out.append(sl)
+    return out
 
 
 def _rows(prefixes):
     world = unreal.EditorLevelLibrary.get_editor_world()
     rows, notes = [], []
     for sl in _streaming_levels(world):
-        pkg = str(sl.get_world_asset_package_name())
+        pkg = str(sl.get_world_asset_package_f_name())
         if not any(pkg.startswith(p) for p in prefixes):
             continue
         level = sl.get_loaded_level()

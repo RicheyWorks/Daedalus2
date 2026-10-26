@@ -16,6 +16,9 @@ need on the Unreal side. It is MIT licensed, like the rest of Daedalus.
 You still have to do two things yourself: sign in to Epic, and accept the Unreal Engine EULA. The
 script never does either for you.
 
+Before setup, builds, installation, imports or editor operations on a shared project, meet the
+[sole-custodian prerequisite](#editor-operation-and-custody) below.
+
 ```powershell
 cd Daedalus2\engines\unreal ; .\setup-unreal.ps1 -Project C:\Unreal\DaedalusRealm\DaedalusRealm.uproject -InstallLauncher -Build -Import
 ```
@@ -82,17 +85,34 @@ cd engines/unreal/core-test && g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../Dae
   reads a running server the way the actor does, and checks the result against the server's own
   `world.glb`.
 
-## Claude operates the editor
+## Editor operation and custody
+
+Native builds and editor operations belong to the currently verified sole custodian, with the
+applicable resource leases. Confirm the actual owner and target project/process generation through
+the current coordinator before acting. Historical owner names, stale process IDs, expired leases
+and empty locks do not establish custody. Follow the [current custody and preservation rules](../../AGENTS.md#integration-stages-and-native-custody).
+
+The [dated operating notes](../../docs/production/UNREAL-ONBOARDING.md#1-how-unreal-is-launched-and-who-may-touch-it)
+describe launch, harness, pipeline and recovery procedures. Reconcile their historical names, process
+IDs and recovery advice with the current rules and the [lease-release and verified-handoff lesson](../../docs/LESSONS-LEARNED.md#completion-includes-lease-release-and-a-verified-handoff-2026-10-26).
+
+Record **source merged** (verified remote commit), **built** (successful build tied to source),
+**installed** (the exact plugin build in the target project), **runtime tested** (per-feature behavior
+receipts) and **adopted** (explicit acceptance by the verified custodian) separately. A merge or build
+alone does not establish the later stages; see the [source-to-native reconciliation lesson](../../docs/LESSONS-LEARNED.md#reconcile-merged-source-with-the-actual-native-build-2026-10-26).
+
+### Connector commands
 
 The connector is its own package, `connectors/claude-unreal-connector`, built to be shared on its own
-(README, `PROTOCOL.md`, `install.ps1`, tests). It knows nothing about Daedalus. `setup-unreal.ps1` installs
+([README](../../connectors/claude-unreal-connector/README.md), `PROTOCOL.md`, `install.ps1`, tests).
+It knows nothing about Daedalus. `setup-unreal.ps1` installs
 its bridge plugin into the project on every run, and `-Connector` also opens its Claude extension installer,
-which you need once.
+needed once for the Claude desktop client. Direct protocol clients do not need that extension.
 
 DaedalusLink then adds two commands to the bridge through the connector's `register()` API
 (`daedalus_bridge_commands.py`):
 - `daedalus.import_world` downloads a world from its server, imports it, verifies it, and frames the view.
 - `daedalus.frame_world` points the viewport at a world.
 
-Claude finds them with `list_commands` and runs them with `run_command`. `core-test/bridge_commands_test.py`
+An authorized client discovers them with `list_commands` and runs them with `run_command`. `core-test/bridge_commands_test.py`
 checks that the two sides stay apart.

@@ -32,7 +32,7 @@ enum class Era { Retro, Modern };
 struct Style
 {
     Era E = Era::Modern;
-    int Cols = 36;              // characters per line
+    int Cols = 36;              // UTF-8 code points per line (not rendered glyph width)
     int Lines = 3;              // lines per page
     double Cps = 40.0;          // typewriter speed
     bool Upper = false;         // Retro realms shout in capitals
@@ -62,6 +62,45 @@ inline Style StyleNamed(const std::string& Theme)
     return S;
 }
 
+namespace detail
+{
+/** Valid UTF-8 scalar values stay whole. A malformed byte is one unit, preserved unchanged. */
+inline size_t Utf8UnitBytes(const std::string& Text, size_t At)
+{
+    if (At >= Text.size()) return 0;
+    const unsigned char Lead = static_cast<unsigned char>(Text[At]);
+    if (Lead < 0x80) return 1;
+    const size_t Width = Lead >= 0xC2 && Lead <= 0xDF ? 2
+        : Lead >= 0xE0 && Lead <= 0xEF ? 3 : Lead >= 0xF0 && Lead <= 0xF4 ? 4 : 1;
+    if (Width == 1 || Width > Text.size() - At) return 1;
+    for (size_t I = 1; I < Width; ++I)
+    {
+        const unsigned char C = static_cast<unsigned char>(Text[At + I]);
+        if (C < 0x80 || C > 0xBF) return 1;
+    }
+    const unsigned char Second = static_cast<unsigned char>(Text[At + 1]);
+    if ((Lead == 0xE0 && Second < 0xA0) || (Lead == 0xED && Second >= 0xA0)
+        || (Lead == 0xF0 && Second < 0x90) || (Lead == 0xF4 && Second >= 0x90)) return 1;
+    return Width;
+}
+
+inline size_t Utf8Count(const std::string& Text)
+{
+    size_t Count = 0;
+    for (size_t At = 0; At < Text.size(); At += Utf8UnitBytes(Text, At)) ++Count;
+    return Count;
+}
+
+inline size_t Utf8PrefixBytes(const std::string& Text, size_t Count)
+{
+    size_t End = 0;
+    for (; Count > 0 && End < Text.size(); --Count) End += Utf8UnitBytes(Text, End);
+    return End;
+}
+
+inline char AsciiUpper(char C) { return C >= 'a' && C <= 'z' ? static_cast<char>(C - 'a' + 'A') : C; }
+} // namespace detail
+
 /** A voice: how an NPC babbles. Pitch 0..11 (the jukebox picks the note), Rate scales the typewriter. */
 struct Voice
 {
@@ -71,7 +110,7 @@ struct Voice
     static Voice FromName(const std::string& Name)
     {
         uint32_t H = 2166136261u;
-        for (char C : Name) { H ^= static_cast<unsigned char>(std::toupper(static_cast<unsigned char>(C))); H *= 16777619u; }
+        for (char C : Name) { H ^= static_cast<unsigned char>(detail::AsciiUpper(C)); H *= 16777619u; }
         Voice V;
         V.Pitch = static_cast<int>(H % 12);
         V.Rate = 0.85 + static_cast<double>((H / 12) % 7) * 0.05;   // 0.85 .. 1.15
@@ -79,23 +118,29 @@ struct Voice
     }
 };
 
-/** Word-wrap to Cols, honouring '\n' as a forced break. Never splits a word shorter than the line. */
+/** Word-wrap by UTF-8 code points, honouring '\n'. Widths below one use one; no grapheme/display-width layout. */
 inline std::vector<std::string> Wrap(const std::string& Text, int Cols)
 {
     std::vector<std::string> Out;
     std::string Line, Word;
-    auto Flush = [&]() { Out.push_back(Line); Line.clear(); };
+    const size_t Width = static_cast<size_t>(std::max(1, Cols));
+    size_t LineChars = 0;
+    auto Flush = [&]() { Out.push_back(Line); Line.clear(); LineChars = 0; };
     auto PutWord = [&]() {
         if (Word.empty()) return;
-        if (!Line.empty() && static_cast<int>(Line.size() + 1 + Word.size()) > Cols) Flush();
-        while (static_cast<int>(Word.size()) > Cols)   // a word longer than the line: cut it
+        size_t WordChars = detail::Utf8Count(Word);
+        if (!Line.empty() && LineChars + 1 + WordChars > Width) Flush();
+        while (WordChars > Width)   // a word longer than the line: cut at a code-point boundary
         {
             if (!Line.empty()) Flush();
-            Out.push_back(Word.substr(0, static_cast<size_t>(Cols)));
-            Word.erase(0, static_cast<size_t>(Cols));
+            const size_t End = detail::Utf8PrefixBytes(Word, Width);
+            Out.push_back(Word.substr(0, End));
+            Word.erase(0, End);
+            WordChars -= Width;
         }
-        if (!Line.empty()) Line += ' ';
+        if (!Line.empty()) { Line += ' '; ++LineChars; }
         Line += Word;
+        LineChars += WordChars;
         Word.clear();
     };
     for (char C : Text)
@@ -164,8 +209,8 @@ public:
         {
             const std::string& R = Rows[static_cast<size_t>(i)];
             if (Left <= 0) { V.push_back(""); continue; }
-            V.push_back(R.substr(0, static_cast<size_t>(std::min(Left, static_cast<int>(R.size())))));
-            Left -= static_cast<int>(R.size());
+            V.push_back(R.substr(0, detail::Utf8PrefixBytes(R, static_cast<size_t>(Left))));
+            Left -= static_cast<int>(detail::Utf8Count(R));
         }
         return V;
     }
@@ -175,7 +220,7 @@ public:
     /** A hint that more waits: the little arrow, blinking at 2 Hz once the page is typed. */
     bool MoreArrow() const { return IsOpen && PageDone() && !IsChoosing && (static_cast<int>(Age * 4) % 2 == 0); }
 
-    /** Advance the typewriter; blips come out as "BLIP:<pitch>" events in Sfx (one per letter, none for spaces). */
+    /** Reveal code points; existing ASCII letters/digits blip. No Unicode letter classification is attempted. */
     void Tick(double Dt)
     {
         if (!IsOpen) return;
@@ -187,15 +232,21 @@ public:
         }
         const double Before = Shown;
         Shown = std::min(static_cast<double>(PageChars()), Shown + Dt * St.Cps * Cur.V.Rate);
-        const std::string Flat = PageText();
-        for (int i = static_cast<int>(Before); i < static_cast<int>(Shown); ++i)
+        int CharIdx = 0;
+        for (int Row = PageIdx * St.Lines; Row < std::min(static_cast<int>(Rows.size()), (PageIdx + 1) * St.Lines); ++Row)
         {
-            const char C = Flat[static_cast<size_t>(i)];
-            if (std::isalnum(static_cast<unsigned char>(C)))
+            const std::string& Text = Rows[static_cast<size_t>(Row)];
+            // Step rows separately: malformed bytes on adjoining rows must not combine into a new scalar value.
+            for (size_t At = 0; At < Text.size() && CharIdx < static_cast<int>(Shown); At += detail::Utf8UnitBytes(Text, At), ++CharIdx)
             {
-                const bool Vowel = std::string("AEIOUaeiou").find(C) != std::string::npos;
-                Sfx.push_back("BLIP:" + std::to_string((Cur.V.Pitch + (Vowel ? 4 : 0) + (i % 3)) % 12));
+                const unsigned char C = static_cast<unsigned char>(Text[At]);
+                if (CharIdx >= static_cast<int>(Before) && C < 0x80 && std::isalnum(C))
+                {
+                    const bool Vowel = std::string("AEIOUaeiou").find(static_cast<char>(C)) != std::string::npos;
+                    Sfx.push_back("BLIP:" + std::to_string((Cur.V.Pitch + (Vowel ? 4 : 0) + (CharIdx % 3)) % 12));
+                }
             }
+            if (CharIdx >= static_cast<int>(Shown)) break;
         }
         if (PageDone() && LastPage() && !Cur.Choices.empty() && !IsChoosing) { IsChoosing = true; ChoiceIdx = 0; }
     }
@@ -238,7 +289,7 @@ public:
     }
 
 private:
-    static std::string Up(std::string S) { for (char& C : S) C = static_cast<char>(std::toupper(static_cast<unsigned char>(C))); return S; }
+    static std::string Up(std::string S) { for (char& C : S) C = detail::AsciiUpper(C); return S; }
 
     void Next()
     {
@@ -256,13 +307,13 @@ private:
         if (!Queue.empty()) Next();   // the next line opens straight away
     }
 
-    std::string PageText() const
+    int PageChars() const
     {
-        std::string S;
-        for (int i = PageIdx * St.Lines; i < std::min(static_cast<int>(Rows.size()), (PageIdx + 1) * St.Lines); ++i) S += Rows[static_cast<size_t>(i)];
-        return S;
+        int Count = 0;
+        for (int i = PageIdx * St.Lines; i < std::min(static_cast<int>(Rows.size()), (PageIdx + 1) * St.Lines); ++i)
+            Count += static_cast<int>(detail::Utf8Count(Rows[static_cast<size_t>(i)]));
+        return Count;
     }
-    int PageChars() const { return static_cast<int>(PageText().size()); }
 
     Style St;
     std::vector<Line> Queue;

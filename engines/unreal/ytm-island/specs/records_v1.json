@@ -1,0 +1,67 @@
+[
+ {
+  "asset": "Item_YTM_Record_AndeanPanPipes",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_AppalachianHighLonesome",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_ArabicMaqam",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_ArabicTakht",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_ArmenianDuduk",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_AustralianBushBand",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_BalineseKecak",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_BalkanBrass",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_BaroqueCounterpoint",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_BulgarianWomensChoir",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_CairoOrchestra",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Item_YTM_Record_CarpathianTrembita",
+  "kind": "item",
+  "size": "~0.6 m"
+ },
+ {
+  "asset": "Prop_YTM_RecordRack",
+  "kind": "prop",
+  "size": "~1.4 m"
+ }
+]

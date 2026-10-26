@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 // Notices tool failures, tells the agent to restart, and pivots after a repeated hang.
 
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { execSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { capFailures, decideStop, hasUncheckedItem, isBenignExit } from "./stay-on-task-lib.mjs";
 
-const PIVOT_AFTER = 3;
 const RETRY_AFTER = 1;
 const STALE_MS = 20 * 60 * 1000;
-const STATE_FILE = join(dirname(fileURLToPath(import.meta.url)), "state", "stay-on-task.json");
+const HOOK_DIR = dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = join(HOOK_DIR, "..", "..");
+const STATE_FILE = join(HOOK_DIR, "state", "stay-on-task.json");
+const PIVOT_AFTER = 3;
 
 function readStdin() {
   return new Promise((resolve) => {
@@ -80,6 +84,8 @@ function countFailure(input) {
   const count = fresh ? 1 : (prev.count || 0) + 1;
   state.failures = state.failures || {};
   state.failures[sig] = { count, lastAt: now, sig };
+  state.failures = capFailures(state.failures);
+  state.lastFailureAt = now;
   state.lastSig = sig;
   state.lastAction = count >= PIVOT_AFTER ? "pivot" : "retry";
   state.updatedAt = now;
@@ -114,31 +120,43 @@ function markSuccess() {
   saveState(state);
 }
 
-function stopFollowup() {
-  const state = loadState();
-  const recent = Date.now() - (state.updatedAt || 0) < STALE_MS;
-  if (!recent || state.lastAction === "clear") {
-    return null;
-  }
-  if (state.lastSuccessAt && state.lastSuccessAt >= (state.updatedAt || 0)) {
-    return null;
-  }
-  const action = state.lastAction;
-  state.lastAction = "clear";
-  state.updatedAt = Date.now();
-  saveState(state);
-  if (action === "pivot") {
-    return [
-      "Stay-on-task restart: the last approach hung (same error " + PIVOT_AFTER + "+ times).",
-      "Do not resume that approach. Pick the next remaining task on the goal and continue.",
-    ].join(" ");
-  }
-  return [
-    "Stay-on-task restart: the last turn errored.",
-    "Resume the same task immediately. If you already failed twice on one command, change method.",
-  ].join(" ");
+function backlogPath() {
+  const candidates = [
+    process.env.CURSOR_BACKLOG_PATH,
+    join(REPO_ROOT, "..", "bot-team", "BOARD", "CURSOR-BACKLOG.md"),
+    "C:\\Users\\730ri\\projects\\bot-team\\BOARD\\CURSOR-BACKLOG.md",
+  ].filter(Boolean);
+  return candidates.find((p) => { try { return existsSync(p); } catch { return false; } }) || null;
 }
 
+function backlogHasItem() {
+  const p = backlogPath();
+  if (!p) return false;
+  try { return hasUncheckedItem(readFileSync(p, "utf8")); } catch { return false; }
+}
+
+function repoDirty() {
+  try {
+    return execSync("git status --porcelain --untracked-files=no", {
+      cwd: REPO_ROOT, encoding: "utf8", timeout: 3000, stdio: ["ignore", "pipe", "ignore"],
+    }).trim().length > 0;
+  } catch {
+    return false;
+  }
+}
+
+function stopFollowup(input) {
+  const status = pick(input, ["status", "reason", "stop_reason"]).toLowerCase();
+  const { message, state } = decideStop(loadState(), {
+    now: Date.now(),
+    dirty: repoDirty(),
+    statusCompleted: status === "" || status === "completed",
+    backlogHasItem: backlogHasItem(),
+  });
+  state.failures = capFailures(state.failures);
+  saveState(state);
+  return message;
+}
 const raw = await readStdin();
 const input = asObject(raw);
 const name = eventName(input);
@@ -154,7 +172,7 @@ function exitCode(input) {
 
 const code = exitCode(input);
 const looksLikeFailure = (code != null)
-    ? code !== 0
+    ? !isBenignExit(pick(input, ["command", "cmd"]), code)
     : (name.includes("failure")
         || Boolean(pick(input, ["error", "error_message", "failure"])));
 
@@ -170,7 +188,7 @@ if (name.includes("sessionstart")) {
 }
 
 if (name.includes("stop") && !name.includes("subagent")) {
-  const followup = stopFollowup();
+  const followup = stopFollowup(input);
   if (followup) {
     console.log(JSON.stringify({ followup_message: followup }));
   } else {

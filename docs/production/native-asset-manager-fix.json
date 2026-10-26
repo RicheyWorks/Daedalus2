@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-14T12:22:10.130712+00:00",
+  "file": "Config/DefaultGame.ini",
+  "previouslyAbsent": true,
+  "sha256": "95f68aabe1e7882cc723ef0b480c89598bfea89445e891dbb41702cd46cdebfd",
+  "rule": "GameFeatureData AlwaysCook native class, no explicit scan directories",
+  "reference": "installed GameFeaturesEditorModule.cpp AddGameFeatureDataRule normal fix",
+  "securitySettingsChanged": false,
+  "editorRestarted": false
+}

@@ -317,28 +317,93 @@ function Get-TreeHash([string]$dir) {
     try { return [BitConverter]::ToString($sha.ComputeHash($bytes)) } finally { $sha.Dispose() }
 }
 
-# Sets key=value under [section] in an .ini, adding the section or key if missing; other lines stay as they are.
-# A key listed with a leading '+' (an Unreal array entry) is added once, never duplicated.
+# Read and retain the original Unicode encoding, BOM and line endings.
+function Read-IniDocument([string]$file) {
+    [byte[]]$bytes = @()
+    if (Test-Path -LiteralPath $file) { $bytes = [IO.File]::ReadAllBytes($file) }
+    $prefix = if ($bytes.Length) { [BitConverter]::ToString($bytes, 0, [Math]::Min(4, $bytes.Length)) } else { "" }
+    $skip = 0
+    $encoding = New-Object System.Text.UTF8Encoding($false, $true)
+    # Select BOMs ourselves: StreamReader BOM detection replaces strict decoders
+    # with replacement-fallback encodings. Unmarked input is strict UTF-8.
+    if ($prefix.StartsWith("FF-FE-00-00")) {
+        $skip = 4; $encoding = New-Object System.Text.UTF32Encoding($false, $false, $true)
+    } elseif ($prefix.StartsWith("00-00-FE-FF")) {
+        $skip = 4; $encoding = New-Object System.Text.UTF32Encoding($true, $false, $true)
+    } elseif ($prefix.StartsWith("EF-BB-BF")) {
+        $skip = 3
+    } elseif ($prefix.StartsWith("FF-FE")) {
+        $skip = 2; $encoding = New-Object System.Text.UnicodeEncoding($false, $false, $true)
+    } elseif ($prefix.StartsWith("FE-FF")) {
+        $skip = 2; $encoding = New-Object System.Text.UnicodeEncoding($true, $false, $true)
+    }
+    [byte[]]$bom = @()
+    if ($skip) { $bom = $bytes[0..($skip - 1)] }
+    $text = $encoding.GetString($bytes, $skip, $bytes.Length - $skip)
+    $records = New-Object System.Collections.Generic.List[object]
+    $newline = [Environment]::NewLine
+    $firstEnding = [regex]::Match($text, '\r\n|\n|\r')
+    if ($firstEnding.Success) { $newline = $firstEnding.Value }
+    foreach ($match in [regex]::Matches($text, '([^\r\n]*)(\r\n|\n|\r|$)')) {
+        if ($match.Length) {
+            $records.Add([pscustomobject]@{ Text = $match.Groups[1].Value; Ending = $match.Groups[2].Value })
+        }
+    }
+    return [pscustomobject]@{ Text = $text; Encoding = $encoding; Bom = $bom; Records = $records.ToArray(); Newline = $newline }
+}
+
+# Sets key=value under [section], adding the section or key if missing.
+# A key listed with a leading '+' (an Unreal array entry) is added once.
 function Set-IniValue([string]$file, [string]$section, [string]$key, [string]$value) {
-    $lines = if (Test-Path $file) { @(Get-Content $file) } else { @() }
+    $document = Read-IniDocument $file
     $out = New-Object System.Collections.Generic.List[string]
     $inSection = $false; $done = $false; $seen = $false
-    foreach ($l in $lines) {
+    foreach ($record in $document.Records) {
+        $l = $record.Text
         if ($l -match '^\s*\[(.+)\]\s*$') {
-            if ($inSection -and -not $done) { $out.Add("$key=$value"); $done = $true }
+            if ($inSection -and -not $done) { $out.Add("$key=$value" + $document.Newline); $done = $true }
             $inSection = ($Matches[1] -eq $section); if ($inSection) { $seen = $true }
-            $out.Add($l); continue
+            $out.Add($l + $record.Ending); continue
         }
         if ($inSection -and $key.StartsWith("+") -and $l.Trim() -eq "$key=$value") { $done = $true }
         elseif ($inSection -and -not $key.StartsWith("+") -and $l -match ("^\s*" + [regex]::Escape($key) + "\s*=")) {
-            if (-not $done) { $out.Add("$key=$value"); $done = $true }
+            if (-not $done) { $out.Add("$key=$value" + $record.Ending); $done = $true }
             continue
         }
-        $out.Add($l)
+        $out.Add($l + $record.Ending)
     }
-    if ($inSection -and -not $done) { $out.Add("$key=$value"); $done = $true }
-    if (-not $seen) { $out.Add(""); $out.Add("[$section]"); $out.Add("$key=$value") }
-    Set-Content -Path $file -Value $out -Encoding UTF8
+    $terminal = if (-not $document.Text.Length -or $document.Text -match '[\r\n]$') { $document.Newline } else { "" }
+    if ($inSection -and -not $done) {
+        if ($out.Count -and $out[$out.Count - 1] -notmatch '[\r\n]$') { $out.Add($document.Newline) }
+        $out.Add("$key=$value" + $terminal); $done = $true
+    }
+    if (-not $seen) {
+        if ($out.Count -and $out[$out.Count - 1] -notmatch '[\r\n]$') { $out.Add($document.Newline) }
+        $out.Add($document.Newline); $out.Add("[$section]" + $document.Newline); $out.Add("$key=$value" + $terminal)
+    }
+    [byte[]]$body = $document.Encoding.GetBytes(($out -join ""))
+    [byte[]]$encoded = New-Object byte[] ($document.Bom.Length + $body.Length)
+    $document.Bom.CopyTo($encoded, 0)
+    $body.CopyTo($encoded, $document.Bom.Length)
+    [IO.File]::WriteAllBytes($file, $encoded)
+}
+
+function Ensure-GameFeatureDataCookRule([string]$file) {
+    # Preserve inherited array scans and any existing project rule for this type.
+    $section = "/Script/Engine.AssetManagerSettings"
+    $inSection = $false
+    $document = Read-IniDocument $file
+    foreach ($record in $document.Records) {
+        $line = $record.Text
+        if ($line -match '^\s*\[(.+)\]\s*$') {
+            $inSection = ($Matches[1] -eq $section)
+        } elseif ($inSection -and $line -match '^\s*[+.]?PrimaryAssetTypesToScan\s*=.*PrimaryAssetType\s*=\s*"?GameFeatureData"?\s*[,)]') {
+            return $false
+        }
+    }
+    $rule = '(PrimaryAssetType="GameFeatureData",AssetBaseClass="/Script/GameFeatures.GameFeatureData",bHasBlueprintClasses=False,bIsEditorOnly=False,Directories=(),SpecificAssets=(),Rules=(Priority=-1,ChunkId=-1,bApplyRecursively=True,CookRule=AlwaysCook))'
+    Set-IniValue $file $section "+PrimaryAssetTypesToScan" $rule
+    return $true
 }
 
 # Processes that have a file under $dir loaded (a running editor keeps the plugin's DLL open).
@@ -404,7 +469,23 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
     $up = Get-Content $Project -Raw | ConvertFrom-Json
     $plugins = @()
     if ($up.PSObject.Properties.Name -contains "Plugins" -and $up.Plugins) { $plugins = @($up.Plugins) }
-    $needed = @("DaedalusLink", "ProceduralMeshComponent", "PythonScriptPlugin", "EditorScriptingUtilities", "PCG")   # PCG: procedural ecology (engines/unreal/pcg-ecology)
+    # Keep the serializer implementation canonical; the installed plugin may
+    # live outside this repository and therefore needs a verified staged header.
+    $validationBridge = Join-Path $PluginDest "Source/DaedalusLink/Public/DaedalusNativeValidationBridge.h"
+    if (Test-Path -LiteralPath $validationBridge) {
+        $canonicalContract = Join-Path $PSScriptRoot "../../tools/unreal_mcp/native_validation_result_snapshot.h"
+        # Outside Source: a generated staged copy must not make the existing
+        # source-tree drift comparison replace an otherwise identical plugin.
+        $contractDirectory = Join-Path $PluginDest "Build/AcceptedContracts"
+        New-Item -ItemType Directory -Force -Path $contractDirectory | Out-Null
+        $stagedContract = Join-Path $contractDirectory "native_validation_result_snapshot.h"
+        Copy-Item -LiteralPath $canonicalContract -Destination $stagedContract -Force
+        if ((Get-FileHash -LiteralPath $canonicalContract -Algorithm SHA256).Hash -ne
+            (Get-FileHash -LiteralPath $stagedContract -Algorithm SHA256).Hash) {
+            throw "Validation contract staging hash mismatch"
+        }
+    }
+    $needed = @("DaedalusLink", "ProceduralMeshComponent", "PythonScriptPlugin", "EditorScriptingUtilities", "PCG", "AssetManagerEditor", "DataValidation")   # Bundled editor prerequisites; no transport or security settings changed.
     foreach ($name in $needed) {
         $hit = $plugins | Where-Object { $_.Name -eq $name }
         if ($hit) { $hit.Enabled = $true } else { $plugins += [pscustomobject]@{ Name = $name; Enabled = $true } }
@@ -427,6 +508,8 @@ if (-not $WhatIfOnly -and (Test-Path $Project)) {
     Set-IniValue $ini "/Script/EngineSettings.GameMapsSettings" "GameDefaultMap" "/Game/Daedalus/DaedalusWorld.DaedalusWorld"
     # No camera motion blur: a fast mouse turn smeared the whole screen (Richey, 2026-10-13).
     Set-IniValue $ini "/Script/Engine.RendererSettings" "r.DefaultFeature.MotionBlur" "False"
+    $gameIni = Join-Path (Join-Path $ProjectDir "Config") "DefaultGame.ini"
+    [void](Ensure-GameFeatureDataCookRule $gameIni)
     Write-Host "    project settings: DirectX 12 with Shader Model 6 (for Nanite), Daedalus level at startup, no motion blur"
 }
 

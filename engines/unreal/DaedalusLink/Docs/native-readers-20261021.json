@@ -1,0 +1,442 @@
+{
+  "schema": "daedalus.native-readers-source-checkpoint.v1",
+  "recorded_utc": "2026-10-21T18:22:09.328761+00:00",
+  "engine": "Unreal Engine 5.8.4, CL 58902052",
+  "source": [
+    {
+      "path": "DaedalusLink.uplugin",
+      "bytes": 1350,
+      "sha256": "ff469d8343d12bb9f698111c420b0fceb0482db4f6f728bc99e26c6a4d845ef0",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/DaedalusLink.Build.cs",
+      "bytes": 3004,
+      "sha256": "6e416c76c6ea25aa35f4de0a4939e1d857829a48400eb5726e3a90fbf17590fc",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Public/DaedalusLinkModule.h",
+      "bytes": 697,
+      "sha256": "17731fc318ea29db9a47c74c460469ae49e92f4e3f7b50274d8f2ff29c1391d4",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/DaedalusLinkModule.cpp",
+      "bytes": 1844,
+      "sha256": "3511b49bbf39896f668d0415827062ac6c595c950d670cab1e52dd65beae3250",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Public/DaedalusProspectorMineReadLibrary.h",
+      "bytes": 683,
+      "sha256": "5b282beee8e45d3fd29efd517c3d5f04b0834104069993dea8fc30819b1f8ed4",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/DaedalusProspectorMineReadLibrary.cpp",
+      "bytes": 23244,
+      "sha256": "02f60394b1b6fd1d7da144f9f8b0617fbf82b65d5ae9225420c540684e91504b",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/StartupUcsAttributionObserver.h",
+      "bytes": 1861,
+      "sha256": "1cb4854bd5cbeffa28a453bb5802919fded238cb084184f7da6c41e1fab753ef",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/StartupUcsAttributionObserver.cpp",
+      "bytes": 7720,
+      "sha256": "f36ea96464ef5536bac349e3a5d0ffca4a0ba1c071a721acc811539b94342025",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Public/DaedalusImportedFactorReadLibrary.h",
+      "bytes": 1642,
+      "sha256": "ca1602bfa7bf4d7feddfa58a5a2139874888cc429c1f564ba6373f541163c096",
+      "installed_bytes_match": true
+    },
+    {
+      "path": "Source/DaedalusLink/Private/DaedalusImportedFactorReadLibrary.cpp",
+      "bytes": 40481,
+      "sha256": "c72166198fad49c1036b1f2c47a6745263ea0c201fc484f0549162e4f9d698ac",
+      "installed_bytes_match": true
+    }
+  ],
+  "entry_points": {
+    "mine": "unreal.DaedalusProspectorMineReadLibrary.read_mine_prerequisites(sample_times)",
+    "imported_factors": "unreal.DaedalusImportedFactorReadLibrary.read_imported_factor_bindings(paths, allowed_root, policy_id)",
+    "protection": "unreal.DaedalusImportedFactorReadLibrary.read_imported_factor_protection(paths, allowed_root)",
+    "startup_observer_opt_in": "-DaedalusTraceUCS"
+  },
+  "scope": {
+    "readers": "Typed editor-only observations; no arbitrary graph evaluator, import, reimport, save or world mutation entry point.",
+    "protection": "Criterion-scoped current call, named input roster, three factor connections/leaves and applicable parameter proofs; not every serialized graph field or unused parameter.",
+    "observer": "Resident opt-in editor delegate observer. Preserve delegate/module lifetime until normal process exit; no hot reload, forced unload or arbitrary runtime shutdown while attached.",
+    "dependencies": "Existing installed editor Interchange modules; explicit plugin dependency. No new plugin installation or transport."
+  },
+  "build": {
+    "initial_attempt_exit_code": 6,
+    "initial_failure": "Helper Error/Serialize names conflicted with existing names; corrected by exact namespace qualification.",
+    "corrected_attempt_exit_code": 0,
+    "corrected_attempt_known_terminal": true,
+    "corrected_attempt_seconds": 13.60181499999453,
+    "all_three_units_in_link_response": true,
+    "existing_rawinput_deprecation_warning": true,
+    "binary": {
+      "path": "Binaries/Win64/UnrealEditor-DaedalusLink.dll",
+      "sha256": "bbdac5a0cf580ebdfc35271cb99454b179a86664bcd176a12102109b9d4c936c",
+      "bytes": 10496000
+    }
+  },
+  "runtime": {
+    "reflection_discovery": "PASSED in the built process; all three reflected methods were present.",
+    "mine": {
+      "state": "CRASHED_UNKNOWN_NATIVE_SUBSTAGE",
+      "dispatch_utc": "2026-10-21T04:26:08.653669Z",
+      "crash_utc": "2026-10-21T04:26:12.030Z",
+      "exception": "EXCEPTION_ACCESS_VIOLATION reading 0x00007465736c6f18",
+      "available_stack": "Python311 / PythonScriptPlugin / Slate; no project C++ frame or Python filename/line.",
+      "native_reader_entry_proven": false,
+      "returned_raw_present": false,
+      "automatic_replay_permitted": false,
+      "reimport_attempted": false
+    },
+    "material": {
+      "exposure_read_completed": true,
+      "field_categories": 175,
+      "unavailable_categories": 141,
+      "typed_factor_capture_attempted": true,
+      "material_admitted": false,
+      "current_native_state": "held",
+      "current_native_errors": [
+        "Source material graph not bound to factory"
+      ],
+      "current_host_envelope_state": "complete"
+    },
+    "startup_observer": {
+      "attached": true,
+      "qualifying_observation_rows": 0,
+      "actor_attribution_proven": false,
+      "startup_delay_fixed": false
+    },
+    "world": {
+      "lod_operation_attempted": false,
+      "pcg_operation_attempted": false
+    },
+    "protected_saved_packages_rehashed_after_crash": 27595,
+    "protected_saved_packages_changed": 0,
+    "user_restart": "Duplicate closed normally. Current verified repair session uses one editor; no unsaved state was discarded."
+  },
+  "receipts": [
+    {
+      "local_path": "NativeBuildR2/build-terminal.json",
+      "bytes": 450,
+      "sha256": "19fc05ea0c8e8bc439bc85f7f527bceb689eb3db30a142d6e0ce3f3e60c3467e"
+    },
+    {
+      "local_path": "NativeBuildR2/new-source-inclusion.json",
+      "bytes": 1439,
+      "sha256": "312c1378842a2db0f8ee546177b45a36959a1c3794d62199d8a54b9c0e09eb90"
+    },
+    {
+      "local_path": "NativeBuildR2/ready.json",
+      "bytes": 4390,
+      "sha256": "3e56698107b8206457e91fb66cca9e39b47a9cb6ad9d243efb157139426e00e2"
+    },
+    {
+      "local_path": "StartupObserverR1/result.json",
+      "bytes": 1066,
+      "sha256": "d2671f1054d5a0950ec78c1bdb56f9314601a8dcc0d26bc7de13649569a501da"
+    },
+    {
+      "local_path": "MineCrashR1/failure-reconciliation.json",
+      "bytes": 1171,
+      "sha256": "7dde85e4db338dd7446357b4759ea29d7d4659f9ed684567ed6fb4414e1202a3"
+    },
+    {
+      "local_path": "MineCrashR1/saved-preservation.json",
+      "bytes": 126,
+      "sha256": "6d5e74b9f177fa63c08f24fafe8268bd21e605d3c7091a22ebaa9fd09f534ff2"
+    }
+  ],
+  "native_runtime_qualified": false,
+  "publication_scope": "These ten native/plugin files and this evidence only; stopped Python policy, UCX, PowerShell reporting and combat publication lanes excluded.",
+  "sha256_repair": {
+    "problem": "FPlatformMisc::GetSHA256Signature reached an unimplemented generic-platform assertion in the Windows build.",
+    "backend": "Existing private-static bundled OpenSSL SHA256 API, hash-only header; no new dependency, install or security change.",
+    "failure_behavior": "Null nonempty input or backend failure refuses, clears output and retains the exact source SHA256 equality guard.",
+    "review": "Bounded operator review of the one-file diff, exact built/tested bytes, known-vector oracle, unchanged provenance equality and failure refusal. No separate independent review is claimed.",
+    "source": {
+      "bytes": 40481,
+      "sha256": "c72166198fad49c1036b1f2c47a6745263ea0c201fc484f0549162e4f9d698ac"
+    },
+    "build": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\RemainingIntegration20261021\\MaterialSha256LinkR3\\build-terminal.json",
+      "sha256": "880dcd5bd063fcdec2d2d648c5c692822dd865377a842d543a7135f0a55da8d0",
+      "bytes": 457
+    },
+    "binary": {
+      "bytes": 10499584,
+      "sha256": "bc13b1ed801e1154e6c12e10557783007f7e1aa0cbe95b504c603d8a48610660"
+    },
+    "native_test": {
+      "tests": [
+        {
+          "name": "Daedalus.Editor.Material.ImportedSourceSha256",
+          "state": "Success",
+          "duration": 0.012143801897764206,
+          "errors": [],
+          "warnings": []
+        }
+      ],
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "total": 1,
+      "duration": 0.012143801897764206
+    },
+    "known_vectors": [
+      "empty",
+      "abc",
+      "56-byte multi-block"
+    ],
+    "invalid_input_test": "Null pointer with nonzero length refuses and clears stale digest.",
+    "actual_reader": {
+      "returned_without_assert": true,
+      "production_hash_guard_passed_before_import_getters": true,
+      "state": "held",
+      "errors": [
+        "Source material graph not bound to factory"
+      ],
+      "official_import_getter_invocations": 3,
+      "material_admitted": false,
+      "full_pbr_admitted": false,
+      "root_output_equivalence_proven": false
+    },
+    "preservation": {
+      "protection_projections_complete_and_equal": true,
+      "scene_fields": {
+        "project": true,
+        "world": true,
+        "pie": true,
+        "game_world": true,
+        "dirty_maps": true,
+        "dirty_content": true,
+        "scene": true,
+        "selection": true,
+        "camera": true
+      },
+      "original_packages_unchanged": 3,
+      "authored_material_writes": 0,
+      "save_requests": 0
+    },
+    "host_envelope_limit": "Historical relative-path formatting failure is now corrected by material_path_repair. The factory provenance fragment remains held.",
+    "strict_consumer": {
+      "invoked": false,
+      "state": "HELD_NATIVE_FACTORY_PROVENANCE",
+      "assembler_refusal": "Held: Held/incomplete/dirty fragment cannot be promoted"
+    },
+    "verification_receipt": {
+      "local_path": "Sha256RepairVerificationR2/completion.json",
+      "bytes": 5938,
+      "sha256": "3b0463f2c8af6a74b148af58dbce601731944502a4332ec6108457273570ce1b"
+    },
+    "raw_fragment": {
+      "bytes": 1574,
+      "sha256": "40c8356bd74501a1b2d95232be175e3d75673155050dbc65a04e754c2966ea71"
+    },
+    "repair_verified": true,
+    "broader_material_acceptance": false
+  },
+  "material_path_repair": {
+    "helper": "tools/unreal_mcp/material_capture_paths.py",
+    "callback": "tools/unreal_mcp/material_capture/native_capture.inc",
+    "tests": {
+      "focused_unit_tests": 8,
+      "outcome": "PASS",
+      "coverage": [
+        "absolute admitted project",
+        "actual six-parent relative Unreal path",
+        "Windows separators",
+        "wrong project/drive",
+        "unresolved relative path",
+        "invalid input/result",
+        "missing/failed resolver"
+      ]
+    },
+    "native_positive_path_binding": {
+      "reported": "../../../../../../Unreal/DaedalusRealm/DaedalusRealm.uproject",
+      "canonical": "C:/Unreal/DaedalusRealm/DaedalusRealm.uproject",
+      "real_Unreal_resolver_used": true,
+      "host_envelope_written": true,
+      "actual_timestamps_retained": true
+    },
+    "negative_admission": {
+      "state": "HELD",
+      "refusal": "Held: Held/incomplete/dirty fragment cannot be promoted",
+      "consumer_invoked": false,
+      "material_admitted": false
+    },
+    "native_reader_errors": [
+      "Source material graph not bound to factory"
+    ],
+    "original_nine_fields_and_three_files_preserved": true,
+    "compute_released": true,
+    "verification": {
+      "bytes": 5135,
+      "sha256": "a0171d1b9f6591d38e3abf492d7a6e1175551edabae24202c89177c5c8bb6f48"
+    }
+  },
+  "material_factory_provenance_blocker": {
+    "state": "HELD_ABSENT_PERSISTED_FUNCTION_CHAIN",
+    "observed_materials": [
+      {
+        "material": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+        "root_factory_uid": "Factory_\\Shaders\\Prop_PracticeCrate_material_0",
+        "root_factory_class": "/Script/InterchangeFactoryNodes.InterchangeMaterialFactoryNode",
+        "retained_factory_node_count": 1,
+        "property_connections": {
+          "BaseColor": [
+            "Factory_\\Shaders\\\\Shaders\\Prop_PracticeCrate_material_0\\MF_Default_Body",
+            "BaseColor"
+          ],
+          "Metallic": [
+            "Factory_\\Shaders\\\\Shaders\\Prop_PracticeCrate_material_0\\MF_Default_Body",
+            "Metallic"
+          ],
+          "Roughness": [
+            "Factory_\\Shaders\\\\Shaders\\Prop_PracticeCrate_material_0\\MF_Default_Body",
+            "Roughness"
+          ]
+        },
+        "referenced_function_nodes_present": false
+      },
+      {
+        "material": "/Game/CodexToolEvaluation/EpicIntegrationR1/Import/Prop_PracticeCrate/Prop_PracticeCrate_M1.Prop_PracticeCrate_M1",
+        "root_factory_uid": "Factory_\\Shaders\\Prop_PracticeCrate_material_1",
+        "root_factory_class": "/Script/InterchangeFactoryNodes.InterchangeMaterialFactoryNode",
+        "retained_factory_node_count": 1,
+        "property_connections": {
+          "BaseColor": [
+            "Factory_\\Shaders\\\\Shaders\\Prop_PracticeCrate_material_1\\MF_Default_Body",
+            "BaseColor"
+          ],
+          "Metallic": [
+            "Factory_\\Shaders\\\\Shaders\\Prop_PracticeCrate_material_1\\MF_Default_Body",
+            "Metallic"
+          ],
+          "Roughness": [
+            "Factory_\\Shaders\\\\Shaders\\Prop_PracticeCrate_material_1\\MF_Default_Body",
+            "Roughness"
+          ]
+        },
+        "referenced_function_nodes_present": false
+      }
+    ],
+    "installed_import_source": {
+      "file": "InterchangeImportCommon.cpp",
+      "relevant_lines": "52-84",
+      "pin": {
+        "bytes": 19899,
+        "sha256": "ed1c398df4fac9b44b55450715ec46c61077529750be3d631f43a92ce1b2feb6"
+      },
+      "semantics": "EndSetupAssetData persists the root factory and factory dependency closure, not the translated shader graph."
+    },
+    "positive_original_factory_binding_available": false,
+    "consumer_or_provenance_relaxed": false,
+    "resolution": "Recover authoritative import-time function/factor provenance or explicitly scope new import-time provenance retention. Reconstructing absent history from current values is not a retained-node witness."
+  },
+  "fresh_material_import_receipt_v1": {
+    "schema": "daedalus.material-import-receipt.v1",
+    "scope": "NEW isolated pinned-source M0 only; original-pair persisted-node admission unchanged",
+    "source_review": "CLEAR: one review plus namespace-only compile-fix delta",
+    "focused_python_tests": {
+      "passed": 50,
+      "native_calls": 0
+    },
+    "native_scope_refusal_test": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "warnings": 0
+    },
+    "build": {
+      "first": "Known failed before link: unqualified Error and inherited UObject::Serialize name lookup",
+      "correction": "Explicit ImportedFactorProposal namespace on the new wrapper calls only",
+      "corrected_exit_code": 0,
+      "terminal": {
+        "bytes": 450,
+        "sha256": "9ce3ee82f9d8b3ddab6bccbbb1644bd1846359c1effeda40de713425aa8ed297"
+      }
+    },
+    "actual_new_asset": "/Game/CodexToolEvaluation/MaterialProvenanceRecovery/ReceiptR1/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+    "actual_fresh_import_complete": true,
+    "actual_new_only_save_reload": true,
+    "sealed_receipt": {
+      "bytes": 112341,
+      "sha256": "f7b3dd63c70ea9763106958980d4c14a64cb95e54c14c29ec27b25997f811162"
+    },
+    "post_seal_current_read": {
+      "state": "COMPLETE_DISTINCT_CURRENT_CAPTURE",
+      "first_attempt": "Known resource refusal before dispatch, retained",
+      "recovery_physical_kib": 1792496,
+      "unchanged_minimum_physical_kib": 1700000,
+      "native_dispatches": 1,
+      "current_native": {
+        "bytes": 52421,
+        "sha256": "9c161fe5c7c1e8f4f1599e4fb72bf52d42d3dc228d2ca662d7dc078f3f59589f"
+      }
+    },
+    "live_strict_consumer_admission": {
+      "state": "PASS_FRESH_IMPORT_RECEIPT",
+      "receipt_accepted": true,
+      "historical_admission": false,
+      "admission_scope": "FRESH_SOURCE_BASE_COLOR_RGB_BINDING_ONLY",
+      "root_output_equivalence_proven": false,
+      "all_pbr_factors_qualified": false,
+      "native_runtime_qualified": false,
+      "reasons": [],
+      "asset": "/Game/CodexToolEvaluation/MaterialProvenanceRecovery/ReceiptR1/Prop_PracticeCrate_M0.Prop_PracticeCrate_M0",
+      "receipt_sha256": "f7b3dd63c70ea9763106958980d4c14a64cb95e54c14c29ec27b25997f811162",
+      "source_sha256": "4e83515ecb6c49139db195354651fd6e23cebdf6150b2011778755ec8c41581f",
+      "observed_factors": {
+        "base_color": [
+          0.32972902059555054,
+          0.14799802005290985,
+          0.04614884406328201,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.6000000238418579
+      }
+    },
+    "original_packages_material_projection_and_nine_scene_fields_preserved": true,
+    "current_editor_pid": 30832,
+    "normal_compute_release_confirmed": true,
+    "historical_material_admission": false,
+    "all_pbr_factors_qualified": false,
+    "root_output_equivalence_proven": false,
+    "native_runtime_qualified": false,
+    "limitations": [
+      "Exact closed constant-source M0 profile and direct constant leaves only.",
+      "Trusted caller-owned receipt anchor and fresh independent native witness required.",
+      "Existing saved nodes/history are not reconstructed or promoted.",
+      "Cursor/satellite untouched; no memory-floor reduction or engine retention change."
+    ],
+    "negative_cases_refused": [
+      "missing_receipt",
+      "tampered_bytes",
+      "replayed_reload_witness",
+      "wrong_created_expression",
+      "source_md5_mismatch"
+    ],
+    "verification": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\MaterialImportReceipt20261021\\AdoptionR1\\native-completion.json",
+      "sha256": "edceab200d709627294fb8c4678d46bca3f81fda8c0aaf8c3409a4a909949412",
+      "bytes": 7779
+    }
+  }
+}

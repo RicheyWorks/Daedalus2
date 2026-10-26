@@ -1,0 +1,303 @@
+{
+ "schema": "daedalus.sea-sources/v1",
+ "status": "inventory of EXISTING source for the Sea Realm and the living aquatic habitat (PootScoot 32345/32349/32353). Implemented means code with tests; data-only means a JSON/design file no host loads; absent means grep finds nothing. Owners are the last git author per path, computed by tools/ocean/sources_check.py, never typed here.",
+ "realm_identity": "OCEAN (session core + realm directory). Not a new realm; not World-Zero aerial raid.",
+ "probe_roots": [
+  "daedalus-core/src/main",
+  "daedalus-server/src/main",
+  "engines/unreal/DaedalusLink/Source"
+ ],
+ "entries": [
+  {
+   "id": "realm-session",
+   "area": "sea realm",
+   "status": "implemented",
+   "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusRealmSessionCore.h",
+   "symbols": [
+    "\"OCEAN\"",
+    "Dock",
+    "Shore"
+   ],
+   "note": "realm switch rules: dock -> OCEAN, shore -> realm sailed from; test core-test/realm_session_test.cpp"
+  },
+  {
+   "id": "realm-directory",
+   "area": "sea realm",
+   "status": "implemented",
+   "path": "daedalus-server/src/main/java/com/daedalus/server/service/RealmDirectoryService.java",
+   "symbols": [
+    "OCEAN_V1",
+    "/api/v1/ocean/v1"
+   ],
+   "note": "directory row for the ocean host"
+  },
+  {
+   "id": "ocean-host",
+   "area": "sea realm",
+   "status": "implemented",
+   "path": "daedalus-server/src/main/java/com/daedalus/server/controller/OceanHostController.java",
+   "symbols": [
+    "/chunk"
+   ],
+   "note": "manifest + chunk read API; no gameplay authority"
+  },
+  {
+   "id": "ocean-terrain",
+   "area": "sea realm",
+   "status": "implemented",
+   "path": "daedalus-core/src/main/java/com/daedalus/world/ocean/OceanTerrain.java",
+   "symbols": [
+    "boatBerth",
+    "submarineBerth",
+    "SEA_LEVEL"
+   ],
+   "note": "seeded seabed; only bathymetry that exists (hashed 24-55 depth); one fixed sea level"
+  },
+  {
+   "id": "ocean-chunks",
+   "area": "sea realm",
+   "status": "implemented",
+   "path": "daedalus-core/src/main/java/com/daedalus/world/ocean/OceanChunkWindow.java",
+   "symbols": [
+    "OceanChunkWindow"
+   ],
+   "note": "bounded write-through chunk window (streaming-like)"
+  },
+  {
+   "id": "ocean-travel",
+   "area": "ships",
+   "status": "implemented",
+   "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusOceanTravelCore.h",
+   "symbols": [
+    "Submarine",
+    "Board",
+    "Land"
+   ],
+   "note": "boat/sub board+land validation; uses \"Ocean Realm\" naming (WARN in links_check); no upgrades or economy"
+  },
+  {
+   "id": "ocean-vessel",
+   "area": "ships",
+   "status": "implemented",
+   "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusOceanTravelComponent.h",
+   "symbols": [
+    "ADaedalusOceanVessel"
+   ],
+   "note": "Unreal vessel pawn, replicated hull box"
+  },
+  {
+   "id": "sea-links",
+   "area": "sea realm",
+   "status": "data-only",
+   "path": "data/ocean/links.json",
+   "symbols": [
+    "ocean-tidepen-landing"
+   ],
+   "note": "dock links design; checked by links_check.py; no host loads it"
+  },
+  {
+   "id": "tidepen-gate",
+   "area": "creatures",
+   "status": "implemented",
+   "path": "daedalus-core/src/main/java/com/daedalus/world/ocean/TidePenGate.java",
+   "symbols": [
+    "LEAVE_WILD",
+    "record Subject",
+    "Set.copyOf"
+   ],
+   "note": "pure settled-care decision; caller contract in javadoc; no store, no host action"
+  },
+  {
+   "id": "tidepen-data",
+   "area": "creatures",
+   "status": "data-only",
+   "path": "data/ocean/tidepen.json",
+   "symbols": [
+    "q_tidepen_settle",
+    "owner-proposed"
+   ],
+   "note": "4 residents, care rule, quest socket (not in quests.json)"
+  },
+  {
+   "id": "species-ecology",
+   "area": "creatures",
+   "status": "implemented",
+   "path": "daedalus-core/src/main/java/com/daedalus/world/ecology/Species.java",
+   "symbols": [
+    "record Species"
+   ],
+   "note": "species with rarity/temperament/guild (ark ecology), GET /api/v1/species"
+  },
+  {
+   "id": "biogeography",
+   "area": "ecology",
+   "status": "implemented",
+   "path": "daedalus-core/src/main/java/com/daedalus/world/ecology/Biogeography.java",
+   "symbols": [
+    "equilibrium",
+    "logisticAt"
+   ],
+   "note": "MacArthur-Wilson + logistic r/K, ported from CSRBT; reusable measure for a habitat"
+  },
+  {
+   "id": "diversity",
+   "area": "ecology",
+   "status": "implemented",
+   "path": "daedalus-core/src/main/java/com/daedalus/world/ecology/Diversity.java",
+   "symbols": [
+    "record Diversity"
+   ],
+   "note": "Shannon/evenness/Simpson (CSRBT CommunityMetrics)"
+  },
+  {
+   "id": "egg-hatch",
+   "area": "creatures",
+   "status": "implemented",
+   "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusRealmCore.h",
+   "symbols": [
+    "Hatch",
+    "DRS 1"
+   ],
+   "note": "retro realm dragon egg warm/hatch + DRS1 save; one species, no two-parent breeding"
+  },
+  {
+   "id": "bestiary",
+   "area": "creatures",
+   "status": "implemented",
+   "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusBestiaryCore.h",
+   "symbols": [
+    "Foe"
+   ],
+   "note": "per-realm weighted foe picker; usable for predators"
+  },
+  {
+   "id": "portal-quest",
+   "area": "quests",
+   "status": "implemented",
+   "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPortalQuestCore.h",
+   "symbols": [
+    "DaedalusPortalQuest"
+   ],
+   "note": "ordered per-player steps; no awards, no persistence"
+  },
+  {
+   "id": "quests-data",
+   "area": "quests",
+   "status": "data-only",
+   "path": "data/quests/quests.json",
+   "symbols": [
+    "q_ark"
+   ],
+   "note": "quest list; no Java quest engine"
+  },
+  {
+   "id": "inventory-dic",
+   "area": "items",
+   "status": "implemented",
+   "path": "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusInventoryCore.h",
+   "symbols": [
+    "Intent"
+   ],
+   "note": "browse-only inventory, emits intents, never changes quantities; no ocean catalog"
+  },
+  {
+   "id": "streaming-budget",
+   "area": "streaming",
+   "status": "implemented",
+   "path": "daedalus-core/src/main/java/com/daedalus/world/streaming/StreamingBudget.java",
+   "symbols": [
+    "StreamingBudget"
+   ],
+   "note": "DSB1 budget with C++ parity"
+  },
+  {
+   "id": "ark-ships",
+   "area": "ships",
+   "status": "implemented",
+   "path": "daedalus-core/src/main/java/com/daedalus/world/ark/Ark.java",
+   "symbols": [
+    "record Ark"
+   ],
+   "note": "sky arks (not sea ships); berth/slot"
+  },
+  {
+   "id": "kraken-maze",
+   "area": "reef layout",
+   "status": "implemented",
+   "path": "daedalus-core/src/main/java/com/daedalus/engine/generators/KrakenGenerator.java",
+   "symbols": [
+    "class KrakenGenerator",
+    "Pirate flavor"
+   ],
+   "note": "Eden-growth maze generator, coral-like branching; pirate is comment flavor only, not crews. Candidate seam for a reef/wreck interior layout"
+  },
+  {
+   "id": "habitat-tidepool",
+   "area": "creatures",
+   "status": "data-only",
+   "path": "data/ocean/habitat-tidepool-r1.json",
+   "symbols": [
+    "\"refuge\"",
+    "\"low\""
+   ],
+   "note": "bounded habitat proposal r1 (kept) and r2 (body size); checked by habitat_check.py"
+  },
+  {
+   "id": "habitat-tidepool-r2",
+   "area": "creatures",
+   "status": "data-only",
+   "path": "data/ocean/habitat-tidepool-r2.json",
+   "symbols": [
+    "\"voxel_cm\"",
+    "\"supersedes\""
+   ],
+   "note": "r2: residents have a body size; zones must be deeper than the resident is tall"
+  },
+  {
+   "id": "tidepen-art-r2",
+   "area": "creatures",
+   "status": "implemented",
+   "path": "tools/blender/tidepen_shelf.py",
+   "symbols": [
+    "pen_floor",
+    "sea_outside_pen",
+    "PenWater"
+   ],
+   "note": "Tide-Pen art r2: pen bed at the habitat depths (measured), PenWater role movable per water state; tidepen_tides.py renders low/normal/high"
+  }
+ ],
+ "absent": [
+  {
+   "id": "buoyancy",
+   "probe": "(?i)buoyan"
+  },
+  {
+   "id": "oxygen",
+   "probe": "(?i)\\boxygen"
+  },
+  {
+   "id": "water-level-states",
+   "probe": "(?i)waterlevel|water_level|tide ?level"
+  },
+  {
+   "id": "evolution",
+   "probe": "(?i)\\bevolv|evolution"
+  },
+  {
+   "id": "befriend",
+   "probe": "(?i)befriend"
+  },
+  {
+   "id": "vessel-upgrade",
+   "probe": "(?i)(boat|vessel|ship|submarine)\\w*upgrade|upgrade\\w*(boat|vessel|ship|submarine)"
+  },
+  {
+   "id": "pirate-gameplay",
+   "probe": "(?i)(class|record|enum|struct)\\s+\\w*pirate"
+  },
+  {
+   "id": "ocean-inventory-catalog",
+   "probe": "(?i)ocean\\.dic"
+  }
+ ]
+}

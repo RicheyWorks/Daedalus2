@@ -11,6 +11,8 @@ import os
 import sys
 import time
 
+MAX_WAIT_S = int(os.environ.get("DAEDALUS_SCENARIO_WAIT_S", "900"))
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "..", "connectors", "claude-asset-pipeline"))
 from asset_pipeline import wire  # noqa: E402
@@ -57,13 +59,26 @@ def main(argv):
             tot += 1
             continue
         s = {}
-        for _ in range(180):
+        for _ in range(MAX_WAIT_S):   # 01:35: the airship tour flies ~5 min; 180 s abandoned it mid-flight
             time.sleep(1)
             s = wire.call(wire.UNREAL, "daedalus.play_status", timeout=20)
             if not s.get("running"):
                 break
         r = s.get("result") or {}
-        print("%s error= %s passed=%s/%s" % (name, s.get("error"), r.get("passed"), r.get("total")), flush=True)
+        if r.get("interrupted"):   # a person drove the Play window: rerun this one once, hands off
+            print("%s INTERRUPTED: %s -> rerunning once" % (name, r["interrupted"]), flush=True)
+            time.sleep(5)
+            wire.call(wire.UNREAL, "daedalus.play_scenario", name=name, timeout=20)
+            for _ in range(MAX_WAIT_S):
+                time.sleep(1)
+                s = wire.call(wire.UNREAL, "daedalus.play_status", timeout=20)
+                if not s.get("running"):
+                    break
+            r = s.get("result") or {}
+            if r.get("interrupted"):
+                print("%s INTERRUPTED again: counted as not run" % name, flush=True)
+                continue
+        print("%s error= %s passed=%s/%s fps=%s frames=%s seconds=%s" % (name, s.get("error"), r.get("passed"), r.get("total"), r.get("fps"), r.get("frames"), r.get("seconds")), flush=True)
         for c in r.get("checks", []):
             print("  %s %s :: %s" % ("PASS" if c["pass"] else "FAIL", c["check"], (c.get("detail") or "")[:260]), flush=True)
         tot += r.get("total") or 0

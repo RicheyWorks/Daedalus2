@@ -43,8 +43,17 @@ result = {"path": P["path"], "bytes": os.path.getsize(P["path"]), "objects": obj
 '''
 
 UNREAL_IMPORT = r'''
-import unreal, json
+import unreal, json, hashlib
 P = json.loads(PARAMS)
+if P.get("artifact"):
+    digest = hashlib.sha256()
+    size = 0
+    with open(P["path"], "rb") as source:
+        for chunk in iter(lambda: source.read(1 << 20), b""):
+            digest.update(chunk)
+            size += len(chunk)
+    if {"sha256": digest.hexdigest(), "bytes": size} != P["artifact"]:
+        raise ValueError("import snapshot identity mismatch; no import performed")
 task = unreal.AssetImportTask()
 task.set_editor_property("filename", P["path"])
 task.set_editor_property("destination_path", P["dest"])

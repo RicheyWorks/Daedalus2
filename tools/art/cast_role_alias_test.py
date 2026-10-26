@@ -24,4 +24,38 @@ class AliasTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'SHA256'):alias_bytes(data,'Mob_Test_Old','Mob_Test_New','0'*64)
         with self.assertRaisesRegex(ValueError,'absent'):alias_bytes(data,'Mob_Test_Missing','Mob_Test_New',hashlib.sha256(data).hexdigest())
 
+    def test_existing_destination_identity_is_not_shadowed(self):
+        original, tail = self.fixture()
+        length = struct.unpack_from('<I', original, 12)[0]
+        for group, source, target in (
+                ('nodes', 'Mob_Test_Old', 'Mob_Test_New'),
+                ('nodes', 'Mob_Test_Old_Rig', 'Mob_Test_New_Rig'),
+                ('skins', 'Mob_Test_Old_Rig', 'Mob_Test_New_Rig'),
+                ('meshes', 'Mob_Test_Old', 'Mob_Test_New')):
+            with self.subTest(group=group, target=target):
+                doc = json.loads(original[20:20+length])
+                if group == 'meshes':
+                    doc[group] = [{'name': source}]
+                doc[group].append({'name': target})
+                body = json.dumps(doc).encode()
+                body += b' ' * (-len(body) % 4)
+                data = (struct.pack('<4sII', b'glTF', 2, 20+len(body)+len(tail))
+                        + struct.pack('<I4s', len(body), b'JSON') + body + tail)
+                before = bytes(data)
+                with self.assertRaisesRegex(ValueError, 'destination name'):
+                    alias_bytes(data, 'Mob_Test_Old', 'Mob_Test_New',
+                                hashlib.sha256(data).hexdigest())
+                self.assertEqual(data, before)
+
+    def test_destination_can_use_a_source_name_that_is_renamed_away(self):
+        data, tail = self.fixture()
+        result, count = alias_bytes(data, 'Mob_Test_Old', 'Mob_Test_Old_Rig',
+                                    hashlib.sha256(data).hexdigest())
+        length = struct.unpack_from('<I', result, 12)[0]
+        doc = json.loads(result[20:20+length])
+        self.assertEqual([item['name'] for item in doc['nodes']],
+                         ['Mob_Test_Old_Rig', 'root', 'Mob_Test_Old_Rig_Rig'])
+        self.assertEqual(count, 3)
+        self.assertTrue(result.endswith(tail))
+
 if __name__=='__main__':unittest.main(verbosity=2)

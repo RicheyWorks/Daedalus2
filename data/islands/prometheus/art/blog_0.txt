@@ -1,0 +1,396 @@
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_C_Yarrow_Sprout_V0.fbx'
+export finished in 0.0080 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_C_Yarrow_Sprout_V1.fbx'
+export finished in 0.0047 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_C_Yarrow_Sprout_V2.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_C_Yarrow_Bloom_V0.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_C_Yarrow_Bloom_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_C_Yarrow_Bloom_V2.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_C_Yarrow_Seed_V0.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_C_Yarrow_Seed_V1.fbx'
+export finished in 0.0048 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_C_Yarrow_Seed_V2.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Cs_Plantain_Sprout_V0.fbx'
+export finished in 0.0049 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Cs_Plantain_Sprout_V1.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Cs_Plantain_Sprout_V2.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Cs_Plantain_Bloom_V0.fbx'
+export finished in 0.0035 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Cs_Plantain_Bloom_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Cs_Plantain_Bloom_V2.fbx'
+export finished in 0.0035 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Cs_Plantain_Seed_V0.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Cs_Plantain_Seed_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Cs_Plantain_Seed_V2.fbx'
+export finished in 0.0035 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_D_Chamomile_Sprout_V0.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_D_Chamomile_Sprout_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_D_Chamomile_Sprout_V2.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_D_Chamomile_Bloom_V0.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_D_Chamomile_Bloom_V1.fbx'
+export finished in 0.0080 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_D_Chamomile_Bloom_V2.fbx'
+export finished in 0.0046 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_D_Chamomile_Seed_V0.fbx'
+export finished in 0.0054 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_D_Chamomile_Seed_V1.fbx'
+export finished in 0.0046 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_D_Chamomile_Seed_V2.fbx'
+export finished in 0.0047 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Ds_Valerian_Sprout_V0.fbx'
+export finished in 0.0035 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Ds_Valerian_Sprout_V1.fbx'
+export finished in 0.0047 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Ds_Valerian_Sprout_V2.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Ds_Valerian_Bloom_V0.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Ds_Valerian_Bloom_V1.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Ds_Valerian_Bloom_V2.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Ds_Valerian_Seed_V0.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Ds_Valerian_Seed_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Ds_Valerian_Seed_V2.fbx'
+export finished in 0.0039 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_E_Feverfew_Sprout_V0.fbx'
+export finished in 0.0042 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_E_Feverfew_Sprout_V1.fbx'
+export finished in 0.0037 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_E_Feverfew_Sprout_V2.fbx'
+export finished in 0.0037 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_E_Feverfew_Bloom_V0.fbx'
+export finished in 0.0036 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_E_Feverfew_Bloom_V1.fbx'
+export finished in 0.0048 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_E_Feverfew_Bloom_V2.fbx'
+export finished in 0.0047 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_E_Feverfew_Seed_V0.fbx'
+export finished in 0.0065 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_E_Feverfew_Seed_V1.fbx'
+export finished in 0.0049 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_E_Feverfew_Seed_V2.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_F_Mint_Sprout_V0.fbx'
+export finished in 0.0037 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_F_Mint_Sprout_V1.fbx'
+export finished in 0.0051 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_F_Mint_Sprout_V2.fbx'
+export finished in 0.0048 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_F_Mint_Bloom_V0.fbx'
+export finished in 0.0054 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_F_Mint_Bloom_V1.fbx'
+export finished in 0.0032 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_F_Mint_Bloom_V2.fbx'
+export finished in 0.0047 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_F_Mint_Seed_V0.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_F_Mint_Seed_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_F_Mint_Seed_V2.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Fs_Elderflower_Sprout_V0.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Fs_Elderflower_Sprout_V1.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Fs_Elderflower_Sprout_V2.fbx'
+export finished in 0.0053 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Fs_Elderflower_Bloom_V0.fbx'
+export finished in 0.0062 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Fs_Elderflower_Bloom_V1.fbx'
+export finished in 0.0071 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Fs_Elderflower_Bloom_V2.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Fs_Elderflower_Seed_V0.fbx'
+export finished in 0.0042 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Fs_Elderflower_Seed_V1.fbx'
+export finished in 0.0102 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Fs_Elderflower_Seed_V2.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_G_Sage_Sprout_V0.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_G_Sage_Sprout_V1.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_G_Sage_Sprout_V2.fbx'
+export finished in 0.0080 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_G_Sage_Bloom_V0.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_G_Sage_Bloom_V1.fbx'
+export finished in 0.0061 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_G_Sage_Bloom_V2.fbx'
+export finished in 0.0058 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_G_Sage_Seed_V0.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_G_Sage_Seed_V1.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_G_Sage_Seed_V2.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Gs_Comfrey_Sprout_V0.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Gs_Comfrey_Sprout_V1.fbx'
+export finished in 0.0055 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Gs_Comfrey_Sprout_V2.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Gs_Comfrey_Bloom_V0.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Gs_Comfrey_Bloom_V1.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Gs_Comfrey_Bloom_V2.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Gs_Comfrey_Seed_V0.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Gs_Comfrey_Seed_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_Gs_Comfrey_Seed_V2.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_A_Willow_Sprout_V0.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_A_Willow_Sprout_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_A_Willow_Sprout_V2.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_A_Willow_Bloom_V0.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_A_Willow_Bloom_V1.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_A_Willow_Bloom_V2.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_A_Willow_Seed_V0.fbx'
+export finished in 0.0056 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_A_Willow_Seed_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_A_Willow_Seed_V2.fbx'
+export finished in 0.0059 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_As_Hypericum_Sprout_V0.fbx'
+export finished in 0.0047 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_As_Hypericum_Sprout_V1.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_As_Hypericum_Sprout_V2.fbx'
+export finished in 0.0044 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_As_Hypericum_Bloom_V0.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_As_Hypericum_Bloom_V1.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_As_Hypericum_Bloom_V2.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_As_Hypericum_Seed_V0.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_As_Hypericum_Seed_V1.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_As_Hypericum_Seed_V2.fbx'
+export finished in 0.0030 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_B_Nettle_Sprout_V0.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_B_Nettle_Sprout_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_B_Nettle_Sprout_V2.fbx'
+export finished in 0.0033 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_B_Nettle_Bloom_V0.fbx'
+export finished in 0.0043 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_B_Nettle_Bloom_V1.fbx'
+export finished in 0.0040 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_B_Nettle_Bloom_V2.fbx'
+export finished in 0.0045 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_B_Nettle_Seed_V0.fbx'
+export finished in 0.0059 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_B_Nettle_Seed_V1.fbx'
+export finished in 0.0050 sec.
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Herb_B_Nettle_Seed_V2.fbx'
+export finished in 0.0050 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V00.fbx'
+export finished in 0.0045 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V01.fbx'
+export finished in 0.0045 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V02.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V03.fbx'
+export finished in 0.0035 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V04.fbx'
+export finished in 0.0030 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V05.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V06.fbx'
+export finished in 0.0030 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V07.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V08.fbx'
+export finished in 0.0030 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V09.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V10.fbx'
+export finished in 0.0045 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V11.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V12.fbx'
+export finished in 0.0040 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V13.fbx'
+export finished in 0.0035 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V14.fbx'
+export finished in 0.0035 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V15.fbx'
+export finished in 0.0038 sec.
+Warning: No mesh data to join
+
+FBX export starting... 'C:\\Users\\730ri\\projects\\bot-team\\art\\prometheus_island\\fbx\\Water_StreamSeg_V16.fbx'
+export finished in 0.0050 sec.
+BUILT 0 125
+Blender 4.3.1 (hash 33d812126174 built 2024-12-10 10:08:19)
+
+Blender quit

@@ -62,7 +62,7 @@ def main(argv):
                 "        yield '%%s %%s' %% (s, aid)\n"
                 "    return 'done'\n") % ([(a, g, h) for a, g, h in plan], root)
         r = wire.call(wire.UNREAL, "daedalus.steps", code=code, label="import_cast", timeout=max(120, 15 * len(plan)))
-        res = r.get("result") or r
+        res = r   # wire.call returns the command result: {steps, yielded, result, error, seconds}
         for line in res.get("yielded", []):
             status = line.split()[0]
             counts[status if status in counts else "failed"] += 1
