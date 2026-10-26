@@ -4,15 +4,21 @@ Supply validated production-data.json files and a team-maintained receipt ledger
 Receipts: [{"id": "...", "sha256": "...", "stage": "Imported|Play proven",
             "owner": "...", "evidence": "..."}].
 Evidence is a reference to inspect, not automatically verified gameplay proof.
+
+Optional --previous catalog.json compares full export SHA256 declarations with
+an earlier validated catalog. Its delta names added/changed/removed/unchanged
+IDs; absent IDs are not a deletion request and the comparison dispatches nothing.
 """
 import argparse
 import json
 from pathlib import Path
+if __package__:
+    from .asset_catalog_delta import compare_catalogs
+else:
+    from asset_catalog_delta import compare_catalogs
 
 
-def report(batches, receipts, threshold=32):
-    if threshold < 1:
-        raise ValueError("Backlog threshold must be positive")
+def _catalog(batches):
     assets = {}
     for batch in batches:
         for asset in batch:
@@ -25,6 +31,13 @@ def report(batches, receipts, threshold=32):
             if asset.get('export') != 'Validated':
                 raise ValueError(f"Export validation missing: {key}")
             assets[key] = asset
+    return assets
+
+
+def report(batches, receipts, threshold=32, previous_batches=None):
+    if threshold < 1:
+        raise ValueError("Backlog threshold must be positive")
+    assets = _catalog(batches)
     stages = {key: 'Exported' for key in assets}
     evidence = {}
     ranks = {'Exported': 0, 'Imported': 1, 'Play proven': 2}
@@ -43,7 +56,7 @@ def report(batches, receipts, threshold=32):
             stages[key] = stage
             evidence[key] = receipt
     waiting = sorted(k for k, stage in stages.items() if stage == 'Exported')
-    return {
+    result = {
         'validated_exports': len(assets),
         'import_receipts': sum(ranks[s] >= 1 for s in stages.values()),
         'play_proof_receipts': sum(s == 'Play proven' for s in stages.values()),
@@ -56,6 +69,12 @@ def report(batches, receipts, threshold=32):
         'actual_time_share': None,
         'receipts_require_human_review': list(evidence.values()),
     }
+    if previous_batches is not None:
+        previous = _catalog(previous_batches)
+        result['export_delta'] = compare_catalogs(
+            {key: row['sha256'] for key, row in previous.items()},
+            {key: row['sha256'] for key, row in assets.items()})
+    return result
 
 
 def main():
@@ -63,10 +82,14 @@ def main():
     parser.add_argument('batches', nargs='+', type=Path)
     parser.add_argument('--receipts', type=Path)
     parser.add_argument('--threshold', type=int, default=32)
+    parser.add_argument('--previous', action='append', type=Path,
+                        help='Earlier validated export catalog; repeat for multiple batches')
     args = parser.parse_args()
     batches = [json.loads(p.read_text(encoding='utf8')) for p in args.batches]
     receipts = json.loads(args.receipts.read_text(encoding='utf8')) if args.receipts else []
-    print(json.dumps(report(batches, receipts, args.threshold), indent=2))
+    previous = ([json.loads(p.read_text(encoding='utf8')) for p in args.previous]
+                if args.previous is not None else None)
+    print(json.dumps(report(batches, receipts, args.threshold, previous), indent=2))
 
 
 if __name__ == '__main__':
