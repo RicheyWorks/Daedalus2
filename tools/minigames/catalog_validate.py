@@ -22,10 +22,7 @@ SLOTS_HDR = ROOT / "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/Deskt
 
 # Games whose save slot is written but held for the batched Unreal rebuild. Remove the entry
 # once the slot is on main; the validator fails if a pending game already has a slot.
-SAVE_SLOT_PENDING = {
-    "gloam_latch": "PR 492 (held for rebuild 5)",
-    "reedbeat": "PR 492 (held for rebuild 5)",
-}
+SAVE_SLOT_PENDING = {}
 
 # Matched as whole words, case-insensitive, with spaces/hyphens/underscores between parts optional.
 TRADEMARKS = [
