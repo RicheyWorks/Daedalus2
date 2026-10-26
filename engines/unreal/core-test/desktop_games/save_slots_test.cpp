@@ -42,7 +42,7 @@ int main() {
     }
     Check(std::string(SaveFileFor("minesweeper"))=="minesweeper.dgs" && SupportsManualSave("minesweeper"),"minesweeper unchanged: manual, minesweeper.dgs");
     Check(std::string(SaveFileFor("star_shooter"))=="star_shooter.dgs" && !SupportsManualSave("star_shooter"),"star unchanged: source menu only, star_shooter.dgs");
-    for(const char* Id:{"dungeon","asteroids","sega_shooter","shadow_ninja","dodge_ball","contra","zelda","","nope"}) {
+    for(const char* Id:{"asteroids","sega_shooter","shadow_ninja","dodge_ball","contra","","nope"}) {
         Check(!FindSaveSlot(Id) && !SupportsManualSave(Id),std::string(Id)+": no slot, no manual save");
         Check(std::string(ResumeGameId(Id))=="star_shooter" && std::string(SaveFileFor(Id))=="star_shooter.dgs",std::string(Id)+": keeps legacy Star fallback");
     }
