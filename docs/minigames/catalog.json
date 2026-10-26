@@ -38,6 +38,7 @@
         "desktop_pong_target_rally"
       ],
       "capabilities": [
+        "fresh_pad_replay",
         "options"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
@@ -90,6 +91,7 @@
         "desktop_sports"
       ],
       "capabilities": [
+        "fresh_pad_replay",
         "options"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
@@ -109,6 +111,7 @@
         "desktop_pacman_tunnel"
       ],
       "capabilities": [
+        "fresh_pad_replay",
         "options"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"

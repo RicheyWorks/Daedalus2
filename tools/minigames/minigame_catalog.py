@@ -105,6 +105,24 @@ def parse_capabilities():
     return caps
 
 
+def parse_verified(cmake):
+    """Capabilities proven by registered portable tests.
+
+    A test file may declare `// catalog-capability: <cap>: <id> <id> ...` for
+    behavior a game provides inside Step instead of through an override.
+    """
+    verified, errors = {}, []
+    for src in sorted(cmake):
+        text = (TESTS / src).read_text(encoding="utf-8")
+        for cap, ids in re.findall(r"//\s*catalog-capability:\s*(\w+):\s*([\w ]+)", text):
+            if cap not in CAPABILITIES:
+                errors.append(f"{src} declares unknown capability '{cap}'")
+                continue
+            for gid in ids.split():
+                verified.setdefault(gid, set()).add(cap)
+    return verified, errors
+
+
 def parse_registry(text):
     entries = re.findall(r'\{"([a-z_]+)","([^"]+)","([^"]*)"\}', text)
     factories = dict(re.findall(r'if\(Id=="([a-z_]+)"\) return std::make_unique<(\w+)>', text))
@@ -130,8 +148,10 @@ def build():
     factories = set(factory_map)
     capmap = parse_capabilities()
     cmake = parse_cmake((TESTS / "CMakeLists.txt").read_text(encoding="utf-8"))
-    errors = []
+    verified, errors = parse_verified(cmake)
     ids = [e[0] for e in entries]
+    for gid in sorted(set(verified) - set(ids)):
+        errors.append(f"catalog-capability names unknown game '{gid}'")
     for gid in sorted(set(ids) - factories):
         errors.append(f"listed game '{gid}' has no factory")
     for gid, cls in sorted(factory_map.items()):
@@ -154,7 +174,7 @@ def build():
             "host": "ADaedalusDesktopArcade",
             "start": f'StartGame("{gid}", Seed)',
             "portable_tests": tests,
-            "capabilities": capmap.get(factory_map.get(gid, ""), []),
+            "capabilities": sorted(set(capmap.get(factory_map.get(gid, ""), [])) | verified.get(gid, set())),
             "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
         })
     java = parse_java(errors)
@@ -177,8 +197,8 @@ def build():
     for g in games:
         md.append(f"| `{g['id']}` | {g['title']} | {len(g['portable_tests'])} |")
     md += ["", "## Capabilities", "",
-           "Read from each core's overrides. A blank cell is a parity gap, not necessarily a bug:",
-           "some games handle replay or pause inside `Step`.", "",
+           "Read from each core's overrides, plus behavior proven by a portable test that declares",
+           "`// catalog-capability: <cap>: <ids>` (for games that handle it inside `Step`). A blank cell is a gap.", "",
            "| id | " + " | ".join(CAPABILITIES) + " |", "|---|" + "---|" * len(CAPABILITIES)]
     for g in games:
         md.append(f"| `{g['id']}` | " + " | ".join("yes" if c in g["capabilities"] else "" for c in CAPABILITIES) + " |")

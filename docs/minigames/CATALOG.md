@@ -23,17 +23,17 @@ batched rebuild under the editor custodian.
 
 ## Capabilities
 
-Read from each core's overrides. A blank cell is a parity gap, not necessarily a bug:
-some games handle replay or pause inside `Step`.
+Read from each core's overrides, plus behavior proven by a portable test that declares
+`// catalog-capability: <cap>: <ids>` (for games that handle it inside `Step`). A blank cell is a gap.
 
 | id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | save_restore |
 |---|---|---|---|---|---|---|---|
 | `minesweeper` | yes |  | yes |  | yes |  | yes |
-| `pong` | yes |  |  |  |  |  |  |
+| `pong` | yes |  | yes |  |  |  |  |
 | `dungeon` | yes |  |  |  |  |  |  |
 | `asteroids` | yes |  | yes | yes |  |  |  |
-| `football` | yes |  |  |  |  |  |  |
-| `pacman` | yes |  |  |  |  |  |  |
+| `football` | yes |  | yes |  |  |  |  |
+| `pacman` | yes |  | yes |  |  |  |  |
 | `sega_shooter` | yes |  | yes | yes |  |  |  |
 | `shadow_ninja` | yes |  | yes | yes |  |  |  |
 | `star_shooter` | yes |  |  |  |  | yes | yes |
