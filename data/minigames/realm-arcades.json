@@ -1,0 +1,54 @@
+{
+  "schema": "daedalus.minigames.realm_arcades/v1",
+  "about": "Which realms host arcade cabinets. Patterns match catalog ids (fnmatch). Edit, then run tools/minigames/realm_cabinets.py. 'options' maps a placed desktop game to its SetGameOption value.",
+  "defaults": {
+    "anchor": "arcade_plaza",
+    "layout": "row",
+    "spacing_m": 2.5,
+    "java": true
+  },
+  "realms": [
+    {
+      "realm": "island_hephaestus",
+      "layout": "grid",
+      "columns": 4,
+      "include": [
+        "*_shooter",
+        "driftstone",
+        "ironwake",
+        "emberstep",
+        "lanternwild"
+      ],
+      "java": false,
+      "options": {
+        "lanternwild": 1
+      }
+    },
+    {
+      "realm": "island_oddsreaper",
+      "layout": "arc",
+      "include": [
+        "blackjack",
+        "sudoku",
+        "beacon_sweep"
+      ]
+    },
+    {
+      "realm": "island_prometheus",
+      "layout": "row",
+      "include": [
+        "twinwake",
+        "football",
+        "dodge_ball"
+      ]
+    },
+    {
+      "realm": "spawn_overlook",
+      "layout": "grid",
+      "columns": 5,
+      "include": [
+        "*"
+      ]
+    }
+  ]
+}

@@ -3,9 +3,11 @@
 package com.daedalus.server.service;
 
 import com.daedalus.api.dto.Hotspot;
+import com.daedalus.engine.Braider;
 import com.daedalus.engine.MazeGrid;
 import com.daedalus.engine.WeightedMazeGrid;
 import com.daedalus.engine.MazeGenerator;
+import com.daedalus.engine.UnknownAlgorithmException;
 import com.daedalus.engine.generators.GeneratorRegistry;
 import com.daedalus.model.MazeMetadata;
 import com.daedalus.model.MazeStats;
@@ -34,10 +36,43 @@ import java.util.UUID;
 @Service
 public class MazeGenerationService {
 
+    /** Thrown when {@code cache.max-size} mazes already exist — answered 409. */
+    public static class CapacityExceededException extends RuntimeException {
+        CapacityExceededException(long cap) {
+            super("already holding " + cap + " cached mazes — retry after one idles out");
+        }
+    }
+
+    /**
+     * A registered generator returned {@code null}. That is a plugin contract
+     * break, not a caller typo — 500 with a problem body, not an untyped stack.
+     */
+    public static class NullGridException extends IllegalStateException {
+        private final String generatorId;
+
+        public NullGridException(String generatorId) {
+            super("generator returned null grid: " + generatorId);
+            this.generatorId = generatorId;
+        }
+
+        public String generatorId() {
+            return generatorId;
+        }
+    }
+
     private final GeneratorRegistry registry;
     private final ApplicationEventPublisher events;
     private final MeterRegistry meters;
+    private final long cacheMaxSize;
     private final Cache<UUID, Cached> cache;
+    /**
+     * Serialises first-insert against the cap. Caffeine {@code put} at
+     * {@code maximumSize} evicts LRU, so an unrelated generate used to 404 a
+     * live session or walk whose maze was the victim. Living, traffic, session,
+     * and walk refuse at cap under this lock; idle TTL still evicts abandoned
+     * mazes. Daily, campaign, and permalink share {@link #generate} / {@link #adopt}.
+     */
+    private final Object admission = new Object();
 
     /** Default bounds — see the four-arg constructor. */
     public MazeGenerationService(GeneratorRegistry registry,
@@ -51,9 +86,10 @@ public class MazeGenerationService {
      *        was previously an unbounded {@code ConcurrentHashMap} — at the base rate limit
      *        (30 generations/minute/caller) a long-running instance accumulated grids without
      *        end, the same slow-leak shape the rate-limiter buckets had before their Caffeine
-     *        bound (BACKLOG, 2026-07-19). Eviction is safe by construction: {@code find}
-     *        answering {@code null} is already the API's "unknown maze" path (404), and the
-     *        idle TTL comfortably outlives any session actually being played. Bounds are
+     *        bound (BACKLOG, 2026-07-19). Generating past the size bound refuses
+     *        ({@link CapacityExceededException}) instead of LRU-evicting a maze a live
+     *        session or walk still needs. Idle TTL still evicts abandoned mazes — {@code find}
+     *        answering {@code null} is the API's existing "unknown maze" path (404). Bounds are
      *        configurable via {@code daedalus.maze.cache.*}.
      */
     @Autowired
@@ -84,6 +120,7 @@ public class MazeGenerationService {
         this.registry = registry;
         this.events = events;
         this.meters = meters;
+        this.cacheMaxSize = cacheMaxSize;
         this.cache = Caffeine.newBuilder()
                 .maximumSize(cacheMaxSize)
                 .expireAfterAccess(cacheTtl)
@@ -91,12 +128,21 @@ public class MazeGenerationService {
                 .build();
     }
 
-    /** @param hotspots the weighted cells applied to this maze, or {@code null} for uniform cost */
+    /**
+     * @param hotspots the weighted cells applied to this maze, or {@code null} for uniform cost
+     * @param braid    generate-time opening factor, or {@code null} when none was applied
+     */
     public record Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats,
-                         java.util.List<Hotspot> hotspots) {
-        /** Uniform-cost shape, kept for source compatibility. */
+                         java.util.List<Hotspot> hotspots, Double braid) {
+        /** Uniform-cost, unbraided — the pre-hotspot contract. */
         public Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats) {
-            this(metadata, grid, stats, null);
+            this(metadata, grid, stats, null, null);
+        }
+
+        /** Weighted, unbraided — the pre-braid-echo contract. */
+        public Cached(MazeMetadata metadata, MazeGrid grid, MazeStats stats,
+                      java.util.List<Hotspot> hotspots) {
+            this(metadata, grid, stats, hotspots, null);
         }
     }
 
@@ -115,9 +161,21 @@ public class MazeGenerationService {
      *                 offers a choice. This is what fired the weighted-shading trigger
      *                 recorded in ADR-004.
      */
-    @CircuitBreaker(name = "generation", fallbackMethod = "fallback")
     public Cached generate(String generatorId, int rows, int cols, long seed,
                            java.util.List<Hotspot> hotspots) {
+        return generate(generatorId, rows, cols, seed, hotspots, 0.0);
+    }
+
+    /**
+     * @param braid fraction of dead ends to open after generation, clamped to
+     *              {@code [0, 1]}. Zero is a no-op so existing callers keep a
+     *              tree. Same {@code (grid, factor, seed)} as the tournament,
+     *              then extremes are placed on the braided graph — otherwise
+     *              start and goal would still be the tree's diameter.
+     */
+    @CircuitBreaker(name = "generation", fallbackMethod = "fallback")
+    public Cached generate(String generatorId, int rows, int cols, long seed,
+                           java.util.List<Hotspot> hotspots, double braid) {
         MazeGenerator gen = registry.require(generatorId);
         Timer timer = meters.timer("daedalus.generate", "algo", generatorId);
         MazeStats stats = new MazeStats();
@@ -125,7 +183,7 @@ public class MazeGenerationService {
         if (grid == null) {
             // Timer.record(Supplier) is @Nullable; a generator returning null
             // is a contract violation worth failing loudly on.
-            throw new IllegalStateException("generator returned null grid: " + generatorId);
+            throw new NullGridException(generatorId);
         }
 
         // Start/goal at the maze's two farthest-apart carved cells — never at fixed corners.
@@ -149,12 +207,16 @@ public class MazeGenerationService {
             grid = weighted;
             applied = java.util.List.copyOf(hotspots);
         }
+        if (braid > 0) {
+            Braider.braid(grid, braid, seed);
+        }
         MazeMetrics.placeStartAndGoalAtExtremes(grid);
         MazeMetadata meta = MazeMetadata.of(rows, cols, seed, generatorId,
                 grid.start(), grid.goal());
 
-        Cached cached = new Cached(meta, grid, stats, applied);
-        cache.put(meta.id(), cached);
+        Double recordedBraid = braid > 0 ? braid : null;
+        Cached cached = new Cached(meta, grid, stats, applied, recordedBraid);
+        admit(cached);
         events.publishEvent(new MazeGeneratedEvent(this, meta, grid, stats));
         return cached;
     }
@@ -167,13 +229,49 @@ public class MazeGenerationService {
      * so an adopted maze is indistinguishable from a generated one downstream.
      */
     public Cached adopt(MazeGrid grid, String generatorId, long seed) {
+        return adopt(grid, generatorId, seed, null);
+    }
+
+    /**
+     * @param hotspots parent weights to keep on an adopted child; {@code null} for uniform cost
+     */
+    public Cached adopt(MazeGrid grid, String generatorId, long seed,
+                        java.util.List<Hotspot> hotspots) {
         MazeMetrics.placeStartAndGoalAtExtremes(grid);
+        java.util.List<Hotspot> applied = null;
+        if (hotspots != null && !hotspots.isEmpty()) {
+            WeightedMazeGrid weighted = new WeightedMazeGrid(grid);
+            for (Hotspot h : hotspots) {
+                if (h.row() >= grid.rows() || h.col() >= grid.cols()) {
+                    throw new IllegalArgumentException("hotspot (" + h.row() + "," + h.col()
+                            + ") is outside a " + grid.rows() + "x" + grid.cols() + " maze");
+                }
+                weighted.setWeight(new Point(h.row(), h.col()), h.cost());
+            }
+            grid = weighted;
+            applied = java.util.List.copyOf(hotspots);
+        }
         MazeMetadata meta = MazeMetadata.of(grid.rows(), grid.cols(), seed, generatorId,
                 grid.start(), grid.goal());
-        Cached cached = new Cached(meta, grid, new MazeStats(), null);
-        cache.put(meta.id(), cached);
+        Cached cached = new Cached(meta, grid, new MazeStats(), applied);
+        admit(cached);
         events.publishEvent(new MazeGeneratedEvent(this, meta, grid, cached.stats()));
         return cached;
+    }
+
+    /**
+     * First insert against the size bound. Caffeine {@code put} at {@code maximumSize}
+     * evicts LRU, which is how a generate nobody is playing used to 404 a mid-hunt
+     * session or walk. Idle expiry still drops abandoned mazes.
+     */
+    private void admit(Cached cached) {
+        synchronized (admission) {
+            cache.cleanUp();
+            if (cache.asMap().size() >= cacheMaxSize) {
+                throw new CapacityExceededException(cacheMaxSize);
+            }
+            cache.put(cached.metadata().id(), cached);
+        }
     }
 
     public Cached find(UUID id) { return cache.getIfPresent(id); }
@@ -194,13 +292,20 @@ public class MazeGenerationService {
 
     @SuppressWarnings("unused")
     private Cached fallback(String generatorId, int rows, int cols, long seed,
-                            java.util.List<Hotspot> hotspots, Throwable t) {
+                            java.util.List<Hotspot> hotspots, double braid, Throwable t) {
         // A caller error is not a generator failure — rethrow so it answers 400, not a
-        // silently different maze.
+        // silently different maze. Capacity is the same: serving a binary-tree maze
+        // because the cache is full would 200 a generate that must 409.
+        if (t instanceof CapacityExceededException cap) {
+            throw cap;
+        }
         if (t instanceof IllegalArgumentException iae) {
             throw iae;
         }
+        if (t instanceof UnknownAlgorithmException unknown) {
+            throw unknown;
+        }
         // Minimal recovery: deterministic baseline using BinaryTree (always succeeds).
-        return generate("binary-tree", rows, cols, seed, hotspots);
+        return generate("binary-tree", rows, cols, seed, hotspots, braid);
     }
 }

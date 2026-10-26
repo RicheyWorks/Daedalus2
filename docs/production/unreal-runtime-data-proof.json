@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "sourceHead": "19ce237002b343bee2dd8ca75f1e32a8b38e6131",
+  "trackedPluginFiles": 171,
+  "targetConfiguration": "Shipping",
+  "targetPlatform": "Win64",
+  "declarations": [
+    {
+      "Path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\runtime-data-stage-host\\Plugins\\DaedalusLink\\Content\\Inventory\\*.dic",
+      "Type": "UFS"
+    },
+    {
+      "Path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\runtime-data-stage-host\\Plugins\\DaedalusLink\\Content\\Casts\\*.dcs",
+      "Type": "UFS"
+    },
+    {
+      "Path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\runtime-data-stage-host\\Plugins\\DaedalusLink\\Content\\Realm\\*.drr",
+      "Type": "UFS"
+    }
+  ],
+  "files": {
+    "Content/Casts/bricks.dcs": "787b2b77bc1ff6ed8458973612c6341b99e868e49a4b326dff1b08cad6564e03",
+    "Content/Casts/gallery-city.dcs": "cc8284aea2ecf29baaf5fe7a5264b5f0b1650b33cd11d8e210a07391efcfccaf",
+    "Content/Casts/labyrinth.dcs": "01ea21977bd8dcfe299273096d57d4edba4821b378fbd619a8c888b1ca4468e3",
+    "Content/Casts/parcels.dcs": "2787b33e7b4f166576724c463bf80fcfc31cb4f83add6c282cd291324ea2ec6d",
+    "Content/Inventory/bricks.dic": "b0b3d5ca191c5ea1e214ae37270e1abc067536fb9e28fe7e3015ac29ff0dd3cc",
+    "Content/Inventory/gallery-city.dic": "548b43ac43c1f463172bfefccafae3a5e6191a165117736f4485cc5f65238654",
+    "Content/Inventory/labyrinth.dic": "2362c6c058a67735c0a068d0d8a41f129bc6a86500c8b3c5a1c04ba653e2c15d",
+    "Content/Inventory/parcels.dic": "8162cb87ef1338f4a3d0a09e2b4769326cbbfecda9eec089af2e21737658fad4",
+    "Content/Inventory/world-zero.dic": "0c4e2c72baf68b57cb74e2bdd10b39b94e423167ffcdbf902157d152e5f675ec",
+    "Content/Realm/realm-7.drr": "cb584995ecf43c7029a8b5f7ed4d41ca896c5dd09c57a8e54522b462cb698d44"
+  },
+  "scope": "Actual UBT Shipping target declarations and exact snapshot hashes; not a cook, staged archive or game launch",
+  "packagedGameLaunchVerified": false
+}

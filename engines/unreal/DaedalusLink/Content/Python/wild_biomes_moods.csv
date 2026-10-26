@@ -1,0 +1,7 @@
+---,SunColor,SunIntensity,SkyColor,SkyLightIntensity,FogColor,FogMultiplier,DefaultWeather,FogHeightFalloff,FogStartDistance
+young_meadow,"(R=1.0,G=0.96,B=0.86,A=1.0)",10.0,"(R=0.95,G=1.0,B=1.0,A=1.0)",1.1,"(R=0.55,G=0.68,B=0.85,A=1.0)",0.8,Clear,0.2,2000
+bramble_scrub,"(R=1.0,G=0.88,B=0.7,A=1.0)",11.0,"(R=1.0,G=0.95,B=0.85,A=1.0)",0.9,"(R=0.7,G=0.62,B=0.5,A=1.0)",1.2,Clear,0.15,1000
+pine_stand,"(R=0.92,G=0.95,B=1.0,A=1.0)",8.0,"(R=0.8,G=0.92,B=1.0,A=1.0)",0.9,"(R=0.45,G=0.55,B=0.62,A=1.0)",1.6,Overcast,0.35,0
+old_growth_oak,"(R=1.0,G=0.9,B=0.72,A=1.0)",7.0,"(R=0.85,G=1.0,B=0.8,A=1.0)",0.7,"(R=0.4,G=0.5,B=0.35,A=1.0)",2.0,Fog,0.5,0
+willow_riverbank,"(R=1.0,G=0.97,B=0.92,A=1.0)",9.0,"(R=0.85,G=0.95,B=1.0,A=1.0)",1.0,"(R=0.6,G=0.72,B=0.8,A=1.0)",2.5,Rain,0.8,0
+oddsreaper_storm,"(R=0.62,G=0.6,B=0.95,A=1.0)",6.0,"(R=0.55,G=0.6,B=0.9,A=1.0)",0.6,"(R=0.08,G=0.3,B=0.2,A=1.0)",2.2,Storm,0.4,0

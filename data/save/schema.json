@@ -1,0 +1,36 @@
+{
+ "schema": "daedalus.save/v0",
+ "board": 10,
+ "format": "json, one file per slot, gzip optional",
+ "path": "Saved/SaveGames/Daedalus/slot_{n}.json",
+ "autosave_s": 300,
+ "slots": 5,
+ "root": {
+  "version": "int",
+  "saved_at": "iso8601",
+  "world": {
+   "island_seed": "string (token id -> seed, #20)",
+   "time_of_day": "float 0-24",
+   "day": "int"
+  },
+  "player": {
+   "transform": "[x,y,z,yaw]",
+   "stats": "see data/survival/stats.json keys",
+   "inventory": "[{item,count,slot,durability?}]",
+   "hotbar": "[slot]",
+   "quests": "{quest_id:{state,step,counters}}",
+   "unlocked_recipes": "[recipe_id]"
+  },
+  "world_state": {
+   "harvested_nodes": "[{node_id,respawn_at}]",
+   "chests": "[{id,transform,inventory}]",
+   "placed": "[{class,transform}]"
+  },
+  "pets": "[{id,genome,name,care:{hunger,affection},transform}]",
+  "ark": {
+   "transform": "[x,y,z,yaw]",
+   "latched_islands": "[seed]"
+  }
+ },
+ "migration": "bump version; loader fills missing keys from defaults"
+}

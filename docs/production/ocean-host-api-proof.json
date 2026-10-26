@@ -1,0 +1,47 @@
+{
+  "source_head": "0196a8b44eb4af4237720454bba250f03f28616e",
+  "server_tests": 14,
+  "per_key_429": true,
+  "public_hosting_verified": false,
+  "edited_chunk_after_application_restart": true,
+  "reactor_seconds": 52.029,
+  "invalid_jwt_401": true,
+  "unreal_client_verified": false,
+  "ocean_core_tests": 18,
+  "world_hub_registered": false,
+  "corrupt_storage_503_without_path_disclosure": true,
+  "test_suites": [
+    {
+      "name": "com.daedalus.server.service.OceanHostTest",
+      "seconds": 0.059,
+      "errors": 0,
+      "failures": 0,
+      "tests": 3
+    },
+    {
+      "name": "com.daedalus.server.service.OceanHostHttpRestartTest",
+      "seconds": 6.652,
+      "errors": 0,
+      "failures": 0,
+      "tests": 1
+    },
+    {
+      "name": "com.daedalus.server.config.ProdAuthPostureTest",
+      "seconds": 16.239,
+      "errors": 0,
+      "failures": 0,
+      "tests": 4
+    },
+    {
+      "name": "com.daedalus.server.web.ErrorContractTest",
+      "seconds": 7.839,
+      "errors": 0,
+      "failures": 0,
+      "tests": 6
+    }
+  ],
+  "real_loopback_http": true,
+  "production_jwt_filter": true,
+  "bounded_sector_404": true,
+  "unauthenticated_401": true
+}

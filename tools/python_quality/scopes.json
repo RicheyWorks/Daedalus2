@@ -1,0 +1,15 @@
+{
+  "format": "daedalus-python-quality-scopes",
+  "version": 1,
+  "scopes": [
+    {"scope": "team_handoff", "path": "tools/team_handoff"},
+    {"scope": "world_package", "path": "tools/world_package"}
+  ],
+  "shared_paths": [
+    "tools/python_quality",
+    ".github/workflows/python-source-quality.yml",
+    ".github/workflows/world-census-static.yml",
+    ".github/workflows/team-handoff-offline.yml",
+    ".github/workflows/world-package-preflight.yml"
+  ]
+}

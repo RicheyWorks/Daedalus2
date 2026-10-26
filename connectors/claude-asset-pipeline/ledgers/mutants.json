@@ -1,0 +1,133 @@
+{
+  "when": "2026-10-12T15:51:26",
+  "e2e": false,
+  "killed": 18,
+  "total": 21,
+  "mutants": [
+    {
+      "mutant": "triangle check always passes",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  export lost triangles  want ['triangles: Blender = file'], got []"
+    },
+    {
+      "mutant": "Unreal triangle check always passes",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  Unreal lost a mesh  want ['every file mesh became an Unreal static mesh', 'triangles: file = Unreal, mesh by mesh', 'material slots: file = Unreal, mesh by mesh', 'sizes: file (m) = Unreal (cm)'], got ['every file mesh became an Unreal static mesh', 'material slots: file = Unreal, mesh by mesh', 'sizes: file (m) = Unreal (cm)']"
+    },
+    {
+      "mutant": "an empty shipment passes",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  nothing shipped at all fails, it doesn't pass vacuously  want ['every Blender object reached the file', 'every file mesh became an Unreal static mesh'], got ['every file mesh became an Unreal static mesh']"
+    },
+    {
+      "mutant": "units: centimetres not converted",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  a good shipment passes every check  want [], got ['sizes: file (m) = Unreal (cm)']"
+    },
+    {
+      "mutant": "size tolerance far too loose",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  export changed a size  want ['sizes: Blender = file'], got []"
+    },
+    {
+      "mutant": "slots: bare-mesh default slot ignored",
+      "state": "inconclusive",
+      "why": "anchor matches 0 times"
+    },
+    {
+      "mutant": "materials check skipped",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  export lost a material  want ['materials: Blender = file'], got []"
+    },
+    {
+      "mutant": "material assets never counted",
+      "state": "killed",
+      "by": "judge_test.py",
+      "why": "FAIL  Unreal made no materials  want ['Unreal made a material for each one used'], got []"
+    },
+    {
+      "mutant": "glb: non-indexed prims count vertices as triangles",
+      "state": "killed",
+      "by": "glb_test.py",
+      "why": "FAIL  indexed primitive: indices / 3, plus a non-indexed one: positions / 3  {'name': 'Indexed', 'triangles': 21, 'materials': ['Brass', 'Glow'], 'extent': [2, 3, 1.0], 'dims': [3, 2, 1.0]}"
+    },
+    {
+      "mutant": "glb: indexed prims miscounted",
+      "state": "killed",
+      "by": "glb_test.py",
+      "why": "FAIL  indexed primitive: indices / 3, plus a non-indexed one: positions / 3  {'name': 'Indexed', 'triangles': 21, 'materials': ['Brass', 'Glow'], 'extent': [2, 3, 1.0], 'dims': [3, 2, 1.0]}"
+    },
+    {
+      "mutant": "export without modifiers",
+      "state": "SURVIVED",
+      "by": null,
+      "why": "every suite stayed green"
+    },
+    {
+      "mutant": "Unreal import not automated (dialog)",
+      "state": "SURVIVED",
+      "by": null,
+      "why": "every suite stayed green"
+    },
+    {
+      "mutant": "artqueue: saved glb ignored, re-exported",
+      "state": "killed",
+      "by": "artqueue_test.py",
+      "why": "FAIL  saved glb: shipped as it is, every node's tris SHIPPED (1200 tris, 0.90 m)"
+    },
+    {
+      "mutant": "artqueue: saved glb wins over a newer .blend",
+      "state": "killed",
+      "by": "artqueue_test.py",
+      "why": "FAIL  blend newer than glb: exported from the .blend ([], ['/tmp/artq-yhd860vg/glb/Tool_Pickaxe.glb'])"
+    },
+    {
+      "mutant": "artqueue: open scene exported with no source",
+      "state": "killed",
+      "by": "artqueue_test.py",
+      "why": "FAIL  no source: REJECTED, says no source SHIPPED (1200 tris, 0.90 m)"
+    },
+    {
+      "mutant": "artqueue: overlapped ship re-exports saved glbs",
+      "state": "killed",
+      "by": "artqueue_test.py",
+      "why": "FAIL  overlapped: glb landed as it is, other exported (['Tool_Pickaxe', 'Prop_Isle'], [])"
+    },
+    {
+      "mutant": "artqueue: saved glb only lands its first node",
+      "state": "killed",
+      "by": "artqueue_test.py",
+      "why": "FAIL  saved glb: shipped as it is, every node's tris REJECTED: every Blender object reached the file (1 objects, 3 mesh nodes)"
+    },
+    {
+      "mutant": "artqueue: saved glbs wait for Blender",
+      "state": "killed",
+      "by": "artqueue_test.py",
+      "why": "FAIL  saved glb, Blender down: still ships READY"
+    },
+    {
+      "mutant": "artqueue: duplicate rows update the oldest",
+      "state": "killed",
+      "by": "artqueue_test.py",
+      "why": "FAIL  duplicate asset: set_row updates the newest row ['SHIPPED (9 tris)', 'TODO', 'DOING (grok)', 'READY']"
+    },
+    {
+      "mutant": "artqueue: zero states dropped from counts",
+      "state": "killed",
+      "by": "artqueue_test.py",
+      "why": "FAIL  counts: zero states still listed (READY 0 style) "
+    },
+    {
+      "mutant": "artqueue: BLOCKED not counted",
+      "state": "killed",
+      "by": "artqueue_test.py",
+      "why": "FAIL  counts: BLOCKED 0 and READY columns shown when none are blocked # Art board status"
+    }
+  ]
+}

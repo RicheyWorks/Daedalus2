@@ -1,0 +1,58 @@
+name: Java arcade adapters
+on:
+  pull_request:
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**JavaArcade*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/**", "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs", "engines/unreal/core-test/java_arcade/**", "docs/java-arcade/**", "tools/minigames/**", "docs/minigames/**", ".github/workflows/java-arcade.yml"]
+  push:
+    branches: [main]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**JavaArcade*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade/**", "engines/unreal/DaedalusLink/Source/DaedalusLink/DaedalusLink.Build.cs", "engines/unreal/core-test/java_arcade/**", "docs/java-arcade/**", "tools/minigames/**", "docs/minigames/**", ".github/workflows/java-arcade.yml"]
+permissions:
+  contents: read
+concurrency:
+  group: java-arcade-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  bridge-policy:
+    name: Java arcade policy (${{ matrix.compiler }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            compiler: gcc
+            cxx: g++
+          - os: ubuntu-latest
+            compiler: clang
+            cxx: clang++
+          - os: windows-latest
+            compiler: msvc
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Configure Linux with sanitizers
+        if: runner.os == 'Linux'
+        run: cmake -S engines/unreal/core-test/java_arcade -B java-arcade-build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DJAVA_ARCADE_SANITIZERS=ON
+      - name: Configure MSVC
+        if: runner.os == 'Windows'
+        run: cmake -S engines/unreal/core-test/java_arcade -B java-arcade-build
+      - name: Minigame catalog (Java cabinets) is current
+        run: python tools/minigames/minigame_catalog.py --check
+      - name: Compile
+        run: cmake --build java-arcade-build --config Debug
+      - name: Verify lifecycle and typed state policy
+        run: ctest --test-dir java-arcade-build -C Debug --output-on-failure
+      - name: Verify source-derived Sudoku fixture policy
+        run: python docs/java-arcade/verify_sudoku_fixtures.py
+      - name: Native source preflight
+        run: >-
+          python tools/unreal_preflight/preflight.py
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Public/JavaArcade
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusJavaArcade.h
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusJavaArcade.cpp
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.h
+          engines/unreal/DaedalusLink/Source/DaedalusLink/Private/SDaedalusJavaArcade.cpp
+# Portable policy and synthetic fixtures do not prove HTTP/WebSocket execution,
+# Java service deployment, Unreal compilation, packaged play or live acceptance.

@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://daedalus.invalid/schemas/world-package-import-plan-v1",
+  "title": "Offline World Package preservation plan and supplied accepted receipt",
+  "description": "Structural validation only. The runtime also verifies destination derivation and receipt identity. A plan never proves native acceptance.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/plan"
+    },
+    {
+      "$ref": "#/$defs/receipt"
+    }
+  ],
+  "$defs": {
+    "plan": {
+      "type": "object",
+      "required": [
+        "format",
+        "version",
+        "action",
+        "world",
+        "source",
+        "destination",
+        "geometry",
+        "assets",
+        "previous_destination_root",
+        "policy",
+        "native_acceptance"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "daedalus-world-import-plan"
+        },
+        "version": {
+          "const": 1
+        },
+        "action": {
+          "enum": [
+            "plan_new",
+            "no_op"
+          ]
+        },
+        "world": {
+          "type": "object",
+          "required": [
+            "id",
+            "revision"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512,
+              "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9223372036854775807
+            }
+          }
+        },
+        "source": {
+          "type": "object",
+          "required": [
+            "format",
+            "version",
+            "package_sha256",
+            "package_bytes"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "format": {
+              "const": "daedalus-world-package"
+            },
+            "version": {
+              "const": 1
+            },
+            "package_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "package_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 67108864
+            }
+          }
+        },
+        "destination": {
+          "type": "object",
+          "required": [
+            "root",
+            "level",
+            "materials",
+            "geometry"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "root": {
+              "type": "string",
+              "pattern": "^/Game/Daedalus/PackageImports/[A-Za-z0-9_]{1,16}_r[0-9]+_[0-9a-f]{64}$"
+            },
+            "level": {
+              "type": "string",
+              "pattern": "^/Game/Daedalus/PackageImports/.+/L_World$"
+            },
+            "materials": {
+              "type": "string",
+              "pattern": "^/Game/Daedalus/PackageImports/.+/Materials$"
+            },
+            "geometry": {
+              "type": "string",
+              "pattern": "^/Game/Daedalus/PackageImports/.+/Geometry/world$"
+            }
+          }
+        },
+        "geometry": {
+          "type": "object",
+          "required": [
+            "file",
+            "chunks",
+            "triangles"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "file": {
+              "const": "world.glb"
+            },
+            "chunks": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9223372036854775807
+            },
+            "triangles": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9223372036854775807
+            }
+          }
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "file",
+              "use",
+              "destination"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512,
+                "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+              },
+              "file": {
+                "type": "string",
+                "pattern": "^assets/.+\\.glb$"
+              },
+              "use": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512,
+                "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+              },
+              "destination": {
+                "type": "string",
+                "pattern": "^/Game/Daedalus/PackageImports/.+/Assets/[A-Za-z0-9_]{1,16}_[0-9a-f]{64}$"
+              }
+            }
+          }
+        },
+        "previous_destination_root": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^/Game/Daedalus/PackageImports/[A-Za-z0-9_]{1,16}_r[0-9]+_[0-9a-f]{64}$"
+            }
+          ]
+        },
+        "policy": {
+          "type": "object",
+          "required": [
+            "replace_existing",
+            "delete_existing",
+            "use_shared_materials",
+            "connect_live",
+            "requires_native_owner_review"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "replace_existing": {
+              "const": false
+            },
+            "delete_existing": {
+              "const": false
+            },
+            "use_shared_materials": {
+              "const": false
+            },
+            "connect_live": {
+              "const": false
+            },
+            "requires_native_owner_review": {
+              "const": true
+            }
+          }
+        },
+        "native_acceptance": {
+          "const": false
+        }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "required": [
+        "format",
+        "version",
+        "status",
+        "world_id",
+        "revision",
+        "package_sha256",
+        "destination_root",
+        "acceptance_reference"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "daedalus-world-import-receipt"
+        },
+        "version": {
+          "const": 1
+        },
+        "status": {
+          "const": "accepted"
+        },
+        "world_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "package_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "destination_root": {
+          "type": "string",
+          "pattern": "^/Game/Daedalus/PackageImports/[A-Za-z0-9_]{1,16}_r[0-9]+_[0-9a-f]{64}$"
+        },
+        "acceptance_reference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+        }
+      }
+    }
+  }
+}

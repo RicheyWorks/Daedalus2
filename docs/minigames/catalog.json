@@ -1,0 +1,385 @@
+{
+  "schema": "daedalus.minigames.catalog/v1",
+  "generated_by": "tools/minigames/minigame_catalog.py",
+  "realm_placement": "Spawn one ADaedalusDesktopArcade cabinet per entry, or one cabinet with a picker; call StartGame(id, seed) on use. Derive the seed from realm id + player for repeatable runs.",
+  "games": [
+    {
+      "id": "beacon_sweep",
+      "title": "Beacon Sweep",
+      "summary": "Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"beacon_sweep\", Seed)",
+      "portable_tests": [
+        "desktop_beacon_sweep",
+        "desktop_beacon_sweep_guidance",
+        "desktop_beacon_sweep_new_puzzle",
+        "desktop_beacon_sweep_pointer",
+        "desktop_beacon_sweep_replay"
+      ],
+      "option_count": 3,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "pointer",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "twinwake",
+      "title": "Twinwake Volley",
+      "summary": "A fast duel across the twinwake court. Up/Down or left stick: paddle",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"twinwake\", Seed)",
+      "portable_tests": [
+        "desktop_twinwake",
+        "desktop_twinwake_practice",
+        "desktop_twinwake_quick_match",
+        "desktop_twinwake_save",
+        "desktop_twinwake_spin",
+        "desktop_twinwake_target_rally"
+      ],
+      "option_count": 4,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "dungeon",
+      "title": "Dungeon Prototype",
+      "summary": "Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick; Shift/pad Y: trail",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"dungeon\", Seed)",
+      "portable_tests": [
+        "desktop_dungeon_circuit",
+        "desktop_dungeon_switchback",
+        "desktop_dungeon_trail",
+        "desktop_dungeon_view",
+        "desktop_maze",
+        "desktop_maze_saves"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "driftstone",
+      "title": "Driftstone Patrol",
+      "summary": "Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"driftstone\", Seed)",
+      "portable_tests": [
+        "desktop_driftstone_brake",
+        "desktop_driftstone_flight_practice",
+        "desktop_driftstone_voyage",
+        "desktop_shooters"
+      ],
+      "option_count": 3,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "football",
+      "title": "Football / Soccer",
+      "summary": "A ninety-second duel on the Daedalus pitch. Move: WASD/arrows or left stick; J/X: kick",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"football\", Seed)",
+      "portable_tests": [
+        "desktop_football_match",
+        "desktop_football_practice",
+        "desktop_sports"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "focus_freeze",
+        "fresh_pad_replay",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "glowtrail",
+      "title": "Glowtrail Chase",
+      "summary": "Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"glowtrail\", Seed)",
+      "portable_tests": [
+        "desktop_glowtrail_fruit",
+        "desktop_glowtrail_input",
+        "desktop_glowtrail_power",
+        "desktop_glowtrail_pursuit",
+        "desktop_glowtrail_tunnel",
+        "desktop_glowtrail_view",
+        "desktop_maze",
+        "desktop_maze_saves"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "focus_freeze",
+        "fresh_pad_replay",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "riftwing",
+      "title": "Riftwing Vanguard",
+      "summary": "Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"riftwing\", Seed)",
+      "portable_tests": [
+        "desktop_riftwing_boss_rehearsal",
+        "desktop_riftwing_enemy_health",
+        "desktop_riftwing_terminal_pickup",
+        "desktop_shooter_saves",
+        "desktop_shooter_terminal",
+        "desktop_shooters"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "emberstep",
+      "title": "Emberstep Ascent",
+      "summary": "Scale the ember terraces and face the sentinel. Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"emberstep\", Seed)",
+      "portable_tests": [
+        "desktop_ninja_enemy_health",
+        "desktop_ninja_jump",
+        "desktop_ninja_replay",
+        "desktop_ninja_terrace_course",
+        "desktop_platformers"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "focus_freeze",
+        "fresh_pad_replay",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "star_shooter",
+      "title": "Star Shooter",
+      "summary": "Hold the starlanes through escalating waves. Move: WASD/arrows or left stick; J/X: shoot; P/Start: pause/save menu",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"star_shooter\", Seed)",
+      "portable_tests": [
+        "desktop_shooters",
+        "desktop_star_save_pause",
+        "desktop_star_terminal_pickup"
+      ],
+      "option_count": 3,
+      "capabilities": [
+        "core_pause",
+        "focus_freeze",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "dodge_ball",
+      "title": "Courtyard Clash",
+      "summary": "Lead three teammates through four courtyard rounds. Move: WASD/arrows or left stick; throw/catch/jump actions",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"dodge_ball\", Seed)",
+      "portable_tests": [
+        "desktop_dodge_country_stick",
+        "desktop_dodge_guard",
+        "desktop_dodge_pass",
+        "desktop_dodge_target",
+        "desktop_dodge_tournament",
+        "desktop_sports"
+      ],
+      "option_count": 8,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "ironwake",
+      "title": "Ironwake Advance",
+      "summary": "Run the ironwake route through platforms and enemy fire. Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/pad A: jump",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"ironwake\", Seed)",
+      "portable_tests": [
+        "desktop_ironwake_ledge",
+        "desktop_ironwake_target_range",
+        "desktop_platformers"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "focus_freeze",
+        "fresh_pad_replay",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys",
+        "title_screen"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "lanternwild",
+      "title": "Lanternwild Quest",
+      "summary": "Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"lanternwild\", Seed)",
+      "portable_tests": [
+        "desktop_lanternwild_sword_assist",
+        "desktop_lanternwild_terminal",
+        "desktop_lanternwild_view",
+        "desktop_platformers"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "gloam_latch",
+      "title": "Gloam Latch",
+      "summary": "Darken every lamp. Arrows or stick: move; J/Space or pad A: flip a lamp and its neighbors",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"gloam_latch\", Seed)",
+      "portable_tests": [
+        "desktop_gloam_latch"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "hints",
+        "options",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "reedbeat",
+      "title": "Reedbeat",
+      "summary": "Strike the reed when it glows. J/Space or pad A: strike",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"reedbeat\", Seed)",
+      "portable_tests": [
+        "desktop_reedbeat"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "focus_freeze",
+        "hints",
+        "options",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    }
+  ],
+  "java_cabinets": [
+    {
+      "id": "sudoku",
+      "title": "SudokuPro",
+      "summary": "Account-scoped Sudoku boards with pencil notes, hints and saved boards.",
+      "host": "ADaedalusJavaArcade",
+      "game_enum": "EDaedalusJavaGame::Sudoku",
+      "source_repo": "RicheyWorks/sudokupro",
+      "requires": "local Java game service (rules stay in Java)",
+      "portable_tests": [
+        "java_arcade_protocol",
+        "sudoku_saved_games"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "blackjack",
+      "title": "BlackJackPro",
+      "summary": "Blackjack table with Java-approved actions, table options and recovery context.",
+      "host": "ADaedalusJavaArcade",
+      "game_enum": "EDaedalusJavaGame::Blackjack",
+      "source_repo": "RicheyWorks/BlackJackPro",
+      "requires": "local Java game service (rules stay in Java)",
+      "portable_tests": [
+        "java_arcade_protocol"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
+      "actions": [
+        "bet",
+        "clearBet",
+        "rebet",
+        "deal",
+        "hit",
+        "stand",
+        "double",
+        "split",
+        "surrender",
+        "insurance",
+        "setRule",
+        "setDecks",
+        "setSplitLimit",
+        "reload",
+        "newSession"
+      ]
+    }
+  ]
+}

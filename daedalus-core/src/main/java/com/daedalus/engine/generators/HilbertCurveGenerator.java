@@ -9,18 +9,17 @@ import com.daedalus.model.*;
 import java.util.*;
 
 /**
- * Hilbert Curve Spanning Tree Generator.
+ * Hilbert-order spanning tree.
  *
- * Directly inspired by David Hilbert's legendary space-filling curve (1891) — one of the most
- * beautiful objects in all of discrete mathematics. The Hilbert curve is a continuous fractal
- * that visits every cell while preserving locality far better than Morton Z-order (or any
- * other generator in your collection).
+ * <p>Walks the grid in the canonical Hilbert {@code d2xy} order and attaches each cell to a
+ * <em>random already-visited neighbour</em>. The curve itself has excellent locality; this
+ * tree does not inherit it. Measured stretch at 32×32 (20,000 random pairs) puts the
+ * generator at mean 4.62 versus Prim's 2.48, with more than double the diameter. Carving
+ * strictly along the curve is worse still — a Hamiltonian path of diameter 1023.
  *
- * We traverse the entire grid in true Hilbert order and connect each new cell to a random
- * already-visited neighbor. The result is mesmerizing self-similar swirling patterns —
- * pure mathematical art.
- *
- * From the mathematician list you asked for. This one would make Hilbert himself proud.
+ * <p>Prefer {@code prims} or {@code archimedes-spiral} when the maze is a network topology.
+ * This generator stays in the roster for the swirl texture, not for the locality the
+ * vision documents once claimed.
  */
 public class HilbertCurveGenerator extends AbstractMazeGenerator {
 
@@ -32,8 +31,9 @@ public class HilbertCurveGenerator extends AbstractMazeGenerator {
         return new AlgorithmDescriptor(
                 id(), displayName(), "generator",
                 "O(n) time, O(n) space",
-                "Stunning self-similar fractal swirls — best locality of any curve generator",
-                "David Hilbert’s space-filling curve (1891) + spanning-tree construction. Pure math elegance.");
+                "Self-similar swirls; Hilbert order, random attach — not the curve's locality",
+                "Walks cells in Hilbert order (1891) and attaches each to a random visited neighbour. "
+                        + "The curve preserves locality; the tree does not. Prefer prims for topologies.");
     }
 
     @Override

@@ -1,0 +1,125 @@
+{
+  "schema": "daedalus.pcg-private-fixture-checkpoint.v1",
+  "utc": "2026-10-21T23:29:40.849600+00:00",
+  "state": "BUILT_SOURCE_READY_NATIVE_HELD_BY_PHYSICAL_MEMORY",
+  "native_accepted": false,
+  "generic_native_runtime_qualified": false,
+  "existing_capability": {
+    "observation_editor_pid": 39812,
+    "PCG_installed_and_project_enabled": true,
+    "observation": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PCGIsolatedWitness20261021\\BindingR1\\native-result.json",
+      "sha256": "32b188efc573964ca08cee38750d801af588c0b23f40d386bbecfdb8686745f0",
+      "bytes": 10452
+    },
+    "graph": "/Game/Pythagoras/PCGEcology/PCG_Ecology.PCG_Ecology",
+    "actor": "/Game/Daedalus/DaedalusWorld.DaedalusWorld:PersistentLevel.PCGVolume_4",
+    "component_seed_observed": 42,
+    "layout_seed_separate": 7,
+    "graph_nodes_observed": 14,
+    "authored_points_observed": 1684,
+    "generated_observed": false,
+    "production_graph_not_mutated": true
+  },
+  "implementation": {
+    "native_library": "UDaedalusPCGFixtureOwnerLibrary",
+    "scope": "Exact clean current DaedalusWorld only, no arbitrary target/world; retained one RF_Transient/nontransactional Actor+box+PCGComponent. Generated solely in future explicitly admitted private test, OnDemand/seed42/nonpartitioned. Duplicate names/owners, PIE, active transaction, busy cleanup refused. No production map/graph saves or dirty-flag clearing.",
+    "private_graph": "/Game/CodexToolEvaluation/PCGMinimal/R1/PCG_WillowFixture.PCG_WillowFixture",
+    "points_cm": [
+      [
+        700000,
+        700000,
+        300000
+      ],
+      [
+        700300,
+        700000,
+        300000
+      ],
+      [
+        700000,
+        700300,
+        300000
+      ]
+    ],
+    "intended_graph": "Reuse existing CreatePoints->weighted StaticMeshSpawner->Output pipeline with pinned Blender Willow Mature. Own per-component standard preview mode makes ISMs transient; no project setting or experimental feature enable.",
+    "planned_acceptance": "Two actual completed local generations with three exact mesh/transform ISM instances; same seed correspondence across private graph save/clean reload; positive/negative policy plus native duplicate-owner refusal; cleanup only own fixture and preserve production owner/graph, world/scene/camera. NOT EXECUTED."
+  },
+  "tests": {
+    "synthetic_test_methods_passed": 3,
+    "negative_cases": "Wrong graph/mesh/seed including bool, absent/duplicate callback, ungenerated/busy, missing/extra/duplicate instance, tampered position/scale/nonfinite/mesh. No native positive or negative outcome inferred.",
+    "native_callback_source_syntax_pass": true
+  },
+  "build": {
+    "terminal": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PCGIsolatedWitness20261021\\OwnerBuildR1\\build-terminal.json",
+      "sha256": "a9b28a5b0f9bbe9b53dc3c9d431ff7894d6f551a52fe1456f70c1fefa71f2e2a",
+      "bytes": 399
+    },
+    "install": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PCGIsolatedWitness20261021\\OwnerBuildR1\\install.json",
+      "sha256": "acafe61ccddcd12df0c83a57739b69d88fe79e317e596e7e186993c1eb530635",
+      "bytes": 1107
+    },
+    "build_exit": 0,
+    "build_elapsed_seconds": 273.1693505999974,
+    "reopen": {
+      "utc": "2026-10-21T23:22:20.831510+00:00",
+      "start_utc": "2026-10-21T23:22:20.7368733Z",
+      "pid": 16792,
+      "binary": {
+        "path": "C:\\Unreal\\DaedalusRealm\\Plugins\\DaedalusLink\\Binaries\\Win64\\UnrealEditor-DaedalusLink.dll",
+        "sha256": "1a7f8e632468c1af70eb8a74fce729d5b71286f5606b174f7ea5e72b65eaaff3",
+        "bytes": 10648064
+      },
+      "project": "C:/Unreal/DaedalusRealm/DaedalusRealm.uproject",
+      "ready": false
+    },
+    "warnings": "New editor PCG module dependency triggered one full plugin rebuild. The successful installed cut warned missing PCG plugin dependency plus pre-existing C4701/C4996. Repository uplugin now declares PCG editor-only dependency, source metadata only; live descriptor unchanged and this metadata is not newly installed/tested."
+  },
+  "resource_blocker": {
+    "utc": "2026-10-21T23:25:48.762825+00:00",
+    "available_physical": 1426034688,
+    "available_commit": 28161736704,
+    "floor_physical": 1740800000,
+    "floor_commit": 2252800000,
+    "pass": false,
+    "failed_ready_native_folder_absent": true
+  },
+  "readiness_action": "Fresh guarded native readiness callback, target existing new editor16792; stopped before native folder or RPC. No uncertain dispatch.",
+  "actual_fixture_creates": 0,
+  "actual_graph_creates": 0,
+  "actual_generations": 0,
+  "actual_test_saves": 0,
+  "new_editor_native_readiness_or_scene_camera_preservation": "UNQUALIFIED due pre-dispatch floor; OS responsive/startup complete is not native proof.",
+  "preservation": {
+    "preclose_nine_native_fields_clean_exact": true,
+    "preclose": {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PCGIsolatedWitness20261021\\OwnerBuildR1\\preclose.json",
+      "sha256": "68486d934e58ee4e09b5a5247dc8ad606beee8220a1fda9baf6f6571572c118a",
+      "bytes": 1244
+    },
+    "protected_saved_source_files": 34,
+    "protected_files_unchanged_after_build": true,
+    "no_Cursor_or_app_settings_changes": true,
+    "no_production_project_settings_changes": true,
+    "live_plugin_descriptor_unchanged": true
+  },
+  "release": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PCGIsolatedWitness20261021\\FixtureR1\\resource-hold-normal-release.json",
+    "sha256": "fcddbe9d916b428b877b7e87e5833a394c82b02312a7c06b29848e58c0d3ad95",
+    "bytes": 866
+  },
+  "source_r2": {
+    "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PCGIsolatedWitness20261021\\FixtureR1\\source-gate-r2.json",
+    "sha256": "e2b30724dbae4962ea3a4a0a2f933ab2f23e9f8199a072cc52ad72476d7f0366",
+    "bytes": 2334
+  },
+  "source_r1": "Prepared helper was not dispatched. Exact unused source archived; R2 adds original PCG component preservation. Use R2 host only, no R1 replay.",
+  "next_step": "After a fresh unchanged resource guard passes: normally claim compute, verify sole current editor16792+startUTC/binary/source/canonical pins; pcg_fixture_run_r2.py ready (remaining-only) then start, retain callbacks, first, then second. Do not call start until fresh native readiness and protected scene/camera match. No source/rebuild/extra reopen needed for the currently installed C++ cut. Repository dependency descriptor remains source-only until a normal future install/reopen; do not mutate live settings to clear warning.",
+  "remaining_limits": [
+    "No actual PCG generation, descriptor persistence, same-seed output, native duplicate refusal or fixture cleanup has run.",
+    "Production ecology remains unchanged and unadopted; original strict finishline contract is not weakened or relabeled.",
+    "New fixture owner binary is compiled/installed but not native-executed; standard preview fixture semantics not production persistence/quality."
+  ]
+}

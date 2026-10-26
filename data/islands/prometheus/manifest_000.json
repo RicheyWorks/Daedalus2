@@ -1,0 +1,985 @@
+[
+{
+"i": 0,
+"name": "Herb_C_Yarrow_Sprout_V0",
+"cat": "herb",
+"tris": 80,
+"stage": "Sprout",
+"pc": 0
+},
+{
+"i": 1,
+"name": "Herb_C_Yarrow_Sprout_V1",
+"cat": "herb",
+"tris": 80,
+"stage": "Sprout",
+"pc": 0
+},
+{
+"i": 2,
+"name": "Herb_C_Yarrow_Sprout_V2",
+"cat": "herb",
+"tris": 80,
+"stage": "Sprout",
+"pc": 0
+},
+{
+"i": 3,
+"name": "Herb_C_Yarrow_Bloom_V0",
+"cat": "herb",
+"tris": 160,
+"stage": "Bloom",
+"pc": 0
+},
+{
+"i": 4,
+"name": "Herb_C_Yarrow_Bloom_V1",
+"cat": "herb",
+"tris": 160,
+"stage": "Bloom",
+"pc": 0
+},
+{
+"i": 5,
+"name": "Herb_C_Yarrow_Bloom_V2",
+"cat": "herb",
+"tris": 160,
+"stage": "Bloom",
+"pc": 0
+},
+{
+"i": 6,
+"name": "Herb_C_Yarrow_Seed_V0",
+"cat": "herb",
+"tris": 160,
+"stage": "Seed",
+"pc": 0
+},
+{
+"i": 7,
+"name": "Herb_C_Yarrow_Seed_V1",
+"cat": "herb",
+"tris": 160,
+"stage": "Seed",
+"pc": 0
+},
+{
+"i": 8,
+"name": "Herb_C_Yarrow_Seed_V2",
+"cat": "herb",
+"tris": 160,
+"stage": "Seed",
+"pc": 0
+},
+{
+"i": 9,
+"name": "Herb_Cs_Plantain_Sprout_V0",
+"cat": "herb",
+"tris": 100,
+"stage": "Sprout",
+"pc": 1
+},
+{
+"i": 10,
+"name": "Herb_Cs_Plantain_Sprout_V1",
+"cat": "herb",
+"tris": 100,
+"stage": "Sprout",
+"pc": 1
+},
+{
+"i": 11,
+"name": "Herb_Cs_Plantain_Sprout_V2",
+"cat": "herb",
+"tris": 100,
+"stage": "Sprout",
+"pc": 1
+},
+{
+"i": 12,
+"name": "Herb_Cs_Plantain_Bloom_V0",
+"cat": "herb",
+"tris": 180,
+"stage": "Bloom",
+"pc": 1
+},
+{
+"i": 13,
+"name": "Herb_Cs_Plantain_Bloom_V1",
+"cat": "herb",
+"tris": 180,
+"stage": "Bloom",
+"pc": 1
+},
+{
+"i": 14,
+"name": "Herb_Cs_Plantain_Bloom_V2",
+"cat": "herb",
+"tris": 180,
+"stage": "Bloom",
+"pc": 1
+},
+{
+"i": 15,
+"name": "Herb_Cs_Plantain_Seed_V0",
+"cat": "herb",
+"tris": 180,
+"stage": "Seed",
+"pc": 1
+},
+{
+"i": 16,
+"name": "Herb_Cs_Plantain_Seed_V1",
+"cat": "herb",
+"tris": 180,
+"stage": "Seed",
+"pc": 1
+},
+{
+"i": 17,
+"name": "Herb_Cs_Plantain_Seed_V2",
+"cat": "herb",
+"tris": 180,
+"stage": "Seed",
+"pc": 1
+},
+{
+"i": 18,
+"name": "Herb_D_Chamomile_Sprout_V0",
+"cat": "herb",
+"tris": 120,
+"stage": "Sprout",
+"pc": 2
+},
+{
+"i": 19,
+"name": "Herb_D_Chamomile_Sprout_V1",
+"cat": "herb",
+"tris": 120,
+"stage": "Sprout",
+"pc": 2
+},
+{
+"i": 20,
+"name": "Herb_D_Chamomile_Sprout_V2",
+"cat": "herb",
+"tris": 120,
+"stage": "Sprout",
+"pc": 2
+},
+{
+"i": 21,
+"name": "Herb_D_Chamomile_Bloom_V0",
+"cat": "herb",
+"tris": 200,
+"stage": "Bloom",
+"pc": 2
+},
+{
+"i": 22,
+"name": "Herb_D_Chamomile_Bloom_V1",
+"cat": "herb",
+"tris": 200,
+"stage": "Bloom",
+"pc": 2
+},
+{
+"i": 23,
+"name": "Herb_D_Chamomile_Bloom_V2",
+"cat": "herb",
+"tris": 200,
+"stage": "Bloom",
+"pc": 2
+},
+{
+"i": 24,
+"name": "Herb_D_Chamomile_Seed_V0",
+"cat": "herb",
+"tris": 200,
+"stage": "Seed",
+"pc": 2
+},
+{
+"i": 25,
+"name": "Herb_D_Chamomile_Seed_V1",
+"cat": "herb",
+"tris": 200,
+"stage": "Seed",
+"pc": 2
+},
+{
+"i": 26,
+"name": "Herb_D_Chamomile_Seed_V2",
+"cat": "herb",
+"tris": 200,
+"stage": "Seed",
+"pc": 2
+},
+{
+"i": 27,
+"name": "Herb_Ds_Valerian_Sprout_V0",
+"cat": "herb",
+"tris": 140,
+"stage": "Sprout",
+"pc": 3
+},
+{
+"i": 28,
+"name": "Herb_Ds_Valerian_Sprout_V1",
+"cat": "herb",
+"tris": 140,
+"stage": "Sprout",
+"pc": 3
+},
+{
+"i": 29,
+"name": "Herb_Ds_Valerian_Sprout_V2",
+"cat": "herb",
+"tris": 140,
+"stage": "Sprout",
+"pc": 3
+},
+{
+"i": 30,
+"name": "Herb_Ds_Valerian_Bloom_V0",
+"cat": "herb",
+"tris": 220,
+"stage": "Bloom",
+"pc": 3
+},
+{
+"i": 31,
+"name": "Herb_Ds_Valerian_Bloom_V1",
+"cat": "herb",
+"tris": 220,
+"stage": "Bloom",
+"pc": 3
+},
+{
+"i": 32,
+"name": "Herb_Ds_Valerian_Bloom_V2",
+"cat": "herb",
+"tris": 220,
+"stage": "Bloom",
+"pc": 3
+},
+{
+"i": 33,
+"name": "Herb_Ds_Valerian_Seed_V0",
+"cat": "herb",
+"tris": 220,
+"stage": "Seed",
+"pc": 3
+},
+{
+"i": 34,
+"name": "Herb_Ds_Valerian_Seed_V1",
+"cat": "herb",
+"tris": 220,
+"stage": "Seed",
+"pc": 3
+},
+{
+"i": 35,
+"name": "Herb_Ds_Valerian_Seed_V2",
+"cat": "herb",
+"tris": 220,
+"stage": "Seed",
+"pc": 3
+},
+{
+"i": 36,
+"name": "Herb_E_Feverfew_Sprout_V0",
+"cat": "herb",
+"tris": 80,
+"stage": "Sprout",
+"pc": 4
+},
+{
+"i": 37,
+"name": "Herb_E_Feverfew_Sprout_V1",
+"cat": "herb",
+"tris": 80,
+"stage": "Sprout",
+"pc": 4
+},
+{
+"i": 38,
+"name": "Herb_E_Feverfew_Sprout_V2",
+"cat": "herb",
+"tris": 80,
+"stage": "Sprout",
+"pc": 4
+},
+{
+"i": 39,
+"name": "Herb_E_Feverfew_Bloom_V0",
+"cat": "herb",
+"tris": 160,
+"stage": "Bloom",
+"pc": 4
+},
+{
+"i": 40,
+"name": "Herb_E_Feverfew_Bloom_V1",
+"cat": "herb",
+"tris": 160,
+"stage": "Bloom",
+"pc": 4
+},
+{
+"i": 41,
+"name": "Herb_E_Feverfew_Bloom_V2",
+"cat": "herb",
+"tris": 160,
+"stage": "Bloom",
+"pc": 4
+},
+{
+"i": 42,
+"name": "Herb_E_Feverfew_Seed_V0",
+"cat": "herb",
+"tris": 160,
+"stage": "Seed",
+"pc": 4
+},
+{
+"i": 43,
+"name": "Herb_E_Feverfew_Seed_V1",
+"cat": "herb",
+"tris": 160,
+"stage": "Seed",
+"pc": 4
+},
+{
+"i": 44,
+"name": "Herb_E_Feverfew_Seed_V2",
+"cat": "herb",
+"tris": 160,
+"stage": "Seed",
+"pc": 4
+},
+{
+"i": 45,
+"name": "Herb_F_Mint_Sprout_V0",
+"cat": "herb",
+"tris": 100,
+"stage": "Sprout",
+"pc": 5
+},
+{
+"i": 46,
+"name": "Herb_F_Mint_Sprout_V1",
+"cat": "herb",
+"tris": 100,
+"stage": "Sprout",
+"pc": 5
+},
+{
+"i": 47,
+"name": "Herb_F_Mint_Sprout_V2",
+"cat": "herb",
+"tris": 100,
+"stage": "Sprout",
+"pc": 5
+},
+{
+"i": 48,
+"name": "Herb_F_Mint_Bloom_V0",
+"cat": "herb",
+"tris": 180,
+"stage": "Bloom",
+"pc": 5
+},
+{
+"i": 49,
+"name": "Herb_F_Mint_Bloom_V1",
+"cat": "herb",
+"tris": 180,
+"stage": "Bloom",
+"pc": 5
+},
+{
+"i": 50,
+"name": "Herb_F_Mint_Bloom_V2",
+"cat": "herb",
+"tris": 180,
+"stage": "Bloom",
+"pc": 5
+},
+{
+"i": 51,
+"name": "Herb_F_Mint_Seed_V0",
+"cat": "herb",
+"tris": 180,
+"stage": "Seed",
+"pc": 5
+},
+{
+"i": 52,
+"name": "Herb_F_Mint_Seed_V1",
+"cat": "herb",
+"tris": 180,
+"stage": "Seed",
+"pc": 5
+},
+{
+"i": 53,
+"name": "Herb_F_Mint_Seed_V2",
+"cat": "herb",
+"tris": 180,
+"stage": "Seed",
+"pc": 5
+},
+{
+"i": 54,
+"name": "Herb_Fs_Elderflower_Sprout_V0",
+"cat": "herb",
+"tris": 120,
+"stage": "Sprout",
+"pc": 6
+},
+{
+"i": 55,
+"name": "Herb_Fs_Elderflower_Sprout_V1",
+"cat": "herb",
+"tris": 120,
+"stage": "Sprout",
+"pc": 6
+},
+{
+"i": 56,
+"name": "Herb_Fs_Elderflower_Sprout_V2",
+"cat": "herb",
+"tris": 120,
+"stage": "Sprout",
+"pc": 6
+},
+{
+"i": 57,
+"name": "Herb_Fs_Elderflower_Bloom_V0",
+"cat": "herb",
+"tris": 200,
+"stage": "Bloom",
+"pc": 6
+},
+{
+"i": 58,
+"name": "Herb_Fs_Elderflower_Bloom_V1",
+"cat": "herb",
+"tris": 200,
+"stage": "Bloom",
+"pc": 6
+},
+{
+"i": 59,
+"name": "Herb_Fs_Elderflower_Bloom_V2",
+"cat": "herb",
+"tris": 200,
+"stage": "Bloom",
+"pc": 6
+},
+{
+"i": 60,
+"name": "Herb_Fs_Elderflower_Seed_V0",
+"cat": "herb",
+"tris": 200,
+"stage": "Seed",
+"pc": 6
+},
+{
+"i": 61,
+"name": "Herb_Fs_Elderflower_Seed_V1",
+"cat": "herb",
+"tris": 200,
+"stage": "Seed",
+"pc": 6
+},
+{
+"i": 62,
+"name": "Herb_Fs_Elderflower_Seed_V2",
+"cat": "herb",
+"tris": 200,
+"stage": "Seed",
+"pc": 6
+},
+{
+"i": 63,
+"name": "Herb_G_Sage_Sprout_V0",
+"cat": "herb",
+"tris": 140,
+"stage": "Sprout",
+"pc": 7
+},
+{
+"i": 64,
+"name": "Herb_G_Sage_Sprout_V1",
+"cat": "herb",
+"tris": 140,
+"stage": "Sprout",
+"pc": 7
+},
+{
+"i": 65,
+"name": "Herb_G_Sage_Sprout_V2",
+"cat": "herb",
+"tris": 140,
+"stage": "Sprout",
+"pc": 7
+},
+{
+"i": 66,
+"name": "Herb_G_Sage_Bloom_V0",
+"cat": "herb",
+"tris": 220,
+"stage": "Bloom",
+"pc": 7
+},
+{
+"i": 67,
+"name": "Herb_G_Sage_Bloom_V1",
+"cat": "herb",
+"tris": 220,
+"stage": "Bloom",
+"pc": 7
+},
+{
+"i": 68,
+"name": "Herb_G_Sage_Bloom_V2",
+"cat": "herb",
+"tris": 220,
+"stage": "Bloom",
+"pc": 7
+},
+{
+"i": 69,
+"name": "Herb_G_Sage_Seed_V0",
+"cat": "herb",
+"tris": 220,
+"stage": "Seed",
+"pc": 7
+},
+{
+"i": 70,
+"name": "Herb_G_Sage_Seed_V1",
+"cat": "herb",
+"tris": 220,
+"stage": "Seed",
+"pc": 7
+},
+{
+"i": 71,
+"name": "Herb_G_Sage_Seed_V2",
+"cat": "herb",
+"tris": 220,
+"stage": "Seed",
+"pc": 7
+},
+{
+"i": 72,
+"name": "Herb_Gs_Comfrey_Sprout_V0",
+"cat": "herb",
+"tris": 80,
+"stage": "Sprout",
+"pc": 8
+},
+{
+"i": 73,
+"name": "Herb_Gs_Comfrey_Sprout_V1",
+"cat": "herb",
+"tris": 80,
+"stage": "Sprout",
+"pc": 8
+},
+{
+"i": 74,
+"name": "Herb_Gs_Comfrey_Sprout_V2",
+"cat": "herb",
+"tris": 80,
+"stage": "Sprout",
+"pc": 8
+},
+{
+"i": 75,
+"name": "Herb_Gs_Comfrey_Bloom_V0",
+"cat": "herb",
+"tris": 160,
+"stage": "Bloom",
+"pc": 8
+},
+{
+"i": 76,
+"name": "Herb_Gs_Comfrey_Bloom_V1",
+"cat": "herb",
+"tris": 160,
+"stage": "Bloom",
+"pc": 8
+},
+{
+"i": 77,
+"name": "Herb_Gs_Comfrey_Bloom_V2",
+"cat": "herb",
+"tris": 160,
+"stage": "Bloom",
+"pc": 8
+},
+{
+"i": 78,
+"name": "Herb_Gs_Comfrey_Seed_V0",
+"cat": "herb",
+"tris": 160,
+"stage": "Seed",
+"pc": 8
+},
+{
+"i": 79,
+"name": "Herb_Gs_Comfrey_Seed_V1",
+"cat": "herb",
+"tris": 160,
+"stage": "Seed",
+"pc": 8
+},
+{
+"i": 80,
+"name": "Herb_Gs_Comfrey_Seed_V2",
+"cat": "herb",
+"tris": 160,
+"stage": "Seed",
+"pc": 8
+},
+{
+"i": 81,
+"name": "Herb_A_Willow_Sprout_V0",
+"cat": "herb",
+"tris": 100,
+"stage": "Sprout",
+"pc": 9
+},
+{
+"i": 82,
+"name": "Herb_A_Willow_Sprout_V1",
+"cat": "herb",
+"tris": 100,
+"stage": "Sprout",
+"pc": 9
+},
+{
+"i": 83,
+"name": "Herb_A_Willow_Sprout_V2",
+"cat": "herb",
+"tris": 100,
+"stage": "Sprout",
+"pc": 9
+},
+{
+"i": 84,
+"name": "Herb_A_Willow_Bloom_V0",
+"cat": "herb",
+"tris": 180,
+"stage": "Bloom",
+"pc": 9
+},
+{
+"i": 85,
+"name": "Herb_A_Willow_Bloom_V1",
+"cat": "herb",
+"tris": 180,
+"stage": "Bloom",
+"pc": 9
+},
+{
+"i": 86,
+"name": "Herb_A_Willow_Bloom_V2",
+"cat": "herb",
+"tris": 180,
+"stage": "Bloom",
+"pc": 9
+},
+{
+"i": 87,
+"name": "Herb_A_Willow_Seed_V0",
+"cat": "herb",
+"tris": 180,
+"stage": "Seed",
+"pc": 9
+},
+{
+"i": 88,
+"name": "Herb_A_Willow_Seed_V1",
+"cat": "herb",
+"tris": 180,
+"stage": "Seed",
+"pc": 9
+},
+{
+"i": 89,
+"name": "Herb_A_Willow_Seed_V2",
+"cat": "herb",
+"tris": 180,
+"stage": "Seed",
+"pc": 9
+},
+{
+"i": 90,
+"name": "Herb_As_Hypericum_Sprout_V0",
+"cat": "herb",
+"tris": 120,
+"stage": "Sprout",
+"pc": 10
+},
+{
+"i": 91,
+"name": "Herb_As_Hypericum_Sprout_V1",
+"cat": "herb",
+"tris": 120,
+"stage": "Sprout",
+"pc": 10
+},
+{
+"i": 92,
+"name": "Herb_As_Hypericum_Sprout_V2",
+"cat": "herb",
+"tris": 120,
+"stage": "Sprout",
+"pc": 10
+},
+{
+"i": 93,
+"name": "Herb_As_Hypericum_Bloom_V0",
+"cat": "herb",
+"tris": 200,
+"stage": "Bloom",
+"pc": 10
+},
+{
+"i": 94,
+"name": "Herb_As_Hypericum_Bloom_V1",
+"cat": "herb",
+"tris": 200,
+"stage": "Bloom",
+"pc": 10
+},
+{
+"i": 95,
+"name": "Herb_As_Hypericum_Bloom_V2",
+"cat": "herb",
+"tris": 200,
+"stage": "Bloom",
+"pc": 10
+},
+{
+"i": 96,
+"name": "Herb_As_Hypericum_Seed_V0",
+"cat": "herb",
+"tris": 200,
+"stage": "Seed",
+"pc": 10
+},
+{
+"i": 97,
+"name": "Herb_As_Hypericum_Seed_V1",
+"cat": "herb",
+"tris": 200,
+"stage": "Seed",
+"pc": 10
+},
+{
+"i": 98,
+"name": "Herb_As_Hypericum_Seed_V2",
+"cat": "herb",
+"tris": 200,
+"stage": "Seed",
+"pc": 10
+},
+{
+"i": 99,
+"name": "Herb_B_Nettle_Sprout_V0",
+"cat": "herb",
+"tris": 140,
+"stage": "Sprout",
+"pc": 11
+},
+{
+"i": 100,
+"name": "Herb_B_Nettle_Sprout_V1",
+"cat": "herb",
+"tris": 140,
+"stage": "Sprout",
+"pc": 11
+},
+{
+"i": 101,
+"name": "Herb_B_Nettle_Sprout_V2",
+"cat": "herb",
+"tris": 140,
+"stage": "Sprout",
+"pc": 11
+},
+{
+"i": 102,
+"name": "Herb_B_Nettle_Bloom_V0",
+"cat": "herb",
+"tris": 220,
+"stage": "Bloom",
+"pc": 11
+},
+{
+"i": 103,
+"name": "Herb_B_Nettle_Bloom_V1",
+"cat": "herb",
+"tris": 220,
+"stage": "Bloom",
+"pc": 11
+},
+{
+"i": 104,
+"name": "Herb_B_Nettle_Bloom_V2",
+"cat": "herb",
+"tris": 220,
+"stage": "Bloom",
+"pc": 11
+},
+{
+"i": 105,
+"name": "Herb_B_Nettle_Seed_V0",
+"cat": "herb",
+"tris": 220,
+"stage": "Seed",
+"pc": 11
+},
+{
+"i": 106,
+"name": "Herb_B_Nettle_Seed_V1",
+"cat": "herb",
+"tris": 220,
+"stage": "Seed",
+"pc": 11
+},
+{
+"i": 107,
+"name": "Herb_B_Nettle_Seed_V2",
+"cat": "herb",
+"tris": 220,
+"stage": "Seed",
+"pc": 11
+},
+{
+"i": 108,
+"name": "Water_StreamSeg_V00",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 109,
+"name": "Water_StreamSeg_V01",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 110,
+"name": "Water_StreamSeg_V02",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 111,
+"name": "Water_StreamSeg_V03",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 112,
+"name": "Water_StreamSeg_V04",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 113,
+"name": "Water_StreamSeg_V05",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 114,
+"name": "Water_StreamSeg_V06",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 115,
+"name": "Water_StreamSeg_V07",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 116,
+"name": "Water_StreamSeg_V08",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 117,
+"name": "Water_StreamSeg_V09",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 118,
+"name": "Water_StreamSeg_V10",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 119,
+"name": "Water_StreamSeg_V11",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 120,
+"name": "Water_StreamSeg_V12",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 121,
+"name": "Water_StreamSeg_V13",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 122,
+"name": "Water_StreamSeg_V14",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 123,
+"name": "Water_StreamSeg_V15",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+},
+{
+"i": 124,
+"name": "Water_StreamSeg_V16",
+"cat": "water",
+"tris": 12,
+"kind": "StreamSeg"
+}
+]

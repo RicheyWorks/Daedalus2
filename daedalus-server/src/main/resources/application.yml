@@ -36,6 +36,45 @@ management:
 
 # Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
 daedalus:
+  # Optional persisted sea sector. Directory and seed are required only when enabled.
+  ocean:
+    enabled: ${DAEDALUS_OCEAN_ENABLED:false}
+    directory: ${DAEDALUS_OCEAN_DIRECTORY}
+    seed: ${DAEDALUS_OCEAN_SEED}
+    capacity: ${DAEDALUS_OCEAN_CAPACITY:128}
+    min-x: ${DAEDALUS_OCEAN_MIN_X:-2}
+    max-x: ${DAEDALUS_OCEAN_MAX_X:1}
+    min-y: ${DAEDALUS_OCEAN_MIN_Y:-3}
+    max-y: ${DAEDALUS_OCEAN_MAX_Y:0}
+    min-z: ${DAEDALUS_OCEAN_MIN_Z:-2}
+    max-z: ${DAEDALUS_OCEAN_MAX_Z:1}
+  audio:
+    host-subject: "" # Explicit authenticated engine identity for audio design; blank denies.
+  kennel:
+    host-subject: "" # Explicit authenticated engine identity; blank denies brew calculations.
+  brew:
+    host-subject: "" # Explicit authenticated engine identity for YTM melody brews; blank denies.
+  tactics:
+    host:
+      subject: "" # Explicit authenticated JWT subject of the trusted Unreal host; blank denies all requests.
+      squad: "" # Only this squad may be controlled by that host; sessions are correlation keys, not credentials.
+    adaptive:
+      enabled: false # Opt-in single-encounter host; native Unreal fallback remains available.
+      directory: "" # Required explicit checkpoint directory when enabled; exclusive writer, 4096-file cap.
+      squad: pack-1 # Only this trusted encounter is accepted by the adaptive brain.
+      faction: raiders
+      objective-x: 0 # Fixed trusted objective in Unreal centimetres; set before enabling.
+      objective-y: 0
+      objective-z: 0
+  # Optional single-settlement simulation; see docs/realms/LivingWorldSimulation.md.
+  simulation:
+    enabled: ${DAEDALUS_SIMULATION_ENABLED:false}
+    # Required when enabled: exclusive sidecar path and authenticated principal name.
+    file: ${DAEDALUS_SIMULATION_FILE}
+    steward: ${DAEDALUS_SIMULATION_STEWARD}
+    world-id: ${DAEDALUS_SIMULATION_WORLD_ID:world-zero}
+    tick-ms: ${DAEDALUS_SIMULATION_TICK_MS:1000}
+    poll-ms: ${DAEDALUS_SIMULATION_POLL_MS:1000}
   plugins:
     directory: ${DAEDALUS_PLUGIN_DIR:${user.home}/.daedalus/plugins}
     scan-on-startup: true
@@ -75,6 +114,9 @@ daedalus:
     max-ticks: ${DAEDALUS_LIVING_MAX_TICKS:240}
     max-concurrent: ${DAEDALUS_LIVING_MAX_CONCURRENT:8}
     erosion-factor: ${DAEDALUS_LIVING_EROSION_FACTOR:0.08}
+    # 0 keeps POST /live as v1 erosion. A positive value (or ?seal= on the request)
+    # closes extra passages each tick without disconnecting anyone (ADR-008).
+    seal-factor: ${DAEDALUS_LIVING_SEAL_FACTOR:0.0}
   # ----- Daily maze (ADR-006 idea #4) -----
   # GET /api/v1/maze/daily. Seed derives from the UTC date, so every instance generates the
   # identical topology with no coordination — these knobs only shape what kind of maze the
@@ -116,7 +158,8 @@ daedalus:
     max-campaigns: ${DAEDALUS_CAMPAIGN_MAX:50}
   # ----- Maze fingerprint / generator classifier (ADR-007 idea 4) -----
   # Nearest-centroid over scale-invariant structural signatures. Training samples each
-  # registered generator at 3 sizes x train-seeds seeds, once, on first use.
+  # registered generator at 3 sizes x train-seeds seeds, once, on a dedicated thread
+  # kicked by the first Identify. Until then GET /fingerprint answers 503.
   fingerprint:
     train-seeds: ${DAEDALUS_FINGERPRINT_TRAIN_SEEDS:4}
   # ----- Complexity Lab (ADR-007 idea 2) -----
@@ -171,6 +214,25 @@ daedalus:
   ghost:
     max-mazes: ${DAEDALUS_GHOST_MAX:1000}
     idle-ttl: ${DAEDALUS_GHOST_IDLE_TTL:24h}
+  # ----- World Zero -----
+  # One persistent volume beside the maze cache. Not Caffeine. A restart reloads this file.
+  world:
+    file: ${DAEDALUS_WORLD_FILE:${user.home}/.daedalus/world-zero.daew}
+  # ----- The Realm (ADR-023) -----
+  # One ecological day of server time, in ms: how often island communities grow, drift and fade.
+  realm:
+    day-ms: ${DAEDALUS_REALM_DAY_MS:10000}
+  # ----- Wallet sign-in and island deeds (ADR-028) -----
+  # Off unless DAEDALUS_WALLET_ENABLED=true. deed-signer-key is a secret (a key with no funds that only
+  # signs mint vouchers); deed-contract comes from chain/ deploy (deployments/<network>.json).
+  wallet:
+    enabled: ${DAEDALUS_WALLET_ENABLED:false}
+    domain: ${DAEDALUS_WALLET_DOMAIN:localhost:8088}
+    uri: ${DAEDALUS_WALLET_URI:http://localhost:8088}
+    chain-id: ${DAEDALUS_WALLET_CHAIN_ID:11155111}
+    deed-contract: ${DAEDALUS_WALLET_DEED_CONTRACT:}
+    deed-signer-key: ${DAEDALUS_WALLET_DEED_SIGNER_KEY:}
+    voucher-minutes: ${DAEDALUS_WALLET_VOUCHER_MINUTES:30}
   # ----- Per-key rate limiting -----
   # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
   # clones each into an independent bucket per caller (authenticated subject, else client IP),
@@ -178,8 +240,7 @@ daedalus:
   ratelimit:
     # Trust X-Forwarded-For when deriving the client IP? Enable ONLY behind a proxy / load
     # balancer that overwrites the header — otherwise a caller can spoof it to mint a fresh
-    # bucket per forged IP and defeat the limit. Off by default (use the socket remoteAddr);
-    # application-prod.yml turns it on because that surface sits behind an ingress.
+    # bucket per forged IP and defeat the limit. Off by default in every profile.
     trust-forwarded-header: ${DAEDALUS_RL_TRUST_XFF:false}
 
 # ----- Resilience4j rate limiters -----
@@ -193,6 +254,36 @@ daedalus:
 resilience4j:
   ratelimiter:
     instances:
+      audioDesign:
+        limit-for-period: 120
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      kennelBrew:
+        limit-for-period: 120
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      melodyBrew:
+        limit-for-period: 120
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      tacticsDecide:
+        limit-for-period: 1200        # Unreal asks ~1/s per squad (ADR-060); 20/s per game host covers 20 squads
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      presence:
+        limit-for-period: 600         # a client reports where it is a few times a second (ADR-039)
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      oceanChunks:
+        limit-for-period: 32          # bounded sector streaming; separate from maze-generation quota
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false
       mazeGenerate:
         limit-for-period: 30          # 30 generations
         limit-refresh-period: 1m      # per minute

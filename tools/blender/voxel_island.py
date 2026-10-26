@@ -1,0 +1,482 @@
+# SPDX-License-Identifier: MIT
+"""Team Claude's contest island (2026-10-14 09:29: "team codex vs team claude, who makes the best and most islands").
+
+A voxel island from a seed, in the look of the contest reference (docs/production/reference): grass top with a
+dirt band and a grey rock mass that narrows to a jagged underside, a sandy rim, a pond basin with a waterfall sheet
+pouring off the edge, tree clusters with round canopies, two or three blossom trees, a cottage with a red roof and
+lit windows, flower drifts, a few rocks, crystals hanging below, clouds nearby. One voxel = 1 m. Everything is one
+mesh per layer (island / water / trees / cottage / flowers / rocks / crystals / clouds) coloured by vertex colour,
+exported as a GLB with the island's origin at the top centre (walk surface at Z=0) and a convex UCX for the body.
+
+Run inside Blender (bpy):   exec(open(r'...\\voxel_island.py').read()); build(seed=240, out=r'C:\\...\\Island_C240.glb')
+"""
+import math
+import os
+import random
+
+try:
+    import bpy
+    import bmesh
+except ImportError:   # unit tests run the planner without Blender
+    bpy = None
+
+# ---- the plan (pure) ------------------------------------------------------------------------------------------
+
+PAL = {
+    "grass": (0.36, 0.62, 0.27), "grass2": (0.42, 0.68, 0.30), "dirt": (0.45, 0.31, 0.19), "dirt2": (0.52, 0.37, 0.22),
+    "rock": (0.42, 0.40, 0.46), "rock2": (0.36, 0.34, 0.41), "sand": (0.80, 0.72, 0.52), "water": (0.35, 0.62, 0.90),
+    "foam": (0.80, 0.90, 1.00), "trunk": (0.40, 0.26, 0.15), "leaf": (0.25, 0.55, 0.22), "leaf2": (0.33, 0.66, 0.28),
+    "blossom": (0.93, 0.60, 0.78), "blossom2": (0.98, 0.75, 0.86), "wall": (0.82, 0.72, 0.55), "roof": (0.70, 0.22, 0.20),
+    "window": (1.00, 0.90, 0.55), "door": (0.35, 0.22, 0.12), "flower_r": (0.90, 0.25, 0.30), "flower_y": (0.95, 0.85, 0.25),
+    "flower_w": (0.95, 0.95, 0.95), "crystal": (0.75, 0.55, 0.95), "crystal2": (0.55, 0.85, 0.95), "cloud": (0.97, 0.97, 0.99),
+    "path": (0.62, 0.55, 0.42), "fence": (0.55, 0.40, 0.25), "lantern": (1.00, 0.85, 0.45), "shroom": (0.85, 0.25, 0.20),
+    "shroom_dot": (0.98, 0.95, 0.90), "plank": (0.60, 0.45, 0.28), "boat": (0.45, 0.30, 0.18), "sail": (0.95, 0.93, 0.85),
+}
+# v2 biomes (09:36 "whoever comes up with seeds and algorithms to produce mass work at high quality will win"): a seed
+# picks a biome, which remaps the palette keys so every island reads differently from the air.
+BIOMES = {
+    "meadow": {},
+    "autumn": {"grass": (0.62, 0.55, 0.22), "grass2": (0.70, 0.62, 0.26), "leaf": (0.85, 0.42, 0.12), "leaf2": (0.92, 0.60, 0.15),
+               "blossom": (0.80, 0.20, 0.12), "blossom2": (0.95, 0.45, 0.20), "roof": (0.35, 0.25, 0.18)},
+    "snow": {"grass": (0.92, 0.94, 0.97), "grass2": (0.86, 0.90, 0.95), "leaf": (0.20, 0.40, 0.30), "leaf2": (0.80, 0.88, 0.92),
+             "blossom": (0.90, 0.92, 0.95), "blossom2": (0.70, 0.80, 0.90), "sand": (0.80, 0.84, 0.90), "water": (0.55, 0.75, 0.95),
+             "roof": (0.30, 0.35, 0.50), "flower_r": (0.70, 0.30, 0.40)},
+    "cherry": {"leaf": (0.93, 0.60, 0.78), "leaf2": (0.98, 0.75, 0.86), "blossom": (0.98, 0.85, 0.92), "blossom2": (0.90, 0.50, 0.70),
+               "grass": (0.45, 0.68, 0.38), "roof": (0.55, 0.20, 0.30), "wall": (0.92, 0.88, 0.80)},
+    "volcanic": {"grass": (0.25, 0.22, 0.22), "grass2": (0.32, 0.26, 0.24), "dirt": (0.20, 0.14, 0.12), "dirt2": (0.28, 0.18, 0.14),
+                 "rock": (0.18, 0.16, 0.18), "rock2": (0.26, 0.22, 0.24), "sand": (0.35, 0.30, 0.28), "water": (1.00, 0.45, 0.10),
+                 "foam": (1.00, 0.80, 0.30), "leaf": (0.30, 0.30, 0.22), "leaf2": (0.45, 0.40, 0.25), "blossom": (0.95, 0.35, 0.10),
+                 "blossom2": (1.00, 0.60, 0.15), "crystal": (1.00, 0.55, 0.15), "crystal2": (1.00, 0.80, 0.30), "roof": (0.25, 0.22, 0.24)},
+    "tropical": {"grass": (0.30, 0.70, 0.35), "grass2": (0.40, 0.78, 0.40), "sand": (0.95, 0.88, 0.65), "water": (0.25, 0.80, 0.85),
+                 "leaf": (0.15, 0.55, 0.25), "leaf2": (0.30, 0.70, 0.30), "blossom": (0.95, 0.40, 0.55), "blossom2": (0.98, 0.65, 0.30),
+                 "roof": (0.75, 0.60, 0.35), "wall": (0.90, 0.85, 0.70)},
+}
+BIOME_NAMES = tuple(BIOMES)
+
+
+def biome_of(seed):
+    return BIOME_NAMES[seed % len(BIOME_NAMES)]
+
+
+def palette(seed):
+    pal = dict(PAL)
+    pal.update(BIOMES[biome_of(seed)])
+    return pal
+
+
+def plan(seed, size=46, thick=22):
+    """{layer: [(x, y, z, colour)]} voxels for one island, 1 m each, centred at (0,0), walk surface at z=0.
+    size = island radius in voxels (46 -> 92 m), thick = rock depth below the rim."""
+    rng = random.Random(seed)
+    vox = {k: [] for k in ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals", "clouds")}
+    # 1. footprint: a blobby disc (3 harmonics), the rim 2 m below the top so the top is a plateau
+    harm = [(rng.uniform(0.04, 0.10), rng.randint(2, 5), rng.uniform(0, 6.28)) for _ in range(3)]
+    if seed % 4 == 1:      # v4: every fourth island is two-lobed (a strong 2nd harmonic) for silhouette variety
+        harm.append((rng.uniform(0.18, 0.26), 2, rng.uniform(0, 6.28)))
+
+    def radius(ang):
+        return size * (1.0 + sum(a * math.sin(n * ang + p) for a, n, p in harm))
+
+    top = {}   # (x,y) -> True inside
+    for x in range(-size - 6, size + 7):
+        for y in range(-size - 6, size + 7):
+            r = math.hypot(x + 0.5, y + 0.5)
+            if r <= radius(math.atan2(y + 0.5, x + 0.5)):
+                top[(x, y)] = r
+    # pond: a basin 10 m across off-centre, with a waterfall notch toward the rim
+    pang = rng.uniform(0, 6.28)
+    pr = size * 0.45
+    pcx, pcy = int(pr * math.cos(pang)), int(pr * math.sin(pang))
+    pond = {(x, y) for (x, y) in top if math.hypot(x - pcx, y - pcy) <= 5.5}
+    notch_dir = (math.cos(pang), math.sin(pang))
+    notch = {(x, y) for (x, y) in top if 0 <= ((x - pcx) * notch_dir[0] + (y - pcy) * notch_dir[1]) and abs((x - pcx) * -notch_dir[1] + (y - pcy) * notch_dir[0]) <= 1.5}
+    # v2: a gentle hill under the cottage side (0-4 m), so the island has a profile from the air and a slope to walk
+    hang = pang + math.pi
+    hcx, hcy = int(size * 0.35 * math.cos(hang)), int(size * 0.35 * math.sin(hang))
+    hr = size * 0.55
+
+    salt = rng.randint(0, 1 << 20)
+
+    def patch(x, y, z, p=0.7, b=4):
+        """Colour noise in b-voxel patches instead of per voxel: the texture reads the same from the air and the
+        greedy mesher can merge faces (per-voxel noise left 27k quads of 40k)."""
+        h = ((x // b) * 73856093 ^ (y // b) * 19349663 ^ (z // b) * 83492791 ^ salt) & 0xFFFF
+        return h < p * 0xFFFF
+
+    def hill(x, y):
+        d = math.hypot(x - hcx, y - hcy)
+        return int(round(4.0 * max(0.0, 1.0 - (d / hr) ** 2))) if d < hr else 0
+
+    # 2. the body: top grass layer, dirt band, rock narrowing to a jagged keel
+    for (x, y), r in top.items():
+        edge = radius(math.atan2(y + 0.5, x + 0.5)) - r
+        rim = edge < 2.0
+        in_pond = (x, y) in pond
+        in_notch = (x, y) in notch and not in_pond and edge < 6
+        ztop = (-1 if rim else 0) + (0 if (rim or in_pond or in_notch) else hill(x, y))
+        if in_pond:
+            ztop = -2
+        if in_notch:
+            ztop = -2
+        for z in range(0, ztop):      # fill the hill down to the plateau
+            vox["island"].append((x, y, z, "dirt" if patch(x, y, z) else "dirt2"))
+        colour = "sand" if rim else ("grass" if patch(x, y, ztop) else "grass2")
+        if in_pond or in_notch:
+            colour = "dirt2"
+        vox["island"].append((x, y, ztop, colour))
+        for z in range(ztop - 1, ztop - 4, -1):
+            vox["island"].append((x, y, z, "dirt" if patch(x, y, z) else "dirt2"))
+        jag = (((x // 3) * 2654435761 ^ (y // 3) * 40503 ^ salt) & 7) // 2 - 1      # -1..2 per 3x3 patch, not per column
+        depth = int(thick * (1.0 - (r / max(radius(math.atan2(y + 0.5, x + 0.5)), 1.0)) ** 1.6) + jag)
+        for z in range(ztop - 4, ztop - 4 - max(depth, 1), -1):
+            vox["island"].append((x, y, z, "rock" if patch(x, y, z, 0.6) else "rock2"))
+    # 3. water: pond surface and the waterfall sheet
+    for (x, y) in pond:
+        vox["water"].append((x, y, -1, "water"))
+    for (x, y) in notch:
+        if (x, y) in top and (x, y) not in pond:
+            vox["water"].append((x, y, -1, "water"))
+    fx, fy = max(notch, key=lambda p: math.hypot(p[0], p[1])) if notch else (pcx, pcy)
+    for z in range(-1, -thick - 6, -1):
+        vox["water"].append((fx, fy, z, "water" if z % 3 else "foam"))
+        vox["water"].append((fx + int(round(-notch_dir[1])), fy + int(round(notch_dir[0])), z, "water"))
+    # 4. cottage on the high side opposite the pond
+    cx, cy = hcx, hcy
+    hz = hill(cx, cy)
+    w, d, h = 7, 6, 4
+    for x in range(cx - w // 2, cx + w // 2 + 1):
+        for y in range(cy - d // 2, cy + d // 2 + 1):
+            for z in range(hz + 1, hz + h + 1):
+                shell = x in (cx - w // 2, cx + w // 2) or y in (cy - d // 2, cy + d // 2)
+                if shell:
+                    c = "wall"
+                    if z - hz in (2, 3) and ((x - cx) % 3 == 0) and y == cy - d // 2:
+                        c = "window"
+                    if z - hz in (1, 2) and x == cx and y == cy + d // 2:
+                        c = "door"
+                    vox["cottage"].append((x, y, z, c))
+    for k in range(4):   # gable roof
+        for x in range(cx - w // 2 - 1 + k, cx + w // 2 + 2 - k):
+            for y in range(cy - d // 2 - 1, cy + d // 2 + 2):
+                vox["cottage"].append((x, y, hz + h + 1 + k, "roof"))
+    # a path from the door down to the pond
+    steps_n = int(math.hypot(pcx - cx, pcy - cy))
+    for i in range(d // 2 + 1, steps_n - 6):
+        px, py = int(round(cx + (pcx - cx) * i / steps_n)), int(round(cy + (pcy - cy) * i / steps_n))
+        for (qx, qy) in ((px, py), (px + 1, py)):
+            if (qx, qy) in top and (qx, qy) not in pond:
+                vox["island"].append((qx, qy, hill(qx, qy), "path"))
+    # 5. trees: 3 clusters of 3-5 round-canopy trees + 2-3 blossom trees, away from pond/cottage
+    def free(x, y, m=3):
+        return (x, y) in top and top[(x, y)] < radius(math.atan2(y, x)) - 4 and math.hypot(x - pcx, y - pcy) > 8 and (abs(x - cx) > w // 2 + m or abs(y - cy) > d // 2 + m)
+
+    biome = biome_of(seed)
+
+    def tree(x, y, kind):
+        """v4 (11:40): the canopy shape follows the biome - pines in snow, palms in the tropics, bare dead trees on
+        volcanic rock, round canopies elsewhere; blossom trees stay round everywhere."""
+        base = hill(x, y)
+        hgt = rng.randint(4, 7) + base
+        shape = "round" if kind == "blossom" else {"snow": "pine", "tropical": "palm", "volcanic": "dead"}.get(biome, "round")
+        if shape == "palm":
+            hgt += 3
+        for z in range(base + 1, hgt + 1):
+            vox["trees"].append((x, y, z, "trunk"))
+        leafc = lambda: ("blossom" if rng.random() < 0.7 else "blossom2") if kind == "blossom" else ("leaf" if rng.random() < 0.6 else "leaf2")
+        if shape == "round":
+            rad = rng.randint(2, 3)
+            for dx in range(-rad, rad + 1):
+                for dy in range(-rad, rad + 1):
+                    for dz in range(-rad + 1, rad + 1):
+                        if dx * dx + dy * dy + dz * dz <= rad * rad + 1:
+                            vox["trees"].append((x + dx, y + dy, hgt + dz, leafc()))
+        elif shape == "pine":
+            for i, rad in enumerate((3, 2, 2, 1, 1, 0)):
+                z = hgt - 3 + i
+                for dx in range(-rad, rad + 1):
+                    for dy in range(-rad, rad + 1):
+                        if abs(dx) + abs(dy) <= rad:
+                            vox["trees"].append((x + dx, y + dy, z, leafc()))
+            vox["trees"].append((x, y, hgt + 3, "leaf"))
+        elif shape == "palm":
+            for ddx, ddy in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
+                for i in range(1, 5):
+                    vox["trees"].append((x + ddx * i, y + ddy * i, hgt + (1 if i < 2 else 0) - (i // 3), leafc()))
+            vox["trees"].append((x, y, hgt + 1, "leaf"))
+        else:   # dead: bare forked branches
+            for ddx, ddy in ((1, 0), (-1, 1), (0, -1)):
+                for i in range(1, 4):
+                    vox["trees"].append((x + ddx * i, y + ddy * i, hgt - 2 + i, "trunk"))
+    for _ in range(3):
+        for _try in range(40):
+            ax, ay = rng.randint(-size, size), rng.randint(-size, size)
+            if free(ax, ay):
+                break
+        for _ in range(rng.randint(3, 5)):
+            tx, ty = ax + rng.randint(-5, 5), ay + rng.randint(-5, 5)
+            if free(tx, ty):
+                tree(tx, ty, "leaf")
+    for _ in range(rng.randint(2, 3)):
+        for _try in range(40):
+            tx, ty = rng.randint(-size, size), rng.randint(-size, size)
+            if free(tx, ty):
+                tree(tx, ty, "blossom")
+                break
+    # 6. flowers, rocks
+    for _ in range(rng.randint(60, 110)):
+        x, y = rng.randint(-size, size), rng.randint(-size, size)
+        if free(x, y, 1):
+            vox["flowers"].append((x, y, hill(x, y) + 1, rng.choice(("flower_r", "flower_y", "flower_w"))))
+    for _ in range(rng.randint(4, 8)):
+        x, y = rng.randint(-size, size), rng.randint(-size, size)
+        if free(x, y, 2):
+            for dx in range(0, rng.randint(1, 3)):
+                for dy in range(0, rng.randint(1, 2)):
+                    for dz in range(1, rng.randint(2, 3)):
+                        vox["rocks"].append((x + dx, y + dy, hill(x, y) + dz, "rock" if rng.random() < 0.5 else "rock2"))
+    # v3 (10:46): lantern posts along the path, a fenced garden by the cottage, mushrooms under the trees,
+    # a plank pier off the rim with a little boat — the landmarks the contest reference islands had.
+    for i in range(d // 2 + 3, steps_n - 6, 7):
+        px, py = int(round(cx + (pcx - cx) * i / steps_n)), int(round(cy + (pcy - cy) * i / steps_n))
+        lx, ly = px - 1, py - 1
+        if (lx, ly) in top and (lx, ly) not in pond:
+            base = hill(lx, ly)
+            for z in range(base + 1, base + 4):
+                vox["rocks"].append((lx, ly, z, "trunk"))
+            vox["rocks"].append((lx, ly, base + 4, "lantern"))
+    gx, gy = cx + w // 2 + 3, cy - d // 2 - 1       # garden: 8x6 fence east of the cottage
+    for x in range(gx, gx + 9):
+        for y in range(gy, gy + 7):
+            if (x, y) not in top or (x, y) in pond:
+                continue
+            base = hill(x, y)
+            if x in (gx, gx + 8) or y in (gy, gy + 6):
+                if (x + y) % 2 == 0 or x in (gx, gx + 8):
+                    vox["rocks"].append((x, y, base + 1, "fence"))
+            elif (x + y) % 2 == 0:
+                vox["flowers"].append((x, y, base + 1, rng.choice(("flower_r", "flower_y", "flower_w"))))
+    for _ in range(rng.randint(6, 12)):
+        x, y = rng.randint(-size, size), rng.randint(-size, size)
+        if free(x, y, 1):
+            base = hill(x, y)
+            vox["rocks"].append((x, y, base + 1, "trunk"))
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    vox["rocks"].append((x + dx, y + dy, base + 2, "shroom_dot" if (dx, dy) == (0, 0) else "shroom"))
+    pier_ang = pang + rng.uniform(1.6, 2.6) * rng.choice((-1, 1))
+    pdx, pdy = math.cos(pier_ang), math.sin(pier_ang)
+    rim_r = radius(pier_ang)
+    for i in range(int(rim_r) - 4, int(rim_r) + 9):
+        for side in (-1, 0, 1):
+            x, y = int(round(i * pdx - side * pdy)), int(round(i * pdy + side * pdx))
+            vox["rocks"].append((x, y, -1, "plank"))
+            if i % 4 == 0 and side:
+                for z in range(-6, 0):
+                    vox["rocks"].append((x, y, z, "fence"))
+    bx, by = int(round((rim_r + 11) * pdx + 3 * pdy)), int(round((rim_r + 11) * pdy - 3 * pdx))
+    for dx in range(-3, 4):
+        for dy in range(-1, 2):
+            vox["rocks"].append((bx + dx, by + dy, -3, "boat"))
+            if abs(dx) < 3:
+                vox["rocks"].append((bx + dx, by + dy, -2, "boat" if dy else "plank"))
+    for z in range(-1, 5):
+        vox["rocks"].append((bx, by, z, "trunk"))
+        if 0 <= z < 4:
+            for dx in range(1, 4 - z):
+                vox["rocks"].append((bx + dx, by, z, "sail"))
+    # 7. crystals hanging below the keel, clouds beside
+    for _ in range(rng.randint(3, 6)):
+        x, y = rng.randint(-size // 2, size // 2), rng.randint(-size // 2, size // 2)
+        ln = rng.randint(4, 9)
+        c = rng.choice(("crystal", "crystal2"))
+        for z in range(-thick - 4, -thick - 4 - ln, -1):
+            vox["crystals"].append((x, y, z, c))
+            if ln > 6 and z > -thick - 6:
+                vox["crystals"].append((x + 1, y, z, c))
+    for _ in range(rng.randint(2, 3)):
+        ang = rng.uniform(0, 6.28)
+        cx0, cy0, cz0 = int((size + 18) * math.cos(ang)), int((size + 18) * math.sin(ang)), rng.randint(6, 14)
+        for dx in range(-6, 7):
+            for dy in range(-3, 4):
+                for dz in range(0, 3):
+                    if dx * dx / 36.0 + dy * dy / 9.0 + (dz - 1) ** 2 / 2.0 <= 1.0 + rng.uniform(-0.2, 0.2):
+                        vox["clouds"].append((cx0 + dx, cy0 + dy, cz0 + dz, "cloud"))
+    return vox
+
+
+def stats(vox):
+    return {k: len(v) for k, v in vox.items()}
+
+
+# ---- Blender side ---------------------------------------------------------------------------------------------
+
+def greedy_quads(voxels):
+    """Merge coplanar same-colour outer faces into rectangles (greedy meshing). Returns
+    [(axis, sign, slice, u0, v0, w, h, colour)]: axis 0/1/2 is the face normal, sign +1/-1, slice the plane
+    coordinate; (u, v) are the two other axes in order. 5-10x fewer faces than one quad per voxel face, which is
+    what Unreal's import time and memory scale with (10:51: a loaded world of 126 islands was 15 GB)."""
+    occupied = {(x, y, z): c for x, y, z, c in voxels}
+    out = []
+    for axis in (0, 1, 2):
+        ua, va = [a for a in (0, 1, 2) if a != axis]
+        for sign in (1, -1):
+            slices = {}
+            for p, c in occupied.items():
+                n = list(p)
+                n[axis] += sign
+                if tuple(n) in occupied:
+                    continue
+                slices.setdefault(p[axis], {})[(p[ua], p[va])] = c
+            for sl, mask in slices.items():
+                done = set()
+                for (u, v) in sorted(mask):
+                    if (u, v) in done:
+                        continue
+                    c = mask[(u, v)]
+                    w = 1
+                    while (u + w, v) in mask and (u + w, v) not in done and mask[(u + w, v)] == c:
+                        w += 1
+                    h = 1
+                    while all((u + i, v + h) in mask and (u + i, v + h) not in done and mask[(u + i, v + h)] == c for i in range(w)):
+                        h += 1
+                    for i in range(w):
+                        for j in range(h):
+                            done.add((u + i, v + j))
+                    out.append((axis, sign, sl, u, v, w, h, c))
+    return out
+
+
+def _mesh_from_voxels(name, voxels, scale=100.0, pal=PAL):
+    """One mesh from greedy-merged rectangles, vertex colours from the palette. scale: cm per voxel."""
+    bm = bmesh.new()
+    layer = bm.loops.layers.color.new("Col")
+    cache = {}
+
+    def vert(p):
+        v = cache.get(p)
+        if v is None:
+            v = bm.verts.new((p[0] * scale, p[1] * scale, p[2] * scale))
+            cache[p] = v
+        return v
+
+    for axis, sign, sl, u0, v0, w, h, c in greedy_quads(voxels):
+        ua, va = [a for a in (0, 1, 2) if a != axis]
+        # FBX carries vertex colours raw and Unreal reads them as sRGB bytes, so encode the linear palette to sRGB
+        # here (the GLB exporter did this itself; FBX-imported islands came out washed-out beige).
+        col = tuple(q ** (1.0 / 2.2) for q in pal[c]) + (1.0,)
+        plane = sl + (1 if sign > 0 else 0)
+        corners = []
+        for (du, dv) in ((0, 0), (w, 0), (w, h), (0, h)):
+            p = [0, 0, 0]
+            p[axis] = plane
+            p[ua] = u0 + du
+            p[va] = v0 + dv
+            corners.append(tuple(p))
+        # winding: outward normal. For axis order (ua, va) the loop (0,0)->(w,0)->(w,h)->(0,h) faces +axis when
+        # (ua, va, axis) is a right-handed triple, i.e. axis 1 (ua=0, va=2) is the odd one out.
+        if (sign > 0) == (axis == 1):
+            corners.reverse()
+        try:
+            f = bm.faces.new([vert(p) for p in corners])
+        except ValueError:
+            continue
+        for loop in f.loops:
+            loop[layer] = col
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    ob = bpy.data.objects.new(name, me)
+    bpy.context.scene.collection.objects.link(ob)
+    mat = bpy.data.materials.get("VoxelVertexColour")
+    if mat is None:
+        mat = bpy.data.materials.new("VoxelVertexColour")
+        mat.use_nodes = True
+        nodes = mat.node_tree.nodes
+        bsdf = nodes.get("Principled BSDF")
+        vc = nodes.new("ShaderNodeVertexColor")
+        vc.layer_name = "Col"
+        mat.node_tree.links.new(vc.outputs["Color"], bsdf.inputs["Base Color"])
+        bsdf.inputs["Roughness"].default_value = 0.85
+    me.materials.append(mat)
+    return ob
+
+
+GROUPS = {"body": ("island", "water", "trees", "cottage", "flowers", "rocks", "crystals"), "clouds": ("clouds",)}
+
+
+def clouds_ob(name):
+    return bpy.data.objects.get("%s_clouds" % name)
+
+
+def walk_rects(island_voxels):
+    """[(x0, y0, w, h, ztop)] rectangles covering the island's upward faces (colour-agnostic greedy merge)."""
+    flat = [(x, y, z, "k") for x, y, z, _ in island_voxels]
+    return [(u, v, w, h, sl + 1) for axis, sign, sl, u, v, w, h, _ in greedy_quads(flat) if axis == 2 and sign == 1]
+
+
+def _ucx_boxes(name, island_voxels, depth=6, scale=100.0):
+    out = []
+    for i, (x0, y0, w, h, zt) in enumerate(walk_rects(island_voxels)):
+        bm = bmesh.new()
+        bmesh.ops.create_cube(bm, size=1.0)
+        for v in bm.verts:
+            v.co.x = (x0 + (w if v.co.x > 0 else 0)) * scale
+            v.co.y = (y0 + (h if v.co.y > 0 else 0)) * scale
+            v.co.z = (zt if v.co.z > 0 else zt - depth) * scale
+        me = bpy.data.meshes.new("UCX_%s_body_%02d" % (name, i))
+        bm.to_mesh(me)
+        bm.free()
+        ob = bpy.data.objects.new("UCX_%s_body_%02d" % (name, i), me)
+        bpy.context.scene.collection.objects.link(ob)
+        out.append(ob)
+    return out
+
+
+def build(seed, out, size=46, thick=22, keep=False):
+    """Build the island for `seed` in the open Blender scene and export it as FBX next to `out` (body + clouds +
+    UCX boxes); `out` is the .glb path by convention, the GLB itself only when VOXEL_ISLAND_GLB is set."""
+    vox = plan(seed, size, thick)
+    name = "Island_C%d" % seed
+    for ob in list(bpy.data.objects):
+        if ob.name.startswith("Island_C"):
+            bpy.data.objects.remove(ob, do_unlink=True)
+    objs = []
+    for layer, members in GROUPS.items():      # two meshes per island: Unreal's importer costs ~2 s per mesh
+        voxels = [v for m in members for v in vox.get(m, [])]
+        if voxels:
+            objs.append(_mesh_from_voxels("%s_%s" % (name, layer), voxels, pal=palette(seed)))
+    for ob in bpy.data.objects:
+        ob.select_set(ob in objs)
+    bpy.context.view_layer.objects.active = objs[0]
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    if os.environ.get("VOXEL_ISLAND_GLB"):     # the GLB lane is kept for reference only; FBX is what Unreal eats
+        bpy.ops.export_scene.gltf(filepath=out, use_selection=True, export_format="GLB", export_apply=True, export_yup=True)
+    # collision (v4, from Codex's hand-off): one convex box per walk-surface rectangle, named UCX_<body>_NN, so the
+    # importer gets simple collision that follows the hill, pond and rim instead of one hull bridging everything
+    body = bpy.data.objects.get("%s_body" % name)
+    hulls = []
+    if body is not None:
+        hulls = _ucx_boxes(name, vox["island"], depth=6)
+        for ob in bpy.data.objects:
+            ob.select_set(ob is body or ob in hulls or ob is clouds_ob(name))
+        bpy.ops.export_scene.fbx(filepath=out[:-4] + ".fbx", use_selection=True, apply_scale_options="FBX_SCALE_ALL", axis_forward="-Y", axis_up="Z")
+        if not keep:
+            for h in hulls:
+                bpy.data.objects.remove(h, do_unlink=True)
+    if not keep:
+        for ob in objs:
+            bpy.data.objects.remove(ob, do_unlink=True)
+    return {"seed": seed, "out": out, "voxels": stats(vox)}
+
+
+def build_many(seeds, out_dir, size=46, thick=22, force=False):
+    """Contest batches (Richey 09:36 "chunks of 10 then scale up"): one GLB per seed into out_dir. Returns
+    {seed: stats}; a seed whose GLB already exists is skipped so a re-run only fills gaps."""
+    done = {}
+    for seed in seeds:
+        out = os.path.join(out_dir, "Island_C%d.glb" % seed)
+        if os.path.exists(out[:-4] + ".fbx") and not force:
+            done[seed] = "exists"
+            continue
+        done[seed] = build(seed, out, size=size, thick=thick)
+    return done

@@ -80,6 +80,23 @@ class StompSubscriptionAuthorizationInterceptorTest {
     }
 
     @Test
+    void aSubjectThatJoinedWithATokenMaySubscribe() {
+        ownedByAlice.join("Bob", new Point(0, 0), "bob");
+        Message<byte[]> subscribe =
+                frame(StompCommand.SUBSCRIBE, playerTopic(ownedByAlice), new JwtPrincipal("bob"));
+        assertThat(interceptor.preSend(subscribe, channel)).isSameAs(subscribe);
+    }
+
+    @Test
+    void joiningWithoutASubjectDoesNotOpenTheOwnedFeed() {
+        ownedByAlice.join("Bob", new Point(0, 0));
+        Message<byte[]> subscribe =
+                frame(StompCommand.SUBSCRIBE, playerTopic(ownedByAlice), new JwtPrincipal("bob"));
+        assertThatThrownBy(() -> interceptor.preSend(subscribe, channel))
+                .isInstanceOf(StompAuthenticationException.class);
+    }
+
+    @Test
     void anAnonymousConnectionIsRefusedOnAnOwnedSessionTopic() {
         // No principal at all — the advisory profile allows connecting without one, but an
         // owned session's feed is still not theirs to watch.

@@ -1,0 +1,532 @@
+[
+  {
+    "Path": "DaedalusLink.uplugin",
+    "Sha256": "02727987041D51D4AF37F0B77C80F3D5ADC2AB4E1B5F56764E75F0692343951C",
+    "Bytes": 1046
+  },
+  {
+    "Path": "Source\\DaedalusLink\\DaedalusLink.Build.cs",
+    "Sha256": "9411CDC4759B9124ED117B6EB259565541D5CAA7BC5F64E011A9AB5A4F038D82",
+    "Bytes": 762
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusBattlePresentation.cpp",
+    "Sha256": "7758C999FACD18CE8C03B7815FABD5A04508989E4B622795F1D64F2BD531845A",
+    "Bytes": 2983
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusCritter.cpp",
+    "Sha256": "57A2A137752C5ACA830C5C6CB6AE423B106CF17B570CA1AC4A8A8709EFDB9CA3",
+    "Bytes": 6023
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusDesktopArcade.cpp",
+    "Sha256": "A60C424C464D05810FE381E38D7DE42A6417DD95B8F2275D88E9C84E5DECAAA9",
+    "Bytes": 19865
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusDresser.cpp",
+    "Sha256": "440CB4350AF662EA61E39D07DC5DE81FE2823F58902D44147903323B381A397B",
+    "Bytes": 15594
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusEcology.cpp",
+    "Sha256": "FE141658B011F86C012810B24EFF2DFD6563A45BA33862910746C7273CFB0675",
+    "Bytes": 3100
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusEncounters.cpp",
+    "Sha256": "B6A8A5ECCC43FFE6E95EFF0A0C8ABE5D7F965B669ACE1D8B90667945AD6268AB",
+    "Bytes": 6710
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusExplorationTerrain.cpp",
+    "Sha256": "9D8693B42FC3AEAF7E0CC69D0ABC836B86C797391F61DF280C461A4E4DA5162D",
+    "Bytes": 2720
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusFilm.cpp",
+    "Sha256": "BC498F0E556FCED7E143DBD100572CDC1B30CA72574D57FB96BEDAD0B17907B4",
+    "Bytes": 1242
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusGhost.cpp",
+    "Sha256": "6DC251178F2BFC891F3A8FC2A3764E503A06C4F8CA9CD9A68E067A1647B5779F",
+    "Bytes": 16680
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusHero.cpp",
+    "Sha256": "42DF99D4CFFDA0B34C92ECAE063DE0018329A7651734C1A7DF7441825F4215A4",
+    "Bytes": 81747
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusHomestead.cpp",
+    "Sha256": "9A806436C60DF8D700C51B6ACAF805333F2A477F30EF2BDBF374F562B1A17403",
+    "Bytes": 7142
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusJavaArcade.cpp",
+    "Sha256": "1DE82930EE72211EACA9C4ABEFB02882BB312304FB04995B673DA4D8ED52C869",
+    "Bytes": 60752
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusLinkModule.cpp",
+    "Sha256": "4702B6EDB1D6D8DC8032588BC55307475DCF28AE023845DE4C9BDB77042737BB",
+    "Bytes": 388
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusMob.cpp",
+    "Sha256": "1142E16B8F5CF8B4456E5CBCE6F207B11F0ACC38197F368AD9DF73EBAF6420FC",
+    "Bytes": 2095
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusMoodVolume.cpp",
+    "Sha256": "1A947D1B98B1C9E20E1ED816B3AF64024FD268D242F6239A46267932C37AB387",
+    "Bytes": 2727
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusNav.cpp",
+    "Sha256": "06F038A1D938263D42443968599ECD01BB69EA5BDA14F1A42E72810A219E036F",
+    "Bytes": 6653
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusOrrery.cpp",
+    "Sha256": "9542A444D21F92CE601DFC0FB8605034C8B85CFFA288164D8DC3D3B23BE0BFD4",
+    "Bytes": 18232
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusPickup.cpp",
+    "Sha256": "2F83E899E13A77A3C7B946B858863814EB5C73D51713042351C03B0DF13CE01E",
+    "Bytes": 3016
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusSettings.cpp",
+    "Sha256": "B251A91AD193859775579093AE8AC4DDCF4D4DD8D315928DE039938430803940",
+    "Bytes": 10000
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusShiny.cpp",
+    "Sha256": "880FAFD05D5F5A3FCFC76CEA75607E35089DC886BA83D89D5519A6BA73F71A91",
+    "Bytes": 4177
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusSkyBridge.cpp",
+    "Sha256": "DD579237091A2521BF2D4B2EF74FEF78B53EAB587B37B6165500406D49432638",
+    "Bytes": 3218
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusSkyDirector.cpp",
+    "Sha256": "A3FDB967218BE6B01DE319B7CBA797871B665371C739BFFBF7F05DA78D67BB9E",
+    "Bytes": 16420
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusSolReachJournal.cpp",
+    "Sha256": "711A184EE255DF4876F89131BF86B2099A6A48C3B5952AEF2FA41E5E07492DA0",
+    "Bytes": 8826
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusStreamer.cpp",
+    "Sha256": "208B2484F326E68ECF4A03987F47AFE4925BE8C04D4C5AF88E4A86317E50CA7F",
+    "Bytes": 5077
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusTactics.cpp",
+    "Sha256": "528F4CCA9CCE857D920D77A3DC345D05477E7196D8AA75CE68CBAEEF4B945A34",
+    "Bytes": 12402
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusTalker.cpp",
+    "Sha256": "81CC80CD8E46F8A109A674FDCE47A62FF7366B2BAACFA0FBA5F009F78956F93B",
+    "Bytes": 5243
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusTarget.cpp",
+    "Sha256": "A2F478548FA4B781EC3A7D3D7FB136C341A9533D6C49E1332F8CC96A51A7CAC5",
+    "Bytes": 20697
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusVoxelIsle.cpp",
+    "Sha256": "63D76EE28BA0C945E9CDC665016733905E29CDE30750B98038EA1946158014D6",
+    "Bytes": 9182
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\DaedalusWorldActor.cpp",
+    "Sha256": "FA0F9635A7E2B78CAF63A19F76E38D102642F7E99D72A624B00E49BF09BF8651",
+    "Bytes": 22936
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.cpp",
+    "Sha256": "1BFE44F19F6C26A99B04631E58FE3555EB905D221DFC95ED1F3FDC6B8FC105BF",
+    "Bytes": 26287
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusDesktopArcade.h",
+    "Sha256": "BBEB1BA0191730B193E7361EF9131499A9F3DF8007E8680D578ADBFA7D670AB1",
+    "Bytes": 2411
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusDialogue.cpp",
+    "Sha256": "1ADFE8D0AC21AA984A4F383B85E0307E8BED8FEA2F81C8DEB7535C37304A7995",
+    "Bytes": 6332
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusDialogue.h",
+    "Sha256": "14877E072C7233C21249642F11A18288AC5BFEBA4F8CE5C5CC270C7C856D391F",
+    "Bytes": 2241
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusFieldMenu.cpp",
+    "Sha256": "A367363A7DD68D73DE6917F37C03D157537DAFA1040295B296A4BA35E343266F",
+    "Bytes": 13052
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusFieldMenu.h",
+    "Sha256": "3A5E154C24FEAE1B629BC8DA29E045D4A62C855E60826DEF9D0BAB905D975B47",
+    "Bytes": 1783
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusHud.cpp",
+    "Sha256": "BE682AF2512A2A2C26E396A67C915A79C9FD022BE9961BC65436BCFE91E3DB50",
+    "Bytes": 11327
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusHud.h",
+    "Sha256": "B49B8C9BAC27D9C2303AB61DE3A8D9A83CB9F0927F0E04A487FF33E6F0474030",
+    "Bytes": 718
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusInventory.cpp",
+    "Sha256": "CB78D44886E6C70BEA9641B31F1989DB457073C9E3BE5CBBCBA7BF8B1115D29F",
+    "Bytes": 10756
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusInventory.h",
+    "Sha256": "99C34688A9C03C6542E59050AC68A6F1594BE0F127CA531D14EE72FCDE50D52D",
+    "Bytes": 2483
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusJavaArcade.cpp",
+    "Sha256": "7264206EE93950115AC91C916BB576BC6811A7660A6236276354BFEF68279C5B",
+    "Bytes": 16477
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusJavaArcade.h",
+    "Sha256": "5BA9EC7E169ACB57F87DD590F042B8C52B4C4B293E350EAE84368A3492247CA0",
+    "Bytes": 1436
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusRealm.cpp",
+    "Sha256": "93416C0DDE4B2FD4B96B37D03F60135DE7FA4E3F9A75DBD52C81DBAAAFD274E8",
+    "Bytes": 7956
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusRealm.h",
+    "Sha256": "8344FC42399A1CC073CC75D7A129190A5945B80B4896C4C9EF9CF2D9577BB2DC",
+    "Bytes": 3000
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusSettingsMenu.cpp",
+    "Sha256": "064137E6D7AA657A6075730260F090D79F345386D43060E63E82602DCCCB1BB3",
+    "Bytes": 15983
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Private\\SDaedalusSettingsMenu.h",
+    "Sha256": "51FFE1B24159B5118EC0DE1870AA47740FE28061BEF6B9308B09404E28898B35",
+    "Bytes": 2135
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusAssetLodCore.h",
+    "Sha256": "BF561043A19CC4908C7A9142ADE40950B71FADEE75F6EAE5AE3905582B29AD8B",
+    "Bytes": 6330
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusBattlePresentation.h",
+    "Sha256": "0FD0D6489BE34762DE003FBBCB5EB1798BF42F1A7189F4715D38688984B61AC9",
+    "Bytes": 1581
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusBattleStageCore.h",
+    "Sha256": "460F75ECDB67313744FFC71305CF0A3103FF4B32A90237DB621F5BC2B5CBAB51",
+    "Bytes": 9770
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusCastScriptCore.h",
+    "Sha256": "D0AF46E5877CE637FB859300E6B1A5BD72123B09071C250CB265FC726F9E3BCA",
+    "Bytes": 14303
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusCritter.h",
+    "Sha256": "B0FFEA1B357D9A821903C6187301CB7C1BC9A5F8FBA268CB96E8FC29ABE2B574",
+    "Bytes": 2902
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusDesktopArcade.h",
+    "Sha256": "6856255C9A0B7A590E410A8D4FCC4D090A98F379994977B97BB74227308D8F6A",
+    "Bytes": 10397
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusDialogueCore.h",
+    "Sha256": "7F512DA804E6D4DCDE60C54A7453E97F74A37789AB62A11C9295C6A04125B5A4",
+    "Bytes": 11626
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusDresser.h",
+    "Sha256": "DABA55C89838AC409A24BAB10F09AF41849F64A330CC6ABF3223D818C7068797",
+    "Bytes": 2865
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusEcology.h",
+    "Sha256": "956B8B794F9CD17174E5A50D7AF21665A85741547E06325434AD40174D6735AD",
+    "Bytes": 2675
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusEcologyCore.h",
+    "Sha256": "63327A045E9B4A2E299D2501BF6916E8A729D7BFF5644A98C107E49F4B5F3F4D",
+    "Bytes": 6371
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusEncounters.h",
+    "Sha256": "27C232E7CADC8F2FBC59994C4B21ED2510DC70291DE47C1F081A3C80A0637487",
+    "Bytes": 1893
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusExplorationTerrain.h",
+    "Sha256": "50281F3329FE34D2B776AE5923017DA599572A6121048555C65AF2BACCFCB715",
+    "Bytes": 1119
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusExplorationTerrainCore.h",
+    "Sha256": "64852FA40CFF6C3EF106E9BBC1BF875864D2E1336DBE999DC62F969400E74762",
+    "Bytes": 2658
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusFilm.h",
+    "Sha256": "37A566FB8FEB79F49C7B46AD0733272F7F9B951C8C02C7400D23EA05F22FA4ED",
+    "Bytes": 1290
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusGhost.h",
+    "Sha256": "B8EDED8583DBBEF5382F2BFEE6360502B31791A574DF082845A51FAE77716945",
+    "Bytes": 4668
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusHero.h",
+    "Sha256": "2C49EAFBBCBF7CECC025F47B2D34CC683510042A674860BA850EA79602F0BC93",
+    "Bytes": 20771
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusHomestead.h",
+    "Sha256": "C5C1E5F5C32C1402E1EB38713A5B12006B70B2C23881214216FA306DACE67BCA",
+    "Bytes": 6790
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusInventoryCore.h",
+    "Sha256": "B0FF4BF115B3E9A43453451DFE765F0062F527A3E3A1F51A82619CFE8DC989AE",
+    "Bytes": 16607
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusJavaArcade.h",
+    "Sha256": "5F381E5C487F0242F935BC8B490F269AB25AE1D1608D88528D29AD6B08D8CD63",
+    "Bytes": 12285
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusLandGrid.h",
+    "Sha256": "1483E59D9FE35CF706391D1C826D46480EC15B37349B94140726AD758DB31C3E",
+    "Bytes": 5254
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusLinkModule.h",
+    "Sha256": "8CAB6B4A9AB8FD4CE5E9AF6F0F5545D6DD047773D8CB3EAB52D6894F2C0348DA",
+    "Bytes": 360
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusMeshCore.h",
+    "Sha256": "0F0B6DE54CAD1A75D11CB10A36D3C2C9CF0207B517CFCAA5B8D4FF2AF49BDF03",
+    "Bytes": 14977
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusMob.h",
+    "Sha256": "16C6D99267A53B801176D46EBBF00C7ECB6B6715343A018EE5530429ACD7CF48",
+    "Bytes": 1077
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusMoodVolume.h",
+    "Sha256": "F45F4A4B5876C6CE65F95EFE9C0A63F9162AAEA43352F679936AF38FF1DC3EA4",
+    "Bytes": 2765
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusNav.h",
+    "Sha256": "04669B2717A527B281CE128651CC62E7A4573BCEFD68C67FE8D3F5C17E8B5A9A",
+    "Bytes": 2469
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusOceanTravelCore.h",
+    "Sha256": "C6CA90A607D2D64D0F23CE3CE99AC5F75BC7B60C9084577FFE934EC46678D7D1",
+    "Bytes": 1577
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusOrrery.h",
+    "Sha256": "712FA49F121A007262076FB214C25F9BCB1733B1D935D949794D21236A9BF381",
+    "Bytes": 8472
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusOrreryCore.h",
+    "Sha256": "DDD9C5A7001E972CC097040E835C700CA5EFB3602A32EF4B89A4D19A4E3C85F9",
+    "Bytes": 6823
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusPickup.h",
+    "Sha256": "E296C3C7E6BB1508B55A2F5E3ECEDB91A20B50B9B39224A59B9427C29119F691",
+    "Bytes": 1237
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusPortalQuestCore.h",
+    "Sha256": "3DBFB26A741630922C0D1B5CDC7548FFB1B35EFE25E0179E5D0476BBD247F2C6",
+    "Bytes": 2341
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusRealmCore.h",
+    "Sha256": "E9CFC753E1F6A967C266B99A2DADAAE9544AB1BF8642CC7836B618F0609F2498",
+    "Bytes": 89071
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusRealmDraw.h",
+    "Sha256": "D2E3929ED4BDC51CFBF8E6B52637760C77B2616D5326AED6F59799B524647672",
+    "Bytes": 27340
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusRealmLook.h",
+    "Sha256": "FC3DA2288CD5550A6FF157DBB747159910B6E525C3D059D72ACCB574C1C79004",
+    "Bytes": 13166
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusRealmSpec.h",
+    "Sha256": "F6E476868A694A286B15EF52BCC2B407D2D9CA644E41066C4E39F03287EDA346",
+    "Bytes": 19980
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusRealmSprites.h",
+    "Sha256": "9D3B9BEE3017E5DE925ED034748CD85D098F66294EF01225C07A6859B826E4E2",
+    "Bytes": 7501
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusSettings.h",
+    "Sha256": "88568C06315024C4DD5CE2A0C971105564C5A2A321D8BB68127B9456DF8BFFA3",
+    "Bytes": 2205
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusShiny.h",
+    "Sha256": "55E99DD0CDA2AAAC67CA92FC609E28655924C0416F4D36AC7251B95355AB17FE",
+    "Bytes": 1681
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusSkyBridge.h",
+    "Sha256": "D10D433BA7B60AB23B14100A8EDEF7025BE2C55680E806E1F08798F1835F2A0C",
+    "Bytes": 1660
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusSkyDirector.h",
+    "Sha256": "08602CE8204496EB0F81575F9E35FDB2384EED811952A0F58C190F27BA78114E",
+    "Bytes": 12671
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusSolReachCore.h",
+    "Sha256": "AC93488E682BDDC138DBF9F72139FD42A8C16A183D21BC021FBF04B9428C8018",
+    "Bytes": 5207
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusSolReachJournal.h",
+    "Sha256": "7FA22BAA639DA7C8A3D169576A38814FCF946ADB3415025EBBCB3BF0AB283298",
+    "Bytes": 6057
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusStreamCore.h",
+    "Sha256": "D5412674080463EFE6C9A7F49646F301B1BACF5691B1414459A2BAE3F2AA943A",
+    "Bytes": 4951
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusStreamer.h",
+    "Sha256": "1628AEC435CA5D738DDD47C628BB01D1BF73C4546F8B4A8E13D7E43B1C342976",
+    "Bytes": 2092
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusStreamingBudgetCore.h",
+    "Sha256": "8916842540469039E81D82B2C211D72CF597BE6E0EB1C838F674D411D21B0223",
+    "Bytes": 6366
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusTactics.h",
+    "Sha256": "1A04C86E0214DC62157552B192642D3CD98FB9B1B4BFD77FA8B2831DF1A56D16",
+    "Bytes": 5107
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusTacticsCore.h",
+    "Sha256": "08896868A59868046B982B3914D73BAB73C9B1D1851D594A32DB21ACEDC79EE5",
+    "Bytes": 16694
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusTalker.h",
+    "Sha256": "EF66258345AE3BD833F86C640A4F978B430736EDC5863FF53164A94A725B4766",
+    "Bytes": 3116
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusTarget.h",
+    "Sha256": "03F3AAB7D834FC556254B320A9B8E7AB17B6C44E27732C4799D6FA25E5FCB0F8",
+    "Bytes": 6853
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusVoxelIsle.h",
+    "Sha256": "A48FCD2EDE6EAE346346D875EABF9CA6ABC4C2898E7D2F5FFBDF4F838FC37C02",
+    "Bytes": 5270
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusVoxelIsleCore.h",
+    "Sha256": "9CDC6CE32004A55E5E891857477E6FBCFE815B8007FD404915263E2E26C588B7",
+    "Bytes": 13279
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DaedalusWorldActor.h",
+    "Sha256": "E10B67DEA3D54C21CD3E6EF4099D1B45A7E350200E21769C6B5F950236234305",
+    "Bytes": 10206
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameRegistry.h",
+    "Sha256": "2A494F53B50C4AB9339AA313230368634FD79FC79AE72310E39B39FD11598558",
+    "Bytes": 5871
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopGameTypes.h",
+    "Sha256": "5665CDF879921A8421346D35CD58AC89AC7956970310E374D81A9C0811AEF142",
+    "Bytes": 4865
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopMazeCore.h",
+    "Sha256": "403CAB699959075E55FF3065447D6105B05A98193845D75B088AE90574A24DD1",
+    "Bytes": 25220
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPlatformersCore.h",
+    "Sha256": "2ECA2A6AE89DCFE328CB70BDF6CAAF14944F859525E941F36FB580894E70E05A",
+    "Bytes": 27092
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopPongCore.h",
+    "Sha256": "E282406B9ACD43731C6CAC137A0BF10B0501223A251A054CA52DEB441737EE06",
+    "Bytes": 2385
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopShootersCore.h",
+    "Sha256": "DF494A7426075399EE8EE290FF2D00D8D86EF168B116E91C3CAEF9F8555E9F09",
+    "Bytes": 46562
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\DesktopGames\\DaedalusDesktopSportsCore.h",
+    "Sha256": "2005F6E818B4F66EC8C76D041317B414F8F383FABC2422D2F157FE8A816D876D",
+    "Bytes": 25223
+  },
+  {
+    "Path": "Source\\DaedalusLink\\Public\\JavaArcade\\DaedalusJavaArcadeProtocol.h",
+    "Sha256": "9B819430250B9386E2686EBB423121CA733C0111585E453A49CFAD557DB6CBA0",
+    "Bytes": 12109
+  }
+]

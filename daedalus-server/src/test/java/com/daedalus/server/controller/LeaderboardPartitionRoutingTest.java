@@ -2,11 +2,7 @@
 
 package com.daedalus.server.controller;
 
-import com.daedalus.server.service.AlgorithmCatalogService;
-import com.daedalus.server.service.GameSessionService;
 import com.daedalus.server.service.LeaderboardService;
-import com.daedalus.server.service.MazeGenerationService;
-import com.daedalus.server.service.MazeSolverService;
 import com.daedalus.server.web.ApiExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,15 +49,7 @@ class LeaderboardPartitionRoutingTest {
         when(board.top(anyInt(), any())).thenReturn(List.of());
         when(board.topByGenerator(anyInt(), any())).thenReturn(List.of());
 
-        MazeController controller = new MazeController(
-                mock(MazeGenerationService.class),
-                mock(MazeSolverService.class),
-                mock(AlgorithmCatalogService.class),
-                mock(GameSessionService.class),
-                board,
-                mock(com.daedalus.server.service.LivingMazeService.class),
-                mock(com.daedalus.server.service.DailyMazeService.class),
-                mock(com.daedalus.server.service.TrafficService.class));
+        LeaderboardController controller = new LeaderboardController(board);
         mvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(new ApiExceptionHandler())
                 .build();

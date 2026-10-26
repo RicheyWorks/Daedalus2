@@ -1,0 +1,23 @@
+{
+ "schema": "daedalus.inventory/v0",
+ "board": 4,
+ "player": {
+  "slots": 30,
+  "hotbar": 8
+ },
+ "stack_default": 64,
+ "stack_tools": 1,
+ "chests": {
+  "Chest_Wood": {
+   "slots": 20
+  },
+  "Chest_Iron": {
+   "slots": 40
+  }
+ },
+ "rules": [
+  "merge into existing stacks first",
+  "shift-click moves to other container",
+  "full -> item drops as pickup"
+ ]
+}

@@ -63,6 +63,8 @@ class ConfigCoverageTest {
 
     private static final Pattern VALUE_KEY =
             Pattern.compile("\\$\\{(daedalus\\.[A-Za-z0-9.-]+?)(?::|})");
+    private static final Pattern CONDITIONAL_KEY =
+            Pattern.compile("@ConditionalOnProperty\\(name = \"(daedalus\\.[A-Za-z0-9.-]+)\"");
 
     /** {@code @ConfigurationProperties("daedalus.x")} — a whole subtree bound without any @Value. */
     private static final Pattern PROPERTIES_PREFIX =
@@ -135,10 +137,13 @@ class ConfigCoverageTest {
                 .isTrue();
         try (Stream<Path> files = Files.walk(root)) {
             for (Path file : files.filter(p -> p.toString().endsWith(".java")).toList()) {
-                Matcher m = VALUE_KEY.matcher(Files.readString(file, StandardCharsets.UTF_8));
+                String source = Files.readString(file, StandardCharsets.UTF_8);
+                Matcher m = VALUE_KEY.matcher(source);
                 while (m.find()) {
                     keys.add(m.group(1));
                 }
+                m = CONDITIONAL_KEY.matcher(source);
+                while (m.find()) keys.add(m.group(1));
             }
         }
         assertThat(keys)
