@@ -65,6 +65,7 @@ canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; displa
 <script src="settings/daedalus-settings.js"></script>
 <script src="summons.js"></script>
 <script src="waystones.js"></script>
+<script src="journey-save.js"></script>
 <script>
 "use strict";
 (() => {
@@ -114,21 +115,49 @@ function setHeld(src, k, v) {
 function releaseSource(src) { if (SRC[src]) for (const k of LOGICAL) setHeld(src, k, false); delete SRC[src]; }
 const KEYMAP = { ArrowUp: "up", KeyW: "up", ArrowDown: "down", KeyS: "down", ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right",
   KeyZ: "a", Space: "a", KeyX: "b", Escape: "b", Backspace: "b", Enter: "start" };
+const keyboardCodes = new Set();
+let pageInactive = typeof document.hasFocus === "function" && !document.hasFocus();
+let settingsTransition = false, settingsFramePaused = false;
+let last = performance.now(), SPEED = 1;                 /* tests may run the clock faster (PRISM_DEMO.speed) */
+let PAD = null, PANEL = null;                            /* reset callbacks may be synchronous during setup */
+function keyboardHeld(code, down) {
+  if (down) keyboardCodes.add(code); else keyboardCodes.delete(code);
+  const k = KEYMAP[code];
+  if (k) setHeld("kb", k, Array.from(keyboardCodes).some(c => KEYMAP[c] === k));
+}
+function gameplayInputBlocked() {
+  return settingsTransition || pageInactive || document.hidden || !!(PANEL && PANEL.isOpen()) || !!(PAD && PAD.binding());
+}
+function resetGameplayInput() {
+  keyboardCodes.clear(); Object.keys(SRC).forEach(releaseSource);
+  for (const k of LOGICAL) { pressed[k] = false; delete pressedAt[k]; delete repeatAt[k]; }
+  touchEl.querySelectorAll(".held").forEach(b => b.classList.remove("held"));
+  settingsTransition = true; last = performance.now();
+  if (PAD) { PAD.releaseAll(); PAD.clearEdges(); }
+}
+function suspendGameplayInput() {
+  if (PAD && PAD.binding()) PAD.cancelBind();
+  resetGameplayInput();
+}
 window.addEventListener("keydown", e => {
-  if (typeof PANEL !== "undefined" && PANEL && PANEL.isOpen()) return;
   if (PAD && PAD.binding() && e.code === "Escape") { e.preventDefault(); return PAD.cancelBind(); }
-  const k = KEYMAP[e.code]; if (!k) return; e.preventDefault(); if (!e.repeat) setHeld("kb", k, true); unlockAudio();
+  if (gameplayInputBlocked()) return;
+  const k = KEYMAP[e.code]; if (!k) return; e.preventDefault(); if (!e.repeat) keyboardHeld(e.code, true); unlockAudio();
 });
-window.addEventListener("keyup", e => { const k = KEYMAP[e.code]; if (k) setHeld("kb", k, false); });
-window.addEventListener("blur", () => Object.keys(SRC).forEach(releaseSource));     /* focus loss releases everything held */
+window.addEventListener("keyup", e => { if (KEYMAP[e.code]) keyboardHeld(e.code, false); });
+window.addEventListener("blur", () => { pageInactive = true; suspendGameplayInput(); });
+window.addEventListener("focus", () => { pageInactive = false; resetGameplayInput(); });
+document.addEventListener("visibilitychange", () => { if (document.hidden) suspendGameplayInput(); else resetGameplayInput(); });
 document.querySelectorAll("#pad button").forEach(b => {
   const k = b.dataset.k;
-  const down = e => { e.preventDefault(); if (k === "opts") { openSettings(); return; } setHeld("touch", k, true); b.classList.add("held"); unlockAudio(); };
+  const down = e => { e.preventDefault(); if (gameplayInputBlocked()) return; if (k === "opts") { openSettings(); return; } setHeld("touch", k, true); b.classList.add("held"); unlockAudio(); };
   const up = e => { e.preventDefault(); setHeld("touch", k, false); b.classList.remove("held"); };
   b.addEventListener("pointerdown", down); b.addEventListener("pointerup", up); b.addEventListener("pointerleave", up); b.addEventListener("pointercancel", up);
 });
 cv.addEventListener("pointerdown", () => { cv.focus(); unlockAudio(); });
 const hit = k => { const v = pressed[k]; pressed[k] = false; return !!v; };
+/* A mode transition consumes this press, while held sources and movement buffering stay intact. */
+function clearActionButtons() { for (const k of ["a", "b", "start"]) hit(k); }
 function menuRepeat(now) {                                        /* held directions repeat in menus, never in the field */
   if (mode === "field" && !dlg) return;
   for (const k of ["up", "down", "left", "right"]) if (held[k] && now >= (repeatAt[k] || Infinity)) { pressed[k] = true; repeatAt[k] = now + 110; }
@@ -141,22 +170,30 @@ function menuRepeat(now) {                                        /* held direct
 const SETTINGS = window.DaedalusSettings ? DaedalusSettings.create({ schema: "settings/settings-schema.json" }) : null;
 if (SETTINGS) SETTINGS.on("*", () => applyAudio());
 const PAD_TO_DEMO = { up: "up", down: "down", left: "left", right: "right", confirm: "a", cancel: "b", menu: "start" };
-const PAD = window.DaedalusPad ? DaedalusPad.create({
+PAD = window.DaedalusPad ? DaedalusPad.create({
   bundle: "controllers/controller-bundle.json", arcadeKeys: true, storageKey: "prism.pad.v2", settings: SETTINGS,
   onChange: e => {
     if (e.type === "down" || e.type === "up") {
-      if (PANEL && PANEL.isOpen()) return;                  /* the panel reads the pad itself */
+      if (e.type === "down" && gameplayInputBlocked()) return; /* shared panel keeps polling; releases still reach the game */
       if (e.action === "select" && e.type === "down") { openSettings(); return; }
       const k = PAD_TO_DEMO[e.action]; if (k) setHeld("pad", k, e.type === "down"); if (e.type === "down") unlockAudio(); return;
     }
-    if (e.type === "bind" && e.step) sfx("TICK");
-    if (e.type === "bound") { sfx("PICK"); toast("Buttons taught", e.pad.name); }
+    if (e.type === "bind") { if (e.step) sfx("TICK"); else resetGameplayInput(); }
+    if (e.type === "bound") { resetGameplayInput(); sfx("PICK"); toast("Buttons taught", e.pad.name); }
+    if (e.type === "bindcancel") { resetGameplayInput(); toast("Button teaching cancelled", "Previous controls kept. Try again in Settings."); }
     if (e.type === "connect") toast(e.pad.name + " connected", e.pad.source === "guess" ? "Unknown layout: Settings > Controller > Teach Buttons" : "Ready. View / Select opens Settings.");
-    if (e.type === "disconnect") toast(e.pad.name + " disconnected");
+    if (e.type === "disconnect") {
+      const teaching = PAD && PAD.binding();
+      if (teaching) PAD.cancelBind();
+      toast(e.pad.name + " disconnected", teaching ? "Button teaching stopped. Reconnect, then start Teach Buttons again." : "Keyboard and other connected controllers remain available.");
+    }
   },
 }) : null;
-const PANEL = SETTINGS && window.DaedalusSettings ? DaedalusSettings.mountPanel({ settings: SETTINGS, pad: PAD,
-  onOpen: () => { Object.keys(SRC).forEach(releaseSource); }, onClose: () => { cv.focus({ preventScroll: true }); } }) : null;
+function clearSettingsInput() {
+  resetGameplayInput();                                  /* the panel's closing choice never becomes a game action */
+}
+PANEL = SETTINGS && window.DaedalusSettings ? DaedalusSettings.mountPanel({ settings: SETTINGS, pad: PAD,
+  onOpen: clearSettingsInput, onClose: () => { if (PAD && PAD.binding()) PAD.cancelBind(); clearSettingsInput(); cv.focus({ preventScroll: true }); } }) : null;
 /* A small notice in the corner: a controller arriving or leaving, a save, a bind finished. */
 let toastTimer = 0;
 function toast(title, sub) {
@@ -166,11 +203,14 @@ function toast(title, sub) {
   toastEl.classList.add("on"); clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toastEl.classList.remove("on"), 3800);
 }
-function openSettings() { if (PANEL && !PANEL.isOpen()) { Object.keys(SRC).forEach(releaseSource); PANEL.open(); } }
+function openSettings() { if (PANEL && !PANEL.isOpen()) PANEL.open(); }
 
 /* This demo's own rows in the shared tabs: controllers (shared helper), touch controls, the jukebox monitor, keys, save. */
 if (SETTINGS) {
   DaedalusSettings.addPadRows(SETTINGS, PAD);
+  SETTINGS.extend({ tab: "CONTROLLER", section: "Prismheart", rows: [
+    { id: "PrismControllerHelp", kind: "info", label: "Control Help", value: "Settings pauses your journey.\nQ / E: tabs   R: reset tab   C: copy\nMouse and touch also work.",
+      help: "Teach Buttons maps the seven journey controls. For tabs, reset and copy on a taught pad, use the keyboard, mouse or touch. Release held buttons before returning to your journey." }] });
   SETTINGS.extend({ tab: "CONTROLLER", section: "Touch", rows: [
     { id: "TouchControls", kind: "choice", label: "Touch Controls", choices: ["AUTO", "ON", "OFF"], default: 0, max: 2,
       help: "The on-screen d-pad and buttons. Auto shows them on touch screens only." }] });
@@ -185,9 +225,9 @@ if (SETTINGS) {
     { id: "JukeboxNow", kind: "info", label: "Now Playing", value: () => (juke.cue ? juke.cue + " cue" : "Silent") + (actx ? "" : " (press a button to start sound)"),
       help: "The jukebox cue the realm asked for last. The same cue never restarts its song." }] });
   SETTINGS.extend({ tab: "GAMEPLAY", section: "Saved Game", rows: [
-    { id: "SaveInfo", kind: "info", label: "Journey", value: () => saveSummary(), help: "Resting at the inn records your journey. CONTINUE on the title screen picks it up." },
-    { id: "SaveErase", kind: "action", label: "Erase Saved Journey", button: "ERASE", help: "Forget the saved journey. CONTINUE goes dark until you rest at an inn again." }] });
-  SETTINGS.onAction("SaveErase", () => { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} toast("Saved journey erased"); });
+    { id: "SaveInfo", kind: "info", label: "Journey", value: () => saveSummary(), help: "Rest at an inn or choose SAVE in the field menu outside a dungeon to record your journey. CONTINUE on the title screen resumes it." },
+    { id: "SaveErase", kind: "action", label: "Erase Saved Journey", button: "ERASE", help: "Forget the saved journey. Rest at an inn or choose SAVE in the field menu outside a dungeon to enable CONTINUE again." }] });
+  SETTINGS.onAction("SaveErase", eraseSavedJourney);
   SETTINGS.on("TouchControls", () => fit());
   SETTINGS.on("JukeboxMonitor", v => { logEl.hidden = !v; });
 }
@@ -337,13 +377,13 @@ function makeMember(m, L) {
   const st = {};
   for (const k in m.stats) st[k] = m.stats[k] + Math.floor((L - 1) * 0.9);
   const hp = m.hp + m.growth.hp * (L - 1), mp = m.mp + m.growth.mp * (L - 1);
-  let next = D.realm_profile ? m.next : 400; for (let i = START_LEVEL; i < L; i++) next = Math.round(next * 1.18);
+  let next = D.realm_profile ? m.next : 400;
+  for (let i = START_LEVEL; i < L; i++) { next = Math.round(next * 1.18); if (!Number.isFinite(next)) break; }
   return { name: m.name, job: m.job, lv: L, exp: 0, next, hp, max: hp, mp, mmax: mp, st, equip: Object.assign({}, m.equip),
     kinds: m.weapon_kinds, armor: m.armor_kind, spells: m.spells.slice(), sprite: "Party_" + m.job, defend: false };
 }
-/* Recruits: members.json says who joins "after <dungeon>". Beating that dungeon's Warden brings them in at the party's
-   average level, into the reserve (or straight into battle if a slot is free). Brannoc joins after Gearwright's Folly,
-   which this demo does not have, so he never appears here. */
+/* Recruits: members.json says who joins "after <dungeon>". Beating that dungeon's boss brings them in at the party's
+   average level, into the reserve (or straight into battle if a slot is free). */
 function recruitsFor(dungeonName) { return D.party.members.filter(m => m.joins === "after " + dungeonName); }
 function recruit(dungeonName) {
   const have = new Set(roster().map(m => m.job)), lv = Math.max(START_LEVEL, Math.round(party.reduce((a, m) => a + m.lv, 0) / Math.max(1, party.length)));
@@ -353,8 +393,16 @@ function recruit(dungeonName) {
     return n;
   });
 }
-function recruitBeaten() {                                  /* saves from before recruits: bring in whoever is owed */
-  D.dungeons.forEach(d => { if (d.boss_data && state.beaten.has(d.boss_data.name)) recruit(d.name); });
+function recruitBeaten(saved) {                             /* prepare older saves without touching the live roster */
+  const beaten = new Set(saved.beaten);
+  D.dungeons.forEach(d => {
+    if (!d.boss_data || !beaten.has(d.boss_data.name)) return;
+    const have = new Set(saved.party.concat(saved.reserve).map(m => m.job));
+    const lv = Math.max(START_LEVEL, Math.round(saved.party.reduce((a, m) => a + m.lv, 0) / saved.party.length));
+    recruitsFor(d.name).filter(m => !have.has(m.job)).forEach(m => {
+      (saved.party.length < ACTIVE ? saved.party : saved.reserve).push(makeMember(m, lv));
+    });
+  });
 }
 const atkOf = m => m.st.str * 2 + ((GEAR[m.equip.weapon] || {}).attack || 0);
 const defOf = m => ["armor", "helm", "shield"].reduce((a, k) => a + ((GEAR[m.equip[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);   /* armour counts now that the gear table has it */
@@ -364,6 +412,7 @@ const alive = l => l.filter(x => x.hp > 0);
 /* ---------- maps ---------- */
 let mode = "title", map = null, P = { x: 0, y: 0, dir: "down", fx: 0, fy: 0, moving: 0, step: 0 }, fade = 0, fadeCb = null;
 const opened = new Set(), state = { beaten: new Set(), steps: 0, sinceBattle: 0, returnTo: null, seen: {}, air: null, fish: {}, quests: {}, ways: new Set(), day: 1, minute: 8 * 60 };
+let journeySerial = 0;                                      /* invalidate callbacks only when a journey is accepted */
 /* ---------- time of day ----------
    A day passes in steps: 4 minutes a step on the world map, 2 in towns and villages, 1 in dungeons (no sky there),
    15 a battle. Dawn 5-7, day 7-18, dusk 18-20, night 20-5. The field darkens toward night and lamps glow; at night
@@ -389,12 +438,18 @@ function dark() {                                               /* 0 at noon-ish
 /* ---------- the airship (world map only) ----------
    The Prism Skiff waits at the AirshipPad. It lifts once the first Warden falls (its shard fills the envelope).
    Walk onto it to board; aboard, fly over anything (twice walking speed, no random battles, no landmarks); press A
-   to land on a tile the map marks airship_lands. It stays where you land; walk onto it to fly again. */
+   to land on a tile the map marks airship_lands. It stays where you land; confirm there or walk onto it to fly again. */
 const AIR_SPEED = 2;
 function airUnlocked() { return !!(D && D.dungeons[0] && D.dungeons[0].boss_data && state.beaten.has(D.dungeons[0].boss_data.name)); }
 function airship() {
   if (!state.air) { const p = find(D.world, "AirshipPad"); state.air = p ? { x: p[0], y: p[1], aboard: false } : null; }
   return state.air;
+}
+function boardAirship() {
+  if (map.kind !== "world" || !airUnlocked()) return false;
+  const a = airship();
+  if (!a || a.aboard || a.x !== P.x || a.y !== P.y) return false;
+  a.aboard = true; sfx("ENTER"); toast("ABOARD THE PRISM SKIFF", titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO LAND ON OPEN GROUND"); return true;
 }
 const flying = () => !!(map && map.kind === "world" && state.air && state.air.aboard);
 /* Where a saved skiff may stay parked: on landable ground the party can walk to from the Town. CONTINUE starts on
@@ -430,12 +485,17 @@ function openCache(c) {
   say(["A CHEST NO ONE COULD WALK TO.", "FOUND " + c.item.toUpperCase() + "!"]);
   return true;
 }
-/* The shard quest: four dungeons from data.json (landmark -> dungeon); each boss leaves a shard; the final dungeon
-   opens once the three shards are in hand. Floor grids are copied per journey, so NEW GAME starts them fresh. */
+/* The shard quest: the original four indices stay fixed. The optional Folly follows them and carries no shard.
+   Floor grids are copied per journey, so NEW GAME starts them fresh. */
 let grids = {};
-const shardBosses = () => D.dungeons.filter(d => d.boss_data && !d.final).map(d => d.boss_data.name);
+const carriesShard = d => d.boss_data && !d.final && !!d.boss_data.shard && d.boss_data.shard !== "-" && d.boss_data.shard !== "all";
+const shardBosses = () => D.dungeons.filter(carriesShard).map(d => d.boss_data.name);
 const shardCount = () => shardBosses().filter(n => state.beaten.has(n)).length;
+const follyDungeon = () => D.dungeons.find(d => d.optional && d.name === "Gearwright's Folly");
+const follyCleared = (beaten = state.beaten) => !!follyDungeon() && beaten.has(follyDungeon().boss_data.name);
 const pretty = n => n.replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase();
+const remainingShardHints = () => D.dungeons.filter(d => d.boss_data && !d.final && d.boss_data.shard && d.boss_data.shard !== "-" && d.boss_data.shard !== "all" && !state.beaten.has(d.boss_data.name))
+  .map(d => "THE " + pretty(d.boss_data.shard) + " SHARD: " + pretty(d.name) + ". MAP: " + pretty(d.landmark) + ".");
 const chestKey = (di, fi, x, y) => "dungeon" + di + "/" + fi + ":" + x + "," + y;
 const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 const DIR_ROW = { down: 0, up: 1, left: 2, right: 3 };
@@ -471,11 +531,14 @@ function villageMap() {
   return { kind: "village", name: v.name, grid: v.grid.map(r => r.slice()), key: c => "town:" + c, cue: "TOWN",
     walk: c => !!(tt[c] && tt[c].walkable), npcs: v.npcs.map(n => ({ type: n.type, x: n.x, y: n.y, dir: n.facing, lines: n.lines, request: n.request })) };
 }
-function interiorMap(name) {
+function interiorMap(name, beaten = state.beaten) {
   const it = D.interiors[name], ti = D.interior_tiles, tt = D.town_tiles;
-  return { kind: "interior", name, info: it, grid: it.grid.map(r => r.slice()), cue: name === "Castle" ? "CASTLE" : name === "Inn" ? "TOWN" : "TOWN",
+  const room = { kind: "interior", name, info: it, grid: it.grid.map(r => r.slice()), cue: name === "Castle" ? "CASTLE" : name === "Inn" ? "TOWN" : "TOWN",
     key: c => (D.frames["int:" + c] ? "int:" : "town:") + c, walk: c => !!((ti[c] || tt[c] || {}).walkable),
     npcs: it.npcs.map(n => ({ type: n.type, x: n.x, y: n.y, dir: n.facing })) };
+  if (name === "Inn" && follyCleared(beaten) && room.walk(room.grid[6] && room.grid[6][11]) && !room.npcs.some(n => n.x === 11 && n.y === 6))
+    room.npcs.push({ type: "Brannoc", x: 11, y: 6, dir: "down", fieldSprite: "NPC_Merchant" });
+  return room;
 }
 function worldMap() {
   const wt = D.world_tiles;
@@ -503,23 +566,24 @@ const npcAt = (x, y) => map.npcs.find(n => n.x === x && n.y === y);
 /* ---------- dialog ---------- */
 let dlg = null;
 function say(lines, then, voice = 6) { dlg = { pages: [].concat(lines), i: 0, shown: 0, then, voice, choice: null }; }
-function ask(question, options, then) { dlg = { pages: [question], i: 0, shown: 0, voice: 4, choice: { options, idx: 0, then } }; }
+function ask(question, options, then, cancel) { dlg = { pages: [question], i: 0, shown: 0, voice: 4, choice: { options, idx: 0, then, cancel } }; }
 function dialogTick(dt) {
   const page = dlg.pages[dlg.i];
   if (dlg.shown < page.length) {
     const before = Math.floor(dlg.shown);
     dlg.shown = Math.min(page.length, dlg.shown + dt * 45);
     if (Math.floor(dlg.shown / 3) > Math.floor(before / 3)) sfx("BLIP:" + ((dlg.voice + Math.floor(dlg.shown) % 3) % 12));
-    if (hit("a")) dlg.shown = page.length;
+    if (hit("a")) { dlg.shown = page.length; hit("b"); }
     return;
   }
   if (dlg.choice) {
+    if (hit("b")) { sfx("TICK"); const c = dlg.choice; hit("a"); dlg = null; c.cancel ? c.cancel() : c.then(1); return; }
     if (hit("up") || hit("down")) { dlg.choice.idx = 1 - dlg.choice.idx; sfx("TICK"); }
     if (hit("a")) { sfx("PICK"); const c = dlg.choice, i = c.idx; dlg = null; c.then(i); }
-    else if (hit("b")) { sfx("TICK"); const c = dlg.choice; dlg = null; c.then(1); }
     return;
   }
-  if (hit("a") || hit("b")) {
+  const confirm = hit("a"), back = hit("b");
+  if (confirm || back) {
     if (dlg.i < dlg.pages.length - 1) { dlg.i++; dlg.shown = 0; sfx("PAGE"); }
     else { const t = dlg.then; dlg = null; t && t(); }
   }
@@ -547,19 +611,32 @@ const LINES = {
 };
 const VOICE = { Guard: 2, Merchant: 7, Child: 11, Elder: 0, Farmer: 4, Innkeeper: 6, Sailor: 3, Mage: 9, Ruler: 1 };
 function interact() {
+  if (map.kind === "world" && boardAirship()) return;
   const [dx, dy] = DIRS[P.dir], tx = P.x + dx, ty = P.y + dy;
   let n = npcAt(tx, ty), t = at(tx, ty);
+  if (map.kind === "world" && !flying() && t === "AirshipPad") {
+    const di = D.dungeons.findIndex(d => d === follyDungeon());
+    if (di >= 0) return enterDungeon(di);
+  }
   if (!n && t === "Counter") n = npcAt(tx + dx, ty + dy);
   if (n) {
     n.dir = { up: "down", down: "up", left: "right", right: "left" }[P.dir];
     const svc = map.kind === "interior" ? (map.info.service || "") : "";
     if (svc.startsWith("shop:") && n === map.npcs[0]) return say(LINES[n.type] || ["HELLO."], () => openShop(), VOICE[n.type]);
     if (svc === "inn" && n.type === "Innkeeper") return innPrompt();
+    if (n.type === "Brannoc") return workshopPrompt();
+    if (map.kind === "town" && n.type === "Elder" && follyDungeon()) {
+      opened.add("story/folly/discovered");
+      return say(LINES.Elder.concat(follyCleared() ? ["BRANNOC HAS QUIETED THE OLD WORKS. HE KEEPS A CALIBRATION BENCH AT THE INN; ASK HIM HOW HE DID IT."] : [
+        "BRANNOC'S BELLOWS HAVE FALLEN SILENT. FACE THE AIRSHIP PAD IN THE NORTH-EAST. " + titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO EXAMINE THE WORKS.",
+        "THE WORKS RESPOND TO THE THREE SHARDS. GATHER THEM FIRST, THEN FREE BRANNOC FROM THE CLOCKWORK COLOSSUS. TIDE MAGIC MAY HELP."
+      ]), null, VOICE.Elder);
+    }
     if (n.type === "Ruler" && state.beaten.size && D.dungeons.some(d => d.final && d.boss_data)) {
       const c = shardCount(), healed = state.beaten.has(D.dungeons.find(d => d.final).boss_data.name);
       return say(healed ? ["THE HEART IS WHOLE AGAIN. YOU HAVE THE THANKS OF EVERY ISLAND."]
         : c >= 3 ? ["ALL THREE SHARDS! TAKE THEM TO THE CRYSTAL SHRINE IN THE SOUTH-EAST. WHAT WAITS THERE IS HUNGRY."]
-        : ["THE HEART BURNS A LITTLE BRIGHTER. " + (3 - c) + (3 - c === 1 ? " SHARD REMAINS." : " SHARDS REMAIN.")], null, 1);
+        : ["THE HEART BURNS A LITTLE BRIGHTER. " + (3 - c) + (3 - c === 1 ? " SHARD REMAINS." : " SHARDS REMAIN.")].concat(c > 0 ? remainingShardHints() : []), null, 1);
     }
     if (n.request) return villageRequest(n);
     return say(n.lines || LINES[n.type] || ["..."], null, VOICE[n.type]);
@@ -579,8 +656,66 @@ function innPrompt() {
     if (gold < price) return say(["YOU CAN'T AFFORD IT, FRIEND."], null, 6);
     gold -= price; sfx("INN"); cue("INN");
     roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; }); clearAll(roster());
-    fade = 1; fadeCb = () => { cue(map.cue); wakeAt(7); const ok = saveGame(); say(["GOOD MORNING! YOUR PARTY IS RESTED."].concat(ok ? ["YOUR JOURNEY HAS BEEN WRITTEN IN THE INN'S BOOK."] : []), null, 6); if (ok) toast("Journey saved", saveSummary()); };
+    fade = 1; fadeCb = () => {
+      cue(map.cue); wakeAt(7); const ok = saveGame();
+      say(["GOOD MORNING! YOUR PARTY IS RESTED."].concat(ok ? ["YOUR JOURNEY HAS BEEN WRITTEN IN THE INN'S BOOK."]
+        : ["YOUR JOURNEY COULD NOT BE SAVED. KEEP THIS GAME OPEN.", "TRY SAVE IN THE FIELD MENU BEFORE YOU LEAVE."]), null, 6);
+      if (ok) toast("Journey saved", saveSummary());
+      else toast("Journey not saved", "Your party is rested. Keep this game open and retry SAVE in the field menu.");
+    };
   });
+}
+/* Authored Folly calibration: v1 opened flags hold records; cancelling never completes a drill. */
+function workshopStat(name) {
+  const prefix = "workshop/folly/" + name + "/", key = Array.from(opened).find(k => typeof k === "string" && k.startsWith(prefix));
+  const value = key ? Number(key.slice(prefix.length)) : 0;
+  return Number.isSafeInteger(value) && value >= 0 ? Math.min(value, 999999) : 0;
+}
+function setWorkshopStat(name, value) {
+  const prefix = "workshop/folly/" + name + "/";
+  Array.from(opened).forEach(k => { if (typeof k === "string" && k.startsWith(prefix)) opened.delete(k); });
+  opened.add(prefix + Math.min(999999, value));
+}
+function workshopPrompt() {
+  if (!follyCleared()) return;
+  const best = Math.min(3, workshopStat("best")), runs = workshopStat("runs"), token = journeySerial;
+  say(["BRANNOC: A STRONG ARM STOPS A COLOSSUS. A CAREFUL HAND KEEPS THE TOWN'S BELLOWS TURNING.",
+       "THREE READINGS, THREE CHOICES. YOUR BEST IS " + best + "/3 ACROSS " + runs + " COMPLETED DRILLS. NO FEE, NO DAMAGE. " + titlePrompt("cancel", "X/ESC OR TAP B") + " TO LEAVE THE BENCH."],
+    () => { if (token === journeySerial) ask("TRY A CALIBRATION DRILL?", ["TRY", "LEAVE"], i => { if (token === journeySerial && i === 0) startCalibration(); }); });
+}
+function startCalibration() {
+  const token = journeySerial, runs = workshopStat("runs"), lessons = [
+    { clue: "THE RED GAUGE CLIMBS. STEAM HAS NO EXIT.", choices: ["VENT", "STOKE"], answer: 0,
+      good: "THE PRESSURE FALLS. THE BELLOWS FIND THEIR RHYTHM.", bad: "MORE FIRE RAISES THE PRESSURE. BRANNOC OPENS THE SAFETY VENT." },
+    { clue: "THE CRYSTAL PULSE ARRIVES BETWEEN THE GEAR TEETH.", choices: ["FLOOD", "ALIGN"], answer: 1,
+      good: "THE TIMING MARKS MEET. THE GEAR CATCHES THE PULSE.", bad: "WATER CANNOT FIX THE TIMING. BRANNOC ALIGNS THE MARKS." },
+    { clue: "THE TAIL GEAR GLOWS HOT EVEN AT A STEADY PACE.", choices: ["COOL", "RUSH"], answer: 0,
+      good: "A TIDE TRICKLE DRAWS OFF THE HEAT. THE WORKS RUN CLEAR.", bad: "RUSHING ADDS HEAT. BRANNOC LETS THE TIDE CHANNEL COOL THE GEAR." }
+  ];
+  let turn = 0, score = 0;
+  const cancel = () => { if (token === journeySerial) say(["BRANNOC: LEAVE IT SAFE. NO SCORE OR REWARD WAS RECORDED; TRY AGAIN WHEN YOU LIKE."]); };
+  const next = () => {
+    if (token !== journeySerial) return;
+    if (turn === lessons.length) {
+      setWorkshopStat("runs", runs + 1); setWorkshopStat("best", Math.max(workshopStat("best"), score));
+      const lines = ["BRANNOC: " + score + "/3. " + (score === 3 ? "A CLEAN CALIBRATION!" : "NOTICE THE GAUGE, THE TIMING AND THE HEAT. PRACTICE MAKES A KEEPER."),
+        "PERSONAL BEST " + workshopStat("best") + "/3. TALK TO ME TO TRY A NEW ORDER. SAVE YOUR JOURNEY TO KEEP THE RECORD."];
+      if (score === 3 && !opened.has("workshop/folly/first-perfect") && GEAR["Herb Tonic"] && GEAR["Herb Tonic"].effect) {
+        opened.add("workshop/folly/first-perfect"); bag["Herb Tonic"] = (Number(bag["Herb Tonic"]) || 0) + 2;
+        lines.push("YOUR FIRST PERFECT DRILL EARNS TWO HERB TONICS. FURTHER DRILLS ARE FOR YOUR PERSONAL BEST."); sfx("ITEM");
+      }
+      return say(lines);
+    }
+    const lesson = lessons[(turn + runs) % lessons.length], flip = (turn + runs) % 2;
+    const options = flip ? lesson.choices.slice().reverse() : lesson.choices;
+    ask("READING " + (turn + 1) + "/3: " + lesson.clue, options, i => {
+      if (token !== journeySerial) return;
+      const correct = (flip ? 1 - i : i) === lesson.answer;
+      if (correct) score++;
+      turn++; say([correct ? lesson.good : lesson.bad], next);
+    }, cancel);
+  };
+  next();
 }
 function openChest(x, y) {
   const k = map.kind === "dungeon" ? chestKey(map.dungeon, map.floor, x, y) : map.kind + (map.floor || 0) + ":" + x + "," + y;
@@ -599,24 +734,35 @@ function openShop() {
   const stock = (map.info.stock || []).slice();
   shop = { kind, stock, idx: 0, top: 0, tab: "buy", msg: "WHAT WOULD YOU LIKE?" + (kind === "magic" ? "" : "  LEFT/RIGHT: SELL") }; mode = "shop";
 }
+const magicShopCaster = sp => roster().find(m => m.job === (sp.target === "ally" ? "Lightmender" : "Runecaster"));
+function shopGearChoice(it) {
+  if (it.attack) {
+    const kind = WEAPON_KIND[it.name];
+    return { slot: "weapon", who: roster().find(m => (m.kinds.includes(kind) || (kind === "sword" && m.kinds.includes("dagger"))) && ((GEAR[m.equip.weapon] || {}).attack || 0) < it.attack) };
+  }
+  if (it.defence) {
+    const slot = /Shield/.test(it.name) ? "shield" : /Helm/.test(it.name) ? "helm" : "armor";
+    return { slot, who: roster().find(m => ((GEAR[m.equip[slot]] || {}).defence || 0) < it.defence && (m.armor === "heavy" || slot === "armor")) };
+  }
+  return null;
+}
 function buy(it) {
   if (gold < it.price) { sfx("LOCKED"); shop.msg = "NOT ENOUGH GOLD."; return; }
   if (shop.kind === "magic") {
     const sp = spellOf(it.name); if (!sp) return;
-    const caster = sp.target === "ally" ? roster().find(m => m.job === "Lightmender") : roster().find(m => m.job === "Runecaster");
+    const caster = magicShopCaster(sp);
     if (!caster || caster.spells.includes(sp.name)) { shop.msg = "YOU ALREADY KNOW THAT."; return; }
     gold -= it.price; caster.spells.push(sp.name); sfx("BUY"); shop.msg = caster.name + " LEARNS " + sp.name.toUpperCase() + "."; return;
   }
   gold -= it.price; sfx("BUY");
+  const choice = shopGearChoice(it);
   if (it.attack) {
-    const kind = WEAPON_KIND[it.name];
-    const who = roster().find(m => (m.kinds.includes(kind) || (kind === "sword" && m.kinds.includes("dagger"))) && ((GEAR[m.equip.weapon] || {}).attack || 0) < it.attack);
-    if (who) { who.equip.weapon = it.name; sfx("EQUIP"); shop.msg = who.name + " EQUIPS THE " + it.name.toUpperCase() + "."; }
+    const who = choice.who;
+    if (who) { const old = who.equip.weapon; if (old) bag[old] = (bag[old] || 0) + 1; who.equip.weapon = it.name; sfx("EQUIP"); shop.msg = who.name + " EQUIPS THE " + it.name.toUpperCase() + "."; }
     else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "NO ONE NEEDS IT. INTO THE BAG."; }
   } else if (it.defence) {
-    const slot = /Shield/.test(it.name) ? "shield" : /Helm/.test(it.name) ? "helm" : "armor";
-    const who = roster().find(m => ((GEAR[m.equip[slot]] || {}).defence || 0) < it.defence && (m.armor === "heavy" || slot === "armor"));
-    if (who) { who.equip[slot] = it.name; sfx("EQUIP"); shop.msg = who.name + " PUTS ON THE " + it.name.toUpperCase() + "."; }
+    const { slot, who } = choice;
+    if (who) { const old = who.equip[slot]; if (old) bag[old] = (bag[old] || 0) + 1; who.equip[slot] = it.name; sfx("EQUIP"); shop.msg = who.name + " PUTS ON THE " + it.name.toUpperCase() + "."; }
     else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "INTO THE BAG."; }
   } else { bag[it.name] = (bag[it.name] || 0) + 1; shop.msg = "THANK YOU!"; }
 }
@@ -624,6 +770,7 @@ function buy(it) {
 const sellPrice = name => Math.floor(((GEAR[name] || {}).price || 0) / 2);
 const sellList = () => Object.keys(bag).filter(k => bag[k] > 0 && sellPrice(k) > 0).sort();
 function shopTick() {
+  if (hit("b") || hit("start")) { clearActionButtons(); sfx("TICK"); shop = null; mode = "field"; say(["COME AGAIN!"]); return; }
   if (shop.kind !== "magic" && (hit("left") || hit("right"))) {
     shop.tab = shop.tab === "buy" ? "sell" : "buy"; shop.idx = 0; shop.top = 0; sfx("TICK");
     shop.msg = shop.tab === "sell" ? (sellList().length ? "WHAT WILL YOU SELL?" : "NOTHING I CAN BUY FROM YOU.") : "WHAT WOULD YOU LIKE?";
@@ -636,7 +783,6 @@ function shopTick() {
       shop.idx = Math.min(shop.idx, n - 1); shop.top = clamp(shop.top, shop.idx - 7, shop.idx);
       if (hit("a")) { const k = list[shop.idx], p = sellPrice(k); bag[k]--; gold += p; sfx("BUY"); shop.msg = "SOLD " + k.toUpperCase() + " FOR " + p + " G."; }
     }
-    if (hit("b") || hit("start")) { sfx("TICK"); shop = null; mode = "field"; say(["COME AGAIN!"]); }
     return;
   }
   const n = shop.stock.length;
@@ -644,7 +790,6 @@ function shopTick() {
   if (hit("down")) { shop.idx = (shop.idx + 1) % n; sfx("TICK"); }
   shop.top = clamp(shop.top, shop.idx - 7, shop.idx);
   if (hit("a")) buy(shop.stock[shop.idx]);
-  if (hit("b") || hit("start")) { sfx("TICK"); shop = null; mode = "field"; say(["COME AGAIN!"]); }
 }
 function drawShop() {
   drawField();
@@ -669,7 +814,9 @@ function drawShop() {
   text("G", W - 82, 37); text(gold, W - 10 - tw(gold), 37);
   shop.stock.slice(shop.top, shop.top + 8).forEach((it, i) => {
     const y = 38 + i * 16;
-    text(it.name.slice(0, 18), 24, y, it.price > gold ? "#808090" : "#ffffff");
+    const sp = shop.kind === "magic" && spellOf(it.name), caster = sp && magicShopCaster(sp);
+    const learnable = shop.kind !== "magic" || caster && !caster.spells.includes(sp.name);
+    text(it.name.slice(0, 18), 24, y, it.price > gold || !learnable ? "#808090" : "#ffffff");
     text(it.price, W - 102 - tw(it.price), y);
   });
   cursor(10, 38 + (shop.idx - shop.top) * 16);
@@ -679,11 +826,40 @@ function drawShop() {
     if (shop.top + 8 < shop.stock.length) g.fillRect(112 - i, 170 - i, 1 + 2 * i, 1);
   }
   win(0, 176, W, 48); text(shop.msg, 12, 190);
-  const it = shop.stock[shop.idx], d = (it.effect && GEAR[it.name] ? itemLine(it.name) : it.effect) || (it.attack ? "ATTACK " + it.attack : it.defence ? "DEFENCE " + it.defence : it.element ? (it.element + " MAGIC").toUpperCase() : "");
+  const it = shop.stock[shop.idx];
+  let d = (it.effect && GEAR[it.name] ? itemLine(it.name) : it.effect) || (it.attack ? "ATTACK " + it.attack : it.defence ? "DEFENCE " + it.defence : it.element ? (it.element + " MAGIC").toUpperCase() : "");
+  if (shop.kind === "magic") {
+    const sp = spellOf(it.name), caster = sp && magicShopCaster(sp);
+    if (sp) {
+      const detail = spellHint(sp) + " " + sp.mp + "MP" + (caster && caster.spells.includes(sp.name) ? " KNOWN" : "");
+      const name = caster ? caster.name.toUpperCase() : "NO CASTER", room = Math.max(0, Math.floor((W - 24) / 6) - detail.length - 2);
+      d = name.slice(0, room) + ": " + detail;
+    }
+  } else if (it.attack || it.defence) {
+    const { slot, who } = shopGearChoice(it);
+    if (who) {
+      const before = slot === "weapon" ? atkOf(who) : defOf(who), after = slot === "weapon" ? atkWith(who, it.name) : defWith(who, { ...who.equip, [slot]: it.name });
+      const detail = " " + (slot === "weapon" ? "ATK" : "DEF") + " " + before + ">" + after, room = Math.max(0, Math.floor((W - 24) / 6) - d.length - 3 - detail.length);
+      d += " / " + who.name.toUpperCase().slice(0, room) + detail;
+    } else d += " / INTO BAG";
+  }
   text(d, 12, 204, "#a0a8c0");
 }
 
 /* ---------- field ---------- */
+function enterDungeon(di) {
+  const dg = D.dungeons[di];
+  if (dg.final && shardCount() < 3) { sfx("LOCKED"); return say(["THE SHRINE IS SEALED BY A HEART-SHAPED LOCK WITH THREE EMPTY HOLLOWS. (" + shardCount() + " OF 3 SHARDS.)"]); }
+  if (dg.optional && shardCount() < 3) { sfx("LOCKED"); return say(["BRANNOC'S THREE-PULSE SEAL HOLDS THE WORKS SHUT. GATHER THE THREE WARDEN SHARDS FIRST. THE ELDER KNOWS THEIR ROADS."]); }
+  const enter = () => { sfx("STAIRS"); const f = dg.floors[0]; goto(dungeonMap(di, 0), f.stairs_up.x, f.stairs_up.y, "down"); };
+  if (dg.optional && !opened.has("story/folly/entered")) {
+    const token = journeySerial;
+    opened.add("story/folly/entered");
+    return say(["GEARWRIGHT'S FOLLY. A MISTIMED HEART-PULSE HAS JAMMED THE COLOSSUS AND SILENCED THE TOWN'S BELLOWS.",
+      "FIND BRANNOC BEYOND THE THIRD-FLOOR GATE. THIS ROAD HOLDS NO SHARD; ITS REWARD IS A FRIEND AND A WORKING REFUGE."], () => { if (token === journeySerial) enter(); });
+  }
+  enter();
+}
 function stepDone() {
   const t = at(P.x, P.y);
   state.steps++; state.sinceBattle++; fieldPoison(); passTime(flying() ? 2 : (STEP_MIN[map.kind] || 2));
@@ -706,7 +882,7 @@ function stepDone() {
     const a = airship();
     if (a && a.aboard) return;                                                   /* flying: no landmarks, no battles */
     if (openCache(cacheAt(P.x, P.y))) return;
-    if (a && a.x === P.x && a.y === P.y) { a.aboard = true; sfx("ENTER"); toast("ABOARD THE PRISM SKIFF", "A: LAND ON OPEN GROUND"); return; }
+    if (boardAirship()) return;
   }
   if (map.kind === "world" && t === "AirshipPad" && !airUnlocked()) {
     sfx("LOCKED"); return say(["AN AIRSHIP DOCK. THE PRISM SKIFF'S ENVELOPE HANGS SLACK.", "IT NEEDS A WARDEN'S SHARD TO LIFT."]);
@@ -717,11 +893,7 @@ function stepDone() {
     if (D.village && t === D.village.landmark) { sfx("ENTER"); const s0 = D.village.spawn; toast(D.village.name.toUpperCase()); return goto(villageMap(), s0.x, s0.y, s0.facing); }
     if (t === "Castle") { sfx("ENTER"); const it = D.interiors.Castle; return goto(interiorMap("Castle"), it.spawn.x, it.spawn.y, "up"); }
     const di = D.dungeons.findIndex(d => d.landmark === t);
-    if (di >= 0) {
-      const dg = D.dungeons[di];
-      if (dg.final && shardCount() < 3) { sfx("LOCKED"); return say(["THE SHRINE IS SEALED BY A HEART-SHAPED LOCK WITH THREE EMPTY HOLLOWS. (" + shardCount() + " OF 3 SHARDS.)"]); }
-      sfx("STAIRS"); const f = dg.floors[0]; return goto(dungeonMap(di, 0), f.stairs_up.x, f.stairs_up.y, "down");
-    }
+    if (di >= 0) return enterDungeon(di);
     if (t === "Shrine") { roster().forEach(m => { m.hp = m.max; m.mp = m.mmax; }); clearAll(roster()); sfx("BLESS"); return say(["A QUIET SHRINE. YOUR WOUNDS CLOSE."]); }
     if (t === "AirshipPad") return;                                               /* the dock, once the skiff has flown */
     if (D.world_tiles[t] && D.world_tiles[t].kind === "landmark") { sfx("LOCKED"); return say(["THE WAY IS SEALED. (BEYOND THIS DEMO.)"]); }
@@ -766,7 +938,7 @@ function fieldTick(dt) {
 function land() {
   const a = airship(), t = at(P.x, P.y), wt = D.world_tiles[t] || {};
   if (!wt.airship_lands) { sfx("BUMP"); toast("NO PLACE TO LAND", t.replace(/([a-z])([A-Z])/g, "$1 $2").toUpperCase()); return; }
-  a.aboard = false; a.x = P.x; a.y = P.y; state.sinceBattle = 0; sfx("STAIRS"); toast("LANDED", "WALK ONTO THE SKIFF TO FLY AGAIN");
+  a.aboard = false; a.x = P.x; a.y = P.y; state.sinceBattle = 0; sfx("STAIRS"); toast("LANDED", titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO BOARD AGAIN HERE");
   openCache(cacheAt(P.x, P.y));
 }
 function drawAirship(ox, oy) {
@@ -783,6 +955,34 @@ function drawAirship(ox, oy) {
   g.restore();
   return a.aboard;
 }
+/* Read the current interaction without trying it: actions, travel and lazy skiff setup stay in their original handlers. */
+function fieldInteractionCue() {
+  if ((D.realm_key || "prism") !== "prism" || mode !== "field" || dlg || fade || P.moving > 0 || settingsFramePaused) return "";
+  if (flying()) return (D.world_tiles[at(P.x, P.y)] || {}).airship_lands ? "LAND" : "NO LANDING HERE";
+  if (map.kind === "world" && airUnlocked()) {
+    const dock = state.air ? null : find(D.world, "AirshipPad"), ship = state.air || (dock && { x: dock[0], y: dock[1], aboard: false });
+    if (ship && !ship.aboard && ship.x === P.x && ship.y === P.y) return "BOARD";
+  }
+  const [dx, dy] = DIRS[P.dir], tx = P.x + dx, ty = P.y + dy, t = at(tx, ty);
+  if (map.kind === "world" && t === "AirshipPad" && follyDungeon()) return "EXAMINE";
+  if (npcAt(tx, ty) || (t === "Counter" && npcAt(tx + dx, ty + dy))) return "TALK";
+  if (t === "Chest" || t === "ChestOpen") return t === "ChestOpen" ? "CHECK" : "OPEN";
+  if (t === "BossGate") { const b = (D.dungeons[map.dungeon] || {}).boss_data; return b && !state.beaten.has(b.name) ? "CHALLENGE" : ""; }
+  if (t === "Barrel" || t === "Crate" || t === "Pot") return opened.has(map.kind + tx + "," + ty) ? "CHECK" : "SEARCH";
+  if (t === "Water" && (map.kind === "village" || map.kind === "town") && (D.fish || []).length) return "FISH";
+  if (t === "Fountain") return "DRINK";
+  if (t === "Bookcase") return "READ";
+  if (t === "Throne") return "EXAMINE";
+  return "";
+}
+function drawFieldInteractionCue(oy) {
+  const action = fieldInteractionCue(); if (!action) return;
+  const blocked = action === "NO LANDING HERE", label = blocked ? action : titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, "") + ": " + action;
+  const width = tw(label) + 16, x = Math.floor((W - width) / 2);
+  const focusBottom = oy + Math.max(P.fy, (P.y + DIRS[P.dir][1]) * T) + T, y = focusBottom >= H - 26 ? 6 : H - 22;
+  g.fillStyle = "#080c20"; g.fillRect(x, y, width, 16); g.fillStyle = "#4d6c8a"; g.fillRect(x, y, width, 1); g.fillRect(x, y + 15, width, 1);
+  text(label, x + 8, y + 4, blocked ? "#f87878" : "#fff070");
+}
 function drawField() {
   const gw = map.grid[0].length, gh = map.grid.length;
   const cx = clamp(P.fx + 8 - W / 2, 0, Math.max(0, gw * T - W)), cy = clamp(P.fy + 8 - H / 2, 0, Math.max(0, gh * T - H));
@@ -798,7 +998,7 @@ function drawField() {
   if (map.kind === "world") for (const c of D.sky_caches || []) tileImg(opened.has(skyKey(c)) ? "town:ChestOpen" : "town:Chest", Math.round(ox + c.x * T), Math.round(oy + c.y * T));
   const walkF = Math.floor(performance.now() / 260) % 2;
   for (const n of map.npcs) {
-    const name = n.type === "Ruler" ? "NPC_Ruler" : "NPC_" + n.type;
+    const name = n.fieldSprite || (n.type === "Ruler" ? "NPC_Ruler" : "NPC_" + n.type);
     spr("sprites", name, ox + n.x * T, oy + n.y * T, (DIR_ROW[n.dir] * 2 + walkF) * 16, 16, 16);
   }
   const pf = P.moving > 0 ? (P.step % 2) : 0;
@@ -818,6 +1018,7 @@ function drawField() {
       }
     }
   }
+  drawFieldInteractionCue(oy);
 }
 
 /* ---------- fishing (data.json fish, from data/rpg/prism-fish.json) ----------
@@ -847,7 +1048,7 @@ function pickFish() {
   for (const f of all) { r -= wt(f); if (r < 0) return f; }
   return all[all.length - 1];
 }
-function endFish() { fishing = null; mode = "field"; }
+function endFish() { clearActionButtons(); fishing = null; mode = "field"; }
 function fishTick(dt) {
   const f = fishing; f.t += dt;
   if (f.phase === "wait") {
@@ -865,7 +1066,92 @@ function fishTick(dt) {
     } else if (f.t > f.fish.window_s) { f.phase = "done"; f.t = 0; f.msg = "IT GOT AWAY."; sfx("MISS"); }
   } else if (f.t > 0.3 && (hit("a") || hit("b"))) endFish();
 }
+function anglerGuideTick() {
+  const confirm = hit("a"), back = hit("b"), left = hit("left"), right = hit("right");
+  if (confirm || back) { hit("up"); hit("down"); menu.sub = null; sfx("TICK"); return; }
+  if (left || right) { hit("up"); hit("down"); menu.fishHelp = !menu.fishHelp; sfx("TICK"); return; }
+  if (menu.fishHelp) { hit("up"); hit("down"); return; }
+  const n = (D.fish || []).length; if (n) menuMove("ii", n);
+}
+function fishFeedingHint(fish) {
+  const all = D.fish || [], day = all.reduce((n, f) => n + f.weight, 0), night = all.reduce((n, f) => n + (f.night_weight || f.weight), 0);
+  const atNight = (fish.night_weight || fish.weight) * day, atDay = fish.weight * night;
+  return atNight > atDay ? "MORE LIKELY AT DUSK/NIGHT." : atNight < atDay ? "MORE LIKELY IN DAYLIGHT." : "BITES BY DAY AND NIGHT.";
+}
+function drawAnglerHelp() {
+  const half = W / 2, width = half - 18;
+  for (const [x, bite] of [[12, false], [half + 6, true]]) {
+    g.fillStyle = "#14283d"; g.fillRect(x, 52, width, 78);
+    text(bite ? "STRIKE" : "WAIT", x + 8, 60, bite ? "#ffdf83" : "#a0d8f8");
+    const cx = Math.round(x + width / 2), y = bite ? 102 : 99;
+    g.fillStyle = "#426d8f"; g.fillRect(x + 8, 100, width - 16, 2);
+    for (let i = 0; i < 3; i++) g.fillRect(x + 12 + i * 25, 107 + (i % 2) * 3, 15, 1);
+    g.fillStyle = "#b6cfdb"; g.fillRect(cx - 14, 80, 1, y - 83); g.fillRect(cx - 14, y - 4, 13, 1);
+    g.fillStyle = "#f04848"; g.fillRect(cx - 2, y - 3, 4, 3); g.fillStyle = "#ffffff"; g.fillRect(cx - 2, y, 4, 2);
+    if (bite) { text("!", cx - 2, 80, "#ffdf83"); g.fillStyle = "#ffcf70"; g.fillRect(x + 12, 120, width - 24, 3); }
+  }
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text("WAIT FOR !, THEN " + confirm + ".", 12, 140);
+  text(back + ": REEL IN / LEAVE CAST", 12, 154, "#a0a8c0");
+  text("CATCHES GO TO YOUR PACK AND LOG.", 12, 168);
+  text("FACE WATER. " + confirm + ": CAST", 12, 182, "#a0d8f8");
+  text("SOME FISH FEED AT DUSK/NIGHT.", 12, 196, "#a0a8c0");
+}
+function drawAnglerGuide() {
+  const all = D.fish || [], selected = clamp(menu.ii, 0, Math.max(0, all.length - 1)), fish = all[selected], columns = Math.floor((W - 24) / 6);
+  const known = all.filter(f => state.fish[f.name] > 0).length, count = "KNOWN " + known + "/" + all.length, help = !!menu.fishHelp;
+  const number = n => n > (W < 320 ? 99 : 9999) ? (W < 320 ? "99+" : "9999+") : String(n || 0);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 50);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 49, W, 1);
+  text("FISH GUIDE", 12, 10, "#fff070"); text(help ? "LEFT/RIGHT: LOG" : "LEFT/RIGHT: HELP", 84, 10, "#a0a8c0"); text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  text(clockText() + (isNight() ? " / DUSK/NIGHT" : " / DAYLIGHT"), 12, 22, isNight() ? "#a0c8ff" : "#fff070");
+  const back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  if (help) {
+    text("FRESH WATER - WINDMERE", 12, 34, "#a0d8f8"); drawAnglerHelp();
+    text("LEFT/RIGHT: LOG " + back + ": BACK", 12, 212, "#fff070"); return;
+  }
+  const rarityX = W < 320 ? 120 : 146, caughtRight = W - (W < 320 ? 42 : 58), packRight = W - 12;
+  text("SPECIES", 24, 38, "#a0a8c0"); text("RARITY", rarityX, 38, "#a0a8c0"); text("CAUGHT", caughtRight - 36, 38, "#a0a8c0"); text("PACK", packRight - 24, 38, "#a0a8c0");
+  const colors = { COMMON: "#c8d0e0", UNCOMMON: "#70e0a0", RARE: "#70b8ff", LEGENDARY: "#ffd060" };
+  all.forEach((f, i) => {
+    const y = 58 + i * 14, caught = state.fish[f.name] || 0, held = itemStock(f.name), total = number(caught), pack = number(held);
+    if (i === selected) { g.fillStyle = "#243850"; g.fillRect(8, y - 2, W - 16, 13); cursor(12, y); }
+    text(caught ? f.name.toUpperCase().slice(0, W < 320 ? 15 : 18) : "???", 24, y, caught ? "#ffffff" : "#6c6c8c");
+    text(f.rarity, rarityX, y, colors[f.rarity] || "#ffffff"); text(total, caughtRight - tw(total), y); text(pack, packRight - tw(pack), y, held ? "#a8e0a0" : "#a0a8c0");
+  });
+  g.fillStyle = "#101a32"; g.fillRect(0, 146, W, H - 146); g.fillStyle = "#4d6c8a"; g.fillRect(0, 145, W, 1);
+  if (fish && state.fish[fish.name] > 0) {
+    wrap(fish.note.toUpperCase().replace(/;/g, ".") + ".", columns).slice(0, 2).forEach((line, i) => text(line, 12, 154 + i * 12));
+    text(("EAT: " + itemLine(fish.name)).slice(0, columns), 12, 178, "#a0d8f8");
+    text(fishFeedingHint(fish), 12, 190, "#a0a8c0");
+  } else {
+    text(fish ? "NOT CAUGHT YET." : "NO FISH RECORDS YET.", 12, 154, "#a0a8c0");
+    text("LEFT/RIGHT OPENS THE FISHING GUIDE.", 12, 178, "#a0d8f8");
+    text("DISCOVER SPECIES AT THE POND.", 12, 190, "#a0a8c0");
+  }
+  text("UP/DOWN: SPECIES " + back + ": BACK", 12, 212, "#fff070");
+}
+function drawFishingHUD(f, baseY) {
+  const top = baseY >= H - 72 ? 4 : H - 58, columns = Math.floor((W - 24) / 6);
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  g.fillStyle = "#101a32"; g.fillRect(4, top, W - 8, 54); g.fillStyle = "#4d6c8a"; g.fillRect(4, top, W - 8, 1); g.fillRect(4, top + 53, W - 8, 1);
+  if (f.phase === "wait") {
+    text("WAIT FOR !", 12, top + 8, "#a0d8f8"); text("STRIKE WHEN ! APPEARS.", 12, top + 20);
+    text(back + ": REEL IN", 12, top + 40, "#fff070");
+  } else if (f.phase === "bite") {
+    text("BITE! " + confirm + ": STRIKE", 12, top + 8, "#ffdf83"); text(back + ": REEL IN", 12, top + 20);
+    text("BITE WINDOW", W - 12 - tw("BITE WINDOW"), top + 20, "#a0a8c0");
+    const left = clamp(1 - f.t / f.fish.window_s, 0, 1); gauge(12, top + 40, W - 24, left, left > 0.35 ? "#58b898" : "#ffcf70");
+  } else {
+    if (f.caught) {
+      text((f.msg.startsWith("NEW!") ? "NEW! " : "") + "CAUGHT " + f.caught.toUpperCase() + "!", 12, top + 8, "#fff070");
+      const held = itemStock(f.caught), pack = held > 9999 ? "9999+" : String(held); text(f.fish.rarity + " / PACK " + pack, 12, top + 20, "#a8e0a0");
+    } else wrap(f.msg, columns).slice(0, 2).forEach((line, i) => text(line, 12, top + 8 + i * 12));
+    text(confirm + "/" + back + ": CONTINUE", 12, top + 40, "#fff070");
+  }
+}
 function drawFishLog() {                                     /* every kind in the table; the uncaught ones keep their secret */
+  if ((D.realm_key || "prism") === "prism") return drawAnglerGuide();
   const all = D.fish || [], i = menu.ii, have = Object.keys(state.fish).length;
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 26); win(0, 26, W, 120); win(0, 146, W, H - 146);
@@ -892,6 +1178,7 @@ function drawFish() {
   g.strokeStyle = "rgba(255,255,255,0.7)"; g.beginPath(); g.moveTo(Math.round(ox + P.fx + 8), Math.round(oy + P.fy + 4)); g.lineTo(bx, by - 2); g.stroke();
   g.fillStyle = "#f04848"; g.fillRect(bx - 2, by - 3, 4, 3); g.fillStyle = "#ffffff"; g.fillRect(bx - 2, by, 4, 2);
   if (f.phase === "bite") { g.strokeStyle = "rgba(255,255,255,0.6)"; g.beginPath(); g.ellipse(bx, by + 1, 6 + f.t * 10, 2 + f.t * 3, 0, 0, Math.PI * 2); g.stroke(); text("!", bx - 2, by - 16, "#fff070"); }
+  if ((D.realm_key || "prism") === "prism") return drawFishingHUD(f, Math.round(oy + f.y * T + 8));
   win(4, H - 30, W - 8, 26); text(f.msg, 14, H - 20, f.phase === "done" && f.caught ? "#fff070" : "#ffffff");
 }
 
@@ -911,8 +1198,8 @@ function canEquip(m, name) {
   return slot === "armor" || m.armor === "heavy";            /* helms and shields need heavy armour training */
 }
 const MENU_WIN = n => { const w = ((D.menus.screens.Menu || {}).windows || []).find(x => x.name === n); return w ? [w.x, w.y, w.w, w.h] : null; };
-function openMenu() { sfx("OPEN"); menu = { idx: 0, sub: null, who: 0, ii: 0, msg: "" }; mode = "menu"; }
-function closeMenu() { sfx("TICK"); mode = "field"; menu = null; }
+function openMenu() { clearActionButtons(); sfx("OPEN"); menu = { idx: 0, sub: null, who: 0, ii: 0, msg: "" }; mode = "menu"; }
+function closeMenu() { clearActionButtons(); sfx("TICK"); mode = "field"; menu = null; }
 function menuMove(k, n) { if (hit("up")) { menu[k] = (menu[k] + n - 1) % n; sfx("TICK"); } if (hit("down")) { menu[k] = (menu[k] + 1) % n; sfx("TICK"); } }
 function menuWho(keep) {                                   /* keep: the item / slot cursor stays put while you change who */
   if (hit("left")) { menu.who = (menu.who + roster().length - 1) % roster().length; if (!keep) menu.ii = 0; sfx("TICK"); }
@@ -931,45 +1218,71 @@ function itemLine(name) {                                     /* what the item r
 }
 const bagItems = () => Object.keys(bag).filter(k => bag[k] > 0 && GEAR[k] && GEAR[k].effect);
 const fieldItems = () => bagItems().filter(k => itemKind(k) !== "escape");
-const battleItems = () => bagItems().filter(k => itemKind(k) !== "camp");
+const itemStock = name => Number.isSafeInteger(bag[name]) && bag[name] > 0 ? bag[name] : 0;
+const battleItemStock = name => Math.max(0, itemStock(name) - (B && B.phase === "cmd"
+  ? B.acts.filter(a => a.kind === "item" && a.item === name).length : 0));
+const battleItems = () => bagItems().filter(k => itemKind(k) !== "camp" && battleItemStock(k) > 0);
+function refuseBattleItems() {
+  const available = battleItems().length > 0;
+  const planned = bagItems().some(k => itemKind(k) !== "camp" && itemStock(k) > 0);
+  B.msg = available ? "THAT ITEM IS NO LONGER AVAILABLE. CHOOSE ITEM AGAIN." : planned ? "ALL BATTLE ITEMS ARE PLANNED. B: CHANGE AN EARLIER COMMAND." : "THE BAG HOLDS NO BATTLE ITEMS.";
+  B.sub = null; B.pending = null; hit("a"); sfx("LOCKED");
+  toast(available ? "Item no longer available" : planned ? "Items already planned" : "No battle items", available ? "Choose ITEM again to pick an available item." : planned ? "Use B to change an earlier command and free its item." : "Choose another command.");
+}
 const fieldSpells = m => m.spells.map(spellOf).filter(Boolean);
 function menuTick() {
   const sub = menu.sub;
   if (!sub) {
-    menuMove("idx", MENU_CMDS.length);
+    const commands = MENU_CMDS.concat((D.realm_key || "prism") === "prism" ? ["JOURNEY"] : []);
+    menuMove("idx", commands.length);
     if (hit("b") || hit("start")) return closeMenu();
     if (!hit("a")) return;
-    const c = MENU_CMDS[menu.idx]; sfx("PICK"); menu.msg = ""; menu.ii = 0; menu.who = 0;
+    const c = commands[menu.idx]; sfx("PICK"); menu.msg = ""; menu.ii = 0; menu.who = 0;
     if (c === "ITEM") { if (!fieldItems().length) { menu.msg = "THE BAG HOLDS NOTHING TO USE."; return; } menu.sub = "item"; menu.msg = "LEFT/RIGHT: WHO.  A: USE."; }
     else if (c === "MAGIC") { menu.sub = "magic-who"; menu.who = Math.max(0, roster().findIndex(m => m.spells.length)); }
     else if (c === "EQUIP") { menu.sub = "equip"; }
     else if (c === "STATUS") { menu.sub = "status"; }
     else if (c === "ORDER") { menu.sub = "order"; menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; }
     else if (c === "SAVE") {
-      if (map.kind === "dungeon") { sfx("LOCKED"); menu.msg = "A WARDEN'S PRESENCE SCATTERS THE INK. SAVE OUTSIDE."; return; }
+      if (map.kind === "dungeon") { sfx("LOCKED"); menu.msg = D.dungeons[map.dungeon].optional ? "THE RATTLING GEARS SCATTER THE INK. SAVE OUTSIDE." : "A WARDEN'S PRESENCE SCATTERS THE INK. SAVE OUTSIDE."; return; }
       menu.msg = saveGame() ? "YOUR JOURNEY IS WRITTEN DOWN." : "THE JOURNEY COULD NOT BE WRITTEN."; if (menu.msg[0] === "Y") toast("Journey saved", saveSummary());
     }
-    else if (c === "BESTIARY") { menu.sub = "bestiary"; menu.ii = 0; }
-    else if (c === "FISH") { menu.sub = "fish"; menu.ii = 0; }
+    else if (c === "BESTIARY") { menu.sub = "bestiary"; menu.ii = 0; if ((D.realm_key || "prism") === "prism") { menu.bp = 0; menu.bc = 0; } }
+    else if (c === "FISH") { menu.sub = "fish"; menu.ii = 0; if ((D.realm_key || "prism") === "prism") menu.fishHelp = false; }
+    else if (c === "JOURNEY") {
+      menu.sub = "journey"; menu.jp = 0;
+      const routes = journeyRoutes(), pin = journeyPinned();
+      menu.ii = pin ? routes.indexOf(pin) : Math.max(0, routes.findIndex(d => !state.beaten.has(d.boss_data.name) && (!(d.final || d.optional) || shardCount() >= 3)));
+    }
     else if (c === "OPTIONS") { closeMenu(); openSettings(); }
     return;
   }
+  if (sub === "journey") return journeyTick();
+  if (sub === "summons" && (D.realm_key || "prism") === "prism") return summonBookTick();
   if (sub === "item") {
+    if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); sfx("TICK"); return; }
     const items = fieldItems();
     if (!items.length) { menu.sub = null; return; }
     menu.ii = clamp(menu.ii, 0, items.length - 1);
     menuMove("ii", items.length); menuWho(true);
     if (hit("a")) menu.msg = useItem(items[menu.ii], roster()[menu.who]);
-    if (hit("b")) { menu.sub = null; menu.msg = ""; sfx("TICK"); }
     return;
   }
   if (sub === "magic-who") {
+    if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); if ((D.realm_key || "prism") === "prism") hit("start"); sfx("TICK"); return; }
+    if ((D.realm_key || "prism") === "prism" && hit("start")) return openSummonBook();
     menuWho();
-    if (hit("a")) { if (!fieldSpells(roster()[menu.who]).length) { sfx("LOCKED"); menu.msg = roster()[menu.who].name.toUpperCase() + " KNOWS NO SPELLS."; return; } sfx("PICK"); menu.sub = "magic"; menu.ii = 0; menu.msg = ""; }
-    if (hit("b")) { menu.sub = null; menu.msg = ""; sfx("TICK"); }
+    if (hit("a")) {
+      const caster = roster()[menu.who];
+      if (caster.hp <= 0) { sfx("LOCKED"); menu.msg = caster.name.toUpperCase().slice(0, 11) + " IS DOWN. REVIVE FIRST."; return; }
+      if (!fieldSpells(caster).length) { sfx("LOCKED"); menu.msg = caster.name.toUpperCase() + " KNOWS NO SPELLS."; return; }
+      sfx("PICK"); menu.sub = "magic"; menu.ii = 0; menu.msg = "";
+    }
     return;
   }
   if (sub === "magic") {
+    if (hit("b")) { menu.sub = "magic-who"; menu.msg = ""; hit("a"); if ((D.realm_key || "prism") === "prism") hit("start"); sfx("TICK"); return; }
+    if ((D.realm_key || "prism") === "prism" && hit("start")) return openSummonBook();
     const caster = roster()[menu.who], list = fieldSpells(caster);
     menuMove("ii", list.length);
     if (hit("a")) {
@@ -978,44 +1291,74 @@ function menuTick() {
       if (caster.mp < sp.mp) { sfx("LOCKED"); menu.msg = "NOT ENOUGH MP."; return; }
       sfx("PICK"); menu.sub = "magic-target"; menu.spell = sp; menu.target = 0; menu.msg = "WHO?";
     }
-    if (hit("b")) { menu.sub = "magic-who"; menu.msg = ""; sfx("TICK"); }
     return;
   }
   if (sub === "magic-target") {
+    if (hit("b")) { menu.sub = "magic"; menu.msg = ""; hit("a"); sfx("TICK"); return; }
     menuMove("target", roster().length);
     if (hit("a")) {
       const caster = roster()[menu.who], m = roster()[menu.target], sp = menu.spell;
+      if (caster.hp <= 0) { sfx("LOCKED"); menu.msg = caster.name.toUpperCase().slice(0, 11) + " IS DOWN. REVIVE FIRST."; return; }
       if (m.hp <= 0) { sfx("LOCKED"); menu.msg = "TOO LATE FOR THAT SPELL."; return; }
       if (caster.mp < sp.mp) { sfx("LOCKED"); menu.msg = "NOT ENOUGH MP."; return; }
-      const amt = Math.round(sp.power * 1.5 + caster.st.spr * 3);
+      const amt = Math.round(sp.power * 1.5 + caster.st.spr * 3), beforeHP = m.hp;
       caster.mp -= sp.mp; m.hp = Math.min(m.max, m.hp + amt); sfx("SPELL"); sfx("HEAL");
-      menu.msg = caster.name.toUpperCase() + " CASTS " + sp.name.toUpperCase() + ". +" + amt + " HP.";
+      const restored = (D.realm_key || "prism") === "prism" ? m.hp - beforeHP : amt;
+      menu.msg = caster.name.toUpperCase() + " CASTS " + sp.name.toUpperCase() + ". +" + restored + " HP.";
     }
-    if (hit("b")) { menu.sub = "magic"; menu.msg = ""; sfx("TICK"); }
     return;
   }
   if (sub === "equip") {
     menuWho(true); menuMove("ii", SLOTS.length);
-    if (hit("a")) { sfx("PICK"); menu.sub = "equip-pick"; menu.slot = SLOTS[menu.ii]; menu.ci = 0; }
-    if (hit("b")) { menu.sub = null; sfx("TICK"); }
+    if (hit("b")) { menu.sub = null; menu.msg = ""; hit("a"); sfx("TICK"); return; }
+    if (hit("a")) {
+      const m = roster()[menu.who], slot = SLOTS[menu.ii];
+      if (!m || !slot) { leaveEquipChoice("CHOOSE A COMPANION AND SLOT AGAIN.", "LOCKED"); return; }
+      const cands = equipCandidates(m, slot);
+      if (!cands.length) { leaveEquipChoice("NO GEAR FITS THIS SLOT. CHOOSE ANOTHER.", "LOCKED"); return; }
+      sfx("PICK"); menu.sub = "equip-pick"; menu.slot = slot; menu.ci = 0;
+      menu.equipChoice = { member: m, slot, old: m.equip[slot], items: cands.slice() };
+      menu.msg = "UP/DOWN: CHOOSE. A: EQUIP. B: BACK.";
+    }
     return;
   }
   if (sub === "equip-pick") {
-    const m = roster()[menu.who], cands = equipCandidates(m, menu.slot);
+    if (hit("b")) { leaveEquipChoice("", "TICK"); return; }
+    const m = roster()[menu.who], choice = menu.equipChoice;
+    if (!m || !SLOTS.includes(menu.slot) || !choice || choice.member !== m || choice.slot !== menu.slot || choice.old !== m.equip[menu.slot]) {
+      leaveEquipChoice("GEAR CHANGED. CHOOSE THE SLOT AGAIN.", "LOCKED"); return;
+    }
+    const cands = equipCandidates(m, menu.slot);
+    if (!cands.length || !Array.isArray(choice.items) || choice.items.length !== cands.length || choice.items.some((c, i) => c !== cands[i])) {
+      leaveEquipChoice("GEAR CHANGED. CHOOSE THE SLOT AGAIN.", "LOCKED"); return;
+    }
+    if (!Number.isInteger(menu.ci) || menu.ci < 0 || menu.ci >= cands.length) {
+      leaveEquipChoice("CHOICE LOST. CHOOSE THE SLOT AGAIN.", "LOCKED"); return;
+    }
     menuMove("ci", cands.length);
     if (hit("a")) {
       const pick = cands[menu.ci], old = m.equip[menu.slot];
-      if (pick === null) { if (old) { bag[old] = (bag[old] || 0) + 1; m.equip[menu.slot] = null; sfx("EQUIP"); } }
-      else { if (old) bag[old] = (bag[old] || 0) + 1; bag[pick]--; if (!bag[pick]) delete bag[pick]; m.equip[menu.slot] = pick; sfx("EQUIP"); }
-      menu.sub = "equip"; menu.msg = m.name.toUpperCase() + (pick ? " EQUIPS THE " + pick.toUpperCase() + "." : " TAKES IT OFF.");
+      if (pick !== null && (typeof pick !== "string" || !Number.isSafeInteger(bag[pick]) || bag[pick] <= 0)) {
+        leaveEquipChoice("GEAR CHANGED. CHOOSE THE SLOT AGAIN.", "LOCKED"); return;
+      }
+      if (pick === null) { if (old) { bag[old] = (bag[old] || 0) + 1; m.equip[menu.slot] = null; } }
+      else { if (old) bag[old] = (bag[old] || 0) + 1; bag[pick]--; if (!bag[pick]) delete bag[pick]; m.equip[menu.slot] = pick; }
+      leaveEquipChoice(m.name.toUpperCase() + (pick ? " EQUIPS THE " + pick.toUpperCase() + "." : " TAKES IT OFF."), "EQUIP");
     }
-    if (hit("b")) { menu.sub = "equip"; sfx("TICK"); }
     return;
   }
-  if (sub === "fish") { const n = (D.fish || []).length; if (n) menuMove("ii", n); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
-  if (sub === "bestiary") { const n = beastList().length; if (n) menuMove("ii", n); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
-  if (sub === "status") { menuWho(); if (hit("b") || hit("a")) { menu.sub = null; sfx("TICK"); } return; }
+  if (sub === "fish") {
+    if ((D.realm_key || "prism") === "prism") return anglerGuideTick();
+    const n = (D.fish || []).length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return;
+  }
+  if (sub === "bestiary") {
+    if ((D.realm_key || "prism") === "prism") return bestiaryTick();
+    const n = beastList().length; if (n) menuMove("ii", n); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return;
+  }
+  if (sub === "status") { menuWho(); const confirm = hit("a"), back = hit("b"); if (confirm || back) { menu.sub = null; sfx("TICK"); } return; }
   if (sub === "order") {
+    if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } hit("a"); if ((D.realm_key || "prism") === "prism") hit("start"); sfx("TICK"); return; }
+    if ((D.realm_key || "prism") === "prism") { const naming = hit("start"); if (naming && menu.pick < 0) { openCallsign(); return; } }
     menuMove("ii", roster().length);
     if (hit("a")) {
       if (menu.pick < 0) { menu.pick = menu.ii; sfx("PICK"); menu.msg = "AND SWAP WITH?"; }
@@ -1025,16 +1368,22 @@ function menuTick() {
         party = r.slice(0, ACTIVE); reserve = r.slice(ACTIVE); menu.pick = -1; sfx("EQUIP"); menu.msg = "ORDER CHANGED.";
       }
     }
-    if (hit("b")) { if (menu.pick >= 0) { menu.pick = -1; menu.msg = "CHOOSE TWO TO SWAP."; } else { menu.sub = null; menu.msg = ""; } sfx("TICK"); }
   }
 }
 function equipCandidates(m, slot) {
   const c = Object.keys(bag).filter(k => bag[k] > 0 && slotOf(k) === slot && canEquip(m, k));
   return m.equip[slot] ? c.concat([null]) : c;                /* null = take it off */
 }
+function leaveEquipChoice(message, sound) {
+  menu.sub = "equip"; menu.ci = 0; delete menu.equipChoice;
+  if (!Number.isInteger(menu.who) || menu.who < 0 || menu.who >= roster().length) menu.who = 0;
+  if (!Number.isInteger(menu.ii) || menu.ii < 0 || menu.ii >= SLOTS.length) menu.ii = 0;
+  menu.msg = message; hit("a"); sfx(sound);                  /* a refused/cancelled choice never leaks a confirm */
+}
 const atkWith = (m, w) => m.st.str * 2 + ((GEAR[w] || {}).attack || 0);
 const defWith = (m, eq) => SLOTS.slice(1).reduce((a, k) => a + ((GEAR[eq[k]] || {}).defence || 0), 0) + Math.floor(m.st.vit / 2);
 function useItem(name, m) {
+  if (!itemStock(name)) { sfx("LOCKED"); return "NO " + String(name || "ITEM").toUpperCase() + " LEFT."; }
   const e = (GEAR[name] || {}).effect || "";
   if (itemKind(name) === "camp") {
     if (B || !map || map.kind !== "world") return "PITCH THE TENT OUT ON THE OPEN ROAD.";
@@ -1049,10 +1398,10 @@ function useItem(name, m) {
   bag[name]--; sfx("ITEM"); sfx("HEAL"); return name.toUpperCase() + " ON " + m.name + ".";
 }
 /* Four rows fill the party window. With a reserve the rows go compact, and a rule marks where battle stops. */
-const rowH = () => roster().length > ACTIVE ? 30 : 52;
+const rowH = () => roster().length >= 7 ? 22 : roster().length > ACTIVE ? 30 : 52;
 const rowY = i => (rowH() === 52 ? 8 : 4) + i * rowH() + (i >= ACTIVE ? 4 : 0);
 function drawPartyRows(mark) {
-  const compact = rowH() === 30;
+  const compact = rowH() !== 52;
   roster().forEach((m, i) => {
     const y = rowY(i), back = i >= ACTIVE, dim = back ? "#a0a8c0" : "#ffffff";
     if (!compact) {
@@ -1078,37 +1427,486 @@ function drawMenu() {
   if (sub === "status") return drawStatus();
   if (sub === "bestiary") return drawBestiary();
   if (sub === "fish") return drawFishLog();
+  if (sub === "journey") return drawJourney();
+  if (sub === "summons" && (D.realm_key || "prism") === "prism") return drawSummonBook();
+  if (sub === "order" && (D.realm_key || "prism") === "prism") return drawFormation();
+  if (sub === "magic-target" && (D.realm_key || "prism") === "prism" && menu.spell) return drawFieldSpellTarget();
+  if ((sub === "magic-who" || sub === "magic") && (D.realm_key || "prism") === "prism") return drawFieldMagicBook();
+  if (sub === "item" && (D.realm_key || "prism") === "prism") return drawFieldPack();
   if (sub === "equip" || sub === "equip-pick") return drawEquip();
   win(...pw); win(...cw); win(...gw);
   const mark = sub === "item" || sub === "magic-who" ? menu.who : sub === "magic-target" ? menu.target : sub === "order" ? menu.ii : -1;
   drawPartyRows(mark);
   if (sub === "order" && menu.pick >= 0) text("*", 2, rowY(menu.pick) + 14, "#fff070");
-  MENU_CMDS.forEach((c, i) => text(c, cw[0] + 18, cw[1] + 10 + i * 16, c === "SAVE" && map.kind === "dungeon" ? "#6c6c8c" : "#ffffff"));
-  if (!sub) cursor(cw[0] + 6, cw[1] + 10 + menu.idx * 16);
+  const commands = MENU_CMDS.concat((D.realm_key || "prism") === "prism" ? ["JOURNEY"] : []);
+  const rows = Math.max(1, Math.floor((cw[3] - 16) / 16));
+  const from = clamp(menu.idx - rows + 1, 0, Math.max(0, commands.length - rows));
+  commands.slice(from, from + rows).forEach((c, i) => text(c, cw[0] + 18, cw[1] + 10 + i * 16, c === "SAVE" && map.kind === "dungeon" ? "#6c6c8c" : "#ffffff"));
+  if (!sub) cursor(cw[0] + 6, cw[1] + 10 + (menu.idx - from) * 16);
+  if (commands.length > rows) text((menu.idx + 1) + "/" + commands.length, cw[0] + 8, cw[1] + cw[3] - 10, "#a0a8c0");
   text("G", gw[0] + 8, gw[1] + 14); text(gold, gw[0] + gw[2] - 10 - tw(gold), gw[1] + 14);
   text("SHARDS", gw[0] + 8, gw[1] + 30); text(shardCount(), gw[0] + gw[2] - 10 - tw(shardCount()), gw[1] + 30);
   text(clockText(), gw[0] + 8, gw[1] + 46, isNight() ? "#90a8ff" : "#fff070");
   if (sub === "item") {
-    const items = fieldItems();
+    const items = fieldItems(), selected = clamp(menu.ii, 0, Math.max(0, items.length - 1)), rows = 6;
+    const from = clamp(selected - rows + 1, 0, Math.max(0, items.length - rows));
     win(20, 60, 220, 112);
-    items.forEach((k, i) => { text(k.slice(0, 18), 40, 72 + i * 13); text(":" + bag[k], 220 - tw(":" + bag[k]), 72 + i * 13); });
-    cursor(28, 72 + menu.ii * 13);
-    const sel = items[menu.ii]; if (sel) text(itemLine(sel).slice(0, 34), 28, 160, "#a0a8c0");
+    items.slice(from, from + rows).forEach((k, i) => { text(k.slice(0, 18), 40, 72 + i * 13); text(":" + bag[k], 220 - tw(":" + bag[k]), 72 + i * 13); });
+    if (items.length) cursor(28, 72 + (selected - from) * 13);
+    if (items.length > rows) text((from + 1) + "-" + Math.min(from + rows, items.length) + "/" + items.length, 28, 145, "#a0a8c0");
+    const sel = items[selected]; if (sel) text(itemLine(sel).slice(0, 34), 28, 160, "#a0a8c0");
   }
   if (sub === "magic" || sub === "magic-target") {
-    const caster = roster()[menu.who], list = fieldSpells(caster);
+    const caster = roster()[menu.who], list = fieldSpells(caster), selected = clamp(menu.ii, 0, Math.max(0, list.length - 1)), rows = 6;
+    const from = clamp(selected - rows + 1, 0, Math.max(0, list.length - rows));
     win(20, 60, 220, 112);
-    list.forEach((sp, i) => { const ok = sp.target === "ally"; text(sp.name, 40, 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); text(sp.mp + " MP", 220 - tw(sp.mp + " MP"), 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); });
-    if (sub === "magic") cursor(28, 72 + menu.ii * 13);
+    list.slice(from, from + rows).forEach((sp, i) => { const ok = !(sp.target !== "ally" || !/heal/.test((sp.status || "") + (sp.effect || "")) && sp.power <= 0); text(sp.name, 40, 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); text(sp.mp + " MP", 220 - tw(sp.mp + " MP"), 72 + i * 13, ok ? "#ffffff" : "#6c6c8c"); });
+    if (sub === "magic" && list.length) cursor(28, 72 + (selected - from) * 13);
+    if (list.length > rows) text((from + 1) + "-" + Math.min(from + rows, list.length) + "/" + list.length, 28, 145, "#a0a8c0");
+    const sel = list[selected];
+    if (sel) { const battleOnly = sel.target !== "ally" || !/heal/.test((sel.status || "") + (sel.effect || "")) && sel.power <= 0; text(((battleOnly ? "BATTLE ONLY. " : "") + spellHint(sel)).slice(0, 34), 28, 160, "#a0a8c0"); }
   }
   if (menu.msg) { win(20, H - 34, 220, 26); text(menu.msg.slice(0, 34), 28, H - 25); }
 }
+function drawFieldMagicBook() {
+  const r = roster(), caster = r[menu.who], list = fieldSpells(caster), who = menu.sub === "magic-who", half = Math.floor(W / 2), columns = Math.floor((W - 24) / 6);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const number = n => n > 9999 ? "9999+" : String(n);
+  const field = s => !(s.target !== "ally" || !/heal/.test((s.status || "") + (s.effect || "")) && s.power <= 0);
+  const selected = clamp(who ? 0 : menu.ii || 0, 0, Math.max(0, list.length - 1)), from = clamp(selected - 5, 0, Math.max(0, list.length - 6)), sp = list[selected];
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 44); g.fillRect(0, 160, W, H - 160);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 43, W, 1); g.fillRect(0, 159, W, 1); g.fillRect(half, 44, 1, 115);
+  text("MAGIC", 12, 10, "#fff070"); const count = "CASTER " + (menu.who + 1) + "/" + r.length; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  text(fit(caster.name, columns - (caster.hp <= 0 ? 7 : 0)) + (caster.hp <= 0 ? " / DOWN" : ""), 12, 22, caster.hp <= 0 ? "#f87878" : "#ffffff");
+  text(caster.job.toUpperCase() + " / " + (party.includes(caster) ? "FRONT" : "RESERVE"), 12, 34, "#a0a8c0");
+  const mp = "MP " + number(caster.mp) + "/" + number(caster.mmax); text(mp, W - 12 - tw(mp), 34, "#a0c8ff");
+  text("WHO / SPELLS", 12, 48, who ? "#fff070" : "#a0a8c0");
+  text("SPELLS " + (list.length ? selected + 1 : 0) + "/" + list.length, half + 12, 48, who ? "#a0a8c0" : "#fff070");
+  r.forEach((m, i) => {
+    const y = 62 + i * 12, known = String(fieldSpells(m).length), right = half - 12 - tw(known), color = m.hp <= 0 ? "#f87878" : known === "0" ? "#808090" : "#ffffff";
+    if (i === menu.who) { g.fillStyle = "#26344c"; g.fillRect(6, y - 2, half - 12, 12); if (who) cursor(4, y); }
+    text(party.includes(m) ? "F" : "R", 14, y, "#a0a8c0"); text(fit(m.name, Math.floor((right - 34) / 6)), 26, y, color); text(known, right, y, color);
+  });
+  if (!list.length) text("NO KNOWN SPELLS.", half + 12, 62, "#a0a8c0");
+  list.slice(from, from + 6).forEach((s, i) => {
+    const index = from + i, y = 62 + i * 15, cost = s.mp + " MP", color = !field(s) || caster.mp < s.mp ? "#6c6c8c" : "#ffffff";
+    if (index === selected) { g.fillStyle = who ? "#172338" : "#26344c"; g.fillRect(half + 6, y - 2, W - half - 12, 13); if (!who) cursor(half + 12, y); }
+    text(fit(s.name, Math.floor((W - half - 36) / 6) - cost.length - 1), half + 24, y, color); text(cost, W - 12 - tw(cost), y, color);
+  });
+  if (sp) { const cost = sp.mp + " MP"; text(fit(sp.name, columns - cost.length - 1), 12, 166, "#fff070"); text(cost, W - 12 - tw(cost), 166, "#a0c8ff"); text(fit(spellHint(sp)), 12, 178, "#a0d8f8"); }
+  const reason = who ? caster.hp <= 0 ? "DOWN. REVIVE THIS COMPANION FIRST." : !list.length ? "NO SPELLS. CHOOSE ANOTHER COMPANION." : "OPEN THIS COMPANION'S SPELLBOOK."
+    : !sp ? "NO KNOWN SPELLS." : !field(sp) ? "BATTLE ONLY. USE MAGIC IN BATTLE." : caster.mp < sp.mp ? "NEED " + (sp.mp - caster.mp) + " MORE MP." : "CHOOSE A LIVING ALLY TO HEAL.";
+  const available = who ? caster.hp > 0 && list.length > 0 : sp && field(sp) && caster.mp >= sp.mp;
+  text(fit(reason), 12, 190, available ? "#a8e0a0" : "#fff070");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text((who ? "LEFT/RIGHT: WHO " : "UP/DOWN: SPELL ") + confirm + (who ? ": BOOK" : ": CHOOSE"), 12, 202, "#fff070");
+  text(back + (who ? ": BACK" : ": CASTER"), 12, 214, "#fff070");
+  const summons = titlePrompt("menu", "ENTER").replace(/^PRESS /, "") + ": SUMMONS"; text(summons, W - 12 - tw(summons), 214, "#a0d8f8");
+}
+let summonAudition = null; // Audio-clock lifetime survives menu closure; it never gates ordinary battle calls.
+function openSummonBook() {
+  menu.summonBack = menu.sub; menu.sub = "summons"; menu.si = 0; menu.summonNote = "";
+  for (const key of ["up", "down", "left", "right"]) hit(key); clearActionButtons(); sfx("OPEN");
+}
+function summonBookTick() {
+  const confirm = hit("a"), back = hit("b"), start = hit("start");
+  if (confirm || back || start) {
+    for (const key of ["up", "down", "left", "right"]) hit(key); clearActionButtons();
+    menu.sub = menu.summonBack === "magic" ? "magic" : "magic-who"; delete menu.summonBack; sfx("TICK"); return;
+  }
+  const spirits = mySpirits(), n = spirits.length; if (n) menuMove("si", n); else { hit("up"); hit("down"); } hit("left");
+  if (hit("right") && n) auditionSummon(spirits[clamp(menu.si || 0, 0, n - 1)]);
+}
+function auditionSummon(spirit) {
+  if (!actx || actx.state !== "running") { menu.summonNote = !actx ? "SOUND HAS NOT STARTED." : actx.state === "suspended" ? "SOUND IS PAUSED." : "SOUND IS UNAVAILABLE."; return; }
+  if (summonAudition && summonAudition.context === actx && actx.currentTime < summonAudition.endsAt) return;
+  const played = playChord(spirit);
+  if (played) { summonAudition = Object.assign(played, { warden: spirit.warden }); menu.summonNote = ""; }
+}
+function drawSummonBook() {
+  const spirits = mySpirits(), selected = clamp(menu.si || 0, 0, Math.max(0, spirits.length - 1)), spirit = spirits[selected], caster = roster()[menu.who];
+  const columns = Math.floor((W - 24) / 6), split = W < 320 ? 112 : 128;
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const number = n => n > 9999 ? "9999+" : String(n);
+  const shard = (center, top, color) => { g.fillStyle = color; [12, 28, 44, 60, 76, 60, 44, 28, 12].forEach((width, i) => g.fillRect(center - width / 2, top + i * 8, width, 8)); g.fillStyle = "#f4e8ff"; g.fillRect(center - 1, top + 12, 2, 48); };
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 60); g.fillRect(0, 178, W, H - 178);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 59, W, 1); g.fillRect(0, 177, W, 1);
+  text("SHARD SUMMONS", 12, 10, "#fff070"); const count = "KNOWN " + spirits.length; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  const mp = "MP " + number(caster.mp) + "/" + number(caster.mmax); text(fit(caster.name, columns - mp.length - 1), 12, 22); text(mp, W - 12 - tw(mp), 22, "#a0c8ff");
+  if (spirit) {
+    const cost = spirit.mp + " MP"; text(fit(spirit.name, columns - cost.length - 1), 12, 42, "#fff070"); text(cost, W - 12 - tw(cost), 42, "#a0c8ff");
+    text("SPIRIT " + (selected + 1) + "/" + spirits.length, 12, 66, "#a0a8c0");
+    const from = clamp(selected - 2, 0, Math.max(0, spirits.length - 3));
+    spirits.slice(from, from + 3).forEach((s, i) => { const y = 84 + i * 28; if (from + i === selected) { g.fillStyle = "#26344c"; g.fillRect(6, y - 2, split - 12, 26); cursor(12, y); } text(fit(s.name, Math.floor((split - 36) / 6)), 24, y); text(s.mp + " MP", 24, y + 12, "#a0c8ff"); });
+    g.fillStyle = "#101a32"; g.fillRect(split + 6, 64, W - split - 12, 112);
+    const center = Math.floor((W + split) / 2), color = ({ fire: "#e88058", water: "#689ce0", air: "#88b8bc", earth: "#b0a068", light: "#d8c47c", dark: "#9c78c0" })[spirit.element] || "#9c88df";
+    shard(center, 74, color);
+    const image = "Boss_" + spirit.warden, r = D.rects.sprites[image];
+    if (r) { const scale = Math.min(72 / r[2], 72 / r[3]); spr("sprites", image, center - r[2] * scale / 2, 74 + (72 - r[3] * scale) / 2, 0, null, null, scale); }
+    if (summonAudition && summonAudition.context === actx && summonAudition.warden === spirit.warden && actx.state !== "closed" && actx.currentTime < summonAudition.endsAt) {
+      text("CHORD", split + 12, 66, "#fff070");
+      summonAudition.startsAt.forEach((at, i) => { if (actx.currentTime >= at) { const alpha = clamp((summonAudition.endsAt - actx.currentTime) / (summonAudition.endsAt - at), 0, 1); g.fillStyle = "rgba(244,232,255," + alpha.toFixed(3) + ")"; g.fillRect(center - 14 + i * 12, 151, 4, 4); } });
+    }
+    text(fit((ELEM[spirit.element] || spirit.element) + " / ALL FOES", Math.floor((W - split - 24) / 6)), split + 12, 162, "#a0d8f8");
+  } else {
+    text("NO SPIRITS YET.", 12, 42, "#a0a8c0"); text("WARDEN SHARDS AWAKEN SUMMONS.", 12, 76); text("EARN A SHARD, THEN RETURN HERE.", 12, 92, "#a0a8c0"); shard(Math.floor(W / 2), 100, "#9c88df");
+  }
+  text("BATTLE ONLY / ONCE EACH PER BATTLE", 12, 184, "#a8e0a0");
+  if (spirit) {
+    const active = summonAudition && summonAudition.context === actx && actx.state !== "closed" && actx.currentTime < summonAudition.endsAt;
+    const hint = active ? actx.state === "running" ? "UP/DOWN PICK / CHORD PLAYING" : "SOUND IS PAUSED." : menu.summonNote && (!actx || actx.state !== "running") ? menu.summonNote : "UP/DOWN PICK / RIGHT HEAR";
+    text(hint, 12, 196, "#a0a8c0");
+  }
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, ""), start = titlePrompt("menu", "ENTER").replace(/^PRESS /, "");
+  text(confirm + "/" + back + "/" + start + ": BACK", 12, 212, "#fff070");
+}
+/* The notebook reads accepted journey state. Looking at a route never awards, travels or saves. */
+function journeyRoutes() { return D.dungeons.filter(d => d.boss_data && d.landmark); }
+const JOURNEY_PIN = "journey/pin/";
+function journeyPinned() { return (D.realm_key || "prism") === "prism" ? journeyRoutes().find(d => opened.has(JOURNEY_PIN + d.landmark)) || null : null; }
+function toggleJourneyPin() {
+  if ((D.realm_key || "prism") !== "prism") return;
+  const routes = journeyRoutes(), d = routes[menu.ii]; if (!d) return;
+  const key = JOURNEY_PIN + d.landmark, remove = opened.has(key);
+  const previous = routes.map(r => JOURNEY_PIN + r.landmark).filter(k => opened.has(k));
+  if (!remove && opened.size - previous.length >= 4096) { sfx("LOCKED"); toast("Journey pin unchanged", "The journey is full. Existing progress kept."); return; }
+  previous.forEach(k => opened.delete(k));
+  if (!remove) opened.add(key);
+  sfx("PICK"); toast(remove ? "Journey pin removed" : "Journey pin set", "Use field SAVE outside a dungeon or rest at an inn to keep this choice.");
+}
+function journeyObjective() {
+  const final = D.dungeons.find(d => d.final && d.boss_data), count = shardCount();
+  if (final && state.beaten.has(final.boss_data.name)) return ["THE HEART IS WHOLE AGAIN.", follyDungeon() && !follyCleared() ? "THE WORKS WAIT AT THE AIRSHIP PAD." : "EXPLORE THE ISLES AT YOUR OWN PACE."];
+  return count >= 3 ? ["THE CRYSTAL SHRINE IS OPEN.", "THE SHATTERED HEART AWAITS."] : [count === 2 ? "ONE WARDEN STILL HOLDS A SHARD." : (3 - count) + " WARDENS STILL HOLD SHARDS.", "CHOOSE ANY UNFINISHED SHARD ROUTE."];
+}
+function journeyStatus(d) {
+  const done = state.beaten.has(d.boss_data.name), shard = carriesShard(d);
+  if (done) return { word: shard ? "SHARD" : "CLEARED", color: "#78f8a0", hint: d.optional ? "BRANNOC'S CALIBRATION IS AT THE INN." : "THIS ROUTE IS COMPLETE. EXPLORE ON." };
+  if ((d.final || d.optional) && shardCount() < 3) return { word: "SEALED", color: "#a0a8c0", hint: "GATHER ALL THREE WARDEN SHARDS." };
+  return { word: "OPEN", color: "#fff070", hint: d.optional ? "ON FOOT: FACE THE AIRSHIP PAD." : d.final ? "THE SHARDS HAVE OPENED THE SHRINE." : "DEFEAT THE WARDEN FOR ITS SHARD." };
+}
+function journeyTick() {
+  if (hit("b") || hit("start")) { clearActionButtons(); menu.sub = null; menu.msg = ""; sfx("TICK"); return; }
+  const left = hit("left"), right = hit("right");
+  const pages = map.kind === "dungeon" ? 3 : 2;
+  if (left || right) { menu.jp = ((menu.jp || 0) + (right ? 1 : -1) + pages) % pages; sfx("TICK"); }
+  if (menu.jp === 2 && map.kind === "dungeon") { hit("up"); hit("down"); hit("a"); return; }
+  const n = journeyRoutes().length; if (n) menuMove("ii", n);
+  if (hit("a") && !left && !right) toggleJourneyPin();
+}
+function drawJourney() {
+  if (menu.jp === 2 && map.kind === "dungeon") return drawFloorSketch();
+  if (menu.jp === 1) return drawJourneyMap();
+  const routes = journeyRoutes(), selected = clamp(menu.ii, 0, Math.max(0, routes.length - 1));
+  const pin = journeyPinned();
+  const from = clamp(selected - 4, 0, Math.max(0, routes.length - 5)), chars = Math.floor((W - 24) / 6);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  win(0, 0, W, 62); win(0, 62, W, 100); win(0, 162, W, H - 162);
+  text("JOURNEY", 12, 10, "#fff070");
+  text(map.kind === "dungeon" ? "LEFT/RIGHT: MAPS" : "LEFT/RIGHT: MAP", 72, 10, "#a0a8c0");
+  const count = "SHARDS " + shardCount() + "/3"; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  journeyObjective().forEach((line, i) => text(line.slice(0, chars), 12, 30 + i * 12));
+  routes.slice(from, from + 5).forEach((d, i) => {
+    const info = journeyStatus(d), y = 72 + i * 18;
+    text(((d === pin ? "X " : "") + d.name).slice(0, Math.floor((W - 120) / 6)), 24, y, selected === from + i ? "#ffffff" : "#a0a8c0");
+    text(info.word, W - 12 - tw(info.word), y, info.color);
+    if (selected === from + i) cursor(10, y);
+  });
+  const d = routes[selected];
+  if (d) {
+    const info = journeyStatus(d);
+    text(("MAP: " + pretty(d.landmark)).slice(0, chars), 12, 172, "#a0d8f8");
+    text((d.optional && info.word === "OPEN" ? "ON FOOT: FACE PAD. " + titlePrompt("confirm", "Z OR TAP A") + "." : info.hint).slice(0, chars), 12, 184);
+    text(((d === pin ? "UNPIN: " : "PIN: ") + titlePrompt("confirm", "Z/SPACE OR TAP A")).slice(0, chars), 12, 196, "#ffdf83");
+  }
+  const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
+  text(("UP/DOWN: ROUTE  " + back + ": BACK").slice(0, chars), 12, H - 14, "#fff070");
+}
+function journeyAnchor() {
+  if (map.kind === "world") return { x: P.x, y: P.y, label: state.air && state.air.aboard ? "ABOARD THE PRISM SKIFF." : "ON THE WORLD MAP." };
+  let landmark = "Town", label = "INSIDE TOWN";
+  if (map.kind === "dungeon") { const d = D.dungeons[map.dungeon]; landmark = d.landmark; label = "INSIDE " + pretty(d.name); }
+  else if (map.kind === "village") { landmark = D.village.landmark; label = "INSIDE " + pretty(D.village.name); }
+  else if (map.kind === "interior") {
+    const opening = (D.interiors[map.name] || {}).opened_by || {};
+    landmark = opening.map === "overworld" ? opening.landmark : "Town"; label = "INSIDE " + pretty(map.name);
+  }
+  const at = find(D.world, landmark);
+  return at ? { x: at[0], y: at[1], label } : null;
+}
+function drawJourneyMap() {
+  const routes = journeyRoutes(), selected = clamp(menu.ii, 0, Math.max(0, routes.length - 1)), d = routes[selected];
+  const height = D.world.length, width = D.world[0].length;
+  const cell = Math.max(1, Math.min(8, Math.floor((W - 32) / width), Math.floor(140 / height)));
+  const x0 = Math.floor((W - width * cell) / 2), y0 = 48 + Math.floor((140 - height * cell) / 2);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 192, W, H - 192);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 192, W, 1);
+  text("MAP", 12, 10, "#fff070"); text(map.kind === "dungeon" ? "LEFT/RIGHT: PAGES" : "LEFT/RIGHT: NOTES", 60, 10, "#a0a8c0");
+  const count = (selected + 1) + "/" + routes.length; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  const anchor = journeyAnchor(), chars = Math.floor((W - 24) / 6), unlocked = airUnlocked(), pin = journeyPinned();
+  const dock = find(D.world, "AirshipPad"), skiff = state.air || (dock && { x: dock[0], y: dock[1] });
+  const pinnedAt = pin && find(D.world, pin.landmark);
+  const skiffHere = unlocked && !(state.air && state.air.aboard) && anchor && skiff && anchor.x === skiff.x && anchor.y === skiff.y;
+  const skiffAtPin = unlocked && !(state.air && state.air.aboard) && skiff && pinnedAt && skiff.x === pinnedAt[0] && skiff.y === pinnedAt[1];
+  text(((anchor ? anchor.label : "WORLD ENTRANCE UNKNOWN.") + (skiffHere ? " SKIFF HERE." : skiffAtPin ? " SKIFF AT X." : "")).slice(0, chars), 12, 22);
+  const confirm = titlePrompt("confirm", "Z/TAP A").replace(/^PRESS /, "");
+  text((confirm + (d === pin ? ": UNPIN X " : ": PIN X ") + (map.kind === "world" ? "YOU+" : "ENTRY+") + " S SKIFF O WAY").slice(0, chars), 12, 34, "#a0d8f8");
+  g.fillStyle = "#86a9bf"; g.fillRect(x0 - 2, y0 - 2, width * cell + 4, height * cell + 4);
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+    const r = D.rects.tiles["wm:" + D.world[y][x] + "#0"];
+    if (r) g.drawImage(IM.tiles, r[0], r[1], 16, 16, x0 + x * cell, y0 + y * cell, cell, cell);
+    else { g.fillStyle = "#243848"; g.fillRect(x0 + x * cell, y0 + y * cell, cell, cell); }
+  }
+  const valid = p => p && Number.isInteger(p.x) && Number.isInteger(p.y) && p.x >= 0 && p.y >= 0 && p.x < width && p.y < height;
+  const mark = (p, glyph, color) => { if (valid(p)) text(glyph, x0 + p.x * cell + Math.floor(cell / 2) - 2, y0 + p.y * cell + Math.floor(cell / 2) - 3, color, "#080c20"); };
+  for (const w of D.waystones || []) if (state.ways.has(w.id)) mark(w, "O", "#d7b5ff");
+  if (unlocked && !(state.air && state.air.aboard)) mark(skiff, "S", "#fff070");
+  if (pinnedAt) mark({ x: pinnedAt[0], y: pinnedAt[1] }, "X", "#ffdf83");
+  const destination = d && find(D.world, d.landmark);
+  if (destination) {
+    const x = x0 + destination[0] * cell, y = y0 + destination[1] * cell;
+    g.fillStyle = "#ffffff"; g.fillRect(x, y, cell, 1); g.fillRect(x, y + cell - 1, cell, 1); g.fillRect(x, y, 1, cell); g.fillRect(x + cell - 1, y, 1, cell);
+  }
+  if (valid(anchor)) {
+    const x = x0 + anchor.x * cell + Math.floor(cell / 2), y = y0 + anchor.y * cell + Math.floor(cell / 2);
+    g.fillStyle = "#ffdf83"; g.fillRect(x - 2, y, 5, 1); g.fillRect(x, y - 2, 1, 5);
+  }
+  if (d) text(((d === pin ? "X " : "") + d.name + " - " + journeyStatus(d).word).slice(0, chars), 12, 198, "#ffffff");
+  const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
+  text(("UP/DOWN: ROUTE  " + back + ": BACK").slice(0, chars), 12, 210, "#fff070");
+}
+function drawFloorSketch() {
+  const grid = map.grid, height = grid.length, width = grid[0].length, dungeon = D.dungeons[map.dungeon];
+  const cell = Math.max(1, Math.min(8, Math.floor((W - 32) / width), Math.floor(140 / height)));
+  const x0 = Math.floor((W - width * cell) / 2), y0 = 48 + Math.floor((140 - height * cell) / 2), chars = Math.floor((W - 24) / 6);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 192, W, H - 192);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 192, W, 1);
+  text("FLOOR MAP", 12, 10, "#fff070"); text("LEFT/RIGHT: PAGES", 80, 10, "#a0a8c0");
+  const floor = "F" + (map.floor + 1) + "/" + dungeon.floors.length; text(floor, W - 12 - tw(floor), 10, "#a0d8f8");
+  text(dungeon.name.toUpperCase().slice(0, chars), 12, 22);
+  text("YOU+ U " + (map.floor === 0 ? "EXIT" : "UP") + " D DOWN C CHEST G GATE", 12, 34, "#a0d8f8");
+  g.fillStyle = "#86a9bf"; g.fillRect(x0 - 2, y0 - 2, width * cell + 4, height * cell + 4);
+  const marks = [], glyphs = { U: ["101", "101", "101", "101", "111"], D: ["110", "101", "101", "101", "110"], C: ["111", "100", "100", "100", "111"], G: ["111", "100", "101", "101", "111"] };
+  let closed = 0, openedCount = 0;
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+    const tile = grid[y][x], rect = D.rects.tiles[map.key(tile) + "#0"];
+    if (rect) g.drawImage(IM.tiles, rect[0], rect[1], 16, 16, x0 + x * cell, y0 + y * cell, cell, cell);
+    else { g.fillStyle = "#243848"; g.fillRect(x0 + x * cell, y0 + y * cell, cell, cell); }
+    if (tile === "Chest") closed++; else if (tile === "ChestOpen") openedCount++;
+    const glyph = tile === "StairsUp" ? "U" : tile === "StairsDown" ? "D" : tile === "Chest" ? "C" : tile === "BossGate" ? "G" : null;
+    if (glyph) marks.push({ x, y, glyph });
+  }
+  for (const mark of marks) {
+    const x = x0 + mark.x * cell + Math.floor(cell / 2) - 1, y = y0 + mark.y * cell + Math.floor(cell / 2) - 2;
+    g.fillStyle = mark.glyph === "C" ? "#ffcf70" : mark.glyph === "G" ? "#f8a0d0" : "#a0d8f8";
+    glyphs[mark.glyph].forEach((row, gy) => { for (let gx = 0; gx < row.length; gx++) if (row[gx] === "1") g.fillRect(x + gx, y + gy, 1, 1); });
+  }
+  if (Number.isInteger(P.x) && Number.isInteger(P.y) && P.x >= 0 && P.y >= 0 && P.x < width && P.y < height) {
+    const x = x0 + P.x * cell + Math.floor(cell / 2), y = y0 + P.y * cell + Math.floor(cell / 2);
+    g.fillStyle = "#ffdf83"; g.fillRect(x - 2, y, 5, 1); g.fillRect(x, y - 2, 1, 5);
+  }
+  text("CHESTS " + openedCount + "/" + (closed + openedCount) + " OPEN", 12, 198, "#ffffff");
+  const here = grid[P.y] && grid[P.y][P.x], stairs = here === "StairsUp" ? (map.floor === 0 ? "EXIT HERE" : "UP STAIRS HERE") : here === "StairsDown" ? "DOWN STAIRS HERE" : "";
+  if (stairs) text(stairs, W - 12 - tw(stairs), 198, "#ffdf83");
+  const back = titlePrompt("cancel", "X/ESC OR TAP B").replace(/^PRESS /, "");
+  text(back + ": BACK", 12, 210, "#fff070");
+}
+function fieldItemForecast(name, member) {
+  if (!name) return "NO ITEMS TO USE.";
+  if (!itemStock(name)) return "NO " + name.toUpperCase() + " LEFT.";
+  const effect = (GEAR[name] || {}).effect || "", kind = itemKind(name), number = n => n > 9999 ? "9999+" : String(n);
+  if (kind === "camp") return B || !map || map.kind !== "world" ? "PITCH THE TENT OUT ON THE OPEN ROAD." : "FULL HP/MP. POISON CLEARED.";
+  if (kind === "revive") return member.hp > 0 ? "ALREADY STANDING." : "REVIVE: HP 0>" + number(Math.ceil(member.max / 4)) + ". STATUS CLEARED.";
+  if (kind === "cure") {
+    if (member.hp <= 0) return "TOO LATE FOR THAT.";
+    const key = effect.match(/cure (\w+)/)[1], word = STATUS[key] ? STATUS[key].word : key.toUpperCase();
+    return has(member, key) ? "CLEARS " + word + " STATUS." : "TARGET IS NOT " + word + ".";
+  }
+  if (kind === "heal") {
+    if (member.hp <= 0) return "TOO LATE FOR A TONIC.";
+    const after = Math.min(member.max, member.hp + +effect.match(/heal (\d+)/)[1] * HEAL_X);
+    return "IF USED: HP " + number(member.hp) + ">" + number(after) + " +" + number(after - member.hp);
+  }
+  if (kind === "mp") {
+    const after = Math.min(member.mmax, member.mp + +effect.match(/(\d+)/)[1] * MP_X);
+    return "IF USED: MP " + number(member.mp) + ">" + number(after) + " +" + number(after - member.mp);
+  }
+  return "NOTHING HAPPENS HERE.";
+}
+function drawFieldPack() {
+  const r = roster(), target = r[menu.who], items = fieldItems(), selected = clamp(menu.ii, 0, Math.max(0, items.length - 1)), name = items[selected];
+  const columns = Math.floor((W - 24) / 6), number = n => n > 9999 ? "9999+" : String(n);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const rows = 6, from = clamp(selected - rows + 1, 0, Math.max(0, items.length - rows)), mid = Math.floor(W / 2), quantity = name ? "QTY " + number(bag[name]) : "EMPTY";
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 180, W, H - 180);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 179, W, 1); g.fillRect(mid, 46, 1, 133);
+  text(fit(name || "PACK", columns - quantity.length - 1), 12, 10, "#fff070"); text(quantity, W - 12 - tw(quantity), 10, "#a0d8f8");
+  const pool = itemKind(name) === "mp" ? "MP " + number(target.mp) + "/" + number(target.mmax) : "HP " + number(target.hp) + "/" + number(target.max);
+  const suffix = (party.includes(target) ? " / FRONT " : " / RESERVE ") + pool;
+  text(itemKind(name) === "camp" ? "CAMP: WHOLE PARTY" : fit("TO " + target.name, columns - suffix.length) + suffix, 12, 22);
+  text("UP/DOWN: ITEM  LEFT/RIGHT: WHO", 12, 34, "#a0a8c0");
+  text(items.length ? "BAG " + (selected + 1) + "/" + items.length : "BAG EMPTY", 24, 50, "#a0d8f8");
+  text("PARTY", mid + 12, 50, "#a0d8f8"); text("HP", W - 24, 50, "#a0d8f8");
+  items.slice(from, from + rows).forEach((item, i) => {
+    const y = 62 + i * 18, count = ":" + number(bag[item]), x = mid - 12 - tw(count), limit = Math.floor((x - 30) / 6);
+    text(fit(item, limit), 24, y); text(count, x, y); if (from + i === selected) cursor(12, y);
+  });
+  r.forEach((member, i) => {
+    const y = 62 + i * 14, hp = number(member.hp), x = W - 12 - tw(hp), color = member.hp <= 0 ? "#f87878" : "#ffffff";
+    if (i === menu.who) { g.fillStyle = "#243850"; g.fillRect(mid + 6, y - 2, W - mid - 12, 13); cursor(mid + 12, y); }
+    text(fit(member.name, Math.floor((x - mid - 30) / 6)), mid + 24, y, color); text(hp, x, y, color);
+  });
+  const preview = fieldItemForecast(name, target), refused = /^(NO |NOTHING|TOO LATE|PITCH|ALREADY|TARGET IS NOT)/.test(preview);
+  text(fit(preview), 12, 184, refused ? "#f8a0a0" : "#a8e0a0");
+  if (menu.msg && menu.msg !== "LEFT/RIGHT: WHO.  A: USE.") text(fit(menu.msg), 12, 196);
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + ": USE  " + back + ": BACK", 12, 212, "#fff070");
+}
+function drawFieldSpellTarget() {
+  const r = roster(), caster = r[menu.who], target = r[menu.target], spell = menu.spell, columns = Math.floor((W - 24) / 6);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const number = n => n > 9999 ? "9999+" : String(n), cost = spell.mp + " MP";
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 180, W, H - 180);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 179, W, 1);
+  text(fit(spell.name, columns - cost.length - 1), 12, 10, "#fff070"); text(cost, W - 12 - tw(cost), 10, "#a0c8ff");
+  const mp = " MP " + number(caster.mp) + "/" + number(caster.mmax);
+  text(fit("CASTER " + caster.name, columns - mp.length) + mp, 12, 22);
+  text("UP/DOWN: COMPANION", 12, 34, "#a0a8c0"); const count = (menu.target + 1) + "/" + r.length; text(count, W - 12 - tw(count), 34, "#a0d8f8");
+  r.forEach((member, i) => {
+    const y = 50 + i * 16, front = party.includes(member), color = member.hp <= 0 ? "#f87878" : front ? "#ffffff" : "#a0a8c0";
+    if (i === menu.target) { g.fillStyle = "#243850"; g.fillRect(8, y - 2, W - 16, 15); cursor(12, y); }
+    text(fit(member.name, W < 320 ? 10 : 18), 26, y, color);
+    text(front ? "FRONT" : "RESERVE", W < 320 ? 98 : 146, y, color);
+    const hp = "HP " + number(member.hp) + "/" + number(member.max); text(hp, W - 12 - tw(hp), y, color);
+    gauge(28, y + 9, W - 54, member.hp / member.max, member.hp <= 0 ? "#883c50" : front ? "#58b898" : "#486c98");
+  });
+  let preview;
+  if (caster.hp <= 0) preview = "CASTER IS DOWN. REVIVE FIRST.";
+  else if (target.hp <= 0) preview = "TOO LATE FOR THAT SPELL.";
+  else if (caster.mp < spell.mp) preview = "NOT ENOUGH MP.";
+  else {
+    const after = Math.min(target.max, target.hp + Math.round(spell.power * 1.5 + caster.st.spr * 3));
+    preview = "IF CAST: HP " + number(target.hp) + ">" + number(after) + " +" + number(after - target.hp);
+  }
+  text(preview, 12, 184, preview.startsWith("IF CAST:") ? "#a8e0a0" : "#f8a0a0");
+  if (menu.msg && menu.msg !== "WHO?") text(fit(menu.msg), 12, 196, "#ffffff");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + ": CAST  " + back + ": BACK", 12, 212, "#fff070");
+}
+function formationPreview() {
+  const r = roster(), target = r[menu.ii], picked = r[menu.pick], chars = Math.floor((W - 24) / 6);
+  if (!picked || !target) return { text: menu.msg || "CHOOSE TWO TO SWAP.", color: "#a0d8f8" };
+  const after = r.slice(); [after[menu.pick], after[menu.ii]] = [after[menu.ii], after[menu.pick]];
+  const front = after.slice(0, ACTIVE);
+  if (!front.some(m => m.hp > 0)) return { text: "SOMEONE STANDING MUST LEAD.", color: "#f87878" };
+  if (front.length !== party.length) return { text: "FRONT AFTER: " + front.length + " MEMBERS.", color: "#fff070" };
+  if (target === picked) return { text: "KEEP " + target.name.toUpperCase().slice(0, chars - 14) + " IN PLACE.", color: "#fff070" };
+  const incoming = front.find(m => !party.includes(m)), outgoing = party.find(m => !front.includes(m));
+  if (incoming && outgoing) { const n = Math.floor((chars - 12) / 2); return { text: "IN: " + incoming.name.toUpperCase().slice(0, n) + " / OUT: " + outgoing.name.toUpperCase().slice(0, n), color: "#78f8a0" }; }
+  const n = Math.floor((chars - 9) / 2);
+  return { text: "SWAP: " + picked.name.toUpperCase().slice(0, n) + " / " + target.name.toUpperCase().slice(0, n), color: "#fff070" };
+}
+function openCallsign() {
+  if ((D.realm_key || "prism") !== "prism" || !menu || menu.sub !== "order" || menu.pick >= 0) return;
+  clearActionButtons(); for (const k of ["up", "down", "left", "right"]) hit(k);
+  const target = roster()[menu.ii]; if (!target) return;
+  nameEntry = { name: "", r: 0, c: 0, t: 0, target, originalName: target.name, returnMenu: menu, serial: journeySerial };
+  mode = "name"; sfx("OPEN");
+}
+function finishCallsign(commit) {
+  const ne = nameEntry;
+  if (!ne || !ne.target || ne.serial !== journeySerial || !roster().includes(ne.target) || menu !== ne.returnMenu) return;
+  const name = ne.name.trim(), changed = !!(commit && name && (name.charAt(0) + name.slice(1).toLowerCase()) !== ne.target.name);
+  if (changed) ne.target.name = name.charAt(0) + name.slice(1).toLowerCase();
+  menu = ne.returnMenu; nameEntry = null; mode = "menu";
+  clearActionButtons(); for (const k of ["up", "down", "left", "right"]) hit(k);
+  sfx(commit ? "PICK" : "CANCEL");
+  if (changed) { menu.msg = "CALL SIGN UPDATED. SAVE TO KEEP IT."; toast("Call sign changed", "Use field SAVE outside a dungeon or rest at an inn to keep this name."); }
+}
+function drawFormation() {
+  const r = roster(), selected = clamp(menu.ii, 0, r.length - 1), member = r[selected], half = Math.floor(W / 2), chars = Math.floor((W - 24) / 6);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 32);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 31, W, 1);
+  win(0, 32, half, 122); win(half, 32, W - half, 122);
+  text("FORMATION", 12, 10, "#fff070");
+  const count = party.length + " FRONT / " + reserve.length + " RESERVE"; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  text((menu.pick < 0 ? "CALL SIGN: " + titlePrompt("menu", "ENTER OR TAP START") : "X MARKS YOUR FIRST PICK.").slice(0, chars), 12, 22, "#a0a8c0");
+  for (const [list, offset, x, label] of [[party, 0, 0, "FRONT / BATTLE"], [reserve, party.length, half, "RESERVE"]]) {
+    text(label, x + 12, 40, "#a0d8f8");
+    const hover = selected - offset, picked = menu.pick - offset;
+    const focus = hover >= 0 && hover < list.length ? hover : picked >= 0 && picked < list.length ? picked : 0;
+    const from = clamp(focus - 3, 0, Math.max(0, list.length - 4));
+    if (list.length > 4) { const range = (from + 1) + "-" + Math.min(from + 4, list.length) + "/" + list.length; text(range, x + half - 12 - tw(range), 40, "#a0a8c0"); }
+    if (!list.length) text("NO RESERVES YET.", x + 12, 70, "#a0a8c0");
+    list.slice(from, from + 4).forEach((m, i) => {
+      const index = offset + from + i, y = 54 + i * 24;
+      if (index === selected) { g.fillStyle = "#203556"; g.fillRect(x + 8, y - 2, half - 16, 22); cursor(x + 10, y); }
+      if (index === menu.pick) text("X", x + 10, y + 10, "#ffdf83");
+      const rect = D.rects.sprites[m.sprite];
+      if (rect) spr("sprites", m.sprite, x + 22, y - 2, 0, null, null, Math.min(20 / rect[2], 20 / rect[3]));
+      const width = Math.floor((half - 60) / 6);
+      text(m.name.toUpperCase().slice(0, width), x + 48, y, m.hp > 0 ? "#ffffff" : "#f87878");
+      text(m.job.toUpperCase().slice(0, width), x + 48, y + 10, "#a0a8c0");
+    });
+  }
+  g.fillStyle = "#101a32"; g.fillRect(0, 154, W, H - 154);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 154, W, 1);
+  const job = member.job.toUpperCase();
+  text(member.name.toUpperCase().slice(0, Math.max(1, chars - 3 - job.length)) + " - " + job, 12, 164, "#ffffff");
+  const number = (n, limit) => n > limit ? limit + "+" : String(n);
+  text("HP " + number(member.hp, 9999) + " MP " + number(member.mp, 999) + " ATK " + number(atkOf(member), 999) + " DEF " + number(defOf(member), 999), 12, 176);
+  const spells = member.spells.map(name => name.toUpperCase()), names = [];
+  for (const name of spells) {
+    const next = names.concat(name), remaining = spells.length - next.length;
+    if (tw("MAGIC: " + next.join(", ") + (remaining ? " +" + remaining : "")) > W - 24) break;
+    names.push(name);
+  }
+  text("MAGIC: " + (names.length ? names.join(", ") + (names.length < spells.length ? " +" + (spells.length - names.length) : "") : spells.length ? spells.length + " KNOWN" : "NONE"), 12, 188, "#a0d8f8");
+  const preview = formationPreview(); text(preview.text.slice(0, chars), 12, 200, preview.color);
+  const confirm = titlePrompt("confirm", "Z/TAP A").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC/TAP B").replace(/^PRESS /, "");
+  text(("UP/DOWN " + confirm + (menu.pick >= 0 ? " SWAP " : " PICK ") + back + " BACK").slice(0, chars), 12, 212, "#fff070");
+}
+function drawCharacterStatus() {
+  const r = roster(), member = r[menu.who], half = Math.floor(W / 2), columns = Math.floor((W - 24) / 6);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const number = (n, cap = 9999) => n > cap ? cap + "+" : String(n), front = party.includes(member), job = member.job.toUpperCase();
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 50); g.fillRect(0, 146, W, H - 146);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 49, W, 1); g.fillRect(0, 145, W, 1); g.fillRect(half, 50, 1, 95);
+  const portrait = D.rects.sprites[member.sprite];
+  if (portrait) spr("sprites", member.sprite, 12, 8, 0, null, null, Math.min(32 / portrait[2], 32 / portrait[3]));
+  text(fit(member.name, Math.floor((W - 64) / 6) - job.length - 3) + " - " + job, 52, 10, "#fff070");
+  text("LV " + number(member.lv, 999) + " / " + (front ? "FRONT" : "RESERVE"), 52, 22, "#a0d8f8");
+  const count = (menu.who + 1) + "/" + r.length; text(count, W - 12 - tw(count), 22, "#a0a8c0");
+  text("HP " + number(member.hp) + "/" + number(member.max), 52, 34, member.hp <= 0 ? "#f87878" : "#a8e0a0");
+  text("MP " + number(member.mp) + "/" + number(member.mmax), half + 24, 34, "#a0c8ff");
+  [["STR", member.st.str], ["AGI", member.st.agi], ["VIT", member.st.vit], ["INT", member.st.int], ["SPR", member.st.spr], ["ATK", atkOf(member)], ["DEF", defOf(member)]].forEach(([key, value], i) => {
+    const y = 58 + i * 12, label = number(value); text(key, 12, y, "#a0a8c0"); text(label, half - 12 - tw(label), y);
+  });
+  SLOTS.forEach((slot, i) => { text(slot.toUpperCase(), half + 12, 58 + i * 20, "#a0a8c0"); text(fit(member.equip[slot] || "-", Math.floor((W - half - 24) / 6)), half + 12, 68 + i * 20); });
+  text("EXP " + number(member.exp, 999999) + "/" + number(member.next, 999999), 12, 152);
+  const need = "NEED " + number(Math.max(0, member.next - member.exp), 999999) + " EXP"; text(need, W - 12 - tw(need), 152, "#a0d8f8");
+  gauge(12, 164, W - 24, member.exp / member.next, "#9c88df");
+  text(member.hp <= 0 ? "DOWN: NO VICTORY EXP." : front ? "FRONT: FULL VICTORY EXP." : "RESERVE: HALF EXP, ROUNDED DOWN.", 12, 176, member.hp <= 0 ? "#f87878" : "#a8e0a0");
+  const record = D.party.members.find(m => m.job === member.job), growth = record && record.growth;
+  text(growth ? "NEXT: MAX HP +" + growth.hp + " / MAX MP +" + growth.mp : "NEXT GROWTH NOT RECORDED.", 12, 188, "#a0c8ff");
+  const keys = tags(member), words = keys.map(key => STATUS[key].word), shown = [];
+  for (const word of words) { const next = shown.concat(word), remaining = words.length - next.length; if (tw("STATUS: " + next.join(", ") + (remaining ? " +" + remaining : "")) > W - 24) break; shown.push(word); }
+  const conditions = words.length ? shown.join(", ") + (shown.length < words.length ? " +" + (words.length - shown.length) : "") : member.hp <= 0 ? "DOWN" : "CLEAR";
+  text("STATUS: " + conditions, 12, 200, member.hp <= 0 ? "#f87878" : keys.length ? STATUS[keys[0]].color : "#a0a8c0");
+  const back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, ""); text("LEFT/RIGHT: WHO " + back + ": BACK", 12, 212, "#fff070");
+}
 function drawStatus() {
+  if ((D.realm_key || "prism") === "prism") return drawCharacterStatus();
   const m = roster()[menu.who];
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 56); win(0, 56, 160, H - 56); win(160, 56, W - 160, H - 56);
   const r = D.rects.sprites[m.sprite]; if (r) spr("sprites", m.sprite, 10, 6, 0, null, null, 44 / r[3]);
-  text(m.name, 56, 10); text(m.job, 56, 22, "#a0a8c0"); text("LV " + m.lv, 56, 36); text("EXP " + m.exp + "/" + m.next, 120, 36, "#a0a8c0");
+  text(m.name, 56, 10); text(m.job + (party.includes(m) ? " / FRONT" : " / RESERVE"), 56, 22, "#a0a8c0"); text("LV " + m.lv, 56, 36); text("EXP " + m.exp + "/" + m.next, 120, 36, "#a0a8c0");
   text("HP " + m.hp + "/" + m.max, 200, 10); if (m.mmax) text("MP " + m.mp + "/" + m.mmax, 200, 22);
   tags(m).forEach((k, i) => text(STATUS[k].word, 200 + i * 56, 36, STATUS[k].color));
   const rows = [["STR", m.st.str], ["AGI", m.st.agi], ["VIT", m.st.vit], ["INT", m.st.int], ["SPR", m.st.spr], ["ATK", atkOf(m)], ["DEF", defOf(m)]];
@@ -1116,7 +1914,44 @@ function drawStatus() {
   SLOTS.forEach((s, i) => { text(s.toUpperCase(), 172, 68 + i * 34, "#a0a8c0"); text((m.equip[s] || "-").slice(0, 22), 172, 80 + i * 34); });
   text("< " + (menu.who + 1) + "/" + roster().length + " >", W - 70, H - 16, "#fff070");
 }
+function drawEquipmentFitting() {
+  const m = roster()[menu.who], picking = menu.sub === "equip-pick", slot = picking ? menu.slot : SLOTS[menu.ii];
+  const cands = equipCandidates(m, slot), fitting = cands.filter(c => c !== null).length, selected = picking && Number.isInteger(menu.ci) && menu.ci >= 0 && menu.ci < cands.length ? menu.ci : -1;
+  const pick = selected >= 0 ? cands[selected] : undefined, after = { ...m.equip }; if (pick !== undefined) after[slot] = pick;
+  const split = Math.floor(W / 2) + 8, columns = Math.floor((W - 24) / 6), rightCols = Math.floor((W - split - 24) / 6);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const number = value => value > 9999 ? "9999+" : String(value), qty = value => value > 999 ? "999+" : String(value);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 44); g.fillRect(0, 160, W, H - 160);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 43, W, 1); g.fillRect(split, 44, 1, 116); g.fillRect(0, 159, W, 1);
+  text("EQUIPMENT", 12, 6, "#fff070"); const counter = (menu.who + 1) + "/" + roster().length; text(counter, W - 12 - tw(counter), 6, "#a0d8f8");
+  const role = party.includes(m) ? "FRONT" : "RESERVE"; text(fit(m.name, columns - role.length - 2), 12, 18); text(role, W - 12 - tw(role), 18, "#a0d8f8");
+  const whoHint = picking ? "UP/DOWN: GEAR" : "LEFT/RIGHT: WHO"; text(fit(m.job, columns - whoHint.length - 2), 12, 30, "#a0a8c0"); text(whoHint, W - 12 - tw(whoHint), 30, "#fff070");
+  if (!picking) {
+    SLOTS.forEach((s, i) => { const y = 52 + i * 26; text(s, 22, y, "#a0a8c0"); text(fit(m.equip[s] || "EMPTY", Math.floor((split - 34) / 6)), 22, y + 12); });
+    if (Number.isInteger(menu.ii) && menu.ii >= 0 && menu.ii < SLOTS.length) cursor(10, 52 + menu.ii * 26);
+  } else {
+    const rows = 6, from = clamp(selected - rows + 1, 0, Math.max(0, cands.length - rows));
+    cands.slice(from, from + rows).forEach((c, i) => text(fit(c === null ? "TAKE OFF" : c, Math.floor((split - 38) / 6)), 26, 54 + i * 16));
+    if (selected >= 0) cursor(14, 54 + (selected - from) * 16);
+    const range = cands.length ? (from + 1) + "-" + Math.min(from + rows, cands.length) + "/" + cands.length : "NO FITTING GEAR"; text(range, 12, 148, "#a0a8c0");
+  }
+  text(pick !== undefined ? "PREVIEW" : "TOTALS", split + 12, 52, "#fff070");
+  [["ATK", atkOf(m), atkWith(m, after.weapon)], ["DEF", defOf(m), defWith(m, after)]].forEach(([label, before, value], i) => {
+    text(label + " " + number(before) + (pick !== undefined ? ">" + number(value) : ""), split + 12, 70 + i * 18, pick === undefined || value === before ? "#ffffff" : value > before ? "#78f8a0" : "#f87878");
+  });
+  text("WORN " + String(slot || "").toUpperCase(), split + 12, 112, "#a0a8c0"); text(fit(m.equip[slot] || "EMPTY", rightCols), split + 12, 124);
+  if (pick !== undefined && pick !== null) text("IN BAG " + qty(bag[pick]), split + 12, 142, "#a0d8f8");
+  const focus = picking ? pick : m.equip[slot], gear = GEAR[focus] || {};
+  text(fit(picking && pick === undefined ? "CHOOSE GEAR AGAIN." : picking && pick === null ? "TAKE OFF " + slot : focus || "EMPTY " + slot + " SLOT"), 12, 166);
+  const detail = picking ? pick === null ? "WORN GEAR RETURNS TO THE BAG." : pick === undefined ? "BACK TO THE SLOT TO CHOOSE AGAIN." : (slot === "weapon" ? "ATTACK " + number(gear.attack || 0) : "DEFENCE " + number(gear.defence || 0)) + " / IN BAG " + qty(bag[pick])
+    : cands.length ? fitting + (fitting === 1 ? " FITTING TYPE" : " FITTING TYPES") + (m.equip[slot] ? " / TAKE OFF AVAILABLE" : "") : "NO GEAR IN THE BAG FITS THIS SLOT.";
+  text(detail, 12, 178, "#a0a8c0");
+  if (menu.msg && menu.msg !== "UP/DOWN: CHOOSE. A: EQUIP. B: BACK.") text(fit(menu.msg), 12, 194, "#fff070");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + (picking ? pick === null ? ": TAKE OFF" : ": EQUIP" : ": CHOOSE"), 12, 212, "#fff070"); const leave = back + ": BACK"; text(leave, W - 12 - tw(leave), 212, "#a0d8f8");
+}
 function drawEquip() {
+  if ((D.realm_key || "prism") === "prism") return drawEquipmentFitting();
   const m = roster()[menu.who];
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 36); win(0, 36, 170, 92); win(170, 36, W - 170, 92); win(0, 128, W, H - 128);
@@ -1125,14 +1960,17 @@ function drawEquip() {
   if (menu.sub === "equip") cursor(10, 46 + menu.ii * 20);
   const slot = menu.sub === "equip-pick" ? menu.slot : SLOTS[menu.ii];
   const cands = equipCandidates(m, slot);
-  const pick = menu.sub === "equip-pick" ? cands[menu.ci] : undefined;
+  const selected = menu.sub === "equip-pick" && Number.isInteger(menu.ci) && menu.ci >= 0 && menu.ci < cands.length ? menu.ci : -1;
+  const pick = selected >= 0 ? cands[selected] : undefined;
   const after = Object.assign({}, m.equip); if (pick !== undefined) after[slot] = pick;
   const a0 = atkOf(m), d0 = defOf(m), a1 = atkWith(m, after.weapon), d1 = defWith(m, after);
   text("ATK", 182, 50); text(a0, 236 - tw(a0), 50); if (pick !== undefined) text("> " + a1, 248, 50, a1 > a0 ? "#78f8a0" : a1 < a0 ? "#f87878" : "#ffffff");
   text("DEF", 182, 70); text(d0, 236 - tw(d0), 70); if (pick !== undefined) text("> " + d1, 248, 70, d1 > d0 ? "#78f8a0" : d1 < d0 ? "#f87878" : "#ffffff");
   if (!cands.length) text("NOTHING IN THE BAG FITS THIS SLOT.", 14, 140, "#a0a8c0");
-  cands.forEach((c, i) => { const g0 = GEAR[c] || {}; text(c === null ? "(TAKE IT OFF)" : c, 26, 140 + i * 14); if (c) text(g0.attack != null ? "ATK " + g0.attack : "DEF " + g0.defence, W - 70, 140 + i * 14, "#a0a8c0"); });
-  if (menu.sub === "equip-pick" && cands.length) cursor(14, 140 + menu.ci * 14);
+  const rows = 5, from = clamp(selected - rows + 1, 0, Math.max(0, cands.length - rows));
+  if (cands.length > rows) text((from + 1) + "-" + Math.min(from + rows, cands.length) + "/" + cands.length, W - 62, 130, "#a0a8c0");
+  cands.slice(from, from + rows).forEach((c, i) => { const g0 = GEAR[c] || {}; text(c === null ? "(TAKE IT OFF)" : c, 26, 140 + i * 14); if (c) text(g0.attack != null ? "ATK " + g0.attack : "DEF " + g0.defence, W - 70, 140 + i * 14, "#a0a8c0"); });
+  if (selected >= 0) cursor(14, 140 + (selected - from) * 14);
   if (menu.msg) text(menu.msg.slice(0, 50), 14, H - 14, "#fff070");
 }
 
@@ -1203,12 +2041,13 @@ const BEHAVIOUR_TEXT = {
   status_sleep: "ITS TOUCH BRINGS SLEEP.", status_confuse: "ITS CRY CONFUSES.", status_bind: "ITS GRIP BINDS.",
   status_blind: "ITS DUST BLINDS.", status_burn: "ITS TOUCH BURNS.", status_paralyze: "ITS STING PARALYZES.",
   warden: "A WARDEN. NEVER SLEEPS. A SPECIAL EVERY FEW TURNS.",
+  boss: "NEVER SLEEPS. A SPECIAL EVERY FEW TURNS.",
 };
 const beastKey = f => f.boss ? "warden:" + f.bossName : f.key;
 function beastInfo(k) {
   if (k.startsWith("warden:")) {
     const b = D.dungeons.map(d => d.boss_data).find(x => x && x.name === k.slice(7)) || {};
-    return { name: pretty(b.name || "?"), lv: b.level, hp: b.hp, atk: b.attack, def: b.defence, el: b.element, weak: b.weakness, beh: "warden", img: "Boss_" + b.name, scale: 0.55 };
+    return { name: pretty(b.name || "?"), lv: b.level, hp: b.hp, atk: b.attack, def: b.defence, el: b.element, weak: b.weakness, beh: b.shard === "-" ? "boss" : "warden", img: "Boss_" + b.name, scale: 0.55 };
   }
   const f = D.foes[k] || {};
   return { name: f.name, lv: f.level, hp: f.hp, atk: f.attack, def: f.defence, el: f.element, weak: null, beh: f.behaviour, img: "Foe_" + k, scale: 0.8 };
@@ -1217,11 +2056,53 @@ function meet(foes) { foes.forEach(f => { const k = beastKey(f), e = state.seen[
 function fell(foes) { foes.forEach(f => { const e = state.seen[beastKey(f)]; if (e) e.felled++; }); }
 const beastList = () => Object.keys(state.seen).sort((a, b) => (beastInfo(a).lv || 0) - (beastInfo(b).lv || 0) || String(beastInfo(a).name).localeCompare(beastInfo(b).name));
 const BEAST_TOTAL = () => Object.keys(D.foes).length + D.dungeons.filter(d => d.boss_data).length;
+const CONDITION_GUIDE = {
+  poison: ["BITES EACH ROUND. FIELD: EVERY FOUR STEPS, INCLUDING RESERVES. PARTY HP STOPS AT 1.", ""],
+  sleep: ["SKIPS ACTIONS. HIT DAMAGE WAKES. POISON AND BURN TICKS DO NOT.", ""],
+  protect: ["HIT DAMAGE X0.6, EXCEPT POISON AND BURN. DEFEND ALSO REDUCES ENEMY HITS.", ""],
+  haste: ["TURN SPEED X1.5. NO EXTRA ACTIONS OR GUARANTEED FIRST TURN.", "APPLYING SLOW REPLACES IT."],
+  slow: ["TURN SPEED X0.6. NO CHANGE TO ACTION COUNT.", "APPLYING HASTE REPLACES IT."],
+  confuse: ["ATTACKS ANOTHER STANDING ALLY OR FOE. HIT DAMAGE CLEARS IT. TICKS DO NOT.", "NO DIRECT CURE ITEM."],
+  bind: ["SKIPS CHOOSING AND QUEUED ACTIONS.", "NO DIRECT CURE ITEM."],
+  paralyze: ["SKIPS CHOOSING AND QUEUED ACTIONS.", "NO DIRECT CURE ITEM."],
+  blind: ["ORDINARY ATTACKS MISS 50 PERCENT. SPELLS, ITEMS AND SUMMONS IGNORE BLIND.", "NO DIRECT CURE ITEM."],
+  burn: ["BITES EACH ROUND. PARTY HP STOPS AT 1. NO FIELD DAMAGE.", "NO DIRECT CURE ITEM."],
+};
+const conditionList = () => Object.keys(CONDITION_GUIDE).filter(key => STATUS[key]);
+function bestiaryTick() {
+  const confirm = hit("a"), back = hit("b"), left = hit("left"), right = hit("right");
+  if (confirm || back) { hit("up"); hit("down"); clearActionButtons(); menu.sub = null; sfx("TICK"); return; }
+  if (left || right) { menu.bp = menu.bp ? 0 : 1; hit("up"); hit("down"); sfx("TICK"); return; }
+  if (menu.bp) menuMove("bc", conditionList().length);
+  else { const n = beastList().length; if (n) menuMove("ii", n); }
+}
+function drawConditionGuide() {
+  const list = conditionList(), selected = clamp(menu.bc || 0, 0, list.length - 1), key = list[selected], entry = STATUS[key], split = W < 320 ? 104 : 112;
+  const columns = Math.floor((W - split - 24) / 6);
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 36); g.fillRect(0, 182, W, H - 182);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 35, W, 1); g.fillRect(0, 181, W, 1); g.fillRect(split, 36, 1, 145);
+  text("CONDITIONS", 12, 10, "#fff070"); const count = (selected + 1) + "/" + list.length; text(count, W - 12 - tw(count), 10, "#a0d8f8");
+  text("COMPANION GUIDE / LEFT/RIGHT: FOES", 12, 22, "#a0a8c0");
+  list.forEach((k, i) => { const y = 44 + i * 12; if (i === selected) { g.fillStyle = "#26344c"; g.fillRect(6, y - 2, split - 12, 12); cursor(10, y); } text(STATUS[k].word, 22, y, STATUS[k].color); });
+  text(entry.word + " / " + entry.tag, split + 12, 44, entry.color);
+  const cures = Object.entries(GEAR).filter(([, it]) => ((it.effect || "").match(/cure (\w+)/) || [])[1] === key).map(([name]) => name.toUpperCase());
+  const remedy = cures.length ? cures.join(" OR ") + ": CURE." : CONDITION_GUIDE[key][1];
+  let y = 60;
+  [[ROUNDS[key] ? ROUNDS[key] + " ROUND-END TICKS." : "NO ROUND EXPIRY.", "#a0a8c0"], [CONDITION_GUIDE[key][0], "#ffffff"], [remedy, "#a8e0a0"]].forEach(([paragraph, color]) => {
+    if (paragraph) { wrap(paragraph, columns).forEach(line => { text(line, split + 12, y, color); y += 12; }); y += 4; }
+  });
+  text("TIMERS: FRONT AT ROUND END.", 12, 188, "#a0a8c0");
+  text("AFTER BATTLE: FRONT KEEPS ONLY POISON.", 12, 200, "#a0a8c0");
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text("UP/DOWN " + confirm + "/" + back + ": CLOSE", 12, 212, "#fff070");
+}
 function drawBestiary() {
+  if ((D.realm_key || "prism") === "prism" && menu.bp) return drawConditionGuide();
   const list = beastList(), i = menu.ii, k = list[i];
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, 26); win(0, 26, 132, H - 26); win(132, 26, W - 132, H - 26);
   text("BESTIARY", 12, 9, "#fff070"); const c = "MET " + list.length + " / " + BEAST_TOTAL(); text(c, W - 10 - tw(c), 9, "#a0a8c0");
+  if ((D.realm_key || "prism") === "prism") text("L/R: HELP", 80, 9, "#a0d8f8");
   if (!list.length) { text("NOTHING MET YET.", 12, 40, "#a0a8c0"); return; }
   const top = clamp(i - 5, 0, Math.max(0, list.length - 12));
   list.slice(top, top + 12).forEach((kk, j) => text(String(beastInfo(kk).name).toUpperCase().slice(0, 13), 22, 36 + j * 15, kk.startsWith("warden:") ? "#fff070" : "#ffffff"));
@@ -1277,17 +2158,19 @@ const CMDS = ["ATTACK", "MAGIC", "ITEM", "DEFEND", "RUN"];
 /* PRISM03 summon spirits (summons.js): beaten Wardens' spirits, one call each per battle */
 const SUMMONS = () => window.PrismSummons ? PrismSummons.table(D.dungeons.map(d => d.boss_data).filter(Boolean), D.realm_key) : [];
 const mySpirits = () => window.PrismSummons ? PrismSummons.unlocked(SUMMONS(), state.beaten) : [];
-const battleCmds = () => mySpirits().length ? CMDS.concat(["SUMMON"]) : CMDS;
+const battleCmds = () => (D.realm_key || "prism") === "prism" ? CMDS.concat(mySpirits().length ? ["SUMMON", "PLAN"] : ["PLAN"]) : mySpirits().length ? CMDS.concat(["SUMMON"]) : CMDS;
 function playChord(sp) {                                  /* soft rolled triad: sine, low-passed, gain <= 0.3 */
   sfx("SUMMON:" + sp.name);
   if (!actx) return;
   const t0 = actx.currentTime, lp = actx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 1200; lp.connect(sfxGain);
+  const timeline = { context: actx, startsAt: [], endsAt: t0 };
   for (const n of sp.chord) {
     const o = actx.createOscillator(), gn = actx.createGain(), t = t0 + n.at_ms / 1000;
     o.type = "sine"; o.frequency.value = Math.min(n.hz, PrismSummons.MAX_HZ);
     gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(n.gain, t + 0.04); gn.gain.exponentialRampToValueAtTime(0.0001, t + 1.6);
-    o.connect(gn); gn.connect(lp); o.start(t); o.stop(t + 1.7);
+    o.connect(gn); gn.connect(lp); o.start(t); o.stop(t + 1.7); timeline.startsAt.push(t); timeline.endsAt = Math.max(timeline.endsAt, t + 1.7);
   }
+  return timeline;
 }
 function nextChooser(from) { for (let i = from; i < party.length; i++) if (party[i].hp > 0 && !isHeld(party[i])) return i; return -1; }
 function battleTick(dt) {
@@ -1297,21 +2180,30 @@ function battleTick(dt) {
   if (B.phase === "intro") { if (B.t > 1.0 || hit("a")) { B.phase = "cmd"; B.who = nextChooser(0); B.acts = []; party.forEach(m => m.defend = false); } return; }
   if (B.phase === "cmd") {
     const m = party[B.who];
+    if (B.sub === "plan") {
+      const back = hit("b"), confirm = hit("a"), start = hit("start");
+      for (const key of ["up", "down", "left", "right"]) hit(key);
+      if (back || confirm || start) { B.sub = null; sfx("TICK"); }
+      return;
+    }
     if (B.sub === "target") {
+      if (hit("b")) { B.sub = B.pending.kind === "attack" ? null : B.pending.kind; hit("a"); sfx("TICK"); return; }
       const tg = B.list;
       if (hit("left") || hit("up")) { B.target = (B.target + tg.length - 1) % tg.length; sfx("TICK"); }
       if (hit("right") || hit("down")) { B.target = (B.target + 1) % tg.length; sfx("TICK"); }
-      if (hit("b")) { B.sub = B.pending.kind === "attack" ? null : B.pending.kind; sfx("TICK"); return; }
-      if (hit("a")) { sfx("PICK"); B.pending.target = tg[B.target]; B.acts.push(B.pending); B.sub = null; advanceChooser(); }
+      if (hit("a")) {
+        if (B.pending.kind === "item" && !battleItemStock(B.pending.item)) { refuseBattleItems(); return; }
+        sfx("PICK"); B.pending.target = tg[B.target]; B.acts.push(B.pending); B.sub = null; advanceChooser();
+      }
       return;
     }
     if (B.sub === "summon") {
+      if (hit("b")) { B.sub = null; hit("a"); sfx("TICK"); return; }
       const opts = mySpirits();
       if (!opts.length) { B.msg = "NO SPIRIT ANSWERS YET."; B.sub = null; sfx("LOCKED"); return; }
       B.oi = clamp(B.oi || 0, 0, opts.length - 1);
       if (hit("up")) { B.oi = (B.oi + opts.length - 1) % opts.length; sfx("TICK"); }
       if (hit("down")) { B.oi = (B.oi + 1) % opts.length; sfx("TICK"); }
-      if (hit("b")) { B.sub = null; sfx("TICK"); return; }
       if (hit("a")) {
         const o = opts[B.oi], used = new Set((B.summoned || []).concat(B.acts.filter(x => x.kind === "summon").map(x => x.spirit.name)));
         if (PrismSummons.refusal(o, used, m.mp)) { sfx("LOCKED"); return; }
@@ -1320,12 +2212,15 @@ function battleTick(dt) {
       return;
     }
     if (B.sub === "magic" || B.sub === "item") {
+      if (hit("b")) { B.sub = null; hit("a"); sfx("TICK"); return; }
       const opts = B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean) : battleItems();
-      if (!opts.length) { B.msg = B.sub === "magic" ? m.name + " KNOWS NO SPELLS." : "THE BAG IS EMPTY."; B.sub = null; sfx("LOCKED"); return; }
+      if (!opts.length) {
+        if (B.sub === "item") { refuseBattleItems(); return; }
+        B.msg = m.name + " KNOWS NO SPELLS."; B.sub = null; sfx("LOCKED"); return;
+      }
       B.oi = clamp(B.oi || 0, 0, opts.length - 1);
       if (hit("up")) { B.oi = (B.oi + opts.length - 1) % opts.length; sfx("TICK"); }
       if (hit("down")) { B.oi = (B.oi + 1) % opts.length; sfx("TICK"); }
-      if (hit("b")) { B.sub = null; sfx("TICK"); return; }
       if (hit("a")) {
         const o = opts[B.oi];
         if (B.sub === "magic") {
@@ -1344,16 +2239,22 @@ function battleTick(dt) {
     const cmds = battleCmds();
     if (hit("up")) { B.cmd = (B.cmd + cmds.length - 1) % cmds.length; sfx("TICK"); }
     if (hit("down")) { B.cmd = (B.cmd + 1) % cmds.length; sfx("TICK"); }
-    if (hit("b") && B.acts.length) { const last = B.acts.pop(); B.who = party.indexOf(last.who); sfx("TICK"); return; }
+    if (hit("b")) {
+      hit("a");
+      if (B.acts.length) { const last = B.acts.pop(); B.who = party.indexOf(last.who); sfx("TICK"); }
+      return;
+    }
     if (hit("a")) {
-      sfx("PICK");
       const c = cmds[B.cmd];
+      if (c === "ITEM" && !battleItems().length) { refuseBattleItems(); return; }
+      sfx("PICK");
       if (c === "ATTACK") { B.pending = { kind: "attack", who: m }; B.list = alive(B.foes); B.target = 0; B.sub = "target"; }
       else if (c === "MAGIC") { B.sub = "magic"; B.oi = 0; }
       else if (c === "ITEM") { B.sub = "item"; B.oi = 0; }
       else if (c === "DEFEND") { B.acts.push({ kind: "defend", who: m }); advanceChooser(); }
       else if (c === "RUN") { B.acts.push({ kind: "run", who: m }); advanceChooser(); }
       else if (c === "SUMMON") { B.sub = "summon"; B.oi = 0; }
+      else if (c === "PLAN") { B.sub = "plan"; }
     }
     return;
   }
@@ -1380,9 +2281,16 @@ function pop(target, txt, color) {
   const p = B.foes.includes(target) ? { x: target.x + target.size / 2, y: target.y + target.size / 3 } : { x: W - 52, y: 22 + party.indexOf(target) * 30 };
   B.pops.push({ x: p.x, y: p.y, txt: String(txt), color, t: 0 });
 }
+function recoverStolenGold() {
+  let back = 0;
+  B.foes.forEach(f => { if (f.hp <= 0 && f.stolen) { back += f.stolen; f.stolen = 0; } });
+  if (back) { gold += back; B.recoveredGold = (B.recoveredGold || 0) + back; }
+  return back;
+}
 function hurtFoe(f, dmg) {
   f.hp = Math.max(0, f.hp - dmg); B.flash[f.key + f.x] = 0.2; pop(f, dmg, "#ffffff");
   if (f.hp <= 0 && f.beh === "undead" && !f.rose && Math.random() < 0.35) { f.rose = true; f.hp = Math.round(f.max * 0.3); B.rose = f; pop(f, "RISES", "#c8a0f8"); }
+  if (f.hp <= 0) recoverStolenGold();
 }
 const riseNote = () => { const f = B.rose; B.rose = null; return f ? " THE " + f.name.toUpperCase() + " RISES AGAIN!" : ""; };
 function doAction(a) {
@@ -1392,9 +2300,12 @@ function doAction(a) {
   if (a.kind === "foe" && who.hp <= 0) { B.wait = 0; return; }
   if (!alive(B.foes).length || !alive(party).length) { B.wait = 0; B.queue = []; return; }
   if (has(who, "sleep")) { B.msg = (a.kind === "foe" ? "THE " + who.name.toUpperCase() : who.name) + " IS ASLEEP."; B.wait = 0.45; return; }
+  const heldStatus = a.kind !== "foe" && ["bind", "paralyze"].find(k => has(who, k));
+  if (heldStatus) { B.msg = who.name + " IS " + STATUS[heldStatus].word + "."; B.wait = 0.45; return; }
+  if (a.kind !== "foe" && has(who, "confuse") && !a.confused) a = { kind: "attack", who, confused: true };
   if (a.kind === "defend") { who.defend = true; B.msg = who.name + " DEFENDS."; B.wait = 0.4; return; }
   if (a.kind === "run") {
-    if (B.boss) { B.msg = "THERE IS NO ESCAPE FROM A WARDEN!"; sfx("LOCKED"); return; }
+    if (B.boss) { B.msg = B.foes.some(f => f.bossName === "ClockworkColossus") ? "THE COLOSSUS BLOCKS YOUR RETREAT!" : "THERE IS NO ESCAPE FROM A WARDEN!"; sfx("LOCKED"); return; }
     if (Math.random() < 0.65) { sfx("RUN"); B.msg = "THE PARTY GETS AWAY!"; B.phase = "end"; B.result = "run"; B.wait = 0.6; return; }
     B.msg = "COULDN'T GET AWAY!"; sfx("MISS"); return;
   }
@@ -1434,9 +2345,14 @@ function doAction(a) {
   }
   if (a.kind === "magic") {
     const s = a.spell; if (who.mp < s.mp) { B.msg = who.name + " IS OUT OF MP."; return; }
+    if (s.target === "ally" && (!party.includes(a.target) || a.target.hp <= 0)) {
+      B.msg = party.includes(a.target) ? a.target.name + " IS DOWN. " + s.name.toUpperCase() + " IS NOT CAST."
+        : "THAT ALLY IS NO LONGER HERE. " + s.name.toUpperCase() + " IS NOT CAST.";
+      sfx("LOCKED"); return;
+    }
     who.mp -= s.mp; sfx("SPELL");
     const targets = a.target === "all" ? alive(B.foes) : [a.target && (a.target.hp > 0 || s.target === "ally") ? a.target : alive(B.foes)[0]];
-    B.fx = { name: s.name, t: 0, targets };
+    B.fx = { name: s.name, t: 0, targets, caster: who, casterJob: who.job, status: s.status, statusLanded: false, element: s.element };
     if (s.target === "ally") {
       targets.forEach(m => {
         if (s.status === "heal" || s.effect === "heal") { const amt = Math.round(s.power * 1.5 + who.st.spr * 3); m.hp = Math.min(m.max, m.hp + amt); pop(m, amt, "#78f8a0"); sfx("HEAL"); }
@@ -1448,8 +2364,9 @@ function doAction(a) {
       const f = targets[0];
       if (!f || f.hp <= 0) { B.msg = who.name + " CASTS " + s.name.toUpperCase() + " AT NOTHING."; return; }
       const ok = !has(f, s.status) && Math.random() < statusChance(f, s.status) && inflict(f, s.status);
+      B.fx.statusLanded = ok;
       if (!ok) pop(f, f.boss && s.status === "sleep" ? "IMMUNE" : "MISS", "#c0c0c0");
-      B.msg = who.name + " CASTS " + s.name.toUpperCase() + (ok ? "! THE " + f.name.toUpperCase() + " IS " + STATUS[s.status].word + "." : (f.boss && s.status === "sleep" ? ". A WARDEN DOES NOT SLEEP." : ". IT DOES NOT TAKE."));
+      B.msg = who.name + " CASTS " + s.name.toUpperCase() + (ok ? "! THE " + f.name.toUpperCase() + " IS " + STATUS[s.status].word + "." : (f.boss && s.status === "sleep" ? f.bossName === "ClockworkColossus" ? ". THE COLOSSUS DOES NOT SLEEP." : ". A WARDEN DOES NOT SLEEP." : ". IT DOES NOT TAKE."));
       return;
     }
     let total = 0, weakHit = false;
@@ -1465,7 +2382,9 @@ function doAction(a) {
     return;
   }
   if (a.kind === "item") {
-    const name = a.item, e = GEAR[name].effect;
+    const name = a.item;
+    if (!itemStock(name)) { B.msg = "NO " + String(name || "ITEM").toUpperCase() + " LEFT."; sfx("LOCKED"); return; }
+    const e = GEAR[name].effect;
     if (/escape/.test(e)) { if (B.boss) { B.msg = "THE SMOKE DOES NOTHING HERE."; return; } bag[name]--; sfx("RUN"); B.msg = "A PUFF OF SMOKE AND THE PARTY IS GONE."; B.phase = "end"; B.result = "run"; B.wait = 0.6; return; }
     const r = useItem(name, a.target || who); B.msg = r; return;
   }
@@ -1532,14 +2451,27 @@ function foeTurn(f, tg) {
 }
 function endRound() {
   if (alive(B.foes).length && alive(party).length) roundStatuses();
+  recoverStolenGold();
   if (!alive(B.foes).length) {
-    const exp = B.foes.reduce((a, f) => a + f.exp, 0), gd = B.foes.reduce((a, f) => a + f.gold, 0), back = B.foes.reduce((a, f) => a + (f.stolen || 0), 0);
-    gold += gd + back; cue("VICTORY"); sfx("VICTORY"); fell(B.foes);
+    const exp = B.foes.reduce((a, f) => a + f.exp, 0), gd = B.foes.reduce((a, f) => a + f.gold, 0), back = B.recoveredGold || 0;
+    gold += gd; cue("VICTORY"); sfx("VICTORY"); fell(B.foes);
     const lines = ["VICTORY! " + exp + " EXP AND " + gd + " GOLD."].concat(back ? ["YOU TAKE BACK " + back + " STOLEN GOLD."] : []);
-    const grow = (m, e) => { if (m.hp <= 0) return; m.exp += e; while (m.exp >= m.next) { m.exp -= m.next; m.lv++; m.next = Math.round(m.next * 1.18); const gHP = D.party.members.find(x => x.job === m.job).growth.hp; m.max += gHP; m.hp += gHP; for (const k in m.st) m.st[k] += 1; lines.push(m.name + " REACHES LEVEL " + m.lv + "!"); sfx("LEVEL"); } };
+    const grow = (m, e) => {
+      if (m.hp <= 0) return; m.exp += e;
+      while (m.exp >= m.next) {
+        m.exp -= m.next; m.lv++; m.next = Math.round(m.next * 1.18);
+        const growth = D.party.members.find(x => x.job === m.job).growth;
+        m.max += growth.hp; m.hp += growth.hp; m.mmax += growth.mp; m.mp += growth.mp; for (const k in m.st) m.st[k] += 1;
+        if ((D.realm_key || "prism") === "prism") {
+          const name = String(m.name).toUpperCase(), shown = name.length > 12 ? name.slice(0, 9) + "..." : name;
+          lines.push(shown + " REACHES LEVEL " + (m.lv > 999 ? "999+" : m.lv) + "! MAX HP +" + growth.hp + " / MAX MP +" + growth.mp + ". ALL STATS +1.");
+        } else lines.push(m.name + " REACHES LEVEL " + m.lv + "!");
+        sfx("LEVEL");
+      }
+    };
     party.forEach(m => grow(m, exp)); reserve.forEach(m => grow(m, Math.floor(exp / 2)));   /* the reserve learns by watching: half */
     const bf = B.foes.find(f => f.boss);
-    if (bf) lines.push(bf.final ? "THE DEVOURER COMES APART INTO LIGHT. THE HEART IS WHOLE AGAIN." : "THE SHARD OF " + String(bf.shard).toUpperCase() + " IS YOURS.");
+    if (bf) lines.push(bf.final ? "THE DEVOURER COMES APART INTO LIGHT. THE HEART IS WHOLE AGAIN." : bf.shard && bf.shard !== "-" ? "THE SHARD OF " + String(bf.shard).toUpperCase() + " IS YOURS." : "THE COLOSSUS FALLS SILENT. BRANNOC STEPS OUT OF THE GEARS.");
     const sp = bf && !bf.final && SUMMONS().find(x => x.warden === bf.bossName);
     if (sp) lines.push("THE SHARD HUMS. " + sp.name.toUpperCase() + " WILL ANSWER A SUMMON NOW.");
     const dg = bf && D.dungeons.find(d => d.boss_data && d.boss_data.name === bf.bossName);
@@ -1554,14 +2486,21 @@ function finishBattle() {
   if (B.endLines && B.endLines.length) { B.msg = B.endLines.shift(); return; }
   const r = B.result, wasBoss = B.boss, prev = B.prevCue, bf = B.foes.find(f => f.boss);
   party.forEach(m => { if (m.status) for (const k of Object.keys(m.status)) if (k !== "poison") delete m.status[k]; });
-  if (r === "lose") { B = null; mode = "gameover"; goT = 0; return; }
+  if (r === "lose") { B = null; mode = "gameover"; goT = 0; goIdx = -1; return; }
   B.phase = "out";
   fade = 1; fadeCb = () => {
     B = null; mode = "field"; cue(prev);
     if (wasBoss && r === "win" && bf) {
       state.beaten.add(bf.bossName);
       const fl = map.info; if (fl && fl.boss) map.grid[fl.boss.gate.y][fl.boss.gate.x] = "Floor";
-      if (bf.final) { ending = { t: 0 }; mode = "ending"; cue("TITLE"); saveGame(); return; }
+      if (bf.final) {
+        ending = { t: 0, saved: saveGame() }; mode = "ending"; cue("TITLE");
+        if (!ending.saved) toast("Victory not saved", "Keep this game open. You can retry saving from the ending screen.");
+        return;
+      }
+      const dg = D.dungeons.find(d => d.boss_data && d.boss_data.name === bf.bossName);
+      if (dg && dg.optional) return say(["BRANNOC: THE WORKS CAN BREATHE AGAIN. NO SHARD WAS HIDDEN HERE; SOME THINGS ARE WORTH MENDING FOR THEIR OWN SAKE.",
+        "I'LL SET UP A CALIBRATION BENCH AT THE INN. COME PRACTICE, AND USE ORDER TO BRING ME INTO BATTLE."], null, 7);
       const c = shardCount();
       say(["THE GATE CRUMBLES. THE " + bf.name.toUpperCase() + " IS GONE.",
         c >= 3 ? "THE THREE SHARDS HUM TOGETHER. THE CRYSTAL SHRINE IN THE SOUTH-EAST WILL OPEN NOW." : (3 - c) + (3 - c === 1 ? " SHARD REMAINS OUT THERE." : " SHARDS REMAIN OUT THERE.")], null, 1);
@@ -1573,17 +2512,158 @@ function bossGate() {
   if (!b || state.beaten.has(b.name)) return;
   ask("SOMETHING VAST WAITS BEYOND THE GATE. FACE THE " + pretty(b.name) + "?", ["YES", "NO"], i => { if (i === 0) startBattle(map.info.encounters.zone, b); });
 }
+function spellHint(s) {
+  const target = s.target === "ally" ? "ALLY" : s.target === "all_enemies" ? "ALL FOES" : "FOE";
+  const effect = s.status === "drain_hp" ? (s.element && s.element !== "none" ? s.element.toUpperCase() + " " : "") + "DRAIN"
+    : s.status === "protect" ? "WARD" : s.status === "heal" || s.effect === "heal" ? "HEAL"
+    : s.status ? s.status.toUpperCase().replace(/_/g, " ") : s.element && s.element !== "none" ? s.element.toUpperCase() : "DAMAGE";
+  return effect + " / " + target;
+}
+function drawBattlePlan() {
+  const columns = Math.floor((W - 24) / 6), fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 46); g.fillRect(0, 180, W, H - 180);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 45, W, 1); g.fillRect(0, 179, W, 1);
+  text("TURN PLAN", 12, 10, "#fff070"); const round = "ROUND " + B.round; text(round, W - 12 - tw(round), 10, "#a0d8f8");
+  text(fit("CHOOSING: " + party[B.who].name), 12, 22);
+  text("CHOICE ORDER / " + B.acts.length + " PLANNED", 12, 34, "#a0a8c0");
+  if (!B.acts.length) text("NO CHOICES YET.", 12, 62, "#a0a8c0");
+  // Four active heroes leave at most three earlier choices while another hero is choosing.
+  B.acts.forEach((act, i) => {
+    const y = 50 + i * 40, magic = act.kind === "magic", summon = act.kind === "summon";
+    const action = magic ? act.spell.name : summon ? act.spirit.name : act.kind === "item" ? act.item : act.kind;
+    const cost = magic ? " " + act.spell.mp + "MP" : summon ? " " + act.spirit.mp + "MP" : "";
+    text(fit((i + 1) + ". " + act.who.name), 12, y, "#a0d8f8");
+    text(fit(action, columns - cost.length) + cost, 12, y + 12);
+    let target = act.target === "all" ? "ALL FOES" : act.kind === "run" || act.kind === "item" && act.target === null ? "ESCAPE ATTEMPT" : "SELF";
+    if (act.target && typeof act.target === "object") {
+      const foe = B.foes.indexOf(act.target), ally = party.indexOf(act.target), suffix = foe >= 0 ? " / FOE " + (foe + 1) : ally >= 0 ? " / ALLY " + (ally + 1) : "";
+      target = fit("TO " + act.target.name, columns - suffix.length) + suffix;
+    }
+    text(target, 12, y + 24, "#a0a8c0"); g.fillStyle = "#243850"; g.fillRect(12, y + 34, W - 24, 1);
+  });
+  text("CHOICE ORDER. TURN ORDER MAY DIFFER.", 12, 184, "#a0a8c0");
+  text("CLOSE, THEN BACK TO UNDO ONE.", 12, 196);
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + ": CLOSE  " + back + ": CLOSE", 12, 212, "#fff070");
+}
+function drawBattleTarget(split) {
+  const pending = B.pending, target = B.list[B.target], columns = Math.floor((split - 12) / 6);
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  const action = pending.kind === "magic" ? pending.spell.name : pending.kind === "item" ? pending.item : "ATTACK";
+  const price = pending.kind === "magic" ? " " + pending.spell.mp + "MP" : "";
+  text(fit(action, columns - price.length) + price, 6, 152, "#fff070");
+  text(fit(target.name), 6, 164);
+  const charged = (D.realm_key || "prism") === "prism" && B.foes.includes(target) && target.hp > 0 && target.charged;
+  const stolen = (D.realm_key || "prism") === "prism" && B.foes.includes(target) && target.hp > 0 && target.stolen > 0;
+  const counter = stolen ? (B.target + 1) + "/" + B.list.length + " STOLEN " + (target.stolen > 999 ? "999+" : target.stolen) + "G" : "TARGET " + (B.target + 1) + "/" + B.list.length + (charged ? " CHARGED" : "");
+  text(counter, 6, 174, charged || stolen ? "#f8d878" : "#a0a8c0");
+  if (party.includes(target)) {
+    const cap = W < 320 ? 999 : 9999, number = n => n > cap ? cap + "+" : String(n);
+    text("HP " + number(target.hp) + "/" + number(target.max), 6, 184, target.hp <= 0 ? "#f87878" : "#a8e0a0");
+    text("MP " + number(target.mp) + "/" + number(target.mmax), 6, 194, "#a0c8ff");
+  } else {
+    const facts = pending.kind === "magic" ? wrap(spellHint(pending.spell), columns).slice(0, 2) : [];
+    facts.forEach((line, i) => text(line, 6, 184 + i * 10, "#a0a8c0"));
+    if (stolen && facts.length < 2) text("DEFEAT TO RECLAIM", 6, 184 + facts.length * 10, "#f8d878");
+  }
+  const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, "");
+  text(confirm + ": CHOOSE", 6, 204, "#fff070"); text(back + ": BACK", 6, 214, "#a0a8c0");
+}
+function statusPill(key, x, y) {
+  const info = STATUS[key]; if (!info) return;
+  x = Math.round(x); y = Math.round(y);
+  g.fillStyle = "#101526"; g.fillRect(x, y, 24, 9);
+  g.fillStyle = info.color; g.fillRect(x, y, 1, 9);
+  text(info.tag, x + 3, y + 1, info.color, null);
+}
+function drawChargeBadge(foe, stacked) {
+  if ((D.realm_key || "prism") !== "prism" || foe.hp <= 0 || !foe.charged) return;
+  const x = Math.round(clamp(foe.x + foe.size / 2 - 24, 0, W - 48)), y = Math.round(foe.y + foe.size - (stacked ? 18 : 7));
+  g.fillStyle = "#101526"; g.fillRect(x, y, 48, 9); g.fillStyle = "#f8d878"; g.fillRect(x, y, 1, 9);
+  text("CHARGED", x + 3, y + 1, "#f8d878", null);
+}
+function drawStolenBadge(foe, stacked) {
+  if ((D.realm_key || "prism") !== "prism" || foe.hp <= 0 || !(foe.stolen > 0)) return;
+  const x = Math.round(clamp(foe.x + foe.size / 2 - 24, 0, W - 48)), y = Math.round(foe.y + foe.size - 7 - stacked * 11);
+  g.fillStyle = "#101526"; g.fillRect(x, y, 48, 9); g.fillStyle = "#f8d878"; g.fillRect(x, y, 1, 9);
+  text("STOLEN", x + 3, y + 1, "#f8d878", null);
+}
+function battlePoint(target) {
+  if (B.foes.includes(target)) return { x: target.x + target.size / 2, y: target.y + target.size / 2 };
+  const i = party.indexOf(target); if (i < 0) return null;
+  const x = target.hp > 0 ? W - 58 - (B.phase === "cmd" && B.who === i ? 10 : 0) : W - 50;
+  return { x: x + 17, y: 25 + i * 30 };
+}
+function drawBespokeSpellFx(fx) {
+  const chrono = fx.casterJob === "Chronoseer" && (fx.name === "Drowse" || fx.name === "Lull");
+  const wind = fx.casterJob === "Beastcaller" && fx.name === "Gust";
+  if (!chrono && !wind) return;
+  const p = clamp(fx.t / 0.65, 0, 1);
+  // Time and indices shape these pixels; drawing never consumes combat's random stream.
+  const pixel = (x, y, w, h, color) => { g.fillStyle = color; g.fillRect(Math.round(x), Math.round(y), w, h); };
+  g.save(); g.beginPath(); g.rect(0, 0, W, 144); g.clip();
+  g.globalAlpha = 1 - Math.max(0, p - 0.8) * 4;
+  for (const target of fx.targets) {
+    const at = battlePoint(target); if (!at) continue;
+    if (chrono) {
+      const applied = fx.statusLanded && target.hp > 0 && has(target, fx.status);
+      for (let i = 0; i < 8; i++) {
+        const a = i * Math.PI / 4 + p * 1.8, radius = 22 - p * 8;
+        const x = at.x + Math.cos(a) * radius, y = at.y + Math.sin(a) * radius * 0.6 - 5 - p * 5;
+        pixel(x, y, 2, 2, i % 2 ? "#a0a8ff" : "#dfc4ff");
+        if (i % 2 === 0) pixel(x - 1, y + 2, 1, 2, "#7568ba");
+      }
+      // An attempted cast has motes; sleep/slow symbols require the actual landed status.
+      if (applied && fx.name === "Drowse") {
+        text("Z", Math.round(at.x + 7 + p * 6), Math.round(at.y - 20 - p * 13), "#d8d8ff", "#302448");
+        if (p > 0.25) text("Z", Math.round(at.x - 7 - p * 3), Math.round(at.y - 14 - p * 10), "#a0a8ff", "#302448");
+      } else if (applied && fx.name === "Lull") {
+        pixel(at.x - 9, at.y - 12, 18, 2, "#e5c0ff");
+        pixel(at.x - 9, at.y + 9, 18, 2, "#e5c0ff");
+        for (let i = 0; i < 8; i++) {
+          const inset = 8 - i;
+          pixel(at.x - inset, at.y - 9 + i, 2, 1, "#ab88d8");
+          pixel(at.x + inset - 1, at.y - 9 + i, 2, 1, "#ab88d8");
+          pixel(at.x - inset, at.y + 7 - i, 2, 1, "#ab88d8");
+          pixel(at.x + inset - 1, at.y + 7 - i, 2, 1, "#ab88d8");
+        }
+        const sand = 2 + Math.floor(p * 4);
+        pixel(at.x - sand, at.y + 7, sand * 2 + 1, 2, "#ffe6a0");
+        pixel(at.x, at.y - 1, 1, 5, "#ffe6a0");
+      }
+    } else {
+      const from = battlePoint(fx.caster); if (!from) continue;
+      for (let ribbon = 0; ribbon < 3; ribbon++) {
+        for (let i = 8; i >= 0; i--) {
+          const u = p * 1.3 - i * 0.045; if (u <= 0 || u > 1) continue;
+          const x = from.x + (at.x - from.x) * u;
+          const y = from.y + (at.y - from.y) * u + (ribbon - 1) * 6 + Math.sin(u * Math.PI * 3 + ribbon * 0.7) * (4 - u * 2);
+          pixel(x, y, i < 2 ? 4 : 3, i === 0 ? 2 : 1, i < 2 ? "#e0fff0" : ribbon === 1 ? "#8ce8cf" : "#64b8bd");
+        }
+      }
+      if (p > 0.65) {
+        const radius = 5 + (p - 0.65) * 28;
+        for (let i = 0; i < 4; i++) {
+          const a = i * Math.PI / 2;
+          pixel(at.x + Math.cos(a) * radius, at.y + Math.sin(a) * radius, 3, 2, "#c0f8df");
+        }
+      }
+    }
+  }
+  g.restore();
+}
 function drawBattle() {
   const r = D.rects.backdrops[B.bd];
   const compact = W < 320, split = compact ? 120 : 150, statsX = split + 8;
+  if (B.phase === "cmd" && B.sub === "plan" && (D.realm_key || "prism") === "prism") return drawBattlePlan();
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   if (r) g.drawImage(IM.backdrops, r[0], r[1], r[2], r[3], 0, 0, W, 180);
   for (const f of B.foes) {
     if (f.hp <= 0 && !(B.flash[f.key + f.x] > 0)) continue;
-    const fl = B.flash[f.key + f.x] || 0; if (fl > 0) B.flash[f.key + f.x] = fl - 1 / 60;
+    const fl = B.flash[f.key + f.x] || 0; if (fl > 0 && !settingsFramePaused) B.flash[f.key + f.x] = fl - 1 / 60;
     if (fl > 0 && Math.floor(fl * 30) % 2) continue;
     spr("sprites", f.img, f.x, f.y, 0, null, null, f.size / 112);
-    const ft = f.hp > 0 ? tags(f) : []; if (ft.length) { const k = ft[Math.floor(B.t / 1.2) % ft.length]; text(STATUS[k].tag, f.x + f.size / 2 - tw(STATUS[k].tag) / 2, f.y + f.size - 6, STATUS[k].color, "#000000"); }
     if (B.sub === "target" && B.list[B.target] === f) cursor(f.x - 10, f.y + f.size / 2 - 4);
   }
   party.forEach((m, i) => {
@@ -1593,29 +2673,57 @@ function drawBattle() {
   });
   if (B.fx) {
     const fr = D.rects.spells["fx:" + B.fx.name];
-    if (fr) { const k = Math.min(9, Math.floor(B.fx.t / 0.065)); for (const t of B.fx.targets) { const p = B.foes.includes(t) ? [t.x + t.size / 2 - 24, t.y + t.size / 2 - 24] : [W - 62, 2 + party.indexOf(t) * 30]; g.drawImage(IM.spells, fr[0] + k * 48, fr[1], 48, 48, p[0], p[1], 48, 48); } }
+    if (fr) { const k = Math.min(9, Math.floor(B.fx.t / 0.065)); for (const t of B.fx.targets) { if (!t) continue; const p = B.foes.includes(t) ? [t.x + t.size / 2 - 24, t.y + t.size / 2 - 24] : [W - 62, 2 + party.indexOf(t) * 30]; g.drawImage(IM.spells, fr[0] + k * 48, fr[1], 48, 48, p[0], p[1], 48, 48); } }
+    drawBespokeSpellFx(B.fx);
+  }
+  // Paint tags after every sprite and spell so overlapping foes cannot hide them.
+  for (const f of B.foes) {
+    const ft = f.hp > 0 ? tags(f) : [];
+    if (ft.length) statusPill(ft[Math.floor(B.t / 1.2) % ft.length], f.x + f.size / 2 - 12, f.y + f.size - 7);
+    drawChargeBadge(f, ft.length > 0);
+    drawStolenBadge(f, (ft.length ? 1 : 0) + (f.charged ? 1 : 0));
   }
   for (const p of B.pops) text(p.txt, Math.round(p.x - tw(p.txt) / 2), Math.round(p.y - p.t * 18), p.color, "#000000");
   win(0, 144, split, 80); win(split, 144, W - split, 80);
+  const hpRight = W - (compact ? 36 : 44), mpRight = W - 10, pillX = W - (compact ? 84 : 104);
+  const statText = n => n > (compact ? 999 : 9999) ? (compact ? "999+" : "9999+") : String(n);
+  g.fillStyle = "#18182c"; g.fillRect(split + 7, 146, W - split - 16, 10);
+  text("PARTY", statsX, 147, "#a0a8c0"); text("HP", hpRight - 12, 147, "#a8e0a0"); text("MP", mpRight - 12, 147, "#a0c8ff");
   party.forEach((m, i) => {
-    const y = 152 + i * 17, c = m.hp <= 0 ? "#f87878" : m.hp < m.max / 4 ? "#fff070" : "#ffffff";
-    text(compact ? m.name.slice(0, 7) : m.name, statsX, y, c); text(m.hp, W - (compact ? 52 : 58) - tw(m.hp), y, c); text(m.mp, W - 12 - tw(m.mp), y, "#a0c8ff");
-    const tg = tags(m); if (tg.length && m.hp > 0) { const k = tg[Math.floor(B.t / 1.2) % tg.length]; text(STATUS[k].tag, compact ? W - 44 : 216, compact ? y + 9 : y, STATUS[k].color); }
-    gauge(statsX, y + 9, compact ? 76 : 104, m.hp / m.max, "#58d058");
+    const y = 159 + i * 15, c = m.hp <= 0 ? "#f87878" : m.hp < m.max / 4 ? "#fff070" : "#ffffff", hp = statText(m.hp), mp = statText(m.mp);
+    if (B.phase === "cmd" && B.who === i) { g.fillStyle = "#30304c"; g.fillRect(split + 6, y - 1, W - split - 14, 14); }
+    text(String(m.name).toUpperCase().slice(0, compact ? 7 : 9), statsX, y, c); text(hp, hpRight - tw(hp), y, c); text(mp, mpRight - tw(mp), y, "#a0c8ff");
+    const tg = tags(m); if (tg.length && m.hp > 0) statusPill(tg[Math.floor(B.t / 1.2) % tg.length], pillX, y - 1);
+    gauge(statsX, y + 9, hpRight - statsX - 2, m.hp / m.max, m.hp < m.max / 4 ? "#e8b85c" : "#58d058");
   });
   if (B.phase === "cmd" && !B.sub) {
-    const cmds = battleCmds(), step = cmds.length > 5 ? 12 : 13;
-    cmds.forEach((c, i) => text(c, 22, 152 + i * step)); cursor(10, 152 + B.cmd * step);
-    text(compact ? party[B.who].name.slice(0, 5) : party[B.who].name, 86, 152, "#fff070");
+    const cmds = battleCmds(), step = cmds.length > 5 ? 12 : 13, rows = (D.realm_key || "prism") === "prism" ? Math.min(6, cmds.length) : cmds.length;
+    const from = clamp(B.cmd - rows + 1, 0, Math.max(0, cmds.length - rows));
+    cmds.slice(from, from + rows).forEach((c, i) => text(c, 22, 152 + i * step)); cursor(10, 152 + (B.cmd - from) * step);
+    text(String(party[B.who].name).toUpperCase().slice(0, compact ? 5 : 9), 86, 152, "#fff070");
+    if (cmds.length > rows) text((B.cmd + 1) + "/" + cmds.length, 86, 166, "#a0a8c0");
   } else if (B.phase === "cmd" && (B.sub === "magic" || B.sub === "item" || B.sub === "summon")) {
-    const m = party[B.who], used = new Set(B.summoned || []);
-    const opts = B.sub === "summon" ? mySpirits().map(s => [s.name, s.mp + "MP", m.mp >= s.mp && !used.has(s.name)]) : B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp]) : battleItems().map(k => [k, ":" + bag[k], true]);
-    const from = clamp((B.oi || 0) - 3, 0, Math.max(0, opts.length - 5));
-    opts.slice(from, from + 5).forEach((o, i) => { text(o[0].slice(0, compact ? 10 : 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], split - 6 - tw(o[1]), 152 + i * 13); });
-    cursor(10, 152 + ((B.oi || 0) - from) * 13);
+    const m = party[B.who], called = new Set(B.summoned || []), planned = new Set(B.acts.filter(a => a.kind === "summon").map(a => a.spirit.name)), used = new Set([...called, ...planned]);
+    const opts = B.sub === "summon" ? mySpirits().map(s => {
+      const why = PrismSummons.refusal(s, used, m.mp);
+      return [s.name, s.mp + "MP", !why, why === "ALREADY ANSWERED" && !called.has(s.name) ? "CALL PLANNED" : why || s.element.toUpperCase() + " / ALL FOES. ONCE PER BATTLE."];
+    }) : B.sub === "magic" ? m.spells.map(spellOf).filter(Boolean).map(s => [s.name, s.mp + "MP", m.mp >= s.mp, spellHint(s)])
+      : battleItems().map(k => [k, ":" + battleItemStock(k), true, itemKind(k) === "escape" && B.boss ? "NO ESCAPE FROM A BOSS." : itemLine(k)]);
+    const selected = clamp(B.oi || 0, 0, Math.max(0, opts.length - 1)), from = clamp(selected - 1, 0, Math.max(0, opts.length - 3));
+    opts.slice(from, from + 3).forEach((o, i) => { text(o[0].slice(0, compact ? 10 : 12), 22, 152 + i * 13, o[2] ? "#ffffff" : "#808090"); text(o[1], split - 6 - tw(o[1]), 152 + i * 13); });
+    if (opts[selected]) {
+      cursor(10, 152 + (selected - from) * 13);
+      text(opts[selected][0], 6, 190, "#fff070");
+      wrap(opts[selected][3], compact ? 18 : 23).slice(0, 2).forEach((l, i) => text(l, 6, 201 + i * 11, "#a0a8c0"));
+    }
+  } else if (B.phase === "cmd" && B.sub === "target" && (D.realm_key || "prism") === "prism" && B.pending && B.list[B.target]) {
+    drawBattleTarget(split);
   } else {
     wrap(B.msg || "", compact ? 16 : 22).slice(0, 5).forEach((l, i) => text(l, 10, 152 + i * 13));
-    if (B.phase === "end" && B.wait <= 0 && Math.floor(performance.now() / 400) % 2) text(">", split - 12, 210, "#fff070");
+    if (B.phase === "end" && B.wait <= 0) {
+      if ((D.realm_key || "prism") === "prism") text(titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, "") + ": NEXT", 10, 214, "#fff070");
+      else if (Math.floor(performance.now() / 400) % 2) text(">", split - 12, 210, "#fff070");
+    }
   }
 }
 
@@ -1624,8 +2732,21 @@ function drawBattle() {
    Settings tabs. The prompt names the button on whatever is plugged in. Tap or click an item to choose it. */
 let SAVE_KEY = "prism.save.v1";
 const TITLE_ITEMS = ["NEW GAME", "CONTINUE", "OPTIONS"];
-let titleT = 0, goT = 0, titleIdx = 0;
-function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 && (v.realm_key || "prism") === (D.realm_key || "prism") ? v : null; } catch (e) { return null; } }
+let titleT = 0, goT = 0, titleIdx = 0, goIdx = -1;
+let saveCacheText, saveCacheData, saveCacheResult;
+function readSavedJourney() {
+  if (!D || !D.party || typeof PrismJourneySave === "undefined") return { ok: false, kind: "unavailable", reason: "The journey reader has not loaded. Reload the game, then try CONTINUE again." };
+  let raw;
+  try { raw = localStorage.getItem(SAVE_KEY); }
+  catch (_) { return { ok: false, kind: "unavailable", reason: "Browser storage is unavailable. Check its access, then try CONTINUE again." }; }
+  // The title draws every frame. Only validate again when the stored record or realm data changes.
+  if (raw !== saveCacheText || D !== saveCacheData || !saveCacheResult) {
+    saveCacheText = raw; saveCacheData = D;
+    saveCacheResult = PrismJourneySave.read(raw, D.realm_key || "prism", D.party.members);
+  }
+  return saveCacheResult;
+}
+function loadSave() { const r = readSavedJourney(); return r.ok ? r.value : null; }
 function saveGame() {
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, realm_key: D.realm_key || "prism", at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen,
@@ -1634,38 +2755,74 @@ function saveGame() {
     return true;
   } catch (e) { return false; }
 }
+function eraseSavedJourney() {
+  try { localStorage.removeItem(SAVE_KEY); }
+  catch (_) { toast("Saved journey not erased", "Your saved record was kept. Check browser storage access, then try ERASE again."); return; }
+  toast("Saved journey erased");
+}
 function saveSummary() {
-  const sv = loadSave(); if (!sv) return "No saved journey";
-  const lead = sv.party[0] || {};
-  const n = (sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])).length;
-  return lead.name + " LV " + lead.lv + " \u00b7 " + sv.gold + " G" + (D.realm_profile ? "" : " \u00b7 " + n + (n === 1 ? " Warden" : " Wardens")) + " \u00b7 " + new Date(sv.at).toLocaleString();
+  const r = readSavedJourney();
+  if (!r.ok) return r.kind === "missing" ? "No saved journey" : "Saved journey needs attention. Choose CONTINUE for details.";
+  const sv = r.value, lead = sv.party[0], n = sv.beaten.length;
+  return lead.name + " LV " + lead.lv + " \u00b7 " + sv.gold + " G" + (D.realm_profile ? "" : " \u00b7 " + n + (n === 1 ? " Boss" : " Bosses"))
+    + (sv.at === undefined ? "" : " \u00b7 " + new Date(sv.at).toLocaleString());
+}
+function refuseContinue(r) {
+  sfx("LOCKED");
+  if (r.kind === "missing") toast("No saved journey", "Start NEW GAME, then rest at an inn or choose SAVE in the field menu.");
+  else toast("Continue unavailable", r.reason + " Your saved record and current journey were kept."
+    + (r.kind === "invalid" ? " Try the build that saved this journey." : ""));
+}
+function prepareContinue(snapshot) {
+  // Keep the cached save detached: playing after Continue must not change its summary or stored snapshot.
+  const saved = JSON.parse(JSON.stringify(snapshot));
+  recruitBeaten(saved);
+  const checked = PrismJourneySave.read(JSON.stringify(saved), D.realm_key || "prism", D.party.members);
+  if (!checked.ok) throw new Error(checked.reason);
+  const it = D.interiors.Inn;
+  return { saved, beaten: new Set(saved.beaten), opened: new Set(saved.opened),
+    air: saved.air ? recoverAir(saved.air) : null,
+    ways: typeof PrismWaystones !== "undefined" && saved.ways ? PrismWaystones.decode(WAYS(), saved.ways).awake : new Set(),
+    inn: interiorMap("Inn", new Set(saved.beaten)), x: it.spawn.x, y: it.spawn.y };
 }
 function titleChoose(i) {
   const item = TITLE_ITEMS[i];
-  if (item === "CONTINUE" && !loadSave()) { sfx("LOCKED"); return; }
+  let resume = null;
+  if (item === "CONTINUE") {
+    const r = readSavedJourney();
+    if (!r.ok) { refuseContinue(r); return; }
+    try { resume = prepareContinue(r.value); }
+    catch (_) { refuseContinue({ kind: "invalid", reason: "This build could not prepare the saved journey." }); return; }
+  }
   unlockAudio(); sfx("PICK");
   if (item === "OPTIONS") { openSettings(); return; }
-  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; state.quests = {}; state.ways = new Set(); state.day = 1; state.minute = 8 * 60; opened.clear(); grids = {};
+  journeySerial++; dlg = null; shop = null; menu = null; B = null; fadeCb = null; fade = 0; ending = null;
+  state.steps = 0; state.sinceBattle = 0; state.returnTo = null;
   if (item === "CONTINUE") {
-    const sv = loadSave();
-    party = sv.party; reserve = sv.reserve || []; bag = sv.bag; gold = sv.gold; state.beaten = new Set(sv.beaten || (sv.bossBeaten ? ["PyreWarden"] : [])); sv.opened.forEach(k => opened.add(k)); state.seen = sv.seen || {}; recruitBeaten();
-    state.air = sv.air ? recoverAir(sv.air) : null;                    /* CONTINUE starts on foot at the inn: never strand the skiff */
-    if (state.air && state.air.recalled && airUnlocked()) setTimeout(() => toast("THE SKIFF FLEW HOME", "IT WAITS AT THE DOCK NORTH OF THE TOWN"), 1400);
-    state.fish = sv.fish || {}; state.quests = sv.quests || {};
-    state.ways = typeof PrismWaystones !== "undefined" && sv.ways ? PrismWaystones.decode(WAYS(), sv.ways).awake : new Set();
-    state.day = Number.isInteger(sv.day) && sv.day > 0 ? sv.day : 1; state.minute = Number.isInteger(sv.minute) && sv.minute >= 0 && sv.minute < 1440 ? sv.minute : 7 * 60;                    /* CONTINUE starts at the inn, on foot */
-    const it = D.interiors.Inn; state.returnTo = null;
-    goto(interiorMap("Inn"), it.spawn.x, it.spawn.y, "up");
-    setTimeout(() => say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6), 600);
+    const sv = resume.saved;
+    Object.assign(GEAR, D.gear);
+    party = sv.party; reserve = sv.reserve; bag = sv.bag; gold = sv.gold; state.beaten = resume.beaten;
+    opened.clear(); resume.opened.forEach(k => opened.add(k)); state.seen = sv.seen; grids = {};
+    state.air = resume.air;                                        /* CONTINUE starts on foot at the inn: never strand the skiff */
+    const token = journeySerial;
+    if (state.air && state.air.recalled && airUnlocked()) setTimeout(() => { if (token === journeySerial) toast("THE SKIFF FLEW HOME", "IT WAITS AT THE DOCK NORTH OF THE TOWN"); }, 1400);
+    state.fish = sv.fish; state.quests = sv.quests; state.ways = resume.ways;
+    state.day = sv.day; state.minute = sv.minute; state.returnTo = null;
+    goto(resume.inn, resume.x, resume.y, "up");
+    setTimeout(() => { if (token === journeySerial && mode === "field" && !dlg) say(["WELCOME BACK. YOUR JOURNEY CONTINUES."], null, 6); }, 600);
     return;
   }
+  party = buildParty(); state.beaten = new Set(); state.seen = {}; state.air = null; state.fish = {}; state.quests = {}; state.ways = new Set(); state.day = 1; state.minute = 8 * 60; opened.clear(); grids = {};
   nameEntry = { name: party[0].name.toUpperCase(), r: 0, c: 0, t: 0 };
   fade = 1; fadeCb = () => { mode = "name"; };
 }
 function beginJourney() {
   const spawn = D.realm_profile && D.realm_profile.start_spawn;
   goto(townMap(), spawn ? spawn.x : 11, spawn ? spawn.y : 15, "up");
-  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => say((D.realm_profile && D.realm_profile.intro) || ["WELCOME TO PRISMHEART. WARDENS STIR ACROSS THE ISLE, EACH ONE GROWN AROUND A SHARD OF THE HEART. THE ELDER IN TOWN KNOWS MORE.", "TALK TO PEOPLE WITH A. OPEN THE MENU WITH START. THE ROAD SOUTH LEAVES TOWN."], null, 0), 600);
+  const token = journeySerial;
+  if (!SETTINGS || !SETTINGS.loaded() || SETTINGS.get("TipsTutorials")) setTimeout(() => {
+    if (token === journeySerial && mode === "field" && !dlg) say((D.realm_profile && D.realm_profile.intro) || ["WELCOME TO PRISMHEART. WARDENS STIR ACROSS THE ISLE, EACH ONE GROWN AROUND A SHARD OF THE HEART. THE ELDER IN TOWN KNOWS MORE.", titlePrompt("confirm", "Z/SPACE OR TAP A") + " TO TALK. " + titlePrompt("menu", "ENTER OR TAP START") + " FOR MENU. THE ROAD SOUTH LEAVES TOWN.", "JOURNEY HAS YOUR MAP AND ROUTE PIN. ORDER PREVIEWS YOUR FRONT LINE. SAVE OUTSIDE DUNGEONS OR REST AT AN INN."], null, 0);
+  }, 600);
 }
 function titleTick(dt) {
   titleT += dt;
@@ -1673,11 +2830,11 @@ function titleTick(dt) {
   if (hit("down")) { titleIdx = (titleIdx + 1) % TITLE_ITEMS.length; sfx("TICK"); }
   if (hit("start") || hit("a")) titleChoose(titleIdx);
 }
-function titlePrompt() {
+function titlePrompt(action = "confirm", fallback = "START") {
   const d = PAD && PAD.devices()[0];
-  if (!d) return "PRESS START";
-  const g = String(PAD.label("confirm", d.index)).toUpperCase();
-  return /^[A-Z0-9+]{1,8}$/.test(g) ? "PRESS " + g : "PRESS START";
+  if (!d) return "PRESS " + fallback;
+  const g = String(PAD.label(action, d.index)).toUpperCase();
+  return /^[A-Z0-9+]{1,8}$/.test(g) ? "PRESS " + g : "PRESS " + fallback;
 }
 function drawTitle() {
   const f = Math.floor(titleT * 6) % 8, M = D.title.menu_geometry, hasSave = !!loadSave();
@@ -1690,7 +2847,7 @@ function drawTitle() {
   text(M.credit, M.credit_xy[0] - tw(M.credit), M.credit_xy[1], "#8080a8", null);
 }
 cv.addEventListener("pointerdown", e => {                 /* tap or click a title item */
-  if (mode !== "title" || !D || (PANEL && PANEL.isOpen())) return;
+  if (mode !== "title" || !D || gameplayInputBlocked()) return;
   const b = cv.getBoundingClientRect(), x = (e.clientX - b.left) * W / b.width, y = (e.clientY - b.top) * H / b.height, M = D.title.menu_geometry;
   const i = Math.floor((y - M.item_y + 3) / M.item_step);
   if (x >= M.window[0] && x <= M.window[0] + M.window[2] && i >= 0 && i < TITLE_ITEMS.length) { titleIdx = i; titleChoose(i); }
@@ -1702,7 +2859,7 @@ let nameEntry = null;
 const NE_X = c => 26 + c * Math.floor((W - 40) / 10), NE_Y = r => 64 + r * 22;
 function neRows() { return D.title.name_entry.grid.length; }
 function neCell(r, c) {                                   /* row neRows() is the bottom bar: columns 0-4 BACK, 5-9 END */
-  if (r === neRows()) return c < 5 ? "BACK" : "END";
+  if (r === neRows()) return c < 5 ? (nameEntry && nameEntry.target ? "CANCEL" : "BACK") : "END";
   const ch = D.title.name_entry.grid[r][c];
   return ch === " " ? (r === 3 && c === 6 ? "SP" : null) : ch;
 }
@@ -1713,13 +2870,15 @@ function neType(ch) {
 }
 function neDelete() { if (nameEntry.name.length) { nameEntry.name = nameEntry.name.slice(0, -1); sfx("TICK"); return true; } return false; }
 function neFinish() {
+  if (nameEntry.target) { finishCallsign(true); return; }
   const nm = nameEntry.name.trim() || party[0].name.toUpperCase();
   party[0].name = nm.charAt(0) + nm.slice(1).toLowerCase(); sfx("PICK"); nameEntry = null; beginJourney();
 }
-function neBack() { nameEntry = null; sfx("CANCEL"); fade = 1; fadeCb = () => { mode = "title"; titleT = 0; }; }
+function neBack() { if (nameEntry && nameEntry.target) { finishCallsign(false); return; } nameEntry = null; sfx("CANCEL"); fade = 1; fadeCb = () => { mode = "title"; titleT = 0; }; }
 function neActivate() {
   const v = neCell(nameEntry.r, nameEntry.c);
-  if (v === "BACK") { if (!neDelete()) neBack(); }
+  if (v === "CANCEL") neBack();
+  else if (v === "BACK") { if (!neDelete()) neBack(); }
   else if (v === "END") neFinish();
   else if (v) neType(v);
 }
@@ -1737,6 +2896,7 @@ function neMove(dr, dc) {
 }
 function nameTick(dt) {
   nameEntry.t += dt;
+  if (nameEntry.target && hit("b")) { neBack(); return; }
   if (hit("up")) neMove(-1, 0);
   if (hit("down")) neMove(1, 0);
   if (hit("left")) neMove(0, -1);
@@ -1746,18 +2906,24 @@ function nameTick(dt) {
   if (nameEntry && hit("start")) { nameEntry.r = neRows(); nameEntry.c = 5; neFinish(); }
 }
 function drawName() {
-  const ne = nameEntry, lead = party[0], H0 = 48, max = D.title.name_entry.max_len;
+  const ne = nameEntry, lead = ne.target || party[0], H0 = 48, max = D.title.name_entry.max_len;
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   win(0, 0, W, H0);
   const r = D.rects.sprites[lead.sprite];
-  if (r) spr("sprites", lead.sprite, 10, 6, 0, null, null, 36 / r[3]);
-  text("NAME YOUR " + lead.job.toUpperCase() + ":", 50, 10, "#fff070");
+  if (r) spr("sprites", lead.sprite, 10, 6, 0, null, null, ne.target ? Math.min(36 / r[2], 36 / r[3]) : 36 / r[3]);
+  text(ne.target ? "CALL SIGN - " + lead.job.toUpperCase() : "NAME YOUR " + lead.job.toUpperCase() + ":", 50, 10, "#fff070");
   const caret = Math.floor(ne.t * 2.5) % 2 && ne.name.length < max ? "_" : " ";
   text(ne.name + caret, 50, 26);
+  if (ne.target) text(("WAS " + ne.originalName).toUpperCase().slice(0, Math.floor((W - 162) / 6)), 150, 26, "#a0a8c0");
   for (let i = 0; i < max; i++) { g.fillStyle = i < ne.name.length ? "#fff070" : "rgba(255,255,255,.35)"; g.fillRect(50 + i * 6, 35, 5, 1); }
   win(0, H0, W, H - H0);
   D.title.name_entry.grid.forEach((row, ri) => { for (let ci = 0; ci < 10; ci++) { const v = neCell(ri, ci); if (v) text(v, NE_X(ci), NE_Y(ri)); } });
-  text("BACK", 26, H - 30); text("END", W - 60, H - 30, "#fff070");
+  text(ne.target ? "CANCEL" : "BACK", 26, H - 30); text("END", W - 60, H - 30, "#fff070");
+  if (ne.target) {
+    const chars = Math.floor((W - 24) / 6), back = titlePrompt("cancel", "ESC OR TAP B").replace(/^PRESS /, "");
+    text((titlePrompt("menu", "ENTER OR TAP START") + " TO FINISH.").slice(0, chars), 12, H - 52, "#a0d8f8");
+    text(("BACKSPACE: DELETE " + back + ": CANCEL").slice(0, chars), 12, H - 16, "#a0a8c0");
+  }
   const cx = ne.r === neRows() ? (ne.c < 5 ? 14 : W - 72) : NE_X(ne.c) - 12, cy = ne.r === neRows() ? H - 30 : NE_Y(ne.r);
   cursor(cx, cy);
 }
@@ -1767,17 +2933,18 @@ function nameAt(px, py) {                                 /* canvas pixel -> gri
   return r >= 0 && r < neRows() && c >= 0 && c < 10 && neCell(r, c) ? [r, c] : null;
 }
 cv.addEventListener("pointerdown", e => {
-  if (mode !== "name" || !nameEntry || (PANEL && PANEL.isOpen())) return;
+  if (mode !== "name" || !nameEntry || gameplayInputBlocked()) return;
   const b = cv.getBoundingClientRect(), at = nameAt((e.clientX - b.left) * W / b.width, (e.clientY - b.top) * H / b.height);
   if (at) { nameEntry.r = at[0]; nameEntry.c = at[1]; neActivate(); }
 });
 window.addEventListener("keydown", e => {                 /* typing straight in */
-  if (mode !== "name" || !nameEntry || (PANEL && PANEL.isOpen()) || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (mode !== "name" || !nameEntry || gameplayInputBlocked() || e.ctrlKey || e.metaKey || e.altKey) return;
   const k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
   const stop = () => { e.preventDefault(); e.stopImmediatePropagation(); };
+  if (k === "Escape" && nameEntry.target) { stop(); neBack(); return; }
   if (k === " ") { stop(); neType("SP"); return; }
   if (k.length === 1 && D.title.name_entry.grid.some(row => row.includes(k))) { stop(); neType(k); return; }
-  if (k === "Enter") { stop(); neFinish(); return; }
+  if (k === "Enter") { stop(); if (!e.repeat) neFinish(); return; }
   if (k === "Backspace") { stop(); if (!neDelete()) neBack(); return; }
 }, true);
 /* ---------- ending ---------- */
@@ -1786,7 +2953,21 @@ const ENDING_LINES = () => ["THE HEART IS WHOLE.", "", "THE WARDENS SLEEP, AND T
   ...roster().map(m => m.name.toUpperCase() + " THE " + m.job.toUpperCase()), "", D.realm.toUpperCase(), "A DAEDALUS REALM", "", "THANK YOU FOR PLAYING"];
 function endingTick(dt) {
   ending.t += dt;
-  if (ending.t > 3 && (hit("a") || hit("start"))) { ending = null; mode = "title"; titleT = 0; cue("TITLE"); }
+  if (ending.t <= 3) return;
+  const confirm = hit("a"), start = hit("start"), back = hit("b");
+  if (!ending.saved && back) {
+    ending = null; mode = "field"; cue(map.cue);
+    say(["YOUR VICTORY IS STILL HERE, BUT IT IS NOT SAVED.", "LEAVE THE DUNGEON AND TRY SAVE IN THE FIELD MENU.", "KEEP THIS GAME OPEN UNTIL SAVING WORKS."]);
+    return;
+  }
+  if (!confirm && !start) return;
+  if (!ending.saved) {
+    ending.saved = saveGame();
+    if (ending.saved) toast("Victory saved", "CONTINUE will remember the restored Heart. Press again to return to the title.");
+    else toast("Victory not saved", "Keep this game open. Retry saving, or go back to keep playing.");
+    return;
+  }
+  ending = null; mode = "title"; titleT = 0; cue("TITLE");
 }
 function drawEnding() {
   const f = Math.floor(ending.t * 6) % 8;
@@ -1794,33 +2975,84 @@ function drawEnding() {
   g.fillStyle = "rgba(4,2,16,.86)"; g.fillRect(0, 0, W, H);       /* the credits read over a dimmed title, never over the logo */
   const lines = ENDING_LINES(), y0 = H - ending.t * 14;
   lines.forEach((l, i) => { const y = y0 + i * 14; if (y > -10 && y < H) text(l, (W - tw(l)) / 2, Math.round(y), i === lines.length - 1 ? "#fff070" : "#ffffff"); });
-  if (y0 + lines.length * 14 < H / 2) { const p = "PRESS START"; if (Math.floor(ending.t * 1.6) % 2) text(p, (W - tw(p)) / 2, H - 24, "#c0c0d0"); }
+  if (!ending.saved) {
+    g.fillStyle = "#080410"; g.fillRect(0, H - 72, W, 72);
+    const notices = ["VICTORY NOT SAVED", "KEEP THIS GAME OPEN.", titlePrompt("confirm", "ENTER/START") + " TO RETRY SAVE", titlePrompt("cancel", "X/ESC/B") + " TO KEEP PLAYING"];
+    notices.forEach((p, i) => text(p, (W - tw(p)) / 2, H - 64 + i * 14, i === 0 ? "#f87878" : "#ffffff"));
+  } else if (y0 + lines.length * 14 < H / 2) { const p = titlePrompt(); if (Math.floor(ending.t * 1.6) % 2) text(p, (W - tw(p)) / 2, H - 24, "#c0c0d0"); }
+}
+function gameOverTick(dt) {
+  goT += dt;
+  if ((D.realm_key || "prism") === "prism") {
+    if (goIdx < 0) goIdx = readSavedJourney().ok ? 0 : 1;
+    if (goT <= 1) { clearActionButtons(); for (const key of ["up", "down", "left", "right"]) hit(key); return; }
+    const back = hit("b"), start = hit("start"), confirm = hit("a"), up = hit("up"), down = hit("down"); hit("left"); hit("right");
+    if (back || start) { clearActionButtons(); mode = "title"; titleT = 0; cue("TITLE"); return; }
+    if (up !== down) { goIdx = 1 - goIdx; sfx("TICK"); }
+    if (confirm) {
+      clearActionButtons();
+      if (goIdx === 0) titleChoose(TITLE_ITEMS.indexOf("CONTINUE"));
+      else { mode = "title"; titleT = 0; cue("TITLE"); }
+    }
+    return;
+  }
+  if (goT > 1 && (hit("start") || hit("a"))) { clearActionButtons(); mode = "title"; titleT = 0; cue("TITLE"); }
+}
+function drawDefeatRecovery() {
+  const saved = readSavedJourney(), columns = Math.floor((W - 24) / 6), choice = goIdx < 0 ? saved.ok ? 0 : 1 : goIdx, ready = goT > 1;
+  const fit = (value, limit = columns) => { const s = String(value).toUpperCase(); return s.length > limit ? s.slice(0, Math.max(0, limit - 3)) + "..." : s; };
+  g.fillStyle = "#080c20"; g.fillRect(0, 0, W, H); g.fillStyle = "#101a32"; g.fillRect(0, 0, W, 40); g.fillRect(0, 176, W, H - 176);
+  g.fillStyle = "#4d6c8a"; g.fillRect(0, 39, W, 1); g.fillRect(0, 175, W, 1);
+  const heading = "THE HEART GOES DARK"; text(heading, Math.floor((W - tw(heading)) / 2), 16, "#f87878");
+  const status = saved.ok ? "SAVED JOURNEY AVAILABLE." : saved.kind === "missing" ? "NO SAVED JOURNEY ON THIS BROWSER." : saved.kind === "invalid" ? "SAVED JOURNEY NEEDS ATTENTION." : "SAVED JOURNEY CANNOT BE READ.";
+  text(status, 12, 52, saved.ok ? "#a8e0a0" : "#fff070");
+  if (saved.ok) {
+    const lead = saved.value.party[0], level = " LV " + (lead.lv > 999 ? "999+" : lead.lv);
+    text("SAVED: " + fit(lead.name, columns - 7 - level.length) + level, 12, 70);
+  } else text("TITLE HAS NEW GAME AND OPTIONS.", 12, 70, "#a0a8c0");
+  ["CONTINUE SAVED JOURNEY", "RETURN TO TITLE"].forEach((label, i) => {
+    const y = 126 + i * 24;
+    if (i === choice) { g.fillStyle = ready ? "#26344c" : "#121d30"; g.fillRect(12, y - 6, W - 24, 20); if (ready) cursor(20, y); }
+    text(label, 36, y, !ready || i === 0 && !saved.ok ? "#808090" : "#ffffff");
+  });
+  if (!ready) text("A MOMENT...", 12, 188, "#a0a8c0");
+  else {
+    text(choice === 0 ? saved.ok ? "LOADS SAVED HP/MP, ITEMS AND TIME." : "CHOOSE CONTINUE FOR DETAILS." : "RETURN TO THE TITLE MENU.", 12, 184, "#a0a8c0");
+    text(choice === 0 && saved.ok ? "STARTS ON FOOT AT THE INN." : "NEW GAME AND OPTIONS ARE THERE.", 12, 196, "#a0a8c0");
+    const confirm = titlePrompt("confirm", "Z/SPACE").replace(/^PRESS /, ""), back = titlePrompt("cancel", "X/ESC").replace(/^PRESS /, ""), start = titlePrompt("menu", "ENTER").replace(/^PRESS /, "");
+    text(confirm + ": OK", 12, 212, "#fff070"); const title = back + "/" + start + ": TITLE"; text(title, W - 12 - tw(title), 212, "#a0d8f8");
+  }
 }
 function drawGameOver() {
+  if ((D.realm_key || "prism") === "prism") return drawDefeatRecovery();
   g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
   const s = "THE HEART GOES DARK", a = clamp(goT, 0, 1);
   g.globalAlpha = a; text(s, (W - tw(s)) / 2, 96, "#f87878", "#300010"); text("PRESS START", (W - tw("PRESS START")) / 2, 130, "#c0c0d0"); g.globalAlpha = 1;
 }
 
 /* ---------- loop ---------- */
-let last = performance.now(), SPEED = 1;                 /* tests may run the clock faster (PRISM_DEMO.speed) */
 function frame(now) {
   requestAnimationFrame(frame);
-  if (PAD) PAD.poll(); menuRepeat(now);
-  const dt = Math.min(0.05, (now - last) / 1000) * SPEED; last = now;
-  if (fade > 0) {
-    fade -= dt * 3;
-    if (fade <= 0.5 && fadeCb) { const cb = fadeCb; fadeCb = null; cb(); }
-    if (fade < 0) fade = 0;
-  } else if (mode === "title") titleTick(dt);
-  else if (mode === "name" && nameEntry) nameTick(dt);
-  else if (mode === "ending" && ending) endingTick(dt);
-  else if (mode === "field") fieldTick(dt);
-  else if (mode === "menu") menuTick();
-  else if (mode === "shop") shopTick();
-  else if (mode === "fish" && fishing) fishTick(dt);
-  else if (mode === "battle") battleTick(dt);
-  else if (mode === "gameover") { goT += dt; if (goT > 1 && (hit("start") || hit("a"))) { mode = "title"; titleT = 0; cue("TITLE"); } }
+  if (PAD) PAD.poll();
+  const paused = settingsFramePaused = gameplayInputBlocked(); settingsTransition = false;
+  const dt = paused ? 0 : Math.min(0.05, (now - last) / 1000) * SPEED; last = now;
+  if (paused) LOGICAL.forEach(hit);
+  else {
+    menuRepeat(now);
+    if (fade > 0) {
+      fade -= dt * 3;
+      if (fade <= 0.5 && fadeCb) { const cb = fadeCb; fadeCb = null; cb(); }
+      if (fade < 0) fade = 0;
+    } else if (mode === "title") titleTick(dt);
+    else if (mode === "name" && nameEntry) nameTick(dt);
+    else if (mode === "ending" && ending) endingTick(dt);
+    else if (mode === "field") fieldTick(dt);
+    else if (mode === "menu") menuTick();
+    else if (mode === "shop") shopTick();
+    else if (mode === "fish" && fishing) fishTick(dt);
+    else if (mode === "battle") battleTick(dt);
+    else if (mode === "gameover") gameOverTick(dt);
+  }
   for (const k in pressed) if (fade > 0) pressed[k] = false;
   for (const k of ["up", "down", "left", "right"]) pressed[k] = false;   /* a direction tap is for this frame only, never a stale menu move */
   for (const k of ["a", "b", "start"]) if (pressed[k] && now - (pressedAt[k] || 0) > 150) pressed[k] = false;   /* buttons buffer 150 ms (a press mid-step still lands), never longer */
@@ -1902,7 +3134,7 @@ async function boot() {
 }
 
 window.addEventListener("keydown", e => {
-  if (!PANEL || PANEL.isOpen()) return;
+  if (!PANEL || gameplayInputBlocked()) return;
   if (e.code === "F1" || e.code === "F10" || (e.code === "Escape" && mode === "title")) { e.preventDefault(); openSettings(); }
 });
 

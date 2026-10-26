@@ -43,7 +43,7 @@ with sync_playwright() as p:
         ev("PRISM_DEMO.hold('up',false)"); W(700)
     new_game(); bot.clear()
     names = [d["name"] for d in D["dungeons"]]
-    check("four quest dungeons in the build", names == ["Cinder Forge", "Windcut Aerie", "Sunwell Sanctum", "The Shattered Heart"], names)
+    check("four original quest indices followed by optional Folly", names == ["Cinder Forge", "Windcut Aerie", "Sunwell Sanctum", "The Shattered Heart", "Gearwright's Folly"] and D["dungeons"][4].get("optional") is True, names)
     check("the final boss is scaled for three shards, in the open", D["dungeons"][3]["boss_data"].get("demo_scale", {}).get("why", "").startswith("three of six"))
     walk_onto("CrystalShrine")
     check("Crystal Shrine sealed with 0 shards", st()["map"] == "world" and "SEALED" in (st()["dialog"] or ""), st()["dialog"])
