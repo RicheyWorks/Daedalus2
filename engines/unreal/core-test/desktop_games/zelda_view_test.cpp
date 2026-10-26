@@ -64,6 +64,17 @@ void View() {
         if(C.Kind==Shape::Text && C.A.Y==78 && C.Label.rfind("HINT",0)==0) Hint=N;
     }
     Check(Plate<Hint && Hint<F.Commands.size(),"the hint sits on a dark plate over the trees");
+    const auto& Hero=G.GetPlayer();
+    std::size_t Sheath=F.Commands.size(),Blade=F.Commands.size();
+    for(std::size_t N=0;N<F.Commands.size();++N) {
+        const auto& C=F.Commands[N];
+        if(C.Kind!=Shape::Rectangle) continue;
+        if(C.A.X==Hero.X-7 && C.A.Y==Hero.Y-3 && C.B.X==14 && C.B.Y==10
+            && C.Tint.R==24 && C.Tint.G==28 && C.Tint.B==40) Sheath=N;
+        if(C.A.X==Hero.X-6 && C.A.Y==Hero.Y-2 && C.B.X==12 && C.B.Y==8
+            && C.Tint.R==180 && C.Tint.G==180 && C.Tint.B==200) Blade=N;
+    }
+    Check(Sheath<Blade && Blade<F.Commands.size(),"the sheathed sword keeps a dark edge on the road");
     std::size_t Brim=F.Commands.size(),Cap=F.Commands.size();
     for(std::size_t N=0;N<F.Commands.size();++N) {
         const auto& C=F.Commands[N];

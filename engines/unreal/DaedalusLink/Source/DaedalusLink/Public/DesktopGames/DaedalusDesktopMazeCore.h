@@ -953,8 +953,11 @@ private:
             else if(P.Face==Facing::Up) { F.AddLine(P.X,P.Y-18,P.X,P.Y-38,Steel,4); F.AddTriangle({P.X-4,P.Y-38},{P.X,P.Y-45},{P.X+4,P.Y-38},Gold); }
             else { F.AddLine(P.X,P.Y+12,P.X,P.Y+32,Steel,4); F.AddTriangle({P.X-4,P.Y+32},{P.X,P.Y+40},{P.X+4,P.Y+32},Gold); }
         } else {
+            const bool Side=P.Face==Facing::Right || P.Face==Facing::Left;
             const double X=P.Face==Facing::Right ? P.X-12 : P.Face==Facing::Left ? P.X+4 : P.X-6;
-            F.AddRect(X,P.Y-2,P.Face==Facing::Right || P.Face==Facing::Left ? 8 : 12,P.Face==Facing::Right || P.Face==Facing::Left ? 14 : 8,{180,180,200,255});
+            const double W=Side?8:12, H=Side?14:8;
+            F.AddRect(X-1,P.Y-3,W+2,H+2,{24,28,40,255});
+            F.AddRect(X,P.Y-2,W,H,{180,180,200,255});
         }
         if(P.Invincible>0 && (P.Invincible/4)%2==0) F.AddCircle(P.X,P.Y,18,{255,255,255,90});
     }
