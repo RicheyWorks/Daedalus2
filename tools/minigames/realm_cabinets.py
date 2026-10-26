@@ -10,6 +10,8 @@ Output: data/minigames/realm-cabinets.json   (data only; realm builders spawn fr
 
 Placements are local offsets (metres, Unreal axes: X forward, Y right, Z up) from
 the realm's named anchor marker, which the realm builder resolves in its own map.
+A realm may set `options: {game: n}`; n is validated against the catalog's
+option_count and the host applies it with SetGameOption(n) after StartGame.
 Each cabinet carries a stable StartGame seed (crc32 of "realm:game"), so a cabinet
 replays the same run wherever it is rebuilt. Stdlib only; no Unreal calls.
 """
@@ -99,6 +101,17 @@ def build(catalog, spec):
         if not (0.5 <= spacing <= 20):
             raise SpecError(f"realm '{rid}' spacing_m must be 0.5..20")
         places = offsets(layout, len(games), spacing, int(r.get("columns", defaults.get("columns", 4))), r.get("radius_m"))
+        options = r.get("options", {})
+        if not isinstance(options, dict):
+            raise SpecError(f"realm '{rid}' options must map game id -> option number")
+        for gid, opt in options.items():
+            if gid not in games:
+                raise SpecError(f"realm '{rid}' sets an option for '{gid}', which it does not place")
+            if gid in java:
+                raise SpecError(f"realm '{rid}' sets an option for Java cabinet '{gid}'; Java cabinets have no options")
+            count = desktop[gid].get("option_count", 0)
+            if not isinstance(opt, int) or isinstance(opt, bool) or not (0 <= opt < max(count, 1)):
+                raise SpecError(f"realm '{rid}' option {opt!r} for '{gid}' is out of range (0..{max(count, 1) - 1})")
         cabinets = []
         for gid, (x, y, yaw) in zip(games, places):
             entry = java.get(gid) if gid in java else desktop[gid]
@@ -108,6 +121,7 @@ def build(catalog, spec):
                 cab["game_enum"] = entry["game_enum"]
                 cab["requires"] = entry["requires"]
             else:
+                cab["option"] = options.get(gid, 0)
                 cab["start"] = f'StartGame("{gid}", {cab["seed"]})'
             cabinets.append(cab)
         realms.append({"realm": rid, "anchor": r.get("anchor", defaults.get("anchor", "arcade_plaza")),

@@ -9,8 +9,8 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import realm_cabinets as rc  # noqa: E402
 
 CATALOG = {
-    "games": [{"id": g, "title": g.title(), "host": "ADaedalusDesktopArcade"} for g in
-              ("pong", "minesweeper", "star_shooter", "sega_shooter", "zelda")],
+    "games": [{"id": g, "title": g.title(), "host": "ADaedalusDesktopArcade", "option_count": n} for g, n in
+              (("pong", 4), ("minesweeper", 3), ("star_shooter", 3), ("sega_shooter", 2), ("zelda", 2))],
     "java_cabinets": [{"id": "sudoku", "title": "SudokuPro", "host": "ADaedalusJavaArcade",
                        "game_enum": "EDaedalusJavaGame::Sudoku", "requires": "java"}],
 }
@@ -69,6 +69,36 @@ class Errors(unittest.TestCase):
             rc.build(CATALOG, spec(layout="spiral"))
         with self.assertRaises(rc.SpecError):
             rc.build(CATALOG, spec(spacing_m=0.1))
+
+
+class Options(unittest.TestCase):
+    def test_default_option_is_zero(self):
+        cabs = rc.build(CATALOG, spec())["realms"][0]["cabinets"]
+        self.assertTrue(all(c["option"] == 0 for c in cabs if c["host"] == "ADaedalusDesktopArcade"))
+        self.assertTrue(all("option" not in c for c in cabs if c["host"] == "ADaedalusJavaArcade"))
+
+    def test_option_applied(self):
+        cabs = rc.build(CATALOG, spec(options={"zelda": 1, "pong": 3}))["realms"][0]["cabinets"]
+        got = {c["game"]: c["option"] for c in cabs if "option" in c}
+        self.assertEqual((got["zelda"], got["pong"], got["minesweeper"]), (1, 3, 0))
+
+    def test_option_out_of_range(self):
+        for bad in (2, -1, 1.0, True, "1"):
+            with self.assertRaises(rc.SpecError, msg=repr(bad)):
+                rc.build(CATALOG, spec(options={"zelda": bad}))
+
+    def test_option_for_unplaced_or_java(self):
+        with self.assertRaises(rc.SpecError):
+            rc.build(CATALOG, spec(include=["pong"], options={"zelda": 1}))
+        with self.assertRaises(rc.SpecError):
+            rc.build(CATALOG, spec(options={"sudoku": 0}))
+        with self.assertRaises(rc.SpecError):
+            rc.build(CATALOG, spec(options=[1]))
+
+    def test_repo_catalog_has_option_counts(self):
+        catalog = json.loads(rc.CATALOG.read_text(encoding="utf-8"))
+        for g in catalog["games"]:
+            self.assertGreaterEqual(g["option_count"], 2, g["id"])
 
 
 class Layouts(unittest.TestCase):
