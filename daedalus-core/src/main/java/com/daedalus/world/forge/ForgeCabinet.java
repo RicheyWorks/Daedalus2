@@ -23,6 +23,14 @@ import java.util.function.Predicate;
  */
 public final class ForgeCabinet {
 
+    /** Keith numbers up to 200000, built once on first use of the Keith Kindling slot. */
+    private static final class KeithList {
+        static final List<Long> KEITH = Collections.unmodifiableList(KeithKindling.keithUpTo(200_000));
+
+        private KeithList() {
+        }
+    }
+
     /** Quest id for the Hephaestus Island forge cabinet hook. */
     public static final String QUEST_ID = "q_forge_cabinet";
     /** Points for a correct answer before streak bonus. */
@@ -406,7 +414,7 @@ public final class ForgeCabinet {
         g.add(game("keith", "Keith Kindling", KeithKindling.QUEST_ID, r -> {
             long n = 10 + r.nextInt(100_000);
             if (r.nextBoolean()) {
-                List<Long> k = KeithKindling.keithUpTo(200_000);
+                List<Long> k = KeithList.KEITH;
                 n = k.get(r.nextInt(k.size()));
             }
             long fn = n;
