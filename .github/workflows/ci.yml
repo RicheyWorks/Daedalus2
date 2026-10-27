@@ -176,9 +176,12 @@ jobs:
           echo "LC_ALL=en_US.UTF-8" >> "$GITHUB_ENV"
           echo "TZ=UTC"             >> "$GITHUB_ENV"
       - name: Install server dependencies (tests run in Build & test)
-        run: mvn -B -ntp -T 1C install -pl daedalus-plugin-runtime,daedalus-wallet -am -DskipTests
+        # Build & test already runs tests, SpotBugs, Checkstyle and JaCoCo on
+        # these modules; here they are only dependencies (no test-jars used).
+        run: mvn -B -ntp -T 1C install -pl daedalus-plugin-runtime,daedalus-wallet -am -Dmaven.test.skip=true -Dspotbugs.skip=true -Dcheckstyle.skip=true -Djacoco.skip=true
       - name: Server tests and coverage check
-        run: mvn -B -ntp verify -pl daedalus-server
+        # Server SpotBugs/Checkstyle already run in Build & test's reactor.
+        run: mvn -B -ntp verify -pl daedalus-server -Dspotbugs.skip=true -Dcheckstyle.skip=true
       - name: Upload server coverage report
         uses: actions/upload-artifact@v7
         with:
