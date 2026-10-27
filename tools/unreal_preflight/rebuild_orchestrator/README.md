@@ -26,3 +26,7 @@ python tools/unreal_preflight/rebuild_orchestrator/rebuild_orchestrator.py --rep
 It never kills, closes or launches a process, never touches locks or pins, and the relaunch stays manual (with the
 small map arg; never the package-recovery auto-decline or unattended flags, see preflight P11). On UBT failure the report carries the
 runbook's restore hint. Exit 0 ok/planned/awaiting close, 1 refused or failed, 2 bad input.
+
+## UBT command
+
+`ubt-command.json` is the exact command rebuild 4 ran (Oct 26 2026; verified from its UBT logs and rebuild script): `Build.bat DaedalusRealmEditor Win64 Development -Project=C:\Unreal\DaedalusRealm\DaedalusRealm.uproject -WaitMutex` under `C:\Program Files\Epic Games\UE_5.8\Engine\Build\BatchFiles`. Pass it with `--ubt-command-file tools/unreal_preflight/rebuild_orchestrator/ubt-command.json`. The runbook keeps the canonical copy.
