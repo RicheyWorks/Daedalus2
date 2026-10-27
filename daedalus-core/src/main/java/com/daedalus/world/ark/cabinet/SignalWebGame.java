@@ -109,6 +109,19 @@ public final class SignalWebGame implements ArkCabinetGame {
             if (p >= 0) {
                 return Integer.toString(p + 1);
             }
+            return legalMoves().get(0);
+        }
+        for (int who : new int[] {mover, 3 - mover}) {
+            for (int i = 0; i < cells.length; i++) {
+                if (cells[i] == 0) {
+                    cells[i] = who;
+                    boolean chain = SignalWeb.winner(n, cells) == who;
+                    cells[i] = 0;
+                    if (chain) {
+                        return Integer.toString(i + 1);
+                    }
+                }
+            }
         }
         return legalMoves().get(0);
     }

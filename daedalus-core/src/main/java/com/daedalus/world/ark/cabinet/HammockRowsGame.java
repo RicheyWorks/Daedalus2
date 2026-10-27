@@ -115,6 +115,13 @@ public final class HammockRowsGame implements ArkCabinetGame {
         if (cells.length <= HammockRows.MAX_SOLVE) {
             return Integer.toString(rack.bestColumn(cells, mover) + 1);
         }
+        for (int who : new int[] {mover, 3 - mover}) {
+            for (int c = 0; c < w; c++) {
+                if (rack.height(cells, c) >= 0 && rack.winner(rack.drop(cells, c, who)) == who) {
+                    return Integer.toString(c + 1);
+                }
+            }
+        }
         return legalMoves().get(0);
     }
 }

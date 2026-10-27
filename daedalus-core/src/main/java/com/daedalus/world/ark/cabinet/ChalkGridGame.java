@@ -112,6 +112,23 @@ public final class ChalkGridGame implements ArkCabinetGame {
         if (cells.length <= ChalkGrid.MAX_SOLVE) {
             return Integer.toString(grid.bestSquare(cells, mover) + 1);
         }
-        return legalMoves().get(0);
+        return Integer.toString(onePly() + 1);
+    }
+
+    /** Big grids: take a square that wins now, else block the other watch's winning square, else the first free. */
+    private int onePly() {
+        for (int who : new int[] {mover, 3 - mover}) {
+            for (int i = 0; i < cells.length; i++) {
+                if (cells[i] == 0) {
+                    cells[i] = who;
+                    boolean line = grid.lineOwner(cells) == who;
+                    cells[i] = 0;
+                    if (line) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return CabinetMoves.number(legalMoves().get(0)) - 1;
     }
 }

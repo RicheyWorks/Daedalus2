@@ -14,9 +14,25 @@ Source: `daedalus-core/src/main/java/com/daedalus/world/ark/cabinet/`. Source on
 | `signal` | The Signal Web | G413 `SignalWeb` | Hex on a 3x3 web |
 | `net` | The Net Mending | G419 `NetMending` | Dots and Boxes on a 2x2 net |
 | `cargo` | The Cargo Shuffle | G422 `CargoShuffle` | solo Rush Hour style 6x6 hold, 3 moves |
+| `blocks` | The Hold Blocks | G426 `HoldBlocks` | solo Klotski 4x4, moves like `BD` (block, R/L/D/U) |
+| `ferry` | The Ferry Watch | G412 `FerryWatch` | solo, 3 crew + 3 raiders, 2-seat ferry, loads like `1,1` |
+| `cube` | The Signal Cube | G435 `SignalCube` | solo pocket cube from a fixed scramble, turns like `R`, `U2`, `F'` |
+| `masts` | The Four Masts | G432 `FourMasts` | solo Hanoi, 4 sails on 4 masts, moves like `1,4` |
+| `crawler` | The Deck Crawler | G409 `DeckCrawler` | Langton's crab on a 21x21 deck, 300 steps; `1`/`10`/`100`/`back` |
 
 The cabinet plays seat 2 itself using each piece's own exact solver, so these default boards are
 kept small enough for perfect play.
+
+On bigger Chalk Grid, Hammock Rows and Signal Web boards (past each solver's cap) the cabinet uses a
+one-ply lookahead: it takes a move that wins at once, else blocks the other side's immediate win,
+else plays the first free move. It does not plan further ahead.
+
+Solo games (Cargo Shuffle, Hold Blocks, Ferry Watch, Signal Cube, Four Masts) count solving as a win for
+player 1. Their hints come from the piece's own shortest plan or solve, except Ferry Watch and Four
+Masts: those pieces only plan from the start, so the adapter runs a small breadth-first search from the
+current position using the piece's own safety rule (Ferry Watch) or the stacking rule (Four Masts, capped
+at 65536 states). The merged pieces are unchanged. The Deck Crawler is a watch-the-pattern toy: the
+show ends at its step budget or if the crab reaches the deck edge.
 
 ## How to play
 
