@@ -60,6 +60,7 @@ class NetMendingTest {
     void fewEarnsNoCredit() {
         NetMending n = trap();
         assertEquals(Outcome.CANT_KNOT, n.assign("a0", 1, 1));
+        assertEquals(String.format(KeeperNetLines.CANT_KNOT, 1, 1), n.talk("t0"));
         n.assign("a1", 0, 0);
         assertEquals(Outcome.FEW, n.mend("m1"));
         assertEquals(String.format(KeeperNetLines.FEW, 1, 2), n.talk("t1"));

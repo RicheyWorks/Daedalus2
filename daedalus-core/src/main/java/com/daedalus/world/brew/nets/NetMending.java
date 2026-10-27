@@ -31,6 +31,7 @@ public final class NetMending {
             new QuestProgress.Step("mend", "well", 1),
             new QuestProgress.Step("talk", SeedSongSpring.KEEPER, 1)));
     private Outcome last;
+    private int[] refused;
 
     /** @param knows knows[mender][net] is true when the mender knows that net's knot */
     public NetMending(boolean[][] knows) {
@@ -112,6 +113,11 @@ public final class NetMending {
         return (int) Arrays.stream(netOf).filter(x -> x != NONE).count();
     }
 
+    /** The mender and net from the last refused assignment, or null. */
+    public int[] refused() {
+        return refused == null ? null : refused.clone();
+    }
+
     public Outcome last() {
         return last;
     }
@@ -138,6 +144,8 @@ public final class NetMending {
         }
         if (net != NONE) {
             if (!knows[mender][net]) {
+                last = Outcome.CANT_KNOT;
+                refused = new int[] {mender, net};
                 return Outcome.CANT_KNOT;
             }
             for (int m = 0; m < menders(); m++) {

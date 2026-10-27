@@ -19,6 +19,10 @@ public final class KeeperNetLines {
         if (n.quest().currentStep() == null) {
             return DONE;
         }
+        if (n.last() == NetMending.Outcome.CANT_KNOT) {
+            int[] r = n.refused();
+            return String.format(CANT_KNOT, r[0], r[1]);
+        }
         if (n.last() == NetMending.Outcome.FEW) {
             return String.format(FEW, n.assigned(), n.most());
         }
