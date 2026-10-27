@@ -1,0 +1,42 @@
+name: Offline check-in sessions
+
+on:
+  pull_request:
+    paths:
+      - connectors/claude-asset-pipeline/asset_pipeline/checkin_sessions.py
+      - connectors/claude-asset-pipeline/asset_pipeline/retained_checkins.py
+      - connectors/claude-asset-pipeline/asset_pipeline/team_checkins.py
+      - connectors/claude-asset-pipeline/asset_pipeline/__init__.py
+      - connectors/claude-asset-pipeline/harness/checkin_sessions_test.py
+      - .github/workflows/checkin-sessions.yml
+  push:
+    branches: [main]
+    paths:
+      - connectors/claude-asset-pipeline/asset_pipeline/checkin_sessions.py
+      - connectors/claude-asset-pipeline/asset_pipeline/retained_checkins.py
+      - connectors/claude-asset-pipeline/asset_pipeline/team_checkins.py
+      - connectors/claude-asset-pipeline/asset_pipeline/__init__.py
+      - connectors/claude-asset-pipeline/harness/checkin_sessions_test.py
+      - .github/workflows/checkin-sessions.yml
+
+permissions:
+  contents: read
+
+jobs:
+  offline-sessions:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Synthetic multi-assignment generations and recovery contracts
+        working-directory: connectors/claude-asset-pipeline
+        run: python -B harness/checkin_sessions_test.py
