@@ -25,6 +25,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_oddsreaper",
+      "daedalus_spot": "Oddsreaper island, the puzzle row",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"beacon_sweep\", Seed)",
       "portable_tests": [
@@ -61,6 +63,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the court row",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"twinwake\", Seed)",
       "portable_tests": [
@@ -97,6 +101,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "labyrinth",
+      "daedalus_spot": "Labyrinth, the lantern passage",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"dungeon\", Seed)",
       "portable_tests": [
@@ -132,6 +138,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the rock yard",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"driftstone\", Seed)",
       "portable_tests": [
@@ -167,6 +175,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the pitch",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"football\", Seed)",
       "portable_tests": [
@@ -198,6 +208,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "gallery_city",
+      "daedalus_spot": "Gallery City, the chase court",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"glowtrail\", Seed)",
       "portable_tests": [
@@ -234,6 +246,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the rift line",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"riftwing\", Seed)",
       "portable_tests": [
@@ -271,6 +285,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the terrace grid",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"emberstep\", Seed)",
       "portable_tests": [
@@ -305,6 +321,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "orrery_reach",
+      "daedalus_spot": "Orrery Reach, the star lane",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"star_shooter\", Seed)",
       "portable_tests": [
@@ -336,6 +354,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the courtyard",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"dodge_ball\", Seed)",
       "portable_tests": [
@@ -371,6 +391,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the iron route",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"ironwake\", Seed)",
       "portable_tests": [
@@ -404,6 +426,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "portal_realm",
+      "daedalus_spot": "Portal realm, the wild path",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"lanternwild\", Seed)",
       "portable_tests": [
@@ -437,6 +461,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "gallery_city",
+      "daedalus_spot": "Gallery City, the lamp corner",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"gloam_latch\", Seed)",
       "portable_tests": [
@@ -467,6 +493,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "orrery_reach",
+      "daedalus_spot": "Orrery Reach, the reed bench",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"reedbeat\", Seed)",
       "portable_tests": [
@@ -497,6 +525,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "bricks",
+      "daedalus_spot": "Bricks, the stacking yard",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"cairnwell\", Seed)",
       "portable_tests": [

@@ -68,6 +68,28 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `reedbeat` | normal |
 | `cairnwell` | normal |
 
+## Daedalus spots
+
+One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm already places that cabinet.
+
+| id | realm | spot |
+|---|---|---|
+| `beacon_sweep` | `island_oddsreaper` | Oddsreaper island, the puzzle row |
+| `twinwake` | `island_prometheus` | Prometheus island, the court row |
+| `dungeon` | `labyrinth` | Labyrinth, the lantern passage |
+| `driftstone` | `island_hephaestus` | Hephaestus island, the rock yard |
+| `football` | `island_prometheus` | Prometheus island, the pitch |
+| `glowtrail` | `gallery_city` | Gallery City, the chase court |
+| `riftwing` | `prismheart_realm` | Prismheart, the rift line |
+| `emberstep` | `island_hephaestus` | Hephaestus island, the terrace grid |
+| `star_shooter` | `orrery_reach` | Orrery Reach, the star lane |
+| `dodge_ball` | `island_prometheus` | Prometheus island, the courtyard |
+| `ironwake` | `island_hephaestus` | Hephaestus island, the iron route |
+| `lanternwild` | `portal_realm` | Portal realm, the wild path |
+| `gloam_latch` | `gallery_city` | Gallery City, the lamp corner |
+| `reedbeat` | `orrery_reach` | Orrery Reach, the reed bench |
+| `cairnwell` | `bricks` | Bricks, the stacking yard |
+
 ## Capabilities
 
 Read from each core's overrides, plus behavior proven by a portable test that declares
