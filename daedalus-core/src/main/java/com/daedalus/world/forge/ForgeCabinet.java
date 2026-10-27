@@ -354,6 +354,22 @@ public final class ForgeCabinet {
                 });
         }, AchillesRivets.forgemasterLine(AchillesRivets.Grade.TURNED),
             AchillesRivets.forgemasterLine(AchillesRivets.Grade.SLIPPED)));
+        g.add(game("weird", "Weird Hoards", WeirdHoards.QUEST_ID, r -> {
+            long n = 1 + r.nextInt(15_000);
+            if (r.nextBoolean()) {
+                List<Long> w = WeirdHoards.weirdUpTo(15_000);
+                n = w.get(r.nextInt(w.size()));
+            }
+            long fn = n;
+            return new Puzzle("weird", "Is hoard " + n + " abundant with no exact handful? (weird/tame)",
+                WeirdHoards.isWeird(n) ? "weird" : "tame", a -> {
+                    if (!"weird".equals(a) && !"tame".equals(a)) {
+                        return false;
+                    }
+                    return WeirdHoards.grade(fn, "weird".equals(a)) == WeirdHoards.Grade.TURNED;
+                });
+        }, WeirdHoards.forgemasterLine(WeirdHoards.Grade.TURNED),
+            WeirdHoards.forgemasterLine(WeirdHoards.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
