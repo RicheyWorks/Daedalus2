@@ -51,7 +51,16 @@ public final class ShardringBalance implements BalanceGame {
 
     @Override
     public SessionOutcome play(String difficulty, OddsRng rng) {
-        int[] cfg = CONFIG[NAMES.indexOf(difficulty)];
+        return playConfig(CONFIG[NAMES.indexOf(difficulty)], rng);
+    }
+
+    /** Shipped {facets, hues, shards} for a difficulty (a copy). */
+    static int[] shipped(String difficulty) {
+        return CONFIG[NAMES.indexOf(difficulty)].clone();
+    }
+
+    /** Plays one session with explicit {facets, hues, shards}; used by {@link BalanceTuner}. */
+    SessionOutcome playConfig(int[] cfg, OddsRng rng) {
         int n = cfg[0];
         int hues = cfg[1];
         int pouch = cfg[2];

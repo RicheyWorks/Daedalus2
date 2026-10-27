@@ -62,7 +62,19 @@ public final class CairnwellBalance implements BalanceGame {
         if (!supports(difficulty)) {
             throw new IllegalArgumentException("Cairnwell ships no '" + difficulty + "' well");
         }
-        int[] cfg = CONFIG["easy".equals(difficulty) ? 0 : 1];
+        return playConfig(CONFIG["easy".equals(difficulty) ? 0 : 1], rng);
+    }
+
+    /** Shipped {cols, rows, dropEvery} for a difficulty (a copy), or null if the source ships no such well. */
+    static int[] shipped(String difficulty) {
+        if ("easy".equals(difficulty)) {
+            return CONFIG[0].clone();
+        }
+        return "normal".equals(difficulty) ? CONFIG[1].clone() : null;
+    }
+
+    /** Plays one session with explicit {cols, rows, dropEvery}; used by {@link BalanceTuner}. */
+    SessionOutcome playConfig(int[] cfg, OddsRng rng) {
         int cols = cfg[0];
         int rows = cfg[1];
         int dropEvery = cfg[2];
