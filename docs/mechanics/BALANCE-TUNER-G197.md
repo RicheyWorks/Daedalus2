@@ -1,4 +1,6 @@
-# Minigame Balance Tuner (G195)
+# Minigame Balance Tuner (G197)
+
+Drafted as G195, which Hephaestus claimed first (Anvil Rota); renumbered. The report seed stays 195.
 
 Package: `daedalus-core/src/main/java/com/daedalus/world/odds/balance/` (source only, offline, reporting only).
 Follows the G192 balance simulator (`BALANCE-SIM-G192.md`), which flagged every Shardring and Cairnwell mode.
