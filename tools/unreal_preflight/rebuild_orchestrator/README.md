@@ -7,7 +7,8 @@ Runs the batched-rebuild runbook (BOARD `GUARDS-AND-REBUILD-RUNBOOK.md`, section
 | 1 | `rebuild_delta` from `--base` to `--target` (report only) |
 | 2 | `preflight.py` (all rules, incl. P12) in the `--repo` worktree |
 | 3 | gates: `unreal` lease held by `--owner` (GET `/locks`), editor 0 dirty and not in Play (read-only bridge probe, no global `b`), producer stopped at a saved chunk (`producer_status`), free RAM > 3 GB |
-| 4 | copy-backup of the live plugin `Binaries/` + `.uplugin` to `--backup-root/<stamp>` with `backup-manifest.json` (never deletes, refuses an existing dir) |
+| 4 | copy-backup of the whole live plugin (as rebuild 4's script did) to `--backup-root/<stamp>` with `backup-manifest.json` (never deletes, refuses an existing dir) |
+| 4b | phase B, before UBT: source sync. Mirrors rebuild 4's script (`Copy-Item <worktree>\engines\unreal\DaedalusLink\* <live plugin> -Recurse -Force`): every file under the worktree's `engines/unreal/DaedalusLink` is copied over the live plugin, no exclusions (the script had none; a clean worktree holds no Binaries/Intermediate). Refuses unless the worktree is clean and `HEAD` equals `--target` (pass the sha). Never deletes: live-only files are listed in `live_only_not_deleted`. `source-sync-manifest.json` has per file path, action (add/overwrite/unchanged), source sha256, live sha256 before and after; any after != source stops before UBT. |
 | 5 | UBT: the exact command from `--ubt-command-file` (JSON list). The runbook does not spell the command out, so it is never guessed: copy it from the latest recorded rebuild. |
 | 6 | `build_receipt.py write` then `verify` |
 | 7 | `rebuild-orchestration-<phase>.json` + `.md` in `--run-dir` |

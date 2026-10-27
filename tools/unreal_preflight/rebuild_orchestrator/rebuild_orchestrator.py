@@ -3,7 +3,7 @@
 """Rebuild-runbook orchestrator (BOARD GUARDS-AND-REBUILD-RUNBOOK.md section 2). Dry-run by default.
 
 Order: (1) rebuild_delta since the built base (report only), (2) preflight on the target worktree, (3) gates,
-(4) plugin backup + manifest, (5) UBT, (6) build_receipt write + verify, (7) report JSON/MD.
+(4) plugin backup + manifest, (4b) source sync from the worktree, (5) UBT, (6) build_receipt write + verify, (7) report JSON/MD.
 
   dry-run (default)   : plans every step, runs NOTHING (no git, no bridge, no copy, no UBT).
   --execute           : phase A: steps 1-4 for real, then prints the manual editor close steps and stops.
@@ -111,8 +111,6 @@ class Env:
         rows = []
         for f in sorted(p for p in src.rglob("*") if p.is_file()):
             rel = f.relative_to(src).as_posix()
-            if not (rel.startswith("Binaries/") or rel.endswith(".uplugin")):
-                continue
             t = dest / rel
             t.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(f, t)
@@ -120,6 +118,59 @@ class Env:
         dest.mkdir(parents=True, exist_ok=True)
         (dest / "backup-manifest.json").write_text(json.dumps({"source": str(src), "files": rows}, indent=2), encoding="utf-8")
         return rows
+
+
+    # --- source sync (rebuild-4 script line 49: Copy-Item <worktree>\engines\unreal\DaedalusLink\* <live> -Recurse -Force)
+    def list_files(self, root):
+        root = Path(root)
+        return {p.relative_to(root).as_posix(): p for p in root.rglob("*") if p.is_file()}
+
+    def sha256(self, path):
+        return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+    def copy_file(self, src, dest):
+        Path(dest).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dest)
+
+
+def worktree_check(a, env):
+    """(ok, detail): the source worktree must be clean and at --target (script lines 30-32)."""
+    rc1, head = env.run(["git", "-C", a.repo, "rev-parse", "HEAD"])
+    rc2, want = env.run(["git", "-C", a.repo, "rev-parse", a.target + "^{commit}"])
+    rc3, dirty = env.run(["git", "-C", a.repo, "status", "--porcelain"])
+    if rc1 or rc2 or rc3:
+        return False, "git failed in worktree"
+    if head.strip() != want.strip():
+        return False, f"worktree HEAD {head.strip()[:12]} is not target {a.target} ({want.strip()[:12]})"
+    if dirty.strip():
+        return False, "worktree is not clean: " + dirty.strip().splitlines()[0]
+    return True, f"clean at {head.strip()[:12]}"
+
+
+def source_sync(a, env, execute):
+    """Copy every file under <repo>/engines/unreal/DaedalusLink onto the live plugin, overwriting, never deleting.
+    Like the script there are no exclusions; a clean worktree has no Binaries/Intermediate. Returns manifest."""
+    src_root = Path(a.repo) / "engines" / "unreal" / "DaedalusLink"
+    live = Path(a.plugin)
+    src = env.list_files(src_root)
+    live_files = env.list_files(live)
+    rows = []
+    for rel in sorted(src):
+        s_sha = env.sha256(src[rel])
+        before = env.sha256(live_files[rel]) if rel in live_files else None
+        row = {"path": rel, "source_sha256": s_sha, "live_before_sha256": before,
+               "action": "unchanged" if before == s_sha else ("add" if before is None else "overwrite")}
+        if execute and row["action"] != "unchanged":
+            env.copy_file(src[rel], live / rel)
+        row["live_after_sha256"] = env.sha256(live / rel) if execute else None
+        if execute and row["live_after_sha256"] != s_sha:
+            row["action"] += " MISMATCH"
+        rows.append(row)
+    extras = sorted(r for r in live_files if r not in src and not r.startswith(("Binaries/", "Intermediate/")))
+    return {"source_root": str(src_root), "live": str(live), "files": rows,
+            "live_only_not_deleted": extras,
+            "counts": {k: sum(r["action"] == k for r in rows) for k in ("add", "overwrite", "unchanged")},
+            "mismatches": [r["path"] for r in rows if r["action"].endswith("MISMATCH")]}
 
 
 def check_gates(a, env, phase):
@@ -198,6 +249,8 @@ def orchestrate(a, env):
         add(2, "preflight", "planned", cmd=p["preflight"])
         add(3, "gates", "planned", "lease, editor 0 dirty/not Play, producer at saved boundary, RAM")
         add(4, "backup", "planned", str(Path(a.backup_root) / a.stamp))
+        add("4b", "source sync", "planned", f"copy {Path(a.repo) / 'engines' / 'unreal' / 'DaedalusLink'} -> {a.plugin} "
+            "(overwrite, never delete; worktree must be clean at target; manifest source-sync-manifest.json)")
         add(5, "ubt", "planned" if p["ubt"] else "missing --ubt-command-file", cmd=p["ubt"])
         add(6, "build_receipt write + verify", "planned", cmd=[p["receipt_write"], p["receipt_verify"]])
         add(7, "report", "planned")
@@ -239,8 +292,19 @@ def orchestrate(a, env):
     if not all(x["ok"] for x in gates):
         return fail("gate refused", "refused")
     add(4, "backup", "done in phase A")
+    ok, why = worktree_check(a, env)
+    if not ok:
+        add("4b", "source sync", "REFUSED", why)
+        return fail("worktree " + why, "refused")
     if not p["ubt"]:
         return fail("no --ubt-command-file: the UBT command is never guessed", "refused")
+    man = source_sync(a, env, execute=True)
+    (run / "source-sync-manifest.json").write_text(json.dumps(man, indent=2), encoding="utf-8")
+    rep["source_sync"] = {"counts": man["counts"], "live_only_not_deleted": man["live_only_not_deleted"], "mismatches": man["mismatches"]}
+    add("4b", "source sync", "ok" if not man["mismatches"] else "failed",
+        f"{man['counts']}, {len(man['live_only_not_deleted'])} live-only files kept, {why}")
+    if man["mismatches"]:
+        return fail("source sync mismatch")
     rc, out = env.run(p["ubt"], log=run / "ubt.log")
     ok = rc == 0 and "Result: Succeeded" in out
     add(5, "ubt", "ok" if ok else f"exit {rc}", "Result: Succeeded" if ok else out.strip()[-400:], p["ubt"])
