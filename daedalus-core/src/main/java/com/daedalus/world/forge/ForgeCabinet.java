@@ -444,6 +444,23 @@ public final class ForgeCabinet {
                 });
         }, SelfForged.forgemasterLine(SelfForged.Grade.TURNED),
             SelfForged.forgemasterLine(SelfForged.Grade.SLIPPED)));
+        g.add(game("triad", "Triad Alloys", TriadAlloys.QUEST_ID, r -> {
+            long n = 1 + r.nextInt(100_000);
+            if (r.nextBoolean()) {
+                while (!TriadAlloys.isSphenic(n)) {
+                    n++;
+                }
+            }
+            long fn = n;
+            return new Puzzle("triad", "Is alloy " + n + " three distinct prime ores, each once? (triad/mixed)",
+                TriadAlloys.isSphenic(n) ? "triad" : "mixed", a -> {
+                    if (!"triad".equals(a) && !"mixed".equals(a)) {
+                        return false;
+                    }
+                    return TriadAlloys.grade(fn, "triad".equals(a)) == TriadAlloys.Grade.TURNED;
+                });
+        }, TriadAlloys.forgemasterLine(TriadAlloys.Grade.TURNED),
+            TriadAlloys.forgemasterLine(TriadAlloys.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
