@@ -481,6 +481,23 @@ public final class ForgeCabinet {
                     && PoliteStacks.grade(n, Long.parseLong(a)) == PoliteStacks.Grade.TURNED);
         }, PoliteStacks.forgemasterLine(PoliteStacks.Grade.TURNED),
             PoliteStacks.forgemasterLine(PoliteStacks.Grade.SLIPPED)));
+        g.add(game("duffin", "Duffin Dies", DuffinDies.QUEST_ID, r -> {
+            long n = 2 + r.nextInt(50_000);
+            if (r.nextBoolean()) {
+                while (!DuffinDies.isDuffinian(n)) {
+                    n++;
+                }
+            }
+            long fn = n;
+            return new Puzzle("duffin", "Is die " + n + " composite yet coprime to sigma? (duffin/commondie)",
+                DuffinDies.isDuffinian(n) ? "duffin" : "commondie", a -> {
+                    if (!"duffin".equals(a) && !"commondie".equals(a)) {
+                        return false;
+                    }
+                    return DuffinDies.grade(fn, "duffin".equals(a)) == DuffinDies.Grade.TURNED;
+                });
+        }, DuffinDies.forgemasterLine(DuffinDies.Grade.TURNED),
+            DuffinDies.forgemasterLine(DuffinDies.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
