@@ -12,7 +12,7 @@ MI_Mob_Lab_Hornback_Sick variant (G172) are a follow-up on creatures/*_rig.py. Y
   G183 pythagoras 50603  Prop_Field_Furrows (10 x 10 m tileable ploughed patch, SOCKET_TileE/TileN)
 Daedalus hook: every asset is origin bottom-centre, Blender front -Y (place yaw -90); sockets go to <Asset>.sockets.json via build_kit.
 Usage: python backlog_20261026.py --gap G167 --out data/contest/backlog_g167.kit.json"""
-import argparse, os, sys
+import argparse, math, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "kit")); sys.path.insert(0, HERE)
 import kitlib as K
@@ -183,8 +183,61 @@ def g183():
     return [asset(a, "G183", "pythagoras 50603", P, [M(a, 0, "ploughed ridge soil", SOIL, 0.95), M(a, 1, "furrow soil", SOIL_D, 0.95)],
                   [K.socket("TileE", (L, 0, 0)), K.socket("TileN", (0, L, 0))], [K.ucx_box(a, 0, (L, L, 0.17), (0, 0, 0.085))], "10 x 10 m, 1 m furrow pitch, tiles at SOCKET_TileE/TileN")]
 
+def g186():
+    Y = ("G186", "youtube-master 54649")
+    def lantern(lit):
+        a = "Prop_YTM_WatchLantern_" + ("Lit" if lit else "Unlit")
+        P = [K.box("Base", (0.18, 0.18, 0.03), (0, 0, 0.015), 0), K.box("Cap", (0.2, 0.2, 0.04), (0, 0, 0.31), 0), K.cyl("Ring", "x", 0.04, 0.04, 0.01, (0, 0, 0.36), 1, 10)]
+        for x in (-0.08, 0.08):
+            for y in (-0.08, 0.08):
+                P.append(K.box("Post%.2f%.2f" % (x, y), (0.015, 0.015, 0.26), (x, y, 0.16), 0, bevel=False))
+        P.append(K.box("Glass", (0.15, 0.15, 0.24), (0, 0, 0.16), 2, bevel=False))
+        P.append(K.cyl("Candle", "z", 0.025, 0.025, 0.08 if lit else 0.1, (0, 0, 0.07), 3, 8))
+        mats = [M(a, 0, "lantern frame (G66 timber)", TIMBER), M(a, 1, "iron ring", IRON, 0.5, 0.8), M(a, 2, "glass (lit = warm glow)", "FFD890" if lit else GLASS, 0.2, glow=lit), M(a, 3, "candle", PAPER)]
+        return asset(a, *Y, P, mats, [K.socket("Light", (0, 0, 0.16)), K.socket("Hang", (0, 0, 0.37)), K.socket("Hand", (0, 0, 0.36))], [K.ucx_box(a, 0, (0.2, 0.2, 0.37), (0, 0, 0.185))], "0.2 x 0.37 m")
+    a = "Prop_YTM_HourRail"; HOURS = 12; L = 2.4; P = [K.box("Rail", (L, 0.06, 0.08), (0, 0, 1.4), 0)]; S = []
+    for i in range(2):
+        P.append(K.box("Bracket%d" % i, (0.05, 0.1, 0.12), ((-1 + 2 * i) * (L / 2 - 0.1), 0.02, 1.4), 0))
+    for h in range(HOURS + 1):
+        x = -L / 2 + 0.1 + (L - 0.2) * h / HOURS
+        P.append(K.cyl("Peg%d" % h, "y", 0.01, 0.01, 0.06, (x, -0.06, 1.42), 1, 6, lod1={"drop": True} if h % 2 else None)); S.append(K.socket("Hour_%02d" % h, (x, -0.09, 1.42)))
+    P.append(K.box("DuskCap", (0.08, 0.08, 0.08), (-L / 2 - 0.04, 0, 1.4), 2)); P.append(K.box("DawnCap", (0.08, 0.08, 0.08), (L / 2 + 0.04, 0, 1.4), 3))
+    rail = asset(a, *Y, P, [M(a, 0, "rail (G66 timber)", TIMBER), M(a, 1, "hour pegs (G66 cloth)", CLOTH[0]), M(a, 2, "dusk end", "3E4A7A"), M(a, 3, "dawn end", "F0B050")],
+                 S + [K.socket("Text", (0, -0.04, 1.5))], [K.ucx_box(a, 0, (L + 0.16, 0.14, 0.14), (0, 0, 1.4))], "2.4 m rail, 13 hour pegs dusk(00)->dawn(12)")
+    b = "Prop_YTM_WatchStool"; P = [K.cyl("Seat", "z", 0.17, 0.17, 0.04, (0, 0, 0.46), 0, 12)]
+    for i in range(3):
+        an = i * 2.0944; P.append(K.cyl("Leg%d" % i, "z", 0.022, 0.018, 0.44, (0.11 * math.cos(an), 0.11 * math.sin(an), 0.22), 0, 6))
+    stool = asset(b, *Y, P, [M(b, 0, "stool (G66 timber)", TIMBER)], [K.socket("Seat", (0, 0, 0.48))], [K.ucx_prism(b, 0, "z", 0.17, 0.48, (0, 0, 0.24))], "0.34 x 0.48 m")
+    c = "Prop_YTM_Hourglass"
+    hg = asset(c, *Y, [K.box("Bottom", (0.12, 0.12, 0.015), (0, 0, 0.0075), 0), K.box("Top", (0.12, 0.12, 0.015), (0, 0, 0.2025), 0),
+        K.lathe("Glass", [(0.045, 0.015), (0.045, 0.06), (0.008, 0.105), (0.045, 0.15), (0.045, 0.195)], (0, 0, 0), 1, segments=10),
+        K.cyl("SandLow", "z", 0.04, 0.02, 0.03, (0, 0, 0.03), 2, 10)] + [K.cyl("Pillar%d" % i, "z", 0.006, 0.006, 0.18, (0.05 * (1 if i % 2 else -1), 0.05 * (1 if i > 1 else -1), 0.105), 0, 6) for i in range(4)],
+        [M(c, 0, "frame (G66 timber)", TIMBER), M(c, 1, "glass", GLASS, 0.1), M(c, 2, "sand (Fill = MI scalar)", SAND, 0.9)],
+        [K.socket("Hand", (0, 0, 0.105)), K.socket("Flip", (0, 0, 0.105))], [K.ucx_box(c, 0, (0.12, 0.12, 0.21), (0, 0, 0.105))], "0.12 x 0.21 m")
+    return [lantern(True), lantern(False), rail, stool, hg]
 
-GAPS = {"G156": g156, "G163": g163, "G167": g167, "G172": g172, "G174": g174, "G176": g176, "G181": g181, "G183": g183}
+
+def g194():
+    Y = ("G194", "youtube-master 54678")
+    a = "Prop_YTM_ShoreBoat"; P = [K.box("Keel", (0.08, 3.0, 0.08), (0, 0, 0.04), 0), K.box("Bottom", (0.8, 2.6, 0.03), (0, 0, 0.09), 0)]
+    for s in (-1, 1):
+        P.append(K.box("Side%d" % s, (0.04, 2.7, 0.35), (s * 0.48, 0, 0.28), 0, rot=(0, s * -18, 0)))
+        P.append(K.box("Gunwale%d" % s, (0.06, 2.7, 0.04), (s * 0.54, 0, 0.46), 1))
+    P += [K.box("Thwart", (1.0, 0.18, 0.04), (0, 0.2, 0.36), 1), K.box("Transom", (0.9, 0.04, 0.38), (0, 1.36, 0.27), 0), K.cyl("Stem", "z", 0.05, 0.03, 0.5, (0, -1.45, 0.27), 0, 8),
+          K.box("StripeL", (0.02, 2.5, 0.05), (-0.545, 0, 0.4), 2, bevel=False, lod1={"drop": True}), K.box("StripeR", (0.02, 2.5, 0.05), (0.545, 0, 0.4), 2, bevel=False, lod1={"drop": True})]
+    boat = asset(a, *Y, P, [M(a, 0, "hull planks (G66 timber)", TIMBER), M(a, 1, "gunwale (G66 sign board)", SIGN), M(a, 2, "hull stripe (G66 cloth; pair colour = MI)", CLOTH[1])],
+                 [K.socket("Seat", (0, 0.2, 0.38)), K.socket("Oar_L", (-0.56, 0.2, 0.48)), K.socket("Oar_R", (0.56, 0.2, 0.48)), K.socket("Cargo", (0, -0.6, 0.11)), K.socket("Mooring", (0, -1.5, 0.45))],
+                 [K.ucx_box(a, 0, (1.15, 3.0, 0.5), (0, 0, 0.25))], "3.0 x 1.1 m; matching pair = two instances, stripe MI per boat; cargo = Prop_YTM_CrateOfJars (G167) at SOCKET_Cargo")
+    b = "Prop_YTM_TiltGauge"
+    tg = asset(b, *Y, [K.box("Post", (0.08, 0.08, 1.2), (0, 0, 0.6), 0), K.box("Foot", (0.4, 0.3, 0.05), (0, 0, 0.025), 0), K.box("Beam", (1.2, 0.06, 0.06), (0, 0, 1.23), 0),
+        K.box("Scale", (0.4, 0.01, 0.12), (0, -0.045, 1.05), 1), K.cyl("Cord", "z", 0.003, 0.003, 0.35, (0, -0.06, 1.025), 2, 4), K.cyl("Plumb", "z", 0.0, 0.03, 0.07, (0, -0.06, 0.82), 3, 8)],
+        [M(b, 0, "gauge frame (G66 timber)", TIMBER), M(b, 1, "tilt scale (G66 sign board)", SIGN), M(b, 2, "cord", ROPE), M(b, 3, "brass plumb", BRASS, 0.3, 0.9)],
+        [K.socket("Pivot", (0, -0.06, 1.2)), K.socket("Plumb", (0, -0.06, 0.82)), K.socket("Pan_L", (-0.58, 0, 1.26)), K.socket("Pan_R", (0.58, 0, 1.26))],
+        [K.ucx_box(b, 0, (1.2, 0.3, 1.26), (0, 0, 0.63))], "1.2 m beam on 1.2 m post; plumb swings about SOCKET_Pivot (tilt = roll)")
+    return [boat, tg]
+
+
+GAPS = {"G156": g156, "G163": g163, "G167": g167, "G172": g172, "G174": g174, "G176": g176, "G181": g181, "G183": g183, "G186": g186, "G194": g194}
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--gap", required=True); ap.add_argument("--out", required=True); o = ap.parse_args()
