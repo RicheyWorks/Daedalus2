@@ -72,11 +72,11 @@ public final class GrateSlide {
                 }
             }
         }
-        if (cols % 2 == 1) {
+        if ((cols & 1) == 1) {
             return inv % 2 == 0;
         }
         int fromBottom = rows - blankRow;
-        return (inv + fromBottom) % 2 == 1;
+        return ((inv + fromBottom) & 1) == 1;
     }
 
     private static long pack(int[] t) {
