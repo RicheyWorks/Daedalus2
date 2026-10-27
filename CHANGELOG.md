@@ -10,8 +10,12 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Difficulty.** Every desktop cabinet accepts easy, normal, and hard, and starts on normal. The catalog records that default. Options, score, and save files stay as they are. The arcade host is unchanged.
+- **Cairnwell.** A stacking well. Option 0 is six columns and option 1 is a four-column practice with a slower fall. Slide a single stone; a full layer sinks away. A cream hint, a cyan slide cue, and the access plate sit on the bottom edge.
+- **Controller and accessibility marks.** Every desktop cabinet draws a key hint and a contrast mark on a dark plate. ACT is a cream plus and WAIT is a cyan bar, so colour is not the only signal. The plate is drawn after Beacon Sweep cells, and the mark uses rectangles so Glowtrail passage order stays intact. The Twinwake match opening stays six draw commands.
 - **How to play.** Every desktop cabinet has one original how-to line in the catalog and on the frame. The Twinwake match opening stays six draw commands; practice shows that line.
 - **Scoreboard hook.** Every desktop cabinet reports `Status.Score` through the catalog `scoreboard` capability. The number stays inside the range the arcade host already shows. Save files are unchanged.
+- **Leaderboard feed.** A `DSB1` best-scores file exports a ranked feed (`daedalus.leaderboard.feed/v1` JSON and `DLB1` lines) for a later Discord post. The export is data only: no webhook, token, or network. Old game ids merge through the host aliases. Bad files are refused whole.
 - **Reedbeat.** A rhythm round. Option 0 is eight short glows and option 1 is a four-note practice with a wider glow. Strike on the glow; early taps count as misses. A cream hint and a cyan cue sit on the bottom edge.
 - **Gloam Latch.** A lamp puzzle. Option 0 is 5x5 and option 1 is a 3x3 practice board. Flipping a lamp also flips its neighbors, and every seed starts from a board that can be darkened. A cream hint and a cyan flip cue sit on the bottom edge.
 - **Riftwing Vanguard hints.** A cream hint and a cyan fire cue sit under the speed line. Boss rehearsal names the boss in that hint. Controls and the status note are unchanged.

@@ -58,3 +58,11 @@ salt). `Settings.DEFAULT = (40, 40, 0.75, 30, 1.0, 150, 50)`.
   single-island close-up.
 - Assets: `Mob_Sky_Crane` (Idle/Walk/Fly/Dance), `Prop_Release_Crate` (aviary crate with a door), and reuse of the
   marsh/wetland kit (see UNREAL-QUEUE / BLENDER-ASKS).
+- Staged by blender-team (NOT READY) in `bot-team\staging\g142-sky-crane-return-20261019` (D2 714b05bf3, builders
+  `tools/blender/contest/crane_g142.py`, `sky_g142.py`, `tools/blender/creatures/bird_rig.py`): `Mob_Sky_Crane` (1.18 m,
+  384 tris; clips Idle, Walk, Fly and Dance, the courtship hop for an ESTABLISHED flock; `SOCKET_LegBand` on bone
+  `Leg_L`, shipped in `Mob_Sky_Crane.sockets.json` because UE does not import glTF skeleton sockets). Release crate:
+  `Prop_Release_Crate_Closed` / `_Open`, or the frame `Prop_Release_Crate` plus the mover `Prop_Release_Crate_Door`
+  attached at `SOCKET_Door` (hinge UE (-37, 50, 0) cm, open yaw 110 from the sockets.json `hinges`). Spawn each
+  released bird at `SOCKET_Crane` (inside, facing out) and walk it to `SOCKET_Release` (0.8 m in front of the door);
+  `SOCKET_Carry_L/R` are for the keepers. One crate opening per `release(year, birds)` batch.

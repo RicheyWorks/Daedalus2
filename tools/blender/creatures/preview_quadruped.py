@@ -1,11 +1,12 @@
-# SPDX-License-Identifier: MIT
+﻿# SPDX-License-Identifier: MIT
 """Pose preview sheet for a blender-quadruped/v1 build (reusable): the rest pose at 3/4 view plus frames sampled from every baked
 clip in the exported glb (side view), so the sheet shows the rig actually moves.
   blender -b --factory-startup --python preview_quadruped.py -- --glb <Asset.glb> --tiles <tmp>
   python preview_quadruped.py --compose --tiles <tmp> --title "..." --out sheet.png"""
 import argparse, json, math, os, sys
 
-SAMPLES = {"Idle": (0.5,), "Walk": (0.0, 0.25, 0.5, 0.75), "Run": (0.0, 0.33, 0.66), "Flutter": (0.0, 0.25, 0.5, 0.75)}
+SAMPLES = {"Idle": (0.5,), "Walk": (0.0, 0.25, 0.5, 0.75), "Run": (0.0, 0.33, 0.66), "Flutter": (0.0, 0.25, 0.5, 0.75),
+           "Hop": (0.0, 0.33, 0.66), "Freeze": (0.0,), "Swim": (0.0, 0.25, 0.5, 0.75)}
 VIEWS = {"side": (1.0, -0.12, 0.18), "front": (0.15, -1.0, 0.35), "top": (0.35, -0.45, 1.0)}
 
 

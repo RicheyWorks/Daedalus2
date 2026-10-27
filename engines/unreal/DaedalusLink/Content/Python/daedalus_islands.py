@@ -57,7 +57,7 @@ def _streaming_levels(world):
 
 
 def _rows(prefixes):
-    world = unreal.EditorLevelLibrary.get_editor_world()
+    world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
     rows, notes = [], []
     for sl in _streaming_levels(world):
         pkg = str(sl.get_world_asset_package_f_name())
@@ -67,7 +67,7 @@ def _rows(prefixes):
         if level is None:
             notes.append(pkg + ": not loaded in the editor, skipped")
             continue
-        actors = [a for a in unreal.EditorLevelLibrary.get_all_level_actors() if a.get_level() == level]
+        actors = [a for a in unreal.get_editor_subsystem(unreal.EditorActorSubsystem).get_all_level_actors() if a.get_level() == level]
         if not actors:
             notes.append(pkg + ": no actors")
             continue

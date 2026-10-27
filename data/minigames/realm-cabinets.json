@@ -380,12 +380,26 @@
           "start": "StartGame(\"reedbeat\", 229994874)"
         },
         {
+          "game": "cairnwell",
+          "title": "Cairnwell",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            5.0,
+            5.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 829914631,
+          "option": 0,
+          "start": "StartGame(\"cairnwell\", 829914631)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            5.0,
-            5.0,
+            7.5,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -399,7 +413,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             7.5,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -613,12 +627,26 @@
           "start": "StartGame(\"reedbeat\", 2042897590)"
         },
         {
+          "game": "cairnwell",
+          "title": "Cairnwell",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            7.5,
+            1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 600932809,
+          "option": 0,
+          "start": "StartGame(\"cairnwell\", 600932809)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             7.5,
-            1.25,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -631,8 +659,8 @@
           "title": "BlackJackPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            7.5,
-            3.75,
+            10.0,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1022,7 +1050,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -3.75,
+            -5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1036,7 +1064,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -1.25,
+            -2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1050,7 +1078,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1064,13 +1092,29 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            3.75,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
           "seed": 1847238866,
           "option": 0,
           "start": "StartGame(\"lanternwild\", 1847238866)"
+        },
+        {
+          "game": "shardring",
+          "title": "Shardring Resonance",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            5.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 2061739538,
+          "difficulty": "normal",
+          "module": "tools/minigames/prism_shard.py",
+          "start": "prism_shard.start(2061739538, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
         }
       ]
     },

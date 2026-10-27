@@ -79,6 +79,8 @@ public:
         return WindowOpen()?"CUE Strike":"CUE Wait";
     }
     std::string HowToLine() const override { return "HOW Strike while the reed is bright."; }
+    std::string KeyHint() const override { return "KEYS J strikes on the glow."; }
+    std::string ContrastMark() const override { return WindowOpen()?"MARK ACT":"MARK WAIT"; }
     void Render(Frame& F) const override {
         F.Clear(800,600,{18,16,28,255});
         F.AddText(30,24,Option==1?"REEDBEAT PRACTICE":"REEDBEAT",{255,236,180,255},28);
@@ -88,6 +90,7 @@ public:
         F.AddRect(360,210,80,160,WindowOpen()?Color{255,236,180,255}:Color{28,24,40,255});
         F.AddText(30,548,HintLine(),{255,236,180,255},16);
         F.AddText(30,528,HowToLine(),{255,236,180,255},14);
+        DrawAccess(F,300,520,KeyHint(),ContrastMark());
         F.AddText(620,548,ActionCue(),{120,225,255,255},16);
     }
     Status GetStatus() const override {

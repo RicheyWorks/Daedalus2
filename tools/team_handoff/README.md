@@ -374,3 +374,36 @@ R22 packets, locks and native workflows are unchanged by this source capability.
 This change does not modify the immutable R22c packet, its session-specific stale
 lock procedure, live guards, active campaigns, shared BOARD files or any original
 assets/receipts. Future integration remains with the verified sole custodian.
+
+## Rolling complete composite checkpoints
+
+`checkpoint_store.publish(store, request, source_root, expected_current=None)`
+captures explicit quiescent exports using the existing source-snapshot adapter.
+Each attempt gets a fresh immutable `captures/` directory. Completed entries are
+hash-pinned under `entries/`; one atomic `current.json` index advertises both
+current and previous digests together. The outer sequence/prior links never
+rewrite the inner checkpoint, timestamps, receipts or its independent sequence 1.
+
+```sh
+python -m tools.team_handoff.cli checkpoint-publish --store ./checkpoints --request ./request.json --source-root ./exports --expected-current none
+python -m tools.team_handoff.cli checkpoint-inspect --store ./checkpoints
+python -m tools.team_handoff.cli checkpoint-inspect --store ./checkpoints --selection previous
+```
+
+Initialize with `none`; updates must supply the prior output's outer `sha256`.
+This digest differs from `snapshot.receipt_sha256` and `snapshot.packet_sha256`.
+Pass `--expected-digest` to inspection when a trusted handoff pins the selection.
+No directory search or orphan adoption occurs. Explicit previous inspection can
+recover a complete advertised boundary when the current capture is corrupt; a
+corrupt index itself fails closed. Inspection never rolls back the pointer or
+authorizes replay.
+
+`complete` means a verified saved composite, with `may_execute=false` and retained
+admission holds. Initial unknown provenance can be recorded descriptively, but
+unknown source/build continuity holds subsequent updates. Changed owner/runtime,
+window/provenance, regressed progress/time, or lost/rewritten prior journal events
+also leave the advertised index intact. Held captures, interrupted attempts and
+unadvertised complete entries remain as evidence; retries use new directories.
+An error after pointer replacement reports publication uncertainty: inspect the
+advertised digests before further action. The existing cooperative writer/fsync
+protocol and platform power-loss limits apply. No live provider is installed.

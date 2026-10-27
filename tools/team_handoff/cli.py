@@ -8,6 +8,7 @@ from .contracts import ContractError, plan
 from .packet import read_json, read_packet, seal
 from .source_snapshot import capture, read_snapshot
 from . import operation_journal
+from . import checkpoint_store
 
 
 def main(argv=None):
@@ -25,6 +26,15 @@ def main(argv=None):
     inspect_snapshot = commands.add_parser("inspect-source-snapshot", help="Verify the composite source capture and sealed packet")
     inspect_snapshot.add_argument("--store", required=True)
     inspect_snapshot.add_argument("--expected-receipt", help="Advertised source capture result SHA-256")
+    checkpoint_publish = commands.add_parser("checkpoint-publish", help="Advertise a complete composite snapshot in an owned rolling index")
+    checkpoint_publish.add_argument("--store", required=True)
+    checkpoint_publish.add_argument("--request", required=True)
+    checkpoint_publish.add_argument("--source-root", required=True)
+    checkpoint_publish.add_argument("--expected-current", required=True, help="Outer composite digest, or 'none' for initialization")
+    checkpoint_inspect = commands.add_parser("checkpoint-inspect", help="Verify only the advertised current or explicit previous composite")
+    checkpoint_inspect.add_argument("--store", required=True)
+    checkpoint_inspect.add_argument("--selection", choices=("current", "previous"), default="current")
+    checkpoint_inspect.add_argument("--expected-digest", help="Trusted outer digest for the selected composite")
     journal_create = commands.add_parser("journal-create", help="Create an explicitly fresh private operation store")
     journal_create.add_argument("--store", required=True)
     journal_create.add_argument("--config", required=True)
@@ -46,7 +56,12 @@ def main(argv=None):
             command.add_argument("--request", required=True)
     args = parser.parse_args(argv)
     try:
-        if args.command == "journal-create":
+        if args.command == "checkpoint-publish":
+            result = checkpoint_store.publish(args.store, read_json(args.request), args.source_root,
+                                              None if args.expected_current == "none" else args.expected_current)
+        elif args.command == "checkpoint-inspect":
+            result = checkpoint_store.read(args.store, args.selection, args.expected_digest)
+        elif args.command == "journal-create":
             result = operation_journal.create(args.store, read_json(args.config))
         elif args.command in ("journal-intent", "journal-record", "journal-cover"):
             action = {"journal-intent": operation_journal.intent, "journal-record": operation_journal.record, "journal-cover": operation_journal.cover}[args.command]

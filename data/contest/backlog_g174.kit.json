@@ -1,0 +1,905 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_Brazier_Lit",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G174",
+    "ask": "youtube-master 50492",
+    "lod": "LOD0/1",
+    "size_m": "0.9 m wide, 1.2 m bowl rim",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Fire"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Brazier_Lit_M0",
+     "colour": "stone base",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Brazier_Lit_M1",
+     "colour": "iron bowl",
+     "hex": "3A3A40",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_Brazier_Lit_M2",
+     "colour": "coals",
+     "hex": "F07A28",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_Brazier_Lit_M3",
+     "colour": "flame (G66 warm cloth tone, emissive)",
+     "hex": "FFB040",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Brazier_Lit",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "StoneBase",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.4,
+       "r2": 0.34,
+       "length": 0.5,
+       "centre": [
+        0,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Neck",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.12,
+       "length": 0.4,
+       "centre": [
+        0,
+        0,
+        0.7
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Bowl",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.22,
+       "r2": 0.45,
+       "length": 0.3,
+       "centre": [
+        0,
+        0,
+        1.05
+       ],
+       "slot": 1,
+       "segments": 12
+      },
+      {
+       "name": "Coals",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.4,
+       "r2": 0.4,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        1.18
+       ],
+       "slot": 2,
+       "segments": 12
+      },
+      {
+       "name": "Flame0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.16,
+       "r2": 0.0,
+       "length": 0.35,
+       "centre": [
+        -0.06,
+        0.0,
+        1.35
+       ],
+       "slot": 3,
+       "segments": 6
+      },
+      {
+       "name": "Flame1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.0,
+       "length": 0.45,
+       "centre": [
+        0.0,
+        0.04,
+        1.4
+       ],
+       "slot": 3,
+       "segments": 6
+      },
+      {
+       "name": "Flame2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.0,
+       "length": 0.55,
+       "centre": [
+        0.06,
+        0.0,
+        1.45
+       ],
+       "slot": 3,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Fire",
+     "location": [
+      0,
+      0,
+      1.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_Brazier_Lit_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.45,
+     "r2": 0.45,
+     "length": 1.2,
+     "centre": [
+      0,
+      0,
+      0.6
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 212,
+    "lod1_triangles": 212,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_Brazier_Lit": 212
+    },
+    "bounds_min": [
+     -0.45,
+     -0.45,
+     0.0
+    ],
+    "bounds_max": [
+     0.45,
+     0.45,
+     1.725
+    ],
+    "dimensions": [
+     0.9,
+     0.9,
+     1.725
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5edcd6c2b99e68a32c99542cb3f0c6b5a6e2d2eefd1ac4ae36348e7e61d0b028"
+  },
+  {
+   "asset": "Prop_YTM_Brazier_Unlit",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G174",
+    "ask": "youtube-master 50492",
+    "lod": "LOD0/1",
+    "size_m": "0.9 m wide, 1.2 m bowl rim",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Fire"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Brazier_Unlit_M0",
+     "colour": "stone base",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Brazier_Unlit_M1",
+     "colour": "iron bowl",
+     "hex": "3A3A40",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_Brazier_Unlit_M2",
+     "colour": "cold ash",
+     "hex": "4A4440",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Brazier_Unlit",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "StoneBase",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.4,
+       "r2": 0.34,
+       "length": 0.5,
+       "centre": [
+        0,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Neck",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.12,
+       "length": 0.4,
+       "centre": [
+        0,
+        0,
+        0.7
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Bowl",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.22,
+       "r2": 0.45,
+       "length": 0.3,
+       "centre": [
+        0,
+        0,
+        1.05
+       ],
+       "slot": 1,
+       "segments": 12
+      },
+      {
+       "name": "Coals",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.4,
+       "r2": 0.4,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        1.18
+       ],
+       "slot": 2,
+       "segments": 12
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Fire",
+     "location": [
+      0,
+      0,
+      1.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_Brazier_Unlit_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.45,
+     "r2": 0.45,
+     "length": 1.2,
+     "centre": [
+      0,
+      0,
+      0.6
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 152,
+    "lod1_triangles": 152,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_Brazier_Unlit": 152
+    },
+    "bounds_min": [
+     -0.45,
+     -0.45,
+     0.0
+    ],
+    "bounds_max": [
+     0.45,
+     0.45,
+     1.205
+    ],
+    "dimensions": [
+     0.9,
+     0.9,
+     1.205
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "70ff372e9029cc93581a4f277647051d432c42f916717b082abb3caada66ad8c"
+  },
+  {
+   "asset": "Prop_YTM_SeaMapTable",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G174",
+    "ask": "youtube-master 50492",
+    "lod": "LOD0/1",
+    "size_m": "1.4 x 0.9 x 0.85 m; cords span SOCKET_Peg_i",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Map",
+     "SOCKET_Peg_0",
+     "SOCKET_Peg_1",
+     "SOCKET_Peg_2",
+     "SOCKET_Peg_3",
+     "SOCKET_Peg_4",
+     "SOCKET_Peg_5"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_SeaMapTable_M0",
+     "colour": "table (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_SeaMapTable_M1",
+     "colour": "painted sea map (decal slot)",
+     "hex": "C8D8C0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_SeaMapTable_M2",
+     "colour": "cord pegs (G66 cloth)",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_SeaMapTable",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Top",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.9,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.82
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Map",
+       "shape": "box",
+       "size": [
+        1.3,
+        0.8,
+        0.004
+       ],
+       "centre": [
+        0,
+        0,
+        0.847
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Leg-0.6-0.4",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        0.8
+       ],
+       "centre": [
+        -0.62,
+        -0.38,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg-0.60.4",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        0.8
+       ],
+       "centre": [
+        -0.62,
+        0.38,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg0.6-0.4",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        0.8
+       ],
+       "centre": [
+        0.62,
+        -0.38,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg0.60.4",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        0.8
+       ],
+       "centre": [
+        0.62,
+        0.38,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Peg0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.05,
+       "centre": [
+        -0.5,
+        0.2,
+        0.87
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Peg1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.05,
+       "centre": [
+        -0.3,
+        -0.25,
+        0.87
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Peg2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.05,
+       "centre": [
+        -0.1,
+        0.2,
+        0.87
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Peg3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.05,
+       "centre": [
+        0.1,
+        -0.25,
+        0.87
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Peg4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.05,
+       "centre": [
+        0.3,
+        0.2,
+        0.87
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Peg5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.05,
+       "centre": [
+        0.5,
+        -0.25,
+        0.87
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Map",
+     "location": [
+      0,
+      0,
+      0.849
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.849,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_0",
+     "location": [
+      -0.5,
+      0.2,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.5,
+      0.895,
+      -0.2
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_1",
+     "location": [
+      -0.3,
+      -0.25,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.3,
+      0.895,
+      0.25
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_2",
+     "location": [
+      -0.1,
+      0.2,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.1,
+      0.895,
+      -0.2
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_3",
+     "location": [
+      0.1,
+      -0.25,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.1,
+      0.895,
+      0.25
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_4",
+     "location": [
+      0.3,
+      0.2,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.3,
+      0.895,
+      -0.2
+     ]
+    },
+    {
+     "name": "SOCKET_Peg_5",
+     "location": [
+      0.5,
+      -0.25,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.5,
+      0.895,
+      0.25
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_SeaMapTable_00",
+     "shape": "box",
+     "size": [
+      1.4,
+      0.9,
+      0.85
+     ],
+     "centre": [
+      0,
+      0,
+      0.425
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 352,
+    "lod1_triangles": 352,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_SeaMapTable": 352
+    },
+    "bounds_min": [
+     -0.7,
+     -0.45,
+     0.0
+    ],
+    "bounds_max": [
+     0.7,
+     0.45,
+     0.895
+    ],
+    "dimensions": [
+     1.4,
+     0.9,
+     0.895
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f89ffea650bc84fe9e80bedf7af854630fdb7a45fa6c6c961d543fe97e8e46a2"
+  }
+ ]
+}

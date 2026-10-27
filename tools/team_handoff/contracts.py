@@ -10,6 +10,8 @@ import copy
 import datetime as dt
 import re
 
+from .evidence_paths import evidence_path_issue
+
 
 CHECKPOINT_SCHEMA = "daedalus.takeover-checkpoint.v1"
 ADMISSION_SCHEMA = "daedalus.takeover-admission.v1"
@@ -103,17 +105,15 @@ def timestamp_key(value):
 
 def _path(value, at):
     _string(value, at)
-    if len(value) > 220 or re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/-]*", value) is None:
+    issue = evidence_path_issue(value)
+    if issue == "shape":
         _fail("INVALID_PATH", at + " must be a portable relative evidence path (max 220 ASCII characters)")
-    parts = value.split("/")
-    if "\\" in value or ":" in value or value.startswith("/") or any(p in ("", ".", "..") for p in parts):
+    if issue == "components":
         _fail("INVALID_PATH", at + " must be a normalized relative POSIX path")
-    for part in parts:
-        if part.endswith((".", " ")) or any(c in part for c in '<>"|?*'):
-            _fail("INVALID_PATH", at + " is not portable between supported filesystems")
-        stem = part.split(".")[0].upper()
-        if stem in {"CON", "PRN", "AUX", "NUL"} or re.fullmatch(r"(?:COM|LPT)[1-9]", stem):
-            _fail("INVALID_PATH", at + " uses a reserved device name")
+    if issue == "nonportable_component":
+        _fail("INVALID_PATH", at + " is not portable between supported filesystems")
+    if issue == "reserved_component":
+        _fail("INVALID_PATH", at + " uses a reserved device name")
 
 
 def _identity(value, at):

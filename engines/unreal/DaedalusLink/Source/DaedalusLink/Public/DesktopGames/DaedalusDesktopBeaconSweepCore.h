@@ -207,6 +207,7 @@ public:
         return "CUE Reveal";
     }
     std::string HowToLine() const override { return "HOW Move the mark, then reveal or flag a cell."; }
+    std::string KeyHint() const override { return "KEYS Arrows move. J reveals. K flags."; }
     void Render(Frame& F) const override {
         F.Clear(800,600,{13,23,35,255});F.AddText(25,12,"BEACON SWEEP",{116,224,195,255},26);
         F.AddText(520,16,ActionCue(),{120,225,255,255},16);
@@ -228,6 +229,7 @@ public:
         F.AddText(25,541,CellNote(),White,14);
         F.AddText(25,561,ActionNote(),White,13);
         F.AddText(25,582,"Move: arrows/stick | J/Space/pad A/X: reveal | K/pad B: flag | Shift/pad Y/LB: chord",White,12);
+        DrawAccess(F,430,536,KeyHint(),ContrastMark());
     }
 };
 }}
