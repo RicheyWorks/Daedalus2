@@ -1050,7 +1050,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -3.75,
+            -5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1064,7 +1064,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -1.25,
+            -2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1078,7 +1078,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1092,13 +1092,29 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            3.75,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
           "seed": 1847238866,
           "option": 0,
           "start": "StartGame(\"lanternwild\", 1847238866)"
+        },
+        {
+          "game": "shardring",
+          "title": "Shardring Resonance",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            5.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 2061739538,
+          "difficulty": "normal",
+          "module": "tools/minigames/prism_shard.py",
+          "start": "prism_shard.start(2061739538, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
         }
       ]
     },
