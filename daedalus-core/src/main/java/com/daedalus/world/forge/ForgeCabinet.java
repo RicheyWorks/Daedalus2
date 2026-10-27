@@ -473,6 +473,14 @@ public final class ForgeCabinet {
                 });
         }, PerniciousPins.forgemasterLine(PerniciousPins.Grade.TURNED),
             PerniciousPins.forgemasterLine(PerniciousPins.Grade.SLIPPED)));
+        g.add(game("polite", "Polite Stacks", PoliteStacks.QUEST_ID, r -> {
+            long n = 1 + r.nextInt(5000);
+            long want = PoliteStacks.politeness(n);
+            return new Puzzle("polite", "In how many runs of 2+ consecutive bar counts can " + n + " bars stack?",
+                Long.toString(want), a -> a.matches("\\d{1,18}")
+                    && PoliteStacks.grade(n, Long.parseLong(a)) == PoliteStacks.Grade.TURNED);
+        }, PoliteStacks.forgemasterLine(PoliteStacks.Grade.TURNED),
+            PoliteStacks.forgemasterLine(PoliteStacks.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
