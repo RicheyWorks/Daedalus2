@@ -13,8 +13,10 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Version 1 source-only intake for deathhimself. No service registration, I/O, world generation,
- * native travel, token allocation or publication occurs here. The team implements submitted art/ideas.
+ * Version 1 source-only intake for deathhimself's independent world, with its own environments and identity.
+ * The Labyrinth is only the connection point to the user's world, not a design or world-style constraint.
+ * No service registration, I/O, world generation, native travel, token allocation or publication occurs here.
+ * The team implements submitted art/ideas; creative direction remains unset until supplied.
  */
 public final class CreatorRealmScaffold {
     public static final String REALM_ID = "deathhimself";
