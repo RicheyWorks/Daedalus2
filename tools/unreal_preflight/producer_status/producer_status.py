@@ -146,6 +146,18 @@ def build_status(launch_dir: Path, run_root: Path | None, broker: str, target: i
     return st
 
 
+def model_eta(stages: Path, saved: int, target: int) -> dict:
+    """Drift-aware ETA from tools/grand_collection_throughput (per-stage start + growth per chunk)."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "grand_collection_throughput"))
+    import throughput_sim as ts  # noqa: E402
+    rows = json.loads(Path(stages).read_text(encoding="utf-8"))["rows"]
+    m = ts.model(rows)
+    return {"no_relaunch_h": ts.project(m, saved, target, 10, {})["hours"],
+            "relaunch_24h_h": ts.project(m, saved, target, 10, {"relaunch_every_h": 24})["hours"],
+            "drift_s_per_chunk": round(sum(m[k]["drift"] for k in ts.STAGES), 2),
+            "model_chunks": f"{m['_session']['first']}-{m['_session']['last']}"}
+
+
 def render(st: dict) -> str:
     c = st.get("saved_counts", {})
     lines = [f"PID {st['pid']} {'alive' if st['alive'] else 'NOT RUNNING'}, up {st['uptime_h']} h",
@@ -154,6 +166,12 @@ def render(st: dict) -> str:
              f"pace {st.get('pace_min_per_chunk')} min/chunk, last save {st.get('last_save_age_min')} min ago"
              + (f", ETA {st['eta_h_to_target']} h to target" if "eta_h_to_target" in st else ""),
              f"free RAM {st['free_ram_gb']} GB"]
+    if st.get("eta_model"):
+        e = st["eta_model"]
+        lines.append(f"model ETA (drift {e['drift_s_per_chunk']} s/chunk, chunks {e['model_chunks']}): "
+                     f"{e['no_relaunch_h']} h without relaunch, {e['relaunch_24h_h']} h with a relaunch each 24 h")
+    elif st.get("eta_model_error"):
+        lines.append(f"model ETA unavailable: {st['eta_model_error']}")
     if st["locks"] is None:
         lines.append("locks: broker unreachable")
     for k, v in (st["locks"] or {}).items():
@@ -171,11 +189,18 @@ def main(argv=None) -> int:
     ap.add_argument("--target", type=int, default=10000)
     ap.add_argument("--ram-floor", type=float, default=3.0)
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--stages", type=Path, help="stages.json from grand_collection_throughput extract: adds a drift-aware ETA")
     a = ap.parse_args(argv)
     if not (a.launch_dir / "launch.json").exists():
         print(f"no launch.json in {a.launch_dir}", file=sys.stderr)
         return 2
     st = build_status(a.launch_dir, a.run_root, a.broker, a.target, a.ram_floor)
+    if a.stages:
+        counts = [v for v in st.get("saved_counts", {}).values() if isinstance(v, int)]
+        try:
+            st["eta_model"] = model_eta(a.stages, min(counts) if counts else 0, a.target)
+        except Exception as exc:  # informational only; never changes the exit code
+            st["eta_model_error"] = str(exc)[:200]
     print(json.dumps(st, indent=2) if a.json else render(st))
     return 1 if st["attention"] else 0
 

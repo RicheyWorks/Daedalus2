@@ -76,5 +76,33 @@ class T(unittest.TestCase):
         self.assertFalse(ps.pid_alive(0))
 
 
+class ModelEta(unittest.TestCase):
+    def test_eta_line_from_stages(self):
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            make(d)
+            rows = [{"chunk": 200 + i, "blender": 50.0, "pre": 140.0 + 2 * i, "import": 60.0, "validate": 280.0,
+                     "post": 140.0, "gap": 1.0} for i in range(20)]
+            (d / "stages.json").write_text(json.dumps({"rows": rows}))
+            e = ps.model_eta(d / "stages.json", 2400, 10000)
+            self.assertAlmostEqual(e["drift_s_per_chunk"], 2.0, places=2)
+            self.assertGreater(e["no_relaunch_h"], e["relaunch_24h_h"])
+            st = status(d)
+            st["eta_model"] = e
+            self.assertIn("model ETA (drift 2.0 s/chunk", ps.render(st))
+
+    def test_bad_stages_is_informational(self):
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            make(d)
+            (d / "stages.json").write_text("{}")
+            import io, contextlib
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                rc = ps.main(["--launch-dir", str(d), "--stages", str(d / "stages.json"), "--broker", "http://127.0.0.1:9"])
+            self.assertIn("model ETA unavailable", buf.getvalue())
+            self.assertIn(rc, (0, 1))
+
+
 if __name__ == "__main__":
     unittest.main()
