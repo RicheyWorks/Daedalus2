@@ -414,5 +414,175 @@
    "stool": "SOCKET_Floor -> cab SOCKET_Player1",
    "marquee": "decal on cab SOCKET_Marquee"
   }
+ },
+ "batch_c": {
+  "generated_by": "tools/blender/arcade_prism_props_c.py",
+  "staging": "bot-team\\staging\\arcade-prism-20261026c",
+  "docs": "docs/art/arcade-prism-20261026c",
+  "status": "NOT READY",
+  "assets": [
+   {
+    "name": "Prop_Arcade_PrizeCounter",
+    "tris": 320,
+    "size_m": [
+     2.5,
+     1.55,
+     2.5
+    ],
+    "sockets": [
+     "SOCKET_Prize_0",
+     "SOCKET_Prize_1",
+     "SOCKET_Prize_2",
+     "SOCKET_Prize_3",
+     "SOCKET_Prize_4",
+     "SOCKET_Prize_5",
+     "SOCKET_Prize_6",
+     "SOCKET_Prize_7",
+     "SOCKET_Prize_8",
+     "SOCKET_Clerk",
+     "SOCKET_Customer",
+     "SOCKET_Till",
+     "SOCKET_Sign"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Plush_Shardling",
+    "tris": 208,
+    "size_m": [
+     0.24,
+     0.24,
+     0.36
+    ],
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Plush_Waystoad",
+    "tris": 500,
+    "size_m": [
+     0.22,
+     0.27,
+     0.225
+    ],
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Plush_Glimmermoth",
+    "tris": 176,
+    "size_m": [
+     0.44,
+     0.225,
+     0.135
+    ],
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_FloorTile_Starfield",
+    "tris": 180,
+    "size_m": [
+     2.0,
+     2.0,
+     0.022
+    ],
+    "sockets": [
+     "SOCKET_TileE",
+     "SOCKET_TileN",
+     "SOCKET_Centre"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_FloorTile_Checker",
+    "tris": 108,
+    "size_m": [
+     2.0,
+     2.0,
+     0.022
+    ],
+    "sockets": [
+     "SOCKET_TileE",
+     "SOCKET_TileN",
+     "SOCKET_Centre"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_FloorTile_PrismRay",
+    "tris": 84,
+    "size_m": [
+     2.0,
+     2.0,
+     0.022
+    ],
+    "sockets": [
+     "SOCKET_TileE",
+     "SOCKET_TileN",
+     "SOCKET_Centre"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_TokenMachine",
+    "tris": 200,
+    "size_m": [
+     0.62,
+     0.63,
+     1.62
+    ],
+    "sockets": [
+     "SOCKET_CoinIn",
+     "SOCKET_TokenOut",
+     "SOCKET_Screen",
+     "SOCKET_Floor",
+     "SOCKET_Customer"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Cab_ClawCrane",
+    "tris": 668,
+    "size_m": [
+     0.9,
+     1.08,
+     2.387
+    ],
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot",
+     "SOCKET_ClawRail",
+     "SOCKET_Claw",
+     "SOCKET_PrizeChute",
+     "SOCKET_PrizeOut",
+     "SOCKET_Marquee",
+     "SOCKET_Stick",
+     "SOCKET_Button",
+     "SOCKET_PrizePit_0",
+     "SOCKET_PrizePit_1",
+     "SOCKET_PrizePit_2",
+     "SOCKET_PrizePit_3",
+     "SOCKET_PrizePit_4",
+     "SOCKET_PrizePit_5"
+    ]
+   }
+  ],
+  "decals": [
+   "Decal_Arcade_Neon_Arcade",
+   "Decal_Arcade_Neon_Prism",
+   "Decal_Arcade_Neon_Prize"
+  ],
+  "hook": {
+   "prize_counter": "plush SOCKET_Shelf -> counter SOCKET_Prize_0..8; neon decal at SOCKET_Sign",
+   "floor": "FloorTile SOCKET_TileE/TileN step 2 m, any variant mix",
+   "token_machine": "SOCKET_Floor in an arcade_plaza slot; CoinIn/TokenOut for interaction",
+   "claw": "child node Prop_Arcade_Cab_ClawCrane_Claw driven from SOCKET_ClawRail; prizes spawn at SOCKET_PrizePit_k, drop via SOCKET_PrizeChute -> SOCKET_PrizeOut"
+  }
  }
 }
