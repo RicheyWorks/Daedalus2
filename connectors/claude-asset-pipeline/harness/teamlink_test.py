@@ -365,6 +365,43 @@ box["server"].shutdown()
 shutil.rmtree(d)
 shutil.rmtree(art)
 
+# 1z. Replay survives historical ACKs whose body is prose text (broker crash 2026-10-27) and rebuilds the same locks.
+def _replay(lines):
+    rd = tempfile.mkdtemp(prefix="link-replay-")
+    with open(os.path.join(rd, "log.jsonl"), "w", encoding="utf-8") as f:
+        for m in lines:
+            f.write(json.dumps(m) + "\n")
+    try:
+        rb = teamlink.Broker(rd)
+        return rb, {k: (v["holder"], v["ttl"], v["at"]) for k, v in rb.locks.items()}
+    finally:
+        shutil.rmtree(rd)
+
+
+base = [
+    {"id": 1, "ts": "2026-10-27T11:00:00", "from": "boss", "to": "*", "type": "lock", "body": {"name": "unreal", "ttl": 14400}},
+    {"id": 2, "ts": "2026-10-27T11:00:01", "from": "boss", "to": "*", "type": "lock", "body": {"name": "compute", "ttl": 14400}},
+    {"id": 3, "ts": "2026-10-27T11:05:00", "from": "other", "to": "*", "type": "lock", "body": {"name": "blender", "ttl": 600}},
+    {"id": 4, "ts": "2026-10-27T11:06:00", "from": "other", "to": "*", "type": "unlock", "body": {"name": "blender"}},
+    {"id": 5, "ts": "2026-10-27T11:07:00", "from": "lead", "to": "boss", "type": "ack", "body": {"id": 1}},
+]
+text_acks = [
+    {"id": 6, "ts": "2026-10-27T11:08:00", "from": "lead", "to": "boss", "type": "ack", "body": "ACK, will do it after lunch"},
+    {"id": 7, "ts": "2026-10-27T11:08:30", "from": "lead", "to": "boss", "type": "ack", "body": None},
+    {"id": 8, "ts": "2026-10-27T11:09:00", "from": "lead", "to": "boss", "type": "ack", "body": {"id": "2"}},
+]
+try:
+    rb_plain, locks_plain = _replay(base)
+    rb_text, locks_text = _replay(base[:3] + text_acks + base[3:])
+    check("replay: a text-body ack does not crash the broker", True)
+    check("replay: same locks rebuilt with and without text acks",
+          locks_text == locks_plain and set(locks_text) == {"unreal", "compute"} and locks_text["unreal"][0] == "boss",
+          (locks_plain, locks_text))
+    check("replay: only real integer receipts are acked", rb_text.acked == {("lead", 1)} == rb_plain.acked, rb_text.acked)
+    check("replay: text acks are kept as messages", len(rb_text.messages) == len(base) + len(text_acks), len(rb_text.messages))
+except Exception as e:
+    check("replay: a text-body ack does not crash the broker", False, repr(e))
+
 n = sum(results)
 print("%d/%d" % (n, len(results)))
 sys.exit(0 if n == len(results) else 1)
