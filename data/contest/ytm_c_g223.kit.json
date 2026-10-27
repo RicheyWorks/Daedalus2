@@ -1,0 +1,1105 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_FareBoard",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G223",
+    "ask": "youtube-master 54854",
+    "lod": "LOD0/1",
+    "size_m": "1.0 x 0.8 m board ",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Text",
+     "SOCKET_Fare_0",
+     "SOCKET_Fare_1",
+     "SOCKET_Fare_2",
+     "SOCKET_Fare_3"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_FareBoard_M0",
+     "colour": "posts (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_FareBoard_M1",
+     "colour": "board (G66 sign board)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_FareBoard_M2",
+     "colour": "slot plates (text = MI/decal)",
+     "hex": "EDE3C8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_FareBoard",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Board",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.05,
+        0.8
+       ],
+       "centre": [
+        0,
+        0,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Post-1",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        1.4
+       ],
+       "centre": [
+        -0.535,
+        0,
+        0.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Post1",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        1.4
+       ],
+       "centre": [
+        0.535,
+        0,
+        0.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Slot0",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.01,
+        0.06
+       ],
+       "centre": [
+        0,
+        -0.03,
+        1.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Slot1",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.01,
+        0.06
+       ],
+       "centre": [
+        0,
+        -0.03,
+        1.02667
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Slot2",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.01,
+        0.06
+       ],
+       "centre": [
+        0,
+        -0.03,
+        0.85333
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Slot3",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.01,
+        0.06
+       ],
+       "centre": [
+        0,
+        -0.03,
+        0.68
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Text",
+     "location": [
+      0,
+      -0.03,
+      1.32
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.32,
+      0.03
+     ]
+    },
+    {
+     "name": "SOCKET_Fare_0",
+     "location": [
+      0,
+      -0.036,
+      1.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.2,
+      0.036
+     ]
+    },
+    {
+     "name": "SOCKET_Fare_1",
+     "location": [
+      0,
+      -0.036,
+      1.02667
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.02667,
+      0.036
+     ]
+    },
+    {
+     "name": "SOCKET_Fare_2",
+     "location": [
+      0,
+      -0.036,
+      0.85333
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.85333,
+      0.036
+     ]
+    },
+    {
+     "name": "SOCKET_Fare_3",
+     "location": [
+      0,
+      -0.036,
+      0.68
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.68,
+      0.036
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_FareBoard_00",
+     "shape": "box",
+     "size": [
+      1.14,
+      0.1,
+      1.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.7
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 180,
+    "lod1_triangles": 180,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_FareBoard": 180
+    },
+    "bounds_min": [
+     -0.57,
+     -0.035,
+     0.0
+    ],
+    "bounds_max": [
+     0.57,
+     0.035,
+     1.4
+    ],
+    "dimensions": [
+     1.14,
+     0.07,
+     1.4
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d3055123a2b343e72595ad3b2e84edc74827c8ba4e7c55dc693fe40236336e1b"
+  },
+  {
+   "asset": "Prop_YTM_Ferry",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G223",
+    "ask": "youtube-master 54854",
+    "lod": "LOD0/1",
+    "size_m": "5 x 2 m sail ferry, 3.2 m mast",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Seat_0",
+     "SOCKET_Seat_1",
+     "SOCKET_Seat_2",
+     "SOCKET_Helm",
+     "SOCKET_Mooring_Bow",
+     "SOCKET_Mooring_Stern"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Ferry_M0",
+     "colour": "hull (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Ferry_M1",
+     "colour": "benches (G66 sign board)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_Ferry_M2",
+     "colour": "sail (G66 cloth)",
+     "hex": "6E7F99",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Ferry",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Keel",
+       "shape": "box",
+       "size": [
+        0.08,
+        5.0,
+        0.08
+       ],
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bottom",
+       "shape": "box",
+       "size": [
+        1.7,
+        4.6,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.09
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Transom",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.04,
+        0.38
+       ],
+       "centre": [
+        0,
+        2.36,
+        0.27
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Stem",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.05,
+       "r2": 0.03,
+       "length": 0.55,
+       "centre": [
+        0,
+        -2.45,
+        0.27
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Side-1",
+       "shape": "box",
+       "size": [
+        0.04,
+        4.7,
+        0.35
+       ],
+       "centre": [
+        -0.92,
+        0,
+        0.28
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        18,
+        0
+       ]
+      },
+      {
+       "name": "Gunwale-1",
+       "shape": "box",
+       "size": [
+        0.06,
+        4.7,
+        0.04
+       ],
+       "centre": [
+        -0.98,
+        0,
+        0.46
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Side1",
+       "shape": "box",
+       "size": [
+        0.04,
+        4.7,
+        0.35
+       ],
+       "centre": [
+        0.92,
+        0,
+        0.28
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        -18,
+        0
+       ]
+      },
+      {
+       "name": "Gunwale1",
+       "shape": "box",
+       "size": [
+        0.06,
+        4.7,
+        0.04
+       ],
+       "centre": [
+        0.98,
+        0,
+        0.46
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Mast",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.05,
+       "r2": 0.04,
+       "length": 3.2,
+       "centre": [
+        0,
+        -0.75,
+        1.7
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Sail",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         2.56
+        ],
+        [
+         1.75,
+         0
+        ]
+       ],
+       "thickness": 0.01,
+       "centre": [
+        0,
+        -0.7,
+        0.4
+       ],
+       "slot": 2,
+       "segments": 3,
+       "rot": [
+        90,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Bench0",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.25,
+        0.05
+       ],
+       "centre": [
+        0,
+        -0.8,
+        0.38
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Bench1",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.25,
+        0.05
+       ],
+       "centre": [
+        0,
+        0.2,
+        0.38
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Bench2",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.25,
+        0.05
+       ],
+       "centre": [
+        0,
+        1.2,
+        0.38
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Seat_0",
+     "location": [
+      0,
+      -0.8,
+      0.41
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.41,
+      0.8
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_1",
+     "location": [
+      0,
+      0.2,
+      0.41
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.41,
+      -0.2
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_2",
+     "location": [
+      0,
+      1.2,
+      0.41
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.41,
+      -1.2
+     ]
+    },
+    {
+     "name": "SOCKET_Helm",
+     "location": [
+      0,
+      2.2,
+      0.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.4,
+      -2.2
+     ]
+    },
+    {
+     "name": "SOCKET_Mooring_Bow",
+     "location": [
+      0,
+      -2.5,
+      0.45
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.45,
+      2.5
+     ]
+    },
+    {
+     "name": "SOCKET_Mooring_Stern",
+     "location": [
+      0,
+      2.4,
+      0.45
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.45,
+      -2.4
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_Ferry_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      5.0,
+      0.5
+     ],
+     "centre": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 504,
+    "lod1_triangles": 504,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_Ferry": 504
+    },
+    "bounds_min": [
+     -1.01,
+     -2.5,
+     -0.005
+    ],
+    "bounds_max": [
+     1.01,
+     2.5,
+     3.3
+    ],
+    "dimensions": [
+     2.02,
+     5.0,
+     3.305
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "dcf1c225a2357416a6b7388038c937e5afae2faebda15f8311fa69474e7fe399"
+  },
+  {
+   "asset": "Prop_YTM_InnDock",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G223",
+    "ask": "youtube-master 54854",
+    "lod": "LOD0/1",
+    "size_m": "2 x 4 m dock, deck 0.6 m above water line z=0",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Mooring_0",
+     "SOCKET_Mooring_1",
+     "SOCKET_Board",
+     "SOCKET_Shore"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_InnDock_M0",
+     "colour": "deck planks (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_InnDock_M1",
+     "colour": "piles",
+     "hex": "6A5A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_InnDock",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        2.0,
+        4.0,
+        0.08
+       ],
+       "centre": [
+        0,
+        0,
+        0.56
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pile-0.9-1.8",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.1,
+       "length": 1.0,
+       "centre": [
+        -0.9,
+        -1.8,
+        0.3
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Pile-0.9+0.0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.1,
+       "length": 1.0,
+       "centre": [
+        -0.9,
+        0.0,
+        0.3
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Pile-0.9+1.8",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.1,
+       "length": 1.0,
+       "centre": [
+        -0.9,
+        1.8,
+        0.3
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Pile+0.9-1.8",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.1,
+       "length": 1.0,
+       "centre": [
+        0.9,
+        -1.8,
+        0.3
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Pile+0.9+0.0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.1,
+       "length": 1.0,
+       "centre": [
+        0.9,
+        0.0,
+        0.3
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Pile+0.9+1.8",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.1,
+       "length": 1.0,
+       "centre": [
+        0.9,
+        1.8,
+        0.3
+       ],
+       "slot": 1,
+       "segments": 8
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Mooring_0",
+     "location": [
+      1.0,
+      -1.0,
+      0.65
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.0,
+      0.65,
+      1.0
+     ]
+    },
+    {
+     "name": "SOCKET_Mooring_1",
+     "location": [
+      1.0,
+      1.0,
+      0.65
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.0,
+      0.65,
+      -1.0
+     ]
+    },
+    {
+     "name": "SOCKET_Board",
+     "location": [
+      0,
+      2.0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      -2.0
+     ]
+    },
+    {
+     "name": "SOCKET_Shore",
+     "location": [
+      0,
+      2.0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      -2.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_InnDock_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      4.0,
+      0.6
+     ],
+     "centre": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 212,
+    "lod1_triangles": 212,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_InnDock": 212
+    },
+    "bounds_min": [
+     -1.0,
+     -2.0,
+     -0.2
+    ],
+    "bounds_max": [
+     1.0,
+     2.0,
+     0.8
+    ],
+    "dimensions": [
+     2.0,
+     4.0,
+     1.0
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ffc2d1e6bdef96c787b287b3e885fb218c3887ac791010aac2b604b3abaaded7"
+  }
+ ]
+}
