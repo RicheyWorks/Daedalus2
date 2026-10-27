@@ -42,6 +42,8 @@ jobs:
         run: python tools/minigames/minigame_catalog.py --check
       - name: Every cabinet has a save slot, how-to line, scoreboard entry and an original name
         run: python tools/minigames/catalog_validate.py
+      - name: Leaderboard feed hook matches the catalog and does not post
+        run: python tools/minigames/leaderboard_feed.py --check
       - name: Realm cabinet placements are current and tested
         run: |
           python tools/minigames/realm_cabinets.py --check
