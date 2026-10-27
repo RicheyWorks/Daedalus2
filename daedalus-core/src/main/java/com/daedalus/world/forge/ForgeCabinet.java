@@ -403,6 +403,22 @@ public final class ForgeCabinet {
                 });
         }, LudicLots.forgemasterLine(LudicLots.Grade.TURNED),
             LudicLots.forgemasterLine(LudicLots.Grade.SLIPPED)));
+        g.add(game("keith", "Keith Kindling", KeithKindling.QUEST_ID, r -> {
+            long n = 10 + r.nextInt(100_000);
+            if (r.nextBoolean()) {
+                List<Long> k = KeithKindling.keithUpTo(200_000);
+                n = k.get(r.nextInt(k.size()));
+            }
+            long fn = n;
+            return new Puzzle("keith", "Does ember " + n + "'s digit chain reach it exactly? (keith/cold)",
+                KeithKindling.isKeith(n) ? "keith" : "cold", a -> {
+                    if (!"keith".equals(a) && !"cold".equals(a)) {
+                        return false;
+                    }
+                    return KeithKindling.grade(fn, "keith".equals(a)) == KeithKindling.Grade.TURNED;
+                });
+        }, KeithKindling.forgemasterLine(KeithKindling.Grade.TURNED),
+            KeithKindling.forgemasterLine(KeithKindling.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
