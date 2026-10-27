@@ -22,4 +22,4 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Stdlib offline fault injection (serial temp fixtures)
-        run: python -m unittest tools.team_handoff.test_takeover tools.team_handoff.test_source_snapshot tools.team_handoff.test_operation_journal tools.team_handoff.test_evidence_paths -v
+        run: python -m unittest tools.team_handoff.test_takeover tools.team_handoff.test_source_snapshot tools.team_handoff.test_operation_journal tools.team_handoff.test_evidence_paths tools.team_handoff.test_checkpoint_store -v
