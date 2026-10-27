@@ -461,6 +461,18 @@ public final class ForgeCabinet {
                 });
         }, TriadAlloys.forgemasterLine(TriadAlloys.Grade.TURNED),
             TriadAlloys.forgemasterLine(TriadAlloys.Grade.SLIPPED)));
+        g.add(game("pernicious", "Pernicious Pins", PerniciousPins.QUEST_ID, r -> {
+            long n = r.nextInt(1 << 20);
+            long fn = n;
+            return new Puzzle("pernicious", "Is the count of set bits in pin " + n + " prime? (pernicious/plainpin)",
+                PerniciousPins.isPernicious(n) ? "pernicious" : "plainpin", a -> {
+                    if (!"pernicious".equals(a) && !"plainpin".equals(a)) {
+                        return false;
+                    }
+                    return PerniciousPins.grade(fn, "pernicious".equals(a)) == PerniciousPins.Grade.TURNED;
+                });
+        }, PerniciousPins.forgemasterLine(PerniciousPins.Grade.TURNED),
+            PerniciousPins.forgemasterLine(PerniciousPins.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
