@@ -49,8 +49,8 @@ CLOSE_STEPS = """Manual editor close (runbook 2.4), then phase B:
   1. Save only explicitly owned assets. Do not discard anything.
   2. Quit the editor normally (File > Exit). Never force-kill.
   3. Confirm it has exited, then re-run with --execute --editor-closed --resume <this report.json>.
-After UBT (runbook 2.6): normal clean reopen, detached, WITH the small map arg; never
--AutoDeclinePackageRecovery or -unattended. Then one harmless native read through the bridge."""
+After UBT (runbook 2.6): normal clean reopen, detached, WITH the small map arg; never the
+package-recovery auto-decline or unattended flags (preflight P11). Then one harmless native read through the bridge."""
 
 
 class Env:

@@ -24,5 +24,5 @@ python tools/unreal_preflight/rebuild_orchestrator/rebuild_orchestrator.py --rep
 ```
 
 It never kills, closes or launches a process, never touches locks or pins, and the relaunch stays manual (with the
-small map arg; never `-AutoDeclinePackageRecovery` / `-unattended`). On UBT failure the report carries the
+small map arg; never the package-recovery auto-decline or unattended flags, see preflight P11). On UBT failure the report carries the
 runbook's restore hint. Exit 0 ok/planned/awaiting close, 1 refused or failed, 2 bad input.
