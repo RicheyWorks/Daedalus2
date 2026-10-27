@@ -1,4 +1,6 @@
-# Minigame Balance Simulator (G190)
+# Minigame Balance Simulator (G192)
+
+Renumbered from G190, which Hephaestus already holds for IngotCuts; PR #518 commits still say G190.
 
 Package: `daedalus-core/src/main/java/com/daedalus/world/odds/balance/` (source only, offline, no game changes).
 
