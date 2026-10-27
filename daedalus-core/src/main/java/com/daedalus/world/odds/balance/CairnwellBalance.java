@@ -75,7 +75,7 @@ public final class CairnwellBalance implements BalanceGame {
         while (clears < targetLayers) {
             int target = rng.chance(slip) ? ShardringBalance.pick(rng, cols) : lowest(height, col);
             for (int tick = 1; tick <= dropEvery; tick++) {
-                boolean pressTick = tick > reactTicks && (tick - reactTicks) % 2 == 1;
+                boolean pressTick = tick > reactTicks && (tick - reactTicks) % 2 != 0;
                 if (pressTick && col != target) {
                     int nextCol = col + Integer.signum(target - col);
                     if (height[nextCol] < rows) {
