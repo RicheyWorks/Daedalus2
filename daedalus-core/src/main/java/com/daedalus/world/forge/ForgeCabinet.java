@@ -337,6 +337,23 @@ public final class ForgeCabinet {
                 });
         }, RecordIngots.forgemasterLine(RecordIngots.Grade.TURNED),
             RecordIngots.forgemasterLine(RecordIngots.Grade.SLIPPED)));
+        g.add(game("achilles", "Achilles Rivets", AchillesRivets.QUEST_ID, r -> {
+            long n = 1 + r.nextInt(100_000);
+            if (r.nextBoolean()) {
+                while (!AchillesRivets.isAchilles(n)) {
+                    n++;
+                }
+            }
+            long fn = n;
+            return new Puzzle("achilles", "Is rivet count " + n + " powerful but no perfect power? (achilles/brittle)",
+                AchillesRivets.isAchilles(n) ? "achilles" : "brittle", a -> {
+                    if (!"achilles".equals(a) && !"brittle".equals(a)) {
+                        return false;
+                    }
+                    return AchillesRivets.grade(fn, "achilles".equals(a)) == AchillesRivets.Grade.TURNED;
+                });
+        }, AchillesRivets.forgemasterLine(AchillesRivets.Grade.TURNED),
+            AchillesRivets.forgemasterLine(AchillesRivets.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
