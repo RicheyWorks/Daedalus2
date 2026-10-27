@@ -498,6 +498,18 @@ public final class ForgeCabinet {
                 });
         }, DuffinDies.forgemasterLine(DuffinDies.Grade.TURNED),
             DuffinDies.forgemasterLine(DuffinDies.Grade.SLIPPED)));
+        g.add(game("primorial", "Primorial Pyres", PrimorialPyres.QUEST_ID, r -> {
+            int n = 2 + r.nextInt(PrimorialPyres.MAX_N - 1);
+            boolean prime = PrimorialPyres.isPrime(PrimorialPyres.primorial(n) + 1);
+            return new Puzzle("primorial", "Is " + n + "# + 1 = " + (PrimorialPyres.primorial(n) + 1)
+                + " prime? (prime/composite)", prime ? "prime" : "composite", a -> {
+                    if (!"prime".equals(a) && !"composite".equals(a)) {
+                        return false;
+                    }
+                    return PrimorialPyres.grade(n, "prime".equals(a)) == PrimorialPyres.Grade.TURNED;
+                });
+        }, PrimorialPyres.forgemasterLine(PrimorialPyres.Grade.TURNED),
+            PrimorialPyres.forgemasterLine(PrimorialPyres.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
