@@ -93,8 +93,12 @@ jobs:
           echo "LC_ALL=en_US.UTF-8" >> "$GITHUB_ENV"
           echo "TZ=UTC"             >> "$GITHUB_ENV"
 
+      # -T 1C: one thread per core. Modules still fork their own surefire JVMs
+      # and the graph keeps Core -> Plugin Runtime -> Server -> Desktop serial;
+      # only Plugin API, Wallet and Explore overlap, and their tests use no
+      # ports, user.home or shared paths (checked 2026-10-26, item 19).
       - name: Build & test the reactor
-        run: mvn -B -ntp clean install
+        run: mvn -B -ntp -T 1C clean install
 
       - name: Build the reference biome-plugin
         # Runs after the reactor so daedalus-plugin-api is in ~/.m2. Tests in
