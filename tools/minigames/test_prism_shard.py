@@ -1,4 +1,6 @@
 """Tests for tools/minigames/prism_shard.py (Shardring Resonance)."""
+import io
+import json
 import pathlib
 import sys
 import unittest
@@ -114,6 +116,50 @@ class Shardring(unittest.TestCase):
     def test_original_name(self):
         for text in (ps.TITLE, ps.HOW_TO_PLAY, ps.GAME_ID):
             self.assertEqual(cv.trademark_hits(text), [])
+
+    def test_save_load_roundtrip_resumes_identically(self):
+        g = ps.start(9, "hard")
+        for _ in range(6):
+            if not g.over:
+                g.place(ps.greedy_move(g))
+        saved = json.loads(json.dumps(g.to_state()))
+        h = ps.ShardringGame.from_state(saved)
+        self.assertEqual(h.status(), g.status())
+        while not g.over:
+            f = ps.greedy_move(g)
+            self.assertEqual(g.place(f), h.place(f))
+        self.assertEqual(g.status(), h.status())
+
+    def test_load_rejects_bad_save(self):
+        with self.assertRaises(ValueError):
+            ps.ShardringGame.from_state({"v": 2, "id": "shardring"})
+        s = ps.start(1).to_state()
+        s["ring"] = [None] * 3
+        with self.assertRaises(ValueError):
+            ps.ShardringGame.from_state(s)
+
+    def test_render(self):
+        g = ps.start(4)
+        text = g.render()
+        self.assertIn("Shardring Resonance [normal]", text)
+        self.assertIn("0:.", text)
+        g.pouch = 1
+        g.place(0)
+        self.assertIn("WON", g.render())
+
+    def test_demo_is_deterministic_and_finishes(self):
+        a, b = io.StringIO(), io.StringIO()
+        ga, gb = ps.demo(11, "normal", a), ps.demo(11, "normal", b)
+        self.assertTrue(ga.over)
+        self.assertEqual(a.getvalue(), b.getvalue())
+        self.assertEqual(ps.main(["--demo", "--seed", "3", "--difficulty", "easy"]), 0)
+
+    def test_play_mode_scripted_input(self):
+        out = io.StringIO()
+        g = ps.play(5, "easy", io.StringIO("0\n0\nx\n1\nq\n"), out)
+        self.assertEqual(g.pouch, ps.DIFFICULTY["easy"]["shards"] - 2)
+        self.assertIn("? ", out.getvalue())
+        self.assertIn("facet", out.getvalue())
 
 
 if __name__ == "__main__":

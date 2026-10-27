@@ -34,6 +34,7 @@ SPEC = ROOT / "data/minigames/realm-arcades.json"
 OUT = ROOT / "data/minigames/realm-cabinets.json"
 REALMS_MD = ROOT / "docs/REALMS.md"
 LAYOUTS = ("row", "grid", "arc")
+PY_HOST = "PythonMinigame"  # data-only host tag; no Unreal actor yet
 
 
 class SpecError(ValueError):
@@ -103,7 +104,7 @@ def validate(data):
                 raise SpecError(f"realm '{rid}' cabinet '{g}' yaw_deg must be 0..360")
             if c.get("seed") != stable_seed(rid, g):
                 raise SpecError(f"realm '{rid}' cabinet '{g}' seed is not crc32('{rid}:{g}')")
-            if c.get("host") not in ("ADaedalusDesktopArcade", "ADaedalusJavaArcade"):
+            if c.get("host") not in ("ADaedalusDesktopArcade", "ADaedalusJavaArcade", PY_HOST):
                 raise SpecError(f"realm '{rid}' cabinet '{g}' has unknown host {c.get('host')!r}")
     return data
 
@@ -150,6 +151,7 @@ def select(ids, include, exclude):
 def build(catalog, spec, realms_md=None):
     desktop = {g["id"]: g for g in catalog.get("games", [])}
     java = {j["id"]: j for j in catalog.get("java_cabinets", [])}
+    python = {g["id"]: g for g in catalog.get("python_games", [])}
     known = list(desktop) + [i for i in java if i not in desktop]
     defaults = spec.get("defaults", {})
     seen = set()
@@ -164,9 +166,11 @@ def build(catalog, spec, realms_md=None):
         include = r.get("include", defaults.get("include", ["*"]))
         exclude = r.get("exclude", [])
         for p in list(include) + list(exclude):
-            if not any(ch in p for ch in "*?[") and p not in desktop and p not in java:
+            if not any(ch in p for ch in "*?[") and p not in desktop and p not in java and p not in python:
                 raise SpecError(f"realm '{rid}' names unknown game '{p}'")
         games = select(known, include, exclude)
+        # Python games are placed only when named explicitly (never by a glob).
+        games += [g for g in python if g in include and g not in exclude and g not in games]
         if not r.get("java", defaults.get("java", True)):
             games = [g for g in games if g not in java]
         if not games:
@@ -182,6 +186,8 @@ def build(catalog, spec, realms_md=None):
         for gid, opt in options.items():
             if gid not in games:
                 raise SpecError(f"realm '{rid}' sets an option for '{gid}', which it does not place")
+            if gid in python:
+                raise SpecError(f"realm '{rid}' sets an option for Python game '{gid}'; use its difficulty")
             if gid in java:
                 raise SpecError(f"realm '{rid}' sets an option for Java cabinet '{gid}'; Java cabinets have no options")
             count = desktop[gid].get("option_count", 0)
@@ -189,6 +195,14 @@ def build(catalog, spec, realms_md=None):
                 raise SpecError(f"realm '{rid}' option {opt!r} for '{gid}' is out of range (0..{max(count, 1) - 1})")
         cabinets = []
         for gid, (x, y, yaw) in zip(games, places):
+            if gid in python:
+                p = python[gid]
+                seed = stable_seed(rid, gid)
+                cabinets.append({"game": gid, "title": p["title"], "host": PY_HOST, "offset_m": [x, y, 0.0],
+                                 "yaw_deg": yaw, "seed": seed, "difficulty": p["default_difficulty"],
+                                 "module": p["module"], "start": p["start"].replace("seed", str(seed), 1),
+                                 "requires": "no native host yet; rules run in the Python module"})
+                continue
             entry = java.get(gid) if gid in java else desktop[gid]
             cab = {"game": gid, "title": entry["title"], "host": entry["host"],
                    "offset_m": [x, y, 0.0], "yaw_deg": yaw, "seed": stable_seed(rid, gid)}

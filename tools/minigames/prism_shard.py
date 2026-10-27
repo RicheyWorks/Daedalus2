@@ -10,7 +10,10 @@ is full (the sphere shatters, lost) or the shard pouch is empty (won).
 
 Pure Python, stdlib only, deterministic per seed.
 """
+import argparse
+import json
 import random
+import sys
 
 GAME_ID = "shardring"
 TITLE = "Shardring Resonance"
@@ -102,6 +105,38 @@ class ShardringGame:
             self.over, self.won = True, True
         return gained
 
+    def to_state(self):
+        """JSON-serializable snapshot for a host save slot."""
+        return {"v": 1, "id": GAME_ID, "seed": self.seed, "difficulty": self.difficulty,
+                "ring": list(self.ring), "pouch": self.pouch, "score": self.score, "chain": self.chain,
+                "resonance": dict(self.resonance), "spirits": list(self.spirits), "over": self.over,
+                "won": self.won, "current": self.current, "next": self.next,
+                "rng": [self.rng.getstate()[0], list(self.rng.getstate()[1]), self.rng.getstate()[2]]}
+
+    @classmethod
+    def from_state(cls, state):
+        if state.get("v") != 1 or state.get("id") != GAME_ID:
+            raise ValueError("not a shardring v1 save")
+        g = cls(state["seed"], state["difficulty"])
+        if len(state["ring"]) != len(g.ring):
+            raise ValueError("ring size does not match difficulty")
+        for k in ("ring", "pouch", "score", "chain", "resonance", "spirits", "over", "won", "current", "next"):
+            setattr(g, k, state[k] if not isinstance(state[k], (list, dict)) else type(state[k])(state[k]))
+        v, internal, gauss = state["rng"]
+        g.rng.setstate((v, tuple(internal), gauss))
+        return g
+
+    def render(self):
+        mark = {h: h[0].upper() for h in self.hues}
+        ring = " ".join(f"{i}:{mark[h] if h else '.'}" for i, h in enumerate(self.ring))
+        lines = [f"{TITLE} [{self.difficulty}] score {self.score} chain {self.chain} pouch {self.pouch}",
+                 f"ring  {ring}", f"shard {self.current}  next {self.next}"]
+        if self.spirits:
+            lines.append("spirits " + ", ".join(self.spirits))
+        if self.over:
+            lines.append("WON: the sphere is whole" if self.won else "LOST: the sphere shattered")
+        return "\n".join(lines)
+
     def status(self):
         return {"id": GAME_ID, "score": self.score, "over": self.over, "won": self.won,
                 "pouch": self.pouch, "current": self.current, "next": self.next,
@@ -124,3 +159,52 @@ def greedy_move(game):
         if best_key is None or key > best_key:
             best, best_key = i, key
     return best
+
+
+def demo(seed=0, difficulty=DEFAULT_DIFFICULTY, out=None):
+    """Play a full seeded game with greedy_move; returns the final game. Deterministic."""
+    g = start(seed, difficulty)
+    while not g.over:
+        f = greedy_move(g)
+        pts = g.place(f)
+        if out:
+            print(f"set {f} +{pts}", file=out)
+    if out:
+        print(g.render(), file=out)
+    return g
+
+
+def play(seed, difficulty, inp=sys.stdin, out=sys.stdout):
+    g = start(seed, difficulty)
+    print(HOW_TO_PLAY, file=out)
+    while not g.over:
+        print(g.render(), file=out)
+        print("facet (q quits)> ", end="", file=out, flush=True)
+        line = inp.readline()
+        if not line or line.strip().lower() == "q":
+            break
+        try:
+            g.place(int(line.strip()))
+        except ValueError as e:
+            print(f"? {e}", file=out)
+    print(g.render(), file=out)
+    return g
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(prog="prism_shard", description=TITLE)
+    ap.add_argument("--play", action="store_true")
+    ap.add_argument("--demo", action="store_true")
+    ap.add_argument("--difficulty", default=DEFAULT_DIFFICULTY, choices=sorted(DIFFICULTY))
+    ap.add_argument("--seed", type=int, default=0)
+    a = ap.parse_args(argv)
+    if a.play:
+        play(a.seed, a.difficulty)
+    else:
+        g = demo(a.seed, a.difficulty, sys.stdout)
+        print(json.dumps({"score": g.score, "won": g.won}))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
