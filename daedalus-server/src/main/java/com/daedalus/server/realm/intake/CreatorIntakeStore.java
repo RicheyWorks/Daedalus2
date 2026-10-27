@@ -74,6 +74,7 @@ public final class CreatorIntakeStore implements AutoCloseable {
     private final Header header;
     private final FileChannel lockChannel;
     private final FileLock lock;
+    private final Object monitor = new Object();
     private boolean closed;
 
     public static CreatorIntakeStore create(Path root, Set<String> reservedIds) throws IOException {
@@ -86,10 +87,11 @@ public final class CreatorIntakeStore implements AutoCloseable {
 
     private CreatorIntakeStore(Path location, boolean create, Set<String> reservedIds) throws IOException {
         Path requested = location.toAbsolutePath().normalize();
-        if (requested.getParent() == null) throw new IOException("Intake must name a new private directory");
+        Path requestedParent = requested.getParent();
+        if (requestedParent == null) throw new IOException("Intake must name a new private directory");
         if (create) {
             requireValid(CreatorRealmScaffold.empty(), reservedIds);
-            Files.createDirectories(requested.getParent());
+            Files.createDirectories(requestedParent);
             Files.createDirectory(requested);
         }
         directory(requested);
@@ -128,22 +130,51 @@ public final class CreatorIntakeStore implements AutoCloseable {
         }
     }
 
-    public synchronized Snapshot current() throws IOException { return load(0).selected(); }
-    public synchronized Snapshot read(int revision) throws IOException {
-        if (revision < 1) throw new IOException("Revision must be positive");
-        return load(revision).selected();
+    public Snapshot current() throws IOException {
+        synchronized (monitor) {
+            return load(0).selected();
+        }
     }
-    public synchronized List<Revision> history() throws IOException { return load(0).revisions(); }
+    public Snapshot read(int revision) throws IOException {
+        synchronized (monitor) {
+            if (revision < 1) throw new IOException("Revision must be positive");
+            return load(revision).selected();
+        }
+    }
+    public List<Revision> history() throws IOException {
+        synchronized (monitor) {
+            return load(0).revisions();
+        }
+    }
 
     /** A stale revision refuses without replacing any snapshot, original or current version. */
-    public synchronized Snapshot save(int expectedRevision, Manifest candidate) throws IOException {
-        Snapshot previous = expected(expectedRevision);
-        return commit(previous, candidate);
+    public Snapshot save(int expectedRevision, Manifest candidate) throws IOException {
+        synchronized (monitor) {
+            Snapshot previous = expected(expectedRevision);
+            return commit(previous, candidate);
+        }
     }
 
-    public synchronized Snapshot addEntry(int expectedRevision, String id, Role role, Attribution creator,
+    public Snapshot addEntry(int expectedRevision, String id, Role role, Attribution creator,
                                           String supersedesId) throws IOException {
-        Snapshot previous = expected(expectedRevision);
+        synchronized (monitor) {
+            Snapshot previous = expected(expectedRevision);
+            return appendEntry(previous, id, role, creator, supersedesId);
+        }
+    }
+
+    /** Start a separate editable iteration, retaining the final predecessor and requiring new explicit content/attribution. */
+    public Snapshot reviseEntry(int expectedRevision, String newId, String predecessorId,
+                                             Attribution creator) throws IOException {
+        synchronized (monitor) {
+            Snapshot previous = expected(expectedRevision);
+            Entry predecessor = find(previous.manifest(), predecessorId);
+            if (predecessor.stage() != Stage.FINAL) throw new IOException("Edit an existing draft; revise requires final source content");
+            return appendEntry(previous, newId, predecessor.role(), creator, predecessorId);
+        }
+    }
+
+    private Snapshot appendEntry(Snapshot previous, String id, Role role, Attribution creator, String supersedesId) throws IOException {
         Entry entry = new Entry(id, role, Stage.DRAFT, supersedesId, null, null, null,
                 creator == null ? new Attribution(null, null, null, null) : creator,
                 SaleIntent.UNSET, List.of(), List.of(), List.of());
@@ -152,72 +183,91 @@ public final class CreatorIntakeStore implements AutoCloseable {
         return commit(previous, withEntries(previous.manifest(), entries));
     }
 
-    public synchronized Snapshot editDraft(int expectedRevision, String entryId, DraftEdit edit) throws IOException {
-        Objects.requireNonNull(edit, "edit");
-        Snapshot previous = expected(expectedRevision);
-        draft(find(previous.manifest(), entryId));
-        return commit(previous, replace(previous.manifest(), entryId, entry -> {
-            String preview = edit.previewOriginalId() == null ? null : entry.originals().stream()
-                    .filter(original -> original.id().equals(edit.previewOriginalId())).findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("Preview must name an attached original ID")).originalUri();
-            return new Entry(entry.id(), entry.role(), entry.stage(), entry.supersedesId(), edit.name(), edit.description(), preview,
-                    edit.creator() == null ? new Attribution(null, null, null, null) : edit.creator(),
-                    edit.saleIntent() == null ? SaleIntent.UNSET : edit.saleIntent(), edit.componentIds(), entry.originals(), entry.ideas());
-        }));
+    public Snapshot editDraft(int expectedRevision, String entryId, DraftEdit edit) throws IOException {
+        synchronized (monitor) {
+            Objects.requireNonNull(edit, "edit");
+            Snapshot previous = expected(expectedRevision);
+            draft(find(previous.manifest(), entryId));
+            return commit(previous, replace(previous.manifest(), entryId, entry -> {
+                String preview = edit.previewOriginalId() == null ? null : entry.originals().stream()
+                        .filter(original -> original.id().equals(edit.previewOriginalId())).findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("Preview must name an attached original ID")).originalUri();
+                return new Entry(entry.id(), entry.role(), entry.stage(), entry.supersedesId(), edit.name(), edit.description(), preview,
+                        edit.creator() == null ? new Attribution(null, null, null, null) : edit.creator(),
+                        edit.saleIntent() == null ? SaleIntent.UNSET : edit.saleIntent(), edit.componentIds(), entry.originals(), entry.ideas());
+            }));
+        }
     }
 
-    public synchronized Snapshot appendIdea(int expectedRevision, String entryId, String text) throws IOException {
-        Snapshot previous = expected(expectedRevision);
-        return commit(previous, replace(previous.manifest(), entryId, entry -> CreatorRealmScaffold.appendIdea(entry, text)));
+    public Snapshot appendIdea(int expectedRevision, String entryId, String text) throws IOException {
+        synchronized (monitor) {
+            Snapshot previous = expected(expectedRevision);
+            return commit(previous, replace(previous.manifest(), entryId, entry -> CreatorRealmScaffold.appendIdea(entry, text)));
+        }
     }
 
     /** Copy explicitly supplied local bytes; no original filename becomes a creative name or public URL. */
-    public synchronized Snapshot attachOriginal(int expectedRevision, String entryId, String originalId, Path source,
+    public Snapshot attachOriginal(int expectedRevision, String entryId, String originalId, Path source,
                                                 String provenance, boolean useAsPreview) throws IOException {
-        Snapshot previous = expected(expectedRevision);
-        Entry entry = find(previous.manifest(), entryId);
-        draft(entry);
-        if (entry.role() == Role.IDEA) throw new IOException("Attach art to a separate asset/component/assembly entry");
-        Original probe = new Original(originalId, "urn:sha256:" + "0".repeat(64), "0".repeat(64), provenance);
-        requireValid(replace(previous.manifest(), entryId, value -> withOriginal(value, probe, useAsPreview)), header.reservedIds());
-        String hash = preserve(source);
-        Original original = new Original(originalId, "urn:sha256:" + hash, hash, provenance);
-        return commit(previous, replace(previous.manifest(), entryId, value -> withOriginal(value, original, useAsPreview)));
+        synchronized (monitor) {
+            Snapshot previous = expected(expectedRevision);
+            Entry entry = find(previous.manifest(), entryId);
+            draft(entry);
+            if (entry.role() == Role.IDEA) throw new IOException("Attach art to a separate asset/component/assembly entry");
+            Original probe = new Original(originalId, "urn:sha256:" + "0".repeat(64), "0".repeat(64), provenance);
+            requireValid(replace(previous.manifest(), entryId, value -> withOriginal(value, probe, useAsPreview)), header.reservedIds());
+            String hash = preserve(source);
+            Original original = new Original(originalId, "urn:sha256:" + hash, hash, provenance);
+            return commit(previous, replace(previous.manifest(), entryId, value -> withOriginal(value, original, useAsPreview)));
+        }
     }
 
     /** Final source content is immutable, but still only produces review-required metadata and no sale authority. */
-    public synchronized Snapshot finalizeSourceContent(int expectedRevision, String entryId) throws IOException {
-        Snapshot previous = expected(expectedRevision);
-        Entry entry = find(previous.manifest(), entryId);
-        draft(entry);
-        List<String> missing = missing(entry, false);
-        if (entry.role() == Role.IDEA) missing.add("IDEA_CANNOT_BE_FINAL_CONTENT");
-        if (!missing.isEmpty()) throw new IOException("Cannot finalize source: " + String.join(", ", missing));
-        Entry finalized = new Entry(entry.id(), entry.role(), Stage.FINAL, entry.supersedesId(), entry.name(), entry.description(),
-                entry.previewUri(), entry.creator(), entry.saleIntent(), entry.componentIds(), entry.originals(), entry.ideas());
-        return commit(previous, replace(previous.manifest(), entryId, value -> finalized));
+    public Snapshot finalizeSourceContent(int expectedRevision, String entryId) throws IOException {
+        synchronized (monitor) {
+            Snapshot previous = expected(expectedRevision);
+            Entry entry = find(previous.manifest(), entryId);
+            draft(entry);
+            List<String> missing = missing(entry, false);
+            if (entry.role() == Role.IDEA) missing.add("IDEA_CANNOT_BE_FINAL_CONTENT");
+            if (!missing.isEmpty()) throw new IOException("Cannot finalize source: " + String.join(", ", missing));
+            Entry finalized = new Entry(entry.id(), entry.role(), Stage.FINAL, entry.supersedesId(), entry.name(), entry.description(),
+                    entry.previewUri(), entry.creator(), entry.saleIntent(), entry.componentIds(), entry.originals(), entry.ideas());
+            return commit(previous, replace(previous.manifest(), entryId, value -> finalized));
+        }
+    }
+
+    /** Read-only authoring feedback, including explicit missing inputs; no export file or new revision is created. */
+    public ExportBundle review(int revision) throws IOException {
+        synchronized (monitor) {
+            Snapshot snapshot = read(revision);
+            List<ExportEntry> entries = new ArrayList<>();
+            for (Entry entry : snapshot.manifest().entries()) {
+                IslandTokenMetadata metadata = CreatorRealmScaffold.metadataDraft(snapshot.manifest(), entry.id(), header.reservedIds()).orElse(null);
+                entries.add(new ExportEntry(entry.id(), entry.role(), entry.stage(), CreatorRealmScaffold.saleEligibility(entry).name(),
+                        CreatorRealmScaffold.labels(entry), metadata, missing(entry, true)));
+            }
+            return new ExportBundle(1, revision, snapshot.sha256(), false, snapshot.manifest().marketplace(), entries);
+        }
     }
 
     /** Export JSON only to a new local file outside the private store; originals are never copied to the export. */
-    public synchronized ExportBundle export(int revision, Path destination) throws IOException {
-        Snapshot snapshot = read(revision);
-        Path target = destination.toAbsolutePath().normalize();
-        if (target.getParent() == null || target.getFileName() == null || target.startsWith(root)) {
-            throw new IOException("Export must name a new file outside the private intake store");
+    public ExportBundle export(int revision, Path destination) throws IOException {
+        synchronized (monitor) {
+            ExportBundle bundle = review(revision);
+            Path target = destination.toAbsolutePath().normalize();
+            Path requestedParent = target.getParent();
+            Path fileName = target.getFileName();
+            if (requestedParent == null || fileName == null || target.startsWith(root)) {
+                throw new IOException("Export must name a new file outside the private intake store");
+            }
+            Path parent = requestedParent.toRealPath();
+            directory(parent);
+            target = parent.resolve(fileName);
+            if (target.startsWith(root)) throw new IOException("Export must be outside the private intake store");
+            publish(target, JSON.writeValueAsBytes(bundle));
+            return bundle;
         }
-        Path parent = target.getParent().toRealPath();
-        directory(parent);
-        target = parent.resolve(target.getFileName());
-        if (target.startsWith(root)) throw new IOException("Export must be outside the private intake store");
-        List<ExportEntry> entries = new ArrayList<>();
-        for (Entry entry : snapshot.manifest().entries()) {
-            IslandTokenMetadata metadata = CreatorRealmScaffold.metadataDraft(snapshot.manifest(), entry.id(), header.reservedIds()).orElse(null);
-            entries.add(new ExportEntry(entry.id(), entry.role(), entry.stage(), CreatorRealmScaffold.saleEligibility(entry).name(),
-                    CreatorRealmScaffold.labels(entry), metadata, missing(entry, true)));
-        }
-        ExportBundle bundle = new ExportBundle(1, revision, snapshot.sha256(), false, snapshot.manifest().marketplace(), entries);
-        publish(target, JSON.writeValueAsBytes(bundle));
-        return bundle;
     }
 
     private Snapshot expected(int revision) throws IOException {
@@ -259,7 +309,10 @@ public final class CreatorIntakeStore implements AutoCloseable {
         requireOpen();
         List<Path> files;
         try (var stream = Files.list(snapshots)) {
-            files = stream.filter(path -> path.getFileName().toString().matches("[0-9]{8}\\.json")).sorted().toList();
+            files = stream.filter(path -> {
+                Path name = path.getFileName();
+                return name != null && name.toString().matches("[0-9]{8}\\.json");
+            }).sorted().toList();
         }
         if (files.isEmpty() || files.size() > MAX_REVISIONS) throw new IOException("Missing or excessive intake history");
         Snapshot previous = null;
@@ -267,7 +320,8 @@ public final class CreatorIntakeStore implements AutoCloseable {
         List<Revision> revisions = new ArrayList<>();
         for (int index = 0; index < files.size(); index++) {
             int number = index + 1;
-            if (!files.get(index).getFileName().toString().equals(String.format(java.util.Locale.ROOT, "%08d.json", number))) {
+            Path name = files.get(index).getFileName();
+            if (name == null || !name.toString().equals(String.format(java.util.Locale.ROOT, "%08d.json", number))) {
                 throw new IOException("Intake history has a missing revision");
             }
             byte[] bytes = readBytes(files.get(index));
@@ -347,7 +401,9 @@ public final class CreatorIntakeStore implements AutoCloseable {
 
     /** Same-directory hard-link publication is atomic and refuses existing targets, unlike atomic replace. */
     private static void publish(Path target, byte[] bytes) throws IOException {
-        Path temporary = Files.createTempFile(target.getParent(), ".intake-", ".pending");
+        Path parent = target.getParent();
+        if (parent == null) throw new IOException("Publication requires a parent directory");
+        Path temporary = Files.createTempFile(parent, ".intake-", ".pending");
         try {
             try (FileChannel output = FileChannel.open(temporary, StandardOpenOption.WRITE)) {
                 ByteBuffer buffer = ByteBuffer.wrap(bytes);
@@ -423,8 +479,10 @@ public final class CreatorIntakeStore implements AutoCloseable {
         if (closed || !lock.isValid()) throw new IOException("Intake store is closed");
         directory(root); directory(originals); directory(snapshots);
     }
-    @Override public synchronized void close() throws IOException {
-        closed = true;
-        lockChannel.close();
+    @Override public void close() throws IOException {
+        synchronized (monitor) {
+            closed = true;
+            lockChannel.close();
+        }
     }
 }

@@ -25,12 +25,14 @@ init ROOT [RESERVED_IDS_JSON]
 show ROOT [REVISION]
 history ROOT
 new ROOT EXPECTED ID ROLE [CREATOR_HANDLE] [SUPERSEDES_ID]
+revise ROOT EXPECTED NEW_ID PREDECESSOR_ID [CREATOR_HANDLE]
 edit ROOT EXPECTED ID EDIT_JSON
 idea ROOT EXPECTED ID TEXT_FILE
 attach ROOT EXPECTED ENTRY_ID ORIGINAL_ID LOCAL_FILE PROVENANCE_TEXT_FILE [--preview]
 finalize-source ROOT EXPECTED ID
 save ROOT EXPECTED MANIFEST_JSON
 export ROOT REVISION OUTPUT_JSON
+review ROOT REVISION
 ```
 
 `init` saves empty revision 1. Every mutation requires the current positive
@@ -39,6 +41,11 @@ Reopen the root with `show` or `history` after a conflict before editing again.
 `history` returns revision/digest/parent/entry-count summaries; `show` includes
 the full saved manifest. `save` imports a complete manifest under the same
 validation and preservation rules as individual authoring commands.
+`review` returns labels, available metadata and missing-input reasons without
+creating an export file or changing the revision. Use it before source finalization.
+`revise` retains a final predecessor and creates a new draft with the same role,
+explicit lineage and unset content/attribution. It copies no art or creator claims;
+supply the new iteration's art and attribution explicitly. Existing drafts use `edit`.
 
 `ROLE` is `ASSET`, `ASSEMBLY`, `COMPONENT` or `IDEA`. A new entry has unknown
 attribution unless a creator handle is explicitly supplied, which records

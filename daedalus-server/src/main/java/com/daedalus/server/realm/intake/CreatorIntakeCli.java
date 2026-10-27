@@ -31,12 +31,14 @@ public final class CreatorIntakeCli {
               show ROOT [REVISION]
               history ROOT
               new ROOT EXPECTED ID ROLE [CREATOR_HANDLE] [SUPERSEDES_ID]
+              revise ROOT EXPECTED NEW_ID PREDECESSOR_ID [CREATOR_HANDLE]
               edit ROOT EXPECTED ID EDIT_JSON
               idea ROOT EXPECTED ID TEXT_FILE
               attach ROOT EXPECTED ENTRY_ID ORIGINAL_ID LOCAL_FILE PROVENANCE_TEXT_FILE [--preview]
               finalize-source ROOT EXPECTED ID
               save ROOT EXPECTED MANIFEST_JSON
               export ROOT REVISION OUTPUT_JSON
+              review ROOT REVISION
             ROLE is ASSET, ASSEMBLY, COMPONENT or IDEA. EXPECTED is the current positive revision.
             All operations are local. Final source content and exported metadata do not approve a sale.
             """;
@@ -92,6 +94,11 @@ public final class CreatorIntakeCli {
                 var edit = readJson(args[4], CreatorIntakeStore.DraftEdit.class);
                 yield use(args[1], store -> store.editDraft(revision(args[2]), args[3], edit));
             }
+            case "revise" -> {
+                count(args, 5, 6);
+                Attribution creator = args.length == 6 ? new Attribution(args[5], Basis.USER_ASSERTED, null, null) : null;
+                yield use(args[1], store -> store.reviseEntry(revision(args[2]), args[3], args[4], creator));
+            }
             case "idea" -> {
                 count(args, 5, 5);
                 String brief = readText(args[4]);
@@ -118,6 +125,10 @@ public final class CreatorIntakeCli {
             case "export" -> {
                 count(args, 4, 4);
                 yield use(args[1], store -> store.export(revision(args[2]), Path.of(args[3])));
+            }
+            case "review" -> {
+                count(args, 3, 3);
+                yield use(args[1], store -> store.review(revision(args[2])));
             }
             default -> throw new IllegalArgumentException("Unknown command: " + args[0] + "\n" + USAGE);
         };

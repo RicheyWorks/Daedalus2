@@ -92,6 +92,17 @@ class CreatorIntakeStoreTest {
         assertThat(out.toString(StandardCharsets.UTF_8)).isEmpty();
         assertThat(err.toString(StandardCharsets.UTF_8)).contains("no changes to save");
         assertThat(cli("show", directory).get("revision").asInt()).isEqualTo(7);
+        assertThat(cli("review", directory, "7").get("saleReady").asBoolean()).isFalse();
+        assertThat(cli("show", directory).get("revision").asInt()).isEqualTo(7);
+        var revised = cli("revise", directory, "7", "deathhimself_synthetic_revision", ID);
+        assertThat(revised.get("revision").asInt()).isEqualTo(8);
+        var newDraft = revised.get("manifest").get("entries").get(2);
+        assertThat(newDraft.get("supersedesId").asText()).isEqualTo(ID);
+        assertThat(newDraft.get("stage").asText()).isEqualTo("DRAFT");
+        assertThat(newDraft.get("creator").get("handle").isNull()).isTrue();
+        assertThat(newDraft.get("originals").isEmpty()).isTrue();
+        assertThat(cli("review", directory, "8").get("entries").get(2).get("missingInputs").toString())
+                .contains("DRAFT_CONTENT", "CREATOR_ATTRIBUTION", "ORIGINAL", "PINNED_PREVIEW");
     }
 
     @Test void syntheticIntakeRetainsBytesHistoryAndOfflineMetadataAcrossReopen() throws Exception {
