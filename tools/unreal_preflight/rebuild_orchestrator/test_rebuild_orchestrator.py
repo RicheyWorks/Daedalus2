@@ -21,8 +21,35 @@ class Fake:
         self.free = kw.get("ram", 6.0)
         self.rc = kw.get("rc", {})
         self.ubt_out = kw.get("ubt_out", "Result: Succeeded")
+        self.head = kw.get("head", "abc123")
+        self.target_sha = kw.get("target_sha", "abc123")
+        self.porcelain = kw.get("porcelain", "")
+        self.corrupt = kw.get("corrupt", False)
+        # fake fs: path string -> bytes
+        self.fs = dict(kw.get("fs", {}))
+        self.copies = []
+
+    def list_files(self, root):
+        root = str(root).replace("\\", "/").rstrip("/") + "/"
+        return {k[len(root):]: k for k in self.fs if k.startswith(root)}
+
+    def sha256(self, path):
+        import hashlib
+        return hashlib.sha256(self.fs[str(path).replace("\\", "/")]).hexdigest()
+
+    def copy_file(self, src, dest):
+        self.copies.append((src, str(dest).replace("\\", "/")))
+        if not self.corrupt:
+            self.fs[str(dest).replace("\\", "/")] = self.fs[src]
+        else:
+            self.fs[str(dest).replace("\\", "/")] = b"corrupt"
 
     def run(self, cmd, cwd=None, log=None):
+        if cmd and cmd[0] == "git":
+            self.calls.append(("git", cmd[3]))
+            if cmd[3] == "rev-parse":
+                return 0, (self.head if cmd[4] == "HEAD" else self.target_sha) + "\n"
+            return 0, self.porcelain
         name = "ubt" if cmd and cmd[0] == "Build.bat" else ("delta" if "rebuild_delta.py" in str(cmd) else
                "preflight" if "preflight.py" in str(cmd) else cmd[2])
         self.calls.append(("run", name))
@@ -71,13 +98,14 @@ class T(unittest.TestCase):
         rep = ro.orchestrate(self.args(), f)
         self.assertEqual(f.calls, [])
         self.assertEqual(rep["result"], "planned")
-        self.assertEqual([s["n"] for s in rep["steps"]], [1, 2, 3, 4, 5, 6, 7])
+        self.assertEqual([s["n"] for s in rep["steps"]], [1, 2, 3, 4, "4b", 5, 6, 7])
+        self.assertIn("never delete", rep["steps"][4]["detail"])
         self.assertFalse((self.d / "run").exists())
-        self.assertEqual(rep["steps"][4]["cmd"], UBT)
+        self.assertEqual(rep["steps"][5]["cmd"], UBT)
 
     def test_dry_run_flags_missing_ubt(self):
         rep = ro.orchestrate(self.args(ubt=False), Fake())
-        self.assertIn("missing", rep["steps"][4]["status"])
+        self.assertIn("missing", rep["steps"][5]["status"])
 
     def test_phase_a_order_and_stops_before_ubt(self):
         f = Fake()
@@ -128,6 +156,67 @@ class T(unittest.TestCase):
         rep = ro.orchestrate(a, Fake())
         return ro.write_report(a, rep)
 
+    def fs(self):
+        src = (str(self.d / "repo").replace("\\", "/") + "/engines/unreal/DaedalusLink/")
+        live = str(self.d / "plug").replace("\\", "/") + "/"
+        return src, live, {src + "Source/A.cpp": b"new", src + "Source/B.h": b"same", src + "Source/C.h": b"added",
+                           live + "Source/A.cpp": b"old", live + "Source/B.h": b"same", live + "Source/Stale.h": b"x",
+                           live + "Binaries/Win64/x.dll": b"dll"}
+
+    def test_source_sync_manifest_and_extras_kept(self):
+        path = self.phase_a()
+        src, live, fs = self.fs()
+        f = Fake(editor=None, fs=fs)
+        rep = ro.orchestrate(self.args("--execute", "--editor-closed", "--resume", str(path)), f)
+        self.assertEqual(rep["result"], "ok", rep)
+        man = json.loads((self.d / "run" / "source-sync-manifest.json").read_text())
+        rows = {r["path"]: r for r in man["files"]}
+        self.assertEqual(rows["Source/A.cpp"]["action"], "overwrite")
+        self.assertEqual(rows["Source/B.h"]["action"], "unchanged")
+        self.assertEqual(rows["Source/C.h"]["action"], "add")
+        self.assertIsNone(rows["Source/C.h"]["live_before_sha256"])
+        for r in rows.values():
+            self.assertEqual(r["live_after_sha256"], r["source_sha256"])
+        self.assertEqual(man["live_only_not_deleted"], ["Source/Stale.h"])
+        self.assertIn(live + "Source/Stale.h", f.fs)
+        self.assertEqual(len(f.copies), 2)
+        order = [c for c in f.calls if c[0] in ("git", "run")]
+        self.assertEqual(order[-3:], [("run", "ubt"), ("run", "write"), ("run", "verify")])
+
+    def test_source_sync_mismatch_stops_before_ubt(self):
+        path = self.phase_a()
+        _, _, fs = self.fs()
+        f = Fake(editor=None, fs=fs, corrupt=True)
+        rep = ro.orchestrate(self.args("--execute", "--editor-closed", "--resume", str(path)), f)
+        self.assertEqual(rep["result"], "failed")
+        self.assertNotIn(("run", "ubt"), f.calls)
+
+    def test_refuses_unclean_worktree(self):
+        path = self.phase_a()
+        _, _, fs = self.fs()
+        f = Fake(editor=None, fs=fs, porcelain=" M engines/unreal/DaedalusLink/Source/A.cpp")
+        rep = ro.orchestrate(self.args("--execute", "--editor-closed", "--resume", str(path)), f)
+        self.assertEqual(rep["result"], "refused")
+        self.assertEqual(f.copies, [])
+        self.assertNotIn(("run", "ubt"), f.calls)
+
+    def test_refuses_worktree_not_at_target(self):
+        path = self.phase_a()
+        _, _, fs = self.fs()
+        f = Fake(editor=None, fs=fs, head="def456")
+        rep = ro.orchestrate(self.args("--execute", "--editor-closed", "--resume", str(path)), f)
+        self.assertEqual(rep["result"], "refused")
+        self.assertIn("not target", rep["reason"])
+        self.assertEqual(f.copies, [])
+
+    def test_dry_run_copies_nothing(self):
+        _, _, fs = self.fs()
+        f = Fake(fs=fs)
+        before = dict(f.fs)
+        ro.orchestrate(self.args(), f)
+        self.assertEqual(f.copies, [])
+        self.assertEqual(f.fs, before)
+
     def test_phase_b_full(self):
         path = self.phase_a()
         self.assertTrue(path.with_suffix(".md").exists())
@@ -135,6 +224,7 @@ class T(unittest.TestCase):
         rep = ro.orchestrate(self.args("--execute", "--editor-closed", "--resume", str(path)), f)
         self.assertEqual(rep["result"], "ok", rep)
         runs = [c[1] for c in f.calls if c[0] == "run"]
+        self.assertIn(("git", "status"), f.calls)
         self.assertEqual(runs, ["ubt", "write", "verify"])
 
     def test_phase_b_refuses_when_editor_answers(self):
@@ -176,7 +266,7 @@ class T(unittest.TestCase):
         (src / "Source").mkdir()
         (src / "Source" / "a.cpp").write_text("x")
         rows = ro.Env().backup(src, self.d / "bk" / "S1")
-        self.assertEqual(sorted(r["path"] for r in rows), ["Binaries/Win64/x.dll", "DaedalusLink.uplugin"])
+        self.assertEqual(sorted(r["path"] for r in rows), ["Binaries/Win64/x.dll", "DaedalusLink.uplugin", "Source/a.cpp"])
         self.assertTrue((self.d / "bk" / "S1" / "backup-manifest.json").exists())
         with self.assertRaises(FileExistsError):
             ro.Env().backup(src, self.d / "bk" / "S1")
