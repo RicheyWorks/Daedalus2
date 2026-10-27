@@ -14,6 +14,7 @@ on:
       - 'tools/unreal_preflight/producer_status/**'
       - 'tools/unreal_preflight/rebuild_orchestrator/**'
       - 'tools/unreal_preflight/level_save_audit/**'
+      - 'tools/unreal_preflight/r22_closeout_verifier/**'
       - 'tools/grand_collection_throughput/**'
       - 'tools/unreal_preflight/deprecated_editor_api/**'
       - '.github/workflows/epic-source-tools.yml'
@@ -45,6 +46,8 @@ jobs:
         run: python -m unittest discover -s tools/unreal_preflight/rebuild_orchestrator -p 'test_*.py' -v
       - name: Level save audit
         run: python -m unittest discover -s tools/unreal_preflight/level_save_audit -p 'test_*.py' -v
+      - name: R22 closeout verifier
+        run: python -m unittest discover -s tools/unreal_preflight/r22_closeout_verifier -p 'test_*.py' -v
       - name: Grand Collection throughput simulator
         run: python -m unittest discover -s tools/grand_collection_throughput -p 'test_*.py' -v
       - name: Deprecated editor API scan
