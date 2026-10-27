@@ -123,9 +123,17 @@ class EarRuleSweepTest {
         // G89 ThunderTowers emits unpitched thunder (delays only), nothing to sweep.
     }
 
-    /** Creature calls whose species range stays under the ear rule; SONGBIRD/FOWL/CANID/AMPHIBIAN reach past 800 Hz (flagged). */
+    /** Creature calls whose species range stays under the ear rule; the rest go through the ear-safe path below. */
     @Test void creatureCallsForLowVoicedSpecies() {
         for (Species sp : List.of(Species.BOVINE, Species.SWINE, Species.GOAT)) {
             sweep("CallSynth " + sp, s -> List.of(CallSynth.design(sp, CallSynthTest.genome(s)).baseHz()));
         }
-    }}
+    }
+
+    /** Every species, 300 seeds each, through the ear-safe path the game plays (whole-octave drop under the rule). */
+    @Test void creatureCallsForAllSpeciesThroughEarSafePath() {
+        for (Species sp : Species.values()) {
+            sweep("CallSynth ear-safe " + sp, s -> List.of(CallSynth.designEarSafe(sp, CallSynthTest.genome(s)).baseHz()));
+        }
+    }
+}

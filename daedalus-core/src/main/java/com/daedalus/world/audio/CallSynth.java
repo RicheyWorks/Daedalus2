@@ -40,6 +40,29 @@ public final class CallSynth {
                 round3(vib * 0.8), breath);
     }
 
+    /**
+     * Ear-safe view of a call: the fundamental drops by whole octaves until it is under
+     * {@link EarRule#MAX_FUNDAMENTAL_HZ}; every other field is kept, so the call keeps its shape and pitch class.
+     * Additive only: {@link #design} and the PCS 1 line it produces are unchanged.
+     */
+    public static CallSpec earSafe(CallSpec c) {
+        double hz = c.baseHz();
+        while (!EarRule.ok(hz)) {
+            hz = round3(hz / 2);
+        }
+        hz = EarRule.check(hz, "creature call");
+        if (hz == c.baseHz()) {
+            return c;
+        }
+        return new CallSpec(hz, c.sweep(), c.harmonics(), c.brightness(), c.pulses(), c.pulseMs(), c.gapMs(),
+                c.vibratoHz(), c.vibratoDepth(), c.breath());
+    }
+
+    /** {@link #design} followed by {@link #earSafe}: what the game should actually play. */
+    public static CallSpec designEarSafe(Species s, Genome g) {
+        return earSafe(design(s, g));
+    }
+
     /** Renders 16-bit mono PCM; noise is seeded from the genome, so output is reproducible. */
     public static short[] render(CallSpec c, int sampleRate, long noiseSeed) {
         if (sampleRate < 8000) {
