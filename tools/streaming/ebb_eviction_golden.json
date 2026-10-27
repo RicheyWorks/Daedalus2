@@ -1,0 +1,67 @@
+{
+  "format": "daedalus-ebb-eviction",
+  "objective": "min total reload weight, then min islands unloaded; pinned never unloaded",
+  "ram_budget_kib": 20000,
+  "snapshot_date": "2026-10-26",
+  "summary": {
+    "cannot_fit": 0,
+    "greedy_heaviest_worse": 0,
+    "greedy_weight_worse": 0,
+    "over_budget": 1,
+    "unloads": 1,
+    "worlds": 2
+  },
+  "version": 1,
+  "worlds": [
+    {
+      "greedy_heaviest_first": {
+        "count": 1,
+        "unload_slots": [
+          2
+        ],
+        "weight": 1
+      },
+      "greedy_lowest_weight_first": {
+        "count": 1,
+        "unload_slots": [
+          2
+        ],
+        "weight": 1
+      },
+      "id": "alpha",
+      "need_kib": 12792,
+      "optimal": {
+        "count": 1,
+        "unload_slots": [
+          2
+        ],
+        "weight": 1
+      },
+      "pinned_slots": [],
+      "tide": "ebb",
+      "total_ram_kib": 32792
+    },
+    {
+      "greedy_heaviest_first": {
+        "count": 0,
+        "unload_slots": [],
+        "weight": 0
+      },
+      "greedy_lowest_weight_first": {
+        "count": 0,
+        "unload_slots": [],
+        "weight": 0
+      },
+      "id": "beta",
+      "need_kib": 0,
+      "optimal": {
+        "count": 0,
+        "unload_slots": [],
+        "weight": 0
+      },
+      "pinned_slots": [],
+      "tide": "slack",
+      "total_ram_kib": 16384
+    }
+  ]
+}

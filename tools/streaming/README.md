@@ -108,3 +108,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Census Budget Beacons (G206, quest q_census_beacons)
 - `census_budget.py`: reads the Codex World Census `census.json` (read-only), prices each island with the DSB 1 estimate (same constants as `dsb_manifest.py`) and flags islands whose RAM or disk breaks the resident-set budget: red (`ram_over`/`disk_over`), amber (within `warn_permille`), green. Per world it reports totals, `fits_all_resident` and `max_resident` (= brute-force oracle). The report's `beacon` field lights each island's lighthouse in game (`census_budget_test.py`; CI `Census Budget Beacons`). Rules: `docs/islands/DISKSAVER-CENSUS-BEACONS.md`.
+
+## Ebb Tide Eviction (G253, quest q_ebb_eviction)
+- `ebb_eviction.py`: reads the G206 `census_budget.py` report (read-only) and, for each world over the RAM budget, plans which resident islands to unload first: least total reload weight, then fewest islands, home slot pinned. Exact knapsack DP = brute-force oracle; greedy heaviest-first and lowest-weight-first are reported beside it. The plan's `tide` (`slack`/`ebb`/`stranded`) drives Ebb Warden Marlo in game (`ebb_eviction_test.py`; CI `Ebb Tide Eviction`). Rules: `docs/islands/DISKSAVER-EBB-EVICTION.md`.

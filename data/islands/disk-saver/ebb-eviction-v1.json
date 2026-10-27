@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "quest": "q_ebb_eviction",
+  "lore": "When the hold is too full, the Ebb Warden decides which islands sail out of memory first. Every island has a reload weight: the trouble of bringing it back. The Warden never casts off the home island, and always finds the lightest-burden set of islands to release so the rest can stay resident. Greedy deckhands who drop the biggest island, or the cheapest ones in turn, often pay more.",
+  "pinned_slots": [0],
+  "default_weight": 1,
+  "weights": {},
+  "hook": {"report_format": "daedalus-ebb-eviction", "field": "worlds[].tide", "values": ["slack", "ebb", "stranded"], "unload": "worlds[].optimal.unload_slots"},
+  "npc": {"name": "Ebb Warden Marlo", "lines": {
+    "slack": "Slack water. Every island rides resident.",
+    "ebb": "The tide is going out. Cast these islands off first; the rest stay.",
+    "stranded": "Even with every island cast off but home, she won't fit. Lighten the home island."}}
+}
