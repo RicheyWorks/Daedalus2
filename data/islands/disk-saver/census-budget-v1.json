@@ -1,0 +1,12 @@
+{
+  "v": 1,
+  "quest": "q_census_beacons",
+  "lore": "Every island keeps a lighthouse. Each night the Harbour Pilot reads the world census, weighs every island's cargo of assets against the streaming hold, and sets its lamp: green for an easy berth, amber when the island rides low, red when it is too heavy to ever be carried resident. Sailors trust the lamps; designers fix the red ones before the tide comes in.",
+  "budget": {"ram_budget_kib": 40000, "disk_budget_kib": 32768, "warn_permille": 900},
+  "hook": {"report_format": "daedalus-census-budget", "field": "worlds[].islands[].beacon", "values": ["green", "amber", "red"]},
+  "npc": {"name": "Harbour Pilot Wren", "lines": {
+    "green": "Light cargo. She'll ride resident with room to spare.",
+    "amber": "Riding low. One more crate and she sinks the budget.",
+    "red": "Too heavy for the hold. She can never be carried resident. Lighten her.",
+    "spill": "This world won't fit in the hold at once. We stream it island by island."}}
+}
