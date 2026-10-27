@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Bottle Census
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/bottle_census.py'
+      - 'tools/streaming/bottle_census_test.py'
+      - 'data/islands/disk-saver/bottle-census-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/bottle-census.yml'
+permissions:
+  contents: read
+jobs:
+  bottle-census:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G179 Bottle Census rules (marker total exact, consistent cut, lane state = in-transit oracle, sync shortfall, non-FIFO breaks, replay, G86 tie-in)
+        run: python -m unittest tools/streaming/bottle_census_test.py -v
+      - name: CLI smoke (marker census exact)
+        run: python tools/streaming/bottle_census.py data/islands/disk-saver/bottle-census-v1.json
