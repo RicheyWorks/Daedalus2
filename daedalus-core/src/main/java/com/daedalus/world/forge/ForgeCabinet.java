@@ -524,6 +524,20 @@ public final class ForgeCabinet {
                 });
         }, CullenCrucibles.forgemasterLine(CullenCrucibles.Grade.TURNED),
             CullenCrucibles.forgemasterLine(CullenCrucibles.Grade.SLIPPED)));
+        g.add(game("proth", "Proth Plates", ProthPlates.QUEST_ID, r -> {
+            int n = 1 + r.nextInt(20);
+            long k = 1 + 2L * r.nextInt(1 << (n - 1));
+            long v = (k << n) + 1;
+            boolean prime = ProthPlates.isProthPrime(v);
+            return new Puzzle("proth", "Is the Proth plate " + k + " x 2^" + n + " + 1 = " + v
+                + " prime? (prime/composite)", prime ? "prime" : "composite", a -> {
+                    if (!"prime".equals(a) && !"composite".equals(a)) {
+                        return false;
+                    }
+                    return ProthPlates.grade(v, "prime".equals(a)) == ProthPlates.Grade.TURNED;
+                });
+        }, ProthPlates.forgemasterLine(ProthPlates.Grade.TURNED),
+            ProthPlates.forgemasterLine(ProthPlates.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
