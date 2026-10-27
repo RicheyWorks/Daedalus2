@@ -510,6 +510,20 @@ public final class ForgeCabinet {
                 });
         }, PrimorialPyres.forgemasterLine(PrimorialPyres.Grade.TURNED),
             PrimorialPyres.forgemasterLine(PrimorialPyres.Grade.SLIPPED)));
+        g.add(game("cullen", "Cullen Crucibles", CullenCrucibles.QUEST_ID, r -> {
+            CullenCrucibles.Kind k = r.nextBoolean() ? CullenCrucibles.Kind.CULLEN : CullenCrucibles.Kind.WOODALL;
+            int n = 1 + r.nextInt(CullenCrucibles.MAX_N);
+            boolean prime = CullenCrucibles.isPrimePour(k, n);
+            String sign = k == CullenCrucibles.Kind.CULLEN ? " + 1 = " : " - 1 = ";
+            return new Puzzle("cullen", "Is " + n + " x 2^" + n + sign + CullenCrucibles.pour(k, n)
+                + " prime? (prime/composite)", prime ? "prime" : "composite", a -> {
+                    if (!"prime".equals(a) && !"composite".equals(a)) {
+                        return false;
+                    }
+                    return CullenCrucibles.grade(k, n, "prime".equals(a)) == CullenCrucibles.Grade.TURNED;
+                });
+        }, CullenCrucibles.forgemasterLine(CullenCrucibles.Grade.TURNED),
+            CullenCrucibles.forgemasterLine(CullenCrucibles.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
