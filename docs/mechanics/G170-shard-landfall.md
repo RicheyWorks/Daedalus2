@@ -17,3 +17,6 @@ shard's quay, where Quaymistress Tessaly Brund keeps the pens and the market.
 - **Quest q_shard_landfall:** report_tessaly / replan_landing / sail_again. **SLF 1** one-line encode for the later C++ core.
 
 Code: `daedalus-core/src/main/java/com/daedalus/world/forge/ShardLandfall.java` + `ShardLandfallTest` (9 tests).
+## Native C++ core (G182)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusShardLandfallCore.h` is a header-only C++17 port for the Unreal binding, built on `DaedalusVoidCrossingCore.h`. It provides `HoldOf`, `MakePasture`, `ShardBest` (the same DP table walk and tie rule), `ShardScore`, `ShardLand` (false where Java throws) and `Encode`; the `SLF 1` line is the same as in Java. `engines/unreal/core-test/shard_landfall_core_test.cpp` runs 6 checks (including its own brute-force oracle) under MSVC `/W4 /WX` and g++ `-Werror` with ASan/UBSan. Its `--write` mode writes `shard_landfall_parity.txt`: 50 seeded arks x tonic 0/1 x spares 0/6 x 3 crews x plans best/none/all, 1800 lines. `ShardLandfallParityTest` rebuilds the same crossings in Java and matches the file line for line.

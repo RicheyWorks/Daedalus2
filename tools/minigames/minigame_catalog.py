@@ -81,6 +81,26 @@ def parse_java(errors):
     return out
 
 
+# Pure-Python minigames: rules live in a stdlib module under tools/minigames.
+PY_GAMES = ["prism_shard"]
+
+
+def parse_python(errors):
+    import importlib
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    out = []
+    for mod in PY_GAMES:
+        m = importlib.import_module(mod)
+        test = f"test_{mod}.py"
+        if not (pathlib.Path(__file__).resolve().parent / test).exists():
+            errors.append(f"python game '{mod}' has no {test}")
+        out.append({"id": m.GAME_ID, "title": m.TITLE, "summary": (m.__doc__ or "").splitlines()[0].split(": ", 1)[-1],
+                    "how_to_play": m.HOW_TO_PLAY, "module": f"tools/minigames/{mod}.py",
+                    "start": f"{mod}.start(seed, difficulty)", "difficulty": sorted(m.DIFFICULTY),
+                    "default_difficulty": m.DEFAULT_DIFFICULTY, "tests": [test]})
+    return out
+
+
 CORE_DIR = REG.parent
 # Capability -> overrides that provide it. Realm builders and hosts read these.
 CAPABILITIES = {
@@ -241,6 +261,7 @@ def build():
     if tool_dir not in sys.path:
         sys.path.insert(0, tool_dir)
     from leaderboard_feed import CATALOG_HOOK
+    py = parse_python(errors)
     data = {
         "schema": "daedalus.minigames.catalog/v1",
         "generated_by": "tools/minigames/minigame_catalog.py",
@@ -249,6 +270,7 @@ def build():
         "leaderboard_feed": dict(CATALOG_HOOK),
         "games": games,
         "java_cabinets": java,
+        "python_games": py,
     }
     md = [
         "# Minigame catalog", "",
@@ -283,6 +305,11 @@ def build():
            "| id | title | enum | source | portable tests |", "|---|---|---|---|---|"]
     for j in java:
         md.append(f"| `{j['id']}` | {j['title']} | `{j['game_enum']}` | {j['source_repo']} | {len(j['portable_tests'])} |")
+    md += ["", "## Python minigames", "",
+           "Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), hard.", "",
+           "| id | title | module | how to play |", "|---|---|---|---|"]
+    for g in py:
+        md.append(f"| `{g['id']}` | {g['title']} | `{g['module']}` | {g['how_to_play']} |")
     md.append("")
     return json.dumps(data, indent=2) + "\n", "\n".join(md), errors
 

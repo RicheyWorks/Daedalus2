@@ -82,6 +82,15 @@ def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
         for field in ("id", "title", "summary"):
             for hit in trademark_hits(j.get(field, "")):
                 errors.append(f"Java cabinet '{j.get('id')}' {field} uses trademarked name '{hit}'")
+    for g in catalog.get("python_games", []):
+        gid = g.get("id", "?")
+        if not (g.get("how_to_play") or "").strip():
+            errors.append(f"python game '{gid}' has no how-to line")
+        if "normal" not in g.get("difficulty", []):
+            errors.append(f"python game '{gid}' has no normal difficulty")
+        for field in ("id", "title", "summary", "how_to_play"):
+            for hit in trademark_hits(g.get(field, "")):
+                errors.append(f"python game '{gid}' {field} uses trademarked name '{hit}'")
     ids = {g.get("id") for g in catalog.get("games", [])}
     for gid in sorted(set(pending) - ids):
         errors.append(f"SAVE_SLOT_PENDING names unknown game '{gid}'")

@@ -1,0 +1,77 @@
+{
+ "asset": "Prop_Arcade_Cab_Shardring",
+ "units": "cm",
+ "space": "unreal",
+ "sockets": [
+  {
+   "name": "SOCKET_Floor",
+   "parent": "",
+   "location": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "rotation": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "SOCKET_Screen",
+   "parent": "",
+   "location": [
+    0.0,
+    27.5,
+    122.5
+   ],
+   "rotation": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "SOCKET_Marquee",
+   "parent": "",
+   "location": [
+    0.0,
+    32.5,
+    170.0
+   ],
+   "rotation": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "SOCKET_Player1",
+   "parent": "",
+   "location": [
+    0.0,
+    60.0,
+    0.0
+   ],
+   "rotation": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "SOCKET_CoinSlot",
+   "parent": "",
+   "location": [
+    0.0,
+    37.5,
+    35.0
+   ],
+   "rotation": [
+    0,
+    0,
+    0
+   ]
+  }
+ ]
+}

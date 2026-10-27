@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+﻿# SPDX-License-Identifier: MIT
 """Preview contact sheet for a staged set (blender-team; every finished contest set gets one, prometheus 48809).
 Two stages, one file:
   blender -b --factory-startup --python contact_sheet.py -- --dir <staging> --assets A,B,... --tiles <tmp>
@@ -38,6 +38,8 @@ def render(o):
         d = Vector((0.55, -1.0, 0.45)).normalized(); co.location = c + d * L * 4
         co.rotation_euler = (-d).to_track_quat("-Z", "Y").to_euler(); bpy.context.scene.camera = co
         s = bpy.context.scene; s.render.engine = "BLENDER_WORKBENCH"; s.display.shading.light = "STUDIO"; s.display.shading.color_type = "MATERIAL"
+        if any(getattr(ob.data, "color_attributes", None) and len(ob.data.color_attributes) for ob in meshes):
+            s.display.shading.color_type = "VERTEX"  # voxel kits carry their palette in vertex colours (one tint material)
         s.display.shading.show_cavity = True; s.render.resolution_x = s.render.resolution_y = 420; s.render.film_transparent = False
         w = s.world or bpy.data.worlds.new("w"); s.world = w; w.color = (0.8, 0.8, 0.8)
         s.render.filepath = os.path.join(o.tiles, a + ".png"); bpy.ops.render.render(write_still=True)
