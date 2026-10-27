@@ -286,6 +286,23 @@ public final class ForgeCabinet {
                 a -> new BigInteger(a).equals(t));
         }, AutomorphAnvil.forgemasterLine(AutomorphAnvil.Grade.TURNED),
             AutomorphAnvil.forgemasterLine(AutomorphAnvil.Grade.SLIPPED)));
+        g.add(game("smith", "Smith Stamps", SmithStamps.QUEST_ID, r -> {
+            long n = 4 + r.nextInt(20_000);
+            if (r.nextBoolean()) {
+                while (!SmithStamps.isSmith(n)) {
+                    n++;
+                }
+            }
+            long fn = n;
+            return new Puzzle("smith", "Is stamp " + n + " a Smith number? (smith/plain)", SmithStamps.isSmith(n)
+                ? "smith" : "plain", a -> {
+                    if (!"smith".equals(a) && !"plain".equals(a)) {
+                        return false;
+                    }
+                    return SmithStamps.grade(fn, "smith".equals(a)) == SmithStamps.Grade.TURNED;
+                });
+        }, SmithStamps.forgemasterLine(SmithStamps.Grade.TURNED),
+            SmithStamps.forgemasterLine(SmithStamps.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
