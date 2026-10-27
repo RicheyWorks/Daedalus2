@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -144,6 +145,22 @@ class RetainedInputs(unittest.TestCase):
     def test_change_during_read_refused_before_output(self):
         self.inputs()
         actual_fstat, calls = os.fstat, 0
+        def clock(info, difference):
+            return SimpleNamespace(st_dev=info.st_dev, st_ino=info.st_ino, st_size=info.st_size,
+                st_mtime_ns=info.st_mtime_ns, st_ctime_ns=info.st_ctime_ns + difference)
+        with patch.object(adapter.os, 'fstat', side_effect=lambda fd: clock(actual_fstat(fd), 100)):
+            self.prepare()  # Stable source, different path/handle ctime representations.
+        self.output = self.root / 'ctime-change'
+        def changed_clock(fileno):
+            nonlocal calls
+            calls += 1
+            return clock(actual_fstat(fileno), 100 if calls == 2 else 0)
+        with patch.object(adapter.os, 'fstat', side_effect=changed_clock):
+            with self.assertRaisesRegex(ValueError, 'changed during read'):
+                self.prepare()
+        self.assertFalse(self.output.exists())
+        self.output = self.root / 'content-change'
+        calls = 0
         def changed(fileno):
             nonlocal calls
             calls += 1

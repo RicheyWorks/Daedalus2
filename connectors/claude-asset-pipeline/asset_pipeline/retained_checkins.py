@@ -50,10 +50,13 @@ def _copy(path, limit):
     _need(stat.S_ISREG(before.st_mode), 'input must be a regular retained-copy file')
     _need(0 < before.st_size <= limit, 'input byte limit exceeded or input empty')
     with path.open('rb') as stream:
-        _need(_stamp(os.fstat(stream.fileno())) == _stamp(before), 'input replaced before read')
+        opened = os.fstat(stream.fileno())
+        # Windows path/handle APIs can report different ctime semantics. Match
+        # identity/size/mtime across APIs; retain full ctime checks within each.
+        _need(_stamp(opened)[:4] == _stamp(before)[:4], 'input replaced before read')
         raw = stream.read(limit + 1)
         _need(len(raw) <= limit, 'input byte limit exceeded')
-        _need(_stamp(os.fstat(stream.fileno())) == _stamp(before), 'input changed during read')
+        _need(_stamp(os.fstat(stream.fileno())) == _stamp(opened), 'input changed during read')
     _need(_stamp(path.lstat()) == _stamp(before), 'input changed after read')
     return raw, (_stamp(before), hashlib.sha256(raw).hexdigest())
 
