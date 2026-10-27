@@ -42,7 +42,10 @@
 <div id="msg" aria-live="polite"></div>
 <div id="spirits"></div>
 <p class="help">Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill.
-Click a facet, or use Left/Right to pick and Enter/Space to set. Keys 1-9 and 0 set facets 1-10 directly; R restarts.</p>
+Click a facet, or use Left/Right to pick and Enter/Space to set. Keys 1-9 and 0 set facets 1-10 directly; R restarts. Controller: D-pad or left stick picks, A sets, Start restarts.</p>
+<!-- Optional: the shared DaedalusPad controller layer, read from this repo checkout (no network).
+     If it is missing, the page still plays with mouse and keyboard. -->
+<script src="../../../../daedalus-server/src/main/resources/static/controllers/daedalus-pad.js"></script>
 <script id="shardring-core">
 // Shardring Resonance rules: an exact port of tools/minigames/prism_shard.py,
 // including CPython's random.Random(str) seeding (SHA-512 + MT19937) and choice().
@@ -206,7 +209,18 @@ var Shardring = (function () {
     return { id: "shardring", score: this.score, over: this.over, won: this.won, pouch: this.pouch,
              current: this.current, next: this.next, ring: this.ring.slice(), spirits: this.spirits.slice() };
   };
-  return { Game: Game, PyRandom: PyRandom, sha512: sha512, DIFFICULTY: DIFFICULTY, HUES: HUES };
+  // Controller: logical DaedalusPad actions -> Shardring verbs (D-pad/left stick pick, A/confirm places, Start/menu restarts).
+  var PAD_ACTIONS = { left: "prev", up: "prev", right: "next", down: "next", confirm: "place", menu: "restart" };
+  // One input step shared by keyboard and pad: returns the new selection and whether to restart.
+  function applyVerb(game, sel, verb) {
+    var n = game.ring.length, out = { sel: sel, placed: false, restart: false };
+    if (verb === "prev") out.sel = (sel - 1 + n) % n;
+    else if (verb === "next") out.sel = (sel + 1) % n;
+    else if (verb === "restart") out.restart = true;
+    else if (verb === "place" && !game.over && game.ring[sel] === null) { game.place(sel); out.placed = true; }
+    return out;
+  }
+  return { Game: Game, PyRandom: PyRandom, PAD_ACTIONS: PAD_ACTIONS, applyVerb: applyVerb, sha512: sha512, DIFFICULTY: DIFFICULTY, HUES: HUES };
 })();
 if (typeof module !== "undefined") module.exports = Shardring;
 </script>
@@ -237,9 +251,18 @@ if (typeof module !== "undefined") module.exports = Shardring;
     });
     $("spirits").textContent = g.spirits.length ? "Spirits summoned: " + g.spirits.join(", ") : "";
   }
+  function verb(v) {
+    var r = Shardring.applyVerb(g, sel, v);
+    if (r.restart) return newGame();
+    sel = r.sel;
+    if (r.placed) report(); else draw();
+  }
   function setAt(i) {
     if (g.over || g.ring[i] !== null) return;
-    var pts = g.place(i), ev = g.last;
+    sel = i; verb("place");
+  }
+  function report() {
+    var pts = g.last.gained, ev = g.last;
     $("msg").textContent = ev.spirit ? ev.spirit + " answers the resonance! +" + pts
       : ev.run ? "Resonance of " + ev.run + " (chain " + g.chain + ") +" + pts : "Shard set.";
     if (g.over) $("msg").textContent = g.won ? "The pouch is empty and the sphere holds. You win!" : "Every facet is full. The sphere shatters.";
@@ -248,12 +271,18 @@ if (typeof module !== "undefined") module.exports = Shardring;
   document.addEventListener("keydown", function (e) {
     if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
     var n = g.ring.length;
-    if (e.key === "ArrowRight" || e.key === "ArrowDown") { sel = (sel + 1) % n; draw(); e.preventDefault(); }
-    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { sel = (sel - 1 + n) % n; draw(); e.preventDefault(); }
-    else if (e.key === "Enter" || e.key === " ") { setAt(sel); e.preventDefault(); }
-    else if (e.key === "r" || e.key === "R") newGame();
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") { verb("next"); e.preventDefault(); }
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { verb("prev"); e.preventDefault(); }
+    else if (e.key === "Enter" || e.key === " ") { verb("place"); e.preventDefault(); }
+    else if (e.key === "r" || e.key === "R") verb("restart");
     else if (/^[0-9]$/.test(e.key)) { var k = e.key === "0" ? 9 : +e.key - 1; if (k < n) { sel = k; setAt(k); } }
   });
+  if (window.DaedalusPad) {   /* feature-detect: no pad module, no controller support, nothing breaks */
+    DaedalusPad.create({ storageKey: "shardring.pad.v1", onChange: function (e) {
+      if (e.type === "down" && Shardring.PAD_ACTIONS[e.action]) verb(Shardring.PAD_ACTIONS[e.action]);
+      if (e.type === "connect") $("msg").textContent = e.pad.name + " connected: D-pad/stick picks, A sets, Start restarts.";
+    } });
+  }
   $("restart").onclick = newGame; $("diff").onchange = newGame; $("seed").onchange = newGame;
   newGame();
 })();
