@@ -10,6 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Reedbeat game over.** Three early taps end the round with no score. The round rules are unchanged.
 - **Daedalus spots.** Every desktop cabinet names one home spot in the catalog. The words are original, and that realm already places the cabinet. Cairnwell stands in Bricks, the stacking yard.
 - **Difficulty.** Every desktop cabinet accepts easy, normal, and hard, and starts on normal. The catalog records that default. Options, score, and save files stay as they are. The arcade host is unchanged.
 - **Cairnwell.** A stacking well. Option 0 is six columns and option 1 is a four-column practice with a slower fall. Slide a single stone; a full layer sinks away. A cream hint, a cyan slide cue, and the access plate sit on the bottom edge.
