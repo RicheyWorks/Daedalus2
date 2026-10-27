@@ -100,28 +100,38 @@ def build_plan(zip_path, prior_receipt=None):
         asset_files.add(file.casefold())
         planned_assets.append({"name": name, "file": file, "use": use,
                                "destination": root + "/Assets/" + _segment(name)})
-    action = "plan_new"
-    previous = None
-    if prior_receipt is not None:
-        prior = validate_receipt(prior_receipt)
-        if prior["world_id"] != world_id:
-            raise PlanError("prior receipt belongs to a different raw world ID")
-        if revision < prior["revision"]:
-            raise PlanError("requested revision predates the accepted revision")
-        previous = prior["destination_root"]
-        if revision == prior["revision"]:
-            if digest != prior["package_sha256"] or root != previous:
-                raise PlanError("accepted world revision has conflicting package bytes")
-            action = "no_op"
-    return {"format": "daedalus-world-import-plan", "version": 1, "action": action,
+    plan = {"format": "daedalus-world-import-plan", "version": 1, "action": "plan_new",
             "world": {"id": world_id, "revision": revision},
             "source": {"format": manifest["format"], "version": manifest["version"],
                        "package_sha256": digest, "package_bytes": size},
             "destination": {"root": root, "level": root + "/L_World",
                             "materials": root + "/Materials", "geometry": root + "/Geometry/world"},
             "geometry": {"file": "world.glb", "chunks": chunks, "triangles": triangles},
-            "assets": planned_assets, "previous_destination_root": previous,
+            "assets": planned_assets, "previous_destination_root": None,
             "policy": {"replace_existing": False, "delete_existing": False,
                        "use_shared_materials": False, "connect_live": False,
                        "requires_native_owner_review": True},
             "native_acceptance": False}
+    return _apply_receipt(plan, prior_receipt)
+
+
+def _apply_receipt(plan, prior_receipt):
+    """Apply evidence to a freshly validated in-process plan without rereading ZIPs.
+
+    Internal composition boundary, not a loader for saved/untrusted plans.
+    """
+    if prior_receipt is None:
+        return plan
+    prior = validate_receipt(prior_receipt)
+    if prior["world_id"] != plan["world"]["id"]:
+        raise PlanError("prior receipt belongs to a different raw world ID")
+    revision = plan["world"]["revision"]
+    if revision < prior["revision"]:
+        raise PlanError("requested revision predates the accepted revision")
+    action = "plan_new"
+    if revision == prior["revision"]:
+        if (plan["source"]["package_sha256"] != prior["package_sha256"] or
+                plan["destination"]["root"] != prior["destination_root"]):
+            raise PlanError("accepted world revision has conflicting package bytes")
+        action = "no_op"
+    return dict(plan, action=action, previous_destination_root=prior["destination_root"])
