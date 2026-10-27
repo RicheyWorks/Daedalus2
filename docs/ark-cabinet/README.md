@@ -11,6 +11,9 @@ Source: `daedalus-core/src/main/java/com/daedalus/world/ark/cabinet/`. Source on
 | `hammock` | The Hammock Rows | G416 `HammockRows` | 4x4 rack, three in a line (Connect Four style) |
 | `seeds` | The Seed Trays | G418 `SeedTrays` | Kalah, 3 trays of 3 seeds a side |
 | `hardtack` | The Hardtack Bar | G414 `HardtackBar` | Chomp on a 4x5 bar |
+| `signal` | The Signal Web | G413 `SignalWeb` | Hex on a 3x3 web |
+| `net` | The Net Mending | G419 `NetMending` | Dots and Boxes on a 2x2 net |
+| `cargo` | The Cargo Shuffle | G422 `CargoShuffle` | solo Rush Hour style 6x6 hold, 3 moves |
 
 The cabinet plays seat 2 itself using each piece's own exact solver, so these default boards are
 kept small enough for perfect play.
@@ -25,8 +28,8 @@ java -cp daedalus-core/target/classes com.daedalus.world.ark.cabinet.ArkCabinetD
 ```
 
 Keyboard play: type a game id from the menu. You are player 1 (X, the first seat); the cabinet is
-player 2. Each game prints its move format (square number, column number, tray number, or
-`row,col`). Type `hint` for the cabinet's suggestion, `quit` to leave.
+player 2 (The Cargo Shuffle is solo: solving it is a win). Each game prints its move format (square, post, cord, column or tray number, `row,col`, or
+a crate letter and start such as `B4`). Type `hint` for the cabinet's suggestion, `quit` to leave.
 
 ## In-world hook
 

@@ -78,6 +78,9 @@ public final class ArkCabinet {
             HammockRowsGame::new);
         c.register("seeds", "The Seed Trays", "Kalah with 3 trays of 3 seeds a side (G418)", SeedTraysGame::new);
         c.register("hardtack", "The Hardtack Bar", "Chomp: do not eat the soaked corner (G414)", HardtackBarGame::new);
+        c.register("signal", "The Signal Web", "Hex on a 3x3 web of lamp posts (G413)", SignalWebGame::new);
+        c.register("net", "The Net Mending", "Dots and Boxes on a 2x2 cargo net (G419)", NetMendingGame::new);
+        c.register("cargo", "The Cargo Shuffle", "slide crates to free crate A, solo (G422)", CargoShuffleGame::new);
         return c;
     }
 
