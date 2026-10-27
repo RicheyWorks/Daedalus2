@@ -10,6 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Daedalus spots.** Every desktop cabinet names one home spot in the catalog. The words are original, and that realm already places the cabinet. Cairnwell stands in Bricks, the stacking yard.
 - **Difficulty.** Every desktop cabinet accepts easy, normal, and hard, and starts on normal. The catalog records that default. Options, score, and save files stay as they are. The arcade host is unchanged.
 - **Cairnwell.** A stacking well. Option 0 is six columns and option 1 is a four-column practice with a slower fall. Slide a single stone; a full layer sinks away. A cream hint, a cyan slide cue, and the access plate sit on the bottom edge.
 - **Controller and accessibility marks.** Every desktop cabinet draws a key hint and a contrast mark on a dark plate. ACT is a cream plus and WAIT is a cyan bar, so colour is not the only signal. The plate is drawn after Beacon Sweep cells, and the mark uses rectangles so Glowtrail passage order stays intact. The Twinwake match opening stays six draw commands.

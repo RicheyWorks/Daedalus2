@@ -7,7 +7,7 @@ Per desktop game in docs/minigames/catalog.json:
   * a host save slot in DaedalusDesktopSaveSlots.h (or a dated entry in SAVE_SLOT_PENDING),
   * a how-to line (HowToLine),
   * the scoreboard capability (proven by scoreboard_test.cpp),
-  * a unique title, and no trademarked game, company or character name in id, title,
+  * a unique title, a Daedalus spot whose realm already places the cabinet, and no trademarked game, company or character name in id, title,
     summary or how-to line (Java cabinet titles and summaries are checked too).
 The old ids kept in GameAliases for save compatibility are not scanned. Stdlib only.
 """
@@ -67,6 +67,10 @@ def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
             errors.append(f"'{gid}' has no host save slot in DaedalusDesktopSaveSlots.h")
         if g.get("default_difficulty") != "normal" or g.get("difficulty") != ["easy", "normal", "hard"]:
             errors.append(f"'{gid}' difficulty must default to normal")
+        spot = (g.get("daedalus_spot") or "").strip()
+        realm = (g.get("daedalus_realm") or "").strip()
+        if not spot or not realm:
+            errors.append(f"'{gid}' has no Daedalus spot")
         if not (g.get("how_to_play") or "").strip():
             errors.append(f"'{gid}' has no how-to line")
         if "scoreboard" not in g.get("capabilities", []):
@@ -78,7 +82,7 @@ def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
             errors.append(f"'{gid}' title '{title}' is also used by '{titles[title.lower()]}'")
         else:
             titles[title.lower()] = gid
-        for field in ("id", "title", "summary", "how_to_play"):
+        for field in ("id", "title", "summary", "how_to_play", "daedalus_spot"):
             for hit in trademark_hits(g.get(field, "")):
                 errors.append(f"'{gid}' {field} uses trademarked name '{hit}'; use an original name")
     for j in catalog.get("java_cabinets", []):
