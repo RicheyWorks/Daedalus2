@@ -22,7 +22,31 @@ public final class TwinLedgers {
     public enum Grade { DEFICIENT, PERFECT, ABUNDANT }
 
     /** An aliquot chain: the terms walked, and where a loop started (-1 when none was found). */
-    public record Chain(List<Long> terms, int loopStart) { }
+    public static final class Chain {
+        private final long[] walked;
+        private final int loopStart;
+
+        Chain(List<Long> terms, int loopStart) {
+            this.walked = new long[terms.size()];
+            for (int i = 0; i < walked.length; i++) {
+                walked[i] = terms.get(i);
+            }
+            this.loopStart = loopStart;
+        }
+
+        /** A fresh copy of the walked terms. */
+        public List<Long> terms() {
+            List<Long> out = new ArrayList<>(walked.length);
+            for (long v : walked) {
+                out.add(v);
+            }
+            return out;
+        }
+
+        public int loopStart() {
+            return loopStart;
+        }
+    }
 
     private TwinLedgers() { }
 
@@ -90,7 +114,7 @@ public final class TwinLedgers {
         for (int i = 0; i < maxSteps; i++) {
             Integer at = seen.get(x);
             if (at != null) {
-                return new Chain(List.copyOf(terms), at);
+                return new Chain(terms, at);
             }
             seen.put(x, i);
             terms.add(x);
@@ -102,7 +126,7 @@ public final class TwinLedgers {
             }
             x = properSum(x);
         }
-        return new Chain(List.copyOf(terms), -1);
+        return new Chain(terms, -1);
     }
 
     /** Quest q_twin_ledgers: the purser names the amicable twin of a ledger (or 0 if it has none). */
