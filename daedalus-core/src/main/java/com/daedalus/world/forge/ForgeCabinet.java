@@ -427,6 +427,23 @@ public final class ForgeCabinet {
                 });
         }, KeithKindling.forgemasterLine(KeithKindling.Grade.TURNED),
             KeithKindling.forgemasterLine(KeithKindling.Grade.SLIPPED)));
+        g.add(game("self", "Self Forged", SelfForged.QUEST_ID, r -> {
+            long n = 1 + r.nextInt(100_000);
+            if (r.nextBoolean()) {
+                while (!SelfForged.isSelf(n)) {
+                    n++;
+                }
+            }
+            long fn = n;
+            return new Puzzle("self", "Can no blank m stamp m + digitSum(m) = " + n + "? (self/stamped)",
+                SelfForged.isSelf(n) ? "self" : "stamped", a -> {
+                    if (!"self".equals(a) && !"stamped".equals(a)) {
+                        return false;
+                    }
+                    return SelfForged.grade(fn, "self".equals(a)) == SelfForged.Grade.TURNED;
+                });
+        }, SelfForged.forgemasterLine(SelfForged.Grade.TURNED),
+            SelfForged.forgemasterLine(SelfForged.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
