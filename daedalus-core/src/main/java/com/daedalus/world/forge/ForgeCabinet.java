@@ -370,6 +370,22 @@ public final class ForgeCabinet {
                 });
         }, WeirdHoards.forgemasterLine(WeirdHoards.Grade.TURNED),
             WeirdHoards.forgemasterLine(WeirdHoards.Grade.SLIPPED)));
+        g.add(game("untouched", "Untouched Brands", UntouchedBrands.QUEST_ID, r -> {
+            long n = 1 + r.nextInt(UntouchedBrands.MAX_BRAND);
+            if (r.nextBoolean()) {
+                List<Long> u = UntouchedBrands.untouchedUpTo(UntouchedBrands.MAX_BRAND);
+                n = u.get(r.nextInt(u.size()));
+            }
+            long fn = n;
+            return new Puzzle("untouched", "Is brand " + n + " the aliquot sum of no ingot? (untouched/touched)",
+                UntouchedBrands.isUntouched(n) ? "untouched" : "touched", a -> {
+                    if (!"untouched".equals(a) && !"touched".equals(a)) {
+                        return false;
+                    }
+                    return UntouchedBrands.grade(fn, "untouched".equals(a)) == UntouchedBrands.Grade.TURNED;
+                });
+        }, UntouchedBrands.forgemasterLine(UntouchedBrands.Grade.TURNED),
+            UntouchedBrands.forgemasterLine(UntouchedBrands.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
