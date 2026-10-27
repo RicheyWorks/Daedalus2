@@ -29,9 +29,9 @@ class ArkCabinetTest {
     void menuListsEveryGameAndRejectsUnknownOrDuplicate() {
         ArkCabinet cab = ArkCabinet.standard();
         assertThat(cab.slots()).extracting(ArkCabinet.Slot::id).containsExactly("chalk", "hammock", "seeds",
-            "hardtack", "signal", "net", "cargo");
-        assertThat(cab.menu()).contains("1) chalk").contains("4) hardtack").contains("7) cargo");
-        assertThat(cab.arcadeDescription()).contains(ArkCabinet.QUEST_ID).contains("7 crew games");
+            "hardtack", "signal", "net", "cargo", "blocks", "ferry", "cube", "masts", "crawler");
+        assertThat(cab.menu()).contains("1) chalk").contains("4) hardtack").contains("7) cargo").contains("12) crawler");
+        assertThat(cab.arcadeDescription()).contains(ArkCabinet.QUEST_ID).contains("12 crew games");
         assertThatThrownBy(() -> cab.open("nope")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> cab.register("chalk", "x", "y", ChalkGridGame::new))
             .isInstanceOf(IllegalArgumentException.class);

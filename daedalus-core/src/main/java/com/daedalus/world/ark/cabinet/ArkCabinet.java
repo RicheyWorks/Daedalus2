@@ -81,6 +81,11 @@ public final class ArkCabinet {
         c.register("signal", "The Signal Web", "Hex on a 3x3 web of lamp posts (G413)", SignalWebGame::new);
         c.register("net", "The Net Mending", "Dots and Boxes on a 2x2 cargo net (G419)", NetMendingGame::new);
         c.register("cargo", "The Cargo Shuffle", "slide crates to free crate A, solo (G422)", CargoShuffleGame::new);
+        c.register("blocks", "The Hold Blocks", "Klotski: slide the big block home, solo (G426)", HoldBlocksGame::new);
+        c.register("ferry", "The Ferry Watch", "ferry crew and raiders across safely, solo (G412)", FerryWatchGame::new);
+        c.register("cube", "The Signal Cube", "solve a scrambled 2x2x2 cube, solo (G435)", SignalCubeGame::new);
+        c.register("masts", "The Four Masts", "Tower of Hanoi with four masts, solo (G432)", FourMastsGame::new);
+        c.register("crawler", "The Deck Crawler", "watch Langton's crab paint the deck (G409)", DeckCrawlerGame::new);
         return c;
     }
 
