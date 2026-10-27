@@ -5,7 +5,7 @@ package com.daedalus.world.ark;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.SplittableRandom;
 
 /**
  * G217 The Cinder Climb: at the G147 Cinder Shelf landfall the shore rises in basalt ledges of
@@ -51,7 +51,7 @@ public final class CinderClimb {
         if (n < 0 || maxHeight <= 0) {
             throw new IllegalArgumentException("bad shelf");
         }
-        Random rnd = new Random(seed);
+        SplittableRandom rnd = new SplittableRandom(seed);
         int[] h = new int[n];
         for (int i = 0; i < n; i++) {
             h[i] = rnd.nextInt(maxHeight);
