@@ -1,6 +1,6 @@
 {
  "schema": "daedalus.settings-schema/v1",
- "layout_of": "Halo Infinite (Controller, Keyboard/Mouse, Video, Audio, Gameplay, Accessibility)",
+ "layout_of": "Console standard (Controller, Keyboard/Mouse, Video, Audio, Gameplay, Accessibility)",
  "storage": {
   "unreal": "Saved/Config/DaedalusSettings.json",
   "web": "localStorage daedalus.settings",
@@ -505,7 +505,7 @@
    "tab": "VIDEO",
    "section": "Camera",
    "label": "Camera View",
-   "help": "First Person sees through the hero's eyes with a centred reticle, like Halo Infinite. Over the Shoulder sits behind one shoulder, like Gears of War. Classic follows from behind. R3, D-pad up or V switches in play.",
+   "help": "First Person sees through the hero's eyes with a centred reticle, like a modern console shooter. Over the Shoulder sits behind one shoulder; a third-person view. Classic follows from behind. R3, D-pad up or V switches in play.",
    "kind": "choice",
    "default": 1.0,
    "min": 0.0,
@@ -1065,8 +1065,5 @@
   },
   "source": "DaedalusHero.cpp PadButtons() and RebuildBindings()"
  },
- "research": [
-  "https://support.halowaypoint.com/hc/en-us/articles/4407649252116-Guide-to-Halo-Infinite-Game-Settings",
-  "https://support.halowaypoint.com/hc/en-us/articles/4408122295444-Accessibility-features-in-Halo-Infinite"
- ]
+ "research": []
 }

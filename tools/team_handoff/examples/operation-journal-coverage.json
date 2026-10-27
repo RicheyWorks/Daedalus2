@@ -1,0 +1,23 @@
+{
+  "schema": "daedalus.operation-journal-coverage.v1",
+  "session_id": "fixture-session",
+  "event_utc": "2026-10-26T10:05:00Z",
+  "through_utc": "2026-10-26T10:05:00Z",
+  "authority_ref": "fixture-original-assignment",
+  "window": {
+    "start_utc": "2026-10-26T10:00:00Z",
+    "deadline_utc": "2026-10-26T11:00:00Z"
+  },
+  "scope_id": "fixture-operation-boundary",
+  "covers_head_sha256": "debddad87f98ec1b3bde98da5b251072e06d556f39bc489dc6e8cd1487d41da7",
+  "operation_keys": [
+    "op-1"
+  ],
+  "producer_complete": true,
+  "receipt": {
+    "path": "operation-journal-coverage-proof.json",
+    "logical_path": "C:/Synthetic/Original/coverage-proof.json",
+    "sha256": "9baa7887d166afc9cf27c75692f73acb8ea08207c81810a9225c562c02a151b9",
+    "bytes": 470
+  }
+}

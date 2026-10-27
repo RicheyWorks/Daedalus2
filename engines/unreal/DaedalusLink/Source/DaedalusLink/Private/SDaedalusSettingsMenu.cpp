@@ -16,7 +16,7 @@
 
 namespace DaedalusMenu
 {
-	// Halo Infinite's settings feel: deep blue-black glass, white type, a cool cyan accent on what's selected.
+	// a modern console game's settings feel: deep blue-black glass, white type, a cool cyan accent on what's selected.
 	const FLinearColor Ink(0.93f, 0.95f, 0.97f, 1.f);
 	const FLinearColor Dim(0.58f, 0.64f, 0.71f, 1.f);
 	const FLinearColor Accent(0.36f, 0.82f, 0.96f, 1.f);
@@ -40,7 +40,7 @@ void SDaedalusSettingsMenu::Construct(const FArguments& InArgs)
 	OnChanged = InArgs._OnChanged;
 	OnRespawn = InArgs._OnRespawn;
 
-	// The pause page: just the choices, like Halo Infinite's pause menu. Settings live one step in.
+	// The pause page: just the choices, like a modern console shooter's pause menu. Settings live one step in.
 	static const TCHAR* PauseItems[] = {TEXT("RESUME"), TEXT("SETTINGS"), TEXT("RESPAWN")};
 	TSharedRef<SVerticalBox> PauseList = SNew(SVerticalBox);
 	for (int32 i = 0; i < 3; ++i)
@@ -424,7 +424,7 @@ void SDaedalusSettingsMenu::Back()
 {
 	if (bInSettings)
 	{
-		bInSettings = false;   // B in settings returns to the pause list, like Halo Infinite
+		bInSettings = false;   // B in settings returns to the pause list, like a modern console shooter
 	}
 	else
 	{

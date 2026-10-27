@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Prop_Orr_Bench_Curved",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Bench_Curved/Prop_Orr_Bench_Curved/StaticMeshes/Prop_Orr_Bench_Curved.Prop_Orr_Bench_Curved",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Bench_Curved.json",
+    "report_sha256": "c1548a635b804c1fd5a7dbc24cc4b955ffdd55a54a72305600cde21eb1f34ebc",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\Prop\\Prop_Orr_Bench_Curved.glb",
+    "source_sha256": "bc45e8682a45cd5c27d65d3bac58cca4ac468ccef9d613b4f91f077151dc12c8",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Orr_Lantern_Post",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Post/Prop_Orr_Lantern_Post/StaticMeshes/Prop_Orr_Lantern_Post.Prop_Orr_Lantern_Post",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Lantern_Post.json",
+    "report_sha256": "3e7a9af45b24d8869f53a8cedfa06ef5abaece4648d2a129496daf0051282d22",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\Prop\\Prop_Orr_Lantern_Post.glb",
+    "source_sha256": "77fb1cab7a9aeb1e89230aa85ed7cdf73c34a8a56ee28ae705064fe53cfa34b1",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Orr_Lantern_Path",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Lantern_Path.json",
+    "report_sha256": "86fd631f113d761aedfe75a92ac7d9cf5f1fc2635ff964fe66e64f7c82226fa7",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\Prop\\Prop_Orr_Lantern_Path.glb",
+    "source_sha256": "29f761d8e896fe45d9dd826eda1d7ff2dbe5cf263747ced2e8350751eb8047f2",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Orr_Planter_Long",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Long/Prop_Orr_Planter_Long/StaticMeshes/Prop_Orr_Planter_Long.Prop_Orr_Planter_Long",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Planter_Long.json",
+    "report_sha256": "82c7c4cca3580b399fffbc98e1213d4cd62133d48b16c9e02c06d459e2e1e4a1",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\Prop\\Prop_Orr_Planter_Long.glb",
+    "source_sha256": "d08f99a7a3116e051a318d1a1212ac45e8a49a2a6cc38f5fb11739ff1dc52fb9",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Orr_Planter_Round",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Round/Prop_Orr_Planter_Round/StaticMeshes/Prop_Orr_Planter_Round.Prop_Orr_Planter_Round",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Planter_Round.json",
+    "report_sha256": "d7e7b3c28d61ba89b715623e377299b347fa217f55639203ef257d020e481a63",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\Prop\\Prop_Orr_Planter_Round.glb",
+    "source_sha256": "03ed2f2d647accc9e31e68a6064baac599af03bbeee9e6b29b17b0b41a56ae65",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Orr_Sign_Welcome",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Sign_Welcome/Prop_Orr_Sign_Welcome/StaticMeshes/Prop_Orr_Sign_Welcome.Prop_Orr_Sign_Welcome",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Sign_Welcome.json",
+    "report_sha256": "35df617b4310a754aab7533f28e0c7640448c4588e545902f96d43e39dfc9b7c",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\Prop\\Prop_Orr_Sign_Welcome.glb",
+    "source_sha256": "738d24050cbe5a93958e995234fe320e24fc73329fb24d9ddfdf8fcf5279cb74",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Orr_Sundial_Garden",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Sundial_Garden/Prop_Orr_Sundial_Garden/StaticMeshes/Prop_Orr_Sundial_Garden.Prop_Orr_Sundial_Garden",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Sundial_Garden.json",
+    "report_sha256": "96329751fb28193883561d1f084355e825009da61ba070cc73813415e0cda0af",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\Prop\\Prop_Orr_Sundial_Garden.glb",
+    "source_sha256": "81d897e8ee1c795133775058dad650af1d0f1ff1c69a747e61ce127343b839d4",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Orr_Path_Tile_Cobble",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Path_Tile_Cobble/Prop_Orr_Path_Tile_Cobble/StaticMeshes/Prop_Orr_Path_Tile_Cobble.Prop_Orr_Path_Tile_Cobble",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Path_Tile_Cobble.json",
+    "report_sha256": "00f7b0f6c4a868c269d0711ed2f4eca2de97b1d1e54d07ca5ab8d8c9c44d1927",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\Prop\\Prop_Orr_Path_Tile_Cobble.glb",
+    "source_sha256": "847d4da33c67a9d80c1df346e53aad7f16101c77e64012e46ba2041a0ae0e693",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Grass_MeadowGrass",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Grass_MeadowGrass/Prop_Grass_MeadowGrass/StaticMeshes/Prop_Grass_MeadowGrass.Prop_Grass_MeadowGrass",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Grass_MeadowGrass.json",
+    "report_sha256": "5a8d3812888491b14789bddcf4507c7c6b285b762ba17ed66023bb497e56ba7b",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\glb\\Prop_Grass_MeadowGrass.glb",
+    "source_sha256": "9a072d90ad56e456ff4a224439489f80dd2ff79a8718a432b884ab10d978ef0d",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Grass_Moss",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Grass_Moss/Prop_Grass_Moss/StaticMeshes/Prop_Grass_Moss.Prop_Grass_Moss",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Grass_Moss.json",
+    "report_sha256": "a9854b8a23c4fa4d94c9519f9af84f47f7f459006e5a0dfa27c9ddaab0bffe8e",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\glb\\Prop_Grass_Moss.glb",
+    "source_sha256": "ed9daa119eb73185372856f2a2ba5dc4d243a24a18e00362a190ec13f959eaa9",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Flower_Bluebell",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Flower_Bluebell/Prop_Flower_Bluebell/StaticMeshes/Prop_Flower_Bluebell.Prop_Flower_Bluebell",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Flower_Bluebell.json",
+    "report_sha256": "8898b4eb70216ae492622c27d1df4729f41789587069d76888b5fd00a102a667",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\glb\\Prop_Flower_Bluebell.glb",
+    "source_sha256": "92aeda403b895170689c5cdbe0a1948e15f9a05d445992f4b85182ddacd7a5c3",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  },
+  {
+    "name": "Prop_Flower_Poppy",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Flower_Poppy.json",
+    "report_sha256": "c3adc6dbc32829ff52a2b8340de28fa46335c0595efefd419bcf26381e418c9d",
+    "historical_report_ok": true,
+    "source_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\glb\\Prop_Flower_Poppy.glb",
+    "source_sha256": "6e85a61e3b490bf449d81e2d4389452abf46178ab2342d33a64ffab3883866bc",
+    "note": "Historical Blender/file/Unreal comparisons plus current mesh load. Not fresh native Valid or material-policy admission."
+  }
+]

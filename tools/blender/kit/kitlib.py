@@ -276,7 +276,10 @@ def check_asset(m, cap):
     p = m["predicted"]; out = []
     out.append(("%s tris %d <= %d" % (m["asset"], p["triangles"], cap), p["triangles"] <= cap, p["triangles"]))
     if m.get("mover_of"):                # frame/mover split: origin is the hinge pivot, placed at the frame's SOCKET_Hinge_*
-        out.append(("%s origin = hinge pivot (by design)" % m["asset"], m["hinge"]["socket"].startswith(("SOCKET_Hinge_", "SOCKET_Spin", "SOCKET_Slide")), p["bounds_min"]))
+        out.append(("%s origin = hinge pivot (by design)" % m["asset"], m["hinge"]["socket"].startswith(("SOCKET_Hinge_", "SOCKET_Spin", "SOCKET_Slide", "SOCKET_Door")), p["bounds_min"]))
+    elif m.get("origin_is_attach"):      # small attached prop (pin, tag, band): origin = the point that seats on the host socket
+        out.append(("%s origin = attach point (by design: %s)" % (m["asset"], m["origin_is_attach"]),
+                    all(p["bounds_min"][i] - 1e-6 <= 0 <= p["bounds_max"][i] + 1e-6 for i in range(3)), [p["bounds_min"], p["bounds_max"]]))
     else:
         out.append(("%s stands on z=0" % m["asset"], abs(p["bounds_min"][2]) < 1e-6, p["bounds_min"][2]))
     if m.get("off_centre_ok"):   # e.g. a gate state whose leaves swing open: pivot stays the closed asset's bottom centre

@@ -8,7 +8,7 @@
 class ADaedalusHero;
 
 /**
- * The hero's HUD (ADR-042), in Halo Infinite's spirit: a centred reticle (dot and four ticks) that flashes on a hit,
+ * The hero's HUD (ADR-042), in a console shooter's spirit: a centred reticle (dot and four ticks) that flashes on a hit,
  * and in the corners the weapon, its heat, the camera view and EXP. The reticle shows in first person and over the
  * shoulder, and with the blaster in any view (Settings > Video > Reticle turns it off).
  */

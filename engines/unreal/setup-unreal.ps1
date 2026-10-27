@@ -469,7 +469,23 @@ if (-not (Test-Path (Join-Path $PluginSource "DaedalusLink.uplugin"))) {
     $up = Get-Content $Project -Raw | ConvertFrom-Json
     $plugins = @()
     if ($up.PSObject.Properties.Name -contains "Plugins" -and $up.Plugins) { $plugins = @($up.Plugins) }
-    $needed = @("DaedalusLink", "ProceduralMeshComponent", "PythonScriptPlugin", "EditorScriptingUtilities", "PCG")   # PCG: procedural ecology (engines/unreal/pcg-ecology)
+    # Keep the serializer implementation canonical; the installed plugin may
+    # live outside this repository and therefore needs a verified staged header.
+    $validationBridge = Join-Path $PluginDest "Source/DaedalusLink/Public/DaedalusNativeValidationBridge.h"
+    if (Test-Path -LiteralPath $validationBridge) {
+        $canonicalContract = Join-Path $PSScriptRoot "../../tools/unreal_mcp/native_validation_result_snapshot.h"
+        # Outside Source: a generated staged copy must not make the existing
+        # source-tree drift comparison replace an otherwise identical plugin.
+        $contractDirectory = Join-Path $PluginDest "Build/AcceptedContracts"
+        New-Item -ItemType Directory -Force -Path $contractDirectory | Out-Null
+        $stagedContract = Join-Path $contractDirectory "native_validation_result_snapshot.h"
+        Copy-Item -LiteralPath $canonicalContract -Destination $stagedContract -Force
+        if ((Get-FileHash -LiteralPath $canonicalContract -Algorithm SHA256).Hash -ne
+            (Get-FileHash -LiteralPath $stagedContract -Algorithm SHA256).Hash) {
+            throw "Validation contract staging hash mismatch"
+        }
+    }
+    $needed = @("DaedalusLink", "ProceduralMeshComponent", "PythonScriptPlugin", "EditorScriptingUtilities", "PCG", "AssetManagerEditor", "DataValidation")   # Bundled editor prerequisites; no transport or security settings changed.
     foreach ($name in $needed) {
         $hit = $plugins | Where-Object { $_.Name -eq $name }
         if ($hit) { $hit.Enabled = $true } else { $plugins += [pscustomobject]@{ Name = $name; Enabled = $true } }

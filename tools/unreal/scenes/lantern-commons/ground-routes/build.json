@@ -1,0 +1,652 @@
+{
+  "schema": "daedalus.commons-ground-routes.v1",
+  "utc": "2026-10-23T04:42:33.352829+00:00",
+  "status": "BUILT_SAVED_EDITOR_REVIEWED_NOT_PLAY_VERIFIED",
+  "before": {
+    "floor": {
+      "actor": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.Actor_0",
+      "component": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.Actor_0.ApprovedBlenderFloorTiles",
+      "actor_transform": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "component_transform": "<Struct 'Transform' (0x0000021C0F6202A0) {rotation: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}, translation: {x: 0.000000, y: 0.000000, z: 0.000000}, scale3d: {x: 1.000000, y: 1.000000, z: 1.000000}}>",
+      "instances": 273,
+      "mesh": "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor.Prop_Realm_Cave_Floor",
+      "mesh_bounds": "<Struct 'BoxSphereBounds' (0x0000021C6C821340) {origin: {x: 0.000000, y: 0.000000, z: 10.252867}, box_extent: {x: 400.253387, y: 250.424103, z: 10.252867}, sphere_radius: 471.335993}>",
+      "collision_enabled": "<CollisionEnabled.NO_COLLISION: 0>",
+      "visible": true,
+      "hidden_in_game": false,
+      "materials": [
+        "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade.MI_Commons_GroundShade",
+        "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage.MI_Commons_GroundSage"
+      ]
+    },
+    "collider": {
+      "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_9",
+      "transform": {
+        "location": [
+          0.0,
+          0.0,
+          -5.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          104.0,
+          105.0,
+          0.5
+        ]
+      },
+      "extent": [
+        5200.0,
+        5250.0,
+        25.0
+      ],
+      "collision_enabled": "<CollisionEnabled.QUERY_AND_PHYSICS: 3>",
+      "profile": "BlockAll",
+      "visible": false,
+      "hidden_in_game": true
+    },
+    "owned_materials": {
+      "GroundSage": {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage.MI_Commons_GroundSage",
+        "parent": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS"
+      },
+      "TrailAmber": {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_TrailAmber.MI_Commons_TrailAmber",
+        "parent": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS"
+      }
+    },
+    "retained_pavers_to_hide": [
+      "CommonsTrail_0_00",
+      "CommonsTrail_0_01",
+      "CommonsTrail_0_02",
+      "CommonsTrail_0_03",
+      "CommonsTrail_0_04",
+      "CommonsTrail_1_00",
+      "CommonsTrail_1_01",
+      "CommonsTrail_1_02",
+      "CommonsTrail_1_03",
+      "CommonsTrail_1_04",
+      "CommonsTrail_1_05",
+      "CommonsTrail_2_00",
+      "CommonsTrail_2_01",
+      "CommonsTrail_2_02",
+      "CommonsTrail_2_03",
+      "CommonsTrail_2_04",
+      "CommonsTrail_2_05",
+      "CommonsTrail_2_06",
+      "CommonsR5Approach00L",
+      "CommonsR5Approach00R",
+      "CommonsR5Approach01L",
+      "CommonsR5Approach01R",
+      "CommonsR5Approach02L",
+      "CommonsR5Approach02R",
+      "CommonsR5Approach03L",
+      "CommonsR5Approach03R",
+      "CommonsR5Approach04L",
+      "CommonsR5Approach04R",
+      "CommonsR5Approach05L",
+      "CommonsR5Approach05R",
+      "CommonsR5Approach06L",
+      "CommonsR5Approach06R",
+      "CommonsR5Approach07L",
+      "CommonsR5Approach07R",
+      "CommonsR5Approach08L",
+      "CommonsR5Approach08R",
+      "CommonsR5Approach09L",
+      "CommonsR5Approach09R",
+      "CommonsR5Approach10L",
+      "CommonsR5Approach10R",
+      "CommonsR5Approach11L",
+      "CommonsR5Approach11R",
+      "CommonsR5Approach12L",
+      "CommonsR5Approach12R",
+      "CommonsR5Approach13L",
+      "CommonsR5Approach13R",
+      "CommonsR5Approach14L",
+      "CommonsR5Approach14R",
+      "CommonsR5Approach15L",
+      "CommonsR5Approach15R",
+      "CommonsR5Approach16L",
+      "CommonsR5Approach16R",
+      "CommonsR5Approach17L",
+      "CommonsR5Approach17R"
+    ],
+    "actors_before": 736,
+    "choice": "Hide only owned visual tiles/pavers, retain all instances/transforms and physics; add a separate continuous NoCollision render surface and low route ribbons using existing owned materials.",
+    "images": {
+      "before_arrival": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\GroundRoutesR10\\before-arrival.png",
+        "bytes": 2664439,
+        "sha256": "d4c3a5b9058699544a4cb34142b67efb9fad1a44ada3f369a0cbfbd85393aa57"
+      },
+      "before_overview": {
+        "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\GroundRoutesR10\\before-overview.png",
+        "bytes": 2168739,
+        "sha256": "5ec579e0a3269680707bca00612a03c8e7eb0ec5752c5b18cae3a7c5d369aa69"
+      }
+    },
+    "dirty_after": {
+      "maps": [],
+      "content": []
+    }
+  },
+  "composition": {
+    "saved": true,
+    "actors_current": 749,
+    "new_render_actors": 13,
+    "new_actors": [
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_713"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_714"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_715"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_716"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_717"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_718"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_719"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_720"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_721"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_722"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_723"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_724"
+      },
+      {
+        "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_725"
+      }
+    ],
+    "ground_metres": [
+      104,
+      105
+    ],
+    "visible_surface_top_cm": 20.15,
+    "route_top_cm": 23.2,
+    "routes": [
+      {
+        "name": "Chart",
+        "points": [
+          [
+            -600,
+            0
+          ],
+          [
+            400,
+            400
+          ],
+          [
+            1500,
+            -400
+          ],
+          [
+            2800,
+            500
+          ]
+        ],
+        "width": 320
+      },
+      {
+        "name": "Arrival",
+        "points": [
+          [
+            -750,
+            -800
+          ],
+          [
+            -600,
+            0
+          ]
+        ],
+        "width": 240
+      },
+      {
+        "name": "Stillwater",
+        "points": [
+          [
+            -600,
+            0
+          ],
+          [
+            -600,
+            1050
+          ],
+          [
+            -1200,
+            1250
+          ],
+          [
+            -2150,
+            1450
+          ]
+        ],
+        "width": 240
+      }
+    ],
+    "floor_instances_retained": 273,
+    "visual_floor_hidden": true,
+    "retained_pavers_hidden": [
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_42",
+        "label": "CommonsTrail_0_00",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_43",
+        "label": "CommonsTrail_0_01",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_44",
+        "label": "CommonsTrail_0_02",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_45",
+        "label": "CommonsTrail_0_03",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_46",
+        "label": "CommonsTrail_0_04",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_47",
+        "label": "CommonsTrail_1_00",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_48",
+        "label": "CommonsTrail_1_01",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_49",
+        "label": "CommonsTrail_1_02",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_50",
+        "label": "CommonsTrail_1_03",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_51",
+        "label": "CommonsTrail_1_04",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_52",
+        "label": "CommonsTrail_1_05",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_53",
+        "label": "CommonsTrail_2_00",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_54",
+        "label": "CommonsTrail_2_01",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_55",
+        "label": "CommonsTrail_2_02",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_56",
+        "label": "CommonsTrail_2_03",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_57",
+        "label": "CommonsTrail_2_04",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_58",
+        "label": "CommonsTrail_2_05",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_59",
+        "label": "CommonsTrail_2_06",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_491",
+        "label": "CommonsR5Approach00L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_492",
+        "label": "CommonsR5Approach00R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_493",
+        "label": "CommonsR5Approach01L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_494",
+        "label": "CommonsR5Approach01R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_495",
+        "label": "CommonsR5Approach02L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_496",
+        "label": "CommonsR5Approach02R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_497",
+        "label": "CommonsR5Approach03L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_498",
+        "label": "CommonsR5Approach03R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_499",
+        "label": "CommonsR5Approach04L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_500",
+        "label": "CommonsR5Approach04R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_501",
+        "label": "CommonsR5Approach05L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_502",
+        "label": "CommonsR5Approach05R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_503",
+        "label": "CommonsR5Approach06L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_504",
+        "label": "CommonsR5Approach06R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_505",
+        "label": "CommonsR5Approach07L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_506",
+        "label": "CommonsR5Approach07R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_507",
+        "label": "CommonsR5Approach08L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_508",
+        "label": "CommonsR5Approach08R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_509",
+        "label": "CommonsR5Approach09L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_510",
+        "label": "CommonsR5Approach09R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_511",
+        "label": "CommonsR5Approach10L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_512",
+        "label": "CommonsR5Approach10R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_513",
+        "label": "CommonsR5Approach11L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_514",
+        "label": "CommonsR5Approach11R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_515",
+        "label": "CommonsR5Approach12L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_516",
+        "label": "CommonsR5Approach12R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_517",
+        "label": "CommonsR5Approach13L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_518",
+        "label": "CommonsR5Approach13R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_519",
+        "label": "CommonsR5Approach14L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_520",
+        "label": "CommonsR5Approach14R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_521",
+        "label": "CommonsR5Approach15L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_522",
+        "label": "CommonsR5Approach15R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_523",
+        "label": "CommonsR5Approach16L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_524",
+        "label": "CommonsR5Approach16R",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_525",
+        "label": "CommonsR5Approach17L",
+        "visible": true,
+        "hidden_in_game": false
+      },
+      {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_526",
+        "label": "CommonsR5Approach17R",
+        "visible": true,
+        "hidden_in_game": false
+      }
+    ],
+    "collider_unchanged": true,
+    "original_material_assets_edited": false,
+    "owned_material_assets_edited": false,
+    "rollback": "Restore recorded visibility/hidden flags and remove only CommonsR10 actors; before-map copy retained.",
+    "dirty_after": {
+      "maps": [],
+      "content": []
+    },
+    "Play_run": false,
+    "terrain_build": false,
+    "imports": 0,
+    "reconciliation": "Prior callback saved map then failed bridge-after bookkeeping because a route endpoint reused bridge variable b. Retained saved phase, all13actors, clean packages and collider read back; no creation/save replay."
+  },
+  "images": [
+    {
+      "path": "images/ground-r10-before_arrival.png",
+      "sha256": "d4c3a5b9058699544a4cb34142b67efb9fad1a44ada3f369a0cbfbd85393aa57"
+    },
+    {
+      "path": "images/ground-r10-before_overview.png",
+      "sha256": "5ec579e0a3269680707bca00612a03c8e7eb0ec5752c5b18cae3a7c5d369aa69"
+    },
+    {
+      "path": "images/ground-r10-after_arrival.png",
+      "sha256": "f314ba3f34850a7d2ad6914e0ca769507f723d8eb344f8eac2e31f44a6faae72"
+    },
+    {
+      "path": "images/ground-r10-after_overview.png",
+      "sha256": "258c10e80a32e2fcdf140ae2736da665bb8434985cc892d7c5ed6f3b68aad393"
+    }
+  ],
+  "pixel_review": "Actual matched before/after player-height and overview PNGs inspected. Raised tile grid and its deep dark seams are removed from rendering, replaced by a continuous muted-green surface. Amber routes visibly connect arrival/activity, spawn, chart landmarks and Stillwater approach. Existing meadow shapes, gardens and props remain; flat grass/plain materials and dark perimeter still read as blockout quality. No visual-benchmark acceptance.",
+  "preservation": {
+    "utc": "2026-10-23T04:39:57.210377+00:00",
+    "unlock": {
+      "ok": true,
+      "lock": null
+    },
+    "readback": {
+      "unreal": {
+        "holder": "codex-play-guard",
+        "note": "Owned ground render replacement and continuous route presentation; preserve collider, 273 retained floor instances, activities and originals. No Play/import/terrain rebuild.",
+        "at": 1792730230.4521263,
+        "ttl": 7200.0,
+        "age_s": 166.8,
+        "left_s": 7033.2
+      }
+    },
+    "progress_unchanged": true,
+    "protected_files_unchanged": 312
+  },
+  "new_imports": 0,
+  "new_or_changed_material_assets": 0,
+  "terrain_build": false,
+  "Play_run": false,
+  "limits": [
+    "Flat presentation surface and simple ribbons, not finished terrain/art direction.",
+    "Retained hidden pavers keep prior collision; no new Play/collision test loop.",
+    "Physical slab and104x105m area unchanged; original273instances retained hidden.",
+    "Camera changed intentionally for matched editor captures."
+  ]
+}

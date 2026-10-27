@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Where each setting sits (Halo Infinite's tabs and sections) and the rows Unreal doesn't have yet.
+"""Where each setting sits (a modern console game's tabs and sections) and the rows Unreal doesn't have yet.
 
 Native rows are referenced by id only; their definitions come from DaedalusSettings.cpp. A new row is added
 only when something reads it (CONSUMERS). Audio defaults reuse data/settings/defaults.json.
@@ -12,11 +12,9 @@ _A = _D.get("audio", {})
 _G = _D.get("gameplay", {})
 
 RESEARCH = [
-    "https://support.halowaypoint.com/hc/en-us/articles/4407649252116-Guide-to-Halo-Infinite-Game-Settings",
-    "https://support.halowaypoint.com/hc/en-us/articles/4408122295444-Accessibility-features-in-Halo-Infinite",
 ]
 
-# Tabs in Halo Infinite's order; sections in its order; Daedalus-only sections are marked (ours).
+# Tabs in a modern console game's order; sections in its order; Daedalus-only sections are marked (ours).
 TABS = [
     {"id": "CONTROLLER", "sections": [
         {"name": "General", "rows": ["ButtonLayout", "ThumbstickLayout", "Vibration", "VibrationStrength", "ConfirmButton"]},

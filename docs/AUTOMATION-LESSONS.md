@@ -1472,3 +1472,19 @@ jar, failed to compile, and left an old passing surefire report on disk. Rules: 
   passes 22/22.
 - **The rule:** list every input that decides the output before writing a cache key, and make a missing or unnamed
   input a miss.
+
+
+## A cast filename rename may leave its imported object identity unchanged (2026-10-13, Codex)
+Role binding expected LostLetterGhost/GlueWitch, but exported GLB node/skin/rig names still used
+Courier/Alchemist. Create additive alias deliveries with exact metadata renames, verify original
+manifest hashes and prove all binary chunks plus unrelated JSON unchanged. Keep original art.
+The extra Bricks Builder is Hero builder, not an invented thirteenth NPC. Runtime binding still
+requires consumer acceptance; CPU file checks do not establish an imported or playable character.
+
+
+## Audit role identity before inventing another export name (2026-10-13, Codex)
+DCS who-name parity must honor the native resolver's Brick/Bricks, Labyrinth/Lab and article/
+possessive forms. With two additive aliases all four source manifests cover12/12 talkers;
+Labyrinth's runtime11/12 therefore needs imported-package evidence, not an assumed missing export.
+Report extra hero art separately and never delete it to make NPC counts match. CI identity parity
+is a preflight gate, not proof of imported assets or gameplay acceptance.

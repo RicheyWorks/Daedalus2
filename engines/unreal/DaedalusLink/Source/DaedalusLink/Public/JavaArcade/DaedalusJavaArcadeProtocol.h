@@ -231,6 +231,53 @@ inline bool ValidSudoku(const SudokuView& V)
     for (std::uint16_t Mask : V.PencilMasks) if ((Mask & ~static_cast<std::uint16_t>(0x3fe)) != 0) return false;
     return true;
 }
+inline constexpr std::size_t SudokuSavedListLimit = 10;
+// A list contains complete board DTOs, so it needs an aggregate response budget.
+inline constexpr std::size_t SudokuSavedListMaxPayloadBytes = SessionGuard::MaxPayloadBytes * SudokuSavedListLimit;
+struct SudokuSavedGame
+{
+    std::string GameId;
+    int Difficulty = 1;
+    int FilledCells = 0;
+    int GivensCount = 0;
+    int Lives = 0;
+    std::int64_t ElapsedSeconds = 0;
+    bool Solved = false;
+    bool TimeUp = false;
+};
+// The service returns full boards. Publish only a completely validated,
+// account-scoped metadata list; browsing never applies a board to the live game.
+inline bool ProjectSavedSudokuGames(const std::vector<SudokuView>& Boards,
+    const std::string& AuthenticatedOwner, std::vector<SudokuSavedGame>& Out)
+{
+    if (AuthenticatedOwner.empty() || AuthenticatedOwner.size() > 128
+        || AuthenticatedOwner.find('\0') != std::string::npos
+        || Boards.size() > SudokuSavedListLimit) return false;
+    std::vector<SudokuSavedGame> Candidate;
+    Candidate.reserve(Boards.size());
+    for (const SudokuView& Board : Boards)
+    {
+        if (!ValidSudoku(Board) || Board.Owner != AuthenticatedOwner
+            || Board.GameId.find('\0') != std::string::npos) return false;
+        for (const SudokuSavedGame& Previous : Candidate)
+            if (Previous.GameId == Board.GameId) return false;
+        SudokuSavedGame Summary;
+        Summary.GameId = Board.GameId;
+        Summary.Difficulty = Board.Difficulty;
+        Summary.Lives = Board.Lives;
+        Summary.ElapsedSeconds = Board.ElapsedSeconds;
+        Summary.Solved = Board.Solved;
+        Summary.TimeUp = Board.TimeUp;
+        for (std::size_t I = 0; I < Board.Values.size(); ++I)
+        {
+            if (Board.Values[I] != 0) ++Summary.FilledCells;
+            if (Board.Givens[I]) ++Summary.GivensCount;
+        }
+        Candidate.push_back(Summary);
+    }
+    Out.swap(Candidate);
+    return true;
+}
 inline bool CanSubmitSudoku(const SudokuView& V, const std::string& AuthenticatedPlayer, int Row, int Col, int Value)
 {
     return ValidSudoku(V) && !V.Solved && !V.TimeUp && AuthenticatedPlayer == V.Owner

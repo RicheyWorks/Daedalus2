@@ -51,6 +51,10 @@ jobs:
       - name: Plugin host shutdown on Windows
         shell: bash
         run: mvn -B -ntp -pl daedalus-server -am test -Dtest=PluginHostShutdownTest -Dsurefire.failIfNoSpecifiedTests=false
+      - name: Minimal Unreal packaging fixture scope guards
+        run: python -m unittest discover -s tools/unreal/packaging-witness -p test_prepare_fixture.py -v
+      - name: Unattended ingestion checkpoint and refusal guards
+        run: python -m unittest tools/unreal_mcp/test_unattended_ingestion.py tools/unreal_mcp/test_unattended_codex_adapter.py -v
 
   build:
     name: Build & test
@@ -72,7 +76,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Set up Java 21 (Temurin)
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'
@@ -139,7 +143,7 @@ jobs:
       # token as the CODECOV_TOKEN Actions secret.
       - name: Upload coverage to Codecov
         if: ${{ env.CODECOV_TOKEN != '' }}
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ env.CODECOV_TOKEN }}
           files: daedalus-core/target/site/jacoco/jacoco.xml,daedalus-plugin-api/target/site/jacoco/jacoco.xml,daedalus-plugin-runtime/target/site/jacoco/jacoco.xml,daedalus-server/target/site/jacoco/jacoco.xml,daedalus-desktop/target/site/jacoco/jacoco.xml,daedalus-explore/target/site/jacoco/jacoco.xml

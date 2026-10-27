@@ -104,6 +104,28 @@ class ThrowableSportsTest {
     }
 
     @Test
+    void swingWindowsCoverIntegerLimitsAndExactBoundaries() {
+        int[] offsets = {Integer.MIN_VALUE, Integer.MIN_VALUE + 1, -111, -110, -61, -60, -26, -25,
+            0, 25, 26, 60, 61, 110, 111, Integer.MAX_VALUE - 1, Integer.MAX_VALUE};
+        Swing[] expected = {Swing.STRIKE, Swing.STRIKE, Swing.STRIKE, Swing.FOUL, Swing.FOUL, Swing.DOUBLE,
+            Swing.DOUBLE, Swing.HOME_RUN, Swing.HOME_RUN, Swing.HOME_RUN, Swing.SINGLE, Swing.SINGLE, Swing.FOUL,
+            Swing.FOUL, Swing.STRIKE, Swing.STRIKE, Swing.STRIKE};
+        for (int i = 0; i < offsets.length; i++) {
+            assertThat(g.swing(offsets[i])).as("swing offset %d", offsets[i]).isEqualTo(expected[i]);
+        }
+        assertThat(g.swing(null)).isEqualTo(Swing.STRIKE);
+    }
+
+    @Test
+    void extremeMissesFinishAnInningWithoutAwardingHits() {
+        List<Integer> swings = new ArrayList<>(Collections.nCopies(9, Integer.MIN_VALUE));
+        swings.add(0); // This perfect swing is never pitched after three outs.
+        for (String prop : List.of("Prop_Sport_Baseball", "Prop_Sport_Softball")) {
+            assertThat(g.playInning(prop, swings)).as(prop).isEqualTo(new ThrowableSports.Inning(0, 3, 0, 9));
+        }
+    }
+
+    @Test
     void inningScoresRunnersAndEndsAtThreeOuts() {
         // single, single, double (scores 1 from 2nd... runners on 1st+2nd -> 2nd runner scores, 1st to 3rd), HR (3 runs)
         List<Integer> s = new ArrayList<>(Arrays.asList(40, 40, -40, 0));

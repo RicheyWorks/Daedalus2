@@ -25,7 +25,8 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Owner-consented pins
 - `data/islands/streaming_sources.json` rows may carry `"pin": {"disk_kib": N, ...}` with provenance; priority is layout `streaming` block, then pin, then measurement, then estimate.
-- BlenderBoss (2026-10-18): disk 16,348 KiB = ceil(16,739,484 bytes), the 67 BIP1 packets in `data/islands/blenderboss/flagship.bip.json` (sha256 a00fb9ca...09a9, checked by test_dsb.py). File-only, with blender-team consent (47979, receipt 47991). RAM stays an ESTIMATE.
+- BlenderBoss original R1 pin (2026-10-18): disk 16,348 KiB = ceil(16,739,484 bytes), the 67 BIP1 packets in the original `data/islands/blenderboss/flagship.bip.json` (sha256 a00fb9ca...09a9). File-only, with blender-team consent (47979, receipt 47991).
+- BlenderBoss current R2 pin (reconciled 2026-10-26): disk 18,460 KiB = ceil(18,902,836 bytes), the accepted 67-packet manifest at `45f1f1a882fed09e9380562616962703867afba4` (sha256 b188f1b41c87f0fbecda439eea21cddfbb0455285b3a8058eee2138c0a580a2c). Blender-team READY 50054/50055 and buffffff acceptance 50079 identify that source revision. `test_dsb.py` checks the exact manifest hash, packet-byte sum, KiB rounding and generated BlenderBoss row. The generated `streaming.dsb` follows this pin; RAM remains the placement-count ESTIMATE. No packet re-export or native measurement is implied.
 
 ## Byte Spring cistern (contest G39, quest q_byte_spring)
 - `byte_spring.py`: DiskSaver Island minigame that composes `dsb.py`. DSB rows become islands that drink water, and the DSB 1 picker chooses the start residents. A seeded, integer-only tick sim (`byte_spring_test.py`, 46 tests; CI `Byte Spring cistern`). Rules: `docs/islands/DISKSAVER-BYTE-SPRING.md`.

@@ -1,10 +1,10 @@
 name: Desktop Python game ports
 on:
   pull_request:
-    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "docs/desktop-games-sources.json", ".github/workflows/desktop-games.yml"]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "docs/desktop-games-sources.json", "tools/minigames/**", "docs/minigames/**", "docs/REALMS.md", "data/minigames/**", ".github/workflows/desktop-games.yml"]
   push:
     branches: [main]
-    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", ".github/workflows/desktop-games.yml"]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "tools/minigames/**", "docs/minigames/**", "docs/REALMS.md", "data/minigames/**", ".github/workflows/desktop-games.yml"]
 permissions:
   contents: read
 concurrency:
@@ -26,7 +26,7 @@ jobs:
           - os: windows-latest
             compiler: msvc
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -38,8 +38,16 @@ jobs:
       - name: Configure MSVC
         if: runner.os == 'Windows'
         run: cmake -S engines/unreal/core-test/desktop_games -B desktop-build
+      - name: Minigame catalog is current
+        run: python tools/minigames/minigame_catalog.py --check
+      - name: Every cabinet has a save slot, how-to line, scoreboard entry and an original name
+        run: python tools/minigames/catalog_validate.py
+      - name: Realm cabinet placements are current and tested
+        run: |
+          python tools/minigames/realm_cabinets.py --check
+          python -m unittest discover -s tools/minigames -p "test_*.py" -v
       - name: Compile
-        run: cmake --build desktop-build --config Debug
+        run: cmake --build desktop-build --config Debug --parallel 4
       - name: Replay actual source fixtures and lifecycle checks
         run: ctest --test-dir desktop-build -C Debug --output-on-failure
       - name: Native source preflight

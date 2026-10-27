@@ -1,0 +1,47 @@
+{
+  "assets": [
+    {
+      "id": "Mob_Parcels_LostLetterGhost",
+      "role": "Lost letter quest; nonHalloween ghost reinterpretation",
+      "file": "Mob_Parcels_LostLetterGhost.glb",
+      "triangles": 1052,
+      "bones": 14,
+      "rig": "ParcelsHumanoidV1",
+      "radius_cm": 205,
+      "sha256": "a42b00a851c2a11fa40bc55f0e1f4f5d33d09319432e5514424f8324b20f8ed5",
+      "role_count": 1,
+      "behavior_status": "native binding pending",
+      "kind": "Character",
+      "realm": "The Parcels",
+      "clips": "Idle, Walk, Attack, Hurt",
+      "export": "Validated",
+      "unreal": "Pending",
+      "mechanic": "Binding pending",
+      "source_id": "Mob_Parcels_LostLetterCourier",
+      "source_sha256": "b955a27486c3f020fc7e535fa6417dd0b0c6c255352662e44775c832a7fa243c",
+      "renamed_fields": 3
+    },
+    {
+      "id": "Mob_Bricks_GlueWitch",
+      "role": "NonHalloween Glue Witch art reinterpretation",
+      "file": "Mob_Bricks_GlueWitch.glb",
+      "triangles": 1200,
+      "bones": 14,
+      "rig": "BrickHumanoidV1",
+      "radius_cm": 199,
+      "sha256": "b74764bb5397fdcc853cf8bfaca02494abc54fa9ce1ff450d9f2162a5f2e5bb8",
+      "role_count": 1,
+      "recommended_scale": 1,
+      "behavior_status": "native binding pending",
+      "kind": "Character",
+      "realm": "Brick Realm",
+      "clips": "Idle, Walk, Attack, Hurt",
+      "export": "Validated",
+      "unreal": "Pending",
+      "mechanic": "Binding pending",
+      "source_id": "Mob_Bricks_AdhesiveAlchemist",
+      "source_sha256": "fa368584812713c48cda24cfe165d3501eed4f46793614ef6d1a84f6637e92d4",
+      "renamed_fields": 3
+    }
+  ]
+}

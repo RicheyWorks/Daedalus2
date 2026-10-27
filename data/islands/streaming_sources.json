@@ -6,12 +6,14 @@
       "content_dirs": [],
       "note": "disk pinned to BIP1 packet bytes with owner consent; RAM remains the placement-count ESTIMATE",
       "pin": {
-        "disk_kib": 16348,
-        "disk_bytes": 16739484,
+        "disk_kib": 18460,
+        "disk_bytes": 18902836,
         "manifest": "data/islands/blenderboss/flagship.bip.json",
-        "manifest_sha256": "a00fb9ca1255a4cae977ad84fc1f7cd232c7595c96ee498871c0f448707809a9",
-        "basis": "sum of the 67 BIP1 packet byte counts (28 terrain + 39 prop libs), ceil to KiB; FILE-ONLY",
+        "manifest_sha256": "b188f1b41c87f0fbecda439eea21cddfbb0455285b3a8058eee2138c0a580a2c",
+        "basis": "sum of the 67 BIP1 R2 packet byte counts (28 terrain + 39 prop libs), ceil to KiB; FILE-ONLY",
         "consent": "blender-team 47979 YES_FILE_ONLY via pootscoot-coordination receipt 47991 (request disk-budget-blender-consent-47979-receipt-20261019)",
+        "source_commit": "45f1f1a882fed09e9380562616962703867afba4",
+        "source_acceptance": "R2 manifest: blender-team READY 50054/50055; buffffff acceptance 50079. The consent above records the original R1 file-only pin; these totals follow the accepted R2 source.",
         "ram": "ESTIMATE (placement-count model), not measured"
       }
     },

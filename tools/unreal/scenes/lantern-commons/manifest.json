@@ -1,0 +1,3356 @@
+{
+  "schema": "daedalus.playable-scene-receipt.v7",
+  "engine": "Unreal Engine 5.8.4",
+  "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+  "rule_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules",
+  "ground_metres": [
+    104,
+    105
+  ],
+  "floor_instances": 273,
+  "floor_grid": [
+    13,
+    21
+  ],
+  "tile_spacing_cm": [
+    800,
+    500
+  ],
+  "continuous_ground_collision": {
+    "extent_cm": [
+      5200,
+      5250,
+      25
+    ],
+    "top_z_cm": 20
+  },
+  "perimeter_walls": {
+    "count": 4,
+    "height_metres": 3
+  },
+  "spawn_cm": [
+    -600,
+    0,
+    150
+  ],
+  "chart_cm": [
+    2800,
+    500,
+    135
+  ],
+  "existing_native_classes": [
+    "DaedalusGameMode",
+    "DaedalusHero",
+    "DaedalusStarChart"
+  ],
+  "required_existing_static_meshes": [
+    "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor",
+    "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor_Rocks",
+    "/Game/Daedalus/Art/Item/Item_Orr_Constellation_Chart_Lantern/Item_Orr_Constellation_Chart_Lantern/StaticMeshes/Item_Orr_Constellation_Chart_Lantern",
+    "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Mature/Prop_Tree_Willow_Mature/StaticMeshes/Prop_Tree_Willow_Mature",
+    "/Game/Daedalus/Art/Prop/Prop_Tree_Willow_Mature/Prop_Tree_Willow_Mature/StaticMeshes/Prop_Tree_Willow_Mature_Top",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Bench_Curved/Prop_Orr_Bench_Curved/StaticMeshes/Prop_Orr_Bench_Curved.Prop_Orr_Bench_Curved",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Post/Prop_Orr_Lantern_Post/StaticMeshes/Prop_Orr_Lantern_Post.Prop_Orr_Lantern_Post",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Long/Prop_Orr_Planter_Long/StaticMeshes/Prop_Orr_Planter_Long.Prop_Orr_Planter_Long",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Round/Prop_Orr_Planter_Round/StaticMeshes/Prop_Orr_Planter_Round.Prop_Orr_Planter_Round",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Sign_Welcome/Prop_Orr_Sign_Welcome/StaticMeshes/Prop_Orr_Sign_Welcome.Prop_Orr_Sign_Welcome",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Sundial_Garden/Prop_Orr_Sundial_Garden/StaticMeshes/Prop_Orr_Sundial_Garden.Prop_Orr_Sundial_Garden",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Path_Tile_Cobble/Prop_Orr_Path_Tile_Cobble/StaticMeshes/Prop_Orr_Path_Tile_Cobble.Prop_Orr_Path_Tile_Cobble",
+    "/Game/Daedalus/Art/Prop/Prop_Grass_MeadowGrass/Prop_Grass_MeadowGrass/StaticMeshes/Prop_Grass_MeadowGrass.Prop_Grass_MeadowGrass",
+    "/Game/Daedalus/Art/Prop/Prop_Grass_Moss/Prop_Grass_Moss/StaticMeshes/Prop_Grass_Moss.Prop_Grass_Moss",
+    "/Game/Daedalus/Art/Prop/Prop_Flower_Bluebell/Prop_Flower_Bluebell/StaticMeshes/Prop_Flower_Bluebell.Prop_Flower_Bluebell",
+    "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy",
+    "/Game/Daedalus/Art/Prop/Prop_Aqua_WaterLily/Prop_Aqua_WaterLily/StaticMeshes/Prop_Aqua_WaterLily.Prop_Aqua_WaterLily",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Spring_Basin/Prop_Orr_Spring_Basin/StaticMeshes/Prop_Orr_Spring_Basin.Prop_Orr_Spring_Basin",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Aqueduct_Arch/Prop_Orr_Aqueduct_Arch/StaticMeshes/Prop_Orr_Aqueduct_Arch.Prop_Orr_Aqueduct_Arch",
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Fence_Low/Prop_Orr_Fence_Low/StaticMeshes/Prop_Orr_Fence_Low.Prop_Orr_Fence_Low",
+    "/Game/Daedalus/Art/Prop/Prop_Shrub_Hedge/Prop_Shrub_Hedge/StaticMeshes/Prop_Shrub_Hedge.Prop_Shrub_Hedge",
+    "/Game/Daedalus/Art/Prop/Prop_Crater_RimRock/Prop_Crater_RimRock/StaticMeshes/Prop_Crater_RimRock.Prop_Crater_RimRock",
+    "/Game/Daedalus/Art/Prop/Prop_Island_RockCluster_K11V0/Prop_Island_RockCluster_K11V0/StaticMeshes/Prop_Island_RockCluster_K11V0.Prop_Island_RockCluster_K11V0"
+  ],
+  "source_author": "Unknown; no authorship inferred from filenames.",
+  "actual_checks": {
+    "saved_reload_floor_instances": 273,
+    "physical_corner_seam_trace_hits": 8,
+    "initial_walk_metres": 4.476296396518948,
+    "long_roam_metres": 25.29712653087267,
+    "long_roam_movement_mode": "MOVE_WALKING",
+    "grounded_capsule_z_cm": 114.1500015258789,
+    "pickup": "Existing E/Interact removed the one native StarChart actor.",
+    "health": 100,
+    "shield": 100,
+    "encounter_cvar_during_play": 0,
+    "actual_DaedalusTarget_count": 0,
+    "encounter_cvar_restored_after_normal_stop": 1,
+    "current_player_progress_rolled_back": false,
+    "route_walk_metres": 37.61549281152464,
+    "route_stops": 3,
+    "largest_route_stop_error_cm": 36.704607391571066,
+    "route_all_walking": true,
+    "successful_E_pickup": true,
+    "saved_reload_owned_floor_materials": true,
+    "original_material_disk_hashes_unchanged": true,
+    "compute_released": true,
+    "feedback_hook_triggered": true,
+    "feedback_configured_seconds": 18,
+    "feedback_pixels_reviewed": false,
+    "current_packages_clean": true
+  },
+  "limits": [
+    "R6 retains the already-present atmosphere and adds native height fog; visual horizon improvement remains unreviewed. Three shared-pivot canopy placements corrected.",
+    "R5 Stillwater is a flat decorative surface above existing solid ground, not a water-gameplay integration. New content awaits independent pixel review.",
+    "R4 garden is built/saved, not newly play-tested or pixel-reviewed. New pond candidates remain held; no imports or benchmark acceptance claimed.",
+    "R3 real UMG objective/prompt/completion assets are built, compiled and saved; runtime and pixel acceptance were not run in this build-only pass.",
+    "The full 104 x 105 m ground and eight sampled collision traces are preserved; this is not exhaustive collision or performance coverage.",
+    "Original saved material hashes are unchanged and current packages are clean. Earlier unsaved auto-instancing flags were not restored over saved originals after the old editor closed.",
+    "All four scene lights are movable, with zero unbuilt interactions; no project render settings or global lighting build changed.",
+    "Before/after R2 captures use the same three poses and temporary Game View with prior flags restored.",
+    "Composition and readability remain subject to the established 17-image visual benchmark board. Final art style remains undecided.",
+    "Encounter restoration assumes one serialized Play world. Hardware input was not isolated; no production combat balancing is claimed.",
+    "Independent Daedalus work, not prebuilt game-jam content."
+  ],
+  "landmark_groups": [
+    "Shade Grove",
+    "Stone Overlook",
+    "Lantern Chart"
+  ],
+  "route_cm": [
+    [
+      -600,
+      0
+    ],
+    [
+      400,
+      400
+    ],
+    [
+      1500,
+      -400
+    ],
+    [
+      2800,
+      500
+    ]
+  ],
+  "reviewed_tree_assemblies": 32,
+  "route_pavers": 18,
+  "owned_materials": {
+    "GroundShade": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade",
+    "GroundSage": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage",
+    "TrailAmber": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_TrailAmber",
+    "BoundaryTeal": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal",
+    "LanternGold": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_LanternGold"
+  },
+  "lighting": {
+    "scope": "Owned map only",
+    "fixed_luminance_cd_m2": 1,
+    "exposure_bias": 0,
+    "bloom_intensity": 0.1,
+    "destination_point_intensity": 20,
+    "all_lights_movable": true,
+    "unbuilt_light_interactions": 0,
+    "unbuilt_primitive_interactions": 0,
+    "lighting_bakes": 0
+  },
+  "physical_proxy": {
+    "render_visible": false,
+    "collision": "QueryAndPhysics",
+    "footprint_metres": [
+      104,
+      105
+    ]
+  },
+  "reference_bar": "Existing VISUAL-QUALITY-BAR.md and17-image board; Adopt Me minimum to exceed over iteration. Final art style undecided; current slice does not establish exceeding the bar.",
+  "artifacts": [
+    {
+      "path": ".gitattributes",
+      "bytes": 30,
+      "sha256": "d1e644c08c0023fe896bb537bbe343995c7b9af860a3f2fd2ba26dc81f35341c"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback.uasset",
+      "bytes": 27702,
+      "sha256": "22d276f780ea93e40524278b3251374bcd8240189a47b359ab5d875ec056405a"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules.uasset",
+      "bytes": 58791,
+      "sha256": "116a4c6f9c67a11f25c88773e0c3879c2b28026708c30a2a87a45e28d69eb6d8"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternUIHost.uasset",
+      "bytes": 49675,
+      "sha256": "8b8f5f14c16d5ec1810da558a19b259b90a16747d28ba32132f65345622d43ad"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
+      "bytes": 415635,
+      "sha256": "fe5b2f0938e8c50c66271807ca014d4921af89f01dcd8e1c8d25bf1e3847ccf7"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
+      "bytes": 68967,
+      "sha256": "f1d524109a3f387747b6c78de1552bff081e42f4155d1f0a9c34222156ee500c"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage.uasset",
+      "bytes": 69177,
+      "sha256": "99c1ddad2359d7fbfeb2b91efe287cb64c813c8b259ec48508a6b960a31d8179"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade.uasset",
+      "bytes": 68911,
+      "sha256": "0e8b40fe53b406ca11437ccad88c89f19853543f5d2f0a0ceeb02f1d6e55a598"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_LanternGold.uasset",
+      "bytes": 69512,
+      "sha256": "b998d498cc40b92e7cb3682bed39a1e374ed9fc6aacdb0b4f81936323a1af38e"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_TrailAmber.uasset",
+      "bytes": 69361,
+      "sha256": "ad294e83053a448a60d47834b6461199601c9e3c87f1a2616c1ae2592dd6c2d8"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/WBP_LanternObjective.uasset",
+      "bytes": 133146,
+      "sha256": "324ae33c48c5ffa08b67a6ecf12a55e2a638382acf2b2f8f0f9b5dcf68caf29e"
+    },
+    {
+      "path": "feedback-graph.dsl",
+      "bytes": 136,
+      "sha256": "73fb86cd9170ee9aab9a2851f077de60b881609962559c65bfdbcd171a606bb8"
+    },
+    {
+      "path": "images/after-player.png",
+      "bytes": 2465508,
+      "sha256": "1801b7aa9829d003ba9b5501cc30ddc2dfa06973ea9984173c521f87bd9fdbc4"
+    },
+    {
+      "path": "images/before-overview.png",
+      "bytes": 1790228,
+      "sha256": "1da8d6569844a8a3ecf41fcdb974b688acec375f350f8984aa997b8e09383359"
+    },
+    {
+      "path": "images/before-player.png",
+      "bytes": 1901562,
+      "sha256": "0bfa8599e6ac3d4bb5508400626f1229d2e51d2d66fad98624882a9263d70fe2"
+    },
+    {
+      "path": "images/gameplay-before-pickup.png",
+      "bytes": 2010969,
+      "sha256": "e227d4ac058844b916bcfc482840dce41aa6bc5fd1584a27efa6f5181e2a5a41"
+    },
+    {
+      "path": "images/gameplay-pickup-feedback.png",
+      "bytes": 1990757,
+      "sha256": "8348964607b7cc84e6c85d86f8aef3fafd990e005d266a19512eb8d05b36b886"
+    },
+    {
+      "path": "images/presentation-r2/after-overview.png",
+      "bytes": 1315744,
+      "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5"
+    },
+    {
+      "path": "images/presentation-r2/after-player.png",
+      "bytes": 2381891,
+      "sha256": "afa4e6e59110ca9dfd63eb5b1ce21eea55786626d0ed74d78a66f1b930d5334e"
+    },
+    {
+      "path": "images/presentation-r2/after-route.png",
+      "bytes": 2546560,
+      "sha256": "7056edaf0cfd3e5011f5eb2089e0c86a312f82fdb8b7ebe492b4a39c92a5b78d"
+    },
+    {
+      "path": "images/presentation-r2/before-overview.png",
+      "bytes": 1314120,
+      "sha256": "c1ac8246a9c43911a08f938aefa01235a7d14e1a02101a2ea4ea3aaf28fbf76f"
+    },
+    {
+      "path": "images/presentation-r2/before-player.png",
+      "bytes": 2524451,
+      "sha256": "69664c56c3559b19d0c302b51064f09262279d0eb55a76280451be09daed721c"
+    },
+    {
+      "path": "images/presentation-r2/before-route.png",
+      "bytes": 2671168,
+      "sha256": "daf100b309e3ca8c75d80a8c2f787ca909911afd6e35ad034f0bc03e5dda96e5"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-immediate.png",
+      "bytes": 2729999,
+      "sha256": "04a6955dacec980138fa22836b5f8e4b1eb972fda534737ecf4c41343c20cb52"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-persistent.png",
+      "bytes": 2583021,
+      "sha256": "df396ca7ccc7f833efe796ae63202b4270da993323e77678a263d0e97fef2c9a"
+    },
+    {
+      "path": "lantern-commons-overview.png",
+      "bytes": 1315744,
+      "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5"
+    },
+    {
+      "path": "native-proof.json",
+      "bytes": 5201,
+      "sha256": "4632ef91d769795e4edaefe7daf96d9bad52e21c39e4d3119c59860eaa1d48bc"
+    },
+    {
+      "path": "presentation-r2-proof.json",
+      "bytes": 10906,
+      "sha256": "f8da7f80fe6845d10fb28dc67f7b6c489e06eb5c48f68c5058490d65415fd4a4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2739,
+      "sha256": "e9e1e52594e232d4b1345947622cca408daf65ac7622bb763423b59816b96e9f"
+    },
+    {
+      "path": "ui/build.json",
+      "bytes": 2668,
+      "sha256": "aedda4ddbf0de10cbb0036de0b15b13dcec4bfc2f3843ae0b9090a54b8fd4477"
+    },
+    {
+      "path": "ui/host.dsl",
+      "bytes": 626,
+      "sha256": "6e6abaa73fabaf92f5a084833e042b244e5d56842243655fc0393458869858f1"
+    },
+    {
+      "path": "ui/objective-events.dsl",
+      "bytes": 336,
+      "sha256": "25830afa464c8b6a6263fcce5887e9dc69976d2909431b5b59f9ad8c81e9fd37"
+    },
+    {
+      "path": "ui/objective-refresh.dsl",
+      "bytes": 1428,
+      "sha256": "c646e6f5313e0557c459b883e1f536e75106ac69a15944f492e65c42c8ae1cf7"
+    }
+  ],
+  "feedback_blueprint": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback",
+  "actor_count": 755,
+  "objective_ui": {
+    "schema": "daedalus.commons-objective-ui-build.v1",
+    "status": "BUILT_COMPILED_SAVED",
+    "widget": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/WBP_LanternObjective",
+    "host": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternUIHost",
+    "objective": "Discover the Lantern chart; follow amber stones past Grove/Overlook to the gold arch.",
+    "context_prompt": {
+      "text": "[E] Collect the Lantern chart",
+      "radius_cm": 300,
+      "input_or_focus_changes": false
+    },
+    "completion": {
+      "source": "Existing DaedalusOrrery Charts contains Lantern",
+      "title": "Lantern chart found!",
+      "detail": "You did it! Take your time and explore the Commons. There is no rush.",
+      "persistent_while_current_widget_is_present": true
+    },
+    "progress_writes_or_resets": false,
+    "refresh_interval_seconds": 0.2,
+    "cleanup": "Widget Destruct clears its own timer; owned host EndPlay removes only this widget class.",
+    "compiled_status": {
+      "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/WBP_LanternObjective": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+      "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternUIHost": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+      "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback": "<BlueprintStatus.BS_UP_TO_DATE: 3>"
+    },
+    "saved_packages_clean": true,
+    "compute_released": true,
+    "Play_run": false,
+    "tests_or_previous_route_pickup_reload_repeated": false,
+    "runtime_or_pixel_acceptance": "NOT RUN in this build-only pass, by user direction.",
+    "layout": {
+      "objective_panel": {
+        "position": [
+          32,
+          110
+        ],
+        "size": [
+          540,
+          254
+        ],
+        "title_font_points": 27,
+        "detail_font_points": 18,
+        "background": "Dark teal opaque panel"
+      },
+      "interaction_prompt": {
+        "bottom_centre": true,
+        "size": [
+          600,
+          76
+        ],
+        "font_points": 26
+      },
+      "widget_count": 9,
+      "hit_test": "Invisible; existing game input remains unchanged."
+    },
+    "destination": "Owned contrast signboard and plain-language arrival text; duplicate label hidden. Existing spacious ground and pickup behavior retained.",
+    "source_finding": "Existing shared SDaedalusHud hides the quest panel when no usable actor remains. It was not edited; the owned UMG reads existing progress independently.",
+    "limits": [
+      "No new gameplay/visual/cook/shipping acceptance is claimed.",
+      "Existing screenshot folders document older R1/R2 scenes and do not show this new UI.",
+      "Broad horizon and blockout-level visual finish remain; the reference benchmark is not met."
+    ]
+  },
+  "actual_checks_scope": "Historical R1/R2 gameplay checks predate later content. Latest R6 content built/saved/captured only; no new Play, reload or test loops.",
+  "garden_r4": {
+    "schema": "daedalus.commons-garden-build.v1",
+    "created_utc": "2026-10-23T02:07:20.218681+00:00",
+    "status": "BUILT_AND_SAVED",
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+    "map_sha256": "92a0d94162975d64d3fd4a576bc1b2870491b77eec8e43e93c8390478da9a67a",
+    "new_actors_by_kind": {
+      "Prop_Flower_Bluebell": 42,
+      "Prop_Flower_Poppy": 42,
+      "Prop_Grass_MeadowGrass": 126,
+      "Prop_Grass_Moss": 42,
+      "Prop_Orr_Bench_Curved": 6,
+      "Prop_Orr_Lantern_Path": 8,
+      "Prop_Orr_Lantern_Post": 6,
+      "Prop_Orr_Path_Tile_Cobble": 45,
+      "Prop_Orr_Planter_Long": 6,
+      "Prop_Orr_Planter_Round": 4,
+      "Prop_Orr_Sign_Welcome": 2,
+      "Prop_Orr_Sundial_Garden": 1,
+      "owned_lawn": 14
+    },
+    "ingestion": {
+      "existing_mesh_kinds_reused": 12,
+      "new_imports": 0,
+      "next_sources_prepared": 3,
+      "next_sources_held": 3
+    },
+    "normal_compute_release": true,
+    "protected_original_file_check": "Existing original guard and both original floor material hashes unchanged before/after native stages.",
+    "native_terminal_sha256": "445c598613e0dd6aaae940d817ae1a52cdc724c59925403506ac8fcd2e2a0e01",
+    "release_receipt_sha256": "c5ecc814749d9e33591d2d5abb1717af1a5b51ea3747702d8e072c9539ac3b11",
+    "limits": [
+      "Build mode: no Play, movement/pickup repeat, save/reload loop, collision grid or test suite.",
+      "New decorative props are NoCollision and use existing saved materials; continuous ground collision remains the existing slab.",
+      "Benches are scenery, not a newly implemented sitting interaction. Sundial and garden props add no gameplay or services.",
+      "Screenshots were written successfully but not pixel-reviewed locally; established visual benchmark is not claimed met.",
+      "New UI is unchanged from R3 and remains built/compiled/saved without a new gameplay acceptance claim.",
+      "Source candidates remain held; no generic unattended garden import adoption is claimed."
+    ],
+    "actual_saved_state": {
+      "saved": true,
+      "actors_current": 487,
+      "added_actors": 344,
+      "floor_instances": 273,
+      "ground_metres": [
+        104,
+        105
+      ],
+      "new_mesh_kinds": 12,
+      "existing_imported_assets_reused": true,
+      "new_imports": 0,
+      "landmark_courts": 3,
+      "meadow_pockets": 14,
+      "ui_and_native_pickup_changed": false,
+      "pixel_review": "Pending independent review; local image reader deliberately not used.",
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "test_suites_run": false,
+      "save_reload_loop_run": false,
+      "progress_modified": false,
+      "encounters": 1,
+      "selected_actor_paths": []
+    }
+  },
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 30,
+      "sha256": "d1e644c08c0023fe896bb537bbe343995c7b9af860a3f2fd2ba26dc81f35341c"
+    },
+    {
+      "path": "care-activity/build.json",
+      "bytes": 3334,
+      "sha256": "4c232440d6208bc218888042cf55b12d5cc62cce10cd00dac7fbca5196bcb559"
+    },
+    {
+      "path": "care-activity/CommitCareComplete.dsl",
+      "bytes": 852,
+      "sha256": "dce8aa3f9d1f6bddc616fa08352f82ead33c33714948b01ed5a4bd340bab1725"
+    },
+    {
+      "path": "care-activity/InitGarden.dsl",
+      "bytes": 1400,
+      "sha256": "33cb90f2d84b0c5e41f1d067dcf37d750c1567a29bc2736cf7c7391cc9e1cd67"
+    },
+    {
+      "path": "care-activity/README.md",
+      "bytes": 2156,
+      "sha256": "3cc658c754c686f0bc4246a09d280286e39a542f36ce0d464cd76dd0b9329eb8"
+    },
+    {
+      "path": "care-activity/RefreshCareUI.dsl",
+      "bytes": 2555,
+      "sha256": "295ce80a4d20b30748b6daf2566e032eb6757f35c4d885d06e354101d9363755"
+    },
+    {
+      "path": "care-activity/RefreshGarden.dsl",
+      "bytes": 6817,
+      "sha256": "c867dc75e3730863cfff3ed86b626ab58b40dd9496e639eb284c4808bfa06447"
+    },
+    {
+      "path": "care-activity/TryGardenInteract.dsl",
+      "bytes": 1808,
+      "sha256": "be6cb7ff8a306dd8cd86124235cb7cb5ea8d4a3b38b8c79b463c352ba575a13a"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternChartFeedback.uasset",
+      "bytes": 27702,
+      "sha256": "22d276f780ea93e40524278b3251374bcd8240189a47b359ab5d875ec056405a"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternCommonsRules.uasset",
+      "bytes": 58791,
+      "sha256": "116a4c6f9c67a11f25c88773e0c3879c2b28026708c30a2a87a45e28d69eb6d8"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/BP_LanternUIHost.uasset",
+      "bytes": 49675,
+      "sha256": "8b8f5f14c16d5ec1810da558a19b259b90a16747d28ba32132f65345622d43ad"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/BP_CommonsGardenActivity.uasset",
+      "bytes": 902127,
+      "sha256": "47e52f4be43bd0298bed351c12d2ba309c3b78de68311172031675b57bf43ee2"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/SG_CommonsGarden.uasset",
+      "bytes": 9969,
+      "sha256": "e48ce0ad416c4b44df934e83e46bb7ffc8dc72afa991729a5df4897acadf8719"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/WBP_CommonsGarden.uasset",
+      "bytes": 37076,
+      "sha256": "5da63dd00b54a685ed62b6568501713e7659baadbceb4952f819304401700df9"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.umap",
+      "bytes": 2103515,
+      "sha256": "aa25c13eabf78f48f1dccbf6d7d402dc4ec75abf88796960d264a5b9704aabb2"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_BoundaryTeal.uasset",
+      "bytes": 68967,
+      "sha256": "f1d524109a3f387747b6c78de1552bff081e42f4155d1f0a9c34222156ee500c"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage.uasset",
+      "bytes": 69177,
+      "sha256": "99c1ddad2359d7fbfeb2b91efe287cb64c813c8b259ec48508a6b960a31d8179"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade.uasset",
+      "bytes": 68911,
+      "sha256": "0e8b40fe53b406ca11437ccad88c89f19853543f5d2f0a0ceeb02f1d6e55a598"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_LanternGold.uasset",
+      "bytes": 69512,
+      "sha256": "b998d498cc40b92e7cb3682bed39a1e374ed9fc6aacdb0b4f81936323a1af38e"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_TrailAmber.uasset",
+      "bytes": 69361,
+      "sha256": "ad294e83053a448a60d47834b6461199601c9e3c87f1a2616c1ae2592dd6c2d8"
+    },
+    {
+      "path": "Content/CodexToolEvaluation/PlayableCourtyard/20261022/R1/WBP_LanternObjective.uasset",
+      "bytes": 133146,
+      "sha256": "324ae33c48c5ffa08b67a6ecf12a55e2a638382acf2b2f8f0f9b5dcf68caf29e"
+    },
+    {
+      "path": "Content/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Bird_Feeder_00101cb7aa798653/Prop_Farm_Bird_Feeder.uasset",
+      "bytes": 31991,
+      "sha256": "1ef94ae91f3b1bafb9d438ea0b92aa55b1ec67cc609cf85493eea39d737b8169"
+    },
+    {
+      "path": "Content/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Compost_Bin_b2cc2ceca1a18b79/Prop_Farm_Compost_Bin.uasset",
+      "bytes": 31835,
+      "sha256": "ac601b63e8218317e1a9da78a92f84ab6a7c7b23f5aa9b9f19fde848c56a327e"
+    },
+    {
+      "path": "Content/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Crate_Apples_99b557bf316c89be/Prop_Farm_Crate_Apples.uasset",
+      "bytes": 31936,
+      "sha256": "c5d76a6709c7c6d6e4fba759c9cac96bc30d3fb64113baa38db9d25eff25346e"
+    },
+    {
+      "path": "Content/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Rain_Barrel_41abb221984dc473/Prop_Farm_Rain_Barrel.uasset",
+      "bytes": 31655,
+      "sha256": "8a50f627ba68e956a9d845ec384db2b6ec1bb6efe108fa9a4de930a616c12772"
+    },
+    {
+      "path": "Content/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a/Prop_Aquatic_Pond_Frogbit_4.uasset",
+      "bytes": 109270,
+      "sha256": "85a0f0ea84bc708afeb64163eb4fe037b9df6a4a59f4e183fcd2797f0d87fc2a"
+    },
+    {
+      "path": "Content/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492/Prop_Aquatic_Pond_PinkLily_4.uasset",
+      "bytes": 113914,
+      "sha256": "cd5dddf45be9bed890282bff78e3868a01d805ea9a03b6bf1a938e853d17dee0"
+    },
+    {
+      "path": "Content/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b/Prop_Aquatic_Pond_WaterLily_4.uasset",
+      "bytes": 113262,
+      "sha256": "6cc39e5570ceed62bb026d7e80e2093ffd1ced1ec5023709f3be5fafb2a0b597"
+    },
+    {
+      "path": "entry/build.json",
+      "bytes": 6570,
+      "sha256": "e845123eacc1a95b7108c7bf86a32510d139cb8e016182f592e9bf2a5559ddda"
+    },
+    {
+      "path": "entry/existing-asset-reuse.json",
+      "bytes": 4167,
+      "sha256": "46f543524d09b51c3284914598bca163bb0d43c8d8fcaeebe98a43bc38e85f2a"
+    },
+    {
+      "path": "entry/layout.json",
+      "bytes": 8839,
+      "sha256": "704517d04789bb4c925e6bce9c34d36a71056f35d845f6535f3f9f257d530f95"
+    },
+    {
+      "path": "feedback-graph.dsl",
+      "bytes": 136,
+      "sha256": "73fb86cd9170ee9aab9a2851f077de60b881609962559c65bfdbcd171a606bb8"
+    },
+    {
+      "path": "garden/build.json",
+      "bytes": 3649,
+      "sha256": "0b262cd304a636f6426e9f525118bb0633f52488163f1d7c366da7f2413df210"
+    },
+    {
+      "path": "garden/existing-import-reuse.json",
+      "bytes": 8944,
+      "sha256": "e491a3a707338191ad22f38d09894c94049673f1e70400256c29e083f879c263"
+    },
+    {
+      "path": "garden/layout.json",
+      "bytes": 68161,
+      "sha256": "78f11abada59f8a471360256508429cab40d16759814b8b49ac11242cede8344"
+    },
+    {
+      "path": "garden/next-ingestion-prepared.json",
+      "bytes": 6391,
+      "sha256": "d210c0b9dbe66ef37028b4a569680a52556a4ac2d52c1e66c2136755d429ac98"
+    },
+    {
+      "path": "garden-care/build.json",
+      "bytes": 19024,
+      "sha256": "3ba490dec0e8712b54bbe6ff80df494413a144d27e45d1c7d961070acaa54426"
+    },
+    {
+      "path": "garden-care/README.md",
+      "bytes": 2141,
+      "sha256": "452c6dfcda2c3ca4cc3dc4319ab7aae034047b6441ac928f34bd3d013fffa1c6"
+    },
+    {
+      "path": "garden-care/sources/Prop_Farm_Bird_Feeder.fbx",
+      "bytes": 15484,
+      "sha256": "00101cb7aa79865343d417a674c6fbbbda7406499c9708880983815eeb2befcc"
+    },
+    {
+      "path": "garden-care/sources/Prop_Farm_Bird_Feeder.json",
+      "bytes": 162,
+      "sha256": "c0c94d799fb13e20bfd336547f3a7b073d113f88aa85a34becb4ee00f2dd449b"
+    },
+    {
+      "path": "garden-care/sources/Prop_Farm_Compost_Bin.fbx",
+      "bytes": 15372,
+      "sha256": "b2cc2ceca1a18b7968634fc16bef4f83e36208638b670981524134624e2341aa"
+    },
+    {
+      "path": "garden-care/sources/Prop_Farm_Compost_Bin.json",
+      "bytes": 162,
+      "sha256": "e57eb3c9e20b768d8d6ff9f35de3dbe41481a05cfcb5434b79fd025c8da558a7"
+    },
+    {
+      "path": "garden-care/sources/Prop_Farm_Crate_Apples.fbx",
+      "bytes": 15404,
+      "sha256": "99b557bf316c89be4b55beb98b457e2babfad99242fb0cf33d587527e4de796c"
+    },
+    {
+      "path": "garden-care/sources/Prop_Farm_Crate_Apples.json",
+      "bytes": 163,
+      "sha256": "0534279cc5d907574f4d542cae113cf832db5d741a56c7f2d9fc701f23942076"
+    },
+    {
+      "path": "garden-care/sources/Prop_Farm_Rain_Barrel.fbx",
+      "bytes": 15212,
+      "sha256": "41abb221984dc4739ace392be92ea0ef8113d215c00f541a3e417c1ac72c4950"
+    },
+    {
+      "path": "garden-care/sources/Prop_Farm_Rain_Barrel.json",
+      "bytes": 162,
+      "sha256": "7766efb2738f5fd28381ebbe0fb206a4043286db3fc90a993fc2caaeb6d482f9"
+    },
+    {
+      "path": "gardenkeeper/build.json",
+      "bytes": 3600,
+      "sha256": "feafa3c1420164d5fbeb13e8ca5b5f04e27f0ec5b845b90e5a37bdaf4092f3c6"
+    },
+    {
+      "path": "gardenkeeper/README.md",
+      "bytes": 2185,
+      "sha256": "f7b5ab1afbd02a9d8d0ee97c3426e718c88c9938df876e9cac4c4bb96bc7bac6"
+    },
+    {
+      "path": "gardenkeeper/RefreshGarden.dsl",
+      "bytes": 5642,
+      "sha256": "438873b3370694dde8aff24ef787a0b4bd7e62436d871731df7e05a1697f1da4"
+    },
+    {
+      "path": "gardenkeeper/TryGardenInteract.dsl",
+      "bytes": 1236,
+      "sha256": "4fc512655e728d0d8d57abe41a5ca6be3e7efd061df0329bdc996f7b139522c7"
+    },
+    {
+      "path": "ground-routes/build.json",
+      "bytes": 26514,
+      "sha256": "3f2d3d51233e1a73f4e5799873419698be3ad119d567cccc45795b1827e76e12"
+    },
+    {
+      "path": "ground-routes/README.md",
+      "bytes": 2443,
+      "sha256": "8b3b325628219a8824d3c0535aaac9ba5af2632fc5403237b399ab0538a515ef"
+    },
+    {
+      "path": "images/after-player.png",
+      "bytes": 2465508,
+      "sha256": "1801b7aa9829d003ba9b5501cc30ddc2dfa06973ea9984173c521f87bd9fdbc4"
+    },
+    {
+      "path": "images/before-overview.png",
+      "bytes": 1790228,
+      "sha256": "1da8d6569844a8a3ecf41fcdb974b688acec375f350f8984aa997b8e09383359"
+    },
+    {
+      "path": "images/before-player.png",
+      "bytes": 1901562,
+      "sha256": "0bfa8599e6ac3d4bb5508400626f1229d2e51d2d66fad98624882a9263d70fe2"
+    },
+    {
+      "path": "images/care-r12-station.png",
+      "bytes": 2247985,
+      "sha256": "c2701bbb8371ef24c3fb5e351b32560db9da1025066ff35826839cb6f604398d"
+    },
+    {
+      "path": "images/entry-r6-arrival.png",
+      "bytes": 2572783,
+      "sha256": "7479c432b60536d2f8947c7d67fa294da7fe7325e184e4a0e150076bcbc86ed7"
+    },
+    {
+      "path": "images/entry-r6-horizon.png",
+      "bytes": 2671093,
+      "sha256": "cbc4c30ef6eb912e1e902b220b87e73b4db64fed593c6c2f098f1acd3ffe4a4b"
+    },
+    {
+      "path": "images/entry-r6-overview.png",
+      "bytes": 2165606,
+      "sha256": "2b059b8ed0d72902f1a56a66f1ec8cdd4c49939e90f494cfdc0098f1ccea1ccf"
+    },
+    {
+      "path": "images/gameplay-before-pickup.png",
+      "bytes": 2010969,
+      "sha256": "e227d4ac058844b916bcfc482840dce41aa6bc5fd1584a27efa6f5181e2a5a41"
+    },
+    {
+      "path": "images/gameplay-pickup-feedback.png",
+      "bytes": 1990757,
+      "sha256": "8348964607b7cc84e6c85d86f8aef3fafd990e005d266a19512eb8d05b36b886"
+    },
+    {
+      "path": "images/garden-care-r11-station.png",
+      "bytes": 2305515,
+      "sha256": "22559a6dd1fb2b138859fda65db61231488001eab0d4ab88d5d18eb057fa9a0f"
+    },
+    {
+      "path": "images/garden-r4-overview.png",
+      "bytes": 1290484,
+      "sha256": "40fa1db865c7fde2785ba57aba90008a27887161d881bf920d288f45be71f4ff"
+    },
+    {
+      "path": "images/garden-r4-player.png",
+      "bytes": 2571053,
+      "sha256": "85f12fdebbbdc11aee468a17bc5a756fbf2eede33299614ece75656fc9372f02"
+    },
+    {
+      "path": "images/garden-r4-route.png",
+      "bytes": 2651842,
+      "sha256": "8f06b2162d0aca3a19ce429eb56fbd49f9f32194268478c014618fd8bcb0fc5a"
+    },
+    {
+      "path": "images/gardenkeeper-r9-arrival.png",
+      "bytes": 2663357,
+      "sha256": "50c35362b47159208798e0eb0bf54caf4fb9495ecbd182dfa7e5aa1bd1bbc093"
+    },
+    {
+      "path": "images/ground-r10-after_arrival.png",
+      "bytes": 2369753,
+      "sha256": "f314ba3f34850a7d2ad6914e0ca769507f723d8eb344f8eac2e31f44a6faae72"
+    },
+    {
+      "path": "images/ground-r10-after_overview.png",
+      "bytes": 1982923,
+      "sha256": "258c10e80a32e2fcdf140ae2736da665bb8434985cc892d7c5ed6f3b68aad393"
+    },
+    {
+      "path": "images/ground-r10-before_arrival.png",
+      "bytes": 2664439,
+      "sha256": "d4c3a5b9058699544a4cb34142b67efb9fad1a44ada3f369a0cbfbd85393aa57"
+    },
+    {
+      "path": "images/ground-r10-before_overview.png",
+      "bytes": 2168739,
+      "sha256": "5ec579e0a3269680707bca00612a03c8e7eb0ec5752c5b18cae3a7c5d369aa69"
+    },
+    {
+      "path": "images/plant-r7-arrival.png",
+      "bytes": 2647328,
+      "sha256": "772f2e01100a96d654427346b876258bfa9675ac239641ce308750cf1919509f"
+    },
+    {
+      "path": "images/plant-r7-garden.png",
+      "bytes": 3218367,
+      "sha256": "0d49453e0e31b54eb56d5779d5af61001e5ea4f495ac2da8532adf1bef3e445f"
+    },
+    {
+      "path": "images/presentation-r2/after-overview.png",
+      "bytes": 1315744,
+      "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5"
+    },
+    {
+      "path": "images/presentation-r2/after-player.png",
+      "bytes": 2381891,
+      "sha256": "afa4e6e59110ca9dfd63eb5b1ce21eea55786626d0ed74d78a66f1b930d5334e"
+    },
+    {
+      "path": "images/presentation-r2/after-route.png",
+      "bytes": 2546560,
+      "sha256": "7056edaf0cfd3e5011f5eb2089e0c86a312f82fdb8b7ebe492b4a39c92a5b78d"
+    },
+    {
+      "path": "images/presentation-r2/before-overview.png",
+      "bytes": 1314120,
+      "sha256": "c1ac8246a9c43911a08f938aefa01235a7d14e1a02101a2ea4ea3aaf28fbf76f"
+    },
+    {
+      "path": "images/presentation-r2/before-player.png",
+      "bytes": 2524451,
+      "sha256": "69664c56c3559b19d0c302b51064f09262279d0eb55a76280451be09daed721c"
+    },
+    {
+      "path": "images/presentation-r2/before-route.png",
+      "bytes": 2671168,
+      "sha256": "daf100b309e3ca8c75d80a8c2f787ca909911afd6e35ad034f0bc03e5dda96e5"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-immediate.png",
+      "bytes": 2729999,
+      "sha256": "04a6955dacec980138fa22836b5f8e4b1eb972fda534737ecf4c41343c20cb52"
+    },
+    {
+      "path": "images/presentation-r2/gameplay-success-persistent.png",
+      "bytes": 2583021,
+      "sha256": "df396ca7ccc7f833efe796ae63202b4270da993323e77678a263d0e97fef2c9a"
+    },
+    {
+      "path": "images/stillwater-r5-arrival.png",
+      "bytes": 2474923,
+      "sha256": "08de3cfff70a6811a6555d577110b713f705f0fbfc6e5a75e95072a9fd34e0af"
+    },
+    {
+      "path": "images/stillwater-r5-garden.png",
+      "bytes": 2530208,
+      "sha256": "4620107874dec4ea59314158ea8f1b7632c18f68d2f78fd5ca45e86469fb9d70"
+    },
+    {
+      "path": "images/stillwater-r5-overview.png",
+      "bytes": 1295566,
+      "sha256": "467683a1cbf89f41a7f03007922fa4c1154e0048b6192a0e2776762271fc879d"
+    },
+    {
+      "path": "images/stillwater-r8-garden.png",
+      "bytes": 2942357,
+      "sha256": "810866d9a378922f49ade8ced9d2aa5d21191559f05ba5dade6613b0e73316de"
+    },
+    {
+      "path": "images/stillwater-r8-pond.png",
+      "bytes": 2610112,
+      "sha256": "0ff040be22e36a43972f96c6ef29845f42df297cac90fe53ab129d3dc74345e9"
+    },
+    {
+      "path": "lantern-commons-overview.png",
+      "bytes": 1315744,
+      "sha256": "e49627f93d65132032feafa9b153396312bfe0f0fac29177798e152c9af8d6c5"
+    },
+    {
+      "path": "native-proof.json",
+      "bytes": 5201,
+      "sha256": "4632ef91d769795e4edaefe7daf96d9bad52e21c39e4d3119c59860eaa1d48bc"
+    },
+    {
+      "path": "plant-activity/build.json",
+      "bytes": 10455,
+      "sha256": "3709c4ffe22e046124f821613df459388cd01c1f0bf7e0efb2e9b329de4c0b9b"
+    },
+    {
+      "path": "plant-activity/CommitGardenStage.dsl",
+      "bytes": 650,
+      "sha256": "cb0d7bff0b2f5389ccc087c43267b90947213fbbca44240dc8b568b9f1ec418f"
+    },
+    {
+      "path": "plant-activity/InitGarden.dsl",
+      "bytes": 1211,
+      "sha256": "44aba9870f7faf4124bb97d9e6e3bd9fed57bd5c330602875adf0d054831ab2a"
+    },
+    {
+      "path": "plant-activity/pond-intake-status.json",
+      "bytes": 1358,
+      "sha256": "4a9a20c52efff56b24dd923e6337230f488aa74ef390b44fcf52dd8338c98056"
+    },
+    {
+      "path": "plant-activity/README.md",
+      "bytes": 2619,
+      "sha256": "43f44533affba26586458ee43bea3eb5946468cc863c4bd6a1ffcd58899010d2"
+    },
+    {
+      "path": "plant-activity/RefreshGarden.dsl",
+      "bytes": 3156,
+      "sha256": "b55594e14034e7f72880aabf27eb1316c03312f922d0aa26fad370b02b2694e6"
+    },
+    {
+      "path": "plant-activity/TryGardenInteract.dsl",
+      "bytes": 890,
+      "sha256": "9712dea55c7ab7f77a4db260af20d0d74f3d6be40ca136c657814e0edc5ed1f9"
+    },
+    {
+      "path": "pond-native/build.json",
+      "bytes": 13728,
+      "sha256": "6ee1f95198e6c93e7d4026df7022071d9a06112aaf868d9d9631f9647327be97"
+    },
+    {
+      "path": "pond-native/README.md",
+      "bytes": 2673,
+      "sha256": "054998f194096a29ca3b341072ed6fe10994db79aba9c20cf13210b9970cfaa6"
+    },
+    {
+      "path": "pond-native/sources/Prop_Aquatic_Pond_Frogbit_4.fbx",
+      "bytes": 16668,
+      "sha256": "6bd59792c5edff9ab824f111bc13f7c1a082edc9b3a0f1162f9400bd5780adae"
+    },
+    {
+      "path": "pond-native/sources/Prop_Aquatic_Pond_Frogbit_4.json",
+      "bytes": 372,
+      "sha256": "231f1dd3cf98f692a8689bba18d57d9ad9a0a38e525df4efe9d12d7b37689b8d"
+    },
+    {
+      "path": "pond-native/sources/Prop_Aquatic_Pond_PinkLily_4.fbx",
+      "bytes": 19068,
+      "sha256": "8b5fcea2ae0a44926210bf9ccfcd42da3333d77f1187e36287797d0c15ba2eec"
+    },
+    {
+      "path": "pond-native/sources/Prop_Aquatic_Pond_PinkLily_4.json",
+      "bytes": 451,
+      "sha256": "16ce4558542f3491c37e620288145647e1d7ff1e2e1b56a83ef9d3fcf45ec490"
+    },
+    {
+      "path": "pond-native/sources/Prop_Aquatic_Pond_WaterLily_4.fbx",
+      "bytes": 18780,
+      "sha256": "5499801cc09c511b9183f3e66b41e9a27540aeea9b57cf2238fbe454e8f1af2d"
+    },
+    {
+      "path": "pond-native/sources/Prop_Aquatic_Pond_WaterLily_4.json",
+      "bytes": 488,
+      "sha256": "2f0bd9f3c885785a9b8337673039e0aa8387e183a32307d1ef2b0a870edf0e2d"
+    },
+    {
+      "path": "presentation-r2-proof.json",
+      "bytes": 10906,
+      "sha256": "f8da7f80fe6845d10fb28dc67f7b6c489e06eb5c48f68c5058490d65415fd4a4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13161,
+      "sha256": "6397bc4d893c364af09aa8c1a683d84d834d83a21129adc826d1dcc05bdbc56a"
+    },
+    {
+      "path": "stillwater/build.json",
+      "bytes": 4466,
+      "sha256": "55c086ac76c628d0fb98c4689ab3be46785297e4f34212290cd3c56e3f02292d"
+    },
+    {
+      "path": "stillwater/existing-asset-reuse.json",
+      "bytes": 7022,
+      "sha256": "a177b031ea7a00bf3497333692ecddee4a581ebf7ed75e0cda9553b0c1e8af5f"
+    },
+    {
+      "path": "stillwater/layout.json",
+      "bytes": 30817,
+      "sha256": "b47495073db6703352d562e21626c85fa8f0349e8c4ece37c5489f4a23af063b"
+    },
+    {
+      "path": "stillwater-plants/build.json",
+      "bytes": 4909,
+      "sha256": "a72f4cebd8a59ae2d744c090159f2f862c9ec3a4b925e61e991272f75646ca8c"
+    },
+    {
+      "path": "stillwater-plants/README.md",
+      "bytes": 1448,
+      "sha256": "f67e5bbb50ff8b739a476558075a91cf36b5ec634f3607b22c04bdf617333787"
+    },
+    {
+      "path": "ui/build.json",
+      "bytes": 2668,
+      "sha256": "aedda4ddbf0de10cbb0036de0b15b13dcec4bfc2f3843ae0b9090a54b8fd4477"
+    },
+    {
+      "path": "ui/host.dsl",
+      "bytes": 626,
+      "sha256": "6e6abaa73fabaf92f5a084833e042b244e5d56842243655fc0393458869858f1"
+    },
+    {
+      "path": "ui/objective-events.dsl",
+      "bytes": 336,
+      "sha256": "25830afa464c8b6a6263fcce5887e9dc69976d2909431b5b59f9ad8c81e9fd37"
+    },
+    {
+      "path": "ui/objective-refresh.dsl",
+      "bytes": 1428,
+      "sha256": "c646e6f5313e0557c459b883e1f536e75106ac69a15944f492e65c42c8ae1cf7"
+    }
+  ],
+  "stillwater_r5": {
+    "schema": "daedalus.stillwater-garden-build.v1",
+    "utc": "2026-10-23T02:17:40.760770+00:00",
+    "status": "BUILT_SAVED",
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+    "map_sha256": "6cd8e47bad82f3040091c032ab870e96cf80f3bcb19212f2a579c8fa350dd1f9",
+    "new_actors": 170,
+    "current_actors": 657,
+    "garden_footprint_metres": [
+      24,
+      23
+    ],
+    "decorative_water_metres": [
+      10,
+      7
+    ],
+    "water_material": "/Game/Daedalus/Art/Prop/Prop_Orr_Spring_Basin/Prop_Orr_Spring_Basin/Materials/water.water",
+    "water_implementation": "Existing opaque blue basin material on a flat cylinder above unchanged solid ground. No deep water, swimming, depth volumes, water simulation or new shader graphs.",
+    "features": [
+      "Existing spring basin and seven imported Aqua WaterLily props.",
+      "Four benches, eight planters, eight lanterns, cobbled approach and open pool edging.",
+      "Three paired willow shelters, planted margins and non-quest welcome/wayfinding text."
+    ],
+    "kind_counts": {
+      "Prop_Aqua_WaterLily": 7,
+      "Prop_Flower_Bluebell": 15,
+      "Prop_Flower_Poppy": 15,
+      "Prop_Grass_MeadowGrass": 42,
+      "Prop_Orr_Bench_Curved": 4,
+      "Prop_Orr_Lantern_Path": 4,
+      "Prop_Orr_Lantern_Post": 4,
+      "Prop_Orr_Path_Tile_Cobble": 54,
+      "Prop_Orr_Planter_Long": 4,
+      "Prop_Orr_Planter_Round": 4,
+      "Prop_Orr_Spring_Basin": 1,
+      "canopy": 3,
+      "owned_earth": 1,
+      "rocks": 6,
+      "water_surface": 1,
+      "willow": 3
+    },
+    "current_saved_state": {
+      "saved": true,
+      "images": {
+        "arrival": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\StillwaterGardenR5\\stillwater-arrival.png",
+          "bytes": 2474923,
+          "sha256": "08de3cfff70a6811a6555d577110b713f705f0fbfc6e5a75e95072a9fd34e0af"
+        },
+        "garden": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\StillwaterGardenR5\\stillwater-garden.png",
+          "bytes": 2530208,
+          "sha256": "4620107874dec4ea59314158ea8f1b7632c18f68d2f78fd5ca45e86469fb9d70"
+        },
+        "overview": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\StillwaterGardenR5\\stillwater-overview.png",
+          "bytes": 1295566,
+          "sha256": "467683a1cbf89f41a7f03007922fa4c1154e0048b6192a0e2776762271fc879d"
+        }
+      },
+      "actors_current": 657,
+      "new_actors": 170,
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "test_suites_run": false,
+      "new_imports": 0,
+      "welcome_text": "Pause and enjoy. Explore at your own pace.",
+      "bench_interaction_added": false,
+      "pixel_review": "Pending independent review; known troublesome local image reader not invoked.",
+      "encounters": 1
+    },
+    "composition": {
+      "saved": true,
+      "new_actors": 170,
+      "actors_current": 657,
+      "water": "Flat 10 x 7 m decorative surface above unchanged solid floor; existing opaque basin material. No depth, simulation, swimming or new water gameplay.",
+      "garden_footprint_metres": [
+        24,
+        23
+      ],
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "new_imports": 0,
+      "Play_run": false,
+      "prior_ui_progress_controls_and_collision_edited": false,
+      "original_assets_edited": false
+    },
+    "normal_compute_release": true,
+    "protected_originals": "Existing guard and original floor material hashes unchanged.",
+    "held_sources": {
+      "prepared": 3,
+      "imported": 0,
+      "held": 3,
+      "note": "Unchanged source packet; separate offline adapter worker owns preparation. No forced Coupler reuse."
+    },
+    "limits": [
+      "No Play, movement/pickup repeat, reload loop, collision grid or test suite.",
+      "Screenshots captured but not locally pixel-reviewed; established art benchmark not claimed met.",
+      "Benches are scenery, not a new sitting interaction; arrival text invites a pause without promising that action.",
+      "All added scenery is NoCollision over the unchanged physical floor; no new gameplay, objective or progress writes."
+    ],
+    "terminal_sha256": "bcbcd609aa2fc2f71bba254b3dbfa65139f4ee32ddf149a34bcbb950de626149",
+    "release_sha256": "f2be076ca829a271bdb6c93447df4ca3c120d617819f6fbaabc9d46e13a6174f"
+  },
+  "required_existing_materials": [
+    "/Game/Daedalus/Art/Prop/Prop_Orr_Spring_Basin/Prop_Orr_Spring_Basin/Materials/water.water"
+  ],
+  "entry_horizon_r6": {
+    "schema": "daedalus.commons-entry-horizon-build.v1",
+    "utc": "2026-10-23T02:28:39.261737+00:00",
+    "status": "BUILT_SAVED",
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+    "map_sha256": "237d5228872c58441095cbe8f37cf7e01b812987cf254364b9b0dd0e07f16dd8",
+    "added_actors": 56,
+    "current_actors": 713,
+    "imported_placements_by_kind": {
+      "Prop_Crater_RimRock": 8,
+      "Prop_Island_RockCluster_K11V0": 2,
+      "Prop_Orr_Aqueduct_Arch": 1,
+      "Prop_Orr_Fence_Low": 2,
+      "Prop_Orr_Lantern_Post": 2,
+      "Prop_Orr_Path_Tile_Cobble": 8,
+      "Prop_Orr_Planter_Long": 2,
+      "Prop_Shrub_Hedge": 12,
+      "canopy": 8,
+      "willow": 8
+    },
+    "composition": {
+      "saved": true,
+      "new_actors": 56,
+      "actors_current": 713,
+      "perimeter_clusters": 10,
+      "environment_before": [
+        {
+          "label": "CourtyardSun",
+          "class": "DirectionalLight",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.DirectionalLight_0"
+        },
+        {
+          "label": "CourtyardSky",
+          "class": "SkyLight",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.SkyLight_0"
+        },
+        {
+          "label": "CourtyardAtmosphere",
+          "class": "SkyAtmosphere",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.SkyAtmosphere_0"
+        }
+      ],
+      "environment_changes": [
+        {
+          "operation": "existing SkyAtmosphere retained",
+          "paths": [
+            "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.SkyAtmosphere_0"
+          ]
+        },
+        {
+          "operation": "added native height fog",
+          "density": 0.008,
+          "start_distance_cm": 1800,
+          "volumetric_fog_enabled": false
+        }
+      ],
+      "sun_flag_before": true,
+      "sun_flag_after": true,
+      "sky_recaptured_once": true,
+      "ground_routes_ui_progress_unchanged": true,
+      "imports": 0,
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "corrected_owned_R5_canopies": [
+        {
+          "label": "CommonsR5ShelterCanopy0",
+          "previous_z": -116.5,
+          "shared_root_z": 20,
+          "source_canopy_local_bottom_cm": 130
+        },
+        {
+          "label": "CommonsR5ShelterCanopy1",
+          "previous_z": -97.0,
+          "shared_root_z": 20,
+          "source_canopy_local_bottom_cm": 130
+        },
+        {
+          "label": "CommonsR5ShelterCanopy2",
+          "previous_z": -84.0,
+          "shared_root_z": 20,
+          "source_canopy_local_bottom_cm": 130
+        }
+      ],
+      "instancing_choice": "Bounded 53 imported mesh placements plus one owned signboard; no original material instancing-usage mutations or new instancing framework."
+    },
+    "saved_state": {
+      "saved": true,
+      "new_actors": 56,
+      "actors_current": 713,
+      "images": {
+        "arrival": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\EntryHorizonR6\\entry-horizon-arrival.png",
+          "bytes": 2573656,
+          "sha256": "054db3a6ff72b0bcbecd3694a58341d32383f0edacbcbf1c00b9f8a525cb1a08"
+        },
+        "horizon": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\EntryHorizonR6\\entry-horizon-horizon.png",
+          "bytes": 2671093,
+          "sha256": "cbc4c30ef6eb912e1e902b220b87e73b4db64fed593c6c2f098f1acd3ffe4a4b"
+        },
+        "overview": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\EntryHorizonR6\\entry-horizon-overview.png",
+          "bytes": 2165606,
+          "sha256": "2b059b8ed0d72902f1a56a66f1ec8cdd4c49939e90f494cfdc0098f1ccea1ccf"
+        }
+      },
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "test_suites_run": false,
+      "imports": 0,
+      "encounters": 1,
+      "pixel_review": "Pending independent review; local image reader not invoked. No visual benchmark acceptance claimed."
+    },
+    "protected_originals": "Existing original guard and both saved floor material hashes unchanged.",
+    "normal_compute_released": true,
+    "source_imports": 0,
+    "three_prepared_pond_sources": "HELD; independent offline owner prepares compatible profile.",
+    "ready_to_shift_to_activities": "Recommended: the spacious area now has route, chart, three courts, garden and entrance. Next value is one simple collect-and-plant activity; this is a production recommendation, not gameplay/visual acceptance.",
+    "remaining_gaps": [
+      "Current images await independent review; no art-benchmark or black-horizon resolution claim.",
+      "Current UI and new scenery not newly play-tested, per build mode; benches and sundial are decorative.",
+      "Ground repetition and broader distant composition remain candidates for later visual review, not another tool-certification pass.",
+      "New pond sources remain held until compatible qualified admission."
+    ],
+    "terminal_sha256": "dcd6a28c0a3940aea0e02fc6312460dc1f109c22e77eefc4fc2656f1d98d61ef",
+    "release_sha256": "4332a33a8f768d32b86ca86fdbf336e618fde802d418a4359492693b518516a1",
+    "primary_label_followup": {
+      "utc": "2026-10-23T02:32:09.295310+00:00",
+      "actual": {
+        "saved": true,
+        "primary_label": "LANTERN COMMONS",
+        "optional_tagline_removed": true,
+        "alignment": "center",
+        "backing_resized": true,
+        "image": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\EntryHorizonR6\\entry-horizon-arrival-primary.png",
+          "bytes": 2572783,
+          "sha256": "7479c432b60536d2f8947c7d67fa294da7fe7325e184e4a0e150076bcbc86ed7"
+        },
+        "existing_essential_interaction_prompts_changed": false,
+        "dirty_after": {
+          "maps": [],
+          "content": []
+        },
+        "Play_run": false,
+        "test_suites_run": false,
+        "imports": 0
+      },
+      "terminal_sha256": "56864d6a608cacbfab0cefb5880b4a3339385e7d0f72a56c925d2487a3f5c13f",
+      "normal_compute_released": true,
+      "note": "Late user direction after initial R6 publication: primary label only, centred and resized backing; no UI rewrite or essential prompt removal."
+    }
+  },
+  "plant_activity_r7": {
+    "schema": "daedalus.commons-plant-activity-build.v1",
+    "utc": "2026-10-23T03:19:04.876050+00:00",
+    "status": "BUILT_COMPILED_SAVED_NOT_PLAY_VERIFIED",
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+    "map_sha256": "9b5899f5706d23125c02cd1e2402fd0943d495c0a8bcc22854218715aacfaace",
+    "saved_assets": [
+      {
+        "path": "GardenActivityR7/BP_CommonsGardenActivity.uasset",
+        "sha256": "8c0219002a37671c5c380c72c65724e4033675fbf5c0b3b3304aeefcdbf460f0",
+        "bytes": 434489
+      },
+      {
+        "path": "GardenActivityR7/SG_CommonsGarden.uasset",
+        "sha256": "a67cecdbacb4dd9e9b04c4f324609ee94963ca4c12a38b4fba999c0ee66f41fe",
+        "bytes": 9011
+      },
+      {
+        "path": "GardenActivityR7/WBP_CommonsGarden.uasset",
+        "sha256": "75ee48d5f701c31fb09a2e7b94f22caff8ed995d41491f68b0e84a979fd3e834",
+        "bytes": 34197
+      }
+    ],
+    "native_behavior": {
+      "built_saved": [
+        "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/SG_CommonsGarden",
+        "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/BP_CommonsGardenActivity",
+        "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/WBP_CommonsGarden"
+      ],
+      "functions": [
+        "InitGarden",
+        "CommitGardenStage",
+        "TryGardenInteract",
+        "RefreshGarden"
+      ],
+      "input": "E Pressed, consume_input=false, execute_when_paused=false",
+      "slot": "Daedalus_LanternCommons_Garden_v1",
+      "stages": "0 seed available, 1 seed carried, 2 flower planted",
+      "persistence": "Load version1 stage0..2 only; save before local advance; failed saves retain old state for retry.",
+      "shared_progress_writes": false,
+      "Play_run": false,
+      "runtime_persistence_proven": false
+    },
+    "native_composition": {
+      "saved": true,
+      "actors": [
+        {
+          "label": "CommonsR7ContinuousGardenRoute",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_692",
+          "asset": "/Engine/BasicShapes/Cube"
+        },
+        {
+          "label": "CommonsR7SeedDisplay",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_693",
+          "asset": "/Engine/BasicShapes/Cube"
+        },
+        {
+          "label": "CommonsR7CollectibleSeed",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_694",
+          "asset": "/Game/Daedalus/Art/Item/Item_Orr_Seed_Pouch/Item_Orr_Seed_Pouch/StaticMeshes/Item_Orr_Seed_Pouch.Item_Orr_Seed_Pouch"
+        },
+        {
+          "label": "CommonsR7PlantingPot",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_695",
+          "asset": "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Round/Prop_Orr_Planter_Round/StaticMeshes/Prop_Orr_Planter_Round.Prop_Orr_Planter_Round"
+        },
+        {
+          "label": "CommonsR7PlantedFlower",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_696",
+          "asset": "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy"
+        },
+        {
+          "label": "CommonsR7GardenLamp0",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_697",
+          "asset": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path"
+        },
+        {
+          "label": "CommonsR7GardenLamp1",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_698",
+          "asset": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path"
+        },
+        {
+          "label": "CommonsR7GardenLamp2",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_699",
+          "asset": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path"
+        },
+        {
+          "label": "CommonsR7GardenActivity",
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.BP_CommonsGardenActivity_C_0",
+          "asset": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/GardenActivityR7/BP_CommonsGardenActivity.BP_CommonsGardenActivity_C"
+        }
+      ],
+      "continuous_route_m": [
+        14.5,
+        2.4
+      ],
+      "hidden_old_stones": [
+        "CommonsR6EntryStone0L",
+        "CommonsR6EntryStone0R",
+        "CommonsR6EntryStone1L",
+        "CommonsR6EntryStone1R",
+        "CommonsR6EntryStone2L",
+        "CommonsR6EntryStone2R",
+        "CommonsR6EntryStone3L",
+        "CommonsR6EntryStone3R"
+      ],
+      "old_instructions_hidden": {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.TextRenderActor_0",
+        "text": "LANTERN COMMONS\nFollow the amber stones to the gold arch\nExplore at your own pace - no enemies\nYour Explorer Log will guide you."
+      },
+      "bounds": {
+        "seed": {
+          "path": "/Game/Daedalus/Art/Item/Item_Orr_Seed_Pouch/Item_Orr_Seed_Pouch/StaticMeshes/Item_Orr_Seed_Pouch.Item_Orr_Seed_Pouch",
+          "origin": [
+            0.0,
+            0.0,
+            19.797536849975586
+          ],
+          "extent": [
+            23.516550064086914,
+            16.797536849975586,
+            19.797536849975586
+          ]
+        },
+        "pot": {
+          "path": "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Round/Prop_Orr_Planter_Round/StaticMeshes/Prop_Orr_Planter_Round.Prop_Orr_Planter_Round",
+          "origin": [
+            0.0,
+            0.0,
+            25.86211585998535
+          ],
+          "extent": [
+            32.910953521728516,
+            32.910953521728516,
+            25.86211585998535
+          ]
+        },
+        "flower": {
+          "path": "/Game/Daedalus/Art/Prop/Prop_Flower_Poppy/Prop_Flower_Poppy/StaticMeshes/Prop_Flower_Poppy.Prop_Flower_Poppy",
+          "origin": [
+            0.0,
+            0.0,
+            19.5
+          ],
+          "extent": [
+            12.5,
+            10.5,
+            19.5
+          ]
+        },
+        "lantern": {
+          "path": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Path/Prop_Orr_Lantern_Path/StaticMeshes/Prop_Orr_Lantern_Path.Prop_Orr_Lantern_Path",
+          "origin": [
+            0.0,
+            0.0,
+            77.48424530029297
+          ],
+          "extent": [
+            16.0,
+            16.0,
+            77.48424530029297
+          ]
+        }
+      },
+      "seed_location": [
+        -1550,
+        -1045,
+        100
+      ],
+      "planter_location": [
+        -850,
+        -800,
+        24
+      ],
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "runtime_input_and_persistence": "Built and compiled; not exercised in Play under build-only direction.",
+      "inventory_scope": "Owned activity-stage seed, not the shared Orrery Satchel or Hero save."
+    },
+    "current_scene": {
+      "saved": true,
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "actors_current": 722,
+      "Play_run": false
+    },
+    "progress_preserved": true,
+    "compute_released": true,
+    "ingestion": {
+      "utc": "2026-10-23T03:15:57.360884+00:00",
+      "prepared": 3,
+      "imported": 0,
+      "admitted": 0,
+      "held": 3,
+      "queue_created": false,
+      "complete_pages": 0,
+      "blocker": "Pinned v2 capture_inventory_page refused Inventory editor/current protected context differs on two known-terminal attempts. Intermediate exact PID/editor/engine/world/camera/actor readback matched baseline; the failing condition at dispatch remains unproven. No policy or baseline was relaxed.",
+      "attempts": [
+        "SourceMetadataPage0000R1",
+        "SourceMetadataPage0000R2"
+      ],
+      "metadata_load_count": "Unknown: capture_inventory_page uses the same admission function before and after loads; the bridge first-line error alone does not identify which guard failed. No completed page or source-hash coverage exists.",
+      "preservation": {
+        "dirty_after": {
+          "maps": [],
+          "content": []
+        },
+        "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard",
+        "Play_active": false,
+        "actors": 722,
+        "imports": 0
+      },
+      "protected_files_checked": 310,
+      "release": {
+        "ok": true,
+        "lock": null
+      },
+      "native_pending": false,
+      "correction": "Earlier checkpoint inferred pre-load refusal and metadata_meshes_loaded=0; that detail is not proven and is superseded by unknown here."
+    },
+    "source_commits_accounted": [
+      {
+        "origin": "PR415 7c12bc6f5",
+        "local": "7f651a40d"
+      },
+      {
+        "origin": "PR415 3f821573462bc8f82285ce2b0bb7c2340da69415",
+        "local": "68923e41b"
+      },
+      {
+        "origin": "PR416 7959531c677291ef70707308de0b0a351d20badc",
+        "local": "bf732ec21"
+      },
+      {
+        "origin": "PR415 cb049a109336b77f94d3d0eebc03c491715f7864",
+        "local": "97bd0806c2035f5bded869719384008b5d1a60ec"
+      }
+    ],
+    "pixel_review": "Actual saved garden capture inspected via a reduced JPEG rendering of the unchanged PNG. Continuous amber approach, seed pedestal and pink planter visible. Repetitive tiled floor and broad bare areas remain; benchmark not met.",
+    "limits": [
+      "No Play/input/save/reload proof was run, per build-only direction; runtime persistence is unproven.",
+      "Seed ownership is this isolated activity stage; it does not debit Orrery.Satchel or alter Hero/chart progression.",
+      "One local garden slot/player; no multiplayer/cloud persistence or generic farming system.",
+      "Editor captures do not prove runtime HUD or post-plant completion.",
+      "No fresh source-hash coverage or pond import/admission succeeded; three candidates remain held."
+    ]
+  },
+  "native_pond_intake": {
+    "schema": "daedalus.commons-native-pond-batch.v1",
+    "utc": "2026-10-23T04:02:39.387566+00:00",
+    "prepared": 3,
+    "imported": 3,
+    "saved": 3,
+    "admitted": 3,
+    "held": 0,
+    "placed": 0,
+    "workflow": "Epic StaticMeshTools.import_file; native AssetImportTask/Interchange pipeline correction for the demonstrated missing vertex-colour option; explicit native save.",
+    "native_pipeline": {
+      "vertex_color_import_option": "IVCIO_REPLACE",
+      "reimport_strategy": "APPLY_PIPELINE_PROPERTIES",
+      "bake_meshes": false,
+      "build_scale3d": [
+        1,
+        1,
+        1
+      ],
+      "import_materials": false,
+      "generate_lightmap_u_vs": false,
+      "build_nanite": false,
+      "collision": false
+    },
+    "items": [
+      {
+        "name": "Prop_Aquatic_Pond_Frogbit_4",
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a/Prop_Aquatic_Pond_Frogbit_4.Prop_Aquatic_Pond_Frogbit_4",
+        "package_sha256": "85a0f0ea84bc708afeb64163eb4fe037b9df6a4a59f4e183fcd2797f0d87fc2a",
+        "package_bytes": 109270,
+        "source_sha256": "6bd59792c5edff9ab824f111bc13f7c1a082edc9b3a0f1162f9400bd5780adae",
+        "triangles": 220,
+        "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+        "source_palette": {
+          "triangles": 220,
+          "all_faces_flat": true,
+          "observed_rgba_bytes": [
+            [
+              128,
+              189,
+              128,
+              255
+            ],
+            [
+              251,
+              250,
+              246,
+              255
+            ],
+            [
+              253,
+              237,
+              123,
+              255
+            ]
+          ],
+          "expected_rgba_bytes": [
+            [
+              128,
+              189,
+              128,
+              255
+            ],
+            [
+              251,
+              250,
+              246,
+              255
+            ],
+            [
+              253,
+              237,
+              123,
+              255
+            ]
+          ],
+          "source_palette_matches": true
+        },
+        "bounds_origin_cm": [
+          2.5,
+          -2.5,
+          7.5
+        ],
+        "bounds_extent_cm": [
+          37.5,
+          27.5,
+          7.5
+        ],
+        "native_import_data_class": "InterchangeAssetImportData",
+        "saved": true,
+        "admitted": true,
+        "initial_convenience_import_settings": {
+          "vertex_color_import_option": "<VertexColorImportOption.IGNORE: 1>",
+          "import_uniform_scale": 1.0,
+          "convert_scene": true,
+          "convert_scene_unit": false
+        },
+        "initial_colours": "All white; corrected before final admission."
+      },
+      {
+        "name": "Prop_Aquatic_Pond_PinkLily_4",
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492/Prop_Aquatic_Pond_PinkLily_4.Prop_Aquatic_Pond_PinkLily_4",
+        "package_sha256": "cd5dddf45be9bed890282bff78e3868a01d805ea9a03b6bf1a938e853d17dee0",
+        "package_bytes": 113914,
+        "source_sha256": "8b5fcea2ae0a44926210bf9ccfcd42da3333d77f1187e36287797d0c15ba2eec",
+        "triangles": 544,
+        "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+        "source_palette": {
+          "triangles": 544,
+          "all_faces_flat": true,
+          "observed_rgba_bytes": [
+            [
+              104,
+              160,
+              111,
+              255
+            ],
+            [
+              128,
+              189,
+              128,
+              255
+            ],
+            [
+              194,
+              183,
+              164,
+              255
+            ],
+            [
+              194,
+              205,
+              148,
+              255
+            ],
+            [
+              250,
+              205,
+              220,
+              255
+            ],
+            [
+              253,
+              237,
+              123,
+              255
+            ]
+          ],
+          "expected_rgba_bytes": [
+            [
+              104,
+              160,
+              111,
+              255
+            ],
+            [
+              128,
+              189,
+              128,
+              255
+            ],
+            [
+              194,
+              183,
+              164,
+              255
+            ],
+            [
+              194,
+              205,
+              148,
+              255
+            ],
+            [
+              250,
+              205,
+              220,
+              255
+            ],
+            [
+              253,
+              237,
+              123,
+              255
+            ]
+          ],
+          "source_palette_matches": true
+        },
+        "bounds_origin_cm": [
+          -2.5,
+          7.5,
+          -5.0
+        ],
+        "bounds_extent_cm": [
+          42.5,
+          37.5,
+          20.0
+        ],
+        "native_import_data_class": "InterchangeAssetImportData",
+        "saved": true,
+        "admitted": true,
+        "initial_convenience_import_settings": {
+          "vertex_color_import_option": "<VertexColorImportOption.IGNORE: 1>",
+          "import_uniform_scale": 1.0,
+          "convert_scene": true,
+          "convert_scene_unit": false
+        },
+        "initial_colours": "All white; corrected before final admission."
+      },
+      {
+        "name": "Prop_Aquatic_Pond_WaterLily_4",
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b/Prop_Aquatic_Pond_WaterLily_4.Prop_Aquatic_Pond_WaterLily_4",
+        "package_sha256": "6cc39e5570ceed62bb026d7e80e2093ffd1ced1ec5023709f3be5fafb2a0b597",
+        "package_bytes": 113262,
+        "source_sha256": "5499801cc09c511b9183f3e66b41e9a27540aeea9b57cf2238fbe454e8f1af2d",
+        "triangles": 492,
+        "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+        "source_palette": {
+          "triangles": 492,
+          "all_faces_flat": true,
+          "observed_rgba_bytes": [
+            [
+              104,
+              160,
+              111,
+              255
+            ],
+            [
+              128,
+              189,
+              128,
+              255
+            ],
+            [
+              194,
+              183,
+              164,
+              255
+            ],
+            [
+              194,
+              205,
+              148,
+              255
+            ],
+            [
+              251,
+              250,
+              246,
+              255
+            ],
+            [
+              253,
+              237,
+              123,
+              255
+            ]
+          ],
+          "expected_rgba_bytes": [
+            [
+              104,
+              160,
+              111,
+              255
+            ],
+            [
+              128,
+              189,
+              128,
+              255
+            ],
+            [
+              194,
+              183,
+              164,
+              255
+            ],
+            [
+              194,
+              205,
+              148,
+              255
+            ],
+            [
+              251,
+              250,
+              246,
+              255
+            ],
+            [
+              253,
+              237,
+              123,
+              255
+            ]
+          ],
+          "source_palette_matches": true
+        },
+        "bounds_origin_cm": [
+          -7.5,
+          2.5,
+          -5.0
+        ],
+        "bounds_extent_cm": [
+          42.5,
+          32.5,
+          20.0
+        ],
+        "native_import_data_class": "InterchangeAssetImportData",
+        "saved": true,
+        "admitted": true,
+        "initial_convenience_import_settings": {
+          "vertex_color_import_option": "<VertexColorImportOption.IGNORE: 1>",
+          "import_uniform_scale": 1.0,
+          "convert_scene": true,
+          "convert_scene_unit": false
+        },
+        "initial_colours": "All white; corrected before final admission."
+      }
+    ],
+    "native_validation": {
+      "status": "Valid",
+      "native_invoked": true,
+      "accepted": true,
+      "cancellation_observed": false,
+      "native_return": 0,
+      "diagnostic": "Complete Valid result for every exact requested asset.",
+      "snapshot_json": "{\"snapshot_kind\": \"explicit_native_members_not_mcp_schema\", \"requested_assets\": [\"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a/Prop_Aquatic_Pond_Frogbit_4.Prop_Aquatic_Pond_Frogbit_4\", \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492/Prop_Aquatic_Pond_PinkLily_4.Prop_Aquatic_Pond_PinkLily_4\", \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b/Prop_Aquatic_Pond_WaterLily_4.Prop_Aquatic_Pond_WaterLily_4\"], \"native_return\": 0, \"results\": {\"NumRequested\": 3, \"NumExternalObjects\": 0, \"NumChecked\": 3, \"NumValid\": 3, \"NumInvalid\": 0, \"NumSkipped\": 0, \"NumWarnings\": 0, \"NumUnableToValidate\": 0, \"bAssetLimitReached\": false, \"AssetsDetails\": {\"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a/Prop_Aquatic_Pond_Frogbit_4.Prop_Aquatic_Pond_Frogbit_4\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_Frogbit_4_6bd59792c5edff9a/Prop_Aquatic_Pond_Frogbit_4\", \"AssetName\": \"Prop_Aquatic_Pond_Frogbit_4\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}, \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492/Prop_Aquatic_Pond_PinkLily_4.Prop_Aquatic_Pond_PinkLily_4\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_PinkLily_4_8b5fcea2ae0a4492/Prop_Aquatic_Pond_PinkLily_4\", \"AssetName\": \"Prop_Aquatic_Pond_PinkLily_4\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}, \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b/Prop_Aquatic_Pond_WaterLily_4.Prop_Aquatic_Pond_WaterLily_4\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsPond20261023/Prop_Aquatic_Pond_WaterLily_4_5499801cc09c511b/Prop_Aquatic_Pond_WaterLily_4\", \"AssetName\": \"Prop_Aquatic_Pond_WaterLily_4\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}}, \"ValidatorMessages\": []}, \"settings\": {\"bSkipExcludedDirectories\": false, \"bShowIfNoFailures\": false, \"bCollectPerAssetDetails\": true, \"ValidationUsecase\": \"EDataValidationUsecase::Script\", \"bLoadAssetsForValidation\": true, \"bUnloadAssetsLoadedForValidation\": false, \"bLoadExternalObjectsForValidation\": true, \"bCaptureAssetLoadLogs\": true, \"bCaptureLogsDuringValidation\": true, \"bCaptureWarningsDuringValidationAsErrors\": false, \"MaxAssetsToValidate\": 4, \"bValidateReferencersOfDeletedAssets\": false, \"bSilent\": true}, \"provenance\": {\"fresh_out_results\": \"attested\", \"native_invocation\": \"attested\", \"captured_at_utc\": \"2026-10-23T03:58:20.161Z\"}, \"native_runtime_qualified\": false, \"unknowns\": [\"native_runtime_unqualified\", \"official_mcp_callable_unverified\", \"tokenized_message_tokens_projected_to_text_only\", \"validator_statistics_not_captured\", \"settings_message_log_fields_not_captured\"]}"
+    },
+    "preservation": {
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "scene_actor_count_preserved": true,
+      "camera_preserved": false,
+      "selection_preserved": true,
+      "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard",
+      "Play_run": false
+    },
+    "protected_files": 310,
+    "source_hashes_unchanged": true,
+    "compute_released": true,
+    "camera_note": "Current view differs from the starting viewport; no camera-write API was used. Cause unproven; left current view untouched.",
+    "dedup_scope": "Native searches for these three names and registered SHA tags; exact fresh destinations and no-overwrite initial import. Not complete historical hash coverage.",
+    "known_correction_history": [
+      "Initial first-class convenience imports used FBX IGNORE and produced all-white vertices despite native Valid.",
+      "An owned-only correction using FbxImportUI saved Frogbit through Interchange; reading an FBX-only property then failed. Actual reply/traceback retained, no uncertain import replay.",
+      "Actual readback still white. Explicit native Interchange pipeline with ApplyPipelineProperties then repaired exactly the three new backed-up assets.",
+      "Corrected source palettes/topology read back exactly, followed by one fresh native validation batch: 3 checked, 3 Valid, zero warnings/errors/skips."
+    ],
+    "historical_custom_wrapper": "Context-refusal cause remains unknown. Diagnostic commit b75271c was applied as a6255c7bb17a992f63d54ea9c85ee76c95af94e0 but no diagnostic page was dispatched after the user chose native workflow.",
+    "limits": [
+      "No game/world placements or visual/ecology/gameplay acceptance.",
+      "Native canonical snapshot flags/unknowns are retained unchanged; no generic unattended-run adoption.",
+      "New asset packages only; existing Commons map, R7 activity and all original packages stayed unchanged.",
+      "Actor scale1 corresponds to the observed native centimetre sizes; the old custom unit100/actor0.01 profile was not used."
+    ]
+  },
+  "stillwater_plants_r8": {
+    "schema": "daedalus.stillwater-plants-placement.v1",
+    "utc": "2026-10-23T04:19:01.040493+00:00",
+    "status": "BUILT_SAVED_EDITOR_CAPTURED",
+    "world": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard",
+    "map_sha256": "0772c23bec01a62744b65c4773b8c5f0656f1d4f7f5a40fd210b2a7444ac65a3",
+    "composition": {
+      "saved": true,
+      "plants": 12,
+      "by_kind": [
+        {
+          "kind": "Frogbit",
+          "instances": 6,
+          "actors": 6
+        },
+        {
+          "kind": "PinkLily",
+          "instances": 3,
+          "actors": 3
+        },
+        {
+          "kind": "WaterLily",
+          "instances": 3,
+          "actors": 3
+        }
+      ],
+      "new_actors": 12,
+      "actors_current": 734,
+      "used_native_instancing": false,
+      "waterline_cm": 25.1,
+      "actor_scale": [
+        1,
+        1,
+        1
+      ],
+      "composition": "Three small edge groups; no new middle-water filler, route or shoreline blockage. Aquatic origins meet water surface, roots remain below.",
+      "collision": "All new plant components NoCollision; original solid floor and paths untouched.",
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "new_imports": 0,
+      "Play_run": false
+    },
+    "layout_cm": [
+      {
+        "kind": "Frogbit",
+        "x": -2450,
+        "y": 2615,
+        "yaw": 15
+      },
+      {
+        "kind": "Frogbit",
+        "x": -2390,
+        "y": 2670,
+        "yaw": 83
+      },
+      {
+        "kind": "PinkLily",
+        "x": -2500,
+        "y": 2540,
+        "yaw": 35
+      },
+      {
+        "kind": "WaterLily",
+        "x": -2415,
+        "y": 2520,
+        "yaw": 122
+      },
+      {
+        "kind": "Frogbit",
+        "x": -2410,
+        "y": 2245,
+        "yaw": 145
+      },
+      {
+        "kind": "Frogbit",
+        "x": -2335,
+        "y": 2200,
+        "yaw": 213
+      },
+      {
+        "kind": "PinkLily",
+        "x": -2490,
+        "y": 2310,
+        "yaw": 195
+      },
+      {
+        "kind": "WaterLily",
+        "x": -2330,
+        "y": 2290,
+        "yaw": 250
+      },
+      {
+        "kind": "Frogbit",
+        "x": -1845,
+        "y": 2605,
+        "yaw": 275
+      },
+      {
+        "kind": "Frogbit",
+        "x": -1900,
+        "y": 2675,
+        "yaw": 320
+      },
+      {
+        "kind": "PinkLily",
+        "x": -1775,
+        "y": 2480,
+        "yaw": 310
+      },
+      {
+        "kind": "WaterLily",
+        "x": -1870,
+        "y": 2500,
+        "yaw": 27
+      }
+    ],
+    "images": [
+      {
+        "path": "images/stillwater-r8-pond.png",
+        "sha256": "0ff040be22e36a43972f96c6ef29845f42df297cac90fe53ab129d3dc74345e9"
+      },
+      {
+        "path": "images/stillwater-r8-garden.png",
+        "sha256": "810866d9a378922f49ade8ced9d2aa5d21191559f05ba5dade6613b0e73316de"
+      }
+    ],
+    "plant_origin_z_cm": 25.25,
+    "authored_origin": "Source Z0 is the waterline; negative lily roots remain below. No bottom-snapping.",
+    "instancing_decision": "Shared palette does not already have instanced-mesh usage enabled. Twelve ordinary actors preserve that material unchanged instead of triggering a usage flag change.",
+    "preservation": {
+      "protected_files_unchanged": 312,
+      "clean_packages": true,
+      "compute_released": true,
+      "original_floor_collision_unchanged": true,
+      "existing_activity_and_progress_code_unchanged": true,
+      "Play_run": false,
+      "camera": "Changed intentionally for the two editor captures; no prior-camera equality claimed."
+    },
+    "pixel_review": "Actual pond and garden editor captures inspected. Three small new edge groups leave open water between them. Foreground tree partly occludes the pond view; overview establishes spacing. Repeated raised floor tiles, black perimeter walls and bright/pale foliage remain visible quality gaps. No benchmark acceptance.",
+    "remaining_production_backlog": [
+      "Next gameplay slice: a friendly Stillwater gardenkeeper restoration activity, reusing E prompts, existing objective UI and the isolated garden progress conventions. Give the destination a useful purpose without a general farming framework.",
+      "Improve owned ground and connecting-route presentation: repeated raised floor tiles and dark seams dominate the current overview. Keep existing continuous collision and generous roaming space.",
+      "Improve destination and perimeter readability with current approved content; avoid redundant floating instructions. Final art style remains undecided and the established reference quality bar remains unmet."
+    ],
+    "limits": [
+      "Decorative placement only, no pond gameplay or new interactions.",
+      "No Play/persistence/reload loop repeated. Existing R7 activity remains built/saved with runtime persistence unproven.",
+      "No new import or validation rerun; three previously admitted native asset packages remain unchanged.",
+      "No claim of benchmark visual quality, production ecology or general unattended adoption."
+    ]
+  },
+  "gardenkeeper_r9": {
+    "schema": "daedalus.gardenkeeper-build.v1",
+    "utc": "2026-10-23T04:31:52.616571+00:00",
+    "status": "BUILT_COMPILED_SAVED_NOT_PLAY_VERIFIED",
+    "native_behavior": {
+      "compiled": true,
+      "written": [
+        "RefreshGarden",
+        "TryGardenInteract"
+      ],
+      "existing_save_load_and_commit_graphs_unchanged": true,
+      "greeting": "Stage0: Welcome! Take a seed from the teal stand.",
+      "carried": "Stage1: Your seed is ready. Plant it in the pink pot.",
+      "completion": "Stage2: Thank you! Your flower brightens the Commons.",
+      "new_rewards": false,
+      "save_format_change": false,
+      "input": "Reuses existing non-consuming E; existing pause/settings/field/dialogue refusal remains. Kiosk branch cannot call CommitGardenStage.",
+      "Play_run": false
+    },
+    "native_scene": {
+      "saved": true,
+      "actors": [
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_712"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.TextRenderActor_10"
+        }
+      ],
+      "board": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_712",
+      "location": [
+        -2370.0,
+        -1050.0,
+        20.0
+      ],
+      "actors_current": 736,
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "proximity_cm": 240,
+      "Play_run": false,
+      "preservation": "Existing save/load/commit graphs and SG version1 unchanged; no progress writes, new rewards or chart edits."
+    },
+    "images": [
+      {
+        "path": "images/gardenkeeper-r9-arrival.png",
+        "sha256": "50c35362b47159208798e0eb0bf54caf4fb9495ecbd182dfa7e5aa1bd1bbc093"
+      }
+    ],
+    "editor_pixel_review": "Actual saved PNG inspected via reduced derivative. Sign-board post and Gardenkeeper label are visible beside the arrival arch, with the existing seed/planter route behind. Repeated raised tiles and deep seams dominate the foreground. This capture does not show runtime UMG or prove input.",
+    "preservation": {
+      "utc": "2026-10-23T04:31:08.080730+00:00",
+      "unlock": {
+        "ok": true,
+        "lock": null
+      },
+      "readback": {
+        "unreal": {
+          "holder": "codex-play-guard",
+          "note": "Build owned Gardenkeeper kiosk using existing E/UI and garden stage; no save-format/reward/progress writes or Play loops.",
+          "at": 1792729541.3708389,
+          "ttl": 7200.0,
+          "age_s": 326.7,
+          "left_s": 6873.3
+        }
+      },
+      "progress_unchanged": true,
+      "protected_files_unchanged": 310
+    },
+    "changed_assets": [
+      "owned map",
+      "BP_CommonsGardenActivity",
+      "WBP_CommonsGarden"
+    ],
+    "native_compile_correction": "First DSL attempt put a continuation after a multi-output execution branch. Native compiler refused it; retained reply/journal. Guidance now executes inside the existing valid-player branch. No unrelated functions or assets recreated.",
+    "next_ingestion_batch": {
+      "selected": false,
+      "scope": "Focused current Commons qualification/closeout records name only the three completed pond assets. Wider backlog not fully surveyed. No bulk import."
+    },
+    "limits": [
+      "Static kiosk, no animated NPC or new dialogue framework.",
+      "No rewards, save-version changes or persistent conversation state.",
+      "Runtime input/layout and existing R7 persistence remain unverified; no Play loop."
+    ]
+  },
+  "ground_routes_r10": {
+    "schema": "daedalus.commons-ground-routes.v1",
+    "utc": "2026-10-23T04:42:33.352829+00:00",
+    "status": "BUILT_SAVED_EDITOR_REVIEWED_NOT_PLAY_VERIFIED",
+    "before": {
+      "floor": {
+        "actor": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.Actor_0",
+        "component": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.Actor_0.ApprovedBlenderFloorTiles",
+        "actor_transform": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "component_transform": "<Struct 'Transform' (0x0000021C0F6202A0) {rotation: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}, translation: {x: 0.000000, y: 0.000000, z: 0.000000}, scale3d: {x: 1.000000, y: 1.000000, z: 1.000000}}>",
+        "instances": 273,
+        "mesh": "/Game/Daedalus/Art/Prop/Prop_Realm_Cave_Floor/Prop_Realm_Cave_Floor/StaticMeshes/Prop_Realm_Cave_Floor.Prop_Realm_Cave_Floor",
+        "mesh_bounds": "<Struct 'BoxSphereBounds' (0x0000021C6C821340) {origin: {x: 0.000000, y: 0.000000, z: 10.252867}, box_extent: {x: 400.253387, y: 250.424103, z: 10.252867}, sphere_radius: 471.335993}>",
+        "collision_enabled": "<CollisionEnabled.NO_COLLISION: 0>",
+        "visible": true,
+        "hidden_in_game": false,
+        "materials": [
+          "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundShade.MI_Commons_GroundShade",
+          "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage.MI_Commons_GroundSage"
+        ]
+      },
+      "collider": {
+        "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_9",
+        "transform": {
+          "location": [
+            0.0,
+            0.0,
+            -5.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            104.0,
+            105.0,
+            0.5
+          ]
+        },
+        "extent": [
+          5200.0,
+          5250.0,
+          25.0
+        ],
+        "collision_enabled": "<CollisionEnabled.QUERY_AND_PHYSICS: 3>",
+        "profile": "BlockAll",
+        "visible": false,
+        "hidden_in_game": true
+      },
+      "owned_materials": {
+        "GroundSage": {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_GroundSage.MI_Commons_GroundSage",
+          "parent": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS"
+        },
+        "TrailAmber": {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/Materials/MI_Commons_TrailAmber.MI_Commons_TrailAmber",
+          "parent": "/InterchangeAssets/gltf/MaterialInstances/MI_Default_Opaque_DS.MI_Default_Opaque_DS"
+        }
+      },
+      "retained_pavers_to_hide": [
+        "CommonsTrail_0_00",
+        "CommonsTrail_0_01",
+        "CommonsTrail_0_02",
+        "CommonsTrail_0_03",
+        "CommonsTrail_0_04",
+        "CommonsTrail_1_00",
+        "CommonsTrail_1_01",
+        "CommonsTrail_1_02",
+        "CommonsTrail_1_03",
+        "CommonsTrail_1_04",
+        "CommonsTrail_1_05",
+        "CommonsTrail_2_00",
+        "CommonsTrail_2_01",
+        "CommonsTrail_2_02",
+        "CommonsTrail_2_03",
+        "CommonsTrail_2_04",
+        "CommonsTrail_2_05",
+        "CommonsTrail_2_06",
+        "CommonsR5Approach00L",
+        "CommonsR5Approach00R",
+        "CommonsR5Approach01L",
+        "CommonsR5Approach01R",
+        "CommonsR5Approach02L",
+        "CommonsR5Approach02R",
+        "CommonsR5Approach03L",
+        "CommonsR5Approach03R",
+        "CommonsR5Approach04L",
+        "CommonsR5Approach04R",
+        "CommonsR5Approach05L",
+        "CommonsR5Approach05R",
+        "CommonsR5Approach06L",
+        "CommonsR5Approach06R",
+        "CommonsR5Approach07L",
+        "CommonsR5Approach07R",
+        "CommonsR5Approach08L",
+        "CommonsR5Approach08R",
+        "CommonsR5Approach09L",
+        "CommonsR5Approach09R",
+        "CommonsR5Approach10L",
+        "CommonsR5Approach10R",
+        "CommonsR5Approach11L",
+        "CommonsR5Approach11R",
+        "CommonsR5Approach12L",
+        "CommonsR5Approach12R",
+        "CommonsR5Approach13L",
+        "CommonsR5Approach13R",
+        "CommonsR5Approach14L",
+        "CommonsR5Approach14R",
+        "CommonsR5Approach15L",
+        "CommonsR5Approach15R",
+        "CommonsR5Approach16L",
+        "CommonsR5Approach16R",
+        "CommonsR5Approach17L",
+        "CommonsR5Approach17R"
+      ],
+      "actors_before": 736,
+      "choice": "Hide only owned visual tiles/pavers, retain all instances/transforms and physics; add a separate continuous NoCollision render surface and low route ribbons using existing owned materials.",
+      "images": {
+        "before_arrival": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\GroundRoutesR10\\before-arrival.png",
+          "bytes": 2664439,
+          "sha256": "d4c3a5b9058699544a4cb34142b67efb9fad1a44ada3f369a0cbfbd85393aa57"
+        },
+        "before_overview": {
+          "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-14\\task-2\\native-ingestion\\PlayableCourtyard20261022\\GroundRoutesR10\\before-overview.png",
+          "bytes": 2168739,
+          "sha256": "5ec579e0a3269680707bca00612a03c8e7eb0ec5752c5b18cae3a7c5d369aa69"
+        }
+      },
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      }
+    },
+    "composition": {
+      "saved": true,
+      "actors_current": 749,
+      "new_render_actors": 13,
+      "new_actors": [
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_713"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_714"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_715"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_716"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_717"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_718"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_719"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_720"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_721"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_722"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_723"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_724"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_725"
+        }
+      ],
+      "ground_metres": [
+        104,
+        105
+      ],
+      "visible_surface_top_cm": 20.15,
+      "route_top_cm": 23.2,
+      "routes": [
+        {
+          "name": "Chart",
+          "points": [
+            [
+              -600,
+              0
+            ],
+            [
+              400,
+              400
+            ],
+            [
+              1500,
+              -400
+            ],
+            [
+              2800,
+              500
+            ]
+          ],
+          "width": 320
+        },
+        {
+          "name": "Arrival",
+          "points": [
+            [
+              -750,
+              -800
+            ],
+            [
+              -600,
+              0
+            ]
+          ],
+          "width": 240
+        },
+        {
+          "name": "Stillwater",
+          "points": [
+            [
+              -600,
+              0
+            ],
+            [
+              -600,
+              1050
+            ],
+            [
+              -1200,
+              1250
+            ],
+            [
+              -2150,
+              1450
+            ]
+          ],
+          "width": 240
+        }
+      ],
+      "floor_instances_retained": 273,
+      "visual_floor_hidden": true,
+      "retained_pavers_hidden": [
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_42",
+          "label": "CommonsTrail_0_00",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_43",
+          "label": "CommonsTrail_0_01",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_44",
+          "label": "CommonsTrail_0_02",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_45",
+          "label": "CommonsTrail_0_03",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_46",
+          "label": "CommonsTrail_0_04",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_47",
+          "label": "CommonsTrail_1_00",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_48",
+          "label": "CommonsTrail_1_01",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_49",
+          "label": "CommonsTrail_1_02",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_50",
+          "label": "CommonsTrail_1_03",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_51",
+          "label": "CommonsTrail_1_04",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_52",
+          "label": "CommonsTrail_1_05",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_53",
+          "label": "CommonsTrail_2_00",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_54",
+          "label": "CommonsTrail_2_01",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_55",
+          "label": "CommonsTrail_2_02",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_56",
+          "label": "CommonsTrail_2_03",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_57",
+          "label": "CommonsTrail_2_04",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_58",
+          "label": "CommonsTrail_2_05",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_59",
+          "label": "CommonsTrail_2_06",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_491",
+          "label": "CommonsR5Approach00L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_492",
+          "label": "CommonsR5Approach00R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_493",
+          "label": "CommonsR5Approach01L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_494",
+          "label": "CommonsR5Approach01R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_495",
+          "label": "CommonsR5Approach02L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_496",
+          "label": "CommonsR5Approach02R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_497",
+          "label": "CommonsR5Approach03L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_498",
+          "label": "CommonsR5Approach03R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_499",
+          "label": "CommonsR5Approach04L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_500",
+          "label": "CommonsR5Approach04R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_501",
+          "label": "CommonsR5Approach05L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_502",
+          "label": "CommonsR5Approach05R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_503",
+          "label": "CommonsR5Approach06L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_504",
+          "label": "CommonsR5Approach06R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_505",
+          "label": "CommonsR5Approach07L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_506",
+          "label": "CommonsR5Approach07R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_507",
+          "label": "CommonsR5Approach08L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_508",
+          "label": "CommonsR5Approach08R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_509",
+          "label": "CommonsR5Approach09L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_510",
+          "label": "CommonsR5Approach09R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_511",
+          "label": "CommonsR5Approach10L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_512",
+          "label": "CommonsR5Approach10R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_513",
+          "label": "CommonsR5Approach11L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_514",
+          "label": "CommonsR5Approach11R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_515",
+          "label": "CommonsR5Approach12L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_516",
+          "label": "CommonsR5Approach12R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_517",
+          "label": "CommonsR5Approach13L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_518",
+          "label": "CommonsR5Approach13R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_519",
+          "label": "CommonsR5Approach14L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_520",
+          "label": "CommonsR5Approach14R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_521",
+          "label": "CommonsR5Approach15L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_522",
+          "label": "CommonsR5Approach15R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_523",
+          "label": "CommonsR5Approach16L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_524",
+          "label": "CommonsR5Approach16R",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_525",
+          "label": "CommonsR5Approach17L",
+          "visible": true,
+          "hidden_in_game": false
+        },
+        {
+          "path": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_526",
+          "label": "CommonsR5Approach17R",
+          "visible": true,
+          "hidden_in_game": false
+        }
+      ],
+      "collider_unchanged": true,
+      "original_material_assets_edited": false,
+      "owned_material_assets_edited": false,
+      "rollback": "Restore recorded visibility/hidden flags and remove only CommonsR10 actors; before-map copy retained.",
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false,
+      "terrain_build": false,
+      "imports": 0,
+      "reconciliation": "Prior callback saved map then failed bridge-after bookkeeping because a route endpoint reused bridge variable b. Retained saved phase, all13actors, clean packages and collider read back; no creation/save replay."
+    },
+    "images": [
+      {
+        "path": "images/ground-r10-before_arrival.png",
+        "sha256": "d4c3a5b9058699544a4cb34142b67efb9fad1a44ada3f369a0cbfbd85393aa57"
+      },
+      {
+        "path": "images/ground-r10-before_overview.png",
+        "sha256": "5ec579e0a3269680707bca00612a03c8e7eb0ec5752c5b18cae3a7c5d369aa69"
+      },
+      {
+        "path": "images/ground-r10-after_arrival.png",
+        "sha256": "f314ba3f34850a7d2ad6914e0ca769507f723d8eb344f8eac2e31f44a6faae72"
+      },
+      {
+        "path": "images/ground-r10-after_overview.png",
+        "sha256": "258c10e80a32e2fcdf140ae2736da665bb8434985cc892d7c5ed6f3b68aad393"
+      }
+    ],
+    "pixel_review": "Actual matched before/after player-height and overview PNGs inspected. Raised tile grid and its deep dark seams are removed from rendering, replaced by a continuous muted-green surface. Amber routes visibly connect arrival/activity, spawn, chart landmarks and Stillwater approach. Existing meadow shapes, gardens and props remain; flat grass/plain materials and dark perimeter still read as blockout quality. No visual-benchmark acceptance.",
+    "preservation": {
+      "utc": "2026-10-23T04:39:57.210377+00:00",
+      "unlock": {
+        "ok": true,
+        "lock": null
+      },
+      "readback": {
+        "unreal": {
+          "holder": "codex-play-guard",
+          "note": "Owned ground render replacement and continuous route presentation; preserve collider, 273 retained floor instances, activities and originals. No Play/import/terrain rebuild.",
+          "at": 1792730230.4521263,
+          "ttl": 7200.0,
+          "age_s": 166.8,
+          "left_s": 7033.2
+        }
+      },
+      "progress_unchanged": true,
+      "protected_files_unchanged": 312
+    },
+    "new_imports": 0,
+    "new_or_changed_material_assets": 0,
+    "terrain_build": false,
+    "Play_run": false,
+    "limits": [
+      "Flat presentation surface and simple ribbons, not finished terrain/art direction.",
+      "Retained hidden pavers keep prior collision; no new Play/collision test loop.",
+      "Physical slab and104x105m area unchanged; original273instances retained hidden.",
+      "Camera changed intentionally for matched editor captures."
+    ]
+  },
+  "garden_care_r11": {
+    "schema": "daedalus.commons-garden-care-native.v1",
+    "utc": "2026-10-23T04:55:37.122740+00:00",
+    "counts": {
+      "prepared": 4,
+      "imported": 4,
+      "saved_assets": 4,
+      "admitted": 4,
+      "held": 0,
+      "placed": 4
+    },
+    "items": [
+      {
+        "name": "Prop_Farm_Rain_Barrel",
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Rain_Barrel_41abb221984dc473/Prop_Farm_Rain_Barrel.Prop_Farm_Rain_Barrel",
+        "source": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-farm\\Prop_Farm_Rain_Barrel.fbx",
+          "bytes": 15212,
+          "sha256": "41abb221984dc4739ace392be92ea0ef8113d215c00f541a3e417c1ac72c4950"
+        },
+        "saved": true,
+        "triangles": 44,
+        "native_pipeline": {
+          "vertex_colors": "IVCIO_REPLACE",
+          "bake_meshes": false,
+          "build_scale3d": [
+            1,
+            1,
+            1
+          ],
+          "Nanite": false,
+          "generate_lightmap_uvs": false,
+          "collision": false,
+          "import_materials": false,
+          "replace_existing": false
+        },
+        "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+        "import_data_class": "InterchangeAssetImportData",
+        "admitted": true,
+        "vertex_colours": {
+          "observed_rgba_bytes": [
+            [
+              136,
+              138,
+              148,
+              255
+            ],
+            [
+              158,
+              205,
+              243,
+              255
+            ],
+            [
+              168,
+              138,
+              108,
+              255
+            ]
+          ],
+          "flat_faces": true,
+          "source_matches": true
+        },
+        "dimensions_cm": [
+          30.0,
+          30.0,
+          50.0
+        ],
+        "bounds_origin_cm": [
+          5.0,
+          -5.0,
+          25.0
+        ],
+        "bounds_extent_cm": [
+          15.0,
+          15.0,
+          25.0
+        ],
+        "geometry_matches": true
+      },
+      {
+        "name": "Prop_Farm_Compost_Bin",
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Compost_Bin_b2cc2ceca1a18b79/Prop_Farm_Compost_Bin.Prop_Farm_Compost_Bin",
+        "source": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-farm\\Prop_Farm_Compost_Bin.fbx",
+          "bytes": 15372,
+          "sha256": "b2cc2ceca1a18b7968634fc16bef4f83e36208638b670981524134624e2341aa"
+        },
+        "saved": true,
+        "triangles": 52,
+        "native_pipeline": {
+          "vertex_colors": "IVCIO_REPLACE",
+          "bake_meshes": false,
+          "build_scale3d": [
+            1,
+            1,
+            1
+          ],
+          "Nanite": false,
+          "generate_lightmap_uvs": false,
+          "collision": false,
+          "import_materials": false,
+          "replace_existing": false
+        },
+        "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+        "import_data_class": "InterchangeAssetImportData",
+        "admitted": true,
+        "vertex_colours": {
+          "observed_rgba_bytes": [
+            [
+              189,
+              162,
+              128,
+              255
+            ],
+            [
+              202,
+              177,
+              143,
+              255
+            ],
+            [
+              237,
+              172,
+              97,
+              255
+            ]
+          ],
+          "flat_faces": true,
+          "source_matches": true
+        },
+        "dimensions_cm": [
+          50.0,
+          50.0,
+          30.0
+        ],
+        "bounds_origin_cm": [
+          5.0,
+          -5.0,
+          15.0
+        ],
+        "bounds_extent_cm": [
+          25.0,
+          25.0,
+          15.0
+        ],
+        "geometry_matches": true
+      },
+      {
+        "name": "Prop_Farm_Crate_Apples",
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Crate_Apples_99b557bf316c89be/Prop_Farm_Crate_Apples.Prop_Farm_Crate_Apples",
+        "source": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-farm\\Prop_Farm_Crate_Apples.fbx",
+          "bytes": 15404,
+          "sha256": "99b557bf316c89be4b55beb98b457e2babfad99242fb0cf33d587527e4de796c"
+        },
+        "saved": true,
+        "triangles": 72,
+        "native_pipeline": {
+          "vertex_colors": "IVCIO_REPLACE",
+          "bake_meshes": false,
+          "build_scale3d": [
+            1,
+            1,
+            1
+          ],
+          "Nanite": false,
+          "generate_lightmap_uvs": false,
+          "collision": false,
+          "import_materials": false,
+          "replace_existing": false
+        },
+        "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+        "import_data_class": "InterchangeAssetImportData",
+        "admitted": true,
+        "vertex_colours": {
+          "observed_rgba_bytes": [
+            [
+              230,
+              210,
+              172,
+              255
+            ],
+            [
+              243,
+              123,
+              123,
+              255
+            ]
+          ],
+          "flat_faces": true,
+          "source_matches": true
+        },
+        "dimensions_cm": [
+          40.0,
+          40.0,
+          30.0
+        ],
+        "bounds_origin_cm": [
+          0.0,
+          0.0,
+          15.0
+        ],
+        "bounds_extent_cm": [
+          20.0,
+          20.0,
+          15.0
+        ],
+        "geometry_matches": true
+      },
+      {
+        "name": "Prop_Farm_Bird_Feeder",
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Bird_Feeder_00101cb7aa798653/Prop_Farm_Bird_Feeder.Prop_Farm_Bird_Feeder",
+        "source": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-farm\\Prop_Farm_Bird_Feeder.fbx",
+          "bytes": 15484,
+          "sha256": "00101cb7aa79865343d417a674c6fbbbda7406499c9708880983815eeb2befcc"
+        },
+        "saved": true,
+        "triangles": 60,
+        "native_pipeline": {
+          "vertex_colors": "IVCIO_REPLACE",
+          "bake_meshes": false,
+          "build_scale3d": [
+            1,
+            1,
+            1
+          ],
+          "Nanite": false,
+          "generate_lightmap_uvs": false,
+          "collision": false,
+          "import_materials": false,
+          "replace_existing": false
+        },
+        "material": "/Game/Daedalus/Art/Islands/ClaudeIslands/M_VoxelVertexColour.M_VoxelVertexColour",
+        "import_data_class": "InterchangeAssetImportData",
+        "admitted": true,
+        "vertex_colours": {
+          "observed_rgba_bytes": [
+            [
+              168,
+              138,
+              108,
+              255
+            ],
+            [
+              202,
+              177,
+              143,
+              255
+            ],
+            [
+              230,
+              214,
+              158,
+              255
+            ],
+            [
+              243,
+              228,
+              158,
+              255
+            ]
+          ],
+          "flat_faces": true,
+          "source_matches": true
+        },
+        "dimensions_cm": [
+          50.0,
+          50.0,
+          80.0
+        ],
+        "bounds_origin_cm": [
+          5.0,
+          -5.0,
+          40.0
+        ],
+        "bounds_extent_cm": [
+          25.0,
+          25.0,
+          40.0
+        ],
+        "geometry_matches": true
+      }
+    ],
+    "batch_validation": {
+      "status": "Valid",
+      "native_invoked": true,
+      "accepted": true,
+      "cancellation_observed": false,
+      "native_return": 0,
+      "diagnostic": "Complete Valid result for every exact requested asset.",
+      "snapshot_json": "{\"snapshot_kind\": \"explicit_native_members_not_mcp_schema\", \"requested_assets\": [\"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Rain_Barrel_41abb221984dc473/Prop_Farm_Rain_Barrel.Prop_Farm_Rain_Barrel\", \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Compost_Bin_b2cc2ceca1a18b79/Prop_Farm_Compost_Bin.Prop_Farm_Compost_Bin\", \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Crate_Apples_99b557bf316c89be/Prop_Farm_Crate_Apples.Prop_Farm_Crate_Apples\", \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Bird_Feeder_00101cb7aa798653/Prop_Farm_Bird_Feeder.Prop_Farm_Bird_Feeder\"], \"native_return\": 0, \"results\": {\"NumRequested\": 4, \"NumExternalObjects\": 0, \"NumChecked\": 4, \"NumValid\": 4, \"NumInvalid\": 0, \"NumSkipped\": 0, \"NumWarnings\": 0, \"NumUnableToValidate\": 0, \"bAssetLimitReached\": false, \"AssetsDetails\": {\"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Bird_Feeder_00101cb7aa798653/Prop_Farm_Bird_Feeder.Prop_Farm_Bird_Feeder\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Bird_Feeder_00101cb7aa798653/Prop_Farm_Bird_Feeder\", \"AssetName\": \"Prop_Farm_Bird_Feeder\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}, \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Compost_Bin_b2cc2ceca1a18b79/Prop_Farm_Compost_Bin.Prop_Farm_Compost_Bin\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Compost_Bin_b2cc2ceca1a18b79/Prop_Farm_Compost_Bin\", \"AssetName\": \"Prop_Farm_Compost_Bin\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}, \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Crate_Apples_99b557bf316c89be/Prop_Farm_Crate_Apples.Prop_Farm_Crate_Apples\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Crate_Apples_99b557bf316c89be/Prop_Farm_Crate_Apples\", \"AssetName\": \"Prop_Farm_Crate_Apples\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}, \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Rain_Barrel_41abb221984dc473/Prop_Farm_Rain_Barrel.Prop_Farm_Rain_Barrel\": {\"PackageName\": \"/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Rain_Barrel_41abb221984dc473/Prop_Farm_Rain_Barrel\", \"AssetName\": \"Prop_Farm_Rain_Barrel\", \"Result\": \"Valid\", \"ValidationErrors\": [], \"ValidationWarnings\": [], \"ValidationMessages\": [], \"ExternalObjects\": []}}, \"ValidatorMessages\": []}, \"settings\": {\"bSkipExcludedDirectories\": false, \"bShowIfNoFailures\": false, \"bCollectPerAssetDetails\": true, \"ValidationUsecase\": \"EDataValidationUsecase::Script\", \"bLoadAssetsForValidation\": true, \"bUnloadAssetsLoadedForValidation\": false, \"bLoadExternalObjectsForValidation\": true, \"bCaptureAssetLoadLogs\": true, \"bCaptureLogsDuringValidation\": true, \"bCaptureWarningsDuringValidationAsErrors\": false, \"MaxAssetsToValidate\": 5, \"bValidateReferencersOfDeletedAssets\": false, \"bSilent\": true}, \"provenance\": {\"fresh_out_results\": \"attested\", \"native_invocation\": \"attested\", \"captured_at_utc\": \"2026-10-23T04:49:55.337Z\"}, \"native_runtime_qualified\": false, \"unknowns\": [\"native_runtime_unqualified\", \"official_mcp_callable_unverified\", \"tokenized_message_tokens_projected_to_text_only\", \"validator_statistics_not_captured\", \"settings_message_log_fields_not_captured\"]}"
+    },
+    "saved_packages": [
+      {
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Rain_Barrel_41abb221984dc473/Prop_Farm_Rain_Barrel.Prop_Farm_Rain_Barrel",
+        "sha256": "8a50f627ba68e956a9d845ec384db2b6ec1bb6efe108fa9a4de930a616c12772",
+        "bytes": 31655
+      },
+      {
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Compost_Bin_b2cc2ceca1a18b79/Prop_Farm_Compost_Bin.Prop_Farm_Compost_Bin",
+        "sha256": "ac601b63e8218317e1a9da78a92f84ab6a7c7b23f5aa9b9f19fde848c56a327e",
+        "bytes": 31835
+      },
+      {
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Crate_Apples_99b557bf316c89be/Prop_Farm_Crate_Apples.Prop_Farm_Crate_Apples",
+        "sha256": "c5d76a6709c7c6d6e4fba759c9cac96bc30d3fb64113baa38db9d25eff25346e",
+        "bytes": 31936
+      },
+      {
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Bird_Feeder_00101cb7aa798653/Prop_Farm_Bird_Feeder.Prop_Farm_Bird_Feeder",
+        "sha256": "1ef94ae91f3b1bafb9d438ea0b92aa55b1ec67cc609cf85493eea39d737b8169",
+        "bytes": 31991
+      }
+    ],
+    "station": [
+      {
+        "name": "Prop_Farm_Rain_Barrel",
+        "actor": {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_726"
+        },
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Rain_Barrel_41abb221984dc473/Prop_Farm_Rain_Barrel.Prop_Farm_Rain_Barrel",
+        "location": [
+          -2650,
+          -1200,
+          20.15
+        ],
+        "yaw": 15,
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "Prop_Farm_Compost_Bin",
+        "actor": {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_727"
+        },
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Compost_Bin_b2cc2ceca1a18b79/Prop_Farm_Compost_Bin.Prop_Farm_Compost_Bin",
+        "location": [
+          -2750,
+          -1280,
+          20.15
+        ],
+        "yaw": 25,
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "Prop_Farm_Crate_Apples",
+        "actor": {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_728"
+        },
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Crate_Apples_99b557bf316c89be/Prop_Farm_Crate_Apples.Prop_Farm_Crate_Apples",
+        "location": [
+          -2670,
+          -1370,
+          20.15
+        ],
+        "yaw": -15,
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "Prop_Farm_Bird_Feeder",
+        "actor": {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_729"
+        },
+        "asset": "/Game/Daedalus/Art/Islands/CodexContest/Ingestion/CommonsGardenCare20261023/Prop_Farm_Bird_Feeder_00101cb7aa798653/Prop_Farm_Bird_Feeder.Prop_Farm_Bird_Feeder",
+        "location": [
+          -2870,
+          -1210,
+          20.15
+        ],
+        "yaw": 20,
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      }
+    ],
+    "actors_current": 753,
+    "source_handoff": {
+      "revision": 2,
+      "sha256": "b2521bb3880be05a9f4fedb417ada8f8025e86c70c242b8d261e292754ec4c15",
+      "source_provenance": {
+        "local_generator": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\voxel_farm.py",
+          "bytes": 27128,
+          "sha256": "788a8e31931eb5bb0b412c3ca7c2719adde28fdf5836ad5067b491acf197a6ac"
+        },
+        "local_exporter": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\tools\\blender\\export_farm.py",
+          "bytes": 2999,
+          "sha256": "141ef9c1ed8a9fd1661a451656763f687dc08a003ac1e6844b78cfb8c137c91d"
+        },
+        "license_marker": "SPDX-License-Identifier: MIT on retained source scripts",
+        "history": "Existing Blender exports; no regeneration or source mutation. All four tool-family sidecars use 10 cm voxels, one body, bottom-centre pivot and wheels_spin false. Individual historical author is not recorded. Retained local MIT generator/exporter and metadata provide source provenance.",
+        "source_view": {
+          "path": "C:\\Users\\730ri\\projects\\D2-build\\engines\\unreal\\art\\claude-farm\\sheet-tool.png",
+          "bytes": 2416369,
+          "sha256": "1893bfed9f93159bf8a6314f90c501771d82f53c6110d5c4aa4d2be256fef53b"
+        },
+        "review": "Offline preparer personally inspected unchanged original sheet-tool.png. Tool-family indices (zero-based): Compost_Bin8, Rain_Barrel11, Crate_Apples14, Bird_Feeder26. Their source designs are visible; this is not a complete old/new native appearance comparison."
+      }
+    },
+    "identity_rule": "Category/name similarity is not source identity. Four intended variants imported into separate fresh SHA-suffixed targets, no overwrite. No complete historical dedup or old/new visual-uniqueness claim.",
+    "native_dedup": {
+      "Prop_Farm_Rain_Barrel": {
+        "name_matches": [],
+        "registered_exact_hash_matches": []
+      },
+      "Prop_Farm_Compost_Bin": {
+        "name_matches": [],
+        "registered_exact_hash_matches": []
+      },
+      "Prop_Farm_Crate_Apples": {
+        "name_matches": [],
+        "registered_exact_hash_matches": []
+      },
+      "Prop_Farm_Bird_Feeder": {
+        "name_matches": [],
+        "registered_exact_hash_matches": []
+      }
+    },
+    "preservation": {
+      "utc": "2026-10-23T04:52:19.095105+00:00",
+      "unlock": {
+        "ok": true,
+        "lock": null
+      },
+      "readback": {
+        "unreal": {
+          "holder": "codex-play-guard",
+          "note": "Native four garden-care variants with explicit vertex colours and actual Valid/save readback; unique targets/no overwrite. Preserve older designs, no Play.",
+          "at": 1792730900.650147,
+          "ttl": 7200.0,
+          "age_s": 238.4,
+          "left_s": 6961.6
+        }
+      },
+      "progress_unchanged": true,
+      "protected_existing_files_unchanged": 312
+    },
+    "Play_run": false,
+    "image": {
+      "path": "images/garden-care-r11-station.png",
+      "sha256": "22559a6dd1fb2b138859fda65db61231488001eab0d4ab88d5d18eb057fa9a0f"
+    },
+    "pixel_review": "Actual editor PNG inspected via reduced derivative. Compact barrel, open compost bin, pink-filled apple crate and roofed feeder form a small group beside arrival, clear of the path and kiosk. Strong direct lighting washes out light wood tones; the source attribute palettes match, but visual benchmark acceptance is not claimed.",
+    "limits": [
+      "Decorative props only; no feeding/birds, crafting, economy, rewards or new activities.",
+      "No Play/reload/qualification loops or generic unattended-ingestion acceptance.",
+      "Canonical validation snapshot flags/unknowns remain unmodified.",
+      "Existing barrel/composter/crate designs are not overwritten; full old/new visual comparison is unavailable."
+    ]
+  },
+  "care_activity_r12": {
+    "schema": "daedalus.commons-care-activity-build.v1",
+    "utc": "2026-10-23T05:11:56.407959+00:00",
+    "status": "BUILT_COMPILED_SAVED_RUNTIME_UNVERIFIED",
+    "behavior": {
+      "compiled": true,
+      "written": [
+        "CommitCareComplete",
+        "RefreshCareUI",
+        "InitGarden",
+        "TryGardenInteract",
+        "RefreshGarden"
+      ],
+      "original_plant_commit_unchanged": true,
+      "built_loop": "Original planting complete -> E collect water at barrel -> E tend same planter -> persistent care acknowledgement and two additional blooms.",
+      "persistence": "One additive CareComplete bool in existing version1 SG/slot, saved before local success; carried water session-only; failed save retains water and old completion state.",
+      "no_new_timers_rewards_or_inventory": true,
+      "Play_run": false
+    },
+    "composition": {
+      "saved": true,
+      "actors_current": 755,
+      "new_blooms": [
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_730"
+        },
+        {
+          "refPath": "/Game/CodexToolEvaluation/PlayableCourtyard/20261022/R1/L_LanternCourtyard.L_LanternCourtyard:PersistentLevel.StaticMeshActor_731"
+        }
+      ],
+      "barrel_location": [
+        -2700,
+        -1500,
+        20.15
+      ],
+      "kiosk_overlap_fix": "Barrel moved within owned care grouping to separate its2.4m input radius from kiosk; no input priority framework.",
+      "existing_original_flower_and_plant_quest_preserved": true,
+      "dirty_after": {
+        "maps": [],
+        "content": []
+      },
+      "Play_run": false
+    },
+    "actual_save_defaults": {
+      "Version": 1,
+      "CareComplete": false
+    },
+    "preservation": {
+      "utc": "2026-10-23T05:09:01.097584+00:00",
+      "unlock": {
+        "ok": true,
+        "lock": null
+      },
+      "readback": {
+        "unreal": {
+          "holder": "codex-play-guard",
+          "note": "Build one owned collect-water/tend-flower step using existing E/UI/garden SaveGame. No rewards/reset/new timers/framework/Play loops.",
+          "at": 1792731794.0917494,
+          "ttl": 7200.0,
+          "age_s": 347.0,
+          "left_s": 6853.0
+        }
+      },
+      "progress_unchanged": true,
+      "protected_files_unchanged": 314
+    },
+    "image": {
+      "path": "images/care-r12-station.png",
+      "sha256": "c2701bbb8371ef24c3fb5e351b32560db9da1025066ff35826839cb6f604398d"
+    },
+    "persistence_boundaries": {
+      "slot": "Daedalus_LanternCommons_Garden_v1",
+      "version": 1,
+      "added_saved_field": "CareComplete bool, default false",
+      "HasWater": "Session-only, unlimited recollection, no inventory token/cost.",
+      "save_failure": "Local success/blooms are withheld; water stays carried for retry. On-disk failure transactionality is not claimed.",
+      "legacy_save_compatibility": "Intended additive missing-field default; not exercised against old player files in this build-only pass."
+    },
+    "limits": [
+      "No Play/input/visible-transition/reload/persistence test loop.",
+      "Barrel/planter authored behavior only; feeder/compost/crate stay decorative.",
+      "No rewards, original planting reset, new timer, inventory or economy framework.",
+      "Editor view shows normal saved composition, not completed-care runtime HUD/blooms."
+    ]
+  }
+}

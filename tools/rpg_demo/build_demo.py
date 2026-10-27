@@ -30,6 +30,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 REALM = "prism"
 # The shard quest: world-map landmark -> dungeon. The Crystal Shrine opens once the three shards are in hand.
 QUEST = [("Cave", "Cinder Forge"), ("Tower", "Windcut Aerie"), ("Ruins", "Sunwell Sanctum"), ("CrystalShrine", "The Shattered Heart")]
+OPTIONAL_QUEST = [("AirshipPad", "Gearwright's Folly")]
 FINAL = "The Shattered Heart"
 # The final boss is built for the full game's six shards (level 50, 12000 HP). The demo gathers three, so the
 # Devourer only half-forms: its HP and attack are scaled here, in the open, and the realm says so in battle.
@@ -81,7 +82,7 @@ def main(argv):
     if realm == "portal":
         from portal_realm import project
         projection = project(J)
-    quest_spec = projection["quest"] if projection else QUEST
+    quest_spec = projection["quest"] if projection else QUEST + OPTIONAL_QUEST
     sky_loot = projection["sky_loot"] if projection else SKY_LOOT
     art = os.path.abspath(argv[0])
     out = os.path.abspath(argv[1])
@@ -281,7 +282,8 @@ def main(argv):
         "town": town["demo_towns"][realm], "town_tiles": {t["tile"]: t for t in town["tiles"] if t["realm"] == realm},
         "interiors": inter["interiors"][realm], "interior_tiles": {t["tile"]: t for t in inter["tiles"] if t["realm"] == realm},
         "world": world, "sky_caches": sky_caches, "village": village, "fish": fish, "world_tiles": {t["tile"]: t for t in wm["tiles"] if t["realm"] == realm},
-        "dungeons": [dict(d, landmark=lm, final=d["name"] == FINAL, boss_data=quest_bosses[d["name"]], boss_backdrop=BOSS_BACKDROP[d["theme"]])
+        "dungeons": [dict(d, landmark=lm, final=d["name"] == FINAL, boss_data=quest_bosses[d["name"]], boss_backdrop=BOSS_BACKDROP[d["theme"]],
+                          **({"optional": (lm, d["name"]) in OPTIONAL_QUEST} if not projection else {}))
                      for (lm, _), d in zip(quest_spec, quest)],
         "dungeon_walkable": dun["walkable"], "dungeon_interact": dun["interact"],
         "zones": {z: enc[z] for z in zones if z in enc},
@@ -317,6 +319,7 @@ def main(argv):
     shutil.copy(os.path.join(HERE, "index.html"), os.path.join(out, "index.html"))
     shutil.copy(os.path.join(HERE, "summons.js"), os.path.join(out, "summons.js"))     # PRISM03 summon spirit rules
     shutil.copy(os.path.join(HERE, "waystones.js"), os.path.join(out, "waystones.js"))
+    shutil.copy(os.path.join(HERE, "journey-save.js"), os.path.join(out, "journey-save.js"))
     ctl = os.path.join(REPO, "daedalus-server", "src", "main", "resources", "static", "controllers")   # the shared controller module
     os.makedirs(os.path.join(out, "controllers"), exist_ok=True)
     for f in ("daedalus-pad.js", "controller-bundle.json"):

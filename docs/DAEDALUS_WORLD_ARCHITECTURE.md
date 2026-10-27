@@ -1511,3 +1511,132 @@ The world map's `Village` landmark used to say "the way is sealed". It is now Wi
 - **Proof:** `tools/rpg_demo/sell_test.py` passes 13/13.
   - **Found in the test, not the game:** the test's own bag-clearing called `give(k, -0)`. The hook reads 0 as "1"
     (`n || 1`), so it added a fish back. It now skips empty stacks.
+
+## 15. CSRBT ecosystem: implemented interfaces and Daedalus coverage (2026-10-14)
+
+Owner: `codex-csrbt-reuse`. The 22:01:26 UTC user direction expands the existing CSRBT lane to
+useful implemented ecosystem capabilities, tracing actual code before replacements. This section is
+an additive current-source inventory; the earlier Phase 0 audit and its historical statements remain
+historical. Source bindings, committed delivery, installed runtime, native execution and end-to-end
+proof are separate stages. Dedicated tests/builds are deferred for this phase. No service, editor,
+transport, native kernel, replica or fault-injection target was activated by this inventory.
+
+### 15.1 Actual delivery and preserved behavior
+
+- Existing `daedalus-core/.../world/ecology/Diversity.java` already adapts CSRBT
+  `CommunityMetrics`; `Biogeography.java` already carries theoretical-model formulas. Their
+  `Community`/fractional-abundance behavior remains unchanged.
+- PR145, source `88426cc4cff50c77022557788a3d00c183a653d2`, is the separate draft catalog-delta
+  slice: `tools/blender/asset_catalog_delta.py` reuses CSRBT `tools/evidence.py::compare`;
+  `production_queue.py --previous` adds optional comparison of declared export SHA256 values.
+  Its 14 focused pure-data checks are historical; they were not repeated in this phase. A missing
+  catalog entry is not a delete instruction; catalog declarations are not fresh file-byte proof.
+- This slice adapts all six actual `BetaDiversity.java` measures in
+  `daedalus-core/src/main/java/com/daedalus/world/ecology/CommunityComparison.java`: Jaccard,
+  Sørensen, Bray–Curtis, Renkonen, Pianka and Whittaker turnover. The donor takes integer `Long`
+  counts; Daedalus retains finite nonnegative `Double` populations without rounding. Positive
+  presence is sorted; common scaling avoids overflow of finite counts. Upstream empty-community
+  conventions remain explicit. Existing one-community indices are not replaced.
+- `EcologyComparisonController.java` uses existing `WorldHub.get` and `WorldService.ecology`.
+  `GET /api/v1/world/{id}/islands/{slot}/ecology/compare?otherWorldId=...&otherSlot=...` compares
+  mounted worlds only, returns normal world/island 404s, and carries both independently captured
+  ecology days in `IslandEcologyComparisonResponse`. Comparing one island to itself reuses one
+  snapshot. Existing current-day stepping semantics remain; a cross-world atomic census is not
+  claimed. The exact GET route joins the existing public ecology read policy.
+- The existing `daedalus-server/src/main/resources/static/realm.js` Life panel offers comparison
+  among that world's existing islands, including empty communities. It fetches on an explicit
+  click, discards stale selection/frame responses, and labels all six measures and snapshot days.
+  The API also accepts a different mounted world. No WebSocket contract was changed.
+- These additions are source-wired only at this stage: no build, runtime request, browser/native
+  execution or end-to-end result is claimed. The full ecosystem is not complete because this
+  ecology slice is complete in source. The donor MIT notice is retained at
+  `docs/third-party/CSRBT-MIT.txt` (Copyright 2026 Richmond); PR145's existing notices remain.
+
+### 15.2 All fourteen actual repositories and public seams
+
+All repositories were read at `C:/Users/730ri/projects/<Repository>/`. Each root `LICENSE` is MIT,
+Copyright (c) 2026 Richmond. In the table, `java/<package>/<file>` expands to
+`<Repository>/src/main/java/io/github/richeyworks/<package>/<file>`, except CSRBT's explicit
+module paths. “Possible fit” is an integration design based on read source, not installed coverage.
+Every unbound row below remains a concrete missing implementation, not a completion receipt.
+
+| Repository / observed version | Actual implemented interface/source | Possible Daedalus fit and missing binding |
+|---|---|---|
+| CSRBT core 0.3.1 | `CSRBT/csrbt-core/src/main/java/io/github/richeyworks/csrbt/OrderedSet.java`, `PersistentRankedSet.java`, `PersistentTreeEngine.java`, `interfaces/TreeEngine.java`, `interfaces/TreePersistenceAdapter.java`, `augment/GenericIntervalAugmentor.java`; `control/`, `ensemble/`, `evolution/`, `persistence/`, `event/`, `export/` | Ordered/range/interval catalog lookup and persisted local data could consume public types. No new indexed Daedalus catalog binding exists here. Health-gated strategy morphing/ensemble policy is implemented upstream, but requires a relevant measured workload before runtime adoption. Ranked routing remains declined in **Daedalus** `docs/adr/ADR-002-csrbt-rankedset-for-routing.md`; donor ADR-002 is a different decision. |
+| SuperBeefSort 0.1.0 | `java/superbeefsort/BeefSort.java`, `feed/StreamingFeeder.java`, `feed/ParallelFeeder.java`, `external/ExternalMergeSorter.java`, `external/SpillSerializer.java`; `registry/StrategyProvider.java` | Seeded bulk catalog ordering, sorted recovery and external spill are real implementations. Existing `production_queue.py` remains Python and is not using this sorter. Missing typed production-record serializer, an actual bulk-import consumer, build dependency resolution and later workload evidence. No speculative sorting speedup is claimed. |
+| SmokeHouse 0.3.0 | `java/smokehouse/SmokeHouse.java`, `IndexedStore.java`, `SmokeHouseOptions.java`, `RecordCodec.java`, `Replica.java`, `ReplicationServer.java` | Actual append-log store, rebuildable secondary indexes, typed interval endpoints, tail and read replicas could retain production catalog/receipt history. Current `InventoryCatalogService` serves read-only `.dic` resources; `WorldService` remains its existing world persistence. No replacement, production-store instance, record codec, durable receipt binding or lifecycle/size policy was installed. |
+| Carver 0.1.0 | `java/carver/Carver.java`, `Query.java`, `Planner.java`, `Plan.java`, `PlanStats.java` | Plans primary/secondary/interval/full-scan reads over `IndexedStore`. Missing a Daedalus typed catalog store/query consumer. Its contract is per-walk consistency, not a transaction across predicates; no atomic query claim. |
+| Renderer 0.1.1 | `java/renderer/Renderer.java`, `GroupView.java`: `countBy`, `sumBy`, `top`, tail-driven rebuild | Could expose export/import receipt totals by author/realm/state from the same catalog log. Current production queue JSON totals are snapshots, not Renderer views. Missing store event binding, lifecycle and query/UI binding. This is a data aggregate engine, not a graphics renderer. |
+| Brine 0.1.0 | `java/brine/Brine.java`; CSRBT `csrbt-experimental/.../cache/CacheEvolutionLoop.java`, `CacheGenome.java`, `SegmentedLruCache.java` | Implemented read-through store cache and caller-cadenced evolved residency; tail invalidates and a gap drops cached values. Missing actual catalog-read consumer and dependency/lifecycle wiring. Bounded asynchronous invalidation staleness is explicit. No automatic CPU/build/resource throttling is proposed. |
+| PitBoss 0.1.0 | `java/pitboss/PitBoss.java`: `addReplica`, `tick`, `rebootstrap`, explicitly invoked `promote` | Could maintain local read replicas of the catalog after a real store exists. Missing lifecycle, explicit administration and read-consumer mapping. No instance started; no consensus, automatic failover or split-brain prevention claim. |
+| DryAge 0.3.0 | `java/dryage/DryAge.java`: `preserve`, `generations`, `asOf`, record-bounded view, `retainNewest` | Preserved catalog/receipt generations could extend PR145's earlier/current comparison. Missing catalog store capture/read binding, scratch lifecycle and retention controls. Its record-coordinate history is complete only for an uncompacted preserved generation; no reconstruction of unpreserved history. |
+| Twine 0.1.1 | `java/twine/Twine.java`: `over(PutSink, DeleteSink, ...)`, `batch`, `recover` | Actual journal + atomic rename + idempotent replay could bind an export record and receipt batch. Missing one typed store and all-writes routing. Must recover before later writes and use indexed sinks rather than bypassing indexes. It provides crash recovery; intermediate multi-op application is not automatically invisible to arbitrary concurrent readers. |
+| SmokeSignal 0.3.0 | `java/smokesignal/SmokeSignalClient.java`, `SmokeSignalServer.java`, nested `SmokeSignalServer.WriteRoute` | Existing loopback numeric/typed serialized store API could expose that catalog locally. Missing validated record serializers, service ownership and Daedalus consumer binding. No listener/client/port was started, and this is not a replacement for the shared Unreal harness/transport. |
+| Jerky 0.2.0 | `java/jerky/Jerky.java`: `cure`, `verify`, `restore`, `names`, `extract` | Actual DEFLATE/CRC archive of SmokeHouse backup directories could preserve receipt-log generations. Missing store backup producer and archive workflow; CRC is corruption checking, not identity/provenance SHA256. Existing `WorldPackageService` ZIP/GLB packages remain their own format, not Jerky archives. |
+| Rub 0.1.0 | `java/rub/Rub.java`, `Vitals.java`: `sample`, `tick`, `history`, `pulse`, explicit gap counters | Catalog-store gauge/meter history could show committed mutations, segments and gaps. Missing a SmokeHouse-backed production-store observer and UI binding. These are store/tail metrics, not live OS/Task Manager CPU/RAM measurements. No resource-management policy added. |
+| Sizzle 0.1.0 | `java/sizzle/Sizzle.java`, `ChaosPlan.java`: typed write sinks and slow-tail seam | Upstream fault-injection paths are implemented. Relevant later to isolated durability verification after a local store integration, not active builds or production writes. No production binding or injection; dedicated tests remain deferred. |
+| WholeHog 0.2.1 | `java/wholehog/Organism.java`, `Exhibit.java`, `HarnessConsole.java` | Actual composition joins all engines under indexed-write routing, common lifecycle, archival and observability. `Organism` is specifically `Long,String` with integer `attr,start,end` values, and construction starts tail/replica/wire resources. It is not a drop-in asset metadata database. A useful catalog needs the generic underlying public engines and a typed record schema while preserving these routing contracts. No organism constructed or console launched. |
+
+### 15.3 Actual connectors, plugins, contracts, examples and dependencies
+
+- CSRBT's existing `tools/harness_contract.py` provides the gateway/registry/plugin contract with
+  `manifest`, `discover`, `observe`, `execute`, policy and replay cache. Actual target plugins are
+  `harness_plugin_page.py`, `harness_plugin_session.py`, `harness_plugin_lab.py`,
+  `harness_plugin_organism.py` (and a fixture). Actual transports are `harness_stdio.py`,
+  `harness_http.py`, `harness_mcp.py`; `harness_targets.py`, `routes.json`, `artifact_map.json`
+  and field pages provide registrations/navigation. These files were identified, not edited or run:
+  Poot remains the sole shared harness coder and harness tests are deferred.
+- The organism plugin is a working declared numeric-key/attribute/span protocol over
+  `WholeHog/.../HarnessConsole.java`. It names rank/order, Carver secondary/interval queries,
+  Renderer groups, Brine reads, PitBoss fleet/replicas, DryAge generations/as-of, Jerky archive
+  operations, SmokeHouse segments/compaction, Twine recovery, Rub history and Sizzle's reopen
+  seam. Numeric-only examples do not establish a free-text production asset connector.
+- Other actual examples include WholeHog `Exhibit.java`, CSRBT `ArenaSession.java`,
+  `SearchArenaSession.java`, `ViabilityMap.java`, `ecology/ExperimentLab.java`, `ExperimentSpec.java`,
+  `ExperimentExport.java` and field pages. Ecology helpers also include `DarwinCore.java`,
+  `FieldData.java`, `FieldReport.java`, `LifeTable.java`, `LogisticGrowth.java`,
+  `MarkRecapture.java`, `MendelianGenetics.java`, `PopulationGenetics.java`, `PhyloTree.java`,
+  `RangeQuadrats.java`, `SnapshotLineage.java`, `WorkloadTrace.java`, `TheoreticalModels.java`
+  and `EcologyRecorder.java`. Their implemented field/demo features remain unbound where Daedalus
+  has no matching observation/census input contract. Tree key access frequency is not animal
+  abundance; Darwin Core occurrence metadata must not invent geography or individual counts.
+  `EcologyRecorder` is op-indexed; closed windows are capped but event lifespans/population series
+  need draining or reconstruction for a long-lived deployment.
+- Java donors target 17; Daedalus targets 21 and preserves the SLF4J-only core boundary. CSRBT core
+  uses Log4j API; experimental additionally uses POI OOXML (Office exports). These external
+  dependencies were not added to Daedalus for the JDK-only BetaDiversity adaptation.
+- CSRBT's third actual Gradle module, `csrbt-benchmarks`, contains JMH evidence work rather than a
+  runtime feature. The core also implements `BPlusTreeEngine.java`, `TreeEngineRegistry.java`,
+  `adapter/NavigableOrderedSet.java`, strategy families (red-black/AVL/splay/weight-balanced/hybrid),
+  `export/TreeExport.java`, `TreeSessionRecorder.java` and order-statistics/diagnostics utilities.
+  Those engine/recording choices remain unbound to a Daedalus production workload here; a
+  benchmark module's existence is not performance evidence for this host or this integration.
+- Sibling `settings.gradle.kts` composite builds substitute actual local source. Several declared
+  coordinates name older SmokeHouse 0.2.0/core 0.3.0 while local versions are newer. This inventory
+  verifies source composition, **not Maven Central publication, locally resolved artifacts or
+  binary compatibility**. WholeHog's settings include eleven sibling engines, which reach
+  SuperBeefSort and CSRBT transitively. A Maven consumer still needs an explicit reproducible
+  dependency/source-packaging path; no build or dependency installation was performed.
+- SuperBeefSort's actual strategy plugin registration is
+  `src/main/resources/META-INF/services/io.github.richeyworks.superbeefsort.registry.StrategyProvider`.
+  Optional `sbs-kernels-rust/.../RustKernelStrategyProvider.java` has its own service registration,
+  Java 22 FFM/Cargo/native-library build requirement. Optional
+  `sbs-intelligence-client/.../GrpcIntelligenceClient.java` implements the core `IntelligenceClient`
+  seam; `src/main/proto` is canonical, protobuf 3.25.3/gRPC 1.62.2 are declared, enabled only by
+  `-PwithIntelligence`. Neither is a required dependency for this ecology feature; neither native
+  kernel nor learned-selection service was activated.
+
+### 15.4 Remaining implementation order and honest completion boundary
+
+The next production-data path is a **typed catalog/receipt store**, not replacement ranking for
+load balancing: define an immutable asset/receipt record and real serialization over existing
+SmokeHouse/IndexedStore public APIs; route every write through indexed sinks/Twine; connect the
+existing catalog/production queue inputs and a Daedalus lookup/history consumer. Then bind
+Carver queries, Renderer aggregates, Brine lookups, DryAge/Jerky preserved history and Rub
+telemetry to that same truth. PitBoss/SmokeSignal need a relevant owned replica/local-consumer
+workflow rather than a gratuitous running service. Preserve WholeHog's demonstrated write-routing
+contracts instead of rewriting its numeric example into a different domain. Bulk ordering and
+external spill come from SuperBeefSort when the production input actually uses them. Each missing
+binding in the table must receive its own source/commit/connected/evidence stage before full
+ecosystem completion can be claimed. Deferred tests, native work and end-to-end validation remain
+explicit future stages; this document and the ecology feature do not supply that proof.

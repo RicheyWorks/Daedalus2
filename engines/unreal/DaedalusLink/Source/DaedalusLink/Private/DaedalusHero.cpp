@@ -178,7 +178,7 @@ namespace
 		return R;
 	}
 
-	// Halo Infinite's button layouts, in our actions: each action lists its pad buttons.
+	// a modern console game's button layouts, in our actions: each action lists its pad buttons.
 	TMap<FName, TArray<FString>> PadButtons(int32 Layout)
 	{
 		TMap<FName, TArray<FString>> M;
@@ -264,7 +264,7 @@ ADaedalusHero::ADaedalusHero()
 	Camera->SetFieldOfView(80.f);
 
 	// A blocky body, the realm avatar's proportions (ADR-034) at 1 block = 100 cm. Body blocks hide from the
-	// player's own camera in first person; the arm and weapon stay, Halo-style.
+	// player's own camera in first person; the arm and weapon stay, as in console shooters.
 	Body = CreateDefaultSubobject<USceneComponent>(TEXT("Body"));
 	Body->SetupAttachment(RootComponent);
 	Body->SetRelativeLocation(FVector(0.f, 0.f, -92.f));
@@ -515,7 +515,7 @@ void ADaedalusHero::RebuildBindings()
 	MapSpec(InventoryAction, TEXT("I"));   // the tabbed inventory (hub 28570). The pad is full (d-pad: view, shoulder, cube,
 	                                       // ghost; Menu and View taken): a controller button is Richey's call (open item)
 
-	// The pad's sticks: the thumbstick layout decides which stick axis drives what (Halo Infinite's four layouts).
+	// The pad's sticks: the thumbstick layout decides which stick axis drives what (a modern console game's four layouts).
 	struct FAxis { const TCHAR* Key; int32 Stick; };
 	FAxis MoveX{TEXT("Gamepad_LeftX"), 1}, MoveY{TEXT("Gamepad_LeftY"), 1}, LookX{TEXT("Gamepad_RightX"), 2}, LookY{TEXT("Gamepad_RightY"), 2};
 	switch (AppliedStickLayout)
@@ -751,7 +751,7 @@ void ADaedalusHero::ApplyCameraView()
 	}
 	switch (CameraView)
 	{
-	case 0:   // Halo Infinite: the camera is the eyes, and the hero turns with it
+	case 0:   // Console standard: the camera is the eyes, and the hero turns with it
 		Boom->TargetArmLength = 0.f;
 		Boom->SocketOffset = FVector::ZeroVector;
 		Boom->SetRelativeLocation(FVector(12.f, 0.f, 88.f));
@@ -760,7 +760,7 @@ void ADaedalusHero::ApplyCameraView()
 		Mv->bOrientRotationToMovement = false;
 		SwordPivot->SetRelativeLocation(FVector(35.f, 38.f, 150.f));
 		break;
-	case 1:   // Gears of War: over the shoulder, strafing with the camera
+	case 1:   // Over the shoulder: over the shoulder, strafing with the camera
 		Boom->TargetArmLength = 270.f;
 		Boom->SocketOffset = FVector(0.f, 72.f * ShoulderSide, 62.f);
 		Boom->SetRelativeLocation(FVector(0.f, 0.f, 40.f));
@@ -829,7 +829,7 @@ void ADaedalusHero::Swing()
 	Rumble(0.25f, 0.08f);
 	if (GetCharacterMovement()->IsFalling())
 	{
-		// Zelda II down-thrust: point the sword down and drive the hero at the ground (the blow lands in Landed).
+		// Down-thrust: point the sword down and drive the hero at the ground (the blow lands in Landed).
 		bThrusting = true;
 		LaunchCharacter(FVector(0.f, 0.f, -1400.f), false, true);
 		return;

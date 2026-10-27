@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /*
- * DaedalusSettings: the settings every Daedalus web client shares, laid out like Halo Infinite
+ * DaedalusSettings: the settings every Daedalus web client shares, laid out like a modern console game
  * (Controller, Keyboard/Mouse, Video, Audio, Gameplay, Accessibility), from one schema.
  *
  *   <script src="/settings/daedalus-settings.js"></script>          (or: import "/settings/daedalus-settings.js")
@@ -13,7 +13,7 @@
  * native format, a flat {"Id": number} object (localStorage "daedalus.settings"); export() / import() move a
  * Saved/Config/DaedalusSettings.json between Unreal and the browser unchanged.
  *
- * The panel is Halo Infinite's: a tab ribbon switched with LB / RB (or Q / E), sections of rows, the selected row's
+ * The panel is a modern console game's: a tab ribbon switched with LB / RB (or Q / E), sections of rows, the selected row's
  * description on the side, and button hints. Up / down picks a row, left / right adjusts it, A changes a toggle or
  * choice, Y resets the tab, B closes. It works with any pad DaedalusPad knows, a keyboard, a mouse, or touch (rows
  * and slider handles are at least 44 px tall; drag a slider or tap its - / + buttons).
@@ -118,7 +118,7 @@
   }
 
   /* ------------------------------------------------------------------------------------------- the panel
-     Halo Infinite's settings screen: SETTINGS title, a tab ribbon between LB and RB glyphs with a sliding
+     a modern console game's settings screen: SETTINGS title, a tab ribbon between LB and RB glyphs with a sliding
      indicator, sections of rows (\u2039 VALUE \u203a selectors and sliders), a description pane on the right with the
      current and default value and, for the layout rows, a live controller diagram, and button hints along the
      bottom that use the connected pad's own button names (A / Cross / B ...). The DOM is built once per tab and
@@ -456,7 +456,7 @@
     el.querySelectorAll(".glyph").forEach(b => b.addEventListener("click", () => act(b.dataset.k)));
     const bindEl = $(".bindbox");
     bindEl.querySelector("button").onclick = () => { if (pad) pad.cancelBind(); };
-    function bindView() {                                   /* the pad module's BIND, shown as Infinite-style prompt */
+    function bindView() {                                   /* the pad module's BIND, shown console-style prompt */
       const step = pad && pad.binding();
       bindEl.classList.toggle("on", !!step);
       if (!step) return false;

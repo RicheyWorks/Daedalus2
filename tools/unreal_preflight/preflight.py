@@ -23,6 +23,16 @@ Every rule comes from a real failure on 2026-10-12 (docs/AUTOMATION-LESSONS.md):
                 drop A/U/I, USTRUCT drops F, UENUM and dynamic delegates keep theirs). UHT stops the whole module before
                 compiling: "Class 'ADaedalusBrewBench' shares engine name 'DaedalusBrewBench' with class
                 'ADaedalusBrewBench' in DaedalusHomestead.h(80)" (2026-10-19, #350 vs #285).
+  P11 editor-flag  a script that launches the GUI editor with -AutoDeclinePackageRecovery (anywhere), or with
+                -unattended when it is not a commandlet (-run=), a -game client or a -nullrhi run. Both throw the
+                package-recovery restore list away (engines/unreal/unreal-job.ps1). Comment lines are ignored.
+  P12 cpp-shadow  a local (or loop/lambda variable) in a Class::Method body named like a member of that class
+                (own members from the scanned headers, members of scanned base classes, and the AActor members of
+                P1 for A-classes), or like a parameter of the same method. MSVC C4458/C4457 stops the plugin build:
+                `auto Children=Studies;` in ADaedalusGalleryMotifRack::ReleaseStudies and `FString Owner;` in
+                ADaedalusJavaArcade (rebuild 4, 2026-10-26, fixed by #464). Conservative: only `Type Name =`, `;`,
+                `{` or `(` declarations are checked. Allow one on purpose with `// preflight: allow P12` on that
+                line, or add "Class::Name" to P12_ALLOW.
 """
 import os
 import re
@@ -198,11 +208,160 @@ def check_uht_names(texts, errors):
                 seen[key] = here
 
 
+# ---------------- P12: locals that hide class members or the method's own parameters (C4458/C4457) ----------------
+P12_ALLOW = set()   # "Class::Name" entries that are deliberate; prefer renaming the local
+P12_MARK = "preflight: allow P12"
+_P12_TYPES = (r"(?:const\s+)?(?:auto|bool|int|int8|int16|int32|int64|uint8|uint16|uint32|uint64|float|double|"
+              r"(?:\w+::)*[A-Z]\w*(?:<[^;{}()]*?>)?)")
+_P12_DECL = re.compile(r"(?:^|[;{}]|\bfor\s*\(|\(\s*)\s*" + _P12_TYPES +
+                       r"\s*[*&]{0,2}\s*(?P<name>[A-Za-z_]\w*)\s*(?=[=;{]|\((?!\s*\)))", re.M)
+_P12_METHOD = re.compile(r"\b(?P<cls>[AUF][A-Z]\w*)::(?P<fn>~?\w+)\s*\((?P<params>[^()]*(?:\([^()]*\)[^()]*)*)\)"
+                         r"\s*(?:const\s*)?(?:override\s*)?(?::[^{;]*)?\{")
+
+_P12_LAMBDA = re.compile(r"\[(?P<cap>[^\[\]]*)\]\s*(?:\((?:[^()]|\([^()]*\))*\))?\s*(?:mutable\s*)?"
+                         r"(?:->\s*[\w:<>*&\s]+?)?\s*\{")
+
+
+def _blank(text):
+    return STRIP_RE.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+
+
+def _block_end(code, open_pos):
+    depth, i = 0, open_pos
+    while i < len(code):
+        if code[i] == "{":
+            depth += 1
+        elif code[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    return len(code)
+
+
+def class_members(texts):
+    """{class: (base, {member names})} from the scanned headers; depth-1 declarations of each class body only."""
+    out = {}
+    for f, t in texts.items():
+        if not f.endswith(".h"):
+            continue
+        code = _blank(t)
+        for m in CLASS_RE.finditer(code):
+            start = code.find("{", m.end())
+            if start < 0 or ";" in code[m.end():start]:
+                continue
+            end = _block_end(code, start)
+            names, depth, buf = set(), 0, []
+            for ch in code[start + 1:end]:
+                if ch == "{":
+                    depth += 1
+                    continue
+                if ch == "}":
+                    depth -= 1
+                    buf = []
+                    continue
+                if depth:
+                    continue
+                if ch == ";":
+                    decl = " ".join("".join(buf).split())
+                    buf = []
+                    decl = re.sub(r"^(?:(?:public|private|protected)\s*:\s*)+", "", decl)
+                    decl = re.sub(r"^(?:GENERATED_\w+\s*\([^)]*\)\s*)", "", decl)
+                    if decl.startswith(("using ", "friend ", "typedef ", "static_assert", "enum ")):
+                        continue
+                    mm = MEMBER_RE.match(decl + ";")
+                    if mm and "(" not in decl.replace("UPROPERTY(", "", 1).split(mm.group("name"))[0].split(")", 1)[-1]:
+                        names.add(mm.group("name"))
+                else:
+                    buf.append(ch)
+            base, prev = out.get(m.group(1), (m.group(2), set()))
+            out[m.group(1)] = (base, prev | names)
+    return out
+
+
+def all_members(cls, members, seen=None):
+    seen = set() if seen is None else seen
+    if cls in seen:
+        return set()
+    seen.add(cls)
+    base, names = members.get(cls, (None, set()))
+    names = set(names)
+    if cls[:1] == "A" and cls[1:2].isupper():
+        names |= ACTOR_MEMBERS
+    if base:
+        names |= all_members(base, members, seen)
+    return names
+
+
+def _param_names(params):
+    out = set()
+    for p in params.split(","):
+        p = p.split("=")[0].strip()
+        m = re.search(r"([A-Za-z_]\w*)\s*(?:\[[^\]]*\])?$", p)
+        if m and p != m.group(1) and m.group(1) not in ("void", "const"):
+            out.add(m.group(1))
+    return out
+
+
+def check_shadow(path, text, members, errors):
+    """P12 for one .cpp file."""
+    code = _blank(text)
+    lines = text.split("\n")
+    for m in _P12_METHOD.finditer(code):
+        cls = m.group("cls")
+        if cls not in members:
+            continue
+        hidden = all_members(cls, members)
+        params = _param_names(m.group("params"))
+        open_pos = m.end() - 1
+        body = code[open_pos + 1:_block_end(code, open_pos)]
+        # A lambda that does not capture this is not in member scope (MSVC does not warn there): skip its body.
+        skip = []
+        for lm in _P12_LAMBDA.finditer(body):
+            caps = [c.strip() for c in lm.group("cap").split(",")]
+            if not any(c in ("this", "*this", "=", "&") for c in caps):
+                skip.append((lm.end() - 1, _block_end(body, lm.end() - 1)))
+        for d in _P12_DECL.finditer(body):
+            name = d.group("name")
+            if any(a <= d.start("name") <= b for a, b in skip):
+                continue
+            if name in hidden:
+                what = "member %s::%s (C4458)" % (cls, name)
+            elif name in params:
+                what = "parameter %s of %s::%s (C4457)" % (name, cls, m.group("fn"))
+            else:
+                continue
+            if "%s::%s" % (cls, name) in P12_ALLOW:
+                continue
+            number = line_of(text, open_pos + 1 + d.start("name"))
+            if P12_MARK in lines[number - 1]:
+                continue
+            errors.append((path, number, "P12", "local '%s' hides %s; rename the local" % (name, what)))
+
+
+
 def check_py(path, text, errors):
     for m in PYBOOL_RE.finditer(text):
         errors.append((path, line_of(text, m.start()), "P5", "Python property names drop the b prefix (b_clean_water -> clean_water)"))
     for m in PYSTATIC_RE.finditer(text):
         errors.append((path, line_of(text, m.start()), "P6", "static C++ helpers are not visible to Python unless they are a UFUNCTION"))
+
+
+SCRIPT_EXTS = (".py", ".ps1", ".cmd", ".bat")
+_COMMENT_RE = re.compile(r"^\s*(#|//|::|rem\s|REM\s|<#|\*)")
+_EDITOR_RE = re.compile(r"UnrealEditor(?!-Cmd)(\.exe)?\b|\$editor\b|_editor_cmd\(\)", re.I)
+
+
+def check_editor_flags(path, text, errors):
+    """P11: banned editor launch flags in scripts."""
+    for number, line in enumerate(text.splitlines(), 1):
+        if _COMMENT_RE.match(line):
+            continue
+        if re.search(r"-AutoDeclinePackageRecovery\b", line, re.I):
+            errors.append((path, number, "P11", "-AutoDeclinePackageRecovery throws the package-recovery restore list away; never launch with it"))
+        elif (re.search(r"-unattended\b", line, re.I) and _EDITOR_RE.search(line)
+              and not re.search(r"-run=|-game\b|-nullrhi\b", line, re.I)):
+            errors.append((path, number, "P11", "-unattended on a GUI editor launch drops package recovery; only commandlets, -game or -nullrhi runs may use it"))
 
 
 def scan(paths):
@@ -213,7 +372,7 @@ def scan(paths):
             continue
         for root, dirs, names in os.walk(p):
             dirs[:] = [d for d in dirs if d not in ("Intermediate", "Binaries", "__pycache__", ".git", "fixtures")]
-            files += [os.path.join(root, n) for n in names if n.endswith((".h", ".cpp", ".py"))]
+            files += [os.path.join(root, n) for n in names if n.endswith((".h", ".cpp") + SCRIPT_EXTS)]
     texts = {f: open(f, encoding="utf-8", errors="replace").read() for f in files}
     cpp_sources = [t for f, t in texts.items() if f.endswith(".cpp")]
     holders = std_holders([t for f, t in texts.items() if f.endswith((".h", ".cpp"))])
@@ -223,7 +382,13 @@ def scan(paths):
             check_cpp(f, t, errors, cpp_sources + [t], holders)
         elif f.endswith(".py") and "preflight" not in os.path.basename(f):
             check_py(f, t, errors)
+        if f.endswith(SCRIPT_EXTS) and "preflight" not in os.path.basename(f):
+            check_editor_flags(f, t, errors)
     check_uht_names(texts, errors)
+    members = class_members(texts)
+    for f, t in sorted(texts.items()):
+        if f.endswith(".cpp"):
+            check_shadow(f, t, members, errors)
     return errors
 
 
