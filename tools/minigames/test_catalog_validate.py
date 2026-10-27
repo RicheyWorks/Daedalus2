@@ -10,7 +10,8 @@ import catalog_validate as cv  # noqa: E402
 
 def game(gid, **kw):
     g = {"id": gid, "title": gid.title() + " Run", "summary": "An original round.",
-         "how_to_play": "HOW Do the thing.", "capabilities": ["scoreboard"]}
+         "how_to_play": "HOW Do the thing.", "difficulty": ["easy", "normal", "hard"],
+         "default_difficulty": "normal", "capabilities": ["scoreboard"]}
     g.update(kw)
     return g
 
@@ -54,6 +55,10 @@ class Validate(unittest.TestCase):
     def test_java_titles_checked(self):
         errs = cv.validate({"games": [], "java_cabinets": [{"id": "x", "title": "Tetris Pro", "summary": ""}]}, set(), {})
         self.assertTrue(errs)
+
+    def test_difficulty_defaults_to_normal(self):
+        errs = cv.validate({"games": [game("alpha", default_difficulty="easy")]}, {"alpha"}, {})
+        self.assertTrue(any("difficulty" in e for e in errs))
 
     def test_repo_catalog_is_valid(self):
         cat = json.loads(cv.CATALOG.read_text(encoding="utf-8"))

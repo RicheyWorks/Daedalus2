@@ -65,6 +65,8 @@ def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
             errors.append(f"'{gid}' now has a save slot; remove it from SAVE_SLOT_PENDING")
         elif gid not in slots and gid not in pending:
             errors.append(f"'{gid}' has no host save slot in DaedalusDesktopSaveSlots.h")
+        if g.get("default_difficulty") != "normal" or g.get("difficulty") != ["easy", "normal", "hard"]:
+            errors.append(f"'{gid}' difficulty must default to normal")
         if not (g.get("how_to_play") or "").strip():
             errors.append(f"'{gid}' has no how-to line")
         if "scoreboard" not in g.get("capabilities", []):
