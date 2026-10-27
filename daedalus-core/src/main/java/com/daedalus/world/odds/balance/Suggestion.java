@@ -12,6 +12,11 @@ import java.util.Locale;
 public record Suggestion(String game, String difficulty, int[] shipped, int[] suggested, ModeResult confirm,
         int candidatesInBand) {
 
+    public Suggestion {
+        shipped = shipped == null ? null : shipped.clone();
+        suggested = suggested == null ? null : suggested.clone();
+    }
+
     public boolean found() {
         return suggested != null;
     }
