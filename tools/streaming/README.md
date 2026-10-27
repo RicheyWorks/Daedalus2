@@ -102,3 +102,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Tidemark Chunks (contest G175, quest q_tidemark_chunks)
 - `tidemark_chunks.py`: DiskSaver Island content-defined dedup minigame over the G86 islands' saves (read-only), vault quota = G39 Byte Spring budget cap (read-only). Whole-file storage rewrites every edited save, fixed-size chunks lose all dedup after one inserted byte, and a locked rolling-hash chunker (window 16, 7 mask bits) cuts on content so boundaries resync and the vault fits. Rolling hash = from scratch, exact rebuild, mean chunk vs Monte Carlo, cost = brute-force oracle, golden fixture, seeded replay (`tidemark_chunks_test.py`; CI `Tidemark Chunks`). Rules: `docs/islands/DISKSAVER-TIDEMARK-CHUNKS.md`.
+
+## Bottle Census (contest G179, quest q_bottle_census)
+- `bottle_census.py`: DiskSaver Island distributed-snapshot minigame over the G86 islands (read-only). Credits sail between islands in bottles on FIFO lanes while Harbourmaster Tilde counts them; a naive sum of island balances misses credits in transit, and Chandy-Lamport markers record lane state so the census is exact. Marker total exact, consistent cut, lane state = in-transit oracle, non-FIFO breaks, seeded replay (`bottle_census_test.py`; CI `Bottle Census`). Rules: `docs/islands/DISKSAVER-BOTTLE-CENSUS.md`.
