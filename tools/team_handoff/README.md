@@ -407,3 +407,32 @@ unadvertised complete entries remain as evidence; retries use new directories.
 An error after pointer replacement reports publication uncertainty: inspect the
 advertised digests before further action. The existing cooperative writer/fsync
 protocol and platform power-loss limits apply. No live provider is installed.
+
+## Build a request from explicitly retained files
+
+`source_request.build_request(selection, source_root, captured_utc)` assembles the
+existing source-snapshot request without hand-calculating receipt hashes/sizes.
+Selection schema is `daedalus.source-request-selection.v1`. Supply `profile`,
+`campaign`, `max_source_age_seconds`, `identity`, `session_ref`, `runtime` and
+`source_state` with the existing consumer declarations, plus all twelve `inputs`.
+Each present row contains only `status`, portable relative `path` and the original
+`logical_path`. Each unknown row contains only `status` and its explicit `reason`.
+Unknown paths/references/pins become null; file presence never fills an unknown.
+
+```sh
+python -m tools.team_handoff.cli source-request --selection ./selection.json --source-root ./exports --captured-utc 2026-10-27T02:00:00Z > request.json
+python -m tools.team_handoff.cli checkpoint-publish --store ./checkpoints --request ./request.json --source-root ./exports --expected-current none
+```
+
+Replace the example capture timestamp with the explicit caller declaration. It
+never substitutes for the retained saved event or process START. Declarations
+and logical references remain unchanged; logical references are never opened.
+All paths/case collisions and metadata are validated before reading any receipt.
+The existing file/total byte limits apply; noncatalog receipts must be JSON objects
+under the existing decoder limit, while catalog bytes remain opaque.
+
+The builder reads only named files and emits only a request. Pins describe those
+exact bytes, not authenticity, liveness, a coherent generation or clean source.
+Existing capture rechecks pins and cross-receipt facts; later byte changes or
+in-flight/unknown facts retain its existing HOLD behavior. No clock, discovery,
+source-file mutation, capture/store creation or dispatch grant is added.
