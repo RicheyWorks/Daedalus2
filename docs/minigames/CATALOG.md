@@ -74,3 +74,11 @@ Hosted by `ADaedalusJavaArcade`; rules stay in the owning Java service. See `doc
 |---|---|---|---|---|
 | `sudoku` | SudokuPro | `EDaedalusJavaGame::Sudoku` | RicheyWorks/sudokupro | 2 |
 | `blackjack` | BlackJackPro | `EDaedalusJavaGame::Blackjack` | RicheyWorks/BlackJackPro | 1 |
+
+## Python minigames
+
+Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), hard.
+
+| id | title | module | how to play |
+|---|---|---|---|
+| `shardring` | Shardring Resonance | `tools/minigames/prism_shard.py` | HOW Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill. |

@@ -423,5 +423,24 @@
         "newSession"
       ]
     }
+  ],
+  "python_games": [
+    {
+      "id": "shardring",
+      "title": "Shardring Resonance",
+      "summary": "a prism sphere shard-setting puzzle for Prismheart.",
+      "how_to_play": "HOW Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill.",
+      "module": "tools/minigames/prism_shard.py",
+      "start": "prism_shard.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_prism_shard.py"
+      ]
+    }
   ]
 }
