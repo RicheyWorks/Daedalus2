@@ -30,6 +30,8 @@ jobs:
       - name: Check synthetic source contracts
         run: python -B -m unittest discover -s tools/campaign_throughput_toolkit -t . -p 'test_*.py' -v
       - name: Install shared pinned linter
-        run: python -m pip install --disable-pip-version-check --only-binary=:all: --requirement tools/python_quality/requirements-lint.txt
+        run: >-
+          python -m pip install --disable-pip-version-check --only-binary=:all:
+          --requirement tools/python_quality/requirements-lint.txt
       - name: Check new toolkit source
         run: python -m ruff check --config tools/python_quality/ruff.toml --no-respect-gitignore tools/campaign_throughput_toolkit
