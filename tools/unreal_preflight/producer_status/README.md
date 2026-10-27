@@ -10,3 +10,5 @@ python tools/unreal_preflight/producer_status/producer_status.py --launch-dir <b
 Shows PID liveness, last chunk, counts, next index, pace and ETA to `--target`, free RAM vs `--ram-floor`, team-link
 lease age/remaining (GET `/locks` only) and any `failure.json`. Exit 0 OK, 1 attention, 2 bad input. It never writes,
 kills, or unlocks anything.
+
+`--stages <stages.json>` (from `tools/grand_collection_throughput` extract) adds a drift-aware ETA line: hours to target with and without a relaunch each 24 h. It is informational and never changes the exit code.
