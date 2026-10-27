@@ -131,6 +131,52 @@ class HttpJukeboxTransportTest {
     }
 
     @Test
+    void headersThenSilenceHitsTheHardDeadline() throws Exception {
+        try (ServerSocket raw = new ServerSocket(0, 1, InetAddress.getLoopbackAddress())) {
+            Thread t = new Thread(() -> {
+                try (java.net.Socket sock = raw.accept()) {
+                    sock.getInputStream().read(new byte[4096]);
+                    OutputStream os = sock.getOutputStream();
+                    os.write("HTTP/1.1 200 OK\r\nContent-Length: 100\r\n\r\n0123456789".getBytes(StandardCharsets.US_ASCII));
+                    os.flush();
+                    release.await(10, TimeUnit.SECONDS);
+                } catch (IOException | InterruptedException ignored) {
+                    // the client side is what we test
+                }
+            });
+            t.setDaemon(true);
+            t.start();
+            long t0 = System.nanoTime();
+            assertThatThrownBy(() -> transport(300).get("http://127.0.0.1:" + raw.getLocalPort() + "/stall"))
+                    .isInstanceOf(java.net.http.HttpTimeoutException.class);
+            assertThat(Duration.ofNanos(System.nanoTime() - t0)).isLessThan(Duration.ofSeconds(3));
+        }
+    }
+
+    @Test
+    void stalledBodyIsRetriedAndCountedByTheClient() throws Exception {
+        java.util.concurrent.atomic.AtomicInteger hits = new java.util.concurrent.atomic.AtomicInteger();
+        server.createContext("/api/v1/jukebox/config", ex -> {
+            hits.incrementAndGet();
+            ex.sendResponseHeaders(200, 50);
+            ex.getResponseBody().write(new byte[5]);
+            ex.getResponseBody().flush();
+            try {
+                release.await(10, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            ex.close();
+        });
+        JukeboxClient c = new JukeboxClient(base, transport(200), 1, 1);
+        long t0 = System.nanoTime();
+        assertThatThrownBy(c::config).isInstanceOf(JukeboxClient.JukeboxException.class).hasMessageContaining("network");
+        assertThat(Duration.ofNanos(System.nanoTime() - t0)).isLessThan(Duration.ofSeconds(4));
+        assertThat(hits.get()).isEqualTo(2);
+        assertThat(c.breakerOpen()).isTrue();
+    }
+
+    @Test
     void refusedConnectionIsAnIoException() throws IOException {
         int port;
         try (ServerSocket s = new ServerSocket(0, 1, InetAddress.getLoopbackAddress())) {
