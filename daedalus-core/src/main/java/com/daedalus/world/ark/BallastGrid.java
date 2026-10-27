@@ -27,7 +27,7 @@ public final class BallastGrid {
         if (n < 1 || n > MAX_HOLD || n == 2) {
             throw new IllegalArgumentException("no ballast grid for n = " + n);
         }
-        if (n % 2 == 1) {
+        if (n % 2 != 0) {
             return odd(n);
         }
         return n % 4 == 0 ? doublyEven(n) : singlyEven(n);
