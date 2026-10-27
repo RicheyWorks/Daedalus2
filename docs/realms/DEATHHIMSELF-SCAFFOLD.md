@@ -1,10 +1,12 @@
 # deathhimself source scaffold
 
-`deathhimself` is a new, separate realm extending from The Labyrinth. The display
-name remains exactly `deathhimself`. He submits art and ideas; the development
-team builds the realm, manages implementation, validates content and maintains
-the NFT labels. The intake does not require him to implement engine code or
-deliver a finished game.
+`deathhimself` is a whole independent world with its own environments and
+identity. The Labyrinth is only the connection point to the user's world; it
+does not define this world's content type, environment, style or design. The
+display name remains exactly `deathhimself`. He submits art and ideas; the
+development team builds the realm, manages implementation, validates content
+and maintains the NFT labels. The intake does not require him to implement
+engine code or deliver a finished game.
 
 The working contract is
 [`CreatorRealmScaffold.java`](../../daedalus-server/src/main/java/com/daedalus/server/realm/CreatorRealmScaffold.java).
@@ -29,7 +31,10 @@ network I/O. There is no runtime endpoint, provider mount or playable world.
 The new session and catalog identities are reserved by this descriptor and are
 not registered or mounted. The existing Labyrinth identity, catalog and readiness
 remain unchanged; this scaffold grants neither realm readiness. The connection
-describes two separate endpoints. It is not an operational portal or travel API.
+describes two separate endpoints, without inheriting Labyrinth's maze design,
+world style, generator or environments. The new world's environments and
+creative direction await his art and ideas. It is not an operational portal or
+travel API.
 
 The realm attribution records the user's creative ownership instruction. It
 does not authenticate a legal person, account, wallet, chain owner or rights in
