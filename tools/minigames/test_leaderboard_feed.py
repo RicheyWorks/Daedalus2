@@ -270,7 +270,8 @@ class Parse(unittest.TestCase):
         self.assertIn("leaderboard feed ok", out.getvalue())
         with tempfile.TemporaryDirectory() as tmp:
             path = pathlib.Path(tmp) / "best_scores.dgs"
-            path.write_text("DSB1\npong 9\ntwinwake 4\nfootball 2\n", encoding="utf-8")
+            # Host Save() uses LF only. write_text would rewrite those as CRLF on Windows.
+            path.write_bytes(b"DSB1\npong 9\ntwinwake 4\nfootball 2\n")
             exported = io.StringIO()
             with contextlib.redirect_stdout(exported):
                 self.assertEqual(feed.main([str(path)]), 0)
@@ -287,7 +288,7 @@ class Parse(unittest.TestCase):
             err = io.StringIO()
             with contextlib.redirect_stderr(err):
                 self.assertEqual(feed.main([str(pathlib.Path(tmp) / "missing.dgs")]), 1)
-            path.write_text("DSB1\n@everyone 1\n", encoding="utf-8")
+            path.write_bytes(b"DSB1\n@everyone 1\n")
             err = io.StringIO()
             with contextlib.redirect_stderr(err):
                 self.assertEqual(feed.main([str(path)]), 1)
