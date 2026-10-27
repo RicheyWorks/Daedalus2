@@ -60,7 +60,7 @@ public final class BuntingFlags {
         BigInteger bk = BigInteger.valueOf(k);
         BigInteger rot = necklaces(n, k).multiply(BigInteger.valueOf(n));
         BigInteger flips;
-        if (n % 2 == 1) {
+        if (n % 2 != 0) {
             flips = BigInteger.valueOf(n).multiply(bk.pow((n + 1) / 2));
         } else {
             BigInteger half = BigInteger.valueOf(n / 2);
