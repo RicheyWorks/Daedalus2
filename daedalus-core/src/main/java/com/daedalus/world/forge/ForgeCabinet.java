@@ -386,6 +386,23 @@ public final class ForgeCabinet {
                 });
         }, UntouchedBrands.forgemasterLine(UntouchedBrands.Grade.TURNED),
             UntouchedBrands.forgemasterLine(UntouchedBrands.Grade.SLIPPED)));
+        g.add(game("ludic", "Ludic Lots", LudicLots.QUEST_ID, r -> {
+            int n = 1 + r.nextInt(20_000);
+            if (r.nextBoolean()) {
+                while (!LudicLots.isLudic(n)) {
+                    n++;
+                }
+            }
+            int fn = n;
+            return new Puzzle("ludic", "Does lot " + n + " survive the ludic cull? (ludic/culled)",
+                LudicLots.isLudic(n) ? "ludic" : "culled", a -> {
+                    if (!"ludic".equals(a) && !"culled".equals(a)) {
+                        return false;
+                    }
+                    return LudicLots.grade(fn, "ludic".equals(a)) == LudicLots.Grade.TURNED;
+                });
+        }, LudicLots.forgemasterLine(LudicLots.Grade.TURNED),
+            LudicLots.forgemasterLine(LudicLots.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
