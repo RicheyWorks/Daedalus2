@@ -905,17 +905,49 @@
        ]
       },
       {
+       "name": "BailL",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.04
+       ],
+       "centre": [
+        -0.07,
+        0,
+        0.17
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "BailR",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.04
+       ],
+       "centre": [
+        0.07,
+        0,
+        0.17
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
        "name": "Bail",
        "shape": "box",
        "size": [
-        0.16,
+        0.15,
         0.01,
         0.01
        ],
        "centre": [
         0,
         0,
-        0.22
+        0.19
        ],
        "slot": 1,
        "bevel": true
@@ -947,11 +979,11 @@
    "collision": [],
    "nanite": true,
    "predicted": {
-    "triangles": 124,
-    "lod1_triangles": 124,
+    "triangles": 148,
+    "lod1_triangles": 148,
     "lod1_ratio": 1.0,
     "objects": {
-     "Prop_YTM_Kettle": 124
+     "Prop_YTM_Kettle": 148
     },
     "bounds_min": [
      -0.1,
@@ -961,12 +993,12 @@
     "bounds_max": [
      0.1,
      0.0975,
-     0.225
+     0.195
     ],
     "dimensions": [
      0.2,
      0.2708,
-     0.225
+     0.195
     ],
     "collision_tris": 0
    },
@@ -985,7 +1017,7 @@
     "export_extras": true,
     "export_animations": false
    },
-   "recipe_sha256": "2b4ae2acc6b4bf0a869191f0644a601fd8f7ee5c971f4895a6163c1e3a729f3d"
+   "recipe_sha256": "e29779dbdb7b576d478c6d14bd8b4df4766d8c48023fdea71deb0dab23bc95eb"
   },
   {
    "asset": "Prop_YTM_Fiddle",

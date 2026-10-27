@@ -1,0 +1,643 @@
+{
+ "asset": "Mob_Silverfin_Shoal",
+ "kind": "Mob",
+ "schema": "blender-fish/v1",
+ "seed": 26102027,
+ "params": {
+  "length": 0.2
+ },
+ "materials": [
+  {
+   "slot": 0,
+   "name": "Mob_Silverfin_Shoal_M0",
+   "colour": "silver scales",
+   "hex": "C8D0D8",
+   "roughness": 0.35,
+   "metallic": 0.6,
+   "glow": false
+  },
+  {
+   "slot": 1,
+   "name": "Mob_Silverfin_Shoal_M1",
+   "colour": "fins",
+   "hex": "8898A8",
+   "roughness": 0.5,
+   "metallic": 0.0,
+   "glow": false
+  },
+  {
+   "slot": 2,
+   "name": "Mob_Silverfin_Shoal_M2",
+   "colour": "eyes",
+   "hex": "101418",
+   "roughness": 0.3,
+   "metallic": 0.0,
+   "glow": false
+  }
+ ],
+ "bones": [
+  {
+   "name": "Root",
+   "parent": null,
+   "head": [
+    0,
+    0,
+    0
+   ],
+   "tail": [
+    0,
+    0.02,
+    0
+   ]
+  },
+  {
+   "name": "Body",
+   "parent": "Root",
+   "head": [
+    0,
+    -0.1,
+    0.0
+   ],
+   "tail": [
+    0,
+    0.02,
+    0.0
+   ]
+  },
+  {
+   "name": "Tail",
+   "parent": "Body",
+   "head": [
+    0,
+    0.02,
+    0.0
+   ],
+   "tail": [
+    0,
+    0.08,
+    0.0
+   ]
+  },
+  {
+   "name": "Fin",
+   "parent": "Tail",
+   "head": [
+    0,
+    0.08,
+    0.0
+   ],
+   "tail": [
+    0,
+    0.1,
+    0.0
+   ]
+  }
+ ],
+ "parts": [
+  {
+   "name": "Body",
+   "shape": "lathe",
+   "profile": [
+    [
+     0.0,
+     -0.1
+    ],
+    [
+     0.018,
+     -0.07
+    ],
+    [
+     0.024,
+     -0.02
+    ],
+    [
+     0.016,
+     0.03
+    ],
+    [
+     0.0,
+     0.05
+    ]
+   ],
+   "centre": [
+    0,
+    0,
+    0.0
+   ],
+   "slot": 0,
+   "segments": 8,
+   "caps": [
+    true,
+    true
+   ],
+   "rot": [
+    -90,
+    0,
+    0
+   ],
+   "bone": "Body",
+   "rigid": true
+  },
+  {
+   "name": "Peduncle",
+   "shape": "cyl",
+   "axis": "y",
+   "r1": 0.012,
+   "r2": 0.005,
+   "length": 0.05,
+   "centre": [
+    0,
+    0.055,
+    0.0
+   ],
+   "slot": 0,
+   "segments": 6,
+   "bone": "Tail",
+   "rigid": true
+  },
+  {
+   "name": "TailFin",
+   "shape": "slab",
+   "outline": [
+    [
+     0,
+     0.0
+    ],
+    [
+     0.03,
+     0.025
+    ],
+    [
+     0.0,
+     0.012
+    ],
+    [
+     -0.03,
+     0.025
+    ]
+   ],
+   "thickness": 0.002,
+   "centre": [
+    0,
+    0.08,
+    0.0
+   ],
+   "slot": 1,
+   "segments": 4,
+   "rot": [
+    90,
+    0,
+    90
+   ],
+   "bone": "Fin",
+   "rigid": true
+  },
+  {
+   "name": "Dorsal",
+   "shape": "slab",
+   "outline": [
+    [
+     -0.02,
+     0.0
+    ],
+    [
+     0.02,
+     0.0
+    ],
+    [
+     0.0,
+     0.018
+    ]
+   ],
+   "thickness": 0.002,
+   "centre": [
+    0,
+    -0.02,
+    0.022
+   ],
+   "slot": 1,
+   "segments": 3,
+   "rot": [
+    90,
+    0,
+    90
+   ],
+   "bone": "Body",
+   "rigid": true
+  },
+  {
+   "name": "EyeL",
+   "shape": "box",
+   "size": [
+    0.004,
+    0.006,
+    0.006
+   ],
+   "centre": [
+    0.014,
+    -0.075,
+    0.006
+   ],
+   "slot": 2,
+   "bevel": false,
+   "bone": "Body",
+   "rigid": true
+  },
+  {
+   "name": "EyeR",
+   "shape": "box",
+   "size": [
+    0.004,
+    0.006,
+    0.006
+   ],
+   "centre": [
+    -0.014,
+    -0.075,
+    0.006
+   ],
+   "slot": 2,
+   "bevel": false,
+   "bone": "Body",
+   "rigid": true
+  }
+ ],
+ "clips": {
+  "Swim": {
+   "frames": 24,
+   "fps": 30,
+   "loop": true,
+   "seconds": 0.8,
+   "tracks": {
+    "Body": {
+     "rot": [
+      [
+       0,
+       [
+        0.0,
+        0.0,
+        0.0
+       ]
+      ],
+      [
+       2,
+       [
+        0.0,
+        0.0,
+        0.04
+       ]
+      ],
+      [
+       4,
+       [
+        0.0,
+        0.0,
+        0.06928
+       ]
+      ],
+      [
+       6,
+       [
+        0.0,
+        0.0,
+        0.08
+       ]
+      ],
+      [
+       8,
+       [
+        0.0,
+        0.0,
+        0.06928
+       ]
+      ],
+      [
+       10,
+       [
+        0.0,
+        0.0,
+        0.04
+       ]
+      ],
+      [
+       12,
+       [
+        0.0,
+        0.0,
+        0.0
+       ]
+      ],
+      [
+       14,
+       [
+        0.0,
+        0.0,
+        -0.04
+       ]
+      ],
+      [
+       16,
+       [
+        0.0,
+        0.0,
+        -0.06928
+       ]
+      ],
+      [
+       18,
+       [
+        0.0,
+        0.0,
+        -0.08
+       ]
+      ],
+      [
+       20,
+       [
+        0.0,
+        0.0,
+        -0.06928
+       ]
+      ],
+      [
+       22,
+       [
+        0.0,
+        0.0,
+        -0.04
+       ]
+      ],
+      [
+       24,
+       [
+        0.0,
+        0.0,
+        -0.0
+       ]
+      ]
+     ]
+    },
+    "Tail": {
+     "rot": [
+      [
+       0,
+       [
+        0.0,
+        0.0,
+        -0.29451
+       ]
+      ],
+      [
+       2,
+       [
+        0.0,
+        0.0,
+        -0.1605
+       ]
+      ],
+      [
+       4,
+       [
+        0.0,
+        0.0,
+        0.01651
+       ]
+      ],
+      [
+       6,
+       [
+        0.0,
+        0.0,
+        0.18911
+       ]
+      ],
+      [
+       8,
+       [
+        0.0,
+        0.0,
+        0.31103
+       ]
+      ],
+      [
+       10,
+       [
+        0.0,
+        0.0,
+        0.34961
+       ]
+      ],
+      [
+       12,
+       [
+        0.0,
+        0.0,
+        0.29451
+       ]
+      ],
+      [
+       14,
+       [
+        0.0,
+        0.0,
+        0.1605
+       ]
+      ],
+      [
+       16,
+       [
+        0.0,
+        0.0,
+        -0.01651
+       ]
+      ],
+      [
+       18,
+       [
+        0.0,
+        0.0,
+        -0.18911
+       ]
+      ],
+      [
+       20,
+       [
+        0.0,
+        0.0,
+        -0.31103
+       ]
+      ],
+      [
+       22,
+       [
+        0.0,
+        0.0,
+        -0.34961
+       ]
+      ],
+      [
+       24,
+       [
+        0.0,
+        0.0,
+        -0.29451
+       ]
+      ]
+     ]
+    },
+    "Fin": {
+     "rot": [
+      [
+       0,
+       [
+        0.0,
+        0.0,
+        -0.40918
+       ]
+      ],
+      [
+       2,
+       [
+        0.0,
+        0.0,
+        -0.448
+       ]
+      ],
+      [
+       4,
+       [
+        0.0,
+        0.0,
+        -0.36677
+       ]
+      ],
+      [
+       6,
+       [
+        0.0,
+        0.0,
+        -0.18727
+       ]
+      ],
+      [
+       8,
+       [
+        0.0,
+        0.0,
+        0.04241
+       ]
+      ],
+      [
+       10,
+       [
+        0.0,
+        0.0,
+        0.26073
+       ]
+      ],
+      [
+       12,
+       [
+        0.0,
+        0.0,
+        0.40918
+       ]
+      ],
+      [
+       14,
+       [
+        0.0,
+        0.0,
+        0.448
+       ]
+      ],
+      [
+       16,
+       [
+        0.0,
+        0.0,
+        0.36677
+       ]
+      ],
+      [
+       18,
+       [
+        0.0,
+        0.0,
+        0.18727
+       ]
+      ],
+      [
+       20,
+       [
+        0.0,
+        0.0,
+        -0.04241
+       ]
+      ],
+      [
+       22,
+       [
+        0.0,
+        0.0,
+        -0.26073
+       ]
+      ],
+      [
+       24,
+       [
+        0.0,
+        0.0,
+        -0.40918
+       ]
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "bind_mode": "rigid",
+ "bind": "rigid per part (bind_mode rigid): every part 100% on its bone",
+ "spec": {
+  "gap": "G176",
+  "asker": "pythagoras 50545",
+  "size_m": "~20 cm fish",
+  "tri_cap": 400,
+  "lod": "LOD0/1",
+  "rig": "4 rigid bones; Swim loop",
+  "shoal": {
+   "instance": "HISM or Niagara mesh renderer, one mesh per fish",
+   "Density": "scalar 0..1 -> 0..12 fish per m^3",
+   "phase": "randomise Swim start time per fish"
+  }
+ },
+ "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+ "status": "STAGED NOT READY",
+ "unreal": {
+  "type": "skeletal mesh + 1 anim sequence (Swim), root bone 'Root'",
+  "nanite": "n/a",
+  "collision": "none (instanced)",
+  "sockets": "none"
+ },
+ "predicted": {
+  "triangles": 140,
+  "lod1_triangles": 140,
+  "lod1_ratio": 1.0,
+  "bounds_min": [
+   -0.024,
+   -0.1,
+   -0.024
+  ],
+  "bounds_max": [
+   0.024,
+   0.11,
+   0.04
+  ],
+  "dimensions": [
+   0.048,
+   0.21,
+   0.064
+  ],
+  "bones": 4
+ }
+}

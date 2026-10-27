@@ -156,6 +156,8 @@ def build(name, out_root):
             "sockets": [s["name"] for s in side], "status": "NOT READY"}
     with open(os.path.join(d, name + ".json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, indent=1)
+    with open(os.path.join(d, "build_report.json"), "w", encoding="utf-8") as f:  # contact_sheet reads tris from here
+        json.dump({"asset": name, "triangles": tris, "size_m": size, "sockets": meta["sockets"]}, f, indent=1)
     return meta
 
 
