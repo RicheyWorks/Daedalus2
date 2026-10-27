@@ -24,6 +24,9 @@ API: `g = prism_shard.start(seed, "normal")`, `g.place(facet)`, `g.status()` (sc
 Open `tools/minigames/web/shardring/index.html` in any browser (one file, no server, no downloads). Pick a seed and difficulty; click a facet, or use Left/Right + Enter/Space, keys 1-9/0 for facets 1-10, R to restart.
 The page's `shardring-core` script ports the Python rules and CPython's `random.Random(str)` (SHA-512 seeding + MT19937 + `choice`), so the same seed and difficulty give the same shard sequence and game as `prism_shard.py`. `test_prism_shard_web.py` builds fixtures from Python (shard sequences, full greedy games, final state for 18 seed/difficulty cases) and checks them with `node tools/minigames/shard_web_test.js` (skipped if node is missing).
 
+## Controller
+The page reuses the shared DaedalusPad layer (`daedalus-server/src/main/resources/static/controllers/daedalus-pad.js`, the same module the Prismheart demo uses; see `docs/controllers.md`). It loads it by a repo-relative path and feature-detects `window.DaedalusPad`, so the page still works with mouse and keyboard when the module is absent; nothing is fetched from the network. Shardring only maps DaedalusPad's logical actions (`Shardring.PAD_ACTIONS`): D-pad / left stick (up/left = previous facet, down/right = next), confirm (A, or the family's confirm button) = set shard, menu (Start) = restart. Keyboard and pad share `Shardring.applyVerb`. `shard_pad_test.js` drives the real module with a fake standard gamepad. The pad module itself is unchanged.
+
 ## Realm cabinet
 `data/minigames/realm-arcades.json` names `shardring` in `prismheart_realm`; `realm_cabinets.py` places it with host tag `PythonMinigame`, a crc32 seed, and difficulty `normal`. Python games are placed only when named explicitly, never by a glob. No Unreal actor runs Python games yet; that needs a native host (not in this change).
 

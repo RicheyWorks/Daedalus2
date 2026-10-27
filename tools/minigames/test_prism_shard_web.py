@@ -5,6 +5,7 @@ shard_web_test.js under node. Skips when node is not installed.
 """
 import hashlib
 import json
+import re
 import pathlib
 import random
 import shutil
@@ -18,6 +19,7 @@ sys.path.insert(0, str(HERE))
 import prism_shard as ps  # noqa: E402
 
 PAGE = HERE / "web" / "shardring" / "index.html"
+PAD_REL = "../../../../daedalus-server/src/main/resources/static/controllers/daedalus-pad.js"
 
 
 def fixtures():
@@ -40,8 +42,12 @@ class WebPage(unittest.TestCase):
     def test_page_is_self_contained(self):
         html = PAGE.read_text(encoding="utf-8")
         self.assertIn('<script id="shardring-core">', html)
-        for bad in ("http://", "https://", "<link ", " src="):
+        for bad in ("http://", "https://", "<link "):
             self.assertNotIn(bad, html)
+        srcs = re.findall(r'src="([^"]+)"', html)
+        self.assertEqual(srcs, [PAD_REL])  # only the optional, repo-local controller module
+        self.assertTrue((PAGE.parent / PAD_REL).resolve().exists())
+        self.assertIn("if (window.DaedalusPad)", html)  # feature-detected, never required
 
     def test_page_mirrors_rule_constants(self):
         html = PAGE.read_text(encoding="utf-8")
@@ -57,6 +63,17 @@ class WebPage(unittest.TestCase):
             fx = pathlib.Path(tmp) / "fx.json"
             fx.write_text(json.dumps(fixtures()), encoding="utf-8")
             r = subprocess.run(["node", str(HERE / "shard_web_test.js"), str(fx)], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("OK", r.stdout)
+
+
+    def test_pad_action_map(self):
+        html = PAGE.read_text(encoding="utf-8")
+        self.assertIn('PAD_ACTIONS = { left: "prev", up: "prev", right: "next", down: "next", confirm: "place", menu: "restart" }', html)
+
+    @unittest.skipUnless(shutil.which("node"), "node not installed")
+    def test_node_controller_with_shared_pad(self):
+        r = subprocess.run(["node", str(HERE / "shard_pad_test.js")], capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertIn("OK", r.stdout)
 
