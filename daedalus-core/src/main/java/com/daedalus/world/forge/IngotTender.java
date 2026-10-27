@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.SplittableRandom;
 
 /**
- * Ingot Tender (contest gap G277): the island pays in ingots of set weights. Give exact change for a price with the
+ * Ingot Tender (contest gap G281): the island pays in ingots of set weights. Give exact change for a price with the
  * fewest ingots, count every way to make it, and tell whether the greedy biggest-first habit is safe for this set.
  *
  * <p>The tool is plain: {@link #minIngots} and {@link #ways} are O(n * amount) DPs over an {@code int[]} of ingot
