@@ -2,6 +2,17 @@
   "schema": "daedalus.minigames.catalog/v1",
   "generated_by": "tools/minigames/minigame_catalog.py",
   "realm_placement": "Spawn one ADaedalusDesktopArcade cabinet per entry, or one cabinet with a picker; call StartGame(id, seed) on use. Derive the seed from realm id + player for repeatable runs.",
+  "leaderboard_feed": {
+    "source_format": "DSB1",
+    "source_file": "best_scores.dgs",
+    "feed_format": "daedalus.leaderboard.feed/v1",
+    "text_format": "DLB1",
+    "tool": "tools/minigames/leaderboard_feed.py",
+    "hook": "python tools/minigames/leaderboard_feed.py --check",
+    "network": "none",
+    "tie_break": "score_desc_then_game_id_asc",
+    "rank_rule": "ordinal"
+  },
   "games": [
     {
       "id": "beacon_sweep",

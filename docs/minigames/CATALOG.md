@@ -66,6 +66,15 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes |  |
 | `reedbeat` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes |  |
 
+## Leaderboard feed
+
+The arcade host keeps one best score per game in `best_scores.dgs` (`DSB1`).
+`tools/minigames/leaderboard_feed.py` reads that text and writes a ranked feed
+(`daedalus.leaderboard.feed/v1` JSON, `DLB1` lines). It does not open a network
+connection and it does not post to Discord. Old ids merge through `CanonicalGameId`
+in `DaedalusDesktopSaveSlots.h`. Tie break: `score_desc_then_game_id_asc`. Rank rule: `ordinal`.
+Check: `python tools/minigames/leaderboard_feed.py --check`.
+
 ## Java cabinets
 
 Hosted by `ADaedalusJavaArcade`; rules stay in the owning Java service. See `docs/java-arcade/README.md`.

@@ -257,12 +257,17 @@ def build():
         for gid in sorted(slots - saving):
             errors.append(f"host save slot '{gid}' has no save/restore in its core")
     java = parse_java(errors)
+    tool_dir = str(ROOT / "tools" / "minigames")
+    if tool_dir not in sys.path:
+        sys.path.insert(0, tool_dir)
+    from leaderboard_feed import CATALOG_HOOK
     py = parse_python(errors)
     data = {
         "schema": "daedalus.minigames.catalog/v1",
         "generated_by": "tools/minigames/minigame_catalog.py",
         "realm_placement": ("Spawn one ADaedalusDesktopArcade cabinet per entry, or one cabinet with a picker; "
                             "call StartGame(id, seed) on use. Derive the seed from realm id + player for repeatable runs."),
+        "leaderboard_feed": dict(CATALOG_HOOK),
         "games": games,
         "java_cabinets": java,
         "python_games": py,
@@ -288,6 +293,13 @@ def build():
            "| id | " + " | ".join(CAPABILITIES) + " |", "|---|" + "---|" * len(CAPABILITIES)]
     for g in games:
         md.append(f"| `{g['id']}` | " + " | ".join("yes" if c in g["capabilities"] else "" for c in CAPABILITIES) + " |")
+    md += ["", "## Leaderboard feed", "",
+           "The arcade host keeps one best score per game in `best_scores.dgs` (`DSB1`).",
+           "`tools/minigames/leaderboard_feed.py` reads that text and writes a ranked feed",
+           "(`daedalus.leaderboard.feed/v1` JSON, `DLB1` lines). It does not open a network",
+           "connection and it does not post to Discord. Old ids merge through `CanonicalGameId`",
+           "in `DaedalusDesktopSaveSlots.h`. Tie break: `score_desc_then_game_id_asc`. Rank rule: `ordinal`.",
+           "Check: `python tools/minigames/leaderboard_feed.py --check`."]
     md += ["", "## Java cabinets", "",
            "Hosted by `ADaedalusJavaArcade`; rules stay in the owning Java service. See `docs/java-arcade/README.md`.", "",
            "| id | title | enum | source | portable tests |", "|---|---|---|---|---|"]
