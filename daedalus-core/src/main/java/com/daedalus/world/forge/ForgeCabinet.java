@@ -303,6 +303,23 @@ public final class ForgeCabinet {
                 });
         }, SmithStamps.forgemasterLine(SmithStamps.Grade.TURNED),
             SmithStamps.forgemasterLine(SmithStamps.Grade.SLIPPED)));
+        g.add(game("practical", "Practical Weights", PracticalWeights.QUEST_ID, r -> {
+            long n = 2 + r.nextInt(20_000);
+            if (r.nextBoolean()) {
+                while (!PracticalWeights.isPractical(n)) {
+                    n++;
+                }
+            }
+            long fn = n;
+            return new Puzzle("practical", "Do the divisors of " + n + " weigh every load below it? (practical/short)",
+                PracticalWeights.isPractical(n) ? "practical" : "short", a -> {
+                    if (!"practical".equals(a) && !"short".equals(a)) {
+                        return false;
+                    }
+                    return PracticalWeights.grade(fn, "practical".equals(a)) == PracticalWeights.Grade.WEIGHED;
+                });
+        }, PracticalWeights.forgemasterLine(PracticalWeights.Grade.WEIGHED),
+            PracticalWeights.forgemasterLine(PracticalWeights.Grade.SHORT)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
