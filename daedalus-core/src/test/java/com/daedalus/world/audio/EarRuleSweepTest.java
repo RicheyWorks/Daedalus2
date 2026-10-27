@@ -136,4 +136,14 @@ class EarRuleSweepTest {
             sweep("CallSynth ear-safe " + sp, s -> List.of(CallSynth.designEarSafe(sp, CallSynthTest.genome(s)).baseHz()));
         }
     }
+
+    /** Audible peak (base x glide x vibrato crest) of every species, 300 seeds each, through the peak-checked ear-safe path. */
+    @Test void creatureCallPeaksForAllSpeciesThroughEarSafePeakPath() {
+        for (Species sp : Species.values()) {
+            sweep("CallSynth ear-safe peak " + sp, s -> {
+                CallSpec c = CallSynth.designEarSafePeak(sp, CallSynthTest.genome(s));
+                return List.of(c.baseHz(), CallSynth.peakHz(c));
+            });
+        }
+    }
 }
