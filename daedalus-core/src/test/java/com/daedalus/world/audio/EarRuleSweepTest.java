@@ -119,6 +119,7 @@ class EarRuleSweepTest {
             }
             return out;
         });
+        sweep("G178 ReedHum", s -> ReedHum.seeded(s).hums().stream().map(ReedHum.Hum::hz).toList());
         // G89 ThunderTowers emits unpitched thunder (delays only), nothing to sweep.
     }
 }
