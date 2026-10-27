@@ -1,4 +1,4 @@
-﻿# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: MIT
 """Contest backlog creatures + Hornback sick MI, resumed 2026-10-26 (blender-team). Closes the partial DONEs of G156/G172/G176/G183.
   Mob_Thistle_Hare      G156 pythagoras 50322: ~45 cm island hare on quadruped_rig (15 bones, ornament "ears"); clips Idle, Hop
                         (the rig's Run gait, renamed), Freeze (held bind pose, 1 s loop); bone socket SOCKET_EarTag on Head (Prop_Ear_Tag).
@@ -24,8 +24,10 @@ HARE, SHOAL, FRIT, HORN = "Mob_Thistle_Hare", "Mob_Silverfin_Shoal", "Mob_Ember_
 
 
 def hare(seed=SEED):
-    body = {"body_h": 0.36, "body_w": 0.3, "leg": 0.3, "plates": 0, "tail": 0.05, "head_lift": 0.08, "ornament": "ears"}
-    mats = [K.material(HARE, 0, "thistle-grey hare fur", "9C8C78", 0.95), K.material(HARE, 1, "ear tips / eyes", "3A3028", 0.8), K.material(HARE, 2, "paws", "C8BCA8", 0.9)]
+    # polish 2026-10-26b: long ears, paw feet, a 2-link fluffy tail; rounded body + haunches added below as extra parts
+    body = {"body_h": 0.36, "body_w": 0.3, "leg": 0.3, "plates": 0, "tail": 0.05, "head_lift": 0.08, "ornament": "ears", "ear": 0.42,
+            "tail_bones": 2, "tail_bush": 0.16, "tail_curl": 70.0, "feet": "paw"}
+    mats = [K.material(HARE, 0, "thistle-grey hare fur", "9C8C78", 0.95), K.material(HARE, 1, "ear tips / eyes", "3A3028", 0.8), K.material(HARE, 2, "paws / tail puff (cream)", "E8E0D0", 0.95)]
     spec = {"gap": "G156", "asker": "pythagoras 50322", "size_m": "~45 cm", "tri_cap": 3000, "lod": "LOD0/1",
             "rig": "quadruped_rig 15 bones; clips Idle, Hop (Run gait), Freeze", "sockets": "SOCKET_EarTag on Head (Prop_Ear_Tag)"}
     m = Q.recipe(HARE, seed, 0.52, materials=mats, spec=spec, body=body, clip_names=("Idle", "Run"))
@@ -33,7 +35,24 @@ def hare(seed=SEED):
     fr = copy.deepcopy(c["Idle"]); fr["frames"], fr["seconds"], fr["loop"] = 30, 1.0, True
     fr["tracks"] = {b: {ch: [[0, keys[0][1]], [30, keys[0][1]]] for ch, keys in t.items()} for b, t in fr["tracks"].items()}
     c["Freeze"] = fr
-    head = {b["name"]: b for b in m["bones"]}["Head"]
+    bb = {b["name"]: b for b in m["bones"]}
+    def mid(b, f=0.5): return [bb[b]["head"][i] + f * (bb[b]["tail"][i] - bb[b]["head"][i]) for i in range(3)]
+    def ball(name, c, rx, ry, rz, slot, bone, seg=10):
+        prof = [(round(math.sin(math.pi * k / 6) * 1.0, 4), round(-math.cos(math.pi * k / 6), 4)) for k in range(7)]
+        q = K.lathe(name, [(r * rx, z * rz) for r, z in prof], (c[0], c[1], c[2]), slot, segments=seg, lod1={"segments": 6})
+        q["scale_y"] = round(ry / rx, 4); q["bone"] = bone; return q
+    sc = mid("Spine"); hp = bb["Hips"]["head"]; tl = [b["name"] for b in m["bones"] if b["name"].startswith("Tail")][-1]
+    extra = [ball("BodyRound", sc, 0.105, 0.105, 0.1, 0, "Spine"), ball("ChestRound", mid("Chest"), 0.09, 0.09, 0.09, 0, "Chest")]
+    for s, nm in ((1, "L"), (-1, "R")):
+        extra.append(ball("Haunch" + nm, (hp[0] + s * 0.07, hp[1] + 0.02, hp[2] - 0.03), 0.075, 0.075, 0.085, 0, "Hips"))
+    extra.append(ball("TailPuff", bb[tl]["tail"], 0.045, 0.045, 0.045, 2, tl, 8))
+    for q in extra: q.pop("scale_y", None)
+    m["parts"] += extra
+    Qp = m["parts"]; lo, hi = K.bounds(Qp)
+    t0 = sum(K.part_tris(x) for x in Qp if K.in_lod(x, 0)); t1 = sum(K.part_tris(x, 1) for x in Qp if K.in_lod(x, 1))
+    m["predicted"].update({"triangles": t0, "lod1_triangles": t1, "lod1_ratio": round(t1 / t0, 3), "bounds_min": lo, "bounds_max": hi, "dimensions": [round(hi[i] - lo[i], 4) for i in range(3)]})
+    m["spec"]["polish"] = "2026-10-26b: ears 0.42 x length, rounded body/chest + haunch lathes, 2-link fluffy tail with a cream TailPuff (slot 2)"
+    head = bb["Head"]
     tip = [round(head["head"][i] + 0.6 * (head["tail"][i] - head["head"][i]), 4) for i in range(3)]
     tip[0] += 0.03; tip[2] += 0.05
     m["sockets"] = R.bone_sockets(m["bones"], [("EarTag", "Head", tuple(tip))])

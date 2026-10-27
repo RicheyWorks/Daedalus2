@@ -259,5 +259,160 @@
    ],
    "status": "NOT READY"
   }
- ]
+ ],
+ "batch_b": {
+  "generated_by": "tools/blender/arcade_prism_props_b.py",
+  "staging": "bot-team\\staging\\arcade-prism-20261026b",
+  "docs": "docs/art/arcade-prism-20261026b",
+  "status": "NOT READY",
+  "assets": [
+   {
+    "name": "Prop_Prism_HeartSphere_Pedestal",
+    "tris": 248,
+    "size_m": [
+     1.5,
+     1.5,
+     0.73
+    ],
+    "sockets": [
+     "SOCKET_Sphere",
+     "SOCKET_Rune_0",
+     "SOCKET_Rune_1",
+     "SOCKET_Rune_2",
+     "SOCKET_Rune_3",
+     "SOCKET_Rune_4",
+     "SOCKET_Rune_5"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_CoinCup",
+    "tris": 168,
+    "size_m": [
+     0.12,
+     0.09,
+     0.1
+    ],
+    "sockets": [
+     "SOCKET_Coins",
+     "SOCKET_Mount"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_TicketSpool",
+    "tris": 100,
+    "size_m": [
+     0.07,
+     0.141,
+     0.17
+    ],
+    "sockets": [
+     "SOCKET_Axle",
+     "SOCKET_Mount"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_TicketDispenser",
+    "tris": 68,
+    "size_m": [
+     0.14,
+     0.186,
+     0.2
+    ],
+    "sockets": [
+     "SOCKET_Spool",
+     "SOCKET_TicketOut",
+     "SOCKET_Mount"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Stool",
+    "tris": 176,
+    "size_m": [
+     0.48,
+     0.48,
+     0.7
+    ],
+    "sockets": [
+     "SOCKET_Seat",
+     "SOCKET_Floor"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_ControlPanel",
+    "tris": 88,
+    "size_m": [
+     0.62,
+     0.26,
+     0.055
+    ],
+    "sockets": [
+     "SOCKET_Stick",
+     "SOCKET_Button_0",
+     "SOCKET_Button_1",
+     "SOCKET_Button_2",
+     "SOCKET_Button_3",
+     "SOCKET_Button_4",
+     "SOCKET_Button_5",
+     "SOCKET_Start",
+     "SOCKET_Mount"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Joystick",
+    "tris": 188,
+    "size_m": [
+     0.06,
+     0.06,
+     0.093
+    ],
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Grip"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Button",
+    "tris": 104,
+    "size_m": [
+     0.03,
+     0.0292,
+     0.014
+    ],
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Press"
+    ]
+   }
+  ],
+  "facet_states": {
+   "note": "MI params on the existing Prop_Prism_ShardFacet_* meshes, no new meshes",
+   "states": [
+    "Cracked",
+    "Charged",
+    "Dormant"
+   ],
+   "manifests": [
+    "Prop_Prism_ShardFacet_Fire.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Gale.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Light.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Shade.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Stone.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Tide.states.material_variants.json"
+   ],
+   "mask": "T_Prism_Facet_CrackMask.png"
+  },
+  "decals": [
+   "Decal_Arcade_Marquee_Prismheart",
+   "Decal_Arcade_Marquee_Shardring",
+   "Decal_Arcade_Marquee_Waystone"
+  ],
+  "hook": {
+   "pedestal": "HeartSphere SOCKET_Base -> Pedestal SOCKET_Sphere",
+   "panel": "ControlPanel SOCKET_Mount -> cab control deck; Joystick SOCKET_Base -> SOCKET_Stick; Button SOCKET_Base -> SOCKET_Button_k/Start",
+   "coin_cup": "SOCKET_Mount -> cab SOCKET_CoinSlot",
+   "tickets": "TicketDispenser SOCKET_Spool <- TicketSpool SOCKET_Axle",
+   "stool": "SOCKET_Floor -> cab SOCKET_Player1",
+   "marquee": "decal on cab SOCKET_Marquee"
+  }
+ }
 }
