@@ -66,7 +66,6 @@ public final class RuneTrace {
     /** Every listed word that can be traced, sorted and without duplicates. */
     public static List<String> findWords(char[][] grid, List<String> words) {
         int[][] next = new int[1][26];
-        int[] count = new int[1];
         String[] end = new String[1];
         int nodes = 1;
         for (String w : words) {
@@ -82,7 +81,6 @@ public final class RuneTrace {
                 if (next[v][c] == 0) {
                     if (nodes == next.length) {
                         next = Arrays.copyOf(next, nodes * 2);
-                        count = Arrays.copyOf(count, nodes * 2);
                         end = Arrays.copyOf(end, nodes * 2);
                     }
                     next[nodes] = new int[26];
