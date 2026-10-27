@@ -538,6 +538,18 @@ public final class ForgeCabinet {
                 });
         }, ProthPlates.forgemasterLine(ProthPlates.Grade.TURNED),
             ProthPlates.forgemasterLine(ProthPlates.Grade.SLIPPED)));
+        g.add(game("germain", "Germain Girders", GermainGirders.QUEST_ID, r -> {
+            long p = 2 + r.nextInt(5_000);
+            boolean germain = GermainGirders.isGermain(p);
+            return new Puzzle("germain", "Is " + p + " a Sophie Germain girder (" + p + " and " + (2 * p + 1)
+                + " both prime)? (yes/no)", germain ? "yes" : "no", a -> {
+                    if (!"yes".equals(a) && !"no".equals(a)) {
+                        return false;
+                    }
+                    return GermainGirders.grade(p, "yes".equals(a)) == GermainGirders.Grade.TURNED;
+                });
+        }, GermainGirders.forgemasterLine(GermainGirders.Grade.TURNED),
+            GermainGirders.forgemasterLine(GermainGirders.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
