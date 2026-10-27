@@ -73,7 +73,11 @@ public final class CurseSieve {
                 Integer g = next.get(f).get(e.getKey());
                 int fu = g != null && g != u ? g : 0;
                 fail.set(u, fu);
-                outLink.set(u, ends.get(fu).length > 0 ? fu : outLink.get(fu));
+                if (ends.get(fu).length > 0) {
+                    outLink.set(u, fu);
+                } else {
+                    outLink.set(u, outLink.get(fu));
+                }
                 queue[tail++] = u;
             }
         }
