@@ -46,28 +46,50 @@ One original line per game, read from `HowToLine()`.
 | `reedbeat` | HOW Strike while the reed is bright. |
 | `cairnwell` | HOW Slide the falling stone and clear a full layer. |
 
+## Difficulty
+
+Every cabinet defaults to normal. Easy and hard are the other accepted names. The arcade host is unchanged.
+
+| id | default |
+|---|---|
+| `beacon_sweep` | normal |
+| `twinwake` | normal |
+| `dungeon` | normal |
+| `driftstone` | normal |
+| `football` | normal |
+| `glowtrail` | normal |
+| `riftwing` | normal |
+| `emberstep` | normal |
+| `star_shooter` | normal |
+| `dodge_ball` | normal |
+| `ironwake` | normal |
+| `lanternwild` | normal |
+| `gloam_latch` | normal |
+| `reedbeat` | normal |
+| `cairnwell` | normal |
+
 ## Capabilities
 
 Read from each core's overrides, plus behavior proven by a portable test that declares
 `// catalog-capability: <cap>: <ids>` (for games that handle it inside `Step`). A blank cell is a gap.
 
-| id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | hints | key_hint | contrast_mark | scoreboard | action_cue | save_restore |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `beacon_sweep` | yes |  | yes |  | yes |  | yes | yes | yes | yes | yes | yes | yes |
-| `twinwake` | yes |  | yes |  |  |  | yes | yes | yes | yes | yes | yes | yes |
-| `dungeon` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes |
-| `driftstone` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes |
-| `football` | yes |  | yes |  |  |  | yes |  | yes | yes | yes |  | yes |
-| `glowtrail` | yes |  | yes |  |  |  | yes |  | yes | yes | yes |  | yes |
-| `riftwing` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes |
-| `emberstep` | yes |  | yes | yes |  |  | yes |  | yes | yes | yes |  | yes |
-| `star_shooter` | yes |  |  |  |  | yes | yes |  | yes | yes | yes |  | yes |
-| `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes |
-| `ironwake` | yes | yes | yes | yes |  |  | yes |  | yes | yes | yes |  | yes |
-| `lanternwild` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes |
-| `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes |  |
-| `reedbeat` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes |  |
-| `cairnwell` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes |  |
+| id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | hints | key_hint | contrast_mark | scoreboard | difficulty | action_cue | save_restore |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `beacon_sweep` | yes |  | yes |  | yes |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `twinwake` | yes |  | yes |  |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `dungeon` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `driftstone` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `football` | yes |  | yes |  |  |  | yes |  | yes | yes | yes | yes |  | yes |
+| `glowtrail` | yes |  | yes |  |  |  | yes |  | yes | yes | yes | yes |  | yes |
+| `riftwing` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `emberstep` | yes |  | yes | yes |  |  | yes |  | yes | yes | yes | yes |  | yes |
+| `star_shooter` | yes |  |  |  |  | yes | yes |  | yes | yes | yes | yes |  | yes |
+| `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `ironwake` | yes | yes | yes | yes |  |  | yes |  | yes | yes | yes | yes |  | yes |
+| `lanternwild` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
+| `reedbeat` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
+| `cairnwell` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 
 ## Leaderboard feed
 

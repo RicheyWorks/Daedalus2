@@ -95,6 +95,14 @@ public:
     virtual std::string HowToLine() const { return {}; }
     virtual std::string KeyHint() const { return {}; }
     virtual std::string ContrastMark() const { return "MARK ACT"; }
+    // Catalog difficulty. Normal is the default. Options, score, and saves stay as they are.
+    virtual bool SetCabinetDifficulty(const std::string& Name) {
+        if(Name!="easy" && Name!="normal" && Name!="hard") return false;
+        CabinetDifficultyName=Name; return true;
+    }
+    virtual std::string CabinetDifficulty() const { return CabinetDifficultyName; }
+private:
+    std::string CabinetDifficultyName="normal";
 };
 inline void DrawAccess(Frame& F, double X, double Y, const std::string& Keys, const std::string& Mark) {
     F.AddRect(X,Y,220,34,{16,18,32,255});

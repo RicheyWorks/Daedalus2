@@ -115,6 +115,7 @@ CAPABILITIES = {
     "key_hint": (),  # test-only: proven by a11y_test.cpp
     "contrast_mark": (),  # test-only: proven by a11y_test.cpp
     "scoreboard": (),  # test-only: proven by scoreboard_test.cpp. Host reads Status.Score.
+    "difficulty": (),  # test-only: proven by difficulty_test.cpp. Default name is normal.
     "action_cue": (),  # test-only: proven by action_cue_test.cpp
     "save_restore": ("SaveState", "RestoreState"),
 }
@@ -242,11 +243,13 @@ def build():
             "title": title,
             "summary": blurb,
             "how_to_play": line or "",
+            "difficulty": ["easy", "normal", "hard"],
+            "default_difficulty": "normal",
             "host": "ADaedalusDesktopArcade",
             "start": f'StartGame("{gid}", Seed)',
             "portable_tests": tests,
             "option_count": optmap.get(factory_map.get(gid, ""), 0) or 0,
-            "capabilities": sorted(set(capmap.get(factory_map.get(gid, ""), [])) | verified.get(gid, set())),
+            "capabilities": sorted(set(capmap.get(factory_map.get(gid, ""), [])) | verified.get(gid, set()) | {"difficulty"}),
             "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
         })
     if SLOTS_HDR.exists():
@@ -287,6 +290,11 @@ def build():
            "| id | line |", "|---|---|"]
     for g in games:
         md.append(f"| `{g['id']}` | {g['how_to_play']} |")
+    md += ["", "## Difficulty", "",
+           "Every cabinet defaults to normal. Easy and hard are the other accepted names. The arcade host is unchanged.", "",
+           "| id | default |", "|---|---|"]
+    for g in games:
+        md.append(f"| `{g['id']}` | {g['default_difficulty']} |")
     md += ["", "## Capabilities", "",
            "Read from each core's overrides, plus behavior proven by a portable test that declares",
            "`// catalog-capability: <cap>: <ids>` (for games that handle it inside `Step`). A blank cell is a gap.", "",
