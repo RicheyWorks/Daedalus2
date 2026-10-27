@@ -320,6 +320,23 @@ public final class ForgeCabinet {
                 });
         }, PracticalWeights.forgemasterLine(PracticalWeights.Grade.WEIGHED),
             PracticalWeights.forgemasterLine(PracticalWeights.Grade.SHORT)));
+        g.add(game("record", "Record Ingots", RecordIngots.QUEST_ID, r -> {
+            long n = 1 + r.nextInt(50_000);
+            if (r.nextBoolean()) {
+                while (!RecordIngots.isRecord(n)) {
+                    n++;
+                }
+            }
+            long fn = n;
+            return new Puzzle("record", "Does ingot " + n + " split more ways than every smaller one? (record/common)",
+                RecordIngots.isRecord(n) ? "record" : "common", a -> {
+                    if (!"record".equals(a) && !"common".equals(a)) {
+                        return false;
+                    }
+                    return RecordIngots.grade(fn, "record".equals(a)) == RecordIngots.Grade.TURNED;
+                });
+        }, RecordIngots.forgemasterLine(RecordIngots.Grade.TURNED),
+            RecordIngots.forgemasterLine(RecordIngots.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
