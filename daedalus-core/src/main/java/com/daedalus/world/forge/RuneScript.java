@@ -80,8 +80,8 @@ public final class RuneScript {
         int i = 0;
         for (; i + 3 < v.length; i += 4) {
             int w = v[i] << 18 | v[i + 1] << 12 | v[i + 2] << 6 | v[i + 3];
-            out[k++] = (byte) (w >>> 16);
-            out[k++] = (byte) (w >>> 8);
+            out[k++] = (byte) (w >> 16);
+            out[k++] = (byte) (w >> 8);
             out[k++] = (byte) w;
         }
         int rest = v.length - i;
@@ -89,14 +89,14 @@ public final class RuneScript {
             if ((v[i + 1] & 15) != 0) {
                 throw new IllegalArgumentException("non-zero trailing bits");
             }
-            out[k++] = (byte) (v[i] << 2 | v[i + 1] >>> 4);
+            out[k++] = (byte) (v[i] << 2 | v[i + 1] >> 4);
         } else if (rest == 3) {
             if ((v[i + 2] & 3) != 0) {
                 throw new IllegalArgumentException("non-zero trailing bits");
             }
             int w = v[i] << 12 | v[i + 1] << 6 | v[i + 2];
-            out[k++] = (byte) (w >>> 10);
-            out[k++] = (byte) (w >>> 2);
+            out[k++] = (byte) (w >> 10);
+            out[k++] = (byte) (w >> 2);
         }
         return Arrays.copyOf(out, k);
     }
