@@ -36,5 +36,9 @@
  * <p>G535 Farrier's Two Anvils ({@link FarriersTwoAnvils}, quest {@code q_two_anvils}): shoeing jobs with
  * must-finish-first links on two identical anvils, finish the last job earliest (P2|prec|Cmax); exact memoised event
  * search, which may idle an anvil on purpose, vs. Graham list scheduling in job order.
+ *
+ * <p>G537 Bridle Rack Matching ({@link BridleRackMatching}, quest {@code q_all_tacked}): give every horse its own
+ * groom whose skill covers the horse's temperament so the last horse is ready earliest (bottleneck assignment with
+ * compatibility); exact threshold search with augmenting paths vs. cheapest-pair-first, which strands or delays.
  */
 package com.daedalus.world.stable;
