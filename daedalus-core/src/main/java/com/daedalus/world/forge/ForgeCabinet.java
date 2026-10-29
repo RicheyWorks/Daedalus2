@@ -24,6 +24,14 @@ import java.util.function.Predicate;
 public final class ForgeCabinet {
 
     /** Keith numbers up to 200000, built once on first use of the Keith Kindling slot. */
+    private static final class HofstadterList {
+        private static final int[] Q = HofstadterHammers.qSequence(48);
+        private static final int[] CONWAY = HofstadterHammers.conwaySequence(48);
+
+        private HofstadterList() {
+        }
+    }
+
     private static final class VanEckList {
         private static final int[] ECHOES = VanEckEchoes.sequence(64);
 
@@ -618,6 +626,27 @@ public final class ForgeCabinet {
                 });
         }, VanEckEchoes.forgemasterLine(VanEckEchoes.Grade.TURNED),
             VanEckEchoes.forgemasterLine(VanEckEchoes.Grade.SLIPPED)));
+        g.add(game("hofstadter", "Hofstadter Hammers", HofstadterHammers.QUEST_ID, r -> {
+            boolean useQ = r.nextBoolean();
+            int[] seq = useQ ? HofstadterList.Q : HofstadterList.CONWAY;
+            int n = 6 + r.nextInt(seq.length - 7);
+            StringBuilder heard = new StringBuilder();
+            for (int i = 1; i <= n; i++) {
+                heard.append(i == 1 ? "" : ", ").append(seq[i]);
+            }
+            String rule = useQ ? "Q(n) = Q(n - Q(n-1)) + Q(n - Q(n-2))" : "a(n) = a(a(n-1)) + a(n - a(n-1))";
+            HofstadterHammers.Hammer h = useQ ? HofstadterHammers.Hammer.Q : HofstadterHammers.Hammer.CONWAY;
+            return new Puzzle("hofstadter", "The hammer rings " + heard + " by the rule " + rule
+                + ". What is strike " + (n + 1) + "?", Integer.toString(seq[n + 1]), a -> {
+                    try {
+                        return HofstadterHammers.grade(h, n + 1, Integer.parseInt(a.trim()))
+                            == HofstadterHammers.Grade.TURNED;
+                    } catch (NumberFormatException ex) {
+                        return false;
+                    }
+                });
+        }, HofstadterHammers.forgemasterLine(HofstadterHammers.Grade.TURNED),
+            HofstadterHammers.forgemasterLine(HofstadterHammers.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
