@@ -1,0 +1,656 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_PonyCart",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G316",
+    "ask": "youtube-master 55408",
+    "lod": "LOD0/1",
+    "size_m": "1.2 x 3.4 m pony cart (no pony; hook at SOCKET_Pony)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Pony",
+     "SOCKET_Load",
+     "SOCKET_Driver"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_PonyCart_M0",
+     "colour": "cart (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_PonyCart_M1",
+     "colour": "wheels",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_PonyCart",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bed",
+       "shape": "box",
+       "size": [
+        1.2,
+        1.8,
+        0.08
+       ],
+       "centre": [
+        0,
+        0,
+        0.7
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Side-1",
+       "shape": "box",
+       "size": [
+        0.04,
+        1.8,
+        0.3
+       ],
+       "centre": [
+        -0.6,
+        0,
+        0.88
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Side1",
+       "shape": "box",
+       "size": [
+        0.04,
+        1.8,
+        0.3
+       ],
+       "centre": [
+        0.6,
+        0,
+        0.88
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Wheel-1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.45,
+       "r2": 0.45,
+       "length": 0.06,
+       "centre": [
+        -0.7,
+        0.2,
+        0.45
+       ],
+       "slot": 1,
+       "segments": 14
+      },
+      {
+       "name": "Wheel1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.45,
+       "r2": 0.45,
+       "length": 0.06,
+       "centre": [
+        0.7,
+        0.2,
+        0.45
+       ],
+       "slot": 1,
+       "segments": 14
+      },
+      {
+       "name": "Axle",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 1.5,
+       "centre": [
+        0,
+        0.2,
+        0.45
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Shaft-1",
+       "shape": "box",
+       "size": [
+        0.05,
+        1.6,
+        0.05
+       ],
+       "centre": [
+        -0.35,
+        -1.6,
+        0.6
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Shaft1",
+       "shape": "box",
+       "size": [
+        0.05,
+        1.6,
+        0.05
+       ],
+       "centre": [
+        0.35,
+        -1.6,
+        0.6
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -5,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Pony",
+     "location": [
+      0,
+      -1.9,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      1.9
+     ]
+    },
+    {
+     "name": "SOCKET_Load",
+     "location": [
+      0,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.75,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Driver",
+     "location": [
+      0,
+      -0.6,
+      0.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.8,
+      0.6
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_PonyCart_00",
+     "shape": "box",
+     "size": [
+      1.5,
+      1.8,
+      1.05
+     ],
+     "centre": [
+      0,
+      0,
+      0.52
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 344,
+    "lod1_triangles": 344,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_PonyCart": 344
+    },
+    "bounds_min": [
+     -0.75,
+     -2.3986,
+     0.0113
+    ],
+    "bounds_max": [
+     0.75,
+     0.9,
+     1.03
+    ],
+    "dimensions": [
+     1.5,
+     3.2986,
+     1.0187
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "91572a4e9e592107f9080731240b26905e7f6f133a7eb55fad6a47d9bf262219"
+  },
+  {
+   "asset": "Prop_YTM_HillLoft",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G316",
+    "ask": "youtube-master 55408",
+    "lod": "LOD0/1",
+    "size_m": "3.0 x 2.4 m hill grain loft",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Door",
+     "SOCKET_Inside",
+     "SOCKET_Roof",
+     "SOCKET_LoftDoor"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_HillLoft_M0",
+     "colour": "timber (G66)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_HillLoft_M1",
+     "colour": "walls (G66 whitewash)",
+     "hex": "E8DCC0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_HillLoft_M2",
+     "colour": "thatch",
+     "hex": "B89858",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_HillLoft_M3",
+     "colour": "door (G66 cloth)",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_HillLoft",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Walls",
+       "shape": "box",
+       "size": [
+        3.0,
+        2.4,
+        2.6
+       ],
+       "centre": [
+        0,
+        0,
+        1.3
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Door",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.04,
+        1.8
+       ],
+       "centre": [
+        0,
+        -1.21,
+        0.9
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "RoofL",
+       "shape": "box",
+       "size": [
+        1.86,
+        3.0,
+        0.08
+       ],
+       "centre": [
+        -0.762,
+        0,
+        3.146
+       ],
+       "slot": 2,
+       "bevel": true,
+       "rot": [
+        0,
+        -35,
+        0
+       ]
+      },
+      {
+       "name": "RoofR",
+       "shape": "box",
+       "size": [
+        1.86,
+        3.0,
+        0.08
+       ],
+       "centre": [
+        0.762,
+        0,
+        3.146
+       ],
+       "slot": 2,
+       "bevel": true,
+       "rot": [
+        0,
+        35,
+        0
+       ]
+      },
+      {
+       "name": "GableF",
+       "shape": "slab",
+       "outline": [
+        [
+         -1.5,
+         0
+        ],
+        [
+         1.5,
+         0
+        ],
+        [
+         0,
+         1.02
+        ]
+       ],
+       "thickness": 0.05,
+       "centre": [
+        0,
+        -1.175,
+        2.6
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "GableB",
+       "shape": "slab",
+       "outline": [
+        [
+         -1.5,
+         0
+        ],
+        [
+         1.5,
+         0
+        ],
+        [
+         0,
+         1.02
+        ]
+       ],
+       "thickness": 0.05,
+       "centre": [
+        0,
+        1.175,
+        2.6
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Door",
+     "location": [
+      0,
+      -1.5,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0,
+      1.5
+     ]
+    },
+    {
+     "name": "SOCKET_Inside",
+     "location": [
+      0,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Roof",
+     "location": [
+      0,
+      0,
+      3.68
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      3.68,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_LoftDoor",
+     "location": [
+      0,
+      -1.25,
+      2.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.3,
+      1.25
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_HillLoft_00",
+     "shape": "box",
+     "size": [
+      3.0,
+      2.4,
+      2.6
+     ],
+     "centre": [
+      0,
+      0,
+      1.3
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 192,
+    "lod1_triangles": 192,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_HillLoft": 192
+    },
+    "bounds_min": [
+     -1.5412,
+     -1.5,
+     0.0
+    ],
+    "bounds_max": [
+     1.5412,
+     1.5,
+     3.7067
+    ],
+    "dimensions": [
+     3.0824,
+     3.0,
+     3.7067
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "08fc47c80858dbab41437671e9eaa259a6b7b6bc348f3792fc2bc189bbc8310d"
+  }
+ ]
+}

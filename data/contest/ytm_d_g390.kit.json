@@ -1,0 +1,709 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_TidePost",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G390",
+    "ask": "youtube-master 55798",
+    "lod": "LOD0/1",
+    "size_m": "3.00 m tide gauge post",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Base",
+     "SOCKET_Level_0",
+     "SOCKET_Level_1",
+     "SOCKET_Level_2",
+     "SOCKET_Level_3",
+     "SOCKET_Level_4"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_TidePost_M0",
+     "colour": "post (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_TidePost_M1",
+     "colour": "cap / marks (G66)",
+     "hex": "F0E8D8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_TidePost_M2",
+     "colour": "detail",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_TidePost",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.085,
+       "length": 3.0,
+       "centre": [
+        0,
+        0,
+        1.5
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.03,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        3.04
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Mark0",
+       "shape": "box",
+       "size": [
+        0.21,
+        0.21,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark1",
+       "shape": "box",
+       "size": [
+        0.21,
+        0.21,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark2",
+       "shape": "box",
+       "size": [
+        0.21,
+        0.21,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        1.5
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark3",
+       "shape": "box",
+       "size": [
+        0.21,
+        0.21,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        2.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark4",
+       "shape": "box",
+       "size": [
+        0.21,
+        0.21,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      3.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      3.08,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Level_0",
+     "location": [
+      0,
+      -0.11,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.11
+     ]
+    },
+    {
+     "name": "SOCKET_Level_1",
+     "location": [
+      0,
+      -0.11,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.0,
+      0.11
+     ]
+    },
+    {
+     "name": "SOCKET_Level_2",
+     "location": [
+      0,
+      -0.11,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.5,
+      0.11
+     ]
+    },
+    {
+     "name": "SOCKET_Level_3",
+     "location": [
+      0,
+      -0.11,
+      2.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.0,
+      0.11
+     ]
+    },
+    {
+     "name": "SOCKET_Level_4",
+     "location": [
+      0,
+      -0.11,
+      2.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.5,
+      0.11
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_TidePost_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.1,
+     "r2": 0.1,
+     "length": 3.0,
+     "centre": [
+      0,
+      0,
+      1.5
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 116,
+    "lod1_triangles": 116,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_TidePost": 116
+    },
+    "bounds_min": [
+     -0.12,
+     -0.12,
+     0.0
+    ],
+    "bounds_max": [
+     0.12,
+     0.12,
+     3.08
+    ],
+    "dimensions": [
+     0.24,
+     0.24,
+     3.08
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9f133d82f345cc76e6ee4792e40fcdbf60f9cd69b1ef62168963fc61a1e8675e"
+  },
+  {
+   "asset": "Prop_YTM_LogSlate",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G390",
+    "ask": "youtube-master 55798",
+    "lod": "LOD0/1",
+    "size_m": "0.30 x 0.22 m tide log slate",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Text",
+     "SOCKET_Hand"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_LogSlate_M0",
+     "colour": "tide log slate",
+     "hex": "3A3E44",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_LogSlate_M1",
+     "colour": "ink / glyph (MI)",
+     "hex": "2A2420",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_LogSlate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Sheet",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.003,
+        0.22
+       ],
+       "centre": [
+        0,
+        0,
+        0.11
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Ink",
+       "shape": "box",
+       "size": [
+        0.21,
+        0.002,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.002,
+        0.11
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Text",
+     "location": [
+      0,
+      -0.004,
+      0.11
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.11,
+      0.004
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.11
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.11,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 24,
+    "lod1_triangles": 24,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_LogSlate": 24
+    },
+    "bounds_min": [
+     -0.15,
+     -0.003,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.0015,
+     0.22
+    ],
+    "dimensions": [
+     0.3,
+     0.0045,
+     0.22
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "18159b2dc2760e30b2c10e5b4cd270df6a88a0fbb2414a988ce44e6624a01c16"
+  },
+  {
+   "asset": "Prop_YTM_StoneBoat",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G390",
+    "ask": "youtube-master 55798",
+    "lod": "LOD0/1",
+    "size_m": "0.72 m stone ballast boat",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Float",
+     "SOCKET_Hand"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_StoneBoat_M0",
+     "colour": "stone boat (ballast)",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_StoneBoat",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Hull",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01,
+         0
+        ],
+        [
+         0.3,
+         0.06
+        ],
+        [
+         0.36,
+         0.2
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Keel",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.6,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.02
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Float",
+     "location": [
+      0,
+      0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 112,
+    "lod1_triangles": 112,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_StoneBoat": 112
+    },
+    "bounds_min": [
+     -0.36,
+     -0.36,
+     0
+    ],
+    "bounds_max": [
+     0.36,
+     0.36,
+     0.2
+    ],
+    "dimensions": [
+     0.72,
+     0.72,
+     0.2
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "cb482e670a73122738c102cec6a32c66a763f900f8657291a577bb1caccf2e46"
+  }
+ ]
+}

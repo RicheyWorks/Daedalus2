@@ -1,0 +1,712 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_TrailStone",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G338",
+    "ask": "youtube-master 55526",
+    "lod": "LOD0/1",
+    "size_m": "0.50 x 0.40 x 0.12 m trail stepping stone",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_TrailStone_M0",
+     "colour": "trail stepping stone (G66 stone)",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_TrailStone",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        0.46798,
+        0.37349,
+        0.12844
+       ],
+       "centre": [
+        0.01397,
+        -0.00449,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -2.1996,
+        -3.3361,
+        2.307
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_TrailStone_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.4,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 44,
+    "lod1_triangles": 44,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_TrailStone": 44
+    },
+    "bounds_min": [
+     -0.2289,
+     -0.2015,
+     -0.0233
+    ],
+    "bounds_max": [
+     0.2568,
+     0.1925,
+     0.1433
+    ],
+    "dimensions": [
+     0.4857,
+     0.394,
+     0.1666
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "79c66bf77d5980dbcd0927478906d05471fdf6bbd8b1a16ba880c99e11a3f12a"
+  },
+  {
+   "asset": "Prop_YTM_HillHut",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G338",
+    "ask": "youtube-master 55526",
+    "lod": "LOD0/1",
+    "size_m": "2.6 x 2.2 m hill hut",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Door",
+     "SOCKET_Inside",
+     "SOCKET_Roof"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_HillHut_M0",
+     "colour": "timber (G66)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_HillHut_M1",
+     "colour": "walls (G66 whitewash)",
+     "hex": "E8DCC0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_HillHut_M2",
+     "colour": "thatch",
+     "hex": "B89858",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_HillHut_M3",
+     "colour": "door (G66 cloth)",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_HillHut",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Walls",
+       "shape": "box",
+       "size": [
+        2.6,
+        2.2,
+        2.0
+       ],
+       "centre": [
+        0,
+        0,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Door",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.04,
+        1.8
+       ],
+       "centre": [
+        0,
+        -1.11,
+        0.9
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "RoofL",
+       "shape": "box",
+       "size": [
+        1.612,
+        2.8,
+        0.08
+       ],
+       "centre": [
+        -0.6604,
+        0,
+        2.4732
+       ],
+       "slot": 2,
+       "bevel": true,
+       "rot": [
+        0,
+        -35,
+        0
+       ]
+      },
+      {
+       "name": "RoofR",
+       "shape": "box",
+       "size": [
+        1.612,
+        2.8,
+        0.08
+       ],
+       "centre": [
+        0.6604,
+        0,
+        2.4732
+       ],
+       "slot": 2,
+       "bevel": true,
+       "rot": [
+        0,
+        35,
+        0
+       ]
+      },
+      {
+       "name": "GableF",
+       "shape": "slab",
+       "outline": [
+        [
+         -1.3,
+         0
+        ],
+        [
+         1.3,
+         0
+        ],
+        [
+         0,
+         0.884
+        ]
+       ],
+       "thickness": 0.05,
+       "centre": [
+        0,
+        -1.075,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "GableB",
+       "shape": "slab",
+       "outline": [
+        [
+         -1.3,
+         0
+        ],
+        [
+         1.3,
+         0
+        ],
+        [
+         0,
+         0.884
+        ]
+       ],
+       "thickness": 0.05,
+       "centre": [
+        0,
+        1.075,
+        2.0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Door",
+     "location": [
+      0,
+      -1.4,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0,
+      1.4
+     ]
+    },
+    {
+     "name": "SOCKET_Inside",
+     "location": [
+      0,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Roof",
+     "location": [
+      0,
+      0,
+      2.936
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.936,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_HillHut_00",
+     "shape": "box",
+     "size": [
+      2.6,
+      2.2,
+      2.0
+     ],
+     "centre": [
+      0,
+      0,
+      1.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 192,
+    "lod1_triangles": 192,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_HillHut": 192
+    },
+    "bounds_min": [
+     -1.3381,
+     -1.4,
+     0.0
+    ],
+    "bounds_max": [
+     1.3381,
+     1.4,
+     2.9628
+    ],
+    "dimensions": [
+     2.6762,
+     2.8,
+     2.9628
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9ccfa8aa8ea006d96f11c3a0d06e43818c78b6275efc7e7beab374725d5a6fc5"
+  },
+  {
+   "asset": "Prop_YTM_HealerLantern",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G338",
+    "ask": "youtube-master 55526",
+    "lod": "LOD0/1",
+    "size_m": "1.8 m lit lantern pole",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Light",
+     "SOCKET_Floor"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_HealerLantern_M0",
+     "colour": "pole (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_HealerLantern_M1",
+     "colour": "cap iron",
+     "hex": "3A3A40",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_HealerLantern_M2",
+     "colour": "lit paper lantern (G66 cloth, emissive)",
+     "hex": "FFC870",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_HealerLantern",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Foot",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.3,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.03,
+       "length": 1.8,
+       "centre": [
+        0,
+        0,
+        0.9
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Arm",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.35,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.16,
+        1.75
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Lantern",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.16,
+        0.22
+       ],
+       "centre": [
+        0,
+        -0.3,
+        1.6
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "LanternCap",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.2,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.3,
+        1.73
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.3,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.3
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_HealerLantern_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.15,
+     "r2": 0.15,
+     "length": 1.8,
+     "centre": [
+      0,
+      0,
+      0.9
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 204,
+    "lod1_triangles": 204,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_HealerLantern": 204
+    },
+    "bounds_min": [
+     -0.15,
+     -0.4,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.15,
+     1.8
+    ],
+    "dimensions": [
+     0.3,
+     0.55,
+     1.8
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1e8f7741bdb374b168ebc8ed43e6de7b708e246eed2d2e751f5706091a2d96ca"
+  }
+ ]
+}

@@ -1,0 +1,823 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_SignalDrum",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G404",
+    "ask": "youtube-master 55869",
+    "lod": "LOD0/1",
+    "size_m": "0.60 m dia signal drum",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Strike",
+     "SOCKET_Hand"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_SignalDrum_M0",
+     "colour": "shell (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_SignalDrum_M1",
+     "colour": "hide",
+     "hex": "D8CCB8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_SignalDrum_M2",
+     "colour": "cords",
+     "hex": "B89A62",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_SignalDrum",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Shell",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.27,
+       "r2": 0.3,
+       "length": 0.5,
+       "centre": [
+        0,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Skin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.306,
+       "r2": 0.306,
+       "length": 0.01,
+       "centre": [
+        0,
+        0,
+        0.505
+       ],
+       "slot": 1,
+       "segments": 14
+      },
+      {
+       "name": "Cord0",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.5
+       ],
+       "centre": [
+        0.294,
+        0.0,
+        0.25
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Cord1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.5
+       ],
+       "centre": [
+        0.20789,
+        0.20789,
+        0.25
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Cord2",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.5
+       ],
+       "centre": [
+        0.0,
+        0.294,
+        0.25
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Cord3",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.5
+       ],
+       "centre": [
+        -0.20789,
+        0.20789,
+        0.25
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Cord4",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.5
+       ],
+       "centre": [
+        -0.294,
+        0.0,
+        0.25
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Cord5",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.5
+       ],
+       "centre": [
+        -0.20789,
+        -0.20789,
+        0.25
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Cord6",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.5
+       ],
+       "centre": [
+        -0.0,
+        -0.294,
+        0.25
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Cord7",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.5
+       ],
+       "centre": [
+        0.20789,
+        -0.20789,
+        0.25
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Strike",
+     "location": [
+      0,
+      0,
+      0.51
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.51,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.25,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 200,
+    "lod1_triangles": 200,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_SignalDrum": 200
+    },
+    "bounds_min": [
+     -0.306,
+     -0.299,
+     0.0
+    ],
+    "bounds_max": [
+     0.306,
+     0.299,
+     0.51
+    ],
+    "dimensions": [
+     0.612,
+     0.598,
+     0.51
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "8d76defbf80bce2b5f7e1648317ef01f8f857662f23c06779d3e1939281288df"
+  },
+  {
+   "asset": "Prop_YTM_DrumLineRope",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G404",
+    "ask": "youtube-master 55869",
+    "lod": "LOD0/1",
+    "size_m": "6.0 m drum-line rope with 6 marker tags; hang EndA/EndB",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_EndA",
+     "SOCKET_EndB",
+     "SOCKET_Tag_0",
+     "SOCKET_Tag_1",
+     "SOCKET_Tag_2",
+     "SOCKET_Tag_3",
+     "SOCKET_Tag_4",
+     "SOCKET_Tag_5"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_DrumLineRope_M0",
+     "colour": "line",
+     "hex": "B89A62",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_DrumLineRope_M1",
+     "colour": "items A (G66)",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_DrumLineRope_M2",
+     "colour": "items B (G66)",
+     "hex": "E3C25A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_DrumLineRope",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rope0",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.76,
+       "centre": [
+        -2.625,
+        0,
+        -0.09375
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        13.134,
+        0
+       ]
+      },
+      {
+       "name": "Rope1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.76,
+       "centre": [
+        -1.875,
+        0,
+        -0.24375
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        9.4623,
+        0
+       ]
+      },
+      {
+       "name": "Rope2",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.76,
+       "centre": [
+        -1.125,
+        0,
+        -0.34375
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        5.7106,
+        0
+       ]
+      },
+      {
+       "name": "Rope3",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.76,
+       "centre": [
+        -0.375,
+        0,
+        -0.39375
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        1.9092,
+        0
+       ]
+      },
+      {
+       "name": "Rope4",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.76,
+       "centre": [
+        0.375,
+        0,
+        -0.39375
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        -1.9092,
+        0
+       ]
+      },
+      {
+       "name": "Rope5",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.76,
+       "centre": [
+        1.125,
+        0,
+        -0.34375
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        -5.7106,
+        0
+       ]
+      },
+      {
+       "name": "Rope6",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.76,
+       "centre": [
+        1.875,
+        0,
+        -0.24375
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        -9.4623,
+        0
+       ]
+      },
+      {
+       "name": "Rope7",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.76,
+       "centre": [
+        2.625,
+        0,
+        -0.09375
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        -13.134,
+        0
+       ]
+      },
+      {
+       "name": "Tag0",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.05,
+        0.12
+       ],
+       "centre": [
+        -2.5,
+        0,
+        -0.18222
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Tag1",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.05,
+        0.12
+       ],
+       "centre": [
+        -1.5,
+        0,
+        -0.36
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Tag2",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.05,
+        0.12
+       ],
+       "centre": [
+        -0.5,
+        0,
+        -0.44889
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Tag3",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.05,
+        0.12
+       ],
+       "centre": [
+        0.5,
+        0,
+        -0.44889
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Tag4",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.05,
+        0.12
+       ],
+       "centre": [
+        1.5,
+        0,
+        -0.36
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Tag5",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.05,
+        0.12
+       ],
+       "centre": [
+        2.5,
+        0,
+        -0.18222
+       ],
+       "slot": 2,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_EndA",
+     "location": [
+      -3.0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -3.0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_EndB",
+     "location": [
+      3.0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      3.0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tag_0",
+     "location": [
+      -2.5,
+      0,
+      -0.18222
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -2.5,
+      -0.18222,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tag_1",
+     "location": [
+      -1.5,
+      0,
+      -0.36
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.5,
+      -0.36,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tag_2",
+     "location": [
+      -0.5,
+      0,
+      -0.44889
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.5,
+      -0.44889,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tag_3",
+     "location": [
+      0.5,
+      0,
+      -0.44889
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.5,
+      -0.44889,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tag_4",
+     "location": [
+      1.5,
+      0,
+      -0.36
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.5,
+      -0.36,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tag_5",
+     "location": [
+      2.5,
+      0,
+      -0.18222
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      2.5,
+      -0.18222,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 392,
+    "lod1_triangles": 392,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_DrumLineRope": 392
+    },
+    "bounds_min": [
+     -2.9968,
+     -0.025,
+     -0.5089
+    ],
+    "bounds_max": [
+     2.9968,
+     0.025,
+     0.0
+    ],
+    "dimensions": [
+     5.9936,
+     0.05,
+     0.5089
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "379eff385ace0da65c130d116dc5110b38240501106198d569493613e40155e4"
+  }
+ ]
+}

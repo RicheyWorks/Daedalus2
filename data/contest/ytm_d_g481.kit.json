@@ -1,0 +1,1153 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_BlessingBanner_1",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G481",
+    "ask": "youtube-master 56350",
+    "lod": "LOD0/1",
+    "size_m": "0.5 x 1.1 m hanging blessing banner 1",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Word"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_BlessingBanner_1_M0",
+     "colour": "rod / cord (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_BlessingBanner_1_M1",
+     "colour": "banner (G66 cloth; chant word MI)",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_BlessingBanner_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rod",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.6,
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Banner",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.25,
+         0
+        ],
+        [
+         0.25,
+         0
+        ],
+        [
+         0.25,
+         -1.0
+        ],
+        [
+         0,
+         -1.15
+        ],
+        [
+         -0.25,
+         -1.0
+        ]
+       ],
+       "thickness": 0.003,
+       "centre": [
+        0,
+        0,
+        -0.02
+       ],
+       "slot": 1,
+       "segments": 5,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Cord",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.3,
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Word",
+     "location": [
+      0,
+      -0.005,
+      -0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      -0.5,
+      0.005
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 48,
+    "lod1_triangles": 48,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_BlessingBanner_1": 48
+    },
+    "bounds_min": [
+     -0.3,
+     -0.012,
+     -1.17
+    ],
+    "bounds_max": [
+     0.3,
+     0.012,
+     0.3
+    ],
+    "dimensions": [
+     0.6,
+     0.024,
+     1.47
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "043380131ee0e6595a8725be78b50685c47d1617c73442ca6d16b4209fb3cb93"
+  },
+  {
+   "asset": "Prop_YTM_BlessingBanner_2",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G481",
+    "ask": "youtube-master 56350",
+    "lod": "LOD0/1",
+    "size_m": "0.5 x 1.1 m hanging blessing banner 2",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Word"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_BlessingBanner_2_M0",
+     "colour": "rod / cord (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_BlessingBanner_2_M1",
+     "colour": "banner (G66 cloth; chant word MI)",
+     "hex": "6E7F99",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_BlessingBanner_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rod",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.6,
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Banner",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.25,
+         0
+        ],
+        [
+         0.25,
+         0
+        ],
+        [
+         0.25,
+         -0.9
+        ],
+        [
+         0,
+         -1.05
+        ],
+        [
+         -0.25,
+         -0.9
+        ]
+       ],
+       "thickness": 0.003,
+       "centre": [
+        0,
+        0,
+        -0.02
+       ],
+       "slot": 1,
+       "segments": 5,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Cord",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.3,
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Word",
+     "location": [
+      0,
+      -0.005,
+      -0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      -0.5,
+      0.005
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 48,
+    "lod1_triangles": 48,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_BlessingBanner_2": 48
+    },
+    "bounds_min": [
+     -0.3,
+     -0.012,
+     -1.07
+    ],
+    "bounds_max": [
+     0.3,
+     0.012,
+     0.3
+    ],
+    "dimensions": [
+     0.6,
+     0.024,
+     1.37
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2c9bbf0c96da402762330e6a8db77b24ab0498c7072ec132bf888c592422e4ef"
+  },
+  {
+   "asset": "Prop_YTM_BlessingBanner_3",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G481",
+    "ask": "youtube-master 56350",
+    "lod": "LOD0/1",
+    "size_m": "0.5 x 1.1 m hanging blessing banner 3",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Word"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_BlessingBanner_3_M0",
+     "colour": "rod / cord (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_BlessingBanner_3_M1",
+     "colour": "banner (G66 cloth; chant word MI)",
+     "hex": "E3C25A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_BlessingBanner_3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rod",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.6,
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Banner",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.25,
+         0
+        ],
+        [
+         0.25,
+         0
+        ],
+        [
+         0.25,
+         -0.8
+        ],
+        [
+         0,
+         -0.95
+        ],
+        [
+         -0.25,
+         -0.8
+        ]
+       ],
+       "thickness": 0.003,
+       "centre": [
+        0,
+        0,
+        -0.02
+       ],
+       "slot": 1,
+       "segments": 5,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Cord",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.3,
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Word",
+     "location": [
+      0,
+      -0.005,
+      -0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      -0.5,
+      0.005
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 48,
+    "lod1_triangles": 48,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_BlessingBanner_3": 48
+    },
+    "bounds_min": [
+     -0.3,
+     -0.012,
+     -0.97
+    ],
+    "bounds_max": [
+     0.3,
+     0.012,
+     0.3
+    ],
+    "dimensions": [
+     0.6,
+     0.024,
+     1.27
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "570571b1fb60e01fb93d434e96efa5a11cb0b22857bd2f221f943ae695397cc6"
+  },
+  {
+   "asset": "Prop_YTM_FireRing",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G481",
+    "ask": "youtube-master 56350",
+    "lod": "LOD0/1",
+    "size_m": "1.4 m chant fire ring",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Fire",
+     "SOCKET_Chant_0",
+     "SOCKET_Chant_1",
+     "SOCKET_Chant_2",
+     "SOCKET_Chant_3",
+     "SOCKET_Chant_4",
+     "SOCKET_Chant_5"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_FireRing_M0",
+     "colour": "ring stones",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_FireRing_M1",
+     "colour": "ash",
+     "hex": "5A5650",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_FireRing_M2",
+     "colour": "embers (emissive)",
+     "hex": "F07A28",
+     "roughness": 0.8,
+     "metallic": 0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_FireRing",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone0",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        0.6,
+        0.0,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Stone1",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        0.51949,
+        0.30021,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        30
+       ]
+      },
+      {
+       "name": "Stone2",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        0.29958,
+        0.51986,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        60
+       ]
+      },
+      {
+       "name": "Stone3",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        -0.00072,
+        0.6,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Stone4",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        -0.30083,
+        0.51913,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        120
+       ]
+      },
+      {
+       "name": "Stone5",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        -0.52022,
+        0.29896,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        150
+       ]
+      },
+      {
+       "name": "Stone6",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        -0.6,
+        -0.00144,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        180
+       ]
+      },
+      {
+       "name": "Stone7",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        -0.51877,
+        -0.30146,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        210
+       ]
+      },
+      {
+       "name": "Stone8",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        -0.29833,
+        -0.52058,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        240
+       ]
+      },
+      {
+       "name": "Stone9",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        0.00217,
+        -0.6,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        270
+       ]
+      },
+      {
+       "name": "Stone10",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        0.30208,
+        -0.51841,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        300
+       ]
+      },
+      {
+       "name": "Stone11",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.16,
+        0.14
+       ],
+       "centre": [
+        0.52093,
+        -0.2977,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        330
+       ]
+      },
+      {
+       "name": "Ash",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.45,
+       "r2": 0.45,
+       "length": 0.02,
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 1,
+       "segments": 12
+      },
+      {
+       "name": "Embers",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.25,
+       "r2": 0.2,
+       "length": 0.06,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 2,
+       "segments": 10
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Fire",
+     "location": [
+      0,
+      0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Chant_0",
+     "location": [
+      1.2,
+      0.0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.2,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Chant_1",
+     "location": [
+      0.60021,
+      1.03911,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.60021,
+      0,
+      -1.03911
+     ]
+    },
+    {
+     "name": "SOCKET_Chant_2",
+     "location": [
+      -0.59959,
+      1.03947,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.59959,
+      0,
+      -1.03947
+     ]
+    },
+    {
+     "name": "SOCKET_Chant_3",
+     "location": [
+      -1.2,
+      0.00071,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.2,
+      0,
+      -0.00071
+     ]
+    },
+    {
+     "name": "SOCKET_Chant_4",
+     "location": [
+      -0.60082,
+      -1.03876,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.60082,
+      0,
+      1.03876
+     ]
+    },
+    {
+     "name": "SOCKET_Chant_5",
+     "location": [
+      0.59897,
+      -1.03982,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.59897,
+      0,
+      1.03982
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_FireRing_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.7,
+     "r2": 0.7,
+     "length": 0.15,
+     "centre": [
+      0,
+      0,
+      0.075
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 608,
+    "lod1_triangles": 608,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_FireRing": 608
+    },
+    "bounds_min": [
+     -0.71,
+     -0.71,
+     0.0
+    ],
+    "bounds_max": [
+     0.71,
+     0.71,
+     0.14
+    ],
+    "dimensions": [
+     1.42,
+     1.42,
+     0.14
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "47a41f8c48fde86a3dcc4cc932ec177cf38163387987c29024753a4ad8a86216"
+  }
+ ]
+}

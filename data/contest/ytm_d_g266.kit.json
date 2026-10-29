@@ -1,0 +1,2382 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_RockShelf_H0",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.05 m tide rock shelf 0/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H0_M0",
+     "colour": "tide rock shelf 0/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H0",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.04545,
+        0.98006,
+        0.01861
+       ],
+       "centre": [
+        -0.0314,
+        0.00904,
+        0.00833
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0.6658,
+        -1.1167,
+        -19.1468
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.81847,
+        0.67949,
+        0.01913
+       ],
+       "centre": [
+        0.03884,
+        -0.03859,
+        0.025
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0.4514,
+        0.5445,
+        -19.6898
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.59392,
+        0.47764,
+        0.01911
+       ],
+       "centre": [
+        0.03244,
+        -0.02026,
+        0.04167
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        3.5115,
+        0.7346,
+        0.2491
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H0_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.05
+     ],
+     "centre": [
+      0,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H0": 132
+    },
+    "bounds_min": [
+     -0.6851,
+     -0.6246,
+     -0.0168
+    ],
+    "bounds_max": [
+     0.6223,
+     0.6427,
+     0.0695
+    ],
+    "dimensions": [
+     1.3074,
+     1.2673,
+     0.0863
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "95c28d2364cf894f7c28f77654f5f1b40d894abf0692d5dd6966969731b86eb9"
+  },
+  {
+   "asset": "Prop_YTM_RockShelf_H1",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.10 m tide rock shelf 1/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H1_M0",
+     "colour": "tide rock shelf 1/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.09709,
+        0.95754,
+        0.03246
+       ],
+       "centre": [
+        -0.02729,
+        0.02549,
+        0.01667
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -0.4076,
+        1.4368,
+        18.7894
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.87188,
+        0.69542,
+        0.03293
+       ],
+       "centre": [
+        0.00746,
+        -0.01282,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -1.6535,
+        3.5647,
+        8.6889
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.58246,
+        0.55129,
+        0.03619
+       ],
+       "centre": [
+        -0.00637,
+        -0.01761,
+        0.08333
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        1.2561,
+        3.0017,
+        -14.8745
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H1_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H1": 132
+    },
+    "bounds_min": [
+     -0.6997,
+     -0.6033,
+     -0.0166
+    ],
+    "bounds_max": [
+     0.6452,
+     0.6543,
+     0.1224
+    ],
+    "dimensions": [
+     1.3449,
+     1.2576,
+     0.139
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ff0d92ee7283ad95c2bff8102e032a1373ce00cb55791c11426d95ca981e2496"
+  },
+  {
+   "asset": "Prop_YTM_RockShelf_H2",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.20 m tide rock shelf 2/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H2_M0",
+     "colour": "tide rock shelf 2/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.18112,
+        0.99548,
+        0.06978
+       ],
+       "centre": [
+        0.04664,
+        0.01081,
+        0.03333
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -0.1541,
+        2.4239,
+        11.3143
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.85109,
+        0.71927,
+        0.06952
+       ],
+       "centre": [
+        -0.00878,
+        -0.01623,
+        0.1
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        2.1771,
+        3.9462,
+        12.7655
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.5754,
+        0.53348,
+        0.06493
+       ],
+       "centre": [
+        -0.01754,
+        -0.01263,
+        0.16667
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -1.0692,
+        1.6183,
+        13.4613
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H2_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.2
+     ],
+     "centre": [
+      0,
+      0,
+      0.1
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H2": 132
+    },
+    "bounds_min": [
+     -0.6291,
+     -0.5917,
+     -0.0275
+    ],
+    "bounds_max": [
+     0.7224,
+     0.6133,
+     0.2119
+    ],
+    "dimensions": [
+     1.3515,
+     1.205,
+     0.2394
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ae056034f5102faeb4b697a2cc6afff9cd23fa70401e9bcf544b92ad28297266"
+  },
+  {
+   "asset": "Prop_YTM_RockShelf_H3",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.30 m tide rock shelf 3/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H3_M0",
+     "colour": "tide rock shelf 3/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.02192,
+        0.98372,
+        0.10794
+       ],
+       "centre": [
+        0.03446,
+        -0.00141,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        3.5697,
+        2.4089,
+        -15.6804
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.82064,
+        0.72969,
+        0.11158
+       ],
+       "centre": [
+        -0.02741,
+        0.00132,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -2.0229,
+        -1.129,
+        12.956
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.62029,
+        0.52668,
+        0.10435
+       ],
+       "centre": [
+        -0.01523,
+        0.03212,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.0815,
+        0.8561,
+        -8.3336
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H3_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.3
+     ],
+     "centre": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H3": 132
+    },
+    "bounds_min": [
+     -0.5884,
+     -0.6111,
+     -0.0545
+    ],
+    "bounds_max": [
+     0.6573,
+     0.6083,
+     0.32
+    ],
+    "dimensions": [
+     1.2457,
+     1.2194,
+     0.3745
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9c8088649dd54db87e7e67ac8b289a0caeff53bd3a8757ea41a3b43a14a1601c"
+  },
+  {
+   "asset": "Prop_YTM_RockShelf_H4",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.40 m tide rock shelf 4/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H4_M0",
+     "colour": "tide rock shelf 4/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H4",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.17983,
+        0.96314,
+        0.14286
+       ],
+       "centre": [
+        0.03834,
+        0.00677,
+        0.06667
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -2.0945,
+        -2.3555,
+        -16.6885
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.81569,
+        0.69415,
+        0.14915
+       ],
+       "centre": [
+        -0.02515,
+        -0.00453,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        1.4361,
+        0.9738,
+        -15.1322
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.58824,
+        0.48037,
+        0.14055
+       ],
+       "centre": [
+        0.01601,
+        -0.00652,
+        0.33333
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -0.9754,
+        1.6015,
+        6.7613
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.4,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H4_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H4": 132
+    },
+    "bounds_min": [
+     -0.6618,
+     -0.6209,
+     -0.0452
+    ],
+    "bounds_max": [
+     0.7384,
+     0.6344,
+     0.4151
+    ],
+    "dimensions": [
+     1.4002,
+     1.2553,
+     0.4603
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d7412dc7c891aad9c5cc094f13a0bc56931adc82b70473ca64f669e914c188e5"
+  },
+  {
+   "asset": "Prop_YTM_RockShelf_H5",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.50 m tide rock shelf 5/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H5_M0",
+     "colour": "tide rock shelf 5/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H5",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.13522,
+        0.95296,
+        0.17257
+       ],
+       "centre": [
+        -0.04731,
+        0.00677,
+        0.08333
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -1.1089,
+        3.9592,
+        16.731
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.90076,
+        0.69975,
+        0.18762
+       ],
+       "centre": [
+        0.02297,
+        -0.03061,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.8021,
+        2.8667,
+        -19.8732
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.66812,
+        0.55549,
+        0.16419
+       ],
+       "centre": [
+        0.00798,
+        -0.01881,
+        0.41667
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        2.6167,
+        1.7131,
+        18.5334
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H5_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.5
+     ],
+     "centre": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H5": 132
+    },
+    "bounds_min": [
+     -0.7253,
+     -0.6089,
+     -0.0493
+    ],
+    "bounds_max": [
+     0.6307,
+     0.6224,
+     0.5198
+    ],
+    "dimensions": [
+     1.356,
+     1.2313,
+     0.5691
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5041b59be5e16c93a62a6960f640a6f5a4528980ce0c997314f324cd4f96181f"
+  },
+  {
+   "asset": "Prop_YTM_RockShelf_H6",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.60 m tide rock shelf 6/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H6_M0",
+     "colour": "tide rock shelf 6/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H6",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.06608,
+        0.97602,
+        0.2228
+       ],
+       "centre": [
+        -0.00595,
+        -0.03779,
+        0.1
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        3.391,
+        1.0426,
+        -14.6221
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.83746,
+        0.76383,
+        0.19614
+       ],
+       "centre": [
+        -0.01095,
+        -0.01084,
+        0.3
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        1.5814,
+        -0.8168,
+        -6.704
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.58615,
+        0.55165,
+        0.22129
+       ],
+       "centre": [
+        -0.01895,
+        -0.00595,
+        0.5
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        2.18,
+        2.517,
+        10.452
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H6_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.6
+     ],
+     "centre": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H6": 132
+    },
+    "bounds_min": [
+     -0.6386,
+     -0.6421,
+     -0.0477
+    ],
+    "bounds_max": [
+     0.6267,
+     0.5665,
+     0.6316
+    ],
+    "dimensions": [
+     1.2653,
+     1.2086,
+     0.6793
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e398ec49bc8f16bfb9e69b0f46dde5d567bf8a97a28cbe3a145759160da69d23"
+  },
+  {
+   "asset": "Prop_YTM_RockShelf_H7",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.70 m tide rock shelf 7/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H7_M0",
+     "colour": "tide rock shelf 7/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H7",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.06543,
+        0.91559,
+        0.25835
+       ],
+       "centre": [
+        -0.02937,
+        -0.00024,
+        0.11667
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0.5382,
+        3.7813,
+        4.3178
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.88546,
+        0.7383,
+        0.23417
+       ],
+       "centre": [
+        -0.02661,
+        -0.03005,
+        0.35
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        3.3006,
+        0.8209,
+        -2.8696
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.63883,
+        0.51126,
+        0.25635
+       ],
+       "centre": [
+        -0.03677,
+        -0.01462,
+        0.58333
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.2733,
+        3.8126,
+        -6.391
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.7
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.7,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H7_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.7
+     ],
+     "centre": [
+      0,
+      0,
+      0.35
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H7": 132
+    },
+    "bounds_min": [
+     -0.5978,
+     -0.4949,
+     -0.0493
+    ],
+    "bounds_max": [
+     0.5391,
+     0.4944,
+     0.743
+    ],
+    "dimensions": [
+     1.1369,
+     0.9893,
+     0.7923
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3b5c6be5682ec0c3cacc4a17675a6d0de1bdda2abc2661ca25bbe8779ceb7c65"
+  },
+  {
+   "asset": "Prop_YTM_RockShelf_H8",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.80 m tide rock shelf 8/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H8_M0",
+     "colour": "tide rock shelf 8/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H8",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.0749,
+        0.98288,
+        0.25722
+       ],
+       "centre": [
+        -0.04413,
+        0.01392,
+        0.13333
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.3534,
+        -2.1046,
+        -15.2683
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.90381,
+        0.74275,
+        0.27182
+       ],
+       "centre": [
+        0.04712,
+        0.03654,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -2.4955,
+        -3.4662,
+        13.122
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.64518,
+        0.48114,
+        0.27028
+       ],
+       "centre": [
+        0.02499,
+        0.02971,
+        0.66667
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -2.3638,
+        -1.1418,
+        4.1184
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.8,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H8_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.8
+     ],
+     "centre": [
+      0,
+      0,
+      0.4
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H8": 132
+    },
+    "bounds_min": [
+     -0.6862,
+     -0.5989,
+     -0.0405
+    ],
+    "bounds_max": [
+     0.598,
+     0.6267,
+     0.816
+    ],
+    "dimensions": [
+     1.2842,
+     1.2256,
+     0.8565
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "fa4d5737e79eb6a7f3bd3685a5f769f40617552aa921aea5254325cfd34baa90"
+  },
+  {
+   "asset": "Prop_YTM_RockShelf_H9",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 1.00 x 0.90 m tide rock shelf 9/9 high",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_RockShelf_H9_M0",
+     "colour": "tide rock shelf 9/9 high (G66 stone)",
+     "hex": "6E6A60",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_RockShelf_H9",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.07799,
+        0.9969,
+        0.31398
+       ],
+       "centre": [
+        -0.01816,
+        0.0084,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.0123,
+        1.8844,
+        18.7732
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.80254,
+        0.74574,
+        0.30614
+       ],
+       "centre": [
+        -0.02758,
+        -0.03151,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        2.481,
+        0.9734,
+        15.2345
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.61851,
+        0.51731,
+        0.32333
+       ],
+       "centre": [
+        0.01169,
+        0.00352,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        3.36,
+        3.8172,
+        3.6041
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.9,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_RockShelf_H9_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      1.0,
+      0.9
+     ],
+     "centre": [
+      0,
+      0,
+      0.45
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_RockShelf_H9": 132
+    },
+    "bounds_min": [
+     -0.6787,
+     -0.631,
+     -0.0474
+    ],
+    "bounds_max": [
+     0.6424,
+     0.6478,
+     0.9419
+    ],
+    "dimensions": [
+     1.3211,
+     1.2788,
+     0.9893
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "25241e86f6ab18687944904b94e648a41e99a1a3fa9b9685998ac5656fb05fc3"
+  },
+  {
+   "asset": "Prop_YTM_PoolWater",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "2 x 2 m water plane, scale freely in XY",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Centre"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "scalable": "XY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_PoolWater_M0",
+     "colour": "tide pool water (translucent MI)",
+     "hex": "4A9AB0",
+     "roughness": 0.05,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_PoolWater",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Water",
+       "shape": "box",
+       "size": [
+        2.0,
+        2.0,
+        0.01
+       ],
+       "centre": [
+        0,
+        0,
+        0.005
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0.01
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.01,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 12,
+    "lod1_triangles": 12,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_PoolWater": 12
+    },
+    "bounds_min": [
+     -1.0,
+     -1.0,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     1.0,
+     0.01
+    ],
+    "dimensions": [
+     2.0,
+     2.0,
+     0.01
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b8f17a8c6e861903454932d9cf1fe9e70152444352992e91525064d572e959b9"
+  },
+  {
+   "asset": "Prop_YTM_Crab",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G266",
+    "ask": "youtube-master 55125",
+    "lod": "LOD0/1",
+    "size_m": "0.18 m long shore crab (static; rig via quadruped recipe if animated)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Body",
+     "SOCKET_Root",
+     "SOCKET_Head",
+     "SOCKET_Claw_L",
+     "SOCKET_Claw_R"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Crab_M0",
+     "colour": "body (G66)",
+     "hex": "D05A38",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Crab_M1",
+     "colour": "eyes / horns",
+     "hex": "2A2420",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Crab",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.081,
+       "r2": 0.0648,
+       "length": 0.04,
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Stalk-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.025,
+       "centre": [
+        -0.01944,
+        -0.0648,
+        0.092
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Stalk1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.025,
+       "centre": [
+        0.01944,
+        -0.0648,
+        0.092
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Leg0",
+       "shape": "box",
+       "size": [
+        0.0729,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.10044,
+        -0.0324,
+        0.048
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        -35,
+        0
+       ]
+      },
+      {
+       "name": "Leg1",
+       "shape": "box",
+       "size": [
+        0.0729,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.10044,
+        -0.0324,
+        0.048
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        35,
+        0
+       ]
+      },
+      {
+       "name": "Leg2",
+       "shape": "box",
+       "size": [
+        0.0729,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.10044,
+        0.0,
+        0.048
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        -35,
+        0
+       ]
+      },
+      {
+       "name": "Leg3",
+       "shape": "box",
+       "size": [
+        0.0729,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.10044,
+        0.0,
+        0.048
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        35,
+        0
+       ]
+      },
+      {
+       "name": "Leg4",
+       "shape": "box",
+       "size": [
+        0.0729,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.10044,
+        0.0324,
+        0.048
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        -35,
+        0
+       ]
+      },
+      {
+       "name": "Leg5",
+       "shape": "box",
+       "size": [
+        0.0729,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.10044,
+        0.0324,
+        0.048
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        35,
+        0
+       ]
+      },
+      {
+       "name": "Claw-1",
+       "shape": "box",
+       "size": [
+        0.0108,
+        0.0324,
+        0.009
+       ],
+       "centre": [
+        -0.0486,
+        -0.10044,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -20
+       ]
+      },
+      {
+       "name": "Claw1",
+       "shape": "box",
+       "size": [
+        0.0108,
+        0.0324,
+        0.009
+       ],
+       "centre": [
+        0.0486,
+        -0.10044,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        20
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Body",
+     "location": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Root",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      -0.0729,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      0.0729
+     ]
+    },
+    {
+     "name": "SOCKET_Claw_L",
+     "location": [
+      -0.0486,
+      -0.11664,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.0486,
+      0.06,
+      0.11664
+     ]
+    },
+    {
+     "name": "SOCKET_Claw_R",
+     "location": [
+      0.0486,
+      -0.11664,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0486,
+      0.06,
+      0.11664
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 412,
+    "lod1_triangles": 412,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_Crab": 412
+    },
+    "bounds_min": [
+     -0.1329,
+     -0.1171,
+     0.023
+    ],
+    "bounds_max": [
+     0.1329,
+     0.077,
+     0.1045
+    ],
+    "dimensions": [
+     0.2658,
+     0.1941,
+     0.0815
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5ab143b48aa9ac7ab41f8f0e1fae1c57707e8ea8d151ba2b7a5de1c3cdab5cc4"
+  }
+ ]
+}
