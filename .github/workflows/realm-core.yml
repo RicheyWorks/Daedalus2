@@ -34,7 +34,7 @@ jobs:
       - name: Realm tests (sanitized)
         run: |
           set -euo pipefail
-          for t in realm_spec_draw_test realm_core_test realm_session_test realm_directory_test realm_sprites_test; do
+          for t in realm_spec_draw_test realm_core_test realm_session_test realm_directory_test realm_sprites_test realm_look_test; do
             ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer \
               -I../DaedalusLink/Source/DaedalusLink/Public "$t.cpp" -o "$RUNNER_TEMP/$t"
           done
@@ -44,3 +44,4 @@ jobs:
           "$RUNNER_TEMP/realm_session_test" | tail -1
           "$RUNNER_TEMP/realm_directory_test" | tail -1
           "$RUNNER_TEMP/realm_sprites_test" | tail -1
+          "$RUNNER_TEMP/realm_look_test" | tail -1
