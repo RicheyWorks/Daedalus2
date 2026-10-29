@@ -610,6 +610,23 @@
       "tests": [
         "test_prism_shard.py"
       ]
+    },
+    {
+      "id": "lumenpath",
+      "title": "Lumenpath Refraction",
+      "summary": "bend a Prismheart light beam with shard mirrors to wake every crystal.",
+      "how_to_play": "HOW Toggle shard mirrors in the lattice to bend the prism beam through every crystal before your moves run out.",
+      "module": "tools/minigames/lumenpath.py",
+      "start": "lumenpath.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_lumenpath.py"
+      ]
     }
   ]
 }

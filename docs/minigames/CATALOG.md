@@ -138,3 +138,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | id | title | module | how to play |
 |---|---|---|---|
 | `shardring` | Shardring Resonance | `tools/minigames/prism_shard.py` | HOW Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill. |
+| `lumenpath` | Lumenpath Refraction | `tools/minigames/lumenpath.py` | HOW Toggle shard mirrors in the lattice to bend the prism beam through every crystal before your moves run out. |
