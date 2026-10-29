@@ -71,5 +71,45 @@ try:
 except ValueError:
     t("socket on an unknown bone refused", True)
 t("crane LOD1 35-65%, <= 6000 tris", 0.35 <= cp["lod1_ratio"] <= 0.65 and cp["triangles"] <= 6000)
+
+# ---- proportion presets + perch posture + owl face (2026-10-29)
+import json as _j2
+def _ratios(P):
+    g = R._g(P); L = P["L"]
+    return P["leg"] / L, (g["head"][1] - g["neck0"][1]) / L
+Pd0 = R.params(5, "Def"); dleg, dneck = _ratios(Pd0)
+for pr in ("raptor", "owl", "small"):
+    want = R.PROPORTIONS[pr]; Pp = R.params(5, "X_" + pr, {"proportions": pr}); leg, neck = _ratios(Pp)
+    t("preset %s: leg ratio == %.2f" % (pr, want["leg_frac"]), abs(leg - want["leg_frac"]) < 1e-6, leg)
+    t("preset %s: neck rise ratio == %.2f" % (pr, want["neck_len"]), abs(neck - want["neck_len"]) < 1e-6, neck)
+    t("preset %s: legs and neck shorter than the default bird" % pr, leg < dleg and neck < dneck, (leg, dleg, neck, dneck))
+    t("preset %s: head_scale %.2f, preset key not left in params" % (pr, want["head_scale"]), Pp["head_scale"] == want["head_scale"] and "proportions" not in Pp)
+    mp = R.recipe("X_" + pr, 5, body={"proportions": pr}, clip_names=("Idle", "Walk", "Fly"))
+    t("preset %s: feet on z=0, head above body" % pr, abs(mp["predicted"]["bounds_min"][2]) < 1e-6 and {b["name"]: b for b in mp["bones"]}["Head"]["head"][2] > {b["name"]: b for b in mp["bones"]}["Body"]["head"][2])
+t("explicit leg_frac beats the preset", R.params(5, "X", {"proportions": "raptor", "leg_frac": 0.3})["leg"] == round(0.3 * 0.6, 6))
+try:
+    R.params(5, "X", {"proportions": "penguin"}); t("unknown preset refused", False)
+except ValueError:
+    t("unknown preset refused", True)
+t("default bird unchanged: no new keys in params", not ({"neck_len", "proportions", "posture", "perch_deg", "facial_disc"} & set(Pd0)))
+t("default bird unchanged: recipe(body=None) == recipe(body={})", R.recipe("Def", 5) == R.recipe("Def", 5, body={}))
+t("juvenile crane == its pin", (lambda M: _j2.loads(_j2.dumps(M.juvenile())) == _j2.load(open(os.path.join(ROOT, "data", "contest", "g504_crane_juvenile.quad.json"), encoding="utf-8")))(__import__("marsh_g504")))
+st = R.recipe("Perch", 7, body={"proportions": "raptor"}, sockets=[("Head", "Head", (0, -0.1, 0.2)), ("Talon", "Leg_L", (0.03, 0.0, 0.01))])
+pe = R.recipe("Perch", 7, body={"proportions": "raptor", "posture": "perch", "perch_deg": 35.0}, sockets=[("Head", "Head", (0, -0.1, 0.2)), ("Talon", "Leg_L", (0.03, 0.0, 0.01))])
+sb = {b["name"]: b for b in st["bones"]}; pb = {b["name"]: b for b in pe["bones"]}
+t("perch: legs, feet and leg sockets unchanged", all(sb[n] == pb[n] for n in ("Leg_L", "Leg_R", "Root")) and [p for p in st["parts"] if p["bone"].startswith("Leg_")] == [p for p in pe["parts"] if p["bone"].startswith("Leg_")] and st["sockets"][1] == pe["sockets"][1])
+t("perch: head higher, tail lower, body pitched ~35 deg", pb["Head"]["head"][2] > sb["Head"]["head"][2] + 0.03 and pb["Tail"]["tail"][2] < sb["Tail"]["tail"][2]
+  and abs(math.degrees(math.atan2(pb["Body"]["tail"][2] - pb["Body"]["head"][2], pb["Body"]["tail"][1] - pb["Body"]["head"][1])) + 35) < 0.5)
+t("perch: nothing below the ground", pe["predicted"]["bounds_min"][2] > -1e-6, pe["predicted"]["bounds_min"])
+t("perch: head socket moves with the head", pe["sockets"][0]["location"] != st["sockets"][0]["location"])
+try:
+    R.recipe("X", 1, body={"posture": "lying"}); t("unknown posture refused", False)
+except ValueError:
+    t("unknown posture refused", True)
+ow = R.recipe("Owl", 8, body={"proportions": "owl", "beak_style": "owl", "facial_disc": True}); L8 = ow["params"]["L"]
+bk = [q for p in ow["parts"] if p["name"].startswith("Beak") for q in K.part_points(p)]
+hd = [q for p in ow["parts"] if p["name"] == "Head" for q in K.part_points(p)]
+t("owl beak short (< 0.06 L past the face)", min(q[1] for q in hd) - min(q[1] for q in bk) < 0.06 * L8, (min(q[1] for q in hd), min(q[1] for q in bk)))
+t("owl has a facial disc (2 halves) and forward eyes", sum(p["name"].startswith("FaceDisc_") for p in ow["parts"]) == 2 and all(p["axis"] == "y" for p in ow["parts"] if p["name"].startswith("Eye_")))
 print("%d/%d" % (sum(res), len(res)))
 sys.exit(0 if all(res) else 1)

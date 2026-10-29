@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 """Bird rig proportion pass (blender-team, 2026-10-29, buffffff 57464 next job). Raptor variants on creatures/bird_rig.py (blender-bird/v1)
-using the new opt-in proportions presets (short tarsus, short neck): defaults unchanged, gull / crane / juvenile pins byte-identical.
+using the new opt-in proportions presets (short tarsus, short neck) and the opt-in upright perch posture (hawk/kestrel 35 deg, owl 45 deg; owl: short owl beak + facial disc): defaults unchanged, gull / crane / juvenile pins byte-identical.
   Mob_Bird_Hawk     ~0.55 m buteo-style hawk, proportions "raptor", hooked beak, talons, fingered primaries, 3 tail bands
   Mob_Bird_Owl      ~0.5 m owl, proportions "owl" (almost no neck, big head), hooked beak, talons, 2 tail bands
   Mob_Bird_Kestrel  ~0.34 m small falcon, proportions "raptor" + small-bird head, pointed (plain) wingtips, 1 black tail band
@@ -15,13 +15,13 @@ import bird_rig as R
 SEED = 51029
 ASK = "buffffff 57464 (bird rig proportion pass)"
 CLIPS = ("Idle", "Squawk", "Walk", "Fly")
-V = {"Mob_Bird_Hawk": ({"length": 0.55, "height_frac": 0.7, "proportions": "raptor", "neck_r": 0.95, "wing_lift_deg": 34.0, "tail_off": 0.16, "squawk_deg": 30.0,
+V = {"Mob_Bird_Hawk": ({"length": 0.55, "height_frac": 0.7, "proportions": "raptor", "posture": "perch", "perch_deg": 35.0, "neck_r": 0.95, "wing_lift_deg": 34.0, "tail_off": 0.16, "squawk_deg": 30.0,
                         "beak_style": "hook", "feet": "talons", "wing_tips": "fingered", "tail_bands": 3},
                        [("brown back plumage", "6E4A30"), ("hooked beak / talons (dark horn)", "2A2420"), ("pale barred underwing", "C8B496"), ("dark tips / eyes", "1E1A18")], "~0.55 m long"),
-     "Mob_Bird_Owl": ({"length": 0.5, "height_frac": 0.66, "proportions": "owl", "neck_r": 1.4, "wing_lift_deg": 30.0, "tail_off": 0.14, "squawk_deg": 22.0,
-                       "beak_style": "hook", "feet": "talons", "wing_tips": "plain", "tail_bands": 2},
+     "Mob_Bird_Owl": ({"length": 0.5, "height_frac": 0.66, "proportions": "owl", "posture": "perch", "perch_deg": 45.0, "facial_disc": True, "neck_r": 1.4, "wing_lift_deg": 30.0, "tail_off": 0.14, "squawk_deg": 22.0,
+                       "beak_style": "owl", "feet": "talons", "wing_tips": "plain", "tail_bands": 2},
                       [("mottled tawny plumage", "8C6E4E"), ("beak / talons (pale horn)", "B8A68A"), ("buff facial disc / wings", "D2BE96"), ("dark eyes / bars", "201A14")], "~0.5 m long"),
-     "Mob_Bird_Kestrel": ({"length": 0.34, "height_frac": 0.7, "proportions": "raptor", "head_scale": 1.15, "neck_r": 0.9, "wing_lift_deg": 36.0, "tail_off": 0.2,
+     "Mob_Bird_Kestrel": ({"length": 0.34, "height_frac": 0.7, "proportions": "raptor", "posture": "perch", "perch_deg": 35.0, "head_scale": 1.15, "neck_r": 0.9, "wing_lift_deg": 36.0, "tail_off": 0.2,
                            "squawk_deg": 34.0, "beak_style": "hook", "feet": "talons", "wing_tips": "plain", "tail_bands": 1},
                           [("rufous spotted back", "B8643A"), ("beak / talons (slate)", "3A3A44"), ("blue-grey wings / head", "7C8696"), ("black tail band / eyes", "141418")], "~0.34 m long")}
 
