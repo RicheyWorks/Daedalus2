@@ -902,6 +902,13 @@ public final class ExplorePaint {
                     (cut[1] * 3 + fade[1]) / 4,
                     (cut[2] * 3 + fade[2]) / 4};
         }
+        if ((y & 7) == 4 && !joint) {
+            int[] above = brickTexColor(x, y - 1);
+            return new int[] {
+                    (face[0] * 3 + above[0]) / 4,
+                    (face[1] * 3 + above[1]) / 4,
+                    (face[2] * 3 + above[2]) / 4};
+        }
         if (!course && !joint) {
             return face;
         }

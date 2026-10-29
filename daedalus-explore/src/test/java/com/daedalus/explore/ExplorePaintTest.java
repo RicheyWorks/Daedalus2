@@ -592,6 +592,10 @@ class ExplorePaintTest {
         int[] bodyJoint = ExplorePaint.brickFace(1, 4);
         assertThat(ExplorePaint.brickTexColor(1, 4)[0])
                 .isEqualTo((bodyJoint[0] + ExplorePaint.BRICK_MORTAR_R) / 2);
+        int[] midCourse = ExplorePaint.brickFace(2, 4);
+        int[] midAbove = ExplorePaint.brickTexColor(2, 3);
+        assertThat(ExplorePaint.brickTexColor(2, 4)[0])
+                .isEqualTo((midCourse[0] * 3 + midAbove[0]) / 4);
         int[] aboveCourse = ExplorePaint.brickFace(2, 6);
         assertThat(ExplorePaint.brickTexColor(2, 6)[0])
                 .isEqualTo((aboveCourse[0] * 3 + ExplorePaint.BRICK_MORTAR_R) / 4);

@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick mid course.**
+  The clay in the
+  middle of a brick
+  leans a quarter
+  toward the row
+  under the catch.
+  The grout there
+  stays a half mix.
+
 - **Explore brick under joint.**
   The grout just
   under the catch
