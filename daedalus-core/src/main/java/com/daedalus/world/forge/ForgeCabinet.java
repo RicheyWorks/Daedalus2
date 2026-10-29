@@ -550,6 +550,18 @@ public final class ForgeCabinet {
                 });
         }, GermainGirders.forgemasterLine(GermainGirders.Grade.TURNED),
             GermainGirders.forgemasterLine(GermainGirders.Grade.SLIPPED)));
+        g.add(game("totient", "Totient Tempers", TotientTempers.QUEST_ID, r -> {
+            long n = r.nextInt(3) == 0 ? TotientTempers.tempersUpTo(6000).get(r.nextInt(20)) : 2 + r.nextInt(6000);
+            boolean perfect = TotientTempers.isPerfectTemper(n);
+            return new Puzzle("totient", "Does the totient chain after " + n + " (phi, phi of phi, ... down to 1)"
+                + " sum back to " + n + "? (yes/no)", perfect ? "yes" : "no", a -> {
+                    if (!"yes".equals(a) && !"no".equals(a)) {
+                        return false;
+                    }
+                    return TotientTempers.grade(n, "yes".equals(a)) == TotientTempers.Grade.TURNED;
+                });
+        }, TotientTempers.forgemasterLine(TotientTempers.Grade.TURNED),
+            TotientTempers.forgemasterLine(TotientTempers.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {

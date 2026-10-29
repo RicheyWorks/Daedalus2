@@ -113,7 +113,7 @@ class ForgeCabinetTest {
     @Test
     void registryListsOurForgeGames() {
         List<ForgeCabinet.Game> games = ForgeCabinet.registry();
-        assertThat(games).hasSize(31);
+        assertThat(games).hasSize(32);
         Set<String> ids = new HashSet<>();
         for (ForgeCabinet.Game g : games) {
             assertThat(ids.add(g.id())).isTrue();
@@ -123,7 +123,7 @@ class ForgeCabinetTest {
             assertThat(ForgeCabinet.game(g.id())).isSameAs(g);
         }
         List<String> menu = ForgeCabinet.menu();
-        assertThat(menu).hasSize(31);
+        assertThat(menu).hasSize(32);
         assertThat(menu.get(0)).isEqualTo("1. Carmichael Cycle [carmichael]");
         assertThat(menu.get(13)).isEqualTo("14. Automorph Anvil [automorph]");
         assertThat(menu.get(14)).isEqualTo("15. Smith Stamps [smith]");
@@ -160,6 +160,8 @@ class ForgeCabinetTest {
         assertThat(ForgeCabinet.game("proth").toolQuest()).isEqualTo(ProthPlates.QUEST_ID);
         assertThat(menu.get(30)).isEqualTo("31. Germain Girders [germain]");
         assertThat(ForgeCabinet.game("germain").toolQuest()).isEqualTo(GermainGirders.QUEST_ID);
+        assertThat(menu.get(31)).isEqualTo("32. Totient Tempers [totient]");
+        assertThat(ForgeCabinet.game("totient").toolQuest()).isEqualTo(TotientTempers.QUEST_ID);
         assertThat(ForgeCabinet.game("lucas").toolQuest()).isEqualTo(LucasLattice.QUEST_ID);
         assertThatThrownBy(() -> ForgeCabinet.game("nope")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> ForgeCabinet.registry().clear()).isInstanceOf(UnsupportedOperationException.class);
@@ -218,7 +220,7 @@ class ForgeCabinetTest {
         assertThat(s.hasOpenPuzzle()).isFalse();
         assertThatThrownBy(() -> s.submit("1")).isInstanceOf(IllegalStateException.class);
         assertThatThrownBy(() -> s.pick(0)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> s.pick(32)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> s.pick(33)).isInstanceOf(IllegalArgumentException.class);
         int expected = 0;
         for (int i = 1; i <= 7; i++) {
             ForgeCabinet.Puzzle p = s.pick(i);
@@ -249,7 +251,7 @@ class ForgeCabinetTest {
         int score = 0;
         int streak = 0;
         for (int t = 0; t < 1500; t++) {
-            int slot = 1 + pick.nextInt(31);
+            int slot = 1 + pick.nextInt(32);
             ForgeCabinet.Puzzle pa = a.pick(slot);
             ForgeCabinet.Puzzle pb = b.pick(slot);
             assertThat(pa.prompt()).isEqualTo(pb.prompt());
