@@ -152,3 +152,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Leading Lights (G543, disk-saver)
 
 `leading_lights.py` follows every relative link and image in the repo's Markdown, read-only and without network access: broken targets are errors; missing `#anchors`, machine-local paths, links out of the repo and stale inline-code repo paths are advisories. `--under PREFIX` scopes the files; verdict lit/dim/dark. NPC Lightkeeper Seraphine; hook `data/islands/disk-saver/leading-lights-v1.json`; doc `docs/islands/DISKSAVER-LEADING-LIGHTS.md`.
+
+## Caulking Check (G544, disk-saver)
+
+`caulking_check.py` checks the byte-level seams of the lane's text files, read-only: invalid UTF-8, unparseable JSON/JSONL and duplicate JSON keys are errors; BOMs, CRLF or mixed line endings, a missing final newline, trailing whitespace and tab indentation in .py/.yml are advisories. `--under` (repeatable) picks the lane; verdict sound/weeping/leaking. NPC Caulker Evander; hook `data/islands/disk-saver/caulking-check-v1.json`; doc `docs/islands/DISKSAVER-CAULKING-CHECK.md`.
