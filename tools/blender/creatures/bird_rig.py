@@ -36,7 +36,9 @@ EXTRA = {"leg_frac": 0.2, "neck_r": 1.0, "head_scale": 1.0, "tail_off": 0.18,
          "neck_len": None, "proportions": None,
          # perch posture + owl face (2026-10-29): posture "perch" pitches everything above the legs nose-up by perch_deg about the hip
          # (legs and feet stay planted); beak_style "owl" = short, gently hooked beak; facial_disc = flat disc on the face, eyes forward
-         "posture": "standing", "perch_deg": 35.0, "facial_disc": False}
+         "posture": "standing", "perch_deg": 35.0, "facial_disc": False,
+         # ear_tufts (2026-10-29): two feather tufts on top of the head (owls), slot 0
+         "ear_tufts": False}
 PROPORTIONS = {"raptor": {"leg_frac": 0.1, "neck_len": 0.08, "head_scale": 1.05},      # hawk / kestrel: short tarsus, head sunk into the shoulders
                "owl": {"leg_frac": 0.08, "neck_len": 0.05, "head_scale": 1.35},         # owl: barely any visible neck, big round head
                "small": {"leg_frac": 0.09, "neck_len": 0.07, "head_scale": 1.15}}        # songbird-sized: stubby legs, short neck
@@ -116,6 +118,10 @@ def parts(P):
     bp(_stick("Neck", (0, g["neck0"][0], g["neck0"][1] - 0.02 * L), (0, hy + 0.02 * L, hz - 0.04 * L), 0.055 * L * nr, 0.045 * L * nr, 0, 6, lod1={"segments": 4}), "Neck")
     hp = [(r * hs, z * hs) for r, z in [(0.0, -0.06), (0.045, -0.04), (0.06, 0.0), (0.045, 0.045), (0.0, 0.06)]]
     bp(K.lathe("Head", [(r * L, z * L) for r, z in hp], (0, hy, hz), 0, 8, False, False, rot=(90, 0, 0), lod1={"segments": 5}), "Head")
+    if P.get("ear_tufts"):     # owl ear tufts: thin tilted wedges rising from the crown, mirrored
+        for nm, s in SIDES:
+            bp(K.slab("EarTuft_" + nm, [(-0.012 * L * hs, 0.0), (0.012 * L * hs, 0.0), (0.004 * L * hs, 0.05 * L * hs)], 0.008 * L, (s * 0.03 * L * hs, hy - 0.005 * L * hs, hz + 0.05 * L * hs), 0,
+                      rot=(0, s * -20, 0), lod1={"drop": True}), "Head")
     if P.get("facial_disc"):     # owl: a flat buff disc (slot 2) on the face, both eyes on it looking forward
         for nm, s in SIDES:
             bp(K.cyl("FaceDisc_" + nm, "y", 0.036 * L * hs, 0.036 * L * hs, 0.008 * L, (s * 0.026 * L * hs, hy - 0.052 * L * hs, hz + 0.006 * L * hs), 2, 8, lod1={"segments": 5}), "Head")
@@ -167,7 +173,7 @@ def parts(P):
             for k, (dx, dy) in enumerate(((0.0, -1.0), (0.55, -0.85), (-0.55, -0.85), (0.0, 1.0))):
                 ln = (0.05 if k < 3 else 0.035) * L; e = (x + dx * ln, fy + dy * ln, tz * 0.6)
                 bp(_stick("Toe%d_%s" % (k, nm), (x, fy, tz), e, 0.007 * L, 0.006 * L, 1, 4, lod1={"segments": 3}), "Leg_" + nm)
-                bp(_stick("Claw%d_%s" % (k, nm), e, (e[0] + dx * 0.012 * L, e[1] + dy * 0.012 * L, 0.0005 * L), 0.006 * L, 0.0008 * L, 3, 4, lod1={"drop": True}), "Leg_" + nm)
+                bp(_stick("Claw%d_%s" % (k, nm), e, (e[0] + dx * 0.012 * L, e[1] + dy * 0.012 * L, 0.001 * L), 0.006 * L, 0.0008 * L, 3, 4, lod1={"drop": True}), "Leg_" + nm)
         else:
             bp(K.slab("Foot_" + nm, [(0.0, 0.01 * L), (0.035 * L, -0.07 * L), (0.0, -0.05 * L), (-0.035 * L, -0.07 * L)], 0.006 * L, (x, g["hip"][1], 0.003 * L), 1), "Leg_" + nm)
     return out

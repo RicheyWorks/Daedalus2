@@ -25,7 +25,7 @@ LAYOUTS = [
                 ("Prop_Arcade_HighScoreBoard", 5.0, 5.84, 0)],
          attached=[], posters=[("Decal_Arcade_Poster_StarRun", "W", 2), ("Decal_Arcade_Poster_CometCup", "E", 2)],
          lights=[("Prop_Arcade_CeilingLightRig_B", 3.0, 3.0, 0), ("Prop_Arcade_CeilingLightRig_A", 5.0, 5.0, 0)],
-         floor=dict(carpet="all", tiles=[])),
+         floor=dict(carpet="all", tiles=[]), signs=[("Prop_ArcadeHall_Sign_Prismheart", "N", 1, 3.3), ("Prop_ArcadeHall_Sign_PlayArrow", "W", 0, 3.0)]),
     dict(id="prize_hall", title="Prize Hall (12 x 8 m)", W=6, D=4, door=2, windows=[("E", 1), ("E", 2), ("W", 1), ("W", 2)],
          props=[("Prop_Arcade_PrizeCounter", 6.0, 7.0, 0), ("Prop_Arcade_HighScoreBoard", 9.0, 7.84, 0), ("Prop_Arcade_Cab_DancePad", 2.0, 6.75, 0),
                 ("Prop_Arcade_Cab_Pinball", 0.85, 4.0, 90), ("Prop_Arcade_Cab_Pinball", 0.85, 2.4, 90), ("Prop_Arcade_Cab_Prismheart", 11.4, 5.4, -90),
@@ -35,7 +35,8 @@ LAYOUTS = [
                    ("Prop_Arcade_Plush_Pebblepup", 0, "Prize_6"), ("Prop_Arcade_Plush_Lumenfish", 0, "Prize_8")],
          posters=[("Decal_Arcade_Poster_PrismKnight", "N", 3), ("Decal_Arcade_Poster_ShardRacer", "S", 0), ("Decal_Arcade_Poster_StarRun", "S", 4)],
          lights=[("Prop_Arcade_CeilingLightRig_A", 6.0, 4.0, 0), ("Prop_Arcade_CeilingLightRig_C", 2.0, 4.0, 0), ("Prop_Arcade_CeilingLightRig_C", 10.0, 4.0, 0)],
-         floor=dict(carpet="all", tiles=[("Prop_Arcade_FloorTile_Checker", 2, 1), ("Prop_Arcade_FloorTile_Checker", 3, 1), ("Prop_Arcade_FloorTile_Checker", 2, 0), ("Prop_Arcade_FloorTile_Checker", 3, 0)])),
+         floor=dict(carpet="all", tiles=[("Prop_Arcade_FloorTile_Checker", 2, 1), ("Prop_Arcade_FloorTile_Checker", 3, 1), ("Prop_Arcade_FloorTile_Checker", 2, 0), ("Prop_Arcade_FloorTile_Checker", 3, 0)]),
+         signs=[("Prop_ArcadeHall_Sign_Prizes", "N", 3, 3.45), ("Prop_ArcadeHall_Sign_Prismheart", "S", 4, 3.2), ("Prop_ArcadeHall_Sign_PlayArrow", "W", 3, 3.0)]),
     dict(id="heart_hall", title="Heart Hall (10 x 10 m)", W=5, D=5, door=2, windows=[("E", 2), ("W", 2), ("N", 0), ("N", 4)],
          props=[("Prop_Prism_HeartSphere_Pedestal", 5.0, 5.5, 0), ("Prop_Arcade_Cab_Prismheart", 0.6, 7.5, 90), ("Prop_Arcade_Cab_Shardring", 0.6, 6.6, 90),
                 ("Prop_Arcade_Cab_Waystone", 9.4, 7.5, -90), ("Prop_Arcade_Cab_Cocktail", 9.0, 3.0, 0), ("Prop_Arcade_Cab_Pinball", 0.85, 3.0, 90),
@@ -44,7 +45,8 @@ LAYOUTS = [
          attached=[("Prop_Prism_HeartSphere", 0, "Sphere")] + [("Prop_Prism_ShardFacet_" + e, 0, "Rune_%d" % i) for i, e in enumerate(("Fire", "Tide", "Gale", "Stone", "Light", "Shade"))],
          posters=[("Decal_Arcade_Poster_CometCup", "N", 2), ("Decal_Arcade_Poster_PrismKnight", "W", 3), ("Decal_Arcade_Poster_ShardRacer", "E", 3)],
          lights=[("Prop_Arcade_CeilingLightRig_C", 5.0, 5.5, 0), ("Prop_Arcade_CeilingLightRig_B", 3.0, 2.5, 0), ("Prop_Arcade_CeilingLightRig_B", 7.0, 2.5, 0)],
-         floor=dict(carpet="all", tiles=[("Prop_Arcade_FloorTile_PrismRay", 2, 2), ("Prop_Arcade_FloorTile_Starfield", 2, 1), ("Prop_Arcade_FloorTile_Starfield", 2, 0)])),
+         floor=dict(carpet="all", tiles=[("Prop_Arcade_FloorTile_PrismRay", 2, 2), ("Prop_Arcade_FloorTile_Starfield", 2, 1), ("Prop_Arcade_FloorTile_Starfield", 2, 0)]),
+         signs=[("Prop_ArcadeHall_Sign_Prismheart", "N", 2, 3.3), ("Prop_ArcadeHall_Sign_PlayArrow", "E", 1, 3.0), ("Prop_ArcadeHall_Sign_Prizes", "W", 1, 3.0)]),
 ]
 NO_FOOTPRINT = ("Prop_Arcade_HighScoreBoard", "Prop_Arcade_Stool")   # wall-hung board / seats a player uses: in-bounds check only
 
@@ -101,6 +103,19 @@ def plan(L, sizes, staging):
         else: x, y, yaw = (0.105 if e == "W" else G * W - 0.105), G * i + 1, (90 if e == "W" else -90)
         if e == "S" and i == L["door"]: out["issues"].append("poster %s on the doorway bay" % d)
         out["decals"].append(dict(decal=d, x=x, y=y, z=1.7, yaw=yaw, size=[0.6, 0.9], plane="wall"))
+    # signs: wall neons from the layout + the EXIT sign over the doorway, inside face (origin on the wall surface, face into the room)
+    out["signs"] = []; inner = 0.1; door = L["door"]
+    for a, e, i, z in list(L.get("signs", [])) + [("Prop_ArcadeHall_Sign_DoorInside", "S", door, 3.0)]:
+        if e in "SN": x, y, yaw = G * i + 1, (inner if e == "S" else G * D - inner), (180 if e == "S" else 0)
+        else: x, y, yaw = (inner if e == "W" else G * W - inner), G * i + 1, (90 if e == "W" else -90)
+        out["signs"].append(dict(asset=a, x=x, y=y, z=z, yaw=yaw, edge=e, cell=i, wall=True))
+        if (e, i) in set(L["windows"]): out["issues"].append("sign %s on a window bay %s%d" % (a, e, i))
+        if e == "S" and i == door and a != "Prop_ArcadeHall_Sign_DoorInside": out["issues"].append("wall sign %s on the doorway bay" % a)
+        if z + 0.35 > H - 0.15: out["issues"].append("sign %s hits the crown/ceiling (z %.2f)" % (a, z))
+        if a == "Prop_ArcadeHall_Sign_DoorInside" and z - 0.17 < 2.64: out["issues"].append("EXIT sign drops into the door opening")
+        for d in out["decals"]:
+            if d["plane"] == "wall" and abs(d["x"] - x) < 0.01 + 1.2 * (e in "SN") and abs(d["y"] - y) < 0.01 + 1.2 * (e in "WE") and abs(d["z"] - z) < 0.8:
+                out["issues"].append("sign %s overlaps poster %s" % (a, d["decal"]))
     check(out, sizes, staging); return out
 
 
@@ -163,8 +178,8 @@ def main_plan(o):
             for x in v: walk(x)
     walk(m)
     res = dict(schema="arcade-hall-layouts/v1", generated_by="tools/blender/arcade_hall_assembler.py", seed=SEED, status="NOT READY", units="m, Z up, hall frame (door on south edge, outside -Y)",
-               kit=sorted({p for L in LAYOUTS for p in [k["asset"] for k in wall_pieces(L)]}), source_manifest=o.manifest.replace("\\", "/"), layouts=[plan(L, sizes, o.staging) for L in LAYOUTS])
-    for L in res["layouts"]: L["counts"] = dict(kit=len(L["kit"]), props=len(L["props"]), decals=len(L["decals"]))
+               kit=sorted({p for L in LAYOUTS for p in [k["asset"] for k in wall_pieces(L)]} | {"Prop_ArcadeHall_Sign_DoorInside"} | {x[0] for L in LAYOUTS for x in L.get("signs", [])}), source_manifest=o.manifest.replace("\\", "/"), layouts=[plan(L, sizes, o.staging) for L in LAYOUTS])
+    for L in res["layouts"]: L["counts"] = dict(kit=len(L["kit"]), props=len(L["props"]), decals=len(L["decals"]), signs=len(L["signs"]))
     os.makedirs(o.out, exist_ok=True); p = os.path.join(o.out, "arcade_hall_layouts.json")
     open(p, "w", encoding="utf-8", newline="\n").write(json.dumps(res, indent=1) + "\n")
     for L in res["layouts"]: print(L["id"], L["counts"], "reach", sum(s["ok"] for s in L["walk"]["spots"]), "/", len(L["walk"]["spots"]), "issues:", L["issues"] or "none")
@@ -202,6 +217,7 @@ def main_render(o):
             tag = "ceiling" if "Ceiling" in k["asset"] else ("south" if k.get("edge") == "S" or (k["asset"].endswith("Corner") and k["y"] == 0) else ("east" if k.get("edge") == "E" or (k["asset"].endswith("Corner") and k["x"] > 0) else None))
             place(k["asset"], k["x"], k["y"], k["z"], k["yaw"], tag)
         for p in L["props"]: place(p["asset"], p["x"], p["y"], p["z"], p["yaw"], "ceiling" if p.get("hung") else None)
+        for p in L.get("signs", []): place(p["asset"], p["x"], p["y"], p["z"], p["yaw"], "south" if p["edge"] == "S" else ("east" if p["edge"] == "E" else None))
         for d in L["decals"]:
             bc = glob.glob(os.path.join(staging, "arcade-*", "decals", d["decal"], "T_*_BC.png"))
             bpy.ops.mesh.primitive_plane_add(size=1); pl = bpy.context.active_object; pl.scale = (d["size"][0], d["size"][1], 1)
@@ -223,12 +239,17 @@ def main_render(o):
         sc.view_settings.view_transform = "AgX" if "AgX" in [i.identifier for i in sc.view_settings.bl_rna.properties["view_transform"].enum_items] else "Filmic"
         cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam")); sc.collection.objects.link(cam); sc.camera = cam; cam.data.type = "ORTHO"
         ctr = mathutils.Vector((W / 2, D / 2, 1.0))
-        views = [("plan", ("ceiling",), (W / 2, D / 2, 30), max(W, D * 4 / 3) * 1.08), ("outside", (), (W / 2 + 14, -16, 13), max(W, D) * 1.7), ("cutaway", ("ceiling", "south", "east"), (W / 2 + 14, -16, 15), max(W, D) * 1.55)]
+        views = [("plan", ("ceiling",), (W / 2, D / 2, 30), max(W, D * 4 / 3) * 1.08), ("outside", (), (W / 2 + 14, -16, 13), max(W, D) * 1.7), ("cutaway", ("ceiling", "south", "east"), (W / 2 + 14, -16, 15), max(W, D) * 1.55), ("inside", (), None, None)]
         for vn, hide, pos, scale in views:
             for g in ("ceiling", "south", "east"):
                 for ob in groups[g]: ob.hide_render = g in hide
-            cam.location = pos; cam.data.ortho_scale = scale
-            cam.rotation_euler = (ctr - mathutils.Vector(pos)).to_track_quat("-Z", "Y").to_euler() if vn != "plan" else (0, 0, 0)
+            if vn == "inside":     # player's view back toward the doorway: EXIT sign, doorway, south-wall signs
+                dx = [k["x"] for k in L["kit"] if k["asset"].endswith("Doorway_2m")][0]
+                cam.data.type = "PERSP"; cam.data.lens = 18; cam.location = (dx, min(D - 0.6, 4.0), 1.9)
+                cam.rotation_euler = (mathutils.Vector((dx, 0.0, 2.2)) - cam.location).to_track_quat("-Z", "Y").to_euler()
+            else:
+                cam.data.type = "ORTHO"; cam.location = pos; cam.data.ortho_scale = scale
+                cam.rotation_euler = (ctr - mathutils.Vector(pos)).to_track_quat("-Z", "Y").to_euler() if vn != "plan" else (0, 0, 0)
             sc.render.filepath = os.path.join(o.out, "layout_%s_%s.png" % (L["id"], vn)); bpy.ops.render.render(write_still=True); print("RENDERED", sc.render.filepath)
 
 

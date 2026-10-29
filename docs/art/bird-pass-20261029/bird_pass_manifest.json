@@ -127,5 +127,20 @@
    "Mob_Marsh_Hawk"
   ],
   "marsh_staging": "Mob_Marsh_Hawk rebuild copied into bot-team/staging/pythagoras-marsh-20261029; previous build kept as Mob_Marsh_Hawk_old (+ HAWK_REBUILD_NOTE.txt)"
+ },
+ "ground_and_tufts_20261029": {
+  "change": "claw tips lifted to 0.001 L (talon birds dipped ~0.1 mm below z=0; now >= 0); opt-in ear_tufts (Mob_Bird_Owl on)",
+  "changed_recipes": [
+   "g504_marsh_hawk",
+   "bird_pass_hawk",
+   "bird_pass_owl",
+   "bird_pass_kestrel"
+  ],
+  "unchanged": [
+   "g139_gull",
+   "g142_crane",
+   "g504_crane_juvenile"
+  ],
+  "tests": "test_bird_rig.py 69/69"
  }
 }

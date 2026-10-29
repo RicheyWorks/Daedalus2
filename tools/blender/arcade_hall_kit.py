@@ -9,8 +9,10 @@ arcade prop batches: origin bottom-centre on the 2 m grid line, interior face -Y
   Prop_ArcadeHall_Window_2m     wall bay with a 1.2 x 1.2 m window (sill 1.2 m), glass + mullions: SOCKET_Edge_L/R/Top, SOCKET_Window, SOCKET_Poster
   Prop_ArcadeHall_CeilingBay_2m 2 x 2 m coffered ceiling bay; origin = ceiling plane (sits on wall tops at z 4 m): SOCKET_Edge_N/E/S/W, SOCKET_Hang
   Prop_ArcadeHall_Foundation_2m 2 x 2 x 0.4 m plinth; origin = TOP centre (hall floor level) so it sinks into island terrain: SOCKET_Edge_N/E/S/W, SOCKET_Floor
+Signage pack (2026-10-29): wall neons Prop_ArcadeHall_Sign_Prismheart / _Prizes / _PlayArrow and Prop_ArcadeHall_Sign_DoorInside (EXIT, over the
+doorway inside); pixel-font neon letters, origin = back centre on the wall (face -Y): SOCKET_Wall, SOCKET_Light, SOCKET_Hang_L/R.
 Usage: python arcade_hall_kit.py --kit data/contest/arcade_hall.kit.json"""
-import argparse, os, sys
+import argparse, math, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import arcade_prism_props_b as AB
@@ -102,8 +104,69 @@ def foundation():
     return A(a, P, [("foundation stone", "5A5868", 0.9), ("chrome lip", CHROME, 0.3, 0.9)], S, [K.ucx_box(a, 0, (G, G, 0.4), (0, 0, -0.2))], "2 x 2 x 0.4 m plinth; origin = top")
 
 
+FONT = {"P": ["111", "101", "111", "100", "100"], "R": ["110", "101", "110", "101", "101"], "I": ["111", "010", "010", "010", "111"],
+        "S": ["111", "100", "111", "001", "111"], "M": ["101", "111", "111", "101", "101"], "H": ["101", "101", "111", "101", "101"],
+        "E": ["111", "100", "110", "100", "111"], "A": ["010", "101", "111", "101", "101"], "T": ["111", "010", "010", "010", "010"],
+        "Z": ["111", "001", "010", "100", "111"], "X": ["101", "101", "010", "101", "101"], "L": ["100", "100", "100", "100", "111"],
+        "Y": ["101", "101", "010", "010", "010"], "C": ["111", "100", "100", "100", "111"], "D": ["110", "101", "101", "101", "110"]}
+
+
+def word(P, text, cx, cz, px, y, slot, tag="L"):
+    """Pixel-font neon letters (3 x 5 cells of px metres), centred at (cx, cz), standing in the XZ plane at depth y."""
+    w = len(text) * 4 * px - px; x0 = cx - w / 2
+    for i, ch in enumerate(text):
+        for r, row in enumerate(FONT[ch]):
+            for c, bit in enumerate(row):
+                if bit == "1":
+                    P.append(K.box("%s%d_%d_%d" % (tag, i, r, c), (px * 0.9, 0.02, px * 0.9), (x0 + (4 * i + c) * px + px / 2, y, cz + (2 - r) * px), slot, bevel=False))
+
+
+SIGN_MATS = [("sign back (black)", BLACK, 0.5, 0.3), ("chrome frame", CHROME, 0.3, 0.9), ("neon magenta (emissive)", NEON_M, 0.2, 0.0, True),
+             ("neon cyan (emissive)", NEON_C, 0.2, 0.0, True), ("neon gold (emissive)", "FFE04A", 0.2, 0.0, True)]
+
+
+def neon_sign(a, text, w, h, border_slot, text_slot, px, extra=None, size=""):
+    """Wall-mounted neon sign; origin = back centre on the wall surface, face -Y, so the assembler sets z = mount height."""
+    d = 0.08; P = [K.box("Back", (w, d, h), (0, -d / 2, 0), 0), K.box("FrameTop", (w + 0.04, d + 0.02, 0.03), (0, -d / 2, h / 2), 1),
+                   K.box("FrameBot", (w + 0.04, d + 0.02, 0.03), (0, -d / 2, -h / 2), 1)]
+    tz = 0.0 if not extra else 0.06
+    for k, (sx, sz, x, z) in enumerate(((w - 0.08, 0.025, 0, h / 2 - 0.06), (w - 0.08, 0.025, 0, -h / 2 + 0.06), (0.025, h - 0.12, -w / 2 + 0.04, 0), (0.025, h - 0.12, w / 2 - 0.04, 0))):
+        P.append(K.box("Tube%d" % k, (sx, 0.025, sz), (x, -d - 0.015, z), border_slot, bevel=False))
+    word(P, text, 0, tz, px, -d - 0.012, text_slot)
+    if extra: extra(P, d)
+    S = [K.socket("Wall", (0, 0, 0), forward=(0, 1, 0)), K.socket("Light", (0, -d - 0.3, 0), forward=(0, -1, 0)), K.socket("Hang_L", (-w / 2 + 0.1, -d / 2, h / 2)),
+         K.socket("Hang_R", (w / 2 - 0.1, -d / 2, h / 2))]
+    return A(a, P, SIGN_MATS, S, [K.ucx_box(a, 0, (w, d, h), (0, -d / 2, 0))], size)
+
+
+def sign_prismheart():
+    return neon_sign("Prop_ArcadeHall_Sign_Prismheart", "PRISMHEART", 2.3, 0.6, 2, 3, 0.045, None, "2.3 x 0.6 m wall neon")
+
+
+def sign_prizes():
+    def star(P, d):
+        P.append(K.slab("Star", [(0.09 * math.cos(math.radians(90 + 36 * k)) * (1 if k % 2 == 0 else 0.45), 0.09 * math.sin(math.radians(90 + 36 * k)) * (1 if k % 2 == 0 else 0.45)) for k in range(10)],
+                        0.02, (0, -d - 0.012, -0.14), 4, rot=(90, 0, 0)))
+    return neon_sign("Prop_ArcadeHall_Sign_Prizes", "PRIZES", 1.3, 0.5, 4, 2, 0.04, star, "1.3 x 0.5 m prize neon")
+
+
+def sign_play():
+    a = "Prop_ArcadeHall_Sign_PlayArrow"; m = neon_sign(a, "PLAY", 1.1, 0.45, 3, 4, 0.04, lambda P, d: P.append(
+        K.slab("Arrow", [(-0.2, 0.03), (0.08, 0.03), (0.08, 0.08), (0.2, 0.0), (0.08, -0.08), (0.08, -0.03), (-0.2, -0.03)], 0.02, (0, -0.092, -0.14), 2, rot=(90, 0, 0))), "1.1 x 0.45 m arrow neon")
+    return m
+
+
+def sign_door_inside():
+    """Over the doorway, inside face: EXIT neon on a bar that sits on the lintel (origin = back centre on the wall)."""
+    return neon_sign("Prop_ArcadeHall_Sign_DoorInside", "EXIT", 0.9, 0.3, 3, 2, 0.03, None, "0.9 x 0.3 m inside-door EXIT neon")
+
+
+def sign_assets():
+    return [sign_prismheart(), sign_prizes(), sign_play(), sign_door_inside()]
+
+
 def assets():
-    return [wall(), corner(), doorway(), window(), ceiling(), foundation()]
+    return [wall(), corner(), doorway(), window(), ceiling(), foundation()] + sign_assets()
 
 
 if __name__ == "__main__":

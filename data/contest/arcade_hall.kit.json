@@ -2377,6 +2377,5080 @@
     "export_animations": false
    },
    "recipe_sha256": "6dfb255f65d4cf8317e24629dc41d77b4c3b7c12fbc8cc131bbb86d8122c24e0"
+  },
+  {
+   "asset": "Prop_ArcadeHall_Sign_Prismheart",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "2.3 x 0.6 m wall neon",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Wall",
+     "SOCKET_Light",
+     "SOCKET_Hang_L",
+     "SOCKET_Hang_R"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ArcadeHall_Sign_Prismheart_M0",
+     "colour": "sign back (black)",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ArcadeHall_Sign_Prismheart_M1",
+     "colour": "chrome frame",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ArcadeHall_Sign_Prismheart_M2",
+     "colour": "neon magenta (emissive)",
+     "hex": "FF4AD0",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_ArcadeHall_Sign_Prismheart_M3",
+     "colour": "neon cyan (emissive)",
+     "hex": "6AE8FF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 4,
+     "name": "Prop_ArcadeHall_Sign_Prismheart_M4",
+     "colour": "neon gold (emissive)",
+     "hex": "FFE04A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ArcadeHall_Sign_Prismheart",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Back",
+       "shape": "box",
+       "size": [
+        2.3,
+        0.08,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.04,
+        0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "FrameTop",
+       "shape": "box",
+       "size": [
+        2.34,
+        0.1,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.04,
+        0.3
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "FrameBot",
+       "shape": "box",
+       "size": [
+        2.34,
+        0.1,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.04,
+        -0.3
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Tube0",
+       "shape": "box",
+       "size": [
+        2.22,
+        0.025,
+        0.025
+       ],
+       "centre": [
+        0,
+        -0.095,
+        0.24
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Tube1",
+       "shape": "box",
+       "size": [
+        2.22,
+        0.025,
+        0.025
+       ],
+       "centre": [
+        0,
+        -0.095,
+        -0.24
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Tube2",
+       "shape": "box",
+       "size": [
+        0.025,
+        0.025,
+        0.48
+       ],
+       "centre": [
+        -1.11,
+        -0.095,
+        0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Tube3",
+       "shape": "box",
+       "size": [
+        0.025,
+        0.025,
+        0.48
+       ],
+       "centre": [
+        1.11,
+        -0.095,
+        0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.855,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.81,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.765,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_1_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.855,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_1_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.765,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.855,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.81,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.765,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_3_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.855,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_4_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.855,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_0_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.675,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_0_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.63,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_1_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.675,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_1_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.585,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_2_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.675,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.63,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_3_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.675,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_3_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.585,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_4_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.675,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L1_4_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.585,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.495,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.45,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.405,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L2_1_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.45,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L2_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.45,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L2_3_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.45,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.495,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.45,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.405,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.315,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.27,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.225,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_1_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.315,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_2_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.315,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.27,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_2_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.225,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_3_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.225,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_4_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.315,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_4_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.27,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L3_4_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.225,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_0_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.135,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_0_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.045,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_1_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.135,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_1_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.09,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_1_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.045,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_2_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.135,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.09,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_2_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.045,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_3_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.135,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_3_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.045,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_4_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.135,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L4_4_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        -0.045,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_0_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.045,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_0_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.135,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_1_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.045,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_1_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.135,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_2_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.045,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.09,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_2_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.135,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_3_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.045,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_3_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.135,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_4_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.045,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L5_4_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.135,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_0_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.225,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_0_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.27,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_0_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.315,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_1_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.225,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_2_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.225,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.27,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_3_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.225,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_4_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.225,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_4_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.27,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L6_4_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.315,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_0_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.45,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_1_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.405,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_1_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.495,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_2_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.405,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.45,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_2_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.495,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_3_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.405,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_3_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.495,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_4_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.405,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L7_4_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.495,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_0_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.585,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_0_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.63,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_1_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.585,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_1_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.675,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_2_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.585,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.63,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_3_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.585,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_3_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.675,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_4_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.585,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L8_4_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.675,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L9_0_0",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.765,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L9_0_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.81,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L9_0_2",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.855,
+        -0.092,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L9_1_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.81,
+        -0.092,
+        0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L9_2_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.81,
+        -0.092,
+        0.0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L9_3_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.81,
+        -0.092,
+        -0.045
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L9_4_1",
+       "shape": "box",
+       "size": [
+        0.0405,
+        0.02,
+        0.0405
+       ],
+       "centre": [
+        0.81,
+        -0.092,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Wall",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.38,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.38
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_L",
+     "location": [
+      -1.05,
+      -0.04,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.05,
+      0.3,
+      0.04
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_R",
+     "location": [
+      1.05,
+      -0.04,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.05,
+      0.3,
+      0.04
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ArcadeHall_Sign_Prismheart_00",
+     "shape": "box",
+     "size": [
+      2.3,
+      0.08,
+      0.6
+     ],
+     "centre": [
+      0,
+      -0.04,
+      0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 1380,
+    "lod1_triangles": 1380,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ArcadeHall_Sign_Prismheart": 1380
+    },
+    "bounds_min": [
+     -1.17,
+     -0.1075,
+     -0.315
+    ],
+    "bounds_max": [
+     1.17,
+     0.01,
+     0.315
+    ],
+    "dimensions": [
+     2.34,
+     0.1175,
+     0.63
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "97e00dcb69cf7b3e7165df6f94db7eca5abee60d56b2adfb82d729f2a579db89"
+  },
+  {
+   "asset": "Prop_ArcadeHall_Sign_Prizes",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "1.3 x 0.5 m prize neon",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Wall",
+     "SOCKET_Light",
+     "SOCKET_Hang_L",
+     "SOCKET_Hang_R"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ArcadeHall_Sign_Prizes_M0",
+     "colour": "sign back (black)",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ArcadeHall_Sign_Prizes_M1",
+     "colour": "chrome frame",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ArcadeHall_Sign_Prizes_M2",
+     "colour": "neon magenta (emissive)",
+     "hex": "FF4AD0",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_ArcadeHall_Sign_Prizes_M3",
+     "colour": "neon cyan (emissive)",
+     "hex": "6AE8FF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 4,
+     "name": "Prop_ArcadeHall_Sign_Prizes_M4",
+     "colour": "neon gold (emissive)",
+     "hex": "FFE04A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ArcadeHall_Sign_Prizes",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Back",
+       "shape": "box",
+       "size": [
+        1.3,
+        0.08,
+        0.5
+       ],
+       "centre": [
+        0,
+        -0.04,
+        0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "FrameTop",
+       "shape": "box",
+       "size": [
+        1.34,
+        0.1,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.04,
+        0.25
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "FrameBot",
+       "shape": "box",
+       "size": [
+        1.34,
+        0.1,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.04,
+        -0.25
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Tube0",
+       "shape": "box",
+       "size": [
+        1.22,
+        0.025,
+        0.025
+       ],
+       "centre": [
+        0,
+        -0.095,
+        0.19
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Tube1",
+       "shape": "box",
+       "size": [
+        1.22,
+        0.025,
+        0.025
+       ],
+       "centre": [
+        0,
+        -0.095,
+        -0.19
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Tube2",
+       "shape": "box",
+       "size": [
+        0.025,
+        0.025,
+        0.38
+       ],
+       "centre": [
+        -0.61,
+        -0.095,
+        0
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Tube3",
+       "shape": "box",
+       "size": [
+        0.025,
+        0.025,
+        0.38
+       ],
+       "centre": [
+        0.61,
+        -0.095,
+        0
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.44,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.4,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.36,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_1_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.44,
+        -0.092,
+        0.1
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_1_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.36,
+        -0.092,
+        0.1
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.44,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.4,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.36,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_3_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.44,
+        -0.092,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_4_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.44,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_0_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_0_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.24,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_1_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        0.1
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_1_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.2,
+        -0.092,
+        0.1
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_2_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_2_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.24,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_3_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_3_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.2,
+        -0.092,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_4_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_4_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.2,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.12,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.08,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.04,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_1_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.08,
+        -0.092,
+        0.1
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_2_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.08,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_3_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.08,
+        -0.092,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.12,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.08,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.04,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.04,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.08,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.12,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_1_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.12,
+        -0.092,
+        0.1
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_2_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.08,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_3_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.04,
+        -0.092,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_4_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.04,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_4_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.08,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_4_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.12,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_0_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.2,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_0_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.24,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_0_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.28,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_1_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.2,
+        -0.092,
+        0.1
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_2_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.2,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_2_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.24,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_3_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.2,
+        -0.092,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_4_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.2,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_4_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.24,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L4_4_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.28,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_0_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.36,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_0_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.4,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_0_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.44,
+        -0.092,
+        0.14
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_1_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.36,
+        -0.092,
+        0.1
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_2_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.36,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_2_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.4,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_2_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.44,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_3_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.44,
+        -0.092,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_4_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.36,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_4_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.4,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L5_4_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.44,
+        -0.092,
+        -0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Star",
+       "shape": "slab",
+       "outline": [
+        [
+         0.0,
+         0.09
+        ],
+        [
+         -0.023805,
+         0.032765
+        ],
+        [
+         -0.085595,
+         0.027812
+        ],
+        [
+         -0.038518,
+         -0.012515
+        ],
+        [
+         -0.052901,
+         -0.072812
+        ],
+        [
+         -0.0,
+         -0.0405
+        ],
+        [
+         0.052901,
+         -0.072812
+        ],
+        [
+         0.038518,
+         -0.012515
+        ],
+        [
+         0.085595,
+         0.027812
+        ],
+        [
+         0.023805,
+         0.032765
+        ]
+       ],
+       "thickness": 0.02,
+       "centre": [
+        0,
+        -0.092,
+        -0.14
+       ],
+       "slot": 4,
+       "segments": 10,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Wall",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.38,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.38
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_L",
+     "location": [
+      -0.55,
+      -0.04,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.55,
+      0.25,
+      0.04
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_R",
+     "location": [
+      0.55,
+      -0.04,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.55,
+      0.25,
+      0.04
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ArcadeHall_Sign_Prizes_00",
+     "shape": "box",
+     "size": [
+      1.3,
+      0.08,
+      0.5
+     ],
+     "centre": [
+      0,
+      -0.04,
+      0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 924,
+    "lod1_triangles": 924,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ArcadeHall_Sign_Prizes": 924
+    },
+    "bounds_min": [
+     -0.67,
+     -0.1075,
+     -0.265
+    ],
+    "bounds_max": [
+     0.67,
+     0.01,
+     0.265
+    ],
+    "dimensions": [
+     1.34,
+     0.1175,
+     0.53
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e3d255439c9ac7353c394307d080673e68cc2c958a2f36af862661be3df64b98"
+  },
+  {
+   "asset": "Prop_ArcadeHall_Sign_PlayArrow",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "1.1 x 0.45 m arrow neon",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Wall",
+     "SOCKET_Light",
+     "SOCKET_Hang_L",
+     "SOCKET_Hang_R"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ArcadeHall_Sign_PlayArrow_M0",
+     "colour": "sign back (black)",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ArcadeHall_Sign_PlayArrow_M1",
+     "colour": "chrome frame",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ArcadeHall_Sign_PlayArrow_M2",
+     "colour": "neon magenta (emissive)",
+     "hex": "FF4AD0",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_ArcadeHall_Sign_PlayArrow_M3",
+     "colour": "neon cyan (emissive)",
+     "hex": "6AE8FF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 4,
+     "name": "Prop_ArcadeHall_Sign_PlayArrow_M4",
+     "colour": "neon gold (emissive)",
+     "hex": "FFE04A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ArcadeHall_Sign_PlayArrow",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Back",
+       "shape": "box",
+       "size": [
+        1.1,
+        0.08,
+        0.45
+       ],
+       "centre": [
+        0,
+        -0.04,
+        0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "FrameTop",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.1,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.04,
+        0.225
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "FrameBot",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.1,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.04,
+        -0.225
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Tube0",
+       "shape": "box",
+       "size": [
+        1.02,
+        0.025,
+        0.025
+       ],
+       "centre": [
+        0,
+        -0.095,
+        0.165
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tube1",
+       "shape": "box",
+       "size": [
+        1.02,
+        0.025,
+        0.025
+       ],
+       "centre": [
+        0,
+        -0.095,
+        -0.165
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tube2",
+       "shape": "box",
+       "size": [
+        0.025,
+        0.025,
+        0.33
+       ],
+       "centre": [
+        -0.51,
+        -0.095,
+        0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tube3",
+       "shape": "box",
+       "size": [
+        0.025,
+        0.025,
+        0.33
+       ],
+       "centre": [
+        0.51,
+        -0.095,
+        0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        0.14
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.24,
+        -0.092,
+        0.14
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.2,
+        -0.092,
+        0.14
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_1_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        0.1
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_1_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.2,
+        -0.092,
+        0.1
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        0.06
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.24,
+        -0.092,
+        0.06
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.2,
+        -0.092,
+        0.06
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_3_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L0_4_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.28,
+        -0.092,
+        -0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L1_0_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.12,
+        -0.092,
+        0.14
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L1_1_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.12,
+        -0.092,
+        0.1
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L1_2_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.12,
+        -0.092,
+        0.06
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L1_3_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.12,
+        -0.092,
+        0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L1_4_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.12,
+        -0.092,
+        -0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L1_4_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.08,
+        -0.092,
+        -0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L1_4_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        -0.04,
+        -0.092,
+        -0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.08,
+        -0.092,
+        0.14
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_1_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.04,
+        -0.092,
+        0.1
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_1_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.12,
+        -0.092,
+        0.1
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_2_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.04,
+        -0.092,
+        0.06
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_2_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.08,
+        -0.092,
+        0.06
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_2_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.12,
+        -0.092,
+        0.06
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_3_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.04,
+        -0.092,
+        0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_3_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.12,
+        -0.092,
+        0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.04,
+        -0.092,
+        -0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.12,
+        -0.092,
+        -0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.2,
+        -0.092,
+        0.14
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.28,
+        -0.092,
+        0.14
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L3_1_0",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.2,
+        -0.092,
+        0.1
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L3_1_2",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.28,
+        -0.092,
+        0.1
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L3_2_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.24,
+        -0.092,
+        0.06
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L3_3_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.24,
+        -0.092,
+        0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "L3_4_1",
+       "shape": "box",
+       "size": [
+        0.036,
+        0.02,
+        0.036
+       ],
+       "centre": [
+        0.24,
+        -0.092,
+        -0.02
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Arrow",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.2,
+         0.03
+        ],
+        [
+         0.08,
+         0.03
+        ],
+        [
+         0.08,
+         0.08
+        ],
+        [
+         0.2,
+         0.0
+        ],
+        [
+         0.08,
+         -0.08
+        ],
+        [
+         0.08,
+         -0.03
+        ],
+        [
+         -0.2,
+         -0.03
+        ]
+       ],
+       "thickness": 0.02,
+       "centre": [
+        0,
+        -0.092,
+        -0.14
+       ],
+       "slot": 2,
+       "segments": 7,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Wall",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.38,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.38
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_L",
+     "location": [
+      -0.45,
+      -0.04,
+      0.225
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      0.225,
+      0.04
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_R",
+     "location": [
+      0.45,
+      -0.04,
+      0.225
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      0.225,
+      0.04
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ArcadeHall_Sign_PlayArrow_00",
+     "shape": "box",
+     "size": [
+      1.1,
+      0.08,
+      0.45
+     ],
+     "centre": [
+      0,
+      -0.04,
+      0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 612,
+    "lod1_triangles": 612,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ArcadeHall_Sign_PlayArrow": 612
+    },
+    "bounds_min": [
+     -0.57,
+     -0.1075,
+     -0.24
+    ],
+    "bounds_max": [
+     0.57,
+     0.01,
+     0.24
+    ],
+    "dimensions": [
+     1.14,
+     0.1175,
+     0.48
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5fe0f637790212231dfd131e09263b6dbd9a0e1fdd95d4f85d4f64afd182ae19"
+  },
+  {
+   "asset": "Prop_ArcadeHall_Sign_DoorInside",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "0.9 x 0.3 m inside-door EXIT neon",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Wall",
+     "SOCKET_Light",
+     "SOCKET_Hang_L",
+     "SOCKET_Hang_R"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ArcadeHall_Sign_DoorInside_M0",
+     "colour": "sign back (black)",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.3,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ArcadeHall_Sign_DoorInside_M1",
+     "colour": "chrome frame",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ArcadeHall_Sign_DoorInside_M2",
+     "colour": "neon magenta (emissive)",
+     "hex": "FF4AD0",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_ArcadeHall_Sign_DoorInside_M3",
+     "colour": "neon cyan (emissive)",
+     "hex": "6AE8FF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 4,
+     "name": "Prop_ArcadeHall_Sign_DoorInside_M4",
+     "colour": "neon gold (emissive)",
+     "hex": "FFE04A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ArcadeHall_Sign_DoorInside",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Back",
+       "shape": "box",
+       "size": [
+        0.9,
+        0.08,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.04,
+        0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "FrameTop",
+       "shape": "box",
+       "size": [
+        0.94,
+        0.1,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.04,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "FrameBot",
+       "shape": "box",
+       "size": [
+        0.94,
+        0.1,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.04,
+        -0.15
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Tube0",
+       "shape": "box",
+       "size": [
+        0.82,
+        0.025,
+        0.025
+       ],
+       "centre": [
+        0,
+        -0.095,
+        0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tube1",
+       "shape": "box",
+       "size": [
+        0.82,
+        0.025,
+        0.025
+       ],
+       "centre": [
+        0,
+        -0.095,
+        -0.09
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tube2",
+       "shape": "box",
+       "size": [
+        0.025,
+        0.025,
+        0.18
+       ],
+       "centre": [
+        -0.41,
+        -0.095,
+        0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tube3",
+       "shape": "box",
+       "size": [
+        0.025,
+        0.025,
+        0.18
+       ],
+       "centre": [
+        0.41,
+        -0.095,
+        0
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.21,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.18,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_0_2",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.15,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_1_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.21,
+        -0.092,
+        0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.21,
+        -0.092,
+        0.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_2_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.18,
+        -0.092,
+        0.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_3_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.21,
+        -0.092,
+        -0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_4_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.21,
+        -0.092,
+        -0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_4_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.18,
+        -0.092,
+        -0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L0_4_2",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.15,
+        -0.092,
+        -0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_0_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.09,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_0_2",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.03,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_1_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.09,
+        -0.092,
+        0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_1_2",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.03,
+        -0.092,
+        0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_2_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.06,
+        -0.092,
+        0.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_3_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.09,
+        -0.092,
+        -0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_3_2",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.03,
+        -0.092,
+        -0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_4_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.09,
+        -0.092,
+        -0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L1_4_2",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        -0.03,
+        -0.092,
+        -0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.03,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.06,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_0_2",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.09,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_1_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.06,
+        -0.092,
+        0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_2_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.06,
+        -0.092,
+        0.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_3_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.06,
+        -0.092,
+        -0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.03,
+        -0.092,
+        -0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.06,
+        -0.092,
+        -0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L2_4_2",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.09,
+        -0.092,
+        -0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_0",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.15,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.18,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_0_2",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.21,
+        -0.092,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_1_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.18,
+        -0.092,
+        0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_2_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.18,
+        -0.092,
+        0.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_3_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.18,
+        -0.092,
+        -0.03
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "L3_4_1",
+       "shape": "box",
+       "size": [
+        0.027,
+        0.02,
+        0.027
+       ],
+       "centre": [
+        0.18,
+        -0.092,
+        -0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Wall",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.38,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.38
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_L",
+     "location": [
+      -0.35,
+      -0.04,
+      0.15
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.35,
+      0.15,
+      0.04
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_R",
+     "location": [
+      0.35,
+      -0.04,
+      0.15
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.35,
+      0.15,
+      0.04
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ArcadeHall_Sign_DoorInside_00",
+     "shape": "box",
+     "size": [
+      0.9,
+      0.08,
+      0.3
+     ],
+     "centre": [
+      0,
+      -0.04,
+      0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 600,
+    "lod1_triangles": 600,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ArcadeHall_Sign_DoorInside": 600
+    },
+    "bounds_min": [
+     -0.47,
+     -0.1075,
+     -0.165
+    ],
+    "bounds_max": [
+     0.47,
+     0.01,
+     0.165
+    ],
+    "dimensions": [
+     0.94,
+     0.1175,
+     0.33
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c62a77e86fb6589b796f8644da03e653d4712bf5a53d0e443550c5f7783c449c"
   }
  ]
 }

@@ -1030,5 +1030,75 @@
    "quest": "q_arcade_hall_enter",
    "how": "ArcadeHall.onIsland(layoutId, world, doorAnchor) puts the doorway portal on an island block; enter() opens it and returns the inside spawn"
   }
+ },
+ "hall_signs": {
+  "docs": "docs/art/arcade-hall-signs-20261029",
+  "assets": [
+   {
+    "name": "Prop_ArcadeHall_Sign_Prismheart",
+    "tris": 1380,
+    "size_m": [
+     2.34,
+     0.1175,
+     0.63
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Wall",
+     "SOCKET_SOCKET_Light",
+     "SOCKET_SOCKET_Hang_L",
+     "SOCKET_SOCKET_Hang_R"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Sign_Prizes",
+    "tris": 924,
+    "size_m": [
+     1.34,
+     0.1175,
+     0.53
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Wall",
+     "SOCKET_SOCKET_Light",
+     "SOCKET_SOCKET_Hang_L",
+     "SOCKET_SOCKET_Hang_R"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Sign_PlayArrow",
+    "tris": 612,
+    "size_m": [
+     1.14,
+     0.1175,
+     0.48
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Wall",
+     "SOCKET_SOCKET_Light",
+     "SOCKET_SOCKET_Hang_L",
+     "SOCKET_SOCKET_Hang_R"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Sign_DoorInside",
+    "tris": 600,
+    "size_m": [
+     0.94,
+     0.1175,
+     0.33
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Wall",
+     "SOCKET_SOCKET_Light",
+     "SOCKET_SOCKET_Hang_L",
+     "SOCKET_SOCKET_Hang_R"
+    ],
+    "status": "NOT READY"
+   }
+  ],
+  "status": "NOT READY"
  }
 }

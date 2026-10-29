@@ -1,0 +1,161 @@
+{
+ "schema": "blender-kit/v1 manifest",
+ "generated_by": "tools/blender/arcade_hall_kit.py (sign_assets) + arcade_hall_assembler.py (signs)",
+ "status": "NOT READY",
+ "staging": "bot-team\\staging\\arcade-hall-signs-20261029",
+ "conventions": "wall signs: origin = back centre on the wall surface, face -Y; assembler sets mount height z",
+ "assets": [
+  {
+   "name": "Prop_ArcadeHall_Sign_Prismheart",
+   "tris": 1380,
+   "size_m": [
+    2.34,
+    0.1175,
+    0.63
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Wall",
+    "SOCKET_SOCKET_Light",
+    "SOCKET_SOCKET_Hang_L",
+    "SOCKET_SOCKET_Hang_R"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_ArcadeHall_Sign_Prizes",
+   "tris": 924,
+   "size_m": [
+    1.34,
+    0.1175,
+    0.53
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Wall",
+    "SOCKET_SOCKET_Light",
+    "SOCKET_SOCKET_Hang_L",
+    "SOCKET_SOCKET_Hang_R"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_ArcadeHall_Sign_PlayArrow",
+   "tris": 612,
+   "size_m": [
+    1.14,
+    0.1175,
+    0.48
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Wall",
+    "SOCKET_SOCKET_Light",
+    "SOCKET_SOCKET_Hang_L",
+    "SOCKET_SOCKET_Hang_R"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_ArcadeHall_Sign_DoorInside",
+   "tris": 600,
+   "size_m": [
+    0.94,
+    0.1175,
+    0.33
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Wall",
+    "SOCKET_SOCKET_Light",
+    "SOCKET_SOCKET_Hang_L",
+    "SOCKET_SOCKET_Hang_R"
+   ],
+   "status": "NOT READY"
+  }
+ ],
+ "layouts": [
+  {
+   "id": "corner_arcade",
+   "signs": [
+    [
+     "Prop_ArcadeHall_Sign_Prismheart",
+     "N",
+     1,
+     3.3
+    ],
+    [
+     "Prop_ArcadeHall_Sign_PlayArrow",
+     "W",
+     0,
+     3.0
+    ],
+    [
+     "Prop_ArcadeHall_Sign_DoorInside",
+     "S",
+     1,
+     3.0
+    ]
+   ],
+   "issues": []
+  },
+  {
+   "id": "prize_hall",
+   "signs": [
+    [
+     "Prop_ArcadeHall_Sign_Prizes",
+     "N",
+     3,
+     3.45
+    ],
+    [
+     "Prop_ArcadeHall_Sign_Prismheart",
+     "S",
+     4,
+     3.2
+    ],
+    [
+     "Prop_ArcadeHall_Sign_PlayArrow",
+     "W",
+     3,
+     3.0
+    ],
+    [
+     "Prop_ArcadeHall_Sign_DoorInside",
+     "S",
+     2,
+     3.0
+    ]
+   ],
+   "issues": []
+  },
+  {
+   "id": "heart_hall",
+   "signs": [
+    [
+     "Prop_ArcadeHall_Sign_Prismheart",
+     "N",
+     2,
+     3.3
+    ],
+    [
+     "Prop_ArcadeHall_Sign_PlayArrow",
+     "E",
+     1,
+     3.0
+    ],
+    [
+     "Prop_ArcadeHall_Sign_Prizes",
+     "W",
+     1,
+     3.0
+    ],
+    [
+     "Prop_ArcadeHall_Sign_DoorInside",
+     "S",
+     2,
+     3.0
+    ]
+   ],
+   "issues": []
+  }
+ ],
+ "views": "cutaway, inside (player view back to the doorway: EXIT sign), outside, plan",
+ "note": "layout props/decals unchanged; Java TSV unchanged"
+}

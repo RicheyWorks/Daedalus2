@@ -18,7 +18,7 @@ CLIPS = ("Idle", "Squawk", "Walk", "Fly")
 V = {"Mob_Bird_Hawk": ({"length": 0.55, "height_frac": 0.7, "proportions": "raptor", "posture": "perch", "perch_deg": 35.0, "neck_r": 0.95, "wing_lift_deg": 34.0, "tail_off": 0.16, "squawk_deg": 30.0,
                         "beak_style": "hook", "feet": "talons", "wing_tips": "fingered", "tail_bands": 3},
                        [("brown back plumage", "6E4A30"), ("hooked beak / talons (dark horn)", "2A2420"), ("pale barred underwing", "C8B496"), ("dark tips / eyes", "1E1A18")], "~0.55 m long"),
-     "Mob_Bird_Owl": ({"length": 0.5, "height_frac": 0.66, "proportions": "owl", "posture": "perch", "perch_deg": 45.0, "facial_disc": True, "neck_r": 1.4, "wing_lift_deg": 30.0, "tail_off": 0.14, "squawk_deg": 22.0,
+     "Mob_Bird_Owl": ({"length": 0.5, "height_frac": 0.66, "proportions": "owl", "posture": "perch", "perch_deg": 45.0, "facial_disc": True, "ear_tufts": True, "neck_r": 1.4, "wing_lift_deg": 30.0, "tail_off": 0.14, "squawk_deg": 22.0,
                        "beak_style": "owl", "feet": "talons", "wing_tips": "plain", "tail_bands": 2},
                       [("mottled tawny plumage", "8C6E4E"), ("beak / talons (pale horn)", "B8A68A"), ("buff facial disc / wings", "D2BE96"), ("dark eyes / bars", "201A14")], "~0.5 m long"),
      "Mob_Bird_Kestrel": ({"length": 0.34, "height_frac": 0.7, "proportions": "raptor", "posture": "perch", "perch_deg": 35.0, "head_scale": 1.15, "neck_r": 0.9, "wing_lift_deg": 36.0, "tail_off": 0.2,
