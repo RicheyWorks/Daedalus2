@@ -2578,6 +2578,14 @@ public final class DesktopPaint {
         return wallHiFeatherInk(wallHiFeatherInk(shine, body), body);
     }
 
+    /** Catch row on a side post: halfway from the floor/post seam into that row. */
+    public static String catchPostInk(String floor, String wall, String rowInk) {
+        if (floor == null || wall == null || rowInk == null) {
+            return rowInk;
+        }
+        return mixHex(floorSkirtInk(floor, wall), rowInk, 0.5);
+    }
+
     /** Pixels beside a shine — the catch fades into the tile instead of stopping square. */
     public static Hairline[] catchEnds(Hairline shine) {
         if (shine == null) {

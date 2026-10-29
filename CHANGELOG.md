@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop catch post.**
+  The desktop well
+  mixes the three
+  shine rows into
+  a side post, the
+  same as the web
+  catch.
+
 - **Well catch post.**
   The three shine
   rows that sit on
