@@ -12,3 +12,12 @@ Sole runtime custodian: `codex-play-guard` (Richey, Oct 29). Not adopted yet; no
 broker or lease calls. `ProposedNativeAdapter` raises.
 
 Tests (synthetic): `python -m unittest discover -s tools/unreal_preflight/island_receiving_adapter -p "test_*.py"`
+
+## seal_island.py (custodian-run, read-only)
+
+After the R27 native call, the custodian can seal one island without any editor, broker or lease call:
+
+    python tools/unreal_preflight/island_receiving_adapter/seal_island.py --request request.json --queue-entry entry.json --preflight preflight.json --receipt <block>/batch-complete.json --live-before before.json --live-after after.json --editor-pid <pid> --out sealed.json
+
+It re-hashes every request pin from disk, runs the whole contract and writes `{candidate, sealed}` exclusively (never
+overwrites). Exit 0 only for a fully admitted island; 2 on any refusal (held island included) with nothing written; 1 on bad input.
