@@ -54,6 +54,8 @@ jobs:
         run: python tools/minigames/leaderboard_feed.py --check
       - name: Shardring parity fixture is current (engines/unreal/core-test/shardring_parity.txt)
         run: python tools/minigames/shardring_parity.py --check
+      - name: Lumenpath parity fixture is current (engines/unreal/core-test/lumenpath_parity.txt)
+        run: python tools/minigames/lumenpath_parity.py --check
       - name: Realm cabinet placements are current and tested
         run: |
           python tools/minigames/realm_cabinets.py --check

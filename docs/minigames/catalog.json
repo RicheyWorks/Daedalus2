@@ -577,6 +577,38 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "lumenpath",
+      "title": "Lumenpath Refraction",
+      "summary": "Bend the prism beam through every crystal with shard mirrors. Arrows or stick: move; J/Space or pad A: toggle a mirror",
+      "how_to_play": "HOW Toggle shard mirrors to bend the prism beam through every crystal before your moves run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the refraction gallery",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"lumenpath\", Seed)",
+      "portable_tests": [
+        "desktop_lumenpath"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -626,23 +658,6 @@
     }
   ],
   "python_games": [
-    {
-      "id": "lumenpath",
-      "title": "Lumenpath Refraction",
-      "summary": "bend a Prismheart light beam with shard mirrors to wake every crystal.",
-      "how_to_play": "HOW Toggle shard mirrors in the lattice to bend the prism beam through every crystal before your moves run out.",
-      "module": "tools/minigames/lumenpath.py",
-      "start": "lumenpath.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_lumenpath.py"
-      ]
-    },
     {
       "id": "wardens_accord",
       "title": "Wardens' Accord",

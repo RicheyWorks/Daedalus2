@@ -25,7 +25,7 @@ bool HasShape(const Frame& F,const std::string& Mark) {
 }
 
 int main() {
-    Check(Catalog().size()==16,"access covers every registered game");
+    Check(Catalog().size()==17,"access covers every registered game");
     for(const Entry& E:Catalog()) {
         auto G=CreateGame(E.Id);
         Check(bool(G),E.Id+": factory");

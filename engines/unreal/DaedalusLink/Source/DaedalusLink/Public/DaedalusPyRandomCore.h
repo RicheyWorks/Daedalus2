@@ -162,6 +162,50 @@ public:
 	/** choice(seq) index. */
 	std::size_t ChoiceIndex(std::size_t Size) { return static_cast<std::size_t>(Below(static_cast<std::uint32_t>(Size))); }
 
+	/** randrange(n) for 0 < n < 2^32. */
+	std::uint32_t RandRange(std::uint32_t N) { return Below(N); }
+
+	/** random(): 53-bit float in [0, 1), exactly CPython's genrand_res53. */
+	double RandomDouble()
+	{
+		const std::uint32_t A = U32() >> 5, B = U32() >> 6;
+		return (A * 67108864.0 + B) * (1.0 / 9007199254740992.0);
+	}
+
+	/** sample(population, k) as indices into the population, CPython's two-branch algorithm (setsize 21 + 4^ceil(log4(3k)) for k > 5). */
+	std::vector<std::size_t> SampleIndices(std::size_t N, std::size_t K)
+	{
+		std::vector<std::size_t> Result(K, 0);
+		if (K > N) return {};
+		std::size_t SetSize = 21;
+		if (K > 5)
+		{
+			// 4 ** ceil(log(k*3, 4)); integer form of the same power
+			std::size_t Target = K * 3, Pow = 1; while (Pow < Target) Pow *= 4;
+			SetSize += Pow;
+		}
+		if (N <= SetSize)
+		{
+			std::vector<std::size_t> Pool(N); for (std::size_t I = 0; I < N; ++I) Pool[I] = I;
+			for (std::size_t I = 0; I < K; ++I)
+			{
+				const std::size_t J = static_cast<std::size_t>(Below(static_cast<std::uint32_t>(N - I)));
+				Result[I] = Pool[J]; Pool[J] = Pool[N - I - 1];
+			}
+		}
+		else
+		{
+			std::vector<bool> Selected(N, false);
+			for (std::size_t I = 0; I < K; ++I)
+			{
+				std::size_t J = static_cast<std::size_t>(Below(static_cast<std::uint32_t>(N)));
+				while (Selected[J]) J = static_cast<std::size_t>(Below(static_cast<std::uint32_t>(N)));
+				Selected[J] = true; Result[I] = J;
+			}
+		}
+		return Result;
+	}
+
 	/** 32-bit words drawn since Seed(); re-seeding and discarding this many reproduces the state exactly. */
 	std::uint64_t Drawn() const { return Consumed; }
 	void Discard(std::uint64_t Count) { while (Count--) U32(); }
