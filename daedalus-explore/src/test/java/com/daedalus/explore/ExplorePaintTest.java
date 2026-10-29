@@ -510,8 +510,16 @@ class ExplorePaintTest {
         int[] vaultSide = ExplorePaint.ceilingFace(8, 7);
         int[] vaultDown = ExplorePaint.ceilingFace(7, 8);
         int[] vaultDiag = ExplorePaint.ceilingFace(8, 8);
+        int vaultCornerMix = (vaultCorner[0] + vaultSide[0] + vaultDown[0] + vaultDiag[0]) / 4;
+        int[] vaultLipUnder = ExplorePaint.ceilingTexColor(7, 8);
         assertThat(ExplorePaint.ceilingTexColor(7, 7)[0])
-                .isEqualTo((vaultCorner[0] + vaultSide[0] + vaultDown[0] + vaultDiag[0]) / 4);
+                .isEqualTo((vaultCornerMix * 3 + vaultLipUnder[0]) / 4);
+        int[] vaultHeel = ExplorePaint.ceilingFace(2, 7);
+        int[] vaultHeelNext = ExplorePaint.ceilingFace(2, 8);
+        int vaultHeelSeam = (vaultHeel[0] + vaultHeelNext[0]) / 2;
+        int[] vaultHeelLip = ExplorePaint.ceilingTexColor(2, 8);
+        assertThat(ExplorePaint.ceilingTexColor(2, 7)[0])
+                .isEqualTo((vaultHeelSeam * 3 + vaultHeelLip[0]) / 4);
         int[] underPlank = ExplorePaint.ceilingFace(7, 2);
         int[] underNext = ExplorePaint.ceilingFace(8, 2);
         int underSeam = (underPlank[0] + underNext[0]) / 2;
