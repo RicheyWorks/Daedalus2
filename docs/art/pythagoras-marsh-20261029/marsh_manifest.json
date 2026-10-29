@@ -112,5 +112,17 @@
  "fixes_20261029": [
   "Mob_Marsh_Hawk rebuilt with bird_rig raptor options (beak_style hook, feet talons, wing_tips fingered, tail_bands 3); same name, sockets, clips",
   "contact_sheet skips the glTF bone-display Icosphere, so skinned assets now show their real size"
- ]
+ ],
+ "hawk_proportion_pass_20261029": {
+  "asset": "Mob_Marsh_Hawk",
+  "change": "proportions raptor (leg_frac 0.24 -> 0.10, neck_len 0.08); same name, sockets, clips",
+  "tris": 784,
+  "size_m": [
+   0.1428,
+   0.5603,
+   0.2294
+  ],
+  "docs": "docs/art/bird-pass-20261029",
+  "status": "NOT READY"
+ }
 }
