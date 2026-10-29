@@ -1,0 +1,76 @@
+{
+ "schema": "bb-skeletal-sockets/1",
+ "asset": "Mob_Marsh_Hawk",
+ "status": "STAGED NOT READY",
+ "sockets": [
+  {
+   "name": "SOCKET_Talon",
+   "bone": "Leg_L",
+   "location_m": [
+    0.033,
+    0.011,
+    0.011
+   ],
+   "offset_from_bone_head_m": [
+    0.0,
+    -0.011,
+    -0.066
+   ],
+   "offset_bone_local_m": [
+    0.0,
+    0.066,
+    -0.011
+   ],
+   "offset_from_bone_head_ue_cm": [
+    0.0,
+    1.1,
+    -6.6
+   ],
+   "location_ue_cm": [
+    3.3,
+    -1.1,
+    1.1
+   ],
+   "rotation": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "SOCKET_Head",
+   "bone": "Head",
+   "location_m": [
+    0.0,
+    -0.143,
+    0.198
+   ],
+   "offset_from_bone_head_m": [
+    0.0,
+    -0.0165,
+    0.022
+   ],
+   "offset_bone_local_m": [
+    0.0,
+    0.02446,
+    -0.012568
+   ],
+   "offset_from_bone_head_ue_cm": [
+    0.0,
+    1.65,
+    2.2
+   ],
+   "location_ue_cm": [
+    0.0,
+    14.3,
+    19.8
+   ],
+   "rotation": [
+    0,
+    0,
+    0
+   ]
+  }
+ ],
+ "how": "UE Skeleton editor: Add Socket on <bone>, Relative Location = offset_from_bone_head_ue_cm rotated into the imported bone frame (offset_bone_local_m is the same offset in the Blender bone frame), Relative Rotation 0; the glb also carries the SOCKET_ empty as a child of the joint for checking. Rotation [0, 0, 0] = model axes at rest (Z up)."
+}

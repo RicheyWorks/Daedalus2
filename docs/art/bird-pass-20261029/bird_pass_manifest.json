@@ -1,0 +1,102 @@
+{
+ "schema": "blender-bird/v1 manifest",
+ "generated_by": "tools/blender/contest/bird_pass_20261029.py + marsh_g504.py (hawk rebuild)",
+ "status": "NOT READY",
+ "staging": "bot-team\\staging\\bird-pass-20261029",
+ "rig_change": "bird_rig.py: opt-in neck_len + proportions presets raptor/owl/small (leg_frac/neck_len/head_scale); defaults unchanged",
+ "regression": "g139_gull, g142_crane, g504_crane_juvenile recipes byte-identical; test_bird_rig.py 37/37",
+ "assets": [
+  {
+   "name": "Mob_Marsh_Hawk",
+   "recipe": "data/contest/g504_marsh_hawk.quad.json",
+   "tris": 784,
+   "size_m": [
+    0.1428,
+    0.5603,
+    0.2294
+   ],
+   "sockets": [
+    "SOCKET_Talon",
+    "SOCKET_Head"
+   ],
+   "clips": [
+    "Idle",
+    "Squawk",
+    "Walk",
+    "Fly"
+   ],
+   "proportions": "raptor",
+   "sheet": "Mob_Marsh_Hawk_sheet.jpg",
+   "status": "NOT READY"
+  },
+  {
+   "name": "Mob_Bird_Hawk",
+   "recipe": "data/contest/bird_pass_hawk.quad.json",
+   "tris": 784,
+   "size_m": [
+    0.1428,
+    0.5634,
+    0.2328
+   ],
+   "sockets": [
+    "SOCKET_Talon",
+    "SOCKET_Head"
+   ],
+   "clips": [
+    "Idle",
+    "Squawk",
+    "Walk",
+    "Fly"
+   ],
+   "proportions": "raptor",
+   "sheet": "Mob_Bird_Hawk_sheet.jpg",
+   "status": "NOT READY"
+  },
+  {
+   "name": "Mob_Bird_Owl",
+   "recipe": "data/contest/bird_pass_owl.quad.json",
+   "tris": 628,
+   "size_m": [
+    0.122,
+    0.449,
+    0.1956
+   ],
+   "sockets": [
+    "SOCKET_Talon",
+    "SOCKET_Head"
+   ],
+   "clips": [
+    "Idle",
+    "Squawk",
+    "Walk",
+    "Fly"
+   ],
+   "proportions": "owl",
+   "sheet": "Mob_Bird_Owl_sheet.jpg",
+   "status": "NOT READY"
+  },
+  {
+   "name": "Mob_Bird_Kestrel",
+   "recipe": "data/contest/bird_pass_kestrel.quad.json",
+   "tris": 616,
+   "size_m": [
+    0.083,
+    0.3219,
+    0.146
+   ],
+   "sockets": [
+    "SOCKET_Talon",
+    "SOCKET_Head"
+   ],
+   "clips": [
+    "Idle",
+    "Squawk",
+    "Walk",
+    "Fly"
+   ],
+   "proportions": "raptor",
+   "sheet": "Mob_Bird_Kestrel_sheet.jpg",
+   "status": "NOT READY"
+  }
+ ]
+}

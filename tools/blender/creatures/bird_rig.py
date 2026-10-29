@@ -29,7 +29,14 @@ SIDES = (("L", 1), ("R", -1))
 BODY = {"length": 0.6, "height_frac": 0.62, "squawk_deg": 38.0, "squawk_frames": 36, "wing_lift_deg": 28.0}
 EXTRA = {"leg_frac": 0.2, "neck_r": 1.0, "head_scale": 1.0, "tail_off": 0.18,
          # raptor options (2026-10-29, G504 marsh hawk); absent = the original gull/crane parts, byte-identical pins
-         "beak_style": "straight", "feet": "webbed", "wing_tips": "plain", "tail_bands": 0}
+         "beak_style": "straight", "feet": "webbed", "wing_tips": "plain", "tail_bands": 0,
+         # proportion pass (2026-10-29): neck_len = head rise above the neck root / length, head pulled back to 0.75 x that ahead of the root
+         # (absent = head at height_frac, 0.3 L forward: the old rule);
+         # proportions = preset that fills leg_frac / neck_len / head_scale unless given explicitly
+         "neck_len": None, "proportions": None}
+PROPORTIONS = {"raptor": {"leg_frac": 0.1, "neck_len": 0.08, "head_scale": 1.05},      # hawk / kestrel: short tarsus, head sunk into the shoulders
+               "owl": {"leg_frac": 0.08, "neck_len": 0.05, "head_scale": 1.35},         # owl: barely any visible neck, big round head
+               "small": {"leg_frac": 0.09, "neck_len": 0.07, "head_scale": 1.15}}        # songbird-sized: stubby legs, short neck
 CLIPS = ("Idle", "Squawk", "Walk", "Fly", "Dance")
 
 
@@ -40,6 +47,15 @@ def params(seed, asset, body=None):
         if bad:
             raise ValueError("unknown bird body params: %s" % sorted(bad))
         P.update(body)
+        pr = P.pop("proportions", None)
+        if pr is not None:
+            if pr not in PROPORTIONS:
+                raise ValueError("unknown bird proportions: %s" % pr)
+            for k, v in PROPORTIONS[pr].items():
+                if k not in body:
+                    P[k] = v
+        if P.get("neck_len", 0) is None:
+            P.pop("neck_len")
     r = K.rng(seed, asset + ":bird"); L = P["length"]
     P["L"] = L; P["leg"] = round(P.get("leg_frac", 0.2) * L, 6); P["bz"] = round(P["leg"] + 0.12 * L, 6)        # body centre height
     P["head_turn"] = round(r.uniform(18, 30), 3); P["tail_flick"] = round(r.uniform(6, 10), 3)
@@ -49,7 +65,9 @@ def params(seed, asset, body=None):
 def _g(P):
     L, bz = P["L"], P["bz"]
     b0 = -0.355 * L if "head_scale" not in P else -0.3 * L - 0.055 * P["head_scale"] * L     # beak root at the face
-    return {"neck0": (-0.2 * L, bz + 0.06 * L), "head": (-0.3 * L, P["height_frac"] * L - 0.06 * L), "beak0": b0, "beak1": b0 - 0.145 * L,
+    if "neck_len" in P:     # head (and the face) pulled back with the shorter neck
+        b0 = -0.2 * L - 0.75 * P["neck_len"] * L - 0.055 * P.get("head_scale", 1.0) * L
+    return {"neck0": (-0.2 * L, bz + 0.06 * L), "head": ((-0.3 * L, P["height_frac"] * L - 0.06 * L) if "neck_len" not in P else (-0.2 * L - 0.75 * P["neck_len"] * L, bz + 0.06 * L + P["neck_len"] * L)), "beak0": b0, "beak1": b0 - 0.145 * L,
             "tail0": 0.2 * L, "tail1": 0.5 * L, "shoulder": (0.11 * L, -0.12 * L, bz + 0.05 * L), "hip": (0.06 * L, 0.04 * L)}
 
 

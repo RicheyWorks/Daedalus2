@@ -22,7 +22,8 @@ LEAF, STRAW, HEAD, MUD = "5E9A48", "C8B070", "6A4A2A", "4A4030"
 
 def hawk(seed=SEED):
     a = "Mob_Marsh_Hawk"
-    body = {"length": 0.55, "height_frac": 0.72, "leg_frac": 0.24, "neck_r": 0.9, "head_scale": 0.95, "wing_lift_deg": 34.0, "tail_off": 0.16, "squawk_deg": 30.0,
+    body = {"length": 0.55, "height_frac": 0.72, "proportions": "raptor", "neck_r": 0.9,   # proportion pass 2026-10-29: was leg_frac 0.24 (stilt-legged)
+            "head_scale": 0.95, "wing_lift_deg": 34.0, "tail_off": 0.16, "squawk_deg": 30.0,
             "beak_style": "hook", "feet": "talons", "wing_tips": "fingered", "tail_bands": 3}
     mats = [K.material(a, 0, "russet-brown plumage", "8A5A38", 0.85), K.material(a, 1, "hooked beak / talons (dark horn)", "2A2420", 0.5),
             K.material(a, 2, "barred grey-buff wings", "A89A86", 0.85), K.material(a, 3, "dark wingtips / eyes", "1E1A18", 0.7)]
