@@ -120,3 +120,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Memory Footprint Report (G519, quest q_memory_footprint)
 - `memory_footprint.py`: reads `census.json` or a G206 report (read-only) and reports per world the RAM/disk footprint and permille of the 40000 KiB RAM / 32768 KiB disk budgets, top consumers, the streaming tools' source footprint, and a ranked biggest-wins list (unload or trim, worlds over budget first, `clears` when the win brings a world back under). `--fail-on-over` exits 1 when a world is over. The verdict (`light`/`laden`/`overladen`) drives Quartermaster Bram's waterline in game (`memory_footprint_test.py`; CI `Memory Footprint Report`). Rules: `docs/islands/DISKSAVER-MEMORY-FOOTPRINT.md`.
+
+## Plimsoll Lines (G522, quest q_plimsoll_lines)
+- `plimsoll_lines.py`: reads `census.json` or a G206 report (read-only) and marks per island how many more asset definitions it can take before its beacon turns amber (`to_amber`), red (`to_red`), or its world stops fitting all-resident (`to_spill`); lines = brute-force oracle over the G206 beacon. `--add WORLD:SLOT:N` checks a cargo list: `afloat`/`awash`/`sunk`; `--fail-on-sunk` exits 1. The verdict drives Surveyor Odile's hull lines in game (`plimsoll_lines_test.py`; CI `Plimsoll Lines`). Rules: `docs/islands/DISKSAVER-PLIMSOLL-LINES.md`.
