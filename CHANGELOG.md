@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor under catch.**
+  The row under
+  the paver feather
+  leans a quarter
+  toward that row,
+  joint included.
+  The catch itself
+  stays the shine.
+
 - **Explore brick bridge joint.**
   The grout between
   the middle and

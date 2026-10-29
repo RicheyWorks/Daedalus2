@@ -550,6 +550,16 @@ class ExplorePaintTest {
         int[] catchRow = ExplorePaint.floorPaver(4, 1);
         assertThat(ExplorePaint.floorTexColor(4, 2)[0])
                 .isEqualTo((underCatch[0] + catchRow[0]) / 2);
+        int[] underFeather = ExplorePaint.floorPaver(4, 3);
+        int[] feather = ExplorePaint.floorTexColor(4, 2);
+        assertThat(ExplorePaint.floorTexColor(4, 3)[0])
+                .isEqualTo((underFeather[0] * 3 + feather[0]) / 4);
+        int[] edge = ExplorePaint.floorPaver(7, 3);
+        int[] edgeNext = ExplorePaint.floorPaver(8, 3);
+        int edgeSeam = (edge[0] + edgeNext[0]) / 2;
+        int[] edgeFeather = ExplorePaint.floorTexColor(7, 2);
+        assertThat(ExplorePaint.floorTexColor(7, 3)[0])
+                .isEqualTo((edgeSeam * 3 + edgeFeather[0]) / 4);
         int[] lip = ExplorePaint.floorPaver(4, 0);
         int[] above = ExplorePaint.floorPaver(4, -1);
         int lipSeam = (lip[0] + above[0]) / 2;
