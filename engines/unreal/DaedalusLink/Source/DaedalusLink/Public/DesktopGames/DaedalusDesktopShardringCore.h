@@ -3,6 +3,8 @@
 #include "DaedalusDesktopGameTypes.h"
 #include "DaedalusShardringCore.h"
 #include "DaedalusPyRandomCore.h"
+#include <cerrno>
+#include <cstdlib>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -118,34 +120,44 @@ public:
         O<<" spirits="; for(shardring::Hue H:Core.Spirits) O<<static_cast<int>(H)<<",";
         return O.str();
     }
+    // Exception-free parsing (Unreal game targets build with C++ exceptions off).
+    static bool ParseLL(const std::string& S,long long& Out) {
+        if(S.empty()) return false; char* End=nullptr; errno=0; const long long V=std::strtoll(S.c_str(),&End,10);
+        if(End==S.c_str()||*End!='\0'||errno==ERANGE) return false; Out=V; return true;
+    }
+    static bool ParseInts(const std::string& S,std::vector<int>& Out) {
+        Out.clear(); std::string Tok;
+        for(char Ch:S) {
+            if(Ch==',') { if(!Tok.empty()) { long long V=0; if(!ParseLL(Tok,V)||V<-1||V>1000000) return false; Out.push_back(static_cast<int>(V)); } Tok.clear(); }
+            else Tok.push_back(Ch);
+        }
+        return Tok.empty();
+    }
     bool RestoreState(const std::string& Text,std::uint32_t) override {
-        std::istringstream In(Text); std::string Tag,Ver; In>>Tag>>Ver;
-        if(Tag!="shardring"||Ver!="v1") return false;
-        std::string Diff; std::uint32_t Seed=0; std::uint64_t Drawn=0; int Pouch=0,Chain=0,Cur=-1,Nxt=-1,Cur2=0,Over=0,Won=0; std::int64_t Score=0;
-        std::string RingS,ResS,SpS;
+        if(Text.rfind("shardring v1 ",0)!=0) return false;
         auto Val=[&](const std::string& Key)->std::string { const std::string N=" "+Key+"="; const size_t P=Text.find(N); if(P==std::string::npos) return ""; const size_t S=P+N.size(), E=Text.find(' ',S); return Text.substr(S,E==std::string::npos?std::string::npos:E-S); };
-        try {
-            Diff=Val("d"); Seed=static_cast<std::uint32_t>(std::stoul(Val("seed"))); Drawn=std::stoull(Val("drawn"));
-            Pouch=std::stoi(Val("pouch")); Score=std::stoll(Val("score")); Chain=std::stoi(Val("chain")); Cur=std::stoi(Val("cur")); Nxt=std::stoi(Val("next"));
-            Cur2=std::stoi(Val("cursor")); Over=std::stoi(Val("over")); Won=std::stoi(Val("won")); RingS=Val("ring"); ResS=Val("res"); SpS=Val("spirits");
-        } catch(...) { return false; }
+        long long Seed=0,Drawn=0,Pouch=0,Score=0,Chain=0,Cur=-1,Nxt=-1,Cur2=0,Over=0,Won=0;
+        if(!ParseLL(Val("seed"),Seed)||!ParseLL(Val("drawn"),Drawn)||!ParseLL(Val("pouch"),Pouch)||!ParseLL(Val("score"),Score)
+           ||!ParseLL(Val("chain"),Chain)||!ParseLL(Val("cur"),Cur)||!ParseLL(Val("next"),Nxt)||!ParseLL(Val("cursor"),Cur2)
+           ||!ParseLL(Val("over"),Over)||!ParseLL(Val("won"),Won)) return false;
+        const std::string Diff=Val("d");
         const shardring::Difficulty* D=shardring::FindDifficulty(Diff);
-        if(!D||Drawn<2||Drawn>200000) return false;
-        auto Ints=[](const std::string& S) { std::vector<int> Out; std::string Tok; for(char Ch:S) { if(Ch==',') { if(!Tok.empty()) Out.push_back(std::stoi(Tok)); Tok.clear(); } else Tok.push_back(Ch); } return Out; };
+        if(!D||Seed<0||Seed>0xffffffffLL||Drawn<2||Drawn>200000||Score<0||Score>1000000000LL) return false;
         std::vector<int> RingV,ResV,SpV;
-        try { RingV=Ints(RingS); ResV=Ints(ResS); SpV=Ints(SpS); } catch(...) { return false; }
+        if(!ParseInts(Val("ring"),RingV)||!ParseInts(Val("res"),ResV)||!ParseInts(Val("spirits"),SpV)) return false;
         if(static_cast<int>(RingV.size())!=D->Facets||ResV.size()!=static_cast<std::size_t>(shardring::HueCount)) return false;
         for(int V:RingV) if(V<-1||V>=D->Hues) return false;
+        for(int V:ResV) if(V<0) return false;
         for(int V:SpV) if(V<0||V>=D->Hues) return false;
-        if(Cur<0||Cur>=D->Hues||Nxt<0||Nxt>=D->Hues||Pouch<0||Pouch>D->Shards||Chain<0||Cur2<0||Cur2>=D->Facets) return false;
+        if(Cur<0||Cur>=D->Hues||Nxt<0||Nxt>=D->Hues||Pouch<0||Pouch>D->Shards||Chain<0||Cur2<0||Cur2>=D->Facets||(Over!=0&&Over!=1)||(Won!=0&&Won!=1)) return false;
         Game::SetCabinetDifficulty(Diff);
-        SessionSeed=Seed; Rng.Hues=D->Hues; Rng.Seed(SessionSeed,D->Name); Rng.Rng.Discard(Drawn);
+        SessionSeed=static_cast<std::uint32_t>(Seed); Rng.Hues=D->Hues; Rng.Seed(SessionSeed,D->Name); Rng.Rng.Discard(static_cast<std::uint64_t>(Drawn));
         Core.Diff=D; Core.Ring.clear(); for(int V:RingV) Core.Ring.push_back(static_cast<shardring::Hue>(V));
-        Core.Pouch=Pouch; Core.Score=static_cast<int>(Score); Core.Chain=Chain;
+        Core.Pouch=static_cast<int>(Pouch); Core.Score=static_cast<int>(Score); Core.Chain=static_cast<int>(Chain);
         for(int I=0;I<shardring::HueCount;++I) Core.Resonance[I]=ResV[static_cast<std::size_t>(I)];
         Core.Spirits.clear(); for(int V:SpV) Core.Spirits.push_back(static_cast<shardring::Hue>(V));
         Core.Current=static_cast<shardring::Hue>(Cur); Core.Next=static_cast<shardring::Hue>(Nxt); Core.Over=Over!=0; Core.Won=Won!=0;
-        Cursor=Cur2; LastGained=0; WasPrev=WasNext=WasConfirm=false; Settle();
+        Cursor=static_cast<int>(Cur2); LastGained=0; WasPrev=WasNext=WasConfirm=false; Settle();
         return true;
     }
     std::uint32_t SeedAfterRestore(std::uint32_t) const override { return SessionSeed; }
