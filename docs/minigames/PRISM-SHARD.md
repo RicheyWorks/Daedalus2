@@ -27,6 +27,18 @@ The page's `shardring-core` script ports the Python rules and CPython's `random.
 ## Controller
 The page reuses the shared DaedalusPad layer (`daedalus-server/src/main/resources/static/controllers/daedalus-pad.js`, the same module the Prismheart demo uses; see `docs/controllers.md`). It loads it by a repo-relative path and feature-detects `window.DaedalusPad`, so the page still works with mouse and keyboard when the module is absent; nothing is fetched from the network. Shardring only maps DaedalusPad's logical actions (`Shardring.PAD_ACTIONS`): D-pad / left stick (up/left = previous facet, down/right = next), confirm (A, or the family's confirm button) = set shard, menu (Start) = restart. Keyboard and pad share `Shardring.applyVerb`. `shard_pad_test.js` drives the real module with a fake standard gamepad. The pad module itself is unchanged.
 
+## Native port parity (C++ / Unreal)
+`data/minigames/shardring-parity-v1.json` (schema `daedalus.minigames.shardring_parity/v1`) is generated from `prism_shard.py` by `python tools/minigames/shard_parity.py`; `--check` (and `test_shard_parity.py` in CI) fails if it is stale. It never changes the rules: after a rules or balance change, rerun the generator and commit both.
+
+- `rules`: hues, spirit names, difficulty table, run length, spirit cadence and bonus, and the RNG contract (CPython `random.Random(str)`: SHA-512 seeding, MT19937, `choice` via `getrandbits`; the web page's port is a reference).
+- `cases`: 3 difficulties x seeds 0, 1, 42, 2024. Each has `rng_seed_string` (`shardring:<seed>:<difficulty>`), the first 64 raw `sequence` draws, every move (`facet`, `shard`, `gained`, `score`, `chain`, `spirit`, `ring_before`, `ring_after`, `next_current`, `next_next`, `pouch`), `to_state()` `snapshots` after moves 5 and 20, `final` status and `result`.
+
+How a native port should use it:
+1. Seed check: rebuild the RNG from `rng_seed_string` and match `sequence`.
+2. Replay: start the case, assert `ring_before` and `shard`, call place(`facet`), assert every other move field; then assert `final` and `result`. Moves follow `policy` (greedy), but replaying the listed facets is enough.
+3. Save/load: load each snapshot `state` (RNG state is CPython's `getstate()`: version, 625 words, gauss), replay the remaining moves, and match `final`.
+A port can skip the SHA-512 seeding by loading the RNG from a snapshot, but full parity needs step 1.
+
 ## Realm cabinet
 `data/minigames/realm-arcades.json` names `shardring` in `prismheart_realm`; `realm_cabinets.py` places it with host tag `PythonMinigame`, a crc32 seed, and difficulty `normal`. Python games are placed only when named explicitly, never by a glob. No Unreal actor runs Python games yet; that needs a native host (not in this change).
 
