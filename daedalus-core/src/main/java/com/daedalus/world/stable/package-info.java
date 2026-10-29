@@ -56,5 +56,9 @@
  * <p>G545 Tack Ledger Index ({@link TackLedgerIndex}, quest {@code q_quick_ledger}): file the horses' ledger cards
  * as a binary search tree so lookups, weighted by how often each card is asked for, flip the fewest cards (optimal
  * binary search tree); exact Knuth interval DP vs. most-asked-card-at-the-root, which files lopsided ledgers.
+ *
+ * <p>G547 Stall Plaques ({@link StallPlaques}, quest {@code q_neat_plaques}): letter the stable roll onto fixed-width
+ * plaque lines so the squared leftover space on every line but the last is least (Knuth-Plass-style word wrap); exact
+ * DP over line starts vs. fill-each-line, which leaves short stub lines.
  */
 package com.daedalus.world.stable;
