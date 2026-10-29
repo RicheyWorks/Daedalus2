@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick course edge.**
+  The bottom of a
+  brick course leans
+  toward the next
+  shine. The corner
+  still sinks
+  further into the
+  grout.
+
 - **Explore brick corner.**
   The clay corner
   where a course

@@ -584,6 +584,14 @@ class ExplorePaintTest {
                 + ExplorePaint.BRICK_MORTAR_R) / 3;
         assertThat(ExplorePaint.brickTexColor(1, 7)[0])
                 .isEqualTo((cornerSunk * 3 + cornerShine[0]) / 4);
+        int[] courseEdge = ExplorePaint.brickFace(2, 7);
+        int[] edgeShine = ExplorePaint.brickFace(2, 9);
+        int edgeMix = (courseEdge[0] + ExplorePaint.BRICK_MORTAR_R) / 2;
+        assertThat(ExplorePaint.brickTexColor(2, 7)[0])
+                .isEqualTo((edgeMix * 3 + edgeShine[0]) / 4);
+        int[] bodyJoint = ExplorePaint.brickFace(1, 4);
+        assertThat(ExplorePaint.brickTexColor(1, 4)[0])
+                .isEqualTo((bodyJoint[0] + ExplorePaint.BRICK_MORTAR_R) / 2);
         assertThat(ExplorePaint.brickTexColor(0, 0)).containsExactly(ExplorePaint.brickFace(0, 0));
     }
 
