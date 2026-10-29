@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick fade joint.**
+  The grout on the
+  fade row leans a
+  quarter toward
+  that fade. It
+  stays darker
+  than the clay.
+
 - **Explore brick course fade.**
   The clay just
   above a course
