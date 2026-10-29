@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: MIT
+name: Budget Fathoms
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/budget_fathoms.py'
+      - 'tools/streaming/budget_fathoms_test.py'
+      - 'tools/streaming/census_budget.py'
+      - 'tools/world_census/**'
+      - 'data/islands/disk-saver/budget-fathoms-v1.json'
+      - 'data/islands/disk-saver/census-budget-v1.json'
+      - '.github/workflows/budget-fathoms.yml'
+permissions:
+  contents: read
+jobs:
+  budget-fathoms:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G529 Budget Fathoms (breakpoints = brute-force oracle, tight fleet needs, sweep = G206, CLI)
+        run: python -B -m unittest tools/streaming/budget_fathoms_test.py -v
+      - name: Fathoms of the real world census (--fail-on-aground, with a RAM sweep)
+        run: |
+          python -B -m tools.world_census tools/world_census/fixtures/alpha.json tools/world_census/fixtures/beta.json --snapshot-date 2026-10-26 --bindings tools/world_census/fixtures/bindings.json --output-dir "$RUNNER_TEMP/census"
+          python tools/streaming/budget_fathoms.py "$RUNNER_TEMP/census/census.json" --sweep-ram 30000,32792,40000 --fail-on-aground

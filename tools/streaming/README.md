@@ -126,3 +126,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Harbour Seals (G525, quest q_harbour_seals)
 - `harbour_seals.py`: checks a committed G206 report against its `census.json` and the current config (all read-only): `unsealed` (no `census_sources`), `stale` (sources, snapshot date or budget differ), `tampered` (a fresh G206 re-price does not reproduce it, field-level diff by path) or `sealed`. `--fail-on-broken` exits 1 unless sealed; CI seals the G505 baseline. The verdict drives Customs Officer Perpetua's wax stamp in game (`harbour_seals_test.py`; CI `Harbour Seals`). Rules: `docs/islands/DISKSAVER-HARBOUR-SEALS.md`.
+
+## Budget Fathoms (G529, quest q_budget_fathoms)
+- `budget_fathoms.py`: the inverse of G206. Reads `census.json` or a G206 report (read-only) and computes, for RAM and disk separately, the smallest budgets (KiB) that keep each island green or out of red and each world fitting all-resident, the fleet needs `all_green`/`no_red`/`all_fit`/`deep` with the current slack, and an optional `--sweep-ram`/`--sweep-disk` tide table re-priced with G206. Breakpoints are tight against a brute-force scan. `--fail-on-aground` exits 1. The verdict (`deep`/`shoal`/`aground`) drives Gauge-keeper Corwin's gauge post in game (`budget_fathoms_test.py`; CI `Budget Fathoms`). Rules: `docs/islands/DISKSAVER-BUDGET-FATHOMS.md`.
