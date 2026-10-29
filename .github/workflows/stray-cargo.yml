@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: MIT
+name: Stray Cargo
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/stray_cargo.py'
+      - 'tools/streaming/stray_cargo_test.py'
+      - 'tools/streaming/census_budget.py'
+      - 'tools/world_census/**'
+      - 'data/islands/disk-saver/stray-cargo-v1.json'
+      - '.github/workflows/stray-cargo.yml'
+permissions:
+  contents: read
+jobs:
+  stray-cargo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G531 Stray Cargo (every finding kind, counts = brute force, verdicts, real census, CLI)
+        run: python -B -m unittest tools/streaming/stray_cargo_test.py -v
+      - name: Walk the real world census tideline (--fail-on adrift)
+        run: |
+          python -B -m tools.world_census tools/world_census/fixtures/alpha.json tools/world_census/fixtures/beta.json --snapshot-date 2026-10-26 --bindings tools/world_census/fixtures/bindings.json --output-dir "$RUNNER_TEMP/census"
+          python tools/streaming/stray_cargo.py "$RUNNER_TEMP/census/census.json" --fail-on adrift

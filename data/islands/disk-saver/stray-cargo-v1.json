@@ -1,0 +1,11 @@
+{
+  "v": 1,
+  "quest": "q_stray_cargo",
+  "lore": "Every morning Beachcomber Linnet walks the tideline below the counting house. She finds crates that washed off no island at all, crates labelled for islands that were never built, hulls riding empty but still paying their mooring, and the same crate turning up on two beaches at once. The Harbour Pilot's scales never weigh any of it, so Linnet keeps her own tally of what it would cost once someone finally carries it ashore.",
+  "hook": {"report_format": "daedalus-stray-cargo", "field": "verdict", "values": ["tidy", "littered", "adrift"],
+           "tideline": "findings[]", "hidden_weight": "hidden_cost_kib", "errors": ["dangling", "duplicate_name", "count_mismatch"]},
+  "npc": {"name": "Beachcomber Linnet", "lines": {
+    "tidy": "Clean sand from end to end. Every crate is on its island.",
+    "littered": "A few strays on the tideline. They weigh nothing on the scales today, but they will once someone carries them ashore.",
+    "adrift": "Crates labelled for islands that do not exist. Somebody's census is wrong; fix it before anything sails."}}
+}
