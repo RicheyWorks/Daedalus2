@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick under catch.**
+  The clay just
+  under the catch
+  course leans a
+  quarter toward
+  the shine. The
+  grout on that
+  row stays a
+  half mix.
+
 - **Explore brick fade joint.**
   The grout on the
   fade row leans a

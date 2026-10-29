@@ -602,6 +602,13 @@ class ExplorePaintTest {
                 .isEqualTo((cut * 3 + fade) / 4);
         assertThat(ExplorePaint.brickTexColor(2, 5))
                 .containsExactly(ExplorePaint.brickFace(2, 5));
+        int[] underCourse = ExplorePaint.brickFace(2, 3);
+        int[] underShine = ExplorePaint.brickFace(2, 1);
+        assertThat(ExplorePaint.brickTexColor(2, 3)[0])
+                .isEqualTo((underCourse[0] * 3 + underShine[0]) / 4);
+        int[] underJoint = ExplorePaint.brickFace(1, 3);
+        assertThat(ExplorePaint.brickTexColor(1, 3)[0])
+                .isEqualTo((underJoint[0] + ExplorePaint.BRICK_MORTAR_R) / 2);
         assertThat(ExplorePaint.brickTexColor(0, 0)).containsExactly(ExplorePaint.brickFace(0, 0));
     }
 
