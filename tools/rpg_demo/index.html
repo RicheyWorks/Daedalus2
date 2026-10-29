@@ -40,6 +40,16 @@ canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; displa
 .ab [data-k="b"] { grid-area: 3 / 1; border-radius: 50%; } .ab [data-k="a"] { grid-area: 2 / 2; border-radius: 50%; background: rgba(150, 90, 220, .3); }
 .ab [data-k="opts"] { grid-area: 3 / 2; border-radius: 50%; font: 22px/1 system-ui, sans-serif; background: rgba(255, 255, 255, .05); }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+/* Review controls exist only in an explicitly opted-in, disposable page. Keep the
+   canvas at its normal viewport scale; controls and observable state sit below it. */
+body.visual-review { height: auto; overflow: auto; }
+body.visual-review .stage { position: relative; height: 100vh; }
+#visual-review { padding: 20px; max-width: 1000px; margin: auto; background: #101526; }
+#visual-review[hidden] { display: none; }
+#visual-review button, #visual-review select, #visual-review input { font: inherit; margin: 4px; padding: 8px; }
+#visual-review button:focus-visible, #visual-review select:focus-visible, #visual-review input:focus-visible { outline: 2px solid var(--cyan); }
+#visual-review output { display: block; white-space: pre-wrap; overflow-wrap: anywhere; }
+#visual-review a { color: var(--cyan); }
 </style>
 
 <div class="stage" id="stage">
@@ -61,6 +71,31 @@ canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; displa
   <div class="boot" id="status">LOADING PRISMHEART&hellip;</div>
 </div>
 
+<section id="visual-review" aria-labelledby="review-heading" hidden>
+  <h1 id="review-heading">Prismheart visual review — staged scenes</h1>
+  <p>This disposable review page cannot save a journey, award rewards, play audio or change controller settings. Scenes are frozen; workshop choices are display only.</p>
+  <div role="group" aria-label="Review fixtures">
+    <button type="button" data-review-fixture="hud-readability">Party HUD readability</button>
+    <button type="button" data-review-fixture="drowse-landed">Drowse cast</button>
+    <button type="button" data-review-fixture="lull-landed">Lull cast</button>
+    <button type="button" data-review-fixture="gust">Fennick Gust</button>
+    <button type="button" data-review-fixture="folly">Folly route — new content</button>
+    <button type="button" data-review-fixture="workshop">Workshop reading — new content</button>
+  </div>
+  <p><label for="review-cast-variant">Status cast condition</label>
+    <select id="review-cast-variant"><option value="cast">Fresh target</option><option value="recast">Already affected target</option><option value="immune">Immune Warden — Drowse only</option></select>
+    <label for="review-fx-age">Frozen spell age in seconds</label>
+    <input id="review-fx-age" type="number" min="0" max="0.649" step="0.001" value="0.325">
+    <button type="button" id="review-apply-age">Apply frozen spell age</button></p>
+  <p><label for="review-workshop-runs">Staged completed workshop drills</label>
+    <select id="review-workshop-runs"><option value="0">0 — pressure reading</option><option value="1">1 — timing reading</option><option value="2">2 — heat reading</option></select>
+    <button type="button" id="review-folly-boss">Folly Colossus — new content</button>
+    <button type="button" id="review-show-canvas">Show staged canvas</button>
+    <a id="review-leave">Leave review and reload normal game</a></p>
+  <p id="review-status" role="status" aria-live="polite">Review is off.</p>
+  <output id="review-record" aria-label="Actual staged scene state"></output>
+</section>
+
 <script src="controllers/daedalus-pad.js"></script>
 <script src="settings/daedalus-settings.js"></script>
 <script>
@@ -69,15 +104,21 @@ canvas#screen { image-rendering: pixelated; image-rendering: crisp-edges; displa
 const cv = document.getElementById("screen"), g = cv.getContext("2d");
 g.imageSmoothingEnabled = false;
 const W = 320, H = 224, T = 16;
+const REVIEW_ENABLED = new URLSearchParams(window.location.search).get("visualReview") === "r4";
+const REVIEW = { ready: false, fixture: null, view: null, error: null, controlError: null, clockMs: 0, seed: 0x92D4860B, draws: 0, flashAtCast: {}, record: null, pendingDraw: false, rendered: null };
+let reviewRandom = null;
+const randomRoll = () => REVIEW_ENABLED && reviewRandom ? reviewRandom() : Math.random();
+const visualNow = () => REVIEW_ENABLED && REVIEW.ready ? REVIEW.clockMs : performance.now();
 const statusEl = document.getElementById("status"), logEl = document.getElementById("log");
 let D, IM = {};
-const rnd = (a, b) => a + Math.random() * (b - a);
+const rnd = (a, b) => a + randomRoll() * (b - a);
 const ri = (a, b) => Math.floor(rnd(a, b + 1));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 /* ---------- scaling: the largest sharp scale that fits the window (fractional only below 2x) ---------- */
 const stageEl = document.getElementById("stage"), touchEl = document.getElementById("pad"), toastEl = document.getElementById("toast");
 function touchOn() {
+  if (REVIEW_ENABLED) return false;
   const mode = SETTINGS && SETTINGS.loaded() && SETTINGS.row("TouchControls") ? SETTINGS.get("TouchControls") : 0;   /* 0 AUTO, 1 ON, 2 OFF */
   return mode === 1 || (mode === 0 && window.matchMedia && matchMedia("(pointer: coarse)").matches);
 }
@@ -94,7 +135,8 @@ function fit() {
   cv.style.width = Math.floor(W * k) + "px"; cv.style.height = ch + "px";
   stageEl.style.paddingTop = touch && portrait ? Math.max(10, (availH - ch) / 2) + "px" : "";
 }
-window.addEventListener("resize", fit);
+window.addEventListener("resize", () => { fit(); if (REVIEW_ENABLED && REVIEW.ready) reviewPublish(); });
+window.addEventListener("scroll", () => { if (REVIEW_ENABLED && REVIEW.ready) reviewPublish(); }, { passive: true });
 
 /* ---------- input ----------
    Every source (keyboard, touch pad, each controller, the test hook) holds its own buttons; a logical button is held
@@ -119,7 +161,7 @@ function keyboardHeld(code, down) {
   if (k) setHeld("kb", k, Array.from(keyboardCodes).some(c => KEYMAP[c] === k));
 }
 function gameplayInputBlocked() {
-  return pageInactive || document.hidden || !!(PANEL && PANEL.isOpen()) || !!(PAD && PAD.binding());
+  return REVIEW_ENABLED || pageInactive || document.hidden || !!(PANEL && PANEL.isOpen()) || !!(PAD && PAD.binding());
 }
 function resetGameplayInput() {
   keyboardCodes.clear(); Object.keys(SRC).forEach(releaseSource);
@@ -157,10 +199,10 @@ function menuRepeat(now) {                                        /* held direct
    Standard pads, the community-mapped retro / arcade / adapter database, BIND for anything else, the one-button
    rule for Atari sticks, MAME keys for cabinet encoders. The demo only translates its logical actions. */
 /* ---------- settings: the shared DaedalusSettings module and its Halo Infinite-style panel ---------- */
-const SETTINGS = window.DaedalusSettings ? DaedalusSettings.create({ schema: "settings/settings-schema.json" }) : null;
+const SETTINGS = !REVIEW_ENABLED && window.DaedalusSettings ? DaedalusSettings.create({ schema: "settings/settings-schema.json" }) : null;
 if (SETTINGS) SETTINGS.on("*", () => applyAudio());
 const PAD_TO_DEMO = { up: "up", down: "down", left: "left", right: "right", confirm: "a", cancel: "b", menu: "start" };
-const PAD = window.DaedalusPad ? DaedalusPad.create({
+const PAD = !REVIEW_ENABLED && window.DaedalusPad ? DaedalusPad.create({
   bundle: "controllers/controller-bundle.json", arcadeKeys: true, storageKey: "prism.pad.v2", settings: SETTINGS,
   onChange: e => {
     if (e.type === "down" || e.type === "up") {
@@ -241,6 +283,7 @@ document.addEventListener("visibilitychange", applyAudio);
 const bufs = {};
 const juke = { cue: null, lastPosted: null, sfx: [], posts: 0 };
 function unlockAudio() {
+  if (REVIEW_ENABLED) return;
   if (actx && actx.state === "suspended") actx.resume().catch(() => {});
   if (actx || !AC) return;
   try {
@@ -286,7 +329,7 @@ async function playSfx(ev) {
 }
 function cue(c) { juke.cue = c; }
 const RUMBLE = { HURT: [0.45, 110], CRIT: [0.7, 150], ZAP: [1, 420], DEFEAT: [0.8, 600], CALL: [0.6, 300] };
-function sfx(e) { juke.sfx.push(e); if (RUMBLE[e] && PAD) PAD.rumble(RUMBLE[e][0], RUMBLE[e][1]); }
+function sfx(e) { if (REVIEW_ENABLED) return; juke.sfx.push(e); if (RUMBLE[e] && PAD) PAD.rumble(RUMBLE[e][0], RUMBLE[e][1]); }
 function jukeTick() {
   const changed = juke.cue !== juke.lastPosted;
   if (!changed && !juke.sfx.length) return;
@@ -333,10 +376,10 @@ function win(x, y, w, h) {
     [0, s - c, c, c, x, y + h - c, c, c], [c, s - c, s - 2 * c, c, x + c, y + h - c, w - 2 * c, c], [s - c, s - c, c, c, x + w - c, y + h - c, c, c]];
   for (const p of parts) g.drawImage(IM.sprites, r[0] + p[0], r[1] + p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
 }
-function cursor(x, y) { const f = Math.floor(performance.now() / 300) % 2; spr("sprites", "ui:Cursor", x + f, y, f * 8, 8, 8); }
+function cursor(x, y) { const f = Math.floor(visualNow() / 300) % 2; spr("sprites", "ui:Cursor", x + f, y, f * 8, 8, 8); }
 function tileImg(key, x, y) {
   const n = D.frames[key]; if (!n) return false;
-  const f = n > 1 ? Math.floor(performance.now() / 500) % n : 0;
+  const f = n > 1 ? Math.floor(visualNow() / 500) % n : 0;
   const r = D.rects.tiles[key + "#" + f]; if (!r) return false;
   g.drawImage(IM.tiles, r[0], r[1], 16, 16, x, y, 16, 16); return true;
 }
@@ -475,7 +518,7 @@ function drawDialog() {
     win(W - 74, H - 104, 70, 40);
     dlg.choice.options.forEach((o, i) => text(o, W - 54, H - 94 + i * 13));
     cursor(W - 66, H - 94 + dlg.choice.idx * 13);
-  } else if (dlg.shown >= dlg.pages[dlg.i].length && Math.floor(performance.now() / 400) % 2) text(">", W - 20, H - 16, "#fff070");
+  } else if (dlg.shown >= dlg.pages[dlg.i].length && Math.floor(visualNow() / 400) % 2) text(">", W - 20, H - 16, "#fff070");
 }
 
 /* ---------- NPC talk ---------- */
@@ -733,7 +776,7 @@ function drawField() {
     const c = map.grid[y][x];
     if (c !== "Void" && !tileImg(map.key(c), Math.round(ox + x * T), Math.round(oy + y * T))) { g.fillStyle = "#000"; g.fillRect(Math.round(ox + x * T), Math.round(oy + y * T), T, T); }
   }
-  const walkF = Math.floor(performance.now() / 260) % 2;
+  const walkF = Math.floor(visualNow() / 260) % 2;
   for (const n of map.npcs) {
     const name = n.fieldSprite || (n.type === "Ruler" ? "NPC_Ruler" : "NPC_" + n.type);
     spr("sprites", name, ox + n.x * T, oy + n.y * T, (DIR_ROW[n.dir] * 2 + walkF) * 16, 16, 16);
@@ -1247,7 +1290,7 @@ function doAction(a) {
     if (STATUS[s.status] && !s.power) {                       /* Blight, Drowse, Lull...: a status, no damage */
       const f = targets[0];
       if (!f || f.hp <= 0) { B.msg = who.name + " CASTS " + s.name.toUpperCase() + " AT NOTHING."; return; }
-      const ok = !has(f, s.status) && Math.random() < statusChance(f, s.status) && inflict(f, s.status);
+      const ok = !has(f, s.status) && randomRoll() < statusChance(f, s.status) && inflict(f, s.status);
       B.fx.statusLanded = ok;
       if (!ok) pop(f, f.boss && s.status === "sleep" ? "IMMUNE" : "MISS", "#c0c0c0");
       B.msg = who.name + " CASTS " + s.name.toUpperCase() + (ok ? "! THE " + f.name.toUpperCase() + " IS " + STATUS[s.status].word + "." : (f.boss && s.status === "sleep" ? (f.bossName === "ClockworkColossus" ? ". THE COLOSSUS DOES NOT SLEEP." : ". A WARDEN DOES NOT SLEEP.") : ". IT DOES NOT TAKE."));
@@ -1454,7 +1497,7 @@ function drawBattle() {
   if (r) g.drawImage(IM.backdrops, r[0], r[1], r[2], r[3], 0, 0, 320, 180);
   for (const f of B.foes) {
     if (f.hp <= 0 && !(B.flash[f.key + f.x] > 0)) continue;
-    const fl = B.flash[f.key + f.x] || 0; if (fl > 0) B.flash[f.key + f.x] = fl - 1 / 60;
+    const fl = B.flash[f.key + f.x] || 0; if (fl > 0 && !REVIEW_ENABLED) B.flash[f.key + f.x] = fl - 1 / 60;
     if (fl > 0 && Math.floor(fl * 30) % 2) continue;
     spr("sprites", f.img, f.x, f.y, 0, null, null, f.size / 112);
     if (B.sub === "target" && B.list[B.target] === f) cursor(f.x - 10, f.y + f.size / 2 - 4);
@@ -1496,7 +1539,7 @@ function drawBattle() {
     cursor(10, 152 + ((B.oi || 0) - from) * 13);
   } else {
     wrap(B.msg || "", 22).slice(0, 5).forEach((l, i) => text(l, 10, 152 + i * 13));
-    if (B.phase === "end" && B.wait <= 0 && Math.floor(performance.now() / 400) % 2) text(">", 138, 210, "#fff070");
+    if (B.phase === "end" && B.wait <= 0 && Math.floor(visualNow() / 400) % 2) text(">", 138, 210, "#fff070");
   }
 }
 
@@ -1506,8 +1549,9 @@ function drawBattle() {
 const SAVE_KEY = "prism.save.v1";
 const TITLE_ITEMS = ["NEW GAME", "CONTINUE", "OPTIONS"];
 let titleT = 0, goT = 0, titleIdx = 0;
-function loadSave() { try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
+function loadSave() { if (REVIEW_ENABLED) return null; try { const v = JSON.parse(localStorage.getItem(SAVE_KEY) || "null"); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
 function saveGame() {
+  if (REVIEW_ENABLED) return false;
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, at: Date.now(), party, reserve, bag, gold, beaten: Array.from(state.beaten), opened: Array.from(opened), seen: state.seen }));
     return true;
@@ -1684,6 +1728,17 @@ function drawGameOver() {
 let last = performance.now(), SPEED = 1;                 /* tests may run the clock faster (PRISM_DEMO.speed) */
 function frame(now) {
   requestAnimationFrame(frame);
+  if (REVIEW_ENABLED) {
+    if (REVIEW.ready && REVIEW.pendingDraw) {
+      if (REVIEW.error || !REVIEW.fixture) drawTitle();
+      else if (mode === "battle") drawBattle();
+      else { drawField(); if (dlg) drawDialog(); }
+      REVIEW.pendingDraw = false;
+      REVIEW.rendered = { fixture: REVIEW.fixture, unsupported: !!REVIEW.error, mode, clockMs: REVIEW.clockMs, spellAgeSeconds: B && B.fx ? B.fx.t : null };
+      reviewPublish(false);
+    }
+    return; /* No ticks, campaign callbacks, reward resolution, audio or controller polling. */
+  }
   if (PAD) PAD.poll();
   const blocked = gameplayInputBlocked();
   const dt = blocked ? 0 : Math.min(0.05, (now - last) / 1000) * SPEED; last = now;
@@ -1719,7 +1774,7 @@ function frame(now) {
 }
 
 /* ---------- harness hooks (scripted play-throughs) ---------- */
-window.PRISM_DEMO = {
+if (!REVIEW_ENABLED) window.PRISM_DEMO = {
   state: () => ({ mode, map: map && map.kind, floor: map && map.floor, ending: !!ending, x: P.x, y: P.y, dir: P.dir, gold, bag: Object.assign({}, bag), cue: juke.cue, posts: juke.posts,
     dialog: dlg && dlg.pages[dlg.i], battle: B && { phase: B.phase, msg: B.msg, who: B.who, sub: B.sub, cmd: B.cmd, oi: B.oi || 0, target: B.target, list: (B.list || []).map(x => x.name), foes: B.foes.map(f => [f.name, f.hp, f.weak || null]), boss: B.boss },
     party: party.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), reserve: reserve.map(m => [m.name, m.lv, m.hp, m.max, m.mp, m.equip.weapon, m.spells.slice()]), bossBeaten: state.beaten.has("PyreWarden"),
@@ -1749,6 +1804,153 @@ window.PRISM_DEMO = {
   battle: (zone, boss, keys) => startBattle(zone, boss, keys),
 };
 
+/* ---------- opt-in visual review: ordinary DOM controls, existing game definitions ----------
+   Enabled only by ?visualReview=r4 on a new disposable page; never enabled through a save or settings.
+   Fixtures are explicit staged inputs, not evidence of campaign progression. No adapter is applied to
+   the preserved v10 engine: its missing DOM surface and playable Folly/workshop remain unsupported. */
+function reviewAssert(ok, reason) { if (!ok) throw new Error(reason); }
+function reviewMember(job) {
+  const definition = D.party.members.find(m => m.job === job);
+  reviewAssert(definition && D.rects.sprites["Party_" + job], "Missing real party definition/art: " + job);
+  return makeMember(definition, START_LEVEL);
+}
+function reviewReset() {
+  resetGameplayInput(); journeySerial++;
+  party = ["Bladeward", "Beastcaller", "Chronoseer", "Lightmender"].map(reviewMember);
+  party[0].name = "ABCDEFGHI"; reserve = []; bag = {}; gold = 0;
+  Object.assign(GEAR, D.gear);
+  state.beaten = new Set(); state.seen = {}; state.steps = 0; state.sinceBattle = 0; state.returnTo = null;
+  opened.clear(); grids = {}; dlg = null; menu = null; shop = null; B = null; ending = null; nameEntry = null;
+  fade = 0; fadeCb = null; poisonFlash = 0; reviewRandom = null;
+  REVIEW.clockMs = 0; REVIEW.draws = 0; REVIEW.flashAtCast = {}; REVIEW.error = null; REVIEW.controlError = null;
+  map = townMap(); P = { x: 11, y: 15, dir: "up", fx: 11 * T, fy: 15 * T, moving: 0, step: 0 };
+  mode = "field";
+}
+function reviewBattle(zone, boss, keys) {
+  const bossData = boss && D.dungeons.find(d => d.boss_data.name === boss);
+  reviewAssert(!boss || bossData, "Missing real boss definition: " + boss);
+  if (keys) keys.forEach(k => reviewAssert(D.foes[k] && D.rects.sprites["Foe_" + k], "Missing real foe definition/art: " + k));
+  if (bossData) reviewAssert(D.rects.sprites["Boss_" + boss], "Missing real boss art: " + boss);
+  startBattle(zone, bossData && bossData.boss_data, keys);
+  reviewAssert(D.rects.backdrops[B.bd], "Missing real battle backdrop: " + B.bd);
+  fade = 0; fadeCb = null; mode = "battle"; B.phase = "cmd"; B.who = 0; B.t = 0; B.queue = []; B.wait = 0;
+}
+function reviewFreeze(age) {
+  reviewAssert(B && B.fx, "Select a spell fixture before applying an age.");
+  reviewAssert(Number.isFinite(age) && age >= 0 && age <= 0.649, "Spell age must be between 0 and 0.649 seconds.");
+  B.fx.t = age; B.t = age; REVIEW.clockMs = age * 1000;
+  B.pops.forEach(p => { p.t = age; });
+  for (const key of Object.keys(B.flash)) B.flash[key] = Math.max(0, (REVIEW.flashAtCast[key] || 0) - age);
+}
+function reviewCast(name, variant) {
+  const spell = spellOf(name), caster = party.find(m => m.spells.includes(name));
+  reviewAssert(spell && caster && D.rects.spells["fx:" + name], "Missing native spell/caster/art: " + name);
+  reviewAssert(variant !== "immune" || name === "Drowse", "This control is unsupported: only sleep is Warden-immune.");
+  const boss = name === "Gust" || variant === "immune" ? "PyreWarden" : null;
+  reviewBattle(boss ? "volcano" : "plains", boss, boss ? null : Array(4).fill("prism_best_gelfin"));
+  const target = B.foes[0];
+  if (variant === "recast") { reviewAssert(spell.status && STATUS[spell.status], "Recast control needs a native status spell."); inflict(target, spell.status); B.pops = []; }
+  party.filter(m => m !== caster).forEach(who => doAction({ kind: "defend", who }));
+  // The existing harness's Mulberry32 formula, scoped to this one actual cast. This seed's first draw is zero.
+  let x = REVIEW.seed >>> 0;
+  reviewRandom = () => { REVIEW.draws++; x = (x + 0x6D2B79F5) >>> 0; let t = Math.imul(x ^ (x >>> 15), 1 | x); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  try { B.phase = "act"; doAction({ kind: "magic", who: caster, spell, target }); } finally { reviewRandom = null; }
+  reviewAssert(B.fx && B.fx.name === name && target.hp > 0, "The real cast did not produce the expected live-target spell state.");
+  if (spell.status && STATUS[spell.status]) reviewAssert(B.fx.statusLanded === (variant === "cast"), "Actual cast result does not match the selected condition; unsupported rather than forced.");
+  REVIEW.flashAtCast = Object.assign({}, B.flash);
+  const age = name === "Gust" ? 0.455 : 0.325;
+  document.getElementById("review-fx-age").value = String(age); reviewFreeze(age);
+}
+function reviewPlace(room, x, y, dir) {
+  reviewAssert(room.grid[y] && room.walk(room.grid[y][x]) && !room.npcs.some(n => n.x === x && n.y === y), "Unsupported or occupied real field coordinate.");
+  map = room; P = { x, y, dir, fx: x * T, fy: y * T, moving: 0, step: 0 }; mode = "field";
+}
+function reviewLoad(id, view = "route") {
+  if (!REVIEW_ENABLED || !REVIEW.ready) return;
+  REVIEW.fixture = id; REVIEW.view = view;
+  try {
+    reviewReset();
+    if (id === "hud-readability") {
+      reviewBattle("plains", null, Array(4).fill("prism_best_gelfin"));
+      party[1].hp = Math.max(1, Math.floor(party[1].max * 0.2)); party[1].mp = Math.max(0, party[1].mmax - 4);
+      party[2].hp = 0; party[2].mp = 0; party[3].mp = Math.max(0, party[3].mmax - 12);
+      inflict(party[1], "poison"); inflict(party[3], "protect"); inflict(party[3], "poison"); B.pops = [];
+    } else if (["drowse-landed", "lull-landed", "gust"].includes(id)) {
+      const variant = id === "gust" ? "cast" : document.getElementById("review-cast-variant").value;
+      REVIEW.view = variant; reviewCast(id === "gust" ? "Gust" : id === "drowse-landed" ? "Drowse" : "Lull", variant);
+    } else if (id === "folly" || id === "workshop") {
+      const dg = follyDungeon(), di = D.dungeons.indexOf(dg);
+      reviewAssert(dg && dg.optional && !carriesShard(dg), "No real optional, non-shard Folly route exists in this package.");
+      shardBosses().forEach(name => state.beaten.add(name)); // Explicit staged prerequisites, never a campaign award.
+      if (id === "folly") {
+        const fi = view === "boss" ? dg.floors.findIndex(f => !!f.boss) : 0;
+        reviewAssert(fi >= 0 && dg.floors[fi].stairs_up, "Missing real Folly floor/stairs definition.");
+        const entry = dg.floors[fi].stairs_up; reviewPlace(dungeonMap(di, fi), entry.x, entry.y, "down");
+        if (view === "boss") reviewBattle(dg.floors[fi].encounters.zone, dg.boss_data.name);
+      } else {
+        state.beaten.add(dg.boss_data.name); recruitBeaten();
+        const runs = Number(document.getElementById("review-workshop-runs").value);
+        reviewAssert([0, 1, 2].includes(runs), "Unsupported workshop drill count.");
+        setWorkshopStat("runs", runs); reviewPlace(interiorMap("Inn"), 11, 7, "up");
+        reviewAssert(npcAt(11, 6) && npcAt(11, 6).type === "Brannoc", "The actual post-Folly Inn does not contain Brannoc at11,6.");
+        startCalibration(); reviewAssert(dlg && dlg.choice, "The real calibration reading is unavailable.");
+        dlg.shown = dlg.pages[dlg.i].length;
+      }
+    } else throw new Error("Unknown fixture ID.");
+  } catch (e) { REVIEW.error = e.message; }
+  reviewPublish();
+}
+function reviewPublish(markPending = true) {
+  if (markPending) { REVIEW.pendingDraw = true; REVIEW.rendered = null; }
+  const fx = B && B.fx, target = fx && fx.targets[0];
+  const bounds = cv.getBoundingClientRect();
+  const record = {
+    schema: "daedalus.prismheart.review-state/v1", staged: true, fixture: REVIEW.fixture, view: REVIEW.view,
+    status: REVIEW.error ? "UNSUPPORTED" : REVIEW.fixture ? "STAGED_SOURCE_STATE" : "READY_SELECT_FIXTURE", unsupportedReason: REVIEW.error, controlError: REVIEW.controlError,
+    sourceLabel: "r4 app-owned review on current source; not published v10 or an accepted matched pair",
+    frozen: true, simulationTicking: false, renderClockMs: REVIEW.clockMs, mode, phase: B && B.phase,
+    rendered: REVIEW.rendered,
+    geometry: { viewport: [window.innerWidth, window.innerHeight], devicePixelRatio: window.devicePixelRatio, nativeCanvas: [W, H], canvasCss: { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height }, scaleX: bounds.width / W, scaleY: bounds.height / H },
+    random: { algorithm: "Mulberry32", seedHex: "0x92D4860B", draws: REVIEW.draws, replacesGlobalMathRandom: false },
+    party: party.map(m => ({ name: m.name, job: m.job, level: m.lv, hp: m.hp, maxHp: m.max, mp: m.mp, maxMp: m.mmax, status: tags(m), defend: m.defend })),
+    encounter: B && { backdrop: B.bd, boss: B.boss, message: B.msg, foes: B.foes.map(f => ({ key: f.key, bossName: f.bossName || null, hp: f.hp, maxHp: f.max, status: tags(f) })) },
+    spell: fx && { name: fx.name, casterJob: fx.casterJob, ageSeconds: fx.t, atlasFrame: Math.min(9, Math.floor(fx.t / 0.065)), status: fx.status || null, statusLanded: fx.statusLanded, targetStatusActive: !!(target && fx.status && has(target, fx.status)), targetAlive: !!(target && target.hp > 0) },
+    pops: B ? B.pops.map(p => ({ text: p.txt, ageSeconds: p.t })) : [], flash: B && Object.assign({}, B.flash),
+    field: map && { kind: map.kind, name: map.name || null, dungeon: map.dungeon == null ? null : map.dungeon, floor: map.floor == null ? null : map.floor, x: P.x, y: P.y, facing: P.dir },
+    workshop: REVIEW.fixture === "workshop" ? { stagedCompletedRuns: workshopStat("runs"), reading: dlg && dlg.pages[dlg.i], choices: dlg && dlg.choice && dlg.choice.options.slice(), revealed: !!dlg && dlg.shown === dlg.pages[dlg.i].length, answersEnabled: false } : null,
+    stagedBeaten: Array.from(state.beaten), shards: shardCount(), gold, inventory: Object.assign({}, bag), saveWritesAllowed: false, rewardsResolved: false,
+    baselineSupport: "Preserved v10 has no review DOM adapter; its packed playable output omits Folly/workshop. No baseline equivalence claimed."
+  };
+  REVIEW.record = record;
+  const out = document.getElementById("review-record"); out.textContent = JSON.stringify(record, null, 2);
+  out.dataset.fixture = REVIEW.fixture || "none"; out.dataset.status = record.status;
+  out.dataset.phase = record.phase || "none"; out.dataset.fxAge = fx ? String(fx.t) : "none";
+  out.dataset.statusLanded = fx ? String(fx.statusLanded) : "not-applicable";
+  out.dataset.rendered = String(!!REVIEW.rendered && !REVIEW.error);
+  document.getElementById("review-status").textContent = REVIEW.error ? "Unsupported: " + REVIEW.error : REVIEW.controlError ? "Invalid review control: " + REVIEW.controlError + " The frozen scene is unchanged." : "Frozen staged scene. Read the actual state below before recording a capture.";
+  document.querySelectorAll("[data-review-fixture]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.reviewFixture === REVIEW.fixture)));
+  document.getElementById("review-apply-age").disabled = !fx || !!REVIEW.error;
+}
+function mountVisualReview() {
+  document.body.classList.add("visual-review"); document.getElementById("visual-review").hidden = false;
+  REVIEW.ready = true;
+  document.querySelectorAll("[data-review-fixture]").forEach(b => b.addEventListener("click", () => reviewLoad(b.dataset.reviewFixture)));
+  document.getElementById("review-cast-variant").addEventListener("change", () => { if (["drowse-landed", "lull-landed"].includes(REVIEW.fixture)) reviewLoad(REVIEW.fixture); });
+  document.getElementById("review-workshop-runs").addEventListener("change", () => { if (REVIEW.fixture === "workshop") reviewLoad("workshop"); });
+  document.getElementById("review-folly-boss").addEventListener("click", () => reviewLoad("folly", "boss"));
+  document.getElementById("review-apply-age").addEventListener("click", () => {
+    try {
+      const input = document.getElementById("review-fx-age");
+      reviewAssert(input.value.trim() !== "" && input.validity.valid, "Enter a valid spell age from 0 to 0.649 seconds.");
+      reviewFreeze(Number(input.value)); REVIEW.controlError = null;
+    } catch (e) { REVIEW.controlError = e.message; }
+    reviewPublish();
+  });
+  document.getElementById("review-show-canvas").addEventListener("click", () => { stageEl.scrollIntoView({ block: "start" }); reviewPublish(); });
+  const exit = new URL(window.location.href); exit.searchParams.delete("visualReview"); document.getElementById("review-leave").href = exit.href;
+  reviewPublish(); fit();
+}
+
 /* ---------- boot ---------- */
 function img(src) { return new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => bad(new Error("could not load " + src)); i.src = src; }); }
 async function boot() {
@@ -1758,7 +1960,8 @@ async function boot() {
     [IM.tiles, IM.sprites, IM.backdrops, IM.spells, IM.title] = await Promise.all(["tiles.png", "sprites.png", "backdrops.png", "spells.png", "title.png"].map(img));
   } catch (e) { statusEl.textContent = "The demo files did not load: " + e.message; return; }
   statusEl.hidden = true;
-  cue("TITLE"); fit(); cv.focus({ preventScroll: true });
+  if (REVIEW_ENABLED) mountVisualReview();
+  else { cue("TITLE"); fit(); cv.focus({ preventScroll: true }); }
   requestAnimationFrame(frame);
 }
 

@@ -524,3 +524,281 @@ When Slice 1 is green, Phase 2 is a file-backed `WorldStore` with an explicit re
 6. **Smallest path to World Zero.** Slice 1 primitives → file persistence → `/api/v1/world` → STOMP → one door → registry → `UNACCOUNTED = 0`.
 7. **Serious problems.** No voxels; no durable store; plugin SPI is not capabilities; explore is not a voxel engine. All are expected. Dual spatial models are the design, not a defect.
 8. **Exact first slice.** The file list in §11. Stop after those types and tests are proven. Do not restructure the reactor.
+
+---
+
+## Owner direction addendum: living islands, farms and invasion defence (2026-10-14)
+
+The owner's island direction now connects the shattered-planet story, floating
+rivers/lakes/ponds, four-or-more-island Super Islands, the M.U.L.E. economy,
+FarmVille-inspired homesteads and ecology-wide zombie defence. Plants vs. Zombies
+and Clash of Critters are named inspirations for original Daedalus systems.
+
+The source map and stages are:
+
+| Layer | Existing source / continuation | Current stage in this delivery |
+| --- | --- | --- |
+| Shattered planet and connected homes | `STORY.md` sections 6.1, 7.1 and 7.2 | Owner story direction recorded |
+| Free-air water and aquatic ecology | `realms/AetherflowReach.md`, `data/waterways/aetherflow-reach.json` | Authored Blender modules and local activities; native/persistent authority pending |
+| M.U.L.E. and farming | `mechanics/ISLAND-FARMING.md`, `tools/economy/island_farm.py` | Local farm source over the retained Colony Ledger; live save/native bindings pending |
+| Existing zombie waves | `tools/economy/vendor/mule/colony_ledger.py` `event` / `defend` | Aggregate prototype loss/defence/salvage; retained donor unchanged |
+| Living ecological defence | `mechanics/LIVING-ISLAND-DEFENSE.md`, `data/defense/living-island-defense-plan.json` | Buildable design and backlog; tactical runtime pending |
+| All-life levels, evolution and minigames | `mechanics/LIFE-PROGRESSION-AND-MINIGAMES.md`, `data/progression/life-progression-plan.json` | Owner direction and reusable activity/progression seams; universal runtime pending |
+| Caves in every realm | `mechanics/REALM-CAVES-AND-DUNGEONS.md`, `data/caves/realm-caves.json`, `world/cave/RealmCaveBlueprints.java` in core | Shared blueprint source and themed catalog; host placement/travel/native integration pending |
+| Shop, companion eggs and planned DAED | `production/DAEDALUS-NFT-SHOP.md`, `production/DAEDALUS-UTILITY-COIN.md` | Source/preview; bindings and deployment pending |
+
+**Universal placement and purposeful ecology.** Placeable definitions should
+support attack, aid, scouting, barriers, resource production and terrain roles.
+Animals, trees, bees, carnivorous plants, crops, fungi, water plants and aquatic
+life can contribute within their habitat and the island's theme. Reuse existing
+species keys, item identities, art and friendly-target policy; proposed behavior
+profiles do not automatically register species or grant combat capability.
+Rendered abundance is not an inventory of player-owned combat units.
+
+**One encounter outcome.** The shared phases are `warning`, `prepare`, `engage`,
+`contain`, `recover` and `rewild`, with one authoritative encounter identity and durable receipts.
+The retained donor immediately applies FOOD loss and `zombie_drop` on its
+`zombie_wave` event. A future tactical encounter must replace that managed
+resolution path, or it will charge losses and issue salvage twice. The farm's
+memory-only action IDs are an existing source pattern, not durable server proof.
+
+**Connected ownership.** Four or more physically connected islands make a Super
+Island, preserving each deed and owner/build permissions. Defense lanes, bridges,
+water approaches, cooperation and contributions use explicit accepted connections.
+No numeric-neighbour shortcut grants shared stores or another owner's control.
+Companion and egg NFT identities remain stable through gameplay state changes.
+
+**Crew handoff.** Existing economy, ecology, friendly-combat, creature, native,
+story and inventory owners extend their current lanes using the ordered backlog.
+The newer shared `docs/mechanics/MECHANICS-REGISTRY.md` and existing production
+workbook remain the tracking authorities; reconcile this direction into their
+existing defence/creature/zombie rows. Do not allocate duplicate WZ or ADR numbers
+from this older checkout. The dedicated plan records dependencies and pending
+source/art/runtime stages so unfinished ideas remain available to other bots.
+
+**All-life progression and modular games.** Animals, plants, trees, insects,
+colonies, fish, fungi and microbes can level and evolve through suitable activity,
+care, training, exploration, restoration and defence. Separate maturity, earned
+level/mastery, evolved form and inherited genome/coat/song lineage. Keep one stable
+individual or accepted colony identity, plus any existing NFT binding. Species,
+population counts and client-rendered bodies remain distinct from those records.
+Existing Portal hero XP, egg stages, local waterway journals, farm upgrades and
+arcade games retain their own implementations and stages. Connect eligible results
+through a versioned participant/result adapter and one durable progression receipt;
+do not duplicate game rules or turn browser scores into authoritative XP. The new
+specification records actual sources and the work still needed for universal levels.
+
+**Caves across the realms.** Reuse `RetroRealmGenerator.generate(long)` for the
+three-floor topology, stairs, encounters and reference content. The new immutable
+`RealmCaveBlueprints` authoring layer adds themed, instance-scoped floor/port/content
+references and keeps the complete DRR source snapshot. It does not replace the
+generator, register a realm or carve another owner's terrain. Bind actual surface
+entry and return, native geometry/nav, realm-specific combat, instance persistence
+and accepted loot through their current owners. Preserve Portal's progression and
+all other realms' visual/gameplay identity. Optional Ocean, proposed Lantern and
+Phase 2 Space remain conditional; Orrery and Sol are locations in existing hosts.
+
+**Resonance Ranch and Lifecraft.** The owner's next Island Realm layer combines
+jukebox/CD-discovered beasts, original gel husbandry, farm production, cozy village
+life and optional salvage/extraction. Additive `world.ranch.ResonanceRanch` source
+keeps recording-derived base identity separate from learned training, finite local
+goods, accepted cycles and bounded activity results. Existing JukeboxClient,
+Genome and audio owners retain music/voice responsibility; new accepted-input
+records are integration assertions, not authenticated service receipts.
+
+`world.lifecraft.LifecraftDesigns` supplies portable modular body/habitat blueprint
+rules for the requested 64-bit realm. It does not register a host, mutate inherited
+genomes or implement the existing crew's exploration engine. Provisional Lantern
+Reach remains that crew's lane pending approved identity and native adoption.
+Current farm, ecology, inventory, world-clock, persistence and progression owners
+must connect accepted transfers/results once and preserve separate land deeds.
+See `mechanics/RESONANCE-RANCH-AND-LIFECRAFT.md` and its structured build plan.
+
+The owner clarified that jukebox seeds are already random and wants a random
+interaction to discover their associated monsters. `SeedResonance` supplies a
+bounded beat/sigil echo challenge; the ranch encounter wrapper gates first
+discovery on its stored completion plus accepted playback. The random encounter
+does not change the existing seed-to-base-genome mapping. The separate 64-bit
+Lifecraft target is now identified as the N64-era **Lantern Reach** design lane,
+from its hub, portal worlds, collectible unlocks and playful movement. That
+target name is routing metadata, while canonical realm allocation remains with
+the established host owner.
+
+## Shardstead crafting authority comparison — Team Codex, 14 October 2026
+
+See [the owned crafting adoption handoff](production/SHARDSTEAD-CRAFTING-ADOPTION.md).
+Coordinator main-tree snapshot `34dfe8340da967392930504d42a8185705449384`
+was observed at 15 October 00:59:02 UTC (14 October Pacific). Direct bounded
+source reads distinguish read-only DIC inventory catalogs from domain inventory
+transactions. The inspected Shardstead ledger supports revision/replay and
+prepare/persist/confirm for its existing operations, but has no Craft operation.
+The inspected recipe sample uses exact item/count rows; overlapping tag matching
+is a candidate comparison, not a confirmed defect or accepted implementation.
+
+Remaining dependency: the current authoritative player-bag mutation owner,
+source path/pin and accepted stack/tag/container/capacity model. Keep Unreal as
+intent/display; do not create a parallel craft service, endpoint or persistence
+format. No copied upstream code, immutable upstream revision, algorithm adoption,
+build, installation or native acceptance is claimed. The dedicated handoff records
+reference/defer decisions; this addition preserves existing ownership and sections.
+
+
+<!-- coordinator-creature-farm-architecture-20261015:start -->
+## Creature handling, farm custody and sheep-herder source boundary — coordinator, 15 October 2026
+
+Direct user scope: a modular grapple creature-handling mode for targeting, tether/reel, safe release, capture eligibility and herding into suitable player-farm habitats; dangerous Sea/Pirate creatures require reinforced terrestrial or aquatic containment. Configurable species mass, temperament and learned trust may influence handling. Food/water/chemistry and craftable upgrades connect capture, care and the full FlowersForever farm integration. Existing player traversal and Hero input remain preserved.
+
+Bounded actual source reads established useful pieces, not a complete capture authority: native DaedalusCritter has graze/walk/flee and ledge-safe movement; DaedalusHomestead's ADaedalusLivestock has local feed/trough/growth/production behavior. Neither inspected interface establishes durable individual creature identity, player-farm custody or capture/enclosure transactions. EcologyLedger abundance and ark cargo are aggregate population operations, not individual ownership. Recording-derived ResonanceRanch residents cannot accept arbitrary captured wildlife. The inspected Species/SpeciesCanon identifies ComputerPets-derived provenance and is excluded from this new work. A Tool_GrappleHook art entry alone does not establish a gameplay grapple API; the targeted search found no dedicated implementation. Retain existing traversal source/backlog and keep missing bindings explicit.
+
+**Accepted isolated source claims, not shared native edits:**
+
+- Creature-policy owner /root/checkpoint_review, ACK/START22:19:36UTC, staging root task/creature-handling-source; proposed repository destinations: engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusCreatureHandlingPolicy.h, data/gameplay/creature-handling-policy.json, docs/production/CREATURE-HANDLING-AND-FARM-BINDING.md. First decision code saved22:22:53UTC. The policy emits intents and validates correlated host receipts/revisions; capture/settlement cannot succeed from local intent alone.
+- Character-source owner /root/miniature_village_source, ACK/START22:16:39UTC, staging root task/sheep-herders-source; source destinations tools/blender/sheep_herder_exemplar.py, data/sheep-herders-plan.json, docs/SHEEP-HERDERS-SOURCE.md plus additive story text and source receipt. Source saved22:24:07UTC; independent static review found a recipe-destination mismatch, corrected in owned metadata22:26:14UTC. No Blender output, roster, export, render, rig/animation acceptance or native character exists from this package yet.
+- Existing Flowers owner codex-flowers-integration retains its entire consumer/backend contract. Hub32448 requests explicit ownership of the missing individual capture/farm transfer/capacity reservation/persistence seam. Request delivery is not acceptance. No new competing database, service, endpoint or replacement app is authorized by this source contract.
+
+The proposed host boundary must carry stable player/creature/farm/profile identities, operation ID, expected revision, eligibility/custody evidence, capacity reservation and correlated authoritative result. Retry and stale/unknown results must hold safely without duplicate effects. Habitat suitability checks must use accepted species/environment/containment/care capabilities; reinforced cages and aquatic transport are not interchangeable. Craft recipes and inventory debits remain with their actual authority, never a read-only catalog or local UI.
+
+The original herder source exemplar is unranked. A future explicit positive N uses herder-rarity-sha256-v1: versioned seed plus stable IDs, descending SHA256 score, stable-ID ascending ties, ceil(N/100) named quest candidates, exact realized top/N fraction disclosed. N remains unspecified; no 500-character commitment. Current sheep/prop source keys and the ordered PortalQuest progress interface are compatibility references, with runtime IDs/bindings null until adopted.
+
+No shared Hero/input/Critter/Livestock/Flowers file was modified by these isolated source claims. No compile, tests, service, persistent access, native/editor or gameplay proof follows from them. Existing codex-play-guard is sole native operator; Ultra retains graphics-first Prismheart and its pixel-JRPG identity. The unrelated BlackJackPro restart-recovery action remains blocked pending its separate human approval.
+
+### Actual-code metaverse comparison and next implementation — 22:32 UTC
+
+The eight-area audit is saved in task/metaverse-capability-gap-audit-20261015.json,72858B,SHA91f8234ce91f6664b3b9ba70541b47d1d4eee7843cb71d0a01f176ed9e5e194c:45original app identities retained,34current source pins rechecked. Each area is PARTIAL overall, with individual existing/reusable/missing/unknown evidence; no live or full-parity acceptance.
+
+| Area | Existing/reusable source | Confirmed missing or bounded unknown |
+| --- | --- | --- |
+| Identity/inventory | SessionController/GameSession subjects and owner lists; HeroService file progression | HTTP move lacks verified-subject-to-seat binding; common owned bag/creature mutation API unknown |
+| Portable items | RetroItem/RetroCodec; WorldPackageController/Service manifests and GLB | Instance rights/dependencies, destination compatibility and atomic source-debit/destination-credit unknown |
+| Permissions | STOMP authentication/send guards; World.may/ParcelGate | HTTP seat binding missing; inspected door actor fallback not authenticated; dependency rights graph unknown |
+| Quest/progression | HeroService progress save, CampaignController, ordered PortalQuest source | Shared durable quest/reward/inventory settlement and reconnect reconstruction unknown |
+| Creator tools | Existing block/stamp/parcel APIs, plugin registries and CapabilityRegistry | Complete adopted in-world authoring/permission/publish flow unknown; do not duplicate the current SPI |
+| Social/discovery | PresenceController/Service bounded presence and world lists | Durable bookmarks, safe arrival/admission and full social workflow unknown |
+| In-world apps |45identity matrix, full donor scopes retained, LBP/CSRBT adapters | Served/cooked pairing, lifecycle/reconnect and full original UI/native parity unverified |
+| Asset publishing | WorldPackageService and exact producer/catalog export/receipt provenance | Confirmed receipt-intent inspection gap; immutable bundle/dependency-rights release adoption unknown |
+
+First accepted same-owner gap fix: codex-csrbt-reuse /root/final_docs_review modifies ONLY tools/blender/production_catalog.py, production_queue.py, test_production_catalog.py and tools/csrbt_catalog/README.md in existing csrbt-production-catalog branch. Current code passes no supplied receipt snapshot to catalog inspection and checks export SHA without current/preserved owner/evidence/stage reconciliation. Existing get/asOf/full-field-hash APIs are reused; no new database, Java command, connector, automatic promotion or authority. Source implementation started after explicit GO; first-source ETA22:43UTC. Tests are authored but unrun, and runtime/publish remain unverified.
+
+Higher-consequence capture/farm custody and per-seat HTTP authority need their existing shared owners' accepted contracts before shared edits. No parallel capture store or replacement farm app is being introduced. Primary-source comparison links and license limits are recorded in existing AUTOMATION-LESSONS.md, coordinator-metaverse-research-20261015 section: Second Life patterns, Resonite MIT bridge with session/beta/nondurable-snapshot limits, and Sandbox0.12 with unestablished SDK-copy permission. These are original implementation references, not imported code/assets.
+
+Source milestone readback: creature-handling policy delivered22:29:59UTC, headerb9a6f555874629042367fc1e87aef0d96cab7e71e38fac55f74ac2e2d2acb254, config1b1c60ee..., contractc6880bfc..., all in the isolated source bundle, static reviewed/uncompiled/unbound. Sheep-herder independent source gate closed22:28:27UTC after both recipe mapping and background/factory-scene guard fixes; reviewdfe45b61d01bcc15ca5f8316f2198a696da290d3a9a374025a6d0330f006d0be. Actual generated characters/roster remain0, Nunspecified. Farm owner request32448 still awaits semantic acceptance.
+
+### Consolidated source, authority and production checkpoint — 2026-10-15 22:58 UTC
+
+Shared original realm-preserving adventures and purposeful collecting are the current design direction; the realm's genre/chemistry/survival and full implemented apps remain authoritative. Player-friendly engagement means explicit goals/progress, optional equivalent local onboarding, stable recovery and useful collections rather than filler or forced attendance. One concrete bridge is the same-package herder→Tide-Pen proposal, final dataSHA90df1c49d4298b764140aeb2bb48c96d5c4eae0c1d08adb6556a659902a834dc. It reuses actual ordered PortalQuest semantics and the frozen creature-intent/receipt contract, without another progress store. Account/character/realm/season scope, canonical facts/operations/receipts/revisions, freshness/correction, unknown/rejoin and host-atomic completion/award are requirements, not implemented durable behavior. Headerb9a6f555… and config1b1c60ee… are unchanged; host/Flowers/individual custody/registry/quest/item bindings remain null, all new policies/data disabled, uncompiled and untested. Exactly23 original Knights have separate private artifact visibility, context attraction, action reputation and owned-land IN-WORLD vault permissions; read-only wallet design is not an observer or authentication implementation. Parent reports independent static CLEAR22:56:56UTC for all four Knights pins; source remains proposed/uncompiled, not generated/runtime accepted. Paid chance/holdings weighting, MOST/pool-overflow/operator/winner/dev-AI-cost ideas remain qualitative LEGAL HOLD with every numeric/economic parameter unset and no implementation or action.
+
+The full Dungeon AI donor app remains required, including its existing modules/API/UI/persistence and advanced behavior. Usage credits are separate from DAED, MULE/local Gold and gems. Parent-reported inspection found adapter branch c579 absent from both inspected checkouts; historical TeamCodex/Astra source and Claude native work are not proof of installed full wiring. Existing sole codex-play-guard owns any eventual native adoption. No source handoff, embed or small replacement establishes full app integration.
+
+Current bounded audit artifact task/metaverse-capability-gap-audit-20261015.json has final SHA256cb1f006a8ebc573b8da502461522f8c3ccdfc49f33c751a28c2515302ba6231e. The existing catalog owner delivered local source commit750933675098aeaeac885f6a780f90be34109c3b in exactly four owned files: tools/blender/production_catalog.py, production_queue.py, test_production_catalog.py and tools/csrbt_catalog/README.md. Named lookup now passes supplied receipt intent and compares current/preserved export SHA, stage, owner and evidence; eight new focused tests were authored but UNRUN. Historical mocked checks do not validate this checkpoint. No Java/store/connector/promotion/authority was added.
+
+Final read-only coin/MULE/minigame audit task/daed-coin-mule-minigame-reward-audit-20261015.json SHA256f6293946e149acd0365a558c1621d58c32657ca7b858ae9ed96daa524bd7a2b9 covers37 file pins (27source plus10native/cabinet). Genuine deployed DAED address/payment/award binding remains unbound; MULE, local game Gold and gems are distinct source semantics and cannot silently become DAED. The new own section in docs/production/DAEDALUS-UTILITY-COIN.md records the design/hold boundary.
+
+Latest production facts below are **parent-reported readbacks**, not this documentation worker's native/browser/source acceptance: Winter4 namespace received six FIRST saves22:45, current protected217packages/143actors/184C++sources; world placement/BAR/gameplay remain held. Ultra's actual title work plus two builds exited0 and eight supplementary JPEGs exist, but no combat/controller runtime proof follows. Its primary-main47filecommit was denied; primary HEADc1ce262d74ad01e3e0ecd36fb8f3d52e57a1ef4c, exact denied command/reason still pending, no alternate commit route. Reedwheel's eight renders were delivered and parent confirms eight Library creates; no native quality pass is claimed. No new execution, financial action or publication is authorized by this update; existing BlackJack restart-recovery and publication denials remain in force.
+
+### Living-land vision and acceptance milestones
+
+**Owner vision:** Every Daedalus land is a distinctive living home worth exploring, improving and showing off. Its creatures, chemistry, resources, crafted structures and history create useful possibilities. Neighboring lands and cross-realm adventures give each parcel a meaningful place in the larger world.
+
+High desirability/demand is a design goal only, not promised scarcity, resale value or investment return. Preserve modular implementations, realm identity and immutable versions. Acceptance milestones are: visual identity+biome; functional habitat+persistent residents; resource/craft/adventure loop; meaningful customization; neighboring-land collaboration; discoverable story/collectibles; saved progress+reliable realm transitions. Source or asset presence alone cannot complete them.
+### Original land-mechanics comparison checklist — parent research, audit pending
+
+Parent-researched references: [Terrariums v1](https://blog.axieinfinity.com/p/terrariums-v1-is-live) (parent reports Homeland sunset17June2026), [Terrariums v1.1](https://blog.axieinfinity.com/p/terrariums-v1-1-is-live) (current passive collection/plot accessories/evolved parts), [Terrariums Estates](https://support.axieinfinity.com/hc/en-us/articles/54666286201115-Terrariums-Estates) (adjacency), and [historical Homeland beta](https://blog.axieinfinity.com/p/homeland-beta-is-live) (active crafting). This batch did not independently open these links. Compare actual present/partial/missing evidence first; an independent audit is assigned, not complete. Reuse full farm, chemistry, creature, crafting and minigame contracts for original realm-appropriate adaptations, keeping cosmetic quality and active adventures primary. No copied assets/code, Axie feature-parity, NFT staking or financial-return claim.
+
+| Existing milestone/backlog reference | Initial evidence-qualified status and next proof |
+|---|---|
+| Visual identity+biome; functional biome decorations | PARTIAL art/source evidence; native visual BAR/world acceptance remains held |
+| Creature homes; persistent residents; evolved traits/accessories | PARTIAL local livestock/source proposals; individual ownership/care/save and destination chemistry bindings unresolved |
+| Production→craft→equipment→adventure; upgrades | PARTIAL original farm/craft app/source interfaces; actual cross-module receipts and gameplay loop unverified |
+| Meaningful customization; visible land history | PARTIAL authoring/capability/package source; adopted player workflow and persistent land-history contract UNKNOWN |
+| Neighbor adjacency/settlement synergies and collaboration | UNKNOWN in this bounded check; audit actual ownership/permissions/settlement interfaces before any proposed wiring |
+| Discoverable story and purposeful collectibles | PARTIAL six-step herder→Tide-Pen proposal/eight null-bound references, no installed quest or configured award |
+| Saved progress and reliable realm transitions | PARTIAL existing progression/session source; coupled journal/custody/rejoin/atomic receipt acceptance missing |
+
+Track concrete accepted gaps through the existing BACKLOG.md and existing realm production queues/owner sections after the audit, preserving completed content and versions; this checklist is not another subsystem or blanket missing-feature claim.
+### Final qualified production cutoff — parent updates through22:57 UTC
+
+Parent reports Opus semantic ACK32480 and R3 source/manifest delivery32489:19files, immutableR1/R2, layoutSHA95f7e173… and owner-reported commit591bfc761…. Exact-mesh UCX/anchor policy,8m clearance, rope spans and ledger rows are DESIGN/OWNER-REPORTED, not independently validated by this documentation worker or root; R3 has NO renders. Sky→Tide-Pen collaboration was acknowledged after R3, pending canonical/source-plan reading before writes. Native32486 reports PR147 remote head4c2cdfc6510e59366094abd2e2d077ad432384f8, saved intake unchanged217/143/184. New user-authorized placement/view32491 is SOURCE PREPARATION only, not native execution or a compute claim. Willow export32467 and Poot source32466 have no actual ACK/START in this cutoff.
+
+Reedwheel's eight Library creates succeeded per parent receipt reedwheel-r2-parent-attachments-20261015.json; parent reports17R1/R2pins matched, three paired settings equal and all eight original image hashes recovered excluding metadata in memory. Windows metadata-attribute failure is recorded; no source image was altered. This is delivery/file comparison, not native BAR/gameplay acceptance. Parent's final Dungeon artifact is34227bytes SHA256392f5c5ce1aa932d438ad0bad9cbf0b56e3dff1ea6accdcc8425113c05144f21, superseding33318bytes/2bf432…; its scope remains audit/source, not full connected acceptance.
+
+### Broader land references inside the existing plan — 2026-10-15 23:02 UTC
+
+These are **parent-researched official/official-linked references**, not independently opened by this documentation worker. They extend the same living-land milestones and parent-maintained existing backlog JSON receipt; they create no competing feature backlog, adoption/parity claim, token or financial action. Preserve original Daedalus identity, full implemented apps, immutable versions and confirmed-gap-first code reuse.
+
+| Parent reference | Bounded comparison and uncertainty |
+|---|---|
+| [Decentraland in-world overview](https://docs.decentraland.org/in-world/overview), [LAND manager](https://docs.decentraland.org/marketplace/land-manager) | Programmable LAND/Worlds and delegated editing patterns; inspect our existing publishing/permission interfaces before proposing wiring |
+| [Pixels farm-land docs](https://docs.pixels.online/farm-land-nft) | Productive-farm reference; older numeric claims remain UNVERIFIED, no yield/revenue or current-feature inference |
+| [Nifty Island creation](https://guide.niftyisland.com/island-token/token-utility/island-creation) | Creator islands, multiplayer and build-budget reference; no copied numeric budget or economic model |
+| [Somnium parcels](https://somniumspace.com/en/documentation/parcels-worlds/parcels) | Persistent parcels/custom-world entry reference; no claim our complete saved entry/rejoin flow is accepted |
+| [Voxels discovery](https://www.voxels.com/), [official scripting bundle](https://github.com/cryptovoxels/scripting-bundle) | Discovery and scripting-extension patterns; reference availability is not code/module license adoption or runtime acceptance |
+| [Soulbound official-linked wiki](https://wiki.soulbound.game/NFT) | Parent's current read says legacy NFT land has NO FUNCTION; this supersedes the historical2024 apartment-utility reference, not proof of Daedalus functionality |
+| Otherside | Current full land/resource economy was NOT verified; make neither missing-feature nor fully-shipped claims |
+
+Six highest-value **code-audit candidates**, mapped into existing milestones rather than a new subsystem:
+
+| Candidate | Initial evidence boundary and existing milestone |
+|---|---|
+| Persistent/versioned land publishing + rollback | PARTIAL manifests/package/source evidence; actual accepted publish/rollback unknown. Maps to meaningful customization, visible history and saved progress |
+| ONE complete replayable land activity | PARTIAL ordered quest/activity sources and herder proposal; a complete replay/rejoin/receipt-backed player loop unverified. Maps to resource/craft/adventure and discoverable story |
+| Social discovery + friend joins | PARTIAL bounded presence/world source; complete friend admission/safe-arrival/recovery UNKNOWN. Maps to neighboring-land collaboration and reliable transitions |
+| Useful stations/resources | PARTIAL full farm/craft app and local station interfaces; cross-authority inventory/craft receipts unbound. Maps to functional habitat and production→craft→equipment→adventure |
+| Collaboration + moderation | PARTIAL existing parcel/permission source; accepted delegated editing/moderation workflow UNKNOWN. Maps to meaningful customization and neighboring settlement cooperation |
+| Shared inventory + quest continuity | PARTIAL progression saves/ordered quest source; durable atomic cross-realm inventory/quest/rejoin contracts remain missing or unverified. Maps to saved progress and reliable realm transitions |
+
+Independent audit is assigned, not complete. Refine present/partial/missing/unknown only with exact current code and owner evidence; source discovery does not authorize a new shared writer or claim runtime completion. Reuse existing identity, full farm, chemistry, creature, crafting, minigame, quest and publishing contracts before any additive source claim. Cosmetic quality and active adventures remain primary. No staking, financial returns, asset copying or automatic inventory/currency transfer is proposed by this comparison. Stop this documentation batch here; parent owns the single existing backlog receipt and subsequent production assignments.
+
+<a id="coordinator-buildout-20261015"></a>
+### Finite build-out checkpoint: source, action and evidence — 2026-10-15 23:04 UTC
+
+**ONE current build-out reference within this existing architecture section.** This table consolidates the standing living-land vision, seven acceptance milestones and all researched comparisons; it does not create another subsystem, feature backlog or replacement app. Parent maintains the ONE existing backlog JSON receipt and sends crew assignments from this exact anchor. Earlier tables retain their dated cutoffs; this checkpoint supersedes conflicting current-stage/next-action descriptions. Except this worker's pinned policy/data and file-guard evidence, current production statements below are parent-reported readbacks or retained source audits, not this worker's independent native/browser acceptance.
+
+| Priority / owner and existing package | Current evidence / next bounded action | Completion gate still required |
+|---|---|---|
+| P1 unreal-team / Reedwheel cosmetic R3→R4 | R3 source/manifest delivered32489,19files, ownercommit591bfc761…. Parent reports independent all18manifest pins match, UCX naming/shared anchors pass. **A real binary-vertex pair at4.74547m disproves the claimed global8m wheel clearance**; this witness is not a computed global minimum. Preserve immutable R1/R2/R3 and request an owned R4 SOURCE correction. R3 has no renders. | Correct actual geometry/claim and independently inspect the new pinned source and clearance evidence before any rendering/native acceptance. Final [R3 review](C:/Users/730ri/Documents/Codex/2026-10-14/task/reedwheel-r3-independent-file-geometry-review-20261015.json),25850B,SHA494b58731a9a802478cbaf2a225bce35218593674ebc1eff9296419190c54a56; exact witness4.745474617m, owner notified32503. Do not call R3 accepted or clearance-passed. |
+| P1 codex-play-guard / existing native intake PR147 | Parent reports remote source head4c2cdfc6510e59366094abd2e2d077ad432384f8 and217saved packages/143actors/184Cpp after six Winter4 namespace first saves22:45. New placement/view32491 is source preparation only. | Actual permitted native dispatch, retained world placement/save/readback and separate appearance/BAR/gameplay acceptance. No fresh compute/native claim follows from this table. |
+| P1 Ultra / existing Prismheart graphics | Parent reports actual title work, two builds exit0 and eight supplementary JPEGs. Supported staging is a SOURCE proposal only. Primary main remainsc1ce262d74ad01e3e0ecd36fb8f3d52e57a1ef4c; intended47filecommit denied, exact command still unexposed/requested. | Resolve the denied action through its actual owner/approval evidence; no retry or other-writer bypass. Original pixel-JRPG genre/full features retained; combat/controller runtime acceptance UNRUN. |
+| P2 existing TeamCodex/Astra source + Claude native collaboration / full Dungeon AI | Current owner ACK pending for existing bridge recovery. Parent found c579 adapter branch absent in both inspected checkouts. Final audit34227B SHA392f5c5ce1aa932d438ad0bad9cbf0b56e3dff1ea6accdcc8425113c05144f21 supersedes first artifact. | Accepted exact source owner/pin, recover/reuse the existing full app/bridge and bind actual identity/session/service/lifecycle evidence, then sole-operator native adoption. Full donor modules/API/UI/persistence/advanced capabilities remain required; usage credits stay separate from DAED/game currencies. |
+| P2 codex-flowers-integration / full Flowers authority | Existing app/consumer/backend seams remain owned. Individual creature identity, farm capacity/capture/settlement/care transaction extension remains pending source-owner acceptance. | Actual owner-accepted authenticated identity, durable individual custody, reservation and atomic correlated result/recovery contract. No competing farm store or unowned shared edit. |
+| P2 checkpoint_review / task/creature-handling-source | Portable policy/headerb9a6f555… and adventure data90df1c49… saved/static reviewed; config disabled, profiles empty, live host/registry/quest/item bindings NULL. Herder→Tide-Pen six-step bridge/eight useful references reuse ordered PortalQuest and original intent/receipt policy. | Separately authorized compile/validation and owner-bound snapshots, receipt verification, individual farm authority, safe native executor and actual recovery/save acceptance. Local onboarding and imported facts share scoped recognition; no automatic ownership/power/award. |
+| P2 miniature_village_source / existing sheep-herders-source | ONE unranked exemplar source, proposed Maren/A Dry Path Home; no execution/generated roster, Nunspecified. | Real source→accepted generation/export/art review→existing intake/native/runtime gate under ownership and custody. No500 commitment or rarity-to-power rule. |
+| P2 original Knights source owner / existing daed-knights package | Exactly23 proposed original authoring slots, null live identities; source pinsd21ac81c…/4e2735fe… and all four pins independently static CLEAR22:56:56. Review7345B SHAe02cb732a351b3e190930544293608028b0e55bf16a9cc563ed1a7be69dec6ad. | Preserve private default invisibility/artifact visibility+dialogue, context attraction, action reputation and in-world owned-land vault permissions as separate bindings. No compiled/generated/financial/runtime acceptance; wallet is read-only DESIGN ONLY; paid chance/holdings/MOST/overflow/share proposal remains LEGAL HOLD with parameters unset. |
+| P2 codex-csrbt-reuse / existing production catalog | Local four-file source750933675098aeaeac885f6a780f90be34109c3b, receipt-intent owner/evidence/stage reconciliation; eight focused tests authored UNRUN. Final capability auditcb1f006a… retained. | Bounded actual validation/runtime evidence under future authorization; historical mocked tests do not transfer. No new store, connector, promotion or authority. |
+| P3 root / same existing milestone and backlog receipt | Six code-audit candidates: versioned publishing/rollback; ONE complete replayable activity; social discovery/friend joins; useful stations/resources; collaboration/moderation; shared inventory/quest continuity. Final [land-mechanics checklist](C:/Users/730ri/Documents/Codex/2026-10-14/task/original-land-mechanics-reuse-checklist-20261015.json),27403B,SHAc586a06b09c827095dd0c21429c86d4746ae5f1eb3453ebb9dfe1df5c0efa4c6, rates seven areas PARTIAL at integrated level with exact present/missing/unknown evidence; no feature parity or blanket missing claim. | Exact current source/owner evidence first, select one concrete gap, reuse existing contracts and preserve versions; no second competing backlog or parity claim. |
+
+**Comparison inputs, not adopted implementations.** Parent-researched primary references retained here: [Second Life checked key updates](https://wiki.secondlife.com/wiki/LlUpdateKeyValue); [ResoniteLink](https://github.com/Yellow-Dog-Man/ResoniteLink) (beta/session/snapshot and exact-file license limits retained); [Sandbox0.12](https://docs.sandbox.game/en/creator/game-maker/version-notes-and-changelogs/game-maker-0.12) (no SDK-copy permission established); [Axie Terrariums1.1](https://blog.axieinfinity.com/p/terrariums-v1-1-is-live) and [Estates adjacency](https://support.axieinfinity.com/hc/en-us/articles/54666286201115-Terrariums-Estates). These inform original persistent creature homes, evolved/accessory/cosmetic expression, functional biome decor, settlement synergies, upgrades, production→craft→equipment→adventure and visible history. Cosmetic quality and active adventures remain primary; no staking/returns/copy or Axie feature parity.
+
+Other retained parent comparisons: [Decentraland LAND manager](https://docs.decentraland.org/marketplace/land-manager), [Pixels farm land](https://docs.pixels.online/farm-land-nft) (older numbers unverified), [Nifty Island creation](https://guide.niftyisland.com/island-token/token-utility/island-creation), [Somnium parcels](https://somniumspace.com/en/documentation/parcels-worlds/parcels), [Voxels](https://www.voxels.com/) and [official scripting](https://github.com/cryptovoxels/scripting-bundle). [Soulbound wiki](https://wiki.soulbound.game/NFT) parent-read legacy NFT land NO FUNCTION supersedes the historical2024 apartment-utility claim. Otherside's current full land/resource economy remains unverified; no missing/fully-shipped assertion. [World of Warcraft](https://worldofwarcraft.blizzard.com/) names the user's original adventure/collection inspiration only; no copied franchise material, API integration or verified code/license comparison follows. This worker did not independently browse these links.
+
+Reedwheel's eight Library images already persisted per parent, separate from R3 and native quality. Coin auditf6293946… retains37pins; actual DAED contract/payment/award bindings remain unbound and MULE/local Gold/gems/AI usage credits separate. Preserve the BlackJack recovery denial and LBP publication HOLD. Shared roles, full existing apps, source/asset/current runtime stages and financial/legal boundaries remain explicit. Close this finite documentation checkpoint; root handles crew canonical-path broadcast and existing-package assignments.
+
+### Scheduled all-team lessons review — 16 October 2026, 01:21 UTC
+
+Coordinator pootscoot-coordination opened the scheduled session at01:21:54UTC in the existing D2-build/docs/production/TEAM-BLENDER-UNREAL-HARNESS.md, Whole workflow harness backlog. This is the current review checkpoint; earlier status paragraphs retain their historical cutoffs. Individual hub invitations32640–32656 are delivery evidence, not attendance or implementation. The existing coordination-member-audit-20261015.json records named current responses, independently read-back owner documentation and pending coverage; historical18/20 preparation is separate.
+
+Ranked lessons now recorded there: preserve producer/validator/reconciliation states; fingerprint the actual receiver; separate immutable source acceptance from adoption/build/runtime and historical tests; constrain transport before dispatch and release input by retained ownership; separate generated output from pixel quality; state exact geometry/units/transform limits; bind comparison captures to actual app state and pinned assets; retain numeric prelaunch rejection evidence. Benefits and effort are ESTIMATED. Existing named owners retain their current scopes; this review assigns documentation consolidation, not fresh implementation or compute.
+
+Current corrections: Willow's retained three-view exit0 is technically reconciled without rerender, with original failure/13pins preserved; visualFAIL/nativeHELD and no-PID resource-blocked reopen remain. Dungeon's corrected8files/71727bytes are receiving-accepted source-only32635, exact decision3190ea8a…/independent review7d64daa2…;191-source candidate/adoption/UHT/module/link/runtime remain pending. Ultra's four-source adapter/provenance is clear, zero accepted browser pairs, build/capture request32631 still held. R4's numerical static3m geometry is qualified; mixed-material receiving profile remains unaccepted. No historical test green transfers to changed code.
+
+Latest saved native baseline218packages/145actors/184sources/mapf77f83a2… is a file receipt, not a fresh world query. Sole native owner codex-play-guard remains even if a lease expires. The human safe-editor-save/pause/close/191-build decision remains pending. Glorp is a separate user-authorized project with its own owner and future preview decision; no Daedalus scope, second editor, compute lease or Dungeon approval follows. Frozen packages/recipes/failed attempts/user data and other authors remain preserved.
+
+Story/reproducibility discipline: link visible prototypes to their actual narrative purpose/player goal and explicit mechanic stage. Willow's pond remains an opaque preview; Residents is asset-only with no placement. Neither proves living ecosystems, fluid simulation or gameplay. No new lore, realm parity, public release or promised utility was invented by the review. Keep finished lands immutable and name any authorized future polished successor/version separately.
+<!-- coordinator-creature-farm-architecture-20261015:end -->
+## Team Codex review checkpoint — Willow, 15 October 2026 Pacific
+
+Attributed source for the scheduled lessons review: [Willow lessons](AUTOMATION-LESSONS.md#team-codex--willow-lessons-review-15-october-2026-pacific)
+and retained artifacts/biomes/shardstead/WillowWetland/pilot-r1/stage-plan-r1/PACKAGE-STATUS-r1.md.
+Author/export succeeded; three images rendered and failed the visual bar. Root's
+versioned Windows path reconciliation a7f60238 validates retained PNG evidence
+without overwriting the original failed validator attempt. This closes that
+technical reconciliation only. Source/byte/render evidence is not visual quality,
+native import/save, gameplay or canonical species/inventory authority.
+
+Reopen was blocked before any PID at retained memory floors; actual compute
+release was verified. Missing numerical prelaunch memory evidence is an explicit
+wrapper diagnostic gap, not permission to infer a value or retry. Named owner
+remains Team Codex for the original kit and local wrapper; sole Unreal operator
+codex-play-guard retains native custody even absent a lock. Proposed portable-path,
+visual-gate and prelaunch-receipt improvements go to ROOT's existing Whole workflow
+harness backlog; estimated benefits/effort are in the lessons section. No new
+source, asset, allocation, dispatcher or framework is adopted by this checkpoint.

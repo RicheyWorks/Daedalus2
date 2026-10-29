@@ -7,10 +7,11 @@ const net = require('net');
 const path = require('path');
 const { execFile } = require('child_process');
 const readline = require('readline');
+const shell = require('./shell');
 
 const HOST = process.env.UNREAL_BRIDGE_HOST || '127.0.0.1';
 const PORT = parseInt(process.env.UNREAL_BRIDGE_PORT || '9877', 10) || 9877;
-const SERVER_INFO = { name: 'unreal', version: '1.1.0' };
+const SERVER_INFO = { name: 'unreal', version: '1.4.0' };
 const SUPPORTED = ['2025-06-18', '2025-03-26', '2024-11-05'];
 const none = { type: 'object', properties: {}, additionalProperties: false };
 
@@ -63,6 +64,7 @@ const TOOLS = [
     inputSchema: { type: 'object', properties: {
       lines: { type: 'integer', minimum: 1, maximum: 5000, description: 'How many lines (default 200)' },
       filter: { type: 'string', description: 'Only lines containing this text (case-insensitive)' } }, additionalProperties: false } },
+  ...shell.TOOLS,
 ];
 
 function callUnreal(type, params, timeoutMs) {
@@ -146,6 +148,11 @@ function startDialogWatcher(answered) {
 }
 
 async function runLocal(tool, args) {
+  if (tool.local.startsWith('shell')) {
+    const r = await shell.handle(tool.local, args);
+    if (!r || r.ok === false) return { isError: true, content: [{ type: 'text', text: (r && r.message) || 'shell failed' }] };
+    return { content: [{ type: 'text', text: JSON.stringify(r, null, 2) }] };
+  }
   const r = await runWindows(tool.local, args || {}, tool.timeout);
   if (!r || r.ok === false) return { isError: true, content: [{ type: 'text', text: (r && r.message) || 'window harness failed' }] };
   const content = [];

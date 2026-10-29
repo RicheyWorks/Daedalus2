@@ -60,6 +60,60 @@ The sky in every realm can run day and night, weather and biome light moods thro
 
 ## Build your own realm
 
+### Gallery Dispatch and reflective waterways (owner, 2026-10-14)
+
+Gallery City adds **Gallery Dispatch**, an original timed cab circuit on its
+existing named street grid: collect a passenger, deliver before the deadline,
+then receive the next fare. Pay DAED to activate the cab once per shift; its
+timer starts after accepted activation. The portable Java state model and isolated browser
+arcade source are authored; native vehicles, passengers, authenticated sessions
+and shared rewards remain unbound. See
+[the cab build handoff](mechanics/SKY-CAB-DISPATCH.md) and
+[`data/taxi/sky-cab-release-plan.json`](../data/taxi/sky-cab-release-plan.json).
+This activity leaves the Origin drone and parcel ownership rules in place.
+
+Aetherflow's river appearance now follows the
+[updated visual quality bar](production/VISUAL-QUALITY-BAR.md): layered ripples,
+recognizable distorted reflections, depth, caused foam and useful ecology.
+Riverlight is a new Blender appearance reference. Its procedural material must
+be implemented by the native owner; the existing realm statuses above do not
+advance because an art export or local browser source exists.
+
+### Shared cave direction (owner, 2026-10-14)
+
+Every realm should offer cave/dungeon expeditions with the exploration appeal of
+Dragon Warrior and Final Fantasy I: entrances, connected depths, light and supplies,
+encounters, treasure, keys, discoveries, shortcuts and a safe return. Use original
+Daedalus names, maps and art, with each realm's own presentation and combat rules.
+
+The existing Portal cave generator is the shared blueprint foundation. Continue
+through `docs/mechanics/REALM-CAVES-AND-DUNGEONS.md`,
+`data/caves/realm-caves.json` and the new `RealmCaveBlueprints` source. Theme profiles
+cover the existing realms, Orrery and Sol locations, optional Ocean, proposed
+Lantern Reach and future Space. Profiles do not register worlds or advance the
+statuses in the table above. New realm proposals should include a suitable cave
+theme and entry/return integration in their own release plan.
+
+### Ranch and life-building direction (owner, 2026-10-14)
+
+The Island Realm adds original music-discovered beasts and gel ranching to its
+M.U.L.E./FarmVille farm, cozy village and optional salvage/extraction loop. Use
+the existing jukebox and shared life identity, inventory, habitat and progression
+owners. `ResonanceRanch` is new portable source; it is not native gameplay added
+to the LIVE status above. The shared build handoff is
+`mechanics/RESONANCE-RANCH-AND-LIFECRAFT.md`.
+
+The owner also requests Spore-inspired modular life design in the separate
+**64-bit realm: Lantern Reach**. The era/story match is the late-1990s N64-style
+low-poly 3D hub, compact portal worlds, collectible unlocks, secrets and playful
+vertical movement. The existing `codex-buckwild-n64` crew owns that design lane.
+`LifecraftDesigns` targets it with cell/creature/ecosystem blueprints while its
+canonical realm ID and native host remain an explicit integration step. Here
+64-bit identifies the console-era presentation family; it is not a requirement
+to change every simulation value to a 64-bit number.
+
+### New realm proposals
+
 **The table above is not the limit, and the choice is yours.** Pick any realm in the table or invent a new one: any
 style, any era, any kind of play, **as long as it is original**. A new realm joins through a gate or a portal like
 the others. Some ideas:

@@ -147,6 +147,19 @@ What changed:
 
 A harness that only looks when asked misses the dialog that froze the editor. Watching has to be automatic.
 
+## Blender handoffs and Unreal job outcomes (2026-10-12, Codex)
+
+- **Use evidence from the current import attempt.** The legacy import script falls back to old destination assets when `imported_object_paths` is empty. Controlled editor fixtures reproduce that unsafe fallback and the missing in-call Play guard. The isolated saved-GLB candidate refuses empty current paths and checks Play immediately before import; restoring the legacy script makes both regression canaries fail. This is fixture evidence, not a live Unreal import.
+- **Import the approved bytes and keep the reimport source.** `jobs.blender.glb_sha1` identifies the handoff bytes. Capture once, independently validate the saved GLB, and retain a content-addressed snapshot rather than re-exporting Blender or deleting the import source. Never overwrite a mismatched cache entry. The isolated suite passed 30 executed tests with two explicit link-creation skips; 538 current manifests/GLBs passed read-only structural validation. Shared watcher integration and live Reimport verification are still pending.
+- **Mesh-data names and object names are different identities.** Existing `Tool_GrappleHook` and `Mob_Bat` GLBs contain mesh-data `.001` names with plain node names. Match the manifest's mesh through its explicit node mesh index; do not require the two names to be equal or strip suffixes heuristically. The isolated regression includes this naming difference.
+- **Final completion governs job success.** The production `unreal-job.ps1 -Wait` branch was reproduced reporting BUILD OK from an earlier BUILD SUCCESSFUL despite final `done 1`. The isolated patch parses the complete completion record, fails nonzero outcomes, and keeps partial markers pending: synthetic baseline 5/15 versus patched 15/15 in both PowerShell 7 and Windows PowerShell 5.1. Editor operations were mocked; no real build was run and the patch is not integrated.
+- **Measure the whole useful flow.** The last 100 matched successful hub READY-to-SHIPPED pairs had median 1 s, p95 2 s and maximum 6 s at whole-second timestamp resolution. Failed/uncompleted attempts and usable placement are excluded; these are a baseline, not a claimed optimization gain. SHIPPED currently proves Content Browser import, not placement, collision or gameplay use. The new Unreal-owned dresser source (ca6954ec) provides a later consumer; live acceptance is unverified.
+- **Keep source-derived risks separate.** Publication failures can strand SHIPPING rows because `tick` does not recover them; `-Start` also ignores the WMI launch return/PID. These remain source-audit risks with handling/ownership requested from Unreal, not reproduced production failures or completed fixes. 2Hot2Trot's existing queue digest ownership is preserved.
+
+### Follow-up: verify the launch result (2026-10-12, Codex)
+
+The earlier WMI launch risk is now a reproduced fixture defect: the copied production `-Start` branch returned native exit 0 for `ReturnValue=2` with `ProcessId=4321`. The isolated follow-on patch requires return 0 and a positive UInt32 PID; failed launches return exit 1 and the tested caller skips `-Wait`. Start cases improved from 5/25 to 25/25, and the combined script kept Wait at 15/15 in PowerShell 7 and Windows PowerShell 5.1. CIM, editor operations, clocks and sleeps were mocked; there was no real WMI launch or Unreal build. Apply the Wait delta before the Start delta; shared integration remains pending ownership. A simulated 51-second wait ending with RUNNING and exit 0 means pending, not successful build completion or measured wall-clock performance.
+
 ## Pin asynchronous integration work to its exact job (2026-10-13)
 
 The Unreal turn report marked build-1013-073247 successful after 2.8 seconds, while that
@@ -209,4 +222,174 @@ Keep design/calculation independent of remote music fetches, retain the prior va
 failure, and do not restart an unchanged track at every refresh. Parameter fixtures prove
 cross-language inputs, not audible playback; native playback needs its own live verification.
 
+## Make the water earn the scene (2026-10-14, user reference review)
 
+The owner supplied new street, water and flying-cab reference screenshots and asked for a
+higher visual bar. The water image's strongest visible quality is its broad foreground of
+broken reflections: recognizable warm, cool and dark forms continue into fine surface
+ripples. The rainy street uses repeated amber arches, small warm lamps, violet distance
+and a tall landmark to create depth. These are observations of supplied still images,
+not a measurement of either product or proof of animated water, playable taxis or launch.
+
+- **A cyan shape does not finish a river.** Author large surface undulations and smaller
+  directional ripples, controlled roughness and grazing-angle reflection. Give the water
+  something worth reflecting: trees, lamps, cliffs and landmarks. Maintain a quieter patch
+  where fish, interaction targets and routes must remain readable.
+- **Design three water reads.** From above, show the river's course and habitat patches.
+  At the bank, show shallows, depth changes, bank contact and local foam. Near the surface,
+  show broken reflections and flow direction without hiding the far route. Carry the
+  same family of material parameters across lake, pond, river, rapid and suspended falls.
+- **Our river must still float.** Keep Aetherflow water volumes separate from island
+  terrain. Give suspended sides a deliberate liquid membrane and readable underside,
+  with junctions, habitat anchors and a coherent current. Avoid an opaque glowing slab,
+  constant white outlines, intersecting ribbons and unexplained dry gaps between modules.
+- **Foam and ecology need causes.** Put foam at contact, fast bends, confluences and
+  turbulence; put reeds and nursery cover in protected margins. Reserve clear swimming
+  channels and fishing sight lines. Decorative fish and plants do not establish species
+  ownership, reproduction, rewards, inventory or authoritative habitat capacity.
+- **Reflection and motion need their own native work.** The Aetherflow recipe already
+  has a Blender ripple bump, transmission and IOR controls. Its procedural nodes do not
+  automatically survive GLB. The native owner must bind matching water parameters,
+  reflection fallback, depth/refraction, flow direction, bank foam and quality tiers.
+  A beautiful offline frame establishes appearance for that camera only.
+- **Finish one route before multiplying it.** A hero river segment must read at player
+  height and from its island approach, connect cleanly to its neighbor and support one
+  useful activity. Scale the accepted material/module family into the hundreds of bundle
+  variants after that exemplar is established; quantity is not evidence of finish.
+- **Make an activity recognizable.** The owner asked for a timed cab game: pick up a
+  passenger, reach their destination before time runs out and take the next fare. Gallery
+  City already has the street-grid story and source footprint for that lane. Document the
+  rules, clock authority and failure/retry behavior before presenting a taxi silhouette as
+  a delivered game. Preserve the existing Origin drone and parcel ownership rules.
+- **Keep reference claims bounded.** The supplied social posts contain a parcel-contract
+  question and an alpha announcement. Neither establishes contract reuse, ownership,
+  multiplayer scale, frame rate or the implementation of weather/destruction. Learn from
+  the visible art and the owner's requested mechanics; do not inherit marketing claims.
+
+The concrete water/street requirements, owner sequence and separate art/native receipts
+are recorded in `docs/production/VISUAL-QUALITY-BAR.md`. This lesson was added by reading
+the supplied images and source only. No software tests, builds or game sessions ran.
+
+
+
+## Ultra — Prismheart production review (2026-10-15 Pacific)
+
+Attributed owner: **Ultra / buckwild-sol**. Review session 32641, opened
+2026-10-16 01:21 UTC. This contribution records three lessons from actual
+Prismheart r3 work and the source-only r4 continuation. Proposed harness changes
+belong in the existing coordinator-owned Whole workflow harness backlog; they
+are proposals for Pootscoot to consolidate, not new implementation claims.
+
+### 1. Check an asset's semantic role as well as its shape
+
+The missing input was the menu-free `TitleBg_1x.png`. The available baked
+`Title_1x.png` had the same 2560 by 224 dimensions but already contained menu,
+prompt and credit graphics. Substituting it would duplicate live interface
+layers. Matching dimensions alone did not make it the correct dependency.
+
+The successful bounded recovery used revision
+`9175723ad200b05558a2ea12470763c3b9432152` and its five-file closure:
+`tools/blender/rpg_title.py`, `pixel_png.py`, `pixel_font.py`,
+`rpg_battle_ui.py` and `rpg_menus.py`. With NumPy 2.3.5, call the original
+`title_backdrop("prism", frame)` for frames 0 through 7, concatenate horizontally,
+and use the original PNG writer once into a new title-only overlay. Do not call
+the multi-realm CLI or regenerate canonical `title.json`. The actual retained
+output is `artifacts/prismheart-visual-r3/title-recovery-r1/TitleBg_1x.png`,
+12,609 bytes, 2560 by 224 RGBA8, SHA256
+`2f1402fb85619ca96fceb7269a323043a8a20e89ff2b1a87577b39b498d35446`.
+The recovery receipt is
+`artifacts/prismheart-visual-r3/title-recovery-r1/recovery-receipt.json`, SHA256
+`246629c584242ef2539d951706a363970681a36f260f5b34ebdc6f794f9e4dfd`.
+
+**Proposed upgrade:** retain role, baked/live-layer policy, frame layout,
+producer recipe/hash and consumer alongside dimensions/hash in the existing
+asset contract. **Existing owner:** Ultra for this package; Pootscoot consolidates
+the existing backlog. **Next permitted step:** document this dependency contract;
+implementation or a new recovery run is outside this review. **Benefit ESTIMATED:**
+avoid another semantically invalid substitute or wasted production allocation.
+**Effort ESTIMATED:** small contract/review update, roughly 1–2 hours if adopted.
+No general throughput improvement was measured. The original receipt's pending
+acceptance fields remain historical; successful recovery is not combat or native
+acceptance.
+
+### 2. Make review state observable through supported application controls
+
+The r3 report
+`artifacts/prismheart-visual-r3/execution/visual-execution-report.json`, SHA256
+`8a4253cdbcc61743a6ac02d8510735a05700b563ca25a924b5ea4db9744e5f6e`,
+records eight supplementary UI JPEGs. All six planned battle/new-content scene
+entries remained `PENDING_UNCAPTURED`: the supported browser surface could not
+select and freeze the intended fixtures through hidden application hooks.
+Those eight images do not constitute the four planned comparison pairs.
+
+The source-only r4 response is an app-owned panel enabled only by
+`?visualReview=r4`, with normal play unchanged when absent. The exact current
+engine is `tools/rpg_demo/index.html`, SHA256
+`12a6dc5f96d107c52c592fd4c992ca3441ba9762cf9bc9b61c16507acff971da`.
+The separate `artifacts/prismheart-visual-r4/review-adapter-v10-r1/index.html`,
+SHA256 `9f7bb33dd87ff34cc3530755bc7da3993d60399cfbf5f5d80cbee55e82fe7930`,
+retains the original v10 HUD, plain-text statuses, draw order and atlas-only FX.
+Its manifest, SHA256
+`7bad8400ef3c2a48ef81bb8117316582a330c0a71ace7c61a358993d95cabb3d`,
+and `data/assets/prismheart-visual-r4-staging.json`, SHA256
+`388ed54787272f8106740a80f14f0aaa970a5e85dc44f71088b804e88b16c057`,
+define the shared observation contract. Static review corrected stale geometry
+publication after scroll/resize and separated recoverable invalid-age errors
+from fixture support. These corrections have not been run in a browser.
+
+For a later allocated pass, use the visible fixture/age controls and read
+`#review-record`: require the desired fixture/view, `STAGED_SOURCE_STATE`,
+`controlError: null`, the real spell result/age, visible current geometry and
+`data-rendered="true"` after the requested draw. Selection, age, resize or scroll
+invalidates that marker. A rendered startup title with fixture null is not a
+selected-fixture capture. The staged cast uses the real action path with a
+closure-scoped seed `0x92D4860B`; the baseline observes its original local `ok`
+result without altering native `B.fx`. Gust's baseline status result is null
+(non-applicable), not a failed damage cast. Preserve the in-place sibling asset
+base by serving a common artifacts ancestor; the current review page still needs
+its separately allocated build because the r3 r2 build predates this panel.
+
+**Proposed upgrade:** reuse this small, app-owned DOM observation contract at the
+existing browser-observation seam, recording actual state and both images per
+comparison. **Existing owners:** Ultra for the pages; Pootscoot for allocation.
+**Next permitted step here:** submit the contract and exact source pins for
+backlog consolidation; build/serving/capture awaits request 32631 allocation.
+**Benefit ESTIMATED:** reproducible comparisons without unsupported state access.
+**Effort ESTIMATED:** 30–60 minutes for the bounded capture pass after its gates
+clear, excluding production queue time. Actual r4 fixture runs, images and
+accepted pairs remain **zero**. Folly/workshop are successor-only playable
+content; canonical JSON definitions do not establish a playable v10 equivalent.
+No pixel-quality or gameplay improvement is proven by source review.
+
+### 3. Preserve the boundary between allocation, execution and acceptance
+
+The actual r3 grant and priority handoff are retained in
+`artifacts/prismheart-visual-r3/execution/grant-and-handoff.json`, SHA256
+`2f0203752052adc7ef12bc85b0b597c18dc17f36cd71f76e0d99686e198443eb`.
+Grant 32445 was conditional on the prior native terminal/release 32450 and
+coordinator handoff 32451. The run required its own exclusive compute lease and
+readback, unchanged physical 1,700,000 KiB / virtual 2,200,000 KiB floors, fresh
+process/pin/output-absence guards, serial one-CPU processes, and terminal plus
+own-release/readback after each phase. Lease expiry or an empty lock list was
+never a production grant or transfer of native custody.
+
+The r3 execution report pinned above records three successful serial processes
+(title recovery and two builds), exit zero for each and all owned compute phases
+released. Its eight UI images were partial visual evidence. This demonstrated
+process completion, not accepted combat comparisons, controller/gameplay or
+Unreal ingestion. The later r4 request 32631 reported virtual memory
+1,651,136 KiB at 00:35:42 UTC, below the unchanged floor, and remained held before
+a claim or process; review request 32641 explicitly preserves that hold. That is
+a recorded historical resource reading, not a fresh measurement in this review.
+
+**Proposed upgrade:** retain source-ready, prelaunch-held, actual PID/start/end/
+exit, own-release and visual-acceptance outcomes as distinct fields in the
+existing stage receipts/backlog; link allocation and verified terminal messages.
+**Existing owners:** Ultra for this producer's evidence, Pootscoot for the queue,
+and codex-play-guard for sole native custody. **Next permitted step:** submit
+these existing receipt fields for consolidation and keep 32631 held until a
+fresh valid allocation and guards; no new watcher or retry is implied.
+**Benefit ESTIMATED:** fewer overlapping jobs and false completion claims.
+**Effort ESTIMATED:** 15–30 minutes of receipt/backlog documentation if adopted;
+no measured capacity or speedup claim. No build, test, server, capture, native,
+payment, provider or Git action ran for this documentation review.

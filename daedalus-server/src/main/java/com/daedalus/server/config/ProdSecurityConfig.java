@@ -83,7 +83,13 @@ public class ProdSecurityConfig {
      */
     public static final List<String> STATIC_PAGES = List.of("/realm.html", "/realm.js", "/models/ark.glb",
             "/reach.html", "/reach.js", "/reach-core.js", "/orrery-core.js",
-            "/tactics.html", "/tactics.js", "/tactics-core.js", "/realm-mesh.js");
+            "/tactics.html", "/tactics.js", "/tactics-core.js", "/realm-mesh.js",
+            "/metaverse.html", "/metaverse.css", "/metaverse.js",
+            "/gallery-city.html", "/gallery-city.css", "/gallery-city.js", "/gallery-city-core.js",
+            "/parcels-realm.html", "/parcels-realm.css", "/parcels-realm.js",
+            "/portal-expedition.html", "/portal-expedition.css", "/portal-expedition.js",
+            "/sky-expedition.html", "/sky-expedition.css", "/sky-expedition.js",
+            "/realm-release-catalog.json", "/buckwild-sprint-receipt.json");
 
     public static final List<String> STATIC_SCRIPTS = List.of(
             "/draw.js", "/api.js", "/share.js", "/fog.js", "/seat.js",
