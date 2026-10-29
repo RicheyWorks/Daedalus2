@@ -122,8 +122,13 @@ public:
     }
     // Exception-free parsing (Unreal game targets build with C++ exceptions off).
     static bool ParseLL(const std::string& S,long long& Out) {
-        if(S.empty()) return false; char* End=nullptr; errno=0; const long long V=std::strtoll(S.c_str(),&End,10);
-        if(End==S.c_str()||*End!='\0'||errno==ERANGE) return false; Out=V; return true;
+        if(S.empty()) return false;
+        char* End=nullptr;
+        errno=0;
+        const long long V=std::strtoll(S.c_str(),&End,10);
+        if(End==S.c_str()||*End!='\0'||errno==ERANGE) return false;
+        Out=V;
+        return true;
     }
     static bool ParseInts(const std::string& S,std::vector<int>& Out) {
         Out.clear(); std::string Tok;
