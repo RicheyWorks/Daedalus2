@@ -469,7 +469,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             10.0,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -478,12 +478,26 @@
           "start": "StartGame(\"prismvault\", 1132307240)"
         },
         {
+          "game": "shardfall",
+          "title": "Shardfall Gamble",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            10.0,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 336325053,
+          "option": 0,
+          "start": "StartGame(\"shardfall\", 336325053)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -497,7 +511,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            2.5,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -800,7 +814,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             12.5,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -809,12 +823,26 @@
           "start": "StartGame(\"prismvault\", 1060366944)"
         },
         {
+          "game": "shardfall",
+          "title": "Shardfall Gamble",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            12.5,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 112006771,
+          "option": 0,
+          "start": "StartGame(\"shardfall\", 112006771)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -828,7 +856,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            2.5,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1369,7 +1397,7 @@
         {
           "game": "shardfall",
           "title": "Shardfall Gamble",
-          "host": "PythonMinigame",
+          "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
             12.5,
@@ -1377,10 +1405,8 @@
           ],
           "yaw_deg": 180.0,
           "seed": 242191464,
-          "difficulty": "normal",
-          "module": "tools/minigames/shardfall.py",
-          "start": "shardfall.start(242191464, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
+          "option": 0,
+          "start": "StartGame(\"shardfall\", 242191464)"
         }
       ]
     },

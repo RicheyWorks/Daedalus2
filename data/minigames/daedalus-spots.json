@@ -85,6 +85,10 @@
     "prismvault": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the balance chamber"
+    },
+    "shardfall": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the glowing seam"
     }
   }
 }
