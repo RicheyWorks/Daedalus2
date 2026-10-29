@@ -610,8 +610,10 @@ class ExplorePaintTest {
         int cut = (fadeJoint[0] + ExplorePaint.BRICK_MORTAR_R) / 2;
         assertThat(ExplorePaint.brickTexColor(1, 6)[0])
                 .isEqualTo((cut * 3 + fade) / 4);
-        assertThat(ExplorePaint.brickTexColor(2, 5))
-                .containsExactly(ExplorePaint.brickFace(2, 5));
+        int[] bridge = ExplorePaint.brickFace(2, 5);
+        int[] bridgeBelow = ExplorePaint.brickTexColor(2, 6);
+        assertThat(ExplorePaint.brickTexColor(2, 5)[0])
+                .isEqualTo((bridge[0] * 3 + bridgeBelow[0]) / 4);
         int[] underCourse = ExplorePaint.brickFace(2, 3);
         int[] underShine = ExplorePaint.brickFace(2, 1);
         assertThat(ExplorePaint.brickTexColor(2, 3)[0])

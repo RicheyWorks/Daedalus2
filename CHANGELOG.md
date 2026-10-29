@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick bridge.**
+  The clay between
+  the middle and
+  the bottom fade
+  leans a quarter
+  toward that fade.
+  The grout on
+  that row stays
+  a half mix.
+
 - **Explore brick mid joint.**
   The grout in the
   middle of a brick
