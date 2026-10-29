@@ -40,5 +40,9 @@
  * <p>G537 Bridle Rack Matching ({@link BridleRackMatching}, quest {@code q_all_tacked}): give every horse its own
  * groom whose skill covers the horse's temperament so the last horse is ready earliest (bottleneck assignment with
  * compatibility); exact threshold search with augmenting paths vs. cheapest-pair-first, which strands or delays.
+ *
+ * <p>G539 Water Trough Fill ({@link WaterTroughFill}, quest {@code q_troughs_full}): pump the required buckets from
+ * the well to the trough through pipes with capacities and per-bucket costs at least cost (min-cost flow); exact
+ * successive shortest paths on the residual network vs. cheapest-path-without-undo, which runs dry or pays more.
  */
 package com.daedalus.world.stable;
