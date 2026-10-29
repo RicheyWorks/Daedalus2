@@ -857,12 +857,23 @@ public final class ExplorePaint {
                     (body[1] * 3 + shine[1]) / 4,
                     (body[2] * 3 + shine[2]) / 4};
         }
-        if ((y & 7) == 3 && !joint) {
+        if ((y & 7) == 3) {
             int[] shine = brickFace(x, y - 2);
-            return new int[] {
+            int[] fade = new int[] {
                     (face[0] * 3 + shine[0]) / 4,
                     (face[1] * 3 + shine[1]) / 4,
                     (face[2] * 3 + shine[2]) / 4};
+            if (!joint) {
+                return fade;
+            }
+            int[] cut = new int[] {
+                    (face[0] + BRICK_MORTAR_R) / 2,
+                    (face[1] + BRICK_MORTAR_G) / 2,
+                    (face[2] + BRICK_MORTAR_B) / 2};
+            return new int[] {
+                    (cut[0] * 3 + fade[0]) / 4,
+                    (cut[1] * 3 + fade[1]) / 4,
+                    (cut[2] * 3 + fade[2]) / 4};
         }
         if ((y & 7) == 1 && joint) {
             int[] body = new int[] {

@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick under joint.**
+  The grout just
+  under the catch
+  course leans a
+  quarter toward
+  that clay. It
+  stays darker
+  than the clay.
+
 - **Explore brick under catch.**
   The clay just
   under the catch
