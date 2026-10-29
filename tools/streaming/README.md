@@ -135,3 +135,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Fleet Flags (G533, quest q_fleet_flags)
 - `fleet_flags.py`: reads `census.json` (read-only), prices it with G206 and rolls the streaming budget up by realm (unrealmed worlds grouped first): worlds, islands, RAM/disk totals, beacon counts, spilling worlds, heaviest world and a realm flag (green/amber/red), and checks the census `realms[]` tallies against the worlds list. Verdict `fair`/`signal`/`distress`; `--fail-on-distress` exits 1 (also on any tally mismatch). Signal Yeoman Marisol flies the flags in game (`fleet_flags_test.py`; CI `Fleet Flags`). Rules: `docs/islands/DISKSAVER-FLEET-FLAGS.md`.
+
+## Pier Register (G534, quest q_pier_register)
+- `pier_register.py`: audits every DiskSaver hook file `data/islands/disk-saver/*-v1.json` (read-only) with its rules doc and tool: errors `bad_json`, `no_quest`, `duplicate_quest`, `lines_mismatch`; advisories `no_doc`, `no_tool`, `no_npc`, `name_reused` (same NPC given name on several islands). `--name` checks a new NPC name is free. Verdict `registered`/`queried`/`unregistered`; `--fail-on` exits 1. Dev tooling only, nothing runs in Unreal. Pier Registrar Abelard keeps the register in game (`pier_register_test.py`; CI `Pier Register`). Rules: `docs/islands/DISKSAVER-PIER-REGISTER.md`.
