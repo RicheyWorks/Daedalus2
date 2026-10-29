@@ -823,10 +823,15 @@ public final class ExplorePaint {
         boolean course = y % 8 == 7;
         boolean joint = (sx % 16 == 1) || (sx % 16 == 15);
         if (course && joint) {
-            return new int[] {
+            int[] sunk = new int[] {
                     (face[0] + BRICK_MORTAR_R + BRICK_MORTAR_R) / 3,
                     (face[1] + BRICK_MORTAR_G + BRICK_MORTAR_G) / 3,
                     (face[2] + BRICK_MORTAR_B + BRICK_MORTAR_B) / 3};
+            int[] shine = brickFace(x, y + 2);
+            return new int[] {
+                    (sunk[0] * 3 + shine[0]) / 4,
+                    (sunk[1] * 3 + shine[1]) / 4,
+                    (sunk[2] * 3 + shine[2]) / 4};
         }
         if ((y & 7) == 2) {
             int[] shine = brickFace(x, y - 1);

@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick corner.**
+  The clay corner
+  where a course
+  meets the grout
+  leans toward the
+  next shine. The
+  grout line stays
+  put.
+
 - **Explore brick shine joint.**
   The clay beside
   the grout on the
