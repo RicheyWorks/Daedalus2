@@ -83,7 +83,7 @@ def parse_java(errors):
 
 
 # Pure-Python minigames: rules live in a stdlib module under tools/minigames.
-PY_GAMES = ["prism_shard"]
+PY_GAMES = ["prism_shard", "lumenpath", "wardens_accord", "facetlock", "prismvault", "shardfall", "prismcairn"]
 
 
 def parse_python(errors):
@@ -284,7 +284,9 @@ def build():
         "leaderboard_feed": dict(CATALOG_HOOK),
         "games": games,
         "java_cabinets": java,
-        "python_games": py,
+        # A Python game that now has a native factory is a desktop cabinet; its module stays the rules
+        # authority (parity fixtures), but realm builders place the ADaedalusDesktopArcade host.
+        "python_games": [g for g in py if g["id"] not in {x["id"] for x in games}],
     }
     md = [
         "# Minigame catalog", "",

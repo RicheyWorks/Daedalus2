@@ -19,6 +19,13 @@ Source: `daedalus-core/src/main/java/com/daedalus/world/ark/cabinet/`. Source on
 | `cube` | The Signal Cube | G435 `SignalCube` | solo pocket cube from a fixed scramble, turns like `R`, `U2`, `F'` |
 | `masts` | The Four Masts | G432 `FourMasts` | solo Hanoi, 4 sails on 4 masts, moves like `1,4` |
 | `crawler` | The Deck Crawler | G409 `DeckCrawler` | Langton's crab on a 21x21 deck, 300 steps; `1`/`10`/`100`/`back` |
+| `hoards` | The Two Hoards | G354 `TwoHoards` | Wythoff, hoards 5 and 9 (up to 30 each); `1,k`, `2,k` or `3,k` for both |
+| `skittles` | The Skittle Row | G411 `SkittleRow` | Kayles, rows 3, 5, 7 (up to 40 skittles); `row,spot,count` with count 1 or 2 |
+| `galley` | The Galley Stack | G428 `GalleyStack` | solo pancake flips, 6 plates (2 to 8); type `k` to flip the top k |
+| `pegs` | The Peg Board | G366 `PegBoard` | solo peg solitaire on the 15-hole triangle (side 2 to 5); type `from,to` |
+| `lock` | The Lock Pegs | G362 `LockPegs` | solo Mastermind, 4 pegs in 6 colours, 10 tries; type e.g. `1122`; Knuth hints open any lock in 5 |
+| `casks` | The Measuring Casks | G268 `MeasuringCasks` | solo water jugs, casks of 3 and 5 litres, measure 4; `fillA`, `emptyB`, `pourAB` and so on |
+| `lights` | The Deck Lights | G396 `DeckLights` | solo Akari on a 5x5 deck with 4 walls; type `row,col` to hang or take down a lamp |
 
 The cabinet plays seat 2 itself using each piece's own exact solver, so these default boards are
 kept small enough for perfect play.
@@ -31,7 +38,7 @@ Solo games (Cargo Shuffle, Hold Blocks, Ferry Watch, Signal Cube, Four Masts) co
 player 1. Their hints come from the piece's own shortest plan or solve, except Ferry Watch and Four
 Masts: those pieces only plan from the start, so the adapter runs a small breadth-first search from the
 current position using the piece's own safety rule (Ferry Watch) or the stacking rule (Four Masts, capped
-at 65536 states). The merged pieces are unchanged. The Deck Crawler is a watch-the-pattern toy: the
+at 65536 states). The merged pieces are unchanged. The Measuring Casks hint follows the piece's fewest-move plan; after a move off the plan it empties the casks and starts the plan again. The Deck Lights hint toggles the first lamp that differs from the piece's solved board, and the game is won as soon as the piece's rule check accepts the lamps. The Deck Crawler is a watch-the-pattern toy: the
 show ends at its step budget or if the crab reaches the deck edge.
 
 ## How to play
@@ -60,3 +67,5 @@ ark's mess deck. Finishing any game completes quest `q_ark_cabinet` (`ArkCabinet
 2. Register it: `cabinet.register("id", "Title", "one-line pitch", MyGame::new)`, or add a line
    to `ArkCabinet.standard()`.
 3. Add scripted-move tests for legal moves, an illegal move, a win and the hint.
+
+`ArkCabinetAutoplayTest` plays every slot cabinet-vs-cabinet to its end and checks Two Hoards and Skittle Row perfect play against brute-force game trees. `ArkCabinetCasksLightsTest` checks the casks plan against a breadth-first search over all casks up to 9 litres and the Deck Lights solver against brute-force lamp enumeration.

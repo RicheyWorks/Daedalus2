@@ -86,6 +86,20 @@ public final class ArkCabinet {
         c.register("cube", "The Signal Cube", "solve a scrambled 2x2x2 cube, solo (G435)", SignalCubeGame::new);
         c.register("masts", "The Four Masts", "Tower of Hanoi with four masts, solo (G432)", FourMastsGame::new);
         c.register("crawler", "The Deck Crawler", "watch Langton's crab paint the deck (G409)", DeckCrawlerGame::new);
+        c.register("hoards", "The Two Hoards", "Wythoff: take from one hoard or both, last coin wins (G354)",
+            TwoHoardsGame::new);
+        c.register("skittles", "The Skittle Row", "Kayles: knock 1 or 2 skittles, last one wins (G411)",
+            SkittleRowGame::new);
+        c.register("galley", "The Galley Stack", "flip plates into order in fewest flips, solo (G428)",
+            GalleyStackGame::new);
+        c.register("pegs", "The Peg Board", "jump pegs on a 15-hole triangle down to one, solo (G366)",
+            PegBoardGame::new);
+        c.register("lock", "The Lock Pegs", "crack the strongroom's 4-peg colour code, solo (G362)",
+            LockPegsGame::new);
+        c.register("casks", "The Measuring Casks", "measure exact litres with two casks in fewest moves, solo (G268)",
+            MeasuringCasksGame::new);
+        c.register("lights", "The Deck Lights", "Akari: hang lamps to light the whole deck, solo (G396)",
+            DeckLightsGame::new);
         return c;
     }
 

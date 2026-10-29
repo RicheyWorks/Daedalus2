@@ -1,0 +1,997 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_PebbleSet",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G383",
+    "ask": "youtube-master 55753",
+    "lod": "LOD0/1",
+    "size_m": "0.5 m line of 10 pebbles",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Pebble_0",
+     "SOCKET_Pebble_1",
+     "SOCKET_Pebble_2",
+     "SOCKET_Pebble_3",
+     "SOCKET_Pebble_4",
+     "SOCKET_Pebble_5",
+     "SOCKET_Pebble_6",
+     "SOCKET_Pebble_7",
+     "SOCKET_Pebble_8",
+     "SOCKET_Pebble_9"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_PebbleSet_M0",
+     "colour": "pebbles light",
+     "hex": "D8D0C0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_PebbleSet_M1",
+     "colour": "pebbles dark",
+     "hex": "5A5650",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_PebbleSet",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Pebble0",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        -0.25,
+        0,
+        0.0125
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Pebble1",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        -0.2,
+        0,
+        0.0125
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        15
+       ]
+      },
+      {
+       "name": "Pebble2",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        -0.15,
+        0,
+        0.0125
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        30
+       ]
+      },
+      {
+       "name": "Pebble3",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        -0.1,
+        0,
+        0.0125
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Pebble4",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        -0.05,
+        0,
+        0.0125
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        60
+       ]
+      },
+      {
+       "name": "Pebble5",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        0.0,
+        0,
+        0.0125
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        75
+       ]
+      },
+      {
+       "name": "Pebble6",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        0.05,
+        0,
+        0.0125
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Pebble7",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        0.1,
+        0,
+        0.0125
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        105
+       ]
+      },
+      {
+       "name": "Pebble8",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        0.15,
+        0,
+        0.0125
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        120
+       ]
+      },
+      {
+       "name": "Pebble9",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.04,
+        0.025
+       ],
+       "centre": [
+        0.2,
+        0,
+        0.0125
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        135
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Pebble_0",
+     "location": [
+      -0.25,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.25,
+      0.025,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pebble_1",
+     "location": [
+      -0.2,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.2,
+      0.025,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pebble_2",
+     "location": [
+      -0.15,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.15,
+      0.025,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pebble_3",
+     "location": [
+      -0.1,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.1,
+      0.025,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pebble_4",
+     "location": [
+      -0.05,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.05,
+      0.025,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pebble_5",
+     "location": [
+      0.0,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.025,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pebble_6",
+     "location": [
+      0.05,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.025,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pebble_7",
+     "location": [
+      0.1,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.1,
+      0.025,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pebble_8",
+     "location": [
+      0.15,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.15,
+      0.025,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pebble_9",
+     "location": [
+      0.2,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.2,
+      0.025,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 440,
+    "lod1_triangles": 440,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_PebbleSet": 440
+    },
+    "bounds_min": [
+     -0.275,
+     -0.0302,
+     0.0
+    ],
+    "bounds_max": [
+     0.2297,
+     0.0302,
+     0.025
+    ],
+    "dimensions": [
+     0.5047,
+     0.0604,
+     0.025
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "17f3d1e4ac9719a9be35498044dd649b6dbcce34c173682660ef2ceec6e9035d"
+  },
+  {
+   "asset": "Prop_YTM_TallyStick",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G383",
+    "ask": "youtube-master 55753",
+    "lod": "LOD0/1",
+    "size_m": "0.35 m tally stick, 10 cut sockets",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Hand",
+     "SOCKET_Cut_0",
+     "SOCKET_Cut_1",
+     "SOCKET_Cut_2",
+     "SOCKET_Cut_3",
+     "SOCKET_Cut_4",
+     "SOCKET_Cut_5",
+     "SOCKET_Cut_6",
+     "SOCKET_Cut_7",
+     "SOCKET_Cut_8",
+     "SOCKET_Cut_9"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_TallyStick_M0",
+     "colour": "stick (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_TallyStick_M1",
+     "colour": "cuts",
+     "hex": "2A2420",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_TallyStick",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stick",
+       "shape": "box",
+       "size": [
+        0.35,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.015
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Cut0",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        -0.15,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Cut1",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        -0.12,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Cut2",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        -0.09,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Cut3",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        -0.06,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Cut4",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        -0.03,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Cut5",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        0.0,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Cut6",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        0.03,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Cut7",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        0.06,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Cut8",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        0.09,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Cut9",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.032,
+        0.012
+       ],
+       "centre": [
+        0.12,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.015
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.015,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_0",
+     "location": [
+      -0.15,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.15,
+      0.03,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_1",
+     "location": [
+      -0.12,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.12,
+      0.03,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_2",
+     "location": [
+      -0.09,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.09,
+      0.03,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_3",
+     "location": [
+      -0.06,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.06,
+      0.03,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_4",
+     "location": [
+      -0.03,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.03,
+      0.03,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_5",
+     "location": [
+      0.0,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.03,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_6",
+     "location": [
+      0.03,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.03,
+      0.03,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_7",
+     "location": [
+      0.06,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.06,
+      0.03,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_8",
+     "location": [
+      0.09,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.09,
+      0.03,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cut_9",
+     "location": [
+      0.12,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.12,
+      0.03,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 164,
+    "lod1_triangles": 164,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_TallyStick": 164
+    },
+    "bounds_min": [
+     -0.175,
+     -0.016,
+     0.0
+    ],
+    "bounds_max": [
+     0.175,
+     0.016,
+     0.036
+    ],
+    "dimensions": [
+     0.35,
+     0.032,
+     0.036
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c4fe1bd2992dce5441ab4015a895d9c9f7adf8af334190f53b455741af462d96"
+  }
+ ]
+}

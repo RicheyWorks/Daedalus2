@@ -32,7 +32,7 @@ static std::string ReadAll(const std::string& Path)
 int main(int argc, char** argv)
 {
     const std::string Dir = argc > 1 ? argv[1] : "../DaedalusLink/Content/Inventory";
-    const char* Files[] = {"world-zero", "gallery-city", "parcels", "bricks", "labyrinth"};
+    const char* Files[] = {"world-zero", "gallery-city", "parcels", "bricks", "labyrinth", "ocean"};
     std::map<std::string, Catalog> Cats;
     for (const char* F : Files)
     {
@@ -42,11 +42,11 @@ int main(int argc, char** argv)
         Check(std::string("catalog loads: ") + F, Loaded, Err);
         if (Loaded) Cats[F] = C;
     }
-    Check("five realms, five catalogs", Cats.size() == 5);
+    Check("six realms, six catalogs", Cats.size() == 6);
     {
         std::set<std::string> Themes, Realms;
         for (const auto& P : Cats) { Themes.insert(P.second.Theme); Realms.insert(P.second.Realm); }
-        Check("each realm wears its own theme", Themes.size() == 5 && Realms.size() == 5);
+        Check("each realm wears its own theme", Themes.size() == 6 && Realms.size() == 6);
         bool Known = true;
         for (const auto& P : Cats) Known &= Themes.count(P.second.Theme) && daedalus::inv::Themes().count(P.second.Theme);
         Check("and every theme named exists", Known);
@@ -230,6 +230,16 @@ int main(int argc, char** argv)
     }
 
     // a harness line
+    std::map<std::string, int> SeaBag{{"TIDE_COMPASS", 1}, {"HULL_PATCH", 3}};
+    Tabs Sea;
+    Sea.Open(Cats["ocean"], SeaBag, {}, 6);
+    Check("Ocean uses the common tabs with its own definitions", Sea.Rows().size() == 2 && Sea.TabName() == "ALL"
+        && Sea.Selected() && Sea.Selected()->Def->Id == "TIDE_COMPASS");
+    Check("Ocean exposes inspect without unfinished effects", !Sea.Confirm(I) && Sea.ActionLabels().size() == 1
+        && Sea.ActionLabels()[0] == "INSPECT");
+    Check("Ocean confirm emits inspect for the host", Sea.Confirm(I) && I.Action == "INSPECT" && I.ItemId == "TIDE_COMPASS");
+    Check("Ocean browsing preserves host-owned quantities", SeaBag["TIDE_COMPASS"] == 1 && SeaBag["HULL_PATCH"] == 3);
+
     Check("describe names realm, theme, tab, item", G.Describe().find("realm=GALLERY-CITY theme=gallery tab=ALL(1/6)") != std::string::npos && G.Describe().find("item=PAINT_SPRAY x1") != std::string::npos, G.Describe());
 
     std::cout << Ok << "/" << Total << "\n";

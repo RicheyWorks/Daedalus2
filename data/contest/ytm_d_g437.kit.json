@@ -1,0 +1,388 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_ReedMat",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G437",
+    "ask": "youtube-master 56082",
+    "lod": "LOD0/1",
+    "size_m": "2.0 x 1.5 m reed floor mat",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Centre"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_ReedMat_M0",
+     "colour": "weave (G66)",
+     "hex": "C8B070",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_ReedMat_M1",
+     "colour": "stripes (G66)",
+     "hex": "E3C25A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_ReedMat",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Mat",
+       "shape": "box",
+       "size": [
+        2.0,
+        1.5,
+        0.015
+       ],
+       "centre": [
+        0,
+        0,
+        0.0075
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Stripe0",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08333,
+        0.017
+       ],
+       "centre": [
+        0,
+        -0.625,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe1",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08333,
+        0.017
+       ],
+       "centre": [
+        0,
+        -0.375,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe2",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08333,
+        0.017
+       ],
+       "centre": [
+        0,
+        -0.125,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe3",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08333,
+        0.017
+       ],
+       "centre": [
+        0,
+        0.125,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe4",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08333,
+        0.017
+       ],
+       "centre": [
+        0,
+        0.375,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe5",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08333,
+        0.017
+       ],
+       "centre": [
+        0,
+        0.625,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0.015
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.015,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_ReedMat": 84
+    },
+    "bounds_min": [
+     -1.0,
+     -0.75,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     0.75,
+     0.017
+    ],
+    "dimensions": [
+     2.0,
+     1.5,
+     0.017
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c0d2e815570b83be1b624151a45f15c38566214967973be32cc17057abf98959"
+  },
+  {
+   "asset": "Prop_YTM_ReedBundle",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G437",
+    "ask": "youtube-master 56082",
+    "lod": "LOD0/1",
+    "size_m": "1.6 m reed bundle",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Carry"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_ReedBundle_M0",
+     "colour": "dried reed",
+     "hex": "C8B070",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_ReedBundle_M1",
+     "colour": "ties",
+     "hex": "B89A62",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_ReedBundle",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Reeds",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.12,
+       "r2": 0.1,
+       "length": 1.6,
+       "centre": [
+        0,
+        0,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Tie-1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.125,
+       "r2": 0.125,
+       "length": 0.04,
+       "centre": [
+        -0.5,
+        0,
+        0.12
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Tie1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.125,
+       "r2": 0.125,
+       "length": 0.04,
+       "centre": [
+        0.5,
+        0,
+        0.12
+       ],
+       "slot": 1,
+       "segments": 10
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Carry",
+     "location": [
+      0,
+      0,
+      0.24
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.24,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 108,
+    "lod1_triangles": 108,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_ReedBundle": 108
+    },
+    "bounds_min": [
+     -0.8,
+     -0.125,
+     0.0011
+    ],
+    "bounds_max": [
+     0.8,
+     0.125,
+     0.2389
+    ],
+    "dimensions": [
+     1.6,
+     0.25,
+     0.2378
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f0912b0b83d68b2b9cf4066245feb26272a022ae2dd15a36776db2b56275f469"
+  }
+ ]
+}

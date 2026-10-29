@@ -1,0 +1,11 @@
+{
+  "v": 1,
+  "quest": "q_memory_footprint",
+  "lore": "Before every sailing, Quartermaster Bram weighs each island's cargo on the harbour scales and chalks the load against the waterline on the hull. He keeps a short list nailed to the gangway: the heaviest crates first, and which single crate, thrown off, would lift a sinking island back above the line.",
+  "hook": {"report_format": "daedalus-memory-footprint", "field": "verdict", "values": ["light", "laden", "overladen"],
+           "waterline": "worlds[].ram_permille", "gangway_list": "wins[0:3]", "crates": "top_consumers"},
+  "npc": {"name": "Quartermaster Bram", "lines": {
+    "light": "Every hull rides high. Plenty of room in the holds.",
+    "laden": "We are near the waterline. Check the list on the gangway before loading more.",
+    "overladen": "An island is riding under the line. Throw off the first crate on my list and she floats."}}
+}

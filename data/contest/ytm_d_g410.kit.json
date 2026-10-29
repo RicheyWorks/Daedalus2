@@ -1,0 +1,553 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_LampPostOilJar",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G410",
+    "ask": "youtube-master 55919",
+    "lod": "LOD0/1",
+    "size_m": "2.40 m lamp post with oil jar",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Base",
+     "SOCKET_Flame",
+     "SOCKET_Fill"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_LampPostOilJar_M0",
+     "colour": "post (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_LampPostOilJar_M1",
+     "colour": "cap / marks (G66)",
+     "hex": "3A3A40",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_LampPostOilJar_M2",
+     "colour": "detail",
+     "hex": "FFC870",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_LampPostOilJar",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.051,
+       "length": 2.4,
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.018,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        2.44
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Arm",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.4,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.2,
+        2.3
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Jar",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.06,
+         0
+        ],
+        [
+         0.09,
+         0.08
+        ],
+        [
+         0.05,
+         0.16
+        ]
+       ],
+       "centre": [
+        0,
+        -0.38,
+        2.1
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      2.48
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.48,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Flame",
+     "location": [
+      0,
+      -0.38,
+      2.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.3,
+      0.38
+     ]
+    },
+    {
+     "name": "SOCKET_Fill",
+     "location": [
+      0,
+      -0.38,
+      2.26
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.26,
+      0.38
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_LampPostOilJar_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.06,
+     "r2": 0.06,
+     "length": 2.4,
+     "centre": [
+      0,
+      0,
+      1.2
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 156,
+    "lod1_triangles": 156,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_LampPostOilJar": 156
+    },
+    "bounds_min": [
+     -0.09,
+     -0.4656,
+     0.0
+    ],
+    "bounds_max": [
+     0.09,
+     0.072,
+     2.48
+    ],
+    "dimensions": [
+     0.18,
+     0.5376,
+     2.48
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7b162c25383608d2297aa5120bc8afe2fc13618af61044e0b04cb6326100fb2e"
+  },
+  {
+   "asset": "Prop_YTM_LamplighterCan",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G410",
+    "ask": "youtube-master 55919",
+    "lod": "LOD0/1",
+    "size_m": "0.22 m oil can",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Hand",
+     "SOCKET_Spout"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_LamplighterCan_M0",
+     "colour": "tin can",
+     "hex": "9A9CA0",
+     "roughness": 0.4,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_LamplighterCan_M1",
+     "colour": "bail",
+     "hex": "3A3A40",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_LamplighterCan",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Can",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.07,
+         0
+        ],
+        [
+         0.08,
+         0.15
+        ],
+        [
+         0.03,
+         0.22
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Spout",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.012,
+       "r2": 0.006,
+       "length": 0.18,
+       "centre": [
+        0,
+        -0.1,
+        0.17
+       ],
+       "slot": 0,
+       "segments": 6,
+       "rot": [
+        -35,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Bail",
+       "shape": "slab",
+       "outline": [
+        [
+         0.06,
+         0.0
+        ],
+        [
+         0.055433,
+         0.022961
+        ],
+        [
+         0.042426,
+         0.042426
+        ],
+        [
+         0.022961,
+         0.055433
+        ],
+        [
+         0.0,
+         0.06
+        ],
+        [
+         -0.022961,
+         0.055433
+        ],
+        [
+         -0.042426,
+         0.042426
+        ],
+        [
+         -0.055433,
+         0.022961
+        ],
+        [
+         -0.06,
+         0.0
+        ],
+        [
+         -0.052,
+         0.0
+        ],
+        [
+         -0.048042,
+         0.0199
+        ],
+        [
+         -0.03677,
+         0.03677
+        ],
+        [
+         -0.0199,
+         0.048042
+        ],
+        [
+         0.0,
+         0.052
+        ],
+        [
+         0.0199,
+         0.048042
+        ],
+        [
+         0.03677,
+         0.03677
+        ],
+        [
+         0.048042,
+         0.0199
+        ],
+        [
+         0.052,
+         0.0
+        ]
+       ],
+       "thickness": 0.01,
+       "centre": [
+        0,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 18,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Spout",
+     "location": [
+      0,
+      -0.18,
+      0.22
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.22,
+      0.18
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 144,
+    "lod1_triangles": 144,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_LamplighterCan": 144
+    },
+    "bounds_min": [
+     -0.08,
+     -0.1797,
+     0
+    ],
+    "bounds_max": [
+     0.08,
+     0.0761,
+     0.27
+    ],
+    "dimensions": [
+     0.16,
+     0.2558,
+     0.27
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "67d2fc3c5eb1364e38bea2c5cbcefc8272ba6ec6f2f03bc62b6fec1b5f520d74"
+  }
+ ]
+}

@@ -1,0 +1,825 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_BrineTrough",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G301",
+    "ask": "youtube-master 55339",
+    "lod": "LOD0/1",
+    "size_m": "1.6 m brine trough",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Dip_0",
+     "SOCKET_Dip_1",
+     "SOCKET_Dip_2"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_BrineTrough_M0",
+     "colour": "trough (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_BrineTrough_M1",
+     "colour": "brine (MI)",
+     "hex": "B8C8C0",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_BrineTrough",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bottom",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.5,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.33
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Side-1",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.05,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.48
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Side1",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.05,
+        0.3
+       ],
+       "centre": [
+        0,
+        0.25,
+        0.48
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "End-1",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.5,
+        0.3
+       ],
+       "centre": [
+        -0.8,
+        0,
+        0.48
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "End1",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.5,
+        0.3
+       ],
+       "centre": [
+        0.8,
+        0,
+        0.48
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Brine",
+       "shape": "box",
+       "size": [
+        1.5,
+        0.45,
+        0.01
+       ],
+       "centre": [
+        0,
+        0,
+        0.55
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Leg-1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.5,
+        0.3
+       ],
+       "centre": [
+        -0.65,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.5,
+        0.3
+       ],
+       "centre": [
+        0.65,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Dip_0",
+     "location": [
+      -0.5,
+      -0.3,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.5,
+      0.6,
+      0.3
+     ]
+    },
+    {
+     "name": "SOCKET_Dip_1",
+     "location": [
+      0.0,
+      -0.3,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.6,
+      0.3
+     ]
+    },
+    {
+     "name": "SOCKET_Dip_2",
+     "location": [
+      0.5,
+      -0.3,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.5,
+      0.6,
+      0.3
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_BrineTrough_00",
+     "shape": "box",
+     "size": [
+      1.6,
+      0.5,
+      0.63
+     ],
+     "centre": [
+      0,
+      0,
+      0.32
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 320,
+    "lod1_triangles": 320,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_BrineTrough": 320
+    },
+    "bounds_min": [
+     -0.825,
+     -0.275,
+     0.0
+    ],
+    "bounds_max": [
+     0.825,
+     0.275,
+     0.63
+    ],
+    "dimensions": [
+     1.65,
+     0.55,
+     0.63
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f8ce9c271f44a9f224b516bcd0573318f34293efeda54641558bdc3be1b65a20"
+  },
+  {
+   "asset": "Prop_YTM_Bucket",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G301",
+    "ask": "youtube-master 55339",
+    "lod": "LOD0/1",
+    "size_m": "0.28 m dia x 0.26 m bucket",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Contents",
+     "SOCKET_Hand"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "morph": "Fill (shape key 0 = empty, 1 = full; scales Fill part Z)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Bucket_M0",
+     "colour": "wicker (G66)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Bucket_M1",
+     "colour": "rim / handle",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_Bucket_M2",
+     "colour": "water (fill-level morph 0..1)",
+     "hex": "4A9AB0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Bucket",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Weave",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.112,
+         0
+        ],
+        [
+         0.14,
+         0.221
+        ],
+        [
+         0.1456,
+         0.26
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 14,
+       "caps": [
+        true,
+        false
+       ]
+      },
+      {
+       "name": "Rim",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.1372,
+         0.248
+        ],
+        [
+         0.1512,
+         0.248
+        ],
+        [
+         0.1512,
+         0.278
+        ],
+        [
+         0.1372,
+         0.278
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 1,
+       "segments": 14,
+       "caps": [
+        false,
+        false
+       ]
+      },
+      {
+       "name": "Handle",
+       "shape": "slab",
+       "outline": [
+        [
+         0.133,
+         0.0
+        ],
+        [
+         0.126491,
+         0.041099
+        ],
+        [
+         0.107599,
+         0.078175
+        ],
+        [
+         0.078175,
+         0.107599
+        ],
+        [
+         0.041099,
+         0.126491
+        ],
+        [
+         0.0,
+         0.133
+        ],
+        [
+         -0.041099,
+         0.126491
+        ],
+        [
+         -0.078175,
+         0.107599
+        ],
+        [
+         -0.107599,
+         0.078175
+        ],
+        [
+         -0.126491,
+         0.041099
+        ],
+        [
+         -0.133,
+         0.0
+        ],
+        [
+         -0.1246,
+         0.0
+        ],
+        [
+         -0.118502,
+         0.038504
+        ],
+        [
+         -0.100804,
+         0.073238
+        ],
+        [
+         -0.073238,
+         0.100804
+        ],
+        [
+         -0.038504,
+         0.118502
+        ],
+        [
+         0.0,
+         0.1246
+        ],
+        [
+         0.038504,
+         0.118502
+        ],
+        [
+         0.073238,
+         0.100804
+        ],
+        [
+         0.100804,
+         0.073238
+        ],
+        [
+         0.118502,
+         0.038504
+        ],
+        [
+         0.1246,
+         0.0
+        ]
+       ],
+       "thickness": 0.02,
+       "centre": [
+        0,
+        0,
+        0.26
+       ],
+       "slot": 1,
+       "segments": 22,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Fill",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.133,
+       "r2": 0.084,
+       "length": 0.065,
+       "centre": [
+        0,
+        0,
+        0.247
+       ],
+       "slot": 2,
+       "segments": 12
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Contents",
+     "location": [
+      0,
+      0,
+      0.26
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.26,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.379
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.379,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 280,
+    "lod1_triangles": 280,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_Bucket": 280
+    },
+    "bounds_min": [
+     -0.1512,
+     -0.1474,
+     0
+    ],
+    "bounds_max": [
+     0.1512,
+     0.1474,
+     0.393
+    ],
+    "dimensions": [
+     0.3024,
+     0.2948,
+     0.393
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e77066dfdd394f0ee407e8fcab610d209520a5cd9004083cc1aa1a3fba9628bd"
+  },
+  {
+   "asset": "Prop_YTM_PickleCrock",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G301",
+    "ask": "youtube-master 55339",
+    "lod": "LOD0/1",
+    "size_m": "0.36 m dia x 0.36 m pickle crock",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Contents",
+     "SOCKET_Hand"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_PickleCrock_M0",
+     "colour": "pickle crock (G66 clay)",
+     "hex": "A87850",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_PickleCrock",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.117,
+         0
+        ],
+        [
+         0.18,
+         0.126
+        ],
+        [
+         0.1656,
+         0.288
+        ],
+        [
+         0.126,
+         0.3348
+        ],
+        [
+         0.1404,
+         0.36
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 14,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Lid",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.144,
+       "r2": 0.072,
+       "length": 0.0432,
+       "centre": [
+        0,
+        0,
+        0.3816
+       ],
+       "slot": 0,
+       "segments": 14
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Contents",
+     "location": [
+      0,
+      0,
+      0.306
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.306,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.252
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.252,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_PickleCrock_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.18,
+     "r2": 0.18,
+     "length": 0.36,
+     "centre": [
+      0,
+      0,
+      0.18
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 188,
+    "lod1_triangles": 188,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_PickleCrock": 188
+    },
+    "bounds_min": [
+     -0.18,
+     -0.1755,
+     0
+    ],
+    "bounds_max": [
+     0.18,
+     0.1755,
+     0.4032
+    ],
+    "dimensions": [
+     0.36,
+     0.351,
+     0.4032
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "32be9edf5d0f73dc8db6d9c749ef470a8341d0424828fda4bd0ea224df6957ae"
+  }
+ ]
+}

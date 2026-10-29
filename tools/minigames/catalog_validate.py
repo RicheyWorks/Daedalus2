@@ -9,6 +9,10 @@ Per desktop game in docs/minigames/catalog.json:
   * the scoreboard capability (proven by scoreboard_test.cpp),
   * a unique title, a Daedalus spot whose realm already places the cabinet, and no trademarked game, company or character name in id, title,
     summary or how-to line (Java cabinet titles and summaries are checked too).
+Across every section (games, python_games, java_cabinets):
+  * ids are present, unique and leaderboard-safe (the feed's ^[a-z0-9_]{1,32}$),
+  * every entry has a summary, titles are unique (python games too), and no two titles collapse to the same
+    leaderboard name once the feed strips punctuation (leaderboard_feed.sanitize_name).
 Internal ids (star_shooter, dodge_ball, riftwing) and save file names are not titles and are not scanned; the old ids kept in GameAliases for save compatibility are not scanned. Stdlib only.
 """
 import json
@@ -59,8 +63,53 @@ def slot_ids(text):
     return set(re.findall(r'\{"([a-z_]+)","[a-z_]+\.dgs",SaveStyle::', text))
 
 
-def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
+ID_RE = re.compile(r"^[a-z0-9_]{1,32}$")  # leaderboard_feed._ID: the feed drops any other id
+
+
+def feed_name(title):
+    """The leaderboard name a title becomes (mirrors leaderboard_feed.sanitize_name), lower-cased for comparing."""
+    cleaned = re.sub(r" +", " ", re.sub(r"[^A-Za-z0-9 ]+", " ", title or "")).strip()
+    return cleaned[:64].rstrip().lower()
+
+
+def identity_errors(catalog):
+    """Ids, summaries and titles across all three sections."""
     errors = []
+    seen_ids, seen_titles, seen_names = {}, {}, {}
+    for section, label in (("games", "game"), ("python_games", "python game"), ("java_cabinets", "Java cabinet")):
+        for i, g in enumerate(catalog.get(section, [])):
+            gid = g.get("id")
+            where = f"{section}[{i}]"
+            if not isinstance(gid, str) or not gid.strip():
+                errors.append(f"{label} at {where} has no id")
+                continue
+            if not ID_RE.fullmatch(gid):
+                errors.append(f"{label} '{gid}' id must match ^[a-z0-9_]{{1,32}}$ (the leaderboard feed drops it)")
+            if gid in seen_ids:
+                errors.append(f"{label} '{gid}' id is also used by {seen_ids[gid]}")
+            else:
+                seen_ids[gid] = where
+            if not (g.get("summary") or "").strip():
+                errors.append(f"{label} '{gid}' has no summary")
+            title = (g.get("title") or "").strip()
+            if not title:
+                if section != "games":  # desktop games already report a missing title below
+                    errors.append(f"{label} '{gid}' has no title")
+                continue
+            if section != "games":  # desktop duplicates are reported by validate's own title check
+                if title.lower() in seen_titles:
+                    errors.append(f"{label} '{gid}' title '{title}' is also used by '{seen_titles[title.lower()]}'")
+            seen_titles.setdefault(title.lower(), gid)
+            name = feed_name(title)
+            if name in seen_names and seen_names[name][1].lower() != title.lower():
+                errors.append(f"{label} '{gid}' title '{title}' shows as the same leaderboard name as "
+                              f"'{seen_names[name][0]}' ('{seen_names[name][1]}')")
+            seen_names.setdefault(name, (gid, title))
+    return errors
+
+
+def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
+    errors = identity_errors(catalog)
     titles = {}
     for g in catalog.get("games", []):
         gid = g.get("id", "?")

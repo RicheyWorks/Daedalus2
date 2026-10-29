@@ -1,0 +1,260 @@
+{
+ "asset": "Prop_Arcade_Cab_DancePad",
+ "units": "cm",
+ "space": "unreal",
+ "note": "UE +X forward, +Y right, +Z up, cm; UE = 100 * (x_b, -y_b, z_b) = 100 * (gx, gz, gy) (UEB 48725); location relative to parent node; rotation [pitch, yaw, roll] deg: plain sockets [0, 0, 0] = mesh-aligned, attach sockets +X along barrel/shaft, +Z up; native empties pre-rotated to match",
+ "sockets": [
+  {
+   "name": "SOCKET_CoinSlot",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    50.0,
+    -59.0,
+    90.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Pad_P1_Down",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    -60.0,
+    42.0,
+    19.6
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Pad_P1_Left",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    -92.0,
+    10.0,
+    19.6
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Pad_P1_Right",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    -28.0,
+    10.0,
+    19.6
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Pad_P1_Up",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    -60.0,
+    -22.0,
+    19.6
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Pad_P2_Down",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    60.0,
+    42.0,
+    19.6
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Pad_P2_Left",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    28.0,
+    10.0,
+    19.6
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Pad_P2_Right",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    92.0,
+    10.0,
+    19.6
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Pad_P2_Up",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    60.0,
+    -22.0,
+    19.6
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Player1",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    -60.0,
+    10.0,
+    18.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Player2",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    60.0,
+    10.0,
+    18.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Screen",
+   "parent": "Prop_Arcade_Cab_DancePad",
+   "location": [
+    0.0,
+    -57.0,
+    160.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  }
+ ]
+}

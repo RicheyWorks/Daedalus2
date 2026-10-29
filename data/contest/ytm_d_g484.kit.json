@@ -1,0 +1,757 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_NumberedJar",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G484",
+    "ask": "youtube-master 56374",
+    "lod": "LOD0/1",
+    "size_m": "0.20 m dia x 0.22 m numbered clay jar",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Contents",
+     "SOCKET_Hand",
+     "SOCKET_Number"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "mi_set": [
+     "MI_YTM_NumberedJar_0",
+     "MI_YTM_NumberedJar_1",
+     "MI_YTM_NumberedJar_2",
+     "MI_YTM_NumberedJar_3",
+     "MI_YTM_NumberedJar_4",
+     "MI_YTM_NumberedJar_5",
+     "MI_YTM_NumberedJar_6",
+     "MI_YTM_NumberedJar_7",
+     "MI_YTM_NumberedJar_8",
+     "MI_YTM_NumberedJar_9"
+    ],
+    "mi_param": "Number (0..9)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_NumberedJar_M0",
+     "colour": "numbered clay jar (G66 clay)",
+     "hex": "B8643C",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_NumberedJar_M1",
+     "colour": "painted number (MI 0-9)",
+     "hex": "F0E8D8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_NumberedJar",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.065,
+         0
+        ],
+        [
+         0.1,
+         0.077
+        ],
+        [
+         0.092,
+         0.176
+        ],
+        [
+         0.07,
+         0.2046
+        ],
+        [
+         0.078,
+         0.22
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 14,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Lid",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.04,
+       "length": 0.0264,
+       "centre": [
+        0,
+        0,
+        0.2332
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Number",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.004,
+        0.05
+       ],
+       "centre": [
+        0,
+        -0.098,
+        0.1
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Contents",
+     "location": [
+      0,
+      0,
+      0.187
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.187,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.154
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.154,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Number",
+     "location": [
+      0,
+      -0.102,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      0.102
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a1dae06ea9c261deaf131524800bf762ddaaa3524f90380247e2c8cc84e8fa13",
+   "predicted": {
+    "triangles": 200,
+    "lod1_triangles": 200,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_NumberedJar": 200
+    },
+    "bounds_min": [
+     -0.1,
+     -0.1,
+     0
+    ],
+    "bounds_max": [
+     0.1,
+     0.0975,
+     0.2464
+    ],
+    "dimensions": [
+     0.2,
+     0.1975,
+     0.2464
+    ],
+    "collision_tris": 0
+   }
+  },
+  {
+   "asset": "Prop_YTM_PantryShelf",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G484",
+    "ask": "youtube-master 56374",
+    "lod": "LOD0/1",
+    "size_m": "1.24 x 0.35 x 1.6 m pantry shelf, 16 jar spots",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Jar_0_0",
+     "SOCKET_Jar_0_1",
+     "SOCKET_Jar_0_2",
+     "SOCKET_Jar_0_3",
+     "SOCKET_Jar_1_0",
+     "SOCKET_Jar_1_1",
+     "SOCKET_Jar_1_2",
+     "SOCKET_Jar_1_3",
+     "SOCKET_Jar_2_0",
+     "SOCKET_Jar_2_1",
+     "SOCKET_Jar_2_2",
+     "SOCKET_Jar_2_3",
+     "SOCKET_Jar_3_0",
+     "SOCKET_Jar_3_1",
+     "SOCKET_Jar_3_2",
+     "SOCKET_Jar_3_3"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_PantryShelf_M0",
+     "colour": "shelf (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_PantryShelf",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Side-1",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.35,
+        1.6
+       ],
+       "centre": [
+        -0.6,
+        0,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Side1",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.35,
+        1.6
+       ],
+       "centre": [
+        0.6,
+        0,
+        0.8
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Shelf0",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.35,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Shelf1",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.35,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.6
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Shelf2",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.35,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Shelf3",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.35,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        1.6
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Jar_0_0",
+     "location": [
+      -0.45,
+      0,
+      0.115
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      0.115,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_0_1",
+     "location": [
+      -0.15,
+      0,
+      0.115
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.15,
+      0.115,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_0_2",
+     "location": [
+      0.15,
+      0,
+      0.115
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.15,
+      0.115,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_0_3",
+     "location": [
+      0.45,
+      0,
+      0.115
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      0.115,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_1_0",
+     "location": [
+      -0.45,
+      0,
+      0.615
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      0.615,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_1_1",
+     "location": [
+      -0.15,
+      0,
+      0.615
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.15,
+      0.615,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_1_2",
+     "location": [
+      0.15,
+      0,
+      0.615
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.15,
+      0.615,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_1_3",
+     "location": [
+      0.45,
+      0,
+      0.615
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      0.615,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_2_0",
+     "location": [
+      -0.45,
+      0,
+      1.115
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      1.115,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_2_1",
+     "location": [
+      -0.15,
+      0,
+      1.115
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.15,
+      1.115,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_2_2",
+     "location": [
+      0.15,
+      0,
+      1.115
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.15,
+      1.115,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_2_3",
+     "location": [
+      0.45,
+      0,
+      1.115
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      1.115,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_3_0",
+     "location": [
+      -0.45,
+      0,
+      1.615
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      1.615,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_3_1",
+     "location": [
+      -0.15,
+      0,
+      1.615
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.15,
+      1.615,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_3_2",
+     "location": [
+      0.15,
+      0,
+      1.615
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.15,
+      1.615,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Jar_3_3",
+     "location": [
+      0.45,
+      0,
+      1.615
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      1.615,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_PantryShelf_00",
+     "shape": "box",
+     "size": [
+      1.24,
+      0.35,
+      1.6
+     ],
+     "centre": [
+      0,
+      0,
+      0.8
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_PantryShelf": 264
+    },
+    "bounds_min": [
+     -0.62,
+     -0.175,
+     0.0
+    ],
+    "bounds_max": [
+     0.62,
+     0.175,
+     1.615
+    ],
+    "dimensions": [
+     1.24,
+     0.35,
+     1.615
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f4b47809db4a3860d3f4df9e24f14448dc43f41729f769688072f11630cc15c8"
+  }
+ ]
+}

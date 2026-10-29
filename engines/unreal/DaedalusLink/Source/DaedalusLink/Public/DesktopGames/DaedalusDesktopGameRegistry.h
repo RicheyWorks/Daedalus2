@@ -9,6 +9,8 @@
 #include "DaedalusDesktopShootersCore.h"
 #include "DaedalusDesktopSportsCore.h"
 #include "DaedalusDesktopPlatformersCore.h"
+#include "DaedalusDesktopShardringCore.h"
+#include "DaedalusDesktopLumenpathCore.h"
 #include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
@@ -31,7 +33,9 @@ inline const std::vector<Entry>& Catalog() {
         {"lanternwild","Lanternwild Quest","Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword"},
         {"gloam_latch","Gloam Latch","Darken every lamp. Arrows or stick: move; J/Space or pad A: flip a lamp and its neighbors"},
         {"reedbeat","Reedbeat","Strike the reed when it glows. J/Space or pad A: strike"},
-        {"cairnwell","Cairnwell","Stack stones in the well. Left/Right or stick: slide; Down: drop"}
+        {"cairnwell","Cairnwell","Stack stones in the well. Left/Right or stick: slide; Down: drop"},
+        {"shardring","Shardring Resonance","Set Prism Shards in the sphere ring; three of one hue resonate. Left/Right or stick: pick a facet; J/Space or pad A: set"},
+        {"lumenpath","Lumenpath Refraction","Bend the prism beam through every crystal with shard mirrors. Arrows or stick: move; J/Space or pad A: toggle a mirror"}
     };
     return Entries;
 }
@@ -52,6 +56,8 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="gloam_latch") return std::make_unique<GloamLatchGame>();
     if(Id=="reedbeat") return std::make_unique<ReedbeatGame>();
     if(Id=="cairnwell") return std::make_unique<CairnwellGame>();
+    if(Id=="shardring") return std::make_unique<ShardringGame>();
+    if(Id=="lumenpath") return std::make_unique<LumenpathGame>();
     return nullptr;
 }
 

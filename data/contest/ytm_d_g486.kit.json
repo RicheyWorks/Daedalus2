@@ -1,0 +1,886 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_CargoCrate_Small",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G486",
+    "ask": "youtube-master 56385",
+    "lod": "LOD0/1",
+    "size_m": "0.40 x 0.32 x 0.28 m cargo crate small",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Lift"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_CargoCrate_Small_M0",
+     "colour": "planks (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_CargoCrate_Small_M1",
+     "colour": "bands",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_CargoCrate_Small",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Box",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.32,
+        0.28
+       ],
+       "centre": [
+        0,
+        0,
+        0.14
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Slat0",
+       "shape": "box",
+       "size": [
+        0.41,
+        0.33,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.056
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Slat1",
+       "shape": "box",
+       "size": [
+        0.41,
+        0.33,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.224
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.28
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.28,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lift",
+     "location": [
+      0,
+      0,
+      0.14
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.14,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_CargoCrate_Small_00",
+     "shape": "box",
+     "size": [
+      0.4,
+      0.32,
+      0.28
+     ],
+     "centre": [
+      0,
+      0,
+      0.14
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_CargoCrate_Small": 132
+    },
+    "bounds_min": [
+     -0.205,
+     -0.165,
+     0.0
+    ],
+    "bounds_max": [
+     0.205,
+     0.165,
+     0.28
+    ],
+    "dimensions": [
+     0.41,
+     0.33,
+     0.28
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "df2ed92f9b5878d200c8a54aee305c97ce33eefebf67119573aee7fab5fc5176"
+  },
+  {
+   "asset": "Prop_YTM_CargoCrate_Medium",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G486",
+    "ask": "youtube-master 56385",
+    "lod": "LOD0/1",
+    "size_m": "0.70 x 0.56 x 0.49 m cargo crate medium",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Lift"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_CargoCrate_Medium_M0",
+     "colour": "planks (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_CargoCrate_Medium_M1",
+     "colour": "bands",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_CargoCrate_Medium",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Box",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.56,
+        0.49
+       ],
+       "centre": [
+        0,
+        0,
+        0.245
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Slat0",
+       "shape": "box",
+       "size": [
+        0.71,
+        0.57,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.098
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Slat1",
+       "shape": "box",
+       "size": [
+        0.71,
+        0.57,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.392
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.49
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.49,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lift",
+     "location": [
+      0,
+      0,
+      0.245
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.245,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_CargoCrate_Medium_00",
+     "shape": "box",
+     "size": [
+      0.7,
+      0.56,
+      0.49
+     ],
+     "centre": [
+      0,
+      0,
+      0.245
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_CargoCrate_Medium": 132
+    },
+    "bounds_min": [
+     -0.355,
+     -0.285,
+     0.0
+    ],
+    "bounds_max": [
+     0.355,
+     0.285,
+     0.49
+    ],
+    "dimensions": [
+     0.71,
+     0.57,
+     0.49
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "0e5eb0843e4f6ac081c5225957f4b346a041f6c73c7809324dec5dfb733b95ad"
+  },
+  {
+   "asset": "Prop_YTM_CargoCrate_Large",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G486",
+    "ask": "youtube-master 56385",
+    "lod": "LOD0/1",
+    "size_m": "1.00 x 0.80 x 0.70 m cargo crate large",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Lift"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_CargoCrate_Large_M0",
+     "colour": "planks (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_CargoCrate_Large_M1",
+     "colour": "bands",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_CargoCrate_Large",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Box",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.8,
+        0.7
+       ],
+       "centre": [
+        0,
+        0,
+        0.35
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Slat0",
+       "shape": "box",
+       "size": [
+        1.01,
+        0.81,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.14
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Slat1",
+       "shape": "box",
+       "size": [
+        1.01,
+        0.81,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.56
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.7
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.7,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lift",
+     "location": [
+      0,
+      0,
+      0.35
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.35,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_CargoCrate_Large_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      0.8,
+      0.7
+     ],
+     "centre": [
+      0,
+      0,
+      0.35
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_CargoCrate_Large": 132
+    },
+    "bounds_min": [
+     -0.505,
+     -0.405,
+     0.0
+    ],
+    "bounds_max": [
+     0.505,
+     0.405,
+     0.7
+    ],
+    "dimensions": [
+     1.01,
+     0.81,
+     0.7
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9922af40f2b2a6dc02e04d32cce91c37bf0e9f70f43e9ec27abb380c776c39fa"
+  },
+  {
+   "asset": "Prop_YTM_HarbourScale",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G486",
+    "ask": "youtube-master 56385",
+    "lod": "LOD0/1",
+    "size_m": "1.8 x 2.5 m hanging harbour scale (platform hangs from SOCKET_Hook)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Hook",
+     "SOCKET_Needle",
+     "SOCKET_Reader"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_HarbourScale_M0",
+     "colour": "frame (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_HarbourScale_M1",
+     "colour": "brass dial / hook",
+     "hex": "C8A040",
+     "roughness": 0.3,
+     "metallic": 1.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_HarbourScale",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.12,
+        2.4
+       ],
+       "centre": [
+        -0.8,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Post1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.12,
+        2.4
+       ],
+       "centre": [
+        0.8,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Beam",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.14,
+        0.14
+       ],
+       "centre": [
+        0,
+        0,
+        2.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Dial",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01,
+         0
+        ],
+        [
+         0.15,
+         0.0
+        ],
+        [
+         0.15,
+         0.04
+        ]
+       ],
+       "centre": [
+        0,
+        -0.02,
+        2.1
+       ],
+       "slot": 1,
+       "segments": 14,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Hook",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.4,
+       "centre": [
+        0,
+        0,
+        1.8
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Platform",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.6,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        1.58
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hook",
+     "location": [
+      0,
+      0,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Needle",
+     "location": [
+      0,
+      -0.07,
+      2.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.1,
+      0.07
+     ]
+    },
+    {
+     "name": "SOCKET_Reader",
+     "location": [
+      0,
+      -0.9,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.9
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_HarbourScale_00",
+     "shape": "box",
+     "size": [
+      1.85,
+      0.2,
+      2.5
+     ],
+     "centre": [
+      0,
+      0,
+      1.25
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 276,
+    "lod1_triangles": 276,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_HarbourScale": 276
+    },
+    "bounds_min": [
+     -0.9,
+     -0.3,
+     0.0
+    ],
+    "bounds_max": [
+     0.9,
+     0.3,
+     2.47
+    ],
+    "dimensions": [
+     1.8,
+     0.6,
+     2.47
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3c68ea9a6bcd69fb6996e999982858ff9bd9b30f266a0264ce0492e7b29d55a2"
+  }
+ ]
+}

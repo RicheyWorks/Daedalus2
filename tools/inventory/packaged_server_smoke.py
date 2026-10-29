@@ -30,7 +30,8 @@ def main():
     args=parser.parse_args();jar=args.jar.resolve();output=args.output.resolve();output.mkdir(parents=True,exist_ok=True)
     repo=Path(__file__).resolve().parents[2]
     fixtures=sorted((repo/'engines/unreal/DaedalusLink/Content/Inventory').glob('*.dic'))
-    if len(fixtures)!=5:raise RuntimeError('Expected five canonical catalogs')
+    expected={'world-zero','gallery-city','parcels','bricks','labyrinth','ocean'}
+    if {path.stem for path in fixtures}!=expected:raise RuntimeError('Canonical realm catalog set differs')
     hashes={}
     with zipfile.ZipFile(jar) as boot:
         cores=[name for name in boot.namelist() if name.startswith('BOOT-INF/lib/daedalus-core-') and name.endswith('.jar')]
@@ -49,7 +50,8 @@ def main():
     with (output/'server.log').open('wb') as log:
         process=subprocess.Popen([args.java,'-jar',str(jar),'--server.address=127.0.0.1',f'--server.port={port}',
             '--daedalus.redis.enabled=false','--daedalus.plugins.scan-on-startup=false',
-            '--daedalus.security.jwt.issuer=catalog-smoke'],cwd=output,env=environment,stdout=log,stderr=subprocess.STDOUT)
+            '--daedalus.security.jwt.issuer=catalog-smoke',
+            '--daedalus.world.file='+str(output/'world-zero.daew')],cwd=output,env=environment,stdout=log,stderr=subprocess.STDOUT)
         try:
             deadline=time.monotonic()+60
             while True:
@@ -78,7 +80,7 @@ def main():
             evidence={'jar_sha256':hashlib.sha256(jar.read_bytes()).hexdigest(),'catalog_hashes':hashes,'http':results,
                 'anonymous_refused':True,'unknown_realm_404':True,'scope':'Local packaged production profile; no public deployment or gameplay proof'}
             (output/'proof.json').write_text(json.dumps(evidence,indent=2))
-            print('PACKAGED_SERVER_PASS five byte-identical catalogs, auth HTTP, unknown404')
+            print(f'PACKAGED_SERVER_PASS {len(fixtures)} byte-identical catalogs, auth HTTP, unknown404')
         finally:
             process.terminate()
             try:process.wait(timeout=10)

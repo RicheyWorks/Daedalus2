@@ -545,6 +545,70 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shardring",
+      "title": "Shardring Resonance",
+      "summary": "Set Prism Shards in the sphere ring; three of one hue resonate. Left/Right or stick: pick a facet; J/Space or pad A: set",
+      "how_to_play": "HOW Set each shard in an empty facet; three of one hue in a row resonate.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the Warden shrine",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shardring\", Seed)",
+      "portable_tests": [
+        "desktop_shardring"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "lumenpath",
+      "title": "Lumenpath Refraction",
+      "summary": "Bend the prism beam through every crystal with shard mirrors. Arrows or stick: move; J/Space or pad A: toggle a mirror",
+      "how_to_play": "HOW Toggle shard mirrors to bend the prism beam through every crystal before your moves run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the refraction gallery",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"lumenpath\", Seed)",
+      "portable_tests": [
+        "desktop_lumenpath"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -595,12 +659,12 @@
   ],
   "python_games": [
     {
-      "id": "shardring",
-      "title": "Shardring Resonance",
-      "summary": "a prism sphere shard-setting puzzle for Prismheart.",
-      "how_to_play": "HOW Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill.",
-      "module": "tools/minigames/prism_shard.py",
-      "start": "prism_shard.start(seed, difficulty)",
+      "id": "wardens_accord",
+      "title": "Wardens' Accord",
+      "summary": "draft Prism Shards from the Warden altar and spend them to summon spirits.",
+      "how_to_play": "HOW Take one of three altar shards each round, then spend matching shards to summon spirits; reach the target score before the rounds end.",
+      "module": "tools/minigames/wardens_accord.py",
+      "start": "wardens_accord.start(seed, difficulty)",
       "difficulty": [
         "easy",
         "hard",
@@ -608,7 +672,75 @@
       ],
       "default_difficulty": "normal",
       "tests": [
-        "test_prism_shard.py"
+        "test_wardens_accord.py"
+      ]
+    },
+    {
+      "id": "facetlock",
+      "title": "Facetlock Lattice",
+      "summary": "shift rows and columns of a prism lattice until every facet row glows one hue.",
+      "how_to_play": "HOW Slide lattice rows and columns (they wrap) until each row shows a single hue; finish inside the move budget.",
+      "module": "tools/minigames/facetlock.py",
+      "start": "facetlock.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_facetlock.py"
+      ]
+    },
+    {
+      "id": "prismvault",
+      "title": "Prismvault Weigh",
+      "summary": "find the one hollow Prism Shard with a Warden's balance and few weighings.",
+      "how_to_play": "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out.",
+      "module": "tools/minigames/prismvault.py",
+      "start": "prismvault.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_prismvault.py"
+      ]
+    },
+    {
+      "id": "shardfall",
+      "title": "Shardfall Gamble",
+      "summary": "draw glowing shards from the Prismheart seam and bank them before it cracks.",
+      "how_to_play": "HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot. Reach the target by the last round.",
+      "module": "tools/minigames/shardfall.py",
+      "start": "shardfall.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_shardfall.py"
+      ]
+    },
+    {
+      "id": "prismcairn",
+      "title": "Prismcairn Duel",
+      "summary": "out-think a Warden at the shard cairns; whoever lifts the last shard wins the round.",
+      "how_to_play": "HOW Take 1 or more shards (up to the limit) from one cairn each turn; the Warden replies. Lift the last shard to win the round; best of three.",
+      "module": "tools/minigames/prismcairn.py",
+      "start": "prismcairn.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_prismcairn.py"
       ]
     }
   ]

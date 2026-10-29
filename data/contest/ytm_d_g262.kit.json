@@ -1,0 +1,828 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_WallStone_H1",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G262",
+    "ask": "youtube-master 55107",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 0.60 x 0.30 m sea-wall block",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_WallStone_H1_M0",
+     "colour": "sea-wall block (G66 stone)",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_WallStone_H1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.03213,
+        0.54956,
+        0.10238
+       ],
+       "centre": [
+        -0.02106,
+        -0.02242,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -2.6651,
+        0.9432,
+        -12.2319
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.82925,
+        0.45548,
+        0.11216
+       ],
+       "centre": [
+        -0.0208,
+        -0.00334,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.0925,
+        0.0885,
+        -9.323
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.6462,
+        0.32682,
+        0.10806
+       ],
+       "centre": [
+        -0.01909,
+        -0.00428,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0.673,
+        -0.0562,
+        14.4653
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_WallStone_H1_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.6,
+      0.3
+     ],
+     "centre": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_WallStone_H1": 132
+    },
+    "bounds_min": [
+     -0.5817,
+     -0.3991,
+     -0.0216
+    ],
+    "bounds_max": [
+     0.5396,
+     0.3542,
+     0.3061
+    ],
+    "dimensions": [
+     1.1213,
+     0.7533,
+     0.3277
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ab304d871cb14bd0ed915fd637064deb0ce3c39c254bc6bf367ee6e3b9c1b186"
+  },
+  {
+   "asset": "Prop_YTM_WallStone_H2",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G262",
+    "ask": "youtube-master 55107",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 0.60 x 0.60 m sea-wall block",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_WallStone_H2_M0",
+     "colour": "sea-wall block (G66 stone)",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_WallStone_H2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.11804,
+        0.56209,
+        0.21854
+       ],
+       "centre": [
+        0.01747,
+        -0.00293,
+        0.1
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.9028,
+        -1.8461,
+        -7.306
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.86692,
+        0.44019,
+        0.19428
+       ],
+       "centre": [
+        -0.03643,
+        0.02322,
+        0.3
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0.4006,
+        -3.1066,
+        8.0762
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.6462,
+        0.31227,
+        0.21307
+       ],
+       "centre": [
+        -0.03661,
+        0.01502,
+        0.5
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        1.1569,
+        -2.767,
+        -9.5341
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_WallStone_H2_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.6,
+      0.6
+     ],
+     "centre": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_WallStone_H2": 132
+    },
+    "bounds_min": [
+     -0.5715,
+     -0.3546,
+     -0.0435
+    ],
+    "bounds_max": [
+     0.6065,
+     0.3488,
+     0.6234
+    ],
+    "dimensions": [
+     1.178,
+     0.7034,
+     0.6669
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2b2cc723f5a258fb6d3ab37d5ccb30b97dacf5157e0a5388587d8c7663ba8cca"
+  },
+  {
+   "asset": "Prop_YTM_WallStone_H3",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G262",
+    "ask": "youtube-master 55107",
+    "lod": "LOD0/1",
+    "size_m": "1.20 x 0.60 x 0.90 m sea-wall block",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_WallStone_H3_M0",
+     "colour": "sea-wall block (G66 stone)",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_WallStone_H3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        1.10609,
+        0.57562,
+        0.33641
+       ],
+       "centre": [
+        0.03561,
+        0.0102,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -0.2254,
+        -1.9807,
+        -14.7591
+       ]
+      },
+      {
+       "name": "Chunk1",
+       "shape": "box",
+       "size": [
+        0.88441,
+        0.39884,
+        0.32849
+       ],
+       "centre": [
+        0.04424,
+        -0.01799,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.3715,
+        -0.1627,
+        -0.4086
+       ]
+      },
+      {
+       "name": "Chunk2",
+       "shape": "box",
+       "size": [
+        0.5884,
+        0.31358,
+        0.32875
+       ],
+       "centre": [
+        0.01994,
+        0.01089,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        3.1462,
+        -0.305,
+        -13.7875
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.9,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_WallStone_H3_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.6,
+      0.9
+     ],
+     "centre": [
+      0,
+      0,
+      0.45
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_WallStone_H3": 132
+    },
+    "bounds_min": [
+     -0.5661,
+     -0.4002,
+     -0.0368
+    ],
+    "bounds_max": [
+     0.6373,
+     0.4206,
+     0.922
+    ],
+    "dimensions": [
+     1.2034,
+     0.8208,
+     0.9588
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "525d274ca5ec8676ac2682a0645806d5d328371bba6f3a83068190f0b095c5a5"
+  },
+  {
+   "asset": "Prop_YTM_StormBoard",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G262",
+    "ask": "youtube-master 55107",
+    "lod": "LOD0/1",
+    "size_m": "2.0 x 1.0 m storm board; scalable along X (planks tile), drops into wall slots",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Slot_L",
+     "SOCKET_Slot_R",
+     "SOCKET_Lift"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "scalable": "X 0.5..3.0 (non-uniform ok; UVs world-aligned)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_StormBoard_M0",
+     "colour": "planks (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_StormBoard_M1",
+     "colour": "battens",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_StormBoard",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Board0",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.04,
+        0.24
+       ],
+       "centre": [
+        0,
+        0,
+        0.13
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Board1",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.04,
+        0.24
+       ],
+       "centre": [
+        0,
+        0,
+        0.38
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Board2",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.04,
+        0.24
+       ],
+       "centre": [
+        0,
+        0,
+        0.63
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Board3",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.04,
+        0.24
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Batten-1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.05,
+        1.0
+       ],
+       "centre": [
+        -0.8,
+        -0.04,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Batten1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.05,
+        1.0
+       ],
+       "centre": [
+        0.8,
+        -0.04,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Slot_L",
+     "location": [
+      -1.0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot_R",
+     "location": [
+      1.0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lift",
+     "location": [
+      0,
+      -0.06,
+      0.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.8,
+      0.06
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_StormBoard_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      0.1,
+      1.0
+     ],
+     "centre": [
+      0,
+      0,
+      0.5
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_StormBoard": 264
+    },
+    "bounds_min": [
+     -1.0,
+     -0.065,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     0.02,
+     1.0
+    ],
+    "dimensions": [
+     2.0,
+     0.085,
+     1.0
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "90cb97775e097e4b3cd870163a6b936aee841c2e31f5367a35103d47bd5c97f8"
+  }
+ ]
+}

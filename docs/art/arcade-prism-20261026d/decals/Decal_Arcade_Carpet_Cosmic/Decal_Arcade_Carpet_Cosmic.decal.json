@@ -1,0 +1,81 @@
+{
+ "schema": "daedalus.decal/v1",
+ "asset": "Decal_Arcade_Carpet_Cosmic",
+ "seed": 2610264,
+ "generator": "tools/blender/arcade_prism_props_d.py",
+ "status": "NOT READY",
+ "textures": {
+  "BaseColor": {
+   "file": "T_Decal_Arcade_Carpet_Cosmic_BC.png",
+   "size": [
+    512,
+    512
+   ],
+   "srgb": true,
+   "compression": "TC_Default",
+   "sha12": "da3d375d712f"
+  },
+  "Normal": {
+   "file": "T_Decal_Arcade_Carpet_Cosmic_N.png",
+   "size": [
+    512,
+    512
+   ],
+   "srgb": false,
+   "compression": "TC_Normalmap",
+   "green": "DirectX (UE native, no flip)",
+   "sha12": "0619b7aa68b2"
+  },
+  "Opacity": {
+   "file": "T_Decal_Arcade_Carpet_Cosmic_M.png",
+   "size": [
+    512,
+    512
+   ],
+   "srgb": false,
+   "compression": "TC_Grayscale",
+   "sha12": "bcd735b2fd94"
+  }
+ },
+ "material": {
+  "name": "MI_Decal_Arcade_Carpet_Cosmic",
+  "parent": "M_Decal_ArcadeCarpet",
+  "domain": "DeferredDecal",
+  "blend_mode": "Translucent",
+  "decal_response": "ColorNormalRoughness",
+  "params": {
+   "BaseColorTex": "T_Decal_Arcade_Carpet_Cosmic_BC.png",
+   "NormalTex": "T_Decal_Arcade_Carpet_Cosmic_N.png",
+   "OpacityTex": "T_Decal_Arcade_Carpet_Cosmic_M.png",
+   "BaseColorTint": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "NormalStrength": 1.0,
+   "Roughness": 0.95,
+   "OpacityPower": 1.0,
+   "OpacityContrast": 1.0,
+   "Tiling": 1.0,
+   "UVGlow": 0.0,
+   "Seamless": true
+  },
+  "wiring": "BaseColor = BaseColorTex.rgb * BaseColorTint; Normal = FlattenNormal(NormalTex, 1-NormalStrength); Roughness = Roughness; Opacity = saturate(pow(OpacityTex.r, OpacityPower) * OpacityContrast)"
+ },
+ "projection": {
+  "size_cm": [
+   1.0,
+   200.0,
+   200.0
+  ],
+  "ue_DecalSize_half_extent": [
+   0.5,
+   100.0,
+   100.0
+  ],
+  "axes": "project along local -X into the surface; texture U = +Y, V = -Z (top of texture = up)",
+  "placement": "arcade carpet, 200 x 200 cm, tiles seamlessly (wrap-around pattern); floor decal or tiling floor material",
+  "mesh": null
+ },
+ "relief_cm": 1.0
+}

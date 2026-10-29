@@ -36,7 +36,7 @@ jobs:
       # (450-595 s on the runs that needed reruns); cache objects per compiler.
       - name: Compiler cache (Linux)
         if: runner.os == 'Linux'
-        uses: hendrikmuhs/ccache-action@v1.2
+        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2
         with:
           key: desktop-games-${{ matrix.compiler }}
           max-size: 500M
@@ -52,6 +52,10 @@ jobs:
         run: python tools/minigames/catalog_validate.py
       - name: Leaderboard feed hook matches the catalog and does not post
         run: python tools/minigames/leaderboard_feed.py --check
+      - name: Shardring parity fixture is current (engines/unreal/core-test/shardring_parity.txt)
+        run: python tools/minigames/shardring_parity.py --check
+      - name: Lumenpath parity fixture is current (engines/unreal/core-test/lumenpath_parity.txt)
+        run: python tools/minigames/lumenpath_parity.py --check
       - name: Realm cabinet placements are current and tested
         run: |
           python tools/minigames/realm_cabinets.py --check

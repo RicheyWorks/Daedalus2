@@ -589,5 +589,446 @@
    "Prop_Arcade_Plush_Glimmermoth": "wings are 3-3.5 cm thick rounded fore/hind pads with mirrored dihedral (18/8 deg), 264 tris; SOCKET_Shelf/Hand/Grab unchanged",
    "Prop_YTM_Ferry (G223, data/contest/ytm_c_g223.kit.json)": "3.2 m mast, boom, gaff, 2.4 m-foot mainsail + jib, canvas sail material; SOCKET_Seat_0..2/Helm/Mooring_* unchanged"
   }
+ },
+ "batch_d": {
+  "generated_by": "tools/blender/arcade_prism_props_d.py",
+  "kit": "data/contest/arcade_prism_d.kit.json",
+  "staging": "bot-team\\staging\\arcade-prism-20261026d",
+  "docs": "docs/art/arcade-prism-20261026d",
+  "status": "NOT READY",
+  "request": "Richey 2026-10-29 12:39 PT via buffffff (arcade batch d)",
+  "assets": [
+   {
+    "name": "Prop_Arcade_CeilingLightRig_A",
+    "tris": 672,
+    "size_m": [
+     3.0,
+     0.297,
+     1.03
+    ],
+    "sockets": [
+     "SOCKET_Hang_0",
+     "SOCKET_Hang_1",
+     "SOCKET_Light_0",
+     "SOCKET_Light_1",
+     "SOCKET_Light_2",
+     "SOCKET_Light_3"
+    ],
+    "materials": [
+     "Prop_Arcade_CeilingLightRig_A_M0",
+     "Prop_Arcade_CeilingLightRig_A_M1",
+     "Prop_Arcade_CeilingLightRig_A_M2",
+     "Prop_Arcade_CeilingLightRig_A_M3"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_CeilingLightRig_B",
+    "tris": 616,
+    "size_m": [
+     2.4,
+     2.4,
+     1.03
+    ],
+    "sockets": [
+     "SOCKET_Hang_0",
+     "SOCKET_Hang_1",
+     "SOCKET_Hang_2",
+     "SOCKET_Hang_3",
+     "SOCKET_Light_0",
+     "SOCKET_Light_1",
+     "SOCKET_Light_2",
+     "SOCKET_Light_3"
+    ],
+    "materials": [
+     "Prop_Arcade_CeilingLightRig_B_M0",
+     "Prop_Arcade_CeilingLightRig_B_M1",
+     "Prop_Arcade_CeilingLightRig_B_M2",
+     "Prop_Arcade_CeilingLightRig_B_M3"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_CeilingLightRig_C",
+    "tris": 936,
+    "size_m": [
+     2.8362,
+     2.552,
+     1.03
+    ],
+    "sockets": [
+     "SOCKET_Hang_0",
+     "SOCKET_Hang_1",
+     "SOCKET_Hang_2",
+     "SOCKET_Light_0",
+     "SOCKET_Light_1",
+     "SOCKET_Light_2",
+     "SOCKET_Light_3",
+     "SOCKET_Light_4",
+     "SOCKET_Light_5"
+    ],
+    "materials": [
+     "Prop_Arcade_CeilingLightRig_C_M0",
+     "Prop_Arcade_CeilingLightRig_C_M1",
+     "Prop_Arcade_CeilingLightRig_C_M2",
+     "Prop_Arcade_CeilingLightRig_C_M3"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_TicketCounter",
+    "tris": 256,
+    "size_m": [
+     0.64,
+     0.61,
+     1.445
+    ],
+    "sockets": [
+     "SOCKET_TicketIn",
+     "SOCKET_Display",
+     "SOCKET_ReceiptOut",
+     "SOCKET_Player1",
+     "SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_Arcade_TicketCounter_M0",
+     "Prop_Arcade_TicketCounter_M1",
+     "Prop_Arcade_TicketCounter_M2",
+     "Prop_Arcade_TicketCounter_M3",
+     "Prop_Arcade_TicketCounter_M4"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_PhotoBooth",
+    "tris": 680,
+    "size_m": [
+     1.46,
+     1.06,
+     2.18
+    ],
+    "sockets": [
+     "SOCKET_Seat",
+     "SOCKET_Camera",
+     "SOCKET_Screen",
+     "SOCKET_PhotoSlot",
+     "SOCKET_CurtainRail",
+     "SOCKET_Entry"
+    ],
+    "materials": [
+     "Prop_Arcade_PhotoBooth_M0",
+     "Prop_Arcade_PhotoBooth_M1",
+     "Prop_Arcade_PhotoBooth_M2",
+     "Prop_Arcade_PhotoBooth_M3",
+     "Prop_Arcade_PhotoBooth_M4"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_HighScoreBoard",
+    "tris": 340,
+    "size_m": [
+     1.68,
+     0.11,
+     2.08
+    ],
+    "sockets": [
+     "SOCKET_Title",
+     "SOCKET_Wall",
+     "SOCKET_Entry_0",
+     "SOCKET_Entry_1",
+     "SOCKET_Entry_2",
+     "SOCKET_Entry_3",
+     "SOCKET_Entry_4",
+     "SOCKET_Entry_5",
+     "SOCKET_Entry_6",
+     "SOCKET_Entry_7",
+     "SOCKET_Entry_8",
+     "SOCKET_Entry_9"
+    ],
+    "materials": [
+     "Prop_Arcade_HighScoreBoard_M0",
+     "Prop_Arcade_HighScoreBoard_M1",
+     "Prop_Arcade_HighScoreBoard_M2",
+     "Prop_Arcade_HighScoreBoard_M3",
+     "Prop_Arcade_HighScoreBoard_M4"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Cab_DancePad",
+    "tris": 620,
+    "size_m": [
+     2.4,
+     1.9,
+     2.545
+    ],
+    "sockets": [
+     "SOCKET_Pad_P1_Up",
+     "SOCKET_Pad_P1_Down",
+     "SOCKET_Pad_P1_Left",
+     "SOCKET_Pad_P1_Right",
+     "SOCKET_Player1",
+     "SOCKET_Pad_P2_Up",
+     "SOCKET_Pad_P2_Down",
+     "SOCKET_Pad_P2_Left",
+     "SOCKET_Pad_P2_Right",
+     "SOCKET_Player2",
+     "SOCKET_Screen",
+     "SOCKET_CoinSlot"
+    ],
+    "materials": [
+     "Prop_Arcade_Cab_DancePad_M0",
+     "Prop_Arcade_Cab_DancePad_M1",
+     "Prop_Arcade_Cab_DancePad_M2",
+     "Prop_Arcade_Cab_DancePad_M3",
+     "Prop_Arcade_Cab_DancePad_M4",
+     "Prop_Arcade_Cab_DancePad_M5"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Cab_Pinball",
+    "tris": 560,
+    "size_m": [
+     0.7,
+     1.425,
+     1.8431
+    ],
+    "sockets": [
+     "SOCKET_FlipperL",
+     "SOCKET_FlipperR",
+     "SOCKET_Plunger",
+     "SOCKET_Backglass",
+     "SOCKET_Ball",
+     "SOCKET_Player1",
+     "SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_Arcade_Cab_Pinball_M0",
+     "Prop_Arcade_Cab_Pinball_M1",
+     "Prop_Arcade_Cab_Pinball_M2",
+     "Prop_Arcade_Cab_Pinball_M3",
+     "Prop_Arcade_Cab_Pinball_M4"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Plush_Pebblepup",
+    "tris": 800,
+    "size_m": [
+     0.208,
+     0.3607,
+     0.268
+    ],
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ],
+    "materials": [
+     "Prop_Arcade_Plush_Pebblepup_M0",
+     "Prop_Arcade_Plush_Pebblepup_M1",
+     "Prop_Arcade_Plush_Pebblepup_M2",
+     "Prop_Arcade_Plush_Pebblepup_M3"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Plush_Lumenfish",
+    "tris": 292,
+    "size_m": [
+     0.34,
+     0.2516,
+     0.282
+    ],
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ],
+    "materials": [
+     "Prop_Arcade_Plush_Lumenfish_M0",
+     "Prop_Arcade_Plush_Lumenfish_M1",
+     "Prop_Arcade_Plush_Lumenfish_M2",
+     "Prop_Arcade_Plush_Lumenfish_M3"
+    ]
+   }
+  ],
+  "decals": [
+   {
+    "name": "Decal_Arcade_Carpet_Cosmic",
+    "manifest": "decals/Decal_Arcade_Carpet_Cosmic/Decal_Arcade_Carpet_Cosmic.decal.json"
+   },
+   {
+    "name": "Decal_Arcade_Poster_CometCup",
+    "manifest": "decals/Decal_Arcade_Poster_CometCup/Decal_Arcade_Poster_CometCup.decal.json"
+   },
+   {
+    "name": "Decal_Arcade_Poster_PrismKnight",
+    "manifest": "decals/Decal_Arcade_Poster_PrismKnight/Decal_Arcade_Poster_PrismKnight.decal.json"
+   },
+   {
+    "name": "Decal_Arcade_Poster_ShardRacer",
+    "manifest": "decals/Decal_Arcade_Poster_ShardRacer/Decal_Arcade_Poster_ShardRacer.decal.json"
+   },
+   {
+    "name": "Decal_Arcade_Poster_StarRun",
+    "manifest": "decals/Decal_Arcade_Poster_StarRun/Decal_Arcade_Poster_StarRun.decal.json"
+   }
+  ]
+ },
+ "hall_kit": {
+  "generated_by": "tools/blender/arcade_hall_kit.py + tools/blender/arcade_hall_assembler.py",
+  "staging": "bot-team\\staging\\arcade-hall-20261029",
+  "docs": "docs/art/arcade-hall-20261029",
+  "status": "NOT READY",
+  "assets": [
+   {
+    "name": "Prop_ArcadeHall_Wall_2m",
+    "tris": 156,
+    "size_m": [
+     2.0,
+     0.24,
+     4.0
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Poster",
+     "SOCKET_SOCKET_Sconce",
+     "SOCKET_SOCKET_Edge_L",
+     "SOCKET_SOCKET_Edge_R",
+     "SOCKET_SOCKET_Edge_Top",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Wall_2m_M0",
+     "Prop_ArcadeHall_Wall_2m_M1",
+     "Prop_ArcadeHall_Wall_2m_M2",
+     "Prop_ArcadeHall_Wall_2m_M3"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Corner",
+    "tris": 144,
+    "size_m": [
+     0.36,
+     0.36,
+     4.1
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Edge_X",
+     "SOCKET_SOCKET_Edge_Y",
+     "SOCKET_SOCKET_Edge_Top",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Corner_M0",
+     "Prop_ArcadeHall_Corner_M1",
+     "Prop_ArcadeHall_Corner_M2",
+     "Prop_ArcadeHall_Corner_M3"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Doorway_2m",
+    "tris": 664,
+    "size_m": [
+     2.0,
+     0.4,
+     4.0
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Door",
+     "SOCKET_SOCKET_Entry_Outside",
+     "SOCKET_SOCKET_Entry_Inside",
+     "SOCKET_SOCKET_Sign",
+     "SOCKET_SOCKET_Edge_L",
+     "SOCKET_SOCKET_Edge_R",
+     "SOCKET_SOCKET_Edge_Top",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Doorway_2m_M0",
+     "Prop_ArcadeHall_Doorway_2m_M1",
+     "Prop_ArcadeHall_Doorway_2m_M2",
+     "Prop_ArcadeHall_Doorway_2m_M3",
+     "Prop_ArcadeHall_Doorway_2m_M4",
+     "Prop_ArcadeHall_Doorway_2m_M5"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Window_2m",
+    "tris": 464,
+    "size_m": [
+     2.0,
+     0.34,
+     4.0
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Window",
+     "SOCKET_SOCKET_Poster",
+     "SOCKET_SOCKET_Edge_L",
+     "SOCKET_SOCKET_Edge_R",
+     "SOCKET_SOCKET_Edge_Top",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Window_2m_M0",
+     "Prop_ArcadeHall_Window_2m_M1",
+     "Prop_ArcadeHall_Window_2m_M2",
+     "Prop_ArcadeHall_Window_2m_M3",
+     "Prop_ArcadeHall_Window_2m_M4"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_CeilingBay_2m",
+    "tris": 232,
+    "size_m": [
+     2.0,
+     2.0,
+     0.29
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Edge_N",
+     "SOCKET_SOCKET_Edge_S",
+     "SOCKET_SOCKET_Edge_E",
+     "SOCKET_SOCKET_Edge_W",
+     "SOCKET_SOCKET_Hang"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_CeilingBay_2m_M0",
+     "Prop_ArcadeHall_CeilingBay_2m_M1",
+     "Prop_ArcadeHall_CeilingBay_2m_M2",
+     "Prop_ArcadeHall_CeilingBay_2m_M3"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Foundation_2m",
+    "tris": 88,
+    "size_m": [
+     2.0,
+     2.0,
+     0.4
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Edge_N",
+     "SOCKET_SOCKET_Edge_S",
+     "SOCKET_SOCKET_Edge_E",
+     "SOCKET_SOCKET_Edge_W",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Foundation_2m_M0",
+     "Prop_ArcadeHall_Foundation_2m_M1"
+    ],
+    "status": "NOT READY"
+   }
+  ],
+  "layouts": [
+   "corner_arcade",
+   "prize_hall",
+   "heart_hall"
+  ],
+  "hook": {
+   "java": "daedalus-core/src/main/java/com/daedalus/world/arcade/ArcadeHall.java",
+   "resource": "daedalus-core/src/main/resources/com/daedalus/world/arcade/arcade_hall_layouts.tsv",
+   "quest": "q_arcade_hall_enter",
+   "how": "ArcadeHall.onIsland(layoutId, world, doorAnchor) puts the doorway portal on an island block; enter() opens it and returns the inside spawn"
+  }
  }
 }

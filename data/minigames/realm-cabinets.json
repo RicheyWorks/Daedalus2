@@ -394,12 +394,40 @@
           "start": "StartGame(\"cairnwell\", 829914631)"
         },
         {
+          "game": "shardring",
+          "title": "Shardring Resonance",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            7.5,
+            -3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1619510215,
+          "option": 0,
+          "start": "StartGame(\"shardring\", 1619510215)"
+        },
+        {
+          "game": "lumenpath",
+          "title": "Lumenpath Refraction",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            7.5,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1661686802,
+          "option": 0,
+          "start": "StartGame(\"lumenpath\", 1661686802)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             7.5,
-            -1.25,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -413,7 +441,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             7.5,
-            1.25,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -641,12 +669,40 @@
           "start": "StartGame(\"cairnwell\", 600932809)"
         },
         {
+          "game": "shardring",
+          "title": "Shardring Resonance",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            7.5,
+            3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1914780681,
+          "option": 0,
+          "start": "StartGame(\"shardring\", 1914780681)"
+        },
+        {
+          "game": "lumenpath",
+          "title": "Lumenpath Refraction",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            10.0,
+            -2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1907207132,
+          "option": 0,
+          "start": "StartGame(\"lumenpath\", 1907207132)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            7.5,
-            3.75,
+            10.0,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -660,7 +716,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            0.0,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1064,7 +1120,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -5.0,
+            -12.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1078,7 +1134,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -2.5,
+            -10.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1092,7 +1148,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            0.0,
+            -7.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1106,7 +1162,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            2.5,
+            -5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1117,6 +1173,50 @@
         {
           "game": "shardring",
           "title": "Shardring Resonance",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            -2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 2061739538,
+          "option": 0,
+          "start": "StartGame(\"shardring\", 2061739538)"
+        },
+        {
+          "game": "lumenpath",
+          "title": "Lumenpath Refraction",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 2037330375,
+          "option": 0,
+          "start": "StartGame(\"lumenpath\", 2037330375)"
+        },
+        {
+          "game": "wardens_accord",
+          "title": "Wardens' Accord",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 450290639,
+          "difficulty": "normal",
+          "module": "tools/minigames/wardens_accord.py",
+          "start": "wardens_accord.start(450290639, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
+        },
+        {
+          "game": "facetlock",
+          "title": "Facetlock Lattice",
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
@@ -1124,10 +1224,58 @@
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 2061739538,
+          "seed": 1644454135,
           "difficulty": "normal",
-          "module": "tools/minigames/prism_shard.py",
-          "start": "prism_shard.start(2061739538, difficulty)",
+          "module": "tools/minigames/facetlock.py",
+          "start": "facetlock.start(1644454135, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
+        },
+        {
+          "game": "prismvault",
+          "title": "Prismvault Weigh",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            7.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 895410454,
+          "difficulty": "normal",
+          "module": "tools/minigames/prismvault.py",
+          "start": "prismvault.start(895410454, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
+        },
+        {
+          "game": "shardfall",
+          "title": "Shardfall Gamble",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            10.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 242191464,
+          "difficulty": "normal",
+          "module": "tools/minigames/shardfall.py",
+          "start": "shardfall.start(242191464, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
+        },
+        {
+          "game": "prismcairn",
+          "title": "Prismcairn Duel",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            12.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 557933909,
+          "difficulty": "normal",
+          "module": "tools/minigames/prismcairn.py",
+          "start": "prismcairn.start(557933909, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]

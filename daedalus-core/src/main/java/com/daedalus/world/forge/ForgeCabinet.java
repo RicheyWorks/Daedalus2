@@ -24,6 +24,28 @@ import java.util.function.Predicate;
 public final class ForgeCabinet {
 
     /** Keith numbers up to 200000, built once on first use of the Keith Kindling slot. */
+    private static final class HofstadterList {
+        private static final int[] Q = HofstadterHammers.qSequence(48);
+        private static final int[] CONWAY = HofstadterHammers.conwaySequence(48);
+
+        private HofstadterList() {
+        }
+    }
+
+    private static final class VanEckList {
+        private static final int[] ECHOES = VanEckEchoes.sequence(64);
+
+        private VanEckList() {
+        }
+    }
+
+    private static final class LychrelList {
+        static final List<Long> CANDIDATES = Collections.unmodifiableList(LychrelLadles.candidatesUpTo(1000));
+
+        private LychrelList() {
+        }
+    }
+
     private static final class KeithList {
         static final List<Long> KEITH = Collections.unmodifiableList(KeithKindling.keithUpTo(200_000));
 
@@ -550,6 +572,81 @@ public final class ForgeCabinet {
                 });
         }, GermainGirders.forgemasterLine(GermainGirders.Grade.TURNED),
             GermainGirders.forgemasterLine(GermainGirders.Grade.SLIPPED)));
+        g.add(game("totient", "Totient Tempers", TotientTempers.QUEST_ID, r -> {
+            long n = r.nextInt(3) == 0 ? TotientTempers.tempersUpTo(6000).get(r.nextInt(20)) : 2 + r.nextInt(6000);
+            boolean perfect = TotientTempers.isPerfectTemper(n);
+            return new Puzzle("totient", "Does the totient chain after " + n + " (phi, phi of phi, ... down to 1)"
+                + " sum back to " + n + "? (yes/no)", perfect ? "yes" : "no", a -> {
+                    if (!"yes".equals(a) && !"no".equals(a)) {
+                        return false;
+                    }
+                    return TotientTempers.grade(n, "yes".equals(a)) == TotientTempers.Grade.TURNED;
+                });
+        }, TotientTempers.forgemasterLine(TotientTempers.Grade.TURNED),
+            TotientTempers.forgemasterLine(TotientTempers.Grade.SLIPPED)));
+        g.add(game("emirp", "Emirp Embers", EmirpEmbers.QUEST_ID, r -> {
+            long n = 10 + r.nextInt(9_990);
+            boolean emirp = EmirpEmbers.isEmirp(n);
+            return new Puzzle("emirp", "Are " + n + " and its reversal " + EmirpEmbers.reverse(n)
+                + " two different primes? (yes/no)", emirp ? "yes" : "no", a -> {
+                    if (!"yes".equals(a) && !"no".equals(a)) {
+                        return false;
+                    }
+                    return EmirpEmbers.grade(n, "yes".equals(a)) == EmirpEmbers.Grade.TURNED;
+                });
+        }, EmirpEmbers.forgemasterLine(EmirpEmbers.Grade.TURNED),
+            EmirpEmbers.forgemasterLine(EmirpEmbers.Grade.SLIPPED)));
+        g.add(game("lychrel", "Lychrel Ladles", LychrelLadles.QUEST_ID, r -> {
+            long n = r.nextInt(3) == 0 ? LychrelList.CANDIDATES.get(r.nextInt(LychrelList.CANDIDATES.size())) : 10 + r.nextInt(990);
+            boolean lychrel = LychrelLadles.isLychrelCandidate(n);
+            return new Puzzle("lychrel", "Pour " + n + " into its mirror (n + reverse(n)) again and again: does it"
+                + " never settle into a palindrome within " + LychrelLadles.DEFAULT_LIMIT + " pours? (yes/no)",
+                lychrel ? "yes" : "no", a -> {
+                    if (!"yes".equals(a) && !"no".equals(a)) {
+                        return false;
+                    }
+                    return LychrelLadles.grade(n, "yes".equals(a)) == LychrelLadles.Grade.TURNED;
+                });
+        }, LychrelLadles.forgemasterLine(LychrelLadles.Grade.TURNED),
+            LychrelLadles.forgemasterLine(LychrelLadles.Grade.SLIPPED)));
+        g.add(game("vaneck", "Van Eck Echoes", VanEckEchoes.QUEST_ID, r -> {
+            int n = 5 + r.nextInt(VanEckList.ECHOES.length - 6);
+            StringBuilder heard = new StringBuilder();
+            for (int i = 0; i <= n; i++) {
+                heard.append(i == 0 ? "" : ", ").append(VanEckList.ECHOES[i]);
+            }
+            int next = VanEckList.ECHOES[n + 1];
+            return new Puzzle("vaneck", "The anvil echoes " + heard + ". Each echo is how many strikes ago the"
+                + " previous ring was last heard (0 if new). What is the next echo?", Integer.toString(next), a -> {
+                    try {
+                        return VanEckEchoes.grade(n + 1, Integer.parseInt(a.trim())) == VanEckEchoes.Grade.TURNED;
+                    } catch (NumberFormatException ex) {
+                        return false;
+                    }
+                });
+        }, VanEckEchoes.forgemasterLine(VanEckEchoes.Grade.TURNED),
+            VanEckEchoes.forgemasterLine(VanEckEchoes.Grade.SLIPPED)));
+        g.add(game("hofstadter", "Hofstadter Hammers", HofstadterHammers.QUEST_ID, r -> {
+            boolean useQ = r.nextBoolean();
+            int[] seq = useQ ? HofstadterList.Q : HofstadterList.CONWAY;
+            int n = 6 + r.nextInt(seq.length - 7);
+            StringBuilder heard = new StringBuilder();
+            for (int i = 1; i <= n; i++) {
+                heard.append(i == 1 ? "" : ", ").append(seq[i]);
+            }
+            String rule = useQ ? "Q(n) = Q(n - Q(n-1)) + Q(n - Q(n-2))" : "a(n) = a(a(n-1)) + a(n - a(n-1))";
+            HofstadterHammers.Hammer h = useQ ? HofstadterHammers.Hammer.Q : HofstadterHammers.Hammer.CONWAY;
+            return new Puzzle("hofstadter", "The hammer rings " + heard + " by the rule " + rule
+                + ". What is strike " + (n + 1) + "?", Integer.toString(seq[n + 1]), a -> {
+                    try {
+                        return HofstadterHammers.grade(h, n + 1, Integer.parseInt(a.trim()))
+                            == HofstadterHammers.Grade.TURNED;
+                    } catch (NumberFormatException ex) {
+                        return false;
+                    }
+                });
+        }, HofstadterHammers.forgemasterLine(HofstadterHammers.Grade.TURNED),
+            HofstadterHammers.forgemasterLine(HofstadterHammers.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {

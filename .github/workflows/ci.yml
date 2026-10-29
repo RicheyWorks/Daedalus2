@@ -221,7 +221,7 @@ jobs:
       # token as the CODECOV_TOKEN Actions secret.
       - name: Upload coverage to Codecov
         if: ${{ env.CODECOV_TOKEN != '' }}
-        uses: codecov/codecov-action@v7
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7
         with:
           token: ${{ env.CODECOV_TOKEN }}
           files: daedalus-core/target/site/jacoco/jacoco.xml,daedalus-plugin-api/target/site/jacoco/jacoco.xml,daedalus-plugin-runtime/target/site/jacoco/jacoco.xml,daedalus-server/target/site/jacoco/jacoco.xml,daedalus-desktop/target/site/jacoco/jacoco.xml,daedalus-explore/target/site/jacoco/jacoco.xml
@@ -239,7 +239,7 @@ jobs:
 
       - name: Generate coverage badge
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.jacoco.outputs.files != ''
-        uses: cicirello/jacoco-badge-generator@v2
+        uses: cicirello/jacoco-badge-generator@72266185b7ee48a6fd74eaf0238395cc8b14fef8 # v2
         with:
           jacoco-csv-file: ${{ steps.jacoco.outputs.files }}
           badges-directory: .github/badges
