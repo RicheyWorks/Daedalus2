@@ -1,0 +1,116 @@
+{
+ "gap": "G504 Reed Ceiling / G507 Reed Release",
+ "asker": "pythagoras via buffffff 57306 (buf-blender-next-20261029-1310)",
+ "generated_by": "tools/blender/contest/marsh_g504.py",
+ "staging": "bot-team\\staging\\pythagoras-marsh-20261029",
+ "status": "NOT READY",
+ "assets": [
+  {
+   "name": "Mob_Marsh_Hawk",
+   "kind": "mob",
+   "recipe": "data/contest/g504_marsh_hawk.quad.json",
+   "tris": 784,
+   "size_m": [
+    0.1428,
+    0.5823,
+    0.3944
+   ],
+   "sockets": [
+    "SOCKET_Talon",
+    "SOCKET_Head"
+   ],
+   "clips": "blender-bird/v1 (bird_rig.py), rigid; clips Idle, Squawk, Walk, Fly",
+   "raptor_parts": "hooked beak, talons, fingered primaries, 3 tail bands (bird_rig options, 2026-10-29 fix)"
+  },
+  {
+   "name": "Mob_Sky_Crane_Juvenile",
+   "kind": "mob",
+   "recipe": "data/contest/g504_crane_juvenile.quad.json",
+   "tris": 384,
+   "size_m": [
+    0.1756,
+    0.6969,
+    0.8545
+   ],
+   "sockets": [
+    "SOCKET_LegBand"
+   ],
+   "clips": "blender-bird/v1 (bird_rig.py), rigid; clips Idle, Walk, Fly"
+  },
+  {
+   "name": "Mob_Sky_Crane",
+   "kind": "mob",
+   "reuse": "G142 crane_g142.py / data/contest/g142_crane.quad.json (adult; staged copy, not rebuilt)"
+  },
+  {
+   "name": "Prop_Marsh_ReedbedPatch_Sparse",
+   "kind": "prop",
+   "recipe": "data/contest/marsh_g504.kit.json",
+   "tris": 484,
+   "size_m": [
+    2.202,
+    2.0447,
+    2.0424
+   ],
+   "sockets": [
+    "SOCKET_Hide_0",
+    "SOCKET_Hide_1",
+    "SOCKET_Hide_2",
+    "SOCKET_Hide_3",
+    "SOCKET_Nest",
+    "SOCKET_Edge_N",
+    "SOCKET_Edge_E",
+    "SOCKET_Edge_S",
+    "SOCKET_Edge_W"
+   ]
+  },
+  {
+   "name": "Prop_Marsh_ReedbedPatch_Medium",
+   "kind": "prop",
+   "recipe": "data/contest/marsh_g504.kit.json",
+   "tris": 1116,
+   "size_m": [
+    2.1684,
+    2.036,
+    2.0882
+   ],
+   "sockets": [
+    "SOCKET_Hide_0",
+    "SOCKET_Hide_1",
+    "SOCKET_Hide_2",
+    "SOCKET_Hide_3",
+    "SOCKET_Nest",
+    "SOCKET_Edge_N",
+    "SOCKET_Edge_E",
+    "SOCKET_Edge_S",
+    "SOCKET_Edge_W"
+   ]
+  },
+  {
+   "name": "Prop_Marsh_ReedbedPatch_Dense",
+   "kind": "prop",
+   "recipe": "data/contest/marsh_g504.kit.json",
+   "tris": 2188,
+   "size_m": [
+    2.2025,
+    2.098,
+    2.0883
+   ],
+   "sockets": [
+    "SOCKET_Hide_0",
+    "SOCKET_Hide_1",
+    "SOCKET_Hide_2",
+    "SOCKET_Hide_3",
+    "SOCKET_Nest",
+    "SOCKET_Edge_N",
+    "SOCKET_Edge_E",
+    "SOCKET_Edge_S",
+    "SOCKET_Edge_W"
+   ]
+  }
+ ],
+ "fixes_20261029": [
+  "Mob_Marsh_Hawk rebuilt with bird_rig raptor options (beak_style hook, feet talons, wing_tips fingered, tail_bands 3); same name, sockets, clips",
+  "contact_sheet skips the glTF bone-display Icosphere, so skinned assets now show their real size"
+ ]
+}

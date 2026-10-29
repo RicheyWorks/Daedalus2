@@ -625,5 +625,40 @@
       ]
     }
   ],
-  "python_games": []
+  "python_games": [
+    {
+      "id": "lumenpath",
+      "title": "Lumenpath Refraction",
+      "summary": "bend a Prismheart light beam with shard mirrors to wake every crystal.",
+      "how_to_play": "HOW Toggle shard mirrors in the lattice to bend the prism beam through every crystal before your moves run out.",
+      "module": "tools/minigames/lumenpath.py",
+      "start": "lumenpath.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_lumenpath.py"
+      ]
+    },
+    {
+      "id": "wardens_accord",
+      "title": "Wardens' Accord",
+      "summary": "draft Prism Shards from the Warden altar and spend them to summon spirits.",
+      "how_to_play": "HOW Take one of three altar shards each round, then spend matching shards to summon spirits; reach the target score before the rounds end.",
+      "module": "tools/minigames/wardens_accord.py",
+      "start": "wardens_accord.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_wardens_accord.py"
+      ]
+    }
+  ]
 }

@@ -9,7 +9,9 @@ Every part is rigid-bound (bind_mode "rigid"): low-poly faceted birds read best 
 Clips (FPS 30, looping): Idle (breathing, slow head turns, a tail flick) and Squawk (head up and forward, beak opens wide,
 wings half-lift, body leans; the HarbourRound "gulls answer back" on a clash).
 Body params (body=...): length (beak tip to tail tip, m), height_frac (standing height / length), squawk_deg (beak gape),
-squawk_frames, wing_lift_deg; long-legged birds (G142 crane) add leg_frac (leg / length, default 0.2), neck_r (neck radius scale)
+squawk_frames, wing_lift_deg; raptors (G504 hawk) add beak_style "hook" (deep base, downward-curved hooked tip), feet "talons"
+(3 forward + 1 hind toe, each ending in a down-curved claw), wing_tips "fingered" (5 splayed primaries) and tail_bands N (dark bars);
+long-legged birds (G142 crane) add leg_frac (leg / length, default 0.2), neck_r (neck radius scale)
 and head_scale (written into params only when given, so the gull pin stays byte-identical).
 More clips via recipe(clip_names=...): Walk (alternating leg swing, the stance foot kept planted by a body drop, head pump),
 Fly (wings spread out sideways and flapping, neck stretched forward, legs trailing) and Dance (crane courtship: hops with the
@@ -25,7 +27,9 @@ SCHEMA = "blender-bird/v1"
 FPS = 30
 SIDES = (("L", 1), ("R", -1))
 BODY = {"length": 0.6, "height_frac": 0.62, "squawk_deg": 38.0, "squawk_frames": 36, "wing_lift_deg": 28.0}
-EXTRA = {"leg_frac": 0.2, "neck_r": 1.0, "head_scale": 1.0, "tail_off": 0.18}
+EXTRA = {"leg_frac": 0.2, "neck_r": 1.0, "head_scale": 1.0, "tail_off": 0.18,
+         # raptor options (2026-10-29, G504 marsh hawk); absent = the original gull/crane parts, byte-identical pins
+         "beak_style": "straight", "feet": "webbed", "wing_tips": "plain", "tail_bands": 0}
 CLIPS = ("Idle", "Squawk", "Walk", "Fly", "Dance")
 
 
@@ -85,22 +89,48 @@ def parts(P):
     bp(K.lathe("Head", [(r * L, z * L) for r, z in hp], (0, hy, hz), 0, 8, False, False, rot=(90, 0, 0), lod1={"segments": 5}), "Head")
     for nm, s in SIDES:
         bp(K.cyl("Eye_" + nm, "x", 0.012 * L, 0.012 * L, 0.006 * L, (s * 0.05 * L * hs, hy - 0.015 * L * hs, hz + 0.012 * L * hs), 3, 6, lod1={"drop": True}), "Head")
-    bp(K.cyl("Beak_Upper", "y", 0.016 * L, 0.004 * L, g["beak0"] - g["beak1"], (0, (g["beak0"] + g["beak1"]) / 2, hz - 0.004 * L), 1, 6, lod1={"segments": 4}), "Head")
-    bp(K.cyl("Beak_Lower", "y", 0.012 * L, 0.003 * L, (g["beak0"] - g["beak1"]) * 0.85, (0, g["beak0"] - (g["beak0"] - g["beak1"]) * 0.425, hz - 0.024 * L), 1, 6, lod1={"segments": 4}), "Beak_Lower")
+    if P.get("beak_style", "straight") == "hook":     # raptor: deep base, curved culmen, tip hooks down past the lower mandible
+        b0, bl = g["beak0"], (g["beak0"] - g["beak1"]) * 0.75
+        bp(_stick("Beak_Upper", (0, b0 + 0.01 * L, hz + 0.002 * L), (0, b0 - 0.45 * bl, hz - 0.002 * L), 0.026 * L * hs, 0.019 * L * hs, 1, 6, lod1={"segments": 4}), "Head")
+        bp(_stick("Beak_Curve", (0, b0 - 0.45 * bl, hz - 0.002 * L), (0, b0 - 0.85 * bl, hz - 0.022 * L), 0.019 * L * hs, 0.011 * L * hs, 1, 6, lod1={"segments": 4}), "Head")
+        bp(_stick("Beak_Hook", (0, b0 - 0.85 * bl, hz - 0.022 * L), (0, b0 - 0.93 * bl, hz - 0.058 * L), 0.011 * L * hs, 0.002 * L, 1, 5, lod1={"segments": 3}), "Head")
+        bp(K.cyl("Cere", "y", 0.028 * L * hs, 0.027 * L * hs, 0.02 * L, (0, b0 + 0.004 * L, hz + 0.004 * L), 1, 6, lod1={"drop": True}), "Head")
+        bp(_stick("Beak_Lower", (0, b0, hz - 0.02 * L), (0, b0 - 0.62 * bl, hz - 0.03 * L), 0.015 * L * hs, 0.004 * L, 1, 5, lod1={"segments": 3}), "Beak_Lower")
+    else:
+        bp(K.cyl("Beak_Upper", "y", 0.016 * L, 0.004 * L, g["beak0"] - g["beak1"], (0, (g["beak0"] + g["beak1"]) / 2, hz - 0.004 * L), 1, 6, lod1={"segments": 4}), "Head")
+        bp(K.cyl("Beak_Lower", "y", 0.012 * L, 0.003 * L, (g["beak0"] - g["beak1"]) * 0.85, (0, g["beak0"] - (g["beak0"] - g["beak1"]) * 0.425, hz - 0.024 * L), 1, 6, lod1={"segments": 4}), "Beak_Lower")
     sx, sy, sz = g["shoulder"]
     wing = [(0.0, -0.02), (0.02, 0.12), (0.02, 0.36), (0.0, 0.6), (-0.03, 0.42), (-0.05, 0.16), (-0.04, 0.0)]   # (z, y) along the flank
     for nm, s in SIDES:   # folded wing: a slab standing on its edge against the flank (outline in the YZ plane)
         pts = [(y * L, z * L) for z, y in wing]; cy = sum(p[0] for p in pts) / len(pts); cz = sum(p[1] for p in pts) / len(pts)
         bp(K.slab("Wing_" + nm, [(y - cy, z - cz) for y, z in pts], 0.012 * L, (s * (sx + 0.006 * L), sy + cy, sz + cz), 2, rot=(90, 0, 90),
                   lod1={"segments": 4}), "Wing_" + nm)
-        bp(K.slab("WingTip_" + nm, [(-0.05 * L, 0.0), (0.05 * L, 0.0), (0.0, 0.03 * L)], 0.01 * L, (s * (sx + 0.004 * L), sy + 0.5 * L, sz + 0.0), 3, rot=(90, 0, 90),
-                  lod1={"drop": True}), "Wing_" + nm)
+        if P.get("wing_tips", "plain") == "fingered":   # 5 splayed primaries ("fingers") past the wing tip, fanning down
+            for k in range(5):
+                a_ = math.radians(-10 - 9 * k); y0, z0 = sy + 0.52 * L, sz - 0.01 * L * k; ln = (0.13 - 0.012 * abs(k - 1)) * L
+                bp(K.slab("Primary%d_%s" % (k, nm), [(0.0, -0.008 * L), (ln, -0.005 * L), (ln + 0.012 * L, 0.0), (ln, 0.005 * L), (0.0, 0.008 * L)], 0.006 * L,
+                          (s * (sx + 0.004 * L + 0.002 * L * k), y0 + 0.5 * ln * math.cos(a_), z0 + 0.5 * ln * math.sin(a_)), 3, rot=(90 + math.degrees(a_), 0, 90),
+                          lod1={"drop": True} if k % 2 else None), "Wing_" + nm)
+        else:
+            bp(K.slab("WingTip_" + nm, [(-0.05 * L, 0.0), (0.05 * L, 0.0), (0.0, 0.03 * L)], 0.01 * L, (s * (sx + 0.004 * L), sy + 0.5 * L, sz + 0.0), 3, rot=(90, 0, 90),
+                      lod1={"drop": True}), "Wing_" + nm)
     bp(K.slab("Tail", [(-0.06 * L, -0.06 * L), (0.06 * L, -0.06 * L), (0.055 * L, 0.12 * L), (-0.055 * L, 0.12 * L)], 0.01 * L, (0, g["tail0"] + P.get("tail_off", 0.18) * L, bz + 0.03 * L), 0,
               rot=(8, 0, 0)), "Tail")   # 4-point slabs keep their outline at LOD1 (halving leaves 2 points)
+    for k in range(int(P.get("tail_bands", 0))):     # dark bars across the top of the tail (slot 3), sharing the tail's 8 deg tilt
+        ty = g["tail0"] + P.get("tail_off", 0.18) * L - 0.03 * L + 0.05 * L * k
+        bp(K.box("TailBand%d" % k, (0.112 * L - 0.002 * L * k, 0.016 * L, 0.004 * L), (0, ty, bz + 0.03 * L + 0.006 * L + (ty - g["tail0"] - P.get("tail_off", 0.18) * L) * math.tan(math.radians(8))), 3,
+                     rot=(8, 0, 0), bevel=False, lod1={"drop": True}), "Tail")
     for nm, s in SIDES:
         x = s * g["hip"][0]
         bp(_stick("Leg_" + nm, (x, g["hip"][1], P["leg"] + 0.04 * L), (x, g["hip"][1] - 0.01 * L, 0.012 * L), 0.012 * L, 0.009 * L, 1, 4, lod1={"segments": 3}), "Leg_" + nm)
-        bp(K.slab("Foot_" + nm, [(0.0, 0.01 * L), (0.035 * L, -0.07 * L), (0.0, -0.05 * L), (-0.035 * L, -0.07 * L)], 0.006 * L, (x, g["hip"][1], 0.003 * L), 1), "Leg_" + nm)
+        if P.get("feet", "webbed") == "talons":   # 3 forward toes + 1 hind toe, each ending in a down-curved black claw (slot 3)
+            fy = g["hip"][1] - 0.01 * L; tz = 0.012 * L
+            for k, (dx, dy) in enumerate(((0.0, -1.0), (0.55, -0.85), (-0.55, -0.85), (0.0, 1.0))):
+                ln = (0.05 if k < 3 else 0.035) * L; e = (x + dx * ln, fy + dy * ln, tz * 0.6)
+                bp(_stick("Toe%d_%s" % (k, nm), (x, fy, tz), e, 0.007 * L, 0.006 * L, 1, 4, lod1={"segments": 3}), "Leg_" + nm)
+                bp(_stick("Claw%d_%s" % (k, nm), e, (e[0] + dx * 0.012 * L, e[1] + dy * 0.012 * L, 0.0005 * L), 0.006 * L, 0.0008 * L, 3, 4, lod1={"drop": True}), "Leg_" + nm)
+        else:
+            bp(K.slab("Foot_" + nm, [(0.0, 0.01 * L), (0.035 * L, -0.07 * L), (0.0, -0.05 * L), (-0.035 * L, -0.07 * L)], 0.006 * L, (x, g["hip"][1], 0.003 * L), 1), "Leg_" + nm)
     return out
 
 

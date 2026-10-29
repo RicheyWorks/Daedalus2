@@ -92,6 +92,10 @@ public final class ArkCabinet {
             SkittleRowGame::new);
         c.register("galley", "The Galley Stack", "flip plates into order in fewest flips, solo (G428)",
             GalleyStackGame::new);
+        c.register("pegs", "The Peg Board", "jump pegs on a 15-hole triangle down to one, solo (G366)",
+            PegBoardGame::new);
+        c.register("lock", "The Lock Pegs", "crack the strongroom's 4-peg colour code, solo (G362)",
+            LockPegsGame::new);
         return c;
     }
 

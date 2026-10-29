@@ -1,0 +1,42 @@
+{
+ "schema": "bb-skeletal-sockets/1",
+ "asset": "Mob_Sky_Crane",
+ "status": "STAGED NOT READY",
+ "sockets": [
+  {
+   "name": "SOCKET_LegBand",
+   "bone": "Leg_L",
+   "location_m": [
+    0.06,
+    0.033,
+    0.1704
+   ],
+   "offset_from_bone_head_m": [
+    0.0,
+    -0.007,
+    -0.3696
+   ],
+   "offset_bone_local_m": [
+    0.0,
+    0.3696,
+    -0.007
+   ],
+   "offset_from_bone_head_ue_cm": [
+    0.0,
+    0.7,
+    -36.96
+   ],
+   "location_ue_cm": [
+    6.0,
+    -3.3,
+    17.04
+   ],
+   "rotation": [
+    0,
+    0,
+    0
+   ]
+  }
+ ],
+ "how": "UE Skeleton editor: Add Socket on <bone>, Relative Location = offset_from_bone_head_ue_cm rotated into the imported bone frame (offset_bone_local_m is the same offset in the Blender bone frame), Relative Rotation 0; the glb also carries the SOCKET_ empty as a child of the joint for checking. Rotation [0, 0, 0] = model axes at rest (Z up)."
+}
