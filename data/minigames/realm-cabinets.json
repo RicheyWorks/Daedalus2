@@ -450,12 +450,26 @@
           "start": "StartGame(\"facetlock\", 2019558690)"
         },
         {
+          "game": "prismcairn",
+          "title": "Prismcairn Duel",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            7.5,
+            5.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1466050411,
+          "option": 0,
+          "start": "StartGame(\"prismcairn\", 1466050411)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            7.5,
-            5.0,
+            10.0,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -469,7 +483,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -753,12 +767,26 @@
           "start": "StartGame(\"facetlock\", 1791425260)"
         },
         {
+          "game": "prismcairn",
+          "title": "Prismcairn Duel",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            10.0,
+            3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 724332067,
+          "option": 0,
+          "start": "StartGame(\"prismcairn\", 724332067)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            10.0,
-            3.75,
+            12.5,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -772,7 +800,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1283,12 +1311,26 @@
           "start": "StartGame(\"facetlock\", 1644454135)"
         },
         {
+          "game": "prismcairn",
+          "title": "Prismcairn Duel",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            7.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 557933909,
+          "option": 0,
+          "start": "StartGame(\"prismcairn\", 557933909)"
+        },
+        {
           "game": "prismvault",
           "title": "Prismvault Weigh",
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            7.5,
+            10.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1304,7 +1346,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            10.0,
+            12.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1312,22 +1354,6 @@
           "difficulty": "normal",
           "module": "tools/minigames/shardfall.py",
           "start": "shardfall.start(242191464, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
-        },
-        {
-          "game": "prismcairn",
-          "title": "Prismcairn Duel",
-          "host": "PythonMinigame",
-          "offset_m": [
-            0.0,
-            12.5,
-            0.0
-          ],
-          "yaw_deg": 180.0,
-          "seed": 557933909,
-          "difficulty": "normal",
-          "module": "tools/minigames/prismcairn.py",
-          "start": "prismcairn.start(557933909, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]

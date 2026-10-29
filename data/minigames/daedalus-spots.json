@@ -77,6 +77,10 @@
     "facetlock": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the vault door"
+    },
+    "prismcairn": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the cairn field"
     }
   }
 }

@@ -13,6 +13,7 @@
 #include "DaedalusDesktopLumenpathCore.h"
 #include "DaedalusDesktopWardensAccordCore.h"
 #include "DaedalusDesktopFacetlockCore.h"
+#include "DaedalusDesktopPrismcairnCore.h"
 #include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
@@ -39,7 +40,8 @@ inline const std::vector<Entry>& Catalog() {
         {"shardring","Shardring Resonance","Set Prism Shards in the sphere ring; three of one hue resonate. Left/Right or stick: pick a facet; J/Space or pad A: set"},
         {"lumenpath","Lumenpath Refraction","Bend the prism beam through every crystal with shard mirrors. Arrows or stick: move; J/Space or pad A: toggle a mirror"},
         {"wardens_accord","Wardens' Accord","Take altar shards and spend them to summon Warden spirits. Left/Right or stick: pick; J/Space or pad A: take or summon"},
-        {"facetlock","Facetlock Lattice","Slide wrapping rows and columns until each row is one hue. Arrows or stick: cursor; J/K or pad A/B: slide row; Space/Shift or pad X/Y: slide column"}
+        {"facetlock","Facetlock Lattice","Slide wrapping rows and columns until each row is one hue. Arrows or stick: cursor; J/K or pad A/B: slide row; Space/Shift or pad X/Y: slide column"},
+        {"prismcairn","Prismcairn Duel","Out-think the Warden at the shard cairns; lift the last shard. Left/Right or stick: pick a cairn; J/K/Space/Shift or pad A/B/X/Y: take 1/2/3/4"}
     };
     return Entries;
 }
@@ -64,6 +66,7 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="lumenpath") return std::make_unique<LumenpathGame>();
     if(Id=="wardens_accord") return std::make_unique<WardensAccordGame>();
     if(Id=="facetlock") return std::make_unique<FacetlockGame>();
+    if(Id=="prismcairn") return std::make_unique<PrismcairnGame>();
     return nullptr;
 }
 

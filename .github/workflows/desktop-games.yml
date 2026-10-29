@@ -60,6 +60,8 @@ jobs:
         run: python tools/minigames/wardens_accord_parity.py --check
       - name: Facetlock parity fixture is current (engines/unreal/core-test/facetlock_parity.txt)
         run: python tools/minigames/facetlock_parity.py --check
+      - name: Prismcairn parity fixture is current (engines/unreal/core-test/prismcairn_parity.txt)
+        run: python tools/minigames/prismcairn_parity.py --check
       - name: Realm cabinet placements are current and tested
         run: |
           python tools/minigames/realm_cabinets.py --check

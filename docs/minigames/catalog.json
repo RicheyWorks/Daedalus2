@@ -673,6 +673,38 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "prismcairn",
+      "title": "Prismcairn Duel",
+      "summary": "Out-think the Warden at the shard cairns; lift the last shard. Left/Right or stick: pick a cairn; J/K/Space/Shift or pad A/B/X/Y: take 1/2/3/4",
+      "how_to_play": "HOW Take one or more shards, up to the limit, from one cairn each turn; lift the last shard to win the round, best of three.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the cairn field",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"prismcairn\", Seed)",
+      "portable_tests": [
+        "desktop_prismcairn"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -754,23 +786,6 @@
       "default_difficulty": "normal",
       "tests": [
         "test_shardfall.py"
-      ]
-    },
-    {
-      "id": "prismcairn",
-      "title": "Prismcairn Duel",
-      "summary": "out-think a Warden at the shard cairns; whoever lifts the last shard wins the round.",
-      "how_to_play": "HOW Take 1 or more shards (up to the limit) from one cairn each turn; the Warden replies. Lift the last shard to win the round; best of three.",
-      "module": "tools/minigames/prismcairn.py",
-      "start": "prismcairn.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_prismcairn.py"
       ]
     }
   ]
