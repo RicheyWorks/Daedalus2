@@ -43,7 +43,7 @@ inline char HueMark(Hue H) { return H == Hue::None ? '.' : static_cast<char>(Hue
 struct Difficulty { const char* Name; int Facets; int Hues; int Shards; };
 inline const Difficulty* Difficulties()
 {
-	static const Difficulty Table[] = { { "easy", 12, 3, 60 }, { "normal", 10, 4, 50 }, { "hard", 8, 5, 40 } };
+	static const Difficulty Table[] = { { "easy", 14, 3, 60 }, { "normal", 10, 3, 50 }, { "hard", 8, 3, 40 } };
 	return Table;
 }
 constexpr int DifficultyCount = 3;

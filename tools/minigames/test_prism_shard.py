@@ -35,6 +35,9 @@ class Shardring(unittest.TestCase):
             self.assertEqual(len(g.ring), cfg["facets"])
             self.assertEqual(len(g.hues), cfg["hues"])
             self.assertEqual(g.pouch, cfg["shards"])
+        self.assertEqual(ps.DIFFICULTY["easy"], {"facets": 14, "hues": 3, "shards": 60})
+        self.assertEqual(ps.DIFFICULTY["normal"], {"facets": 10, "hues": 3, "shards": 50})
+        self.assertEqual(ps.DIFFICULTY["hard"], {"facets": 8, "hues": 3, "shards": 40})
         self.assertLess(ps.DIFFICULTY["hard"]["facets"], ps.DIFFICULTY["easy"]["facets"])
         with self.assertRaises(ValueError):
             ps.start(1, "nightmare")

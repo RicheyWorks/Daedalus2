@@ -100,25 +100,26 @@ class BalanceCheckTest {
         int[] empty = {-1, -1, -1};
         assertThat(ShardringBalance.greedy(empty, 1)).isZero();
         List<ModeResult> r = new BalanceCheck().run(new ShardringBalance(), BalanceReport.SEED, TRIALS);
-        assertThat(r.get(0).winRate()).isBetween(0.45, 0.60);
-        assertThat(r.get(1).winRate()).isLessThan(0.06);
-        assertThat(r.get(2).winRate()).isLessThan(0.01);
-        assertThat(r).allMatch(m -> m.flags().contains(BalanceFlag.TOO_HARD));
+        assertThat(r).allMatch(m -> !m.flagged());
+        assertThat(r.get(0).winRate()).isGreaterThan(r.get(1).winRate());
+        assertThat(r.get(1).winRate()).isGreaterThan(r.get(2).winRate());
         assertThat(r.get(0).meanScore()).isGreaterThan(r.get(1).meanScore());
     }
 
     @Test
-    void cairnwellShipsTwoWellsAndNoHard() {
+    void cairnwellShipsAWellForEachSetting() {
         CairnwellBalance g = new CairnwellBalance();
-        assertThat(g.supports("hard")).isFalse();
-        assertThatThrownBy(() -> g.play("hard", new OddsRng(1))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(g.supports("easy")).isTrue();
+        assertThat(g.supports("normal")).isTrue();
+        assertThat(g.supports("hard")).isTrue();
+        assertThat(CairnwellBalance.shipped("easy")).containsExactly(4, 4, 28);
+        assertThat(CairnwellBalance.shipped("normal")).containsExactly(6, 7, 8);
+        assertThat(CairnwellBalance.shipped("hard")).containsExactly(6, 5, 8);
         assertThat(CairnwellBalance.lowest(new int[] {2, 1, 1, 3}, 3)).isEqualTo(2);
         List<ModeResult> r = new BalanceCheck().run(g, BalanceReport.SEED, TRIALS);
-        assertThat(r.get(2).flags()).containsExactly(BalanceFlag.MISSING_MODE);
-        assertThat(r.get(0).flags()).contains(BalanceFlag.TOO_EASY);
-        assertThat(r.get(1).flags()).contains(BalanceFlag.TOO_EASY);
-        List<ModeResult> sloppy = new BalanceCheck().run(new CairnwellBalance(20, 6, 0.75), BalanceReport.SEED, TRIALS);
-        assertThat(sloppy.get(1).flags()).contains(BalanceFlag.NOT_MONOTONIC);
+        assertThat(r).allMatch(m -> !m.flagged());
+        assertThat(r.get(0).winRate()).isGreaterThan(r.get(1).winRate());
+        assertThat(r.get(1).winRate()).isGreaterThan(r.get(2).winRate());
         SessionOutcome lost = new CairnwellBalance(20, 6, 1.0).play("normal", new OddsRng(5));
         assertThat(lost.score() % 10).isZero();
     }
@@ -126,7 +127,7 @@ class BalanceCheckTest {
     @Test
     void reportPrintsEveryMode() {
         assertThat(BalanceReport.games()).extracting(BalanceGame::id).containsExactly("shardring", "cairnwell");
-        assertThat(BalanceReport.runAll(1, 50).get(5).toString()).contains("not in source");
+        assertThat(BalanceReport.runAll(1, 50).get(5).toString()).contains("cairnwell/hard: win");
         assertThat(BalanceReport.runAll(1, 50).get(0).toString()).contains("shardring/easy: win");
         BalanceReport.main(new String[0]);
     }

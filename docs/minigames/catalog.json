@@ -532,7 +532,7 @@
       "portable_tests": [
         "desktop_cairnwell"
       ],
-      "option_count": 2,
+      "option_count": 3,
       "capabilities": [
         "action_cue",
         "contrast_mark",

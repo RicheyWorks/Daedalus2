@@ -4,8 +4,9 @@
 #include <string>
 
 namespace daedalus { namespace desktop {
-// Cairnwell: stack single stones. A full layer sinks away. Option 0 is six
-// columns and a short fall. Option 1 is a four-column practice with a slower fall.
+// Cairnwell: stack single stones. A full layer sinks away. Option 0 is the
+// normal well. Option 1 is a four-column practice with a slower fall.
+// Option 2 is the hard well: the same width, fewer rows, the same fast fall.
 // Stones are single blocks, so this is not a rotating-piece puzzle.
 class CairnwellGame final : public Game {
     int Option=0;
@@ -24,9 +25,9 @@ class CairnwellGame final : public Game {
     std::uint32_t SessionSeed=730;
     std::vector<int> Height;
     void Deal() {
-        Cols=Option==1?4:6;
-        Rows=Option==1?6:8;
-        DropEvery=Option==1?28:16;
+        if(Option==1) { Cols=4; Rows=4; DropEvery=28; }
+        else if(Option==2) { Cols=6; Rows=5; DropEvery=8; }
+        else { Cols=6; Rows=7; DropEvery=8; }
         Height.assign(static_cast<std::size_t>(Cols),0);
         FallTick=0; Locks=0; Clears=0; Lost=false; Falling=true;
         WasLeft=WasRight=WasDown=false;
@@ -58,7 +59,7 @@ class CairnwellGame final : public Game {
 public:
     void Reset(std::uint32_t Seed) override { SessionSeed=Seed?Seed:1; Deal(); }
     bool SetOption(int Value,std::uint32_t Seed) override {
-        if(Value<0 || Value>1) return false;
+        if(Value<0 || Value>2) return false;
         Option=Value; SessionSeed=Seed?Seed:1; Deal(); return true;
     }
     int GetOption() const override { return Option; }
@@ -83,6 +84,8 @@ public:
         WasDown=DownNow;
     }
     int ColumnCount() const { return Cols; }
+    int RowCount() const { return Rows; }
+    int DropEveryCount() const { return DropEvery; }
     int StackHeight(int Column) const {
         return Column>=0 && Column<Cols ? Height[static_cast<std::size_t>(Column)] : 0;
     }
@@ -90,8 +93,9 @@ public:
     int LayerCount() const { return Clears; }
     std::string HintLine() const {
         if(Lost) return "HINT Pad A or R starts the same well again.";
-        return Option==1?"HINT Practice: four columns and a slower fall."
-                        :"HINT Slide the stone. A full layer sinks away.";
+        if(Option==1) return "HINT Practice: four columns and a slower fall.";
+        if(Option==2) return "HINT A short well: six columns and a fast fall.";
+        return "HINT Slide the stone. A full layer sinks away.";
     }
     std::string ActionCue() const { return Lost?"CUE Retry":"CUE Slide"; }
     std::string HowToLine() const override { return "HOW Slide the falling stone and clear a full layer."; }
@@ -99,7 +103,7 @@ public:
     std::string ContrastMark() const override { return Lost?"MARK WAIT":"MARK ACT"; }
     void Render(Frame& F) const override {
         F.Clear(800,600,{22,18,16,255});
-        F.AddText(28,20,Option==1?"CAIRNWELL PRACTICE":"CAIRNWELL",{255,220,170,255},28);
+        F.AddText(28,20,Option==1?"CAIRNWELL PRACTICE":Option==2?"CAIRNWELL HARD":"CAIRNWELL",{255,220,170,255},28);
         F.AddText(28,56,"LAYERS: "+std::to_string(Clears)+"   STONES: "+std::to_string(Locks),White,18);
         const double Cell=44, Left=180, Floor=470;
         F.AddRect(Left-8,Floor-Rows*Cell-8,Cols*Cell+16,Rows*Cell+16,{40,32,28,255});

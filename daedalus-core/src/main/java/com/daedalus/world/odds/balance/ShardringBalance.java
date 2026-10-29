@@ -21,7 +21,7 @@ public final class ShardringBalance implements BalanceGame {
     static final int SPIRIT_EVERY = 3;
     static final int SPIRIT_BONUS = 25;
     /** {facets, hues, shards} per difficulty, as in the source. */
-    private static final int[][] CONFIG = {{12, 3, 60}, {10, 4, 50}, {8, 5, 40}};
+    private static final int[][] CONFIG = {{14, 3, 60}, {10, 3, 50}, {8, 3, 40}};
     static final List<String> NAMES = List.of("easy", "normal", "hard");
 
     private final double slip;

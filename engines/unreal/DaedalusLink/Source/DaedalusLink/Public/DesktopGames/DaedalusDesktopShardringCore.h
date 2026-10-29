@@ -15,7 +15,7 @@ namespace daedalus { namespace desktop {
 // DaedalusShardringCore.h, which is a port of tools/minigames/prism_shard.py (the rules authority).
 // Draws come from a CPython-compatible stream seeded like prism_shard.py, so seed + difficulty reproduce the
 // Python and web games; tests can also inject an Oracle to replay recorded fixtures. Cabinet difficulty is
-// the game's difficulty (easy 12 facets / normal 10 / hard 8). Controls follow the DaedalusPad map in
+// the game's difficulty (easy 14 facets / normal 10 / hard 8, three hues). Controls follow the DaedalusPad map in
 // tools/minigames/web/shardring/index.html: Left/Up previous facet, Right/Down next, confirm sets the shard.
 class ShardringGame final : public Game {
     // CPython-compatible stream (DaedalusPyRandomCore.h) seeded exactly like prism_shard.py:
