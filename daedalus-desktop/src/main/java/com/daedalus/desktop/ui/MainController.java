@@ -3387,9 +3387,17 @@ public class MainController {
         double heelH = Math.min(px, rest);
         double mid = rest - heelH;
         if (mid > 0) {
-            paintHairline(g, new DesktopPaint.Hairline(
-                    side.x(), side.y() + joinH, side.w(), mid),
-                    Color.web(DesktopPaint.wallFootInk(wallInk, floorInk)));
+            double fadeH = shineInk != null && mid >= px ? px : 0;
+            if (fadeH > 0) {
+                paintHairline(g, new DesktopPaint.Hairline(
+                        side.x(), side.y() + joinH, side.w(), fadeH),
+                        Color.web(DesktopPaint.wallSideFadeInk(wallInk, floorInk, shineInk)));
+            }
+            if (mid - fadeH > 0) {
+                paintHairline(g, new DesktopPaint.Hairline(
+                        side.x(), side.y() + joinH + fadeH, side.w(), mid - fadeH),
+                        Color.web(DesktopPaint.wallFootInk(wallInk, floorInk)));
+            }
         }
         paintHairline(g, new DesktopPaint.Hairline(
                 side.x(), side.y() + side.h() - heelH, side.w(), heelH),
