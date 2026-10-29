@@ -79,7 +79,7 @@ jobs:
       - name: Prismvault Weigh core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prismvault_core_test.cpp -o prismvault_core_test_clang && ./prismvault_core_test_clang prismvault_parity.txt
       - name: Shardfall Gamble core (DaedalusShardfallCore.h regenerates shardfall_parity.txt from seed with CPython-compatible seeding and shuffle)
-      - name: Prismvault Weigh core (DaedalusPrismvaultCore.h regenerates shardfall_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test && ./shardfall_core_test shardfall_parity.txt
       - name: Shardfall Gamble core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test_clang && ./shardfall_core_test_clang shardfall_parity.txt
       - name: LAB03 Echo Bell gate session (AEchoBellGate cue scheduling, taps, judge, retry; replays docs/contracts/echo-bell-v1 CUE-SHEET.md + peals.ebg)
