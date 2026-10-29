@@ -69,6 +69,10 @@
     "lumenpath": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the refraction gallery"
+    },
+    "wardens_accord": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the Warden altar"
     }
   }
 }

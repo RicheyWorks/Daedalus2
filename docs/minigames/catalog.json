@@ -609,6 +609,38 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "wardens_accord",
+      "title": "Wardens' Accord",
+      "summary": "Take altar shards and spend them to summon Warden spirits. Left/Right or stick: pick; J/Space or pad A: take or summon",
+      "how_to_play": "HOW Take one of three altar shards each round, then spend matching shards to summon spirits before the rounds end.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the Warden altar",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"wardens_accord\", Seed)",
+      "portable_tests": [
+        "desktop_wardens_accord"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -658,23 +690,6 @@
     }
   ],
   "python_games": [
-    {
-      "id": "wardens_accord",
-      "title": "Wardens' Accord",
-      "summary": "draft Prism Shards from the Warden altar and spend them to summon spirits.",
-      "how_to_play": "HOW Take one of three altar shards each round, then spend matching shards to summon spirits; reach the target score before the rounds end.",
-      "module": "tools/minigames/wardens_accord.py",
-      "start": "wardens_accord.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_wardens_accord.py"
-      ]
-    },
     {
       "id": "facetlock",
       "title": "Facetlock Lattice",
