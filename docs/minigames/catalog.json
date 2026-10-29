@@ -644,6 +644,23 @@
       "tests": [
         "test_wardens_accord.py"
       ]
+    },
+    {
+      "id": "facetlock",
+      "title": "Facetlock Lattice",
+      "summary": "shift rows and columns of a prism lattice until every facet row glows one hue.",
+      "how_to_play": "HOW Slide lattice rows and columns (they wrap) until each row shows a single hue; finish inside the move budget.",
+      "module": "tools/minigames/facetlock.py",
+      "start": "facetlock.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_facetlock.py"
+      ]
     }
   ]
 }

@@ -140,3 +140,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `shardring` | Shardring Resonance | `tools/minigames/prism_shard.py` | HOW Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill. |
 | `lumenpath` | Lumenpath Refraction | `tools/minigames/lumenpath.py` | HOW Toggle shard mirrors in the lattice to bend the prism beam through every crystal before your moves run out. |
 | `wardens_accord` | Wardens' Accord | `tools/minigames/wardens_accord.py` | HOW Take one of three altar shards each round, then spend matching shards to summon spirits; reach the target score before the rounds end. |
+| `facetlock` | Facetlock Lattice | `tools/minigames/facetlock.py` | HOW Slide lattice rows and columns (they wrap) until each row shows a single hue; finish inside the move budget. |
