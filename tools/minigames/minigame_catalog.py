@@ -83,7 +83,7 @@ def parse_java(errors):
 
 
 # Pure-Python minigames: rules live in a stdlib module under tools/minigames.
-PY_GAMES = ["prism_shard", "lumenpath", "wardens_accord", "facetlock", "prismvault", "shardfall", "prismcairn"]
+PY_GAMES = ["prism_shard", "lumenpath", "wardens_accord", "facetlock", "prismvault", "shardfall", "prismcairn", "spiritkite"]
 
 
 def parse_python(errors):
