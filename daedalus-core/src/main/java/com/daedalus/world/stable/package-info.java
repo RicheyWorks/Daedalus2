@@ -28,5 +28,9 @@
  * <p>G530 Tack Room Pegs ({@link TackRoomPegs}, quest {@code q_tidy_tack_room}): hang every piece of tack on the
  * fewest pegs with a weight limit per peg and no two feuding horses' tack on one peg (bin packing with conflicts);
  * exact subset DP vs. first-fit, which a feud pushes to an extra peg.
+ *
+ * <p>G532 Hay Wagon Round ({@link HayWagonRound}, quest {@code q_hay_on_time}): feed every stall inside its feeding
+ * window and get the hay wagon home earliest (travelling salesman with time windows, waiting allowed); exact
+ * Held-Karp over (stalls fed, last stall) vs. nearest-open-stall, which a stall by the barn strands.
  */
 package com.daedalus.world.stable;
