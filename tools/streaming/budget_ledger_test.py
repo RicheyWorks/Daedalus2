@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Tests for Budget Trend Ledger (G515): record/diff/trend, drift kinds, determinism, real census, CLI."""
+"""Tests for Budget Trend Ledger (G517): record/diff/trend, drift kinds, determinism, real census, CLI."""
 import io
 import json
 import os

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Budget Trend Ledger (G515, disk-saver): run-over-run drift of the streaming budget.
+"""Budget Trend Ledger (G517, disk-saver): run-over-run drift of the streaming budget.
 
 Each World Census run is priced by G206 census_budget.py (40000 KiB RAM / 32768 KiB
 disk, amber at 900 permille) and appended as ONE record to a JSON-lines ledger.
