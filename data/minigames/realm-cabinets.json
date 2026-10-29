@@ -436,12 +436,26 @@
           "start": "StartGame(\"wardens_accord\", 323687867)"
         },
         {
+          "game": "facetlock",
+          "title": "Facetlock Lattice",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            7.5,
+            2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 2019558690,
+          "option": 0,
+          "start": "StartGame(\"facetlock\", 2019558690)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             7.5,
-            2.5,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -454,8 +468,8 @@
           "title": "BlackJackPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            7.5,
-            5.0,
+            10.0,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -725,12 +739,26 @@
           "start": "StartGame(\"wardens_accord\", 99191994)"
         },
         {
+          "game": "facetlock",
+          "title": "Facetlock Lattice",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            10.0,
+            1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1791425260,
+          "option": 0,
+          "start": "StartGame(\"facetlock\", 1791425260)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            1.25,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -743,8 +771,8 @@
           "title": "BlackJackPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            10.0,
-            3.75,
+            12.5,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1243,7 +1271,7 @@
         {
           "game": "facetlock",
           "title": "Facetlock Lattice",
-          "host": "PythonMinigame",
+          "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
             5.0,
@@ -1251,10 +1279,8 @@
           ],
           "yaw_deg": 180.0,
           "seed": 1644454135,
-          "difficulty": "normal",
-          "module": "tools/minigames/facetlock.py",
-          "start": "facetlock.start(1644454135, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
+          "option": 0,
+          "start": "StartGame(\"facetlock\", 1644454135)"
         },
         {
           "game": "prismvault",

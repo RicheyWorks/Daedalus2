@@ -641,6 +641,38 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "facetlock",
+      "title": "Facetlock Lattice",
+      "summary": "Slide wrapping rows and columns until each row is one hue. Arrows or stick: cursor; J/K or pad A/B: slide row; Space/Shift or pad X/Y: slide column",
+      "how_to_play": "HOW Slide lattice rows and columns, which wrap, until each row shows a single hue inside the move budget.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the vault door",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"facetlock\", Seed)",
+      "portable_tests": [
+        "desktop_facetlock"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -690,23 +722,6 @@
     }
   ],
   "python_games": [
-    {
-      "id": "facetlock",
-      "title": "Facetlock Lattice",
-      "summary": "shift rows and columns of a prism lattice until every facet row glows one hue.",
-      "how_to_play": "HOW Slide lattice rows and columns (they wrap) until each row shows a single hue; finish inside the move budget.",
-      "module": "tools/minigames/facetlock.py",
-      "start": "facetlock.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_facetlock.py"
-      ]
-    },
     {
       "id": "prismvault",
       "title": "Prismvault Weigh",

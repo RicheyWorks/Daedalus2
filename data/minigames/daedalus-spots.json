@@ -73,6 +73,10 @@
     "wardens_accord": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the Warden altar"
+    },
+    "facetlock": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the vault door"
     }
   }
 }
