@@ -132,3 +132,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Stray Cargo (G531, quest q_stray_cargo)
 - `stray_cargo.py`: reads the `census.json` asset list (read-only) for cargo the G206 pricing never sees: errors `dangling` (asset on an island that does not exist), `duplicate_name`, `count_mismatch`; advisories `stray` (no island, with its G206 cost once placed), `empty_hull`, `shared_file` (same file in several worlds) and `no_realm`. Verdict `tidy`/`littered`/`adrift`; `--fail-on littered|adrift` exits 1. Beachcomber Linnet walks the tideline in game (`stray_cargo_test.py`; CI `Stray Cargo`). Rules: `docs/islands/DISKSAVER-STRAY-CARGO.md`.
+
+## Fleet Flags (G533, quest q_fleet_flags)
+- `fleet_flags.py`: reads `census.json` (read-only), prices it with G206 and rolls the streaming budget up by realm (unrealmed worlds grouped first): worlds, islands, RAM/disk totals, beacon counts, spilling worlds, heaviest world and a realm flag (green/amber/red), and checks the census `realms[]` tallies against the worlds list. Verdict `fair`/`signal`/`distress`; `--fail-on-distress` exits 1 (also on any tally mismatch). Signal Yeoman Marisol flies the flags in game (`fleet_flags_test.py`; CI `Fleet Flags`). Rules: `docs/islands/DISKSAVER-FLEET-FLAGS.md`.

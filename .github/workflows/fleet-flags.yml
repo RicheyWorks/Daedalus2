@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: MIT
+name: Fleet Flags
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/fleet_flags.py'
+      - 'tools/streaming/fleet_flags_test.py'
+      - 'tools/streaming/census_budget.py'
+      - 'tools/world_census/**'
+      - 'data/islands/disk-saver/fleet-flags-v1.json'
+      - 'data/islands/disk-saver/census-budget-v1.json'
+      - '.github/workflows/fleet-flags.yml'
+permissions:
+  contents: read
+jobs:
+  fleet-flags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G533 Fleet Flags (realm rollup = brute force over G206, flags, tally checks, CLI)
+        run: python -B -m unittest tools/streaming/fleet_flags_test.py -v
+      - name: Flags for the real world census (--fail-on-distress)
+        run: |
+          python -B -m tools.world_census tools/world_census/fixtures/alpha.json tools/world_census/fixtures/beta.json --snapshot-date 2026-10-26 --bindings tools/world_census/fixtures/bindings.json --output-dir "$RUNNER_TEMP/census"
+          python tools/streaming/fleet_flags.py "$RUNNER_TEMP/census/census.json" --fail-on-distress
