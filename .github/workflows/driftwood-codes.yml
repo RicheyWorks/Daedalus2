@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.10'
       - name: G76 Driftwood Codes rules (Huffman optimum, trap, prefix codes round trip, G70 tie-in)
