@@ -17,6 +17,9 @@ on:
       - 'tools/unreal_preflight/r22_closeout_verifier/**'
       - 'tools/grand_collection_throughput/**'
       - 'tools/unreal_preflight/deprecated_editor_api/**'
+      - 'tools/unreal_preflight/pin_transition/**'
+      - 'tools/unreal_preflight/r22_chunk_reconcile/**'
+      - 'tools/unreal_preflight/island_receiving_adapter/**'
       - '.github/workflows/epic-source-tools.yml'
 permissions:
   contents: read
