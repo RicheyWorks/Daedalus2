@@ -48,5 +48,9 @@
  * <p>G540 Lantern Posts ({@link LanternPosts}, quest {@code q_paths_lit}): light every path of the tree-shaped yard
  * with lanterns at junctions, each with its own price and lighting at most {@code reach} adjacent paths (capacitated
  * weighted vertex cover on a tree); exact tree DP vs. busiest-junction-per-coin, which pays more on most seeds.
+ *
+ * <p>G542 Hay Bale Stacking ({@link HayBaleStacking}, quest {@code q_tall_stack}): build the tallest stack of bales,
+ * each strictly smaller on both footprint sides than the one below (turning allowed) and carrying at most its strength
+ * (box stacking with load limits); exact DP over (bottom bale, stack weight) vs. biggest-first, usually shorter.
  */
 package com.daedalus.world.stable;
