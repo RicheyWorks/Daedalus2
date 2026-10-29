@@ -575,7 +575,8 @@ class ExplorePaintTest {
                 .isEqualTo((course[0] * 3 + courseShine[0]) / 4);
         int[] catchFace = ExplorePaint.brickFace(1, 1);
         int[] catchJoint = ExplorePaint.brickTexColor(1, 1);
-        assertThat(catchJoint[0]).isEqualTo((catchFace[0] + ExplorePaint.BRICK_MORTAR_R) / 2);
+        int catchMix = (catchFace[0] + ExplorePaint.BRICK_MORTAR_R) / 2;
+        assertThat(catchJoint[0]).isEqualTo((catchMix * 3 + catchFace[0]) / 4);
         assertThat(ExplorePaint.brickTexColor(2, 1)).containsExactly(ExplorePaint.brickFace(2, 1));
         int[] brickCorner = ExplorePaint.brickFace(1, 7);
         assertThat(ExplorePaint.brickTexColor(1, 7)[0])

@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick shine joint.**
+  The clay beside
+  the grout on the
+  brick shine leans
+  back toward that
+  shine. The shine
+  line itself stays
+  bright.
+
 - **Explore brick catch joint.**
   The clay beside
   the grout, on the
