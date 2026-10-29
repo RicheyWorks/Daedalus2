@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore vault fade.**
+  The last full
+  course above the
+  lip leans a quarter
+  toward the bridge,
+  joint included.
+  The lip stays
+  the catch mix.
+
 - **Explore floor fade.**
   The last full
   course above the

@@ -523,6 +523,16 @@ class ExplorePaintTest {
         int[] vaultBridgeSeam = ExplorePaint.ceilingTexColor(7, 4);
         assertThat(ExplorePaint.ceilingTexColor(7, 5)[0])
                 .isEqualTo((vaultBridgeMix * 3 + vaultBridgeSeam[0]) / 4);
+        int[] vaultFade = ExplorePaint.ceilingFace(4, 6);
+        int[] vaultFadeAbove = ExplorePaint.ceilingTexColor(4, 5);
+        assertThat(ExplorePaint.ceilingTexColor(4, 6)[0])
+                .isEqualTo((vaultFade[0] * 3 + vaultFadeAbove[0]) / 4);
+        int[] vaultFadeEdge = ExplorePaint.ceilingFace(7, 6);
+        int[] vaultFadeNext = ExplorePaint.ceilingFace(8, 6);
+        int vaultFadeMix = (vaultFadeEdge[0] + vaultFadeNext[0]) / 2;
+        int[] vaultFadeSeam = ExplorePaint.ceilingTexColor(7, 5);
+        assertThat(ExplorePaint.ceilingTexColor(7, 6)[0])
+                .isEqualTo((vaultFadeMix * 3 + vaultFadeSeam[0]) / 4);
         int[] vaultCorner = ExplorePaint.ceilingFace(7, 7);
         int[] vaultSide = ExplorePaint.ceilingFace(8, 7);
         int[] vaultDown = ExplorePaint.ceilingFace(7, 8);
