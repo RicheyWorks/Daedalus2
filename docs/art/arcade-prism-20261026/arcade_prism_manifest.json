@@ -868,5 +868,167 @@
     "manifest": "decals/Decal_Arcade_Poster_StarRun/Decal_Arcade_Poster_StarRun.decal.json"
    }
   ]
+ },
+ "hall_kit": {
+  "generated_by": "tools/blender/arcade_hall_kit.py + tools/blender/arcade_hall_assembler.py",
+  "staging": "bot-team\\staging\\arcade-hall-20261029",
+  "docs": "docs/art/arcade-hall-20261029",
+  "status": "NOT READY",
+  "assets": [
+   {
+    "name": "Prop_ArcadeHall_Wall_2m",
+    "tris": 156,
+    "size_m": [
+     2.0,
+     0.24,
+     4.0
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Poster",
+     "SOCKET_SOCKET_Sconce",
+     "SOCKET_SOCKET_Edge_L",
+     "SOCKET_SOCKET_Edge_R",
+     "SOCKET_SOCKET_Edge_Top",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Wall_2m_M0",
+     "Prop_ArcadeHall_Wall_2m_M1",
+     "Prop_ArcadeHall_Wall_2m_M2",
+     "Prop_ArcadeHall_Wall_2m_M3"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Corner",
+    "tris": 144,
+    "size_m": [
+     0.36,
+     0.36,
+     4.1
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Edge_X",
+     "SOCKET_SOCKET_Edge_Y",
+     "SOCKET_SOCKET_Edge_Top",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Corner_M0",
+     "Prop_ArcadeHall_Corner_M1",
+     "Prop_ArcadeHall_Corner_M2",
+     "Prop_ArcadeHall_Corner_M3"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Doorway_2m",
+    "tris": 664,
+    "size_m": [
+     2.0,
+     0.4,
+     4.0
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Door",
+     "SOCKET_SOCKET_Entry_Outside",
+     "SOCKET_SOCKET_Entry_Inside",
+     "SOCKET_SOCKET_Sign",
+     "SOCKET_SOCKET_Edge_L",
+     "SOCKET_SOCKET_Edge_R",
+     "SOCKET_SOCKET_Edge_Top",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Doorway_2m_M0",
+     "Prop_ArcadeHall_Doorway_2m_M1",
+     "Prop_ArcadeHall_Doorway_2m_M2",
+     "Prop_ArcadeHall_Doorway_2m_M3",
+     "Prop_ArcadeHall_Doorway_2m_M4",
+     "Prop_ArcadeHall_Doorway_2m_M5"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Window_2m",
+    "tris": 464,
+    "size_m": [
+     2.0,
+     0.34,
+     4.0
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Window",
+     "SOCKET_SOCKET_Poster",
+     "SOCKET_SOCKET_Edge_L",
+     "SOCKET_SOCKET_Edge_R",
+     "SOCKET_SOCKET_Edge_Top",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Window_2m_M0",
+     "Prop_ArcadeHall_Window_2m_M1",
+     "Prop_ArcadeHall_Window_2m_M2",
+     "Prop_ArcadeHall_Window_2m_M3",
+     "Prop_ArcadeHall_Window_2m_M4"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_CeilingBay_2m",
+    "tris": 232,
+    "size_m": [
+     2.0,
+     2.0,
+     0.29
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Edge_N",
+     "SOCKET_SOCKET_Edge_S",
+     "SOCKET_SOCKET_Edge_E",
+     "SOCKET_SOCKET_Edge_W",
+     "SOCKET_SOCKET_Hang"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_CeilingBay_2m_M0",
+     "Prop_ArcadeHall_CeilingBay_2m_M1",
+     "Prop_ArcadeHall_CeilingBay_2m_M2",
+     "Prop_ArcadeHall_CeilingBay_2m_M3"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Foundation_2m",
+    "tris": 88,
+    "size_m": [
+     2.0,
+     2.0,
+     0.4
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Edge_N",
+     "SOCKET_SOCKET_Edge_S",
+     "SOCKET_SOCKET_Edge_E",
+     "SOCKET_SOCKET_Edge_W",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "materials": [
+     "Prop_ArcadeHall_Foundation_2m_M0",
+     "Prop_ArcadeHall_Foundation_2m_M1"
+    ],
+    "status": "NOT READY"
+   }
+  ],
+  "layouts": [
+   "corner_arcade",
+   "prize_hall",
+   "heart_hall"
+  ],
+  "hook": {
+   "java": "daedalus-core/src/main/java/com/daedalus/world/arcade/ArcadeHall.java",
+   "resource": "daedalus-core/src/main/resources/com/daedalus/world/arcade/arcade_hall_layouts.tsv",
+   "quest": "q_arcade_hall_enter",
+   "how": "ArcadeHall.onIsland(layoutId, world, doorAnchor) puts the doorway portal on an island block; enter() opens it and returns the inside spawn"
+  }
  }
 }
