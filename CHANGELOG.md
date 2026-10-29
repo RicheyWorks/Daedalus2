@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop wall under course.**
+  The row under
+  a post's shine
+  course leans a
+  quarter toward
+  that course.
+  The foot stays
+  the floor mix.
+
 - **Well wall under course.**
   The row under
   a post's shine
