@@ -661,6 +661,23 @@
       "tests": [
         "test_facetlock.py"
       ]
+    },
+    {
+      "id": "prismvault",
+      "title": "Prismvault Weigh",
+      "summary": "find the one hollow Prism Shard with a Warden's balance and few weighings.",
+      "how_to_play": "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out.",
+      "module": "tools/minigames/prismvault.py",
+      "start": "prismvault.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_prismvault.py"
+      ]
     }
   ]
 }

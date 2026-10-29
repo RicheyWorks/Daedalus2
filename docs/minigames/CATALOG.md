@@ -141,3 +141,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `lumenpath` | Lumenpath Refraction | `tools/minigames/lumenpath.py` | HOW Toggle shard mirrors in the lattice to bend the prism beam through every crystal before your moves run out. |
 | `wardens_accord` | Wardens' Accord | `tools/minigames/wardens_accord.py` | HOW Take one of three altar shards each round, then spend matching shards to summon spirits; reach the target score before the rounds end. |
 | `facetlock` | Facetlock Lattice | `tools/minigames/facetlock.py` | HOW Slide lattice rows and columns (they wrap) until each row shows a single hue; finish inside the move budget. |
+| `prismvault` | Prismvault Weigh | `tools/minigames/prismvault.py` | HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out. |
