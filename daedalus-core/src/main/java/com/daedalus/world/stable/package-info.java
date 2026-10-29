@@ -3,7 +3,7 @@
 /**
  * Studio horse lane minigames.
  *
- * <p>G505 {@link com.daedalus.world.stable.TrottingRing} (quest {@code q_blue_rosette}): the judge
+ * <p>G506 {@link com.daedalus.world.stable.TrottingRing} (quest {@code q_blue_rosette}): the judge
  * calls walk, trot or canter for each ring segment; the rider picks a gait per segment, scoring 2
  * for a match, 1 for one step off and 0 otherwise, while trot costs 1 stamina, canter 2 and walk
  * restores 1. The rosette goes to a round that equals the dynamic-programming optimum; the eager

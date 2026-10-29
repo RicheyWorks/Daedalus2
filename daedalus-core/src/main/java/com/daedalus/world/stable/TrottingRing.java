@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.SplittableRandom;
 
 /**
- * G505 The Trotting Ring (Studio horse lane): a show ring is split into segments and the judge
+ * G506 The Trotting Ring (Studio horse lane): a show ring is split into segments and the judge
  * calls a tempo for each one: walk, trot or canter. The rider picks one gait per segment. A gait
  * that matches the call scores 2, one step off scores 1, two steps off scores 0. Trot costs the
  * horse 1 stamina, canter costs 2, and walk gives back 1 (up to the horse's maximum). A gait the
