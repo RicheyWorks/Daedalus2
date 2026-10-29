@@ -1064,7 +1064,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -8.75,
+            -10.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1078,7 +1078,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -6.25,
+            -7.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1092,7 +1092,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -3.75,
+            -5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1106,7 +1106,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -1.25,
+            -2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1120,7 +1120,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1136,7 +1136,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            3.75,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1152,7 +1152,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            6.25,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1168,7 +1168,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            8.75,
+            7.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1176,6 +1176,22 @@
           "difficulty": "normal",
           "module": "tools/minigames/facetlock.py",
           "start": "facetlock.start(1644454135, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
+        },
+        {
+          "game": "prismvault",
+          "title": "Prismvault Weigh",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            10.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 895410454,
+          "difficulty": "normal",
+          "module": "tools/minigames/prismvault.py",
+          "start": "prismvault.start(895410454, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]
