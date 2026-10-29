@@ -9,17 +9,18 @@
    "name": "Mob_Marsh_Hawk",
    "kind": "mob",
    "recipe": "data/contest/g504_marsh_hawk.quad.json",
-   "tris": 384,
+   "tris": 784,
    "size_m": [
-    0.1342,
-    0.5375,
-    0.3943
+    0.1428,
+    0.5823,
+    0.3944
    ],
    "sockets": [
     "SOCKET_Talon",
     "SOCKET_Head"
    ],
-   "clips": "blender-bird/v1 (bird_rig.py), rigid; clips Idle, Squawk, Walk, Fly"
+   "clips": "blender-bird/v1 (bird_rig.py), rigid; clips Idle, Squawk, Walk, Fly",
+   "raptor_parts": "hooked beak, talons, fingered primaries, 3 tail bands (bird_rig options, 2026-10-29 fix)"
   },
   {
    "name": "Mob_Sky_Crane_Juvenile",
@@ -107,5 +108,9 @@
     "SOCKET_Edge_W"
    ]
   }
+ ],
+ "fixes_20261029": [
+  "Mob_Marsh_Hawk rebuilt with bird_rig raptor options (beak_style hook, feet talons, wing_tips fingered, tail_bands 3); same name, sockets, clips",
+  "contact_sheet skips the glTF bone-display Icosphere, so skinned assets now show their real size"
  ]
 }

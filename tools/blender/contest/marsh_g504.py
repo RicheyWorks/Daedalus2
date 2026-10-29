@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 """G504 Reed Ceiling / G507 Reed Release marsh pieces (pythagoras, via buffffff 57306 buf-blender-next-20261029-1310).
-  Mob_Marsh_Hawk            ~0.55 m harrier-style marsh hawk on creatures/bird_rig.py (blender-bird/v1). Clips Idle / Squawk / Walk / Fly.
+  Mob_Marsh_Hawk            ~0.55 m harrier-style marsh hawk on creatures/bird_rig.py (blender-bird/v1). Clips Idle / Squawk / Walk / Fly. Raptor parts (2026-10-29 fix): hooked beak, talons, fingered primaries, 3 tail bands.
                             Sockets: SOCKET_Talon (Leg_L, foot), SOCKET_Head (Head; look-at / camera).
   Mob_Sky_Crane             adult: REUSE G142 (crane_g142.py, data/contest/g142_crane.quad.json), not rebuilt; staged copy only.
   Mob_Sky_Crane_Juvenile    ~0.85 m colt on the same long-bird params scaled down (cinnamon/brown juvenile plumage, shorter beak and legs).
@@ -22,7 +22,8 @@ LEAF, STRAW, HEAD, MUD = "5E9A48", "C8B070", "6A4A2A", "4A4030"
 
 def hawk(seed=SEED):
     a = "Mob_Marsh_Hawk"
-    body = {"length": 0.55, "height_frac": 0.72, "leg_frac": 0.24, "neck_r": 0.9, "head_scale": 0.95, "wing_lift_deg": 34.0, "tail_off": 0.16, "squawk_deg": 30.0}
+    body = {"length": 0.55, "height_frac": 0.72, "leg_frac": 0.24, "neck_r": 0.9, "head_scale": 0.95, "wing_lift_deg": 34.0, "tail_off": 0.16, "squawk_deg": 30.0,
+            "beak_style": "hook", "feet": "talons", "wing_tips": "fingered", "tail_bands": 3}
     mats = [K.material(a, 0, "russet-brown plumage", "8A5A38", 0.85), K.material(a, 1, "hooked beak / talons (dark horn)", "2A2420", 0.5),
             K.material(a, 2, "barred grey-buff wings", "A89A86", 0.85), K.material(a, 3, "dark wingtips / eyes", "1E1A18", 0.7)]
     P = R.params(seed, a, body); g = R._g(P)

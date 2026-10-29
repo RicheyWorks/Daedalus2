@@ -13,6 +13,10 @@
   "neck_r": 0.9,
   "head_scale": 0.95,
   "tail_off": 0.16,
+  "beak_style": "hook",
+  "feet": "talons",
+  "wing_tips": "fingered",
+  "tail_bands": 3,
   "L": 0.55,
   "leg": 0.132,
   "bz": 0.198,
@@ -370,17 +374,22 @@
   {
    "name": "Beak_Upper",
    "shape": "cyl",
-   "axis": "y",
-   "r1": 0.0088,
-   "r2": 0.0022,
-   "length": 0.07975,
+   "axis": "z",
+   "r1": 0.01358,
+   "r2": 0.00993,
+   "length": 0.03249,
    "centre": [
-    0,
-    -0.23361,
-    0.3608
+    0.0,
+    -0.20444,
+    0.363
    ],
    "slot": 1,
    "segments": 6,
+   "rot": [
+    86.1174,
+    180.0,
+    0
+   ],
    "lod1": {
     "segments": 4
    },
@@ -388,21 +397,96 @@
    "rigid": true
   },
   {
-   "name": "Beak_Lower",
+   "name": "Beak_Curve",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00993,
+   "r2": 0.00575,
+   "length": 0.02633,
+   "centre": [
+    0.0,
+    -0.23262,
+    0.3564
+   ],
+   "slot": 1,
+   "segments": 6,
+   "rot": [
+    65.3084,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "segments": 4
+   },
+   "bone": "Head",
+   "rigid": true
+  },
+  {
+   "name": "Beak_Hook",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00575,
+   "r2": 0.0011,
+   "length": 0.02037,
+   "centre": [
+    0.0,
+    -0.24697,
+    0.341
+   ],
+   "slot": 1,
+   "segments": 5,
+   "rot": [
+    13.586,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "segments": 3
+   },
+   "bone": "Head",
+   "rigid": true
+  },
+  {
+   "name": "Cere",
    "shape": "cyl",
    "axis": "y",
-   "r1": 0.0066,
-   "r2": 0.00165,
-   "length": 0.06779,
+   "r1": 0.01463,
+   "r2": 0.01411,
+   "length": 0.011,
    "centre": [
     0,
-    -0.22763,
-    0.3498
+    -0.19154,
+    0.3652
    ],
    "slot": 1,
    "segments": 6,
    "lod1": {
-    "segments": 4
+    "drop": true
+   },
+   "bone": "Head",
+   "rigid": true
+  },
+  {
+   "name": "Beak_Lower",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00784,
+   "r2": 0.0022,
+   "length": 0.03749,
+   "centre": [
+    0.0,
+    -0.21228,
+    0.34925
+   ],
+   "slot": 1,
+   "segments": 5,
+   "rot": [
+    81.5638,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "segments": 3
    },
    "bone": "Beak_Lower",
    "rigid": true
@@ -460,38 +544,213 @@
    "rigid": true
   },
   {
-   "name": "WingTip_L",
+   "name": "Primary0_L",
    "shape": "slab",
    "outline": [
     [
-     -0.0275,
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0649,
+     -0.00275
+    ],
+    [
+     0.0715,
      0.0
     ],
     [
-     0.0275,
-     0.0
+     0.0649,
+     0.00275
     ],
     [
      0.0,
-     0.0165
+     0.0044
     ]
    ],
-   "thickness": 0.0055,
+   "thickness": 0.0033,
    "centre": [
     0.0627,
-    0.209,
-    0.2255
+    0.251957,
+    0.219865
    ],
    "slot": 3,
-   "segments": 3,
+   "segments": 5,
    "rot": [
-    90,
+    80.0,
+    0,
+    90
+   ],
+   "bone": "Wing_L",
+   "rigid": true
+  },
+  {
+   "name": "Primary1_L",
+   "shape": "slab",
+   "outline": [
+    [
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0715,
+     -0.00275
+    ],
+    [
+     0.0781,
+     0.0
+    ],
+    [
+     0.0715,
+     0.00275
+    ],
+    [
+     0.0,
+     0.0044
+    ]
+   ],
+   "thickness": 0.0033,
+   "centre": [
+    0.0638,
+    0.253802,
+    0.208361
+   ],
+   "slot": 3,
+   "segments": 5,
+   "rot": [
+    71.0,
     0,
     90
    ],
    "lod1": {
     "drop": true
    },
+   "bone": "Wing_L",
+   "rigid": true
+  },
+  {
+   "name": "Primary2_L",
+   "shape": "slab",
+   "outline": [
+    [
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0649,
+     -0.00275
+    ],
+    [
+     0.0715,
+     0.0
+    ],
+    [
+     0.0649,
+     0.00275
+    ],
+    [
+     0.0,
+     0.0044
+    ]
+   ],
+   "thickness": 0.0033,
+   "centre": [
+    0.0649,
+    0.248652,
+    0.199266
+   ],
+   "slot": 3,
+   "segments": 5,
+   "rot": [
+    62.0,
+    0,
+    90
+   ],
+   "bone": "Wing_L",
+   "rigid": true
+  },
+  {
+   "name": "Primary3_L",
+   "shape": "slab",
+   "outline": [
+    [
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0583,
+     -0.00275
+    ],
+    [
+     0.0649,
+     0.0
+    ],
+    [
+     0.0583,
+     0.00275
+    ],
+    [
+     0.0,
+     0.0044
+    ]
+   ],
+   "thickness": 0.0033,
+   "centre": [
+    0.066,
+    0.24328,
+    0.191457
+   ],
+   "slot": 3,
+   "segments": 5,
+   "rot": [
+    53.0,
+    0,
+    90
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Wing_L",
+   "rigid": true
+  },
+  {
+   "name": "Primary4_L",
+   "shape": "slab",
+   "outline": [
+    [
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0517,
+     -0.00275
+    ],
+    [
+     0.0583,
+     0.0
+    ],
+    [
+     0.0517,
+     0.00275
+    ],
+    [
+     0.0,
+     0.0044
+    ]
+   ],
+   "thickness": 0.0033,
+   "centre": [
+    0.0671,
+    0.237957,
+    0.184905
+   ],
+   "slot": 3,
+   "segments": 5,
+   "rot": [
+    44.0,
+    0,
+    90
+   ],
    "bone": "Wing_L",
    "rigid": true
   },
@@ -548,38 +807,213 @@
    "rigid": true
   },
   {
-   "name": "WingTip_R",
+   "name": "Primary0_R",
    "shape": "slab",
    "outline": [
     [
-     -0.0275,
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0649,
+     -0.00275
+    ],
+    [
+     0.0715,
      0.0
     ],
     [
-     0.0275,
-     0.0
+     0.0649,
+     0.00275
     ],
     [
      0.0,
-     0.0165
+     0.0044
     ]
    ],
-   "thickness": 0.0055,
+   "thickness": 0.0033,
    "centre": [
     -0.0627,
-    0.209,
-    0.2255
+    0.251957,
+    0.219865
    ],
    "slot": 3,
-   "segments": 3,
+   "segments": 5,
    "rot": [
-    90,
+    80.0,
+    0,
+    90
+   ],
+   "bone": "Wing_R",
+   "rigid": true
+  },
+  {
+   "name": "Primary1_R",
+   "shape": "slab",
+   "outline": [
+    [
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0715,
+     -0.00275
+    ],
+    [
+     0.0781,
+     0.0
+    ],
+    [
+     0.0715,
+     0.00275
+    ],
+    [
+     0.0,
+     0.0044
+    ]
+   ],
+   "thickness": 0.0033,
+   "centre": [
+    -0.0638,
+    0.253802,
+    0.208361
+   ],
+   "slot": 3,
+   "segments": 5,
+   "rot": [
+    71.0,
     0,
     90
    ],
    "lod1": {
     "drop": true
    },
+   "bone": "Wing_R",
+   "rigid": true
+  },
+  {
+   "name": "Primary2_R",
+   "shape": "slab",
+   "outline": [
+    [
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0649,
+     -0.00275
+    ],
+    [
+     0.0715,
+     0.0
+    ],
+    [
+     0.0649,
+     0.00275
+    ],
+    [
+     0.0,
+     0.0044
+    ]
+   ],
+   "thickness": 0.0033,
+   "centre": [
+    -0.0649,
+    0.248652,
+    0.199266
+   ],
+   "slot": 3,
+   "segments": 5,
+   "rot": [
+    62.0,
+    0,
+    90
+   ],
+   "bone": "Wing_R",
+   "rigid": true
+  },
+  {
+   "name": "Primary3_R",
+   "shape": "slab",
+   "outline": [
+    [
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0583,
+     -0.00275
+    ],
+    [
+     0.0649,
+     0.0
+    ],
+    [
+     0.0583,
+     0.00275
+    ],
+    [
+     0.0,
+     0.0044
+    ]
+   ],
+   "thickness": 0.0033,
+   "centre": [
+    -0.066,
+    0.24328,
+    0.191457
+   ],
+   "slot": 3,
+   "segments": 5,
+   "rot": [
+    53.0,
+    0,
+    90
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Wing_R",
+   "rigid": true
+  },
+  {
+   "name": "Primary4_R",
+   "shape": "slab",
+   "outline": [
+    [
+     0.0,
+     -0.0044
+    ],
+    [
+     0.0517,
+     -0.00275
+    ],
+    [
+     0.0583,
+     0.0
+    ],
+    [
+     0.0517,
+     0.00275
+    ],
+    [
+     0.0,
+     0.0044
+    ]
+   ],
+   "thickness": 0.0033,
+   "centre": [
+    -0.0671,
+    0.237957,
+    0.184905
+   ],
+   "slot": 3,
+   "segments": 5,
+   "rot": [
+    44.0,
+    0,
+    90
+   ],
    "bone": "Wing_R",
    "rigid": true
   },
@@ -621,6 +1055,84 @@
    "rigid": true
   },
   {
+   "name": "TailBand0",
+   "shape": "box",
+   "size": [
+    0.0616,
+    0.0088,
+    0.0022
+   ],
+   "centre": [
+    0,
+    0.1815,
+    0.21548
+   ],
+   "slot": 3,
+   "bevel": false,
+   "rot": [
+    8,
+    0,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Tail",
+   "rigid": true
+  },
+  {
+   "name": "TailBand1",
+   "shape": "box",
+   "size": [
+    0.0605,
+    0.0088,
+    0.0022
+   ],
+   "centre": [
+    0,
+    0.209,
+    0.21935
+   ],
+   "slot": 3,
+   "bevel": false,
+   "rot": [
+    8,
+    0,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Tail",
+   "rigid": true
+  },
+  {
+   "name": "TailBand2",
+   "shape": "box",
+   "size": [
+    0.0594,
+    0.0088,
+    0.0022
+   ],
+   "centre": [
+    0,
+    0.2365,
+    0.22321
+   ],
+   "slot": 3,
+   "bevel": false,
+   "rot": [
+    8,
+    0,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Tail",
+   "rigid": true
+  },
+  {
    "name": "Leg_L",
    "shape": "cyl",
    "axis": "z",
@@ -646,34 +1158,202 @@
    "rigid": true
   },
   {
-   "name": "Foot_L",
-   "shape": "slab",
-   "outline": [
-    [
-     0.0,
-     0.0055
-    ],
-    [
-     0.01925,
-     -0.0385
-    ],
-    [
-     0.0,
-     -0.0275
-    ],
-    [
-     -0.01925,
-     -0.0385
-    ]
-   ],
-   "thickness": 0.0033,
+   "name": "Toe0_L",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00385,
+   "r2": 0.0033,
+   "length": 0.02763,
    "centre": [
     0.033,
-    0.022,
-    0.00165
+    0.00275,
+    0.00528
    ],
    "slot": 1,
    "segments": 4,
+   "rot": [
+    84.5164,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "segments": 3
+   },
+   "bone": "Leg_L",
+   "rigid": true
+  },
+  {
+   "name": "Claw0_L",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.0033,
+   "r2": 0.00044,
+   "length": 0.00756,
+   "centre": [
+    0.033,
+    -0.0143,
+    0.00212
+   ],
+   "slot": 3,
+   "segments": 4,
+   "rot": [
+    60.8239,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Leg_L",
+   "rigid": true
+  },
+  {
+   "name": "Toe1_L",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00385,
+   "r2": 0.0033,
+   "length": 0.02797,
+   "centre": [
+    0.04056,
+    0.00481,
+    0.00528
+   ],
+   "slot": 1,
+   "segments": 4,
+   "rot": [
+    56.7014,
+    99.901,
+    0
+   ],
+   "lod1": {
+    "segments": 3
+   },
+   "bone": "Leg_L",
+   "rigid": true
+  },
+  {
+   "name": "Claw1_L",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.0033,
+   "r2": 0.00044,
+   "length": 0.00763,
+   "centre": [
+    0.04994,
+    -0.00968,
+    0.00212
+   ],
+   "slot": 3,
+   "segments": 4,
+   "rot": [
+    47.3228,
+    135.4308,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Leg_L",
+   "rigid": true
+  },
+  {
+   "name": "Toe2_L",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00385,
+   "r2": 0.0033,
+   "length": 0.02797,
+   "centre": [
+    0.02544,
+    0.00481,
+    0.00528
+   ],
+   "slot": 1,
+   "segments": 4,
+   "rot": [
+    56.7014,
+    -99.901,
+    0
+   ],
+   "lod1": {
+    "segments": 3
+   },
+   "bone": "Leg_L",
+   "rigid": true
+  },
+  {
+   "name": "Claw2_L",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.0033,
+   "r2": 0.00044,
+   "length": 0.00763,
+   "centre": [
+    0.01606,
+    -0.00968,
+    0.00212
+   ],
+   "slot": 3,
+   "segments": 4,
+   "rot": [
+    47.3228,
+    -135.4308,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Leg_L",
+   "rigid": true
+  },
+  {
+   "name": "Toe3_L",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00385,
+   "r2": 0.0033,
+   "length": 0.01943,
+   "centre": [
+    0.033,
+    0.02612,
+    0.00528
+   ],
+   "slot": 1,
+   "segments": 4,
+   "rot": [
+    -82.191,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "segments": 3
+   },
+   "bone": "Leg_L",
+   "rigid": true
+  },
+  {
+   "name": "Claw3_L",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.0033,
+   "r2": 0.00044,
+   "length": 0.00756,
+   "centre": [
+    0.033,
+    0.03905,
+    0.00212
+   ],
+   "slot": 3,
+   "segments": 4,
+   "rot": [
+    -60.8239,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
    "bone": "Leg_L",
    "rigid": true
   },
@@ -703,34 +1383,202 @@
    "rigid": true
   },
   {
-   "name": "Foot_R",
-   "shape": "slab",
-   "outline": [
-    [
-     0.0,
-     0.0055
-    ],
-    [
-     0.01925,
-     -0.0385
-    ],
-    [
-     0.0,
-     -0.0275
-    ],
-    [
-     -0.01925,
-     -0.0385
-    ]
-   ],
-   "thickness": 0.0033,
+   "name": "Toe0_R",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00385,
+   "r2": 0.0033,
+   "length": 0.02763,
    "centre": [
     -0.033,
-    0.022,
-    0.00165
+    0.00275,
+    0.00528
    ],
    "slot": 1,
    "segments": 4,
+   "rot": [
+    84.5164,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "segments": 3
+   },
+   "bone": "Leg_R",
+   "rigid": true
+  },
+  {
+   "name": "Claw0_R",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.0033,
+   "r2": 0.00044,
+   "length": 0.00756,
+   "centre": [
+    -0.033,
+    -0.0143,
+    0.00212
+   ],
+   "slot": 3,
+   "segments": 4,
+   "rot": [
+    60.8239,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Leg_R",
+   "rigid": true
+  },
+  {
+   "name": "Toe1_R",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00385,
+   "r2": 0.0033,
+   "length": 0.02797,
+   "centre": [
+    -0.02544,
+    0.00481,
+    0.00528
+   ],
+   "slot": 1,
+   "segments": 4,
+   "rot": [
+    56.7014,
+    99.901,
+    0
+   ],
+   "lod1": {
+    "segments": 3
+   },
+   "bone": "Leg_R",
+   "rigid": true
+  },
+  {
+   "name": "Claw1_R",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.0033,
+   "r2": 0.00044,
+   "length": 0.00763,
+   "centre": [
+    -0.01606,
+    -0.00968,
+    0.00212
+   ],
+   "slot": 3,
+   "segments": 4,
+   "rot": [
+    47.3228,
+    135.4308,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Leg_R",
+   "rigid": true
+  },
+  {
+   "name": "Toe2_R",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00385,
+   "r2": 0.0033,
+   "length": 0.02797,
+   "centre": [
+    -0.04056,
+    0.00481,
+    0.00528
+   ],
+   "slot": 1,
+   "segments": 4,
+   "rot": [
+    56.7014,
+    -99.901,
+    0
+   ],
+   "lod1": {
+    "segments": 3
+   },
+   "bone": "Leg_R",
+   "rigid": true
+  },
+  {
+   "name": "Claw2_R",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.0033,
+   "r2": 0.00044,
+   "length": 0.00763,
+   "centre": [
+    -0.04994,
+    -0.00968,
+    0.00212
+   ],
+   "slot": 3,
+   "segments": 4,
+   "rot": [
+    47.3228,
+    -135.4308,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
+   "bone": "Leg_R",
+   "rigid": true
+  },
+  {
+   "name": "Toe3_R",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.00385,
+   "r2": 0.0033,
+   "length": 0.01943,
+   "centre": [
+    -0.033,
+    0.02612,
+    0.00528
+   ],
+   "slot": 1,
+   "segments": 4,
+   "rot": [
+    -82.191,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "segments": 3
+   },
+   "bone": "Leg_R",
+   "rigid": true
+  },
+  {
+   "name": "Claw3_R",
+   "shape": "cyl",
+   "axis": "z",
+   "r1": 0.0033,
+   "r2": 0.00044,
+   "length": 0.00756,
+   "centre": [
+    -0.033,
+    0.03905,
+    0.00212
+   ],
+   "slot": 3,
+   "segments": 4,
+   "rot": [
+    -60.8239,
+    180.0,
+    0
+   ],
+   "lod1": {
+    "drop": true
+   },
    "bone": "Leg_R",
    "rigid": true
   }
@@ -6755,23 +7603,23 @@
   "sockets": "skeleton sockets from <asset>.sockets.json: SOCKET_Talon on Leg_L, SOCKET_Head on Head"
  },
  "predicted": {
-  "triangles": 384,
-  "lod1_triangles": 224,
-  "lod1_ratio": 0.583,
+  "triangles": 784,
+  "lod1_triangles": 376,
+  "lod1_ratio": 0.48,
   "bounds_min": [
-   -0.0671,
-   -0.2735,
-   0.0
+   -0.0714,
+   -0.2504,
+   -0.0001
   ],
   "bounds_max": [
-   0.0671,
-   0.264,
+   0.0714,
+   0.3319,
    0.3943
   ],
   "dimensions": [
-   0.1342,
-   0.5375,
-   0.3943
+   0.1428,
+   0.5823,
+   0.3944
   ],
   "bones": 10
  },
