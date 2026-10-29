@@ -23,6 +23,7 @@ batched rebuild under the editor custodian.
 | `gloam_latch` | Gloam Latch | 1 |
 | `reedbeat` | Reedbeat | 1 |
 | `cairnwell` | Cairnwell | 1 |
+| `shardring` | Shardring Resonance | 1 |
 
 ## How to play
 
@@ -45,6 +46,7 @@ One original line per game, read from `HowToLine()`.
 | `gloam_latch` | HOW Flip a lamp and its neighbors until the board is dark. |
 | `reedbeat` | HOW Strike while the reed is bright. |
 | `cairnwell` | HOW Slide the falling stone and clear a full layer. |
+| `shardring` | HOW Set each shard in an empty facet; three of one hue in a row resonate. |
 
 ## Difficulty
 
@@ -67,6 +69,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `gloam_latch` | normal |
 | `reedbeat` | normal |
 | `cairnwell` | normal |
+| `shardring` | normal |
 
 ## Daedalus spots
 
@@ -89,6 +92,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `gloam_latch` | `gallery_city` | Gallery City, the lamp corner |
 | `reedbeat` | `orrery_reach` | Orrery Reach, the reed bench |
 | `cairnwell` | `bricks` | Bricks, the stacking yard |
+| `shardring` | `prismheart_realm` | Prismheart, the Warden shrine |
 
 ## Capabilities
 
@@ -112,6 +116,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 | `reedbeat` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 | `cairnwell` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
+| `shardring` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 
 ## Leaderboard feed
 

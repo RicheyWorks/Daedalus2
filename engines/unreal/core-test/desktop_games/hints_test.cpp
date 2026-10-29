@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Accessibility hints for the three cabinets that only had options and focus freeze.
 // The line is drawn on the frame. It does not change score, movement, or saves.
-// catalog-capability: hints: beacon_sweep cairnwell driftstone dungeon dodge_ball gloam_latch lanternwild reedbeat riftwing twinwake
+// catalog-capability: hints: beacon_sweep cairnwell driftstone dungeon dodge_ball gloam_latch lanternwild reedbeat riftwing shardring twinwake
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -75,6 +75,14 @@ void CairnwellHints() {
     Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"cairnwell hint is on the frame and stays out of status");
     Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"practice hint names the slower well");
 }
+void ShardringHints() {
+    ShardringGame G;G.Reset(730);
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine()=="HINT Three of one hue in a row resonate and clear.","fresh ring teaches resonance");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"shardring hint is on the frame and stays out of status");
+    Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"guide hint names the practice marker");
+}
 void ReedbeatHints() {
     ReedbeatGame G;G.Reset(730);
     const auto Note=G.GetStatus().Note;
@@ -113,7 +121,7 @@ void LanternwildHints() {
 }
 
 int main() {
-    try { BeaconHints();CairnwellHints();DriftstoneHints();DungeonHints();DodgeHints();GloamLatchHints();LanternwildHints();ReedbeatHints();RiftwingHints();TwinwakeHints(); }
+    try { BeaconHints();CairnwellHints();DriftstoneHints();DungeonHints();DodgeHints();GloamLatchHints();LanternwildHints();ReedbeatHints();RiftwingHints();ShardringHints();TwinwakeHints(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
