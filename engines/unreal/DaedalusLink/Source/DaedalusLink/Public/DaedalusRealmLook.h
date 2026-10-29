@@ -11,6 +11,8 @@
 
 #include "DaedalusRealmDraw.h"
 
+#include <cstdio>
+
 namespace daedalus
 {
 namespace realm
@@ -201,11 +203,24 @@ inline int PageChars(const std::vector<std::string>& Rows, int Page)
 // ------------------------------------------------------------------------------------------ richer field tiles
 
 /**
+ * Copy a scratch frame onto F at (X, Y), black included (Frame::Blit keys black out). Tiles and pictures draw into a
+ * scratch the size of their cell, so nothing they draw (a jittered crown, offset mortar, a drifting cloud) spills into
+ * the neighbour cell or over a frame.
+ */
+inline void Paste(Frame& F, int X, int Y, const Frame& S)
+{
+    for (int y = 0; y < S.H; ++y)
+        for (int x = 0; x < S.W; ++x) F.Set(X + x, Y + y, S.Px[static_cast<size_t>(y * S.W + x)]);
+}
+
+/**
  * The forest tile the way the genre draws it: the whole cell is canopy, scalloped rows of dark leaf with a light
  * crown per bush, so a forest reads as a mass, not as lollipops on a lawn. Salt varies the crowns.
  */
-inline void DrawForest(Frame& F, int X, int Y, uint64_t Salt)
+inline void DrawForest(Frame& Out, int OX, int OY, uint64_t Salt)
 {
+    Frame F(16, 16);
+    const int X = 0, Y = 0;
     F.Rect(X, Y, 16, 16, Pal::TreeDark);
     // four round bushes in a 2x2 (a touch of jitter each), lit from the top-left, a black shadow line under each
     for (int by = 0; by < 2; ++by)
@@ -218,6 +233,7 @@ inline void DrawForest(Frame& F, int X, int Y, uint64_t Salt)
             F.Rect(CX - 3, CY + 3, 7, 1, Pal::Black);
             F.Set(CX + 3, CY + 2, Pal::TreeDark);
         }
+    Paste(Out, OX, OY, F);
 }
 
 /** Grass: a flat field with a few two-pixel blades, not confetti. */
@@ -233,8 +249,10 @@ inline void DrawMeadow(Frame& F, int X, int Y, uint64_t Salt)
 }
 
 /** A town's stone path: light flags with dark mortar, offset every other row. */
-inline void DrawFlagstones(Frame& F, int X, int Y)
+inline void DrawFlagstones(Frame& Out, int OX, int OY)
 {
+    Frame F(16, 16);
+    const int X = 0, Y = 0;
     F.Rect(X, Y, 16, 16, Pal::StoneLo);
     for (int j = 0; j < 16; j += 8)
     {
@@ -243,6 +261,7 @@ inline void DrawFlagstones(Frame& F, int X, int Y)
         for (int i = -4; i < 16; i += 8) F.Rect(X + i + Off, Y + j, 1, 8, Pal::CobbleDark);
         for (int i = -4; i < 16; i += 8) F.Rect(X + i + Off + 1, Y + j + 1, 6, 1, Pal::StoneHi);
     }
+    Paste(Out, OX, OY, F);
 }
 
 /** A town wall: light blocks with black seams and a shadow line, the stone that rings a castle town. */
@@ -259,15 +278,10 @@ inline void DrawBlockWall(Frame& F, int X, int Y)
     }
 }
 
-/**
- * The battle backdrop: a framed picture of where the fight is. 0 = open field (sky bands, far hills, a sun), 1 = a
- * town street (walls, flagstones), 2 = a cave (rock, stalactites, a torch glow). The frame is the realm's window rule.
- */
-inline void DrawBattleScene(Frame& F, int Kind, int Anim)
+/** The battle backdrop's picture, drawn at the origin of its own W x H scratch (see DrawBattleScene). */
+inline void DrawBattlePicture(Frame& F, int Kind, int Anim)
 {
-    const int X = 36, Y = 48, W = 184, H = 100;
-    Ui::Window(F, X - 4, Y - 4, W + 8, H + 8);
-    const int IX = X, IY = Y, IW = W, IH = H;
+    const int IX = 0, IY = 0, IW = F.W, IH = F.H;
     if (Kind == 2)
     {
         F.Rect(IX, IY, IW, IH, Pal::CaveWall);
@@ -303,6 +317,20 @@ inline void DrawBattleScene(Frame& F, int Kind, int Anim)
     for (int k = 0; k < 4; ++k) F.Ellipse(IX + 30 + k * 45, IY + 68, 22, 6, Pal::Hill);
     F.Rect(IX, IY + 70, IW, 30, Pal::Grass);
     for (int i = 0; i < IW; i += 6) if ((i / 6) % 2 == 0) { F.Set(IX + i, IY + 78 + (i / 3) % 9, Pal::GrassDot); F.Set(IX + i + 1, IY + 79 + (i / 3) % 9, Pal::GrassDot); }
+}
+
+/**
+ * The battle backdrop: a framed picture of where the fight is. 0 = open field (sky bands, far hills, a sun), 1 = a
+ * town street (walls, flagstones), 2 = a cave (rock, stalactites, a torch glow). The frame is the realm's window rule.
+ */
+inline void DrawBattleScene(Frame& F, int Kind, int Anim)
+{
+    const int X = 36, Y = 48, W = 184, H = 100;
+    Ui::Window(F, X - 4, Y - 4, W + 8, H + 8);
+    // the picture draws into its own scratch so clouds and hills that drift past its edge are cut by the frame
+    Frame Pic(W, H);
+    DrawBattlePicture(Pic, Kind, Anim);
+    Paste(F, X, Y, Pic);
 }
 
 } // namespace realm
