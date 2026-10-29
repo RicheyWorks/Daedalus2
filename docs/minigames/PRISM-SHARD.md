@@ -42,5 +42,8 @@ A port can skip the SHA-512 seeding by loading the RNG from a snapshot, but full
 ## Realm cabinet
 `data/minigames/realm-arcades.json` names `shardring` in `prismheart_realm`; `realm_cabinets.py` places it with host tag `PythonMinigame`, a crc32 seed, and difficulty `normal`. Python games are placed only when named explicitly, never by a glob. No Unreal actor runs Python games yet; that needs a native host (not in this change).
 
+## Native core (Unreal side, source only)
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusShardringCore.h` is a plain C++17 port of `ShardringGame` (`Start`, `SetShard`, `GreedyMove`, `RunAt`, spirit summons, the difficulty table). It does not port CPython's PRNG: every `random.choice` the rules make reaches the core through an `Oracle` (next hue, spirit facet) that the host supplies, so a native host either asks the Python rules for the draws or replays a recorded sequence. Parity: `tools/minigames/shardring_parity.py` plays 10 seeds x 3 difficulties with `greedy_move` and writes `engines/unreal/core-test/shardring_parity.txt` (every draw and spirit pick, every move, the end line); `engines/unreal/core-test/shardring_core_test.cpp` feeds the draws to the core and must reproduce every line (engines.yml, gcc+ASan and clang). `desktop-games.yml` fails if the fixture is stale (`shardring_parity.py --check`). The native host / `ADaedalusDesktopArcade` binding is the next step; in-editor placement is the editor custodian's.
+
 ## Daedalus tie-in
 Prismheart's Wardens each guard a hue of Prism Shard; resonating shards wakes their summon spirits (G09 lore). Intended as a shrine cabinet in Windmere. Source only; no Unreal cabinet yet.
