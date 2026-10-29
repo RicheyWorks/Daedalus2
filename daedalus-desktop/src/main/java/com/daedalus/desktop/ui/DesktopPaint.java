@@ -2569,6 +2569,20 @@ public final class DesktopPaint {
         return mixHex(side, wallFootInk(wall, footFloor), 0.5);
     }
 
+    /** Row under the post feather — a quarter of the shine, and only while it stays off the foot. */
+    public static Hairline wallHiCourse(Layout layout, int tileRow, int tileCol,
+                                         double scaleX, double scaleY) {
+        Hairline shine = wallHiStroke(layout, tileRow, tileCol, scaleX, scaleY);
+        if (shine == null || layout == null) {
+            return null;
+        }
+        double sy = scaleY > 0 ? scaleY : 1;
+        if (bitmapPx(layout.h(tileRow), sy) <= 4) {
+            return null;
+        }
+        return new Hairline(shine.x(), shine.y() + 2 * shine.h(), shine.w(), shine.h());
+    }
+
     /** Row under the post shine — half the catch, half the wall, same as the vault lip. */
     public static Hairline wallHiFeather(Hairline shine) {
         if (shine == null) {

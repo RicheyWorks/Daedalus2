@@ -821,6 +821,13 @@ class DesktopPaintTest {
         DesktopPaint.Hairline wallStripe = DesktopPaint.wallHiStroke(roomy, 0, 1);
         assertThat(wallStripe).isNotNull();
         assertThat(wallStripe.h()).isEqualTo(1.0);
+        DesktopPaint.Hairline wallCourse = DesktopPaint.wallHiCourse(roomy, 0, 1, 1, 1);
+        assertThat(wallCourse).isNotNull();
+        assertThat(wallCourse.y()).isEqualTo(wallStripe.y() + 2 * wallStripe.h());
+        assertThat(wallCourse.x()).isEqualTo(wallStripe.x());
+        assertThat(wallCourse.w()).isEqualTo(wallStripe.w());
+        assertThat(DesktopPaint.wallHiCourse(
+                DesktopPaint.Layout.fit(5, 5, 20, 20), 0, 1, 1, 1)).isNull();
         DesktopPaint.Hairline foot = DesktopPaint.wallFootStroke(roomy, 0, 1, 1, 1);
         assertThat(foot).isNotNull();
         assertThat(foot.h()).isEqualTo(1.0);
@@ -1513,6 +1520,8 @@ class DesktopPaintTest {
         assertThat(ctrl).contains(
                 "DesktopPaint.wallHiStroke(\n                            mark, tile.tileRow(), tile.tileCol())");
         assertThat(ctrl).contains("paintWallShine(g, DesktopPaint.wallHiStroke(");
+        assertThat(ctrl).contains("DesktopPaint.wallHiCourse(");
+        assertThat(ctrl).contains("DesktopPaint.catchCornerInk(shineInk, wallInk)");
         assertThat(ctrl).contains("paintWallFoot(g, DesktopPaint.wallFootStroke(");
         assertThat(ctrl).contains("DesktopPaint.wallFootCornerInk(wallInk, floorInk, leftFloor)");
         assertThat(ctrl).contains("DesktopPaint.wallSideJoinInk(wallInk, floorInk, shineInk)");
