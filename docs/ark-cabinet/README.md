@@ -22,6 +22,8 @@ Source: `daedalus-core/src/main/java/com/daedalus/world/ark/cabinet/`. Source on
 | `hoards` | The Two Hoards | G354 `TwoHoards` | Wythoff, hoards 5 and 9 (up to 30 each); `1,k`, `2,k` or `3,k` for both |
 | `skittles` | The Skittle Row | G411 `SkittleRow` | Kayles, rows 3, 5, 7 (up to 40 skittles); `row,spot,count` with count 1 or 2 |
 | `galley` | The Galley Stack | G428 `GalleyStack` | solo pancake flips, 6 plates (2 to 8); type `k` to flip the top k |
+| `pegs` | The Peg Board | G366 `PegBoard` | solo peg solitaire on the 15-hole triangle (side 2 to 5); type `from,to` |
+| `lock` | The Lock Pegs | G362 `LockPegs` | solo Mastermind, 4 pegs in 6 colours, 10 tries; type e.g. `1122`; Knuth hints open any lock in 5 |
 
 The cabinet plays seat 2 itself using each piece's own exact solver, so these default boards are
 kept small enough for perfect play.
