@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor above lip.**
+  The row above
+  the paver lip
+  leans a quarter
+  toward that lip,
+  joint included.
+  The lip stays
+  the catch mix.
+
 - **Explore vault under catch.**
   The row under
   the vault feather

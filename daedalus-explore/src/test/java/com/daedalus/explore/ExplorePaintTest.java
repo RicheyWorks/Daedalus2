@@ -554,8 +554,16 @@ class ExplorePaintTest {
         int[] cornerSide = ExplorePaint.floorPaver(8, 7);
         int[] cornerDown = ExplorePaint.floorPaver(7, 8);
         int[] cornerDiag = ExplorePaint.floorPaver(8, 8);
+        int cornerMix = (corner[0] + cornerSide[0] + cornerDown[0] + cornerDiag[0]) / 4;
+        int[] lipUnder = ExplorePaint.floorTexColor(7, 8);
         assertThat(ExplorePaint.floorTexColor(7, 7)[0])
-                .isEqualTo((corner[0] + cornerSide[0] + cornerDown[0] + cornerDiag[0]) / 4);
+                .isEqualTo((cornerMix * 3 + lipUnder[0]) / 4);
+        int[] heel = ExplorePaint.floorPaver(4, 7);
+        int[] heelNext = ExplorePaint.floorPaver(4, 8);
+        int heelSeam = (heel[0] + heelNext[0]) / 2;
+        int[] heelLip = ExplorePaint.floorTexColor(4, 8);
+        assertThat(ExplorePaint.floorTexColor(4, 7)[0])
+                .isEqualTo((heelSeam * 3 + heelLip[0]) / 4);
         int[] underCatch = ExplorePaint.floorPaver(4, 2);
         int[] catchRow = ExplorePaint.floorPaver(4, 1);
         assertThat(ExplorePaint.floorTexColor(4, 2)[0])
