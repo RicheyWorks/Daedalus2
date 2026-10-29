@@ -116,6 +116,12 @@ def plan(L, sizes, staging):
         for d in out["decals"]:
             if d["plane"] == "wall" and abs(d["x"] - x) < 0.01 + 1.2 * (e in "SN") and abs(d["y"] - y) < 0.01 + 1.2 * (e in "WE") and abs(d["z"] - z) < 0.8:
                 out["issues"].append("sign %s overlaps poster %s" % (a, d["decal"]))
+    # exterior: steps from island grade (z = -FOUND) to the floor at the doorway, awning over it, then a path of slabs out to the island
+    dx = G * door + 1; FOUND = 0.4; out["exterior"] = [dict(asset="Prop_ArcadeHall_EntranceSteps", x=dx, y=-0.1, z=0.0, yaw=0),
+                                                         dict(asset="Prop_ArcadeHall_Awning", x=dx, y=-0.1, z=2.72, yaw=0)]
+    for k in range(int(L.get("path_tiles", 3))):
+        out["exterior"].append(dict(asset="Prop_ArcadeHall_PathTile", x=dx, y=-1.0 - 0.8 - 1.6 * k, z=-FOUND, yaw=0))
+    out["island"] = dict(grade_z=-FOUND, steps_bottom=[dx, -1.0, -FOUND], path_end=[dx, -1.0 - 1.6 * int(L.get("path_tiles", 3)), -FOUND])
     check(out, sizes, staging); return out
 
 
@@ -178,8 +184,8 @@ def main_plan(o):
             for x in v: walk(x)
     walk(m)
     res = dict(schema="arcade-hall-layouts/v1", generated_by="tools/blender/arcade_hall_assembler.py", seed=SEED, status="NOT READY", units="m, Z up, hall frame (door on south edge, outside -Y)",
-               kit=sorted({p for L in LAYOUTS for p in [k["asset"] for k in wall_pieces(L)]} | {"Prop_ArcadeHall_Sign_DoorInside"} | {x[0] for L in LAYOUTS for x in L.get("signs", [])}), source_manifest=o.manifest.replace("\\", "/"), layouts=[plan(L, sizes, o.staging) for L in LAYOUTS])
-    for L in res["layouts"]: L["counts"] = dict(kit=len(L["kit"]), props=len(L["props"]), decals=len(L["decals"]), signs=len(L["signs"]))
+               kit=sorted({p for L in LAYOUTS for p in [k["asset"] for k in wall_pieces(L)]} | {"Prop_ArcadeHall_Sign_DoorInside"} | {x[0] for L in LAYOUTS for x in L.get("signs", [])} | {"Prop_ArcadeHall_EntranceSteps", "Prop_ArcadeHall_Awning", "Prop_ArcadeHall_PathTile"}), source_manifest=o.manifest.replace("\\", "/"), layouts=[plan(L, sizes, o.staging) for L in LAYOUTS])
+    for L in res["layouts"]: L["counts"] = dict(kit=len(L["kit"]), props=len(L["props"]), decals=len(L["decals"]), signs=len(L["signs"]), exterior=len(L["exterior"]))
     os.makedirs(o.out, exist_ok=True); p = os.path.join(o.out, "arcade_hall_layouts.json")
     open(p, "w", encoding="utf-8", newline="\n").write(json.dumps(res, indent=1) + "\n")
     for L in res["layouts"]: print(L["id"], L["counts"], "reach", sum(s["ok"] for s in L["walk"]["spots"]), "/", len(L["walk"]["spots"]), "issues:", L["issues"] or "none")
@@ -208,6 +214,11 @@ def main_render(o):
                 new = list(set(bpy.data.objects) - before)
                 cache[name] = [(ob, ob.matrix_world.copy()) for ob in new if ob.type == "MESH" and not ob.name.startswith(("UCX_", "Icosphere"))]
                 for ob in new: ob.hide_render = True
+                for ob, _ in cache[name]:     # glow panels / big emissive ceiling surfaces were blowing out the inside views
+                    for ms in ob.material_slots:
+                        mt = ms.material
+                        if mt and mt.use_nodes and "Principled BSDF" in mt.node_tree.nodes and ("glow panel" in mt.name.lower() or "CeilingBay" in name):
+                            bs = mt.node_tree.nodes["Principled BSDF"]; bs.inputs["Emission Strength"].default_value = min(bs.inputs["Emission Strength"].default_value, 0.25)
             for ob, mw in cache[name]:
                 c = ob.copy(); c.parent = None; c.hide_render = False; sc.collection.objects.link(c)
                 c.matrix_world = mathutils.Matrix.Translation((x, y, z)) @ mathutils.Matrix.Rotation(math.radians(yaw), 4, "Z") @ mw
@@ -217,6 +228,10 @@ def main_render(o):
             tag = "ceiling" if "Ceiling" in k["asset"] else ("south" if k.get("edge") == "S" or (k["asset"].endswith("Corner") and k["y"] == 0) else ("east" if k.get("edge") == "E" or (k["asset"].endswith("Corner") and k["x"] > 0) else None))
             place(k["asset"], k["x"], k["y"], k["z"], k["yaw"], tag)
         for p in L["props"]: place(p["asset"], p["x"], p["y"], p["z"], p["yaw"], "ceiling" if p.get("hung") else None)
+        for p in L.get("exterior", []): place(p["asset"], p["x"], p["y"], p["z"], p["yaw"])
+        bpy.ops.mesh.primitive_plane_add(size=1); gp = bpy.context.active_object; gp.scale = (L["cells"][0] * G + 12, L["cells"][1] * G + 16, 1)
+        gp.location = (L["cells"][0] * G / 2, L["cells"][1] * G / 2 - 4, L.get("island", {}).get("grade_z", -0.4) - 0.002); gm = bpy.data.materials.new("island grass"); gm.use_nodes = True
+        gm.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.16, 0.3, 0.12, 1); gp.data.materials.append(gm)
         for p in L.get("signs", []): place(p["asset"], p["x"], p["y"], p["z"], p["yaw"], "south" if p["edge"] == "S" else ("east" if p["edge"] == "E" else None))
         for d in L["decals"]:
             bc = glob.glob(os.path.join(staging, "arcade-*", "decals", d["decal"], "T_*_BC.png"))
@@ -232,7 +247,7 @@ def main_render(o):
         W, D = L["cells"][0] * G, L["cells"][1] * G
         for p in L["props"]:
             if p.get("hung"):
-                ld = bpy.data.lights.new("rig", "AREA"); ld.size = 2.0; ld.energy = 350; ld.color = (1.0, 0.85, 1.0); lo = bpy.data.objects.new("rig", ld); lo.location = (p["x"], p["y"], 3.0); sc.collection.objects.link(lo)
+                ld = bpy.data.lights.new("rig", "AREA"); ld.size = 2.0; ld.energy = 220; ld.color = (1.0, 0.85, 1.0); lo = bpy.data.objects.new("rig", ld); lo.location = (p["x"], p["y"], 3.0); sc.collection.objects.link(lo)
         sun = bpy.data.objects.new("sun", bpy.data.lights.new("sun", "SUN")); sun.data.energy = 2.5; sun.rotation_euler = (math.radians(50), 0, math.radians(30)); sc.collection.objects.link(sun)
         w = bpy.data.worlds.new("w"); w.use_nodes = True; w.node_tree.nodes["Background"].inputs[0].default_value = (0.55, 0.6, 0.7, 1); w.node_tree.nodes["Background"].inputs[1].default_value = 0.6; sc.world = w
         sc.render.engine = "CYCLES"; sc.cycles.samples = 48; sc.cycles.use_denoising = True; sc.render.resolution_x, sc.render.resolution_y = 1200, 900

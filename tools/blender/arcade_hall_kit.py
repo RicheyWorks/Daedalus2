@@ -11,6 +11,8 @@ arcade prop batches: origin bottom-centre on the 2 m grid line, interior face -Y
   Prop_ArcadeHall_Foundation_2m 2 x 2 x 0.4 m plinth; origin = TOP centre (hall floor level) so it sinks into island terrain: SOCKET_Edge_N/E/S/W, SOCKET_Floor
 Signage pack (2026-10-29): wall neons Prop_ArcadeHall_Sign_Prismheart / _Prizes / _PlayArrow and Prop_ArcadeHall_Sign_DoorInside (EXIT, over the
 doorway inside); pixel-font neon letters, origin = back centre on the wall (face -Y): SOCKET_Wall, SOCKET_Light, SOCKET_Hang_L/R.
+Exterior dressing (2026-10-29): Prop_ArcadeHall_EntranceSteps (island grade -0.4 m up to the floor, 3 steps), Prop_ArcadeHall_Awning
+(neon awning over the doorway, outside), Prop_ArcadeHall_PathTile (1.6 m island path slab with glow inlay, origin = top).
 Usage: python arcade_hall_kit.py --kit data/contest/arcade_hall.kit.json"""
 import argparse, math, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -165,8 +167,55 @@ def sign_assets():
     return [sign_prismheart(), sign_prizes(), sign_play(), sign_door_inside()]
 
 
+def entrance_steps():
+    """3 steps from island grade (z = -0.4, the Foundation_2m depth) up to the hall floor (z = 0). Origin = top centre at the wall's
+    outer face; the flight runs out along -Y (local), so the assembler turns it to face away from the doorway."""
+    a = "Prop_ArcadeHall_EntranceSteps"; w, rise, run = 2.0, 0.4 / 3, 0.3; P = []
+    for i in range(3):
+        top = -i * rise; d = run * (i + 1)
+        P.append(K.box("Step%d" % i, (w, run, 0.4 + top), (0, -run * i - run / 2, -0.4 + (0.4 + top) / 2), 0))
+        P.append(K.box("Nosing%d" % i, (w - 0.04, 0.03, 0.02), (0, -run * i - run + 0.015, top - 0.01), 3, bevel=False))
+    for s in (-1, 1):
+        P.append(K.box("Cheek%d" % (s > 0), (0.1, 0.9, 0.5), (s * (w / 2 + 0.05), -0.45, -0.15), 1))
+        P.append(K.box("RailPost%d" % (s > 0), (0.05, 0.05, 0.9), (s * (w / 2 + 0.05), -0.85, 0.35), 2))
+        P.append(K.box("Rail%d" % (s > 0), (0.05, 0.9, 0.05), (s * (w / 2 + 0.05), -0.45, 0.8), 2))
+    S = [K.socket("Top", (0, 0, 0), forward=(0, 1, 0)), K.socket("Bottom", (0, -0.9, -0.4), forward=(0, -1, 0)), K.socket("Edge_L", (-w / 2, -0.45, -0.4)),
+         K.socket("Edge_R", (w / 2, -0.45, -0.4))]
+    return A(a, P, [("step stone", "5A5868", 0.85), ("cheek walls (black)", BLACK, 0.5, 0.3), ("chrome rails", CHROME, 0.3, 0.9), ("nosing glow (emissive)", NEON_C, 0.2, 0.0, True)],
+             S, [K.ucx_box(a, i, (w, run, 0.4 - i * rise), (0, -run * i - run / 2, -0.4 + (0.4 - i * rise) / 2)) for i in range(3)], "2.2 x 0.9 x 0.4 m entrance steps, 3 x 13 cm rise")
+
+
+def awning():
+    """Neon awning over the doorway, outside; origin = back centre on the outer wall face, sticks out along -Y (local)."""
+    a = "Prop_ArcadeHall_Awning"; w, d = 2.2, 1.0; P = []
+    P.append(K.slab("Canopy", [(-w / 2, 0.0), (w / 2, 0.0), (w / 2, -d), (-w / 2, -d)], 0.04, (0, 0, 0.12), 0, rot=None))
+    for i in range(6):     # alternating stripes on top
+        P.append(K.box("Stripe%d" % i, (w / 6 - 0.01, d - 0.04, 0.012), (-w / 2 + w / 12 + i * w / 6, -d / 2, 0.146), 1 + i % 2, bevel=False))
+    P.append(K.box("Valance", (w, 0.03, 0.18), (0, -d + 0.015, 0.05), 0))
+    P.append(K.box("NeonEdge", (w - 0.06, 0.02, 0.03), (0, -d - 0.015, 0.05), 3, bevel=False))
+    for s in (-1, 1):
+        P.append(K.cyl("Brace%d" % (s > 0), "y", 0.012, 0.012, 0.99, (s * (w / 2 - 0.1), -0.46, -0.125), 4, 6, rot=(-27, 0, 0)))
+    S = [K.socket("Wall", (0, 0, 0), forward=(0, 1, 0)), K.socket("Light", (0, -d / 2, 0.08), forward=(0, 0, -1)), K.socket("Sign", (0, -d - 0.03, 0.05), forward=(0, -1, 0))]
+    return A(a, P, [("canopy (black)", BLACK, 0.5, 0.3), ("stripe magenta", NEON_M, 0.5), ("stripe cyan", NEON_C, 0.5), ("neon edge (emissive)", "FFE04A", 0.2, 0.0, True), ("chrome", CHROME, 0.3, 0.9)],
+             S, [K.ucx_box(a, 0, (w, d, 0.2), (0, -d / 2, 0.08))], "2.2 x 1.0 m neon awning")
+
+
+def path_tile():
+    """1.6 x 1.6 m island path slab; origin = top centre (island grade). Glow inlay strip along the walking direction (Y)."""
+    a = "Prop_ArcadeHall_PathTile"; s = 1.6
+    P = [K.box("Slab", (s, s, 0.08), (0, 0, -0.04), 0), K.box("Inlay", (0.12, s - 0.1, 0.012), (0, 0, 0.0), 2, bevel=False)]
+    for k in (-1, 1): P.append(K.box("Kerb%d" % (k > 0), (0.08, s, 0.1), (k * (s / 2 - 0.04), 0, -0.03), 1))
+    S = [K.socket("Next", (0, -s / 2, 0), forward=(0, -1, 0)), K.socket("Prev", (0, s / 2, 0), forward=(0, 1, 0)), K.socket("Floor", (0, 0, 0), forward=(0, 0, 1))]
+    return A(a, P, [("path stone", "6A6878", 0.9), ("kerb (dark)", "3A3848", 0.9), ("path glow inlay (emissive)", PRISM, 0.4, 0.0, True)],
+             S, [K.ucx_box(a, 0, (s, s, 0.08), (0, 0, -0.04))], "1.6 x 1.6 m path slab")
+
+
+def exterior_assets():
+    return [entrance_steps(), awning(), path_tile()]
+
+
 def assets():
-    return [wall(), corner(), doorway(), window(), ceiling(), foundation()] + sign_assets()
+    return [wall(), corner(), doorway(), window(), ceiling(), foundation()] + sign_assets() + exterior_assets()
 
 
 if __name__ == "__main__":

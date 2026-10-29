@@ -1100,5 +1100,57 @@
    }
   ],
   "status": "NOT READY"
+ },
+ "hall_exterior": {
+  "docs": "docs/art/arcade-hall-exterior-20261029",
+  "assets": [
+   {
+    "name": "Prop_ArcadeHall_EntranceSteps",
+    "tris": 432,
+    "size_m": [
+     2.2,
+     0.9,
+     1.225
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Top",
+     "SOCKET_SOCKET_Bottom",
+     "SOCKET_SOCKET_Edge_L",
+     "SOCKET_SOCKET_Edge_R"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_Awning",
+    "tris": 180,
+    "size_m": [
+     2.2,
+     1.025,
+     0.511
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Wall",
+     "SOCKET_SOCKET_Light",
+     "SOCKET_SOCKET_Sign"
+    ],
+    "status": "NOT READY"
+   },
+   {
+    "name": "Prop_ArcadeHall_PathTile",
+    "tris": 144,
+    "size_m": [
+     1.6,
+     1.6,
+     0.1
+    ],
+    "sockets": [
+     "SOCKET_SOCKET_Next",
+     "SOCKET_SOCKET_Prev",
+     "SOCKET_SOCKET_Floor"
+    ],
+    "status": "NOT READY"
+   }
+  ],
+  "status": "NOT READY"
  }
 }

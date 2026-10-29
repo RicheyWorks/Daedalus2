@@ -47,6 +47,21 @@ class ArcadeHallTest {
     }
 
     @Test
+    void entranceStepsAndPathLeadOutOntoTheIsland() {
+        BlockCoordinate anchor = new BlockCoordinate(10, 20, 30);
+        ArcadeHall hall = ArcadeHall.onIsland("heart_hall", WorldId.ZERO, anchor);
+        BlockCoordinate foot = hall.stepsFoot();
+        BlockCoordinate start = hall.pathStart();
+        assertThat(hall.inside(foot)).isFalse();
+        assertThat(hall.inside(start)).isFalse();
+        assertThat(foot.x()).isEqualTo(anchor.x());
+        assertThat(foot.z()).isLessThan(anchor.z());
+        assertThat(start.z()).isLessThan(foot.z());
+        assertThat(anchor.z() - start.z()).isEqualTo((int) Math.ceil(ArcadeHall.STEPS_RUN_M + ArcadeHall.PATH_TILES * ArcadeHall.PATH_TILE_M));
+        assertThat(ArcadeHall.FOUNDATION_M).isLessThan(1.0);
+    }
+
+    @Test
     void unknownLayoutAndBadRowsRejected() {
         assertThatThrownBy(() -> ArcadeHall.onIsland("nope", WorldId.ZERO, new BlockCoordinate(0, 0, 0))).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> ArcadeHall.parse(new BufferedReader(new StringReader("x\ty\t1\t1\t0\t1\t1\t1\t1\n"))))
