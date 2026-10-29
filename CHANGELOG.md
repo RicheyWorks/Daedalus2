@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well catch post.**
+  The three shine
+  rows that sit on
+  a post mix into
+  that post. The
+  join under the
+  catch stays put.
+
 - **Well north skirt.**
   A dark floor
   still meets the

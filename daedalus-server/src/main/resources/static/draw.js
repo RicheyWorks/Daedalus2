@@ -242,6 +242,28 @@
     g.fillRect(x + w, y + 2, 1, 1);
   }
 
+  /** Catch rows that sit on a post, halfway from that seam into the shine. */
+  function paintCatchPost(g, geom, r, col, tiles, floorInk, postAt, shineInk) {
+    if (!geom || geom.cell < 10 || !tiles || !tiles[r] || !postAt || !shineInk || !floorInk) return;
+    if (r % 2 !== 1 || col % 2 !== 1) return;
+    const x = geom.offX[col], y = geom.offY[r];
+    const w = geom.offX[col + 1] - x, h = geom.offY[r + 1] - y;
+    if (w < 3 || h < 5) return;
+    const edge = halfMix(shineInk, floorInk);
+    const corner = halfMix(edge, floorInk);
+    const stamp = (sx, postInk) => {
+      const seam = halfMix(floorInk, postInk);
+      g.fillStyle = halfMix(seam, corner);
+      g.fillRect(sx, y, 1, 1);
+      g.fillStyle = halfMix(seam, edge);
+      g.fillRect(sx, y + 1, 1, 1);
+      g.fillStyle = halfMix(seam, corner);
+      g.fillRect(sx, y + 2, 1, 1);
+    };
+    if (col > 0 && tiles[r][col - 1] === "#") stamp(x, postAt(r, col - 1));
+    if (col + 1 < tiles[r].length && tiles[r][col + 1] === "#") stamp(x + w - 1, postAt(r, col + 1));
+  }
+
   function cellCenter(geom, p) {
     return [geom.offX[2 * p.col + 1] + geom.cell / 2,
             geom.offY[2 * p.row + 1] + geom.cell / 2];
@@ -786,6 +808,9 @@
                   fogLamp(scene.fog, nr, nc) * fogFrontier(scene.fog, nr, nc)), hiInk);
           if (hiInk) {
             paintFloorCatch(g, geom.offX[col] + 1, geom.offY[r], geom.cell - 2, hiInk, floorInk);
+            paintCatchPost(g, geom, r, col, tiles, floorInk,
+                (nr, nc) => postInk(th, tw, nr, nc,
+                    fogLamp(scene.fog, nr, nc) * fogFrontier(scene.fog, nr, nc)), hiInk);
           }
         } else {
           // Soft edge falloff — clear stone has depth, not flat slate.
@@ -805,6 +830,8 @@
               (nr, nc) => postInk(th, tw, nr, nc, null), hiInk);
           if (hiInk) {
             paintFloorCatch(g, geom.offX[col] + 1, geom.offY[r], geom.cell - 2, hiInk, floorInk);
+            paintCatchPost(g, geom, r, col, tiles, floorInk,
+                (nr, nc) => postInk(th, tw, nr, nc, null), hiInk);
           }
         }
         if (t === "S") start = { row: (r - 1) / 2, col: (col - 1) / 2 };
@@ -1267,6 +1294,8 @@
         const hiInk = endFloorInk(mixHex(idleHi, COLORS.floorDim, 0.22 * edge), end);
         const bodyInk = endFloorInk(mixHex(idleFloor, COLORS.floorDim, 0.22 * edge), end);
         paintFloorCatch(g, geom.offX[c] + 1, geom.offY[r], geom.cell - 2, hiInk, bodyInk);
+        paintCatchPost(g, geom, r, c, tiles, bodyInk,
+            (nr, nc) => postInk(idleRows, idleCols, nr, nc, null), hiInk);
       }
     }
     g.globalAlpha = 0.78;

@@ -260,6 +260,21 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void catchMeetsTheSidePost() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("function paintCatchPost(g, geom, r, col, tiles, floorInk, postAt, shineInk)")
+                    .contains("const seam = halfMix(floorInk, postInk);")
+                    .contains("g.fillStyle = halfMix(seam, corner);")
+                    .contains("g.fillStyle = halfMix(seam, edge);")
+                    .contains("g.fillRect(sx, y + 1, 1, 1)")
+                    .contains("paintCatchPost(g, geom, r, col, tiles, floorInk,")
+                    .contains("paintCatchPost(g, geom, r, c, tiles, bodyInk,");
+        }
+    }
+
+    @Test
     void floorShineFeathersIntoThePaver() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
