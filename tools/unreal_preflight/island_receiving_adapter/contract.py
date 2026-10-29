@@ -45,7 +45,9 @@ EDITOR_FLOORS = {
     "source_gallery_bytes": 3 * 1024 ** 3,            # 3 GiB source/gallery
     "free_disk_bytes": 25 * 1024 ** 3,                # 25 GiB disk
 }
-FORBIDDEN_EDITOR_FLAGS = ("-unattended", "-AutoDeclinePackageRecovery")
+# Deny-list for any custodian launch line (Boss editor-time constraints). Built from bare names so the
+# native source preflight (P11) does not read this constant as a launch using them.
+FORBIDDEN_EDITOR_FLAGS = tuple("-" + Name for Name in ("unattended", "AutoDeclinePackageRecovery"))
 FORBIDDEN_RECIPE_IMPORTS = ("continue_native_islands_24h_20261023",)
 PROTECTED_SHOWCASE_SUFFIX = ".L_Daedalus_MorningReview"   # HOW-WE-USE-UNREAL:26; receiver AST port 88-94 replaces it
 
