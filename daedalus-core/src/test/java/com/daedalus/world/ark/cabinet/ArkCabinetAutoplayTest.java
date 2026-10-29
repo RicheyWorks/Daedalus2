@@ -66,7 +66,7 @@ class ArkCabinetAutoplayTest {
     @Test
     void everyCabinetGameAutoplaysToAnEnd() {
         ArkCabinet cab = ArkCabinet.standard();
-        assertThat(cab.slots()).hasSize(17);
+        assertThat(cab.slots()).hasSize(19);
         for (ArkCabinet.Slot s : cab.slots()) {
             ArkCabinetGame g = s.open();
             List<String> moves = ArkCabinet.autoplay(g);
@@ -77,7 +77,7 @@ class ArkCabinetAutoplayTest {
             assertThat(g.hint()).as(s.id()).isEmpty();
             assertThat(ArkCabinet.quest(g)).as(s.id()).isTrue();
         }
-        assertThat(cab.arcadeDescription()).contains("17 crew games");
+        assertThat(cab.arcadeDescription()).contains("19 crew games");
     }
 
     @Test

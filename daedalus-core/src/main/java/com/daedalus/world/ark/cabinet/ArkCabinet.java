@@ -96,6 +96,10 @@ public final class ArkCabinet {
             PegBoardGame::new);
         c.register("lock", "The Lock Pegs", "crack the strongroom's 4-peg colour code, solo (G362)",
             LockPegsGame::new);
+        c.register("casks", "The Measuring Casks", "measure exact litres with two casks in fewest moves, solo (G268)",
+            MeasuringCasksGame::new);
+        c.register("lights", "The Deck Lights", "Akari: hang lamps to light the whole deck, solo (G396)",
+            DeckLightsGame::new);
         return c;
     }
 
