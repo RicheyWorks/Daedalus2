@@ -97,6 +97,10 @@
       g.fillStyle = corner;
       g.fillRect(x + 1, y + 3, span, 1);
     }
+    if (h > 5) {
+      g.fillStyle = halfMix(corner, wall);
+      g.fillRect(x + 1, y + 4, span, 1);
+    }
   }
 
   function paverInk(rows, cols, r, col, tile, fogLamp) {
