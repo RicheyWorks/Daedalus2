@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well post shine side.**
+  The three shine
+  rows on an open
+  post mix into
+  the paver beside
+  them. The join
+  under the shine
+  stays put.
+
 - **Desktop catch post.**
   The desktop well
   mixes the three

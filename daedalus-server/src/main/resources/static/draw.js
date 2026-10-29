@@ -137,6 +137,16 @@
     if (w < 4 || h < 5) return;
     const span = h - 4;
     const run = (sx, sideInk) => {
+      if (shineInk) {
+        const edge = halfMix(shineInk, wallInk);
+        const corner = halfMix(edge, wallInk);
+        g.fillStyle = halfMix(sideInk, corner);
+        g.fillRect(sx, y, 1, 1);
+        g.fillStyle = halfMix(sideInk, edge);
+        g.fillRect(sx, y + 1, 1, 1);
+        g.fillStyle = halfMix(sideInk, corner);
+        g.fillRect(sx, y + 2, 1, 1);
+      }
       const join = shineInk ? halfMix(sideInk, halfMix(shineInk, wallInk)) : sideInk;
       const heel = floorInk ? halfMix(sideInk, halfMix(wallInk, floorInk)) : sideInk;
       g.fillStyle = join;

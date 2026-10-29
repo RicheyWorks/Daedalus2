@@ -220,6 +220,20 @@ class WebUiPaintPinTest {
     }
 
     @Test
+    void wallShineMeetsThePaver() throws Exception {
+        try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
+            assertThat(in).as("well painter").isNotNull();
+            String js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            assertThat(js).contains("const edge = halfMix(shineInk, wallInk);")
+                    .contains("const corner = halfMix(edge, wallInk);")
+                    .contains("g.fillStyle = halfMix(sideInk, corner);")
+                    .contains("g.fillStyle = halfMix(sideInk, edge);")
+                    .contains("g.fillRect(sx, y, 1, 1)")
+                    .contains("g.fillRect(sx, y + 2, 1, 1)");
+        }
+    }
+
+    @Test
     void wallSideMeetsTheFloor() throws Exception {
         try (InputStream in = getClass().getResourceAsStream("/static/draw.js")) {
             assertThat(in).as("well painter").isNotNull();
