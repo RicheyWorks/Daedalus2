@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Short action chips beside the hint line. The chip names the immediate action
 // and stays out of score, movement, and saved status text.
-// catalog-capability: action_cue: beacon_sweep cairnwell driftstone facetlock dungeon dodge_ball gloam_latch lanternwild lumenpath reedbeat riftwing shardring twinwake wardens_accord
+// catalog-capability: action_cue: beacon_sweep cairnwell driftstone facetlock dungeon dodge_ball gloam_latch lanternwild lumenpath prismcairn reedbeat riftwing shardring twinwake wardens_accord
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -74,6 +74,10 @@ void FacetlockCues() {
     FacetlockGame G;G.Reset(730);
     Expect(G,"CUE Slide","a fresh lattice cues a slide");
 }
+void PrismcairnCues() {
+    PrismcairnGame G;G.Reset(730);
+    Expect(G,"CUE Take shards","a fresh duel cues a take");
+}
 void ShardringCues() {
     ShardringGame G;G.Reset(730);
     Expect(G,"CUE Set shard","a fresh ring cues setting a shard");
@@ -100,7 +104,7 @@ void LanternwildCues() {
 }
 
 int main() {
-    try { BeaconCues();CairnwellCues();FacetlockCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();LumenpathCues();ReedbeatCues();RiftwingCues();ShardringCues();TwinwakeCues();WardensAccordCues(); }
+    try { BeaconCues();CairnwellCues();FacetlockCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();LumenpathCues();PrismcairnCues();ReedbeatCues();RiftwingCues();ShardringCues();TwinwakeCues();WardensAccordCues(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
