@@ -550,9 +550,14 @@ class ExplorePaintTest {
                 .isLessThan(ExplorePaint.floorTexShade(3, 3));
         int[] paver = ExplorePaint.floorPaver(7, 4);
         int[] neighbor = ExplorePaint.floorPaver(8, 4);
-        int[] seam = ExplorePaint.floorTexColor(7, 4);
-        assertThat(seam[0]).isEqualTo((paver[0] + neighbor[0]) / 2);
-        assertThat(ExplorePaint.floorTexColor(4, 4)).containsExactly(ExplorePaint.floorPaver(4, 4));
+        int seamMix = (paver[0] + neighbor[0]) / 2;
+        int[] seamAbove = ExplorePaint.floorTexColor(7, 3);
+        assertThat(ExplorePaint.floorTexColor(7, 4)[0])
+                .isEqualTo((seamMix * 3 + seamAbove[0]) / 4);
+        int[] floorMid = ExplorePaint.floorPaver(4, 4);
+        int[] floorMidAbove = ExplorePaint.floorTexColor(4, 3);
+        assertThat(ExplorePaint.floorTexColor(4, 4)[0])
+                .isEqualTo((floorMid[0] * 3 + floorMidAbove[0]) / 4);
         assertThat(ExplorePaint.floorTexColor(2, 1)).containsExactly(ExplorePaint.floorPaver(2, 1));
         int[] catchPaver = ExplorePaint.floorPaver(7, 1);
         int[] catchNeighbor = ExplorePaint.floorPaver(8, 1);

@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore floor mid course.**
+  The course between
+  the under-catch
+  and the lip leans
+  a quarter toward
+  the row above it,
+  joint included.
+  The catch stays
+  the shine.
+
 - **Explore vault above lip.**
   The row above
   the vault lip
