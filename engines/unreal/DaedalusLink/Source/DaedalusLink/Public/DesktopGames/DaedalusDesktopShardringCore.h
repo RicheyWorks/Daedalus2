@@ -2,6 +2,7 @@
 #pragma once
 #include "DaedalusDesktopGameTypes.h"
 #include "DaedalusShardringCore.h"
+#include "DaedalusPyRandomCore.h"
 #include <memory>
 #include <sstream>
 #include <string>
@@ -10,18 +11,19 @@
 namespace daedalus { namespace desktop {
 // Shardring Resonance (Prismheart cabinet): the ADaedalusDesktopArcade host for the pure core in
 // DaedalusShardringCore.h, which is a port of tools/minigames/prism_shard.py (the rules authority).
-// Draws come from the portable Random stream (deliberately not Python's PRNG; see GameTypes) unless a
-// test injects an Oracle, which is how parity with the Python fixtures is proven. Cabinet difficulty is
+// Draws come from a CPython-compatible stream seeded like prism_shard.py, so seed + difficulty reproduce the
+// Python and web games; tests can also inject an Oracle to replay recorded fixtures. Cabinet difficulty is
 // the game's difficulty (easy 12 facets / normal 10 / hard 8). Controls follow the DaedalusPad map in
 // tools/minigames/web/shardring/index.html: Left/Up previous facet, Right/Down next, confirm sets the shard.
 class ShardringGame final : public Game {
-    // Own xorshift copy of desktop::Random so the stream state can be saved and restored.
+    // CPython-compatible stream (DaedalusPyRandomCore.h) seeded exactly like prism_shard.py:
+    // random.Random(f"shardring:{seed}:{difficulty}"). Same seed and difficulty => the same game as the Python
+    // module and the web page. Saves record the 32-bit words drawn and fast-forward on restore.
     struct Stream : shardring::Oracle {
-        std::uint32_t State=730; int Hues=4;
-        void Seed(std::uint32_t Value) { State=Random::InitialState(Value); }
-        std::uint32_t Next() { State^=State<<13; State^=State>>17; State^=State<<5; return State; }
-        shardring::Hue Draw() override { return static_cast<shardring::Hue>(Next()%static_cast<std::uint32_t>(Hues)); }
-        int SpiritPick(const std::vector<int>& Filled) override { return Filled[Next()%static_cast<std::uint32_t>(Filled.size())]; }
+        pyrandom::PyRandom Rng; int Hues=4;
+        void Seed(std::uint32_t Value,const std::string& Difficulty) { Rng.Seed("shardring:"+std::to_string(Value)+":"+Difficulty); }
+        shardring::Hue Draw() override { return static_cast<shardring::Hue>(Rng.ChoiceIndex(static_cast<std::size_t>(Hues))); }
+        int SpiritPick(const std::vector<int>& Filled) override { return Filled[Rng.ChoiceIndex(Filled.size())]; }
     };
     Stream Rng;
     shardring::Oracle* External=nullptr;
@@ -37,7 +39,7 @@ class ShardringGame final : public Game {
     void Deal() {
         const shardring::Difficulty* D=shardring::FindDifficulty(CabinetDifficulty());
         Rng.Hues=D?D->Hues:4;
-        Rng.Seed(SessionSeed^static_cast<std::uint32_t>((D?D->Facets:10)*0x9e3779b1u));
+        Rng.Seed(SessionSeed,D?D->Name:"normal");
         Core.Start(D?D->Name:"normal",Source());
         Cursor=0; LastGained=0; WasPrev=WasNext=WasConfirm=false;
     }
@@ -66,7 +68,7 @@ public:
     int CursorFacet() const { return Cursor; }
     int LastGain() const { return LastGained; }
 
-    void Reset(std::uint32_t Seed) override { SessionSeed=Seed?Seed:1; Deal(); }
+    void Reset(std::uint32_t Seed) override { SessionSeed=Seed; Deal(); }
     bool SetCabinetDifficulty(const std::string& Name) override {
         if(!Game::SetCabinetDifficulty(Name)) return false;
         Deal(); return true;
@@ -74,7 +76,7 @@ public:
     // Option 0: Resonance (standard). Option 1: Guide practice, which marks the facet greedy_move would pick.
     bool SetOption(int Value,std::uint32_t Seed) override {
         if(Value<0 || Value>1) return false;
-        Option=Value; SessionSeed=Seed?Seed:1; Deal(); return true;
+        Option=Value; SessionSeed=Seed; Deal(); return true;
     }
     int GetOption() const override { return Option; }
     bool SourceKeyDown(int Key) override {
@@ -108,7 +110,7 @@ public:
     }
     std::string SaveState() const override {
         std::ostringstream O;
-        O<<"shardring v1 d="<<CabinetDifficulty()<<" seed="<<SessionSeed<<" rng="<<Rng.State<<" pouch="<<Core.Pouch
+        O<<"shardring v1 d="<<CabinetDifficulty()<<" seed="<<SessionSeed<<" drawn="<<Rng.Rng.Drawn()<<" pouch="<<Core.Pouch
          <<" score="<<Core.Score<<" chain="<<Core.Chain<<" cur="<<static_cast<int>(Core.Current)<<" next="<<static_cast<int>(Core.Next)
          <<" cursor="<<Cursor<<" over="<<(Core.Over?1:0)<<" won="<<(Core.Won?1:0)<<" ring=";
         for(shardring::Hue H:Core.Ring) O<<static_cast<int>(H)<<",";
@@ -119,16 +121,16 @@ public:
     bool RestoreState(const std::string& Text,std::uint32_t) override {
         std::istringstream In(Text); std::string Tag,Ver; In>>Tag>>Ver;
         if(Tag!="shardring"||Ver!="v1") return false;
-        std::string Diff; std::uint32_t Seed=0,State=0; int Pouch=0,Chain=0,Cur=-1,Nxt=-1,Cur2=0,Over=0,Won=0; std::int64_t Score=0;
+        std::string Diff; std::uint32_t Seed=0; std::uint64_t Drawn=0; int Pouch=0,Chain=0,Cur=-1,Nxt=-1,Cur2=0,Over=0,Won=0; std::int64_t Score=0;
         std::string RingS,ResS,SpS;
         auto Val=[&](const std::string& Key)->std::string { const std::string N=" "+Key+"="; const size_t P=Text.find(N); if(P==std::string::npos) return ""; const size_t S=P+N.size(), E=Text.find(' ',S); return Text.substr(S,E==std::string::npos?std::string::npos:E-S); };
         try {
-            Diff=Val("d"); Seed=static_cast<std::uint32_t>(std::stoul(Val("seed"))); State=static_cast<std::uint32_t>(std::stoul(Val("rng")));
+            Diff=Val("d"); Seed=static_cast<std::uint32_t>(std::stoul(Val("seed"))); Drawn=std::stoull(Val("drawn"));
             Pouch=std::stoi(Val("pouch")); Score=std::stoll(Val("score")); Chain=std::stoi(Val("chain")); Cur=std::stoi(Val("cur")); Nxt=std::stoi(Val("next"));
             Cur2=std::stoi(Val("cursor")); Over=std::stoi(Val("over")); Won=std::stoi(Val("won")); RingS=Val("ring"); ResS=Val("res"); SpS=Val("spirits");
         } catch(...) { return false; }
         const shardring::Difficulty* D=shardring::FindDifficulty(Diff);
-        if(!D||State==0) return false;
+        if(!D||Drawn<2||Drawn>200000) return false;
         auto Ints=[](const std::string& S) { std::vector<int> Out; std::string Tok; for(char Ch:S) { if(Ch==',') { if(!Tok.empty()) Out.push_back(std::stoi(Tok)); Tok.clear(); } else Tok.push_back(Ch); } return Out; };
         std::vector<int> RingV,ResV,SpV;
         try { RingV=Ints(RingS); ResV=Ints(ResS); SpV=Ints(SpS); } catch(...) { return false; }
@@ -137,7 +139,7 @@ public:
         for(int V:SpV) if(V<0||V>=D->Hues) return false;
         if(Cur<0||Cur>=D->Hues||Nxt<0||Nxt>=D->Hues||Pouch<0||Pouch>D->Shards||Chain<0||Cur2<0||Cur2>=D->Facets) return false;
         Game::SetCabinetDifficulty(Diff);
-        SessionSeed=Seed?Seed:1; Rng.State=State; Rng.Hues=D->Hues;
+        SessionSeed=Seed; Rng.Hues=D->Hues; Rng.Seed(SessionSeed,D->Name); Rng.Rng.Discard(Drawn);
         Core.Diff=D; Core.Ring.clear(); for(int V:RingV) Core.Ring.push_back(static_cast<shardring::Hue>(V));
         Core.Pouch=Pouch; Core.Score=static_cast<int>(Score); Core.Chain=Chain;
         for(int I=0;I<shardring::HueCount;++I) Core.Resonance[I]=ResV[static_cast<std::size_t>(I)];

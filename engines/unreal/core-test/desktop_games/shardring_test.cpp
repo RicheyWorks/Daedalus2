@@ -32,15 +32,19 @@ std::string Field(const std::string& Line,const std::string& Key) {
     const size_t S=P+N.size(), E=Line.find(' ',S); return Line.substr(S,E==std::string::npos?std::string::npos:E-S);
 }
 
-void Parity(const char* Path) {
+// Mode 0: the fixture's recorded draws drive the cabinet through UseOracle (rules parity).
+// Mode 1: no oracle; the cabinet's own CPython-compatible stream, seeded from the fixture's seed and
+// difficulty exactly like prism_shard.py, must reproduce the same draws, moves and end line (PRNG parity).
+void Parity(const char* Path,int Mode) {
     std::ifstream In(Path);
     if(!In) { Check(false,std::string("fixture opens: ")+Path); return; }
-    std::string Line, Diff; FixtureOracle O; std::vector<std::string> Moves; std::string End; int Games=0;
+    std::string Line, Diff; std::uint32_t Seed=0; FixtureOracle O; std::vector<std::string> Moves; std::string End; int Games=0;
     auto Run=[&]() {
         if(Diff.empty()) return;
         ShardringGame G;
         Check(G.SetCabinetDifficulty(Diff),Diff+": cabinet difficulty");
-        G.UseOracle(&O); G.Reset(730);   // Reset deals through the fixture oracle: first two draws
+        if(Mode==0) { G.UseOracle(&O); G.Reset(730); }   // Reset deals through the fixture oracle: first two draws
+        else G.Reset(Seed);
         int Turn=0; bool Ok=true;
         for(const std::string& Expected:Moves) {
             const int Facet=G.CoreState().GreedyMove();
@@ -58,12 +62,13 @@ void Parity(const char* Path) {
         std::ostringstream E; const auto& C=G.CoreState();
         E<<"end  score="<<C.Score<<" won="<<(C.Won?1:0)<<" spirits=";
         for(std::size_t I=0;I<C.Spirits.size();++I) E<<(I?",":"")<<daedalus::shardring::SpiritName(C.Spirits[I]);
-        Check(Ok && E.str()==End && O.At==O.Events.size() && O.Errors==0,"fixture game "+std::to_string(Games)+" ("+Diff+") replays byte-identical through the cabinet");
+        const bool OracleDrained=Mode==1 || (O.At==O.Events.size() && O.Errors==0);
+        Check(Ok && E.str()==End && OracleDrained,"fixture game "+std::to_string(Games)+" ("+Diff+" s="+std::to_string(Seed)+") replays byte-identical through the cabinet"+(Mode?" from its own CPython-compatible seed":" with injected draws"));
         ++Games; Diff.clear(); O=FixtureOracle{}; Moves.clear(); End.clear();
     };
     while(std::getline(In,Line)) {
         if(Line.empty()||Line[0]=='#') continue;
-        if(Line.rfind("game ",0)==0) { Run(); Diff=Field(Line,"d"); continue; }
+        if(Line.rfind("game ",0)==0) { Run(); Diff=Field(Line,"d"); Seed=static_cast<std::uint32_t>(std::stoul(Field(Line,"s"))); continue; }
         if(Line.rfind("rng  ",0)==0) { std::istringstream S(Line.substr(5)); std::string K,V; S>>K>>V; O.Events.emplace_back(K,V); }
         else if(Line.rfind("move ",0)==0) Moves.push_back(Line);
         else if(Line.rfind("end  ",0)==0) End=Line;
@@ -113,12 +118,12 @@ int main(int Argc,char** Argv) {
     Check(R.GetStatus().Score==Before.Score && R.GetStatus().Note==Before.Note && R.CoreState().RingString()==RingBefore && R.CursorFacet()==S.CursorFacet(),"restored ring, score, note and cursor match");
     for(int N=0;N<5;++N) { S.Step(Set()); S.Step({}); R.Step(Set()); R.Step({}); }
     Check(S.CoreState().RingString()==R.CoreState().RingString() && S.GetStatus().Score==R.GetStatus().Score,"restored stream continues identically");
-    Check(!R.RestoreState("shardring v1 d=normal seed=1 rng=5 pouch=99 score=0 chain=0 cur=0 next=0 cursor=0 over=0 won=0 ring=-1, res=0,0,0,0,0, spirits=",1),"a pouch beyond the difficulty is refused");
+    Check(!R.RestoreState("shardring v1 d=normal seed=1 drawn=5 pouch=99 score=0 chain=0 cur=0 next=0 cursor=0 over=0 won=0 ring=-1, res=0,0,0,0,0, spirits=",1),"a pouch beyond the difficulty is refused");
     Check(!R.RestoreState("cairnwell v1",1) && !R.RestoreState("",1),"foreign save text is refused");
 
     Frame F; G.Render(F);
     Check(!F.Commands.empty() && F.Commands.size()<=Frame::MaxCommands,"render stays bounded");
-    if(Argc>1) Parity(Argv[1]);
+    if(Argc>1) { Parity(Argv[1],0); Parity(Argv[1],1); }
     std::cout<<"shardring cabinet: "<<(Checks-Failed)<<"/"<<Checks<<" checks\n";
     return Failed==0?0:1;
 }
