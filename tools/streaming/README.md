@@ -156,3 +156,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Caulking Check (G544, disk-saver)
 
 `caulking_check.py` checks the byte-level seams of the lane's text files, read-only: invalid UTF-8, unparseable JSON/JSONL and duplicate JSON keys are errors; BOMs, CRLF or mixed line endings, a missing final newline, trailing whitespace and tab indentation in .py/.yml are advisories. `--under` (repeatable) picks the lane; verdict sound/weeping/leaking. NPC Caulker Evander; hook `data/islands/disk-saver/caulking-check-v1.json`; doc `docs/islands/DISKSAVER-CAULKING-CHECK.md`.
+
+## Census Riddles (G546, disk-saver)
+
+`census_riddles.py` is a playable harbour quiz: it reads a world census and the G206 budget config (read-only), draws a seeded set of riddles (islands charted, empty islands, heaviest island, a world's RAM/disk need, how many islands fit the hold, most islands resident at once) whose answers come from the G206 cost model, and grades an answer file: shipshape/adrift/aground. The same seed gives the same quiz everywhere. NPC Tide-clerk Leocadia; hook `data/islands/disk-saver/census-riddles-v1.json`; doc `docs/islands/DISKSAVER-CENSUS-RIDDLES.md`.
