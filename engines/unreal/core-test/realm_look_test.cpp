@@ -4,9 +4,9 @@
 // paging arrow shapes, bold text, the grid's dim rows and blinking cursor, the typewriter page, the party strip, and
 // that tiles and the battle backdrop stay inside their bounds and are deterministic.
 // Build: g++ -std=c++17 -I../DaedalusLink/Source/DaedalusLink/Public realm_look_test.cpp
-#include <cstdio>  // DaedalusRealmLook.h's MemberCard uses std::snprintf without including it itself
+#include "DaedalusRealmLook.h"  // first: the header must stand on its own (it once leaned on a transitive <cstdio>)
 
-#include "DaedalusRealmLook.h"
+#include <cstdio>
 
 #include <string>
 #include <vector>
@@ -227,10 +227,8 @@ int main()
 
     // ---- field tiles
     {
-        // Meadow and block wall stay inside their cell. Forest crowns (Ellipse r4 round a jittered centre) and the
-        // flagstones' offset mortar (i = -4) bleed sideways into the neighbour cells today (flagstones to x+22).
-        // Pin that bleed to the cell's row and 8 px either side so it cannot grow; tighten when the header is fixed.
-        bool Inside = true, Bounded = true, Determ = true, Full = true, Varies = false;
+        // Every tile draws only inside its own 16x16 cell (forest crowns and flagstone mortar once bled sideways).
+        bool Inside = true, Determ = true, Full = true, Varies = false;
         for (int K = 0; K < 4; ++K)
             for (uint64_t Salt = 0; Salt < 16; ++Salt)
             {
@@ -248,12 +246,7 @@ int main()
                     for (int x = 0; x < A.W; ++x)
                     {
                         const bool In = x >= 40 && y >= 40 && x < 56 && y < 56;
-                        const bool Near = x >= 32 && x < 64 && y >= 40 && y < 56;
-                        if (!In && A.Get(x, y) != 0x010203)
-                        {
-                            if (K == 1 || K == 3) Inside = false;
-                            if (!Near) Bounded = false;
-                        }
+                        if (!In && A.Get(x, y) != 0x010203) Inside = false;
                         if (In && A.Get(x, y) == 0x010203) Full = false;
                     }
                 if (K == 1 && Salt > 0)
@@ -263,8 +256,7 @@ int main()
                     Varies |= C.Px != A.Px;
                 }
             }
-        Check("tiles: meadow and block wall stay inside their 16x16 cell", Inside);
-        Check("tiles: forest/flagstone bleed stays in the row, within 8 px (known, see comment)", Bounded);
+        Check("tiles: every tile stays inside its 16x16 cell", Inside);
         Check("tiles: cover the whole cell", Full);
         Check("tiles: same salt draws the same tile", Determ);
         Check("tiles: meadow blades move with the salt", Varies);
@@ -279,11 +271,14 @@ int main()
         Frame K[3];
         for (int k = 0; k < 3; ++k) DrawBattleScene(K[k], k, 0);
         Check("battle scene: three distinct backdrops", K[0].Px != K[1].Px && K[1].Px != K[2].Px && K[0].Px != K[2].Px);
-        // Town and cave stay inside the frame. The open field's clouds drift past the right of the picture (to x=238,
-        // over the rule and beyond) today; pin it to within 16 px so it can't grow, tighten when the header is fixed.
-        Check("battle scene: town and cave stay inside their framed window",
-              OnlyInside(K[1], 32, 44, 32 + 192, 44 + 108) && OnlyInside(K[2], 32, 44, 32 + 192, 44 + 108));
-        Check("battle scene: open-field overdraw bounded (known, see comment)", OnlyInside(K[0], 32, 44, 32 + 192 + 16, 44 + 108));
+        // The picture is cut by its frame (the open field's clouds once drifted to x=238, over the rule and past it).
+        bool In = true;
+        for (int k = 0; k < 3; ++k) In &= OnlyInside(K[k], 32, 44, 32 + 192, 44 + 108);
+        Check("battle scene: every backdrop stays inside its framed window", In);
+        bool RuleClean = true;
+        for (int k = 0; k < 3; ++k)
+            for (int y = 46; y < 150; ++y) RuleClean &= K[k].Get(222, y) == St.Ink && K[k].Get(223, y) == St.Ink;
+        Check("battle scene: the right-hand rule is not painted over", RuleClean);
         Check("battle scene: framed by the window rule", K[0].Get(100, 44) == St.Ink && K[2].Get(32, 100) == St.Ink);
         Frame Again;
         DrawBattleScene(Again, 2, 0);
