@@ -148,3 +148,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Rigging Check (G541, disk-saver)
 
 `rigging_check.py` surveys `.github/workflows` read-only: `uses:` actions with no ref or a moving branch ref (error), action major-version drift, third-party tags instead of SHAs, `python-version` drift and missing top-level `permissions:` (advisories). `--under PREFIX` scopes findings; verdict taut/slack/frayed. NPC Bosun Thaddeus; hook `data/islands/disk-saver/rigging-check-v1.json`; doc `docs/islands/DISKSAVER-RIGGING-CHECK.md`.
+
+## Leading Lights (G543, disk-saver)
+
+`leading_lights.py` follows every relative link and image in the repo's Markdown, read-only and without network access: broken targets are errors; missing `#anchors`, machine-local paths, links out of the repo and stale inline-code repo paths are advisories. `--under PREFIX` scopes the files; verdict lit/dim/dark. NPC Lightkeeper Seraphine; hook `data/islands/disk-saver/leading-lights-v1.json`; doc `docs/islands/DISKSAVER-LEADING-LIGHTS.md`.
