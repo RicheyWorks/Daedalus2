@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick catch joint.**
+  The clay beside
+  the grout, on the
+  course under the
+  brick shine, leans
+  toward that shine.
+  The grout line
+  itself stays put.
+
 - **Desktop post shine side.**
   The desktop post
   mixes the three
