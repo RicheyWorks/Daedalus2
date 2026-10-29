@@ -24,6 +24,13 @@ import java.util.function.Predicate;
 public final class ForgeCabinet {
 
     /** Keith numbers up to 200000, built once on first use of the Keith Kindling slot. */
+    private static final class LychrelList {
+        static final List<Long> CANDIDATES = Collections.unmodifiableList(LychrelLadles.candidatesUpTo(1000));
+
+        private LychrelList() {
+        }
+    }
+
     private static final class KeithList {
         static final List<Long> KEITH = Collections.unmodifiableList(KeithKindling.keithUpTo(200_000));
 
@@ -574,6 +581,19 @@ public final class ForgeCabinet {
                 });
         }, EmirpEmbers.forgemasterLine(EmirpEmbers.Grade.TURNED),
             EmirpEmbers.forgemasterLine(EmirpEmbers.Grade.SLIPPED)));
+        g.add(game("lychrel", "Lychrel Ladles", LychrelLadles.QUEST_ID, r -> {
+            long n = r.nextInt(3) == 0 ? LychrelList.CANDIDATES.get(r.nextInt(LychrelList.CANDIDATES.size())) : 10 + r.nextInt(990);
+            boolean lychrel = LychrelLadles.isLychrelCandidate(n);
+            return new Puzzle("lychrel", "Pour " + n + " into its mirror (n + reverse(n)) again and again: does it"
+                + " never settle into a palindrome within " + LychrelLadles.DEFAULT_LIMIT + " pours? (yes/no)",
+                lychrel ? "yes" : "no", a -> {
+                    if (!"yes".equals(a) && !"no".equals(a)) {
+                        return false;
+                    }
+                    return LychrelLadles.grade(n, "yes".equals(a)) == LychrelLadles.Grade.TURNED;
+                });
+        }, LychrelLadles.forgemasterLine(LychrelLadles.Grade.TURNED),
+            LychrelLadles.forgemasterLine(LychrelLadles.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
