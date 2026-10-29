@@ -160,8 +160,20 @@
       g.fillStyle = join;
       g.fillRect(sx, y + 3, 1, 1);
       if (span > 2) {
-        g.fillStyle = sideInk;
-        g.fillRect(sx, y + 4, 1, span - 2);
+        const fade = shineInk
+            ? halfMix(halfMix(halfMix(shineInk, wallInk), wallInk), wallInk)
+            : null;
+        if (fade) {
+          g.fillStyle = halfMix(sideInk, fade);
+          g.fillRect(sx, y + 4, 1, 1);
+          if (span > 3) {
+            g.fillStyle = sideInk;
+            g.fillRect(sx, y + 5, 1, span - 3);
+          }
+        } else {
+          g.fillStyle = sideInk;
+          g.fillRect(sx, y + 4, 1, span - 2);
+        }
       }
       if (span > 1) {
         g.fillStyle = heel;

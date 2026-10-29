@@ -10,6 +10,16 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Well post side under course.**
+  The open side
+  of the row under
+  a post's shine
+  course leans a
+  quarter toward
+  that course.
+  The heel stays
+  the floor mix.
+
 - **Desktop wall under course.**
   The row under
   a post's shine
