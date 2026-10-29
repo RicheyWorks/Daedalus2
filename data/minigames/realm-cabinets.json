@@ -394,12 +394,26 @@
           "start": "StartGame(\"cairnwell\", 829914631)"
         },
         {
+          "game": "shardring",
+          "title": "Shardring Resonance",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            7.5,
+            -2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1619510215,
+          "option": 0,
+          "start": "StartGame(\"shardring\", 1619510215)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             7.5,
-            -1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -413,7 +427,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             7.5,
-            1.25,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -641,12 +655,26 @@
           "start": "StartGame(\"cairnwell\", 600932809)"
         },
         {
+          "game": "shardring",
+          "title": "Shardring Resonance",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            7.5,
+            3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1914780681,
+          "option": 0,
+          "start": "StartGame(\"shardring\", 1914780681)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            7.5,
-            3.75,
+            10.0,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -660,7 +688,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1117,7 +1145,7 @@
         {
           "game": "shardring",
           "title": "Shardring Resonance",
-          "host": "PythonMinigame",
+          "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
             -1.25,
@@ -1125,10 +1153,8 @@
           ],
           "yaw_deg": 180.0,
           "seed": 2061739538,
-          "difficulty": "normal",
-          "module": "tools/minigames/prism_shard.py",
-          "start": "prism_shard.start(2061739538, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
+          "option": 0,
+          "start": "StartGame(\"shardring\", 2061739538)"
         },
         {
           "game": "lumenpath",

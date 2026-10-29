@@ -545,6 +545,38 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shardring",
+      "title": "Shardring Resonance",
+      "summary": "Set Prism Shards in the sphere ring; three of one hue resonate. Left/Right or stick: pick a facet; J/Space or pad A: set",
+      "how_to_play": "HOW Set each shard in an empty facet; three of one hue in a row resonate.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the Warden shrine",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shardring\", Seed)",
+      "portable_tests": [
+        "desktop_shardring"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -594,23 +626,6 @@
     }
   ],
   "python_games": [
-    {
-      "id": "shardring",
-      "title": "Shardring Resonance",
-      "summary": "a prism sphere shard-setting puzzle for Prismheart.",
-      "how_to_play": "HOW Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill.",
-      "module": "tools/minigames/prism_shard.py",
-      "start": "prism_shard.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_prism_shard.py"
-      ]
-    },
     {
       "id": "lumenpath",
       "title": "Lumenpath Refraction",

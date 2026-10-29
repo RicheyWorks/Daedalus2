@@ -2,20 +2,69 @@
   "schema": "daedalus.minigames.spots/v1",
   "about": "One home spot per desktop cabinet. The realm id must be a realm that already places that cabinet. Wording is original.",
   "spots": {
-    "beacon_sweep": {"realm": "island_oddsreaper", "spot": "Oddsreaper island, the puzzle row"},
-    "twinwake": {"realm": "island_prometheus", "spot": "Prometheus island, the court row"},
-    "dungeon": {"realm": "labyrinth", "spot": "Labyrinth, the lantern passage"},
-    "driftstone": {"realm": "island_hephaestus", "spot": "Hephaestus island, the rock yard"},
-    "football": {"realm": "island_prometheus", "spot": "Prometheus island, the pitch"},
-    "glowtrail": {"realm": "gallery_city", "spot": "Gallery City, the chase court"},
-    "riftwing": {"realm": "prismheart_realm", "spot": "Prismheart, the rift line"},
-    "emberstep": {"realm": "island_hephaestus", "spot": "Hephaestus island, the terrace grid"},
-    "star_shooter": {"realm": "orrery_reach", "spot": "Orrery Reach, the star lane"},
-    "dodge_ball": {"realm": "island_prometheus", "spot": "Prometheus island, the courtyard"},
-    "ironwake": {"realm": "island_hephaestus", "spot": "Hephaestus island, the iron route"},
-    "lanternwild": {"realm": "portal_realm", "spot": "Portal realm, the wild path"},
-    "gloam_latch": {"realm": "gallery_city", "spot": "Gallery City, the lamp corner"},
-    "reedbeat": {"realm": "orrery_reach", "spot": "Orrery Reach, the reed bench"},
-    "cairnwell": {"realm": "bricks", "spot": "Bricks, the stacking yard"}
+    "beacon_sweep": {
+      "realm": "island_oddsreaper",
+      "spot": "Oddsreaper island, the puzzle row"
+    },
+    "twinwake": {
+      "realm": "island_prometheus",
+      "spot": "Prometheus island, the court row"
+    },
+    "dungeon": {
+      "realm": "labyrinth",
+      "spot": "Labyrinth, the lantern passage"
+    },
+    "driftstone": {
+      "realm": "island_hephaestus",
+      "spot": "Hephaestus island, the rock yard"
+    },
+    "football": {
+      "realm": "island_prometheus",
+      "spot": "Prometheus island, the pitch"
+    },
+    "glowtrail": {
+      "realm": "gallery_city",
+      "spot": "Gallery City, the chase court"
+    },
+    "riftwing": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the rift line"
+    },
+    "emberstep": {
+      "realm": "island_hephaestus",
+      "spot": "Hephaestus island, the terrace grid"
+    },
+    "star_shooter": {
+      "realm": "orrery_reach",
+      "spot": "Orrery Reach, the star lane"
+    },
+    "dodge_ball": {
+      "realm": "island_prometheus",
+      "spot": "Prometheus island, the courtyard"
+    },
+    "ironwake": {
+      "realm": "island_hephaestus",
+      "spot": "Hephaestus island, the iron route"
+    },
+    "lanternwild": {
+      "realm": "portal_realm",
+      "spot": "Portal realm, the wild path"
+    },
+    "gloam_latch": {
+      "realm": "gallery_city",
+      "spot": "Gallery City, the lamp corner"
+    },
+    "reedbeat": {
+      "realm": "orrery_reach",
+      "spot": "Orrery Reach, the reed bench"
+    },
+    "cairnwell": {
+      "realm": "bricks",
+      "spot": "Bricks, the stacking yard"
+    },
+    "shardring": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the Warden shrine"
+    }
   }
 }
