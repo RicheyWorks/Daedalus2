@@ -19,6 +19,9 @@ Source: `daedalus-core/src/main/java/com/daedalus/world/ark/cabinet/`. Source on
 | `cube` | The Signal Cube | G435 `SignalCube` | solo pocket cube from a fixed scramble, turns like `R`, `U2`, `F'` |
 | `masts` | The Four Masts | G432 `FourMasts` | solo Hanoi, 4 sails on 4 masts, moves like `1,4` |
 | `crawler` | The Deck Crawler | G409 `DeckCrawler` | Langton's crab on a 21x21 deck, 300 steps; `1`/`10`/`100`/`back` |
+| `hoards` | The Two Hoards | G354 `TwoHoards` | Wythoff, hoards 5 and 9 (up to 30 each); `1,k`, `2,k` or `3,k` for both |
+| `skittles` | The Skittle Row | G411 `SkittleRow` | Kayles, rows 3, 5, 7 (up to 40 skittles); `row,spot,count` with count 1 or 2 |
+| `galley` | The Galley Stack | G428 `GalleyStack` | solo pancake flips, 6 plates (2 to 8); type `k` to flip the top k |
 
 The cabinet plays seat 2 itself using each piece's own exact solver, so these default boards are
 kept small enough for perfect play.
@@ -60,3 +63,5 @@ ark's mess deck. Finishing any game completes quest `q_ark_cabinet` (`ArkCabinet
 2. Register it: `cabinet.register("id", "Title", "one-line pitch", MyGame::new)`, or add a line
    to `ArkCabinet.standard()`.
 3. Add scripted-move tests for legal moves, an illegal move, a win and the hint.
+
+`ArkCabinetAutoplayTest` plays every slot cabinet-vs-cabinet to its end and checks Two Hoards and Skittle Row perfect play against brute-force game trees.
