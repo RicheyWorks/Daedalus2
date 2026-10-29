@@ -44,5 +44,9 @@
  * <p>G539 Water Trough Fill ({@link WaterTroughFill}, quest {@code q_troughs_full}): pump the required buckets from
  * the well to the trough through pipes with capacities and per-bucket costs at least cost (min-cost flow); exact
  * successive shortest paths on the residual network vs. cheapest-path-without-undo, which runs dry or pays more.
+ *
+ * <p>G540 Lantern Posts ({@link LanternPosts}, quest {@code q_paths_lit}): light every path of the tree-shaped yard
+ * with lanterns at junctions, each with its own price and lighting at most {@code reach} adjacent paths (capacitated
+ * weighted vertex cover on a tree); exact tree DP vs. busiest-junction-per-coin, which pays more on most seeds.
  */
 package com.daedalus.world.stable;
