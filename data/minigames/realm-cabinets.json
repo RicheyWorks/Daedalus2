@@ -1120,7 +1120,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -13.75,
+            -15.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1134,7 +1134,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -11.25,
+            -12.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1148,7 +1148,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -8.75,
+            -10.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1162,7 +1162,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -6.25,
+            -7.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1176,7 +1176,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -3.75,
+            -5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1190,7 +1190,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -1.25,
+            -2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1204,7 +1204,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1220,7 +1220,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            3.75,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1236,7 +1236,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            6.25,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1252,7 +1252,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            8.75,
+            7.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1268,7 +1268,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            11.25,
+            10.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1284,7 +1284,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            13.75,
+            12.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1292,6 +1292,22 @@
           "difficulty": "normal",
           "module": "tools/minigames/spiritkite.py",
           "start": "spiritkite.start(630418058, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
+        },
+        {
+          "game": "shadewatch",
+          "title": "Shadewatch Vigil",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            15.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1433643621,
+          "difficulty": "normal",
+          "module": "tools/minigames/shadewatch.py",
+          "start": "shadewatch.start(1433643621, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]

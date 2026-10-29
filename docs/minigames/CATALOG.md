@@ -155,3 +155,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `shardfall` | Shardfall Gamble | `tools/minigames/shardfall.py` | HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot. Reach the target by the last round. |
 | `prismcairn` | Prismcairn Duel | `tools/minigames/prismcairn.py` | HOW Take 1 or more shards (up to the limit) from one cairn each turn; the Warden replies. Lift the last shard to win the round; best of three. |
 | `spiritkite` | Spiritkite Weave | `tools/minigames/spiritkite.py` | HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out. |
+| `shadewatch` | Shadewatch Vigil | `tools/minigames/shadewatch.py` | HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends. |

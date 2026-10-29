@@ -759,6 +759,23 @@
       "tests": [
         "test_spiritkite.py"
       ]
+    },
+    {
+      "id": "shadewatch",
+      "title": "Shadewatch Vigil",
+      "summary": "hold the Prismheart's lanes against creeping shades with shard flares and a nova.",
+      "how_to_play": "HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends.",
+      "module": "tools/minigames/shadewatch.py",
+      "start": "shadewatch.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_shadewatch.py"
+      ]
     }
   ]
 }
