@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * Cairnwell (DaedalusDesktopCairnwellCore.h, branch cursor/cairnwell-20261026 commit 5420cb03) re-played tick by
- * tick. Source constants: option 0 (mapped to "normal") is 6 columns, 8 rows, auto-drop every 16 ticks; option 1
- * (the practice well, mapped to "easy") is 4 columns, 6 rows, every 28 ticks. The source ships no third option, so
- * "hard" is reported as missing. Stones spawn in column (seed + locks) mod cols; a full layer sinks; a stone that
+ * tick. Source constants: option 1 (easy) is 4 columns, 4 rows, auto-drop every 28 ticks; option 0
+ * (normal) is 6 columns, 7 rows, every 8 ticks; option 2 (hard) is 6 columns, 5 rows, every 8 ticks.
+ * Stones spawn in column (seed + locks) mod cols; a full layer sinks; a stone that
  * would spawn on a full column loses. Score is locks x 10 + layers x 100.
  *
  * <p>The game is endless, so a session counts as won when {@code targetLayers} layers sink before the well fills.
@@ -20,8 +20,8 @@ import java.util.List;
 public final class CairnwellBalance implements BalanceGame {
 
     static final List<String> NAMES = List.of("easy", "normal", "hard");
-    /** {cols, rows, dropEvery} for "easy" (option 1) and "normal" (option 0). */
-    private static final int[][] CONFIG = {{4, 6, 28}, {6, 8, 16}};
+    /** {cols, rows, dropEvery} for easy, normal, and hard. */
+    private static final int[][] CONFIG = {{4, 4, 28}, {6, 7, 8}, {6, 5, 8}};
     static final int LOCK_POINTS = 10;
     static final int LAYER_POINTS = 100;
 
@@ -54,7 +54,7 @@ public final class CairnwellBalance implements BalanceGame {
 
     @Override
     public boolean supports(String difficulty) {
-        return "easy".equals(difficulty) || "normal".equals(difficulty);
+        return NAMES.contains(difficulty);
     }
 
     @Override
@@ -62,15 +62,12 @@ public final class CairnwellBalance implements BalanceGame {
         if (!supports(difficulty)) {
             throw new IllegalArgumentException("Cairnwell ships no '" + difficulty + "' well");
         }
-        return playConfig(CONFIG["easy".equals(difficulty) ? 0 : 1], rng);
+        return playConfig(CONFIG[NAMES.indexOf(difficulty)], rng);
     }
 
-    /** Shipped {cols, rows, dropEvery} for a difficulty (a copy), or null if the source ships no such well. */
+    /** Shipped {cols, rows, dropEvery} for a difficulty (a copy). */
     static int[] shipped(String difficulty) {
-        if ("easy".equals(difficulty)) {
-            return CONFIG[0].clone();
-        }
-        return "normal".equals(difficulty) ? CONFIG[1].clone() : null;
+        return CONFIG[NAMES.indexOf(difficulty)].clone();
     }
 
     /** Plays one session with explicit {cols, rows, dropEvery}; used by {@link BalanceTuner}. */

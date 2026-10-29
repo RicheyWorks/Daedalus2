@@ -102,7 +102,7 @@ class BalanceTunerTest {
         }
         Suggestion hard = all.get(5);
         assertThat(hard.game()).isEqualTo("cairnwell");
-        assertThat(hard.shipped()).isNull();
+        assertThat(hard.shipped()).containsExactly(6, 5, 8);
     }
 
     @Test

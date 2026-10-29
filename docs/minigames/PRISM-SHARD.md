@@ -9,9 +9,9 @@ Game over: every facet is full (the sphere shatters, lost) or the shard pouch is
 
 | difficulty | facets | hues | shards |
 |---|---|---|---|
-| easy | 12 | 3 | 60 |
-| normal (default) | 10 | 4 | 50 |
-| hard | 8 | 5 | 40 |
+| easy | 14 | 3 | 60 |
+| normal (default) | 10 | 3 | 50 |
+| hard | 8 | 3 | 40 |
 
 API: `g = prism_shard.start(seed, "normal")`, `g.place(facet)`, `g.status()` (score, over, won, ring, spirits).
 

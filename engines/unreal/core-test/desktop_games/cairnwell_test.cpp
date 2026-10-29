@@ -20,7 +20,8 @@ void FillColumn(CairnwellGame& G,int Column) {
 
 int main() {
     CairnwellGame Fresh;Fresh.Reset(730);
-    Check(Fresh.ColumnCount()==6 && Fresh.FallingColumn()==730%6,"a fresh well has six columns");
+    Check(Fresh.ColumnCount()==6 && Fresh.RowCount()==7 && Fresh.DropEveryCount()==8
+        && Fresh.FallingColumn()==730%6,"a fresh well is the normal setting");
     Check(!Fresh.GetStatus().Over && Fresh.GetStatus().Score==0 && Fresh.GetStatus().Note.find("HINT")==std::string::npos,"opening score is clear and the hint stays off the note");
     const int Start=Fresh.FallingColumn();
     Press(Fresh,-1);
@@ -30,8 +31,12 @@ int main() {
     Drop(Fresh);
     Check(Fresh.StackHeight(Start-1)==1 && Fresh.GetStatus().Score==10,"a drop locks one stone");
     CairnwellGame Practice;
-    Check(Practice.SetOption(1,730) && Practice.GetOption()==1 && Practice.ColumnCount()==4,"practice opens four columns");
-    Check(!Practice.SetOption(2,730) && Practice.GetOption()==1,"an out-of-range well option is refused");
+    Check(Practice.SetOption(1,730) && Practice.GetOption()==1 && Practice.ColumnCount()==4
+        && Practice.RowCount()==4 && Practice.DropEveryCount()==28,"practice is four columns, four rows, a slow fall");
+    Check(Practice.SetOption(2,730) && Practice.GetOption()==2 && Practice.ColumnCount()==6
+        && Practice.RowCount()==5 && Practice.DropEveryCount()==8,"hard is six columns, five rows, a fast fall");
+    Check(!Practice.SetOption(3,730) && Practice.GetOption()==2,"an out-of-range well option is refused");
+    Practice.SetOption(1,730);
     for(int C=0;C<4;++C) FillColumn(Practice,C);
     Check(Practice.LayerCount()==1 && Practice.StackHeight(0)==0 && Practice.GetStatus().Score==140,"one stone in every column sinks a layer");
     CairnwellGame Pile;Pile.Reset(730);
