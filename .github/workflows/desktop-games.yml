@@ -36,7 +36,7 @@ jobs:
       # (450-595 s on the runs that needed reruns); cache objects per compiler.
       - name: Compiler cache (Linux)
         if: runner.os == 'Linux'
-        uses: hendrikmuhs/ccache-action@v1.2
+        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2
         with:
           key: desktop-games-${{ matrix.compiler }}
           max-size: 500M
