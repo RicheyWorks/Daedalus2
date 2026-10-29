@@ -195,6 +195,8 @@ class WebUiPaintPinTest {
                     .contains("g.fillRect(x + w - 1, y + 1, 1, 1)")
                     .contains("g.fillRect(x + 1, y, span, 1)")
                     .contains("g.fillRect(x + 1, y + 2, span, 1)")
+                    .contains("if (h > 4)")
+                    .contains("g.fillRect(x + 1, y + 3, span, 1)")
                     .contains("paintWallHi(g, geom, r, col, mixHex(hi, COLORS.unseen, 0.28 * edge), wallInk)")
                     .contains("paintWallHi(g, geom, r, col, mixHex(lampHi, COLORS.unseen, 0.28 * edge), wallInk)");
         }

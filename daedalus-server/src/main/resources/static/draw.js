@@ -93,6 +93,10 @@
     g.fillStyle = corner;
     g.fillRect(x, y + 2, 1, 1);
     g.fillRect(x + w - 1, y + 2, 1, 1);
+    if (h > 4) {
+      g.fillStyle = corner;
+      g.fillRect(x + 1, y + 3, span, 1);
+    }
   }
 
   function paverInk(rows, cols, r, col, tile, fogLamp) {
