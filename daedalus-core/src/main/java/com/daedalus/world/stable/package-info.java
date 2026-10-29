@@ -32,5 +32,9 @@
  * <p>G532 Hay Wagon Round ({@link HayWagonRound}, quest {@code q_hay_on_time}): feed every stall inside its feeding
  * window and get the hay wagon home earliest (travelling salesman with time windows, waiting allowed); exact
  * Held-Karp over (stalls fed, last stall) vs. nearest-open-stall, which a stall by the barn strands.
+ *
+ * <p>G535 Farrier's Two Anvils ({@link FarriersTwoAnvils}, quest {@code q_two_anvils}): shoeing jobs with
+ * must-finish-first links on two identical anvils, finish the last job earliest (P2|prec|Cmax); exact memoised event
+ * search, which may idle an anvil on purpose, vs. Graham list scheduling in job order.
  */
 package com.daedalus.world.stable;
