@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick mid joint.**
+  The grout in the
+  middle of a brick
+  leans a quarter
+  toward that clay.
+  It stays darker
+  than the clay.
+
 - **Explore brick mid course.**
   The clay in the
   middle of a brick
