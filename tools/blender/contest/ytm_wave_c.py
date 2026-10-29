@@ -1,4 +1,4 @@
-﻿# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: MIT
 """youtube-master YTM wave c (G204..G245, asks 54746..54989, 2026-10-26 19:03-20:57 PT), blender-kit/v1, G66 island palette.
 Built from reusable part helpers (table, stool, board, boat, stall, pole) shared with backlog_20261026.asset/M. Every asset is
 origin bottom-centre, Blender front -Y (place yaw -90), sockets for the Daedalus hook, UCX where it is walk-into furniture.
@@ -60,7 +60,13 @@ def boat_parts(L, W, mast=0.0, sail_slot=2):
         P.append(K.box("Side%d" % s, (0.04, L - 0.3, 0.35), (s * (W / 2 - 0.08), 0, 0.28), 0, rot=(0, s * -18, 0)))
         P.append(K.box("Gunwale%d" % s, (0.06, L - 0.3, 0.04), (s * (W / 2 - 0.02), 0, 0.46), 1))
     if mast:
-        P += [K.cyl("Mast", "z", 0.05, 0.04, mast, (0, -L * 0.15, mast / 2 + 0.1), 0, 8), K.slab("Sail", [(0, 0), (0, mast * 0.8), (L * 0.35, 0)], 0.01, (0, -L * 0.15 + 0.05, 0.4), sail_slot, rot=(90, 0, 90))]
+        # fix 2026-10-29: real rig. Mast stepped on the keel at y = -0.15 L, boom at 0.95 m running aft, triangular mainsail
+        # (luff on the mast, foot on the boom; slab rot (90,0,90) maps outline x -> +Y aft, y -> +Z up), small jib to the stem.
+        my, boom_z, foot = -L * 0.15, 0.95, L * 0.48
+        P += [K.cyl("Mast", "z", 0.06, 0.04, mast, (0, my, mast / 2 + 0.1), 0, 8), K.cyl("Boom", "y", 0.035, 0.03, foot + 0.1, (0, my + foot / 2 + 0.05, boom_z), 0, 6),
+              K.cyl("Gaff", "z", 0.02, 0.02, 0.15, (0, my, mast + 0.12), 0, 6),
+              K.slab("Sail", [(0.0, 0.0), (foot, 0.0), (foot * 0.15, mast - boom_z - 0.15), (0.0, mast - boom_z - 0.1)], 0.012, (0, my + 0.07, boom_z + 0.04), sail_slot, rot=(90, 0, 90)),
+              K.slab("Jib", [(0.0, 0.0), (L / 2 + my - 0.25, 0.0), (0.0, (mast - 0.6) * 0.75)], 0.01, (0, my - 0.07, 0.6), sail_slot, rot=(90, 0, -90))]
     return P
 
 
@@ -160,7 +166,7 @@ def g219():
 def g223():
     g = "G223"; out = [board("Prop_YTM_FareBoard", g, 1.0, 0.8, 0.6, 4, "Fare")]
     a = "Prop_YTM_Ferry"; P = boat_parts(5.0, 2.0, mast=3.2) + [K.box("Bench%d" % i, (1.6, 0.25, 0.05), (0, -0.8 + 1.0 * i, 0.38), 1) for i in range(3)]
-    out.append(asset(a, *Y(g), P, [M(a, 0, "hull (G66 timber)", TIMBER), M(a, 1, "benches (G66 sign board)", SIGN), M(a, 2, "sail (G66 cloth)", CLOTH4[1])],
+    out.append(asset(a, *Y(g), P, [M(a, 0, "hull (G66 timber)", TIMBER), M(a, 1, "benches (G66 sign board)", SIGN), M(a, 2, "sail canvas (G66 linen; stripe/colour via MI)", "E8DEC6", 0.9)],
                      [K.socket("Seat_%d" % i, (0, -0.8 + 1.0 * i, 0.41)) for i in range(3)] + [K.socket("Helm", (0, 2.2, 0.4)), K.socket("Mooring_Bow", (0, -2.5, 0.45)), K.socket("Mooring_Stern", (0, 2.4, 0.45))],
                      [K.ucx_box(a, 0, (2.0, 5.0, 0.5), (0, 0, 0.25))], "5 x 2 m sail ferry, 3.2 m mast"))
     b = "Prop_YTM_InnDock"; P = [K.box("Deck", (2.0, 4.0, 0.08), (0, 0, 0.56), 0)]

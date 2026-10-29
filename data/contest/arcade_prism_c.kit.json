@@ -1429,72 +1429,206 @@
        ]
       },
       {
-       "name": "Wing-1",
+       "name": "Fore-1",
        "shape": "slab",
        "outline": [
         [
-         0,
-         0
+         -0.0,
+         0.0
         ],
         [
-         0.16,
-         -0.04
+         -0.07,
+         0.02
         ],
         [
-         0.18,
-         0.08
+         -0.14,
+         0.02
         ],
         [
-         0.04,
-         0.1
+         -0.18,
+         -0.02
+        ],
+        [
+         -0.17,
+         -0.08
+        ],
+        [
+         -0.12,
+         -0.11
+        ],
+        [
+         -0.05,
+         -0.09
+        ],
+        [
+         -0.0,
+         -0.03
         ]
        ],
-       "thickness": 0.02,
+       "thickness": 0.035,
        "centre": [
-        -0.04,
-        0,
-        0.12
+        -0.045,
+        -0.015,
+        0.13
        ],
        "slot": 1,
-       "segments": 4,
+       "segments": 8,
        "rot": [
         0,
-        0,
-        180
+        18,
+        0
        ]
       },
       {
-       "name": "Wing1",
+       "name": "Hind-1",
        "shape": "slab",
        "outline": [
         [
-         0,
-         0
+         -0.0,
+         0.04
         ],
         [
-         0.16,
-         -0.04
-        ],
-        [
-         0.18,
+         -0.015,
          0.08
         ],
         [
-         0.04,
-         0.1
+         -0.05,
+         0.11
+        ],
+        [
+         -0.1,
+         0.11
+        ],
+        [
+         -0.13,
+         0.07
+        ],
+        [
+         -0.11,
+         0.02
+        ],
+        [
+         -0.05,
+         0.0
+        ],
+        [
+         -0.0,
+         0.0
         ]
        ],
-       "thickness": 0.02,
+       "thickness": 0.03,
        "centre": [
-        0.04,
-        0,
-        0.12
+        -0.04,
+        0.03,
+        0.105
        ],
        "slot": 1,
-       "segments": 4,
+       "segments": 8,
        "rot": [
         0,
+        8,
+        0
+       ]
+      },
+      {
+       "name": "Fore1",
+       "shape": "slab",
+       "outline": [
+        [
+         0.0,
+         -0.03
+        ],
+        [
+         0.05,
+         -0.09
+        ],
+        [
+         0.12,
+         -0.11
+        ],
+        [
+         0.17,
+         -0.08
+        ],
+        [
+         0.18,
+         -0.02
+        ],
+        [
+         0.14,
+         0.02
+        ],
+        [
+         0.07,
+         0.02
+        ],
+        [
+         0.0,
+         0.0
+        ]
+       ],
+       "thickness": 0.035,
+       "centre": [
+        0.045,
+        -0.015,
+        0.13
+       ],
+       "slot": 1,
+       "segments": 8,
+       "rot": [
         0,
+        -18,
+        0
+       ]
+      },
+      {
+       "name": "Hind1",
+       "shape": "slab",
+       "outline": [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         0.05,
+         0.0
+        ],
+        [
+         0.11,
+         0.02
+        ],
+        [
+         0.13,
+         0.07
+        ],
+        [
+         0.1,
+         0.11
+        ],
+        [
+         0.05,
+         0.11
+        ],
+        [
+         0.015,
+         0.08
+        ],
+        [
+         0.0,
+         0.04
+        ]
+       ],
+       "thickness": 0.03,
+       "centre": [
+        0.04,
+        0.03,
+        0.105
+       ],
+       "slot": 1,
+       "segments": 8,
+       "rot": [
+        0,
+        -8,
         0
        ]
       }
@@ -1563,26 +1697,26 @@
    "collision": [],
    "nanite": true,
    "predicted": {
-    "triangles": 176,
-    "lod1_triangles": 176,
+    "triangles": 264,
+    "lod1_triangles": 264,
     "lod1_ratio": 1.0,
     "objects": {
-     "Prop_Arcade_Plush_Glimmermoth": 176
+     "Prop_Arcade_Plush_Glimmermoth": 264
     },
     "bounds_min": [
-     -0.22,
+     -0.2216,
      -0.125,
      0.04
     ],
     "bounds_max": [
-     0.22,
-     0.1,
-     0.175
+     0.2216,
+     0.14,
+     0.2023
     ],
     "dimensions": [
-     0.44,
-     0.225,
-     0.135
+     0.4432,
+     0.265,
+     0.1623
     ],
     "collision_tris": 0
    },
@@ -1601,7 +1735,7 @@
     "export_extras": true,
     "export_animations": false
    },
-   "recipe_sha256": "6c9f26e9b110d5deea267387c8b974a203b8da3f049df6d76ec94355873b9162"
+   "recipe_sha256": "bab71c10b29c9913bd5fb27406ea6783ab87633ea18f377d544e82a50f791f62"
   },
   {
    "asset": "Prop_Arcade_FloorTile_Starfield",
@@ -3358,95 +3492,189 @@
      "role": "mover",
      "parts": [
       {
-       "name": "Cable",
-       "shape": "cyl",
-       "axis": "z",
-       "r1": 0.004,
-       "r2": 0.004,
-       "length": 0.3,
+       "name": "Trolley",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.1,
+        0.05
+       ],
        "centre": [
         0,
         0,
-        0.15
+        1.815
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Cable",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.005,
+       "r2": 0.005,
+       "length": 0.32,
+       "centre": [
+        0,
+        0,
+        1.63
        ],
        "slot": 1,
        "segments": 4
       },
       {
-       "name": "Hub",
+       "name": "Motor",
        "shape": "cyl",
        "axis": "z",
-       "r1": 0.04,
-       "r2": 0.03,
+       "r1": 0.05,
+       "r2": 0.05,
        "length": 0.06,
        "centre": [
         0,
         0,
-        -0.03
+        1.49
        ],
-       "slot": 1,
-       "segments": 8
+       "slot": 3,
+       "segments": 10
       },
       {
-       "name": "Prong0",
+       "name": "Hub",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.03,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        1.44
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "ProngUp0",
        "shape": "box",
        "size": [
-        0.012,
-        0.012,
-        0.14
+        0.014,
+        0.014,
+        0.1
        ],
        "centre": [
-        0.04,
+        0.07,
         0.0,
-        -0.12
+        1.39
        ],
        "slot": 1,
        "bevel": true,
        "rot": [
-        0.0,
-        -22.9183,
+        -0.0,
+        34.3775,
         0
        ]
       },
       {
-       "name": "Prong1",
+       "name": "ProngTip0",
        "shape": "box",
        "size": [
-        0.012,
-        0.012,
-        0.14
+        0.014,
+        0.014,
+        0.09
        ],
        "centre": [
-        -0.02,
-        0.03464,
-        -0.12
+        0.085,
+        0.0,
+        1.305
        ],
        "slot": 1,
        "bevel": true,
        "rot": [
-        19.8478,
-        11.4592,
+        0.0,
+        -20.0535,
         0
        ]
       },
       {
-       "name": "Prong2",
+       "name": "ProngUp1",
        "shape": "box",
        "size": [
-        0.012,
-        0.012,
-        0.14
+        0.014,
+        0.014,
+        0.1
        ],
        "centre": [
-        -0.02,
-        -0.03464,
-        -0.12
+        -0.035,
+        0.06062,
+        1.39
        ],
        "slot": 1,
        "bevel": true,
        "rot": [
-        -19.8478,
-        11.4592,
+        -29.7718,
+        -17.1887,
+        0
+       ]
+      },
+      {
+       "name": "ProngTip1",
+       "shape": "box",
+       "size": [
+        0.014,
+        0.014,
+        0.09
+       ],
+       "centre": [
+        -0.0425,
+        0.07361,
+        1.305
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        17.3669,
+        10.0268,
+        0
+       ]
+      },
+      {
+       "name": "ProngUp2",
+       "shape": "box",
+       "size": [
+        0.014,
+        0.014,
+        0.1
+       ],
+       "centre": [
+        -0.035,
+        -0.06062,
+        1.39
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        29.7718,
+        -17.1887,
+        0
+       ]
+      },
+      {
+       "name": "ProngTip2",
+       "shape": "box",
+       "size": [
+        0.014,
+        0.014,
+        0.09
+       ],
+       "centre": [
+        -0.0425,
+        -0.07361,
+        1.305
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -17.3669,
+        10.0268,
         0
        ]
       }
@@ -3780,17 +4008,17 @@
    ],
    "nanite": true,
    "predicted": {
-    "triangles": 668,
-    "lod1_triangles": 668,
+    "triangles": 888,
+    "lod1_triangles": 888,
     "lod1_ratio": 1.0,
     "objects": {
      "Prop_Arcade_Cab_ClawCrane": 496,
-     "Prop_Arcade_Cab_ClawCrane_Claw": 172
+     "Prop_Arcade_Cab_ClawCrane_Claw": 392
     },
     "bounds_min": [
      -0.45,
      -0.63,
-     -0.187
+     0.0
     ],
     "bounds_max": [
      0.45,
@@ -3800,7 +4028,7 @@
     "dimensions": [
      0.9,
      1.08,
-     2.387
+     2.2
     ],
     "collision_tris": 12
    },
@@ -3819,7 +4047,7 @@
     "export_extras": true,
     "export_animations": false
    },
-   "recipe_sha256": "805f6daaf5772ef822bd85fbc0f8e64a91464039e77f3b3cbd5992d7d11379e6"
+   "recipe_sha256": "4b29e5c5825dc02c934128245ea68c520ee26f708ce0f491633b8bda5c381e16"
   }
  ]
 }

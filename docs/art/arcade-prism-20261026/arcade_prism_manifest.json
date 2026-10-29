@@ -475,11 +475,11 @@
    },
    {
     "name": "Prop_Arcade_Plush_Glimmermoth",
-    "tris": 176,
+    "tris": 264,
     "size_m": [
-     0.44,
-     0.225,
-     0.135
+     0.4432,
+     0.265,
+     0.1623
     ],
     "sockets": [
      "SOCKET_Shelf",
@@ -547,11 +547,11 @@
    },
    {
     "name": "Prop_Arcade_Cab_ClawCrane",
-    "tris": 668,
+    "tris": 888,
     "size_m": [
      0.9,
      1.08,
-     2.387
+     2.2
     ],
     "sockets": [
      "SOCKET_Floor",
@@ -583,6 +583,11 @@
    "floor": "FloorTile SOCKET_TileE/TileN step 2 m, any variant mix",
    "token_machine": "SOCKET_Floor in an arcade_plaza slot; CoinIn/TokenOut for interaction",
    "claw": "child node Prop_Arcade_Cab_ClawCrane_Claw driven from SOCKET_ClawRail; prizes spawn at SOCKET_PrizePit_k, drop via SOCKET_PrizeChute -> SOCKET_PrizeOut"
+  },
+  "fixes_20261029": {
+   "Prop_Arcade_Cab_ClawCrane": "claw node now hangs from SOCKET_ClawRail (z 1.84) inside the glass volume: trolley, 0.32 m cable, motor, hub, 3 two-segment prongs; check render preview_sheet_full.png / Prop_Arcade_Cab_ClawCrane_glassless_check.png",
+   "Prop_Arcade_Plush_Glimmermoth": "wings are 3-3.5 cm thick rounded fore/hind pads with mirrored dihedral (18/8 deg), 264 tris; SOCKET_Shelf/Hand/Grab unchanged",
+   "Prop_YTM_Ferry (G223, data/contest/ytm_c_g223.kit.json)": "3.2 m mast, boom, gaff, 2.4 m-foot mainsail + jib, canvas sail material; SOCKET_Seat_0..2/Helm/Mooring_* unchanged"
   }
  }
 }

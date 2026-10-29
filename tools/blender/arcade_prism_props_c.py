@@ -1,4 +1,4 @@
-﻿# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: MIT
 """Prismheart arcade batch c (blender-team, 2026-10-26c, Richey "next" via buffffff). Same conventions as arcade_prism_props_b.py.
   Prop_Arcade_PrizeCounter     glass-front counter + back shelf: SOCKET_Prize_0..8 (shelf), SOCKET_Clerk, SOCKET_Customer, SOCKET_Till
   Prop_Arcade_Plush_Shardling / _Waystoad / _Glimmermoth   low-poly plush prizes (original critters), SOCKET_Shelf (base), SOCKET_Hand
@@ -50,8 +50,14 @@ def plush(kind):
         mats = [("plush moss green", "7AB060", 0.95), ("gold rune", GOLD, 0.6), ("eyes", BLACK, 0.4)]
     else:                         # Glimmermoth
         P = [ball("Body", (0, 0, 0.1), 0.06, 0), ball("Head", (0, -0.08, 0.13), 0.045, 0)]
+        # fix 2026-10-29: puffy wings - each wing is a fore + hind pad (rounded 8-point outline, 3.5 cm thick), raised in a dihedral
+        # (fore 18 deg, hind 8 deg) so they curve up and away from the body (left side = outline mirrored in X, dihedral mirrored).
+        fore = [(0.0, -0.03), (0.05, -0.09), (0.12, -0.11), (0.17, -0.08), (0.18, -0.02), (0.14, 0.02), (0.07, 0.02), (0.0, 0.0)]
+        hind = [(0.0, 0.0), (0.05, 0.0), (0.11, 0.02), (0.13, 0.07), (0.1, 0.11), (0.05, 0.11), (0.015, 0.08), (0.0, 0.04)]
         for s in (-1, 1):
-            P.append(K.slab("Wing%d" % s, [(0, 0), (0.16, -0.04), (0.18, 0.08), (0.04, 0.1)], 0.02, (s * 0.04, 0, 0.12), 1, rot=(0, 0, 0 if s > 0 else 180)))
+            mir = lambda o: [(s * x, y) for x, y in (o if s > 0 else o[::-1])]          # true mirror in X (keeps fore at -Y on both sides)
+            P.append(K.slab("Fore%d" % s, mir(fore), 0.035, (s * 0.045, -0.015, 0.13), 1, rot=(0, -s * 18, 0)))
+            P.append(K.slab("Hind%d" % s, mir(hind), 0.03, (s * 0.04, 0.03, 0.105), 1, rot=(0, -s * 8, 0)))
         mats = [("plush cream", "F0E6D0", 0.95), ("glimmer wings", "F2C0E8", 0.8), ("eyes", BLACK, 0.4)]
     return A(a, P, mats, [K.socket("Shelf", (0, 0, 0)), K.socket("Hand", (0, 0, 0.12)), K.socket("Grab", (0, 0, 0.2))], [], "~25 cm plush prize")
 
@@ -96,9 +102,15 @@ def claw_cab():
         for y in (-D / 2 + 0.03, D / 2 - 0.03): body.append(K.box("Pillar%+.2f%+.2f" % (x, y), (0.05, 0.05, 1.0), (x, y, 1.4), 1))
     body += [K.box("GlassF", (W - 0.06, 0.01, 0.98), (0, -D / 2 + 0.01, 1.4), 2, bevel=False), K.box("Pit", (W - 0.1, D - 0.1, 0.04), (0, 0, 0.92), 0),
              K.box("Chute", (0.25, 0.25, 0.3), (0.28, -0.28, 1.05), 1), K.box("Panel", (W, 0.2, 0.05), (0, -D / 2 - 0.08, 0.95), 1), K.box("Rail", (W - 0.1, 0.04, 0.04), (0, 0, 1.86), 1)]
-    claw = [K.cyl("Cable", "z", 0.004, 0.004, 0.3, (0, 0, 0.15), 1, 4), K.cyl("Hub", "z", 0.04, 0.03, 0.06, (0, 0, -0.03), 1, 8)]
+    # fix 2026-10-29: claw parts are in MODEL space (build_kit subtracts the node pivot), hung from the rail at z = RZ inside the glass
+    # volume (pit top 0.94, roof underside 1.9): trolley on the rail, 0.32 m cable, hub, three curved 2-segment prongs (open pose).
+    RZ = 1.84; hub = RZ - 0.4
+    claw = [K.box("Trolley", (0.1, 0.1, 0.05), (0, 0, RZ - 0.025), 1), K.cyl("Cable", "z", 0.005, 0.005, 0.32, (0, 0, RZ - 0.05 - 0.16), 1, 4),
+            K.cyl("Motor", "z", 0.05, 0.05, 0.06, (0, 0, hub + 0.05), 3, 10), K.cyl("Hub", "z", 0.045, 0.03, 0.05, (0, 0, hub), 1, 10)]
     for k in range(3):
-        an = k * 2 * math.pi / 3; claw.append(K.box("Prong%d" % k, (0.012, 0.012, 0.14), (0.04 * math.cos(an), 0.04 * math.sin(an), -0.12), 1, rot=(math.degrees(0.4 * math.sin(an)), -math.degrees(0.4 * math.cos(an)), 0)))
+        an = k * 2 * math.pi / 3; c, s = math.cos(an), math.sin(an)
+        claw.append(K.box("ProngUp%d" % k, (0.014, 0.014, 0.1), (0.07 * c, 0.07 * s, hub - 0.05), 1, rot=(math.degrees(-0.6 * s), math.degrees(0.6 * c), 0)))
+        claw.append(K.box("ProngTip%d" % k, (0.014, 0.014, 0.09), (0.085 * c, 0.085 * s, hub - 0.135), 1, rot=(math.degrees(0.35 * s), math.degrees(-0.35 * c), 0)))
     S = [K.socket("Floor", (0, 0, 0)), K.socket("Player1", (0, -D / 2 - 0.6, 0)), K.socket("CoinSlot", (0.3, -D / 2 - 0.01, 0.6)), K.socket("ClawRail", (0, 0, 1.84)),
          K.socket("Claw", (0, 0, 1.84), parent="Prop_Arcade_Cab_ClawCrane_Claw"), K.socket("PrizeChute", (0.28, -0.28, 1.2)), K.socket("PrizeOut", (0.28, -D / 2 - 0.02, 0.3)), K.socket("Marquee", (0, -D / 2 - 0.05, 2.05)),
          K.socket("Stick", (-0.15, -D / 2 - 0.08, 0.98)), K.socket("Button", (0.15, -D / 2 - 0.08, 0.98))] + [K.socket("PrizePit_%d" % i, (-0.25 + 0.2 * (i % 3), -0.05 + 0.25 * (i // 3), 0.94)) for i in range(6)]
