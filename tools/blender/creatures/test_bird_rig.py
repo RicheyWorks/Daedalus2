@@ -111,5 +111,11 @@ bk = [q for p in ow["parts"] if p["name"].startswith("Beak") for q in K.part_poi
 hd = [q for p in ow["parts"] if p["name"] == "Head" for q in K.part_points(p)]
 t("owl beak short (< 0.06 L past the face)", min(q[1] for q in hd) - min(q[1] for q in bk) < 0.06 * L8, (min(q[1] for q in hd), min(q[1] for q in bk)))
 t("owl has a facial disc (2 halves) and forward eyes", sum(p["name"].startswith("FaceDisc_") for p in ow["parts"]) == 2 and all(p["axis"] == "y" for p in ow["parts"] if p["name"].startswith("Eye_")))
+ot = R.recipe("Owl", 8, body={"proportions": "owl", "beak_style": "owl", "facial_disc": True, "ear_tufts": True, "feet": "talons"})
+tuf = [p for p in ot["parts"] if p["name"].startswith("EarTuft_")]
+t("ear tufts: 2, on the Head bone, above the head top", len(tuf) == 2 and all(p["bone"] == "Head" for p in tuf) and min(q[2] for p in tuf for q in K.part_points(p)) > {b["name"]: b for b in ot["bones"]}["Head"]["head"][2])
+t("ear tufts opt-in (absent by default)", not any(p["name"].startswith("EarTuft_") for p in ow["parts"]))
+for nm_, bd_ in (("talons", {"feet": "talons"}), ("perch talons", {"feet": "talons", "proportions": "raptor", "posture": "perch"}), ("webbed", {})):
+    t("base: %s bird sits exactly on z=0 (nothing below the ground)" % nm_, R.recipe("G", 3, body=bd_)["predicted"]["bounds_min"][2] >= 0.0, R.recipe("G", 3, body=bd_)["predicted"]["bounds_min"])
 print("%d/%d" % (sum(res), len(res)))
 sys.exit(0 if all(res) else 1)
