@@ -24,6 +24,13 @@ import java.util.function.Predicate;
 public final class ForgeCabinet {
 
     /** Keith numbers up to 200000, built once on first use of the Keith Kindling slot. */
+    private static final class VanEckList {
+        private static final int[] ECHOES = VanEckEchoes.sequence(64);
+
+        private VanEckList() {
+        }
+    }
+
     private static final class LychrelList {
         static final List<Long> CANDIDATES = Collections.unmodifiableList(LychrelLadles.candidatesUpTo(1000));
 
@@ -594,6 +601,23 @@ public final class ForgeCabinet {
                 });
         }, LychrelLadles.forgemasterLine(LychrelLadles.Grade.TURNED),
             LychrelLadles.forgemasterLine(LychrelLadles.Grade.SLIPPED)));
+        g.add(game("vaneck", "Van Eck Echoes", VanEckEchoes.QUEST_ID, r -> {
+            int n = 5 + r.nextInt(VanEckList.ECHOES.length - 6);
+            StringBuilder heard = new StringBuilder();
+            for (int i = 0; i <= n; i++) {
+                heard.append(i == 0 ? "" : ", ").append(VanEckList.ECHOES[i]);
+            }
+            int next = VanEckList.ECHOES[n + 1];
+            return new Puzzle("vaneck", "The anvil echoes " + heard + ". Each echo is how many strikes ago the"
+                + " previous ring was last heard (0 if new). What is the next echo?", Integer.toString(next), a -> {
+                    try {
+                        return VanEckEchoes.grade(n + 1, Integer.parseInt(a.trim())) == VanEckEchoes.Grade.TURNED;
+                    } catch (NumberFormatException ex) {
+                        return false;
+                    }
+                });
+        }, VanEckEchoes.forgemasterLine(VanEckEchoes.Grade.TURNED),
+            VanEckEchoes.forgemasterLine(VanEckEchoes.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
