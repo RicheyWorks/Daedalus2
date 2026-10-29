@@ -18,6 +18,7 @@ import struct
 import zipfile
 
 from .glb_payload import PayloadError, validate_glb
+from .archive_integrity import ArchiveIntegrityError, validate_archive_integrity
 
 MAX_PACKAGE_BYTES = 64 * 1024 * 1024
 MAX_EXPANDED_BYTES = 256 * 1024 * 1024
@@ -156,6 +157,12 @@ def read_snapshot(zip_path):
                 parts = name.split("/")
                 if any("/".join(parts[:count]) in seen for count in range(1, len(parts))):
                     raise PlanError("ZIP member file/directory prefix collision: " + name)
+            try:
+                validate_archive_integrity(archive, max_expanded_bytes=MAX_EXPANDED_BYTES,
+                                           max_member_bytes=MAX_EXPANDED_BYTES)
+            except ArchiveIntegrityError as error:
+                raise PlanError(str(error)) from error
+
             def read_member(name):
                 try:
                     # Reading to EOF evaluates CRC and decompressor errors;

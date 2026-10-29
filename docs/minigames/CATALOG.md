@@ -22,6 +22,7 @@ batched rebuild under the editor custodian.
 | `lanternwild` | Lanternwild Quest | 4 |
 | `gloam_latch` | Gloam Latch | 1 |
 | `reedbeat` | Reedbeat | 1 |
+| `cairnwell` | Cairnwell | 1 |
 
 ## How to play
 
@@ -43,28 +44,83 @@ One original line per game, read from `HowToLine()`.
 | `lanternwild` | HOW Explore, swing once, and recover the key. |
 | `gloam_latch` | HOW Flip a lamp and its neighbors until the board is dark. |
 | `reedbeat` | HOW Strike while the reed is bright. |
+| `cairnwell` | HOW Slide the falling stone and clear a full layer. |
+
+## Difficulty
+
+Every cabinet defaults to normal. Easy and hard are the other accepted names. The arcade host is unchanged.
+
+| id | default |
+|---|---|
+| `beacon_sweep` | normal |
+| `twinwake` | normal |
+| `dungeon` | normal |
+| `driftstone` | normal |
+| `football` | normal |
+| `glowtrail` | normal |
+| `riftwing` | normal |
+| `emberstep` | normal |
+| `star_shooter` | normal |
+| `dodge_ball` | normal |
+| `ironwake` | normal |
+| `lanternwild` | normal |
+| `gloam_latch` | normal |
+| `reedbeat` | normal |
+| `cairnwell` | normal |
+
+## Daedalus spots
+
+One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm already places that cabinet.
+
+| id | realm | spot |
+|---|---|---|
+| `beacon_sweep` | `island_oddsreaper` | Oddsreaper island, the puzzle row |
+| `twinwake` | `island_prometheus` | Prometheus island, the court row |
+| `dungeon` | `labyrinth` | Labyrinth, the lantern passage |
+| `driftstone` | `island_hephaestus` | Hephaestus island, the rock yard |
+| `football` | `island_prometheus` | Prometheus island, the pitch |
+| `glowtrail` | `gallery_city` | Gallery City, the chase court |
+| `riftwing` | `prismheart_realm` | Prismheart, the rift line |
+| `emberstep` | `island_hephaestus` | Hephaestus island, the terrace grid |
+| `star_shooter` | `orrery_reach` | Orrery Reach, the star lane |
+| `dodge_ball` | `island_prometheus` | Prometheus island, the courtyard |
+| `ironwake` | `island_hephaestus` | Hephaestus island, the iron route |
+| `lanternwild` | `portal_realm` | Portal realm, the wild path |
+| `gloam_latch` | `gallery_city` | Gallery City, the lamp corner |
+| `reedbeat` | `orrery_reach` | Orrery Reach, the reed bench |
+| `cairnwell` | `bricks` | Bricks, the stacking yard |
 
 ## Capabilities
 
 Read from each core's overrides, plus behavior proven by a portable test that declares
 `// catalog-capability: <cap>: <ids>` (for games that handle it inside `Step`). A blank cell is a gap.
 
-| id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | hints | scoreboard | action_cue | save_restore |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| `beacon_sweep` | yes |  | yes |  | yes |  | yes | yes | yes | yes | yes |
-| `twinwake` | yes |  | yes |  |  |  | yes | yes | yes | yes | yes |
-| `dungeon` | yes |  |  |  |  |  | yes | yes | yes | yes | yes |
-| `driftstone` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes |
-| `football` | yes |  | yes |  |  |  | yes |  | yes |  | yes |
-| `glowtrail` | yes |  | yes |  |  |  | yes |  | yes |  | yes |
-| `riftwing` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes |
-| `emberstep` | yes |  | yes | yes |  |  | yes |  | yes |  | yes |
-| `star_shooter` | yes |  |  |  |  | yes | yes |  | yes |  | yes |
-| `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes | yes | yes |
-| `ironwake` | yes | yes | yes | yes |  |  | yes |  | yes |  | yes |
-| `lanternwild` | yes |  |  |  |  |  | yes | yes | yes | yes | yes |
-| `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes | yes |  |
-| `reedbeat` | yes |  |  | yes |  |  | yes | yes | yes | yes |  |
+| id | options | title_screen | fresh_pad_replay | source_keys | pointer | core_pause | focus_freeze | hints | key_hint | contrast_mark | scoreboard | difficulty | action_cue | save_restore |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `beacon_sweep` | yes |  | yes |  | yes |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `twinwake` | yes |  | yes |  |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `dungeon` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `driftstone` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `football` | yes |  | yes |  |  |  | yes |  | yes | yes | yes | yes |  | yes |
+| `glowtrail` | yes |  | yes |  |  |  | yes |  | yes | yes | yes | yes |  | yes |
+| `riftwing` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `emberstep` | yes |  | yes | yes |  |  | yes |  | yes | yes | yes | yes |  | yes |
+| `star_shooter` | yes |  |  |  |  | yes | yes |  | yes | yes | yes | yes |  | yes |
+| `dodge_ball` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `ironwake` | yes | yes | yes | yes |  |  | yes |  | yes | yes | yes | yes |  | yes |
+| `lanternwild` | yes |  |  |  |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
+| `reedbeat` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
+| `cairnwell` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
+
+## Leaderboard feed
+
+The arcade host keeps one best score per game in `best_scores.dgs` (`DSB1`).
+`tools/minigames/leaderboard_feed.py` reads that text and writes a ranked feed
+(`daedalus.leaderboard.feed/v1` JSON, `DLB1` lines). It does not open a network
+connection and it does not post to Discord. Old ids merge through `CanonicalGameId`
+in `DaedalusDesktopSaveSlots.h`. Tie break: `score_desc_then_game_id_asc`. Rank rule: `ordinal`.
+Check: `python tools/minigames/leaderboard_feed.py --check`.
 
 ## Java cabinets
 
@@ -74,3 +130,11 @@ Hosted by `ADaedalusJavaArcade`; rules stay in the owning Java service. See `doc
 |---|---|---|---|---|
 | `sudoku` | SudokuPro | `EDaedalusJavaGame::Sudoku` | RicheyWorks/sudokupro | 2 |
 | `blackjack` | BlackJackPro | `EDaedalusJavaGame::Blackjack` | RicheyWorks/BlackJackPro | 1 |
+
+## Python minigames
+
+Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), hard.
+
+| id | title | module | how to play |
+|---|---|---|---|
+| `shardring` | Shardring Resonance | `tools/minigames/prism_shard.py` | HOW Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill. |

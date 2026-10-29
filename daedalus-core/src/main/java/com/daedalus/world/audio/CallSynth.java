@@ -40,6 +40,58 @@ public final class CallSynth {
                 round3(vib * 0.8), breath);
     }
 
+    /**
+     * Ear-safe view of a call: the fundamental drops by whole octaves until it is under
+     * {@link EarRule#MAX_FUNDAMENTAL_HZ}; every other field is kept, so the call keeps its shape and pitch class.
+     * Additive only: {@link #design} and the PCS 1 line it produces are unchanged.
+     */
+    public static CallSpec earSafe(CallSpec c) {
+        double hz = c.baseHz();
+        while (!EarRule.ok(hz)) {
+            hz = round3(hz / 2);
+        }
+        hz = EarRule.check(hz, "creature call");
+        if (hz == c.baseHz()) {
+            return c;
+        }
+        return new CallSpec(hz, c.sweep(), c.harmonics(), c.brightness(), c.pulses(), c.pulseMs(), c.gapMs(),
+                c.vibratoHz(), c.vibratoDepth(), c.breath());
+    }
+
+    /** {@link #design} followed by {@link #earSafe}: what the game should actually play. */
+    public static CallSpec designEarSafe(Species s, Genome g) {
+        return earSafe(design(s, g));
+    }
+
+    /**
+     * Highest instantaneous fundamental {@link #render} can reach for this call: the base times the largest upward
+     * glide ({@code 2^max(0, sweep)}, reached at the end of a pulse) times the vibrato crest ({@code 2^(depth/12)}).
+     * An upper bound, using exactly the parameters render uses.
+     */
+    public static double peakHz(CallSpec c) {
+        return c.baseHz() * Math.pow(2, Math.max(0, c.sweep()) + c.vibratoDepth() / 12.0);
+    }
+
+    /**
+     * {@link #earSafe} plus a peak check: the base keeps dropping by whole octaves until the audible peak
+     * ({@link #peakHz}) is also under the ear rule. Glide and vibrato are kept as they are, so the call keeps its
+     * shape and pitch class. Additive: {@link #design} and {@link #earSafe} are unchanged.
+     */
+    public static CallSpec earSafePeak(CallSpec c) {
+        CallSpec out = earSafe(c);
+        while (!EarRule.ok(peakHz(out))) {
+            out = new CallSpec(round3(out.baseHz() / 2), out.sweep(), out.harmonics(), out.brightness(), out.pulses(),
+                    out.pulseMs(), out.gapMs(), out.vibratoHz(), out.vibratoDepth(), out.breath());
+        }
+        EarRule.check(peakHz(out), "creature call peak");
+        return out;
+    }
+
+    /** {@link #design} followed by {@link #earSafePeak}: base and audible peak both under the ear rule. */
+    public static CallSpec designEarSafePeak(Species s, Genome g) {
+        return earSafePeak(design(s, g));
+    }
+
     /** Renders 16-bit mono PCM; noise is seeded from the genome, so output is reproducible. */
     public static short[] render(CallSpec c, int sampleRate, long noiseSeed) {
         if (sampleRate < 8000) {

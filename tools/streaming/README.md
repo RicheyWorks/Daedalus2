@@ -102,3 +102,12 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Tidemark Chunks (contest G175, quest q_tidemark_chunks)
 - `tidemark_chunks.py`: DiskSaver Island content-defined dedup minigame over the G86 islands' saves (read-only), vault quota = G39 Byte Spring budget cap (read-only). Whole-file storage rewrites every edited save, fixed-size chunks lose all dedup after one inserted byte, and a locked rolling-hash chunker (window 16, 7 mask bits) cuts on content so boundaries resync and the vault fits. Rolling hash = from scratch, exact rebuild, mean chunk vs Monte Carlo, cost = brute-force oracle, golden fixture, seeded replay (`tidemark_chunks_test.py`; CI `Tidemark Chunks`). Rules: `docs/islands/DISKSAVER-TIDEMARK-CHUNKS.md`.
+
+## Bottle Census (contest G179, quest q_bottle_census)
+- `bottle_census.py`: DiskSaver Island distributed-snapshot minigame over the G86 islands (read-only). Credits sail between islands in bottles on FIFO lanes while Harbourmaster Tilde counts them; a naive sum of island balances misses credits in transit, and Chandy-Lamport markers record lane state so the census is exact. Marker total exact, consistent cut, lane state = in-transit oracle, non-FIFO breaks, seeded replay (`bottle_census_test.py`; CI `Bottle Census`). Rules: `docs/islands/DISKSAVER-BOTTLE-CENSUS.md`.
+
+## Census Budget Beacons (G206, quest q_census_beacons)
+- `census_budget.py`: reads the Codex World Census `census.json` (read-only), prices each island with the DSB 1 estimate (same constants as `dsb_manifest.py`) and flags islands whose RAM or disk breaks the resident-set budget: red (`ram_over`/`disk_over`), amber (within `warn_permille`), green. Per world it reports totals, `fits_all_resident` and `max_resident` (= brute-force oracle). The report's `beacon` field lights each island's lighthouse in game (`census_budget_test.py`; CI `Census Budget Beacons`). Rules: `docs/islands/DISKSAVER-CENSUS-BEACONS.md`.
+
+## Ebb Tide Eviction (G253, quest q_ebb_eviction)
+- `ebb_eviction.py`: reads the G206 `census_budget.py` report (read-only) and, for each world over the RAM budget, plans which resident islands to unload first: least total reload weight, then fewest islands, home slot pinned. Exact knapsack DP = brute-force oracle; greedy heaviest-first and lowest-weight-first are reported beside it. The plan's `tide` (`slack`/`ebb`/`stranded`) drives Ebb Warden Marlo in game (`ebb_eviction_test.py`; CI `Ebb Tide Eviction`). Rules: `docs/islands/DISKSAVER-EBB-EVICTION.md`.

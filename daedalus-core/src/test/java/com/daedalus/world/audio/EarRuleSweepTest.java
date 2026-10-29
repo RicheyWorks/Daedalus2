@@ -119,6 +119,31 @@ class EarRuleSweepTest {
             }
             return out;
         });
+        sweep("G178 ReedHum", s -> ReedHum.seeded(s).hums().stream().map(ReedHum.Hum::hz).toList());
         // G89 ThunderTowers emits unpitched thunder (delays only), nothing to sweep.
+    }
+
+    /** Creature calls whose species range stays under the ear rule; the rest go through the ear-safe path below. */
+    @Test void creatureCallsForLowVoicedSpecies() {
+        for (Species sp : List.of(Species.BOVINE, Species.SWINE, Species.GOAT)) {
+            sweep("CallSynth " + sp, s -> List.of(CallSynth.design(sp, CallSynthTest.genome(s)).baseHz()));
+        }
+    }
+
+    /** Every species, 300 seeds each, through the ear-safe path the game plays (whole-octave drop under the rule). */
+    @Test void creatureCallsForAllSpeciesThroughEarSafePath() {
+        for (Species sp : Species.values()) {
+            sweep("CallSynth ear-safe " + sp, s -> List.of(CallSynth.designEarSafe(sp, CallSynthTest.genome(s)).baseHz()));
+        }
+    }
+
+    /** Audible peak (base x glide x vibrato crest) of every species, 300 seeds each, through the peak-checked ear-safe path. */
+    @Test void creatureCallPeaksForAllSpeciesThroughEarSafePeakPath() {
+        for (Species sp : Species.values()) {
+            sweep("CallSynth ear-safe peak " + sp, s -> {
+                CallSpec c = CallSynth.designEarSafePeak(sp, CallSynthTest.genome(s));
+                return List.of(c.baseHz(), CallSynth.peakHz(c));
+            });
+        }
     }
 }

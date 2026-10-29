@@ -2,12 +2,31 @@
   "schema": "daedalus.minigames.catalog/v1",
   "generated_by": "tools/minigames/minigame_catalog.py",
   "realm_placement": "Spawn one ADaedalusDesktopArcade cabinet per entry, or one cabinet with a picker; call StartGame(id, seed) on use. Derive the seed from realm id + player for repeatable runs.",
+  "leaderboard_feed": {
+    "source_format": "DSB1",
+    "source_file": "best_scores.dgs",
+    "feed_format": "daedalus.leaderboard.feed/v1",
+    "text_format": "DLB1",
+    "tool": "tools/minigames/leaderboard_feed.py",
+    "hook": "python tools/minigames/leaderboard_feed.py --check",
+    "network": "none",
+    "tie_break": "score_desc_then_game_id_asc",
+    "rank_rule": "ordinal"
+  },
   "games": [
     {
       "id": "beacon_sweep",
       "title": "Beacon Sweep",
       "summary": "Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord",
       "how_to_play": "HOW Move the mark, then reveal or flag a cell.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_oddsreaper",
+      "daedalus_spot": "Oddsreaper island, the puzzle row",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"beacon_sweep\", Seed)",
       "portable_tests": [
@@ -20,9 +39,12 @@
       "option_count": 3,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "pointer",
         "save_restore",
@@ -35,6 +57,14 @@
       "title": "Twinwake Volley",
       "summary": "A fast duel across the twinwake court. Up/Down or left stick: paddle",
       "how_to_play": "HOW Move the paddle to meet the ball.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the court row",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"twinwake\", Seed)",
       "portable_tests": [
@@ -48,9 +78,12 @@
       "option_count": 4,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -62,6 +95,14 @@
       "title": "Dungeon Prototype",
       "summary": "Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick; Shift/pad Y: trail",
       "how_to_play": "HOW Walk to the NEXT lantern and light it.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "labyrinth",
+      "daedalus_spot": "Labyrinth, the lantern passage",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"dungeon\", Seed)",
       "portable_tests": [
@@ -75,8 +116,11 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -88,6 +132,14 @@
       "title": "Driftstone Patrol",
       "summary": "Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot",
       "how_to_play": "HOW Turn, thrust, and clear the rocks.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the rock yard",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"driftstone\", Seed)",
       "portable_tests": [
@@ -99,9 +151,12 @@
       "option_count": 3,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -114,6 +169,14 @@
       "title": "Football / Soccer",
       "summary": "A ninety-second duel on the Daedalus pitch. Move: WASD/arrows or left stick; J/X: kick",
       "how_to_play": "HOW Move the player and kick the ball into the goal.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the pitch",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"football\", Seed)",
       "portable_tests": [
@@ -123,8 +186,11 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -136,6 +202,14 @@
       "title": "Glowtrail Chase",
       "summary": "Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick",
       "how_to_play": "HOW Gather the trail and stay away from the pursuers.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "gallery_city",
+      "daedalus_spot": "Gallery City, the chase court",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"glowtrail\", Seed)",
       "portable_tests": [
@@ -150,8 +224,11 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -163,6 +240,14 @@
       "title": "Gleamwing Sentinel",
       "summary": "Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot",
       "how_to_play": "HOW Hold fire and collect the pickups.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the rift line",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"riftwing\", Seed)",
       "portable_tests": [
@@ -176,9 +261,12 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -191,6 +279,14 @@
       "title": "Emberstep Ascent",
       "summary": "Scale the ember terraces and face the sentinel. Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb",
       "how_to_play": "HOW Jump the terraces and face the sentinel.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the terrace grid",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"emberstep\", Seed)",
       "portable_tests": [
@@ -202,8 +298,11 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -216,6 +315,14 @@
       "title": "Lumen Barrage",
       "summary": "Hold the starlanes through escalating waves. Move: WASD/arrows or left stick; J/X: shoot; P/Start: pause/save menu",
       "how_to_play": "HOW Hold the lanes and clear each wave.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "orrery_reach",
+      "daedalus_spot": "Orrery Reach, the star lane",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"star_shooter\", Seed)",
       "portable_tests": [
@@ -225,8 +332,11 @@
       ],
       "option_count": 3,
       "capabilities": [
+        "contrast_mark",
         "core_pause",
+        "difficulty",
         "focus_freeze",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -238,6 +348,14 @@
       "title": "Pebblecourt Rally",
       "summary": "Lead three teammates through four courtyard rounds. Move: WASD/arrows or left stick; throw/catch/jump actions",
       "how_to_play": "HOW Lead the team, then throw or catch the ball.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the courtyard",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"dodge_ball\", Seed)",
       "portable_tests": [
@@ -251,8 +369,11 @@
       "option_count": 8,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -264,6 +385,14 @@
       "title": "Ironwake Advance",
       "summary": "Run the ironwake route through platforms and enemy fire. Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/pad A: jump",
       "how_to_play": "HOW Run the route, shoot, and jump the gaps.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the iron route",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"ironwake\", Seed)",
       "portable_tests": [
@@ -273,8 +402,11 @@
       ],
       "option_count": 2,
       "capabilities": [
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -288,6 +420,14 @@
       "title": "Lanternwild Quest",
       "summary": "Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword",
       "how_to_play": "HOW Explore, swing once, and recover the key.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "portal_realm",
+      "daedalus_spot": "Portal realm, the wild path",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"lanternwild\", Seed)",
       "portable_tests": [
@@ -299,8 +439,11 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard"
@@ -312,6 +455,14 @@
       "title": "Gloam Latch",
       "summary": "Darken every lamp. Arrows or stick: move; J/Space or pad A: flip a lamp and its neighbors",
       "how_to_play": "HOW Flip a lamp and its neighbors until the board is dark.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "gallery_city",
+      "daedalus_spot": "Gallery City, the lamp corner",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"gloam_latch\", Seed)",
       "portable_tests": [
@@ -320,8 +471,11 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "hints",
+        "key_hint",
         "options",
         "scoreboard",
         "source_keys"
@@ -333,6 +487,14 @@
       "title": "Reedbeat",
       "summary": "Strike the reed when it glows. J/Space or pad A: strike",
       "how_to_play": "HOW Strike while the reed is bright.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "orrery_reach",
+      "daedalus_spot": "Orrery Reach, the reed bench",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"reedbeat\", Seed)",
       "portable_tests": [
@@ -341,8 +503,43 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
+        "difficulty",
         "focus_freeze",
         "hints",
+        "key_hint",
+        "options",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "cairnwell",
+      "title": "Cairnwell",
+      "summary": "Stack stones in the well. Left/Right or stick: slide; Down: drop",
+      "how_to_play": "HOW Slide the falling stone and clear a full layer.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "bricks",
+      "daedalus_spot": "Bricks, the stacking yard",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"cairnwell\", Seed)",
+      "portable_tests": [
+        "desktop_cairnwell"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
         "options",
         "scoreboard",
         "source_keys"
@@ -393,6 +590,25 @@
         "setSplitLimit",
         "reload",
         "newSession"
+      ]
+    }
+  ],
+  "python_games": [
+    {
+      "id": "shardring",
+      "title": "Shardring Resonance",
+      "summary": "a prism sphere shard-setting puzzle for Prismheart.",
+      "how_to_play": "HOW Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill.",
+      "module": "tools/minigames/prism_shard.py",
+      "start": "prism_shard.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_prism_shard.py"
       ]
     }
   ]

@@ -7,7 +7,7 @@ Per desktop game in docs/minigames/catalog.json:
   * a host save slot in DaedalusDesktopSaveSlots.h (or a dated entry in SAVE_SLOT_PENDING),
   * a how-to line (HowToLine),
   * the scoreboard capability (proven by scoreboard_test.cpp),
-  * a unique title, and no trademarked game, company or character name in id, title,
+  * a unique title, a Daedalus spot whose realm already places the cabinet, and no trademarked game, company or character name in id, title,
     summary or how-to line (Java cabinet titles and summaries are checked too).
 Internal ids (star_shooter, dodge_ball, riftwing) and save file names are not titles and are not scanned; the old ids kept in GameAliases for save compatibility are not scanned. Stdlib only.
 """
@@ -25,6 +25,7 @@ SLOTS_HDR = ROOT / "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/Deskt
 SAVE_SLOT_PENDING = {
     "gloam_latch": "PR 492 (held for rebuild 5)",
     "reedbeat": "PR 492 (held for rebuild 5)",
+    "cairnwell": "PR pending (held for the next rebuild)",
 }
 
 # Matched as whole words, case-insensitive, with spaces/hyphens/underscores between parts optional.
@@ -67,6 +68,12 @@ def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
             errors.append(f"'{gid}' now has a save slot; remove it from SAVE_SLOT_PENDING")
         elif gid not in slots and gid not in pending:
             errors.append(f"'{gid}' has no host save slot in DaedalusDesktopSaveSlots.h")
+        if g.get("default_difficulty") != "normal" or g.get("difficulty") != ["easy", "normal", "hard"]:
+            errors.append(f"'{gid}' difficulty must default to normal")
+        spot = (g.get("daedalus_spot") or "").strip()
+        realm = (g.get("daedalus_realm") or "").strip()
+        if not spot or not realm:
+            errors.append(f"'{gid}' has no Daedalus spot")
         if not (g.get("how_to_play") or "").strip():
             errors.append(f"'{gid}' has no how-to line")
         if "scoreboard" not in g.get("capabilities", []):
@@ -78,7 +85,7 @@ def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
             errors.append(f"'{gid}' title '{title}' is also used by '{titles[title.lower()]}'")
         else:
             titles[title.lower()] = gid
-        for field in ("id", "title", "summary", "how_to_play"):
+        for field in ("id", "title", "summary", "how_to_play", "daedalus_spot"):
             if field == "id" and gid in LEGACY_INTERNAL_IDS:
                 continue
             for hit in trademark_hits(g.get(field, "")):
@@ -87,6 +94,15 @@ def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
         for field in ("id", "title", "summary"):
             for hit in trademark_hits(j.get(field, "")):
                 errors.append(f"Java cabinet '{j.get('id')}' {field} uses trademarked name '{hit}'")
+    for g in catalog.get("python_games", []):
+        gid = g.get("id", "?")
+        if not (g.get("how_to_play") or "").strip():
+            errors.append(f"python game '{gid}' has no how-to line")
+        if "normal" not in g.get("difficulty", []):
+            errors.append(f"python game '{gid}' has no normal difficulty")
+        for field in ("id", "title", "summary", "how_to_play"):
+            for hit in trademark_hits(g.get(field, "")):
+                errors.append(f"python game '{gid}' {field} uses trademarked name '{hit}'")
     ids = {g.get("id") for g in catalog.get("games", [])}
     for gid in sorted(set(pending) - ids):
         errors.append(f"SAVE_SLOT_PENDING names unknown game '{gid}'")

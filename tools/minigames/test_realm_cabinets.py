@@ -147,7 +147,7 @@ class Stability(unittest.TestCase):
         catalog = json.loads(rc.CATALOG.read_text(encoding="utf-8"))
         data = rc.build(catalog, json.loads(rc.SPEC.read_text(encoding="utf-8")))
         self.assertTrue(data["realms"])
-        ids = {g["id"] for g in catalog["games"]} | {j["id"] for j in catalog.get("java_cabinets", [])}
+        ids = {g["id"] for g in catalog["games"]} | {j["id"] for j in catalog.get("java_cabinets", [])} | {p["id"] for p in catalog.get("python_games", [])}
         for realm in data["realms"]:
             self.assertTrue(all(c["game"] in ids for c in realm["cabinets"]))
 
@@ -213,6 +213,34 @@ class Schema(unittest.TestCase):
             self.assertIn(m["id"], ids)
         rc.validate(out)
 
+
+
+class PythonGames(unittest.TestCase):
+    CAT = {"games": [{"id": "alpha", "title": "Alpha", "host": "ADaedalusDesktopArcade", "option_count": 0}],
+           "java_cabinets": [],
+           "python_games": [{"id": "shardring", "title": "Shardring Resonance", "module": "tools/minigames/prism_shard.py",
+                             "start": "prism_shard.start(seed, difficulty)", "default_difficulty": "normal"}]}
+
+    def test_named_python_game_is_placed(self):
+        out = rc.build(self.CAT, {"realms": [{"realm": "prismheart_realm", "include": ["alpha", "shardring"]}]})
+        cab = out["realms"][0]["cabinets"][-1]
+        self.assertEqual((cab["game"], cab["host"], cab["difficulty"]), ("shardring", rc.PY_HOST, "normal"))
+        self.assertEqual(cab["seed"], rc.stable_seed("prismheart_realm", "shardring"))
+        self.assertIn(str(cab["seed"]), cab["start"])
+
+    def test_glob_does_not_pull_python_games(self):
+        out = rc.build(self.CAT, {"realms": [{"realm": "r", "include": ["*"]}]})
+        self.assertEqual([c["game"] for c in out["realms"][0]["cabinets"]], ["alpha"])
+
+    def test_python_game_takes_no_option(self):
+        with self.assertRaises(rc.SpecError):
+            rc.build(self.CAT, {"realms": [{"realm": "r", "include": ["shardring"], "options": {"shardring": 0}}]})
+
+    def test_real_prismheart_has_shardring(self):
+        import json
+        data = json.loads(rc.OUT.read_text(encoding="utf-8"))
+        realm = next(r for r in data["realms"] if r["realm"] == "prismheart_realm")
+        self.assertIn("shardring", [c["game"] for c in realm["cabinets"]])
 
 if __name__ == "__main__":
     unittest.main()

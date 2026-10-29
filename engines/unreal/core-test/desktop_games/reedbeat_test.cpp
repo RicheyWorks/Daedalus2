@@ -21,6 +21,9 @@ int main() {
     Check(Fresh.MissCount()==1 && !Fresh.GetStatus().Over,"an early tap is one miss");
     Input Held;Held.Fire=true;Fresh.Step(Held);
     Check(Fresh.MissCount()==1,"held fire does not add another miss");
+    ReedbeatGame Dropped;Dropped.Reset(730);
+    for(int N=0;N<3;++N) { Input Tap;Tap.FirePressed=true;Dropped.Step(Tap); }
+    Check(Dropped.MissCount()==3 && Dropped.GetStatus().Over && !Dropped.GetStatus().Won && Dropped.GetStatus().Score==0,"three early taps end the round with no score");
     ReedbeatGame Round;Round.Reset(730);
     Check(WaitOpen(Round),"the reed opens");
     const int Hits=Round.HitCount();

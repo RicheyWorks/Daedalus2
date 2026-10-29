@@ -1,0 +1,593 @@
+{
+ "schema": "daedalus.blender.arcade_prism/v1",
+ "generated_by": "tools/blender/arcade_prism_props.py",
+ "realm": "prismheart_realm",
+ "anchor": "arcade_plaza",
+ "status": "NOT READY",
+ "hook": {
+  "cabinet": "SOCKET_Floor -> realm-cabinets.json slot; UI on SOCKET_Screen/SOCKET_Marquee",
+  "sphere": "SOCKET_Facet_0..5 <- facet SOCKET_Seat",
+  "vfx": "SOCKET_Glow / SOCKET_Core"
+ },
+ "assets": [
+  {
+   "name": "Prop_Prism_ShardFacet_Fire",
+   "realm": "Prismheart Realm",
+   "kind": "facet",
+   "voxel_cm": 5.0,
+   "voxels": 146,
+   "tris": 446,
+   "size_m": [
+    0.35,
+    0.35,
+    0.6
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Prism_ShardFacet_Fire",
+   "sockets": [
+    "SOCKET_Seat",
+    "SOCKET_Glow"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Prism_ShardFacet_Tide",
+   "realm": "Prismheart Realm",
+   "kind": "facet",
+   "voxel_cm": 5.0,
+   "voxels": 146,
+   "tris": 446,
+   "size_m": [
+    0.35,
+    0.35,
+    0.6
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Prism_ShardFacet_Tide",
+   "sockets": [
+    "SOCKET_Seat",
+    "SOCKET_Glow"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Prism_ShardFacet_Gale",
+   "realm": "Prismheart Realm",
+   "kind": "facet",
+   "voxel_cm": 5.0,
+   "voxels": 146,
+   "tris": 446,
+   "size_m": [
+    0.35,
+    0.35,
+    0.6
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Prism_ShardFacet_Gale",
+   "sockets": [
+    "SOCKET_Seat",
+    "SOCKET_Glow"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Prism_ShardFacet_Stone",
+   "realm": "Prismheart Realm",
+   "kind": "facet",
+   "voxel_cm": 5.0,
+   "voxels": 146,
+   "tris": 446,
+   "size_m": [
+    0.35,
+    0.35,
+    0.6
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Prism_ShardFacet_Stone",
+   "sockets": [
+    "SOCKET_Seat",
+    "SOCKET_Glow"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Prism_ShardFacet_Light",
+   "realm": "Prismheart Realm",
+   "kind": "facet",
+   "voxel_cm": 5.0,
+   "voxels": 146,
+   "tris": 446,
+   "size_m": [
+    0.35,
+    0.35,
+    0.6
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Prism_ShardFacet_Light",
+   "sockets": [
+    "SOCKET_Seat",
+    "SOCKET_Glow"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Prism_ShardFacet_Shade",
+   "realm": "Prismheart Realm",
+   "kind": "facet",
+   "voxel_cm": 5.0,
+   "voxels": 146,
+   "tris": 446,
+   "size_m": [
+    0.35,
+    0.35,
+    0.6
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Prism_ShardFacet_Shade",
+   "sockets": [
+    "SOCKET_Seat",
+    "SOCKET_Glow"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Prism_HeartSphere",
+   "realm": "Prismheart Realm",
+   "kind": "sphere",
+   "voxel_cm": 5.0,
+   "voxels": 1636,
+   "tris": 4880,
+   "size_m": [
+    1.05,
+    1.05,
+    1.2
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Prism_HeartSphere",
+   "sockets": [
+    "SOCKET_Base",
+    "SOCKET_Core",
+    "SOCKET_Facet_0",
+    "SOCKET_Facet_1",
+    "SOCKET_Facet_2",
+    "SOCKET_Facet_3",
+    "SOCKET_Facet_4",
+    "SOCKET_Facet_5"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Arcade_Cab_Prismheart",
+   "realm": "Prismheart Realm",
+   "kind": "cabinet",
+   "voxel_cm": 5.0,
+   "voxels": 7159,
+   "tris": 316,
+   "size_m": [
+    0.7,
+    0.9,
+    2.05
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Arcade_Cab_Prismheart",
+   "sockets": [
+    "SOCKET_Floor",
+    "SOCKET_Screen",
+    "SOCKET_Marquee",
+    "SOCKET_Player1",
+    "SOCKET_CoinSlot"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Arcade_Cab_Shardring",
+   "realm": "Prismheart Realm",
+   "kind": "cabinet",
+   "voxel_cm": 5.0,
+   "voxels": 7159,
+   "tris": 316,
+   "size_m": [
+    0.7,
+    0.9,
+    2.05
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Arcade_Cab_Shardring",
+   "sockets": [
+    "SOCKET_Floor",
+    "SOCKET_Screen",
+    "SOCKET_Marquee",
+    "SOCKET_Player1",
+    "SOCKET_CoinSlot"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Arcade_Cab_Waystone",
+   "realm": "Prismheart Realm",
+   "kind": "cabinet",
+   "voxel_cm": 5.0,
+   "voxels": 7159,
+   "tris": 316,
+   "size_m": [
+    0.7,
+    0.9,
+    2.05
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Arcade_Cab_Waystone",
+   "sockets": [
+    "SOCKET_Floor",
+    "SOCKET_Screen",
+    "SOCKET_Marquee",
+    "SOCKET_Player1",
+    "SOCKET_CoinSlot"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_Arcade_Cab_Cocktail",
+   "realm": "Prismheart Realm",
+   "kind": "cabinet",
+   "voxel_cm": 5.0,
+   "voxels": 4055,
+   "tris": 82,
+   "size_m": [
+    0.9,
+    0.9,
+    0.8
+   ],
+   "pivot": "bottom-centre",
+   "front": "Blender -Y (place with yaw -90)",
+   "collision": "UCX_Prop_Arcade_Cab_Cocktail",
+   "sockets": [
+    "SOCKET_Floor",
+    "SOCKET_Screen",
+    "SOCKET_Player1",
+    "SOCKET_Player2",
+    "SOCKET_CoinSlot"
+   ],
+   "status": "NOT READY"
+  }
+ ],
+ "batch_b": {
+  "generated_by": "tools/blender/arcade_prism_props_b.py",
+  "staging": "bot-team\\staging\\arcade-prism-20261026b",
+  "docs": "docs/art/arcade-prism-20261026b",
+  "status": "NOT READY",
+  "assets": [
+   {
+    "name": "Prop_Prism_HeartSphere_Pedestal",
+    "tris": 248,
+    "size_m": [
+     1.5,
+     1.5,
+     0.73
+    ],
+    "sockets": [
+     "SOCKET_Sphere",
+     "SOCKET_Rune_0",
+     "SOCKET_Rune_1",
+     "SOCKET_Rune_2",
+     "SOCKET_Rune_3",
+     "SOCKET_Rune_4",
+     "SOCKET_Rune_5"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_CoinCup",
+    "tris": 168,
+    "size_m": [
+     0.12,
+     0.09,
+     0.1
+    ],
+    "sockets": [
+     "SOCKET_Coins",
+     "SOCKET_Mount"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_TicketSpool",
+    "tris": 100,
+    "size_m": [
+     0.07,
+     0.141,
+     0.17
+    ],
+    "sockets": [
+     "SOCKET_Axle",
+     "SOCKET_Mount"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_TicketDispenser",
+    "tris": 68,
+    "size_m": [
+     0.14,
+     0.186,
+     0.2
+    ],
+    "sockets": [
+     "SOCKET_Spool",
+     "SOCKET_TicketOut",
+     "SOCKET_Mount"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Stool",
+    "tris": 176,
+    "size_m": [
+     0.48,
+     0.48,
+     0.7
+    ],
+    "sockets": [
+     "SOCKET_Seat",
+     "SOCKET_Floor"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_ControlPanel",
+    "tris": 88,
+    "size_m": [
+     0.62,
+     0.26,
+     0.055
+    ],
+    "sockets": [
+     "SOCKET_Stick",
+     "SOCKET_Button_0",
+     "SOCKET_Button_1",
+     "SOCKET_Button_2",
+     "SOCKET_Button_3",
+     "SOCKET_Button_4",
+     "SOCKET_Button_5",
+     "SOCKET_Start",
+     "SOCKET_Mount"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Joystick",
+    "tris": 188,
+    "size_m": [
+     0.06,
+     0.06,
+     0.093
+    ],
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Grip"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Button",
+    "tris": 104,
+    "size_m": [
+     0.03,
+     0.0292,
+     0.014
+    ],
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Press"
+    ]
+   }
+  ],
+  "facet_states": {
+   "note": "MI params on the existing Prop_Prism_ShardFacet_* meshes, no new meshes",
+   "states": [
+    "Cracked",
+    "Charged",
+    "Dormant"
+   ],
+   "manifests": [
+    "Prop_Prism_ShardFacet_Fire.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Gale.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Light.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Shade.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Stone.states.material_variants.json",
+    "Prop_Prism_ShardFacet_Tide.states.material_variants.json"
+   ],
+   "mask": "T_Prism_Facet_CrackMask.png"
+  },
+  "decals": [
+   "Decal_Arcade_Marquee_Prismheart",
+   "Decal_Arcade_Marquee_Shardring",
+   "Decal_Arcade_Marquee_Waystone"
+  ],
+  "hook": {
+   "pedestal": "HeartSphere SOCKET_Base -> Pedestal SOCKET_Sphere",
+   "panel": "ControlPanel SOCKET_Mount -> cab control deck; Joystick SOCKET_Base -> SOCKET_Stick; Button SOCKET_Base -> SOCKET_Button_k/Start",
+   "coin_cup": "SOCKET_Mount -> cab SOCKET_CoinSlot",
+   "tickets": "TicketDispenser SOCKET_Spool <- TicketSpool SOCKET_Axle",
+   "stool": "SOCKET_Floor -> cab SOCKET_Player1",
+   "marquee": "decal on cab SOCKET_Marquee"
+  }
+ },
+ "batch_c": {
+  "generated_by": "tools/blender/arcade_prism_props_c.py",
+  "staging": "bot-team\\staging\\arcade-prism-20261026c",
+  "docs": "docs/art/arcade-prism-20261026c",
+  "status": "NOT READY",
+  "assets": [
+   {
+    "name": "Prop_Arcade_PrizeCounter",
+    "tris": 320,
+    "size_m": [
+     2.5,
+     1.55,
+     2.5
+    ],
+    "sockets": [
+     "SOCKET_Prize_0",
+     "SOCKET_Prize_1",
+     "SOCKET_Prize_2",
+     "SOCKET_Prize_3",
+     "SOCKET_Prize_4",
+     "SOCKET_Prize_5",
+     "SOCKET_Prize_6",
+     "SOCKET_Prize_7",
+     "SOCKET_Prize_8",
+     "SOCKET_Clerk",
+     "SOCKET_Customer",
+     "SOCKET_Till",
+     "SOCKET_Sign"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Plush_Shardling",
+    "tris": 208,
+    "size_m": [
+     0.24,
+     0.24,
+     0.36
+    ],
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Plush_Waystoad",
+    "tris": 500,
+    "size_m": [
+     0.22,
+     0.27,
+     0.225
+    ],
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Plush_Glimmermoth",
+    "tris": 264,
+    "size_m": [
+     0.4432,
+     0.265,
+     0.1623
+    ],
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_FloorTile_Starfield",
+    "tris": 180,
+    "size_m": [
+     2.0,
+     2.0,
+     0.022
+    ],
+    "sockets": [
+     "SOCKET_TileE",
+     "SOCKET_TileN",
+     "SOCKET_Centre"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_FloorTile_Checker",
+    "tris": 108,
+    "size_m": [
+     2.0,
+     2.0,
+     0.022
+    ],
+    "sockets": [
+     "SOCKET_TileE",
+     "SOCKET_TileN",
+     "SOCKET_Centre"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_FloorTile_PrismRay",
+    "tris": 84,
+    "size_m": [
+     2.0,
+     2.0,
+     0.022
+    ],
+    "sockets": [
+     "SOCKET_TileE",
+     "SOCKET_TileN",
+     "SOCKET_Centre"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_TokenMachine",
+    "tris": 200,
+    "size_m": [
+     0.62,
+     0.63,
+     1.62
+    ],
+    "sockets": [
+     "SOCKET_CoinIn",
+     "SOCKET_TokenOut",
+     "SOCKET_Screen",
+     "SOCKET_Floor",
+     "SOCKET_Customer"
+    ]
+   },
+   {
+    "name": "Prop_Arcade_Cab_ClawCrane",
+    "tris": 888,
+    "size_m": [
+     0.9,
+     1.08,
+     2.2
+    ],
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot",
+     "SOCKET_ClawRail",
+     "SOCKET_Claw",
+     "SOCKET_PrizeChute",
+     "SOCKET_PrizeOut",
+     "SOCKET_Marquee",
+     "SOCKET_Stick",
+     "SOCKET_Button",
+     "SOCKET_PrizePit_0",
+     "SOCKET_PrizePit_1",
+     "SOCKET_PrizePit_2",
+     "SOCKET_PrizePit_3",
+     "SOCKET_PrizePit_4",
+     "SOCKET_PrizePit_5"
+    ]
+   }
+  ],
+  "decals": [
+   "Decal_Arcade_Neon_Arcade",
+   "Decal_Arcade_Neon_Prism",
+   "Decal_Arcade_Neon_Prize"
+  ],
+  "hook": {
+   "prize_counter": "plush SOCKET_Shelf -> counter SOCKET_Prize_0..8; neon decal at SOCKET_Sign",
+   "floor": "FloorTile SOCKET_TileE/TileN step 2 m, any variant mix",
+   "token_machine": "SOCKET_Floor in an arcade_plaza slot; CoinIn/TokenOut for interaction",
+   "claw": "child node Prop_Arcade_Cab_ClawCrane_Claw driven from SOCKET_ClawRail; prizes spawn at SOCKET_PrizePit_k, drop via SOCKET_PrizeChute -> SOCKET_PrizeOut"
+  },
+  "fixes_20261029": {
+   "Prop_Arcade_Cab_ClawCrane": "claw node now hangs from SOCKET_ClawRail (z 1.84) inside the glass volume: trolley, 0.32 m cable, motor, hub, 3 two-segment prongs; check render preview_sheet_full.png / Prop_Arcade_Cab_ClawCrane_glassless_check.png",
+   "Prop_Arcade_Plush_Glimmermoth": "wings are 3-3.5 cm thick rounded fore/hind pads with mirrored dihedral (18/8 deg), 264 tris; SOCKET_Shelf/Hand/Grab unchanged",
+   "Prop_YTM_Ferry (G223, data/contest/ytm_c_g223.kit.json)": "3.2 m mast, boom, gaff, 2.4 m-foot mainsail + jib, canvas sail material; SOCKET_Seat_0..2/Helm/Mooring_* unchanged"
+  }
+ }
+}

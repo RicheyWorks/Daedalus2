@@ -86,10 +86,17 @@ fetch/native functions. Changed reader signatures fail closed and require
 review. This is a source adapter to the existing interface, not a second
 implementation of the package grammar.
 
-The preflight completely reads the manifest, primary GLB and each declared
-secondary GLB from the captured archive, evaluating their ZIP CRC and
-decompression errors before any plan output. The existing expansion budget is
-checked before these reads. Errors identify the offending member.
+After the existing name/type/member-count/declared-size checks, an integrity
+pass streams **every ZIP member** from the captured archive to EOF, including
+unreferenced extras. It discards chunks of at most 64 KiB and evaluates CRC,
+decompression/read/close errors and actual-versus-declared member size before
+any plan output. Errors identify the offending member; nothing is extracted.
+
+The existing 256 MiB expanded-byte cap also bounds actual streamed bytes both
+per member and cumulatively. At a cap, a one-byte EOF probe distinguishes an
+exact fit from overflow; the first excess byte stops admission. Later reads
+for manifest and declared-GLB parsing are not charged again to this unique
+whole-archive budget. Expanded members are never cached by the integrity pass.
 
 One shared payload boundary wraps the existing pure `glb_summary` for primary
 and secondary GLBs. It checks magic/version/total length, complete aligned
@@ -101,7 +108,8 @@ rules are unchanged. The existing package reader still checks the primary
 node count against the manifest.
 
 This is container admission, not geometry/accessor or shader evaluation.
-Unreferenced archive members are not payload-validated or CRC-read. Full
+Unreferenced bytes remain semantically opaque, including non-UTF8 files and
+unlisted `.glb` files; valid extras are retained unchanged. Full
 glTF/material/texture semantics, external URI availability, rights, native
 filesystem path compatibility and import success remain unverified.
 Package hashes bind exact source bytes, including ZIP metadata; a repackaged
@@ -131,5 +139,9 @@ revision conflicts, raw-ID/sanitization collisions, owned asset/material/level
 destinations, strict receipts/schema, input immutability, malformed ZIP/GLB/JSON,
 primary/secondary chunk refusal parity, listed-member CRC and decompression
 failures, preserved valid materials/transforms/BIN/extension bytes, resource
-budgets and blocked native/network/top-level execution. CI runs the
+budgets, corrupt unreferenced members, real truncated streams, exact and actual
+expansion limits, bounded opaque-extra reads, size mismatches, receipt/source
+preservation and blocked native/network/top-level execution. The original
+unreferenced-CRC regression also demonstrates the prior extraction mismatch
+using only a disposable synthetic fixture directory. CI runs the
 same serial Python 3.10 suite, including when the existing reader changes.

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://daedalus.invalid/schemas/world-package-frozen-job-v1",
+  "title": "Frozen whole-ZIP World Package job manifest",
+  "description": "Pins retained bytes, not receipt authenticity, native acceptance or permanent filesystem immutability. Runtime checks exact inventory, budgets, selection and rebuilt plan binding.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "state", "files", "native_acceptance"],
+  "properties": {
+    "format": {"const": "daedalus-world-frozen-job"},
+    "version": {"type": "integer", "const": 1},
+    "state": {"const": "complete"},
+    "native_acceptance": {"const": false},
+    "files": {
+      "type": "array", "minItems": 4, "maxItems": 19,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["path", "bytes", "sha256"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^(provenance\\.json|request\\.json|plan\\.json|packages/[0-9]{4}\\.zip)$"},
+          "bytes": {"type": "integer", "minimum": 0, "maximum": 67108864},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "allOf": [
+          {"if": {"properties": {"path": {"const": "provenance.json"}}}, "then": {"properties": {"bytes": {"maximum": 2097152}}}},
+          {"if": {"properties": {"path": {"const": "request.json"}}}, "then": {"properties": {"bytes": {"maximum": 1048576}}}},
+          {"if": {"properties": {"path": {"const": "plan.json"}}}, "then": {"properties": {"bytes": {"maximum": 8388608}}}}
+        ]
+      }
+    }
+  }
+}

@@ -27,6 +27,7 @@ JAVA_TESTS = ROOT / "engines/unreal/core-test/java_arcade/CMakeLists.txt"
 SLOTS_HDR = REG.parent / "DaedalusDesktopSaveSlots.h"
 OUT_JSON = ROOT / "docs/minigames/catalog.json"
 OUT_MD = ROOT / "docs/minigames/CATALOG.md"
+SPOTS = ROOT / "data/minigames/daedalus-spots.json"
 
 # Test-file prefixes per game id (shared-family suites included).
 TEST_PREFIX = {
@@ -81,6 +82,26 @@ def parse_java(errors):
     return out
 
 
+# Pure-Python minigames: rules live in a stdlib module under tools/minigames.
+PY_GAMES = ["prism_shard"]
+
+
+def parse_python(errors):
+    import importlib
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    out = []
+    for mod in PY_GAMES:
+        m = importlib.import_module(mod)
+        test = f"test_{mod}.py"
+        if not (pathlib.Path(__file__).resolve().parent / test).exists():
+            errors.append(f"python game '{mod}' has no {test}")
+        out.append({"id": m.GAME_ID, "title": m.TITLE, "summary": (m.__doc__ or "").splitlines()[0].split(": ", 1)[-1],
+                    "how_to_play": m.HOW_TO_PLAY, "module": f"tools/minigames/{mod}.py",
+                    "start": f"{mod}.start(seed, difficulty)", "difficulty": sorted(m.DIFFICULTY),
+                    "default_difficulty": m.DEFAULT_DIFFICULTY, "tests": [test]})
+    return out
+
+
 CORE_DIR = REG.parent
 # Capability -> overrides that provide it. Realm builders and hosts read these.
 CAPABILITIES = {
@@ -92,7 +113,10 @@ CAPABILITIES = {
     "core_pause": ("OwnPause",),
     "focus_freeze": (),  # test-only: proven by focus_freeze_test.cpp
     "hints": (),  # test-only: proven by hints_test.cpp
+    "key_hint": (),  # test-only: proven by a11y_test.cpp
+    "contrast_mark": (),  # test-only: proven by a11y_test.cpp
     "scoreboard": (),  # test-only: proven by scoreboard_test.cpp. Host reads Status.Score.
+    "difficulty": (),  # test-only: proven by difficulty_test.cpp. Default name is normal.
     "action_cue": (),  # test-only: proven by action_cue_test.cpp
     "save_restore": ("SaveState", "RestoreState"),
 }
@@ -192,6 +216,9 @@ def build():
     cmake = parse_cmake((TESTS / "CMakeLists.txt").read_text(encoding="utf-8"))
     verified, errors = parse_verified(cmake)
     ids = [e[0] for e in entries]
+    spots = json.loads(SPOTS.read_text(encoding="utf-8")).get("spots", {})
+    for gid in sorted(set(spots) - set(ids)):
+        errors.append(f"Daedalus spot names unknown game '{gid}'")
     for gid in sorted(set(verified) - set(ids)):
         errors.append(f"catalog-capability names unknown game '{gid}'")
     for gid in sorted(set(ids) - factories):
@@ -215,16 +242,25 @@ def build():
         line = howto.get(cls)
         if not line:
             errors.append(f"game '{gid}' has no HowToLine")
+        home = spots.get(gid) or {}
+        spot = (home.get("spot") or "").strip()
+        realm = (home.get("realm") or "").strip()
+        if not spot or not realm:
+            errors.append(f"game '{gid}' has no Daedalus spot in data/minigames/daedalus-spots.json")
         games.append({
             "id": gid,
             "title": title,
             "summary": blurb,
             "how_to_play": line or "",
+            "difficulty": ["easy", "normal", "hard"],
+            "default_difficulty": "normal",
+            "daedalus_realm": realm,
+            "daedalus_spot": spot,
             "host": "ADaedalusDesktopArcade",
             "start": f'StartGame("{gid}", Seed)',
             "portable_tests": tests,
             "option_count": optmap.get(factory_map.get(gid, ""), 0) or 0,
-            "capabilities": sorted(set(capmap.get(factory_map.get(gid, ""), [])) | verified.get(gid, set())),
+            "capabilities": sorted(set(capmap.get(factory_map.get(gid, ""), [])) | verified.get(gid, set()) | {"difficulty"}),
             "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
         })
     if SLOTS_HDR.exists():
@@ -235,13 +271,20 @@ def build():
         for gid in sorted(slots - saving):
             errors.append(f"host save slot '{gid}' has no save/restore in its core")
     java = parse_java(errors)
+    tool_dir = str(ROOT / "tools" / "minigames")
+    if tool_dir not in sys.path:
+        sys.path.insert(0, tool_dir)
+    from leaderboard_feed import CATALOG_HOOK
+    py = parse_python(errors)
     data = {
         "schema": "daedalus.minigames.catalog/v1",
         "generated_by": "tools/minigames/minigame_catalog.py",
         "realm_placement": ("Spawn one ADaedalusDesktopArcade cabinet per entry, or one cabinet with a picker; "
                             "call StartGame(id, seed) on use. Derive the seed from realm id + player for repeatable runs."),
+        "leaderboard_feed": dict(CATALOG_HOOK),
         "games": games,
         "java_cabinets": java,
+        "python_games": py,
     }
     md = [
         "# Minigame catalog", "",
@@ -258,17 +301,39 @@ def build():
            "| id | line |", "|---|---|"]
     for g in games:
         md.append(f"| `{g['id']}` | {g['how_to_play']} |")
+    md += ["", "## Difficulty", "",
+           "Every cabinet defaults to normal. Easy and hard are the other accepted names. The arcade host is unchanged.", "",
+           "| id | default |", "|---|---|"]
+    for g in games:
+        md.append(f"| `{g['id']}` | {g['default_difficulty']} |")
+    md += ["", "## Daedalus spots", "",
+           "One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm already places that cabinet.", "",
+           "| id | realm | spot |", "|---|---|---|"]
+    for g in games:
+        md.append(f"| `{g['id']}` | `{g['daedalus_realm']}` | {g['daedalus_spot']} |")
     md += ["", "## Capabilities", "",
            "Read from each core's overrides, plus behavior proven by a portable test that declares",
            "`// catalog-capability: <cap>: <ids>` (for games that handle it inside `Step`). A blank cell is a gap.", "",
            "| id | " + " | ".join(CAPABILITIES) + " |", "|---|" + "---|" * len(CAPABILITIES)]
     for g in games:
         md.append(f"| `{g['id']}` | " + " | ".join("yes" if c in g["capabilities"] else "" for c in CAPABILITIES) + " |")
+    md += ["", "## Leaderboard feed", "",
+           "The arcade host keeps one best score per game in `best_scores.dgs` (`DSB1`).",
+           "`tools/minigames/leaderboard_feed.py` reads that text and writes a ranked feed",
+           "(`daedalus.leaderboard.feed/v1` JSON, `DLB1` lines). It does not open a network",
+           "connection and it does not post to Discord. Old ids merge through `CanonicalGameId`",
+           "in `DaedalusDesktopSaveSlots.h`. Tie break: `score_desc_then_game_id_asc`. Rank rule: `ordinal`.",
+           "Check: `python tools/minigames/leaderboard_feed.py --check`."]
     md += ["", "## Java cabinets", "",
            "Hosted by `ADaedalusJavaArcade`; rules stay in the owning Java service. See `docs/java-arcade/README.md`.", "",
            "| id | title | enum | source | portable tests |", "|---|---|---|---|---|"]
     for j in java:
         md.append(f"| `{j['id']}` | {j['title']} | `{j['game_enum']}` | {j['source_repo']} | {len(j['portable_tests'])} |")
+    md += ["", "## Python minigames", "",
+           "Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), hard.", "",
+           "| id | title | module | how to play |", "|---|---|---|---|"]
+    for g in py:
+        md.append(f"| `{g['id']}` | {g['title']} | `{g['module']}` | {g['how_to_play']} |")
     md.append("")
     return json.dumps(data, indent=2) + "\n", "\n".join(md), errors
 

@@ -74,3 +74,5 @@ Every roll is a splitmix hash of (seed, generation, chick, locus, salt). `Settin
   VAULT01's ark seed-vault era.
 - Assets: `Prop_Studbook_Ledger` (open ledger on a lectern with a diversity bar), `Prop_Leg_Band` (coloured crane leg
   band showing lineage), and reuse of `Mob_Sky_Crane` and the aviary (see UNREAL-QUEUE / BLENDER-ASKS).
+- `Mob_Sky_Crane` is staged (see CRANE01). `Prop_Leg_Band` attaches at the crane's `SOCKET_LegBand` on bone `Leg_L`
+  (from `Mob_Sky_Crane.sockets.json`); colour it by founder lineage.

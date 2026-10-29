@@ -10,6 +10,13 @@ on:
       - 'tools/unreal_preflight/preflight*'
       - 'tools/unreal_preflight/fixtures/**'
       - 'tools/unreal_preflight/rebuild_delta/**'
+      - 'tools/unreal_preflight/build_receipt/**'
+      - 'tools/unreal_preflight/producer_status/**'
+      - 'tools/unreal_preflight/rebuild_orchestrator/**'
+      - 'tools/unreal_preflight/level_save_audit/**'
+      - 'tools/unreal_preflight/r22_closeout_verifier/**'
+      - 'tools/grand_collection_throughput/**'
+      - 'tools/unreal_preflight/deprecated_editor_api/**'
       - '.github/workflows/epic-source-tools.yml'
 permissions:
   contents: read
@@ -31,6 +38,20 @@ jobs:
         run: python -m unittest discover -s tools/unreal_mcp/convention_audit -p 'test_*.py' -v
       - name: Rebuild delta helper
         run: python -m unittest discover -s tools/unreal_preflight/rebuild_delta -p 'test_*.py' -v
+      - name: Plugin build receipt
+        run: python -m unittest discover -s tools/unreal_preflight/build_receipt -p 'test_*.py' -v
+      - name: Producer status
+        run: python -m unittest discover -s tools/unreal_preflight/producer_status -p 'test_*.py' -v
+      - name: Rebuild orchestrator
+        run: python -m unittest discover -s tools/unreal_preflight/rebuild_orchestrator -p 'test_*.py' -v
+      - name: Level save audit
+        run: python -m unittest discover -s tools/unreal_preflight/level_save_audit -p 'test_*.py' -v
+      - name: R22 closeout verifier
+        run: python -m unittest discover -s tools/unreal_preflight/r22_closeout_verifier -p 'test_*.py' -v
+      - name: Grand Collection throughput simulator
+        run: python -m unittest discover -s tools/grand_collection_throughput -p 'test_*.py' -v
+      - name: Deprecated editor API scan
+        run: python -m unittest discover -s tools/unreal_preflight/deprecated_editor_api -p 'test_*.py' -v
       - name: Preflight rule fixtures
         run: python tools/unreal_preflight/preflight_test.py
       - name: Preflight on main tree

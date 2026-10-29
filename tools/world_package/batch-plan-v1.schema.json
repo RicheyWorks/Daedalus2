@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://daedalus.invalid/schemas/world-package-batch-plan-v1",
+  "title": "Explicit offline World Package batch request and inventory",
+  "description": "Structural checks only; runtime enforces hashes, identity, counts, budgets and replay relationships.",
+  "oneOf": [{"$ref": "#/$defs/request"}, {"$ref": "#/$defs/batch"}],
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "key": {"type": "string", "minLength": 1, "maxLength": 128},
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "integer": {"type": "integer", "minimum": 0},
+    "world": {
+      "type": "object", "additionalProperties": false, "required": ["id", "revision"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 512},
+        "revision": {"type": "integer", "minimum": 0, "maximum": 9223372036854775807}
+      }
+    },
+    "request": {
+      "type": "object", "additionalProperties": false,
+      "required": ["format", "version", "packages", "prior_receipts"],
+      "properties": {
+        "format": {"const": "daedalus-world-batch-request"},
+        "version": {"type": "integer", "const": 1},
+        "packages": {
+          "type": "array", "minItems": 1, "maxItems": 16,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["key", "package"],
+            "properties": {"key": {"$ref": "#/$defs/key"}, "package": {"$ref": "#/$defs/text"}}
+          }
+        },
+        "prior_receipts": {
+          "type": "array", "maxItems": 16,
+          "items": {"$ref": "https://daedalus.invalid/schemas/world-package-import-plan-v1#/$defs/receipt"}
+        }
+      }
+    },
+    "item": {
+      "type": "object", "additionalProperties": false, "required": ["key", "package", "status"],
+      "properties": {
+        "key": {"$ref": "#/$defs/key"}, "package": {"$ref": "#/$defs/text"},
+        "status": {"enum": ["plan_new", "no_op", "duplicate", "error", "conflict"]},
+        "reference": {"$ref": "#/$defs/digest"}, "duplicate_of": {"$ref": "#/$defs/key"},
+        "error": {"type": "string", "maxLength": 2048}
+      },
+      "allOf": [
+        {"if": {"properties": {"status": {"const": "duplicate"}}}, "then": {"required": ["reference", "duplicate_of"]}},
+        {"if": {"properties": {"status": {"enum": ["error", "conflict"]}}}, "then": {"required": ["error"]}},
+        {"if": {"properties": {"status": {"enum": ["plan_new", "no_op"]}}}, "then": {"required": ["reference"]}}
+      ]
+    },
+    "record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reference", "world", "package_sha256", "keys", "status"],
+      "properties": {
+        "reference": {"$ref": "#/$defs/digest"}, "world": {"$ref": "#/$defs/world"},
+        "package_sha256": {"$ref": "#/$defs/digest"},
+        "keys": {"type": "array", "minItems": 1, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/key"}},
+        "status": {"enum": ["plan_new", "no_op", "error", "conflict"]},
+        "plan": {"$ref": "https://daedalus.invalid/schemas/world-package-import-plan-v1#/$defs/plan"}
+      },
+      "if": {"properties": {"status": {"enum": ["plan_new", "no_op"]}}},
+      "then": {"required": ["plan"]},
+      "else": {"not": {"required": ["plan"]}}
+    },
+    "batch": {
+      "type": "object", "additionalProperties": false,
+      "required": ["format", "version", "ready", "items", "inventory", "counts", "budget", "native_acceptance"],
+      "properties": {
+        "format": {"const": "daedalus-world-batch-plan"}, "version": {"type": "integer", "const": 1},
+        "ready": {"type": "boolean"}, "native_acceptance": {"const": false},
+        "items": {"type": "array", "minItems": 1, "maxItems": 16, "items": {"$ref": "#/$defs/item"}},
+        "inventory": {"type": "array", "maxItems": 16, "items": {"$ref": "#/$defs/record"}},
+        "counts": {
+          "type": "object", "additionalProperties": false,
+          "required": ["plan_new", "no_op", "duplicate", "error", "conflict"],
+          "properties": {
+            "plan_new": {"$ref": "#/$defs/integer"}, "no_op": {"$ref": "#/$defs/integer"},
+            "duplicate": {"$ref": "#/$defs/integer"}, "error": {"$ref": "#/$defs/integer"}, "conflict": {"$ref": "#/$defs/integer"}
+          }
+        },
+        "budget": {
+          "type": "object", "additionalProperties": false,
+          "required": ["source_bytes_charged", "source_bytes_validated", "source_bytes_limit", "package_attempts", "input_limit"],
+          "properties": {
+            "source_bytes_charged": {"$ref": "#/$defs/integer"}, "source_bytes_validated": {"$ref": "#/$defs/integer"},
+            "source_bytes_limit": {"const": 268435456}, "package_attempts": {"type": "integer", "minimum": 0, "maximum": 16},
+            "input_limit": {"const": 16}
+          }
+        }
+      }
+    }
+  }
+}

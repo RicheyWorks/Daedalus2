@@ -27,7 +27,8 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-# contents: write is needed only by the coverage-badge commit step on main.
+# contents: write is needed only by the coverage-badge commit step on main
+# (Coverage job).
 permissions:
   contents: write
 
@@ -68,8 +69,6 @@ jobs:
     # 2026-07-28 and 2026-07-31). Hoisting it into job-level env is the
     # documented workaround: job env may reference secrets, and step `if:` may
     # reference env.
-    env:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - name: Check out source
@@ -93,8 +92,14 @@ jobs:
           echo "LC_ALL=en_US.UTF-8" >> "$GITHUB_ENV"
           echo "TZ=UTC"             >> "$GITHUB_ENV"
 
+      # -T 1C: one thread per core. Modules still fork their own surefire JVMs
+      # and the graph keeps Core -> Plugin Runtime -> Server -> Desktop serial;
+      # only Plugin API, Wallet and Explore overlap, and their tests use no
+      # ports, user.home or shared paths (checked 2026-10-26, item 19).
       - name: Build & test the reactor
-        run: mvn -B -ntp clean install
+        # Server tests (com.daedalus.api/server) run in the parallel
+        # "Server tests" job; this job still builds and installs the server.
+        run: mvn -B -ntp -T 1C clean install -Dsurefire.excludesFile=${{ github.workspace }}/.github/ci/server-test-excludes.txt
 
       - name: Build the reference biome-plugin
         # Runs after the reactor so daedalus-plugin-api is in ~/.m2. Tests in
@@ -134,6 +139,79 @@ jobs:
           curl -sf http://localhost:8080/actuator/health >/dev/null
           python3 -m unittest discover -s sweep -p 'test_*.py'
           python3 sweep/api-sweep.py
+
+      - name: Upload coverage reports for the coverage job
+        uses: actions/upload-artifact@v7
+        with:
+          name: jacoco-build
+          path: '**/target/site/jacoco/'
+          if-no-files-found: ignore
+          retention-days: 3
+
+      - name: Upload server JAR (for inspection on failure)
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: daedalus-server-jar
+          path: daedalus-server/target/*.jar
+          if-no-files-found: ignore
+          retention-days: 7
+
+  server-tests:
+    name: Server tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Set deterministic locale
+        run: |
+          echo "LANG=en_US.UTF-8"  >> "$GITHUB_ENV"
+          echo "LC_ALL=en_US.UTF-8" >> "$GITHUB_ENV"
+          echo "TZ=UTC"             >> "$GITHUB_ENV"
+      - name: Install server dependencies (tests run in Build & test)
+        # Build & test already runs tests, SpotBugs, Checkstyle and JaCoCo on
+        # these modules; here they are only dependencies (no test-jars used).
+        run: mvn -B -ntp -T 1C install -pl daedalus-plugin-runtime,daedalus-wallet -am -Dmaven.test.skip=true -Dspotbugs.skip=true -Dcheckstyle.skip=true -Djacoco.skip=true
+      - name: Server tests and coverage check
+        # Server SpotBugs/Checkstyle already run in Build & test's reactor.
+        run: mvn -B -ntp verify -pl daedalus-server -Dspotbugs.skip=true -Dcheckstyle.skip=true
+      - name: Upload server coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: jacoco-server
+          path: daedalus-server/target/site/jacoco/
+          if-no-files-found: ignore
+          retention-days: 3
+
+  coverage:
+    name: Coverage
+    needs: [ build, server-tests ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Job-level env so the Codecov step's `if:` can see the secret (see the
+    # 2026-07-28 parse-failure note history in git).
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Download build coverage reports
+        uses: actions/download-artifact@v5
+        with:
+          name: jacoco-build
+          path: .
+      - name: Download server coverage report
+        uses: actions/download-artifact@v5
+        with:
+          name: jacoco-server
+          path: daedalus-server/target/site/jacoco
 
       # Coverage upload (BACKLOG: the last outstanding piece of the original
       # "GitHub Actions CI" item). Guarded on the CODECOV_TOKEN secret —
@@ -190,12 +268,3 @@ jobs:
           else
             echo "Badge unchanged — nothing to commit."
           fi
-
-      - name: Upload server JAR (for inspection on failure)
-        if: failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: daedalus-server-jar
-          path: daedalus-server/target/*.jar
-          if-no-files-found: ignore
-          retention-days: 7

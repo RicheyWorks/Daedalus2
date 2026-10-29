@@ -10,7 +10,9 @@ import catalog_validate as cv  # noqa: E402
 
 def game(gid, **kw):
     g = {"id": gid, "title": gid.title() + " Run", "summary": "An original round.",
-         "how_to_play": "HOW Do the thing.", "capabilities": ["scoreboard"]}
+         "how_to_play": "HOW Do the thing.", "difficulty": ["easy", "normal", "hard"],
+         "default_difficulty": "normal", "daedalus_realm": "r1", "daedalus_spot": "The test row",
+         "capabilities": ["scoreboard"]}
     g.update(kw)
     return g
 
@@ -60,6 +62,20 @@ class Validate(unittest.TestCase):
     def test_java_titles_checked(self):
         errs = cv.validate({"games": [], "java_cabinets": [{"id": "x", "title": "Tetris Pro", "summary": ""}]}, set(), {})
         self.assertTrue(errs)
+
+    def test_difficulty_defaults_to_normal(self):
+        errs = cv.validate({"games": [game("alpha", default_difficulty="easy")]}, {"alpha"}, {})
+        self.assertTrue(any("difficulty" in e for e in errs))
+
+    def test_every_game_has_a_daedalus_spot(self):
+        cat = json.loads(cv.CATALOG.read_text(encoding="utf-8"))
+        cabinets = json.loads((cv.CATALOG.parents[2] / "data/minigames/realm-cabinets.json").read_text(encoding="utf-8"))
+        by_realm = {r["realm"]: {c["game"] for c in r["cabinets"]} for r in cabinets["realms"]}
+        self.assertGreaterEqual(len(cat["games"]), 1)
+        for g in cat["games"]:
+            self.assertTrue((g.get("daedalus_spot") or "").strip(), g["id"])
+            self.assertEqual(cv.trademark_hits(g["daedalus_spot"]), [], g["id"])
+            self.assertIn(g["id"], by_realm.get(g.get("daedalus_realm"), set()), g["id"])
 
     def test_repo_catalog_is_valid(self):
         cat = json.loads(cv.CATALOG.read_text(encoding="utf-8"))

@@ -15,6 +15,7 @@ import stat
 import uuid
 
 from .contracts import ContractError, timestamp_key, validate_checkpoint
+from .evidence_paths import evidence_path_issue
 
 PACKET_SCHEMA = "daedalus.takeover-packet.v1"
 POINTER_SCHEMA = "daedalus.takeover-pointer.v1"
@@ -80,11 +81,10 @@ def _root(path, create=False):
 
 
 def relative(value):
-    if not isinstance(value, str) or len(value) > 220 or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/-]*", value):
+    issue = evidence_path_issue(value)
+    if issue == "shape":
         fail("unsafe_path", "Expected a portable relative evidence path: " + repr(value))
-    reserved = {"con", "prn", "aux", "nul"} | {prefix + str(i) for prefix in ("com", "lpt") for i in range(1, 10)}
-    if any(part in ("", ".", "..") or part.endswith(".") or part.split(".")[0].lower() in reserved
-           for part in value.split("/")):
+    if issue is not None:
         fail("unsafe_path", "Unsafe evidence path: " + value)
     return value
 

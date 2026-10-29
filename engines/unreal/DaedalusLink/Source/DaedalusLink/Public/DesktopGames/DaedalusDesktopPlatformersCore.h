@@ -482,6 +482,7 @@ public:
     std::size_t EnemyCount() const { return Enemies.size(); }
     std::size_t ParticleCount() const { return Particles.size(); }
     std::string HowToLine() const override { return "HOW Run the route, shoot, and jump the gaps."; }
+    std::string KeyHint() const override { return "KEYS Arrows move. Space jumps. J fires."; }
     void Render(Frame& F) const override {
         F.Clear(800,600,{135,206,235,255});
         if(AtTitle) {
@@ -494,6 +495,7 @@ public:
             F.AddText(245,410,"Code progress: "+std::to_string(CheatIndex)+" / 10",White,18);
             F.AddText(155,460,Option==1?"Play starts a fresh range. R/Restart keeps this mode.":"Play starts fresh with the selected lives. R/Restart: standard run.",White,15);
             F.AddText(155,490,HowToLine(),{255,236,180,255},15);
+            DrawAccess(F,155,510,KeyHint(),ContrastMark());
             return;
         }
         for(int I=-2;I<5;++I) {
@@ -585,6 +587,7 @@ public:
         F.AddText(25,562,"Move: WASD/arrows, stick/D-pad | Crouch: down | Jump: Space/W or pad A",White,13);
         F.AddText(25,581,"Hold fire: J/Z/X/Ctrl or pad X/RB/RT | R / Restart: new run",White,13);
         F.AddText(25,598,HowToLine(),{255,236,180,255},12);
+        DrawAccess(F,400,48,KeyHint(),ContrastMark());
         if(Over) {
             F.AddRect(140,220,520,210,{0,0,0,230});
             F.AddText(235,250,Won?(Option==1?"RANGE COMPLETE!":"MISSION COMPLETE!"):"GAME OVER",Won?Color{50,255,50,255}:Color{255,50,50,255},32);
@@ -780,6 +783,7 @@ public:
     std::size_t AttackCount() const { return Attacks.size(); }
     std::size_t GoldCount() const { return Gold.size(); }
     std::string HowToLine() const override { return "HOW Jump the terraces and face the sentinel."; }
+    std::string KeyHint() const override { return "KEYS Arrows move. Space jumps."; }
     void Render(Frame& F) const override {
         F.Clear(800,600,{20,20,40,255}); F.AddRect(0,0,800,480,{30,30,60,255});
         for(int X:{80,300,520,720}) { F.AddRect(X,200,8,40,{100,60,20,255}); F.AddCircle(X+4,195,6,{255,150,50,255}); }
@@ -858,6 +862,7 @@ public:
         F.AddText(60,575,Option==1?"Move: Left/Right, stick or hat   Jump: A/Space   Wall: hold Up"
             :"Jump: A/Space  Sword: B/X  Star: Y/RB  Spin: LB  Wall: up/down",White,16);
         F.AddText(60,556,HowToLine(),{255,236,180,255},13);
+        DrawAccess(F,300,540,KeyHint(),ContrastMark());
         if(Over) {
             F.AddRect(180,240,440,130,{20,20,40,240});
             F.AddText(Option==1?215:260,270,Won?(Option==1?"TERRACE CLIMB CLEAR!":"BOSS DEFEATED!"):"GAME OVER",Won?Color{255,200,50,255}:Color{220,50,50,255},Option==1?28:32);
