@@ -27,7 +27,11 @@
    ],
    "proportions": "raptor",
    "sheet": "Mob_Marsh_Hawk_sheet.jpg",
-   "status": "NOT READY"
+   "status": "NOT READY",
+   "posture": "standing",
+   "perch_deg": null,
+   "beak_style": "hook",
+   "facial_disc": false
   },
   {
    "name": "Mob_Bird_Hawk",
@@ -35,8 +39,8 @@
    "tris": 784,
    "size_m": [
     0.1428,
-    0.5634,
-    0.2328
+    0.507,
+    0.3
    ],
    "sockets": [
     "SOCKET_Talon",
@@ -50,16 +54,20 @@
    ],
    "proportions": "raptor",
    "sheet": "Mob_Bird_Hawk_sheet.jpg",
-   "status": "NOT READY"
+   "status": "NOT READY",
+   "posture": "perch",
+   "perch_deg": 35.0,
+   "beak_style": "hook",
+   "facial_disc": false
   },
   {
    "name": "Mob_Bird_Owl",
    "recipe": "data/contest/bird_pass_owl.quad.json",
-   "tris": 628,
+   "tris": 632,
    "size_m": [
     0.122,
-    0.449,
-    0.1956
+    0.3516,
+    0.2611
    ],
    "sockets": [
     "SOCKET_Talon",
@@ -73,7 +81,11 @@
    ],
    "proportions": "owl",
    "sheet": "Mob_Bird_Owl_sheet.jpg",
-   "status": "NOT READY"
+   "status": "NOT READY",
+   "posture": "perch",
+   "perch_deg": 45.0,
+   "beak_style": "owl",
+   "facial_disc": true
   },
   {
    "name": "Mob_Bird_Kestrel",
@@ -81,8 +93,8 @@
    "tris": 616,
    "size_m": [
     0.083,
-    0.3219,
-    0.146
+    0.2738,
+    0.1875
    ],
    "sockets": [
     "SOCKET_Talon",
@@ -96,7 +108,24 @@
    ],
    "proportions": "raptor",
    "sheet": "Mob_Bird_Kestrel_sheet.jpg",
-   "status": "NOT READY"
+   "status": "NOT READY",
+   "posture": "perch",
+   "perch_deg": 35.0,
+   "beak_style": "hook",
+   "facial_disc": false
   }
- ]
+ ],
+ "perch_pass_20261029": {
+  "rig_change": "bird_rig.py: opt-in posture 'perch' (perch_deg; body/neck/wings/tail pitched nose-up about the hip, head re-levelled, tail/wingtips swung clear of the ground, Fly clip pitches the body back level), beak_style 'owl', facial_disc",
+  "regression": "gull, crane, juvenile crane, Mob_Marsh_Hawk recipes byte-identical; test_bird_rig.py 64/64 (new: preset leg/neck ratios, defaults unchanged, perch, owl face)",
+  "perch_assets": [
+   "Mob_Bird_Hawk",
+   "Mob_Bird_Owl",
+   "Mob_Bird_Kestrel"
+  ],
+  "standing_assets": [
+   "Mob_Marsh_Hawk"
+  ],
+  "marsh_staging": "Mob_Marsh_Hawk rebuild copied into bot-team/staging/pythagoras-marsh-20261029; previous build kept as Mob_Marsh_Hawk_old (+ HAWK_REBUILD_NOTE.txt)"
+ }
 }
