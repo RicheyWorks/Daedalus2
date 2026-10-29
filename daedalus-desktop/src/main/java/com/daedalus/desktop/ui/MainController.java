@@ -1895,7 +1895,17 @@ public class MainController {
                     paintWallShine(g, DesktopPaint.wallHiStroke(
                             mark, tile.tileRow(), tile.tileCol()),
                             DesktopPaint.emptyMarkWallHiInk(tile.tileRow(), tile.tileCol()),
-                            DesktopPaint.emptyMarkWallInk(tile.tileRow(), tile.tileCol()));
+                            DesktopPaint.emptyMarkWallInk(tile.tileRow(), tile.tileCol()),
+                            tile.tileCol() > 0
+                                    && DesktopPaint.EMPTY_MARK[tile.tileRow()]
+                                            .charAt(tile.tileCol() - 1) != '#'
+                                    ? DesktopPaint.emptyMarkFloorInk(
+                                            tile.tileRow(), tile.tileCol() - 1) : null,
+                            tile.tileCol() + 1 < DesktopPaint.EMPTY_MARK[tile.tileRow()].length()
+                                    && DesktopPaint.EMPTY_MARK[tile.tileRow()]
+                                            .charAt(tile.tileCol() + 1) != '#'
+                                    ? DesktopPaint.emptyMarkFloorInk(
+                                            tile.tileRow(), tile.tileCol() + 1) : null);
                     if (tile.tileRow() + 1 < DesktopPaint.EMPTY_MARK.length
                             && DesktopPaint.EMPTY_MARK[tile.tileRow() + 1]
                                     .charAt(tile.tileCol()) != '#') {
@@ -2046,7 +2056,18 @@ public class MainController {
                     paintWallShine(g, DesktopPaint.wallHiStroke(
                             layout, r, c, store.scaleX(), store.scaleY()),
                             DesktopPaint.clearWallHiInk(edge),
-                            DesktopPaint.wallInk(edge));
+                            DesktopPaint.wallInk(edge),
+                            c > 0 && DesktopPaint.floorRole(tiles[r][c - 1]) != TileType.WALL
+                                    ? DesktopPaint.endFloorInk(
+                                            DesktopPaint.clearFloorInk(
+                                                    DesktopPaint.floorEdge(layout, r, c - 1)),
+                                            tiles[r][c - 1]) : null,
+                            c + 1 < layout.tileCols()
+                                    && DesktopPaint.floorRole(tiles[r][c + 1]) != TileType.WALL
+                                    ? DesktopPaint.endFloorInk(
+                                            DesktopPaint.clearFloorInk(
+                                                    DesktopPaint.floorEdge(layout, r, c + 1)),
+                                            tiles[r][c + 1]) : null);
                     if (r + 1 < layout.tileRows()
                             && DesktopPaint.floorRole(tiles[r + 1][c]) != TileType.WALL) {
                         paintWallFoot(g, DesktopPaint.wallFootStroke(
@@ -2669,7 +2690,18 @@ public class MainController {
                     double lamp = DesktopPaint.fogFloorIntensity(fog, r, c);
                     paintWallShine(g, DesktopPaint.wallHiStroke(layout, r, c, scaleX, scaleY),
                             DesktopPaint.fogWallHiInk(lamp, edge),
-                            DesktopPaint.fogWall(fog, r, c, edge));
+                            DesktopPaint.fogWall(fog, r, c, edge),
+                            c > 0 && DesktopPaint.floorRole(tiles[r][c - 1]) != TileType.WALL
+                                    ? DesktopPaint.endFloorInk(
+                                            DesktopPaint.fogFloor(fog, r, c - 1,
+                                                    DesktopPaint.floorEdge(layout, r, c - 1)),
+                                            tiles[r][c - 1]) : null,
+                            c + 1 < layout.tileCols()
+                                    && DesktopPaint.floorRole(tiles[r][c + 1]) != TileType.WALL
+                                    ? DesktopPaint.endFloorInk(
+                                            DesktopPaint.fogFloor(fog, r, c + 1,
+                                                    DesktopPaint.floorEdge(layout, r, c + 1)),
+                                            tiles[r][c + 1]) : null);
                     if (r + 1 < layout.tileRows()
                             && DesktopPaint.floorRole(tiles[r + 1][c]) != TileType.WALL) {
                         paintWallFoot(g, DesktopPaint.wallFootStroke(layout, r, c, scaleX, scaleY),
@@ -3263,8 +3295,45 @@ public class MainController {
 
     /** Post shine plus the row under it, so the catch feathers into the wall. */
     private static void paintWallShine(GraphicsContext g, DesktopPaint.Hairline shine,
-                                        String shineInk, String wallInk) {
+                                        String shineInk, String wallInk,
+                                        String leftFloor, String rightFloor) {
         paintCatchShine(g, shine, shineInk, wallInk);
+        paintWallShineSides(g, shine, shineInk, wallInk, leftFloor, rightFloor);
+    }
+
+    /** Three shine rows on an open post, mixed into the paver beside them. */
+    private static void paintWallShineSides(GraphicsContext g, DesktopPaint.Hairline shine,
+                                             String shineInk, String wallInk,
+                                             String leftFloor, String rightFloor) {
+        if (shine == null || shineInk == null || wallInk == null) {
+            return;
+        }
+        if (leftFloor == null && rightFloor == null) {
+            return;
+        }
+        String corner = DesktopPaint.catchCornerInk(shineInk, wallInk);
+        String edge = DesktopPaint.wallHiFeatherInk(shineInk, wallInk);
+        paintWallShineSideRow(g, DesktopPaint.catchLip(shine), wallInk, corner, leftFloor, rightFloor);
+        paintWallShineSideRow(g, shine, wallInk, edge, leftFloor, rightFloor);
+        paintWallShineSideRow(g, DesktopPaint.wallHiFeather(shine), wallInk, corner,
+                leftFloor, rightFloor);
+    }
+
+    private static void paintWallShineSideRow(GraphicsContext g, DesktopPaint.Hairline row,
+                                               String wallInk, String rowInk,
+                                               String leftFloor, String rightFloor) {
+        DesktopPaint.Hairline[] ends = DesktopPaint.catchEnds(row);
+        if (ends.length < 2) {
+            return;
+        }
+        if (leftFloor != null) {
+            paintHairline(g, ends[0],
+                    Color.web(DesktopPaint.wallShineSideInk(wallInk, leftFloor, rowInk)));
+        }
+        if (rightFloor != null) {
+            paintHairline(g, ends[1],
+                    Color.web(DesktopPaint.wallShineSideInk(wallInk, rightFloor, rowInk)));
+        }
     }
 
     /** Base of a post on open floor, so the wall meets the paver. */

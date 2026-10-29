@@ -2543,6 +2543,14 @@ public final class DesktopPaint {
         return mixHex(foot, wallFootInk(wall, side), 0.5);
     }
 
+    /** Shine row on an open post, halfway from the wall/paver seam into that row. */
+    public static String wallShineSideInk(String wall, String floor, String rowInk) {
+        if (wall == null || floor == null || rowInk == null) {
+            return rowInk;
+        }
+        return mixHex(wallFootInk(wall, floor), rowInk, 0.5);
+    }
+
     /** Top of an open side, halfway from the paver mix into the catch under the shine. */
     public static String wallSideJoinInk(String wall, String floor, String shine) {
         String side = wallFootInk(wall, floor);

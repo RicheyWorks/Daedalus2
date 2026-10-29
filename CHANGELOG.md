@@ -10,6 +10,14 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop post shine side.**
+  The desktop post
+  mixes the three
+  shine rows into
+  an open paver,
+  the same as the
+  web post.
+
 - **Well post shine side.**
   The three shine
   rows on an open

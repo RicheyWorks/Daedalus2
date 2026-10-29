@@ -838,6 +838,10 @@ class DesktopPaintTest {
                 .isEqualTo(DesktopPaint.mixHex(
                         DesktopPaint.wallFootInk("#120e0c", "#484339"),
                         DesktopPaint.wallFootInk("#120e0c", "#5c4a32"), 0.5));
+        assertThat(DesktopPaint.wallShineSideInk("#120e0c", "#484339", "#4a3824"))
+                .isEqualTo(DesktopPaint.mixHex(
+                        DesktopPaint.wallFootInk("#120e0c", "#484339"), "#4a3824", 0.5));
+        assertThat(DesktopPaint.wallShineSideInk("#120e0c", null, "#4a3824")).isEqualTo("#4a3824");
         assertThat(DesktopPaint.wallSideJoinInk("#120e0c", "#484339", "#4a3824"))
                 .isEqualTo(DesktopPaint.mixHex(
                         DesktopPaint.wallFootInk("#120e0c", "#484339"),
@@ -1512,6 +1516,8 @@ class DesktopPaintTest {
         assertThat(ctrl).contains("paintWallFoot(g, DesktopPaint.wallFootStroke(");
         assertThat(ctrl).contains("DesktopPaint.wallFootCornerInk(wallInk, floorInk, leftFloor)");
         assertThat(ctrl).contains("DesktopPaint.wallSideJoinInk(wallInk, floorInk, shineInk)");
+        assertThat(ctrl).contains("paintWallShineSides(g, shine, shineInk, wallInk, leftFloor, rightFloor)");
+        assertThat(ctrl).contains("DesktopPaint.wallShineSideInk(wallInk, leftFloor, rowInk)");
         assertThat(ctrl).contains("DesktopPaint.wallSideHeelInk(wallInk, floorInk, footInk)");
         assertThat(ctrl).contains("paintWallSide(g, DesktopPaint.wallSideStroke(");
         assertThat(ctrl).contains("paintFloorSkirts(g, layout, r, c, store.scaleX(), store.scaleY(),");
