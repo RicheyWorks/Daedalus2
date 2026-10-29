@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <cstring>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace daedalus { namespace pyrandom {
@@ -204,6 +205,16 @@ public:
 			}
 		}
 		return Result;
+	}
+
+	/** shuffle(x) in place: CPython's Fisher-Yates from the top with _randbelow(i + 1). */
+	template <typename T> void Shuffle(std::vector<T>& X)
+	{
+		for (std::size_t I = X.size() > 0 ? X.size() - 1 : 0; I > 0; --I)
+		{
+			const std::size_t J = static_cast<std::size_t>(Below(static_cast<std::uint32_t>(I + 1)));
+			std::swap(X[I], X[J]);
+		}
 	}
 
 	/** 32-bit words drawn since Seed(); re-seeding and discarding this many reproduces the state exactly. */

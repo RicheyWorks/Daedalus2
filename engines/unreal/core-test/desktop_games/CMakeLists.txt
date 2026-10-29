@@ -80,6 +80,7 @@ desktop_test(desktop_wardens_accord wardens_accord_test.cpp ../wardens_accord_pa
 desktop_test(desktop_facetlock facetlock_test.cpp ../facetlock_parity.txt)
 desktop_test(desktop_prismcairn prismcairn_test.cpp ../prismcairn_parity.txt)
 desktop_test(desktop_prismvault prismvault_test.cpp ../prismvault_parity.txt)
+desktop_test(desktop_shardfall shardfall_test.cpp ../shardfall_parity.txt)
 desktop_test(desktop_hints hints_test.cpp "")
 desktop_test(desktop_scoreboard scoreboard_test.cpp "")
 desktop_test(desktop_difficulty difficulty_test.cpp "")

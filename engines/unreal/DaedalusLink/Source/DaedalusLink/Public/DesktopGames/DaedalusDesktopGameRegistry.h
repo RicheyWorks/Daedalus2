@@ -15,6 +15,7 @@
 #include "DaedalusDesktopFacetlockCore.h"
 #include "DaedalusDesktopPrismcairnCore.h"
 #include "DaedalusDesktopPrismvaultCore.h"
+#include "DaedalusDesktopShardfallCore.h"
 #include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
@@ -43,7 +44,8 @@ inline const std::vector<Entry>& Catalog() {
         {"wardens_accord","Wardens' Accord","Take altar shards and spend them to summon Warden spirits. Left/Right or stick: pick; J/Space or pad A: take or summon"},
         {"facetlock","Facetlock Lattice","Slide wrapping rows and columns until each row is one hue. Arrows or stick: cursor; J/K or pad A/B: slide row; Space/Shift or pad X/Y: slide column"},
         {"prismcairn","Prismcairn Duel","Out-think the Warden at the shard cairns; lift the last shard. Left/Right or stick: pick a cairn; J/K/Space/Shift or pad A/B/X/Y: take 1/2/3/4"},
-        {"prismvault","Prismvault Weigh","Find the hollow shard with the Warden's balance. Left/Right or stick: pick; J or pad A: pan it; Space or pad X: weigh; Shift or pad Y: name"}
+        {"prismvault","Prismvault Weigh","Find the hollow shard with the Warden's balance. Left/Right or stick: pick; J or pad A: pan it; Space or pad X: weigh; Shift or pad Y: name"},
+        {"shardfall","Shardfall Gamble","Draw glowing shards from the seam and bank before it cracks. J/Space or pad A: draw; K/Shift or pad B/X: bank"}
     };
     return Entries;
 }
@@ -70,6 +72,7 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="facetlock") return std::make_unique<FacetlockGame>();
     if(Id=="prismcairn") return std::make_unique<PrismcairnGame>();
     if(Id=="prismvault") return std::make_unique<PrismvaultGame>();
+    if(Id=="shardfall") return std::make_unique<ShardfallGame>();
     return nullptr;
 }
 
