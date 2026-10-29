@@ -678,6 +678,23 @@
       "tests": [
         "test_prismvault.py"
       ]
+    },
+    {
+      "id": "shardfall",
+      "title": "Shardfall Gamble",
+      "summary": "draw glowing shards from the Prismheart seam and bank them before it cracks.",
+      "how_to_play": "HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot. Reach the target by the last round.",
+      "module": "tools/minigames/shardfall.py",
+      "start": "shardfall.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_shardfall.py"
+      ]
     }
   ]
 }

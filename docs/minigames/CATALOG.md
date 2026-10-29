@@ -142,3 +142,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `wardens_accord` | Wardens' Accord | `tools/minigames/wardens_accord.py` | HOW Take one of three altar shards each round, then spend matching shards to summon spirits; reach the target score before the rounds end. |
 | `facetlock` | Facetlock Lattice | `tools/minigames/facetlock.py` | HOW Slide lattice rows and columns (they wrap) until each row shows a single hue; finish inside the move budget. |
 | `prismvault` | Prismvault Weigh | `tools/minigames/prismvault.py` | HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out. |
+| `shardfall` | Shardfall Gamble | `tools/minigames/shardfall.py` | HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot. Reach the target by the last round. |

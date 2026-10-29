@@ -1064,7 +1064,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -10.0,
+            -11.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1078,7 +1078,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -7.5,
+            -8.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1092,7 +1092,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -5.0,
+            -6.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1106,7 +1106,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1120,7 +1120,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            0.0,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1136,7 +1136,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            2.5,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1152,7 +1152,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            5.0,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1168,7 +1168,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            7.5,
+            6.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1184,7 +1184,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            10.0,
+            8.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1192,6 +1192,22 @@
           "difficulty": "normal",
           "module": "tools/minigames/prismvault.py",
           "start": "prismvault.start(895410454, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
+        },
+        {
+          "game": "shardfall",
+          "title": "Shardfall Gamble",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            11.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 242191464,
+          "difficulty": "normal",
+          "module": "tools/minigames/shardfall.py",
+          "start": "shardfall.start(242191464, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]
