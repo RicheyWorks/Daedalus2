@@ -1083,19 +1083,26 @@ public final class ExplorePaint {
         });
     }
 
-    /** Unshaded vault texel. Plank edges mix, and the rows beside the catch feather. */
+    /** Unshaded vault texel. Plank edges mix, both rows beside the catch feather, and the row under that feather leans toward it. */
     public static int[] ceilingTexColor(int x, int y) {
         int[] here = ceilingFace(x, y);
         int band = y & 7;
         int[] color = band == 0 ? ceilingSeamX(x, y, here) : ceilingSeam(x, y, here);
-        if (band != 0 && band != 2) {
-            return color;
+        if (band == 0 || band == 2) {
+            int[] shine = ceilingFace(x, band == 0 ? y + 1 : y - 1);
+            return new int[] {
+                    (color[0] + shine[0]) / 2,
+                    (color[1] + shine[1]) / 2,
+                    (color[2] + shine[2]) / 2};
         }
-        int[] shine = ceilingFace(x, band == 0 ? y + 1 : y - 1);
-        return new int[] {
-                (color[0] + shine[0]) / 2,
-                (color[1] + shine[1]) / 2,
-                (color[2] + shine[2]) / 2};
+        if (band == 3) {
+            int[] above = ceilingTexColor(x, y - 1);
+            return new int[] {
+                    (color[0] * 3 + above[0]) / 4,
+                    (color[1] * 3 + above[1]) / 4,
+                    (color[2] * 3 + above[2]) / 4};
+        }
+        return color;
     }
 
     private static int[] ceilingSeam(int x, int y, int[] here) {

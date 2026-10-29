@@ -482,6 +482,16 @@ class ExplorePaintTest {
         assertThat(vaultFeather[0]).isEqualTo((vaultShine[0] + vaultBody[0]) / 2);
         assertThat(ExplorePaint.ceilingTexColor(2, 1)).containsExactly(vaultShine);
         assertThat(ExplorePaint.ceilingTexColor(2, 4)).containsExactly(ExplorePaint.ceilingFace(2, 4));
+        int[] vaultUnder = ExplorePaint.ceilingFace(2, 3);
+        int[] vaultFeatherRow = ExplorePaint.ceilingTexColor(2, 2);
+        assertThat(ExplorePaint.ceilingTexColor(2, 3)[0])
+                .isEqualTo((vaultUnder[0] * 3 + vaultFeatherRow[0]) / 4);
+        int[] vaultEdge = ExplorePaint.ceilingFace(7, 3);
+        int[] vaultEdgeNext = ExplorePaint.ceilingFace(8, 3);
+        int vaultEdgeSeam = (vaultEdge[0] + vaultEdgeNext[0]) / 2;
+        int[] vaultEdgeFeather = ExplorePaint.ceilingTexColor(7, 2);
+        assertThat(ExplorePaint.ceilingTexColor(7, 3)[0])
+                .isEqualTo((vaultEdgeSeam * 3 + vaultEdgeFeather[0]) / 4);
         int[] vaultLid = ExplorePaint.ceilingFace(2, 0);
         assertThat(ExplorePaint.ceilingTexColor(2, 0)[0])
                 .isEqualTo((vaultLid[0] + vaultShine[0]) / 2);

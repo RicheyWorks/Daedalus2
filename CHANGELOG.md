@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore vault under catch.**
+  The row under
+  the vault feather
+  leans a quarter
+  toward that row,
+  joint included.
+  The catch itself
+  stays the shine.
+
 - **Explore floor under catch.**
   The row under
   the paver feather
