@@ -1064,7 +1064,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -6.25,
+            -7.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1078,7 +1078,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -3.75,
+            -5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1092,7 +1092,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -1.25,
+            -2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1106,7 +1106,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1120,7 +1120,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            3.75,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1136,7 +1136,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            6.25,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1144,6 +1144,22 @@
           "difficulty": "normal",
           "module": "tools/minigames/lumenpath.py",
           "start": "lumenpath.start(2037330375, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
+        },
+        {
+          "game": "wardens_accord",
+          "title": "Wardens' Accord",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            7.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 450290639,
+          "difficulty": "normal",
+          "module": "tools/minigames/wardens_accord.py",
+          "start": "wardens_accord.start(450290639, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]
