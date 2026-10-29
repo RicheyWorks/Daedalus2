@@ -742,6 +742,23 @@
       "tests": [
         "test_prismcairn.py"
       ]
+    },
+    {
+      "id": "spiritkite",
+      "title": "Spiritkite Weave",
+      "summary": "fly a spirit kite across Prismheart's sky isles, gather lanterns and return to the anchor.",
+      "how_to_play": "HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out.",
+      "module": "tools/minigames/spiritkite.py",
+      "start": "spiritkite.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_spiritkite.py"
+      ]
     }
   ]
 }

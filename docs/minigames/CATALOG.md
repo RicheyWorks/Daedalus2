@@ -154,3 +154,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `prismvault` | Prismvault Weigh | `tools/minigames/prismvault.py` | HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out. |
 | `shardfall` | Shardfall Gamble | `tools/minigames/shardfall.py` | HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot. Reach the target by the last round. |
 | `prismcairn` | Prismcairn Duel | `tools/minigames/prismcairn.py` | HOW Take 1 or more shards (up to the limit) from one cairn each turn; the Warden replies. Lift the last shard to win the round; best of three. |
+| `spiritkite` | Spiritkite Weave | `tools/minigames/spiritkite.py` | HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out. |
