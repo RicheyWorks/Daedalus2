@@ -43,6 +43,14 @@ public final class ArcadeHall {
     public static final int GRID = 2;
     /** Wall height of the kit, metres. */
     public static final int HEIGHT = 4;
+    /** The hall floor sits on Foundation_2m plinths this far above island grade (metres); EntranceSteps climb it in 3 steps. */
+    public static final double FOUNDATION_M = 0.4;
+    /** Horizontal run of the EntranceSteps out from the doorway, metres. */
+    public static final double STEPS_RUN_M = 0.9;
+    /** Number of 1.6 m PathTile slabs the assembler lays from the foot of the steps out onto the island. */
+    public static final int PATH_TILES = 3;
+    /** Path slab length, metres. */
+    public static final double PATH_TILE_M = 1.6;
 
     /** One sample layout from the assembler. */
     public record Layout(String id, String title, int cellsW, int cellsD, int doorCell, double spawnInsideX, double spawnInsideY,
@@ -112,6 +120,17 @@ public final class ArcadeHall {
     public boolean inside(BlockCoordinate b) {
         BlockCoordinate c = corner();
         return b.y() == anchor.y() && b.x() >= c.x() && b.x() < c.x() + layout.widthM() && b.z() > c.z() && b.z() < c.z() + layout.depthM();
+    }
+
+    /** Island block at the foot of the entrance steps, straight out from the doorway (-Z); the island grade there is
+     * {@link #FOUNDATION_M} below the hall floor, which is under one block, so it shares the anchor's Y. */
+    public BlockCoordinate stepsFoot() {
+        return new BlockCoordinate(anchor.x(), anchor.y(), anchor.z() - (int) Math.ceil(STEPS_RUN_M));
+    }
+
+    /** Island block where the glowing path to the door begins (the far end of the path slabs). */
+    public BlockCoordinate pathStart() {
+        return new BlockCoordinate(anchor.x(), anchor.y(), anchor.z() - (int) Math.ceil(STEPS_RUN_M + PATH_TILES * PATH_TILE_M));
     }
 
     /** Opens the doorway (the hall is open for business). */
