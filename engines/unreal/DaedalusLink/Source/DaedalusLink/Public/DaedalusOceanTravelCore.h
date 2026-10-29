@@ -29,6 +29,14 @@ struct Route
     std::string DestinationRealm;
     std::string ArrivalAnchor;
 };
+// Session/realm-directory IDs are canonical; retain the original display-name contracts.
+// Registries should use one spelling consistently, never both aliases as separate realms.
+inline bool IsOceanRealm(const std::string& realm) { return realm == "OCEAN" || realm == "Ocean Realm"; }
+inline bool IsPortalRealm(const std::string& realm) { return realm == "PORTAL" || realm == "Portal Realm"; }
+inline bool SameRealmIdentity(const std::string& a, const std::string& b)
+{
+    return a == b || (IsOceanRealm(a) && IsOceanRealm(b)) || (IsPortalRealm(a) && IsPortalRealm(b));
+}
 inline bool ValidDock(const Dock& dock)
 {
     return ValidIdentifier(dock.Id) && ValidIdentifier(dock.Realm)
@@ -39,24 +47,25 @@ inline Route Board(const std::string& currentRealm, const Dock& departure,
 {
     if (!ValidVessel(vessel) || !ValidIdentifier(currentRealm)
         || !ValidDock(departure) || !ValidDock(oceanArrival)
-        || departure.Realm != currentRealm || currentRealm == "Ocean Realm"
-        || oceanArrival.Realm != "Ocean Realm" || oceanArrival.ArrivalAnchor.empty()
+        || departure.Realm != currentRealm || IsOceanRealm(currentRealm)
+        || !IsOceanRealm(oceanArrival.Realm) || oceanArrival.ArrivalAnchor.empty()
         || (vessel == Vessel::Boat && (departure.Underwater || oceanArrival.Underwater)))
         return {};
     return {true, oceanArrival.Realm, oceanArrival.ArrivalAnchor};
 }
 inline Route Land(const std::string& currentRealm, const Dock& destination,
-                  Vessel vessel)
+                  Vessel vessel, const std::string& shoreReturnRealm = "Portal Realm")
 {
     if (!ValidVessel(vessel) || !ValidDock(destination)
-        || currentRealm != "Ocean Realm" || destination.Id.empty()
-        || destination.Realm.empty() || destination.Realm == "Ocean Realm"
+        || !IsOceanRealm(currentRealm) || destination.Id.empty()
+        || destination.Realm.empty() || IsOceanRealm(destination.Realm)
         || destination.ArrivalAnchor.empty()
         || (vessel == Vessel::Boat && destination.Underwater))
         return {};
-    // Other worlds require their configured underwater docks. Ordinary shores
-    // return to Portal/Dragon Warrior land, never an arbitrary requested realm.
-    if (!destination.Underwater && destination.Realm != "Portal Realm") return {};
+    // The caller supplies its host-owned departure record, never a requested destination.
+    // The legacy three-argument API retains its original Portal-only shore behavior.
+    if (!destination.Underwater && (!ValidIdentifier(shoreReturnRealm)
+        || IsOceanRealm(shoreReturnRealm) || !SameRealmIdentity(destination.Realm, shoreReturnRealm))) return {};
     return {true, destination.Realm, destination.ArrivalAnchor};
 }
 
@@ -79,12 +88,13 @@ class DockRegistry
         for (const auto& dock : docks) if (dock.Id == id) return &dock;
         return nullptr;
     }
-    static Route ResolvePair(const Dock& from, const Dock& to, Vessel vessel)
+    static Route ResolvePair(const Dock& from, const Dock& to, Vessel vessel,
+                             const std::string& shoreReturnRealm = "Portal Realm")
     {
-        if (from.Realm == "Ocean Realm")
+        if (IsOceanRealm(from.Realm))
         {
             if (vessel == Vessel::Boat && from.Underwater) return {};
-            return Land(from.Realm, to, vessel);
+            return Land(from.Realm, to, vessel, shoreReturnRealm);
         }
         return Board(from.Realm, from, to, vessel);
     }
@@ -100,7 +110,7 @@ public:
         {
             if (!ValidIdentifier(registeredRealms[i])) return false;
             for (std::size_t j=0;j<i;++j)
-                if (registeredRealms[i] == registeredRealms[j]) return false;
+                if (SameRealmIdentity(registeredRealms[i], registeredRealms[j])) return false;
         }
         for (std::size_t i=0;i<docks.size();++i)
         {
@@ -119,8 +129,9 @@ public:
             const Dock* from=Find(docks,connection.DepartureId);
             const Dock* to=Find(docks,connection.DestinationId);
             if (!from || !to || from == to) return false;
-            if (connection.Boats && !ResolvePair(*from,*to,Vessel::Boat).Allowed) return false;
-            if (connection.Submarines && !ResolvePair(*from,*to,Vessel::Submarine).Allowed) return false;
+            // A configured shore edge is only potential. Resolve checks the actual passenger departure.
+            if (connection.Boats && !ResolvePair(*from,*to,Vessel::Boat,to->Realm).Allowed) return false;
+            if (connection.Submarines && !ResolvePair(*from,*to,Vessel::Submarine,to->Realm).Allowed) return false;
             for (std::size_t j=0;j<i;++j)
                 if (connections[j].DepartureId == connection.DepartureId
                     && connections[j].DestinationId == connection.DestinationId) return false;
@@ -133,7 +144,8 @@ public:
         return true;
     }
     Route Resolve(const std::string& currentRealm, const std::string& departureId,
-                  const std::string& destinationId, Vessel vessel) const
+                  const std::string& destinationId, Vessel vessel,
+                  const std::string& shoreReturnRealm = "Portal Realm") const
     {
         if (!ValidVessel(vessel) || !ValidIdentifier(currentRealm)
             || !ValidIdentifier(departureId) || !ValidIdentifier(destinationId)) return {};
@@ -144,7 +156,7 @@ public:
             if (connection.DepartureId == departureId && connection.DestinationId == destinationId
                 && ((vessel == Vessel::Boat && connection.Boats)
                     || (vessel == Vessel::Submarine && connection.Submarines)))
-                return ResolvePair(*from,*to,vessel);
+                return ResolvePair(*from,*to,vessel,shoreReturnRealm);
         return {};
     }
 };

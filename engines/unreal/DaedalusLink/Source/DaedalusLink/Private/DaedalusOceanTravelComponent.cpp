@@ -16,6 +16,7 @@
 #include "DaedalusOceanDock.h"
 #include "EngineUtils.h"
 #include "CollisionQueryParams.h"
+#include "Templates/UnrealTemplate.h"
 
 namespace
 {
@@ -124,7 +125,16 @@ void ADaedalusOceanVessel::RemoveHelmMapping()
             Subsystem->RemoveMappingContext(HelmMapping);
     MappingController.Reset();LocalHelm=FVector::ZeroVector;LocalAge=1;SendAge=0;bLocalSender=false;
 }
-void ADaedalusOceanVessel::UnPossessed() {RemoveHelmMapping();Super::UnPossessed();}
+void ADaedalusOceanVessel::UnPossessed()
+{
+    // Retire the departing pilot's authoritative command before cleanup or
+    // Super can notify callbacks that immediately install another controller.
+    // ForwardSpeed is physical inertia, not pilot input, and is preserved.
+    Helm=FVector::ZeroVector;
+    InputAge=1;
+    RemoveHelmMapping();
+    Super::UnPossessed();
+}
 void ADaedalusOceanVessel::OnRep_Controller()
 {
     if (MappingController.Get()!=GetController()) RemoveHelmMapping();
@@ -223,7 +233,7 @@ bool UDaedalusOceanTravelComponent::IsHost() const
 bool UDaedalusOceanTravelComponent::ConfigureHost(const TArray<FString>& RegisteredRealms,
     const TArray<FDaedalusOceanDock>& Docks, const TArray<FDaedalusOceanConnection>& Connections)
 {
-    if (!IsHost() || RegisteredRealms.Num() > 32 || Docks.Num() > 1024
+    if (!IsHost() || bBoardingTransition || RegisteredRealms.Num() > 32 || Docks.Num() > 1024
         || Connections.Num() > 4096) return false;
     // A reload cannot remove or relocate the exit of a boarded passenger.
     for (const auto& Session : BoardingAvatars)
@@ -277,8 +287,16 @@ bool UDaedalusOceanTravelComponent::ResolveForPlayer(AController* Player,
     });
     if (!Dock || FVector::DistSquared(Location, Dock->BoardingLocation)
         > Dock->BoardingRadiusCm * Dock->BoardingRadiusCm) return false;
+    FString ShoreReturnRealm;
+    if (const auto* Boarding = BoardingAvatars.Find(Player);
+        Boarding && Boarding->Vessel.Get() == Vessel && Boarding->Avatar.IsValid()
+        && Boarding->Avatar->HasAuthority() && Boarding->Avatar->GetWorld() == GetWorld()
+        && !Boarding->Avatar->GetController())
+        ShoreReturnRealm = Boarding->DepartureRealm;
+    // Explicit empty origin fails closed for an absent/stale/different-vessel
+    // boarding session; do not fall back to the legacy Portal-only core default.
     const auto Route = Registry.Resolve(Utf8(Vessel->CurrentRealm), Utf8(DepartureId),
-                                       Utf8(DestinationId), Kind);
+                                       Utf8(DestinationId), Kind, Utf8(ShoreReturnRealm));
     if (!Route.Allowed) return false;
     DestinationRealm = UTF8_TO_TCHAR(Route.DestinationRealm.c_str());
     ArrivalAnchor = UTF8_TO_TCHAR(Route.ArrivalAnchor.c_str());
@@ -288,7 +306,7 @@ bool UDaedalusOceanTravelComponent::ResolveForPlayer(AController* Player,
 bool UDaedalusOceanTravelComponent::BoardAtDock(AController* Player,
     ADaedalusOceanVessel* Vessel, const FString& DockId)
 {
-    if (!IsHost() || !IsValid(Player) || !IsValid(Vessel) || !Player->HasAuthority()
+    if (!IsHost() || bBoardingTransition || !IsValid(Player) || !IsValid(Vessel) || !Player->HasAuthority()
         || !Vessel->HasAuthority() || Player->GetWorld() != GetWorld()
         || Vessel->GetWorld() != GetWorld() || Vessel->GetController()) return false;
     APawn* Avatar = Player->GetPawn();
@@ -309,9 +327,14 @@ bool UDaedalusOceanTravelComponent::BoardAtDock(AController* Player,
         if (!Finite(Position) || FVector::DistSquared(Position, Dock->BoardingLocation)
             > Dock->BoardingRadiusCm * Dock->BoardingRadiusCm) return false;
     }
+    // Snapshot the validated dock BEFORE Possess can broadcast arbitrary host
+    // callbacks. No Dock pointer dereference is safe across that boundary.
+    const FString DepartureRealm = DaedalusOceanTravel::IsOceanRealm(Utf8(Dock->Realm))
+        ? FString() : Dock->Realm;
+    TGuardValue<bool> BoardingTransition(bBoardingTransition, true);
     Player->Possess(Vessel);
     if (Player->GetPawn() != Vessel || Vessel->GetController() != Player) return false;
-    BoardingAvatars.Add(Player, {Avatar, Vessel, Avatar->GetActorEnableCollision(), Avatar->IsHidden()});
+    BoardingAvatars.Add(Player, {Avatar, Vessel, Avatar->GetActorEnableCollision(), Avatar->IsHidden(), DepartureRealm});
     Avatar->SetActorEnableCollision(false);
     Avatar->SetActorHiddenInGame(true);
     return true;
@@ -320,7 +343,7 @@ bool UDaedalusOceanTravelComponent::BoardAtDock(AController* Player,
 bool UDaedalusOceanTravelComponent::DisembarkAtDock(AController* Player,
     ADaedalusOceanVessel* Vessel, const FString& DockId)
 {
-    if (!IsHost() || !IsValid(Player) || !IsValid(Vessel) || !Player->HasAuthority()
+    if (!IsHost() || bBoardingTransition || !IsValid(Player) || !IsValid(Vessel) || !Player->HasAuthority()
         || !Vessel->HasAuthority() || Player->GetWorld() != GetWorld()
         || Vessel->GetWorld() != GetWorld() || Player->GetPawn() != Vessel
         || Vessel->GetController() != Player) return false;
@@ -336,9 +359,17 @@ bool UDaedalusOceanTravelComponent::DisembarkAtDock(AController* Player,
     if (!Dock || Dock->Realm != Vessel->CurrentRealm || !Finite(Position)
         || FVector::DistSquared(Position, Dock->BoardingLocation)
             > Dock->BoardingRadiusCm * Dock->BoardingRadiusCm) return false;
+    // Collision/teleport and possession can invoke host callbacks. Snapshot all
+    // map/array values before the first boundary and serialize the entire exit,
+    // including rollback; no Original or Dock pointer is used after it.
+    const bool bOriginalCollision = Original->bCollision;
+    const bool bOriginalHidden = Original->bHidden;
+    const FVector ExitLocation = Dock->ExitLocation;
+    const FRotator ExitRotation = Avatar->GetActorRotation();
+    TGuardValue<bool> BoardingTransition(bBoardingTransition, true);
     // Collision-aware teleport refuses an obstructed exit before possession changes.
-    Avatar->SetActorEnableCollision(Original->bCollision);
-    if (!Avatar->TeleportTo(Dock->ExitLocation, Avatar->GetActorRotation(), false, false))
+    Avatar->SetActorEnableCollision(bOriginalCollision);
+    if (!Avatar->TeleportTo(ExitLocation, ExitRotation, false, false))
     {
         Avatar->SetActorEnableCollision(false);
         return false;
@@ -349,7 +380,7 @@ bool UDaedalusOceanTravelComponent::DisembarkAtDock(AController* Player,
         Avatar->SetActorEnableCollision(false);
         return false;
     }
-    Avatar->SetActorHiddenInGame(Original->bHidden);
+    Avatar->SetActorHiddenInGame(bOriginalHidden);
     BoardingAvatars.Remove(Player);
     return true;
 }
