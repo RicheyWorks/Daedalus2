@@ -123,3 +123,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Plimsoll Lines (G522, quest q_plimsoll_lines)
 - `plimsoll_lines.py`: reads `census.json` or a G206 report (read-only) and marks per island how many more asset definitions it can take before its beacon turns amber (`to_amber`), red (`to_red`), or its world stops fitting all-resident (`to_spill`); lines = brute-force oracle over the G206 beacon. `--add WORLD:SLOT:N` checks a cargo list: `afloat`/`awash`/`sunk`; `--fail-on-sunk` exits 1. The verdict drives Surveyor Odile's hull lines in game (`plimsoll_lines_test.py`; CI `Plimsoll Lines`). Rules: `docs/islands/DISKSAVER-PLIMSOLL-LINES.md`.
+
+## Harbour Seals (G525, quest q_harbour_seals)
+- `harbour_seals.py`: checks a committed G206 report against its `census.json` and the current config (all read-only): `unsealed` (no `census_sources`), `stale` (sources, snapshot date or budget differ), `tampered` (a fresh G206 re-price does not reproduce it, field-level diff by path) or `sealed`. `--fail-on-broken` exits 1 unless sealed; CI seals the G505 baseline. The verdict drives Customs Officer Perpetua's wax stamp in game (`harbour_seals_test.py`; CI `Harbour Seals`). Rules: `docs/islands/DISKSAVER-HARBOUR-SEALS.md`.
