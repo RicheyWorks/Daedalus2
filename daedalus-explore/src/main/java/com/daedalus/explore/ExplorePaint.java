@@ -1095,7 +1095,7 @@ public final class ExplorePaint {
 
     /**
      * Unshaded vault texel. Plank edges mix, both rows beside the catch feather,
-     * the row under that feather leans toward it, and the row above the lip leans toward the lip.
+     * the courses under that feather lean toward it, and the row above the lip leans toward the lip.
      */
     public static int[] ceilingTexColor(int x, int y) {
         int[] here = ceilingFace(x, y);
@@ -1108,7 +1108,7 @@ public final class ExplorePaint {
                     (color[1] + shine[1]) / 2,
                     (color[2] + shine[2]) / 2};
         }
-        if (band == 3) {
+        if (band == 3 || band == 4) {
             int[] above = ceilingTexColor(x, y - 1);
             return new int[] {
                     (color[0] * 3 + above[0]) / 4,

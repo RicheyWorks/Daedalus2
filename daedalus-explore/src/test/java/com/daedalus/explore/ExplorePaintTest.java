@@ -481,7 +481,10 @@ class ExplorePaintTest {
         int[] vaultFeather = ExplorePaint.ceilingTexColor(2, 2);
         assertThat(vaultFeather[0]).isEqualTo((vaultShine[0] + vaultBody[0]) / 2);
         assertThat(ExplorePaint.ceilingTexColor(2, 1)).containsExactly(vaultShine);
-        assertThat(ExplorePaint.ceilingTexColor(2, 4)).containsExactly(ExplorePaint.ceilingFace(2, 4));
+        int[] vaultCourse = ExplorePaint.ceilingFace(2, 4);
+        int[] vaultCourseAbove = ExplorePaint.ceilingTexColor(2, 3);
+        assertThat(ExplorePaint.ceilingTexColor(2, 4)[0])
+                .isEqualTo((vaultCourse[0] * 3 + vaultCourseAbove[0]) / 4);
         int[] vaultUnder = ExplorePaint.ceilingFace(2, 3);
         int[] vaultFeatherRow = ExplorePaint.ceilingTexColor(2, 2);
         assertThat(ExplorePaint.ceilingTexColor(2, 3)[0])
@@ -502,10 +505,14 @@ class ExplorePaintTest {
                 .isEqualTo((vaultLipSeam + ExplorePaint.ceilingFace(7, 1)[0]) / 2);
         int[] plank = ExplorePaint.ceilingFace(7, 4);
         int[] plankNext = ExplorePaint.ceilingFace(8, 4);
+        int plankMix = (plank[0] + plankNext[0]) / 2;
+        int[] plankAbove = ExplorePaint.ceilingTexColor(7, 3);
         assertThat(ExplorePaint.ceilingTexColor(7, 4)[0])
-                .isEqualTo((plank[0] + plankNext[0]) / 2);
-        assertThat(ExplorePaint.ceilingTexColor(4, 4))
-                .containsExactly(ExplorePaint.ceilingFace(4, 4));
+                .isEqualTo((plankMix * 3 + plankAbove[0]) / 4);
+        int[] vaultMid = ExplorePaint.ceilingFace(4, 4);
+        int[] vaultMidAbove = ExplorePaint.ceilingTexColor(4, 3);
+        assertThat(ExplorePaint.ceilingTexColor(4, 4)[0])
+                .isEqualTo((vaultMid[0] * 3 + vaultMidAbove[0]) / 4);
         int[] vaultCorner = ExplorePaint.ceilingFace(7, 7);
         int[] vaultSide = ExplorePaint.ceilingFace(8, 7);
         int[] vaultDown = ExplorePaint.ceilingFace(7, 8);
