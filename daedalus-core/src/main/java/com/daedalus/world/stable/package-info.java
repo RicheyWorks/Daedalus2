@@ -24,5 +24,9 @@
  * the waiting horses in turn; each has a shoeing time, a fret weight and a show-ring call. The exact
  * subset DP minimizes total weighted lateness, while Smith's rule (fret per minute) ignores the calls
  * and leaves early-called horses waiting.
+ *
+ * <p>G530 Tack Room Pegs ({@link TackRoomPegs}, quest {@code q_tidy_tack_room}): hang every piece of tack on the
+ * fewest pegs with a weight limit per peg and no two feuding horses' tack on one peg (bin packing with conflicts);
+ * exact subset DP vs. first-fit, which a feud pushes to an extra peg.
  */
 package com.daedalus.world.stable;
