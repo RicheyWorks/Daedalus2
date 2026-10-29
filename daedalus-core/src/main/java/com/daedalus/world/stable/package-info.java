@@ -19,5 +19,10 @@
  * one paddock a day; each paddock regrows while it rests, up to its cap. The pasture stays green when
  * the season plan equals the exact rest-counter optimum, while always grazing the fullest paddock
  * strips the lush paddocks before they refill.
+ *
+ * <p>G528 {@link com.daedalus.world.stable.ShoeingShed} (quest {@code q_sound_hooves}): one farrier shoes
+ * the waiting horses in turn; each has a shoeing time, a fret weight and a show-ring call. The exact
+ * subset DP minimizes total weighted lateness, while Smith's rule (fret per minute) ignores the calls
+ * and leaves early-called horses waiting.
  */
 package com.daedalus.world.stable;
