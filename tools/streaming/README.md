@@ -144,3 +144,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Bell Buoys (G538, quest q_bell_buoys)
 - `bell_buoys.py`: checks every `.github/workflows` pull_request `paths` filter against the repo files its run steps use (read-only, plain-text parse): errors `unguarded` (a used file, module or directory no pattern matches, so changing it never triggers the check) and `missing_file`; advisory `stale_pattern` (a pattern matching no file). `--under PREFIX` scopes to one lane. Verdict `ringing`/`muffled`/`silent`; `--fail-on` exits 1. Dev tooling only, nothing runs in Unreal. Buoy-tender Ottoline checks the buoys in game (`bell_buoys_test.py`; CI `Bell Buoys`). Rules: `docs/islands/DISKSAVER-BELL-BUOYS.md`.
+
+## Rigging Check (G541, disk-saver)
+
+`rigging_check.py` surveys `.github/workflows` read-only: `uses:` actions with no ref or a moving branch ref (error), action major-version drift, third-party tags instead of SHAs, `python-version` drift and missing top-level `permissions:` (advisories). `--under PREFIX` scopes findings; verdict taut/slack/frayed. NPC Bosun Thaddeus; hook `data/islands/disk-saver/rigging-check-v1.json`; doc `docs/islands/DISKSAVER-RIGGING-CHECK.md`.
