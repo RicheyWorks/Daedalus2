@@ -867,6 +867,12 @@ public final class ExplorePaint {
                     (body[1] * 3 + face[1]) / 4,
                     (body[2] * 3 + face[2]) / 4};
         }
+        if ((y & 7) == 6 && !joint) {
+            return new int[] {
+                    (face[0] * 3 + BRICK_MORTAR_R) / 4,
+                    (face[1] * 3 + BRICK_MORTAR_G) / 4,
+                    (face[2] * 3 + BRICK_MORTAR_B) / 4};
+        }
         if (!course && !joint) {
             return face;
         }

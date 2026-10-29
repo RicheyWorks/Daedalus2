@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore brick course fade.**
+  The clay just
+  above a course
+  bottom leans a
+  quarter toward
+  the grout. The
+  course bottom
+  stays darker.
+
 - **Explore brick course edge.**
   The bottom of a
   brick course leans
