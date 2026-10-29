@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: MIT
+name: Beacon Watch
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/beacon_watch.py'
+      - 'tools/streaming/beacon_watch_test.py'
+      - 'tools/streaming/beacon_watch_golden.json'
+      - 'tools/streaming/census_budget.py'
+      - 'tools/world_census/**'
+      - 'data/islands/disk-saver/beacon-watch-v1.json'
+      - 'data/islands/disk-saver/beacon-watch-baseline-v1.json'
+      - 'data/islands/disk-saver/census-budget-v1.json'
+      - '.github/workflows/beacon-watch.yml'
+permissions:
+  contents: read
+jobs:
+  beacon-watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - name: G505 Beacon Watch (gate = brute-force oracle, each regression kind, seeded replay, golden from real census)
+        run: python -B -m unittest tools/streaming/beacon_watch_test.py -v
+      - name: Regression gate (real world census -> beacons -> compare with committed baseline)
+        run: |
+          python -B -m tools.world_census tools/world_census/fixtures/alpha.json tools/world_census/fixtures/beta.json --snapshot-date 2026-10-26 --bindings tools/world_census/fixtures/bindings.json --output-dir "$RUNNER_TEMP/census"
+          python tools/streaming/census_budget.py "$RUNNER_TEMP/census/census.json" -o "$RUNNER_TEMP/beacons.json"
+          python tools/streaming/beacon_watch.py data/islands/disk-saver/beacon-watch-baseline-v1.json "$RUNNER_TEMP/beacons.json" --strict

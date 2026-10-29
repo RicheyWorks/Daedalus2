@@ -111,3 +111,6 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Ebb Tide Eviction (G253, quest q_ebb_eviction)
 - `ebb_eviction.py`: reads the G206 `census_budget.py` report (read-only) and, for each world over the RAM budget, plans which resident islands to unload first: least total reload weight, then fewest islands, home slot pinned. Exact knapsack DP = brute-force oracle; greedy heaviest-first and lowest-weight-first are reported beside it. The plan's `tide` (`slack`/`ebb`/`stranded`) drives Ebb Warden Marlo in game (`ebb_eviction_test.py`; CI `Ebb Tide Eviction`). Rules: `docs/islands/DISKSAVER-EBB-EVICTION.md`.
+
+## Beacon Watch (G505, quest q_beacon_watch)
+- `beacon_watch.py`: streaming-budget regression gate. Compares a current G206 `census_budget.py` report with the committed baseline `data/islands/disk-saver/beacon-watch-baseline-v1.json` (both read-only) and fails (`--strict`, exit 1) when an island's beacon worsens, a new island arrives amber/red, a world stops fitting resident, or `max_resident` drops; improvements and removals pass. Gate = brute-force oracle; the baseline must equal the real World Census pipeline output. The verdict (`calm`/`storm`) drives Watchkeeper Isolde in game (`beacon_watch_test.py`; CI `Beacon Watch`). Rules: `docs/islands/DISKSAVER-BEACON-WATCH.md`.
