@@ -562,6 +562,18 @@ public final class ForgeCabinet {
                 });
         }, TotientTempers.forgemasterLine(TotientTempers.Grade.TURNED),
             TotientTempers.forgemasterLine(TotientTempers.Grade.SLIPPED)));
+        g.add(game("emirp", "Emirp Embers", EmirpEmbers.QUEST_ID, r -> {
+            long n = 10 + r.nextInt(9_990);
+            boolean emirp = EmirpEmbers.isEmirp(n);
+            return new Puzzle("emirp", "Are " + n + " and its reversal " + EmirpEmbers.reverse(n)
+                + " two different primes? (yes/no)", emirp ? "yes" : "no", a -> {
+                    if (!"yes".equals(a) && !"no".equals(a)) {
+                        return false;
+                    }
+                    return EmirpEmbers.grade(n, "yes".equals(a)) == EmirpEmbers.Grade.TURNED;
+                });
+        }, EmirpEmbers.forgemasterLine(EmirpEmbers.Grade.TURNED),
+            EmirpEmbers.forgemasterLine(EmirpEmbers.Grade.SLIPPED)));
         Map<String, Game> m = new LinkedHashMap<>();
         for (Game x : g) {
             if (m.put(x.id(), x) != null) {
