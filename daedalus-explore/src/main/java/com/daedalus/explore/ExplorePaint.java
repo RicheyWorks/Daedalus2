@@ -1108,7 +1108,7 @@ public final class ExplorePaint {
                     (color[1] + shine[1]) / 2,
                     (color[2] + shine[2]) / 2};
         }
-        if (band == 3 || band == 4) {
+        if (band == 3 || band == 4 || band == 5) {
             int[] above = ceilingTexColor(x, y - 1);
             return new int[] {
                     (color[0] * 3 + above[0]) / 4,

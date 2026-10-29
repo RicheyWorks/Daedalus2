@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Explore vault bridge.**
+  The course under
+  the mid course
+  leans a quarter
+  toward that row,
+  joint included.
+  The catch stays
+  the shine.
+
 - **Explore floor bridge.**
   The course under
   the mid course
