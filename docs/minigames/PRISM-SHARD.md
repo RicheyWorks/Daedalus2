@@ -47,3 +47,7 @@ A port can skip the SHA-512 seeding by loading the RNG from a snapshot, but full
 
 ## Daedalus tie-in
 Prismheart's Wardens each guard a hue of Prism Shard; resonating shards wakes their summon spirits (G09 lore). Intended as a shrine cabinet in Windmere. Source only; no Unreal cabinet yet.
+
+## Lumenpath native (Unreal side, source only)
+`DaedalusLumenpathCore.h` ports `lumenpath.py` with CPython-compatible seeding (`DaedalusPyRandomCore.h` now also covers `randrange`, `random()` and `sample`), so the native lattice for a seed is the Python lattice. `tools/minigames/lumenpath_parity.py` writes `engines/unreal/core-test/lumenpath_parity.txt` (10 seeds x 3 difficulties, demo_action) and `lumenpath_core_test.cpp` must regenerate every lattice and move from seed alone. `DesktopGames/DaedalusDesktopLumenpathCore.h` is the `ADaedalusDesktopArcade` cabinet (registry id `lumenpath`, save slot `lumenpath.dgs`; arrows move the cursor, A toggles the mirror, option 1 Guide marks the next solution mirror); `desktop_games/lumenpath_test.cpp` replays the fixture through it with steered input. Cabinet rows regenerate with host `ADaedalusDesktopArcade`.
+

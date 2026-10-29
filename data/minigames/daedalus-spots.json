@@ -65,6 +65,10 @@
     "shardring": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the Warden shrine"
+    },
+    "lumenpath": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the refraction gallery"
     }
   }
 }

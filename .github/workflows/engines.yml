@@ -58,6 +58,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shardring_core_test.cpp -o shardring_core_test && ./shardring_core_test shardring_parity.txt
       - name: Shardring Resonance core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardring_core_test.cpp -o shardring_core_test_clang && ./shardring_core_test_clang shardring_parity.txt
+      - name: Lumenpath Refraction core (DaedalusLumenpathCore.h regenerates lumenpath_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public lumenpath_core_test.cpp -o lumenpath_core_test && ./lumenpath_core_test lumenpath_parity.txt
+      - name: Lumenpath Refraction core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public lumenpath_core_test.cpp -o lumenpath_core_test_clang && ./lumenpath_core_test_clang lumenpath_parity.txt
       - name: LAB03 Echo Bell gate session (AEchoBellGate cue scheduling, taps, judge, retry; replays docs/contracts/echo-bell-v1 CUE-SHEET.md + peals.ebg)
         run: |
           cmp echo_bell/DaedalusEchoBellCore.h ../DaedalusLink/Source/DaedalusLink/Public/DaedalusEchoBellCore.h
