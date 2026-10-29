@@ -52,5 +52,9 @@
  * <p>G542 Hay Bale Stacking ({@link HayBaleStacking}, quest {@code q_tall_stack}): build the tallest stack of bales,
  * each strictly smaller on both footprint sides than the one below (turning allowed) and carrying at most its strength
  * (box stacking with load limits); exact DP over (bottom bale, stack weight) vs. biggest-first, usually shorter.
+ *
+ * <p>G545 Tack Ledger Index ({@link TackLedgerIndex}, quest {@code q_quick_ledger}): file the horses' ledger cards
+ * as a binary search tree so lookups, weighted by how often each card is asked for, flip the fewest cards (optimal
+ * binary search tree); exact Knuth interval DP vs. most-asked-card-at-the-root, which files lopsided ledgers.
  */
 package com.daedalus.world.stable;
