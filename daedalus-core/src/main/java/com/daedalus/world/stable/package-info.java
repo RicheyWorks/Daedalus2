@@ -9,5 +9,10 @@
  * restores 1. The rosette goes to a round that equals the dynamic-programming optimum; the eager
  * "always obey the judge" habit tires the horse before the last canter. Deterministic from a seed,
  * source only, no Unreal or Blender dependency.
+ *
+ * <p>G516 {@link com.daedalus.world.stable.FeedLoft} (quest {@code q_full_manger}): hay bales with weight,
+ * bulk and nourishment go into a loft with a weight limit and a volume limit; the manger is full when
+ * the load equals the exact two-constraint 0/1 optimum, while stacking by nourishment per weight
+ * fills the loft with light, bulky bales.
  */
 package com.daedalus.world.stable;
