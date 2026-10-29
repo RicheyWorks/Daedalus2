@@ -56,6 +56,10 @@ jobs:
         run: python tools/minigames/shardring_parity.py --check
       - name: Lumenpath parity fixture is current (engines/unreal/core-test/lumenpath_parity.txt)
         run: python tools/minigames/lumenpath_parity.py --check
+      - name: Wardens' Accord parity fixture is current (engines/unreal/core-test/wardens_accord_parity.txt)
+        run: python tools/minigames/wardens_accord_parity.py --check
+      - name: Facetlock parity fixture is current (engines/unreal/core-test/facetlock_parity.txt)
+        run: python tools/minigames/facetlock_parity.py --check
       - name: Realm cabinet placements are current and tested
         run: |
           python tools/minigames/realm_cabinets.py --check
