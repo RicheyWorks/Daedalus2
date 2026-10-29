@@ -464,12 +464,26 @@
           "start": "StartGame(\"prismcairn\", 1466050411)"
         },
         {
+          "game": "prismvault",
+          "title": "Prismvault Weigh",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            10.0,
+            -2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1132307240,
+          "option": 0,
+          "start": "StartGame(\"prismvault\", 1132307240)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            -1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -483,7 +497,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            1.25,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -781,12 +795,26 @@
           "start": "StartGame(\"prismcairn\", 724332067)"
         },
         {
+          "game": "prismvault",
+          "title": "Prismvault Weigh",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            12.5,
+            -2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1060366944,
+          "option": 0,
+          "start": "StartGame(\"prismvault\", 1060366944)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            -1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -800,7 +828,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            1.25,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1327,7 +1355,7 @@
         {
           "game": "prismvault",
           "title": "Prismvault Weigh",
-          "host": "PythonMinigame",
+          "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
             10.0,
@@ -1335,10 +1363,8 @@
           ],
           "yaw_deg": 180.0,
           "seed": 895410454,
-          "difficulty": "normal",
-          "module": "tools/minigames/prismvault.py",
-          "start": "prismvault.start(895410454, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
+          "option": 0,
+          "start": "StartGame(\"prismvault\", 895410454)"
         },
         {
           "game": "shardfall",

@@ -705,6 +705,38 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "prismvault",
+      "title": "Prismvault Weigh",
+      "summary": "Find the hollow shard with the Warden's balance. Left/Right or stick: pick; J or pad A: pan it; Space or pad X: weigh; Shift or pad Y: name",
+      "how_to_play": "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the balance chamber",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"prismvault\", Seed)",
+      "portable_tests": [
+        "desktop_prismvault"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -754,23 +786,6 @@
     }
   ],
   "python_games": [
-    {
-      "id": "prismvault",
-      "title": "Prismvault Weigh",
-      "summary": "find the one hollow Prism Shard with a Warden's balance and few weighings.",
-      "how_to_play": "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out.",
-      "module": "tools/minigames/prismvault.py",
-      "start": "prismvault.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_prismvault.py"
-      ]
-    },
     {
       "id": "shardfall",
       "title": "Shardfall Gamble",
