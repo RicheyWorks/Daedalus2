@@ -14,5 +14,10 @@
  * bulk and nourishment go into a loft with a weight limit and a volume limit; the manger is full when
  * the load equals the exact two-constraint 0/1 optimum, while stacking by nourishment per weight
  * fills the loft with light, bulky bales.
+ *
+ * <p>G523 {@link com.daedalus.world.stable.PaddockRotation} (quest {@code q_green_pasture}): the herd grazes
+ * one paddock a day; each paddock regrows while it rests, up to its cap. The pasture stays green when
+ * the season plan equals the exact rest-counter optimum, while always grazing the fullest paddock
+ * strips the lush paddocks before they refill.
  */
 package com.daedalus.world.stable;
