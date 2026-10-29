@@ -94,8 +94,8 @@ int main(int Argc,char** Argv) {
     Check(G.SourceKeyDown(3)==false && G.SourceControllerButton(0) && G.CoreState().Pouch==47,"source right key and pad A set a shard");
 
     ShardringGame D; D.Reset(730);
-    Check(D.SetCabinetDifficulty("easy") && D.CoreState().Facets()==12 && D.CoreState().Pouch==60,"easy opens twelve facets");
-    Check(D.SetCabinetDifficulty("hard") && D.CoreState().Facets()==8 && D.CoreState().Pouch==40 && D.CoreState().Diff->Hues==5,"hard opens eight facets with five hues");
+    Check(D.SetCabinetDifficulty("easy") && D.CoreState().Facets()==14 && D.CoreState().Pouch==60,"easy opens fourteen facets");
+    Check(D.SetCabinetDifficulty("hard") && D.CoreState().Facets()==8 && D.CoreState().Pouch==40 && D.CoreState().Diff->Hues==3,"hard opens eight facets with three hues");
     Check(!D.SetCabinetDifficulty("legendary") && D.CoreState().Facets()==8,"unknown difficulty is refused");
     Check(!D.SetOption(2,730) && D.SetOption(1,730) && D.GetOption()==1 && D.HintLine().find("Practice")!=std::string::npos,"guide practice is option 1; option 2 is refused");
     { Frame GF; D.Render(GF); int Blue=0; for(const auto& C:GF.Commands) if(C.Kind==Shape::Circle && C.Tint.R==120 && C.Tint.G==225 && C.Tint.B==255) ++Blue; Check(Blue==1,"guide practice marks exactly one facet"); }
