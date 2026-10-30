@@ -21,12 +21,59 @@ public final class FogChannelPilot {
     public static final String QUEST_ID = "q_pilot_through_fog";
     public static final int ECHOES = 3;
     public static final int MAX_CHANNELS = 4;
-    public static final int MAX_BLASTS = 8;
+    /** Longest fog a harbour may hold (the pea-soup tier reaches it). */
+    public static final int MAX_BLASTS = 16;
+    /** Blast cap of the classic {@link #harbour(String)} draw, kept at 8 so the G586 parity seeds never move. */
+    public static final int CLASSIC_BLASTS = 8;
+    /** A blast whose echo never came back: it costs nothing in any lane, so it tells the pilot nothing. */
+    public static final int MISSED = ECHOES;
     public static final int INVALID = -1;
     /** A reading within this many points of par still earns two stars. */
     public static final int PAR_SLACK = 2;
     /** Display names of the echo kinds, by index. */
-    public static final List<String> ECHO_NAMES = List.of("dull", "ring", "clang");
+    public static final List<String> ECHO_NAMES = List.of("dull", "ring", "clang", "silence");
+
+    /**
+     * Difficulty tiers for {@link #harbour(String, Tier)}: how many blasts, how sharply the echo costs separate lanes
+     * (a wide spread means telling echoes) and the percent chance a blast's echo is lost in the fog. Greedy-loss
+     * rates over seeds 1..300 (pinned by FogChannelPilotTest): CALM 146, FOG 233, PEA_SOUP 264 (classic 182).
+     */
+    public enum Tier {
+        CALM(2, 5, 14, 0), FOG(4, 10, 7, 10), PEA_SOUP(8, 16, 4, 30);
+
+        private final int minBlasts;
+        private final int maxBlasts;
+        private final int echoSpread;
+        private final int missPercent;
+
+        Tier(int minBlasts, int maxBlasts, int echoSpread, int missPercent) {
+            this.minBlasts = minBlasts;
+            this.maxBlasts = maxBlasts;
+            this.echoSpread = echoSpread;
+            this.missPercent = missPercent;
+        }
+
+        public int minBlasts() {
+            return minBlasts;
+        }
+
+        public int maxBlasts() {
+            return maxBlasts;
+        }
+
+        public int echoSpread() {
+            return echoSpread;
+        }
+
+        public int missPercent() {
+            return missPercent;
+        }
+
+        /** Seed prefix used by the tests and parity files, e.g. "pea-soup-". */
+        public String seedPrefix() {
+            return name().toLowerCase(java.util.Locale.ROOT).replace('_', '-') + "-";
+        }
+    }
 
     /** A foggy harbour: opening, drift and echo costs plus the echoes heard, one per blast. */
     public record Harbour(int[] open, int[][] drift, int[][] echo, int[] heard) {
@@ -55,7 +102,7 @@ public final class FogChannelPilot {
                 }
             }
             for (int h : heard) {
-                if (h < 0 || h >= ECHOES) {
+                if (h < 0 || h > MISSED) {
                     throw new IllegalArgumentException("unknown echo " + h);
                 }
             }
@@ -153,7 +200,7 @@ public final class FogChannelPilot {
     public static Harbour harbour(String seed) {
         PyStringRandom rnd = new PyStringRandom(seed);
         int s = 2 + rnd.below(3);
-        int t = 1 + rnd.below(MAX_BLASTS);
+        int t = 1 + rnd.below(CLASSIC_BLASTS);
         int[] open = new int[s];
         for (int i = 0; i < s; i++) {
             open[i] = rnd.below(6);
@@ -177,6 +224,44 @@ public final class FogChannelPilot {
         return new Harbour(open, drift, echo, heard);
     }
 
+    /**
+     * Tiered harbour from {@code random.Random(seed)}: channels in [2, 4], blasts in the tier's range, opening and
+     * drift costs as in {@link #harbour(String)}, echo costs below the tier's spread, then for every blast one
+     * draw below 100 (under missPercent: the echo is missed) and, if heard, the echo kind.
+     */
+    public static Harbour harbour(String seed, Tier tier) {
+        PyStringRandom rnd = new PyStringRandom(seed);
+        int s = 2 + rnd.below(3);
+        int t = tier.minBlasts() + rnd.below(tier.maxBlasts() - tier.minBlasts() + 1);
+        int[] open = new int[s];
+        for (int i = 0; i < s; i++) {
+            open[i] = rnd.below(6);
+        }
+        int[][] drift = new int[s][s];
+        for (int i = 0; i < s; i++) {
+            for (int j = 0; j < s; j++) {
+                drift[i][j] = i == j ? rnd.below(3) : 2 + rnd.below(8);
+            }
+        }
+        int[][] echo = new int[s][ECHOES];
+        for (int i = 0; i < s; i++) {
+            for (int o = 0; o < ECHOES; o++) {
+                echo[i][o] = rnd.below(tier.echoSpread());
+            }
+        }
+        int[] heard = new int[t];
+        for (int k = 0; k < t; k++) {
+            heard[k] = rnd.below(100) < tier.missPercent() ? MISSED : rnd.below(ECHOES);
+        }
+        return new Harbour(open, drift, echo, heard);
+    }
+
+    /** Echo cost of blast {@code k} from lane {@code l}; a missed echo costs nothing anywhere. */
+    private static int echoCost(Harbour h, int l, int k) {
+        int e = h.heard[k];
+        return e == MISSED ? 0 : h.echo[l][e];
+    }
+
     /** Cheapest lane sequence for all blasts at once (Viterbi); ties go to the lower lane, earlier and later. */
     public static Track best(Harbour h) {
         int s = h.channels();
@@ -187,7 +272,7 @@ public final class FogChannelPilot {
         int[][] cost = new int[t][s];
         int[][] from = new int[t][s];
         for (int i = 0; i < s; i++) {
-            cost[0][i] = h.open[i] + h.echo[i][h.heard[0]];
+            cost[0][i] = h.open[i] + echoCost(h, i, 0);
         }
         for (int k = 1; k < t; k++) {
             for (int j = 0; j < s; j++) {
@@ -197,7 +282,7 @@ public final class FogChannelPilot {
                         bestPrev = i;
                     }
                 }
-                cost[k][j] = cost[k - 1][bestPrev] + h.drift[bestPrev][j] + h.echo[j][h.heard[k]];
+                cost[k][j] = cost[k - 1][bestPrev] + h.drift[bestPrev][j] + echoCost(h, j, k);
                 from[k][j] = bestPrev;
             }
         }
@@ -215,10 +300,17 @@ public final class FogChannelPilot {
         return new Track(cost[t - 1][last], lanes);
     }
 
-    /** The dockhand's habit: each blast on its own, the lane its echo surprises least (lower lane on ties). */
+    /**
+     * The dockhand's habit: each blast on its own, the lane its echo surprises least (lower lane on ties); when an
+     * echo is missed the dockhand holds the last lane (lane 0 before any echo).
+     */
     public static Track loudestEcho(Harbour h) {
         int[] lanes = new int[h.blasts()];
         for (int k = 0; k < lanes.length; k++) {
+            if (h.heard[k] == MISSED) {
+                lanes[k] = k == 0 ? 0 : lanes[k - 1];
+                continue;
+            }
             int pick = 0;
             for (int i = 1; i < h.channels(); i++) {
                 if (h.echo[i][h.heard[k]] < h.echo[pick][h.heard[k]]) {
@@ -241,7 +333,7 @@ public final class FogChannelPilot {
             if (l < 0 || l >= h.channels()) {
                 return INVALID;
             }
-            total += (k == 0 ? h.open[l] : h.drift[lanes[k - 1]][l]) + h.echo[l][h.heard[k]];
+            total += (k == 0 ? h.open[l] : h.drift[lanes[k - 1]][l]) + echoCost(h, l, k);
         }
         return total;
     }
@@ -287,7 +379,7 @@ public final class FogChannelPilot {
         for (int k = 0; k < b.length; k++) {
             int l = b[k];
             int move = k == 0 ? h.open[l] : h.drift[b[k - 1]][l];
-            out.add(new Step(k, l, h.heard[k], move, h.echo[l][h.heard[k]], g[k]));
+            out.add(new Step(k, l, h.heard[k], move, echoCost(h, l, k), g[k]));
         }
         return out;
     }
