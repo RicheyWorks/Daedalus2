@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Short action chips beside the hint line. The chip names the immediate action
 // and stays out of score, movement, and saved status text.
-// catalog-capability: action_cue: beacon_sweep cairnwell dodge_ball driftstone dungeon facetlock glimmerloom gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shadewatch shardfall shardring siltlane twinwake wardens_accord
+// catalog-capability: action_cue: beacon_sweep cairnwell dodge_ball driftstone dungeon facetlock glimmerloom gloam_latch lanternwild lumenpath prismcairn prismchime prismvault reedbeat riftwing shadewatch shardfall shardring siltlane twinwake wardens_accord
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -82,6 +82,10 @@ void PrismvaultCues() {
     PrismvaultGame G;G.Reset(730);
     Expect(G,"CUE Load the pans","a fresh vault cues loading the pans");
 }
+void PrismchimeCues() {
+    PrismchimeGame G;G.Reset(730);
+    Expect(G,"CUE Tap a chime","a fresh ring cues a tap");
+}
 void GlimmerloomCues() {
     GlimmerloomGame G;G.Reset(730);
     Expect(G,"CUE Buy or rest","a fresh market with nothing held cues buy or rest");
@@ -121,7 +125,7 @@ void LanternwildCues() {
 }
 
 int main() {
-    try { BeaconCues();CairnwellCues();FacetlockCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();LumenpathCues();PrismcairnCues();PrismvaultCues();ReedbeatCues();RiftwingCues();GlimmerloomCues();ShadewatchCues();ShardfallCues();ShardringCues();TwinwakeCues();WardensAccordCues(); }
+    try { BeaconCues();CairnwellCues();FacetlockCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();LumenpathCues();PrismcairnCues();PrismvaultCues();ReedbeatCues();RiftwingCues();PrismchimeCues();GlimmerloomCues();ShadewatchCues();ShardfallCues();ShardringCues();TwinwakeCues();WardensAccordCues(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

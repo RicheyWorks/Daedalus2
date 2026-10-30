@@ -534,12 +534,26 @@
           "start": "StartGame(\"glimmerloom\", 663721098)"
         },
         {
+          "game": "prismchime",
+          "title": "Prismchime Ring",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            12.5,
+            -2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1893908471,
+          "option": 0,
+          "start": "StartGame(\"prismchime\", 1893908471)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            -1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -553,7 +567,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            1.25,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -912,7 +926,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             15.0,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -921,12 +935,26 @@
           "start": "StartGame(\"glimmerloom\", 1609831265)"
         },
         {
+          "game": "prismchime",
+          "title": "Prismchime Ring",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            15.0,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 212661951,
+          "option": 0,
+          "start": "StartGame(\"prismchime\", 212661951)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             15.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -940,7 +968,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             15.0,
-            2.5,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1521,24 +1549,22 @@
           "start": "StartGame(\"glimmerloom\", 1712892515)"
         },
         {
-          "game": "spiritkite",
-          "title": "Spiritkite Weave",
-          "host": "PythonMinigame",
+          "game": "prismchime",
+          "title": "Prismchime Ring",
+          "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
             15.0,
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 630418058,
-          "difficulty": "normal",
-          "module": "tools/minigames/spiritkite.py",
-          "start": "spiritkite.start(630418058, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
+          "seed": 113376713,
+          "option": 0,
+          "start": "StartGame(\"prismchime\", 113376713)"
         },
         {
-          "game": "prismchime",
-          "title": "Prismchime Ring",
+          "game": "spiritkite",
+          "title": "Spiritkite Weave",
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
@@ -1546,10 +1572,10 @@
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 113376713,
+          "seed": 630418058,
           "difficulty": "normal",
-          "module": "tools/minigames/prismchime.py",
-          "start": "prismchime.start(113376713, difficulty)",
+          "module": "tools/minigames/spiritkite.py",
+          "start": "spiritkite.start(630418058, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]

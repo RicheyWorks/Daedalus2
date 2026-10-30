@@ -33,6 +33,7 @@ batched rebuild under the editor custodian.
 | `siltlane` | Siltlane | 1 |
 | `shadewatch` | Shadewatch Vigil | 1 |
 | `glimmerloom` | Glimmerloom Ledger | 1 |
+| `prismchime` | Prismchime Ring | 1 |
 
 ## How to play
 
@@ -65,6 +66,7 @@ One original line per game, read from `HowToLine()`.
 | `siltlane` | HOW Switch lanes so the drifting silt passes you. |
 | `shadewatch` | HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends. |
 | `glimmerloom` | HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target. |
+| `prismchime` | HOW Tap a chime to ring it: its charge pulses along its facing and it gains one; a chime that fills to four peals and charges both neighbours. Light every chime before your taps run out. |
 
 ## Difficulty
 
@@ -97,6 +99,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `siltlane` | normal |
 | `shadewatch` | normal |
 | `glimmerloom` | normal |
+| `prismchime` | normal |
 
 ## Daedalus spots
 
@@ -129,6 +132,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `siltlane` | `spawn_overlook` | Spawn overlook, the silt course |
 | `shadewatch` | `prismheart_realm` | Prismheart, the watch lanes |
 | `glimmerloom` | `prismheart_realm` | Prismheart, the Glimmerloom market |
+| `prismchime` | `prismheart_realm` | Prismheart, the chime ring |
 
 ## Capabilities
 
@@ -162,6 +166,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `siltlane` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 | `shadewatch` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `glimmerloom` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `prismchime` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 
 ## Leaderboard feed
 
