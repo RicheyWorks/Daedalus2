@@ -35,6 +35,7 @@ batched rebuild under the editor custodian.
 | `glimmerloom` | Glimmerloom Ledger | 1 |
 | `prismchime` | Prismchime Ring | 1 |
 | `fogbell` | Fogbell Ferry | 1 |
+| `roostcall` | Roostcall | 1 |
 
 ## How to play
 
@@ -69,6 +70,7 @@ One original line per game, read from `HowToLine()`.
 | `glimmerloom` | HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target. |
 | `prismchime` | HOW Tap a chime to ring it: its charge pulses along its facing and it gains one; a chime that fills to four peals and charges both neighbours. Light every chime before your taps run out. |
 | `fogbell` | HOW Move the ferry one cell a turn across the tidal flat, pick up the lantern passengers from their docks and reach the harbour before the rising tide floods your cell. |
+| `roostcall` | HOW Walk up behind the glimmer-birds so they flee one step at a time; drive every bird into the roost corner before your turns run out. |
 
 ## Difficulty
 
@@ -103,6 +105,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `glimmerloom` | normal |
 | `prismchime` | normal |
 | `fogbell` | normal |
+| `roostcall` | normal |
 
 ## Daedalus spots
 
@@ -137,6 +140,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `glimmerloom` | `prismheart_realm` | Prismheart, the Glimmerloom market |
 | `prismchime` | `prismheart_realm` | Prismheart, the chime ring |
 | `fogbell` | `prismheart_realm` | Prismheart, the fogbell quay |
+| `roostcall` | `prismheart_realm` | Prismheart, the roost yard |
 
 ## Capabilities
 
@@ -172,6 +176,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `glimmerloom` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `prismchime` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `fogbell` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `roostcall` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 
 ## Leaderboard feed
 

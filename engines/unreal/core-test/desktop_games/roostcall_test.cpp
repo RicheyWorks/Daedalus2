@@ -1,0 +1,181 @@
+// SPDX-License-Identifier: MIT
+// Roostcall cabinet: walking, waiting, restart, difficulty, options, save round trip, and Python parity from seed
+// alone by pressing each fixture move with real input.
+#include "DesktopGames/DaedalusDesktopGameRegistry.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+
+using namespace daedalus::desktop;
+namespace {
+int Checks = 0, Failed = 0;
+void Check(bool Ok, const std::string& What) {
+    ++Checks;
+    if(!Ok) {
+        ++Failed;
+        std::cerr << "FAIL " << What << '\n';
+    }
+}
+Input Dir(const std::string& Act) {
+    Input I;
+    if(Act == "n") I.Up = true;
+    else if(Act == "s") I.Down = true;
+    else if(Act == "w") I.Left = true;
+    else if(Act == "e") I.Right = true;
+    else I.FirePressed = true;
+    return I;
+}
+void Press(RoostcallGame& G, const std::string& Act) {
+    G.Step(Dir(Act));
+    G.Step({});
+}
+std::string Field(const std::string& Line, const std::string& Key) {
+    const std::string N = " " + Key + "=";
+    const size_t P = Line.find(N);
+    if(P == std::string::npos) return "";
+    const size_t S = P + N.size(), E = Line.find(' ', S);
+    return Line.substr(S, E == std::string::npos ? std::string::npos : E - S);
+}
+std::string State(const RoostcallGame& G) {
+    const auto& C = G.CoreState();
+    std::ostringstream O;
+    O << " whistler=" << C.Whistler.R << "," << C.Whistler.C << " birds=" << daedalus::roostcall::Game::CellsString(C.Birds) << " settled=" << C.Settled
+      << " turns=" << C.Turns << " score=" << C.Score << " over=" << (C.Over ? 1 : 0) << " won=" << (C.Won ? 1 : 0);
+    return O.str();
+}
+
+void Parity(const char* Path) {
+    std::ifstream In(Path);
+    if(!In) {
+        Check(false, std::string("fixture opens: ") + Path);
+        return;
+    }
+    std::string Line, Diff;
+    RoostcallGame G;
+    std::uint32_t Seed = 0;
+    int Turn = 0, Games = 0;
+    bool Skip = false;
+    while(std::getline(In, Line)) {
+        if(Line.empty() || Line[0] == '#') continue;
+        if(Line.rfind("game ", 0) == 0) {
+            Seed = static_cast<std::uint32_t>(std::stoul(Field(Line, "s")));
+            Diff = Field(Line, "d");
+            Turn = 0;
+            Skip = false;
+            ++Games;
+            G.SetCabinetDifficulty(Diff);
+            G.Reset(Seed);
+            const auto& C = G.CoreState();
+            std::ostringstream O;
+            O << "game s=" << Seed << " d=" << Diff << " size=" << C.Size() << " turns=" << C.Turns << " whistler=" << C.Whistler.R << "," << C.Whistler.C << " birds=" << daedalus::roostcall::Game::CellsString(C.Birds);
+            if(O.str() != Line) {
+                std::cerr << "  want " << Line << "\n  got  " << O.str() << '\n';
+                Check(false, "fixture yard regenerates through the cabinet");
+                Skip = true;
+            }
+        } else if(Line.rfind("move ", 0) == 0) {
+            if(Skip) continue;
+            const std::string Act = Field(Line, "act");
+            Press(G, Act);
+            ++Turn;
+            const std::string Got = "move t=" + std::to_string(Turn) + " act=" + Act + State(G) + " res=" + G.LastResultText();
+            if(Got != Line) {
+                std::cerr << "  want " << Line << "\n  got  " << Got << '\n';
+                Check(false, "fixture move replays through the cabinet (" + Diff + " s=" + std::to_string(Seed) + ")");
+                Skip = true;
+            }
+        } else if(Line.rfind("end  ", 0) == 0) {
+            if(Skip) continue;
+            const auto& C = G.CoreState();
+            const std::string Got = "end  score=" + std::to_string(C.Score) + " won=" + (C.Won ? "1" : "0") + " settled=" + std::to_string(C.Settled) + " turns=" + std::to_string(C.Turns);
+            Check(Got == Line && C.Over, "fixture yard ends identically (" + Diff + " s=" + std::to_string(Seed) + ")");
+        }
+    }
+    Check(Games == 30, "fixture holds 30 yards");
+}
+}
+
+int main(int Argc, char** Argv) {
+    RoostcallGame G;
+    G.Reset(730);
+    const auto& C = G.CoreState();
+    Check(C.Size() == 7 && C.Birds.size() == 4 && C.Turns == 30 && C.Whistler.R == 0 && C.Whistler.C == 0 && !C.Over && G.GetStatus().Lives == 1, "a fresh normal yard starts north-west with four birds and thirty turns");
+    Press(G, "e");
+    Check(C.Whistler.C == 1 && C.Turns == 29 && G.LastResultText().rfind("e: ", 0) == 0, "right walks east one cell and spends a turn");
+    Input Hold = Dir("s");
+    G.Step(Hold);
+    G.Step(Hold);
+    Check(C.Whistler.R == 1 && C.Turns == 28, "held down walks once per edge");
+    G.Step({});
+    Press(G, "wait");
+    Check(C.Turns == 27 && C.Whistler.R == 1 && C.Whistler.C == 1, "A waits a turn in place");
+    Check(G.SourceControllerButton(0) && C.Turns == 26, "pad A waits");
+    {
+        RoostcallGame Edge;
+        Edge.Reset(730);
+        Press(Edge, "n");
+        Check(Edge.CoreState().Turns == 30, "walking off the yard is refused and costs nothing");
+    }
+
+    RoostcallGame D;
+    D.Reset(730);
+    Check(D.SetCabinetDifficulty("easy") && D.CoreState().Size() == 6 && D.CoreState().Birds.size() == 3, "easy is a 6x6 yard with three birds");
+    Check(D.SetCabinetDifficulty("hard") && D.CoreState().Size() == 8 && D.CoreState().Turns == 48, "hard is an 8x8 yard with forty-eight turns");
+    Check(!D.SetCabinetDifficulty("mythic") && D.CoreState().Size() == 8, "unknown difficulty is refused");
+    Check(!D.SetOption(2, 730) && D.SetOption(1, 730) && D.GetOption() == 1 && D.HintLine().find("Practice") != std::string::npos, "guide practice is option 1");
+    {
+        Frame GF;
+        D.Render(GF);
+        int Marks = 0;
+        for(const auto& Cmd : GF.Commands) if(Cmd.Kind == Shape::Rectangle && Cmd.Tint.R == 120 && Cmd.Tint.G == 225 && Cmd.Tint.B == 255) ++Marks;
+        Check(Marks == 1, "guide marks exactly one cell");
+    }
+    Check(D.SetOption(0, 730) && D.GetOption() == 0, "option 0 returns to the yard");
+
+    RoostcallGame X;
+    X.Reset(730);
+    X.SetCabinetDifficulty("easy");
+    for(int N = 0; N < 40 && !X.GetStatus().Over; ++N) Press(X, "wait");
+    Check(X.GetStatus().Over && !X.GetStatus().Won, "waiting in the corner until dusk loses");
+    Check(!X.Walk(daedalus::roostcall::Move::E) && X.ContrastMark() == "MARK WAIT" && X.ActionCue() == "CUE Retry", "a finished yard refuses moves");
+    Check(X.SourceKeyDown(8) && !X.GetStatus().Over && X.CoreState().Turns == 16, "R scatters a new flock");
+    for(int N = 0; N < 40 && !X.GetStatus().Over; ++N) Press(X, "wait");
+    Check(X.SourceControllerButton(1) && !X.GetStatus().Over, "pad Start restarts a finished yard");
+    Check(!X.SourceControllerButton(1), "pad Start is not consumed mid-game");
+
+    RoostcallGame W;
+    W.Reset(730);
+    W.SetCabinetDifficulty("easy");
+    for(int N = 0; N < 40 && !W.GetStatus().Over; ++N) Press(W, daedalus::roostcall::MoveName(W.CoreState().DemoAction()));
+    Check(W.GetStatus().Over && W.CoreState().Settled + static_cast<int>(W.CoreState().Birds.size()) == 3, "following the watcher ends the yard with every bird accounted for");
+
+    RoostcallGame S;
+    S.Reset(4242);
+    S.SetCabinetDifficulty("hard");
+    for(int N = 0; N < 6 && !S.GetStatus().Over; ++N) Press(S, daedalus::roostcall::MoveName(S.CoreState().DemoAction()));
+    const std::string Saved = S.SaveState();
+    const auto Before = S.GetStatus();
+    RoostcallGame R;
+    R.Reset(1);
+    Check(R.RestoreState(Saved, 1) && R.CabinetDifficulty() == "hard" && R.SeedAfterRestore(1) == 4242, "save text restores difficulty and seed");
+    Check(R.GetStatus().Score == Before.Score && R.GetStatus().Note == Before.Note && R.CoreState().Whistler == S.CoreState().Whistler
+          && daedalus::roostcall::Game::CellsString(R.CoreState().Birds) == daedalus::roostcall::Game::CellsString(S.CoreState().Birds), "restored whistler, birds, score and note match");
+    for(int N = 0; N < 60 && !S.GetStatus().Over; ++N) {
+        const std::string Act = daedalus::roostcall::MoveName(S.CoreState().DemoAction());
+        Press(S, Act);
+        Press(R, Act);
+    }
+    Check(S.GetStatus().Over == R.GetStatus().Over && S.GetStatus().Score == R.GetStatus().Score && S.CoreState().Settled == R.CoreState().Settled, "restored yard plays on identically");
+    Check(!R.RestoreState("roostcall v1 d=hard seed=4242 turns=10 settled=0 score=0 over=0 won=0 whistler=0,0 birds=7,7", 1), "a bird inside the roost is refused");
+    Check(!R.RestoreState("roostcall v1 d=hard seed=4242 turns=10 settled=0 score=0 over=0 won=0 whistler=0,0 birds=3,3;3,3", 1), "duplicate birds are refused");
+    Check(!R.RestoreState("roostcall v1 d=hard seed=4242 turns=10 settled=9 score=0 over=0 won=0 whistler=0,0 birds=-", 1), "impossible counts are refused");
+    Check(!R.RestoreState("fogbell v1", 1) && !R.RestoreState("", 1), "foreign save text is refused");
+
+    Frame F;
+    G.Render(F);
+    Check(!F.Commands.empty() && F.Commands.size() <= Frame::MaxCommands, "render stays bounded");
+    if(Argc > 1) Parity(Argv[1]);
+    std::cout << "roostcall cabinet: " << (Checks - Failed) << "/" << Checks << " checks\n";
+    return Failed == 0 ? 0 : 1;
+}

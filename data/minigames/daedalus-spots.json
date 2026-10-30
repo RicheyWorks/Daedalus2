@@ -109,6 +109,10 @@
     "fogbell": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the fogbell quay"
+    },
+    "roostcall": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the roost yard"
     }
   }
 }

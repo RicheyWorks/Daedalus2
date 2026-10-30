@@ -539,7 +539,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             12.5,
-            -3.75,
+            -5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -553,7 +553,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             12.5,
-            -1.25,
+            -2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -562,12 +562,26 @@
           "start": "StartGame(\"fogbell\", 1972091195)"
         },
         {
+          "game": "roostcall",
+          "title": "Roostcall",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            12.5,
+            0.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1172847535,
+          "option": 0,
+          "start": "StartGame(\"roostcall\", 1172847535)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            1.25,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -581,7 +595,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            3.75,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -977,12 +991,26 @@
           "start": "StartGame(\"fogbell\", 890040248)"
         },
         {
+          "game": "roostcall",
+          "title": "Roostcall",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            15.0,
+            3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1464779873,
+          "option": 0,
+          "start": "StartGame(\"roostcall\", 1464779873)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            15.0,
-            3.75,
+            17.5,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -996,7 +1024,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             17.5,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1605,24 +1633,22 @@
           "start": "StartGame(\"fogbell\", 404876817)"
         },
         {
-          "game": "spiritkite",
-          "title": "Spiritkite Weave",
-          "host": "PythonMinigame",
+          "game": "roostcall",
+          "title": "Roostcall",
+          "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
             17.5,
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 630418058,
-          "difficulty": "normal",
-          "module": "tools/minigames/spiritkite.py",
-          "start": "spiritkite.start(630418058, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
+          "seed": 1603034746,
+          "option": 0,
+          "start": "StartGame(\"roostcall\", 1603034746)"
         },
         {
-          "game": "roostcall",
-          "title": "Roostcall",
+          "game": "spiritkite",
+          "title": "Spiritkite Weave",
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
@@ -1630,10 +1656,10 @@
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 1603034746,
+          "seed": 630418058,
           "difficulty": "normal",
-          "module": "tools/minigames/roostcall.py",
-          "start": "roostcall.start(1603034746, difficulty)",
+          "module": "tools/minigames/spiritkite.py",
+          "start": "spiritkite.start(630418058, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]
