@@ -15,7 +15,7 @@
     3. Project              - -Project names a .uproject; if it does not exist a blank one is made.
     4. Plugin               - DaedalusLink is copied into <Project>/Plugins and enabled in the .uproject.
     5. World Package        - <Server>/api/v1/world/<World>/package is saved under <Project>/Saved/Daedalus. A
-                              localhost server that isn't running is started in its own window (Java 21 via
+                              localhost server that isn't running is started in a minimized console (Java 21 via
                               winget and Maven from Apache if missing); -NoServerStart turns that off.
     6. Build (-Build)       - compiles the plugin with RunUAT BuildPlugin and installs the result (needs
                               Visual Studio 2022 with "Game development with C++", installed with winget if
@@ -636,9 +636,11 @@ function Start-LocalServer {
         $jar = Get-ChildItem (Join-Path $repo "daedalus-server\target") -Filter "daedalus-server-*-exec.jar" |
             Sort-Object LastWriteTime -Descending | Select-Object -First 1
     }
-    Write-Host "    starting the Daedalus server on port $port in its own window (leave it open)"
+    Write-Host "    starting the Daedalus server on port $port in a minimized console (available on the taskbar)"
     $cmd = "`$env:SERVER_PORT='$port'; Set-Location '$repo'; & '$java' -jar '$($jar.FullName)'"
-    Start-Process powershell -ArgumentList @("-NoExit", "-Command", $cmd) | Out-Null
+    # This is a separate console, outside the Unreal-only dialog/window sweep.
+    # Retain interactive diagnostics without putting a large shell over the editor.
+    Start-Process powershell -WindowStyle Minimized -ArgumentList @("-NoExit", "-Command", $cmd) | Out-Null
     for ($i = 0; $i -lt 90; $i++) {
         Start-Sleep -Seconds 2
         if ((Test-Server) -and $script:ProbeCode -eq 200) { Write-Host "    server is up"; return }
