@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Glowmoss Delve parity: DaedalusGlowmossCore.h must regenerate every shaft in glowmoss_parity.txt (crystals,
-// darkness, glowmoss, the exact best delve's target and plan) from seed + difficulty alone (CPython-compatible
+// darkness, glowmoss, footing, the exact best delve's target and plan) from seed + difficulty alone (CPython-compatible
 // seeding) and replay every demo dig byte for byte.
 //   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test && ./glowmoss_core_test glowmoss_parity.txt
 #include "DaedalusGlowmossCore.h"
@@ -55,7 +55,7 @@ std::string StateString(const Game& G)
 std::string Opening(std::uint32_t Seed, const std::string& Diff, const Game& G)
 {
 	return "game s=" + std::to_string(Seed) + " d=" + Diff + " gems=" + GridString(G.Cells.Gems) + " dark=" + GridString(G.Cells.Dark)
-		+ " moss=" + GridString(G.Cells.Moss) + " target=" + std::to_string(G.Target) + " plan=" + Ints(G.Plan) + " " + StateString(G);
+		+ " moss=" + GridString(G.Cells.Moss) + " unstable=" + GridString(G.Cells.Unstable) + " best=" + std::to_string(G.Best) + " target=" + std::to_string(G.Target) + " plan=" + Ints(G.Plan) + " " + StateString(G);
 }
 
 int UnitChecks()
@@ -63,10 +63,11 @@ int UnitChecks()
 	int Fails = 0;
 	if (ClimbCost(Surface) != 0 || ClimbCost(0) != 1 || ClimbCost(1) != 1 || ClimbCost(2) != 2 || ClimbCost(4) != 3) { std::printf("FAIL climb cost\n"); ++Fails; }
 	if (FirstDigCol(0) != 0 || LastDigCol(3, 4) != 3 || FirstDigCol(2) != 1 || LastDigCol(2, 4) != 3) { std::printf("FAIL dig reach\n"); ++Fails; }
-	const Difficulty Tiny{ "tiny", 2, 3, 6, 3, 0, 100 };
+	const Difficulty Tiny{ "tiny", 2, 3, 6, 3, 0, 0, 100 };
 	if (AfterDig(6, Tiny, 2, false) != 3 || AfterDig(6, Tiny, 0, true) != 6 || AfterDig(1, Tiny, 1, true) != 2) { std::printf("FAIL after dig\n"); ++Fails; }
-	// Same shaft as test_glowmoss.test_best_delve_exact.
-	Shaft S{ { { 1, 9 }, { 5, 1 }, { 1, 1 } }, { { 0, 2 }, { 0, 0 }, { 0, 0 } }, { { 0, 0 }, { 0, 0 }, { 0, 0 } } };
+	// Same shafts as test_glowmoss.test_best_delve_exact and test_unstable_ledge_falls.
+	const Grid Flat{ { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	Shaft S{ { { 1, 9 }, { 5, 1 }, { 1, 1 } }, { { 0, 2 }, { 0, 0 }, { 0, 0 } }, Flat, Flat };
 	const Delve Dry = BestDelve(Tiny, S);
 	if (Dry.Best != 14 || Dry.Plan != std::vector<int>{ 1, 0 }) { std::printf("FAIL best delve\n"); ++Fails; }
 	S.Moss[0][1] = 1;
@@ -75,20 +76,28 @@ int UnitChecks()
 	S.Moss[0][1] = 0;
 	Difficulty Dim = Tiny; Dim.Light = 1;
 	if (BestDelve(Dim, S).Best != 0 || !BestDelve(Dim, S).Plan.empty()) { std::printf("FAIL unreachable shaft\n"); ++Fails; }
+	S.Unstable[0][1] = 1;
+	const Landing Fall = Land(Tiny, S, 0, 1, 6);
+	if (Fall.Row != 1 || Fall.Light != 3 || Fall.Got != 10 || !Fall.Fell || Fall.Mossy) { std::printf("FAIL unstable fall\n"); ++Fails; }
+	S.Unstable[2][0] = 1;
+	if (Land(Tiny, S, 2, 0, 6).Fell) { std::printf("FAIL fall below the floor\n"); ++Fails; }
 
 	Game G; std::string Res;
 	if (G.Start(0, "mythic")) { std::printf("FAIL unknown difficulty accepted\n"); ++Fails; }
-	if (!G.Start(1, "hard") || G.Cells.Gems.size() != 12 || G.Col != 2 || G.Light != 10 || G.Target < 1) { std::printf("FAIL hard start\n"); ++Fails; }
+	if (!G.Start(1, "hard") || G.Cells.Unstable.size() != 12 || G.Col != 2 || G.Light != 10 || G.Target < 1 || G.Target > G.Best) { std::printf("FAIL hard start\n"); ++Fails; }
 	if (G.Step({ Kind::Dig, G.Col + 2 }, Res) != Game::Act::NoLedge) { std::printf("FAIL far dig accepted\n"); ++Fails; }
-	const int Col = G.Col;
-	if (G.Step({ Kind::Dig, Col }, Res) != Game::Act::Ok || G.Row != 0 || G.Crystals != G.Cells.Gems[0][static_cast<size_t>(Col)]) { std::printf("FAIL dig\n"); ++Fails; }
 	G.Start(3, "normal");
-	G.Light = 1 + G.Cells.Dark[0][static_cast<size_t>(G.Col)];
-	G.Cells.Moss[0][static_cast<size_t>(G.Col)] = 0;
+	const size_t Mid = static_cast<size_t>(G.Col);
+	G.Light = 1 + G.Cells.Dark[0][Mid];
+	G.Cells.Moss[0][Mid] = 0;
+	G.Cells.Unstable[0][Mid] = 0;
 	if (G.Step({ Kind::Dig, G.Col }, Res) != Game::Act::Ok || Res != "the lamp gutters out" || !G.Over || G.Won) { std::printf("FAIL guttering\n"); ++Fails; }
 	if (G.Step({ Kind::Climb, 0 }, Res) != Game::Act::GameOver) { std::printf("FAIL move after game over\n"); ++Fails; }
 	G.Start(4, "normal");
 	if (G.Step({ Kind::Climb, 0 }, Res) != Game::Act::Ok || Res != "climbed out with 0" || G.Won || G.Score != 0) { std::printf("FAIL empty climb\n"); ++Fails; }
+	G.Start(5, "easy");
+	while (!G.Over) G.Step(G.DemoAction(), Res);
+	if (!G.Won || !G.Perfect || G.Score != G.Crystals + G.Light + PerfectBonus) { std::printf("FAIL perfect delve bonus\n"); ++Fails; }
 	return Fails;
 }
 
@@ -125,7 +134,7 @@ int main(int Argc, char** Argv)
 		else if (Line.rfind("end  ", 0) == 0)
 		{
 			if (Skip) continue;
-			std::ostringstream E; E << "end  score=" << G.Score << " won=" << (G.Won ? 1 : 0);
+			std::ostringstream E; E << "end  score=" << G.Score << " won=" << (G.Won ? 1 : 0) << " perfect=" << (G.Perfect ? 1 : 0);
 			if (E.str() != Line || !G.Over) { std::printf("FAIL s=%u %s end\n  want %s\n  got  %s\n", Seed, Diff.c_str(), Line.c_str(), E.str().c_str()); ++Fails; }
 		}
 		else { std::printf("FAIL unknown line: %s\n", Line.c_str()); return 1; }

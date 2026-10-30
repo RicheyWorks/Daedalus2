@@ -4,12 +4,12 @@
 Writes engines/unreal/core-test/glowmoss_parity.txt from tools/minigames/glowmoss.py for a fixed set of
 seeds x difficulties, playing demo_action to the end:
 
-  game s=<seed> d=<difficulty> gems=<row/row..> dark=<row/row..> moss=<row/row..> target=<t> plan=<..> row=<r> col=<c> light=<l> crystals=<n> score=<s>
+  game s=<seed> d=<difficulty> gems=<row/row..> dark=<row/row..> moss=<row/row..> unstable=<row/row..> best=<b> target=<t> plan=<..> row=<r> col=<c> light=<l> crystals=<n> score=<s>
   move t=<turn> act=<dig:c|climb> row=.. col=.. light=.. crystals=.. score=.. path=<..> over=<0|1> won=<0|1> res=<text>
-  end  score=<s> won=<0|1>
+  end  score=<s> won=<0|1> perfect=<0|1>
 
 No RNG events are recorded: DaedalusGlowmossCore.h seeds its own CPython-compatible stream from
-"glowmoss:<seed>:<difficulty>", so every ledge's crystals, darkness and glowmoss, the exact best delve (target
+"glowmoss:<seed>:<difficulty>", so every ledge's crystals, darkness, glowmoss and footing, the exact best delve (target
 and plan) and every demo dig are part of the parity check. All rules math is integer.
 Run `python tools/minigames/glowmoss_parity.py --check` to verify the committed file is current.
 """
@@ -44,15 +44,16 @@ def state_str(g):
 
 def play(seed, difficulty):
     g = gm.Game(seed, difficulty)
-    lines = ["game s=%d d=%s gems=%s dark=%s moss=%s target=%d plan=%s %s" % (
-        seed, difficulty, grid(g.gems), grid(g.dark), grid(g.moss), g.target, ints(g.plan), state_str(g))]
+    lines = ["game s=%d d=%s gems=%s dark=%s moss=%s unstable=%s best=%d target=%d plan=%s %s" % (
+        seed, difficulty, grid(g.gems), grid(g.dark), grid(g.moss), grid(g.unstable), g.best, g.target, ints(g.plan),
+        state_str(g))]
     turn = 0
     while not g.over:
         a = g.demo_action()
         res = g.step(a)
         turn += 1
         lines.append("move t=%d act=%s %s over=%d won=%d res=%s" % (turn, act_str(a), state_str(g), int(g.over), int(g.won), res))
-    lines.append("end  score=%d won=%d" % (g.score, int(g.won)))
+    lines.append("end  score=%d won=%d perfect=%d" % (g.score, int(g.won), int(g.perfect)))
     return lines
 
 

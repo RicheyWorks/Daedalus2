@@ -14,7 +14,11 @@ class Contract(kit.GameContract, unittest.TestCase):
 
 
 def tiny_cfg(light=6, refill=3):
-    return {"cols": 2, "rows": 3, "light": light, "refill": refill, "moss_pct": 0, "target_pct": 100}
+    return {"cols": 2, "rows": 3, "light": light, "refill": refill, "moss_pct": 0, "unstable_pct": 0, "target_pct": 100}
+
+
+def flat():
+    return [[False, False], [False, False], [False, False]]
 
 
 class Rules(unittest.TestCase):
@@ -32,12 +36,29 @@ class Rules(unittest.TestCase):
     def test_best_delve_exact(self):
         gems = [[1, 9], [5, 1], [1, 1]]
         dark = [[0, 2], [0, 0], [0, 0]]
-        no_moss = [[False, False], [False, False], [False, False]]
         # Start above column 1 with 6 light: 9 costs 3 (light 3), then 5 costs 1 (light 2 >= climb 1), the bottom needs 2 more.
-        self.assertEqual(gm.best_delve(tiny_cfg(), gems, dark, no_moss), (14, [1, 0]))
-        moss = [[False, True], [False, False], [False, False]]
-        self.assertEqual(gm.best_delve(tiny_cfg(), gems, dark, moss), (15, [1, 0, 0]))
-        self.assertEqual(gm.best_delve(tiny_cfg(light=1), gems, dark, no_moss), (0, []))
+        self.assertEqual(gm.best_delve(tiny_cfg(), (gems, dark, flat(), flat())), (14, [1, 0]))
+        moss = flat()
+        moss[0][1] = True
+        self.assertEqual(gm.best_delve(tiny_cfg(), (gems, dark, moss, flat())), (15, [1, 0, 0]))
+        self.assertEqual(gm.best_delve(tiny_cfg(light=1), (gems, dark, flat(), flat())), (0, []))
+
+    def test_unstable_ledge_falls(self):
+        gems = [[1, 9], [5, 1], [1, 1]]
+        dark = [[0, 2], [0, 0], [0, 0]]
+        unstable = flat()
+        unstable[0][1] = True
+        shaft = (gems, dark, flat(), unstable)
+        self.assertEqual(gm.land(tiny_cfg(), shaft, 0, 1, 6), (1, 3, 10, False, True))
+        unstable[2][0] = True
+        self.assertFalse(gm.land(tiny_cfg(), shaft, 2, 0, 6)[4])
+        # 9 + 1 by the fall (light 3 on row 1), then either bottom ledge (lowest column on ties): 3 - 1 = 2 covers climb 2.
+        self.assertEqual(gm.best_delve(tiny_cfg(), shaft), (11, [1, 0]))
+
+    def test_perfect_delve_bonus(self):
+        g = gm.demo(5, "easy")
+        self.assertTrue(g.won and g.perfect)
+        self.assertEqual(g.score, g.crystals + g.light + gm.PERFECT_BONUS)
 
     def test_demo_follows_the_best_plan_and_wins(self):
         for d in gm.DIFFICULTY:
@@ -60,6 +81,7 @@ class Rules(unittest.TestCase):
         g = gm.start(3)
         g.light = 1 + g.dark[0][g.col]
         g.moss[0][g.col] = False
+        g.unstable[0][g.col] = False
         self.assertEqual(g.step(("dig", g.col)), "the lamp gutters out")
         self.assertTrue(g.over and not g.won)
 
