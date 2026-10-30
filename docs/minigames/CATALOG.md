@@ -28,6 +28,7 @@ batched rebuild under the editor custodian.
 | `wardens_accord` | Wardens' Accord | 1 |
 | `facetlock` | Facetlock Lattice | 1 |
 | `prismcairn` | Prismcairn Duel | 1 |
+| `prismvault` | Prismvault Weigh | 1 |
 
 ## How to play
 
@@ -55,6 +56,7 @@ One original line per game, read from `HowToLine()`.
 | `wardens_accord` | HOW Take one of three altar shards each round, then spend matching shards to summon spirits before the rounds end. |
 | `facetlock` | HOW Slide lattice rows and columns, which wrap, until each row shows a single hue inside the move budget. |
 | `prismcairn` | HOW Take one or more shards, up to the limit, from one cairn each turn; lift the last shard to win the round, best of three. |
+| `prismvault` | HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out. |
 
 ## Difficulty
 
@@ -82,6 +84,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `wardens_accord` | normal |
 | `facetlock` | normal |
 | `prismcairn` | normal |
+| `prismvault` | normal |
 
 ## Daedalus spots
 
@@ -109,6 +112,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `wardens_accord` | `prismheart_realm` | Prismheart, the Warden altar |
 | `facetlock` | `prismheart_realm` | Prismheart, the vault door |
 | `prismcairn` | `prismheart_realm` | Prismheart, the cairn field |
+| `prismvault` | `prismheart_realm` | Prismheart, the balance chamber |
 
 ## Capabilities
 
@@ -137,6 +141,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `wardens_accord` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 | `facetlock` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 | `prismcairn` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
+| `prismvault` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 
 ## Leaderboard feed
 
