@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "quest": "q_tidelinks_golf",
+  "lore": "Greenkeeper Talwyn mows the links on the dunes above the harbour. She keeps the club rack, the wind sock and a slate of scorecards, chalks how the caddies would have played each hole beside yours, and knows the shortest way round every water hazard on the course.",
+  "hook": {"core": "DaedalusDiskSaverTidelinksGolfCore.h", "field": "verdict", "values": ["masterful", "steady", "rough"],
+           "hole": "one asset file read", "length": "bytes still to read", "club": "read block size", "wind": "I/O load",
+           "water": "bad-sector band (retry)", "putter": "final small read", "score": "requests (strokes) against par",
+           "habits": ["safe", "bold", "layup"], "refusals": ["holes", "club", "cap", "short", "extra"]},
+  "npc": {"name": "Greenkeeper Talwyn", "lines": {
+    "masterful": "Not a stroke wasted. Even the gulls stopped to watch.",
+    "steady": "A caddie's round. My slate says there was a shorter way; go and read it.",
+    "rough": "Half the course is in the water and the rest is in the dunes. Even the lay-up caddie went round in fewer."}}
+}
