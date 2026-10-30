@@ -221,3 +221,18 @@ CI: `quayside-shove.yml`.
 python tools/streaming/quayside_shove.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/quayside_shove_test.py
 ```
+
+## Sack Chute (G559)
+
+`sack_chute.py` is a solitaire sowing (mancala-style) game over the world census. Islands are
+bins on a looping chute that passes the hold, and a seed fills them with sacks. Tipping a bin
+sows its sacks one at a time down the chute, banking one each time the sowing passes the hold.
+Par is the fewest moves by exact BFS, checked against an independent memoised recursion.
+`greedy_moves` shows the nearest-the-hold trap. Verdicts are `stowed`, `slow` and `loose`.
+Hook: `data/islands/disk-saver/sack-chute-v1.json` (Hold Master Peregrine). Doc:
+`docs/islands/DISKSAVER-SACK-CHUTE.md`. CI: `sack-chute.yml`.
+
+```
+python tools/streaming/sack_chute.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/sack_chute_test.py
+```
