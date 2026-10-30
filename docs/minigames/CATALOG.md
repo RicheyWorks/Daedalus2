@@ -158,7 +158,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `facetlock` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `prismcairn` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `prismvault` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
-| `shardfall` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
+| `shardfall` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `siltlane` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 | `shadewatch` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 | `glimmerloom` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
