@@ -326,3 +326,18 @@ Agatha). Doc: `docs/islands/DISKSAVER-BELFRY-CHANGES.md`. CI: `belfry-changes.ym
 python tools/streaming/belfry_changes.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/belfry_changes_test.py
 ```
+
+## Tram Shunt (G566)
+
+`tram_shunt.py` is a railway-shunting (stack sorting) puzzle over the world census. Each island
+loads a tram wagon, and a seed jumbles the inbound order. Shunter Rosalind uses two dead-end
+sidings to send the wagons out in number order. Par is the fewest moves by exact BFS, checked
+against an independent search for every train of up to five wagons. `greedy_moves` shows the
+yardman's-habit trap. Verdicts are `smart`, `slow` and `jammed`. Hook:
+`data/islands/disk-saver/tram-shunt-v1.json`. Doc: `docs/islands/DISKSAVER-TRAM-SHUNT.md`.
+CI: `tram-shunt.yml`.
+
+```
+python tools/streaming/tram_shunt.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/tram_shunt_test.py
+```
