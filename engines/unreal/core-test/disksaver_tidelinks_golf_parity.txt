@@ -1,0 +1,1624 @@
+# disksaver tidelinks_golf parity v1: written by tools/streaming/tidelinks_golf_parity.py; do not edit
+C seed0
+S x746964656c696e6b732d676f6c667c323032362d31302d33307c30
+O L 4 16
+O R 0 Dunes 270 4 3 40
+O R 1 Anchor_Reach 270 4 -3 0
+O R 2 Harbour_Mouth 390 4 0 330
+O R 3 Lantern_Point 260 4 0 70
+O P safe D,P,P/D,9,P/D,5,P/D,C,C 12
+O P bold D,P,P/D,9,P/D,5,P/D,C,C 12
+O P layup D,P,P/D,9,P/D,5,P/D,C,C 12
+O P best W,C/D,9,C/D,W,C/5,9 10
+M W,C/D,9,C/D,W,C/5,9
+O m 10 -6 masterful
+M D,P,P/D,9,P/D,5,P/D,C,C
+O m 12 -4 steady
+M D,P,P/D,9,P/D,5,P/D,C,C
+O m 12 -4 steady
+M D,P,P/D,9,P/D,5,P/D,C,C
+O m 12 -4 steady
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M P,P,5,S/9,5,C/S,7,7,W,7/C
+O refused short 0
+M X,W,C/D,9,C/D,W,C/5,9
+O refused club 0
+M W/D,9,C/D,W,C/5,9
+O refused short 0
+M W,C,P/D,9,C/D,W,C/5,9
+O refused extra 0
+M W,C/D,9,C/D,W,C
+O refused holes 0
+M W,C/D,9,C/D,W,C/5,9/P
+O refused holes 0
+M -/D,9,C/D,W,C/5,9
+O refused short 0
+C seed1
+S x746964656c696e6b732d676f6c667c323032362d31302d33307c31
+O L 6 25
+O R 0 Dunes 400 4 3 180
+O R 1 Jetty_End 500 5 -3 40
+O R 2 Foghorn 350 4 3 170
+O R 3 Inkwell 270 4 -3 40
+O R 4 Capstan_Rise 360 4 2 0
+O R 5 Kelp_Bed 290 4 1 150
+O P safe D,7,P/D,D,5,P/D,S,P/D,9,P/D,9/D,S,P 18
+O P bold D,7,P/D,D,5,P/D,S,P/D,9,P/D,9/D,S,P 18
+O P layup D,9,P,P/D,D,7,C,P/D,S,P/D,9,P/D,9/D,C,C 20
+O P best D,7,P/D,D,5,C/W,9/D,9,C/D,9/D,S,P 17
+M D,7,P/D,D,5,C/W,9/D,9,C/D,9/D,S,P
+O m 17 -8 masterful
+M D,7,P/D,D,5,P/D,S,P/D,9,P/D,9/D,S,P
+O m 18 -7 steady
+M D,7,P/D,D,5,P/D,S,P/D,9,P/D,9/D,S,P
+O m 18 -7 steady
+M D,9,P,P/D,D,7,C,P/D,S,P/D,9,P/D,9/D,C,C
+O m 20 -5 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M D,W,W,9,S/P,9,9,7/P/D,D,S/S,7,P,C/W
+O refused short 0
+M X,D,7,P/D,D,5,C/W,9/D,9,C/D,9/D,S,P
+O refused club 0
+M D,7/D,D,5,C/W,9/D,9,C/D,9/D,S,P
+O refused short 0
+M D,7,P,P/D,D,5,C/W,9/D,9,C/D,9/D,S,P
+O refused extra 0
+M D,7,P/D,D,5,C/W,9/D,9,C/D,9
+O refused holes 0
+M D,7,P/D,D,5,C/W,9/D,9,C/D,9/D,S,P/P
+O refused holes 0
+M -/D,D,5,C/W,9/D,9,C/D,9/D,S,P
+O refused short 0
+C seed2
+S x746964656c696e6b732d676f6c667c323032362d31302d33307c37
+O L 5 18
+O R 0 Eelgrass 310 4 -3 130
+O R 1 Foghorn 120 3 3 50
+O R 2 Dunes 170 3 3 70
+O R 3 Bellbuoy 260 4 2 0
+O R 4 Harbour_Mouth 330 4 -2 280
+O P safe D,5,P/9,P/7,P/D,P,P/D,5,P 13
+O P bold D,5,P/9,P/7,P/D,P,P/D,5,P 13
+O P layup D,7,C,P/S,P,P,P/7,P/D,P,P/D,7,C,P 17
+O P best D,5,C/9,P/W,C/5,S/D,W,S 12
+M D,5,C/9,P/W,C/5,S/D,W,S
+O m 12 -6 masterful
+M D,5,P/9,P/7,P/D,P,P/D,5,P
+O m 13 -5 steady
+M D,5,P/9,P/7,P/D,P,P/D,5,P
+O m 13 -5 steady
+M D,7,C,P/S,P,P,P/7,P/D,P,P/D,7,C,P
+O m 17 -1 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M C,7,5,5/P/7,D,5/P,P/S,7,P,9
+O refused short 0
+M X,D,5,C/9,P/W,C/5,S/D,W,S
+O refused club 0
+M D,5/9,P/W,C/5,S/D,W,S
+O refused short 0
+M D,5,C,P/9,P/W,C/5,S/D,W,S
+O refused extra 0
+M D,5,C/9,P/W,C/5,S
+O refused holes 0
+M D,5,C/9,P/W,C/5,S/D,W,S/P
+O refused holes 0
+M -/9,P/W,C/5,S/D,W,S
+O refused short 0
+C seed3
+S x746964656c696e6b732d676f6c667c323032362d31302d33307c3432
+O L 5 18
+O R 0 Jetty_End 280 4 -2 100
+O R 1 Eelgrass 150 3 -3 40
+O R 2 Gullwing 190 3 0 60
+O R 3 Inkwell 380 4 3 110
+O R 4 Foghorn 240 4 -3 0
+O P safe D,9/W,P/W/D,9/D,S,S,P 11
+O P bold D,9/W,P/W/D,9/D,S,S,P 11
+O P layup D,9/5,C,P/W/D,9/D,S,C,P 12
+O P best D,9/W,C/W/D,9/W,9,C 10
+M D,9/W,C/W/D,9/W,9,C
+O m 10 -8 masterful
+M D,9/W,P/W/D,9/D,S,S,P
+O m 11 -7 steady
+M D,9/W,P/W/D,9/D,S,S,P
+O m 11 -7 steady
+M D,9/5,C,P/W/D,9/D,S,C,P
+O m 12 -6 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M C,D/9,W,7,7/7,5,9,D/W,W,S,S,P/D,9,7
+O refused short 0
+M X,D,9/W,C/W/D,9/W,9,C
+O refused club 0
+M D/W,C/W/D,9/W,9,C
+O refused short 0
+M D,9,P/W,C/W/D,9/W,9,C
+O refused extra 0
+M D,9/W,C/W/D,9
+O refused holes 0
+M D,9/W,C/W/D,9/W,9,C/P
+O refused holes 0
+M -/W,C/W/D,9/W,9,C
+O refused short 0
+C seed4
+S x746964656c696e6b732d676f6c667c323032362d31302d33307c2d33
+O L 5 16
+O R 0 Gullwing 190 3 3 0
+O R 1 Anchor_Reach 140 3 1 90
+O R 2 Bellbuoy 220 3 -2 0
+O R 3 Lantern_Point 160 3 -3 100
+O R 4 Eelgrass 310 4 1 130
+O P safe 5/7/D,C,P/W/D,S,P 9
+O P bold 5/7/D,C,P/W/D,S,P 9
+O P layup 5/7/D,C,P/W/D,S,P 9
+O P best 5/7/5,9/W/W,9 7
+M 5/7/5,9/W/W,9
+O m 7 -9 masterful
+M 5/7/D,C,P/W/D,S,P
+O m 9 -7 steady
+M 5/7/D,C,P/W/D,S,P
+O m 9 -7 steady
+M 5/7/D,C,P/W/D,S,P
+O m 9 -7 steady
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 5,P,C,D/S,7,7,W/S,D/D,S,5/W,D
+O refused extra 0
+M X,5/7/5,9/W/W,9
+O refused club 0
+M -/7/5,9/W/W,9
+O refused short 0
+M 5,P/7/5,9/W/W,9
+O refused extra 0
+M 5/7/5,9/W
+O refused holes 0
+M 5/7/5,9/W/W,9/P
+O refused holes 0
+M -/7/5,9/W/W,9
+O refused short 0
+C seed5
+S x
+O L 5 23
+O R 0 Anchor_Reach 480 5 -2 170
+O R 1 Eelgrass 310 4 3 220
+O R 2 Jetty_End 500 5 -1 60
+O R 3 Harbour_Mouth 390 4 0 130
+O R 4 Gullwing 420 5 -1 40
+O P safe D,D,9/D,C,P/D,D,9,P/D,5,P/D,D 15
+O P bold D,D,9/D,C,P/D,D,9,P/D,5,P/D,D 15
+O P layup D,D,9/D,C,P/D,D,S,C,C,P/D,5,P/D,D 17
+O P best D,D,9/S,W/D,D,9,C/D,W,C/D,D 14
+M D,D,9/S,W/D,D,9,C/D,W,C/D,D
+O m 14 -9 masterful
+M D,D,9/D,C,P/D,D,9,P/D,5,P/D,D
+O m 15 -8 steady
+M D,D,9/D,C,P/D,D,9,P/D,5,P/D,D
+O m 15 -8 steady
+M D,D,9/D,C,P/D,D,S,C,C,P/D,5,P/D,D
+O m 17 -6 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 9,W,9/5/5,9/P,D/5
+O refused short 0
+M X,D,D,9/S,W/D,D,9,C/D,W,C/D,D
+O refused club 0
+M D,D/S,W/D,D,9,C/D,W,C/D,D
+O refused short 0
+M D,D,9,P/S,W/D,D,9,C/D,W,C/D,D
+O refused extra 0
+M D,D,9/S,W/D,D,9,C/D,W,C
+O refused holes 0
+M D,D,9/S,W/D,D,9,C/D,W,C/D,D/P
+O refused holes 0
+M -/S,W/D,D,9,C/D,W,C/D,D
+O refused short 0
+C seed6
+S x67
+O L 5 20
+O R 0 Dunes 400 4 1 0
+O R 1 Harbour_Mouth 410 5 -1 250
+O R 2 Anchor_Reach 330 4 3 0
+O R 3 Capstan_Rise 230 4 2 160
+O R 4 Lantern_Point 110 3 -3 60
+O P safe D,5/D,D,P/D,S,P/D,P/7,P 12
+O P bold D,5/D,D,P/D,S,P/D,P/7,P 12
+O P layup D,5/D,W,C,P/D,C,P,P,P/W,P,P/7,P 16
+O P best D,5/D,D,C/D,9,C/D,P/7,C 12
+M D,5/D,D,C/D,9,C/D,P/7,C
+O m 12 -8 masterful
+M D,5/D,D,P/D,S,P/D,P/7,P
+O m 12 -8 masterful
+M D,5/D,D,P/D,S,P/D,P/7,P
+O m 12 -8 masterful
+M D,5/D,W,C,P/D,C,P,P,P/W,P,P/7,P
+O m 16 -4 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M P,D/P,C,5/C,C,5,9/C,C,P/5,C,P
+O refused short 0
+M X,D,5/D,D,C/D,9,C/D,P/7,C
+O refused club 0
+M D/D,D,C/D,9,C/D,P/7,C
+O refused short 0
+M D,5,P/D,D,C/D,9,C/D,P/7,C
+O refused extra 0
+M D,5/D,D,C/D,9,C/D,P
+O refused holes 0
+M D,5/D,D,C/D,9,C/D,P/7,C/P
+O refused holes 0
+M -/D,D,C/D,9,C/D,P/7,C
+O refused short 0
+C seed7
+S x746964656c696e6b732d676f6c667c6c696e6b73
+O L 6 23
+O R 0 Lantern_Point 230 4 -2 150
+O R 1 Dunes 310 4 0 0
+O R 2 Jetty_End 140 3 1 0
+O R 3 Eelgrass 430 5 3 160
+O R 4 Inkwell 320 4 0 90
+O R 5 Harbour_Mouth 190 3 1 0
+O P safe D,S,P/D,9,P/7/D,5,P/D,9/W,P 14
+O P bold D,S,P/D,9,P/7/D,5,P/D,9/W,P 14
+O P layup D,C,C,P/D,S,C,P/7/D,7,P,P/D,9/5,P,P 18
+O P best D,S,C/D,9,P/7/D,5,P/D,9/W,P 14
+M D,S,C/D,9,P/7/D,5,P/D,9/W,P
+O m 14 -9 masterful
+M D,S,P/D,9,P/7/D,5,P/D,9/W,P
+O m 14 -9 masterful
+M D,S,P/D,9,P/7/D,5,P/D,9/W,P
+O m 14 -9 masterful
+M D,C,C,P/D,S,C,P/7/D,7,P,P/D,9/5,P,P
+O m 18 -5 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M S,D/5,5,C,S/7,W/9,C,C,D,5/C/5,S
+O refused short 0
+M X,D,S,C/D,9,P/7/D,5,P/D,9/W,P
+O refused club 0
+M D,S/D,9,P/7/D,5,P/D,9/W,P
+O refused short 0
+M D,S,C,P/D,9,P/7/D,5,P/D,9/W,P
+O refused extra 0
+M D,S,C/D,9,P/7/D,5,P/D,9
+O refused holes 0
+M D,S,C/D,9,P/7/D,5,P/D,9/W,P/P
+O refused holes 0
+M -/D,9,P/7/D,5,P/D,9/W,P
+O refused short 0
+C seed8
+S x756e69636f64653ac3a9cebbe29883
+O L 5 20
+O R 0 Inkwell 100 3 -1 30
+O R 1 Eelgrass 230 4 0 60
+O R 2 Anchor_Reach 420 5 3 0
+O R 3 Gullwing 220 3 -1 0
+O R 4 Kelp_Bed 460 5 -2 0
+O P safe 9,P/D,P/D,7,P/D,P/D,D,S,C,P 14
+O P bold 9,P/D,P/D,7,P/D,P/D,D,S,C,P 14
+O P layup 9,P/D,P/D,7,P/D,P/D,D,S,C,P 14
+O P best 5,S/D,P/D,W,C/D,C/D,W,9,C 13
+M 5,S/D,P/D,W,C/D,C/D,W,9,C
+O m 13 -7 masterful
+M 9,P/D,P/D,7,P/D,P/D,D,S,C,P
+O m 14 -6 steady
+M 9,P/D,P/D,7,P/D,P/D,D,S,C,P
+O m 14 -6 steady
+M 9,P/D,P/D,7,P/D,P/D,D,S,C,P
+O m 14 -6 steady
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused extra 0
+M S,S/5/9,5,C,D/D,7,D,5/S,P,5,S,W
+O refused short 1
+M X,5,S/D,P/D,W,C/D,C/D,W,9,C
+O refused club 0
+M 5/D,P/D,W,C/D,C/D,W,9,C
+O refused short 0
+M 5,S,P/D,P/D,W,C/D,C/D,W,9,C
+O refused extra 0
+M 5,S/D,P/D,W,C/D,C
+O refused holes 0
+M 5,S/D,P/D,W,C/D,C/D,W,9,C/P
+O refused holes 0
+M -/D,P/D,W,C/D,C/D,W,9,C
+O refused short 0
+C seed9
+S x746964656c696e6b732d676f6c667c62756c6b7c30
+O L 5 20
+O R 0 Harbour_Mouth 450 5 1 160
+O R 1 Foghorn 170 3 -1 90
+O R 2 Capstan_Rise 460 5 -3 0
+O R 3 Dunes 120 3 1 70
+O R 4 Lantern_Point 300 4 1 0
+O P safe D,D,P/W,P/D,D,9,P/9,P/D,S 13
+O P bold D,D,P/W,P/D,D,9,P/9,P/D,S 13
+O P layup D,W,P,P/5,C,P/D,D,9,P/9,P/D,S 15
+O P best D,D,P/W,C/D,D,9,C/9,P/D,S 13
+M D,D,P/W,C/D,D,9,C/9,P/D,S
+O m 13 -7 masterful
+M D,D,P/W,P/D,D,9,P/9,P/D,S
+O m 13 -7 masterful
+M D,D,P/W,P/D,D,9,P/9,P/D,S
+O m 13 -7 masterful
+M D,W,P,P/5,C,P/D,D,9,P/9,P/D,S
+O m 15 -5 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M S/S,W,S,S,D/D,9,P,S/W,9,7,9,5/9,9,9,S,C
+O refused short 0
+M X,D,D,P/W,C/D,D,9,C/9,P/D,S
+O refused club 0
+M D,D/W,C/D,D,9,C/9,P/D,S
+O refused short 0
+M D,D,P,P/W,C/D,D,9,C/9,P/D,S
+O refused extra 0
+M D,D,P/W,C/D,D,9,C/9,P
+O refused holes 0
+M D,D,P/W,C/D,D,9,C/9,P/D,S/P
+O refused holes 0
+M -/W,C/D,D,9,C/9,P/D,S
+O refused short 0
+C seed10
+S x746964656c696e6b732d676f6c667c62756c6b7c31
+O L 5 20
+O R 0 Gullwing 500 5 0 0
+O R 1 Dunes 180 3 2 80
+O R 2 Capstan_Rise 370 4 3 40
+O R 3 Lantern_Point 330 4 -3 30
+O R 4 Kelp_Bed 390 4 0 250
+O P safe D,D,S/5/D,9,P/D,5,P/D,5,P 13
+O P bold D,D,S/5/D,9,P/D,5,P/D,5,P 13
+O P layup D,D,S/5/D,S,P,P,P/D,5,P/D,5,P 15
+O P best D,D,S/5/D,9,P/D,5,C/D,W,C 13
+M D,D,S/5/D,9,P/D,5,C/D,W,C
+O m 13 -7 masterful
+M D,D,S/5/D,9,P/D,5,P/D,5,P
+O m 13 -7 masterful
+M D,D,S/5/D,9,P/D,5,P/D,5,P
+O m 13 -7 masterful
+M D,D,S/5/D,S,P,P,P/D,5,P/D,5,P
+O m 15 -5 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 7,C,5,7/W,S,P,D,S/D,P,P,D/7,9/C,C,5,D,7
+O refused short 0
+M X,D,D,S/5/D,9,P/D,5,C/D,W,C
+O refused club 0
+M D,D/5/D,9,P/D,5,C/D,W,C
+O refused short 0
+M D,D,S,P/5/D,9,P/D,5,C/D,W,C
+O refused extra 0
+M D,D,S/5/D,9,P/D,5,C
+O refused holes 0
+M D,D,S/5/D,9,P/D,5,C/D,W,C/P
+O refused holes 0
+M -/5/D,9,P/D,5,C/D,W,C
+O refused short 0
+C seed11
+S x746964656c696e6b732d676f6c667c62756c6b7c32
+O L 6 26
+O R 0 Dunes 230 4 -2 120
+O R 1 Inkwell 440 5 2 0
+O R 2 Gullwing 320 4 2 200
+O R 3 Anchor_Reach 290 4 1 0
+O R 4 Bellbuoy 470 5 3 220
+O R 5 Jetty_End 340 4 2 30
+O P safe D,S,P/D,W,P/D,S/D,S,P/D,W/D,S,P,P 17
+O P bold D,S,P/D,W,P/D,S/D,S,P/D,W/D,S,P,P 17
+O P layup D,C,C,P/D,5,P,P/D,S/D,C,C/D,W/D,S,P,P 19
+O P best D,S,C/D,D,C/D,S/D,S,P/D,W/W,9,P 16
+M D,S,C/D,D,C/D,S/D,S,P/D,W/W,9,P
+O m 16 -10 masterful
+M D,S,P/D,W,P/D,S/D,S,P/D,W/D,S,P,P
+O m 17 -9 steady
+M D,S,P/D,W,P/D,S/D,S,P/D,W/D,S,P,P
+O m 17 -9 steady
+M D,C,C,P/D,5,P,P/D,S/D,C,C/D,W/D,S,P,P
+O m 19 -7 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 5,5,C,7/D,D,S/9,C,W/S,S,C,S,S/C,P/7
+O refused short 0
+M X,D,S,C/D,D,C/D,S/D,S,P/D,W/W,9,P
+O refused club 0
+M D,S/D,D,C/D,S/D,S,P/D,W/W,9,P
+O refused short 0
+M D,S,C,P/D,D,C/D,S/D,S,P/D,W/W,9,P
+O refused extra 0
+M D,S,C/D,D,C/D,S/D,S,P/D,W
+O refused holes 0
+M D,S,C/D,D,C/D,S/D,S,P/D,W/W,9,P/P
+O refused holes 0
+M -/D,D,C/D,S/D,S,P/D,W/W,9,P
+O refused short 0
+C seed12
+S x746964656c696e6b732d676f6c667c62756c6b7c33
+O L 4 15
+O R 0 Inkwell 230 4 -2 150
+O R 1 Capstan_Rise 210 3 3 0
+O R 2 Dunes 270 4 1 0
+O R 3 Gullwing 400 4 0 60
+O P safe D,S,P/W,P/D,C,P/D,W,P 11
+O P bold D,S,P/W,P/D,C,P/D,W,P 11
+O P layup D,C,C,P/5,P,P/D,C,P/D,5,C 13
+O P best D,S,C/W,P/W,S/D,W,P 10
+M D,S,C/W,P/W,S/D,W,P
+O m 10 -5 masterful
+M D,S,P/W,P/D,C,P/D,W,P
+O m 11 -4 steady
+M D,S,P/W,P/D,C,P/D,W,P
+O m 11 -4 steady
+M D,C,C,P/5,P,P/D,C,P/D,5,C
+O m 13 -2 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 7,W,W,S/W/D/9,W,5,7
+O refused short 0
+M X,D,S,C/W,P/W,S/D,W,P
+O refused club 0
+M D,S/W,P/W,S/D,W,P
+O refused short 0
+M D,S,C,P/W,P/W,S/D,W,P
+O refused extra 0
+M D,S,C/W,P/W,S
+O refused holes 0
+M D,S,C/W,P/W,S/D,W,P/P
+O refused holes 0
+M -/W,P/W,S/D,W,P
+O refused short 0
+C seed13
+S x746964656c696e6b732d676f6c667c62756c6b7c34
+O L 4 17
+O R 0 Eelgrass 500 5 3 310
+O R 1 Lantern_Point 130 3 1 50
+O R 2 Kelp_Bed 500 5 2 120
+O R 3 Dunes 380 4 3 260
+O P safe D,D/7,P/D,D,P,P/D,9 10
+O P bold D,D/7,P/D,D,P,P/D,9 10
+O P layup D,D/9,P,P/D,D,P,P/D,9 11
+O P best D,D/7,P/D,5,S/D,9 9
+M D,D/7,P/D,5,S/D,9
+O m 9 -8 masterful
+M D,D/7,P/D,D,P,P/D,9
+O m 10 -7 steady
+M D,D/7,P/D,D,P,P/D,9
+O m 10 -7 steady
+M D,D/9,P,P/D,D,P,P/D,9
+O m 11 -6 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 5,S/9/S,P,W,P,7/7
+O refused short 0
+M X,D,D/7,P/D,5,S/D,9
+O refused club 0
+M D/7,P/D,5,S/D,9
+O refused short 0
+M D,D,P/7,P/D,5,S/D,9
+O refused extra 0
+M D,D/7,P/D,5,S
+O refused holes 0
+M D,D/7,P/D,5,S/D,9/P
+O refused holes 0
+M -/7,P/D,5,S/D,9
+O refused short 0
+C seed14
+S x746964656c696e6b732d676f6c667c62756c6b7c35
+O L 4 15
+O R 0 Jetty_End 140 3 -1 90
+O R 1 Gullwing 280 4 -3 130
+O R 2 Eelgrass 300 4 0 250
+O R 3 Inkwell 270 4 3 0
+O P safe 5,P/D,7,P/D,S,C/D,P,P 11
+O P bold 5,P/D,7,P/D,S,C/D,P,P 11
+O P layup 7,C,P/D,9,C,P/D,S,C/D,P,P 13
+O P best 5,C/D,7,C/D,9,C/W,C 10
+M 5,C/D,7,C/D,9,C/W,C
+O m 10 -5 masterful
+M 5,P/D,7,P/D,S,C/D,P,P
+O m 11 -4 steady
+M 5,P/D,7,P/D,S,C/D,P,P
+O m 11 -4 steady
+M 7,C,P/D,9,C,P/D,S,C/D,P,P
+O m 13 -2 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M P,C,D,D/P,9/C/S,9,9,S
+O refused short 0
+M X,5,C/D,7,C/D,9,C/W,C
+O refused club 0
+M 5/D,7,C/D,9,C/W,C
+O refused short 0
+M 5,C,P/D,7,C/D,9,C/W,C
+O refused extra 0
+M 5,C/D,7,C/D,9,C
+O refused holes 0
+M 5,C/D,7,C/D,9,C/W,C/P
+O refused holes 0
+M -/D,7,C/D,9,C/W,C
+O refused short 0
+C seed15
+S x746964656c696e6b732d676f6c667c62756c6b7c36
+O L 6 24
+O R 0 Bellbuoy 490 5 1 230
+O R 1 Kelp_Bed 200 3 -3 30
+O R 2 Harbour_Mouth 340 4 1 250
+O R 3 Gullwing 270 4 -1 0
+O R 4 Lantern_Point 430 5 2 380
+O R 5 Dunes 200 3 -1 0
+O P safe W,D,S,P/D,P/D,9/D,S,P/D,5,P/D,P 16
+O P bold D,W,D,S,P/D,P/D,9/D,S,P/D,5,P/D,P 18
+O P layup W,D,C,C/D,P/D,9/D,S,P/D,5,P/W,C,P 17
+O P best C,D,D/D,C/D,9/W,9/D,5,P/D,C 14
+M C,D,D/D,C/D,9/W,9/D,5,P/D,C
+O m 14 -10 masterful
+M W,D,S,P/D,P/D,9/D,S,P/D,5,P/D,P
+O m 16 -8 steady
+M D,W,D,S,P/D,P/D,9/D,S,P/D,5,P/D,P
+O m 18 -6 rough
+M W,D,C,C/D,P/D,9/D,S,P/D,5,P/W,C,P
+O m 17 -7 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 7/P,W/5,9/D,5,P,5/D/5,D,P
+O refused short 0
+M X,C,D,D/D,C/D,9/W,9/D,5,P/D,C
+O refused club 0
+M C,D/D,C/D,9/W,9/D,5,P/D,C
+O refused short 0
+M C,D,D,P/D,C/D,9/W,9/D,5,P/D,C
+O refused extra 0
+M C,D,D/D,C/D,9/W,9/D,5,P
+O refused holes 0
+M C,D,D/D,C/D,9/W,9/D,5,P/D,C/P
+O refused holes 0
+M -/D,C/D,9/W,9/D,5,P/D,C
+O refused short 0
+C seed16
+S x746964656c696e6b732d676f6c667c62756c6b7c37
+O L 6 24
+O R 0 Anchor_Reach 330 4 -3 30
+O R 1 Lantern_Point 380 4 1 280
+O R 2 Inkwell 270 4 -2 80
+O R 3 Foghorn 310 4 -2 230
+O R 4 Capstan_Rise 230 4 -1 180
+O R 5 Dunes 320 4 -2 190
+O P safe D,5,P/D,7,P/D,9,P/D,7/D,C,P/W,5,P 17
+O P bold D,5,P/D,7,P/D,9,P/D,7/D,C,P/D,W,5,P 19
+O P layup D,5,P/D,7,P/D,S,C,C,P/D,7/D,C,P/W,5,P 19
+O P best D,5,C/D,7,P/D,7,S/D,7/S,W/W,5,C 16
+M D,5,C/D,7,P/D,7,S/D,7/S,W/W,5,C
+O m 16 -8 masterful
+M D,5,P/D,7,P/D,9,P/D,7/D,C,P/W,5,P
+O m 17 -7 steady
+M D,5,P/D,7,P/D,9,P/D,7/D,C,P/D,W,5,P
+O m 19 -5 rough
+M D,5,P/D,7,P/D,S,C,C,P/D,7/D,C,P/W,5,P
+O m 19 -5 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M P,P/C,W,5,S/5,P,P,7/P,W/W,7,P/9,C,7,7
+O refused short 0
+M X,D,5,C/D,7,P/D,7,S/D,7/S,W/W,5,C
+O refused club 0
+M D,5/D,7,P/D,7,S/D,7/S,W/W,5,C
+O refused short 0
+M D,5,C,P/D,7,P/D,7,S/D,7/S,W/W,5,C
+O refused extra 0
+M D,5,C/D,7,P/D,7,S/D,7/S,W
+O refused holes 0
+M D,5,C/D,7,P/D,7,S/D,7/S,W/W,5,C/P
+O refused holes 0
+M -/D,7,P/D,7,S/D,7/S,W/W,5,C
+O refused short 0
+C seed17
+S x746964656c696e6b732d676f6c667c62756c6b7c38
+O L 6 23
+O R 0 Bellbuoy 330 4 1 240
+O R 1 Gullwing 260 4 1 0
+O R 2 Foghorn 240 4 -1 60
+O R 3 Eelgrass 160 3 -2 110
+O R 4 Lantern_Point 300 4 3 220
+O R 5 Anchor_Reach 400 4 -2 250
+O P safe D,9,P/D,C/D,C,C,P/W,P/D,C/D,D 15
+O P bold D,9,P/D,C/D,C,C,P/W,P/D,C/D,D 15
+O P layup D,S,C/D,C/D,C,C,P/5,C,P/D,C/D,D 16
+O P best D,9,P/D,C/5,9/D,S/D,C/D,D 13
+M D,9,P/D,C/5,9/D,S/D,C/D,D
+O m 13 -10 masterful
+M D,9,P/D,C/D,C,C,P/W,P/D,C/D,D
+O m 15 -8 steady
+M D,9,P/D,C/D,C,C,P/W,P/D,C/D,D
+O m 15 -8 steady
+M D,S,C/D,C/D,C,C,P/5,C,P/D,C/D,D
+O m 16 -7 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M S,7,5/C,5,5/9,5,C/9,W,9,P,S/S,7,P,D/7
+O refused short 0
+M X,D,9,P/D,C/5,9/D,S/D,C/D,D
+O refused club 0
+M D,9/D,C/5,9/D,S/D,C/D,D
+O refused short 0
+M D,9,P,P/D,C/5,9/D,S/D,C/D,D
+O refused extra 0
+M D,9,P/D,C/5,9/D,S/D,C
+O refused holes 0
+M D,9,P/D,C/5,9/D,S/D,C/D,D/P
+O refused holes 0
+M -/D,C/5,9/D,S/D,C/D,D
+O refused short 0
+C seed18
+S x746964656c696e6b732d676f6c667c62756c6b7c39
+O L 5 19
+O R 0 Gullwing 160 3 1 0
+O R 1 Bellbuoy 250 4 -1 110
+O R 2 Dunes 210 3 1 100
+O R 3 Inkwell 300 4 -1 170
+O R 4 Eelgrass 440 5 0 390
+O P safe 5,P/D,S,P/W,P/D,9/D,D 11
+O P bold 5,P/D,S,P/W,P/D,9/D,D 11
+O P layup 7,P,P/D,C,C,C,P/W,P/D,9/D,D 14
+O P best 5,P/D,9,S/W,P/D,9/D,D 11
+M 5,P/D,9,S/W,P/D,9/D,D
+O m 11 -8 masterful
+M 5,P/D,S,P/W,P/D,9/D,D
+O m 11 -8 masterful
+M 5,P/D,S,P/W,P/D,9/D,D
+O m 11 -8 masterful
+M 7,P,P/D,C,C,C,P/W,P/D,9/D,D
+O m 14 -5 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M W,9/W,5,P/9,C,D/9,P/9,W,9,W
+O refused short 0
+M X,5,P/D,9,S/W,P/D,9/D,D
+O refused club 0
+M 5/D,9,S/W,P/D,9/D,D
+O refused short 0
+M 5,P,P/D,9,S/W,P/D,9/D,D
+O refused extra 0
+M 5,P/D,9,S/W,P/D,9
+O refused holes 0
+M 5,P/D,9,S/W,P/D,9/D,D/P
+O refused holes 0
+M -/D,9,S/W,P/D,9/D,D
+O refused short 0
+C seed19
+S x746964656c696e6b732d676f6c667c62756c6b7c3130
+O L 5 18
+O R 0 Anchor_Reach 380 4 -3 0
+O R 1 Jetty_End 320 4 1 0
+O R 2 Inkwell 360 4 2 220
+O R 3 Eelgrass 190 3 2 140
+O R 4 Kelp_Bed 130 3 1 60
+O P safe D,D/D,S,C,P/D,9/5,P/7,P 12
+O P bold D,D/D,S,C,P/D,9/5,P/7,P 12
+O P layup D,D/D,S,P,P/D,9/5,P/9,P,P 13
+O P best D,D/W,9,P/D,9/5,P/7,P 11
+M D,D/W,9,P/D,9/5,P/7,P
+O m 11 -7 masterful
+M D,D/D,S,C,P/D,9/5,P/7,P
+O m 12 -6 steady
+M D,D/D,S,C,P/D,9/5,P/7,P
+O m 12 -6 steady
+M D,D/D,S,P,P/D,9/5,P/9,P,P
+O m 13 -5 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M D,9,S,W,S/5,C,P,C/S,7,5/D,S,9,7/7,D
+O refused short 0
+M X,D,D/W,9,P/D,9/5,P/7,P
+O refused club 0
+M D/W,9,P/D,9/5,P/7,P
+O refused short 0
+M D,D,P/W,9,P/D,9/5,P/7,P
+O refused extra 0
+M D,D/W,9,P/D,9/5,P
+O refused holes 0
+M D,D/W,9,P/D,9/5,P/7,P/P
+O refused holes 0
+M -/W,9,P/D,9/5,P/7,P
+O refused short 0
+C seed20
+S x746964656c696e6b732d676f6c667c62756c6b7c3131
+O L 5 18
+O R 0 Gullwing 340 4 -1 180
+O R 1 Dunes 400 4 0 90
+O R 2 Kelp_Bed 150 3 3 90
+O R 3 Jetty_End 230 4 3 150
+O R 4 Inkwell 200 3 2 70
+O P safe D,7,P/D,W,P/7,P/W,P/W,P 12
+O P bold D,7,P/D,W,P/7,P/W,P/W,P 12
+O P layup D,7,P/D,5,C/9,P,P/W,P/5,P,P 14
+O P best D,W,S/D,W,P/7,P/W,P/D,C 12
+M D,W,S/D,W,P/7,P/W,P/D,C
+O m 12 -6 masterful
+M D,7,P/D,W,P/7,P/W,P/W,P
+O m 12 -6 masterful
+M D,7,P/D,W,P/7,P/W,P/W,P
+O m 12 -6 masterful
+M D,7,P/D,5,C/9,P,P/W,P/5,P,P
+O m 14 -4 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M S/D,C,9,W/D,W,P/C,D,P,5/P,9,C,S,W
+O refused short 0
+M X,D,W,S/D,W,P/7,P/W,P/D,C
+O refused club 0
+M D,W/D,W,P/7,P/W,P/D,C
+O refused short 0
+M D,W,S,P/D,W,P/7,P/W,P/D,C
+O refused extra 0
+M D,W,S/D,W,P/7,P/W,P
+O refused holes 0
+M D,W,S/D,W,P/7,P/W,P/D,C/P
+O refused holes 0
+M -/D,W,P/7,P/W,P/D,C
+O refused short 0
+C seed21
+S x746964656c696e6b732d676f6c667c62756c6b7c3132
+O L 4 14
+O R 0 Inkwell 190 3 3 50
+O R 1 Bellbuoy 410 5 1 350
+O R 2 Gullwing 120 3 0 0
+O R 3 Eelgrass 100 3 0 0
+O P safe 5/D,5,P/7,P/9 7
+O P bold 5/D,5,P/7,P/9 7
+O P layup 5/D,5,P/9,C/9 7
+O P best 5/D,5,P/7,P/9 7
+M 5/D,5,P/7,P/9
+O m 7 -7 masterful
+M 5/D,5,P/7,P/9
+O m 7 -7 masterful
+M 5/D,5,P/7,P/9
+O m 7 -7 masterful
+M 5/D,5,P/9,C/9
+O m 7 -7 masterful
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 7,W,D,P,D/W,7,W,S/W,P,D/5
+O refused short 0
+M X,5/D,5,P/7,P/9
+O refused club 0
+M -/D,5,P/7,P/9
+O refused short 0
+M 5,P/D,5,P/7,P/9
+O refused extra 0
+M 5/D,5,P/7,P
+O refused holes 0
+M 5/D,5,P/7,P/9/P
+O refused holes 0
+M -/D,5,P/7,P/9
+O refused short 0
+C seed22
+S x746964656c696e6b732d676f6c667c62756c6b7c3133
+O L 4 17
+O R 0 Anchor_Reach 160 3 -2 50
+O R 1 Eelgrass 430 5 -2 310
+O R 2 Foghorn 490 5 -2 0
+O R 3 Dunes 350 4 -2 130
+O P safe W,P/D,D,S,P/D,D,9,P/D,5,P 13
+O P bold W,P/D,D,S,P/D,D,9,P/D,5,P 13
+O P layup 5,C,P/D,D,C,C,P/D,D,9,P/D,5,P 15
+O P best D,S/D,D,S,C/D,D,9,C/D,5,C 13
+M D,S/D,D,S,C/D,D,9,C/D,5,C
+O m 13 -4 masterful
+M W,P/D,D,S,P/D,D,9,P/D,5,P
+O m 13 -4 masterful
+M W,P/D,D,S,P/D,D,9,P/D,5,P
+O m 13 -4 masterful
+M 5,C,P/D,D,C,C,P/D,D,9,P/D,5,P
+O m 15 -2 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 7,W/S,S,P/5,S,C,D,C/5,5,7,C
+O refused short 0
+M X,D,S/D,D,S,C/D,D,9,C/D,5,C
+O refused club 0
+M D/D,D,S,C/D,D,9,C/D,5,C
+O refused short 0
+M D,S,P/D,D,S,C/D,D,9,C/D,5,C
+O refused extra 0
+M D,S/D,D,S,C/D,D,9,C
+O refused holes 0
+M D,S/D,D,S,C/D,D,9,C/D,5,C/P
+O refused holes 0
+M -/D,D,S,C/D,D,9,C/D,5,C
+O refused short 0
+C seed23
+S x746964656c696e6b732d676f6c667c62756c6b7c3134
+O L 6 23
+O R 0 Lantern_Point 200 3 0 60
+O R 1 Jetty_End 430 5 -2 180
+O R 2 Capstan_Rise 180 3 -3 120
+O R 3 Harbour_Mouth 160 3 0 80
+O R 4 Dunes 330 4 0 120
+O R 5 Inkwell 440 5 -3 170
+O P safe W,P/D,D,S,P/D,P/5/D,9,P/D,D,9,P 16
+O P bold W,P/D,D,S,P/D,P/5/D,9,P/D,D,9,P 16
+O P layup W,P/D,D,C,C,P/W,C,P/5/D,9,P/D,D,S,S 18
+O P best D,C/D,D,S,C/D,C/5/D,7,C/D,D,9,C 16
+M D,C/D,D,S,C/D,C/5/D,7,C/D,D,9,C
+O m 16 -7 masterful
+M W,P/D,D,S,P/D,P/5/D,9,P/D,D,9,P
+O m 16 -7 masterful
+M W,P/D,D,S,P/D,P/5/D,9,P/D,D,9,P
+O m 16 -7 masterful
+M W,P/D,D,C,C,P/W,C,P/5/D,9,P/D,D,S,S
+O m 18 -5 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M W,W/C,9/7,C,P/P,5,7/S,7,W,5,W/C
+O refused short 0
+M X,D,C/D,D,S,C/D,C/5/D,7,C/D,D,9,C
+O refused club 0
+M D/D,D,S,C/D,C/5/D,7,C/D,D,9,C
+O refused short 0
+M D,C,P/D,D,S,C/D,C/5/D,7,C/D,D,9,C
+O refused extra 0
+M D,C/D,D,S,C/D,C/5/D,7,C
+O refused holes 0
+M D,C/D,D,S,C/D,C/5/D,7,C/D,D,9,C/P
+O refused holes 0
+M -/D,D,S,C/D,C/5/D,7,C/D,D,9,C
+O refused short 0
+C seed24
+S x746964656c696e6b732d676f6c667c62756c6b7c3135
+O L 4 15
+O R 0 Inkwell 290 4 2 50
+O R 1 Bellbuoy 160 3 -2 50
+O R 2 Anchor_Reach 380 4 -2 0
+O R 3 Gullwing 320 4 -1 140
+O P safe D,C,P/W,P/D,W,P/D,7,P 11
+O P bold D,C,P/W,P/D,W,P/D,7,P 11
+O P layup D,C,P/5,C,P/D,W,P/D,9,C,P 13
+O P best W,S/D,S/D,W,C/D,7,C 10
+M W,S/D,S/D,W,C/D,7,C
+O m 10 -5 masterful
+M D,C,P/W,P/D,W,P/D,7,P
+O m 11 -4 steady
+M D,C,P/W,P/D,W,P/D,7,P
+O m 11 -4 steady
+M D,C,P/5,C,P/D,W,P/D,9,C,P
+O m 13 -2 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 5,5,5,P/S,D,5,C/D/D,D
+O refused short 0
+M X,W,S/D,S/D,W,C/D,7,C
+O refused club 0
+M W/D,S/D,W,C/D,7,C
+O refused short 0
+M W,S,P/D,S/D,W,C/D,7,C
+O refused extra 0
+M W,S/D,S/D,W,C
+O refused holes 0
+M W,S/D,S/D,W,C/D,7,C/P
+O refused holes 0
+M -/D,S/D,W,C/D,7,C
+O refused short 0
+C seed25
+S x746964656c696e6b732d676f6c667c62756c6b7c3136
+O L 6 24
+O R 0 Eelgrass 470 5 2 0
+O R 1 Bellbuoy 280 4 -1 150
+O R 2 Jetty_End 200 3 -2 120
+O R 3 Kelp_Bed 310 4 -1 140
+O R 4 Dunes 420 5 1 260
+O R 5 Inkwell 200 3 1 30
+O P safe D,D,P/D,S,C,P/D/D,9,P/D,W,P/W 15
+O P bold D,D,P/D,S,C,P/D/D,9,P/D,W,P/W 15
+O P layup D,W,P,P/D,S,C,P/D/D,9,P/D,5,P,P/W 17
+O P best D,D,P/D,7,S/D/D,5,S/D,W,P/W 14
+M D,D,P/D,7,S/D/D,5,S/D,W,P/W
+O m 14 -10 masterful
+M D,D,P/D,S,C,P/D/D,9,P/D,W,P/W
+O m 15 -9 steady
+M D,D,P/D,S,C,P/D/D,9,P/D,W,P/W
+O m 15 -9 steady
+M D,W,P,P/D,S,C,P/D/D,9,P/D,5,P,P/W
+O m 17 -7 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M D,D,S/9/S,9,C/C,5,D,C,W/P/7
+O refused short 0
+M X,D,D,P/D,7,S/D/D,5,S/D,W,P/W
+O refused club 0
+M D,D/D,7,S/D/D,5,S/D,W,P/W
+O refused short 0
+M D,D,P,P/D,7,S/D/D,5,S/D,W,P/W
+O refused extra 0
+M D,D,P/D,7,S/D/D,5,S/D,W,P
+O refused holes 0
+M D,D,P/D,7,S/D/D,5,S/D,W,P/W/P
+O refused holes 0
+M -/D,7,S/D/D,5,S/D,W,P/W
+O refused short 0
+C seed26
+S x746964656c696e6b732d676f6c667c62756c6b7c3137
+O L 5 21
+O R 0 Eelgrass 180 3 2 0
+O R 1 Inkwell 420 5 3 300
+O R 2 Anchor_Reach 460 5 -3 300
+O R 3 Bellbuoy 350 4 1 0
+O R 4 Gullwing 270 4 0 0
+O P safe 5/D,7,P/D,D,9,P/D,9,P/D,S,P 14
+O P bold 5/D,7,P/D,D,9,P/D,9,P/D,S,P 14
+O P layup 5/D,7,P/D,D,9,P/D,9,P/D,C,C,P 15
+O P best 5/D,W,C/D,D,9,C/D,9,P/D,S,P 14
+M 5/D,W,C/D,D,9,C/D,9,P/D,S,P
+O m 14 -7 masterful
+M 5/D,7,P/D,D,9,P/D,9,P/D,S,P
+O m 14 -7 masterful
+M 5/D,7,P/D,D,9,P/D,9,P/D,S,P
+O m 14 -7 masterful
+M 5/D,7,P/D,D,9,P/D,9,P/D,C,C,P
+O m 15 -6 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M S/5,C,7,7,7/9,5,9/S,C,5,D/7,P,7,5
+O refused short 0
+M X,5/D,W,C/D,D,9,C/D,9,P/D,S,P
+O refused club 0
+M -/D,W,C/D,D,9,C/D,9,P/D,S,P
+O refused short 0
+M 5,P/D,W,C/D,D,9,C/D,9,P/D,S,P
+O refused extra 0
+M 5/D,W,C/D,D,9,C/D,9,P
+O refused holes 0
+M 5/D,W,C/D,D,9,C/D,9,P/D,S,P/P
+O refused holes 0
+M -/D,W,C/D,D,9,C/D,9,P/D,S,P
+O refused short 0
+C seed27
+S x746964656c696e6b732d676f6c667c62756c6b7c3138
+O L 5 21
+O R 0 Kelp_Bed 230 4 -3 120
+O R 1 Harbour_Mouth 290 4 -3 30
+O R 2 Dunes 340 4 1 0
+O R 3 Anchor_Reach 500 5 1 0
+O R 4 Eelgrass 400 4 -1 190
+O P safe D,S,P/D,7/D,9/D,D,C,P/D,W,P 14
+O P bold D,S,P/D,7/D,9/D,D,C,P/D,W,P 14
+O P layup D,S,P/D,7/D,9/D,D,C,P/D,W,P 14
+O P best W,9/D,7/D,9/D,W,S/D,W,C 12
+M W,9/D,7/D,9/D,W,S/D,W,C
+O m 12 -9 masterful
+M D,S,P/D,7/D,9/D,D,C,P/D,W,P
+O m 14 -7 steady
+M D,S,P/D,7/D,9/D,D,C,P/D,W,P
+O m 14 -7 steady
+M D,S,P/D,7/D,9/D,D,C,P/D,W,P
+O m 14 -7 steady
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 5,P,5,C,D/C/7,S/7/9,7,C,D
+O refused short 0
+M X,W,9/D,7/D,9/D,W,S/D,W,C
+O refused club 0
+M W/D,7/D,9/D,W,S/D,W,C
+O refused short 0
+M W,9,P/D,7/D,9/D,W,S/D,W,C
+O refused extra 0
+M W,9/D,7/D,9/D,W,S
+O refused holes 0
+M W,9/D,7/D,9/D,W,S/D,W,C/P
+O refused holes 0
+M -/D,7/D,9/D,W,S/D,W,C
+O refused short 0
+C seed28
+S x746964656c696e6b732d676f6c667c62756c6b7c3139
+O L 6 24
+O R 0 Harbour_Mouth 470 5 -2 0
+O R 1 Kelp_Bed 130 3 3 0
+O R 2 Jetty_End 340 4 3 100
+O R 3 Foghorn 150 3 0 30
+O R 4 Capstan_Rise 490 5 -1 440
+O R 5 Bellbuoy 380 4 3 330
+O P safe D,D,9,P/9/D,S/5,P/D,D,S,C,P/D,9 16
+O P bold D,D,9,P/9/D,S/5,P/D,D,S,C,P/D,9 16
+O P layup D,D,S,C,C,P/9/D,S/7,C/D,D,S,C,P/D,9 18
+O P best D,D,7,S/9/D,S/5,P/D,D,7,S/D,9 15
+M D,D,7,S/9/D,S/5,P/D,D,7,S/D,9
+O m 15 -9 masterful
+M D,D,9,P/9/D,S/5,P/D,D,S,C,P/D,9
+O m 16 -8 steady
+M D,D,9,P/9/D,S/5,P/D,D,S,C,P/D,9
+O m 16 -8 steady
+M D,D,S,C,C,P/9/D,S/7,C/D,D,S,C,P/D,9
+O m 18 -6 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M D,S,P/5,P,C,9/P,D,W,C,9/9,W,7,S,P/C,C,7/P
+O refused short 0
+M X,D,D,7,S/9/D,S/5,P/D,D,7,S/D,9
+O refused club 0
+M D,D,7/9/D,S/5,P/D,D,7,S/D,9
+O refused short 0
+M D,D,7,S,P/9/D,S/5,P/D,D,7,S/D,9
+O refused extra 0
+M D,D,7,S/9/D,S/5,P/D,D,7,S
+O refused holes 0
+M D,D,7,S/9/D,S/5,P/D,D,7,S/D,9/P
+O refused holes 0
+M -/9/D,S/5,P/D,D,7,S/D,9
+O refused short 0
+C seed29
+S x746964656c696e6b732d676f6c667c62756c6b7c3230
+O L 6 24
+O R 0 Lantern_Point 350 4 1 260
+O R 1 Jetty_End 200 3 3 30
+O R 2 Kelp_Bed 310 4 -3 220
+O R 3 Bellbuoy 230 4 -1 160
+O R 4 Foghorn 300 4 0 200
+O R 5 Anchor_Reach 480 5 0 250
+O P safe D,9,P/5,P/D,5,P/D,C,P/D,S,C/D,D,C,C 18
+O P bold D,9,P/5,P/D,5,P/D,C,P/D,S,C/D,D,C,C 18
+O P layup D,9,P/5,P/D,7,C,P/D,C,P/D,S,C/D,D,C,C 19
+O P best D,9,P/D,C/D,5,C/W,S/D,9,C/D,5,9 16
+M D,9,P/D,C/D,5,C/W,S/D,9,C/D,5,9
+O m 16 -8 masterful
+M D,9,P/5,P/D,5,P/D,C,P/D,S,C/D,D,C,C
+O m 18 -6 steady
+M D,9,P/5,P/D,5,P/D,C,P/D,S,C/D,D,C,C
+O m 18 -6 steady
+M D,9,P/5,P/D,7,C,P/D,C,P/D,S,C/D,D,C,C
+O m 19 -5 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M P,S,S/D,P,S,C/S,P/7,7,D,P/D,S,S/5,P,D
+O refused short 0
+M X,D,9,P/D,C/D,5,C/W,S/D,9,C/D,5,9
+O refused club 0
+M D,9/D,C/D,5,C/W,S/D,9,C/D,5,9
+O refused short 0
+M D,9,P,P/D,C/D,5,C/W,S/D,9,C/D,5,9
+O refused extra 0
+M D,9,P/D,C/D,5,C/W,S/D,9,C
+O refused holes 0
+M D,9,P/D,C/D,5,C/W,S/D,9,C/D,5,9/P
+O refused holes 0
+M -/D,C/D,5,C/W,S/D,9,C/D,5,9
+O refused short 0
+C seed30
+S x746964656c696e6b732d676f6c667c62756c6b7c3231
+O L 6 22
+O R 0 Harbour_Mouth 390 4 -3 210
+O R 1 Inkwell 450 5 -1 120
+O R 2 Kelp_Bed 170 3 0 40
+O R 3 Eelgrass 190 3 -2 130
+O R 4 Bellbuoy 110 3 2 50
+O R 5 Gullwing 270 4 -1 0
+O P safe D,D,P/D,D,C,C,P/5,P/D,P/9,P/D,S,P 17
+O P bold D,D,P/D,D,C,C,P/5,P/D,P/9,P/D,S,P 17
+O P layup D,D,P/D,D,C,C,P/5,P/W,C,P/S,P,P,P/D,S,P 20
+O P best D,D,C/D,5,9/W,C/D,C/7,C/W,9 14
+M D,D,C/D,5,9/W,C/D,C/7,C/W,9
+O m 14 -8 masterful
+M D,D,P/D,D,C,C,P/5,P/D,P/9,P/D,S,P
+O m 17 -5 steady
+M D,D,P/D,D,C,C,P/5,P/D,P/9,P/D,S,P
+O m 17 -5 steady
+M D,D,P/D,D,C,C,P/5,P/W,C,P/S,P,P,P/D,S,P
+O m 20 -2 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 5/P,5,5,5,C/P,7/9,S,S,5/C,7,7,W,D/S,W,S
+O refused short 0
+M X,D,D,C/D,5,9/W,C/D,C/7,C/W,9
+O refused club 0
+M D,D/D,5,9/W,C/D,C/7,C/W,9
+O refused short 0
+M D,D,C,P/D,5,9/W,C/D,C/7,C/W,9
+O refused extra 0
+M D,D,C/D,5,9/W,C/D,C/7,C
+O refused holes 0
+M D,D,C/D,5,9/W,C/D,C/7,C/W,9/P
+O refused holes 0
+M -/D,5,9/W,C/D,C/7,C/W,9
+O refused short 0
+C seed31
+S x746964656c696e6b732d676f6c667c62756c6b7c3232
+O L 5 22
+O R 0 Anchor_Reach 430 5 0 0
+O R 1 Foghorn 320 4 3 0
+O R 2 Capstan_Rise 340 4 3 0
+O R 3 Bellbuoy 430 5 -3 370
+O R 4 Inkwell 310 4 1 60
+O P safe D,D,P/D,C,P,P/D,S/D,W,9,P/D,S,P 16
+O P bold D,D,P/D,C,P,P/D,S/D,D,W,9,P/D,S,P 18
+O P layup D,W,C/D,C,P,P/D,S/D,W,9,P/D,S,P 16
+O P best D,D,P/5,9/D,S/D,W,9,C/W,9 13
+M D,D,P/5,9/D,S/D,W,9,C/W,9
+O m 13 -9 masterful
+M D,D,P/D,C,P,P/D,S/D,W,9,P/D,S,P
+O m 16 -6 steady
+M D,D,P/D,C,P,P/D,S/D,D,W,9,P/D,S,P
+O m 18 -4 rough
+M D,W,C/D,C,P,P/D,S/D,W,9,P/D,S,P
+O m 16 -6 steady
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M C,S,7,5/S/C,5,5/D,7,7/W,S,7
+O refused short 0
+M X,D,D,P/5,9/D,S/D,W,9,C/W,9
+O refused club 0
+M D,D/5,9/D,S/D,W,9,C/W,9
+O refused short 0
+M D,D,P,P/5,9/D,S/D,W,9,C/W,9
+O refused extra 0
+M D,D,P/5,9/D,S/D,W,9,C
+O refused holes 0
+M D,D,P/5,9/D,S/D,W,9,C/W,9/P
+O refused holes 0
+M -/5,9/D,S/D,W,9,C/W,9
+O refused short 0
+C seed32
+S x746964656c696e6b732d676f6c667c62756c6b7c3233
+O L 6 24
+O R 0 Eelgrass 230 4 -2 120
+O R 1 Lantern_Point 100 3 3 0
+O R 2 Foghorn 480 5 1 120
+O R 3 Gullwing 500 5 1 380
+O R 4 Bellbuoy 300 4 1 0
+O R 5 Capstan_Rise 170 3 -2 0
+O P safe D,S,P/S,P/D,D,C,P/D,D,C,P/D,S/W 16
+O P bold D,S,P/S,P/D,D,C,P/D,D,C,P/D,S/W 16
+O P layup D,C,C,P/S,P/D,D,P,P/D,D,C,P/D,S/W 17
+O P best D,S,C/S,P/D,7,9/D,W,S/D,S/W 14
+M D,S,C/S,P/D,7,9/D,W,S/D,S/W
+O m 14 -10 masterful
+M D,S,P/S,P/D,D,C,P/D,D,C,P/D,S/W
+O m 16 -8 steady
+M D,S,P/S,P/D,D,C,P/D,D,C,P/D,S/W
+O m 16 -8 steady
+M D,C,C,P/S,P/D,D,P,P/D,D,C,P/D,S/W
+O m 17 -7 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M S/C,5/P,D,S,5/P,C,9/5,5,P,D,D/5,W,D,P
+O refused short 0
+M X,D,S,C/S,P/D,7,9/D,W,S/D,S/W
+O refused club 0
+M D,S/S,P/D,7,9/D,W,S/D,S/W
+O refused short 0
+M D,S,C,P/S,P/D,7,9/D,W,S/D,S/W
+O refused extra 0
+M D,S,C/S,P/D,7,9/D,W,S/D,S
+O refused holes 0
+M D,S,C/S,P/D,7,9/D,W,S/D,S/W/P
+O refused holes 0
+M -/S,P/D,7,9/D,W,S/D,S/W
+O refused short 0
+C seed33
+S x746964656c696e6b732d676f6c667c62756c6b7c3234
+O L 5 19
+O R 0 Lantern_Point 460 5 2 150
+O R 1 Kelp_Bed 270 4 -1 120
+O R 2 Bellbuoy 190 3 3 0
+O R 3 Dunes 230 4 0 140
+O R 4 Gullwing 140 3 3 60
+O P safe D,W,P/D,S,P/5/D,P/9,P 11
+O P bold D,W,P/D,S,P/5/D,P/9,P 11
+O P layup D,W,P/D,S,P/5/D,P/9,P 11
+O P best D,W,P/W,9/5/D,P/5,C 10
+M D,W,P/W,9/5/D,P/5,C
+O m 10 -9 masterful
+M D,W,P/D,S,P/5/D,P/9,P
+O m 11 -8 steady
+M D,W,P/D,S,P/5/D,P/9,P
+O m 11 -8 steady
+M D,W,P/D,S,P/5/D,P/9,P
+O m 11 -8 steady
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 9,W,P,S/D,P/S/D,C/S,S
+O refused short 0
+M X,D,W,P/W,9/5/D,P/5,C
+O refused club 0
+M D,W/W,9/5/D,P/5,C
+O refused short 0
+M D,W,P,P/W,9/5/D,P/5,C
+O refused extra 0
+M D,W,P/W,9/5/D,P
+O refused holes 0
+M D,W,P/W,9/5/D,P/5,C/P
+O refused holes 0
+M -/W,9/5/D,P/5,C
+O refused short 0
+C seed34
+S x746964656c696e6b732d676f6c667c62756c6b7c3235
+O L 4 12
+O R 0 Lantern_Point 130 3 0 70
+O R 1 Anchor_Reach 220 3 3 80
+O R 2 Kelp_Bed 130 3 2 80
+O R 3 Capstan_Rise 170 3 -2 110
+O P safe 7/W/9,P/W 5
+O P bold 7/W/9,P/W 5
+O P layup 7/W/9,P/W 5
+O P best 7/W/9,P/W 5
+M 7/W/9,P/W
+O m 5 -7 masterful
+M 7/W/9,P/W
+O m 5 -7 masterful
+M 7/W/9,P/W
+O m 5 -7 masterful
+M 7/W/9,P/W
+O m 5 -7 masterful
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 9,P,D/P,W/7,W,D,W,9/W
+O refused short 0
+M X,7/W/9,P/W
+O refused club 0
+M -/W/9,P/W
+O refused short 0
+M 7,P/W/9,P/W
+O refused extra 0
+M 7/W/9,P
+O refused holes 0
+M 7/W/9,P/W/P
+O refused holes 0
+M -/W/9,P/W
+O refused short 0
+C seed35
+S x746964656c696e6b732d676f6c667c62756c6b7c3236
+O L 6 22
+O R 0 Inkwell 160 3 1 80
+O R 1 Bellbuoy 250 4 0 0
+O R 2 Dunes 390 4 1 110
+O R 3 Anchor_Reach 210 3 -2 0
+O R 4 Jetty_End 180 3 -2 0
+O R 5 Capstan_Rise 470 5 -3 200
+O P safe 5,P/D,C,P/D,5,P/D,P/W,P/D,D,7,P 16
+O P bold 5,P/D,C,P/D,5,P/D,P/W,P/D,D,7,P 16
+O P layup 7,P,P/D,C,P/D,7,P,P/D,P/W,P/D,D,9,C,P 19
+O P best 5,P/W,S/D,5,P/D,C/W,C/D,D,7,C 15
+M 5,P/W,S/D,5,P/D,C/W,C/D,D,7,C
+O m 15 -7 masterful
+M 5,P/D,C,P/D,5,P/D,P/W,P/D,D,7,P
+O m 16 -6 steady
+M 5,P/D,C,P/D,5,P/D,P/W,P/D,D,7,P
+O m 16 -6 steady
+M 7,P,P/D,C,P/D,7,P,P/D,P/W,P/D,D,9,C,P
+O m 19 -3 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 5/S,S,C,C/C,D,C,5/S/5,P/W,7,P,9
+O refused short 0
+M X,5,P/W,S/D,5,P/D,C/W,C/D,D,7,C
+O refused club 0
+M 5/W,S/D,5,P/D,C/W,C/D,D,7,C
+O refused short 0
+M 5,P,P/W,S/D,5,P/D,C/W,C/D,D,7,C
+O refused extra 0
+M 5,P/W,S/D,5,P/D,C/W,C
+O refused holes 0
+M 5,P/W,S/D,5,P/D,C/W,C/D,D,7,C/P
+O refused holes 0
+M -/W,S/D,5,P/D,C/W,C/D,D,7,C
+O refused short 0
+C one_short_hole
+H 30:0:0
+O L 1 3
+O R 0 Hand_0 30 3 0 0
+O P safe C,P 2
+O P bold C,P 2
+O P layup C,P 2
+O P best C,P 2
+M C,P
+O m 2 -1 masterful
+M C,P
+O m 2 -1 masterful
+M C,P
+O m 2 -1 masterful
+M C,P
+O m 2 -1 masterful
+M P,P,P,P,P,P,P,P,P,P,P,P
+O refused extra 0
+M S,7
+O refused short 0
+M X,C,P
+O refused club 0
+M C
+O refused short 0
+M C,P,P
+O refused extra 0
+M none
+O refused holes 0
+M C,P/P
+O refused holes 0
+M -
+O refused short 0
+C ace_hole
+H 220:0:0
+O L 1 3
+O R 0 Hand_0 220 3 0 0
+O P safe D 1
+O P bold D 1
+O P layup D 1
+O P best D 1
+M D
+O m 1 -2 masterful
+M D
+O m 1 -2 masterful
+M D
+O m 1 -2 masterful
+M D
+O m 1 -2 masterful
+M P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M P
+O refused short 0
+M X,D
+O refused club 0
+M -
+O refused short 0
+M D,P
+O refused extra 0
+M none
+O refused holes 0
+M D/P
+O refused holes 0
+M -
+O refused short 0
+C ace_in_wind
+H 250:3:0
+O L 1 4
+O R 0 Hand_0 250 4 3 0
+O P safe D 1
+O P bold D 1
+O P layup D 1
+O P best D 1
+M D
+O m 1 -3 masterful
+M D
+O m 1 -3 masterful
+M D
+O m 1 -3 masterful
+M D
+O m 1 -3 masterful
+M P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M C,S
+O refused short 0
+M X,D
+O refused club 0
+M -
+O refused short 0
+M D,P
+O refused extra 0
+M none
+O refused holes 0
+M D/P
+O refused holes 0
+M -
+O refused short 0
+C headwind_long
+H 600:-5:300,600:5:0
+O L 2 10
+O R 0 Hand_0 600 5 -5 300
+O R 1 Hand_1 600 5 5 0
+O P safe D,D,D,7,P/D,D,C,P 9
+O P bold D,D,D,7,P/D,D,C,P 9
+O P layup D,D,D,7,P/D,D,P,P,P,P,P,P 13
+O P best D,D,D,W,9/D,7,9 8
+M D,D,D,W,9/D,7,9
+O m 8 -2 masterful
+M D,D,D,7,P/D,D,C,P
+O m 9 -1 steady
+M D,D,D,7,P/D,D,C,P
+O m 9 -1 steady
+M D,D,D,7,P/D,D,P,P,P,P,P,P
+O m 13 +3 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M C,7,P,S,C/9,W,7
+O refused short 0
+M X,D,D,D,W,9/D,7,9
+O refused club 0
+M D,D,D,W/D,7,9
+O refused short 0
+M D,D,D,W,9,P/D,7,9
+O refused extra 0
+M D,D,D,W,9
+O refused holes 0
+M D,D,D,W,9/D,7,9/P
+O refused holes 0
+M -/D,7,9
+O refused short 0
+C water_at_carry
+H 400:0:220,300:0:190
+O L 2 8
+O R 0 Hand_0 400 4 0 220
+O R 1 Hand_1 300 4 0 190
+O P safe W,D,P/D,S,C 6
+O P bold D,W,D,P/D,S,C 8
+O P layup W,W,C/D,S,C 6
+O P best W,D,P/D,9,C 6
+M W,D,P/D,9,C
+O m 6 -2 masterful
+M W,D,P/D,S,C
+O m 6 -2 masterful
+M D,W,D,P/D,S,C
+O m 8 E rough
+M W,W,C/D,S,C
+O m 6 -2 masterful
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M C,P,5/W,D
+O refused short 0
+M X,W,D,P/D,9,C
+O refused club 0
+M W,D/D,9,C
+O refused short 0
+M W,D,P,P/D,9,C
+O refused extra 0
+M W,D,P
+O refused holes 0
+M W,D,P/D,9,C/P
+O refused holes 0
+M -/D,9,C
+O refused short 0
+C water_just_short
+H 240:0:210
+O L 1 4
+O R 0 Hand_0 240 4 0 210
+O P safe W,S,P 3
+O P bold D,W,S,P 5
+O P layup W,P,P,C,P 5
+O P best C,D 2
+M C,D
+O m 2 -2 masterful
+M W,S,P
+O m 3 -1 steady
+M D,W,S,P
+O m 5 +1 rough
+M W,P,P,C,P
+O m 5 +1 rough
+M P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M 7,S
+O refused short 0
+M X,C,D
+O refused club 0
+M C
+O refused short 0
+M C,D,P
+O refused extra 0
+M none
+O refused holes 0
+M C,D/P
+O refused holes 0
+M -
+O refused short 0
+C nine_holes
+H 100:-5:0,150:-4:0,200:-3:0,250:-2:0,300:-1:0,350:0:0,400:1:0,450:2:0,500:3:0
+O L 9 35
+O R 0 Hand_0 100 3 -5 0
+O R 1 Hand_1 150 3 -4 0
+O R 2 Hand_2 200 3 -3 0
+O R 3 Hand_3 250 4 -2 0
+O R 4 Hand_4 300 4 -1 0
+O R 5 Hand_5 350 4 0 0
+O R 6 Hand_6 400 4 1 0
+O R 7 Hand_7 450 5 2 0
+O R 8 Hand_8 500 5 3 0
+O P safe 5,P/W/D,P/D,S,P/D,9/D,7/D,5/D,W/D,D 18
+O P bold 5,P/W/D,P/D,S,P/D,9/D,7/D,5/D,W/D,D 18
+O P layup 7,S,P/W/D,P/D,S,P/D,9/D,7/D,5/D,W/D,D 19
+O P best 5,S/W/D,C/W,9/D,9/D,7/D,5/D,W/D,D 17
+M 5,S/W/D,C/W,9/D,9/D,7/D,5/D,W/D,D
+O m 17 -18 masterful
+M 5,P/W/D,P/D,S,P/D,9/D,7/D,5/D,W/D,D
+O m 18 -17 steady
+M 5,P/W/D,P/D,S,P/D,9/D,7/D,5/D,W/D,D
+O m 18 -17 steady
+M 7,S,P/W/D,P/D,S,P/D,9/D,7/D,5/D,W/D,D
+O m 19 -16 rough
+M P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P/P,P,P,P,P,P,P,P,P,P,P,P
+O refused extra 0
+M C/C,7,P,C/C,9/D,S,C,7/9,5,D,W,S/5,C,7/D,W/7/5,7,9
+O refused short 0
+M X,5,S/W/D,C/W,9/D,9/D,7/D,5/D,W/D,D
+O refused club 0
+M 5/W/D,C/W,9/D,9/D,7/D,5/D,W/D,D
+O refused short 0
+M 5,S,P/W/D,C/W,9/D,9/D,7/D,5/D,W/D,D
+O refused extra 0
+M 5,S/W/D,C/W,9/D,9/D,7/D,5/D,W
+O refused holes 0
+M 5,S/W/D,C/W,9/D,9/D,7/D,5/D,W/D,D/P
+O refused holes 0
+M -/W/D,C/W,9/D,9/D,7/D,5/D,W/D,D
+O refused short 0
+C putter_only
+H 40:0:0
+O L 1 3
+O R 0 Hand_0 40 3 0 0
+O P safe C,C 2
+O P bold C,C 2
+O P layup C,C 2
+O P best S,C 2
+M S,C
+O m 2 -1 masterful
+M C,C
+O m 2 -1 masterful
+M C,C
+O m 2 -1 masterful
+M C,C
+O m 2 -1 masterful
+M P,P,P,P,P,P,P,P,P,P,P,P
+O refused extra 0
+M C,5,D
+O refused short 0
+M X,S,C
+O refused club 0
+M S
+O refused short 0
+M S,C,P
+O refused extra 0
+M none
+O refused holes 0
+M S,C/P
+O refused holes 0
+M -
+O refused short 0
+C past_the_pin
+H 200:2:0
+O L 1 3
+O R 0 Hand_0 200 3 2 0
+O P safe W,P 2
+O P bold W,P 2
+O P layup 5,P,P 3
+O P best D,C 2
+M D,C
+O m 2 -1 masterful
+M W,P
+O m 2 -1 masterful
+M W,P
+O m 2 -1 masterful
+M 5,P,P
+O m 3 E rough
+M P,P,P,P,P,P,P,P,P,P,P,P
+O refused cap 0
+M S
+O refused short 0
+M X,D,C
+O refused club 0
+M D
+O refused short 0
+M D,C,P
+O refused extra 0
+M none
+O refused holes 0
+M D,C/P
+O refused holes 0
+M -
+O refused short 0
+C no_holes
+H -
+O hand_refused no_holes
+C ten_holes
+H 100:0:0,100:0:0,100:0:0,100:0:0,100:0:0,100:0:0,100:0:0,100:0:0,100:0:0,100:0:0
+O hand_refused too_many_holes
+C length_short
+H 20:0:0
+O hand_refused length
+C length_odd
+H 105:0:0
+O hand_refused length
+C wind_strong
+H 200:6:0
+O hand_refused wind
+C headwind_strong
+H 200:-6:0
+O hand_refused wind
+C water_late
+H 200:0:180
+O hand_refused water
+C water_odd
+H 200:0:55
+O hand_refused water
