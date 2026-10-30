@@ -104,6 +104,35 @@ class Rules(unittest.TestCase):
                 g.step(g.demo_action())
             self.assertEqual(g.cracked, 0)
 
+    def test_properties_hold_under_random_coals(self):
+        """Iteration 1: random legal coals on 120 floors never break the bookkeeping or the heat bounds."""
+        import random
+        for s in range(120):
+            d = ("easy", "normal", "hard")[s % 3]
+            g = gm.start(s, d)
+            rng = random.Random(s)
+            clay = g.cfg["size"] ** 2 - g.cfg["stone"]
+            while not g.over:
+                r, c = rng.randrange(g.size()), rng.randrange(g.size())
+                glazes, cracks, _ = g.preview(r, c)
+                before = (g.glazed, g.cracked, g.coals, g.score)
+                g.step("%d,%d" % (r, c))
+                self.assertEqual((g.glazed - before[0], g.cracked - before[1], before[2] - g.coals), (glazes, cracks, 1))
+                self.assertEqual(g.glazed + g.cracked + g.clay(), clay)
+                if not g.won:
+                    self.assertEqual(g.score, before[3] + gm.GLAZE_SCORE * glazes + gm.CRACK_SCORE * cracks)
+                for rr in range(g.size()):
+                    for cc in range(g.size()):
+                        t, h = g.target[rr][cc], g.heat[rr][cc]
+                        if t == gm.STONE:
+                            self.assertEqual(h, 0)
+                        elif t > 0:
+                            self.assertLess(h, t)
+                        else:
+                            self.assertIn(t, (gm.GLAZED, gm.CRACKED))
+            self.assertTrue(g.clay() == 0 or g.coals == 0)
+            self.assertEqual(g.won, g.clay() == 0 and g.cracked == 0)
+
     def test_render_marks(self):
         g = self.floor(["20", "32"])
         g.step("0,0")
@@ -111,6 +140,22 @@ class Rules(unittest.TestCase):
         self.assertIn("**", screen)
         self.assertIn("##", screen)
         self.assertIn("1/3", screen)
+
+
+
+class Balance(unittest.TestCase):
+    """Iteration 3: the stoker's win rate stays inside pinned bands, so a rules change that shifts the difficulty is caught."""
+    BANDS = {"easy": (65, 90), "normal": (70, 95), "hard": (70, 95)}
+
+    def test_stoker_win_rates(self):
+        for d, (low, high) in self.BANDS.items():
+            wins = 0
+            for s in range(200):
+                g = gm.start(s, d)
+                while not g.over:
+                    g.step(g.demo_action())
+                wins += g.won
+            self.assertTrue(low <= wins / 2 <= high, "%s stoker win rate %.1f%% outside %d-%d" % (d, wins / 2, low, high))
 
 
 if __name__ == "__main__":
