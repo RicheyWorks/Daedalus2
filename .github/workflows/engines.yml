@@ -32,6 +32,9 @@ jobs:
         working-directory: engines/unreal/core-test
     steps:
       - uses: actions/checkout@v4
+      - name: Every minigame C++ core has a parity fixture and a CI core test
+        working-directory: ${{ github.workspace }}
+        run: python3 tools/minigames/minigame_core_parity.py --check
       - name: gcc
         run: g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
       - name: clang

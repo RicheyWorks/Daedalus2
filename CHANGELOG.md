@@ -10,6 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Minigame core parity.** One check lists every catalog minigame that has a native C++ core and fails when its parity fixture, core test, or CI run is missing. Game rules are unchanged.
 - **Catalog fields.** One test walks every desktop cabinet and checks the score hook, how-to line, access marks, difficulty, and Daedalus placement are present. The four Prism cabinets that already draw those marks are recorded in the catalog.
 - **Siltlane.** A lane runner in the desktop C++ core. Option 0 is three lanes and option 1 is a two-lane practice. Left and right switch lanes so drifting silt can pass; standing in a stone's lane ends the run. Easy drifts slowly and hard drifts quickly. The opening score stays clear, and a cream hint, a cyan switch cue, and the access plate sit on the bottom edge. The cabinet stands at Spawn overlook, the silt course.
 - **Reedbeat game over.** Three early taps end the round with no score. The round rules are unchanged.
