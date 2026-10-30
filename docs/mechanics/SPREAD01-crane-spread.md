@@ -51,3 +51,13 @@ is a splitmix hash of (seed, year, cell), so a seed always replays the same run.
 ## Assets
 
 None. Reuses Mob_Sky_Crane (G142) and the marsh kits. Optional UI: a front marker on the G119 census board.
+
+## Native C++ core (G583)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshCraneSpreadCore.h` (namespace `daedalus::marsh`)
+is a header-only C++17 port of this core. It covers the kernel and `Mgf`, `SpreadingSpeed` (c*), the deterministic and
+seeded noisy `Run`, `SpreadReport::YearReached` and `SpreadSettings::Valid`. It uses the standard library only. The Java
+class stays the rules authority. `MarshCoresParityTest.craneSpread` writes golden vectors (6 tunings × MGF/c*,
+deterministic run and noisy run, sampled every 5 years over 40 years) to
+`engines/unreal/core-test/marsh_crane_spread_parity.txt`. `marsh_crane_spread_core_test.cpp` replays them and runs in
+`.github/workflows/marsh-cores.yml`. Pattern: [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md).
