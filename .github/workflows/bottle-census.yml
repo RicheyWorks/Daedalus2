@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.10'
       - name: G179 Bottle Census rules (marker total exact, consistent cut, lane state = in-transit oracle, sync shortfall, non-FIFO breaks, replay, G86 tie-in)
