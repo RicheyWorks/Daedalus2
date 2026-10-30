@@ -27,6 +27,25 @@ of it (0 if unheard). A game is 0 to 500.
 |---|---|---|---|---|
 | `shardsong_crossing` | normal | 1-2 strips | 2-3 strips | 3-4 strips |
 
+## Ruleset V2 (opt-in; V1 stays the default and is frozen)
+
+`Game::Begin(seed, difficulty, Ruleset::V2)`. V1 (`shardsong_golden.txt`) is unchanged line for line. V2
+(`shardsong_golden_v2.txt`) adds:
+
+- **Marsh and rock strips.** Reed stems scatter the upper bands hardest and a frog chorus fills the middle bands at a
+  marsh mate; bare rock is quiet and open but echoes off its faces smear trills a little.
+- **Wind and a singing flock each round.** Wind (calm half the time, else breeze or gusty) adds low-pitched noise at the
+  mate (halved in forest shelter) and doubles the blur on steady tones over open ground when gusty. Most rounds another
+  flock sings in one band at the mate's fragment, masking it (and half its neighbours), so the call must find a free
+  band: the acoustic niche idea, illustrative.
+- **Gentle first round and a difficulty ramp.** Round 1 is always one 20-60 m strip in still air with no flock. Later
+  rounds use the difficulty's base strip count, one more strip in rounds 4-5, and the longest strip allowed grows from
+  60 m to 120 m. Every crossing is solvable both with the best call and with a tone alone.
+
+Why: in V1 one answer (315 Hz tone) was best in 35% of rounds and two bands carried most of the game. Over 45,000 V2
+rounds no single answer is best in more than 25% (the top is 315 Hz tone at about 23%), every band is the answer at
+least 5% of the time, and trills win about 37%.
+
 ## Feedback (free, after any call)
 
 `Advise(crossing, band, form)` says how far the call fell short of the best one (in 0.1 dB), whether the mate heard
@@ -60,3 +79,6 @@ under 800 Hz, with soft two-harmonic tones and no piercing sounds.
 | 1 | iter PR 1 | `Explain` / `Advise` no-cost feedback (cause: absorbed, smeared, masked; pitch and form hints) | unchanged, golden v1 identical |
 | 2 | iter PR 1 | property, boundary and fuzz tests: 10 m more path lowers every call; 10 m and 400 m edges; 30,000 raw seeds solvable | unchanged |
 | 3 | iter PR 1 | ear-rule checks (base and peak < 800 Hz, 2 harmonics, low brightness, no extra drop) and a no-heap check over 500 full games | unchanged |
+| 4 | iter PR 2 | Ruleset V2: marsh and rock strips (V1 frozen and default) | V2 only; new golden v2 |
+| 5 | iter PR 2 | V2: per-round wind and a singing flock masking one band (balance: no answer above 25%) | V2 only |
+| 6 | iter PR 2 | V2: gentle first round and a difficulty ramp; tone-solvable guarantee | V2 only |

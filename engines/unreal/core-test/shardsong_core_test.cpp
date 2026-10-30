@@ -56,6 +56,31 @@ static std::vector<std::string> GoldenLines()
 	return Out;
 }
 
+// Ruleset V2 fixture: also records wind, the singing flock's band, and the best tone (for tone-only play).
+static std::vector<std::string> GoldenLinesV2()
+{
+	std::vector<std::string> Out;
+	Out.push_back("# shardsong_golden v2: token difficulty round | wind chorus_hz | strips habitat:m | best band form snr_tenths | best tone band snr_tenths");
+	for (std::uint64_t Token = 0; Token < 300; ++Token)
+		for (int Di = 0; Di < 3; ++Di)
+		{
+			const Difficulty D = static_cast<Difficulty>(Di);
+			const Game G = Game::Begin(TokenSeed(Token), D, Ruleset::V2);
+			for (int R = 0; R < Rounds; ++R)
+			{
+				const Crossing& C = G.Rounds_[R];
+				std::string L = std::to_string(Token) + " " + DiffName(D) + " " + std::to_string(R) + " | " + WindName(C.Air) + " "
+					+ (C.Chorus < 0 ? std::string("none") : std::to_string(BandHz[C.Chorus])) + " |";
+				for (int I = 0; I < C.Count; ++I) L += std::string(" ") + HabitatName(C.Seg[I].H) + ":" + std::to_string(C.Seg[I].LengthM);
+				const Choice B = Best(C), T = BestTone(C);
+				L += " | " + std::to_string(BandHz[B.Band]) + (B.F == Form::Tone ? " tone " : " trill ") + std::to_string(B.Snr);
+				L += " | " + std::to_string(BandHz[T.Band]) + " " + std::to_string(T.Snr);
+				Out.push_back(L);
+			}
+		}
+	return Out;
+}
+
 static void Properties()
 {
 	Check(TokenSeed(1) != TokenSeed(2) && TokenSeed(7) == TokenSeed(7), "token seeds mix and repeat");
@@ -223,33 +248,110 @@ static void EarAndHeap()
 	Check(Made == 0 && Sink != 0, "play path makes no heap allocation (" + std::to_string(Made) + ")");
 }
 
-int main(int argc, char** argv)
+// Iterations 4-6 (Ruleset V2): marsh and rock strips, wind and a singing flock per round, a gentle first round and a
+// rising difficulty curve. V1 stays the default and is untouched (its golden file still matches line for line).
+static void RulesetV2()
 {
-	const std::vector<std::string> Want = GoldenLines();
-	if (argc > 2 && std::strcmp(argv[1], "--write") == 0)
+	Check(Game::Begin(5, Difficulty::Normal).Rules == Ruleset::V1, "V1 is the default ruleset");
+	int Count[Bands][2] = {}, ToneBand[Bands] = {}, Total = 0, Bad = 0, HabSeen[HabitatCount] = {}, WindSeen[WindCount] = {};
+	for (std::uint64_t Token = 0; Token < 3000; ++Token)
+		for (int Di = 0; Di < 3; ++Di)
+		{
+			const Difficulty D = static_cast<Difficulty>(Di);
+			Game G = Game::Begin(TokenSeed(Token), D, Ruleset::V2);
+			const Game V1 = Game::Begin(TokenSeed(Token), D);
+			bool AllCalmV1 = true;
+			for (int R = 0; R < Rounds; ++R) AllCalmV1 = AllCalmV1 && V1.Rounds_[R].Air == Wind::Calm && V1.Rounds_[R].Chorus == -1
+				&& static_cast<int>(V1.Rounds_[R].Listener()) < V1HabitatCount;
+			if (!AllCalmV1) ++Bad;
+			for (int R = 0; R < Rounds; ++R)
+			{
+				const Crossing& C = G.Rounds_[R];
+				const Choice B = Best(C), T = BestTone(C);
+				const int Base = Di + 1, MaxLen = R == 0 ? 60 : 10 * (4 + 2 * R);
+				bool Ok = B.Snr >= HeardSnr && T.Snr >= HeardSnr && C.TotalM() <= MaxTotalM && T.Snr <= B.Snr;
+				Ok = Ok && (R == 0 ? (C.Count == 1 && C.Air == Wind::Calm && C.Chorus == -1 && C.Seg[0].LengthM >= 20)
+					: C.Count == Base + (R >= 3 ? 1 : 0)) && C.Chorus >= -1 && C.Chorus < Bands;
+				for (int I = 0; I < C.Count; ++I)
+				{
+					Ok = Ok && C.Seg[I].LengthM >= 10 && C.Seg[I].LengthM <= MaxLen;
+					++HabSeen[static_cast<int>(C.Seg[I].H)];
+				}
+				++WindSeen[static_cast<int>(C.Air)];
+				if (!Ok) ++Bad;
+				++Count[B.Band][static_cast<int>(B.F)]; ++ToneBand[T.Band]; ++Total;
+				if (G.Choose(B.Band, B.F) != 100) ++Bad;
+			}
+		}
+	Check(Bad == 0, "V2 crossings solvable (best and tone), gentle round 0, ramp shape, V1 still calm (" + std::to_string(Bad) + " bad)");
+	bool AllSeen = true;
+	for (int H = 0; H < HabitatCount; ++H) AllSeen = AllSeen && HabSeen[H] > 0;
+	for (int W = 0; W < WindCount; ++W) AllSeen = AllSeen && WindSeen[W] > 0;
+	Check(AllSeen, "V2 draws every habitat and wind");
+	// Balance: no single answer dominates and every pitch band is the best answer sometimes.
+	int MaxChoice = 0, Trills = 0;
+	for (int Band = 0; Band < Bands; ++Band)
 	{
-		std::ofstream Out(argv[2], std::ios::binary);
-		for (const auto& L : Want) Out << L << "\n";
-		std::printf("wrote %zu lines\n", Want.size());
-		return 0;
+		const int BandTotal = Count[Band][0] + Count[Band][1];
+		Check(BandTotal * 100 >= 5 * Total, "V2 band " + std::to_string(BandHz[Band]) + " is the answer >= 5%");
+		Check(ToneBand[Band] * 100 >= 5 * Total, "V2 tone-only band " + std::to_string(BandHz[Band]) + " >= 5%");
+		for (int F = 0; F < 2; ++F) if (Count[Band][F] > MaxChoice) MaxChoice = Count[Band][F];
+		Trills += Count[Band][1];
 	}
-	Properties();
-	FeedbackTests();
-	BoundaryAndFuzz();
-	EarAndHeap();
-	const char* Path = argc > 1 ? argv[1] : "engines/unreal/core-test/shardsong_golden.txt";
+	Check(MaxChoice * 100 <= 25 * Total, "V2 no answer above 25% (" + std::to_string(MaxChoice * 100 / Total) + "%)");
+	Check(Trills * 100 >= 25 * Total && Trills * 100 <= 75 * Total, "V2 tone and trill both common");
+	// Hand cases: wind adds low noise (halved in forest), the flock masks its band and half its neighbours, rock and marsh.
+	Crossing W; W.Count = 1; W.Seg[0] = { Habitat::Grass, 100 };
+	const int Calm = SnrTenths(W, 0, Form::Trill);
+	W.Air = Wind::Gusty;
+	Check(SnrTenths(W, 0, Form::Trill) == Calm - 80 && SnrTenths(W, 5, Form::Trill) == SnrTenths(Crossing(W), 5, Form::Trill)
+		&& ReceivedTenths(W, 2, Form::Tone) == ReceivedTenths(W, 2, Form::Trill) - 40 + 0, "gusty: +8 dB at 200 Hz, tone blur doubled");
+	Crossing F; F.Count = 1; F.Seg[0] = { Habitat::Forest, 50 }; F.Air = Wind::Gusty;
+	Check(NoiseAt(F, 0) == 340 + 40, "forest shelter halves wind");
+	Crossing K; K.Count = 1; K.Seg[0] = { Habitat::Rock, 50 }; K.Chorus = 2;
+	Check(NoiseAt(K, 2) == 300 + 80 && NoiseAt(K, 1) == 300 + 40 && NoiseAt(K, 3) == 310 + 40 && NoiseAt(K, 0) == 300, "flock masks its band");
+	Check(ReceivedTenths(K, 0, Form::Tone) - ReceivedTenths(K, 0, Form::Trill) == 15, "trill smears off rock (3 per 10 m)");
+	Crossing M; M.Count = 1; M.Seg[0] = { Habitat::Marsh, 100 };
+	Check(Best(M).Band <= 1 || Best(M).Band == 5, "marsh: frog chorus pushes calls out of the middle bands");
+}
+
+static std::size_t Compare(const std::string& Path, const std::vector<std::string>& Want)
+{
 	std::ifstream In(Path);
-	if (!In) { std::printf("FAIL cannot open %s\n", Path); return 1; }
+	if (!In) { Check(false, "cannot open " + Path); return 0; }
 	std::string Line;
 	std::size_t N = 0, Same = 0;
 	while (std::getline(In, Line))
 	{
 		if (!Line.empty() && Line.back() == '\r') Line.pop_back();
 		if (N < Want.size() && Line == Want[N]) ++Same;
-		else if (N < Want.size()) Check(false, "golden line " + std::to_string(N) + ": file [" + Line + "] c++ [" + Want[N] + "]");
+		else if (N < Want.size()) Check(false, Path + " line " + std::to_string(N) + ": file [" + Line + "] c++ [" + Want[N] + "]");
 		++N;
 	}
-	Check(N == Want.size(), "golden line count " + std::to_string(N) + " vs " + std::to_string(Want.size()));
-	std::printf("shardsong_core: golden %zu/%zu lines identical; %d checks, %d failures\n", Same, Want.size(), Checks, Failures);
+	Check(N == Want.size(), Path + " line count " + std::to_string(N) + " vs " + std::to_string(Want.size()));
+	return Same;
+}
+
+int main(int argc, char** argv)
+{
+	const std::vector<std::string> Want = GoldenLines(), WantV2 = GoldenLinesV2();
+	if (argc > 3 && std::strcmp(argv[1], "--write") == 0)  // --write V1PATH V2PATH
+	{
+		std::ofstream Out(argv[2], std::ios::binary), Out2(argv[3], std::ios::binary);
+		for (const auto& L : Want) Out << L << "\n";
+		for (const auto& L : WantV2) Out2 << L << "\n";
+		std::printf("wrote %zu + %zu lines\n", Want.size(), WantV2.size());
+		return 0;
+	}
+	Properties();
+	FeedbackTests();
+	BoundaryAndFuzz();
+	EarAndHeap();
+	RulesetV2();
+	const std::string Path = argc > 1 ? argv[1] : "engines/unreal/core-test/shardsong_golden.txt";
+	const std::string PathV2 = Path.substr(0, Path.size() - 4) + "_v2.txt";  // shardsong_golden_v2.txt beside it
+	const std::size_t Same = Compare(Path, Want), SameV2 = Compare(PathV2, WantV2);
+	std::printf("shardsong_core: golden v1 %zu/%zu, v2 %zu/%zu lines identical; %d checks, %d failures\n", Same, Want.size(),
+		SameV2, WantV2.size(), Checks, Failures);
 	return Failures == 0 ? 0 : 1;
 }

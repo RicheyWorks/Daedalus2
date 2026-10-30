@@ -6,6 +6,7 @@ on:
       - 'engines/unreal/**/DaedalusEarRuleCore.h'
       - 'engines/unreal/core-test/shardsong_core_test.cpp'
       - 'engines/unreal/core-test/shardsong_golden.txt'
+      - 'engines/unreal/core-test/shardsong_golden_v2.txt'
       - '.github/workflows/shardsong-core.yml'
   push:
     branches: [main]
@@ -14,6 +15,7 @@ on:
       - 'engines/unreal/**/DaedalusEarRuleCore.h'
       - 'engines/unreal/core-test/shardsong_core_test.cpp'
       - 'engines/unreal/core-test/shardsong_golden.txt'
+      - 'engines/unreal/core-test/shardsong_golden_v2.txt'
   workflow_dispatch:
 permissions:
   contents: read
