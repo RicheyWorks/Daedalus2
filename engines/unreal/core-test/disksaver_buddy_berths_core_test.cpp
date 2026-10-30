@@ -64,12 +64,15 @@ static std::string Join(const BB::Plan& P) {
 
 struct Case {
     std::string Name;
-    bool Open = false, Ok = true, Laid = false;
+    bool Open = false, Ok = true, Laid = false, Refused = false;
+    std::int64_t Opt = 0, Hab = 0;
     BB::Layout L;
     std::vector<std::string> Got, Want;
 };
 
 static int Plays = 0, Layouts = 0;
+static std::size_t PeakStates = 0;
+static const std::size_t MaxStates = 60000;  // worst_legal_ones (10 size-1 ships, 4 moored) needs 29194
 
 static void Flush(Case& K) {
     if (!K.Open) return;
@@ -94,6 +97,11 @@ static void Lay(Case& K) {
         K.Got.push_back(std::string("P ") + Names[P] + " " + Join(Plans[P]) + " " + std::to_string(T[P]));
     }
     for (int P = 0; P < 3; ++P) Check(T[P] >= T[3], K.Name + ": best is no worse than a habit");
+    BB::BestSearch S(L);
+    Check(S.Run() == Plans[3], K.Name + ": the search is repeatable");
+    Check(S.States() <= MaxStates, K.Name + ": the best-plan search stays small (" + std::to_string(S.States()) + " states)");
+    if (S.States() > PeakStates) PeakStates = S.States();
+    BB::Scores(L, K.Opt, K.Hab);
     K.Laid = true;
     ++Layouts;
 }
@@ -128,9 +136,16 @@ int main(int argc, char** argv) {
                 Ok = F.size() == 2 && ToI64(F[0], V.first) && ToI64(F[1], V.second) && Ok;
                 SS.push_back(V);
             }
-            if (Ok && BB::MakeHand(SS, K->L) == BB::Error::None) Lay(*K);
-            else K->Ok = false;
-        } else if (T[0] == "M" && T.size() == 2 && K->Laid) {
+            const BB::Error E = Ok ? BB::MakeHand(SS, K->L) : BB::Error::None;
+            if (!Ok) K->Ok = false;
+            else if (E == BB::Error::None) Lay(*K);
+            else {  // a refused hand quay: no layout, no plays
+                K->Got.push_back(std::string("hand_refused ") + BB::ErrorName(E));
+                K->Laid = true;
+                K->Refused = true;
+                ++Layouts;
+            }
+        } else if (T[0] == "M" && T.size() == 2 && K->Laid && !K->Refused) {
             BB::Plan P;
             if (T[1] == "-") P.push_back(BB::Turn);  // the shared Split reads a lone "-" as empty
             else if (T[1] != "none") {
@@ -144,7 +159,7 @@ int main(int argc, char** argv) {
                 }
             }
             BB::PlayResult R;
-            const BB::Error E = BB::Play(K->L, P, R);
+            const BB::Error E = BB::PlayScored(K->L, P, K->Opt, K->Hab, R);
             K->Got.push_back(E != BB::Error::None ? std::string("refused ") + BB::ErrorName(E)
                                                   : "m " + std::to_string(R.Turned) + " " + BB::VerdictName(R.V));
             ++Plays;
@@ -158,5 +173,6 @@ int main(int argc, char** argv) {
     Flush(*K);
     delete K;
     Check(Layouts == Cases, "every case laid out");
+    Check(PeakStates > 0, "the search ran");
     return Finish("buddy_berths", Cases, Plays);
 }

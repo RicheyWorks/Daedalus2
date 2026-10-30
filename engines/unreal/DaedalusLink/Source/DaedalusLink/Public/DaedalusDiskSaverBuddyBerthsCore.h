@@ -24,12 +24,13 @@ namespace BuddyBerths {
 constexpr std::int64_t Quay = 16;
 constexpr std::uint32_t MinShips = 7, SeedShipSpan = 4, MaxShips = 10;
 constexpr std::int64_t MaxStay = 16;
+constexpr std::int64_t HandMaxMoored = 4;  // hand quays: ships moored at once, which bounds the best-plan search
 constexpr std::size_t MaxSeedBytes = 4096;
 constexpr std::int64_t Turn = -1;  // a plan entry that turns the ship away
 static const char* const Names[12] = {"albatross", "brigantine", "coracle", "dhow", "felucca", "galleon",
                                        "junk", "ketch", "lugger", "pinnace", "schooner", "yawl"};
 
-enum class Error { None, Length, Align, Busy, NoShips, TooManyShips, Size, Stay, Seed };
+enum class Error { None, Length, Align, Busy, NoShips, TooManyShips, Size, Stay, Overlap, Seed };
 
 inline const char* ErrorName(Error E) {
     switch (E) {
@@ -41,6 +42,7 @@ inline const char* ErrorName(Error E) {
         case Error::TooManyShips: return "too_many_ships";
         case Error::Size: return "size";
         case Error::Stay: return "stay";
+        case Error::Overlap: return "overlap";
         case Error::Seed: return "seed";
     }
     return "?";
@@ -85,7 +87,9 @@ inline Error FromSeed(const std::string& Seed, Layout& Out) {
     return Error::None;
 }
 
-// A hand-laid quay: 1..10 ships, sizes powers of two up to the quay, stays 1..16.
+// A hand-laid quay: 1..10 ships, sizes powers of two up to the quay, stays 1..16, and at most 4 ships moored at
+// once (ship k is moored for arrivals k .. k + stay - 1). The moored cap keeps the exact search small; seeded
+// quays (stays 1..5) are not capped.
 inline Error MakeHand(const std::vector<std::pair<std::int64_t, std::int64_t>>& SizeStay, Layout& Out) {
     if (SizeStay.empty()) return Error::NoShips;
     if (SizeStay.size() > MaxShips) return Error::TooManyShips;
@@ -95,6 +99,12 @@ inline Error MakeHand(const std::vector<std::pair<std::int64_t, std::int64_t>>& 
         if (S < 1 || S > Quay || (S & (S - 1)) != 0) return Error::Size;
         if (T < 1 || T > MaxStay) return Error::Stay;
         Out.Ships.push_back(Ship{"ship" + std::to_string(I), S, T});
+    }
+    for (std::size_t J = 0; J < Out.Ships.size(); ++J) {
+        std::int64_t Moored = 0;
+        for (std::size_t K = 0; K <= J; ++K)
+            if (static_cast<std::int64_t>(K) + Out.Ships[K].Stay > static_cast<std::int64_t>(J)) ++Moored;
+        if (Moored > HandMaxMoored) return Error::Overlap;
     }
     return Error::None;
 }
@@ -179,6 +189,8 @@ class BestSearch {
 public:
     explicit BestSearch(const Layout& L) : L_(L) {}
 
+    std::size_t States() const { return Memo_.size(); }
+
     Plan Run() {
         Plan P;
         Cells C(static_cast<std::size_t>(Quay), 0);
@@ -242,17 +254,29 @@ struct PlayResult {
 };
 
 // snug = as few turned away as the best plan; fair = no worse than the best of the three habits.
-inline Error Play(const Layout& L, const Plan& P, PlayResult& R) {
+// Opt and Hab: turned-away counts of the best plan and the best habit (see Scores), so a caller playing many
+// plans on one quay searches once.
+inline Error PlayScored(const Layout& L, const Plan& P, std::int64_t Opt, std::int64_t Hab, PlayResult& R) {
     const Error E = Simulate(L, P, R.Turned);
     if (E != Error::None) return E;
-    std::int64_t Opt = 0, Hab = -1, T = 0;
+    R.V = R.Turned == Opt ? Verdict::Snug : R.Turned <= Hab ? Verdict::Fair : Verdict::Crowded;
+    return Error::None;
+}
+
+inline void Scores(const Layout& L, std::int64_t& Opt, std::int64_t& Hab) {
+    std::int64_t T = 0;
     Simulate(L, Best(L), Opt);
+    Hab = -1;
     for (Habit H : {Habit::Lowest, Habit::Tightest, Habit::Highest}) {
         Simulate(L, HabitPlan(L, H), T);
         if (Hab < 0 || T < Hab) Hab = T;
     }
-    R.V = R.Turned == Opt ? Verdict::Snug : R.Turned <= Hab ? Verdict::Fair : Verdict::Crowded;
-    return Error::None;
+}
+
+inline Error Play(const Layout& L, const Plan& P, PlayResult& R) {
+    std::int64_t Opt = 0, Hab = 0;
+    Scores(L, Opt, Hab);
+    return PlayScored(L, P, Opt, Hab, R);
 }
 
 }  // namespace BuddyBerths

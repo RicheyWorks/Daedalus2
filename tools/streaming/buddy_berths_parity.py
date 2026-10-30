@@ -19,7 +19,9 @@ randrange(5) for the stay, then shuffle (the ship names; CPython's _randbelow lo
 
 Golden lines: `C name`; `S hex` (seed string, utf-8 hex) or `H size:stay,...` (a hand layout); `O L n`,
 `O R k name size stay` per ship, `O P habit plan turned` for lowest, tightest, highest and best; then
-`M plan` (comma-separated offsets or `-`; `none` for an empty plan) answered by `O m turned verdict` or `O refused kind`.
+a hand quay the core refuses is answered by `O hand_refused kind`
+(no_ships, too_many_ships, size, stay, overlap: more than HAND_MAX_MOORED ships moored at once) and has no
+plays; `M plan` (comma-separated offsets or `-`; `none` for an empty plan) answered by `O m turned verdict` or `O refused kind`.
 """
 import os
 import random
@@ -30,6 +32,9 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 GOLDEN = os.path.join(ROOT, "engines", "unreal", "core-test", "disksaver_buddy_berths_parity.txt")
 QUAY = 16
 MIN_SHIPS = 7
+HAND_MAX_SHIPS = 10
+MAX_STAY = 16
+HAND_MAX_MOORED = 4  # hand quays only: bounds the exact search (seeded stays are 1..5)
 NAMES = ("albatross", "brigantine", "coracle", "dhow", "felucca", "galleon", "junk", "ketch",
          "lugger", "pinnace", "schooner", "yawl")
 
@@ -123,7 +128,17 @@ def tightest(occ, s, opts):
     return min(opts, key=lambda o: (room(occ, o, s), o))
 
 
+_BEST = {}
+
+
 def best(ships):
+    key = tuple(ships)
+    if key not in _BEST:
+        _BEST[key] = _best(ships)
+    return list(_BEST[key])
+
+
+def _best(ships):
     """Fewest turned away; ties go to the first choice in offset order, `-` last. Memo key: per unit, the
     arrival before which its ship sails (0 = free), so ships that free the same units at the same time merge."""
     n = len(ships)
@@ -203,10 +218,34 @@ def lines():
              "halves_then_whole": [(8, 2), (8, 2), (16, 1), (1, 4)],
              "fragmenting_ones": [(1, 4)] * 5 + [(8, 1), (4, 2), (8, 1)],
              "ten_long_stays": [(4, 4), (2, 4), (8, 4), (1, 4), (4, 4), (2, 4), (8, 4), (1, 4), (4, 4), (2, 4)]}
+    hands["worst_legal_ones"] = [(1, 4)] * 10  # ten size-1 ships, four moored at once: the largest legal search
     for name, hs in hands.items():
+        assert hand_error(hs) is None, name
         ships = [(f"ship{k}", s, t) for k, (s, t) in enumerate(hs)]
         case(out, name, "H " + ",".join(f"{s}:{t}" for s, t in hs), ships, rng)
+    bad = {"ten_ones_long_stays": [(1, 16)] * 10,  # used to run its best-plan search for minutes
+           "five_moored": [(1, 5)] * 5, "no_ships": [], "eleven_ships": [(1, 1)] * 11, "size_three": [(3, 1)],
+           "size_past_quay": [(32, 1)], "stay_zero": [(1, 0)], "stay_past_max": [(1, 17)]}
+    for name, hs in bad.items():
+        out += [f"C {name}", "H " + (",".join(f"{s}:{t}" for s, t in hs) or "-"), f"O hand_refused {hand_error(hs)}"]
     return out
+
+
+def hand_error(hs):
+    """The core's MakeHand checks, in its order."""
+    if not hs:
+        return "no_ships"
+    if len(hs) > HAND_MAX_SHIPS:
+        return "too_many_ships"
+    for s, t in hs:
+        if not (1 <= s <= QUAY and s & (s - 1) == 0):
+            return "size"
+        if not 1 <= t <= MAX_STAY:
+            return "stay"
+    for j in range(len(hs)):
+        if sum(1 for k in range(j + 1) if k + hs[k][1] > j) > HAND_MAX_MOORED:
+            return "overlap"
+    return None
 
 
 def main(argv):

@@ -1468,3 +1468,64 @@ M 1,4,8,6,0,4,8,6,0,4
 O refused align
 M 0,0,0,0,0,0,0,0,0,0
 O refused busy
+C worst_legal_ones
+H 1:4,1:4,1:4,1:4,1:4,1:4,1:4,1:4,1:4,1:4
+O L 10
+O R 0 ship0 1 4
+O R 1 ship1 1 4
+O R 2 ship2 1 4
+O R 3 ship3 1 4
+O R 4 ship4 1 4
+O R 5 ship5 1 4
+O R 6 ship6 1 4
+O R 7 ship7 1 4
+O R 8 ship8 1 4
+O R 9 ship9 1 4
+O P lowest 0,1,2,3,0,1,2,3,0,1 0
+O P tightest 0,1,2,3,0,1,2,3,0,1 0
+O P highest 15,14,13,12,15,14,13,12,15,14 0
+O P best 0,1,2,3,0,1,2,3,0,1 0
+M 0,1,2,3,0,1,2,3,0,1
+O m 0 snug
+M 0,1,2,3,0,1,2,3,0,1
+O m 0 snug
+M 0,1,2,3,0,1,2,3,0,1
+O m 0 snug
+M 15,14,13,12,15,14,13,12,15,14
+O m 0 snug
+M -,-,-,-,-,-,-,-,-,-
+O m 10 crowded
+M 10,7,7,8,4,1,6,4,3,9
+O refused busy
+M 0,1,2,3,0,1,2,3,0
+O refused length
+M 0,1,2,3,0,1,2,3,0,1,-
+O refused length
+M 15,1,2,3,0,1,2,3,0,1
+O m 0 snug
+M 0,0,0,0,0,0,0,0,0,0
+O refused busy
+C ten_ones_long_stays
+H 1:16,1:16,1:16,1:16,1:16,1:16,1:16,1:16,1:16,1:16
+O hand_refused overlap
+C five_moored
+H 1:5,1:5,1:5,1:5,1:5
+O hand_refused overlap
+C no_ships
+H -
+O hand_refused no_ships
+C eleven_ships
+H 1:1,1:1,1:1,1:1,1:1,1:1,1:1,1:1,1:1,1:1,1:1
+O hand_refused too_many_ships
+C size_three
+H 3:1
+O hand_refused size
+C size_past_quay
+H 32:1
+O hand_refused size
+C stay_zero
+H 1:0
+O hand_refused stay
+C stay_past_max
+H 1:17
+O hand_refused stay

@@ -19,7 +19,11 @@ Quest `q_buddy_berths`. NPC: **Dockmother Imelda**, who chalks the long quay int
 - for each ship, `size = 1 << int(random() * 4)` and `stay = 1 + randrange(5)`;
 - the ship names: a CPython `shuffle` of 12 names, built from the header's `_randbelow`, keeping the first `n`.
 
-Seeds are strings (the header's CPython str path), for example `buddy-berths|2026-10-26|42`. Hand-laid quays are used for edge cases: up to 10 ships, sizes that are powers of two up to 16, and stays from 1 to 16.
+Seeds are strings (the header's CPython str path), for example `buddy-berths|2026-10-26|42`. Hand-laid quays are used for edge cases: up to 10 ships, sizes that are powers of two up to 16, stays from 1 to 16, and **at most 4 ships moored at once**. Ship k is moored for arrivals k to k + stay - 1.
+
+The moored cap bounds the exact search. Before it existed, ten size-1 ships staying 16 arrivals each ran the search for minutes. That quay is now refused as `overlap`. The largest legal search (`worst_legal_ones`: ten size-1 ships, four moored at once) visits 29,194 states, and the test fails if any case passes 60,000. Seeded quays are not capped, because their stays are 1 to 5.
+
+Hand-quay refusals are `no_ships`, `too_many_ships`, `size`, `stay` and `overlap`, answered as `hand_refused kind`.
 
 **How it plugs into Daedalus.** The island streaming pool is a buddy quay:
 - each island chunk that streams in asks for a power-of-two slab of the fixed streaming pool;
@@ -34,6 +38,8 @@ The hook (`data/islands/disk-saver/buddy-berths-v1.json`) lets a pool trace be r
 **Code.**
 - `engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusDiskSaverBuddyBerthsCore.h`: header-only C++17. No Unreal includes, no exceptions or RTTI. Errors are return codes. It uses the shared `DaedalusPyRandomCore.h` without changing it.
 - `tools/streaming/buddy_berths_parity.py --write/--check` writes `engines/unreal/core-test/disksaver_buddy_berths_parity.txt` from CPython. Python is only the fixture generator.
-  - 42 cases: 36 seed strings (empty, one-letter and Unicode seeds among them) and 6 hand quays (one dinghy, a whole-quay ship, four eights, halves then the whole quay, size-1 ships that fragment the quay, ten long stays).
-  - Each case has 10 plays, with refusals among them.
+  - 51 cases: 36 seed strings (empty, one-letter and Unicode seeds among them), 7 hand quays and 8 refused hand quays.
+  - The hand quays: one dinghy, a whole-quay ship, four eights, halves then the whole quay, size-1 ships that fragment the quay, ten long stays, and the worst legal search.
+  - The refused quays: the old slow quay, five moored at once, no ships, eleven ships, two bad sizes and two bad stays.
+  - Each laid case has 10 plays, with refusals among them.
 - `engines/unreal/core-test/disksaver_buddy_berths_core_test.cpp` replays every line. The existing engines.yml loop over `disksaver_*_core_test.cpp` runs it under gcc ASan/UBSan and clang, and `disksaver_cpp_parity.py --check` keeps the golden file fresh.
