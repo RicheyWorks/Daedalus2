@@ -1,0 +1,47 @@
+name: Shardsong Crossing core (G587)
+on:
+  pull_request:
+    paths:
+      - 'engines/unreal/**/DaedalusShardsongCore.h'
+      - 'engines/unreal/**/DaedalusEarRuleCore.h'
+      - 'engines/unreal/core-test/shardsong_core_test.cpp'
+      - 'engines/unreal/core-test/shardsong_golden.txt'
+      - '.github/workflows/shardsong-core.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'engines/unreal/**/DaedalusShardsongCore.h'
+      - 'engines/unreal/**/DaedalusEarRuleCore.h'
+      - 'engines/unreal/core-test/shardsong_core_test.cpp'
+      - 'engines/unreal/core-test/shardsong_golden.txt'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shardsong golden vectors + properties (sanitized, no FMA contraction)
+        run: |
+          ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Werror -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer engines/unreal/core-test/shardsong_core_test.cpp -o "$RUNNER_TEMP/shardsong"
+          "$RUNNER_TEMP/shardsong" engines/unreal/core-test/shardsong_golden.txt
+  msvc:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Shardsong golden vectors + properties (MSVC cl /W4 /WX /fp:strict)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $out = Join-Path $env:RUNNER_TEMP 'shardsong'
+          New-Item -ItemType Directory -Force $out | Out-Null
+          cl /nologo /std:c++17 /EHsc /W4 /WX /fp:strict engines/unreal/core-test/shardsong_core_test.cpp "/Fo$out\shardsong.obj" "/Fe$out\shardsong.exe"
+          if ($LASTEXITCODE) { throw "cl failed ($LASTEXITCODE)" }
+          & "$out\shardsong.exe" engines/unreal/core-test/shardsong_golden.txt
+          if ($LASTEXITCODE) { throw "shardsong_core_test failed ($LASTEXITCODE)" }
