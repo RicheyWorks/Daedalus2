@@ -93,6 +93,34 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class Saves(unittest.TestCase):
+    """Iteration 5: from_state refuses saves that break the rules."""
+    def bad(self, **fields):
+        st = gm.start(3).to_state()
+        st.update(fields)
+        with self.assertRaises(ValueError):
+            gm.Game.from_state(st)
+
+    def test_round_trip_still_works(self):
+        g = gm.start(3)
+        for _ in range(3):
+            g.step(g.demo_action())
+        self.assertEqual(gm.Game.from_state(g.to_state()).status(), g.status())
+
+    def test_bad_saves_are_refused(self):
+        g = gm.start(3)
+        reshaped = [row[:] for row in g.heights]
+        reshaped[2][2] = 9 if reshaped[2][2] != 9 else 8
+        self.bad(heights=reshaped)
+        self.bad(ferry=[99, 0])
+        self.bad(passengers=[[1, 1]] if [1, 1] not in g.passengers else [[1, 2]])
+        self.bad(aboard=7)
+        self.bad(turn=999)
+        low = next((r, c) for r in range(8) for c in range(8) if g.heights[r][c] == 1) if any(1 in row for row in g.heights) else None
+        if low:
+            self.bad(ferry=list(low), turn=3 * 1)
+
+
 class Properties(unittest.TestCase):
     """Iteration 1: invariants on every voyage, every move, every seed (no rule change)."""
     SEEDS = range(60)
