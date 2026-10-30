@@ -39,3 +39,7 @@ Notes
 ## translocation_plan (pythagoras, READY 59018)
 
 11 assets: TRANS01 cabinet with reed topper, ventilated crate, 3 m soft-release pen with gate, planning board (6 years x 4 cohorts), risk gauge (needle plus 95% band), reed marsh 10 m tile, marsh bird at 4 ages (chick, juvenile, subadult, adult), Warden NPC. The birds and Warden are static, rigs pending. Sheet: translocation_plan.png.
+
+## prismchime (unreal-team, READY 59142/59143; 'Blender items' sheet)
+
+6 assets. Name mapping: Cab_Prismchime is built as Prop_Arcade_Cab_Prismchime (shared cabinet sockets, ring-of-bells topper), and NPC_Prismchime_Warden as Mob_Prismchime_Warden (static; shared 8-bone rig pending). Hoop: 1.6 m silver double hoop on a short chain with 8 bell sockets; scale it for the 6- and 10-bell variants. Bell_Dark and Bell_Lit: crystal bell on a rod with 3 pip sockets; Lit is amber emissive. Mallet: prism head. Sheet: prismchime.png.
