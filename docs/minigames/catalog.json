@@ -914,6 +914,23 @@
       "tests": [
         "test_glimmerloom.py"
       ]
+    },
+    {
+      "id": "glowmoss",
+      "title": "Glowmoss Delve",
+      "summary": "climb down a seeded crystal shaft in Prismheart on a light budget and climb out richer.",
+      "how_to_play": "HOW Dig down the shaft one ledge at a time to gather crystals; glowmoss refills your lamp. Climb out before the light is too low to carry you back up.",
+      "module": "tools/minigames/glowmoss.py",
+      "start": "glowmoss.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_glowmoss.py"
+      ]
     }
   ]
 }
