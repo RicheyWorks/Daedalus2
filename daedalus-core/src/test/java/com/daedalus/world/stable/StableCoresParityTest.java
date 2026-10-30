@@ -188,6 +188,44 @@ class StableCoresParityTest {
         return out;
     }
 
+    static List<String> tackLedgerIndex() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            int[] f = TackLedgerIndex.frequencies(s, s % 12, 20);
+            TackLedgerIndex.Filing b = TackLedgerIndex.best(f);
+            TackLedgerIndex.Filing g = TackLedgerIndex.mostAskedRoot(f);
+            out.add("seed=" + s + " freq=" + join(f) + " best=" + b.flips() + ":" + join(b.order()) + " mostasked=" + g.flips() + ":"
+                    + join(g.order()));
+        }
+        return out;
+    }
+
+    static List<String> stallPlaques() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            int[] len = StallPlaques.names(s, s % 15, 1, 6);
+            StallPlaques.Layout b = StallPlaques.best(len, 12);
+            StallPlaques.Layout g = StallPlaques.fillEachLine(len, 12);
+            out.add("seed=" + s + " len=" + join(len) + " best=" + b.ugliness() + ":" + join(b.breaks()) + " fill=" + g.ugliness() + ":"
+                    + join(g.breaks()));
+        }
+        return out;
+    }
+
+    static List<String> barnUpgrades() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            int n = s % 13;
+            int[] v = BarnUpgrades.values(s, n, n / 2, 9, 9);
+            int[] need = BarnUpgrades.needs(s, n, n / 2, 40);
+            BarnUpgrades.Build b = BarnUpgrades.best(v, need);
+            BarnUpgrades.Build g = BarnUpgrades.oneAtATime(v, need);
+            out.add("seed=" + s + " value=" + join(v) + " need=" + join(need) + " best=" + b.coin() + ":" + b.chosen() + " oneatatime="
+                    + g.coin() + ":" + g.chosen());
+        }
+        return out;
+    }
+
     @Test
     void trottingRingMatchesCpp() throws IOException {
         check("stable_trotting_ring_parity.txt", "G506 TrottingRing", StableCoresParityTest::trottingRing);
@@ -241,6 +279,21 @@ class StableCoresParityTest {
     @Test
     void hayBaleStackingMatchesCpp() throws IOException {
         check("stable_hay_bale_stacking_parity.txt", "G542 HayBaleStacking", StableCoresParityTest::hayBaleStacking);
+    }
+
+    @Test
+    void tackLedgerIndexMatchesCpp() throws IOException {
+        check("stable_tack_ledger_index_parity.txt", "G545 TackLedgerIndex", StableCoresParityTest::tackLedgerIndex);
+    }
+
+    @Test
+    void stallPlaquesMatchesCpp() throws IOException {
+        check("stable_stall_plaques_parity.txt", "G547 StallPlaques", StableCoresParityTest::stallPlaques);
+    }
+
+    @Test
+    void barnUpgradesMatchesCpp() throws IOException {
+        check("stable_barn_upgrades_parity.txt", "G548 BarnUpgrades", StableCoresParityTest::barnUpgrades);
     }
 
     private static void check(String file, String game, Supplier<List<String>> lines) throws IOException {
