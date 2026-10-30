@@ -15,10 +15,13 @@ as `Error` codes. Any Unreal glue will be a thin separate wrapper later.
 | G561 Channel Dash | `DaedalusDiskSaverChannelDashCore.h` | barge drift (Python modulo, tick reduced mod 9), exact BFS par and plan over (row, col, tick mod 9), move validation (letter/dock/leaves), hit tick, verdict swift/safe/swamped |
 | G562 Boom Defence | `DaedalusDiskSaverBoomDefenceCore.h` | tick simulator with fates, exhaustive par over site pairs, most-reach greedy, post parsing (site/twice/many), verdict watertight/leaky/overrun |
 | G563 Salvage Sale | `DaedalusDiskSaverSalvageSaleCore.h` | Broker bid rule, exact par search (pass-first tie rule) and bids, win-what-you-can greedy, bid parsing (count/coin, huge bids saturate), verdict shrewd/fair/fleeced |
+| G564 Rope Run | `DaedalusDiskSaverRopeRunCore.h` | exact self-avoiding route DFS (Python direction order, 200M-visit cap), grip-follow greedy, route grading (letter/dock/off/cross), verdict per grip and dock |
+| G565 Belfry Changes | `DaedalusDiskSaverBelfryChangesCore.h` | change rule, exact BFS par and changes over packed rows (7 bells, 4M-state cap), single-swap par, change parsing (format/range/overlap/rest), lead count, verdict |
+| G566 Tram Shunt | `DaedalusDiskSaverTramShuntCore.h` | siding moves, exact BFS par and plan (8 wagons, 4M-state cap), greedy shunter (200-move cap, none if stuck), move parsing (format/out/impossible), verdict |
 
 **Layouts stay in Python.** The seeded layouts use Python's `random`, which the ports do not reimplement. Each core takes the
 puzzle as the Python tool laid it out (card pair ids, chart edges, the yard's `draw()` rows, sacks per bin, quay walls/marks/dock/start, barge lanes, channel path/sites/hulls, lot values/coin). Overflow
-is guarded by size caps: 64 cards, 12 chart nodes, a 7x7 yard with a 4M-state BFS cap, 8 bins / 24 sacks, 4 seal marks, 8 barge lanes with |velocity| <= 9, 6 skiffs / 12 sites / hull 1000, and 8 lots with value and coin caps.
+is guarded by size caps: 64 cards, 12 chart nodes, a 7x7 yard with a 4M-state BFS cap, 8 bins / 24 sacks, 4 seal marks, 8 barge lanes with |velocity| <= 9, 6 skiffs / 12 sites / hull 1000, 8 lots with value and coin caps, rope grips <= 9 with a 200M-visit DFS cap, 7 bells and 8 wagons with 4M-state BFS caps.
 
 **Golden files.** `tools/streaming/disksaver_cpp_parity.py` runs each tool's real `play()` path and writes
 `engines/unreal/core-test/disksaver_<game>_parity.txt`. The cases are the real `tools/world_census` fixtures under several seeds,
@@ -32,4 +35,4 @@ layout, par, plan, and each play's result or refusal. Single-line mutations of t
       -I../DaedalusLink/Source/DaedalusLink/Public disksaver_sack_chute_core_test.cpp -o t && ./t disksaver_sack_chute_parity.txt
 
 CI: three steps in the `engines.yml` mesh-parity job: gcc with ASan/UBSan, clang, and a check that the golden files match the Python tools. The steps loop over every `disksaver_*_core_test.cpp`, so a new batch needs no workflow edit.
-Next: G564 Rope Run, G565 Belfry Changes, G566 Tram Shunt, then the earlier games.
+Next: G555 Watchfires, G554 Tide Lock, G553 Smugglers Island, G552 Harbour Cryptogram, G551 Fleet Soundings, G550 Quay Duel, G549 Last Crate, G546 Census Riddles.

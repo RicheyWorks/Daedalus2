@@ -351,3 +351,5 @@ python -B -m unittest tools/streaming/tram_shunt_test.py
 `DaedalusDiskSaver<Game>Core.h` are header-only, engine-free C++17 ports of the pure logic of Manifest Match, Twin Pilots, Quayside Shove and Sack Chute (par solver, move validation, greedy, verdict). Layouts stay in Python. `disksaver_cpp_parity.py --write|--check` writes their golden files `engines/unreal/core-test/disksaver_<game>_parity.txt` from these tools. See `docs/islands/DISKSAVER-CPP-CORES.md`.
 
 Batch 2 (G574): `DaedalusDiskSaver{SealRoll,ChannelDash,BoomDefence,SalvageSale}Core.h` port Seal Roll, Channel Dash, Boom Defence and Salvage Sale the same way. Their golden files are written by the same `disksaver_cpp_parity.py`.
+
+Batch 3 (G575): `DaedalusDiskSaver{RopeRun,BelfryChanges,TramShunt}Core.h` port Rope Run, Belfry Changes and Tram Shunt the same way, with explicit caps on the route DFS and the state searches.
