@@ -87,6 +87,65 @@ class StableCoresParityTest {
         return out;
     }
 
+    static List<String> tackRoomPegs() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            int n = s % 11;
+            int[] w = TackRoomPegs.weights(s, n, 10);
+            int[] f = TackRoomPegs.feuds(s, n, 25);
+            TackRoomPegs.Room b = TackRoomPegs.best(w, f, 10);
+            TackRoomPegs.Room g = TackRoomPegs.firstFit(w, f, 10);
+            out.add("seed=" + s + " weight=" + join(w) + " feud=" + join(f) + " best=" + b.pegs() + ":" + join(b.pegOf())
+                    + " firstfit=" + g.pegs() + ":" + join(g.pegOf()));
+        }
+        return out;
+    }
+
+    static List<String> hayWagonRound() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            HayWagonRound.Yard y = HayWagonRound.yard(s, s % 9, 10, 6);
+            HayWagonRound.Round b = HayWagonRound.best(y);
+            HayWagonRound.Round g = HayWagonRound.nearest(y);
+            out.add("seed=" + s + " x=" + join(y.x()) + " y=" + join(y.y()) + " open=" + join(y.open()) + " close=" + join(y.close())
+                    + " best=" + b.finish() + ":" + join(b.order()) + " nearest=" + g.finish() + ":" + join(g.order()));
+        }
+        return out;
+    }
+
+    static List<String> farriersTwoAnvils() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            int n = s % 9;
+            int[] t = FarriersTwoAnvils.durations(s, n);
+            int[] p = FarriersTwoAnvils.links(s, n, 30);
+            FarriersTwoAnvils.Plan b = FarriersTwoAnvils.best(t, p);
+            FarriersTwoAnvils.Plan g = FarriersTwoAnvils.listSchedule(t, p);
+            out.add("seed=" + s + " time=" + join(t) + " pred=" + join(p) + " best=" + b.makespan() + ":" + join(b.start()) + ":"
+                    + join(b.anvil()) + " list=" + g.makespan() + ":" + join(g.start()) + ":" + join(g.anvil()));
+        }
+        return out;
+    }
+
+    static List<String> bridleRackMatching() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            int n = s % 9;
+            int[] temper = BridleRackMatching.temperaments(s, n);
+            int[] skill = BridleRackMatching.skills(s, temper);
+            int[][] time = BridleRackMatching.times(s, n);
+            StringBuilder rows = new StringBuilder();
+            for (int[] row : time) {
+                rows.append(rows.length() == 0 ? "" : "/").append(join(row));
+            }
+            BridleRackMatching.Pairing b = BridleRackMatching.best(skill, temper, time);
+            BridleRackMatching.Pairing g = BridleRackMatching.cheapestFirst(skill, temper, time);
+            out.add("seed=" + s + " temper=" + join(temper) + " skill=" + join(skill) + " time=" + (n == 0 ? "-" : rows)
+                    + " best=" + b.ready() + ":" + join(b.groomOf()) + " cheapest=" + g.ready() + ":" + join(g.groomOf()));
+        }
+        return out;
+    }
+
     @Test
     void trottingRingMatchesCpp() throws IOException {
         check("stable_trotting_ring_parity.txt", "G506 TrottingRing", StableCoresParityTest::trottingRing);
@@ -105,6 +164,26 @@ class StableCoresParityTest {
     @Test
     void shoeingShedMatchesCpp() throws IOException {
         check("stable_shoeing_shed_parity.txt", "G528 ShoeingShed", StableCoresParityTest::shoeingShed);
+    }
+
+    @Test
+    void tackRoomPegsMatchesCpp() throws IOException {
+        check("stable_tack_room_pegs_parity.txt", "G530 TackRoomPegs", StableCoresParityTest::tackRoomPegs);
+    }
+
+    @Test
+    void hayWagonRoundMatchesCpp() throws IOException {
+        check("stable_hay_wagon_round_parity.txt", "G532 HayWagonRound", StableCoresParityTest::hayWagonRound);
+    }
+
+    @Test
+    void farriersTwoAnvilsMatchesCpp() throws IOException {
+        check("stable_farriers_two_anvils_parity.txt", "G535 FarriersTwoAnvils", StableCoresParityTest::farriersTwoAnvils);
+    }
+
+    @Test
+    void bridleRackMatchingMatchesCpp() throws IOException {
+        check("stable_bridle_rack_matching_parity.txt", "G537 BridleRackMatching", StableCoresParityTest::bridleRackMatching);
     }
 
     private static void check(String file, String game, Supplier<List<String>> lines) throws IOException {
