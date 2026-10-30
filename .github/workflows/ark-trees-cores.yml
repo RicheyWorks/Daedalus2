@@ -1,7 +1,7 @@
 name: Ark tree cores
-# G572/G584/G588: header-only C++ ports of the ark tree cores (G520 Shroud Paths, G524 Berth Leases, G527 Swell Crests,
-# G569 Tow Lines) and of the G441 Star Mesh (Delaunay) must replay the Java-written ark_*_parity.txt line for line
-# and agree with their brute-force checks. Engine-free; no Unreal needed.
+# G572/G584/G588/G592: header-only C++ ports of the ark tree cores (G520 Shroud Paths, G524 Berth Leases, G527 Swell Crests,
+# G569 Tow Lines), the G441 Star Mesh (Delaunay) and the G461 Dock Calipers (hull + rotating calipers) must replay
+# the Java-written ark_*_parity.txt line for line and agree with their brute-force checks. Engine-free; no Unreal needed.
 on:
   pull_request:
     paths:
@@ -10,6 +10,7 @@ on:
       - 'engines/unreal/**/DaedalusArkSwellCrestsCore.h'
       - 'engines/unreal/**/DaedalusArkTowLinesCore.h'
       - 'engines/unreal/**/DaedalusArkStarMeshCore.h'
+      - 'engines/unreal/**/DaedalusArkDockCalipersCore.h'
       - 'engines/unreal/**/DaedalusStableRandom.h'
       - 'engines/unreal/core-test/ark_trees_test.h'
       - 'engines/unreal/core-test/ark_shroud_paths_*'
@@ -17,6 +18,7 @@ on:
       - 'engines/unreal/core-test/ark_swell_crests_*'
       - 'engines/unreal/core-test/ark_tow_lines_*'
       - 'engines/unreal/core-test/ark_star_mesh_*'
+      - 'engines/unreal/core-test/ark_dock_calipers_*'
       - '.github/workflows/ark-trees-cores.yml'
   push:
     branches: [main]
@@ -38,7 +40,7 @@ jobs:
       - name: Ark tree cores replay the Java parity files (sanitized, warnings as errors)
         working-directory: engines/unreal/core-test
         run: |
-          for name in ark_shroud_paths ark_berth_leases ark_swell_crests ark_tow_lines ark_star_mesh; do
+          for name in ark_shroud_paths ark_berth_leases ark_swell_crests ark_tow_lines ark_star_mesh ark_dock_calipers; do
             ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -fno-omit-frame-pointer \
               -I../DaedalusLink/Source/DaedalusLink/Public "${name}_core_test.cpp" -o "$RUNNER_TEMP/$name"
             "$RUNNER_TEMP/$name" "${name}_parity.txt"
