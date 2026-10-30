@@ -1372,7 +1372,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -17.5,
+            -18.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1386,7 +1386,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -15.0,
+            -16.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1400,7 +1400,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -12.5,
+            -13.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1414,7 +1414,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -10.0,
+            -11.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1428,7 +1428,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -7.5,
+            -8.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1442,7 +1442,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -5.0,
+            -6.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1456,7 +1456,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1470,7 +1470,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            0.0,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1484,7 +1484,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            2.5,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1498,7 +1498,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            5.0,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1512,7 +1512,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            7.5,
+            6.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1526,7 +1526,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            10.0,
+            8.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1540,7 +1540,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            12.5,
+            11.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1554,7 +1554,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            15.0,
+            13.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1568,7 +1568,7 @@
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            17.5,
+            16.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1576,6 +1576,22 @@
           "difficulty": "normal",
           "module": "tools/minigames/spiritkite.py",
           "start": "spiritkite.start(630418058, difficulty)",
+          "requires": "no native host yet; rules run in the Python module"
+        },
+        {
+          "game": "fogbell",
+          "title": "Fogbell Ferry",
+          "host": "PythonMinigame",
+          "offset_m": [
+            0.0,
+            18.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 404876817,
+          "difficulty": "normal",
+          "module": "tools/minigames/fogbell.py",
+          "start": "fogbell.start(404876817, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]
