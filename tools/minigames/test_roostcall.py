@@ -86,3 +86,91 @@ class Rules(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Properties(unittest.TestCase):
+    """Iteration 1: invariants on every yard, every move, every seed (no rule change)."""
+    SEEDS = range(60)
+
+    def check(self, g, before):
+        s = g.size()
+        self.assertEqual(g.turns, before["turns"] - 1, "every action is one turn")
+        self.assertEqual(g.settled + len(g.birds), g.cfg["birds"], "birds are home or in the yard, never lost")
+        self.assertEqual(len({tuple(b) for b in g.birds}), len(g.birds), "no two birds share a cell")
+        self.assertNotIn(g.whistler, g.birds, "the whistler never shares a cell with a bird")
+        self.assertTrue(all(0 <= r < s and 0 <= c < s for r, c in g.birds + [g.whistler]))
+        self.assertTrue(all(not g.in_roost(r, c) for r, c in g.birds), "a bird in the roost has perched")
+        self.assertLessEqual(abs(g.whistler[0] - before["whistler"][0]) + abs(g.whistler[1] - before["whistler"][1]), 1)
+        self.assertEqual(g.over, not g.birds or g.turns <= 0, "the yard ends exactly when all are home or at dusk")
+        self.assertEqual(g.won, not g.birds)
+        if g.over:
+            self.assertEqual(g.score, gm.BIRD_SCORE * g.settled + (g.turns if g.won else 0))
+        else:
+            self.assertEqual(g.score, 0)
+
+    def legal_moves(self, g):
+        s = g.size()
+        return [n for n, (dr, dc) in gm.MOVES.items()
+                if 0 <= g.whistler[0] + dr < s and 0 <= g.whistler[1] + dc < s and [g.whistler[0] + dr, g.whistler[1] + dc] not in g.birds]
+
+    def snapshot(self, g):
+        return {"turns": g.turns, "whistler": list(g.whistler)}
+
+    def test_random_legal_moves_keep_invariants(self):
+        import random
+        for d in gm.DIFFICULTY:
+            for seed in self.SEEDS:
+                g = gm.start(seed, d)
+                rng = random.Random(seed * 17 + 3)
+                while not g.over:
+                    before = self.snapshot(g)
+                    g.step(rng.choice(self.legal_moves(g)))
+                    self.check(g, before)
+
+    def test_demo_moves_keep_invariants_and_are_legal(self):
+        for d in gm.DIFFICULTY:
+            for seed in self.SEEDS:
+                g = gm.start(seed, d)
+                while not g.over:
+                    before = self.snapshot(g)
+                    a = g.demo_action()
+                    self.assertIn(a, self.legal_moves(g))
+                    g.step(a)
+                    self.check(g, before)
+
+    def test_birds_never_step_closer(self):
+        for seed in self.SEEDS:
+            g = gm.start(seed, "hard")
+            while not g.over:
+                a = g.demo_action()
+                dr, dc = gm.MOVES[a]
+                w = [g.whistler[0] + dr, g.whistler[1] + dc]
+                before = {tuple(b): max(abs(b[0] - w[0]), abs(b[1] - w[1])) for b in g.birds}
+                moved_from = {}
+                for i, b in enumerate(g.birds):
+                    to = g.flee_step(i, w)
+                    if to is not None:
+                        moved_from[tuple(to)] = tuple(b)
+                g.step(a)
+                for b in g.birds:
+                    src = moved_from.get(tuple(b))
+                    if src is not None:
+                        self.assertGreater(max(abs(b[0] - w[0]), abs(b[1] - w[1])) * 10 + abs(b[0] - w[0]) + abs(b[1] - w[1]),
+                                           before[src] * 10 + abs(src[0] - w[0]) + abs(src[1] - w[1]), "a fleeing bird ends strictly farther")
+
+
+class Balance(unittest.TestCase):
+    """Iteration 3: the greedy watcher's win rate per difficulty is pinned to a band."""
+    BANDS = {"easy": (0.65, 0.92), "normal": (0.55, 0.88), "hard": (0.55, 0.88)}
+
+    def test_greedy_win_rate_bands(self):
+        import io
+        for d, (lo, hi) in self.BANDS.items():
+            wins = sum(gm.demo(s, d, io.StringIO()).won for s in range(100))
+            self.assertTrue(lo <= wins / 100 <= hi, f"{d}: greedy wins {wins}/100, band {lo}-{hi}")
+
+    def test_yards_are_not_trivial(self):
+        import io
+        for d in gm.DIFFICULTY:
+            used = [gm.DIFFICULTY[d]["turns"] - gm.demo(s, d, io.StringIO()).turns for s in range(100)]
+            self.assertGreaterEqual(sum(used) / 100, 10, f"{d}: average yard too short")
