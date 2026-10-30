@@ -1,4 +1,5 @@
 """Tests for tools/minigames/glowmoss.py (Glowmoss Delve)."""
+import json
 import pathlib
 import sys
 import unittest
@@ -129,6 +130,53 @@ class Rules(unittest.TestCase):
             gm.Game.parse("dig x")
         with self.assertRaisesRegex(ValueError, "use dig"):
             gm.Game.parse("dig")
+
+
+    def test_save_carries_rules_version_and_is_validated(self):
+        g = gm.start(2, "hard")
+        g.step(g.demo_action())
+        st = g.to_state()
+        self.assertEqual(st["rules"], gm.RULES_VERSION)
+        self.assertEqual(gm.Game.from_state(json.loads(json.dumps(st))).status(), g.status())
+        breakages = {
+            "rules version": lambda d: d.update(rules=1),
+            "unknown difficulty": lambda d: d.update(difficulty="mythic"),
+            "grid 'gems'": lambda d: d["gems"].pop(),
+            "grid 'dark'": lambda d: d["dark"][0].__setitem__(0, 7),
+            "grid 'unstable'": lambda d: d.update(unstable="none"),
+            "outside the shaft": lambda d: d.update(col=99),
+            "lamp": lambda d: d.update(light=999),
+            "path": lambda d: d.update(path=[0, 0, 0, 0, 0]),
+        }
+        for text, breakit in breakages.items():
+            bad = json.loads(json.dumps(st))
+            breakit(bad)
+            with self.assertRaises(ValueError) as e:
+                gm.Game.from_state(bad)
+            self.assertIn(text.split()[-1].strip("'"), str(e.exception), text)
+
+    def test_render_shows_lamp_legend_and_reach(self):
+        g = gm.start(3)
+        text = g.render()
+        self.assertIn("GLOW-N-3", text)
+        self.assertIn("lamp [############]", text)
+        self.assertIn("legend:", text)
+        self.assertEqual(text.splitlines()[4].count("v"), len(gm.dig_cols(g.col, g.cfg["cols"])))
+        g = gm.demo(5, "easy")
+        self.assertIn("WON (perfect delve)", g.render())
+        g = gm.start(4)
+        g.step(("climb", 0))
+        self.assertIn("short of the target", g.render())
+
+    def test_tutorial_help_and_hint_commands(self):
+        self.assertIn("how to play", gm.TUTORIAL)
+        with self.assertRaisesRegex(ValueError, "how to play"):
+            gm.Game.parse("help")
+        g = gm.start(1)
+        before = g.status()
+        self.assertEqual(g.step(gm.Game.parse("hint")), "hint: dig %d" % g.plan[0])
+        self.assertEqual(g.status(), before)
+        self.assertEqual(gm.main(["--tutorial"]), 0)
 
 
 if __name__ == "__main__":
