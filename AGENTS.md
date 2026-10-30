@@ -14,6 +14,26 @@ minimal reversible changes. Preserve working behavior and data; disclose
 unavoidable tradeoffs. Use focused checks appropriate to changed logic and
 actual production blockers.
 
+## Craft: beautiful code is part of done
+
+Verified is the floor, not the finish. Before a PR is opened, and again before it
+is merged, read the diff as a reviewer who did not write it and make it beautiful:
+
+- One idea per line. Split packed statements; name a value the moment it is used
+  twice or means something (`AltarSlots`, not `3`; `SourceKey::Space`, not `7`).
+- Pull repeated shapes into a shared helper with its own test instead of a
+  third hand-rolled copy (for Unreal cabinets: `DaedalusDesktopSaveText.h` for
+  save text, `EdgeLatch` for held buttons, `SourceKey` / `PadButton` for input).
+- A function does what its name says and nothing else; a comment explains why,
+  never what the code already says. Delete dead code, stale comments and
+  no-op branches on sight.
+- Keep the file's existing convention (indent, brace and naming style) rather
+  than introducing a second one; the native cores are tab/Allman, the desktop
+  cabinets are four-space K&R, both PascalCase.
+- The cleanup is its own commit or PR with no behavior change, and the existing
+  tests and parity fixtures are the proof that nothing moved. Throughput never
+  excuses leaving the beauty pass for later: schedule it before the next feature.
+
 ## UI design
 
 Prioritize clear hierarchy, layout and meaningful primary labels. Remove

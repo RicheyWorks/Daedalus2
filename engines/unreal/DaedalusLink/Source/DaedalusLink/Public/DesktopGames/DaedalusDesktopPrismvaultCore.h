@@ -1,160 +1,329 @@
 // SPDX-License-Identifier: MIT
+// Prismvault Weigh (Prismheart cabinet): the ADaedalusDesktopArcade host for DaedalusPrismvaultCore.h, a port of
+// tools/minigames/prismvault.py (prism-shard-dev, the rules authority). CPython-compatible seeding, so
+// StartGame("prismvault", seed) hides the same hollow shard as prismvault.start(seed, difficulty).
+//
+//   Left/Right or stick   pick a shard
+//   pad A / J             cycle it: none -> left pan -> right pan -> none
+//   pad X / Space         weigh the pans (equal, non-empty)
+//   pad Y / Shift         name the cursor shard
+//   pad B / K             clear both pans
+//   R / pad Start         restart a finished vault
+//   option 0 Weigh; option 1 Guide practice highlights the pans demo_action would load
 #pragma once
 #include "DaedalusDesktopGameTypes.h"
+#include "DaedalusDesktopSaveText.h"
 #include "DaedalusPrismvaultCore.h"
-#include <cerrno>
-#include <cstdlib>
-#include <sstream>
 #include <string>
 #include <vector>
 
 namespace daedalus { namespace desktop {
-// Prismvault Weigh (Prismheart cabinet): the ADaedalusDesktopArcade host for DaedalusPrismvaultCore.h, a port of
-// tools/minigames/prismvault.py (prism-shard-dev, the rules authority). CPython-compatible seeding, so
-// StartGame("prismvault", seed) hides the same hollow shard as prismvault.start(seed, difficulty). Left/Right or
-// stick pick a shard; pad A / J cycles it none -> left pan -> right pan -> none; pad X / Space weighs the pans
-// (equal, non-empty); pad Y / Shift names the cursor shard; pad B / K clears both pans. R or pad Start restarts a
-// finished vault. Option 0 Weigh; option 1 Guide practice loads the pans demo_action would use.
-class PrismvaultGame final : public Game {
-    prismvault::Game Core;
-    std::uint32_t SessionSeed=730;
-    int Option=0;
-    int Cursor=0;
-    std::vector<int> Pan;    // per shard: 0 none, 1 left, 2 right
-    char LastResult='?';
-    int LastGained=0;
-    bool WasPrev=false, WasNext=false;
 
-    void Deal() { Core.Start(SessionSeed,CabinetDifficulty()); Cursor=0; Pan.assign(static_cast<size_t>(Core.Shards()),0); LastResult='?'; LastGained=0; WasPrev=WasNext=false; }
-    static bool GoPrev(const Input& I) { return I.Left||I.Up||I.PadLeft||I.PadUp||I.AxisX<-0.4||I.AxisY<-0.4; }
-    static bool GoNext(const Input& I) { return I.Right||I.Down||I.PadRight||I.PadDown||I.AxisX>0.4||I.AxisY>0.4; }
-    void Move(int Dir) { const int N=Core.Shards(); if(N<=0) return; Cursor=((Cursor+Dir)%N+N)%N; }
-    static bool ParseLL(const std::string& S,long long& Out) {
-        if(S.empty()) return false;
-        char* End=nullptr;
-        errno=0;
-        const long long V=std::strtoll(S.c_str(),&End,10);
-        if(End==S.c_str()||*End!='\0'||errno==ERANGE) return false;
-        Out=V;
-        return true;
+class PrismvaultGame final : public Game {
+    enum PanSide : int { NoPan = 0, LeftPan = 1, RightPan = 2 };
+
+    prismvault::Game Core;
+    std::uint32_t SessionSeed = 730;
+    int Option = 0;
+    int Cursor = 0;
+    std::vector<int> PanOfShard;   // PanSide per shard index
+    char LastResult = '?';         // '<', '>', '=' after a weighing; '?' until then
+    int LastGained = 0;
+    EdgeLatch PrevEdge, NextEdge;
+
+    static constexpr int MaxScore = 1000;
+
+    void Deal() {
+        Core.Start(SessionSeed, CabinetDifficulty());
+        ResetTable();
     }
-    std::vector<int> PanList(int Which) const { std::vector<int> V; for(int I=0;I<static_cast<int>(Pan.size());++I) if(Pan[static_cast<size_t>(I)]==Which) V.push_back(I); return V; }
+    void ResetTable() {
+        Cursor = 0;
+        PanOfShard.assign(static_cast<size_t>(Core.Shards()), NoPan);
+        LastResult = '?';
+        LastGained = 0;
+        PrevEdge.Clear();
+        NextEdge.Clear();
+    }
+    static bool GoPrev(const Input& I) { return I.Left || I.Up || I.PadLeft || I.PadUp || I.AxisX < -0.4 || I.AxisY < -0.4; }
+    static bool GoNext(const Input& I) { return I.Right || I.Down || I.PadRight || I.PadDown || I.AxisX > 0.4 || I.AxisY > 0.4; }
+    void Move(int Direction) {
+        const int N = Core.Shards();
+        if(N <= 0) return;
+        Cursor = ((Cursor + Direction) % N + N) % N;
+    }
+    std::vector<int> ShardsOn(PanSide Which) const {
+        std::vector<int> Shards;
+        for(int I = 0; I < static_cast<int>(PanOfShard.size()); ++I) {
+            if(PanOfShard[static_cast<size_t>(I)] == Which) Shards.push_back(I);
+        }
+        return Shards;
+    }
+    static bool Contains(const std::vector<int>& List, int Value) {
+        for(int X : List) if(X == Value) return true;
+        return false;
+    }
+    /** Replays one saved "left:right:result" row against a fresh core; false when it does not reproduce. */
+    static bool ReplayRow(prismvault::Game& Fresh, const std::string& Row) {
+        const std::vector<std::string> Parts = SplitText(Row, ':');
+        if(Parts.size() != 3 || Parts[2].size() != 1) return false;
+        std::vector<int> Left, Right;
+        for(const std::string& Token : SplitText(Parts[0], ',')) {
+            long long Value = 0;
+            if(!ParseInteger(Token, Value)) return false;
+            Left.push_back(static_cast<int>(Value));
+        }
+        for(const std::string& Token : SplitText(Parts[1], ',')) {
+            long long Value = 0;
+            if(!ParseInteger(Token, Value)) return false;
+            Right.push_back(static_cast<int>(Value));
+        }
+        char Result = '?';
+        return Fresh.Weigh(Left, Right, Result) == prismvault::Game::Act::Ok && Result == Parts[2][0];
+    }
+
 public:
     const prismvault::Game& CoreState() const { return Core; }
     int CursorShard() const { return Cursor; }
-    int PanOf(int Shard) const { return Shard>=0 && Shard<static_cast<int>(Pan.size()) ? Pan[static_cast<size_t>(Shard)] : 0; }
+    int PanOf(int Shard) const {
+        const bool InRange = Shard >= 0 && Shard < static_cast<int>(PanOfShard.size());
+        return InRange ? PanOfShard[static_cast<size_t>(Shard)] : NoPan;
+    }
     char LastWeighResult() const { return LastResult; }
     int LastGain() const { return LastGained; }
 
-    void Reset(std::uint32_t Seed) override { SessionSeed=Seed; Deal(); }
-    bool SetCabinetDifficulty(const std::string& Name) override { if(!Game::SetCabinetDifficulty(Name)) return false; Deal(); return true; }
-    bool SetOption(int Value,std::uint32_t Seed) override { if(Value<0 || Value>1) return false; Option=Value; SessionSeed=Seed; Deal(); return true; }
+    void Reset(std::uint32_t Seed) override {
+        SessionSeed = Seed;
+        Deal();
+    }
+    bool SetCabinetDifficulty(const std::string& Name) override {
+        if(!Game::SetCabinetDifficulty(Name)) return false;
+        Deal();
+        return true;
+    }
+    bool SetOption(int Value, std::uint32_t Seed) override {
+        if(Value < 0 || Value > 1) return false;
+        Option = Value;
+        SessionSeed = Seed;
+        Deal();
+        return true;
+    }
     int GetOption() const override { return Option; }
-    void CyclePan() { if(Core.Over) return; int& P=Pan[static_cast<size_t>(Cursor)]; P=(P+1)%3; }
-    void ClearPans() { for(int& P:Pan) P=0; }
+
+    void CyclePan() {
+        if(Core.Over) return;
+        int& Pan = PanOfShard[static_cast<size_t>(Cursor)];
+        Pan = (Pan + 1) % 3;
+    }
+    void ClearPans() {
+        for(int& Pan : PanOfShard) Pan = NoPan;
+    }
     bool WeighPans() {
         if(Core.Over) return false;
-        char R='?';
-        if(Core.Weigh(PanList(1),PanList(2),R)!=prismvault::Game::Act::Ok) return false;
-        LastResult=R; ClearPans(); return true;
+        char Result = '?';
+        if(Core.Weigh(ShardsOn(LeftPan), ShardsOn(RightPan), Result) != prismvault::Game::Act::Ok) return false;
+        LastResult = Result;
+        ClearPans();
+        return true;
     }
     bool NameCursor() {
         if(Core.Over) return false;
-        int Gained=0;
-        if(Core.Name(Cursor,Gained)!=prismvault::Game::Act::Ok) return false;
-        LastGained=Gained; return true;
+        int Gained = 0;
+        if(Core.Name(Cursor, Gained) != prismvault::Game::Act::Ok) return false;
+        LastGained = Gained;
+        return true;
     }
+
     bool SourceKeyDown(int Key) override {
-        if(Core.Over) { if(Key==5||Key==6||Key==7||Key==8) { Deal(); return true; } return false; }
-        if(Key==0||Key==2) Move(-1); else if(Key==1||Key==3) Move(1);
-        else if(Key==5||Key==6) CyclePan(); else if(Key==4) ClearPans(); else if(Key==7) WeighPans();
+        if(Core.Over) {
+            if(!SourceKey::IsRestart(Key)) return false;
+            Deal();
+            return true;
+        }
+        switch(Key) {
+            case SourceKey::Up:
+            case SourceKey::Left:  Move(-1); break;
+            case SourceKey::Down:
+            case SourceKey::Right: Move(1); break;
+            case SourceKey::A:
+            case SourceKey::Enter: CyclePan(); break;
+            case SourceKey::B:     ClearPans(); break;
+            case SourceKey::Space: WeighPans(); break;
+            default: break;
+        }
         return false;
     }
     bool SourceControllerButton(int Button) override {
-        if(Button==0 && !Core.Over) { CyclePan(); return true; }
-        if(Button==1 && Core.Over) { Deal(); return true; }
+        if(Button == PadButton::A && !Core.Over) {
+            CyclePan();
+            return true;
+        }
+        if(Button == PadButton::Start && Core.Over) {
+            Deal();
+            return true;
+        }
         return false;
     }
     void Step(const Input& I) override {
-        if(Core.Over) { if(I.FirePressed||I.JumpPressed||I.ActionPressed||I.DashPressed) Deal(); return; }
-        const bool P=GoPrev(I), N=GoNext(I);
-        if(P && !WasPrev) Move(-1); else if(N && !WasNext) Move(1);
-        WasPrev=P; WasNext=N;
-        if(I.FirePressed) CyclePan(); else if(I.JumpPressed) ClearPans(); else if(I.ActionPressed) WeighPans(); else if(I.DashPressed) NameCursor();
-    }
-    std::string SaveState() const override {
-        std::ostringstream O;
-        O<<"prismvault v1 d="<<CabinetDifficulty()<<" seed="<<SessionSeed<<" weighings="<<Core.Weighings<<" score="<<Core.Score<<" over="<<(Core.Over?1:0)<<" won="<<(Core.Won?1:0)
-         <<" cursor="<<Cursor<<" candidates="<<(Core.Candidates.empty()?"-":Core.CandidatesString())<<" log=";
-        for(size_t I=0;I<Core.Log.size();++I) { if(I) O<<';'; O<<prismvault::Game::ListString(Core.Log[I].Left)<<':'<<prismvault::Game::ListString(Core.Log[I].Right)<<':'<<Core.Log[I].Result; }
-        return O.str();
-    }
-    bool RestoreState(const std::string& Text,std::uint32_t) override {
-        if(Text.rfind("prismvault v1 ",0)!=0) return false;
-        auto Val=[&](const std::string& Key)->std::string { const std::string N=" "+Key+"="; const size_t P=Text.find(N); if(P==std::string::npos) return ""; const size_t S=P+N.size(), E=Text.find(' ',S); return Text.substr(S,E==std::string::npos?std::string::npos:E-S); };
-        auto Split=[](const std::string& S,char Sep) { std::vector<std::string> Out; std::string Tok; for(char Ch:S) { if(Ch==Sep) { Out.push_back(Tok); Tok.clear(); } else Tok.push_back(Ch); } if(!S.empty()) Out.push_back(Tok); return Out; };
-        long long Seed=0,W=0,Score=0,Over=0,Won=0,Cur=0;
-        if(!ParseLL(Val("seed"),Seed)||!ParseLL(Val("weighings"),W)||!ParseLL(Val("score"),Score)||!ParseLL(Val("over"),Over)||!ParseLL(Val("won"),Won)||!ParseLL(Val("cursor"),Cur)) return false;
-        const std::string Diff=Val("d"); const prismvault::Difficulty* D=prismvault::FindDifficulty(Diff);
-        if(!D||Seed<0||Seed>0xffffffffLL||W<0||W>D->Weighings||Score<0||Score>1000||(Over!=0&&Over!=1)||(Won!=0&&Won!=1)||Cur<0||Cur>=D->Shards) return false;
-        // Regenerate the hollow shard from the seed, then replay the saved log so candidates are derived, not trusted.
-        prismvault::Game Fresh; if(!Fresh.Start(static_cast<std::uint32_t>(Seed),Diff)) return false;
-        const std::string LogS=Val("log");
-        if(!LogS.empty()) for(const std::string& Row:Split(LogS,';')) {
-            const std::vector<std::string> P=Split(Row,':'); if(P.size()!=3||P[2].size()!=1) return false;
-            std::vector<int> L,R;
-            for(const std::string& X:Split(P[0],',')) { long long V=0; if(!ParseLL(X,V)) return false; L.push_back(static_cast<int>(V)); }
-            for(const std::string& X:Split(P[1],',')) { long long V=0; if(!ParseLL(X,V)) return false; R.push_back(static_cast<int>(V)); }
-            char Res='?'; if(Fresh.Weigh(L,R,Res)!=prismvault::Game::Act::Ok||Res!=P[2][0]) return false;
+        if(Core.Over) {
+            if(I.FirePressed || I.JumpPressed || I.ActionPressed || I.DashPressed) Deal();
+            return;
         }
-        if(Fresh.Weighings!=static_cast<int>(W)) return false;
-        const std::string CandS=Val("candidates"); if((CandS=="-"?std::string():CandS)!=Fresh.CandidatesString()) return false;
-        Fresh.Score=static_cast<int>(Score); Fresh.Over=Over!=0; Fresh.Won=Won!=0;
-        Game::SetCabinetDifficulty(Diff);
-        SessionSeed=static_cast<std::uint32_t>(Seed); Core=Fresh; Cursor=static_cast<int>(Cur); Pan.assign(static_cast<size_t>(Core.Shards()),0); LastResult='?'; LastGained=0; WasPrev=WasNext=false;
+        const bool Prev = PrevEdge.Rose(GoPrev(I));
+        const bool Next = NextEdge.Rose(GoNext(I));
+        if(Prev) Move(-1);
+        else if(Next) Move(1);
+        if(I.FirePressed) CyclePan();
+        else if(I.JumpPressed) ClearPans();
+        else if(I.ActionPressed) WeighPans();
+        else if(I.DashPressed) NameCursor();
+    }
+
+    std::string SaveState() const override {
+        std::string Log;
+        for(size_t I = 0; I < Core.Log.size(); ++I) {
+            if(I) Log.push_back(';');
+            Log += prismvault::Game::ListString(Core.Log[I].Left) + ':' + prismvault::Game::ListString(Core.Log[I].Right) + ':' + Core.Log[I].Result;
+        }
+        return SaveWriter(prismvault::GameId())
+            .Field("d", CabinetDifficulty())
+            .Field("seed", SessionSeed)
+            .Field("weighings", Core.Weighings)
+            .Field("score", Core.Score)
+            .Flag("over", Core.Over)
+            .Flag("won", Core.Won)
+            .Field("cursor", Cursor)
+            .Field("candidates", Core.Candidates.empty() ? std::string("-") : Core.CandidatesString())
+            .Field("log", Log)
+            .Text();
+    }
+    // The hollow shard is regenerated from the seed and the saved weighing log is replayed against it, so the
+    // candidate list is derived rather than trusted.
+    bool RestoreState(const std::string& Text, std::uint32_t) override {
+        const SaveFields Fields(Text, prismvault::GameId());
+        if(!Fields.IsValid()) return false;
+        const std::string DifficultyName = Fields.Str("d");
+        const prismvault::Difficulty* Diff = prismvault::FindDifficulty(DifficultyName);
+        if(!Diff) return false;
+
+        std::uint32_t Seed = 0;
+        int Weighings = 0, Score = 0, SavedCursor = 0;
+        bool Over = false, Won = false;
+        if(!Fields.Seed("seed", Seed)) return false;
+        if(!Fields.Int("weighings", 0, Diff->Weighings, Weighings)) return false;
+        if(!Fields.Int("score", 0, MaxScore, Score)) return false;
+        if(!Fields.Flag("over", Over) || !Fields.Flag("won", Won)) return false;
+        if(!Fields.Int("cursor", 0, Diff->Shards - 1, SavedCursor)) return false;
+
+        prismvault::Game Fresh;
+        if(!Fresh.Start(Seed, DifficultyName)) return false;
+        const std::string Log = Fields.Str("log");
+        if(!Log.empty()) {
+            for(const std::string& Row : SplitText(Log, ';')) {
+                if(!ReplayRow(Fresh, Row)) return false;
+            }
+        }
+        if(Fresh.Weighings != Weighings) return false;
+        const std::string SavedCandidates = Fields.Str("candidates");
+        if((SavedCandidates == "-" ? std::string() : SavedCandidates) != Fresh.CandidatesString()) return false;
+
+        Fresh.Score = Score;
+        Fresh.Over = Over;
+        Fresh.Won = Won;
+        Game::SetCabinetDifficulty(DifficultyName);
+        SessionSeed = Seed;
+        Core = Fresh;
+        ResetTable();
+        Cursor = SavedCursor;
         return true;
     }
     std::uint32_t SeedAfterRestore(std::uint32_t) const override { return SessionSeed; }
+
     std::string HintLine() const {
-        if(Core.Over) return Core.Won?"HINT You found the hollow shard. Pad A or R seals a new vault.":"HINT Wrong shard. Pad A or R seals a new vault.";
-        if(Option==1) return "HINT Practice: the blue pans show a balanced split.";
+        if(Core.Over) {
+            return Core.Won ? "HINT You found the hollow shard. Pad A or R seals a new vault."
+                            : "HINT Wrong shard. Pad A or R seals a new vault.";
+        }
+        if(Option == 1) return "HINT Practice: the blue pans show a balanced split.";
         return "HINT Split the suspects in three; the lighter pan holds the hollow one.";
     }
-    std::string ActionCue() const { if(Core.Over) return "CUE Retry"; if(Core.Candidates.size()==1) return "CUE Name it"; if(Core.Weighings==0) return "CUE Name a shard"; return "CUE Load the pans"; }
-    std::string HowToLine() const override { return "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out."; }
+    std::string ActionCue() const {
+        if(Core.Over) return "CUE Retry";
+        if(Core.Candidates.size() == 1) return "CUE Name it";
+        if(Core.Weighings == 0) return "CUE Name a shard";
+        return "CUE Load the pans";
+    }
+    std::string HowToLine() const override {
+        return "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out.";
+    }
     std::string KeyHint() const override { return "KEYS Left or Right picks a shard; A pans it, X weighs, Y names."; }
-    std::string ContrastMark() const override { return Core.Over?"MARK WAIT":"MARK ACT"; }
+    std::string ContrastMark() const override { return Core.Over ? "MARK WAIT" : "MARK ACT"; }
+
     void Render(Frame& F) const override {
-        F.Clear(800,600,{14,16,24,255});
-        F.AddText(28,20,std::string(Option==1?"PRISMVAULT GUIDE  [":"PRISMVAULT WEIGH  [")+CabinetDifficulty()+"]",{226,236,255,255},26);
-        F.AddText(28,56,"SCORE: "+std::to_string(Core.Score)+"   WEIGHINGS LEFT: "+std::to_string(Core.Weighings)+"   SUSPECTS: "+std::to_string(Core.Candidates.size()),White,18);
-        const int N=Core.Shards(); if(N<=0) return;
-        std::vector<int> GuideL,GuideR;
-        if(Option==1 && !Core.Over) { const prismvault::Game::Demo Dm=Core.DemoAction(); if(!Dm.IsName) { GuideL=Dm.Left; GuideR=Dm.Right; } else GuideL.push_back(Dm.Shard); }
-        const int Cols=N<=12?N:9; const double Cell=N<=12?48:40, Left=60, Top=110;
-        for(int I=0;I<N;++I) {
-            const double X=Left+(I%Cols)*Cell, Y=Top+(I/Cols)*Cell;
-            bool Suspect=false; for(int C:Core.Candidates) if(C==I) Suspect=true;
-            const int P=Pan[static_cast<size_t>(I)];
-            F.AddCircle(X+Cell/2,Y+Cell/2,Cell*0.36,P==1?Color{255,180,90,255}:P==2?Color{90,180,255,255}:Suspect?Color{200,200,220,255}:Color{50,50,64,255});
-            bool GL=false,GR=false; for(int G:GuideL) if(G==I) GL=true; for(int G:GuideR) if(G==I) GR=true;
-            if(GL||GR) F.AddCircle(X+Cell/2,Y+Cell/2,Cell*0.44,{120,225,255,255});
-            if(I==Cursor && !Core.Over) F.AddRect(X+4,Y+Cell-6,Cell-8,4,{255,236,180,255});
-            F.AddText(X+Cell/2-6,Y+Cell/2-8,std::to_string(I),Black,12);
+        const Color Ice{226, 236, 255, 255}, Gold{255, 236, 180, 255}, Sky{120, 225, 255, 255};
+        const Color Amber{255, 180, 90, 255}, Azure{90, 180, 255, 255}, Suspect{200, 200, 220, 255}, Cleared{50, 50, 64, 255};
+
+        F.Clear(800, 600, {14, 16, 24, 255});
+        F.AddText(28, 20, std::string(Option == 1 ? "PRISMVAULT GUIDE  [" : "PRISMVAULT WEIGH  [") + CabinetDifficulty() + "]", Ice, 26);
+        F.AddText(28, 56, "SCORE: " + std::to_string(Core.Score) + "   WEIGHINGS LEFT: " + std::to_string(Core.Weighings) + "   SUSPECTS: " + std::to_string(Core.Candidates.size()), White, 18);
+        const int N = Core.Shards();
+        if(N <= 0) return;
+
+        std::vector<int> GuideLeft, GuideRight;
+        if(Option == 1 && !Core.Over) {
+            const prismvault::Game::Demo Demo = Core.DemoAction();
+            if(Demo.IsName) GuideLeft.push_back(Demo.Shard);
+            else {
+                GuideLeft = Demo.Left;
+                GuideRight = Demo.Right;
+            }
         }
-        F.AddText(520,120,"LOG",{226,236,255,255},16);
-        for(size_t I=0;I<Core.Log.size() && I<3;++I) F.AddText(520,146+static_cast<double>(I)*22,prismvault::Game::ListString(Core.Log[I].Left)+" "+std::string(1,Core.Log[I].Result)+" "+prismvault::Game::ListString(Core.Log[I].Right),White,14);
-        if(LastResult!='?' && !Core.Over) F.AddText(520,240,std::string("BALANCE: ")+(LastResult=='<'?"left is lighter":LastResult=='>'?"right is lighter":"balanced"),{255,236,180,255},16);
-        if(LastGained>0 && !Core.Over) F.AddText(520,270,"+"+std::to_string(LastGained),{255,236,180,255},24);
-        if(Core.Over) F.AddText(60,400,Core.Won?"WON: SHARD "+std::to_string(Core.Hollow)+" WAS HOLLOW":"LOST: SHARD "+std::to_string(Core.Hollow)+" WAS THE HOLLOW ONE",{255,236,180,255},22);
-        F.AddText(28,548,HintLine(),{255,236,180,255},16);
-        F.AddText(28,528,HowToLine(),{255,236,180,255},14);
-        DrawAccess(F,300,500,KeyHint(),ContrastMark());
-        F.AddText(600,548,ActionCue(),{120,225,255,255},16);
+
+        // Shard grid: pan colour first, then suspect/cleared; a guide ring sits behind a guided shard
+        const int Columns = N <= 12 ? N : 9;
+        const double Cell = N <= 12 ? 48 : 40, GridLeft = 60, GridTop = 110;
+        for(int I = 0; I < N; ++I) {
+            const double X = GridLeft + (I % Columns) * Cell;
+            const double Y = GridTop + (I / Columns) * Cell;
+            const double CX = X + Cell / 2, CY = Y + Cell / 2;
+            const int Pan = PanOfShard[static_cast<size_t>(I)];
+            Color Fill = Contains(Core.Candidates, I) ? Suspect : Cleared;
+            if(Pan == LeftPan) Fill = Amber;
+            else if(Pan == RightPan) Fill = Azure;
+            F.AddCircle(CX, CY, Cell * 0.36, Fill);
+            if(Contains(GuideLeft, I) || Contains(GuideRight, I)) F.AddCircle(CX, CY, Cell * 0.44, Sky);
+            if(I == Cursor && !Core.Over) F.AddRect(X + 4, Y + Cell - 6, Cell - 8, 4, Gold);
+            F.AddText(CX - 6, CY - 8, std::to_string(I), Black, 12);
+        }
+
+        // Weighing log and the last balance reading
+        F.AddText(520, 120, "LOG", Ice, 16);
+        for(size_t I = 0; I < Core.Log.size() && I < 3; ++I) {
+            const prismvault::Weighing& W = Core.Log[I];
+            F.AddText(520, 146 + static_cast<double>(I) * 22, prismvault::Game::ListString(W.Left) + " " + std::string(1, W.Result) + " " + prismvault::Game::ListString(W.Right), White, 14);
+        }
+        if(LastResult != '?' && !Core.Over) {
+            const char* Reading = LastResult == '<' ? "left is lighter" : LastResult == '>' ? "right is lighter" : "balanced";
+            F.AddText(520, 240, std::string("BALANCE: ") + Reading, Gold, 16);
+        }
+        if(LastGained > 0 && !Core.Over) F.AddText(520, 270, "+" + std::to_string(LastGained), Gold, 24);
+        if(Core.Over) {
+            const std::string Hollow = std::to_string(Core.Hollow);
+            F.AddText(60, 400, Core.Won ? "WON: SHARD " + Hollow + " WAS HOLLOW" : "LOST: SHARD " + Hollow + " WAS THE HOLLOW ONE", Gold, 22);
+        }
+
+        F.AddText(28, 528, HowToLine(), Gold, 14);
+        F.AddText(28, 548, HintLine(), Gold, 16);
+        DrawAccess(F, 300, 500, KeyHint(), ContrastMark());
+        F.AddText(600, 548, ActionCue(), Sky, 16);
     }
     Status GetStatus() const override {
-        if(Core.Over) return {Core.Score,0,true,Core.Won,(Core.Won?"The hollow shard was found; ":"Wrong shard; ")+std::string("pad A or R seals a new vault; weighings left ")+std::to_string(Core.Weighings)};
-        return {Core.Score,1,false,false,"Weighings "+std::to_string(Core.Weighings)+"; suspects "+std::to_string(Core.Candidates.size())};
+        if(Core.Over) {
+            const std::string Outcome = Core.Won ? "The hollow shard was found; " : "Wrong shard; ";
+            return {Core.Score, 0, true, Core.Won, Outcome + "pad A or R seals a new vault; weighings left " + std::to_string(Core.Weighings)};
+        }
+        return {Core.Score, 1, false, false, "Weighings " + std::to_string(Core.Weighings) + "; suspects " + std::to_string(Core.Candidates.size())};
     }
 };
+
 }} // daedalus::desktop
