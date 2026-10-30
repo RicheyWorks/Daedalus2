@@ -999,6 +999,23 @@
       "tests": [
         "test_glowmoss.py"
       ]
+    },
+    {
+      "id": "fogbell",
+      "title": "Fogbell Ferry",
+      "summary": "steer a ferry over a tidal flat, collect lantern passengers from the docks, and make harbour before the tide takes your cell.",
+      "how_to_play": "HOW Move the ferry one cell a turn across the tidal flat, pick up the lantern passengers from their docks and reach the harbour before the rising tide floods your cell.",
+      "module": "tools/minigames/fogbell.py",
+      "start": "fogbell.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_fogbell.py"
+      ]
     }
   ]
 }
