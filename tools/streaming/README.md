@@ -192,3 +192,17 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Manifest Match (G556, disk-saver)
 
 `manifest_match.py` is a memory (Concentration) game over the world census: every island has an ISLAND card and a MANIFEST card (its G206 RAM cost), a seed deals up to 12 pairs face down, and each turn flips two cards (`--turns 1-2,3-4`, replayed so the log reveals the faces). Par is the perfect-memory turn count for that layout and `--auto` plays it. Verdict sharp/matched/unfinished. NPC Wharf Clerk Godfrey; hook `data/islands/disk-saver/manifest-match-v1.json`; doc `docs/islands/DISKSAVER-MANIFEST-MATCH.md`.
+
+## Twin Pilots (G557)
+
+`twin_pilots.py` is a cooperative two-boat round over the world census. Islands and seeded buoys
+are berths on a channel chart. Two pilot boats each move one channel per bell and together must
+call at every berth and return home. Par is an exact BFS over the joint state, checked against a
+split-and-tour brute-force oracle. `solo_bells` shows the single-boat trap. Verdicts are
+`in_step`, `late` and `adrift`. Hook: `data/islands/disk-saver/twin-pilots-v1.json`
+(Pilotmaster Cuthbert). Doc: `docs/islands/DISKSAVER-TWIN-PILOTS.md`. CI: `twin-pilots.yml`.
+
+```
+python tools/streaming/twin_pilots.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/twin_pilots_test.py
+```
