@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3).
+"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -10,6 +10,8 @@ DaedalusDiskSaver<Game>Core.h ports replay every line in disksaver_<game>_core_t
 Batch 1: G556 Manifest Match, G557 Twin Pilots, G558 Quayside Shove, G559 Sack Chute.
 Batch 2: G560 Seal Roll, G561 Channel Dash, G562 Boom Defence, G563 Salvage Sale.
 Batch 3: G564 Rope Run, G565 Belfry Changes, G566 Tram Shunt.
+Batch 4: G555 Watchfires, G554 Tide Lock, G553 Smugglers Island, G552 Harbour Cryptogram
+(the cryptogram's cipher, key and plain text and the smuggler's hidden island are written into the file).
 Cases cover the real tools/world_census fixtures (several seeds), synthetic censuses, and
 hand-laid edge layouts (unsolvable, stuck, disconnected) injected through the tool's own
 play() by swapping its layout function for one call.
@@ -31,6 +33,7 @@ sys.path.insert(0, HERE)
 import belfry_changes as bc  # noqa: E402
 import boom_defence as bd  # noqa: E402
 import census_budget as cb  # noqa: E402
+import harbour_cryptogram as hc  # noqa: E402
 import channel_dash as cd  # noqa: E402
 import manifest_match as mm  # noqa: E402
 import quayside_shove as qs  # noqa: E402
@@ -38,8 +41,11 @@ import rope_run as rr  # noqa: E402
 import sack_chute as sc  # noqa: E402
 import salvage_sale as ss  # noqa: E402
 import seal_roll as sr  # noqa: E402
+import smugglers_island as si  # noqa: E402
+import tide_lock as tl  # noqa: E402
 import tram_shunt as ts  # noqa: E402
 import twin_pilots as tp  # noqa: E402
+import watchfires as wf  # noqa: E402
 
 ROOT = cb.ROOT
 CORE_TEST = os.path.join(ROOT, "engines", "unreal", "core-test")
@@ -692,9 +698,206 @@ def ts_lines():
                     out.append(f"T {t or '-'} err {r}")
     return out
 
+# ---------------------------------------------------------------- G555 Watchfires
+WF_KINDS = [("no island", "unknown")]
+
+
+def wf_lines():
+    out = ["# disksaver watchfires parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    hl = lambda n: [f"h:{i}" for i in range(n)]  # noqa: E731
+    for k, h in {"hand_one": (hl(1), []), "hand_path5": (hl(5), [(i, i + 1) for i in range(4)]),
+                 "hand_star": (hl(7), [(0, i) for i in range(1, 7)]),
+                 "hand_isolated3": (hl(3), []),
+                 "hand_greedy_trap": (hl(6), [(0, 1), (0, 2), (0, 3), (1, 4), (2, 5), (3, 4), (4, 5)])}.items():
+        cases.append((k, SYN["syn5"], 0, h))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(wf, "chart", lambda d, s=0, h=hand: (list(h[0]), sorted(h[1]))) if hand else \
+            patched(wf, "FORMAT", wf.FORMAT)
+        with ctx:
+            labels, edges = wf.chart(doc, seed)
+            n = len(labels)
+            k, best = wf.par(n, edges)
+            g = wf.greedy(n, edges)
+            out.append(f"C {cname}")
+            out.append(f"L {lst(labels)} {lst(f'{a}-{b}' for a, b in edges)}")
+            out.append(f"P {k} {lst(best)} {lst(g)}")
+            bl = [labels[i] for i in best]
+            tries = [None, bl, [labels[i] for i in g], [], bl[:-1], bl + [labels[-1]], bl + bl[:1], list(labels),
+                     ["nowhere:9"], bl + ["nowhere:9"], labels[:1], list(reversed(labels))[:2]]
+            for t in tries:
+                ok, r = run(lambda m=t: wf.game(doc, seed, fires=m, auto=m is None), WF_KINDS)
+                name = "auto" if t is None else lst(t)
+                if ok:
+                    idx = {l: i for i, l in enumerate(labels)}
+                    out.append(f"T {name} ok {lst(idx[f] for f in r['fires'])} {lst(idx[f] for f in r['unlit'])} {r['verdict']}")
+                else:
+                    out.append(f"T {name} err {r}")
+    return out
+
+
+# ---------------------------------------------------------------- G554 Tide Lock
+TL_REFUSE = [("longer than the chamber", "long"), ("must be a positive integer", "param")]
+
+
+def tl_lines():
+    out = ["# disksaver tide_lock parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            q = tl.boats(doc, s)
+            big = max(b[1] for b in q)
+            for f, cyc in ((1, 30), (3, 7)):
+                cases.append((f"{cname}_seed{s}_x{f}_c{cyc}", doc, s, None, big * f, cyc))
+    hand = {"hand_one": [("h:0", 5, 0)], "hand_burst": [(f"h:{i}", 3, 0) for i in range(6)],
+            "hand_spread": [("h:0", 4, 0), ("h:1", 4, 40), ("h:2", 9, 41), ("h:3", 1, 90), ("h:4", 6, 91)],
+            "hand_tie": [("h:0", 2, 0), ("h:1", 2, 10), ("h:2", 2, 20), ("h:3", 2, 30)]}
+    for k, q in hand.items():
+        cases.append((k, SYN["syn5"], 0, q, 12, 10))
+    cases.append(("hand_too_long", SYN["syn5"], 0, hand["hand_spread"], 8, 10))
+    cases.append(("hand_bad_cycle", SYN["syn5"], 0, hand["hand_one"], 5, 0))
+    for cname, doc, seed, q, chamber, cyc in cases:
+        ctx = patched(tl, "boats", lambda d, s, h=q: list(h)) if q else patched(tl, "FORMAT", tl.FORMAT)
+        with ctx:
+            queue = tl.boats(doc, seed)
+            n = len(queue)
+            out.append(f"C {cname}")
+            out.append(f"L {chamber} {cyc} {lst(f'{b[1]}:{b[2]}' for b in queue)}")
+            ok, r = run(lambda: tl.puzzle(doc, seed, chamber, cyc), TL_REFUSE)
+            if not ok:
+                out.append(f"P err {r}")
+                continue
+            best = tl.puzzle(doc, seed, chamber, cyc, auto=True)["optimal_plan"]
+            out.append(f"P {r['optimal_wait']} {lst(best)} {lst(r['greedy_plan'])} {r['greedy_wait']}")
+            tries = [None, best, r["greedy_plan"], [n], [1] * n, best[:-1], best + [1], [0] + best, [-1, n + 1], [],
+                     [n + 1], [2] * (n // 2) + [1] * (n % 2), [1] * (n + 3)]
+            for t in tries:
+                p = tl.puzzle(doc, seed, chamber, cyc, plan=t, auto=t is None)
+                name = "auto" if t is None else lst(t)
+                if p["verdict"] == "jammed":
+                    pr = p["problem"]
+                    kind = "plan" if pr.startswith("plan must") else "group" + pr.split()[1]
+                    out.append(f"T {name} jam {kind}")
+                else:
+                    out.append(f"T {name} ok {p['wait']} {p['verdict']}")
+    return out
+
+
+# ---------------------------------------------------------------- G553 Smugglers Island
+SI_KINDS = [("give --auto", "mode"), ("accusation", "accuse"), ("unknown question", "question"), ("no island", "island")]
+
+
+def si_lines():
+    out = ["# disksaver smugglers_island parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+
+    def hs(rows):
+        return sorted(({"label": f"{w}:{s}", "world": w, "realm": r, "slot": s, "cargo": c} for w, r, s, c in rows),
+                      key=lambda t: t["label"])
+    for k, h in {"hand_one": (hs([("w", "none", 0, 0)]), 0),
+                 "hand_twins": (hs([("w", "none", 0, 5), ("w", "none", 1, 5)]), 1),
+                 "hand_realms": (hs([("a", "r1", 0, 0), ("a", "r1", 1, 3), ("b", "r2", 0, 3), ("c", "none", 2, 9),
+                                     ("c", "none", 4, 1)]), 3),
+                 "hand_wide": (hs([("z", "none", i, i % 3) for i in range(9)]), 8)}.items():
+        cases.append((k, SYN["syn5"], 0, h))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(si, "setup", lambda d, s, h=hand: (h[0], si.questions(h[0]), h[1])) if hand else \
+            patched(si, "FORMAT", si.FORMAT)
+        with ctx:
+            sus, qs, hidden = si.setup(doc, seed)
+            labels = [x["label"] for x in sus]
+            depth, _ = si.solver(qs)
+            out.append(f"C {cname}")
+            out.append(f"L {hidden} {lst('|'.join(str(x[f]) for f in ('label', 'world', 'realm', 'slot', 'cargo')) for x in sus)}")
+            out.append(f"P {depth(frozenset(range(len(sus))))} {lst(qs)}")
+            a = si.play(doc, seed, auto=True)
+            path = [x["question"] for x in a["asked"]]
+            wrong = labels[(hidden + 1) % len(labels)]
+            tries = [("auto", None, None), ("a", path, labels[hidden]), ("a", path, wrong), ("a", [], labels[hidden]),
+                     ("a", list(qs), labels[hidden]), ("a", path + path[:1], labels[hidden]),
+                     ("a", path[:-1], labels[hidden]), ("a", ["planet:x"], labels[hidden]),
+                     ("a", path, "nowhere:0"), ("a", path, None), ("mix", path, labels[hidden])]
+            for mode, asks, acc in tries:
+                ok, r = run(lambda m=mode, q=asks, c=acc: si.play(doc, seed, q, c, auto=m in ("auto", "mix")), SI_KINDS)
+                name = "auto -" if mode == "auto" else f"{lst(asks)} {acc or '-'}" + (" mix" if mode == "mix" else "")
+                if ok:
+                    log = lst(f"{x['question']}/{x['answer'][0]}/{x['suspects_left']}" for x in r["asked"])
+                    out.append(f"T {name} ok {log} {r['accused']} {lst(r['still_possible'])} {r['verdict']}")
+                else:
+                    out.append(f"T {name} err {r}")
+    return out
+
+
+# ---------------------------------------------------------------- G552 Harbour Cryptogram
+def hx(s):
+    return "x" + s.encode("utf-8").hex()
+
+
+def hc_hand(plain, shift, given):
+    key = {c: chr((ord(c) - 65 + shift) % 26 + 65) for c in hc.ALPHA}
+    cipher = hc.encode(plain, key)
+    used = sorted({ch for ch in plain if ch in hc.ALPHA})
+    freq = {}
+    for ch in cipher:
+        if ch in hc.ALPHA:
+            freq[ch] = freq.get(ch, 0) + 1
+    return {"seed": 0, "cipher": cipher, "plain": plain, "given": {key[p]: p for p in given},
+            "frequency": dict(sorted(freq.items(), key=lambda t: (-t[1], t[0]))), "key": {key[p]: p for p in used}}
+
+
+def hc_lines():
+    out = ["# disksaver harbour_cryptogram parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    for n in (0, 1, 7, 13, 19, 20, 21, 40, 99, 100, 101, 110, 999, 1000, 1234, 20261029):
+        out.append(f"N {n} {hc.number_words(n).replace(' ', '_')}")
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", hc.make(doc, s)))
+    cases.append(("hand_short", hc_hand("SEA STOP TEA", 1, "SE")))
+    cases.append(("hand_one_word", hc_hand("ARK", 25, "A")))
+    cases.append(("hand_numbers", hc_hand(hc.number_words(4321) + " ISLANDS", 13, "IN")))
+    for cname, p in cases:
+        plain, cipher = p["plain"], p["cipher"]
+        out.append(f"C {cname}")
+        pairs = lambda m: lst(f"{c}={v}" for c, v in sorted(m.items()))  # noqa: E731
+        out.append(f"L {cipher.replace(' ', '_')} {plain.replace(' ', '_')} {pairs(p['key'])} {pairs(p['given'])}")
+        board = "".join(p["given"].get(ch, "_") if ch in hc.ALPHA else "." for ch in cipher)
+        out.append(f"F {lst(f'{c}:{k}' for c, k in p['frequency'].items())} {board}")
+        half = plain[:len(plain) // 2]
+        guesses = [plain, "", plain.lower(), "Q" + plain[1:], half, plain + " EXTRA", plain.replace(" ", "--") + "!",
+                   cipher, "A" * len(plain), "  " + plain.lower() + "  ", plain[1:], "x"]
+        for gs in guesses:
+            r = hc.grade(p, gs)
+            out.append(f"T g {hx(gs)} {r['right']} {r['letters']} {r['verdict']}")
+        inv = dict(p["key"])
+        ks = sorted(inv)
+        rot = {c: inv[ks[(i + 1) % len(ks)]] for i, c in enumerate(ks)}
+        maps = [inv, {}, {c: inv[c] for c in ks[:len(ks) // 2]}, {" " + c.lower(): inv[c].lower() + "\t" for c in ks},
+                {"QQ": "S"}, {"1": "A"}, {ks[0]: ""}, rot, dict([(ks[0].lower(), "Z"), (ks[0] + " ", inv[ks[0]])]),
+                {c: "E" for c in ks}]
+        for m in maps:
+            enc = lst(f"{hx(k)}.{hx(v)}" for k, v in m.items())
+            try:
+                reads = hc.apply_mapping(p, m)
+            except hc.CryptogramError as e:
+                assert "single letters" in str(e)
+                out.append(f"T m {enc} err letters")
+                continue
+            r = hc.grade(p, reads)
+            out.append(f"T m {enc} ok {hx(reads)} {r['right']} {r['letters']} {r['verdict']}")
+    return out
+
+
 GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": qs_lines, "sack_chute": sc_lines,
          "seal_roll": sr_lines, "channel_dash": cd_lines, "boom_defence": bd_lines, "salvage_sale": ss_lines,
-         "rope_run": rr_lines, "belfry_changes": bc_lines, "tram_shunt": ts_lines}
+         "rope_run": rr_lines, "belfry_changes": bc_lines, "tram_shunt": ts_lines,
+         "watchfires": wf_lines, "tide_lock": tl_lines, "smugglers_island": si_lines, "harbour_cryptogram": hc_lines}
 
 
 def texts():
