@@ -206,3 +206,18 @@ split-and-tour brute-force oracle. `solo_bells` shows the single-boat trap. Verd
 python tools/streaming/twin_pilots.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/twin_pilots_test.py
 ```
+
+## Quayside Shove (G558)
+
+`quayside_shove.py` is a crate-pushing puzzle over the world census. The up to three costliest
+islands each ship a crate into a seeded 7x7 yard. The yard is built by reverse pulls, so it is
+always solvable. Yardmaster Hamish pushes (never pulls) the crates onto the chalk marks. Par is
+the fewest steps by exact BFS, checked against an independent layered search, and a `stuck`
+result reports whether the yard is deadlocked. Verdicts are `tidy`, `shuffled` and `stuck`.
+Hook: `data/islands/disk-saver/quayside-shove-v1.json`. Doc: `docs/islands/DISKSAVER-QUAYSIDE-SHOVE.md`.
+CI: `quayside-shove.yml`.
+
+```
+python tools/streaming/quayside_shove.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/quayside_shove_test.py
+```
