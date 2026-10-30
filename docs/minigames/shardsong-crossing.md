@@ -64,7 +64,10 @@ the full breakdown: spreading, absorption, smearing and noise, which add up to t
 ## Daedalus tie-in
 
 The seed for a fragment pair comes from a Daedalus token id (`TokenSeed(tokenId)`, SplitMix64 defined in the header),
-so every island token has its own five crossings, identical on every platform.
+so every island token has its own five crossings, identical on every platform. `DailySeed(tokenId, day)` gives each
+island a new game every day; a `Streak` counts consecutive days that total at least 350 of 500 (a missed day or a low
+total starts again, replays of a recorded day change nothing). Across 10,000 token ids no two tokens share a game in
+either ruleset at any difficulty, and 70,000 daily games (10,000 tokens x 7 days) are all different.
 
 ## Ecology (illustrative)
 
@@ -92,3 +95,12 @@ under 800 Hz, with soft two-harmonic tones and no piercing sounds.
 | 6 | iter PR 2 | V2: gentle first round and a difficulty ramp; tone-solvable guarantee | V2 only |
 | 7 | iter PR 3 | V2 partial-credit tiers (100/90/75/50/25/0) | V2 only; fixture unchanged |
 | 8 | iter PR 3 | tone-only accessibility mode (trills refused, scored against the best tone) | opt-in; fixture unchanged |
+| 9 | iter PR 4 | daily seeds and a streak counter (`DailySeed`, `Streak`) | new API; fixtures unchanged |
+| 10 | iter PR 4 | seed-to-puzzle collision checks (10,000 tokens x 2 rulesets x 3 difficulties; 70,000 daily games) and this doc | tests and doc only |
+
+## Testing
+
+`shardsong_core_test.cpp` checks both fixtures line for line, then: hand-worked cases, scores and tiers against
+their formulas, solvability (token and raw seeds), monotonic path loss, 10 m and 400 m edges, V2 balance limits,
+feedback arithmetic, ear-rule limits for every call, zero heap allocations over 500 full games, streak rules and
+collision checks. CI runs it with g++ and clang++ (ASan and UBSan, `-ffp-contract=off`) and MSVC (`/W4 /WX /fp:strict`).

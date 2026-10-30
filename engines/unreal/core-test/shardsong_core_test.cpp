@@ -13,6 +13,7 @@
 #include <cstring>
 #include <fstream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 using namespace daedalus::shardsong;
@@ -380,6 +381,58 @@ static void TiersAndToneOnly()
 	Check(!V1.ToneOnly && V1.Choose(0, Form::Trill) >= 0, "V1 default still allows trills");
 }
 
+// Iteration 9: daily seeds and streaks.
+static void DailyAndStreak()
+{
+	Check(DailySeed(1, 0) != DailySeed(1, 1) && DailySeed(1, 0) != DailySeed(2, 0) && DailySeed(4, 9) == DailySeed(4, 9)
+		&& DailySeed(1, 0) != TokenSeed(1), "daily seeds differ by day and token, repeat exactly");
+	Streak S;
+	Check(S.Record(10, 400) == 1 && S.Record(11, 350) == 2 && S.Record(11, 0) == 2 && S.Record(9, 500) == 2, "streak grows; replays ignored");
+	Check(S.Record(12, 349) == 0 && S.Record(13, 500) == 1 && S.Record(15, 500) == 1 && S.Longest == 2, "low total or gap restarts; longest kept");
+	Streak P;
+	int Days = 0;
+	for (std::uint32_t Day = 0; Day < 60; ++Day)
+	{
+		Game G = Game::Begin(DailySeed(77, Day), Difficulty::Normal, Ruleset::V2);
+		while (!G.Over()) { const Choice B = Best(G.Current()); G.Choose(B.Band, B.F); }
+		Days = P.Record(Day, G.Total());
+	}
+	Check(Days == 60 && P.Longest == 60, "perfect daily play keeps a 60 day streak");
+}
+
+// Iteration 10: seed-to-puzzle collisions. 10,000 token ids (and 7 daily seeds each) give 10,000 (70,000) different
+// five-round games in V1 and V2; hash buckets are confirmed by comparing the games field by field.
+static std::string Fingerprint(const Game& G)
+{
+	std::string F;
+	for (int R = 0; R < Rounds; ++R)
+	{
+		const Crossing& C = G.Rounds_[R];
+		F += static_cast<char>('0' + C.Count); F += static_cast<char>('a' + static_cast<int>(C.Air)); F += static_cast<char>('B' + C.Chorus);
+		for (int I = 0; I < C.Count; ++I) { F += static_cast<char>('a' + static_cast<int>(C.Seg[I].H)); F += static_cast<char>('A' + C.Seg[I].LengthM / 10); }
+		F += '|';
+	}
+	return F;
+}
+static void Collisions()
+{
+	for (int Rs = 0; Rs < 2; ++Rs)
+		for (int Di = 0; Di < 3; ++Di)
+		{
+			std::unordered_map<std::string, std::uint64_t> Seen;
+			int Dup = 0;
+			for (std::uint64_t Token = 0; Token < 10000; ++Token)
+				if (!Seen.emplace(Fingerprint(Game::Begin(TokenSeed(Token), static_cast<Difficulty>(Di), static_cast<Ruleset>(Rs))), Token).second) ++Dup;
+			Check(Dup == 0, "no two of 10,000 tokens share a game (ruleset " + std::to_string(Rs + 1) + ", difficulty " + std::to_string(Di) + "): " + std::to_string(Dup));
+		}
+	std::unordered_map<std::string, int> Daily;
+	int Dup = 0;
+	for (std::uint64_t Token = 0; Token < 10000; ++Token)
+		for (std::uint32_t Day = 0; Day < 7; ++Day)
+			if (!Daily.emplace(Fingerprint(Game::Begin(DailySeed(Token, Day), Difficulty::Normal, Ruleset::V2)), 0).second) ++Dup;
+	Check(Dup == 0, "no two of 70,000 daily games collide: " + std::to_string(Dup));
+}
+
 int main(int argc, char** argv)
 {
 	const std::vector<std::string> Want = GoldenLines(), WantV2 = GoldenLinesV2();
@@ -397,6 +450,8 @@ int main(int argc, char** argv)
 	EarAndHeap();
 	RulesetV2();
 	TiersAndToneOnly();
+	DailyAndStreak();
+	Collisions();
 	const std::string Path = argc > 1 ? argv[1] : "engines/unreal/core-test/shardsong_golden.txt";
 	const std::string PathV2 = Path.substr(0, Path.size() - 4) + "_v2.txt";  // shardsong_golden_v2.txt beside it
 	const std::size_t Same = Compare(Path, Want), SameV2 = Compare(PathV2, WantV2);
