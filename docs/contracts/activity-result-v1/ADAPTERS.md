@@ -250,3 +250,32 @@ at the shard (losses kept as a measure), and a stable lantern-night announcement
 Tie-in: the far-island families are housed, the scar gives up its starmetal, the ark crosses the void, and the
 children find their masters. The loft hound, the scar goat and the crew companions each earn their G12 credit once
 per run, replayable from the G49 journal.
+
+## G586 Fog Channel Pilot (2hot2trot): Java + C++ plug-in
+
+One adapter for an original Java-and-C++ game, not registered in `contestAll`; a host joins it with
+`register(new FogChannelPilotAdapter(mode), FogChannelPilotAdapter.Reading.class, AwardPolicy.inactive("pilot.fog-channel", "mastery.navigation"))`
+until the owner approves numbers. The Unreal side reports the same receipt from
+`DaedalusPilotFogChannelCore.h` (`FogActivityId`, `FogMeasureNames`, `FogMeasures(harbour, lanes)`), so both hosts
+fill identical measures.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `FogChannelPilotAdapter` | G586 Fog Channel Pilot, `world.pilot.FogChannelPilot` (2hot2trot) | `pilot.fog-channel` | `Reading.of(harbour, lanes, abandoned)` (a lane list that is not a track is refused) | blasts, cost, over_par, stars (0-3), quest_done | bird, animal / navigation, observation |
+
+What completes: a reading at par (the Viterbi best, quest `q_pilot_through_fog`). Any other real track is a FAILED
+effort with its stars (2 within `PAR_SLACK` = 2 of par, else 1); leaving pays nothing.
+
+Difficulty: `harbour(seed, Tier)` with `CALM` (2-5 blasts, telling echoes), `FOG` (4-10 blasts, 10% of echoes
+missed) and `PEA_SOUP` (8-16 blasts, muddy echoes, 30% missed). Trusting each echo on its own loses on 146, 233 and
+264 of seeds 1-300 (182 for the classic `harbour(seed)`). `explainText(harbour)` / `FogExplainText` give the player
+one line per blast on why the pilot chose that lane.
+
+Parity: every `pilot_fog_channel_*parity.txt` file in `engines/unreal/core-test` is written by
+`FogChannelPilotTest` (`mvn test -Dtest=FogChannelPilotTest -Dpilot.parity.write=true`) and replayed by
+`pilot_fog_channel_core_test.cpp` in the `Stable cores` workflow (g++ and clang++, ASan + UBSan, `-Werror`); the
+bench file carries 2000-seed checksums per tier that the C++ timing loop must reproduce. Seeds are CPython
+`random.Random(str)` strings, pinned against python3 in the Java test.
+
+Tie-in: the harbour gull rides the bow and learns the channels by ear; a clean reading through the pea-soup fog
+earns its navigation credit once per run, replayable from the G49 journal.
