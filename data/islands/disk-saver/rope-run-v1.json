@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "quest": "q_rope_run",
+  "lore": "A gale is due, and the census ships need one long mooring rope run across the quay from the bollard to the dock post. Ropewalker Theodora lays it square by square. It may never cross itself or go over a crate. Every iron ring it passes holds it a little, and every island's brass cleat holds it hard. Lay the rope with the most grip before the wind arrives.",
+  "hook": {
+    "report_format": "daedalus-rope-run",
+    "field": "verdict",
+    "values": ["taut", "slack", "loose"],
+    "par": "par",
+    "trap": "greedy_grip",
+    "log": "route"
+  },
+  "npc": {
+    "name": "Ropewalker Theodora",
+    "lines": {
+      "taut": "Not a better line on the whole quay. She'll ride the gale out.",
+      "slack": "It reaches the post, but there's grip left on the cobbles. Wind it past more cleats.",
+      "loose": "The rope stops short of the dock post. A rope that isn't made fast is just string."
+    }
+  }
+}
