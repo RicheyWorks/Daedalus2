@@ -96,6 +96,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public pyrandom_core_test.cpp -o pyrandom_core_test && ./pyrandom_core_test pyrandom_parity.txt
       - name: PyRandom core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public pyrandom_core_test.cpp -o pyrandom_core_test_clang && ./pyrandom_core_test_clang pyrandom_parity.txt
+      - name: Prismchime Ring core (DaedalusPrismchimeCore.h regenerates prismchime_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public prismchime_core_test.cpp -o prismchime_core_test && ./prismchime_core_test prismchime_parity.txt
+      - name: Prismchime Ring core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prismchime_core_test.cpp -o prismchime_core_test_clang && ./prismchime_core_test_clang prismchime_parity.txt
       - name: G206 Census Budget cost model core (DaedalusCensusBudgetCore.h replays census_budget_parity.txt from census_budget.py; 40000/32768 KiB edges)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fno-exceptions -fno-rtti -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public census_budget_core_test.cpp -o census_budget_core_test && ./census_budget_core_test census_budget_parity.txt
       - name: G206 Census Budget cost model core, clang
