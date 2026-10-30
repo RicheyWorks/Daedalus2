@@ -434,6 +434,66 @@ def star_mesh():
     return out
 
 
+
+def bird(a, body_hex, wing_hex, beak_hex, s=1.0, note="", pose="perch"):
+    """Static bird placeholder (rig pending). s = scale; ~0.4 m long at s=1. Front -Y."""
+    P = [ball("Body", (0, 0, 0.12 * s), 0.09 * s, 0, 10), ball("Head", (0, -0.1 * s, 0.2 * s), 0.05 * s, 0, 8),
+         K.cyl("Beak", "y", 0.018 * s, 0.002 * s, 0.06 * s, (0, -0.17 * s, 0.195 * s), 2, 6), K.box("Tail", (0.06 * s, 0.1 * s, 0.015 * s), (0, 0.12 * s, 0.13 * s), 1, bevel=False, rot=(15, 0, 0))]
+    if pose == "glide":
+        P += [K.box("Wing%d" % k, (0.32 * s, 0.09 * s, 0.012 * s), (k * 0.2 * s, 0, 0.15 * s), 1, bevel=False, rot=(0, -k * 8, 0)) for k in (-1, 1)]
+    else:
+        P += [K.box("Wing%d" % k, (0.02 * s, 0.16 * s, 0.07 * s), (k * 0.085 * s, 0.02 * s, 0.13 * s), 1, bevel=False) for k in (-1, 1)]
+        P += [K.cyl("Leg%d" % k, "z", 0.006 * s, 0.006 * s, 0.05 * s, (k * 0.03 * s, 0, 0.025 * s), 2, 4) for k in (-1, 1)]
+    S = [K.socket("Perch", (0, 0, 0)), K.socket("Head", (0, -0.1 * s, 0.22 * s)), K.socket("Beak", (0, -0.2 * s, 0.195 * s))]
+    w = 0.7 * s if pose == "glide" else 0.2 * s
+    return simple(a, P, [("feathers", body_hex, 0.9), ("wings / tail", wing_hex, 0.9), ("beak / legs", beak_hex, 0.6)], S,
+                  "%.2f m bird, %s pose (static, rig pending)%s" % (0.3 * s, pose, ": " + note if note else ""), (w, 0.32 * s, 0.26 * s), (0, -0.02 * s, 0.13 * s))
+
+
+# ================================================================ fog_channel_pilot (2hot2trot, READY 59012)
+@game("fog_channel_pilot")
+def fog_channel_pilot():
+    G = "Prop_FogChannel_"; out = []; LANE = ["E04040", "F2C740", "40B060", "3A7AE0"]
+    horn = [K.cyl("HornBell", "y", 0.12, 0.04, 0.3, (0, -0.05, 2.18), 5, 12, rot=(0, 0, 0)), K.cyl("HornPost", "z", 0.02, 0.02, 0.12, (0, 0.1, 2.12), 5, 6)]
+    out.append(cabinet("Prop_Arcade_Cab_FogChannelPilot", "6A7078", "C8CCD4", "FFB03A", horn, [("brass horn", "B08D3C", 0.35, 0.9)], "fog-grey hull, foghorn topper"))
+    a = G + "PilotBoat"; P = [K.lathe("Hull", [(0, 0), (0.7, 0.05), (0.85, 0.5), (0, 0.5)], (0, 0, 0), 0, 8, rot=(0, 0, 22.5)), K.box("Deck", (1.4, 3.6, 0.05), (0, 0, 0.52), 1),
+                              K.box("Wheelhouse", (1.0, 1.0, 0.9), (0, 0.4, 1.0), 2), K.box("Roof", (1.15, 1.15, 0.06), (0, 0.4, 1.48), 0), K.box("Window", (0.8, 0.02, 0.35), (0, -0.11, 1.15), 3, bevel=False)]
+    P[0] = K.box("Hull", (1.6, 4.0, 0.5), (0, 0, 0.25), 0)
+    P += [K.box("Bow", (1.6 * 0.7, 0.8, 0.5), (0, -2.2, 0.3), 0, rot=(0, 0, 45))]
+    P += [K.box("Rail%d" % k, (0.03, 3.4, 0.03), (k * 0.75, 0, 0.85), 4, bevel=False) for k in (-1, 1)] + [K.box("Stanchion%d_%d" % (k, j), (0.03, 0.03, 0.33), (k * 0.75, -1.5 + 0.75 * j, 0.7), 4, bevel=False) for k in (-1, 1) for j in range(5)]
+    out.append(simple(a, P, [("hull", "2A3A4A", 0.6), ("deck", WOOD, 0.8), ("wheelhouse", "E8E4D8", 0.7), ("window", "1A2A3A", 0.1), ("rail", CHROME, 0.3, 0.9)],
+                      [K.socket("Floor", (0, 0, 0)), K.socket("Helm", (0, 0.0, 0.55)), K.socket("Bow", (0, -2.3, 0.6)), K.socket("Waterline", (0, 0, 0.2))], "4.6 m wheelhouse launch with deck rail", (1.6, 4.6, 1.5), (0, -0.3, 0.75)))
+    for i, hx in enumerate(LANE):
+        a = G + "Buoy_Lane%d" % i; P = [K.cyl("Float", "z", 0.35, 0.3, 0.5, (0, 0, 0.25), 0, 10), K.cyl("Mast", "z", 0.08, 0.05, 0.9, (0, 0, 0.95), 0, 8), K.box("Number", (0.22, 0.01, 0.22), (0, -0.31, 0.3), 1, bevel=False), ball("Lamp", (0, 0, 1.45), 0.07, 2, 8)]
+        P += [K.box("Num%d" % k, (0.03, 0.012, 0.14), (-0.045 * i / 2 + 0.045 * k, -0.316, 0.3), 3, bevel=False) for k in range(i + 1)]
+        out.append(simple(a, P, [("buoy paint", hx, 0.5), ("number plate", "F2F2F2", 0.6), ("lamp (emissive)", hx, 0.2, 0.0, True), ("number marks", BLACK, 0.6)],
+                          [K.socket("Pivot", (0, 0, 0.2)), K.socket("Lamp", (0, 0, 1.45)), K.socket("Mooring", (0, 0, 0))], "1.5 m lane %d buoy (bob about Pivot)" % i, (0.7, 0.7, 1.52), (0, 0, 0.76)))
+    a = G + "Foghorn"; P = [K.cyl("Post", "z", 0.06, 0.08, 1.4, (0, 0, 0.7), 1, 8), K.cyl("Bell", "y", 0.28, 0.06, 0.7, (0, -0.25, 1.5), 0, 14), K.box("Valve", (0.16, 0.16, 0.16), (0, 0.15, 1.5), 1)]
+    out.append(simple(a, P, [("brass horn", "B08D3C", 0.35, 0.9), ("iron post", "3A3A40", 0.6)], [K.socket("Floor", (0, 0, 0)), K.socket("Blast", (0, -0.62, 1.5))], "1.8 m brass foghorn on post (blast anim hook at Blast)", (0.56, 0.95, 1.78), (0, -0.2, 0.89)))
+    for nm, hx, n in (("Dull", "8A8A9A", 1), ("Ring", "7AD8FF", 2), ("Clang", "FFB03A", 3), ("Silence", "3A3A48", 0)):
+        a = G + "EchoMarker_" + nm; P = [K.cyl("Disc", "y", 0.12, 0.12, 0.02, (0, 0, 0.12), 0, 16)]
+        P += [K.cyl("Ring%d" % k, "y", 0.035 + 0.03 * k, 0.035 + 0.03 * k, 0.012, (0, -0.012 - 0.003 * (n - k), 0.12), 1 if (n - 1 - k) % 2 == 0 else 0, 16) for k in range(n)] or [K.box("Bar", (0.16, 0.012, 0.025), (0, -0.012, 0.12), 1, bevel=False)]
+        out.append(simple(a, P, [("disc", "1A1E26", 0.6), ("glyph (emissive)", hx, 0.3, 0.0, True)], [K.socket("Centre", (0, 0, 0.12))], "0.24 m echo glyph disc: %s" % nm.lower(), (0.24, 0.04, 0.24), (0, 0, 0.12)))
+    a = G + "DriftingShip"; P = [K.box("Hull", (2.4, 9.0, 1.4), (0, 0, 0.7), 0), K.box("Bow", (1.7, 1.7, 1.4), (0, -4.5, 0.7), 0, rot=(0, 0, 45)), K.box("Cabin", (1.8, 3.0, 1.6), (0, 2.0, 2.2), 0), K.cyl("Funnel", "z", 0.4, 0.4, 2.0, (0, 1.0, 3.6), 0, 8), K.cyl("Mast", "z", 0.08, 0.06, 4.5, (0, -2.5, 3.6), 0, 6)]
+    out.append(simple(a, P, [("fog silhouette (unlit-friendly, flat)", "4A5058", 1.0)], [K.socket("Floor", (0, 0, 0)), K.socket("Bow", (0, -5.7, 1.0)), K.socket("Light", (0, -2.5, 5.8))], "10 m low-detail ship silhouette for fog", (2.4, 10.2, 5.9), (0, -0.6, 2.95)))
+    for nm, op in (("Calm", "C8CCD0"), ("Fog", "A0A8B0"), ("PeaSoup", "8A9078")):
+        a = G + "FogBankCard_" + nm; out.append(simple(a, [K.box("Card", (8.0, 0.01, 4.0), (0, 0, 2.0), 0, bevel=False)], [("fog card %s (translucent in UE)" % nm, op, 1.0)], [K.socket("Base", (0, 0, 0))], "8 x 4 m fog volume card, %s density" % nm, (8.0, 0.01, 4.0), (0, 0, 2.0)))
+    a = G + "LaneChartBoard"; P = [K.box("Frame", (1.8, 0.06, 0.8), (0, 0, 1.2), 0), K.box("Slate", (1.7, 0.01, 0.7), (0, -0.031, 1.2), 1, bevel=False)] + [K.box("Leg%d" % k, (0.05, 0.05, 0.85), (k * 0.8, 0, 0.425), 0) for k in (-1, 1)]
+    P += [K.box("Row%d" % r, (1.6, 0.004, 0.006), (0, -0.037, 1.0 + 0.14 * r), 2, bevel=False) for r in range(4)] + [K.box("Col%d" % c, (0.004, 0.004, 0.56), (-0.8 + 0.1 * c, -0.037, 1.21), 2, bevel=False) for c in range(17)]
+    P += [K.box("Swatch%d" % r, (0.05, 0.004, 0.05), (-0.84, -0.038, 1.0 + 0.14 * r), 3 + r, bevel=False) for r in range(4)]
+    mats = [("wood frame", WOOD, 0.7), ("chalkboard", "1E2A24", 0.9), ("chalk grid", "D8D8D0", 0.95)] + [("lane %d swatch" % i, hx, 0.6) for i, hx in enumerate(LANE)]
+    out.append(simple(a, P, mats, [K.socket("Floor", (0, 0, 0)), K.socket("Grid_TopLeft", (-0.75, -0.04, 1.42))], "1.8 m chalk lane chart, 4 lanes x 16 blasts (cell 0.1 x 0.14 m)", (1.8, 0.06, 1.6), (0, 0, 0.8)))
+    a = G + "StarPlaque"; P = [K.box("Plaque", (0.6, 0.04, 0.24), (0, 0, 0.12), 0)]; S = [K.socket("Wall", (0, 0.02, 0.12))]
+    for k in range(3):
+        x = -0.18 + 0.18 * k; P += [K.lathe("Star%d" % k, [(0, 0), (0.06, 0.0), (0.06, 0.01), (0, 0.012)], (x, -0.02, 0.12), 1, 5, rot=(90, 0, 0))]; S.append(K.socket("Star_%d" % k, (x, -0.035, 0.12)))
+    out.append(simple(a, P, [("brass plaque", "B08D3C", 0.35, 0.9), ("star sockets (emissive fill in UE)", "FFE680", 0.3, 0.0, True)], S, "0.6 m 3-star plaque", (0.6, 0.06, 0.24), (0, 0, 0.12)))
+    out.append(bird("Mob_FogChannel_HarbourGull_Perch", "F2F2F0", "8A9098", "F2B03A", 1.0, "harbour gull"))
+    out.append(bird("Mob_FogChannel_HarbourGull_Glide", "F2F2F0", "8A9098", "F2B03A", 1.0, "harbour gull", "glide"))
+    out.append(npc("Mob_FogChannel_HarbourPilot", "C8A830", "2A3A4A", [K.cyl("Spyglass", "y", 0.02, 0.028, 0.3, (-0.37, -0.1, 0.88), 4, 8), K.cyl("SouWester", "z", 0.2, 0.13, 0.08, (0, 0.02, 1.76), 0, 10)], [("brass spyglass", "B08D3C", 0.35, 0.9)], "oilskin coat, spyglass"))
+    out.append(npc("Mob_FogChannel_Dockhand", "5A6A4A", "3A3A48", [K.cyl("RopeCoil", "y", 0.14, 0.14, 0.06, (0.4, -0.02, 0.9), 4, 12)], [("rope", ROPE, 0.95)], "rival, rope coil"))
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)

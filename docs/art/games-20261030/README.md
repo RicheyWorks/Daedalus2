@@ -27,3 +27,7 @@ Notes
 ## star_mesh (art-master-flex, READY 59021)
 
 8 assets: orrery cabinet, star chart table (inlaid grid), star peg lit/unlit, chart thread (1 m, scale X to the edge length), sighting glass, flip tally board, Mob_StarMesh_NavigatorWren (static, rig pending). Sheet: star_mesh.png.
+
+## fog_channel_pilot (2hot2trot, READY 59012)
+
+21 assets: foghorn cabinet, pilot boat, 4 lane buoys (bob about the Pivot socket), foghorn, 4 echo glyph discs (dull, ring, clang, silence), drifting ship silhouette, 3 fog bank cards (calm, fog, pea soup), lane chart board (4 x 16), 3-star plaque, harbour gull (perch and glide), Harbour Pilot and Dockhand NPCs. The gull and NPCs are static, rigs pending. Sheet: fog_channel_pilot.png.
