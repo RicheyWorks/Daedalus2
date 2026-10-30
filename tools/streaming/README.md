@@ -172,3 +172,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Fleet Soundings (G551, disk-saver)
 
 `fleet_soundings.py` is a daily solitaire-battleship puzzle over the world census: every island is a ship sized by its cargo, a seed moors the fleet in a 6x6 or 7x7 anchorage, and the player gets only row/column soundings. An exact backtracking solver reveals hint cells until exactly one solution remains, and `--check` grades a player grid charted/short/reefed. NPC Tugmaster Ignatius; hook `data/islands/disk-saver/fleet-soundings-v1.json`; doc `docs/islands/DISKSAVER-FLEET-SOUNDINGS.md`.
+
+## Harbour Cryptogram (G552, disk-saver)
+
+`harbour_cryptogram.py` is a word/cipher puzzle: true harbour news built from the world census (world titles, island counts, cargo names, empty islands, totals) is sent in a seeded letter-substitution cipher where no letter stands for itself, with a few letters given and a frequency table. Answer with `--guess` or a partial key via `--mapping`; every letter position is graded decoded/partial/garbled. NPC Telegraphist Philippa; hook `data/islands/disk-saver/harbour-cryptogram-v1.json`; doc `docs/islands/DISKSAVER-HARBOUR-CRYPTOGRAM.md`.
