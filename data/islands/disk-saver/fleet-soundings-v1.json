@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "quest": "q_fleet_soundings",
+  "lore": "A fog came down on DiskSaver anchorage while the fleet was mooring, and when it lifted Tugmaster Ignatius had only his soundings: a count of hull under every row and every column of the anchorage, and a few cells he was sure of. Every island in the census sent one ship, longer for heavier cargo. Ships lie straight and never touch, not even at the corners. Chart where each one lies.",
+  "hook": {
+    "report_format": "daedalus-fleet-soundings",
+    "field": "verdict",
+    "values": ["charted", "short", "reefed"],
+    "soundings": "rows[] + cols[]",
+    "sure_cells": "hints[]",
+    "problems": "problems[]"
+  },
+  "npc": {
+    "name": "Tugmaster Ignatius",
+    "lines": {
+      "charted": "Every ship where she lies, every sounding true. That's the only chart that fits. Well read.",
+      "short": "A legal mooring, but the lead line disagrees: some row or column sounds wrong, or a cell I was sure of. Look again.",
+      "reefed": "That's no mooring. Ships bent, touching, or not the fleet we sent. You'd have them on the reef."
+    }
+  }
+}
