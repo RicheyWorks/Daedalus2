@@ -53,3 +53,13 @@ Yearly censuses miss crashes that happen between counts, so the one-step-a-year 
 ## Assets
 
 None. Optional UI: a risk gauge on the G119 census board next to the G163 studbook.
+
+## Native C++ core (G570)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshDroughtOddsCore.h` (namespace `daedalus::marsh`)
+is a header-only C++17 port of this core: `Phi`, `DroughtOdds::Within`, `Ultimate`, `MedianYears` and the seeded
+`SimulateHits`/`Simulate`, plus `DroughtSettings::Valid`. It uses the standard library only (no Unreal headers). The
+Java class stays the rules authority. `MarshCoresParityTest` writes 48 golden vectors to
+`engines/unreal/core-test/marsh_drought_odds_parity.txt` and `marsh_drought_odds_core_test.cpp` replays them:
+closed-form values to 1e-9 relative, the median to 1e-7, and Monte Carlo hits to ±1. CI runs this in
+`.github/workflows/marsh-cores.yml`. See [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md) for how to port the next core.
