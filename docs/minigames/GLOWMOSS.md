@@ -24,6 +24,19 @@ Score on a win: crystals + light left after the climb, plus `PERFECT_BONUS` (5) 
 
 Before tuning (first release, no unstable ledges): greedy 93% / 46% / 15%, random 59% / 9% / 1%.
 
+## Tutorial and screen
+`python -m tools.minigames.glowmoss --tutorial` prints the step-by-step how-to (`TUTORIAL`); in `--play`, type `help` for it and `hint` for the best next move (a hint never changes the game). The screen shows the seed code, a lamp gauge, the climb-out cost, a legend, and `v` on the ledges you can dig next:
+
+```
+lamp [#########...] 9/11  climb-out cost 1  crystals 2/22
+legend: @ you  v can dig  digit crystals  . : darkness  * glowmoss  ! unstable
+row  0   5.    4: ! @2.    3.
+row  1   4    v4.   v5:   v2
+```
+
+## Saves
+`to_state()` adds `rules` (currently 2, bumped when an older save would replay differently). `Game.from_state()` checks the save before loading and raises `ValueError` naming the first problem: wrong game or rules version, unknown difficulty, a grid of the wrong shape or with out-of-range values, a position outside the shaft, more light than the lamp holds, or a path that does not end at the saved column.
+
 ## Helpers
 - Hint: `g.hint()` is the first move of the best delve from where you stand (`("climb", 0)` when no dig adds crystals safely). Following hints from the surface digs exactly the demo's best delve.
 - Seed codes: `seed_code(1337, "normal")` is `GLOW-N-1337`; `parse_seed_code(code)` reads one back (trimmed, any case) and raises `ValueError` saying what is wrong. The native core refuses codes with more than 9 seed digits (uint32 seeds).

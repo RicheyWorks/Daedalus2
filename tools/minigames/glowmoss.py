@@ -35,6 +35,18 @@ MIN_GEMS, MAX_GEMS = 1, 5
 PERCENT = 100
 PERFECT_BONUS = 5  # added to a winning score that gathered the best possible crystal total
 CODE_PREFIX = "GLOW"
+RULES_VERSION = 2  # bumped when a save from older rules would replay differently (2: unstable ledges)
+DARK_GLYPHS = " .:"  # darkness 0, 1, 2
+LIGHT_BAR = 12  # characters in the rendered lamp gauge
+TUTORIAL = """Glowmoss Delve - how to play
+1. You start on the surface above the shaft, lamp full. Row 0 is the top ledge row.
+2. `dig C` drops you onto column C of the next row; C may be your column or one either side.
+3. Each dig burns 1 light plus the ledge's darkness (. is 1, : is 2) and picks up its crystals.
+4. Glowmoss (*) refills your lamp. Unstable ledges (!) crumble and drop you one more row for free.
+5. Climbing out from row r costs (r + 2) // 2 light. If a dig leaves less than that, the lamp gutters: you lose.
+6. `climb` ends the delve. Bring up at least the target to win; leftover light adds to your score,
+   and matching the best possible haul earns a perfect-delve bonus.
+Type `hint` for the best next move, `help` for this text, `q` to quit."""
 
 
 def seed_code(seed, difficulty):
@@ -160,6 +172,8 @@ class Game(pc.PrismGame):
 
     def act(self, action):
         kind, c = action
+        if kind == "hint":
+            return self.hint_text()
         if kind == "climb":
             won = self.crystals >= self.target
             self.light -= climb_cost(self.row)
@@ -184,6 +198,10 @@ class Game(pc.PrismGame):
             return "the lamp gutters out"
         return f"+{got}" + (" glowmoss" if mossy else "") + (" crumble" if fell else "")
 
+    def hint_text(self):
+        kind, c = self.hint()
+        return "hint: climb out now" if kind == "climb" else f"hint: dig {c}"
+
     def hint(self):
         """Best next move from here: the first dig of the best delve from the current ledge, else climb out."""
         _, plan = best_delve(self.cfg, self.shaft(), (self.row, self.col, self.light))
@@ -196,21 +214,44 @@ class Game(pc.PrismGame):
 
     def render(self):
         cfg = self.cfg
-        lines = [f"{TITLE} [{self.difficulty}] row {self.row} col {self.col} light {self.light}/{cfg['light']} "
-                 f"crystals {self.crystals}/{self.target} climb {climb_cost(self.row)}"]
+        filled = LIGHT_BAR * max(0, self.light) // cfg["light"]
+        lines = [f"{TITLE} [{self.difficulty}] {seed_code(self.seed, self.difficulty)}",
+                 f"lamp [{'#' * filled}{'.' * (LIGHT_BAR - filled)}] {self.light}/{cfg['light']}  "
+                 f"climb-out cost {climb_cost(self.row)}  crystals {self.crystals}/{self.target}",
+                 "legend: @ you  v can dig  digit crystals  . : darkness  * glowmoss  ! unstable"]
+        reach = dig_cols(self.col, cfg["cols"]) if not self.over and self.row + 1 < cfg["rows"] else range(0)
+        lines.append("surface " + ("@" if self.row == SURFACE else ""))
         for r in range(cfg["rows"]):
             cells = []
             for c in range(cfg["cols"]):
-                here = "@" if (r, c) == (self.row, self.col) else " "
-                cells.append(f"{here}{self.gems[r][c]}d{self.dark[r][c]}{'m' if self.moss[r][c] else ' '}{'u' if self.unstable[r][c] else ' '}")
-            lines.append(f"{r:2d} " + " ".join(cells))
+                mark = "@" if (r, c) == (self.row, self.col) else "v" if r == self.row + 1 and c in reach else " "
+                cells.append(mark + str(self.gems[r][c]) + DARK_GLYPHS[self.dark[r][c]]
+                             + ("*" if self.moss[r][c] else " ") + ("!" if self.unstable[r][c] else " "))
+            lines.append(f"row {r:2d}  " + " ".join(cells))
         if self.over:
-            lines.append("WON: you climb out into the light, pockets glittering" if self.won else "LOST: the lamp gutters out")
+            badge = " (perfect delve)" if self.perfect else ""
+            lines.append(f"WON{badge}: you climb out into the light, pockets glittering" if self.won
+                         else "LOST: the lamp gutters out" if self.light < climb_cost(self.row) else
+                         "LOST: you climbed out short of the target")
         return "\n".join(lines)
+
+    def to_state(self):
+        st = super().to_state()
+        st["rules"] = RULES_VERSION
+        return st
+
+    @classmethod
+    def from_state(cls, state):
+        check_save(state)
+        return super().from_state(state)
 
     @staticmethod
     def parse(line):
         parts = line.lower().split()
+        if parts == ["help"]:
+            raise ValueError(TUTORIAL)
+        if parts == ["hint"]:
+            return ("hint", 0)
         if parts == ["climb"]:
             return ("climb", 0)
         if len(parts) == 2 and parts[0] == "dig":
@@ -218,6 +259,30 @@ class Game(pc.PrismGame):
                 raise ValueError(f"dig needs a column number, not {parts[1]!r}")
             return ("dig", int(parts[1]))
         raise ValueError("use dig <column> or climb")
+
+
+def check_save(state):
+    """Raise ValueError naming the first thing wrong with a Glowmoss save, before any of it is loaded."""
+    if not isinstance(state, dict) or state.get("id") != GAME_ID or state.get("v") != 1:
+        raise ValueError(f"not a {GAME_ID} v1 save")
+    if state.get("rules") != RULES_VERSION:
+        raise ValueError(f"save is for rules version {state.get('rules')}, this game is version {RULES_VERSION}")
+    cfg = DIFFICULTY.get(state.get("difficulty"))
+    if cfg is None:
+        raise ValueError(f"unknown difficulty {state.get('difficulty')!r}")
+    for name, low, high in (("gems", MIN_GEMS, MAX_GEMS), ("dark", 0, MAX_DARK), ("moss", 0, 1), ("unstable", 0, 1)):
+        rows = state.get(name)
+        if (not isinstance(rows, list) or len(rows) != cfg["rows"]
+                or any(not isinstance(row, list) or len(row) != cfg["cols"] for row in rows)
+                or any(not isinstance(x, int) or not low <= x <= high for row in rows for x in row)):
+            raise ValueError(f"save grid {name!r} is not {cfg['rows']} rows of {cfg['cols']} values in {low}-{high}")
+    row, col, light, path = state.get("row"), state.get("col"), state.get("light"), state.get("path")
+    if not (isinstance(row, int) and SURFACE <= row < cfg["rows"] and isinstance(col, int) and 0 <= col < cfg["cols"]):
+        raise ValueError(f"save position row {row!r} col {col!r} is outside the shaft")
+    if not isinstance(light, int) or light > cfg["light"]:
+        raise ValueError(f"save light {light!r} is not a whole number up to the lamp's {cfg['light']}")
+    if not isinstance(path, list) or len(path) > row + 1 or (path and path[-1] != col):
+        raise ValueError("save path does not end at the saved column")
 
 
 def start(seed=0, difficulty=DEFAULT_DIFFICULTY):
@@ -233,6 +298,10 @@ def play(seed, difficulty, inp=sys.stdin, out=sys.stdout):
 
 
 def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if "--tutorial" in argv:
+        print(TUTORIAL)
+        return 0
     return pc.main(Game, argv)
 
 
