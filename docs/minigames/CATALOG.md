@@ -160,8 +160,8 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `prismvault` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `shardfall` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `siltlane` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
-| `shadewatch` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
-| `glimmerloom` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
+| `shadewatch` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `glimmerloom` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 
 ## Leaderboard feed
 
