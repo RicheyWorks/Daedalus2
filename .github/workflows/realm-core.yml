@@ -1,6 +1,6 @@
 name: Realm core
 # The 8-bit realm's headless C++ (DaedalusRealmCore/Spec/Look/Draw/Sprites/Session/Directory, BattleStage) had
-# portable tests but no CI job. This builds and runs them with sanitizers on two compilers.
+# portable tests but no CI job. This builds and runs them with sanitizers on two compilers, and with MSVC (/W4 /WX) as Unreal does on Windows.
 on:
   pull_request:
     paths:
@@ -45,3 +45,27 @@ jobs:
           "$RUNNER_TEMP/realm_directory_test" | tail -1
           "$RUNNER_TEMP/realm_sprites_test" | tail -1
           "$RUNNER_TEMP/realm_look_test" | tail -1
+  msvc:
+    # Unreal builds the plugin with MSVC on Windows: compile the same headless realm cores with cl /W4 /WX.
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: engines/unreal/core-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Realm tests (MSVC /W4 /WX)
+        shell: pwsh
+        run: |
+          $out = Join-Path $env:RUNNER_TEMP 'realm-msvc'
+          New-Item -ItemType Directory -Force -Path $out, (Join-Path $out 'realm-out') | Out-Null
+          $tests = @('realm_spec_draw_test', 'realm_core_test', 'realm_session_test', 'realm_directory_test', 'realm_sprites_test', 'realm_look_test')
+          foreach ($t in $tests) {
+            cl /nologo /EHsc /std:c++17 /W4 /WX /permissive- /utf-8 /I../DaedalusLink/Source/DaedalusLink/Public "$t.cpp" "/Fe:$out/$t.exe" "/Fo:$out/$t.obj"
+            if ($LASTEXITCODE -ne 0) { Write-Error "$t failed to compile"; exit $LASTEXITCODE }
+          }
+          foreach ($t in $tests) {
+            if ($t -eq 'realm_core_test') { & "$out/$t.exe" ../DaedalusLink/Content/Realm/realm-7.drr (Join-Path $out 'realm-out') | Select-Object -Last 1 }
+            else { & "$out/$t.exe" | Select-Object -Last 1 }
+            if ($LASTEXITCODE -ne 0) { Write-Error "$t failed"; exit $LASTEXITCODE }
+          }
