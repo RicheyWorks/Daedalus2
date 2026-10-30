@@ -52,3 +52,14 @@ reproductive values.
 
 None. Reuses Prop_Release_Crate (G142) and Prop_Studbook_Ledger (G163). Optional UI: a release calendar strip on
 the census board.
+
+## Native C++ core (G589)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshTranslocationPlanCore.h` (namespace
+`daedalus::marsh`) is a header-only C++17 port of this core, built on the G585 `DaedalusMarshCraneCohortsCore.h` flock.
+It covers the shared seeded shocks, `Risk`, the exhaustive `Best`, `Greedy`, `FrontLoaded`, `Even` and
+`TranslocationSettings::Valid`, using the standard library only. The Java class stays the rules authority.
+`MarshCoresParityTest.translocationPlan` writes golden vectors for 6 plans (3 flocks, release cohorts, no-noise and
+zero-budget cases) to `engines/unreal/core-test/marsh_translocation_plan_parity.txt`.
+`marsh_translocation_plan_core_test.cpp` replays them in `.github/workflows/marsh-cores.yml`. Pattern:
+[NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md).
