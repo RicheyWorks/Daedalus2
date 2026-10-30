@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
- * CraneSpread), G585 (G194 CraneCohorts) and G589 (G251 TranslocationPlan); later ecology ports add a method here.
- * Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true)
- * and replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
- * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
+ * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan) and G591 (G504 ReedCeiling); later ecology
+ * ports add a method here. Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with
+ * -Dmarsh.parity.write=true) and replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h.
+ * Doubles are printed with Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
  */
 class MarshCoresParityTest {
 
@@ -48,6 +48,51 @@ class MarshCoresParityTest {
             }
         }
         return out;
+    }
+
+    static List<String> reedCeiling() {
+        // r, reedHectares, cranesPerHectare, attack, handling, conversion, mortality
+        double[][] marshes = {{0.4, 40, 2, 0.02, 0.5, 0.6, 0.15}, {0.4, 80, 2, 0.02, 0.5, 0.6, 0.15},
+            {0.4, 10, 2, 0.02, 0.5, 0.6, 0.15}, {0.8, 30, 3, 0.05, 0.3, 0.4, 0.1}, {0.25, 60, 1.5, 0.01, 1.0, 0.5, 0.2},
+            {1.2, 25, 4, 0.03, 0.2, 0.7, 0.3}};
+        List<String> out = new ArrayList<>();
+        for (int c = 0; c < marshes.length; c++) {
+            double[] m = marshes[c];
+            ReedCeiling rc = ReedCeiling.of(new ReedCeiling.Settings(m[0], m[1], m[2], m[3], m[4], m[5], m[6]));
+            double n0 = rc.settings().capacity() * 0.6;
+            double p0 = 5 + c;
+            double[] rate = rc.rate(n0, p0);
+            StringBuilder s = new StringBuilder();
+            s.append("r=").append(m[0]).append(" reed=").append(m[1]).append(" perHa=").append(m[2]).append(" a=")
+                    .append(m[3]).append(" h=").append(m[4]).append(" e=").append(m[5]).append(" m=").append(m[6])
+                    .append(" nstar=").append(rc.cranesStar()).append(" pstar=").append(rc.hawksStar())
+                    .append(" kh=").append(rc.hopfCapacity()).append(" cycleHa=").append(rc.cycleHectares())
+                    .append(" hawkHa=").append(rc.hawkHectares()).append(" regime=").append(rc.regime().ordinal())
+                    .append(" trace=").append(rc.trace()).append(" n0=").append(n0).append(" p0=").append(p0)
+                    .append(" dn=").append(rate[0]).append(" dp=").append(rate[1]);
+            out.add(s.toString());
+            out.add(run("rk4", rc.integrate(n0, p0, 60, 0.02)));
+            out.add(run("noisy seed=" + (17 + c), rc.noisy(n0, p0, 40, 17 + c)));
+        }
+        return out;
+    }
+
+    private static String run(String head, ReedCeiling.Run r) {
+        StringBuilder s = new StringBuilder("run=" + head);
+        s.append(" points=").append(r.points().size()).append(" min=").append(r.minCranes()).append(" max=")
+                .append(r.maxCranes()).append(" finalHawks=").append(r.finalHawks());
+        for (ReedCeiling.Point p : r.points()) {
+            if (Math.round(p.year()) % 5 == 0) {
+                s.append(" n").append(Math.round(p.year())).append('=').append(p.cranes()).append(" p")
+                        .append(Math.round(p.year())).append('=').append(p.hawks());
+            }
+        }
+        return s.toString();
+    }
+
+    @Test
+    void reedCeilingMatchesCpp() throws IOException {
+        check("marsh_reed_ceiling_parity.txt", "G504 ReedCeiling", MarshCoresParityTest::reedCeiling);
     }
 
     static List<String> translocationPlan() {
