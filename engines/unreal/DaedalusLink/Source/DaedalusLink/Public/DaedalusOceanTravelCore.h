@@ -29,6 +29,14 @@ struct Route
     std::string DestinationRealm;
     std::string ArrivalAnchor;
 };
+// Session/realm-directory IDs are canonical; retain the original display-name contracts.
+// Registries should use one spelling consistently, never both aliases as separate realms.
+inline bool IsOceanRealm(const std::string& realm) { return realm == "OCEAN" || realm == "Ocean Realm"; }
+inline bool IsPortalRealm(const std::string& realm) { return realm == "PORTAL" || realm == "Portal Realm"; }
+inline bool SameRealmIdentity(const std::string& a, const std::string& b)
+{
+    return a == b || (IsOceanRealm(a) && IsOceanRealm(b)) || (IsPortalRealm(a) && IsPortalRealm(b));
+}
 inline bool ValidDock(const Dock& dock)
 {
     return ValidIdentifier(dock.Id) && ValidIdentifier(dock.Realm)
@@ -39,8 +47,8 @@ inline Route Board(const std::string& currentRealm, const Dock& departure,
 {
     if (!ValidVessel(vessel) || !ValidIdentifier(currentRealm)
         || !ValidDock(departure) || !ValidDock(oceanArrival)
-        || departure.Realm != currentRealm || currentRealm == "Ocean Realm"
-        || oceanArrival.Realm != "Ocean Realm" || oceanArrival.ArrivalAnchor.empty()
+        || departure.Realm != currentRealm || IsOceanRealm(currentRealm)
+        || !IsOceanRealm(oceanArrival.Realm) || oceanArrival.ArrivalAnchor.empty()
         || (vessel == Vessel::Boat && (departure.Underwater || oceanArrival.Underwater)))
         return {};
     return {true, oceanArrival.Realm, oceanArrival.ArrivalAnchor};
@@ -49,14 +57,14 @@ inline Route Land(const std::string& currentRealm, const Dock& destination,
                   Vessel vessel)
 {
     if (!ValidVessel(vessel) || !ValidDock(destination)
-        || currentRealm != "Ocean Realm" || destination.Id.empty()
-        || destination.Realm.empty() || destination.Realm == "Ocean Realm"
+        || !IsOceanRealm(currentRealm) || destination.Id.empty()
+        || destination.Realm.empty() || IsOceanRealm(destination.Realm)
         || destination.ArrivalAnchor.empty()
         || (vessel == Vessel::Boat && destination.Underwater))
         return {};
     // Other worlds require their configured underwater docks. Ordinary shores
     // return to Portal/Dragon Warrior land, never an arbitrary requested realm.
-    if (!destination.Underwater && destination.Realm != "Portal Realm") return {};
+    if (!destination.Underwater && !IsPortalRealm(destination.Realm)) return {};
     return {true, destination.Realm, destination.ArrivalAnchor};
 }
 
@@ -81,7 +89,7 @@ class DockRegistry
     }
     static Route ResolvePair(const Dock& from, const Dock& to, Vessel vessel)
     {
-        if (from.Realm == "Ocean Realm")
+        if (IsOceanRealm(from.Realm))
         {
             if (vessel == Vessel::Boat && from.Underwater) return {};
             return Land(from.Realm, to, vessel);
@@ -100,7 +108,7 @@ public:
         {
             if (!ValidIdentifier(registeredRealms[i])) return false;
             for (std::size_t j=0;j<i;++j)
-                if (registeredRealms[i] == registeredRealms[j]) return false;
+                if (SameRealmIdentity(registeredRealms[i], registeredRealms[j])) return false;
         }
         for (std::size_t i=0;i<docks.size();++i)
         {

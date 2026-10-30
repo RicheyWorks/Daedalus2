@@ -62,6 +62,14 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public lumenpath_core_test.cpp -o lumenpath_core_test && ./lumenpath_core_test lumenpath_parity.txt
       - name: Lumenpath Refraction core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public lumenpath_core_test.cpp -o lumenpath_core_test_clang && ./lumenpath_core_test_clang lumenpath_parity.txt
+      - name: Shadewatch Vigil core (DaedalusShadewatchCore.h regenerates shadewatch_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shadewatch_core_test.cpp -o shadewatch_core_test && ./shadewatch_core_test shadewatch_parity.txt
+      - name: Shadewatch Vigil core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shadewatch_core_test.cpp -o shadewatch_core_test_clang && ./shadewatch_core_test_clang shadewatch_parity.txt
+      - name: Glimmerloom Ledger core (DaedalusGlimmerloomCore.h regenerates glimmerloom_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public glimmerloom_core_test.cpp -o glimmerloom_core_test && ./glimmerloom_core_test glimmerloom_parity.txt
+      - name: Glimmerloom Ledger core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public glimmerloom_core_test.cpp -o glimmerloom_core_test_clang && ./glimmerloom_core_test_clang glimmerloom_parity.txt
       - name: Wardens' Accord core (DaedalusWardensAccordCore.h regenerates wardens_accord_parity.txt from seed with CPython-compatible seeding)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public wardens_accord_core_test.cpp -o wardens_accord_core_test && ./wardens_accord_core_test wardens_accord_parity.txt
       - name: Wardens' Accord core, clang
@@ -82,6 +90,20 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test && ./shardfall_core_test shardfall_parity.txt
       - name: Shardfall Gamble core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test_clang && ./shardfall_core_test_clang shardfall_parity.txt
+      - name: G206 Census Budget cost model core (DaedalusCensusBudgetCore.h replays census_budget_parity.txt from census_budget.py; 40000/32768 KiB edges)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fno-exceptions -fno-rtti -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public census_budget_core_test.cpp -o census_budget_core_test && ./census_budget_core_test census_budget_parity.txt
+      - name: G206 Census Budget cost model core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -fno-exceptions -fno-rtti -I../DaedalusLink/Source/DaedalusLink/Public census_budget_core_test.cpp -o census_budget_core_test_clang && ./census_budget_core_test_clang census_budget_parity.txt
+      - name: G206 census_budget_parity.txt matches the Python tool
+        run: python3 ../../../tools/streaming/census_budget_parity.py --check
+      - name: G573 DiskSaver game cores (DaedalusDiskSaver*Core.h replay disksaver_*_parity.txt written by the Python tools)
+        run: |
+          for t in disksaver_*_core_test.cpp; do n="${t%_core_test.cpp}"; g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fno-exceptions -fno-rtti -fsanitize=address,undefined -fno-omit-frame-pointer -I../DaedalusLink/Source/DaedalusLink/Public "$t" -o "$RUNNER_TEMP/$n" && "$RUNNER_TEMP/$n" "${n}_parity.txt" || exit 1; done
+      - name: G573 DiskSaver game cores, clang
+        run: |
+          for t in disksaver_*_core_test.cpp; do n="${t%_core_test.cpp}"; clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -fno-exceptions -fno-rtti -I../DaedalusLink/Source/DaedalusLink/Public "$t" -o "$RUNNER_TEMP/$n" && "$RUNNER_TEMP/$n" "${n}_parity.txt" || exit 1; done
+      - name: G573 disksaver_*_parity.txt match the Python tools
+        run: python3 ../../../tools/streaming/disksaver_cpp_parity.py --check
       - name: LAB03 Echo Bell gate session (AEchoBellGate cue scheduling, taps, judge, retry; replays docs/contracts/echo-bell-v1 CUE-SHEET.md + peals.ebg)
         run: |
           cmp echo_bell/DaedalusEchoBellCore.h ../DaedalusLink/Source/DaedalusLink/Public/DaedalusEchoBellCore.h

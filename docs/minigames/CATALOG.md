@@ -30,6 +30,7 @@ batched rebuild under the editor custodian.
 | `prismcairn` | Prismcairn Duel | 1 |
 | `prismvault` | Prismvault Weigh | 1 |
 | `shardfall` | Shardfall Gamble | 1 |
+| `siltlane` | Siltlane | 1 |
 
 ## How to play
 
@@ -59,6 +60,7 @@ One original line per game, read from `HowToLine()`.
 | `prismcairn` | HOW Take one or more shards, up to the limit, from one cairn each turn; lift the last shard to win the round, best of three. |
 | `prismvault` | HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out. |
 | `shardfall` | HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot; reach the target by the last round. |
+| `siltlane` | HOW Switch lanes so the drifting silt passes you. |
 
 ## Difficulty
 
@@ -88,6 +90,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `prismcairn` | normal |
 | `prismvault` | normal |
 | `shardfall` | normal |
+| `siltlane` | normal |
 
 ## Daedalus spots
 
@@ -117,6 +120,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `prismcairn` | `prismheart_realm` | Prismheart, the cairn field |
 | `prismvault` | `prismheart_realm` | Prismheart, the balance chamber |
 | `shardfall` | `prismheart_realm` | Prismheart, the glowing seam |
+| `siltlane` | `spawn_overlook` | Spawn overlook, the silt course |
 
 ## Capabilities
 
@@ -140,13 +144,14 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 | `reedbeat` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 | `cairnwell` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
-| `shardring` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
-| `lumenpath` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
-| `wardens_accord` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
-| `facetlock` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
-| `prismcairn` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
-| `prismvault` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
+| `shardring` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `lumenpath` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `wardens_accord` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `facetlock` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `prismcairn` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `prismvault` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `shardfall` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
+| `siltlane` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 
 ## Leaderboard feed
 
@@ -181,3 +186,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `prismcairn` | Prismcairn Duel | `tools/minigames/prismcairn.py` | HOW Take 1 or more shards (up to the limit) from one cairn each turn; the Warden replies. Lift the last shard to win the round; best of three. |
 | `spiritkite` | Spiritkite Weave | `tools/minigames/spiritkite.py` | HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out. |
 | `shadewatch` | Shadewatch Vigil | `tools/minigames/shadewatch.py` | HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends. |
+| `glimmerloom` | Glimmerloom Ledger | `tools/minigames/glimmerloom.py` | HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target. |

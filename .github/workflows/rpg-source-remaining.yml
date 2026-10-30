@@ -93,7 +93,7 @@ jobs:
         run: node --max-old-space-size=128 tools/rpg_demo/summon_book_test.js
       - name: Victory feedback
         run: node --max-old-space-size=128 tools/rpg_demo/victory_feedback_test.js
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.10'
       - name: Generate and check journey diagnostic

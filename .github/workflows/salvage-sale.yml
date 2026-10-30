@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: MIT
+name: salvage-sale
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/streaming/salvage_sale*.py'
+      - 'tools/streaming/census_budget.py'
+      - 'tools/world_census/**'
+      - 'data/islands/disk-saver/salvage-sale-v1.json'
+  pull_request:
+    paths:
+      - 'tools/streaming/salvage_sale*.py'
+      - 'tools/streaming/census_budget.py'
+      - 'tools/world_census/**'
+      - 'data/islands/disk-saver/salvage-sale-v1.json'
+permissions:
+  contents: read
+jobs:
+  salvage-sale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - run: python -B -m unittest tools/streaming/salvage_sale_test.py -v
+      - run: |
+          python -B -m tools.world_census tools/world_census/fixtures/alpha.json tools/world_census/fixtures/beta.json --snapshot-date 2026-10-26 --bindings tools/world_census/fixtures/bindings.json --output-dir "$RUNNER_TEMP/census"
+          python -B tools/streaming/salvage_sale.py "$RUNNER_TEMP/census/census.json" --seed 7 --auto
