@@ -143,6 +143,33 @@ class Rules(unittest.TestCase):
 
 
 
+class Saves(unittest.TestCase):
+    """Iteration 5: from_state refuses saves that break the rules."""
+    def bad(self, **fields):
+        st = gm.start(3).to_state()
+        st.update(fields)
+        with self.assertRaises(ValueError):
+            gm.Game.from_state(st)
+
+    def test_round_trip_still_works(self):
+        g = gm.start(3)
+        for _ in range(5):
+            g.step(g.demo_action())
+        self.assertEqual(gm.Game.from_state(g.to_state()).status(), g.status())
+
+    def test_bad_saves_are_refused(self):
+        g = gm.start(3)
+        heat = [row[:] for row in g.heat]
+        r, c = next((r, c) for r in range(g.size()) for c in range(g.size()) if g.target[r][c] > 0)
+        heat[r][c] = g.target[r][c]
+        self.bad(heat=heat)                                 # a raw tile sitting on its target
+        self.bad(target=[row[:-1] for row in g.target])     # wrong shape
+        self.bad(coals=99)
+        self.bad(glazed=1)
+        self.bad(won=True)
+        self.bad(over=True)
+
+
 class Balance(unittest.TestCase):
     """Iteration 3: the stoker's win rate stays inside pinned bands, so a rules change that shifts the difficulty is caught."""
     BANDS = {"easy": (65, 90), "normal": (70, 95), "hard": (70, 95)}
