@@ -12,7 +12,7 @@ import java.util.Arrays;
 public final class FairPar {
 
     /** Percent of bot runs that should reach bronze, silver and gold. */
-    public static final int[] TIER_PERCENT = {60, 25, 5};
+    private static final int[] TIER_PERCENT = {60, 25, 5};
 
     /** Tiers from worst to best. */
     public enum Tier { NONE, BRONZE, SILVER, GOLD, PERFECT }
