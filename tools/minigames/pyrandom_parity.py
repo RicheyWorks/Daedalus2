@@ -4,7 +4,9 @@
 Writes engines/unreal/core-test/pyrandom_parity.txt. One block per seed string, each line a method call made in
 order on the same generator, so the stream position carries from line to line exactly as it does in the games:
 
-  seed <string>
+  seed <string>          random.Random(<string>)
+  seedint <decimal>      random.Random(int)   (int64 range; negatives hash as abs)
+  seedhex <hex>          random.Random(int.from_bytes(bytes.fromhex(hex), "big"))   (the SHA-256 digest path)
   u32 <getrandbits(32)>
   below n=<n> <_randbelow(n)>
   randrange n=<n> <randrange(n)>
@@ -23,6 +25,11 @@ import sys
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "engines", "unreal", "core-test",
                    "pyrandom_parity.txt")
+INT_SEEDS = (0, 1, 7, -3, 4294967295, 4294967296, 1 << 40, -(1 << 40), (1 << 63) - 1, -(1 << 63))
+HEX_SEEDS = ("00", "01", "ffffffff", "0100000000", "00000000ffffffff",
+             "0000000000000000000000000000000000000000000000000000000000000007",   # 256-bit digest, leading zero limbs
+             "2c70e12b7a0646f92279f427c7b38e7334d8e5389cff167a1dc30e73f826b683",   # sha256(b"alpha")
+             "d3ea76e5fd4b6e3b0e0bd5dcaef62e0ae5aa6e39cbf3cde5f0b35d5a5f98b5d1")
 SEEDS = ("shardring:0:normal", "shardfall:42:hard", "prismvault:65535:easy", "lumenpath:2026:normal", "", "a",
          "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef", "unicode:éλ☃")
 
@@ -42,9 +49,9 @@ class Counting(random.Random):
         return super().random()
 
 
-def block(seed):
+def block(seed, label=None):
     rng = Counting(seed)
-    lines = ["seed %s" % seed]
+    lines = [label or "seed %s" % seed]
     for _ in range(3):
         lines.append("u32 %d" % rng.getrandbits(32))
     for n in (1, 2, 3, 7, 10, 16, 100, 1000, 2 ** 31 - 1):
@@ -70,6 +77,10 @@ def generate():
            "Do not hand-edit."]
     for s in SEEDS:
         out += block(s)
+    for n in INT_SEEDS:
+        out += block(n, "seedint %d" % n)
+    for h in HEX_SEEDS:
+        out += block(int.from_bytes(bytes.fromhex(h), "big"), "seedhex %s" % h)
     return "\n".join(out) + "\n"
 
 

@@ -117,17 +117,40 @@ public:
 		std::vector<std::uint8_t> Bytes(SeedString.begin(), SeedString.end());
 		const std::array<std::uint8_t, 64> Digest = Sha512(Bytes.data(), Bytes.size());
 		Bytes.insert(Bytes.end(), Digest.begin(), Digest.end());
-		// CPython: int.from_bytes(bytes, 'big') split into 32-bit limbs, least significant first.
-		std::vector<std::uint32_t> Key;
-		for (std::size_t End = Bytes.size(); End > 0; End = (End >= 4 ? End - 4 : 0))
+		SeedBigEndian(Bytes.data(), Bytes.size());
+	}
+
+	/**
+	 * random.seed(int) for a big-endian byte string such as a SHA-256 digest: CPython reads int.from_bytes(bytes, 'big')
+	 * and splits abs(n) into 32-bit limbs, least significant first, dropping high zero limbs (n == 0 gives the key [0]).
+	 * docs/islands/DISKSAVER-SEED-SPEC.md section 1.
+	 */
+	void SeedBigEndian(const std::uint8_t* Bytes, std::size_t Length)
+	{
+		std::vector<std::uint32_t> Limbs;
+		for (std::size_t End = Length; End > 0; End = (End >= 4 ? End - 4 : 0))
 		{
 			std::uint32_t V = 0;
 			for (std::size_t B = (End >= 4 ? End - 4 : 0); B < End; ++B) V = (V << 8) | Bytes[B];
-			Key.push_back(V);
+			Limbs.push_back(V);
 		}
-		while (Key.size() > 1 && Key.back() == 0) Key.pop_back();
-		if (Key.empty()) Key.push_back(0);
-		InitByArray(Key);
+		SeedLimbs(Limbs);
+	}
+
+	/** random.seed(int) for a machine integer. The sign is dropped, as CPython hashes abs(n). */
+	void SeedInt(std::int64_t N)
+	{
+		// Two's complement: -N would overflow for INT64_MIN, so negate as unsigned.
+		const std::uint64_t Magnitude = N < 0 ? 0 - static_cast<std::uint64_t>(N) : static_cast<std::uint64_t>(N);
+		SeedLimbs({ static_cast<std::uint32_t>(Magnitude & 0xffffffffu), static_cast<std::uint32_t>(Magnitude >> 32) });
+	}
+
+	/** init_by_array over 32-bit limbs, least significant first. High zero limbs are dropped; an empty key is [0]. */
+	void SeedLimbs(std::vector<std::uint32_t> Limbs)
+	{
+		while (Limbs.size() > 1 && Limbs.back() == 0) Limbs.pop_back();
+		if (Limbs.empty()) Limbs.push_back(0);
+		InitByArray(Limbs);
 		Consumed = 0;
 	}
 
