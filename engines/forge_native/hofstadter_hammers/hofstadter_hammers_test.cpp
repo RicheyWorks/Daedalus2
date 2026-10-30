@@ -39,14 +39,26 @@ static_assert(CompileTimeStrike(hh::Hammer::Q, 10) == 6, "Q(10)");
 static_assert(CompileTimeStrike(hh::Hammer::Conway, 9) == 5, "a(9)");
 static_assert(CompileTimeStrike(hh::Hammer::Q, 0) == -1, "Q(0) rejected");
 
+// Strict reader: M must come first and match kMaxN, rows are "Q n v" / "C n v" with nothing trailing,
+// each tag's n strictly increases (no duplicates), 1..3000 is dense for both hammers, and kMaxN is present.
 static void Golden(const char* path, const std::vector<std::int32_t>& q, const std::vector<std::int32_t>& a) {
     std::ifstream f(path);
     Check(f.good(), std::string("open golden file ") + path);
     std::string line;
     int q_rows = 0;
     int c_rows = 0;
-    bool saw_max = false;
+    long long last_q = 0;
+    long long last_c = 0;
+    bool saw_m = false;
+    bool rows_before_m = false;
+    bool saw_max_q = false;
+    bool saw_max_c = false;
+    int line_no = 0;
     while (std::getline(f, line)) {
+        ++line_no;
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
         if (line.empty() || line[0] == '#') {
             continue;
         }
@@ -54,30 +66,47 @@ static void Golden(const char* path, const std::vector<std::int32_t>& q, const s
         std::string tag;
         long long n = 0;
         long long v = 0;
+        std::string extra;
         in >> tag >> n;
+        const std::string where = "line " + std::to_string(line_no) + ": " + line;
         if (tag == "M") {
-            Check(n == hh::kMaxN, "M " + line);
+            Check(!saw_m && !in.fail() && !(in >> extra) && n == hh::kMaxN, "M header " + where);
+            saw_m = true;
             continue;
         }
+        rows_before_m = rows_before_m || !saw_m;
         in >> v;
-        if (in.fail() || n < 1 || n > hh::kMaxN) {
-            Check(false, "bad row " + line);
+        if (in.fail() || (in >> extra) || n < 1 || n > hh::kMaxN) {
+            Check(false, "malformed " + where);
             continue;
         }
         if (tag == "Q") {
-            Check(q[static_cast<std::size_t>(n)] == v, line);
+            Check(n > last_q, "Q rows strictly increase " + where);
+            if (n <= 3000) {
+                Check(n == last_q + 1, "Q dense 1..3000 " + where);
+            }
+            Check(q[static_cast<std::size_t>(n)] == v, where);
+            last_q = n;
             ++q_rows;
+            saw_max_q = saw_max_q || n == hh::kMaxN;
         } else if (tag == "C") {
-            Check(a[static_cast<std::size_t>(n)] == v, line);
+            Check(n > last_c, "C rows strictly increase " + where);
+            if (n <= 3000) {
+                Check(n == last_c + 1, "C dense 1..3000 " + where);
+            }
+            Check(a[static_cast<std::size_t>(n)] == v, where);
+            last_c = n;
             ++c_rows;
+            saw_max_c = saw_max_c || n == hh::kMaxN;
         } else {
-            Check(false, "unknown row " + line);
-            continue;
+            Check(false, "unknown row " + where);
         }
-        saw_max = saw_max || n == hh::kMaxN;
     }
-    Check(q_rows > 3000 && c_rows > 3000 && saw_max, "golden coverage");
-    std::printf("golden: %d Q rows, %d Conway rows, max_n covered: %s\n", q_rows, c_rows, saw_max ? "yes" : "no");
+    Check(saw_m && !rows_before_m, "M header present and first");
+    Check(q_rows == c_rows && q_rows > 3000, "matching Q/C coverage");
+    Check(saw_max_q && saw_max_c, "kMaxN covered for both hammers");
+    std::printf("golden: %d Q rows, %d Conway rows, max_n covered: %s\n", q_rows, c_rows,
+                saw_max_q && saw_max_c ? "yes" : "no");
 }
 
 static void Properties(const std::vector<std::int32_t>& q, const std::vector<std::int32_t>& a) {
@@ -113,19 +142,32 @@ static void SingleIndex() {
     }
 }
 
+static void StatusNames() {
+    Check(std::strcmp(hh::StatusName(hh::Status::Ok), "Ok") == 0, "name Ok");
+    Check(std::strcmp(hh::StatusName(hh::Status::BadArgument), "BadArgument") == 0, "name BadArgument");
+    Check(std::strcmp(hh::StatusName(hh::Status::BufferTooSmall), "BufferTooSmall") == 0, "name BufferTooSmall");
+    Check(std::strcmp(hh::StatusName(hh::Status::IndexFell), "IndexFell") == 0, "name IndexFell");
+    Check(std::strcmp(hh::StatusName(hh::Status::NullPointer), "NullPointer") == 0, "name NullPointer");
+    Check(std::strcmp(hh::StatusName(static_cast<hh::Status>(200)), "Unknown") == 0, "name unknown");
+    Check(static_cast<int>(hh::Status::NullPointer) == 4, "status values are stable");
+}
+
 static void Edges() {
     std::int32_t buf[16] = {};
     std::int32_t out = 77;
     Check(hh::QSequence(-1, buf, 16) == hh::Status::BadArgument, "QSequence -1");
     Check(hh::ConwaySequence(hh::kMaxN + 1, buf, 16) == hh::Status::BadArgument, "Conway max+1");
     Check(hh::QSequence(15, buf, 15) == hh::Status::BufferTooSmall, "buffer n+1 needed");
-    Check(hh::ConwaySequence(3, nullptr, 0) == hh::Status::BufferTooSmall, "null buffer");
+    Check(hh::ConwaySequence(3, nullptr, 0) == hh::Status::NullPointer, "null buffer");
+    Check(hh::QSequence(3, nullptr, 4) == hh::Status::NullPointer, "null buffer with length");
+    Check(hh::QSequence(-1, nullptr, 0) == hh::Status::BadArgument, "range checked before pointers");
     Check(hh::QSequence(0, buf, 1) == hh::Status::Ok && buf[0] == 0, "n=0 sequence");
     Check(hh::QSequence(15, buf, 16) == hh::Status::Ok && buf[15] == 10, "Q(15)=10");
     Check(hh::Q(0, buf, 16, &out) == hh::Status::BadArgument && out == 77, "Q(0) rejected, out untouched");
     Check(hh::Conway(-5, buf, 16, &out) == hh::Status::BadArgument && out == 77, "Conway(-5)");
     Check(hh::Q(20, buf, 16, &out) == hh::Status::BufferTooSmall && out == 77, "scratch too small");
-    Check(hh::Q(1, buf, 16, nullptr) == hh::Status::BadArgument, "null out");
+    Check(hh::Q(1, buf, 16, nullptr) == hh::Status::NullPointer, "null out");
+    Check(hh::Conway(5, nullptr, 16, &out) == hh::Status::NullPointer && out == 77, "null scratch");
     Check(hh::Strike(hh::Hammer::Conway, 1, buf, 16, &out) == hh::Status::Ok && out == 1, "a(1)");
     Check(hh::GradeClaim(hh::Hammer::Q, 10, 6, buf, 16) == hh::Grade::Turned, "grade turned");
     Check(hh::GradeClaim(hh::Hammer::Conway, 10, 7, buf, 16) == hh::Grade::Slipped, "grade slipped");
@@ -145,6 +187,7 @@ int main(int argc, char** argv) {
     Properties(q, a);
     SingleIndex();
     Edges();
+    StatusNames();
     std::printf("%s: %d checks, %d failures\n", g_failures == 0 ? "PASS" : "FAIL", g_checks, g_failures);
     return g_failures == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }
