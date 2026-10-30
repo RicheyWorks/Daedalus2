@@ -35,3 +35,7 @@ Notes
 ## shardsong_crossing (prometheus, READY 59004)
 
 15 assets: dusk cabinet, 3 caller songbirds, mate songbird, 2 island shard platforms, 6 habitat strips (forest, grass, water, scrub, marsh, rock; 10 m tileable with Start and End sockets), distant flock silhouette, Warbler keeper NPC. The birds and NPC are static, rigs pending. Not Blender items: the UI widgets, audio, and the wind and wave FX. Sheet: shardsong_crossing.png.
+
+## translocation_plan (pythagoras, READY 59018)
+
+11 assets: TRANS01 cabinet with reed topper, ventilated crate, 3 m soft-release pen with gate, planning board (6 years x 4 cohorts), risk gauge (needle plus 95% band), reed marsh 10 m tile, marsh bird at 4 ages (chick, juvenile, subadult, adult), Warden NPC. The birds and Warden are static, rigs pending. Sheet: translocation_plan.png.

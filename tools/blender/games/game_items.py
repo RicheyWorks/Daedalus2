@@ -545,6 +545,39 @@ def shardsong_crossing():
     return out
 
 
+
+# ================================================================ translocation_plan (pythagoras, READY 59018)
+@game("translocation_plan")
+def translocation_plan():
+    G = "Prop_Translocation_"; out = []
+    reeds = [K.cyl("MarqReed%d" % k, "z", 0.012, 0.004, 0.25, (-0.3 + 0.12 * k, 0.05, 2.18), 5, 4) for k in range(6)]
+    out.append(cabinet("Prop_Arcade_Cab_TranslocationPlan", "3A5A4A", "C8B48A", "9AE0A0", reeds, [("reeds", "8A9A4A", 0.95)], "TRANS01, marsh reed topper"))
+    a = G + "Crate"; P = [K.box("Box", (0.7, 0.5, 0.45), (0, 0, 0.225), 0), K.box("Lid", (0.74, 0.54, 0.05), (0, 0, 0.475), 0), K.box("Handle", (0.3, 0.04, 0.06), (0, 0, 0.53), 1)]
+    P += [K.box("Vent%d" % k, (0.5, 0.01, 0.025), (0, -0.252, 0.12 + 0.07 * k), 1, bevel=False) for k in range(4)]
+    out.append(simple(a, P, [("crate wood", "A07A4A", 0.8), ("vents / handle", "3A2A1A", 0.8)], [K.socket("Floor", (0, 0, 0)), K.socket("Lid", (0, 0, 0.5)), K.socket("Grab", (0, 0, 0.56))], "0.7 m ventilated bird crate", (0.74, 0.54, 0.56), (0, 0, 0.28)))
+    a = G + "ReleasePen"; P = []
+    for k in range(4):
+        an = k * math.pi / 2; x, y = 1.5 * math.cos(an), 1.5 * math.sin(an)
+        P += [K.box("Mesh%d" % k, (3.0 if k % 2 else 0.03, 0.03 if k % 2 else 3.0, 1.2), (x, y, 0.6), 1, bevel=False)]
+    P += [K.cyl("Post%d" % k, "z", 0.05, 0.05, 1.3, (sx * 1.5, sy * 1.5, 0.65), 0, 6) for k, (sx, sy) in enumerate(((-1, -1), (1, -1), (1, 1), (-1, 1)))]
+    P += [K.box("Gate", (0.9, 0.04, 1.0), (0, -1.53, 0.5), 2)]
+    out.append(simple(a, P, [("posts", WOOD, 0.8), ("netting (masked in UE)", "8A8A80", 0.9), ("gate", "A07A4A", 0.8)], [K.socket("Floor", (0, 0, 0)), K.socket("Gate", (0, -1.55, 0)), K.socket("Inside", (0, 0, 0))], "3 m soft-release pen with gate (-Y)", (3.1, 3.1, 1.3), (0, 0, 0.65)))
+    a = G + "PlanningBoard"; P = [K.box("Frame", (1.6, 0.06, 1.0), (0, 0, 1.3), 0), K.box("Face", (1.5, 0.01, 0.9), (0, -0.031, 1.3), 1, bevel=False)] + [K.box("Leg%d" % k, (0.05, 0.05, 0.85), (k * 0.7, 0, 0.425), 0) for k in (-1, 1)]
+    P += [K.box("Cell%d_%d" % (r, c), (0.2, 0.004, 0.16), (-0.6 + 0.24 * c, -0.037, 1.6 - 0.2 * r), 2 + (r + c) % 2, bevel=False) for r in range(4) for c in range(6)]
+    out.append(simple(a, P, [("frame", WOOD, 0.7), ("board", "E8E4D8", 0.8), ("cell A", "C8DCC0", 0.8), ("cell B", "B0C8B8", 0.8)], [K.socket("Floor", (0, 0, 0)), K.socket("Grid_TopLeft", (-0.7, -0.04, 1.68))], "1.6 m planning board, 6 years x 4 cohorts", (1.6, 0.06, 1.8), (0, 0, 0.9)))
+    a = G + "RiskGauge"; P = [K.cyl("Dial", "y", 0.3, 0.3, 0.06, (0, 0, 1.3), 0, 20), K.cyl("Face", "y", 0.27, 0.27, 0.01, (0, -0.035, 1.3), 1, 20), K.cyl("Post", "z", 0.04, 0.05, 1.0, (0, 0.02, 0.5), 0, 6),
+                             K.box("Band", (0.24, 0.006, 0.05), (0, -0.042, 1.45), 2, bevel=False), K.box("Needle", (0.015, 0.008, 0.22), (0, -0.048, 1.38), 3, bevel=False, rot=(0, 30, 0))]
+    out.append(simple(a, P, [("brass case", "B08D3C", 0.35, 0.9), ("dial face", "F2EEE0", 0.6), ("95% interval band (emissive)", "E0A040", 0.4, 0.0, True), ("needle", "C03030", 0.5)],
+                      [K.socket("Floor", (0, 0, 0)), K.socket("NeedlePivot", (0, -0.05, 1.3))], "1.6 m risk gauge with needle + 95% band (rotate in UE)", (0.6, 0.1, 1.6), (0, 0, 0.8)))
+    P = [K.box("Pool%d" % k, (1.6, 1.0, 0.02), (-3 + 3 * k, (-1) ** k * 0.6, 0.01), 2, bevel=False) for k in range(3)]
+    P += sum(scatter("Reed", 22, 7, lambda n, x, y, R: [K.cyl(n, "z", 0.04, 0.01, 1.3, (x, y, 0.65), 1, 4)]), [])
+    out.append(strip(G + "ReedMarsh", "4A5A3A", P, [("reeds", "8A9A4A", 0.95), ("shallow pool", "3A5A6A", 0.1)], "reed marsh destination", 1.3))
+    for st, s in (("Chick", 0.35), ("Juvenile", 0.6), ("Subadult", 0.8), ("Adult", 1.0)):
+        out.append(bird("Mob_Translocation_MarshBird_" + st, "8A6A4A" if st != "Chick" else "C8B08A", "4A3A2A", "D8A040", s * 1.2, "marsh bird " + st.lower()))
+    out.append(npc("Mob_Translocation_Warden", "4A5A3A", "3A3A2A", [K.box("Clipboard", (0.2, 0.02, 0.28), (-0.37, -0.06, 0.95), 4)], [("clipboard", "C8B48A", 0.8)], "wildlife warden"))
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)
