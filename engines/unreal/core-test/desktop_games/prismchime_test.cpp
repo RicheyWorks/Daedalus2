@@ -127,7 +127,23 @@ int main(int Argc, char** Argv) {
         for(const auto& Cmd : GF.Commands) if(Cmd.Kind == Shape::Circle && Cmd.Tint.R == 120 && Cmd.Tint.G == 225 && Cmd.Tint.B == 255) ++Rings;
         Check(Rings == 1, "guide draws exactly one counsel ring");
     }
+    Check(D.HintLine().find("would peal") != std::string::npos, "guide v2 previews the cursor chime's peals");
     Check(D.SetOption(0, 730) && D.GetOption() == 0, "option 0 returns to the ring");
+    {
+        PrismchimeGame T;
+        T.Reset(5);
+        Frame F1;
+        T.Render(F1);
+        int Rows = 0;
+        for(const auto& Cmd : F1.Commands) if(Cmd.Kind == Shape::Text && Cmd.Label.rfind("TAP  a chime", 0) == 0) ++Rows;
+        Check(Rows == 1, "a fresh ring shows the tutorial rows");
+        TapAt(T, 0);
+        Frame F2;
+        T.Render(F2);
+        Rows = 0;
+        for(const auto& Cmd : F2.Commands) if(Cmd.Kind == Shape::Text && Cmd.Label.rfind("TAP  a chime", 0) == 0) ++Rows;
+        Check(Rows == 0, "the tutorial leaves after the first tap");
+    }
 
     PrismchimeGame X;
     X.Reset(730);

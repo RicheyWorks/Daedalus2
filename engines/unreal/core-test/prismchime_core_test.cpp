@@ -91,10 +91,12 @@ int InvariantSweep()
 				Pick = Pick * 1664525u + 1013904223u;
 				const int I = static_cast<int>(Pick >> 16) % G.Chimes();
 				const int TapsBefore = G.Taps, LitBefore = G.LitCount(), PealsBefore = G.Peals;
+				int PreviewPealed = 0, PreviewLit = 0; G.Preview(I, PreviewPealed, PreviewLit);
 				int Pealed = 0; std::string Text;
 				if (G.Tap(I, Pealed, Text) != Game::Act::Ok) { std::printf("FAIL sweep: tap refused mid-game (seed %u %s)\n", Seed, Diff); ++Fails; break; }
 				++Taps;
 				bool Ok = G.Taps == TapsBefore - 1 && G.Peals - PealsBefore == Pealed && G.LitCount() >= LitBefore && G.LitCount() - LitBefore <= Pealed;
+				if (PreviewPealed != Pealed || PreviewLit != G.LitCount() - LitBefore) { std::printf("FAIL preview differs from the tap (seed %u %s)\n", Seed, Diff); ++Fails; break; }
 				for (int C : G.Charge) if (C < 0 || C >= Peal) Ok = false;
 				if (G.Score != PealScore * G.Peals + (G.Won ? TapBonus * G.Taps : 0)) Ok = false;
 				if (G.Over != (G.AllLit() || G.Taps <= 0) || G.Won != G.AllLit()) Ok = false;
@@ -103,7 +105,7 @@ int InvariantSweep()
 			int Pealed = 0; std::string Text;
 			if (G.Tap(0, Pealed, Text) != Game::Act::GameOver) { std::printf("FAIL sweep: finished ring accepted a tap\n"); ++Fails; }
 		}
-	if (!Fails) std::printf("sweep: 600 rings, %d random taps, invariants held\n", Taps);
+	if (!Fails) std::printf("sweep: 600 rings, %d random taps, invariants held, every preview matched its tap\n", Taps);
 	return Fails;
 }
 
