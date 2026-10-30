@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
- * CraneSpread) and G585 (G194 CraneCohorts); later ecology ports add a method here. Each
- * engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
- * replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
+ * CraneSpread), G585 (G194 CraneCohorts) and G589 (G251 TranslocationPlan); later ecology ports add a method here.
+ * Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true)
+ * and replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
  * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
  */
 class MarshCoresParityTest {
@@ -48,6 +48,55 @@ class MarshCoresParityTest {
             }
         }
         return out;
+    }
+
+    static List<String> translocationPlan() {
+        double[][] flocks = {{0.5, 0.7, 0.85, 0.9, 0.15, 0.45}, {0.5, 0.7, 0.85, 0.8, 0.15, 0.45},
+            {0.6, 0.8, 0.9, 0.95, 0.3, 1.2}};
+        // start, budget, perYear, releaseYears, horizon, threshold, sigma, cohort, runs
+        double[][] plans = {{12, 10, 6, 5, 30, 10, 0.2, 3, 120}, {8, 6, 3, 3, 20, 6, 0.3, 3, 100},
+            {12, 8, 4, 4, 25, 10, 0.25, 2, 100}, {5, 4, 4, 2, 15, 4, 0.0, 0, 50}, {20, 0, 2, 3, 10, 12, 0.4, 1, 80},
+            {10, 9, 5, 4, 30, 8, 0.35, 3, 90}};
+        List<String> out = new ArrayList<>();
+        for (int c = 0; c < plans.length; c++) {
+            double[] f = flocks[c % flocks.length];
+            double[] p = plans[c];
+            CraneCohorts flock = CraneCohorts.marsh(new CraneCohorts.Settings(f[0], f[1], f[2], f[3], f[4], f[5], 10),
+                    1);
+            TranslocationPlan.Settings s = new TranslocationPlan.Settings((int) p[0], (int) p[1], (int) p[2],
+                    (int) p[3], (int) p[4], p[5], p[6], (int) p[7], (int) p[8]);
+            long seed = 7 + 31L * c;
+            TranslocationPlan plan = TranslocationPlan.of(flock, s, seed);
+            TranslocationPlan.Plan best = plan.best();
+            TranslocationPlan.Plan greedy = plan.greedy();
+            int[] front = plan.frontLoaded();
+            int[] even = plan.even();
+            out.add("flock=" + (c % flocks.length) + " start=" + s.start() + " budget=" + s.budget() + " perYear="
+                    + s.perYear() + " releaseYears=" + s.releaseYears() + " horizon=" + s.horizon() + " threshold="
+                    + s.threshold() + " sigma=" + s.sigma() + " cohort=" + s.cohort() + " runs=" + s.runs() + " seed="
+                    + seed + " front=" + csv(front) + " frontRisk=" + plan.risk(front) + " even=" + csv(even)
+                    + " evenRisk=" + plan.risk(even) + " best=" + csv(best.schedule()) + " bestRisk=" + best.risk()
+                    + " greedy=" + csv(greedy.schedule()) + " greedyRisk=" + greedy.risk());
+        }
+        return out;
+    }
+
+    private static String csv(int[] a) {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < a.length; i++) {
+            s.append(i == 0 ? "" : ",").append(a[i]);
+        }
+        return s.toString();
+    }
+
+    private static String csv(List<Integer> a) {
+        return csv(a.stream().mapToInt(Integer::intValue).toArray());
+    }
+
+    @Test
+    void translocationPlanMatchesCpp() throws IOException {
+        check("marsh_translocation_plan_parity.txt", "G251 TranslocationPlan",
+                MarshCoresParityTest::translocationPlan);
     }
 
     static List<String> craneCohorts() {
