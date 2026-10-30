@@ -1,0 +1,14 @@
+# Prismheart Fair Par golden vectors: written by tools/minigames/fair_par.py, replayed by prism_fair_par_core_test.cpp.
+game=glowmoss difficulty=easy seeds=400 bronze=1 silver=28 gold=33 bronzeHit=505 silverHit=252 goldHit=65 winMedian=27 botWin=505 demoWin=1000 demoMedian=38 separated=true
+game=glowmoss difficulty=normal seeds=400 bronze=1 silver=32 gold=38 bronzeHit=137 silverHit=60 goldHit=15 winMedian=31 botWin=137 demoWin=1000 demoMedian=42 separated=true
+game=glowmoss difficulty=hard seeds=400 bronze=1 silver=29 gold=39 bronzeHit=45 silverHit=20 goldHit=5 winMedian=25 botWin=45 demoWin=1000 demoMedian=41 separated=true
+game=spiritkite difficulty=easy seeds=400 bronze=1 silver=22 gold=28 bronzeHit=587 silverHit=290 goldHit=67 winMedian=21 botWin=587 demoWin=1000 demoMedian=23 separated=true
+game=spiritkite difficulty=normal seeds=400 bronze=1 silver=22 gold=29 bronzeHit=187 silverHit=80 goldHit=20 winMedian=20 botWin=187 demoWin=1000 demoMedian=24 separated=true
+game=spiritkite difficulty=hard seeds=400 bronze=1 silver=22 gold=25 bronzeHit=20 silverHit=12 goldHit=2 winMedian=22 botWin=20 demoWin=1000 demoMedian=24 separated=true
+game=glimmerloom difficulty=easy seeds=400 bronze=1 silver=167 gold=205 bronzeHit=582 silverHit=242 goldHit=62 winMedian=159 botWin=582 demoWin=817 demoMedian=187 separated=true
+game=glimmerloom difficulty=normal seeds=400 bronze=1 silver=157 gold=185 bronzeHit=302 silverHit=125 goldHit=32 winMedian=152 botWin=302 demoWin=555 demoMedian=142 separated=true
+game=glimmerloom difficulty=hard seeds=400 bronze=1 silver=120 gold=135 bronzeHit=207 silverHit=87 goldHit=22 winMedian=117 botWin=207 demoWin=310 demoMedian=0 separated=true
+hash run=0 u=0.578865250385359 pick=5
+hash run=1 u=0.2257281665523796 pick=4
+hash run=2 u=0.88656220536723 pick=1
+hash run=3 u=0.21818975602841806 pick=4
