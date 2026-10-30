@@ -21,6 +21,7 @@
 #include "DaedalusDesktopGlimmerloomCore.h"
 #include "DaedalusDesktopPrismchimeCore.h"
 #include "DaedalusDesktopFogbellCore.h"
+#include "DaedalusDesktopRoostcallCore.h"
 #include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
@@ -55,7 +56,8 @@ inline const std::vector<Entry>& Catalog() {
         {"shadewatch","Shadewatch Vigil","Hold the lanes against creeping shades. Left/Right or stick: pick a lane; J or pad A: flare; K or pad B: kindle; Space or pad X: nova"},
         {"glimmerloom","Glimmerloom Ledger","Trade hued shards as prices drift and heed the rumor. Left/Right or stick: pick a hue; J or pad A: buy; K or pad B: sell; Shift or pad Y: buy all; Space or pad X: rest"},
         {"prismchime","Prismchime Ring","Tap chimes so their charge pulses the ring and peals chain. Left/Right or stick: pick a chime; J/Space or pad A: tap"},
-        {"fogbell","Fogbell Ferry","Steer the ferry over the tidal flat, collect lanterns, make harbour before the tide. Arrows or stick: steer one cell; J/Space or pad A: wait"}
+        {"fogbell","Fogbell Ferry","Steer the ferry over the tidal flat, collect lanterns, make harbour before the tide. Arrows or stick: steer one cell; J/Space or pad A: wait"},
+        {"roostcall","Roostcall","Walk up behind the glimmer-birds and drive them into the roost corner before dusk. Arrows or stick: walk one cell; J/Space or pad A: wait"}
     };
     return Entries;
 }
@@ -88,6 +90,7 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="glimmerloom") return std::make_unique<GlimmerloomGame>();
     if(Id=="prismchime") return std::make_unique<PrismchimeGame>();
     if(Id=="fogbell") return std::make_unique<FogbellGame>();
+    if(Id=="roostcall") return std::make_unique<RoostcallGame>();
     return nullptr;
 }
 
