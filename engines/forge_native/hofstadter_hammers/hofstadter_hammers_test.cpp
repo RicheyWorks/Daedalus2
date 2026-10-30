@@ -71,12 +71,25 @@ static std::int32_t At(const std::vector<std::int32_t>& v, std::int32_t i) {
 
 // Strict reader: M must come first and match kMaxN, rows are "Q n v" / "C n v" with nothing trailing,
 // each tag's n strictly increases (no duplicates), 1..3000 is dense for both hammers, and kMaxN is present.
-static void Golden(const char* path, const std::vector<std::int32_t>& q, const std::vector<std::int32_t>& a) {
-    std::ifstream f(path);
-    Check(f.good(), std::string("open golden file ") + path);
-    std::string line;
+// Returns the number of problems found; prints the first few when verbose.
+struct GoldenStats {
+    int problems = 0;
     int q_rows = 0;
     int c_rows = 0;
+};
+
+static GoldenStats ReadGolden(std::istream& f, const std::vector<std::int32_t>& q, const std::vector<std::int32_t>& a,
+                              bool verbose) {
+    GoldenStats s;
+    auto expect = [&s, verbose](bool ok, const std::string& what) {
+        if (!ok) {
+            ++s.problems;
+            if (verbose && s.problems <= 20) {
+                std::printf("FAIL: %s\n", what.c_str());
+            }
+        }
+    };
+    std::string line;
     long long last_q = 0;
     long long last_c = 0;
     bool saw_m = false;
@@ -100,43 +113,93 @@ static void Golden(const char* path, const std::vector<std::int32_t>& q, const s
         in >> tag >> n;
         const std::string where = "line " + std::to_string(line_no) + ": " + line;
         if (tag == "M") {
-            Check(!saw_m && !in.fail() && !(in >> extra) && n == hh::kMaxN, "M header " + where);
+            expect(!saw_m && !in.fail() && !(in >> extra) && n == hh::kMaxN, "M header " + where);
             saw_m = true;
             continue;
         }
         rows_before_m = rows_before_m || !saw_m;
         in >> v;
         if (in.fail() || (in >> extra) || n < 1 || n > hh::kMaxN) {
-            Check(false, "malformed " + where);
+            expect(false, "malformed " + where);
             continue;
         }
         if (tag == "Q") {
-            Check(n > last_q, "Q rows strictly increase " + where);
-            if (n <= 3000) {
-                Check(n == last_q + 1, "Q dense 1..3000 " + where);
-            }
-            Check(q[static_cast<std::size_t>(n)] == v, where);
+            expect(n > last_q, "Q rows strictly increase " + where);
+            expect(n > 3000 || n == last_q + 1, "Q dense 1..3000 " + where);
+            expect(q[static_cast<std::size_t>(n)] == v, where);
             last_q = n;
-            ++q_rows;
+            ++s.q_rows;
             saw_max_q = saw_max_q || n == hh::kMaxN;
         } else if (tag == "C") {
-            Check(n > last_c, "C rows strictly increase " + where);
-            if (n <= 3000) {
-                Check(n == last_c + 1, "C dense 1..3000 " + where);
-            }
-            Check(a[static_cast<std::size_t>(n)] == v, where);
+            expect(n > last_c, "C rows strictly increase " + where);
+            expect(n > 3000 || n == last_c + 1, "C dense 1..3000 " + where);
+            expect(a[static_cast<std::size_t>(n)] == v, where);
             last_c = n;
-            ++c_rows;
+            ++s.c_rows;
             saw_max_c = saw_max_c || n == hh::kMaxN;
         } else {
-            Check(false, "unknown row " + where);
+            expect(false, "unknown row " + where);
         }
     }
-    Check(saw_m && !rows_before_m, "M header present and first");
-    Check(q_rows == c_rows && q_rows > 3000, "matching Q/C coverage");
-    Check(saw_max_q && saw_max_c, "kMaxN covered for both hammers");
-    std::printf("golden: %d Q rows, %d Conway rows, max_n covered: %s\n", q_rows, c_rows,
-                saw_max_q && saw_max_c ? "yes" : "no");
+    expect(saw_m && !rows_before_m, "M header present and first");
+    expect(s.q_rows == s.c_rows && s.q_rows > 3000, "matching Q/C coverage");
+    expect(saw_max_q && saw_max_c, "kMaxN covered for both hammers");
+    return s;
+}
+
+static std::string Slurp(const char* path) {
+    std::ifstream f(path, std::ios::binary);
+    std::ostringstream o;
+    o << f.rdbuf();
+    return o.str();
+}
+
+static void Golden(const char* path, const std::vector<std::int32_t>& q, const std::vector<std::int32_t>& a) {
+    std::ifstream f(path);
+    Check(f.good(), std::string("open golden file ") + path);
+    const GoldenStats s = ReadGolden(f, q, a, true);
+    Check(s.problems == 0, "golden fixture replays with no problems");
+    std::printf("golden: %d Q rows, %d Conway rows, %d problems\n", s.q_rows, s.c_rows, s.problems);
+}
+
+// Iteration 10: the strict reader must reject in-memory corruptions of the real fixture (the file on disk
+// is only read, never changed), so a weakened reader cannot silently pass a damaged fixture.
+static std::string ReplaceFirst(std::string text, const std::string& from, const std::string& to) {
+    const std::size_t at = text.find(from);
+    if (at != std::string::npos) {
+        text.replace(at, from.size(), to);
+    }
+    return text;
+}
+
+static void ReaderRejectsCorruption(const char* path, const std::vector<std::int32_t>& q,
+                                    const std::vector<std::int32_t>& a) {
+    const std::string good = Slurp(path);
+    Check(good.find("\nQ 10 6\n") != std::string::npos && good.find("\nC 10000000 ") != std::string::npos,
+          "fixture has the anchor rows the corruptions edit");
+    struct Case {
+        const char* name;
+        std::string text;
+    };
+    const Case cases[] = {
+        {"wrong value", ReplaceFirst(good, "\nQ 10 6\n", "\nQ 10 7\n")},
+        {"trailing token", ReplaceFirst(good, "\nQ 10 6\n", "\nQ 10 6 x\n")},
+        {"duplicate row", ReplaceFirst(good, "\nQ 10 6\n", "\nQ 10 6\nQ 10 6\n")},
+        {"dense gap", ReplaceFirst(good, "\nQ 10 6\n", "\n")},
+        {"missing M", ReplaceFirst(good, "M 10000000\n", "")},
+        {"wrong M", ReplaceFirst(good, "M 10000000\n", "M 9999999\n")},
+        {"second M", good + "M 10000000\n"},
+        {"unknown tag", ReplaceFirst(good, "\nQ 10 6\n", "\nQ 10 6\nZ 10 6\n")},
+        {"n out of range", good + "Q 10000001 1\n"},
+        {"lost kMaxN", ReplaceFirst(good, "\nC 10000000 ", "\nC 9999998 ")},
+    };
+    for (const Case& c : cases) {
+        std::istringstream in(c.text);
+        Check(c.text != good, std::string("corruption applied: ") + c.name);
+        Check(ReadGolden(in, q, a, false).problems > 0, std::string("reader rejects ") + c.name);
+    }
+    std::istringstream crlf(ReplaceFirst(good, "\nQ 10 6\n", "\nQ 10 6\r\n"));
+    Check(ReadGolden(crlf, q, a, false).problems == 0, "reader tolerates CRLF");
 }
 
 static void Properties(const std::vector<std::int32_t>& q, const std::vector<std::int32_t>& a) {
@@ -319,6 +382,7 @@ int main(int argc, char** argv) {
     Check(hh::QSequence(hh::kMaxN, q.data(), q.size()) == hh::Status::Ok, "Q to kMaxN");
     Check(hh::ConwaySequence(hh::kMaxN, a.data(), a.size()) == hh::Status::Ok, "Conway to kMaxN");
     Golden(path, q, a);
+    ReaderRejectsCorruption(path, q, a);
     Properties(q, a);
     SingleIndex();
     Extend(q, a);
