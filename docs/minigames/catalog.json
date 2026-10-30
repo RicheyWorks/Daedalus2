@@ -1033,6 +1033,23 @@
       "tests": [
         "test_glowmoss.py"
       ]
+    },
+    {
+      "id": "roostcall",
+      "title": "Roostcall",
+      "summary": "whistle the glimmer-birds home. Walk the grid so every bird flees into the roost before dusk.",
+      "how_to_play": "HOW Walk up behind the glimmer-birds so they flee one step at a time; drive every bird into the roost corner before your turns run out.",
+      "module": "tools/minigames/roostcall.py",
+      "start": "roostcall.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_roostcall.py"
+      ]
     }
   ]
 }
