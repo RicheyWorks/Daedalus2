@@ -760,7 +760,7 @@
       "portable_tests": [
         "desktop_siltlane"
       ],
-      "option_count": 0,
+      "option_count": 2,
       "capabilities": [
         "action_cue",
         "contrast_mark",
@@ -768,6 +768,7 @@
         "focus_freeze",
         "hints",
         "key_hint",
+        "options",
         "scoreboard",
         "source_keys"
       ],

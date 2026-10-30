@@ -5,11 +5,13 @@
 #include <vector>
 
 namespace daedalus { namespace desktop {
-// Siltlane: a three-lane runner. Silt stones drift toward the runner. Switching
-// lanes lets a stone pass; standing in its lane ends the run. The C++ core is
-// the playable rules. Easy drifts slowly, hard drifts quickly.
+// Siltlane: a lane runner. Silt stones drift toward the runner. Switching lanes
+// lets a stone pass; standing in its lane ends the run. Option 0 is three lanes
+// and option 1 is a two-lane practice. Easy drifts slowly, hard drifts quickly.
 class SiltlaneGame final : public Game {
     struct Stone { int Lane = 0; int Row = 0; };
+    int Option = 0;
+    int Course = 3;
     int Lane = 1;
     int Passed = 0;
     bool Lost = false;
@@ -27,7 +29,9 @@ class SiltlaneGame final : public Game {
         else { FallEvery = 12; SpawnEvery = 24; }
     }
     void Deal() {
-        Lane = 1; Passed = 0; Lost = false; Tick = 0;
+        Course = Option == 1 ? 2 : 3;
+        Lane = Option == 1 ? 0 : 1;
+        Passed = 0; Lost = false; Tick = 0;
         WasLeft = WasRight = false; Stones.clear();
         Rng.Seed(SessionSeed); ApplyPace();
     }
@@ -41,9 +45,14 @@ class SiltlaneGame final : public Game {
         }
         Stones.swap(Kept);
     }
-    void Spawn() { Stones.push_back({Rng.Int(0, 2), 7}); }
+    void Spawn() { Stones.push_back({Rng.Int(0, Course - 1), 7}); }
 public:
     void Reset(std::uint32_t Seed) override { SessionSeed = Seed ? Seed : 1; Deal(); }
+    bool SetOption(int Value, std::uint32_t Seed) override {
+        if (Value < 0 || Value > 1) return false;
+        Option = Value; SessionSeed = Seed ? Seed : 1; Deal(); return true;
+    }
+    int GetOption() const override { return Option; }
     bool SetCabinetDifficulty(const std::string& Name) override {
         if (!Game::SetCabinetDifficulty(Name)) return false;
         ApplyPace();
@@ -61,7 +70,7 @@ public:
         const bool LeftNow = I.Left || I.PadLeft || I.AxisX < -0.4;
         const bool RightNow = I.Right || I.PadRight || I.AxisX > 0.4;
         if (LeftNow && !WasLeft && Lane > 0) --Lane;
-        else if (RightNow && !WasRight && Lane < 2) ++Lane;
+        else if (RightNow && !WasRight && Lane < Course - 1) ++Lane;
         WasLeft = LeftNow; WasRight = RightNow;
         ++Tick;
         if (Tick % FallEvery == 0) Fall();
@@ -79,7 +88,7 @@ public:
         F.Clear(800, 600, {16, 18, 32, 255});
         F.AddText(30, 24, "SILTLANE", {255, 236, 180, 255}, 28);
         F.AddText(30, 58, "PASSED: " + std::to_string(Passed), White, 18);
-        for (int Column = 0; Column < 3; ++Column) {
+        for (int Column = 0; Column < Course; ++Column) {
             const double X = 180.0 + Column * 140.0;
             F.AddRect(X, 120, 100, 360, Column == Lane ? Color{48, 56, 84, 255} : Color{28, 32, 48, 255});
         }
@@ -98,6 +107,7 @@ public:
         return {Passed, 1, false, false, "Lane " + std::to_string(Lane) + "; passed " + std::to_string(Passed)};
     }
     int LaneIndex() const { return Lane; }
+    int LaneCount() const { return Course; }
     int FallEveryCount() const { return FallEvery; }
     int SpawnEveryCount() const { return SpawnEvery; }
     int ClosestSilt() const {

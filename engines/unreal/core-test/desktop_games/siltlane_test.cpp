@@ -50,6 +50,9 @@ int main() {
     Check(Run.GetStatus().Over && !Run.GetStatus().Won && Run.GetStatus().Lives == 0, "standing still ends the run when silt arrives");
     const auto Caught = Run.GetStatus().Score;
     Check(Run.SourceKeyDown(8) && !Run.GetStatus().Over && Run.GetStatus().Score == 0 && Run.LaneIndex() == 1, "R starts the same lane again");
+    SiltlaneGame Practice;
+    Check(Practice.SetOption(1, 730) && Practice.GetOption() == 1 && Practice.LaneCount() == 2 && Practice.LaneIndex() == 0, "practice is two lanes");
+    Check(!Practice.SetOption(2, 730) && Practice.GetOption() == 1, "an out-of-range course is refused");
     Check(Caught >= 0, "the caught score was a host-visible count");
     std::cout << "siltlane: " << (Checks - Failed) << "/" << Checks << " checks\n";
     return Failed == 0 ? 0 : 1;

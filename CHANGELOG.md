@@ -10,7 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
-- **Siltlane.** A three-lane runner in the desktop C++ core. Left and right switch lanes so drifting silt can pass; standing in a stone's lane ends the run. Easy drifts slowly and hard drifts quickly. The opening score stays clear, and a cream hint, a cyan switch cue, and the access plate sit on the bottom edge. The cabinet stands at Spawn overlook, the silt course.
+- **Siltlane.** A lane runner in the desktop C++ core. Option 0 is three lanes and option 1 is a two-lane practice. Left and right switch lanes so drifting silt can pass; standing in a stone's lane ends the run. Easy drifts slowly and hard drifts quickly. The opening score stays clear, and a cream hint, a cyan switch cue, and the access plate sit on the bottom edge. The cabinet stands at Spawn overlook, the silt course.
 - **Reedbeat game over.** Three early taps end the round with no score. The round rules are unchanged.
 - **Daedalus spots.** Every desktop cabinet names one home spot in the catalog. The words are original, and that realm already places the cabinet. Cairnwell stands in Bricks, the stacking yard.
 - **Difficulty.** Every desktop cabinet accepts easy, normal, and hard, and starts on normal. The catalog records that default. Options, score, and save files stay as they are. The arcade host is unchanged.
