@@ -236,3 +236,18 @@ Hook: `data/islands/disk-saver/sack-chute-v1.json` (Hold Master Peregrine). Doc:
 python tools/streaming/sack_chute.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/sack_chute_test.py
 ```
+
+## Seal Roll (G560)
+
+`seal_roll.py` is a rolling-cube puzzle over the world census. Up to four islands each get a
+chalk mark on a seeded 7x7 quay. Sealwright Cornelius tips a cube with the seal on one face,
+edge over edge, and must land it seal-up on every mark and then finish on the dock. Par is the
+fewest tips by exact BFS over (square, seal side, marks), checked against an independent 3-D
+vector solver. Verdicts are `true`, `wobbly` and `off_mark`. Hook:
+`data/islands/disk-saver/seal-roll-v1.json`. Doc: `docs/islands/DISKSAVER-SEAL-ROLL.md`.
+CI: `seal-roll.yml`.
+
+```
+python tools/streaming/seal_roll.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/seal_roll_test.py
+```
