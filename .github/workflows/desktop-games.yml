@@ -50,6 +50,8 @@ jobs:
         run: python tools/minigames/minigame_catalog.py --check
       - name: Every cabinet has a save slot, how-to line, scoreboard entry and an original name
         run: python tools/minigames/catalog_validate.py
+      - name: Every minigame C++ core has a parity fixture and a CI core test
+        run: python tools/minigames/minigame_core_parity.py --check
       - name: Leaderboard feed hook matches the catalog and does not post
         run: python tools/minigames/leaderboard_feed.py --check
       - name: Shardring parity fixture is current (engines/unreal/core-test/shardring_parity.txt)
@@ -64,6 +66,10 @@ jobs:
         run: python tools/minigames/prismchime_parity.py --check
       - name: Glimmerloom parity fixture is current (engines/unreal/core-test/glimmerloom_parity.txt)
         run: python tools/minigames/glimmerloom_parity.py --check
+      - name: Spiritkite parity fixture is current (engines/unreal/core-test/spiritkite_parity.txt)
+        run: python tools/minigames/spiritkite_parity.py --check
+      - name: Glowmoss parity fixture is current (engines/unreal/core-test/glowmoss_parity.txt)
+        run: python tools/minigames/glowmoss_parity.py --check
       - name: Wardens' Accord parity fixture is current (engines/unreal/core-test/wardens_accord_parity.txt)
         run: python tools/minigames/wardens_accord_parity.py --check
       - name: Facetlock parity fixture is current (engines/unreal/core-test/facetlock_parity.txt)
