@@ -1,0 +1,241 @@
+# disksaver channel_dash parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit
+C real_seed0
+L 000111100:2,000000010:-2,000000010:-2 5 7
+P 6 UUUULL
+T UUUULL ok 6 0 0 5 swift
+T - ok 0 0 4 7 swamped
+T UUUUL ok 5 0 0 6 swamped
+T UUUULL. err dock
+T X err letter
+T UUUUUUU err leaves
+T .........UUUULL ok 15 0 0 5 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .UUULL ok 5 5 1 6 swamped
+T U.U.U.U.U.U. ok 5 5 1 7 swamped
+T LLUUUU ok 5 5 1 5 swamped
+C real_seed1
+L 011000111:-2,000011100:-2,001110000:-1 0 6
+P 10 UUUULLLLLL
+T UUUULLLLLL ok 10 0 0 0 swift
+T - ok 0 0 4 6 swamped
+T UUUULLLLL ok 9 0 0 1 swamped
+T UUUULLLLLL. err dock
+T X err letter
+T UUUUUUU err leaves
+T .........UUUULLLLLL ok 19 0 0 0 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .UUULLLLLL ok 5 5 1 5 swamped
+T U.U.U.U.U.U. ok 4 4 2 6 swamped
+T LLLLLLUUUU ok 10 0 0 0 swift
+C real_seed7
+L 001100001:-2,000000100:-1,011000000:1 4 3
+P 7 LUUUURR
+T LUUUURR ok 7 0 0 4 swift
+T - ok 0 0 4 3 swamped
+T LUUUUR ok 6 0 0 3 swamped
+T LUUUURR. err dock
+T X err letter
+T UUUUUUU ok 1 1 3 3 swamped
+T .........LUUUURR ok 16 0 0 4 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .UUUURR ok 2 2 3 3 swamped
+T U.U.U.U.U.U. ok 1 1 3 3 swamped
+T RRUUUUL ok 3 3 3 5 swamped
+C real_seed42
+L 001101110:-1,111000000:-2,000000110:1 6 2
+P 8 URRUUURR
+T URRUUURR ok 8 0 0 6 swift
+T - ok 0 0 4 2 swamped
+T URRUUUR ok 7 0 0 5 swamped
+T URRUUURR. err dock
+T X err letter
+T UUUUUUU ok 3 3 1 2 swamped
+T .........URRUUURR ok 17 0 0 6 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .RRUUURR ok 7 7 1 5 swamped
+T U.U.U.U.U.U. ok 4 4 2 2 swamped
+T RRUUURRU ok 6 6 1 5 swamped
+C syn5_seed1
+L 001000000:-2,111100000:1,011100010:-1,000000100:1,000011000:2 7 5
+P 10 UUUDRRUUUU
+T UUUDRRUUUU ok 10 0 0 7 swift
+T - ok 0 0 6 5 swamped
+T UUUDRRUUU ok 9 0 1 7 swamped
+T UUUDRRUUUU. err dock
+T X err letter
+T UUUUUUU ok 4 4 2 5 swamped
+T .........UUUDRRUUUU ok 19 0 0 7 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .UUDRRUUUU ok 5 5 5 6 swamped
+T U.U.U.U.U.U. ok 5 5 3 5 swamped
+T UUUURRDUUU ok 4 4 2 5 swamped
+C syn5_seed7
+L 100000001:1,111000000:-1,001000110:-2,000000111:-2,001100000:-1 3 8
+P 11 UUUUUULLLLL
+T UUUUUULLLLL ok 11 0 0 3 swift
+T - ok 0 0 6 8 swamped
+T UUUUUULLLL ok 10 0 0 4 swamped
+T UUUUUULLLLL. err dock
+T X err letter
+T UUUUUUU err leaves
+T .........UUUUUULLLLL ok 20 0 0 3 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .UUUUULLLLL ok 4 4 3 8 swamped
+T U.U.U.U.U.U. ok 4 4 4 8 swamped
+T LLLLLUUUUUU ok 7 7 4 3 swamped
+C syn6_seed1
+L 011000000:1,001111000:1,100000000:2,000011000:-2,000011111:-2 5 3
+P 9 R.UUUUUUR
+T R.UUUUUUR ok 9 0 0 5 swift
+T - ok 0 0 6 3 swamped
+T R.UUUUUU ok 8 0 0 4 swamped
+T R.UUUUUUR. err dock
+T X err letter
+T UUUUUUU ok 1 1 5 3 swamped
+T .........R.UUUUUUR ok 18 0 0 5 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T ..UUUUUUR ok 9 0 0 4 swamped
+T U.U.U.U.U.U. ok 1 1 5 3 swamped
+T RUUUUUU.R ok 2 2 5 4 swamped
+C syn6_seed7
+L 000111110:-1,111011100:2,000110000:2,000110000:-2,100000111:-1 1 6
+P 17 LLLLLLRLRUUDUUUUU
+T LLLLLLRLRUUDUUUUU ok 17 0 0 1 swift
+T - ok 0 0 6 6 swamped
+T LLLLLLRLRUUDUUUU ok 16 0 1 1 swamped
+T LLLLLLRLRUUDUUUUU. err dock
+T X err letter
+T UUUUUUU ok 1 1 5 6 swamped
+T .........LLLLLLRLRUUDUUUUU ok 26 0 0 1 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .LLLLLRLRUUDUUUUU ok 17 0 0 2 swamped
+T U.U.U.U.U.U. ok 1 1 5 6 swamped
+T UUUUUDUURLRLLLLLL ok 1 1 5 6 swamped
+C syn8_seed1
+L 110001000:1,100100111:-2,000000011:-2,011001110:-1,100100111:1 5 6
+P 10 UUUL.RUUUL
+T UUUL.RUUUL ok 10 0 0 5 swift
+T - ok 0 0 6 6 swamped
+T UUUL.RUUU ok 9 0 0 6 swamped
+T UUUL.RUUUL. err dock
+T X err letter
+T UUUUUUU ok 5 5 1 6 swamped
+T .........UUUL.RUUUL ok 19 0 0 5 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .UUL.RUUUL ok 5 5 4 5 swamped
+T U.U.U.U.U.U. ok 4 4 4 6 swamped
+T LUUUR.LUUU ok 2 2 5 5 swamped
+C syn8_seed7
+L 000011000:-2,111100110:-1,000001000:1,001101110:-2,011001110:1 8 2
+P 13 RRR.UUURRUUUR
+T RRR.UUURRUUUR ok 13 0 0 8 swift
+T - ok 0 0 6 2 swamped
+T RRR.UUURRUUU ok 12 0 0 7 swamped
+T RRR.UUURRUUUR. err dock
+T X err letter
+T UUUUUUU ok 1 1 5 2 swamped
+T .........RRR.UUURRUUUR ok 22 0 0 8 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .RR.UUURRUUUR ok 6 6 4 4 swamped
+T U.U.U.U.U.U. ok 1 1 5 2 swamped
+T RUUURRUUU.RRR ok 2 2 5 3 swamped
+C syn14_seed1
+L 000010000:2,111010000:-1,010001000:-2,000000011:1,000000111:-1 7 8
+P 9 UUDUUUUUL
+T UUDUUUUUL ok 9 0 0 7 swift
+T - ok 0 0 6 8 swamped
+T UUDUUUUU ok 8 0 0 8 swamped
+T UUDUUUUUL. err dock
+T X err letter
+T UUUUUUU ok 3 3 3 8 swamped
+T .........UUDUUUUUL ok 18 0 0 7 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .UDUUUUUL ok 9 0 1 7 swamped
+T U.U.U.U.U.U. ok 12 0 0 8 swamped
+T LUUUUUDUU ok 6 6 1 7 swamped
+C syn14_seed7
+L 000011100:-1,100000011:2,000001111:-1,001000000:2,100000111:1 8 0
+P 17 RLRR.UUUUUURRRRRR
+T RLRR.UUUUUURRRRRR ok 17 0 0 8 swift
+T - ok 0 0 6 0 swamped
+T RLRR.UUUUUURRRRR ok 16 0 0 7 swamped
+T RLRR.UUUUUURRRRRR. err dock
+T X err letter
+T UUUUUUU ok 1 1 5 0 swamped
+T .........RLRR.UUUUUURRRRRR ok 26 0 0 8 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .LRR.UUUUUURRRRRR err leaves
+T U.U.U.U.U.U. ok 1 1 5 0 swamped
+T RRRRRRUUUUUU.RRLR ok 7 7 5 6 swamped
+C hand_no_lanes
+L - 4 2
+P 3 URR
+T URR ok 3 0 0 4 swift
+T - ok 0 0 1 2 swamped
+T UR ok 2 0 0 3 swamped
+T URR. err dock
+T X err letter
+T UUUUUUU err leaves
+T .........URR ok 12 0 0 4 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .RR ok 3 0 1 4 swamped
+T U.U.U.U.U.U. err leaves
+T RRU ok 3 0 0 4 swift
+C hand_wall_of_barges
+L 111111111:1,100000000:-1 0 8
+P -1 -
+T - ok 0 0 3 8 swamped
+T - ok 0 0 3 8 swamped
+T - ok 0 0 3 8 swamped
+T . ok 1 0 3 8 swamped
+T X err letter
+T UUUUUUU ok 1 1 2 8 swamped
+T ......... ok 9 0 3 8 swamped
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T . ok 1 0 3 8 swamped
+T U.U.U.U.U.U. ok 1 1 2 8 swamped
+T - ok 0 0 3 8 swamped
+C hand_fast_lanes
+L 111111000:2,000111000:-2,000000001:-1 8 0
+P 12 URRRRUUURRRR
+T URRRRUUURRRR ok 12 0 0 8 swift
+T - ok 0 0 4 0 swamped
+T URRRRUUURRR ok 11 0 0 7 swamped
+T URRRRUUURRRR. err dock
+T X err letter
+T UUUUUUU ok 2 2 2 0 swamped
+T .........URRRRUUURRRR ok 21 0 0 8 safe
+T D err leaves
+T LLLLLLLLLL err leaves
+T RRRRRRRRRR err leaves
+T .RRRRUUURRRR ok 9 9 1 5 swamped
+T U.U.U.U.U.U. err leaves
+T RRRRUUURRRRU ok 10 10 1 7 swamped

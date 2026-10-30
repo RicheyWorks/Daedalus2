@@ -349,3 +349,19 @@ python -B -m unittest tools/streaming/tram_shunt_test.py
 ### C++17 game cores (`disksaver_cpp_parity.py`, G573)
 
 `DaedalusDiskSaver<Game>Core.h` are header-only, engine-free C++17 ports of the pure logic of Manifest Match, Twin Pilots, Quayside Shove and Sack Chute (par solver, move validation, greedy, verdict). Layouts stay in Python. `disksaver_cpp_parity.py --write|--check` writes their golden files `engines/unreal/core-test/disksaver_<game>_parity.txt` from these tools. See `docs/islands/DISKSAVER-CPP-CORES.md`.
+
+Batch 2 (G574): `DaedalusDiskSaver{SealRoll,ChannelDash,BoomDefence,SalvageSale}Core.h` port Seal Roll, Channel Dash, Boom Defence and Salvage Sale the same way. Their golden files are written by the same `disksaver_cpp_parity.py`.
+
+Batch 3 (G575): `DaedalusDiskSaver{RopeRun,BelfryChanges,TramShunt}Core.h` port Rope Run, Belfry Changes and Tram Shunt the same way, with explicit caps on the route DFS and the state searches.
+
+Batch 4 (G576): `DaedalusDiskSaver{Watchfires,TideLock,SmugglersIsland,HarbourCryptogram}Core.h` port Watchfires, Tide Lock, Smuggler's Island and Harbour Cryptogram the same way; the golden files carry the smuggler's hidden island and the cryptogram's cipher, key and plain text.
+
+Batch 5 (G577): `DaedalusDiskSaver{FleetSoundings,QuayDuel,LastCrate,CensusRiddles}Core.h` port Fleet Soundings, Quay Duel, Last Crate and Census Riddles (grading; the riddles and answers are in the golden file). That completes the C++ ports of the DiskSaver Python games.
+
+Batch 6 (G578): `DaedalusDiskSaver{TideClocks,LighthouseLeases,TidemarkChunks,BottleCensus}Core.h` port the earlier simulations Tide Clocks (G166), Lighthouse Leases (G171), Tidemark Chunks (G175) and Bottle Census (G179). The golden files record each run's random draws, so C++ replays the same simulation without reimplementing Python's `random`. Config files, NPC lines and the CLI stay in Python. Bottle Census was first committed under another bot's name; this port only adds files.
+
+Batch 7 (G579): `DaedalusDiskSaver{EbbEviction,BeaconWatch,BudgetFathoms,FleetFlags}Core.h` port Ebb Tide Eviction (G253), Beacon Watch (G505), Budget Fathoms (G529) and Fleet Flags (G533). They price censuses with the G571 port `DaedalusCensusBudgetCore.h` through the shared `DaedalusDiskSaverCensusPlanCore.h`. JSON loading, config files and the CLIs stay in Python.
+
+Batch 8 (G580): `DaedalusDiskSaver{StrayCargo,MemoryFootprint,BudgetLedger,CaulkingCheck}Core.h` (+ `DaedalusDiskSaverPyJsonCore.h`) port Stray Cargo (G531), Memory Footprint (G519), Budget Trend Ledger (G517) and Caulking Check (G544), including the duplicate-JSON-key check. Folder walks, ledger files and the CLIs stay in Python. This completes the DiskSaver lane port list.
+
+Seed spec (G581): `docs/islands/DISKSAVER-SEED-SPEC.md` specifies how the DiskSaver tools seed and draw from Python's `random` (sha256 key format, MT19937 init_by_array, every Random method they call, a per-tool draw table, and how the shared `DaedalusPyRandomCore.h` differs). `disksaver_seed_spec.py --write/--check` writes `engines/unreal/core-test/disksaver_seed_spec_parity.txt` from CPython and checks it against a pure-Python reference of the spec; `DaedalusDiskSaverSeedSpecCore.h` replays it in C++. No tool behaviour changes.
