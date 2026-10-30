@@ -17,6 +17,15 @@ game=wardens_accord difficulty=hard seeds=400 bronze=1 silver=60 gold=65 bronzeH
 game=facetlock difficulty=easy seeds=400 bronze=1 silver=140 gold=160 bronzeHit=515 silverHit=322 goldHit=85 winMedian=140 botWin=515 demoWin=1000 demoMedian=140 separated=true
 game=facetlock difficulty=normal seeds=400 bronze=1 silver=140 gold=170 bronzeHit=275 silverHit=145 goldHit=32 winMedian=140 botWin=275 demoWin=1000 demoMedian=150 separated=true
 game=facetlock difficulty=hard seeds=400 bronze=1 silver=130 gold=160 bronzeHit=115 silverHit=70 goldHit=25 winMedian=130 botWin=115 demoWin=1000 demoMedian=130 separated=true
+game=prismvault difficulty=easy seeds=400 bronze=1 silver=150 gold=250 bronzeHit=427 silverHit=427 goldHit=75 winMedian=150 botWin=427 demoWin=1000 demoMedian=150 separated=false
+game=prismvault difficulty=normal seeds=400 bronze=1 silver=150 gold=250 bronzeHit=297 silverHit=150 goldHit=45 winMedian=150 botWin=297 demoWin=1000 demoMedian=100 separated=true
+game=prismvault difficulty=hard seeds=400 bronze=1 silver=100 gold=200 bronzeHit=235 silverHit=235 goldHit=35 winMedian=100 botWin=235 demoWin=1000 demoMedian=100 separated=false
+game=shardfall difficulty=easy seeds=400 bronze=1 silver=44 gold=50 bronzeHit=327 silverHit=142 goldHit=40 winMedian=43 botWin=327 demoWin=975 demoMedian=43 separated=true
+game=shardfall difficulty=normal seeds=400 bronze=1 silver=43 gold=48 bronzeHit=62 silverHit=32 goldHit=7 winMedian=43 botWin=62 demoWin=590 demoMedian=41 separated=true
+game=shardfall difficulty=hard seeds=400 bronze=1 silver=34 gold=38 bronzeHit=60 silverHit=27 goldHit=10 winMedian=33 botWin=60 demoWin=400 demoMedian=0 separated=true
+game=prismcairn difficulty=easy seeds=400 bronze=1 silver=105 gold=105 bronzeHit=545 silverHit=292 goldHit=292 winMedian=105 botWin=545 demoWin=1000 demoMedian=105 separated=false
+game=prismcairn difficulty=normal seeds=400 bronze=1 silver=105 gold=105 bronzeHit=285 silverHit=117 goldHit=117 winMedian=100 botWin=285 demoWin=1000 demoMedian=105 separated=false
+game=prismcairn difficulty=hard seeds=400 bronze=1 silver=0 gold=0 bronzeHit=0 silverHit=0 goldHit=0 winMedian=0 botWin=0 demoWin=1000 demoMedian=105 separated=false
 hash run=0 u=0.578865250385359 pick=5
 hash run=1 u=0.2257281665523796 pick=4
 hash run=2 u=0.88656220536723 pick=1

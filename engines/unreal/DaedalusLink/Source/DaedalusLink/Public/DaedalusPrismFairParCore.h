@@ -13,6 +13,9 @@
 #include "DaedalusFacetlockCore.h"
 #include "DaedalusGlowmossCore.h"
 #include "DaedalusLumenpathCore.h"
+#include "DaedalusPrismcairnCore.h"
+#include "DaedalusPrismvaultCore.h"
+#include "DaedalusShardfallCore.h"
 #include "DaedalusSpiritkiteCore.h"
 #include "DaedalusWardensAccordCore.h"
 #include <algorithm>
@@ -27,7 +30,8 @@ constexpr int Seeds = 400;
 constexpr std::int64_t BotSeed = 600;
 constexpr int StepLimit = 500;
 constexpr int WinPercent[2] = { 40, 10 };
-constexpr int GameCount = 6; // G603: glowmoss, spiritkite, glimmerloom; G604: lumenpath, wardens_accord, facetlock
+constexpr int GameCount = 9; // G603: glowmoss, spiritkite, glimmerloom; G604: lumenpath, wardens_accord, facetlock;
+                              // G605: prismvault, shardfall, prismcairn
 
 enum class Tier { None, Bronze, Silver, Gold };
 
@@ -176,6 +180,65 @@ inline int FacetlockRound(std::uint32_t Seed, const char* Difficulty, bool DemoO
 	return G.Won ? G.Score : 0;
 }
 
+// --- G605: same mixed bot (salts 13, 14, 15) ---
+inline int PrismvaultRound(std::uint32_t Seed, const char* Difficulty, bool DemoOnly)
+{
+	prismvault::Game G;
+	if (!G.Start(Seed, Difficulty)) return -1;
+	const int Run = static_cast<int>(Seed);
+	for (int K = 0; K < StepLimit && !G.Over; ++K)
+	{
+		prismvault::Game::Demo A = G.DemoAction();
+		if (!DemoOnly && !FollowDemo(Run, K))
+		{
+			const std::vector<int>& C = G.Candidates;
+			A = { true, C[static_cast<size_t>(Pick(BotSeed, Run, K, 13, static_cast<int>(C.size()) - 1))], {}, {} };
+		}
+		int Gained = 0;
+		char Res = '=';
+		if ((A.IsName ? G.Name(A.Shard, Gained) : G.Weigh(A.Left, A.Right, Res)) != prismvault::Game::Act::Ok) return -1;
+	}
+	return G.Won ? G.Score : 0;
+}
+
+inline int ShardfallRound(std::uint32_t Seed, const char* Difficulty, bool DemoOnly)
+{
+	shardfall::Game G;
+	if (!G.Start(Seed, Difficulty)) return -1;
+	const int Run = static_cast<int>(Seed);
+	for (int K = 0; K < StepLimit && !G.Over; ++K)
+	{
+		bool BankIt = G.DemoBank();
+		if (!DemoOnly && !FollowDemo(Run, K)) BankIt = G.Bag.empty() || Pick(BotSeed, Run, K, 14, 1) == 1;
+		int V = 0;
+		shardfall::Game::Draw D = shardfall::Game::Draw::Value;
+		if ((BankIt ? G.Bank(V) : G.DrawShard(D, V)) != shardfall::Game::Act::Ok) return -1;
+	}
+	return G.Won ? G.Score : 0;
+}
+
+inline int PrismcairnRound(std::uint32_t Seed, const char* Difficulty, bool DemoOnly)
+{
+	prismcairn::Game G;
+	if (!G.Start(Seed, Difficulty)) return -1;
+	const int Run = static_cast<int>(Seed);
+	for (int K = 0; K < StepLimit && !G.Over; ++K)
+	{
+		std::pair<int, int> M = prismcairn::BestMove(G.Cairns, G.Diff->TakeMax);
+		if (!DemoOnly && !FollowDemo(Run, K))
+		{
+			std::vector<std::pair<int, int>> Options;
+			for (int I = 0; I < static_cast<int>(G.Cairns.size()); ++I)
+				for (int T = 1; T <= std::min(G.Diff->TakeMax, G.Cairns[static_cast<size_t>(I)]); ++T) Options.push_back({ I, T });
+			M = Options[static_cast<size_t>(Pick(BotSeed, Run, K, 15, static_cast<int>(Options.size()) - 1))];
+		}
+		prismcairn::Game::Outcome O = prismcairn::Game::Outcome::WardenTakes;
+		int Wc = 0, Wt = 0;
+		if (G.Take(M.first, M.second, O, Wc, Wt) != prismcairn::Game::Act::Ok) return -1;
+	}
+	return G.Won ? G.Score : 0;
+}
+
 // One round: final score if won, else 0. Demo = the game's own DemoAction(). Returns -1 on a refused move.
 template <class GameT, class BotT>
 int PlayRound(std::uint32_t Seed, const char* Difficulty, BotT Bot)
@@ -222,7 +285,8 @@ inline Row Calibrate(const std::string& Game, const std::string& Difficulty, con
 inline std::vector<Row> Table(bool& Ok, int SeedCount = Seeds)
 {
 	static const char* const Diffs[3] = { "easy", "normal", "hard" };
-	static const char* const Names[GameCount] = { "glowmoss", "spiritkite", "glimmerloom", "lumenpath", "wardens_accord", "facetlock" };
+	static const char* const Names[GameCount] = { "glowmoss", "spiritkite", "glimmerloom", "lumenpath", "wardens_accord", "facetlock",
+		"prismvault", "shardfall", "prismcairn" };
 	std::vector<Row> Out;
 	Ok = true;
 	for (int Gi = 0; Gi < GameCount; ++Gi)
@@ -239,7 +303,10 @@ inline std::vector<Row> Table(bool& Ok, int SeedCount = Seeds)
 				else if (Gi == 2) { A = PlayRound<glimmerloom::Game>(U, D, GlimmerloomBot); B = PlayRound<glimmerloom::Game>(U, D, Demo); }
 				else if (Gi == 3) { A = LumenpathRound(U, D, false); B = LumenpathRound(U, D, true); }
 				else if (Gi == 4) { A = WardensRound(U, D, false); B = WardensRound(U, D, true); }
-				else { A = FacetlockRound(U, D, false); B = FacetlockRound(U, D, true); }
+				else if (Gi == 5) { A = FacetlockRound(U, D, false); B = FacetlockRound(U, D, true); }
+				else if (Gi == 6) { A = PrismvaultRound(U, D, false); B = PrismvaultRound(U, D, true); }
+				else if (Gi == 7) { A = ShardfallRound(U, D, false); B = ShardfallRound(U, D, true); }
+				else { A = PrismcairnRound(U, D, false); B = PrismcairnRound(U, D, true); }
 				Ok = Ok && A >= 0 && B >= 0;
 				S.push_back(std::max(0, A)); De.push_back(std::max(0, B));
 			}

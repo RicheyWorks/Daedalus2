@@ -1,9 +1,9 @@
-# FAIRPAR02 - Prismheart Fair Par (G603, G604; Prismheart balance lane)
+# FAIRPAR02 - Prismheart Fair Par (G603-G605; Prismheart balance lane)
 
 Code: `tools/minigames/fair_par.py` (authority; read-only on the games' rules)
 C++: `engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPrismFairParCore.h` (namespace `daedalus::prismpar`)
 Tests: `tools/minigames/test_fair_par.py` (6 tests); `engines/unreal/core-test/prism_fair_par_core_test.cpp`
-(114 checks). The C++ core plays the same bot through each game's own C++ core and must
+(168 checks). The C++ core plays the same bot through each game's own C++ core and must
 rebuild `prism_fair_par_parity.txt` exactly. CI: `engines.yml` (g++ ASan+UBSan, clang++) and `desktop-games.yml`
 (`fair_par.py --check`). Source only; no editor, no new assets.
 
@@ -19,9 +19,10 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
    - Glowmoss: dig a random ledge that still leaves light to climb out; climb out once the target is met.
    - Spiritkite: fly random lanes that keep a way home; head home once the target is met; then land.
    - Glimmerloom: sell what the rumor does not favour; buy a random amount of the hue rumored to rise; rest.
-   - G604 puzzle cabinets (Lumenpath, Wardens' Accord, Facetlock): a mixed bot. Each move, a coin flip either
-     plays the game's own demo move or a random legal move (a random mirror cell; a random take or affordable
-     summon; a random row or column slide).
+   - G604/G605 cabinets (Lumenpath, Wardens' Accord, Facetlock, Prismvault, Shardfall, Prismcairn): a mixed bot.
+     Each move, a coin flip either plays the game's own demo move or a random legal move (a random mirror cell; a
+     random take or affordable summon; a random row or column slide; name a random remaining candidate; draw or
+     bank on a coin; any legal take).
 4. Bot choices come from the stateless SplitMix64 hash shared with FairPar.java (bot seed 600), never from the
    game's own RNG. Each game uses seeds 0-399.
 5. **Daedalus hook:** `prismpar::TierOf(row, won, score)` gives the result-screen tier. Satchel tiers, Almanac daily
@@ -49,12 +50,20 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
 | facetlock | easy | 51.5 % | 140 | 160 | 515 / 322 / 85 | 140 | 100.0 % | 140 | yes |
 | facetlock | normal | 27.5 % | 140 | 170 | 275 / 145 / 32 | 140 | 100.0 % | 150 | yes |
 | facetlock | hard | 11.5 % | 130 | 160 | 115 / 70 / 25 | 130 | 100.0 % | 130 | yes |
-
-
+| prismvault | easy | 42.7 % | 150 | 250 | 427 / 427 / 75 | 150 | 100.0 % | 150 | no |
+| prismvault | normal | 29.7 % | 150 | 250 | 297 / 150 / 45 | 150 | 100.0 % | 100 | yes |
+| prismvault | hard | 23.5 % | 100 | 200 | 235 / 235 / 35 | 100 | 100.0 % | 100 | no |
+| shardfall | easy | 32.7 % | 44 | 50 | 327 / 142 / 40 | 43 | 97.5 % | 43 | yes |
+| shardfall | normal | 6.2 % | 43 | 48 | 62 / 32 / 7 | 43 | 59.0 % | 41 | yes |
+| shardfall | hard | 6.0 % | 34 | 38 | 60 / 27 / 10 | 33 | 40.0 % | 0 | yes |
+| prismcairn | easy | 54.5 % | 105 | 105 | 545 / 292 / 292 | 105 | 100.0 % | 105 | no |
+| prismcairn | normal | 28.5 % | 105 | 105 | 285 / 117 / 117 | 100 | 100.0 % | 105 | no |
+| prismcairn | hard | 0.0 % | 0 | 0 | 0 / 0 / 0 | 0 | 100.0 % | 105 | no |
 
 ## Balance findings
 
-- Every row is separated: a win, silver and gold need strictly better scores.
+- Every G603/G604 row is separated: a win, silver and gold need strictly better scores. Five G605 rows are not
+  (below).
 - **Hard is very hard for casual play.** Spiritkite hard: 2 % of casual rounds win (8 of 400), so its silver and gold
   rest on 8 rounds and are low-confidence. Glowmoss hard: 4.5 %. A careful player with the exact plan always wins
   (demo 100 %).
@@ -68,3 +77,11 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
   solves it, so pars are fair but hard is unforgiving to one wrong slide.
 - **Lumenpath is gentle on every difficulty** (casual wins 74-88 %). Gold (230/190/180) needs a near-demo solve with
   moves to spare.
+- **Prismvault scores in 50-point steps** (100 + 50 per spare weighing), so silver can equal the plain-win score
+  (easy, hard). Pars are coarse; a finer score (for example a bonus for fewer shards on the scale) would separate
+  them. A careful weigher always wins.
+- **Shardfall normal and hard are brutal for casual play** (6 %), and even the demo's banking rule wins only 59 % /
+  40 %. The target is luck-heavy; worth a look by the game's owner.
+- **Prismcairn has a perfect-play wall**: the demo (exact Grundy play) wins 100 %, the casual bot wins 0 % on hard,
+  and scores cap at 105 (50 per round + 5 per round left), so silver = gold. There is no room for a gold tier
+  without a new score source (for example a bonus for fast rounds).
