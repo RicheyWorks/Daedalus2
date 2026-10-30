@@ -201,4 +201,33 @@ class TranslocationPlanTest {
         assertEquals(1 - p.risk(even), s[s.length - 1], 1e-12);
         assertTrue(p.survival(p.frontLoaded())[9] >= p.survival(p.backLoaded())[9], "early birds help early");
     }
+
+    @Test
+    void polishNeverHurtsAndClosesTheGreedyGap() {
+        for (int budget : new int[] {4, 10, 16}) {
+            TranslocationPlan p = plan(D.withBudget(budget));
+            Plan greedy = p.greedy();
+            Plan polished = p.greedyPolished();
+            assertEquals(budget, polished.total());
+            assertTrue(polished.risk() <= greedy.risk());
+            assertTrue(p.best().risk() <= polished.risk());
+            int[] s = polished.schedule().stream().mapToInt(Integer::intValue).toArray();
+            assertEquals(polished.risk(), p.risk(s), 0);
+        }
+        TranslocationPlan p = plan(D);
+        assertTrue(p.polish(p.backLoaded()).risk() < p.risk(p.backLoaded()));
+    }
+
+    @Test
+    void cohortRisksAgreeWithReproductiveValue() {
+        double[] r = plan(new Settings(12, 10, 6, 5, 30, 10, 0.2, CraneCohorts.ADULT, 150)).cohortRisks();
+        int lowest = 0;
+        for (int c = 1; c < r.length; c++) {
+            if (r[c] < r[lowest]) {
+                lowest = c;
+            }
+        }
+        assertEquals(FLOCK.bestRelease(), lowest);
+        assertTrue(r[CraneCohorts.CHICK] > r[CraneCohorts.ADULT]);
+    }
 }

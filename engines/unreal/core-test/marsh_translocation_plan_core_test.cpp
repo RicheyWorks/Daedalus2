@@ -79,10 +79,22 @@ int main(int argc, char** argv)
 			while (std::getline(Ws, Part, ',')) SvOk = SvOk && K < Sample.size() && marsh_test::Close(Sample[K++], std::strtod(Part.c_str(), nullptr), 1e-12);
 			Check(Tag + " survival curve", SvOk && K == Sample.size() && marsh_test::Close(Sv.back(), 1 - B.Risk, 1e-12));
 		}
+		const TranslocationPlanResult Po = P.GreedyPolished();
+		Check(Tag + " polished greedy", Po.Schedule == ParseCsv(marsh_test::Field(H, "polished")) && RiskOk(Po.Risk, "polishedRisk")
+			&& Po.Risk <= G.Risk && B.Risk <= Po.Risk);
+		{
+			const auto Cr = P.CohortRisks();
+			std::stringstream Ws(marsh_test::Field(H, "cohortRisks"));
+			std::string Part;
+			bool CrOk = true;
+			int K = 0;
+			while (std::getline(Ws, Part, ',')) { CrOk = CrOk && K < 4 && Cr[K] == std::strtod(Part.c_str(), nullptr); ++K; }
+			Check(Tag + " cohort risks", CrOk && K == 4);
+		}
 		Check(Tag + " best is no worse than greedy, front or even",
 			B.Risk <= G.Risk && B.Risk <= P.Risk(P.FrontLoaded()) && B.Risk <= P.Risk(P.Even()));
 	}
-	Check("risks identical on every case", Risks == 45 && Exact == Risks);
+	Check("risks identical on every case", Risks == 54 && Exact == Risks);
 	for (const std::string& Q : Problems)
 	{
 		TranslocationSettings S;

@@ -4,8 +4,8 @@
 // authority. Plans how to spend an aviary budget of birds over the first release years so the G194 Leslie flock
 // (DaedalusMarshCraneCohortsCore.h) is least likely to fall below a crash threshold under log-normal environmental
 // shocks. All schedules share the same hashed shocks (common random numbers). Best() searches every schedule; Greedy()
-// adds one bird at a time. BackLoaded(), RiskInterval() (Wilson 95 %), Problem(), Survival() and the pruned search came with the G589
-// iterations.
+// adds one bird at a time. BackLoaded(), RiskInterval() (Wilson 95 %), Problem(), Survival(), the pruned search, Polish(),
+// GreedyPolished() and CohortRisks() came with the G589 iterations.
 // Golden vectors: engines/unreal/core-test/marsh_translocation_plan_parity.txt, written by MarshCoresParityTest.java.
 //
 // Seeding: as in G570/G583/G585, the Java core hashes (seed, run, year, salt) statelessly with the SplitMix64
@@ -90,7 +90,7 @@ inline double Normal(int64_t Seed, int Run, int T)
 class TranslocationPlan
 {
 public:
-	TranslocationPlan(const CraneCohorts& InFlock, const TranslocationSettings& In, int64_t Seed) : Flock(InFlock), S(In)
+	TranslocationPlan(const CraneCohorts& InFlock, const TranslocationSettings& In, int64_t Seed) : Flock(InFlock), S(In), SeedValue(Seed)
 	{
 		Shock.assign(static_cast<size_t>(S.Runs) * S.Horizon, 0.0);
 		const double Sg = S.Sigma;
@@ -137,6 +137,46 @@ public:
 			++Cur[BestYear];
 		}
 		return { Cur, Risk(Cur) };
+	}
+
+	// Local search: move one bird from year I to year J (first improving move, I then J ascending) while the risk
+	// strictly drops. Schedule empty and risk -1 for a bad start.
+	TranslocationPlanResult Polish(std::vector<int> Cur) const
+	{
+		double R = Risk(Cur);
+		if (R < 0) return { {}, -1 };
+		bool Moved = true;
+		const int N = static_cast<int>(Cur.size());
+		while (Moved && R > 0)
+		{
+			Moved = false;
+			for (int I = 0; I < N && !Moved; ++I)
+				for (int J = 0; J < N && !Moved; ++J)
+				{
+					if (I == J || Cur[I] == 0 || Cur[J] >= S.PerYear) continue;
+					--Cur[I];
+					++Cur[J];
+					const double Next = Risk(Cur);
+					if (Next < R) { R = Next; Moved = true; }
+					else { ++Cur[I]; --Cur[J]; }
+				}
+		}
+		return { Cur, R };
+	}
+
+	TranslocationPlanResult GreedyPolished() const { return Polish(Greedy().Schedule); }
+
+	// Polished-greedy risk for releasing into each G194 cohort, on the same shocks.
+	std::array<double, 4> CohortRisks() const
+	{
+		std::array<double, 4> Out{};
+		for (int C = 0; C < CraneCohorts::Cohorts; ++C)
+		{
+			TranslocationSettings Sc = S;
+			Sc.Cohort = C;
+			Out[C] = TranslocationPlan(Flock, Sc, SeedValue).GreedyPolished().Risk;
+		}
+		return Out;
 	}
 
 	std::vector<int> FrontLoaded() const
@@ -206,6 +246,7 @@ public:
 private:
 	CraneCohorts Flock;
 	TranslocationSettings S;
+	int64_t SeedValue = 0;
 	std::vector<double> Shock;
 
 	bool ValidSchedule(const std::vector<int>& Schedule) const
