@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4).
+"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -12,6 +12,8 @@ Batch 2: G560 Seal Roll, G561 Channel Dash, G562 Boom Defence, G563 Salvage Sale
 Batch 3: G564 Rope Run, G565 Belfry Changes, G566 Tram Shunt.
 Batch 4: G555 Watchfires, G554 Tide Lock, G553 Smugglers Island, G552 Harbour Cryptogram
 (the cryptogram's cipher, key and plain text and the smuggler's hidden island are written into the file).
+Batch 5: G551 Fleet Soundings, G550 Quay Duel, G549 Last Crate, G546 Census Riddles (the riddles
+and their answers are written into the file).
 Cases cover the real tools/world_census fixtures (several seeds), synthetic censuses, and
 hand-laid edge layouts (unsolvable, stuck, disconnected) injected through the tool's own
 play() by swapping its layout function for one call.
@@ -33,9 +35,13 @@ sys.path.insert(0, HERE)
 import belfry_changes as bc  # noqa: E402
 import boom_defence as bd  # noqa: E402
 import census_budget as cb  # noqa: E402
+import census_riddles as cr  # noqa: E402
 import harbour_cryptogram as hc  # noqa: E402
+import last_crate as lc  # noqa: E402
 import channel_dash as cd  # noqa: E402
+import fleet_soundings as fs  # noqa: E402
 import manifest_match as mm  # noqa: E402
+import quay_duel as qd  # noqa: E402
 import quayside_shove as qs  # noqa: E402
 import rope_run as rr  # noqa: E402
 import sack_chute as sc  # noqa: E402
@@ -894,10 +900,198 @@ def hc_lines():
     return out
 
 
+# ---------------------------------------------------------------- G551 Fleet Soundings
+def fs_grid(cells, size):
+    return ["".join("#" if (r, c) in cells else "." for c in range(size)) for r in range(size)]
+
+
+def fs_lines():
+    out = ["# disksaver fleet_soundings parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    for k, ships in {"hand_one_boat": [("h:0", 1)], "hand_pair": [("h:0", 2), ("h:1", 2)],
+                     "hand_full": [("h:0", 4), ("h:1", 3), ("h:2", 3), ("h:3", 2)],
+                     "hand_singles": [(f"h:{i}", 1) for i in range(5)]}.items():
+        cases.append((k, SYN["syn5"], 3, ships))
+    for cname, doc, seed, ships in cases:
+        ctx = patched(fs, "fleet", lambda d, s=0, h=ships: (__import__("random").Random(11), list(h))) if ships else \
+            patched(fs, "FORMAT", fs.FORMAT)
+        with ctx:
+            p = fs.generate(doc, seed)
+        size = p["size"]
+        lengths = [s["length"] for s in p["fleet"]]
+        hints = {(h["row"], h["col"]): h["hull"] for h in p["hints"]}
+        sol = p["solution"]
+        out.append(f"C {cname}")
+        out.append(f"L {size} {lst(lengths)} {lst(p['rows'])} {lst(p['cols'])} "
+                   f"{lst(f'{r}.{c}.{int(v)}' for (r, c), v in sorted(hints.items()))} {'/'.join(sol)}")
+        for limit, hs in ((2, hints), (1, hints), (2, {}), (4, {})):
+            sols = fs.solve(size, lengths, p["rows"], p["cols"], hs, limit)
+            out.append(f"S {limit} {int(bool(hs))} {len(sols)} {lst(('/'.join(fs_grid(x, size)) for x in sols), ';')}")
+        flip = [list(r) for r in sol]
+        flip[0][0] = "." if flip[0][0] == "#" else "#"
+        tr = ["".join(sol[c][r] for c in range(size)) for r in range(size)]
+        water = ["." * size] * size
+        bent = list(water)
+        bent[1] = "##" + "." * (size - 2)
+        bent[2] = ".#" + "." * (size - 2)
+        diag = list(water)
+        diag[0] = "#" + "." * (size - 1)
+        diag[1] = ".#" + "." * (size - 2)
+        grids = [sol, water, ["".join(r) for r in flip], tr, sol[:-1], [r + "." for r in sol],
+                 [sol[0].replace(".", "~")] + sol[1:], bent, diag, list(reversed(sol)), ["#" * size] * size,
+                 [r[::-1] for r in sol]]
+        for g in grids:
+            r = fs.check(p, g)
+            out.append(f"T {hx(chr(10).join(g))} {r['verdict']} {hx(chr(10).join(r['problems']))}")
+    return out
+
+
+# ---------------------------------------------------------------- G550 Quay Duel
+QD_KINDS = [("exactly one", "mode"), ("ran out", "short"), ("unknown move", "move"), ("after the quay", "long")]
+
+
+def qd_lines():
+    out = ["# disksaver quay_duel parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    for k, vals in {"hand_one": [5], "hand_twin": [7, 7], "hand_trap": [1, 100, 1], "hand_classic": [3, 9, 1, 2],
+                    "hand_flat": [4, 4, 4, 4, 4], "hand_zero": [0, 0, 0]}.items():
+        cases.append((k, SYN["syn5"], 0, [(f"h:{i}", v) for i, v in enumerate(vals)]))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(qd, "quay", lambda d, s, h=hand: list(h)) if hand else patched(qd, "FORMAT", qd.FORMAT)
+        with ctx:
+            values = [v for _, v in qd.quay(doc, seed)]
+            n = len(values)
+            out.append(f"C {cname}")
+            out.append(f"L {lst(values)}")
+            out.append(f"P {qd.margins(values)[0][n - 1]}")
+            for second in (False, True):
+                a = qd.duel(doc, seed, auto=True, second=second)
+                mine = [t["move"] for t in a["turns"] if t["captain"] == "you"]
+                k = len(mine)
+                tries = [None, mine, ["L"] * k, ["R"] * k, mine[:-1], mine + ["L"], ["X"] + mine[1:], [],
+                         [("L", "R")[i % 2] for i in range(k)], ["l"] * k]
+                if second:
+                    tries.append("both")
+                for t in tries:
+                    if t == "both":
+                        ok, r = run(lambda: qd.duel(doc, seed, moves=mine, auto=True, second=second), QD_KINDS)
+                    else:
+                        ok, r = run(lambda m=t: qd.duel(doc, seed, moves=m, auto=m is None, second=second), QD_KINDS)
+                    name = "both" if t == "both" else "auto" if t is None else lst(t)
+                    head = f"T {int(second)} {name}"
+                    if ok:
+                        mv = "".join(x["move"] for x in r["turns"])
+                        out.append(f"{head} ok {r['you_kib']} {r['casimir_kib']} {r['best_margin_kib']} {r['gave_away_kib']} "
+                                   f"{mv} {r['outcome']}")
+                    else:
+                        out.append(f"{head} err {r}")
+    return out
+
+
+# ---------------------------------------------------------------- G549 Last Crate
+LC_KINDS = [("hold-kib must", "hold"), ("exactly one", "mode"), ("moves ran out", "short"), ("unknown move", "move"),
+            ("stack is empty", "empty"), ("after the game", "long")]
+
+
+def lc_lines():
+    out = ["# disksaver last_crate parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    for k, ws in {"hand_one": [5], "hand_equal": [3, 3, 3], "hand_spike": [1, 2, 50, 1], "hand_zero": [0, 0, 4]}.items():
+        cases.append((k, SYN["syn5"], 0, [(f"h:{i}", w) for i, w in enumerate(ws)]))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(lc, "stack", lambda d, s, h=hand: list(h)) if hand else patched(lc, "FORMAT", lc.FORMAT)
+        with ctx:
+            deck = [w for _, w in lc.stack(doc, seed)]
+            n, tot = len(deck), sum(deck)
+            holds = sorted({max(1, tot // 2), max(1, max(deck) - 1), max(1, tot), cb.MAX_KIB}) + [0, cb.MAX_KIB + 1]
+            out.append(f"C {cname}")
+            out.append(f"L {lst(deck)}")
+            for hold in holds:
+                ok, a = run(lambda: lc.play(doc, seed, hold, auto=True), LC_KINDS)
+                tries = [None, ["sail"], ["load", "sail"], ["load"] * n + ["sail"], ["load"] * (n + 1), [], ["load"],
+                         ["fly"], ["Load", "sail"], "both"]
+                if ok:
+                    tries.append([t["move"] for t in a["turns"]] + ["sail"])
+                for t in tries:
+                    if t == "both":
+                        ok, r = run(lambda: lc.play(doc, seed, hold, moves=["sail"], auto=True), LC_KINDS)
+                    else:
+                        ok, r = run(lambda m=t: lc.play(doc, seed, hold, moves=m, auto=m is None), LC_KINDS)
+                    name = "both" if t == "both" else "auto" if t is None else lst(t)
+                    head = f"T {hold} {name}"
+                    if ok:
+                        adv = lst((";".join((x["advice"]["bust_chance"], x["advice"]["load_value"], x["advice"]["sail_value"],
+                                             x["advice"]["advice"]) + ((x["move"],))) for x in r["turns"]))
+                        out.append(f"{head} ok {r['carried_kib']} {r['best_kib']} {r['outcome']} {adv}")
+                    else:
+                        out.append(f"{head} err {r}")
+    return out
+
+
+# ---------------------------------------------------------------- G546 Census Riddles
+def cr_riddle(r):
+    return f"{r['id']}.{r['kind']}.{hx(r['question'])}.{hx(r['answer'])}"
+
+
+def cr_lines():
+    out = ["# disksaver census_riddles parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    with open(cb.DEFAULT_CONFIG, encoding="utf-8-sig") as f:
+        cfg = json.load(f)
+    for n in (0, 1, 20, 21, -3):
+        ok, _ = run(lambda c=n: cr.draw(SYN["syn5"], cfg, 0, c), [("count must", "count")])
+        out.append(f"N {n} {'ok' if ok else 'count'}")
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            for count in ((5, 9) if cname == "real" else (5,)):
+                cases.append((f"{cname}_seed{s}_n{count}", cr.draw(doc, cfg, s, count)))
+    hand = [("islands_total", "1000"), ("widest_world", "Alpha"), ("world_ram", "0"), ("heaviest_island", "beta:7"),
+            ("cargo_total", "-12")]
+    cases.append(("hand_mixed", {"seed": 0, "riddles": [{"id": f"r{i + 1}", "kind": k, "question": f"Q {k}?", "answer": a}
+                                                       for i, (k, a) in enumerate(hand)]}))
+    cases.append(("hand_single", {"seed": 0, "riddles": [{"id": "r1", "kind": "empty_islands", "question": "How many?",
+                                                          "answer": "7"}]}))
+    for cname, q in cases:
+        rs = q["riddles"]
+        out.append(f"C {cname}")
+        out.append(f"L {lst(cr_riddle(r) for r in rs)}")
+        right = {r["id"]: r["answer"] for r in rs}
+
+        def vary(a, how):
+            if how == "case":
+                return "  " + a.upper() + "\t"
+            if a.lstrip("-").isdigit():
+                return {"commas": ",".join(a), "plus": "+" + a.lstrip("-") if not a.startswith("-") else a,
+                        "zeros": ("-00" + a[1:]) if a.startswith("-") else "00" + a, "under": a[0] + "_" + a[1:],
+                        "spaced": a + " ,"}[how]
+            return a + "!"
+        tries = [right, {}, {k: v + "x" for k, v in right.items()}, dict(list(right.items())[: len(right) // 2])]
+        for how in ("case", "commas", "plus", "zeros", "under", "spaced"):
+            tries.append({k: vary(v, how) for k, v in right.items()})
+        tries.append(dict(right, r99="1", extra="x"))
+        tries.append({k: "" for k in right})
+        tries.append({k: "-0" if v == "0" else " " for k, v in right.items()})
+        for t in tries:
+            g = cr.grade(q, t)
+            flags = "".join("1" if x["correct"] else "0" for x in g["results"])
+            out.append(f"T {lst(f'{hx(k)}.{hx(v)}' for k, v in t.items())} {g['score']} {g['out_of']} {flags} {g['verdict']}")
+    return out
+
+
 GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": qs_lines, "sack_chute": sc_lines,
          "seal_roll": sr_lines, "channel_dash": cd_lines, "boom_defence": bd_lines, "salvage_sale": ss_lines,
          "rope_run": rr_lines, "belfry_changes": bc_lines, "tram_shunt": ts_lines,
-         "watchfires": wf_lines, "tide_lock": tl_lines, "smugglers_island": si_lines, "harbour_cryptogram": hc_lines}
+         "watchfires": wf_lines, "tide_lock": tl_lines, "smugglers_island": si_lines, "harbour_cryptogram": hc_lines,
+         "fleet_soundings": fs_lines, "quay_duel": qd_lines, "last_crate": lc_lines, "census_riddles": cr_lines}
 
 
 def texts():

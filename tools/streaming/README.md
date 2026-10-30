@@ -355,3 +355,5 @@ Batch 2 (G574): `DaedalusDiskSaver{SealRoll,ChannelDash,BoomDefence,SalvageSale}
 Batch 3 (G575): `DaedalusDiskSaver{RopeRun,BelfryChanges,TramShunt}Core.h` port Rope Run, Belfry Changes and Tram Shunt the same way, with explicit caps on the route DFS and the state searches.
 
 Batch 4 (G576): `DaedalusDiskSaver{Watchfires,TideLock,SmugglersIsland,HarbourCryptogram}Core.h` port Watchfires, Tide Lock, Smuggler's Island and Harbour Cryptogram the same way; the golden files carry the smuggler's hidden island and the cryptogram's cipher, key and plain text.
+
+Batch 5 (G577): `DaedalusDiskSaver{FleetSoundings,QuayDuel,LastCrate,CensusRiddles}Core.h` port Fleet Soundings, Quay Duel, Last Crate and Census Riddles (grading; the riddles and answers are in the golden file). That completes the C++ ports of the DiskSaver Python games.
