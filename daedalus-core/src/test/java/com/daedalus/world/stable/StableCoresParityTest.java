@@ -146,6 +146,48 @@ class StableCoresParityTest {
         return out;
     }
 
+    static List<String> waterTroughFill() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            WaterTroughFill.Pipes net = WaterTroughFill.pipes(s, 2 + s % 8, 5);
+            int demand = 1 + s % 6;
+            WaterTroughFill.Plan b = WaterTroughFill.best(net, demand);
+            WaterTroughFill.Plan g = WaterTroughFill.cheapestPath(net, demand);
+            out.add("seed=" + s + " nodes=" + net.nodes() + " from=" + join(net.from()) + " to=" + join(net.to()) + " cap=" + join(net.cap())
+                    + " cost=" + join(net.cost()) + " demand=" + demand + " best=" + b.cost() + ":" + join(b.flow()) + " cheapest=" + g.cost()
+                    + ":" + join(g.flow()));
+        }
+        return out;
+    }
+
+    static List<String> lanternPosts() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            int n = 1 + s % 12;
+            int reach = s % 4;
+            int[] parent = LanternPosts.yard(s, n);
+            int[] price = LanternPosts.prices(s, n, 9);
+            LanternPosts.Plan b = LanternPosts.best(parent, price, reach);
+            LanternPosts.Plan g = LanternPosts.busiestFirst(parent, price, reach);
+            out.add("seed=" + s + " parent=" + join(parent) + " price=" + join(price) + " reach=" + reach + " best=" + b.cost() + ":"
+                    + join(b.lighter()) + " busiest=" + g.cost() + ":" + join(g.lighter()));
+        }
+        return out;
+    }
+
+    static List<String> hayBaleStacking() {
+        List<String> out = new ArrayList<>();
+        for (int s = 1; s <= SEEDS; s++) {
+            HayBaleStacking.Bales h = HayBaleStacking.bales(s, s % 10);
+            HayBaleStacking.Stack b = HayBaleStacking.best(h);
+            HayBaleStacking.Stack g = HayBaleStacking.biggestFirst(h);
+            out.add("seed=" + s + " a=" + join(h.a()) + " b=" + join(h.b()) + " height=" + join(h.height()) + " weight=" + join(h.weight())
+                    + " strength=" + join(h.strength()) + " best=" + b.height() + ":" + join(b.bottomUp()) + " biggest=" + g.height() + ":"
+                    + join(g.bottomUp()));
+        }
+        return out;
+    }
+
     @Test
     void trottingRingMatchesCpp() throws IOException {
         check("stable_trotting_ring_parity.txt", "G506 TrottingRing", StableCoresParityTest::trottingRing);
@@ -184,6 +226,21 @@ class StableCoresParityTest {
     @Test
     void bridleRackMatchingMatchesCpp() throws IOException {
         check("stable_bridle_rack_matching_parity.txt", "G537 BridleRackMatching", StableCoresParityTest::bridleRackMatching);
+    }
+
+    @Test
+    void waterTroughFillMatchesCpp() throws IOException {
+        check("stable_water_trough_fill_parity.txt", "G539 WaterTroughFill", StableCoresParityTest::waterTroughFill);
+    }
+
+    @Test
+    void lanternPostsMatchesCpp() throws IOException {
+        check("stable_lantern_posts_parity.txt", "G540 LanternPosts", StableCoresParityTest::lanternPosts);
+    }
+
+    @Test
+    void hayBaleStackingMatchesCpp() throws IOException {
+        check("stable_hay_bale_stacking_parity.txt", "G542 HayBaleStacking", StableCoresParityTest::hayBaleStacking);
     }
 
     private static void check(String file, String game, Supplier<List<String>> lines) throws IOException {
