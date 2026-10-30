@@ -506,12 +506,26 @@
           "start": "StartGame(\"siltlane\", 1269710344)"
         },
         {
+          "game": "shadewatch",
+          "title": "Shadewatch Vigil",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            10.0,
+            2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 592504923,
+          "option": 0,
+          "start": "StartGame(\"shadewatch\", 592504923)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            2.5,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -524,8 +538,8 @@
           "title": "BlackJackPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            10.0,
-            5.0,
+            12.5,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -865,12 +879,26 @@
           "start": "StartGame(\"siltlane\", 1071606724)"
         },
         {
+          "game": "shadewatch",
+          "title": "Shadewatch Vigil",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            12.5,
+            3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1595842835,
+          "option": 0,
+          "start": "StartGame(\"shadewatch\", 1595842835)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            12.5,
-            3.75,
+            15.0,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -884,7 +912,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             15.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1437,24 +1465,22 @@
           "start": "StartGame(\"shardfall\", 242191464)"
         },
         {
-          "game": "spiritkite",
-          "title": "Spiritkite Weave",
-          "host": "PythonMinigame",
+          "game": "shadewatch",
+          "title": "Shadewatch Vigil",
+          "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
             11.25,
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 630418058,
-          "difficulty": "normal",
-          "module": "tools/minigames/spiritkite.py",
-          "start": "spiritkite.start(630418058, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
+          "seed": 1433643621,
+          "option": 0,
+          "start": "StartGame(\"shadewatch\", 1433643621)"
         },
         {
-          "game": "shadewatch",
-          "title": "Shadewatch Vigil",
+          "game": "spiritkite",
+          "title": "Spiritkite Weave",
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
@@ -1462,10 +1488,10 @@
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 1433643621,
+          "seed": 630418058,
           "difficulty": "normal",
-          "module": "tools/minigames/shadewatch.py",
-          "start": "shadewatch.start(1433643621, difficulty)",
+          "module": "tools/minigames/spiritkite.py",
+          "start": "spiritkite.start(630418058, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         },
         {

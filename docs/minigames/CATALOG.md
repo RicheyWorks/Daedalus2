@@ -31,6 +31,7 @@ batched rebuild under the editor custodian.
 | `prismvault` | Prismvault Weigh | 1 |
 | `shardfall` | Shardfall Gamble | 1 |
 | `siltlane` | Siltlane | 1 |
+| `shadewatch` | Shadewatch Vigil | 1 |
 
 ## How to play
 
@@ -61,6 +62,7 @@ One original line per game, read from `HowToLine()`.
 | `prismvault` | HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out. |
 | `shardfall` | HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot; reach the target by the last round. |
 | `siltlane` | HOW Switch lanes so the drifting silt passes you. |
+| `shadewatch` | HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends. |
 
 ## Difficulty
 
@@ -91,6 +93,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `prismvault` | normal |
 | `shardfall` | normal |
 | `siltlane` | normal |
+| `shadewatch` | normal |
 
 ## Daedalus spots
 
@@ -121,6 +124,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `prismvault` | `prismheart_realm` | Prismheart, the balance chamber |
 | `shardfall` | `prismheart_realm` | Prismheart, the glowing seam |
 | `siltlane` | `spawn_overlook` | Spawn overlook, the silt course |
+| `shadewatch` | `prismheart_realm` | Prismheart, the watch lanes |
 
 ## Capabilities
 
@@ -152,6 +156,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `prismvault` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `shardfall` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `siltlane` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
+| `shadewatch` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 
 ## Leaderboard feed
 

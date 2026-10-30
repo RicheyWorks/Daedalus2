@@ -17,6 +17,7 @@
 #include "DaedalusDesktopPrismvaultCore.h"
 #include "DaedalusDesktopShardfallCore.h"
 #include "DaedalusDesktopSiltlaneCore.h"
+#include "DaedalusDesktopShadewatchCore.h"
 #include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
@@ -47,7 +48,8 @@ inline const std::vector<Entry>& Catalog() {
         {"prismcairn","Prismcairn Duel","Out-think the Warden at the shard cairns; lift the last shard. Left/Right or stick: pick a cairn; J/K/Space/Shift or pad A/B/X/Y: take 1/2/3/4"},
         {"prismvault","Prismvault Weigh","Find the hollow shard with the Warden's balance. Left/Right or stick: pick; J or pad A: pan it; Space or pad X: weigh; Shift or pad Y: name"},
         {"shardfall","Shardfall Gamble","Draw glowing shards from the seam and bank before it cracks. J/Space or pad A: draw; K/Shift or pad B/X: bank"},
-        {"siltlane","Siltlane","Switch lanes so the drifting silt passes you. Left/Right or stick: change lane"}
+        {"siltlane","Siltlane","Switch lanes so the drifting silt passes you. Left/Right or stick: change lane"},
+        {"shadewatch","Shadewatch Vigil","Hold the lanes against creeping shades. Left/Right or stick: pick a lane; J or pad A: flare; K or pad B: kindle; Space or pad X: nova"}
     };
     return Entries;
 }
@@ -76,6 +78,7 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="prismvault") return std::make_unique<PrismvaultGame>();
     if(Id=="shardfall") return std::make_unique<ShardfallGame>();
     if(Id=="siltlane") return std::make_unique<SiltlaneGame>();
+    if(Id=="shadewatch") return std::make_unique<ShadewatchGame>();
     return nullptr;
 }
 
