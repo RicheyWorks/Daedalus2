@@ -1,0 +1,45 @@
+{
+ "schema": "bb-material-variants/1",
+ "gap": "G116 (youtube-master 49939, PR #337 brew.school.SongSchool)",
+ "status": "NOT READY",
+ "candles": {
+  "asset": "Prop_YTM_LessonCandles",
+  "slot": "flame (slot 2)",
+  "parent": "M_YTM_CandleFlame (UE: Masked, unlit/emissive)",
+  "params": {
+   "LitCount": "scalar 0..6 = SongSchool.lessonsLeft()",
+   "CandleX0_cm": -27.5,
+   "CandlePitch_cm": 11.0,
+   "FlameColour": "vector, linear",
+   "EmissiveStrength": "scalar (nits-ish, 20 default)"
+  },
+  "graph": "k = floor((LocalPosition.X - CandleX0_cm) / CandlePitch_cm + 0.5); OpacityMask = (k < LitCount) ? 1 : 0; Emissive = FlameColour * EmissiveStrength * flicker(Time + k)",
+  "instances": {
+   "MI_YTM_LessonCandles_Lit": {
+    "LitCount": 6,
+    "EmissiveStrength": 20,
+    "FlameColour_srgb": "FFB347"
+   },
+   "MI_YTM_LessonCandles_Unlit": {
+    "LitCount": 0,
+    "EmissiveStrength": 0,
+    "FlameColour_srgb": "FFB347"
+   }
+  },
+  "sockets": "SOCKET_Flame_k: spawn a small point light / ember VFX while k < LitCount; snuff from the highest k down as lessons are used"
+ },
+ "cards": {
+  "asset": "Prop_YTM_SongCard",
+  "slot": "tab (slot 1)",
+  "params": {
+   "PupilColour": "vector, one MI per pupil"
+  },
+  "suggested_pupil_colours_srgb": [
+   "C98A3A",
+   "6E7F99",
+   "E3C25A",
+   "3F8A8C"
+  ],
+  "slots": "Prop_YTM_CardShelf SOCKET_Box<k>_Card<j>: k = SongSchool Card.box(), j = order in the box"
+ }
+}

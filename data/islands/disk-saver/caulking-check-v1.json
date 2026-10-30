@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "quest": "q_caulking_check",
+  "lore": "A hull is only as dry as its seams. Caulker Evander works the DiskSaver slipway with oakum and a mallet, running his thumb along every plank joint. A stray mark at the start of a file, a carriage return where a newline should be, a key written twice so the second silently drowns the first: each is a seam that weeps, and enough of them sink a boat.",
+  "hook": {
+    "report_format": "daedalus-caulking-check",
+    "field": "verdict",
+    "values": ["sound", "weeping", "leaking"],
+    "planks": "files",
+    "open_seams": "findings[kind=bad_utf8|bad_json|duplicate_key]",
+    "damp_seams": "findings[kind=bom|crlf|no_final_newline|trailing_space|tab_indent]"
+  },
+  "npc": {
+    "name": "Caulker Evander",
+    "lines": {
+      "sound": "Every seam tight from stem to stern. Not a drop gets in. Slide her down the ways.",
+      "weeping": "She floats, but some seams are damp: a stray mark, a crooked line ending, a plank cut short. I'll pay them with pitch when there's time.",
+      "leaking": "There's an open seam: a plank that won't read, or a key nailed twice so one is lost. She'll take water. Haul her out and fix it."
+    }
+  }
+}

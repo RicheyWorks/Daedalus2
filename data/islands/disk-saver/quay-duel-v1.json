@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "quest": "q_quay_duel",
+  "lore": "When two captains both want the same tide, DiskSaver custom says they settle it on the quay. Every island's crate is lined up end to end, and the captains take turns hauling one crate off either end of the line until none are left. Wharfinger Casimir has run the quay for thirty years and has never taken a crate he could not justify. Beat him, or at least learn what he knew.",
+  "hook": {
+    "report_format": "daedalus-quay-duel",
+    "field": "outcome",
+    "values": ["won", "tied", "lost"],
+    "perfect": "perfect",
+    "margin": "margin_kib",
+    "best_margin": "best_margin_kib"
+  },
+  "npc": {
+    "name": "Wharfinger Casimir",
+    "lines": {
+      "won": "You took the heavier share off my own quay. Few captains manage that. The tide is yours.",
+      "tied": "Crate for crate, kilobyte for kilobyte. We share the tide, and I'll buy the first round.",
+      "lost": "The quay goes to me. Look at which end you took on each turn; the line told you everything."
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+ "asset": "Prop_YTM_RecordPlayer",
+ "units": "cm",
+ "space": "unreal",
+ "note": "UE +X forward, +Y right, +Z up, cm; UE = 100 * (x_b, -y_b, z_b) = 100 * (gx, gz, gy) (UEB 48725); location relative to parent node; rotation [pitch, yaw, roll] deg: plain sockets [0, 0, 0] = mesh-aligned, attach sockets +X along barrel/shaft, +Z up; native empties pre-rotated to match",
+ "sockets": [
+  {
+   "name": "SOCKET_Hinge_Crank",
+   "parent": "Prop_YTM_RecordPlayer",
+   "location": [
+    18.2,
+    0.0,
+    9.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Needle",
+   "parent": "Prop_YTM_RecordPlayer",
+   "location": [
+    5.0,
+    6.0,
+    17.8
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Sound",
+   "parent": "Prop_YTM_RecordPlayer",
+   "location": [
+    0.0,
+    3.7,
+    49.1
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Spin",
+   "parent": "Prop_YTM_RecordPlayer",
+   "location": [
+    0.0,
+    0.0,
+    17.5
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  }
+ ],
+ "hinges": [
+  {
+   "socket": "SOCKET_Hinge_Crank",
+   "mover": "Prop_YTM_RecordPlayer_Crank",
+   "pivot_m": [
+    0.182,
+    0.0,
+    0.09
+   ],
+   "motion": "spin",
+   "spin_axis_blender": [
+    1,
+    0,
+    0
+   ],
+   "spin_axis_ue": [
+    1,
+    0,
+    0
+   ],
+   "open_blender_euler_deg": null,
+   "open_ue_rotator": null
+  },
+  {
+   "socket": "SOCKET_Spin",
+   "mover": "Prop_YTM_Record_Whole",
+   "alt_movers": [
+    "Prop_YTM_Record_Scratched"
+   ],
+   "pivot_m": [
+    0.0,
+    0.0,
+    0.175
+   ],
+   "motion": "spin",
+   "spin_axis_blender": [
+    0,
+    0,
+    1
+   ],
+   "spin_axis_ue": [
+    0,
+    0,
+    1
+   ],
+   "rpm": 78,
+   "open_blender_euler_deg": null,
+   "open_ue_rotator": null
+  }
+ ]
+}

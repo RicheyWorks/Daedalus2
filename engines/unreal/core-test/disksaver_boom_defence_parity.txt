@@ -1,0 +1,117 @@
+# disksaver boom_defence parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit
+C real_seed0
+L 1.0,1.1,1.2,2.2,2.3,2.4,3.4,4.4,5.4,5.5,5.6,4.6,3.6,3.7,3.8 0.0,0.1,0.2,1.4,2.0,2.6,3.3,4.7,5.7,6.3,6.4,6.5 6,5,5
+P 0 BG 0 GH
+T B,G ok 0 sss watertight
+T - ok 3 ttt overrun
+T G,H ok 0 sss watertight
+T A ok 3 ttt overrun
+T A,A err twice
+T A,B,C err many
+T Z err site
+T a,b ok 3 ttt overrun
+T L ok 3 ttt overrun
+T L,A ok 3 ttt overrun
+T AA err site
+C real_seed1
+L 0.0,1.0,2.0,2.1,2.2,3.2,3.3,3.4,4.4,4.5,4.6,3.6,2.6,1.6,0.6,0.7,0.8,1.8,2.8,3.8,4.8,5.8 0.1,1.2,1.3,1.7,2.5,3.1,3.7,4.2,4.7,5.5,5.7,6.8 5,5,4
+P 0 AD 0 DG
+T A,D ok 0 sss watertight
+T - ok 3 ttt overrun
+T D,G ok 0 sss watertight
+T A ok 3 ttt overrun
+T A,A err twice
+T A,B,C err many
+T Z err site
+T a,b ok 2 tts leaky
+T L ok 3 ttt overrun
+T L,A ok 3 ttt overrun
+T AA err site
+C real_seed7
+L 4.0,3.0,2.0,1.0,1.1,1.2,2.2,2.3,2.4,3.4,4.4,4.5,4.6,3.6,2.6,1.6,1.7,1.8,0.8 0.3,0.5,0.6,0.7,1.4,1.5,2.7,3.1,3.7,5.1,5.3,5.6 6,4,4
+P 0 CD 0 DG
+T C,D ok 0 sss watertight
+T - ok 3 ttt overrun
+T D,G ok 0 sss watertight
+T A ok 3 ttt overrun
+T A,A err twice
+T A,B,C err many
+T Z err site
+T a,b ok 3 ttt overrun
+T L ok 3 ttt overrun
+T L,A ok 3 ttt overrun
+T AA err site
+C syn5_seed1
+L 1.0,1.1,1.2,2.2,3.2,4.2,5.2,5.3,5.4,4.4,3.4,2.4,1.4,0.4,0.5,0.6,0.7,0.8,1.8,2.8,3.8,4.8,5.8 0.0,0.3,1.3,2.1,2.5,3.5,4.3,5.1,5.7,6.1,6.3,6.4 4,6,5,5,5
+P 0 AC 0 CG
+T A,C ok 0 sssss watertight
+T - ok 5 ttttt overrun
+T C,G ok 0 sssss watertight
+T A ok 5 ttttt overrun
+T A,A err twice
+T A,B,C err many
+T Z err site
+T a,b ok 1 stsss leaky
+T L ok 5 ttttt overrun
+T L,A ok 4 stttt leaky
+T AA err site
+C syn6_seed1
+L 5.0,4.0,4.1,4.2,3.2,3.3,3.4,2.4,1.4,1.5,1.6,2.6,3.6,4.6,5.6,5.7,5.8,6.8 0.3,0.7,1.3,1.7,2.1,2.7,3.0,3.5,4.3,5.2,5.3,6.5 6,7,4,5,6,4
+P 1 CH 1 HI
+T C,H ok 1 ssssts watertight
+T - ok 6 tttttt overrun
+T H,I ok 1 ssssts watertight
+T A ok 6 tttttt overrun
+T A,A err twice
+T A,B,C err many
+T Z err site
+T a,b ok 6 tttttt overrun
+T L ok 6 tttttt overrun
+T L,A ok 6 tttttt overrun
+T AA err site
+C syn8_seed1
+L 1.0,1.1,1.2,2.2,3.2,4.2,5.2,6.2,6.3,6.4,5.4,4.4,3.4,2.4,1.4,0.4,0.5,0.6,1.6,2.6,3.6,4.6,5.6,6.6,6.7,6.8,5.8 0.1,1.3,1.5,1.7,2.0,2.1,2.3,2.7,3.1,4.5,5.5,6.5 5,7,5,6,7,5
+P 0 AB 0 CG
+T A,B ok 0 ssssss watertight
+T - ok 6 tttttt overrun
+T C,G ok 0 ssssss watertight
+T A ok 6 tttttt overrun
+T A,A err twice
+T A,B,C err many
+T Z err site
+T a,b ok 0 ssssss watertight
+T L ok 6 tttttt overrun
+T L,A ok 2 stssts leaky
+T AA err site
+C hand_no_sites
+L 3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7,3.8 - 4,5
+P 2 - 2 -
+T - ok 2 tt watertight
+C hand_one_site
+L 3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7,3.8 2.4 1,4,2
+P 1 A 1 A
+T A ok 1 sts watertight
+T - ok 3 ttt overrun
+T A ok 1 sts watertight
+T A ok 1 sts watertight
+T A,A err twice
+T A,B,C err site
+T Z err site
+T a,b err site
+T A ok 1 sts watertight
+T AB err site
+T AA err site
+C hand_two_sites
+L 3.0,3.1,3.2,3.3,3.4,3.5,3.6,3.7,3.8 2.1,4.7 2
+P 0 AB 0 AB
+T A,B ok 0 s watertight
+T - ok 1 t overrun
+T A,B ok 0 s watertight
+T A ok 0 s watertight
+T A,A err twice
+T A,B,C err site
+T Z err site
+T a,b ok 0 s watertight
+T B ok 0 s watertight
+T B,A ok 0 s watertight
+T AA err site
