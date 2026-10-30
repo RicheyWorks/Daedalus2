@@ -143,6 +143,23 @@ class Rules(unittest.TestCase):
 
 
 
+class Screen(unittest.TestCase):
+    """Iterations 7 and 9: tutorial rows on the first coal only; the safe-cell count tracks the preview."""
+    def test_tutorial_only_on_the_first_coal(self):
+        g = gm.start(2)
+        self.assertIn("COAL   r,c", g.render())
+        g.step(g.demo_action())
+        self.assertNotIn("COAL   r,c", g.render())
+
+    def test_safe_cells_count_matches_preview(self):
+        g = gm.start(4, "easy")
+        while not g.over:
+            expect = sum(1 for r in range(g.size()) for c in range(g.size()) if g.preview(r, c)[1] == 0)
+            self.assertIn("safe cells %d" % expect, g.render())
+            g.step(g.demo_action())
+        self.assertNotIn("safe cells", g.render())
+
+
 class Saves(unittest.TestCase):
     """Iteration 5: from_state refuses saves that break the rules."""
     def bad(self, **fields):

@@ -152,6 +152,20 @@ class Game(pc.PrismGame):
                 raised += 1
         return glazes, cracks, raised
 
+    def tutorial(self):
+        """First-coal teaching rows for the screen (iteration 7)."""
+        return ["COAL   r,c sets a coal: +%d heat under it, +%d on each neighbour" % (COAL_HEAT, SPREAD_HEAT),
+                "GLAZE  a tile at exactly its target glazes (**); past it cracks (xx)",
+                "SPREAD stone (##) and finished tiles take no heat but pass the spread on"]
+
+    def fresh(self):
+        return self.coals == self.cfg["coals"] and not self.over
+
+    def safe_cells(self):
+        """Cells where a coal cracks nothing (iteration 9: the screen counts them so the player knows the floor is still safe)."""
+        s = self.size()
+        return sum(1 for r in range(s) for c in range(s) if self.preview(r, c)[1] == 0)
+
     def demo_action(self):
         """Stoker: the coal that cracks nothing and glazes most, then raises most heat; ties by row, column.
 
@@ -180,6 +194,10 @@ class Game(pc.PrismGame):
                 row.append("##" if t == STONE else "**" if t == GLAZED else "xx" if t == CRACKED else f"{self.heat[r][c]}/{t}")
             rows.append(" ".join(row))
         lines = [f"{TITLE} [{self.difficulty}] coals {self.coals} glazed {self.glazed} cracked {self.cracked} raw {self.clay()} score {self.score}"] + rows
+        if self.fresh():
+            lines += self.tutorial()
+        if not self.over:
+            lines.append(f"safe cells {self.safe_cells()}")
         if self.over:
             lines.append("WON: the whole floor shines" if self.won else "LOST: the firing is spoiled")
         return "\n".join(lines)
