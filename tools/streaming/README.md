@@ -311,3 +311,18 @@ CI: `rope-run.yml`.
 python tools/streaming/rope_run.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/rope_run_test.py
 ```
+
+## Belfry Changes (G565)
+
+`belfry_changes.py` is a change-ringing puzzle over the world census. Each island casts a bell,
+and a seed jumbles the row. Each change swaps any set of non-overlapping neighbouring pairs, and
+the heavy tenor must rest after each change it moves in. Every island bell must ring at lead
+before the ring comes round. Par is the fewest changes by exact BFS, checked against an
+independent search. `single_swap_par` shows the one-pair-at-a-time cost. Verdicts are `rung`,
+`clattered` and `unfinished`. Hook: `data/islands/disk-saver/belfry-changes-v1.json` (Ringer
+Agatha). Doc: `docs/islands/DISKSAVER-BELFRY-CHANGES.md`. CI: `belfry-changes.yml`.
+
+```
+python tools/streaming/belfry_changes.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/belfry_changes_test.py
+```
