@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Defrag Tide
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/defrag_tide.py'
+      - 'tools/streaming/defrag_tide_test.py'
+      - 'data/islands/disk-saver/defrag-tide-v1.json'
+      - 'data/islands/disk-saver/byte-spring-v1.json'
+      - '.github/workflows/defrag-tide.yml'
+permissions:
+  contents: read
+jobs:
+  defrag-tide:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G63 Defrag Tide rules (validation, erosion, seeded runs, G39 tie-in)
+        run: python -m unittest tools/streaming/defrag_tide_test.py -v
+      - name: CLI smoke (seed 1 wins)
+        run: python tools/streaming/defrag_tide.py data/islands/disk-saver/defrag-tide-v1.json --seed 1

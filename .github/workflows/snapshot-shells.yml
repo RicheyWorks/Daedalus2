@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Snapshot Shells
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/snapshot_shells.py'
+      - 'tools/streaming/snapshot_shells_test.py'
+      - 'data/islands/disk-saver/snapshot-shells-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/snapshot-shells.yml'
+permissions:
+  contents: read
+jobs:
+  snapshot-shells:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G113 Snapshot Shells rules (copy-on-write space, exact restores, retention traps, G86 tie-in)
+        run: python -m unittest tools/streaming/snapshot_shells_test.py -v
+      - name: CLI smoke (tuned retention wins)
+        run: python tools/streaming/snapshot_shells.py data/islands/disk-saver/snapshot-shells-v1.json

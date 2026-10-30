@@ -1,0 +1,27 @@
+{
+  "packaged_server_to_native_client": true,
+  "water_payload": true,
+  "bounds404": true,
+  "jwt401": true,
+  "cancelled_reply_ignored": true,
+  "reconnect": true,
+  "token_not_in_logs": true,
+  "elapsed_seconds": 21.188,
+  "scope": "Java server startup plus native engine startup and HTTP scenario",
+  "jar_sha256": "9779c9d102965c3dc175a7bbb78439909b0f1c07417392dde82f38197c946695",
+  "rendered_gameplay_verified": false,
+  "tls_redirect_policy_verified": false,
+  "realm_transfer_verified": false,
+  "source_head": "385a3f3f84b8f00afdf663a0a601270285126562",
+  "production_inputs": 131,
+  "fixture_additions": [
+    "Public/OceanHttpProbe.h",
+    "Private/OceanHttpProbe.cpp"
+  ],
+  "owned_children_stopped": true,
+  "log_sha256": {
+    "native-stdout.log": "8611963ca648a864a5858f2dd54a1a502b2b39afef0d34ea710414cdc248da14",
+    "native.log": "f25aae5e2d9e1d2edecd150676e32032c9004417d00d442ba6e3eaca3d018ded",
+    "server.log": "b4013cb8c57ec756ebb90f0925d634d901fafc5116df3fedef77d74c820f8877"
+  }
+}

@@ -1,0 +1,74 @@
+# SPDX-License-Identifier: MIT
+# Engine-free standalone core tests for the realms (Bricks, Gallery motif/spectrum, Parcels).
+# They were only runnable by hand through run_*.cmd with a local Visual Studio; this runs the same
+# cl flags on the Windows runner. No Unreal, no UBT.
+name: Realms core tests
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'engines/unreal/core-test/bricks_*'
+      - 'engines/unreal/core-test/gallery_*'
+      - 'engines/unreal/core-test/mail_route_*'
+      - 'engines/unreal/core-test/verify_*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusBricks*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusGalleryMotif*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusGallerySpectrum*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusGallery*Core.h'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMailRoute*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusBricks*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusGalleryMotif*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusGallerySpectrum*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusMailRoute*'
+      - 'engines/unreal/DaedalusLink/Source/DaedalusLink/Private/DaedalusLocalSvgFiles*'
+      - 'docs/realms/REALM-DEPENDENCIES-20261026.md'
+      - 'docs/realms/dependency-reconciliation-*.json'
+      - 'tools/realm/test_dependency_reconciliation.py'
+      - '.github/workflows/realms-core-tests.yml'
+permissions:
+  contents: read
+jobs:
+  msvc:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Realm dependency reconciliation (source only)
+        run: python -B -m unittest discover -s tools/realm -p test_dependency_reconciliation.py -v
+      - name: Build and run realms core tests (cl /W4 /WX)
+        shell: pwsh
+        working-directory: engines/unreal/core-test
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $inc = Resolve-Path ..\DaedalusLink\Source\DaedalusLink\Public
+          $tests = @(
+            @{ n='bricks_blueprint_print_core_test'; arg=$true; verify='verify_bricks_blueprint_print.py' },
+            @{ n='bricks_bridge_core_test' },
+            @{ n='bricks_bridge_walk_core_test' },
+            @{ n='bricks_skyline_core_test' },
+            @{ n='gallery_motif_core_test' },
+            @{ n='gallery_motif_flipbook_core_test' },
+            @{ n='gallery_motif_storyboard_core_test'; arg=$true; verify='verify_gallery_motif_storyboard.py' },
+            @{ n='gallery_spectrum_core_test' },
+            @{ n='mail_route_core_test' },
+            @{ n='mail_route_practice_core_test' }
+          )
+          $failed = @()
+          foreach ($t in $tests) {
+            $out = Join-Path $env:RUNNER_TEMP $t.n
+            New-Item -ItemType Directory -Force $out | Out-Null
+            Write-Host "::group::$($t.n)"
+            cl /nologo /std:c++17 /EHsc /W4 /WX "/I$inc" "$($t.n).cpp" "/Fo$out\t.obj" "/Fe$out\t.exe"
+            if ($LASTEXITCODE) { $failed += "$($t.n) (compile)"; Write-Host '::endgroup::'; continue }
+            if ($t.arg) { & "$out\t.exe" $out } else { & "$out\t.exe" }
+            if ($LASTEXITCODE) { $failed += "$($t.n) (run $LASTEXITCODE)" }
+            elseif ($t.verify) { python $t.verify $out; if ($LASTEXITCODE) { $failed += "$($t.n) (verify)" } }
+            Write-Host '::endgroup::'
+          }
+          if ($failed) { Write-Host "FAILED: $($failed -join ', ')"; exit 1 }
+          Write-Host "All $($tests.Count) realms core tests passed"

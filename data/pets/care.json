@@ -1,0 +1,24 @@
+{
+ "schema": "daedalus.pet_care/v0",
+ "board": 14,
+ "scope": "care only; genome/breeding is codex",
+ "needs": {
+  "hunger": {
+   "max": 100,
+   "drain_per_min": 2
+  },
+  "affection": {
+   "max": 100,
+   "drain_per_min": 0.5,
+   "gain": {
+    "feed": 10,
+    "pet": 5
+   }
+  }
+ },
+ "breed_requires": {
+  "affection_min": 70,
+  "hunger_min": 50
+ },
+ "harness": "pet_harness lets a pet follow onto the ark"
+}

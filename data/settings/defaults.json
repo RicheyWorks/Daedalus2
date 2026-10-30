@@ -1,0 +1,24 @@
+{
+ "schema": "daedalus.settings/v0",
+ "board": 19,
+ "video": {
+  "quality": "high",
+  "fov": 90,
+  "vsync": true,
+  "fps_cap": 120
+ },
+ "audio": {
+  "master": 0.8,
+  "music": 0.6,
+  "sfx": 0.8,
+  "jukebox": 0.7
+ },
+ "controls": {
+  "mouse_sens": 1.0,
+  "invert_y": false
+ },
+ "gameplay": {
+  "hud_scale": 1.0,
+  "show_tutorial": true
+ }
+}

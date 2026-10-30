@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.0</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.daedalus</groupId>
+    <artifactId>daedalus-parent</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Daedalus :: Parent</name>
+    <description>
+        Daedalus — pluggable maze / simulation engine.
+        Multi-module reactor designed so that the engine nucleus
+        (daedalus-core + daedalus-plugin-api + daedalus-plugin-runtime)
+        is embeddable in any JVM host without dragging in the web/UI layers.
+    </description>
+
+    <properties>
+        <java.version>21</java.version>
+        <javafx.version>21.0.3</javafx.version>
+        <lwjgl.version>3.3.6</lwjgl.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <resilience4j.version>2.4.0</resilience4j.version>
+        <springdoc.version>3.0.3</springdoc.version>
+
+        <!-- Build hygiene plugins -->
+        <jacoco.version>0.8.15</jacoco.version>
+        <!-- Coverage ratchet (TESTING.md, gap P2): jacoco:check fails the build below this
+             instruction-coverage ratio. Each module pins its own value 2-3 points below its
+             measured coverage and raises it as coverage rises — never lower it to make a PR
+             pass. This default is only the floor a brand-new module starts from. Desktop
+             and plugin-api used to advertise a visible 0.00 exemption; they now carry
+             small real floors (0.09 / 0.11) with matching ceilings — a deletion guard,
+             not the absence of one. -->
+        <jacoco.check.minimum>0.60</jacoco.check.minimum>
+        <!-- How far coverage may rise above the floor before the ratchet demands a bump. -->
+        <jacoco.check.headroom>0.03</jacoco.check.headroom>
+        <jacoco.check.ceiling>0.63</jacoco.check.ceiling>
+        <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
+        <checkstyle.version>13.9.0</checkstyle.version>
+        <spotbugs-plugin.version>4.10.3.0</spotbugs-plugin.version>
+    </properties>
+
+    <modules>
+        <module>daedalus-plugin-api</module>
+        <module>daedalus-core</module>
+        <module>daedalus-wallet</module>
+        <module>daedalus-plugin-runtime</module>
+        <module>daedalus-server</module>
+        <module>daedalus-desktop</module>
+        <module>daedalus-explore</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Internal modules — versioned through the reactor -->
+            <dependency>
+                <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-plugin-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-wallet</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- Ethereum signatures only (secp256k1, Keccak, EIP-55): the crypto module, not web3j core,
+                 so no OkHttp / RPC client comes along (ADR-028). -->
+            <dependency>
+                <groupId>org.web3j</groupId>
+                <artifactId>crypto</artifactId>
+                <version>4.12.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-plugin-runtime</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.daedalus</groupId>
+                <artifactId>daedalus-explore</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Resilience4j -->
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot4</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+
+            <!-- OpenAPI / Swagger UI -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
+            <!-- JavaFX (declared here so module poms don't repeat the version) -->
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-fxml</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-graphics</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-media</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-maven-plugin</artifactId>
+                    <version>0.0.8</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <!-- Coverage: agent on tests, per-module XML/CSV report at verify.
+                 CI feeds the CSVs to the badge generator. -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <!-- The ratchet: report alone enforces nothing — before this, a PR that
+                         deleted tests passed CI with a quietly shrinking badge. -->
+                    <execution>
+                        <id>check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <!-- The floor: coverage may not regress below it. -->
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${jacoco.check.minimum}</minimum>
+                                        </limit>
+                                        <!-- The ceiling, which is what makes this an actual
+                                             ratchet rather than a floor someone set once.
+
+                                             Audited 2026-07-31: the server sat at 91% against a
+                                             79% floor, twelve points of slack, after gaining
+                                             ~100 tests across two roadmaps that nobody paired
+                                             with a threshold bump. Coverage could have fallen by
+                                             a ninth of the codebase before the build noticed,
+                                             which is not what "fails on regression" means. Two
+                                             other modules had the floor at 0.00 outright.
+
+                                             So: if coverage climbs more than
+                                             jacoco.check.headroom above the floor, the build
+                                             fails and asks you to raise the floor. Yes, that
+                                             means improving coverage occasionally costs a
+                                             one-line pom edit. That is the price of the number
+                                             meaning something, and it is paid by the person who
+                                             just improved it rather than by whoever regresses it
+                                             six months later. -->
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <maximum>${jacoco.check.ceiling}</maximum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Style gate: minimal hygiene ruleset (config/checkstyle.xml),
+                 fails the build on violations. Deliberately lean — it codifies
+                 mistakes worth blocking, not a formatting regime. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>${maven.multiModuleProjectDirectory}/config/checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <failOnViolation>true</failOnViolation>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>checkstyle-check</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Bug-pattern gate: SpotBugs at verify. Exclusions (if ever
+                 needed) live in config/spotbugs-exclude.xml. -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs-plugin.version}</version>
+                <configuration>
+                    <excludeFilterFile>${maven.multiModuleProjectDirectory}/config/spotbugs-exclude.xml</excludeFilterFile>
+                    <effort>Default</effort>
+                    <threshold>Medium</threshold>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>spotbugs-check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

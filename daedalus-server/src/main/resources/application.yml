@@ -1,0 +1,324 @@
+spring:
+  application:
+    name: daedalus-server
+  profiles:
+    active: ${DAEDALUS_PROFILE:dev}
+  banner:
+    location: classpath:banner.txt
+
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    com.daedalus: INFO
+    org.springframework: INFO
+
+# ----- Health -----
+# Tie Spring Boot's stock Redis health check to the same flag that gates RedisConfig.
+#
+# Why this is needed: spring-boot-starter-data-redis is always on the classpath, so Boot's
+# DataRedisAutoConfiguration contributes a RedisConnectionFactory even when
+# daedalus.redis.enabled is false — and the health auto-configuration then registers a Redis
+# indicator for it, which fails to PING and drags the *aggregate* status to DOWN. The result
+# was that a perfectly healthy instance running its in-memory LeaderboardService backend
+# answered /actuator/health with 503, which is exactly what a load balancer or Kubernetes
+# readiness probe interprets as "take this pod out of rotation". The dev profile (the default)
+# sets enabled: false, so this hit anyone who cloned the repo and ran it.
+#
+# Binding the indicator to daedalus.redis.enabled keeps the check where it is meaningful —
+# prod, where Redis really is required — and drops it where Redis is deliberately off.
+# Caught by ApplicationSmokeTest, which is the only test that boots the full context.
+management:
+  health:
+    redis:
+      enabled: ${daedalus.redis.enabled:false}
+
+# Daedalus-specific config. Bind these with @ConfigurationProperties("daedalus") in the server module.
+daedalus:
+  # Optional persisted sea sector. Directory and seed are required only when enabled.
+  ocean:
+    enabled: ${DAEDALUS_OCEAN_ENABLED:false}
+    directory: ${DAEDALUS_OCEAN_DIRECTORY}
+    seed: ${DAEDALUS_OCEAN_SEED}
+    capacity: ${DAEDALUS_OCEAN_CAPACITY:128}
+    min-x: ${DAEDALUS_OCEAN_MIN_X:-2}
+    max-x: ${DAEDALUS_OCEAN_MAX_X:1}
+    min-y: ${DAEDALUS_OCEAN_MIN_Y:-3}
+    max-y: ${DAEDALUS_OCEAN_MAX_Y:0}
+    min-z: ${DAEDALUS_OCEAN_MIN_Z:-2}
+    max-z: ${DAEDALUS_OCEAN_MAX_Z:1}
+  audio:
+    host-subject: "" # Explicit authenticated engine identity for audio design; blank denies.
+  kennel:
+    host-subject: "" # Explicit authenticated engine identity; blank denies brew calculations.
+  brew:
+    host-subject: "" # Explicit authenticated engine identity for YTM melody brews; blank denies.
+  tactics:
+    host:
+      subject: "" # Explicit authenticated JWT subject of the trusted Unreal host; blank denies all requests.
+      squad: "" # Only this squad may be controlled by that host; sessions are correlation keys, not credentials.
+    adaptive:
+      enabled: false # Opt-in single-encounter host; native Unreal fallback remains available.
+      directory: "" # Required explicit checkpoint directory when enabled; exclusive writer, 4096-file cap.
+      squad: pack-1 # Only this trusted encounter is accepted by the adaptive brain.
+      faction: raiders
+      objective-x: 0 # Fixed trusted objective in Unreal centimetres; set before enabling.
+      objective-y: 0
+      objective-z: 0
+  # Optional single-settlement simulation; see docs/realms/LivingWorldSimulation.md.
+  simulation:
+    enabled: ${DAEDALUS_SIMULATION_ENABLED:false}
+    # Required when enabled: exclusive sidecar path and authenticated principal name.
+    file: ${DAEDALUS_SIMULATION_FILE}
+    steward: ${DAEDALUS_SIMULATION_STEWARD}
+    world-id: ${DAEDALUS_SIMULATION_WORLD_ID:world-zero}
+    tick-ms: ${DAEDALUS_SIMULATION_TICK_MS:1000}
+    poll-ms: ${DAEDALUS_SIMULATION_POLL_MS:1000}
+  plugins:
+    directory: ${DAEDALUS_PLUGIN_DIR:${user.home}/.daedalus/plugins}
+    scan-on-startup: true
+  # ----- Maze cache -----
+  # These two keys used to read `cache.maze-cache-size: 256` and `maze-cache-ttl-minutes: 30`,
+  # which nothing bound: MazeGenerationService reads daedalus.maze.cache.*, so the real cache
+  # held 5000 mazes for 2h while this file advertised 256 for 30m. An operator tuning the
+  # documented knob changed nothing. ConfigCoverageTest now fails the build on either half of
+  # that mistake — a key the code reads and this file omits, or a key this file declares and
+  # nothing reads.
+  maze:
+    cache:
+      max-size: ${DAEDALUS_MAZE_CACHE_MAX:5000}
+      idle-ttl: ${DAEDALUS_MAZE_CACHE_TTL:2h}
+  security:
+    # JWT signing key. Required in every profile because AuthController is registered
+    # everywhere (so dev and desktop builds can issue tokens for testing too). The default
+    # below is for dev / test only — prod must override via DAEDALUS_JWT_SECRET. The value
+    # is base64-decoded; a literal string >= 32 chars also works (UTF-8 fallback).
+    jwt:
+      secret: ${DAEDALUS_JWT_SECRET:dev-only-secret-change-me-please-32bytes!}
+      issuer: ${DAEDALUS_JWT_ISSUER:daedalus-server}
+      ttl-minutes: ${DAEDALUS_JWT_TTL_MINUTES:60}
+    # Single ops user. Password is a bcrypt hash, never plaintext. Generate with:
+    #   System.out.println(new BCryptPasswordEncoder().encode("your-password"));
+    # In dev, the default below is the bcrypt of "admin" so login works out of the box.
+    # In prod, override DAEDALUS_ADMIN_PASSWORD_BCRYPT or auth will refuse all attempts.
+    admin:
+      username: ${DAEDALUS_ADMIN_USER:admin}
+      password-bcrypt: ${DAEDALUS_ADMIN_PASSWORD_BCRYPT:$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy}
+  # ----- Living mazes (ADR-006) -----
+  # POST /api/v1/maze/{id}/live schedules erosion ticks that mutate a cached maze in place.
+  # Every knob is a bound: runs cap their ticks, the service caps concurrent runs, and each
+  # tick erodes a fraction of the current dead ends (at least one wall whenever any remain).
+  living:
+    tick-interval: ${DAEDALUS_LIVING_TICK_INTERVAL:2s}
+    max-ticks: ${DAEDALUS_LIVING_MAX_TICKS:240}
+    max-concurrent: ${DAEDALUS_LIVING_MAX_CONCURRENT:8}
+    erosion-factor: ${DAEDALUS_LIVING_EROSION_FACTOR:0.08}
+    # 0 keeps POST /live as v1 erosion. A positive value (or ?seal= on the request)
+    # closes extra passages each tick without disconnecting anyone (ADR-008).
+    seal-factor: ${DAEDALUS_LIVING_SEAL_FACTOR:0.0}
+  # ----- Daily maze (ADR-006 idea #4) -----
+  # GET /api/v1/maze/daily. Seed derives from the UTC date, so every instance generates the
+  # identical topology with no coordination — these knobs only shape what kind of maze the
+  # day serves.
+  daily:
+    generator-id: ${DAEDALUS_DAILY_GENERATOR:recursive-backtracker}
+    rows: ${DAEDALUS_DAILY_ROWS:21}
+    cols: ${DAEDALUS_DAILY_COLS:21}
+  # ----- Traffic simulation (ADR-006 idea #3) -----
+  # POST /api/v1/maze/{id}/traffic. Occupancy (player moves, agent steps) bumps entered
+  # cells' costs; each pulse decays raised costs toward uniform 1.0. Single-writer
+  # copy-on-write, bounded trackers, self-retiring when quiet.
+  traffic:
+    bump: ${DAEDALUS_TRAFFIC_BUMP:4.0}
+    decay-factor: ${DAEDALUS_TRAFFIC_DECAY:0.80}
+    max-cost: ${DAEDALUS_TRAFFIC_MAX_COST:200.0}
+    tick-interval: ${DAEDALUS_TRAFFIC_TICK_INTERVAL:2s}
+    max-concurrent: ${DAEDALUS_TRAFFIC_MAX_CONCURRENT:8}
+    quiet-ticks: ${DAEDALUS_TRAFFIC_QUIET_TICKS:5}
+  # ----- Fog-of-war agents (ADR-006 idea #7) -----
+  # POST /api/v1/maze/{id}/agent + /api/v1/agent/{id}/step. Bounded store (Caffeine) and a
+  # per-walk step budget; max-steps caps what a caller may request.
+  agent:
+    max-agents: ${DAEDALUS_AGENT_MAX:10000}
+    idle-ttl: ${DAEDALUS_AGENT_IDLE_TTL:1h}
+    max-steps: ${DAEDALUS_AGENT_MAX_STEPS:100000}
+  # ----- Campaign mode (ADR-006 idea #10) -----
+  # A deterministic ladder: stage n's maze seed derives from (campaignSeed, n), and each stage
+  # picks among `candidates` generated mazes the one whose MEASURED DifficultyGrader score is
+  # nearest that stage's target. Planning a campaign therefore costs stages x candidates
+  # generations once per seed, then caches.
+  campaign:
+    stages: ${DAEDALUS_CAMPAIGN_STAGES:6}
+    candidates: ${DAEDALUS_CAMPAIGN_CANDIDATES:3}
+    # Raising base-size/size-step, or the target range in CampaignService, shrinks the headroom
+    # each stage leaves the next; past a point the ladder stops being monotone (measured).
+    base-size: ${DAEDALUS_CAMPAIGN_BASE_SIZE:9}
+    size-step: ${DAEDALUS_CAMPAIGN_SIZE_STEP:4}
+    max-campaigns: ${DAEDALUS_CAMPAIGN_MAX:50}
+  # ----- Maze fingerprint / generator classifier (ADR-007 idea 4) -----
+  # Nearest-centroid over scale-invariant structural signatures. Training samples each
+  # registered generator at 3 sizes x train-seeds seeds, once, on a dedicated thread
+  # kicked by the first Identify. Until then GET /fingerprint answers 503.
+  fingerprint:
+    train-seeds: ${DAEDALUS_FINGERPRINT_TRAIN_SEEDS:4}
+  # ----- Complexity Lab (ADR-007 idea 2) -----
+  # Measures a generator's real growth across a capped size sweep and fits the curve. One
+  # request runs `max-points` generations (cached afterwards), so raising these raises the
+  # work a single rate-limit token buys.
+  complexity:
+    max-size: ${DAEDALUS_COMPLEXITY_MAX_SIZE:96}
+    max-points: ${DAEDALUS_COMPLEXITY_MAX_POINTS:6}
+    max-cached: ${DAEDALUS_COMPLEXITY_MAX_CACHED:200}
+    idle-ttl: ${DAEDALUS_COMPLEXITY_IDLE_TTL:6h}
+  # ----- Waypoint Tour mode (ADR-007 idea 1) -----
+  # Collect every waypoint, then reach the goal. Waypoints are placed by k-center so they
+  # spread, and the optimal collection order is exact (Held-Karp). `count` is hard-capped at
+  # WaypointTour.MAX_WAYPOINTS because the solver is O(2^k * k^2).
+  waypoint:
+    count: ${DAEDALUS_WAYPOINT_COUNT:5}
+    max-tours: ${DAEDALUS_WAYPOINT_MAX_TOURS:500}
+    idle-ttl: ${DAEDALUS_WAYPOINT_IDLE_TTL:2h}
+  # ----- Play sessions -----
+  # Bounded store of open sessions; idle ones are evicted rather than held for the process
+  # lifetime. `multiplayer` is deliberately not listed here — it is an opt-in flag set per
+  # profile, and ConfigCoverageTest records that exemption explicitly.
+  session:
+    max-sessions: ${DAEDALUS_SESSION_MAX:10000}
+    idle-ttl: ${DAEDALUS_SESSION_IDLE_TTL:2h}
+  # ----- Leaderboard -----
+  # Entries retained per board (global, per-generator, per-maze, per-stage). Applies to both
+  # backends: the in-memory one trims on write, and the Redis one trims the sorted set.
+  leaderboard:
+    max-entries: ${DAEDALUS_LEADERBOARD_MAX:100}
+  # ----- Distance field / sanctuaries / heuristic lens (ADR-007 ideas 5, 6 and 8) -----
+  # A payload bound, not an algorithmic one: the breadth-first sweeps behind these overlays are
+  # linear and happy at 512x512, but that maze is 262,144 integers — about 1.5 MB of JSON for
+  # one overlay. Larger grids are refused with a 400 that explains itself rather than being
+  # silently downsampled. The heuristic lens shares this cap deliberately; it ships the same
+  # shape of per-cell grid.
+  topography:
+    max-field-cells: ${DAEDALUS_TOPOGRAPHY_MAX_FIELD_CELLS:16384}
+  # ----- Solver tournament (ADR-007 ideas 10 and 7) -----
+  # One request runs `mazes` generations and up to `mazes` x solvers searches, so both are
+  # capped and results are cached per request shape. A solver that spends its node budget is
+  # dropped after three refusals rather than costing a second per maze for the whole sample.
+  tournament:
+    max-mazes: ${DAEDALUS_TOURNAMENT_MAX_MAZES:24}
+    max-size: ${DAEDALUS_TOURNAMENT_MAX_SIZE:41}
+    max-cached: ${DAEDALUS_TOURNAMENT_MAX_CACHED:100}
+    idle-ttl: ${DAEDALUS_TOURNAMENT_IDLE_TTL:6h}
+  # ----- Ghost runs (ADR-006 idea #8) -----
+  # The best completed run per maze, replayed as a translucent racer. One recording per
+  # maze, trail length capped in the model (GameSession.MAX_TRAIL).
+  ghost:
+    max-mazes: ${DAEDALUS_GHOST_MAX:1000}
+    idle-ttl: ${DAEDALUS_GHOST_IDLE_TTL:24h}
+  # ----- World Zero -----
+  # One persistent volume beside the maze cache. Not Caffeine. A restart reloads this file.
+  world:
+    file: ${DAEDALUS_WORLD_FILE:${user.home}/.daedalus/world-zero.daew}
+  # ----- The Realm (ADR-023) -----
+  # One ecological day of server time, in ms: how often island communities grow, drift and fade.
+  realm:
+    day-ms: ${DAEDALUS_REALM_DAY_MS:10000}
+  # ----- Wallet sign-in and island deeds (ADR-028) -----
+  # Off unless DAEDALUS_WALLET_ENABLED=true. deed-signer-key is a secret (a key with no funds that only
+  # signs mint vouchers); deed-contract comes from chain/ deploy (deployments/<network>.json).
+  wallet:
+    enabled: ${DAEDALUS_WALLET_ENABLED:false}
+    domain: ${DAEDALUS_WALLET_DOMAIN:localhost:8088}
+    uri: ${DAEDALUS_WALLET_URI:http://localhost:8088}
+    chain-id: ${DAEDALUS_WALLET_CHAIN_ID:11155111}
+    deed-contract: ${DAEDALUS_WALLET_DEED_CONTRACT:}
+    deed-signer-key: ${DAEDALUS_WALLET_DEED_SIGNER_KEY:}
+    voucher-minutes: ${DAEDALUS_WALLET_VOUCHER_MINUTES:30}
+  # ----- Per-key rate limiting -----
+  # The Resilience4j instances below are treated as *templates*: PerKeyRateLimitInterceptor
+  # clones each into an independent bucket per caller (authenticated subject, else client IP),
+  # so one noisy client can't spend everyone else's quota.
+  ratelimit:
+    # Trust X-Forwarded-For when deriving the client IP? Enable ONLY behind a proxy / load
+    # balancer that overwrites the header — otherwise a caller can spoof it to mint a fresh
+    # bucket per forged IP and defeat the limit. Off by default in every profile.
+    trust-forwarded-header: ${DAEDALUS_RL_TRUST_XFF:false}
+
+# ----- Resilience4j rate limiters -----
+# These named instances are the per-caller *templates* consulted by @PerKeyRateLimit(...) on
+# the controller methods (mazeGenerate / mazeSolve / authLogin). The interceptor clones each
+# into a bucket keyed on the caller (see daedalus.ratelimit above); the values here set the
+# limit / refresh-period / timeout of every such bucket. Defaults below are sane for a
+# single-process dev / portfolio deploy. Profile-specific overrides:
+#   application-test.yml  -> very generous (don't trip MockMvc tests)
+#   application-prod.yml  -> tighter (real traffic, brute-force protection on /auth/login)
+resilience4j:
+  ratelimiter:
+    instances:
+      audioDesign:
+        limit-for-period: 120
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      kennelBrew:
+        limit-for-period: 120
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      melodyBrew:
+        limit-for-period: 120
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      tacticsDecide:
+        limit-for-period: 1200        # Unreal asks ~1/s per squad (ADR-060); 20/s per game host covers 20 squads
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      presence:
+        limit-for-period: 600         # a client reports where it is a few times a second (ADR-039)
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      oceanChunks:
+        limit-for-period: 32          # bounded sector streaming; separate from maze-generation quota
+        limit-refresh-period: 1s
+        timeout-duration: 0
+        register-health-indicator: false
+      mazeGenerate:
+        limit-for-period: 30          # 30 generations
+        limit-refresh-period: 1m      # per minute
+        timeout-duration: 0           # don't queue — fail fast with RequestNotPermitted
+        register-health-indicator: false
+      sessionOpen:
+        limit-for-period: 60          # opening/joining sessions is cheap but feeds the
+        limit-refresh-period: 1m      # session store and leaderboard; bound the inflow
+        timeout-duration: 0
+        register-health-indicator: false
+      mazeSolve:
+        limit-for-period: 60          # solving is cheaper than generating; allow more headroom
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      authLogin:
+        limit-for-period: 10          # brute-force guard. Tighten in prod.
+        limit-refresh-period: 1m
+        timeout-duration: 0
+        register-health-indicator: false
+      mazeLive:
+        limit-for-period: 10          # each acceptance schedules a whole ticker run, so this
+        limit-refresh-period: 1m      # is the most expensive request per call — keep it low;
+        timeout-duration: 0           # daedalus.living.max-concurrent is the hard backstop
+        register-health-indicator: false
+      agentStep:
+        limit-for-period: 1200        # a blind walk is hundreds of tiny requests by design —
+        limit-refresh-period: 1m      # 20/s per caller lets a scripted agent actually walk
+        timeout-duration: 0           # while still bounding a runaway loop
+        register-health-indicator: false
+      sessionMove:
+        limit-for-period: 1200        # a played maze is the same shape as a scripted walk:
+        limit-refresh-period: 1m      # hundreds of tiny state-mutating requests. It went
+        timeout-duration: 0           # unbounded until an audit measured ONE client pushing
+        register-health-indicator: false   # 201 moves/s — ten times the budget its twin
+                                      # (agentStep) was given for identical traffic, and each
+                                      # move publishes a PlayerMovedEvent to every plugin
+                                      # listener synchronously, inside the session lock.

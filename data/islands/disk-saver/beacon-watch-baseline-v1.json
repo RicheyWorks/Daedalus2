@@ -1,0 +1,73 @@
+{
+  "budget": {
+    "disk_budget_kib": 32768,
+    "ram_budget_kib": 40000,
+    "warn_permille": 900
+  },
+  "census_sources": [
+    "5d0bf7de452225dbaddc3d864064923b20990e751b452f033e3b4aa3b853eb43",
+    "96e49cf5c76ae032f1091612c23cea83709b8248d3ac6ed2998cc6950588f1e0"
+  ],
+  "cost_model": {
+    "base_disk_kib": 4096,
+    "base_ram_kib": 16384,
+    "kind": "ESTIMATE (dsb_manifest placement model, asset definitions as placements)",
+    "per_asset_disk_kib": 96,
+    "per_asset_ram_kib": 24
+  },
+  "format": "daedalus-census-budget",
+  "snapshot_date": "2026-10-26",
+  "summary": {
+    "amber": 0,
+    "green": 3,
+    "islands": 3,
+    "red": 0,
+    "worlds": 2,
+    "worlds_spilling": 0
+  },
+  "version": 1,
+  "worlds": [
+    {
+      "fits_all_resident": true,
+      "id": "alpha",
+      "islands": [
+        {
+          "asset_definitions": 1,
+          "beacon": "green",
+          "disk_kib": 4192,
+          "flags": [],
+          "ram_kib": 16408,
+          "slot": 2
+        },
+        {
+          "asset_definitions": 0,
+          "beacon": "green",
+          "disk_kib": 4096,
+          "flags": [],
+          "ram_kib": 16384,
+          "slot": 9
+        }
+      ],
+      "max_resident": 2,
+      "total_disk_kib": 8288,
+      "total_ram_kib": 32792
+    },
+    {
+      "fits_all_resident": true,
+      "id": "beta",
+      "islands": [
+        {
+          "asset_definitions": 0,
+          "beacon": "green",
+          "disk_kib": 4096,
+          "flags": [],
+          "ram_kib": 16384,
+          "slot": 4
+        }
+      ],
+      "max_resident": 1,
+      "total_disk_kib": 4096,
+      "total_ram_kib": 16384
+    }
+  ]
+}

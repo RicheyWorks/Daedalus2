@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Parity Reef
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/parity_reef.py'
+      - 'tools/streaming/parity_reef_test.py'
+      - 'data/islands/disk-saver/parity-reef-v1.json'
+      - 'data/islands/disk-saver/defrag-tide-v1.json'
+      - '.github/workflows/parity-reef.yml'
+permissions:
+  contents: read
+jobs:
+  parity-reef:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G67 Parity Reef rules (XOR parity, verified rebuild, storms, seeded runs, G63 tie-in)
+        run: python -m unittest tools/streaming/parity_reef_test.py -v
+      - name: CLI smoke (seed 1 wins)
+        run: python tools/streaming/parity_reef.py data/islands/disk-saver/parity-reef-v1.json --seed 1

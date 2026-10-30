@@ -1,0 +1,155 @@
+{
+ "asset": "Prop_Prism_HeartSphere_Pedestal",
+ "units": "cm",
+ "space": "unreal",
+ "note": "UE +X forward, +Y right, +Z up, cm; UE = 100 * (x_b, -y_b, z_b) = 100 * (gx, gz, gy) (UEB 48725); location relative to parent node; rotation [pitch, yaw, roll] deg: plain sockets [0, 0, 0] = mesh-aligned, attach sockets +X along barrel/shaft, +Z up; native empties pre-rotated to match",
+ "sockets": [
+  {
+   "name": "SOCKET_Rune_0",
+   "parent": "Prop_Prism_HeartSphere_Pedestal",
+   "location": [
+    50.5,
+    0.0,
+    47.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Rune_1",
+   "parent": "Prop_Prism_HeartSphere_Pedestal",
+   "location": [
+    25.25,
+    -43.734,
+    47.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Rune_2",
+   "parent": "Prop_Prism_HeartSphere_Pedestal",
+   "location": [
+    -25.25,
+    -43.734,
+    47.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Rune_3",
+   "parent": "Prop_Prism_HeartSphere_Pedestal",
+   "location": [
+    -50.5,
+    0.0,
+    47.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Rune_4",
+   "parent": "Prop_Prism_HeartSphere_Pedestal",
+   "location": [
+    -25.25,
+    43.734,
+    47.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Rune_5",
+   "parent": "Prop_Prism_HeartSphere_Pedestal",
+   "location": [
+    25.25,
+    43.734,
+    47.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Sphere",
+   "parent": "Prop_Prism_HeartSphere_Pedestal",
+   "location": [
+    0.0,
+    0.0,
+    73.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  }
+ ]
+}

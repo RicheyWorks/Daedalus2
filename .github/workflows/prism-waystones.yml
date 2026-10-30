@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: MIT
+name: Prismheart waystones
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/rpg_demo/waystones.js'
+      - 'tools/rpg_demo/waystones.py'
+      - 'tools/rpg_demo/waystone_core_test.js'
+      - 'tools/rpg_demo/waystone_place_test.py'
+      - 'data/rpg/prism-waystones.json'
+      - 'data/rpg/worldmap-tiles.json'
+      - '.github/workflows/prism-waystones.yml'
+permissions:
+  contents: read
+jobs:
+  rules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+      - name: WAY1 rules (travel, fares, save string)
+        run: node tools/rpg_demo/waystone_core_test.js
+      - name: Placement on the real world map
+        run: python -m unittest tools/rpg_demo/waystone_place_test.py -v

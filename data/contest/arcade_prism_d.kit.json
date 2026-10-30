@@ -1,0 +1,6635 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_CeilingLightRig_A",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "ceiling light rig A; origin = ceiling plane, hangs 0.9 m",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Hang_0",
+     "SOCKET_Hang_1",
+     "SOCKET_Light_0",
+     "SOCKET_Light_1",
+     "SOCKET_Light_2",
+     "SOCKET_Light_3"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_CeilingLightRig_A_M0",
+     "colour": "truss (chrome)",
+     "hex": "C8CCD4",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_CeilingLightRig_A_M1",
+     "colour": "cans / cables (black)",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_CeilingLightRig_A_M2",
+     "colour": "lens magenta (emissive)",
+     "hex": "FF4AD0",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_CeilingLightRig_A_M3",
+     "colour": "lens cyan (emissive)",
+     "hex": "6AE8FF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_CeilingLightRig_A",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Truss",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.2,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Lace0",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        -1.4,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace1",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        -1.2,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace2",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        -1.0,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace3",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        -0.8,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace4",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        -0.6,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace5",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        -0.4,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace6",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        -0.2,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace7",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        0.0,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace8",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        0.2,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace9",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        0.4,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace10",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        0.6,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace11",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        0.8,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace12",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        1.0,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace13",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        1.2,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lace14",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.21,
+        0.21
+       ],
+       "centre": [
+        1.4,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        45,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Cable0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.5,
+       "centre": [
+        -1.3,
+        0,
+        -0.25
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Plate0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        -1.3,
+        0,
+        -0.01
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Cable1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.5,
+       "centre": [
+        1.3,
+        0,
+        -0.25
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Plate1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        1.3,
+        0,
+        -0.01
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Can0Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        -1.2,
+        0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        -1.2,
+        0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can0Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        -1.2,
+        0,
+        -1.025
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Can1Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        -0.4,
+        0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        -0.4,
+        0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can1Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        -0.4,
+        0,
+        -1.025
+       ],
+       "slot": 3,
+       "segments": 10
+      },
+      {
+       "name": "Can2Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        0.4,
+        0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        0.4,
+        0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can2Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        0.4,
+        0,
+        -1.025
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Can3Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        1.2,
+        0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        1.2,
+        0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can3Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        1.2,
+        0,
+        -1.025
+       ],
+       "slot": 3,
+       "segments": 10
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang_0",
+     "location": [
+      -1.3,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.3,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_1",
+     "location": [
+      1.3,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.3,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light_0",
+     "location": [
+      -1.2,
+      0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.2,
+      -0.93,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light_1",
+     "location": [
+      -0.4,
+      0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -0.4,
+      -0.93,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light_2",
+     "location": [
+      0.4,
+      0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      0.4,
+      -0.93,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light_3",
+     "location": [
+      1.2,
+      0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      1.2,
+      -0.93,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 672,
+    "lod1_triangles": 672,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_CeilingLightRig_A": 672
+    },
+    "bounds_min": [
+     -1.5,
+     -0.1485,
+     -1.03
+    ],
+    "bounds_max": [
+     1.5,
+     0.1485,
+     0.0
+    ],
+    "dimensions": [
+     3.0,
+     0.297,
+     1.03
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5caa8dd8fbe23c7e5e7270ffc1e6a9c41554dc652a8307ec8ada0a1518b68ea3"
+  },
+  {
+   "asset": "Prop_Arcade_CeilingLightRig_B",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "ceiling light rig B; origin = ceiling plane, hangs 0.9 m",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Hang_0",
+     "SOCKET_Hang_1",
+     "SOCKET_Hang_2",
+     "SOCKET_Hang_3",
+     "SOCKET_Light_0",
+     "SOCKET_Light_1",
+     "SOCKET_Light_2",
+     "SOCKET_Light_3"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_CeilingLightRig_B_M0",
+     "colour": "truss (chrome)",
+     "hex": "C8CCD4",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_CeilingLightRig_B_M1",
+     "colour": "cans / cables (black)",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_CeilingLightRig_B_M2",
+     "colour": "lens magenta (emissive)",
+     "hex": "FF4AD0",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_CeilingLightRig_B_M3",
+     "colour": "lens cyan (emissive)",
+     "hex": "6AE8FF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_CeilingLightRig_B",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "TrussX",
+       "shape": "box",
+       "size": [
+        2.4,
+        0.2,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "TrussY",
+       "shape": "box",
+       "size": [
+        0.2,
+        2.4,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Cable0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.5,
+       "centre": [
+        0.6,
+        0.0,
+        -0.25
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Plate0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        0.6,
+        0.0,
+        -0.01
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Cable1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.5,
+       "centre": [
+        -0.6,
+        0.0,
+        -0.25
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Plate1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        -0.6,
+        0.0,
+        -0.01
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Cable2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.5,
+       "centre": [
+        0,
+        0.6,
+        -0.25
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Plate2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        0,
+        0.6,
+        -0.01
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Cable3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.5,
+       "centre": [
+        0,
+        -0.6,
+        -0.25
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Plate3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        0,
+        -0.6,
+        -0.01
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Can0Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        1.0,
+        0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        1.0,
+        0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can0Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        1.0,
+        0,
+        -1.025
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Can1Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        -1.0,
+        0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        -1.0,
+        0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can1Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        -1.0,
+        0,
+        -1.025
+       ],
+       "slot": 3,
+       "segments": 10
+      },
+      {
+       "name": "Can2Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        0,
+        1.0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        0,
+        1.0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can2Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        0,
+        1.0,
+        -1.025
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Can3Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        0,
+        -1.0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        0,
+        -1.0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can3Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        0,
+        -1.0,
+        -1.025
+       ],
+       "slot": 3,
+       "segments": 10
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang_0",
+     "location": [
+      0.6,
+      0.0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_1",
+     "location": [
+      -0.6,
+      0.0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_2",
+     "location": [
+      0,
+      0.6,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -0.6
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_3",
+     "location": [
+      0,
+      -0.6,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.6
+     ]
+    },
+    {
+     "name": "SOCKET_Light_0",
+     "location": [
+      1.0,
+      0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      1.0,
+      -0.93,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light_1",
+     "location": [
+      -1.0,
+      0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.0,
+      -0.93,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light_2",
+     "location": [
+      0,
+      1.0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      0,
+      -0.93,
+      -1.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light_3",
+     "location": [
+      0,
+      -1.0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      0,
+      -0.93,
+      1.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 616,
+    "lod1_triangles": 616,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_CeilingLightRig_B": 616
+    },
+    "bounds_min": [
+     -1.2,
+     -1.2,
+     -1.03
+    ],
+    "bounds_max": [
+     1.2,
+     1.2,
+     0.0
+    ],
+    "dimensions": [
+     2.4,
+     2.4,
+     1.03
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "55a88405b4c32fd21dc5875a861fbb25a2eaba329fb1189df819cce3955ad34e"
+  },
+  {
+   "asset": "Prop_Arcade_CeilingLightRig_C",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "ceiling light rig C; origin = ceiling plane, hangs 0.9 m",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Hang_0",
+     "SOCKET_Hang_1",
+     "SOCKET_Hang_2",
+     "SOCKET_Light_0",
+     "SOCKET_Light_1",
+     "SOCKET_Light_2",
+     "SOCKET_Light_3",
+     "SOCKET_Light_4",
+     "SOCKET_Light_5"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_CeilingLightRig_C_M0",
+     "colour": "truss (chrome)",
+     "hex": "C8CCD4",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_CeilingLightRig_C_M1",
+     "colour": "cans / cables (black)",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_CeilingLightRig_C_M2",
+     "colour": "lens magenta (emissive)",
+     "hex": "FF4AD0",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_CeilingLightRig_C_M3",
+     "colour": "lens cyan (emissive)",
+     "hex": "6AE8FF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_CeilingLightRig_C",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Arc0",
+       "shape": "box",
+       "size": [
+        0.2,
+        1.3,
+        0.2
+       ],
+       "centre": [
+        1.01845,
+        0.588,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        30.0
+       ]
+      },
+      {
+       "name": "Arc1",
+       "shape": "box",
+       "size": [
+        0.2,
+        1.3,
+        0.2
+       ],
+       "centre": [
+        0.0,
+        1.176,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        90.0
+       ]
+      },
+      {
+       "name": "Arc2",
+       "shape": "box",
+       "size": [
+        0.2,
+        1.3,
+        0.2
+       ],
+       "centre": [
+        -1.01845,
+        0.588,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        150.0
+       ]
+      },
+      {
+       "name": "Arc3",
+       "shape": "box",
+       "size": [
+        0.2,
+        1.3,
+        0.2
+       ],
+       "centre": [
+        -1.01845,
+        -0.588,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        210.0
+       ]
+      },
+      {
+       "name": "Arc4",
+       "shape": "box",
+       "size": [
+        0.2,
+        1.3,
+        0.2
+       ],
+       "centre": [
+        -0.0,
+        -1.176,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        270.0
+       ]
+      },
+      {
+       "name": "Arc5",
+       "shape": "box",
+       "size": [
+        0.2,
+        1.3,
+        0.2
+       ],
+       "centre": [
+        1.01845,
+        -0.588,
+        -0.6
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        330.0
+       ]
+      },
+      {
+       "name": "Cable0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.5,
+       "centre": [
+        1.2,
+        0.0,
+        -0.25
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Plate0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        1.2,
+        0.0,
+        -0.01
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Cable1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.5,
+       "centre": [
+        -0.6,
+        1.03923,
+        -0.25
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Plate1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        -0.6,
+        1.03923,
+        -0.01
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Cable2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.5,
+       "centre": [
+        -0.6,
+        -1.03923,
+        -0.25
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Plate2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        -0.6,
+        -1.03923,
+        -0.01
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Can0Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        1.2,
+        0.0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        1.2,
+        0.0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can0Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        1.2,
+        0.0,
+        -1.025
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Can1Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        0.6,
+        1.03923,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        0.6,
+        1.03923,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can1Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        0.6,
+        1.03923,
+        -1.025
+       ],
+       "slot": 3,
+       "segments": 10
+      },
+      {
+       "name": "Can2Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        -0.6,
+        1.03923,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        -0.6,
+        1.03923,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can2Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        -0.6,
+        1.03923,
+        -1.025
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Can3Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        -1.2,
+        0.0,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        -1.2,
+        0.0,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can3Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        -1.2,
+        0.0,
+        -1.025
+       ],
+       "slot": 3,
+       "segments": 10
+      },
+      {
+       "name": "Can4Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        -0.6,
+        -1.03923,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        -0.6,
+        -1.03923,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can4Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        -0.6,
+        -1.03923,
+        -1.025
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Can5Yoke",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.12,
+       "centre": [
+        0.6,
+        -1.03923,
+        -0.76
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Can5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        0.6,
+        -1.03923,
+        -0.92
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Can5Lens",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.072,
+       "r2": 0.072,
+       "length": 0.01,
+       "centre": [
+        0.6,
+        -1.03923,
+        -1.025
+       ],
+       "slot": 3,
+       "segments": 10
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang_0",
+     "location": [
+      1.2,
+      0.0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.2,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_1",
+     "location": [
+      -0.6,
+      1.03923,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0,
+      -1.03923
+     ]
+    },
+    {
+     "name": "SOCKET_Hang_2",
+     "location": [
+      -0.6,
+      -1.03923,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0,
+      1.03923
+     ]
+    },
+    {
+     "name": "SOCKET_Light_0",
+     "location": [
+      1.2,
+      0.0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      1.2,
+      -0.93,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light_1",
+     "location": [
+      0.6,
+      1.03923,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      0.6,
+      -0.93,
+      -1.03923
+     ]
+    },
+    {
+     "name": "SOCKET_Light_2",
+     "location": [
+      -0.6,
+      1.03923,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -0.6,
+      -0.93,
+      -1.03923
+     ]
+    },
+    {
+     "name": "SOCKET_Light_3",
+     "location": [
+      -1.2,
+      0.0,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -1.2,
+      -0.93,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light_4",
+     "location": [
+      -0.6,
+      -1.03923,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      -0.6,
+      -0.93,
+      1.03923
+     ]
+    },
+    {
+     "name": "SOCKET_Light_5",
+     "location": [
+      0.6,
+      -1.03923,
+      -0.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      -1
+     ],
+     "location_gltf": [
+      0.6,
+      -0.93,
+      1.03923
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 936,
+    "lod1_triangles": 936,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_CeilingLightRig_C": 936
+    },
+    "bounds_min": [
+     -1.4181,
+     -1.276,
+     -1.03
+    ],
+    "bounds_max": [
+     1.4181,
+     1.276,
+     0.0
+    ],
+    "dimensions": [
+     2.8362,
+     2.552,
+     1.03
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7b39ac18f53ff202d531f4ec665c2d8cd007ff01916ed2a023c62b4ce9b7d0d3"
+  },
+  {
+   "asset": "Prop_Arcade_TicketCounter",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "0.64 x 0.54 x 1.45 m ticket eater",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_TicketIn",
+     "SOCKET_Display",
+     "SOCKET_ReceiptOut",
+     "SOCKET_Player1",
+     "SOCKET_Floor"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_TicketCounter_M0",
+     "colour": "cabinet",
+     "hex": "2A2240",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_TicketCounter_M1",
+     "colour": "chrome trim",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_TicketCounter_M2",
+     "colour": "prism stripe",
+     "hex": "A6E6FF",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_TicketCounter_M3",
+     "colour": "ticket count display (emissive, MI digits)",
+     "hex": "FF6A3A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_TicketCounter_M4",
+     "colour": "black",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_TicketCounter",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.5,
+        1.2
+       ],
+       "centre": [
+        0,
+        0,
+        0.6
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Hood",
+       "shape": "box",
+       "size": [
+        0.62,
+        0.3,
+        0.25
+       ],
+       "centre": [
+        0,
+        0.08,
+        1.32
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Display",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.02,
+        0.14
+       ],
+       "centre": [
+        0,
+        -0.07,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Feeder",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.12,
+        0.06
+       ],
+       "centre": [
+        0,
+        -0.28,
+        0.95
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "FeedSlot",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.01
+       ],
+       "centre": [
+        0,
+        -0.33,
+        0.985
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Printer",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.04,
+        0.05
+       ],
+       "centre": [
+        0.18,
+        -0.27,
+        0.75
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Stripe",
+       "shape": "box",
+       "size": [
+        0.61,
+        0.51,
+        0.08
+       ],
+       "centre": [
+        0,
+        0,
+        0.3
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.64,
+        0.54,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 4,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_TicketIn",
+     "location": [
+      0,
+      -0.34,
+      0.99
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.99,
+      0.34
+     ]
+    },
+    {
+     "name": "SOCKET_Display",
+     "location": [
+      0,
+      -0.085,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_ReceiptOut",
+     "location": [
+      0.18,
+      -0.3,
+      0.75
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.18,
+      0.75,
+      0.3
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.9,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.9
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_TicketCounter_00",
+     "shape": "box",
+     "size": [
+      0.64,
+      0.54,
+      1.45
+     ],
+     "centre": [
+      0,
+      0,
+      0.725
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 256,
+    "lod1_triangles": 256,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_TicketCounter": 256
+    },
+    "bounds_min": [
+     -0.32,
+     -0.34,
+     0.0
+    ],
+    "bounds_max": [
+     0.32,
+     0.27,
+     1.445
+    ],
+    "dimensions": [
+     0.64,
+     0.61,
+     1.445
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b2faa84e94d89a90df1ce3b0e040ee77f4fc4a1ac48c983e4d9f860e918f8af9"
+  },
+  {
+   "asset": "Prop_Arcade_PhotoBooth",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "1.4 x 1.0 x 2.15 m photo booth",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Seat",
+     "SOCKET_Camera",
+     "SOCKET_Screen",
+     "SOCKET_PhotoSlot",
+     "SOCKET_CurtainRail",
+     "SOCKET_Entry"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_PhotoBooth_M0",
+     "colour": "booth shell",
+     "hex": "2A2240",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_PhotoBooth_M1",
+     "colour": "chrome / black fittings",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_PhotoBooth_M2",
+     "colour": "header sign (neon decal target)",
+     "hex": "A6E6FF",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_PhotoBooth_M3",
+     "colour": "curtain / seat velvet",
+     "hex": "B02A5A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_PhotoBooth_M4",
+     "colour": "lens / screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_PhotoBooth",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Back",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.06,
+        2.1
+       ],
+       "centre": [
+        0,
+        0.47,
+        1.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.06,
+        1.0,
+        2.1
+       ],
+       "centre": [
+        -0.67,
+        0,
+        1.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Roof",
+       "shape": "box",
+       "size": [
+        1.46,
+        1.06,
+        0.08
+       ],
+       "centre": [
+        0,
+        0,
+        2.14
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Header",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0,
+        -0.47,
+        1.925
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Seat",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.35,
+        0.06
+       ],
+       "centre": [
+        0.1,
+        0.2,
+        0.5
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "SeatPost",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.04,
+       "length": 0.47,
+       "centre": [
+        0.1,
+        0.2,
+        0.235
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "CamPanel",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.6,
+        0.7
+       ],
+       "centre": [
+        -0.61,
+        0.0,
+        1.25
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Lens",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.04,
+       "r2": 0.04,
+       "length": 0.03,
+       "centre": [
+        -0.565,
+        0.0,
+        1.35
+       ],
+       "slot": 4,
+       "segments": 10
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.3,
+        0.2
+       ],
+       "centre": [
+        -0.575,
+        0.0,
+        1.1
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.06,
+        1.0,
+        2.1
+       ],
+       "centre": [
+        0.67,
+        0,
+        1.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Slot",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.706,
+        -0.3,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Rail",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 1.3,
+       "centre": [
+        0,
+        -0.44,
+        1.74
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Curtain0",
+       "shape": "box",
+       "size": [
+        0.13,
+        0.03,
+        1.5
+       ],
+       "centre": [
+        -0.55,
+        -0.44,
+        0.97
+       ],
+       "slot": 3,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        12
+       ]
+      },
+      {
+       "name": "Curtain1",
+       "shape": "box",
+       "size": [
+        0.13,
+        0.03,
+        1.5
+       ],
+       "centre": [
+        -0.41,
+        -0.44,
+        0.97
+       ],
+       "slot": 3,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -12
+       ]
+      },
+      {
+       "name": "Curtain2",
+       "shape": "box",
+       "size": [
+        0.13,
+        0.03,
+        1.5
+       ],
+       "centre": [
+        -0.27,
+        -0.44,
+        0.97
+       ],
+       "slot": 3,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        12
+       ]
+      },
+      {
+       "name": "Curtain3",
+       "shape": "box",
+       "size": [
+        0.13,
+        0.03,
+        1.5
+       ],
+       "centre": [
+        -0.13,
+        -0.44,
+        0.97
+       ],
+       "slot": 3,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -12
+       ]
+      },
+      {
+       "name": "Curtain4",
+       "shape": "box",
+       "size": [
+        0.13,
+        0.03,
+        1.5
+       ],
+       "centre": [
+        0.01,
+        -0.44,
+        0.97
+       ],
+       "slot": 3,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        12
+       ]
+      },
+      {
+       "name": "Curtain5",
+       "shape": "box",
+       "size": [
+        0.13,
+        0.03,
+        1.5
+       ],
+       "centre": [
+        0.15,
+        -0.44,
+        0.97
+       ],
+       "slot": 3,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -12
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Seat",
+     "location": [
+      0.1,
+      0.2,
+      0.53
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.1,
+      0.53,
+      -0.2
+     ]
+    },
+    {
+     "name": "SOCKET_Camera",
+     "location": [
+      -0.55,
+      0.0,
+      1.35
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      -0.55,
+      1.35,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      -0.57,
+      0.0,
+      1.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.57,
+      1.1,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_PhotoSlot",
+     "location": [
+      0.71,
+      -0.3,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.71,
+      1.0,
+      0.3
+     ]
+    },
+    {
+     "name": "SOCKET_CurtainRail",
+     "location": [
+      0,
+      -0.44,
+      1.74
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.74,
+      0.44
+     ]
+    },
+    {
+     "name": "SOCKET_Entry",
+     "location": [
+      0,
+      -0.9,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.9
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_PhotoBooth_00",
+     "shape": "box",
+     "size": [
+      1.4,
+      0.06,
+      2.1
+     ],
+     "centre": [
+      0,
+      0.47,
+      1.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Arcade_PhotoBooth_01",
+     "shape": "box",
+     "size": [
+      0.06,
+      1.0,
+      2.1
+     ],
+     "centre": [
+      -0.67,
+      0,
+      1.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Arcade_PhotoBooth_02",
+     "shape": "box",
+     "size": [
+      0.06,
+      1.0,
+      2.1
+     ],
+     "centre": [
+      0.67,
+      0,
+      1.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 680,
+    "lod1_triangles": 680,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_PhotoBooth": 680
+    },
+    "bounds_min": [
+     -0.73,
+     -0.53,
+     0.0
+    ],
+    "bounds_max": [
+     0.73,
+     0.53,
+     2.18
+    ],
+    "dimensions": [
+     1.46,
+     1.06,
+     2.18
+    ],
+    "collision_tris": 36
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a961744e0df212cf0d706b4cc41d857b3cd69742c49bc5e57d613dff5f50b53a"
+  },
+  {
+   "asset": "Prop_Arcade_HighScoreBoard",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "1.68 x 2.08 m wall board (hang at 0.8 m), 10 entry rows",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Title",
+     "SOCKET_Wall",
+     "SOCKET_Entry_0",
+     "SOCKET_Entry_1",
+     "SOCKET_Entry_2",
+     "SOCKET_Entry_3",
+     "SOCKET_Entry_4",
+     "SOCKET_Entry_5",
+     "SOCKET_Entry_6",
+     "SOCKET_Entry_7",
+     "SOCKET_Entry_8",
+     "SOCKET_Entry_9"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_HighScoreBoard_M0",
+     "colour": "board back",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_HighScoreBoard_M1",
+     "colour": "chrome bezel",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_HighScoreBoard_M2",
+     "colour": "title / rank chips (emissive)",
+     "hex": "FFE04A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_HighScoreBoard_M3",
+     "colour": "entry row A (emissive)",
+     "hex": "3A2A70",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_HighScoreBoard_M4",
+     "colour": "entry row B (emissive)",
+     "hex": "2A3A70",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_HighScoreBoard",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Panel",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.08,
+        2.0
+       ],
+       "centre": [
+        0,
+        0,
+        1.8
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        1.68,
+        0.06,
+        2.08
+       ],
+       "centre": [
+        0,
+        0.02,
+        1.8
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Title",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.02,
+        0.25
+       ],
+       "centre": [
+        0,
+        -0.05,
+        2.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row0",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        2.35
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Rank0",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        2.35
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row1",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        2.205
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Rank1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        2.205
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row2",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        2.06
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Rank2",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        2.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row3",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        1.915
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Rank3",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        1.915
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row4",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        1.77
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Rank4",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        1.77
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row5",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        1.625
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Rank5",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        1.625
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row6",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        1.48
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Rank6",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        1.48
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row7",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        1.335
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Rank7",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        1.335
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row8",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        1.19
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Rank8",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        1.19
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row9",
+       "shape": "box",
+       "size": [
+        1.36,
+        0.015,
+        0.11
+       ],
+       "centre": [
+        0,
+        -0.045,
+        1.045
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Rank9",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        -0.05,
+        1.045
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Title",
+     "location": [
+      0,
+      -0.065,
+      2.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.6,
+      0.065
+     ]
+    },
+    {
+     "name": "SOCKET_Wall",
+     "location": [
+      0,
+      0.05,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.8,
+      -0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_0",
+     "location": [
+      0,
+      -0.055,
+      2.35
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.35,
+      0.055
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_1",
+     "location": [
+      0,
+      -0.055,
+      2.205
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.205,
+      0.055
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_2",
+     "location": [
+      0,
+      -0.055,
+      2.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.06,
+      0.055
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_3",
+     "location": [
+      0,
+      -0.055,
+      1.915
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.915,
+      0.055
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_4",
+     "location": [
+      0,
+      -0.055,
+      1.77
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.77,
+      0.055
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_5",
+     "location": [
+      0,
+      -0.055,
+      1.625
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.625,
+      0.055
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_6",
+     "location": [
+      0,
+      -0.055,
+      1.48
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.48,
+      0.055
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_7",
+     "location": [
+      0,
+      -0.055,
+      1.335
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.335,
+      0.055
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_8",
+     "location": [
+      0,
+      -0.055,
+      1.19
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.19,
+      0.055
+     ]
+    },
+    {
+     "name": "SOCKET_Entry_9",
+     "location": [
+      0,
+      -0.055,
+      1.045
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.045,
+      0.055
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 340,
+    "lod1_triangles": 340,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_HighScoreBoard": 340
+    },
+    "bounds_min": [
+     -0.84,
+     -0.06,
+     0.76
+    ],
+    "bounds_max": [
+     0.84,
+     0.05,
+     2.84
+    ],
+    "dimensions": [
+     1.68,
+     0.11,
+     2.08
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e5bf41bbc17ac965664abcc4e0ea337de1c3b0badf18637fca626397dedb878d"
+  },
+  {
+   "asset": "Prop_Arcade_Cab_DancePad",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "2.4 x 1.8 x 2.55 m dance cab, 2 players, 8 arrow pads",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Pad_P1_Up",
+     "SOCKET_Pad_P1_Down",
+     "SOCKET_Pad_P1_Left",
+     "SOCKET_Pad_P1_Right",
+     "SOCKET_Player1",
+     "SOCKET_Pad_P2_Up",
+     "SOCKET_Pad_P2_Down",
+     "SOCKET_Pad_P2_Left",
+     "SOCKET_Pad_P2_Right",
+     "SOCKET_Player2",
+     "SOCKET_Screen",
+     "SOCKET_CoinSlot"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_DancePad_M0",
+     "colour": "cab body",
+     "hex": "2A2240",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_DancePad_M1",
+     "colour": "stage / rails (chrome)",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_DancePad_M2",
+     "colour": "arrows + marquee (emissive)",
+     "hex": "A6E6FF",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_DancePad_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_DancePad_M4",
+     "colour": "speakers",
+     "hex": "141418",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_DancePad_M5",
+     "colour": "pad panels (pressed = MI param)",
+     "hex": "D0D8F0",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_DancePad",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Tower",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.6,
+        2.2
+       ],
+       "centre": [
+        0,
+        0.9,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.03,
+        0.62
+       ],
+       "centre": [
+        0,
+        0.585,
+        1.6
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.4,
+        0.35
+       ],
+       "centre": [
+        0,
+        0.8,
+        2.37
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Speaker-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.16,
+       "r2": 0.16,
+       "length": 0.04,
+       "centre": [
+        -0.62,
+        0.585,
+        1.6
+       ],
+       "slot": 4,
+       "segments": 12
+      },
+      {
+       "name": "Speaker1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.16,
+       "r2": 0.16,
+       "length": 0.04,
+       "centre": [
+        0.62,
+        0.585,
+        1.6
+       ],
+       "slot": 4,
+       "segments": 12
+      },
+      {
+       "name": "Stage",
+       "shape": "box",
+       "size": [
+        2.4,
+        1.2,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.1,
+        0.09
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "RailBack",
+       "shape": "box",
+       "size": [
+        2.4,
+        0.05,
+        0.05
+       ],
+       "centre": [
+        0,
+        0.45,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "RailPost-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.82,
+       "centre": [
+        -1.15,
+        0.45,
+        0.59
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "RailPost1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.82,
+       "centre": [
+        1.15,
+        0.45,
+        0.59
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "PadP1Up",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.28,
+        0.012
+       ],
+       "centre": [
+        -0.6,
+        0.22,
+        0.185
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "ArrowP1Up",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.09
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.03,
+         0
+        ],
+        [
+         0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         0
+        ],
+        [
+         -0.07,
+         0
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.6,
+        0.22,
+        0.192
+       ],
+       "slot": 2,
+       "segments": 7,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "PadP1Down",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.28,
+        0.012
+       ],
+       "centre": [
+        -0.6,
+        -0.42,
+        0.185
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "ArrowP1Down",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.09
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.03,
+         0
+        ],
+        [
+         0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         0
+        ],
+        [
+         -0.07,
+         0
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.6,
+        -0.42,
+        0.192
+       ],
+       "slot": 2,
+       "segments": 7,
+       "rot": [
+        0,
+        0,
+        180
+       ]
+      },
+      {
+       "name": "PadP1Left",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.28,
+        0.012
+       ],
+       "centre": [
+        -0.92,
+        -0.1,
+        0.185
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "ArrowP1Left",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.09
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.03,
+         0
+        ],
+        [
+         0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         0
+        ],
+        [
+         -0.07,
+         0
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.92,
+        -0.1,
+        0.192
+       ],
+       "slot": 2,
+       "segments": 7,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "PadP1Right",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.28,
+        0.012
+       ],
+       "centre": [
+        -0.28,
+        -0.1,
+        0.185
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "ArrowP1Right",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.09
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.03,
+         0
+        ],
+        [
+         0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         0
+        ],
+        [
+         -0.07,
+         0
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.28,
+        -0.1,
+        0.192
+       ],
+       "slot": 2,
+       "segments": 7,
+       "rot": [
+        0,
+        0,
+        -90
+       ]
+      },
+      {
+       "name": "PadP2Up",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.28,
+        0.012
+       ],
+       "centre": [
+        0.6,
+        0.22,
+        0.185
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "ArrowP2Up",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.09
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.03,
+         0
+        ],
+        [
+         0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         0
+        ],
+        [
+         -0.07,
+         0
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.6,
+        0.22,
+        0.192
+       ],
+       "slot": 2,
+       "segments": 7,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "PadP2Down",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.28,
+        0.012
+       ],
+       "centre": [
+        0.6,
+        -0.42,
+        0.185
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "ArrowP2Down",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.09
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.03,
+         0
+        ],
+        [
+         0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         0
+        ],
+        [
+         -0.07,
+         0
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.6,
+        -0.42,
+        0.192
+       ],
+       "slot": 2,
+       "segments": 7,
+       "rot": [
+        0,
+        0,
+        180
+       ]
+      },
+      {
+       "name": "PadP2Left",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.28,
+        0.012
+       ],
+       "centre": [
+        0.28,
+        -0.1,
+        0.185
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "ArrowP2Left",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.09
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.03,
+         0
+        ],
+        [
+         0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         0
+        ],
+        [
+         -0.07,
+         0
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.28,
+        -0.1,
+        0.192
+       ],
+       "slot": 2,
+       "segments": 7,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "PadP2Right",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.28,
+        0.012
+       ],
+       "centre": [
+        0.92,
+        -0.1,
+        0.185
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "ArrowP2Right",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.09
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.03,
+         0
+        ],
+        [
+         0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         -0.08
+        ],
+        [
+         -0.03,
+         0
+        ],
+        [
+         -0.07,
+         0
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.92,
+        -0.1,
+        0.192
+       ],
+       "slot": 2,
+       "segments": 7,
+       "rot": [
+        0,
+        0,
+        -90
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Pad_P1_Up",
+     "location": [
+      -0.6,
+      0.22,
+      0.196
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0.196,
+      -0.22
+     ]
+    },
+    {
+     "name": "SOCKET_Pad_P1_Down",
+     "location": [
+      -0.6,
+      -0.42,
+      0.196
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0.196,
+      0.42
+     ]
+    },
+    {
+     "name": "SOCKET_Pad_P1_Left",
+     "location": [
+      -0.92,
+      -0.1,
+      0.196
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.92,
+      0.196,
+      0.1
+     ]
+    },
+    {
+     "name": "SOCKET_Pad_P1_Right",
+     "location": [
+      -0.28,
+      -0.1,
+      0.196
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.28,
+      0.196,
+      0.1
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      -0.6,
+      -0.1,
+      0.18
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0.18,
+      0.1
+     ]
+    },
+    {
+     "name": "SOCKET_Pad_P2_Up",
+     "location": [
+      0.6,
+      0.22,
+      0.196
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      0.196,
+      -0.22
+     ]
+    },
+    {
+     "name": "SOCKET_Pad_P2_Down",
+     "location": [
+      0.6,
+      -0.42,
+      0.196
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      0.196,
+      0.42
+     ]
+    },
+    {
+     "name": "SOCKET_Pad_P2_Left",
+     "location": [
+      0.28,
+      -0.1,
+      0.196
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.28,
+      0.196,
+      0.1
+     ]
+    },
+    {
+     "name": "SOCKET_Pad_P2_Right",
+     "location": [
+      0.92,
+      -0.1,
+      0.196
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.92,
+      0.196,
+      0.1
+     ]
+    },
+    {
+     "name": "SOCKET_Player2",
+     "location": [
+      0.6,
+      -0.1,
+      0.18
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      0.18,
+      0.1
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      0.57,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      -0.57
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0.5,
+      0.59,
+      0.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.5,
+      0.9,
+      -0.59
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_DancePad_00",
+     "shape": "box",
+     "size": [
+      1.6,
+      0.6,
+      2.55
+     ],
+     "centre": [
+      0,
+      0.9,
+      1.27
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Arcade_Cab_DancePad_01",
+     "shape": "box",
+     "size": [
+      2.4,
+      1.2,
+      0.18
+     ],
+     "centre": [
+      0,
+      -0.1,
+      0.09
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 620,
+    "lod1_triangles": 620,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_DancePad": 620
+    },
+    "bounds_min": [
+     -1.2,
+     -0.7,
+     0.0
+    ],
+    "bounds_max": [
+     1.2,
+     1.2,
+     2.545
+    ],
+    "dimensions": [
+     2.4,
+     1.9,
+     2.545
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d586f07cf133c2ad560aec82f3732dcb917e438741861a333fa0210254853f14"
+  },
+  {
+   "asset": "Prop_Arcade_Cab_Pinball",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "0.7 x 1.3 x 1.85 m pinball, playfield tilted 6.5 deg",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_FlipperL",
+     "SOCKET_FlipperR",
+     "SOCKET_Plunger",
+     "SOCKET_Backglass",
+     "SOCKET_Ball",
+     "SOCKET_Player1",
+     "SOCKET_Floor"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_Pinball_M0",
+     "colour": "cabinet",
+     "hex": "2A2240",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_Pinball_M1",
+     "colour": "chrome legs / trim",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_Pinball_M2",
+     "colour": "backglass / bumpers (emissive)",
+     "hex": "A6E6FF",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_Pinball_M3",
+     "colour": "playfield art (MI)",
+     "hex": "2A1A50",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_Pinball_M4",
+     "colour": "glass",
+     "hex": "B8E0F0",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_Pinball",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "box",
+       "size": [
+        0.7,
+        1.3,
+        0.3
+       ],
+       "centre": [
+        0,
+        0,
+        0.89406
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        6.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Glass",
+       "shape": "box",
+       "size": [
+        0.64,
+        1.24,
+        0.01
+       ],
+       "centre": [
+        0,
+        0,
+        1.04906
+       ],
+       "slot": 4,
+       "bevel": false,
+       "rot": [
+        6.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Playfield",
+       "shape": "box",
+       "size": [
+        0.62,
+        1.22,
+        0.01
+       ],
+       "centre": [
+        0,
+        0,
+        0.99406
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        6.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Backbox",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.25,
+        0.75
+       ],
+       "centre": [
+        0,
+        0.55,
+        1.46812
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Backglass",
+       "shape": "box",
+       "size": [
+        0.62,
+        0.01,
+        0.6
+       ],
+       "centre": [
+        0,
+        0.42,
+        1.46812
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Leg-1-1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.67
+       ],
+       "centre": [
+        -0.3,
+        -0.6,
+        0.335
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Leg-11",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.81812
+       ],
+       "centre": [
+        -0.3,
+        0.6,
+        0.40906
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Leg1-1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.67
+       ],
+       "centre": [
+        0.3,
+        -0.6,
+        0.335
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Leg11",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.81812
+       ],
+       "centre": [
+        0.3,
+        0.6,
+        0.40906
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Flipper-1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.025,
+        0.02
+       ],
+       "centre": [
+        -0.08,
+        -0.43,
+        0.96
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        6.5,
+        0,
+        25
+       ]
+      },
+      {
+       "name": "Flipper1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.025,
+        0.02
+       ],
+       "centre": [
+        0.08,
+        -0.43,
+        0.96
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        6.5,
+        0,
+        -25
+       ]
+      },
+      {
+       "name": "Bumper0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.04,
+       "length": 0.05,
+       "centre": [
+        -0.15,
+        0.2,
+        1.01
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Bumper1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.04,
+       "length": 0.05,
+       "centre": [
+        0.0,
+        0.2,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Bumper2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.04,
+       "length": 0.05,
+       "centre": [
+        0.15,
+        0.2,
+        1.05
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Plunger",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.12,
+       "centre": [
+        0.3,
+        -0.69,
+        0.87
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Apron",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.12,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.55,
+        0.95
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_FlipperL",
+     "location": [
+      -0.08,
+      -0.43,
+      0.96
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.08,
+      0.96,
+      0.43
+     ]
+    },
+    {
+     "name": "SOCKET_FlipperR",
+     "location": [
+      0.08,
+      -0.43,
+      0.96
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.08,
+      0.96,
+      0.43
+     ]
+    },
+    {
+     "name": "SOCKET_Plunger",
+     "location": [
+      0.3,
+      -0.75,
+      0.87
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.3,
+      0.87,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_Backglass",
+     "location": [
+      0,
+      0.41,
+      1.46812
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.46812,
+      -0.41
+     ]
+    },
+    {
+     "name": "SOCKET_Ball",
+     "location": [
+      0.3,
+      -0.5,
+      0.96
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.3,
+      0.96,
+      0.5
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -1.15,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      1.15
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_Pinball_00",
+     "shape": "box",
+     "size": [
+      0.7,
+      1.3,
+      1.11812
+     ],
+     "centre": [
+      0,
+      0,
+      0.55906
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_Arcade_Cab_Pinball_01",
+     "shape": "box",
+     "size": [
+      0.7,
+      0.25,
+      0.75
+     ],
+     "centre": [
+      0,
+      0.55,
+      1.46812
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 560,
+    "lod1_triangles": 560,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_Pinball": 560
+    },
+    "bounds_min": [
+     -0.35,
+     -0.75,
+     0.0
+    ],
+    "bounds_max": [
+     0.35,
+     0.675,
+     1.8431
+    ],
+    "dimensions": [
+     0.7,
+     1.425,
+     1.8431
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a4767ad145241dfcf872a864df094795a763305d1bc3dae2e521b8c2e4cee456"
+  },
+  {
+   "asset": "Prop_Arcade_Plush_Pebblepup",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "~25 cm plush prize",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Plush_Pebblepup_M0",
+     "colour": "plush pebble grey",
+     "hex": "A8A0B8",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Plush_Pebblepup_M1",
+     "colour": "plush ears / snout",
+     "hex": "D8C8E8",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Plush_Pebblepup_M2",
+     "colour": "prism gem collar",
+     "hex": "A6E6FF",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Plush_Pebblepup_M3",
+     "colour": "eyes / nose",
+     "hex": "141418",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Plush_Pebblepup",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.1
+        ],
+        [
+         0.0707,
+         -0.0707
+        ],
+        [
+         0.1,
+         -0.0
+        ],
+        [
+         0.0707,
+         0.0707
+        ],
+        [
+         0.0,
+         0.1
+        ]
+       ],
+       "centre": [
+        0,
+        0.02,
+        0.1
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.08
+        ],
+        [
+         0.0566,
+         -0.0566
+        ],
+        [
+         0.08,
+         -0.0
+        ],
+        [
+         0.0566,
+         0.0566
+        ],
+        [
+         0.0,
+         0.08
+        ]
+       ],
+       "centre": [
+        0,
+        -0.09,
+        0.18
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Snout",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.035
+        ],
+        [
+         0.0247,
+         -0.0247
+        ],
+        [
+         0.035,
+         -0.0
+        ],
+        [
+         0.0247,
+         0.0247
+        ],
+        [
+         0.0,
+         0.035
+        ]
+       ],
+       "centre": [
+        0,
+        -0.16,
+        0.16
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Nose",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.012
+        ],
+        [
+         0.0085,
+         -0.0085
+        ],
+        [
+         0.012,
+         -0.0
+        ],
+        [
+         0.0085,
+         0.0085
+        ],
+        [
+         0.0,
+         0.012
+        ]
+       ],
+       "centre": [
+        0,
+        -0.19,
+        0.17
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "EyeL",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.014
+        ],
+        [
+         0.0099,
+         -0.0099
+        ],
+        [
+         0.014,
+         -0.0
+        ],
+        [
+         0.0099,
+         0.0099
+        ],
+        [
+         0.0,
+         0.014
+        ]
+       ],
+       "centre": [
+        0.035,
+        -0.155,
+        0.21
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "EyeR",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.014
+        ],
+        [
+         0.0099,
+         -0.0099
+        ],
+        [
+         0.014,
+         -0.0
+        ],
+        [
+         0.0099,
+         0.0099
+        ],
+        [
+         0.0,
+         0.014
+        ]
+       ],
+       "centre": [
+        -0.035,
+        -0.155,
+        0.21
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Collar",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.07,
+       "r2": 0.07,
+       "length": 0.02,
+       "centre": [
+        0,
+        -0.06,
+        0.13
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Gem",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.015
+        ],
+        [
+         0.0106,
+         -0.0106
+        ],
+        [
+         0.015,
+         -0.0
+        ],
+        [
+         0.0106,
+         0.0106
+        ],
+        [
+         0.0,
+         0.015
+        ]
+       ],
+       "centre": [
+        0,
+        -0.13,
+        0.12
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Ear-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.08
+       ],
+       "centre": [
+        -0.075,
+        -0.08,
+        0.2
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        -25,
+        0
+       ]
+      },
+      {
+       "name": "Ear1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.08
+       ],
+       "centre": [
+        0.075,
+        -0.08,
+        0.2
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        25,
+        0
+       ]
+      },
+      {
+       "name": "Paw0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.028
+        ],
+        [
+         0.0198,
+         -0.0198
+        ],
+        [
+         0.028,
+         -0.0
+        ],
+        [
+         0.0198,
+         0.0198
+        ],
+        [
+         0.0,
+         0.028
+        ]
+       ],
+       "centre": [
+        -0.06,
+        -0.09,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Paw1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.028
+        ],
+        [
+         0.0198,
+         -0.0198
+        ],
+        [
+         0.028,
+         -0.0
+        ],
+        [
+         0.0198,
+         0.0198
+        ],
+        [
+         0.0,
+         0.028
+        ]
+       ],
+       "centre": [
+        0.06,
+        -0.09,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Paw2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.028
+        ],
+        [
+         0.0198,
+         -0.0198
+        ],
+        [
+         0.028,
+         -0.0
+        ],
+        [
+         0.0198,
+         0.0198
+        ],
+        [
+         0.0,
+         0.028
+        ]
+       ],
+       "centre": [
+        -0.06,
+        0.05,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Paw3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.028
+        ],
+        [
+         0.0198,
+         -0.0198
+        ],
+        [
+         0.028,
+         -0.0
+        ],
+        [
+         0.0198,
+         0.0198
+        ],
+        [
+         0.0,
+         0.028
+        ]
+       ],
+       "centre": [
+        0.06,
+        0.05,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tail",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.02,
+       "r2": 0.01,
+       "length": 0.06,
+       "centre": [
+        0,
+        0.13,
+        0.12
+       ],
+       "slot": 1,
+       "segments": 6,
+       "rot": [
+        -30,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Shelf",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grab",
+     "location": [
+      0,
+      0,
+      0.22
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.22,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 800,
+    "lod1_triangles": 800,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Plush_Pebblepup": 800
+    },
+    "bounds_min": [
+     -0.104,
+     -0.2004,
+     -0.008
+    ],
+    "bounds_max": [
+     0.104,
+     0.1603,
+     0.26
+    ],
+    "dimensions": [
+     0.208,
+     0.3607,
+     0.268
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "fbd96f1cb5cf3718ccdc224458b12943bd33ac1200d2365afd0ea61d4be0ed56"
+  },
+  {
+   "asset": "Prop_Arcade_Plush_Lumenfish",
+   "kind": "Prop",
+   "seed": 2610262,
+   "spec": {
+    "gap": "ARCADE-B",
+    "ask": "buffffff (Richey order) 2026-10-26",
+    "lod": "LOD0/1",
+    "realm": "prismheart_realm arcade_plaza",
+    "size_m": "~25 cm plush prize",
+    "tri_cap": 4000,
+    "sockets": [
+     "SOCKET_Shelf",
+     "SOCKET_Hand",
+     "SOCKET_Grab"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Plush_Lumenfish_M0",
+     "colour": "plush teal",
+     "hex": "4AC8C0",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Plush_Lumenfish_M1",
+     "colour": "fins coral",
+     "hex": "F08A6A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Plush_Lumenfish_M2",
+     "colour": "glow lure (emissive)",
+     "hex": "FFF0A0",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Plush_Lumenfish_M3",
+     "colour": "eyes",
+     "hex": "141418",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Plush_Lumenfish",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.11
+        ],
+        [
+         0.0778,
+         -0.0778
+        ],
+        [
+         0.11,
+         -0.0
+        ],
+        [
+         0.0778,
+         0.0778
+        ],
+        [
+         0.0,
+         0.11
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tail",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0
+        ],
+        [
+         0.08,
+         0.07
+        ],
+        [
+         0.1,
+         0.0
+        ],
+        [
+         0.08,
+         -0.07
+        ]
+       ],
+       "thickness": 0.025,
+       "centre": [
+        0,
+        0.1,
+        0.12
+       ],
+       "slot": 1,
+       "segments": 4,
+       "rot": [
+        0,
+        -90,
+        90
+       ]
+      },
+      {
+       "name": "FinTop",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0
+        ],
+        [
+         0.05,
+         0.07
+        ],
+        [
+         0.09,
+         0
+        ]
+       ],
+       "thickness": 0.02,
+       "centre": [
+        0,
+        -0.03,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        90,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Lure",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.022
+        ],
+        [
+         0.0156,
+         -0.0156
+        ],
+        [
+         0.022,
+         -0.0
+        ],
+        [
+         0.0156,
+         0.0156
+        ],
+        [
+         0.0,
+         0.022
+        ]
+       ],
+       "centre": [
+        0,
+        -0.12,
+        0.27
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Stalk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.005,
+       "r2": 0.005,
+       "length": 0.07,
+       "centre": [
+        0,
+        -0.1,
+        0.235
+       ],
+       "slot": 1,
+       "segments": 4,
+       "rot": [
+        -25,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "EyeL",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.02
+        ],
+        [
+         0.0141,
+         -0.0141
+        ],
+        [
+         0.02,
+         -0.0
+        ],
+        [
+         0.0141,
+         0.0141
+        ],
+        [
+         0.0,
+         0.02
+        ]
+       ],
+       "centre": [
+        0.05,
+        -0.09,
+        0.15
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "EyeR",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0,
+         -0.02
+        ],
+        [
+         0.0141,
+         -0.0141
+        ],
+        [
+         0.02,
+         -0.0
+        ],
+        [
+         0.0141,
+         0.0141
+        ],
+        [
+         0.0,
+         0.02
+        ]
+       ],
+       "centre": [
+        -0.05,
+        -0.09,
+        0.15
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Side-1",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0
+        ],
+        [
+         0.06,
+         0.03
+        ],
+        [
+         0.07,
+         -0.02
+        ]
+       ],
+       "thickness": 0.015,
+       "centre": [
+        -0.1,
+        0,
+        0.1
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        0,
+        0,
+        180
+       ]
+      },
+      {
+       "name": "Side1",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0
+        ],
+        [
+         0.06,
+         0.03
+        ],
+        [
+         0.07,
+         -0.02
+        ]
+       ],
+       "thickness": 0.015,
+       "centre": [
+        0.1,
+        0,
+        0.1
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Shelf",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grab",
+     "location": [
+      0,
+      0,
+      0.22
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.22,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 292,
+    "lod1_triangles": 292,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Plush_Lumenfish": 292
+    },
+    "bounds_min": [
+     -0.17,
+     -0.1391,
+     0.01
+    ],
+    "bounds_max": [
+     0.17,
+     0.1125,
+     0.292
+    ],
+    "dimensions": [
+     0.34,
+     0.2516,
+     0.282
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "334277f0bfa3237ceab16a97ac14dcd417b5b750173c0ef2186405ec7939c2ba"
+  }
+ ]
+}

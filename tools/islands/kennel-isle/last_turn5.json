@@ -1,0 +1,19 @@
+{
+ "err": [
+  "noherb:Harvest_HerbGarden"
+ ],
+ "herbs": 12,
+ "trough": 2,
+ "sign": 1,
+ "tags_added": 71,
+ "saved": [
+  [
+   "Island_AMF",
+   true
+  ],
+  [
+   "WildBiomes_AMF_Pets",
+   true
+  ]
+ ]
+}

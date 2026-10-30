@@ -1,0 +1,478 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_FireLogSeat",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G398",
+    "ask": "youtube-master 55832",
+    "lod": "LOD0/1",
+    "size_m": "1.6 m log bench, 3 seats",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Sit_0",
+     "SOCKET_Sit_1",
+     "SOCKET_Sit_2"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_FireLogSeat_M0",
+     "colour": "bark log",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_FireLogSeat_M1",
+     "colour": "adzed seat",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_FireLogSeat",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Log",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.2,
+       "r2": 0.18,
+       "length": 1.6,
+       "centre": [
+        0,
+        0,
+        0.2
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Flat",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.3,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.39
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Chock-1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.3,
+        0.1
+       ],
+       "centre": [
+        -0.6,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Chock1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.3,
+        0.1
+       ],
+       "centre": [
+        0.6,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Sit_0",
+     "location": [
+      -0.5,
+      -0.05,
+      0.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.5,
+      0.4,
+      0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Sit_1",
+     "location": [
+      0.0,
+      -0.05,
+      0.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.4,
+      0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Sit_2",
+     "location": [
+      0.5,
+      -0.05,
+      0.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.5,
+      0.4,
+      0.05
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_FireLogSeat_00",
+     "shape": "box",
+     "size": [
+      1.6,
+      0.4,
+      0.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 136,
+    "lod1_triangles": 136,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_FireLogSeat": 136
+    },
+    "bounds_min": [
+     -0.8,
+     -0.2,
+     0.0
+    ],
+    "bounds_max": [
+     0.8,
+     0.2,
+     0.4
+    ],
+    "dimensions": [
+     1.6,
+     0.4,
+     0.4
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4a5644dceb1c6b6badae75b49ad3549477e7fca1163708e9f68067e46bfba7fa"
+  },
+  {
+   "asset": "Prop_YTM_NightLantern",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G398",
+    "ask": "youtube-master 55832",
+    "lod": "LOD0/1",
+    "size_m": "1.4 m lit lantern pole",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Light",
+     "SOCKET_Floor"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_NightLantern_M0",
+     "colour": "pole (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_NightLantern_M1",
+     "colour": "cap iron",
+     "hex": "3A3A40",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_NightLantern_M2",
+     "colour": "lit paper lantern (G66 cloth, emissive)",
+     "hex": "FFC870",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_NightLantern",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Foot",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.3,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.03,
+       "length": 1.4,
+       "centre": [
+        0,
+        0,
+        0.7
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Arm",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.35,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.16,
+        1.35
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Lantern",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.16,
+        0.22
+       ],
+       "centre": [
+        0,
+        -0.3,
+        1.2
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "LanternCap",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.2,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.3,
+        1.33
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.3,
+      1.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.2,
+      0.3
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_NightLantern_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.15,
+     "r2": 0.15,
+     "length": 1.4,
+     "centre": [
+      0,
+      0,
+      0.7
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 204,
+    "lod1_triangles": 204,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_NightLantern": 204
+    },
+    "bounds_min": [
+     -0.15,
+     -0.4,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.15,
+     1.4
+    ],
+    "dimensions": [
+     0.3,
+     0.55,
+     1.4
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "70d058213bcf2df24a3e1886abaa612c0f60922f1cd716f372dbd22aad523535"
+  }
+ ]
+}

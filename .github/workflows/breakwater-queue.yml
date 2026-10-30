@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Breakwater Queue
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/breakwater_queue.py'
+      - 'tools/streaming/breakwater_queue_test.py'
+      - 'data/islands/disk-saver/breakwater-queue-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/breakwater-queue.yml'
+permissions:
+  contents: read
+jobs:
+  breakwater-queue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G126 Breakwater Queue rules (drops vs bufferbloat, capacity traps, G86 tie-in)
+        run: python -m unittest tools/streaming/breakwater_queue_test.py -v
+      - name: CLI smoke (tuned breakwater wins)
+        run: python tools/streaming/breakwater_queue.py data/islands/disk-saver/breakwater-queue-v1.json

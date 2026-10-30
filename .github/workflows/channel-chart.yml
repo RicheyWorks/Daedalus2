@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: MIT
+name: Channel Chart
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/**'
+      - 'data/islands/disk-saver/**'
+      - '.github/workflows/**'
+permissions:
+  contents: read
+jobs:
+  channel-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G536 Channel Chart (imports, cycles = brute force, run order, coverage gaps, real repo, CLI)
+        run: python -B -m unittest tools/streaming/channel_chart_test.py -v
+      - name: Chart the real tools/streaming (--fail-on uncharted)
+        run: python tools/streaming/channel_chart.py --fail-on uncharted

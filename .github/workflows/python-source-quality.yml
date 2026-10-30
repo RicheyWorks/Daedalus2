@@ -1,0 +1,79 @@
+# SPDX-License-Identifier: MIT
+name: Scoped Python source quality
+on:
+  # Route the complete Git diff, avoiding GitHub path-filter truncation on large PRs.
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quality-routing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.route.outputs.matrix }}
+      any: ${{ steps.route.outputs.any }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # PR merge + its two parents; unavailable older push history selects both.
+          fetch-depth: 2
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: tools/python_quality/requirements-lint.txt
+      - name: Install shared pinned linter
+        run: >-
+          python -m pip install --disable-pip-version-check --only-binary=:all:
+          --requirement tools/python_quality/requirements-lint.txt
+      - name: Test routing boundaries and synthetic Git comparisons
+        run: python -B -m unittest tools.python_quality.test_changed_scopes -v
+      - name: Check the routing helper itself
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m ruff check --config tools/python_quality/ruff.toml --no-respect-gitignore --show-files tools/python_quality | tee "$RUNNER_TEMP/quality-helper-files.txt"
+          test -s "$RUNNER_TEMP/quality-helper-files.txt"
+          python -m ruff check --config tools/python_quality/ruff.toml --no-respect-gitignore --output-format github tools/python_quality
+      - name: Select approved source scopes
+        id: route
+        shell: bash
+        env:
+          QUALITY_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          QUALITY_PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          python -B -m tools.python_quality.changed_scopes --scope-map tools/python_quality/scopes.json --event "$GITHUB_EVENT_NAME" --base "$QUALITY_BASE" --head "$GITHUB_SHA" --pr-head "$QUALITY_PR_HEAD" --github-output "$GITHUB_OUTPUT"
+  module-lint:
+    needs: quality-routing
+    if: needs.quality-routing.outputs.any == 'true'
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.quality-routing.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: tools/python_quality/requirements-lint.txt
+      - name: Install shared pinned linter
+        run: >-
+          python -m pip install --disable-pip-version-check --only-binary=:all:
+          --requirement tools/python_quality/requirements-lint.txt
+      - name: Check the selected nonempty Python scope
+        shell: bash
+        env:
+          QUALITY_SCOPE: ${{ matrix.path }}
+        run: |
+          set -euo pipefail
+          python -m ruff check --config tools/python_quality/ruff.toml --no-respect-gitignore --show-files "$QUALITY_SCOPE" | tee "$RUNNER_TEMP/quality-module-files.txt"
+          test -s "$RUNNER_TEMP/quality-module-files.txt"
+          python -m ruff check --config tools/python_quality/ruff.toml --no-respect-gitignore --output-format github "$QUALITY_SCOPE"

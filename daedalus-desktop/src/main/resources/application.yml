@@ -1,0 +1,13 @@
+# Desktop client configuration.
+#
+# The desktop is a Spring Boot application (see DaedalusLauncher) and until now it shipped no
+# configuration file at all, while ThemeManager read `daedalus.ui.theme` through @Value and
+# CosmicTheme's javadoc told the reader the default lived "in application.yml". It did not. The
+# only way to select a theme was a -Ddaedalus.ui.theme JVM flag nothing documented — which is the
+# same failure ConfigCoverageTest was written to prevent in the server module, in the module that
+# test could not see. It scans both now.
+daedalus:
+  ui:
+    # Which registered Theme the window starts with. Themes are Spring beans, so a plugin can
+    # contribute one and name it here; unknown ids fall back to the first registered theme.
+    theme: ${DAEDALUS_UI_THEME:cosmic}

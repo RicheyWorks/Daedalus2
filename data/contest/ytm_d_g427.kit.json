@@ -1,0 +1,407 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_WashingStone",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G427",
+    "ask": "youtube-master 56022",
+    "lod": "LOD0/1",
+    "size_m": "0.90 x 0.60 x 0.40 m washing stone",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Washer",
+     "SOCKET_Scrub"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_WashingStone_M0",
+     "colour": "washing stone (G66 stone)",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_WashingStone",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Chunk0",
+       "shape": "box",
+       "size": [
+        0.89908,
+        0.59337,
+        0.41989
+       ],
+       "centre": [
+        0.01534,
+        0.01646,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -1.8101,
+        1.3525,
+        16.4186
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.4,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Washer",
+     "location": [
+      0,
+      -0.6,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.6
+     ]
+    },
+    {
+     "name": "SOCKET_Scrub",
+     "location": [
+      0,
+      -0.1,
+      0.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.4,
+      0.1
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_WashingStone_00",
+     "shape": "box",
+     "size": [
+      0.9,
+      0.6,
+      0.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 44,
+    "lod1_triangles": 44,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_WashingStone": 44
+    },
+    "bounds_min": [
+     -0.4877,
+     -0.3866,
+     -0.027
+    ],
+    "bounds_max": [
+     0.5184,
+     0.4195,
+     0.427
+    ],
+    "dimensions": [
+     1.0061,
+     0.8061,
+     0.454
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a084d4049725cbbabb3dbeb9c6d6fb33d17fc9ded5ef94b4d30482cfb76fb043"
+  },
+  {
+   "asset": "Prop_YTM_LaundryBasket",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G427",
+    "ask": "youtube-master 56022",
+    "lod": "LOD0/1",
+    "size_m": "0.60 m dia x 0.35 m laundry basket",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Contents",
+     "SOCKET_Hand"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_LaundryBasket_M0",
+     "colour": "wicker (G66)",
+     "hex": "C8A060",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_LaundryBasket_M1",
+     "colour": "rim / handle",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_LaundryBasket_M2",
+     "colour": "laundry (G66 cloth)",
+     "hex": "6E7F99",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_LaundryBasket",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Weave",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.24,
+         0
+        ],
+        [
+         0.3,
+         0.2975
+        ],
+        [
+         0.312,
+         0.35
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 14,
+       "caps": [
+        true,
+        false
+       ]
+      },
+      {
+       "name": "Rim",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.294,
+         0.338
+        ],
+        [
+         0.324,
+         0.338
+        ],
+        [
+         0.324,
+         0.368
+        ],
+        [
+         0.294,
+         0.368
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 1,
+       "segments": 14,
+       "caps": [
+        false,
+        false
+       ]
+      },
+      {
+       "name": "Fill",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.285,
+       "r2": 0.18,
+       "length": 0.0875,
+       "centre": [
+        0,
+        0,
+        0.3325
+       ],
+       "slot": 2,
+       "segments": 12
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Contents",
+     "location": [
+      0,
+      0,
+      0.35
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.35,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.35
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.35,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 196,
+    "lod1_triangles": 196,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_LaundryBasket": 196
+    },
+    "bounds_min": [
+     -0.324,
+     -0.3159,
+     0
+    ],
+    "bounds_max": [
+     0.324,
+     0.3159,
+     0.3763
+    ],
+    "dimensions": [
+     0.648,
+     0.6318,
+     0.3763
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e0511215a3965ac9c94abb2c11d6c8f926066a55a151121a96251553a233e9f6"
+  }
+ ]
+}

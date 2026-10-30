@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: MIT
+#
+# Dependabot: weekly dependency update PRs.
+# Two ecosystems — Maven (reactor + the standalone biome-plugin pom) and
+# the GitHub Actions used by ci.yml / release.yml.
+
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # Batch minor/patch bumps into one PR to cut review noise;
+      # majors still arrive individually.
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: maven
+    directory: "/examples/biome-plugin"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 2
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5

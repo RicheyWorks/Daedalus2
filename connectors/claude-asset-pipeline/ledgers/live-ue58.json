@@ -1,0 +1,146 @@
+{
+  "engine": "5.8.3-58210709+++UE5+Release-5.8",
+  "when": "2026-10-11",
+  "sent": {
+    "path": "/tmp/claude-0/live/Props.glb",
+    "bytes": 22912,
+    "objects": [
+      {
+        "name": "Lamp",
+        "triangles": 60,
+        "materials": [
+          "Brass",
+          "Glow"
+        ],
+        "dims": [
+          3.0,
+          0.4,
+          0.4
+        ]
+      },
+      {
+        "name": "Crate",
+        "triangles": 108,
+        "materials": [
+          "Wood"
+        ],
+        "dims": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "name": "Stone",
+        "triangles": 80,
+        "materials": [],
+        "dims": [
+          1.0,
+          1.0,
+          0.95106
+        ]
+      }
+    ],
+    "blender": "5.2.2 LTS"
+  },
+  "unreal": {
+    "meshes": [
+      {
+        "name": "Stone",
+        "triangles": 80,
+        "materials": [
+          "-1"
+        ],
+        "dims_cm": [
+          100,
+          99.99999237060547,
+          95.10577392578125
+        ]
+      },
+      {
+        "name": "Crate",
+        "triangles": 108,
+        "materials": [
+          "Wood"
+        ],
+        "dims_cm": [
+          200,
+          100,
+          100
+        ]
+      },
+      {
+        "name": "Lamp",
+        "triangles": 60,
+        "materials": [
+          "Brass",
+          "Glow"
+        ],
+        "dims_cm": [
+          300,
+          40,
+          40
+        ]
+      }
+    ],
+    "materials": [
+      {
+        "name": "Wood"
+      },
+      {
+        "name": "Brass"
+      },
+      {
+        "name": "Glow"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "check": "every Blender object reached the file",
+      "ok": true,
+      "detail": "3 objects, 3 mesh nodes"
+    },
+    {
+      "check": "triangles: Blender = file",
+      "ok": true,
+      "detail": "Blender 248, file 248"
+    },
+    {
+      "check": "materials: Blender = file",
+      "ok": true,
+      "detail": "Blender ['Brass', 'Glow', 'Wood'], file ['Brass', 'Glow', 'Wood']"
+    },
+    {
+      "check": "sizes: Blender = file",
+      "ok": true,
+      "detail": "Blender [(1.0, 1.0, 0.95106), (1.0, 1.0, 1.0), (3.0, 0.4, 0.4)], file [(1.0, 1.0, 0.95106), (1.0, 1.0, 1.0), (3.0, 0.4, 0.4)]"
+    },
+    {
+      "check": "every file mesh became an Unreal static mesh",
+      "ok": true,
+      "detail": "file 3 mesh nodes, Unreal 3 static meshes"
+    },
+    {
+      "check": "triangles: file = Unreal, mesh by mesh",
+      "ok": true,
+      "detail": "file [60, 80, 108], Unreal [60, 80, 108]"
+    },
+    {
+      "check": "material slots: file = Unreal, mesh by mesh",
+      "ok": true,
+      "detail": "file [1, 1, 2], Unreal [1, 1, 2]"
+    },
+    {
+      "check": "sizes: file (m) = Unreal (cm)",
+      "ok": true,
+      "detail": "file [(1.0, 1.0, 0.95106), (2.0, 1.0, 1.0), (3.0, 0.4, 0.4)] m, Unreal [(100, 99.99999237060547, 95.10577392578125), (200, 100, 100), (300, 40, 40)] cm"
+    },
+    {
+      "check": "Unreal made a material for each one used",
+      "ok": true,
+      "detail": "used 3, Unreal made 3"
+    }
+  ],
+  "ok": true
+}

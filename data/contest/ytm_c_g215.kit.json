@@ -1,0 +1,1500 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_MarketStall_A",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G215",
+    "ask": "youtube-master 54811",
+    "lod": "LOD0/1",
+    "size_m": "1.6 x 1.2 x 2.3 m stall A",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Counter",
+     "SOCKET_Keeper",
+     "SOCKET_Customer"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_MarketStall_A_M0",
+     "colour": "stall timber (G66)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_MarketStall_A_M1",
+     "colour": "awning cloth (G66)",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_MarketStall_A_M2",
+     "colour": "sign board (G66)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_MarketStall_A_M3",
+     "colour": "goods",
+     "hex": "B89A62",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_MarketStall_A",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Counter",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.5,
+        0.9
+       ],
+       "centre": [
+        0,
+        -0.35,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole-0.8-0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        -0.76,
+        -0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole-0.8+0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        -0.76,
+        0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole+0.8-0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        0.76,
+        -0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole+0.8+0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        0.76,
+        0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Awning",
+       "shape": "box",
+       "size": [
+        1.8,
+        1.5,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.15,
+        2.25
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -10,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Counter",
+     "location": [
+      0,
+      -0.35,
+      0.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.9,
+      0.35
+     ]
+    },
+    {
+     "name": "SOCKET_Keeper",
+     "location": [
+      0,
+      0.4,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -0.4
+     ]
+    },
+    {
+     "name": "SOCKET_Customer",
+     "location": [
+      0,
+      -1.1,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      1.1
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_MarketStall_A_00",
+     "shape": "box",
+     "size": [
+      1.6,
+      1.2,
+      2.2
+     ],
+     "centre": [
+      0,
+      0,
+      1.1
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_MarketStall_A": 264
+    },
+    "bounds_min": [
+     -0.9,
+     -0.8912,
+     0.0
+    ],
+    "bounds_max": [
+     0.9,
+     0.595,
+     2.3991
+    ],
+    "dimensions": [
+     1.8,
+     1.4862,
+     2.3991
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "6a047558547f0f628489a5460f02938067976c1b945788c21f6d659eac630df1"
+  },
+  {
+   "asset": "Prop_YTM_MarketStall_B",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G215",
+    "ask": "youtube-master 54811",
+    "lod": "LOD0/1",
+    "size_m": "2.0 x 1.2 x 2.3 m stall B",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Counter",
+     "SOCKET_Keeper",
+     "SOCKET_Customer"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_MarketStall_B_M0",
+     "colour": "stall timber (G66)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_MarketStall_B_M1",
+     "colour": "awning cloth (G66)",
+     "hex": "6E7F99",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_MarketStall_B_M2",
+     "colour": "sign board (G66)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_MarketStall_B_M3",
+     "colour": "goods",
+     "hex": "B89A62",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_MarketStall_B",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Counter",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.5,
+        0.9
+       ],
+       "centre": [
+        0,
+        -0.35,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole-1.0-0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        -0.96,
+        -0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole-1.0+0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        -0.96,
+        0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole+1.0-0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        0.96,
+        -0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole+1.0+0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        0.96,
+        0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Awning",
+       "shape": "box",
+       "size": [
+        2.2,
+        1.5,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.15,
+        2.25
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -10,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Counter",
+     "location": [
+      0,
+      -0.35,
+      0.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.9,
+      0.35
+     ]
+    },
+    {
+     "name": "SOCKET_Keeper",
+     "location": [
+      0,
+      0.4,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -0.4
+     ]
+    },
+    {
+     "name": "SOCKET_Customer",
+     "location": [
+      0,
+      -1.1,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      1.1
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_MarketStall_B_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      1.2,
+      2.2
+     ],
+     "centre": [
+      0,
+      0,
+      1.1
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_MarketStall_B": 264
+    },
+    "bounds_min": [
+     -1.1,
+     -0.8912,
+     0.0
+    ],
+    "bounds_max": [
+     1.1,
+     0.595,
+     2.3991
+    ],
+    "dimensions": [
+     2.2,
+     1.4862,
+     2.3991
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "603d8c4d73f8a907836ecd2d6ed30fce4d07a993aeacd7678d8c49e52837ad67"
+  },
+  {
+   "asset": "Prop_YTM_MarketStall_C",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G215",
+    "ask": "youtube-master 54811",
+    "lod": "LOD0/1",
+    "size_m": "2.4 x 1.2 x 2.3 m stall C",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Counter",
+     "SOCKET_Keeper",
+     "SOCKET_Customer"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_MarketStall_C_M0",
+     "colour": "stall timber (G66)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_MarketStall_C_M1",
+     "colour": "awning cloth (G66)",
+     "hex": "E3C25A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_MarketStall_C_M2",
+     "colour": "sign board (G66)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_MarketStall_C_M3",
+     "colour": "goods",
+     "hex": "B89A62",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_MarketStall_C",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Counter",
+       "shape": "box",
+       "size": [
+        2.4,
+        0.5,
+        0.9
+       ],
+       "centre": [
+        0,
+        -0.35,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole-1.2-0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        -1.16,
+        -0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole-1.2+0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        -1.16,
+        0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole+1.2-0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        1.16,
+        -0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pole+1.2+0.6",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        2.2
+       ],
+       "centre": [
+        1.16,
+        0.56,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Awning",
+       "shape": "box",
+       "size": [
+        2.6,
+        1.5,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.15,
+        2.25
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -10,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Counter",
+     "location": [
+      0,
+      -0.35,
+      0.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.9,
+      0.35
+     ]
+    },
+    {
+     "name": "SOCKET_Keeper",
+     "location": [
+      0,
+      0.4,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -0.4
+     ]
+    },
+    {
+     "name": "SOCKET_Customer",
+     "location": [
+      0,
+      -1.1,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      1.1
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_MarketStall_C_00",
+     "shape": "box",
+     "size": [
+      2.4,
+      1.2,
+      2.2
+     ],
+     "centre": [
+      0,
+      0,
+      1.1
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_MarketStall_C": 264
+    },
+    "bounds_min": [
+     -1.3,
+     -0.8912,
+     0.0
+    ],
+    "bounds_max": [
+     1.3,
+     0.595,
+     2.3991
+    ],
+    "dimensions": [
+     2.6,
+     1.4862,
+     2.3991
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "8f98dccd6a41c7a017a156b12048e9c2787b499862b368d55a39ee7a3aa6964d"
+  },
+  {
+   "asset": "Prop_YTM_HarbourGate",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G215",
+    "ask": "youtube-master 54811",
+    "lod": "LOD0/1",
+    "size_m": "3.6 m wide, 3.3 m; leaves hinge at SOCKET_HingeL/R (split leaves in UE or swap open mesh)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_HingeL",
+     "SOCKET_HingeR",
+     "SOCKET_Text",
+     "SOCKET_Lamp_L",
+     "SOCKET_Lamp_R"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_HarbourGate_M0",
+     "colour": "gate timber (G66)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_HarbourGate_M1",
+     "colour": "lintel stone",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_HarbourGate_M2",
+     "colour": "harbour sign (G66 sign board)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_HarbourGate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "PostL",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.3,
+        3.0
+       ],
+       "centre": [
+        -1.6,
+        0,
+        1.5
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "PostR",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.3,
+        3.0
+       ],
+       "centre": [
+        1.6,
+        0,
+        1.5
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Lintel",
+       "shape": "box",
+       "size": [
+        3.6,
+        0.35,
+        0.3
+       ],
+       "centre": [
+        0,
+        0,
+        3.15
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "LeafL",
+       "shape": "box",
+       "size": [
+        1.45,
+        0.06,
+        2.2
+       ],
+       "centre": [
+        -0.75,
+        0,
+        1.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "LeafR",
+       "shape": "box",
+       "size": [
+        1.45,
+        0.06,
+        2.2
+       ],
+       "centre": [
+        0.75,
+        0,
+        1.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Sign",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.04,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.2,
+        3.15
+       ],
+       "slot": 2,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HingeL",
+     "location": [
+      -1.47,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.47,
+      0.05,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HingeR",
+     "location": [
+      1.47,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.47,
+      0.05,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Text",
+     "location": [
+      0,
+      -0.23,
+      3.15
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      3.15,
+      0.23
+     ]
+    },
+    {
+     "name": "SOCKET_Lamp_L",
+     "location": [
+      -1.6,
+      -0.2,
+      2.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.6,
+      2.6,
+      0.2
+     ]
+    },
+    {
+     "name": "SOCKET_Lamp_R",
+     "location": [
+      1.6,
+      -0.2,
+      2.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.6,
+      2.6,
+      0.2
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_HarbourGate_00",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.3,
+      3.0
+     ],
+     "centre": [
+      -1.6,
+      0,
+      1.5
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_HarbourGate_01",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.3,
+      3.0
+     ],
+     "centre": [
+      1.6,
+      0,
+      1.5
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_HarbourGate_02",
+     "shape": "box",
+     "size": [
+      3.6,
+      0.35,
+      0.3
+     ],
+     "centre": [
+      0,
+      0,
+      3.15
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_HarbourGate": 264
+    },
+    "bounds_min": [
+     -1.8,
+     -0.22,
+     0.0
+    ],
+    "bounds_max": [
+     1.8,
+     0.175,
+     3.3
+    ],
+    "dimensions": [
+     3.6,
+     0.395,
+     3.3
+    ],
+    "collision_tris": 36
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9e5811b64a77085466a7e08e0c3b38491879cccd29698ea6eada20a8527f9470"
+  },
+  {
+   "asset": "Prop_YTM_InnDoor",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G215",
+    "ask": "youtube-master 54811",
+    "lod": "LOD0/1",
+    "size_m": "1.2 x 2.3 m; leaf hinges at SOCKET_Door",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Door",
+     "SOCKET_Handle",
+     "SOCKET_Text"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_InnDoor_M0",
+     "colour": "frame (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_InnDoor_M1",
+     "colour": "door + inn sign (G66 sign board)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_InnDoor_M2",
+     "colour": "iron ring",
+     "hex": "3A3A40",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_InnDoor",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "FrameL",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.15,
+        2.2
+       ],
+       "centre": [
+        -0.55,
+        0,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "FrameR",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.15,
+        2.2
+       ],
+       "centre": [
+        0.55,
+        0,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "FrameTop",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.15,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        2.26
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Door",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.05,
+        2.15
+       ],
+       "centre": [
+        0,
+        0,
+        1.08
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Ring",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.05,
+       "r2": 0.05,
+       "length": 0.01,
+       "centre": [
+        0.35,
+        -0.035,
+        1.05
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "InnSign",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.03,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.1,
+        2.55
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Door",
+     "location": [
+      -0.5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Handle",
+     "location": [
+      0.35,
+      -0.04,
+      1.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.35,
+      1.05,
+      0.04
+     ]
+    },
+    {
+     "name": "SOCKET_Text",
+     "location": [
+      0,
+      -0.12,
+      2.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.55,
+      0.12
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_InnDoor_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.15,
+      2.32
+     ],
+     "centre": [
+      0,
+      0,
+      1.16
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 256,
+    "lod1_triangles": 256,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_InnDoor": 256
+    },
+    "bounds_min": [
+     -0.6,
+     -0.115,
+     0.0
+    ],
+    "bounds_max": [
+     0.6,
+     0.075,
+     2.7
+    ],
+    "dimensions": [
+     1.2,
+     0.19,
+     2.7
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "15f0d0d47d8ce368d86d6e960b4ab33cacac95e09c0be345d863ec72bf32dfa6"
+  }
+ ]
+}

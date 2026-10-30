@@ -1,0 +1,96 @@
+{
+ "schema": "bb-material-variants/1",
+ "asset": "Mob_Lab_Hornback",
+ "gap": "G172 (pythagoras 50449)",
+ "status": "NOT READY",
+ "style": "G28: MI params + masks, no baked textures",
+ "parent_material": {
+  "name": "M_Hornback (UE side)",
+  "graph": "hide: BaseColor = lerp(CoatTint, PatchColour, CoatMask(uv) * PatchAmount); hoof: BaseColor = lerp(hoof, LesionColour, LesionMask(uv) * LesionAmount)"
+ },
+ "projection": {
+  "uv": "u = (LocalPosition.Y - u.min)/u.size, v = (LocalPosition.Z - v.min)/v.size (PreSkinnedLocalPosition)",
+  "u": {
+   "axis": "Y",
+   "min_cm": -76.14,
+   "size_cm": 156.14
+  },
+  "v": {
+   "axis": "Z",
+   "min_cm": 0.0,
+   "size_cm": 128.42
+  }
+ },
+ "masks": {
+  "CoatMask": {
+   "file": "T_Mob_Lab_Hornback_Sick_CoatMask.png",
+   "sha256": "83c41240ca7dd8ddff44d55dfad7a54326f667010d28a5b2d6ac64f1dd306b6e"
+  },
+  "LesionMask": {
+   "file": "T_Mob_Lab_Hornback_Sick_LesionMask.png",
+   "sha256": "5ec58c54660428f681c7c1a463e484b722ae827e2576acb0e88cf3e730062289"
+  }
+ },
+ "instances": {
+  "MI_Mob_Lab_Hornback_Sick": {
+   "slots": {
+    "0": "hide",
+    "2": "hoof"
+   },
+   "params": {
+    "CoatTint": {
+     "srgb_hex": "7A6A52",
+     "linear_rgba": [
+      0.194618,
+      0.144128,
+      0.084376,
+      1.0
+     ]
+    },
+    "PatchColour": {
+     "srgb_hex": "B8A88A",
+     "linear_rgba": [
+      0.47932,
+      0.391572,
+      0.254152,
+      1.0
+     ]
+    },
+    "LesionColour": {
+     "srgb_hex": "6A2A22",
+     "linear_rgba": [
+      0.144128,
+      0.023153,
+      0.015996,
+      1.0
+     ]
+    },
+    "PatchAmount": 0.85,
+    "LesionAmount": 1.0,
+    "Roughness": 0.97,
+    "CoatMask": "T_Mob_Lab_Hornback_Sick_CoatMask.png",
+    "LesionMask": "T_Mob_Lab_Hornback_Sick_LesionMask.png"
+   }
+  },
+  "MI_Mob_Lab_Hornback_Healthy": {
+   "slots": {
+    "0": "hide",
+    "2": "hoof"
+   },
+   "params": {
+    "CoatTint": {
+     "srgb_hex": "8A6A4A",
+     "linear_rgba": [
+      0.254152,
+      0.144128,
+      0.068478,
+      1.0
+     ]
+    },
+    "PatchAmount": 0.0,
+    "LesionAmount": 0.0,
+    "Roughness": 0.9
+   }
+  }
+ }
+}

@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: MIT
+name: caulking-check
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/streaming/**'
+      - 'data/islands/disk-saver/**'
+      - 'docs/islands/**'
+  pull_request:
+    paths:
+      - 'tools/streaming/**'
+      - 'data/islands/disk-saver/**'
+      - 'docs/islands/**'
+permissions:
+  contents: read
+jobs:
+  caulking-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - run: python -B -m unittest tools/streaming/caulking_check_test.py -v
+      - run: python -B tools/streaming/caulking_check.py --fail-on leaking

@@ -1,0 +1,388 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Studbook_Ledger",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G163",
+    "ask": "pythagoras 50406",
+    "lod": "LOD0/1",
+    "size_m": "0.55 x 0.42 x 1.2 m",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Text",
+     "SOCKET_Diversity"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Studbook_Ledger_M0",
+     "colour": "lectern timber",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Studbook_Ledger_M1",
+     "colour": "ledger pages",
+     "hex": "EDE3C8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Studbook_Ledger_M2",
+     "colour": "Diversity bar (scalar 0..1 MI param)",
+     "hex": "3EAA5A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Studbook_Ledger",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        0.45,
+        0.4,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.025
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Post",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.08,
+        1.0
+       ],
+       "centre": [
+        0,
+        0,
+        0.55
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Desk",
+       "shape": "box",
+       "size": [
+        0.55,
+        0.42,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        1.08
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Book",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.36,
+        0.05
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.12
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "BarFrame",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.012,
+        0.05
+       ],
+       "centre": [
+        0,
+        -0.215,
+        1.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bar",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.01,
+        0.035
+       ],
+       "centre": [
+        0,
+        -0.222,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Text",
+     "location": [
+      0,
+      -0.08,
+      1.16
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.16,
+      0.08
+     ]
+    },
+    {
+     "name": "SOCKET_Diversity",
+     "location": [
+      -0.2,
+      -0.23,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.2,
+      1.0,
+      0.23
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Studbook_Ledger_00",
+     "shape": "box",
+     "size": [
+      0.45,
+      0.42,
+      1.2
+     ],
+     "centre": [
+      0,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Studbook_Ledger": 264
+    },
+    "bounds_min": [
+     -0.275,
+     -0.227,
+     0.0
+    ],
+    "bounds_max": [
+     0.275,
+     0.2025,
+     1.203
+    ],
+    "dimensions": [
+     0.55,
+     0.4295,
+     1.203
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "0e4d6a7c441de68225c3691d898364a43f97d85b76f87d98f98b2bfad40729f9"
+  },
+  {
+   "asset": "Prop_Leg_Band",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G163",
+    "ask": "pythagoras 50406",
+    "lod": "LOD0/1",
+    "size_m": "2.4 x 3 cm; fits Mob_Sky_Crane SOCKET_LegBand",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_LegBand"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Leg_Band_M0",
+     "colour": "band (lineage colour = MI param)",
+     "hex": "D04040",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Leg_Band",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Band",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.03,
+       "centre": [
+        0,
+        0,
+        0.015
+       ],
+       "slot": 0,
+       "segments": 12
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_LegBand",
+     "location": [
+      0,
+      0,
+      0.015
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.015,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 44,
+    "lod1_triangles": 44,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Leg_Band": 44
+    },
+    "bounds_min": [
+     -0.012,
+     -0.012,
+     0.0
+    ],
+    "bounds_max": [
+     0.012,
+     0.012,
+     0.03
+    ],
+    "dimensions": [
+     0.024,
+     0.024,
+     0.03
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3e998b4a03b4136b4affaa46f67f0aa4768ab8b2ae3a38ee75cb87c6d5b9e698"
+  }
+ ]
+}

@@ -1,0 +1,1215 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_NumberedHive",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G374",
+    "ask": "youtube-master 55707",
+    "lod": "LOD0/1",
+    "size_m": "0.5 m hive, numbered",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Entrance",
+     "SOCKET_Number",
+     "SOCKET_Ribbon"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "mi_set": [
+     "MI_YTM_NumberedHive_0",
+     "MI_YTM_NumberedHive_1",
+     "MI_YTM_NumberedHive_2",
+     "MI_YTM_NumberedHive_3",
+     "MI_YTM_NumberedHive_4",
+     "MI_YTM_NumberedHive_5",
+     "MI_YTM_NumberedHive_6",
+     "MI_YTM_NumberedHive_7",
+     "MI_YTM_NumberedHive_8",
+     "MI_YTM_NumberedHive_9"
+    ],
+    "mi_param": "Number (0..9)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_NumberedHive_M0",
+     "colour": "stand / lid (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_NumberedHive_M1",
+     "colour": "hive boxes (G66 whitewash)",
+     "hex": "E8DCC0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_NumberedHive_M2",
+     "colour": "number plate (MI 0-9)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_NumberedHive",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stand",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.5,
+        0.35
+       ],
+       "centre": [
+        0,
+        0,
+        0.175
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Box0",
+       "shape": "box",
+       "size": [
+        0.46,
+        0.4,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Box1",
+       "shape": "box",
+       "size": [
+        0.46,
+        0.4,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        0.66
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Lid",
+       "shape": "box",
+       "size": [
+        0.52,
+        0.46,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Number",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.005,
+        0.1
+       ],
+       "centre": [
+        0,
+        -0.203,
+        0.66
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Entrance",
+     "location": [
+      0,
+      -0.21,
+      0.37
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.37,
+      0.21
+     ]
+    },
+    {
+     "name": "SOCKET_Number",
+     "location": [
+      0,
+      -0.206,
+      0.66
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.66,
+      0.206
+     ]
+    },
+    {
+     "name": "SOCKET_Ribbon",
+     "location": [
+      0,
+      0,
+      0.91
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.91,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_NumberedHive_00",
+     "shape": "box",
+     "size": [
+      0.52,
+      0.5,
+      0.91
+     ],
+     "centre": [
+      0,
+      0,
+      0.455
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 188,
+    "lod1_triangles": 188,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_NumberedHive": 188
+    },
+    "bounds_min": [
+     -0.26,
+     -0.25,
+     0.0
+    ],
+    "bounds_max": [
+     0.26,
+     0.25,
+     0.91
+    ],
+    "dimensions": [
+     0.52,
+     0.5,
+     0.91
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "bf9ee2a0a92445560973573b1b75af37bab1d30360168631e183dc08c2f41b93"
+  },
+  {
+   "asset": "Prop_YTM_HiveRibbon",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G374",
+    "ask": "youtube-master 55707",
+    "lod": "LOD0/1",
+    "size_m": "0.12 m lucky-hive rosette",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Pin"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "mi_set": [
+     "MI_YTM_HiveRibbon_Gold",
+     "MI_YTM_HiveRibbon_Red",
+     "MI_YTM_HiveRibbon_Blue"
+    ],
+    "mi_param": "Tint"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_HiveRibbon_M0",
+     "colour": "prize ribbon (G66 cloth; tint MI)",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_HiveRibbon",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rosette",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.01,
+       "centre": [
+        0,
+        0,
+        0.0
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Tail-1",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.03,
+         -0.15
+        ],
+        [
+         0,
+         -0.12
+        ],
+        [
+         -0.03,
+         -0.15
+        ]
+       ],
+       "thickness": 0.003,
+       "centre": [
+        -0.025,
+        0,
+        -0.03
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Tail1",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.03,
+         -0.15
+        ],
+        [
+         0,
+         -0.12
+        ],
+        [
+         -0.03,
+         -0.15
+        ]
+       ],
+       "thickness": 0.003,
+       "centre": [
+        0.025,
+        0,
+        -0.03
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Pin",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 68,
+    "lod1_triangles": 68,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_HiveRibbon": 68
+    },
+    "bounds_min": [
+     -0.06,
+     -0.005,
+     -0.18
+    ],
+    "bounds_max": [
+     0.06,
+     0.005,
+     0.0571
+    ],
+    "dimensions": [
+     0.12,
+     0.01,
+     0.2371
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4ece0a9dcd7b2481dd86c0a18ca04dad3384068cf900d91ebd1cc86317b92316"
+  },
+  {
+   "asset": "Prop_YTM_BeeSwarm",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G374",
+    "ask": "youtube-master 55707",
+    "lod": "LOD0/1",
+    "size_m": "0.8 m swarm cloud (30 bee cards; Niagara can replace)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Centre"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_BeeSwarm_M0",
+     "colour": "bees (amber/black MI)",
+     "hex": "D8A020",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_BeeSwarm",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bee0",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.12951,
+        0.16676,
+        0.54166
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        179.7888
+       ]
+      },
+      {
+       "name": "Bee1",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.07596,
+        -0.15074,
+        0.63583
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        223.3411
+       ]
+      },
+      {
+       "name": "Bee2",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.07845,
+        -0.25855,
+        0.41192
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        158.4999
+       ]
+      },
+      {
+       "name": "Bee3",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.00644,
+        -0.10574,
+        0.40648
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        202.1878
+       ]
+      },
+      {
+       "name": "Bee4",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.24767,
+        -0.09292,
+        0.63658
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        38.6681
+       ]
+      },
+      {
+       "name": "Bee5",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.09015,
+        -0.06404,
+        0.34663
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        274.4941
+       ]
+      },
+      {
+       "name": "Bee6",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.12143,
+        0.39316,
+        0.4087
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        296.0409
+       ]
+      },
+      {
+       "name": "Bee7",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.17879,
+        0.09437,
+        0.81237
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        70.9039
+       ]
+      },
+      {
+       "name": "Bee8",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.03436,
+        -0.00426,
+        0.54079
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        323.9554
+       ]
+      },
+      {
+       "name": "Bee9",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.14036,
+        0.03036,
+        0.51663
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        112.0839
+       ]
+      },
+      {
+       "name": "Bee10",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.16155,
+        0.20778,
+        0.5796
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        139.6656
+       ]
+      },
+      {
+       "name": "Bee11",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.02986,
+        0.09976,
+        0.49024
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        153.987
+       ]
+      },
+      {
+       "name": "Bee12",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.16299,
+        -0.19724,
+        0.556
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        96.2249
+       ]
+      },
+      {
+       "name": "Bee13",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.23297,
+        -0.25105,
+        0.5898
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        236.1904
+       ]
+      },
+      {
+       "name": "Bee14",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.20717,
+        -0.23044,
+        0.21639
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        294.1308
+       ]
+      },
+      {
+       "name": "Bee15",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.05437,
+        -0.0608,
+        0.71055
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        280.5834
+       ]
+      },
+      {
+       "name": "Bee16",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.10585,
+        0.00657,
+        0.513
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        223.4391
+       ]
+      },
+      {
+       "name": "Bee17",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.23154,
+        -0.07,
+        0.47649
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        205.1817
+       ]
+      },
+      {
+       "name": "Bee18",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.02845,
+        0.03439,
+        0.35737
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        65.8681
+       ]
+      },
+      {
+       "name": "Bee19",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.07189,
+        -0.23165,
+        0.60365
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        112.3413
+       ]
+      },
+      {
+       "name": "Bee20",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.20241,
+        0.00717,
+        0.67462
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        165.5743
+       ]
+      },
+      {
+       "name": "Bee21",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.13894,
+        0.07162,
+        0.37256
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        288.9833
+       ]
+      },
+      {
+       "name": "Bee22",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.10673,
+        -0.43045,
+        0.34799
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        274.3837
+       ]
+      },
+      {
+       "name": "Bee23",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.4133,
+        -0.17555,
+        0.56871
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        328.675
+       ]
+      },
+      {
+       "name": "Bee24",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.34426,
+        -0.19928,
+        0.39393
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        151.9171
+       ]
+      },
+      {
+       "name": "Bee25",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.33101,
+        -0.25301,
+        0.44256
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        256.5548
+       ]
+      },
+      {
+       "name": "Bee26",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.09373,
+        -0.27912,
+        0.6046
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        341.3195
+       ]
+      },
+      {
+       "name": "Bee27",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0.11739,
+        -0.04263,
+        0.58064
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        197.3851
+       ]
+      },
+      {
+       "name": "Bee28",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.08024,
+        0.15598,
+        0.82336
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        25.5675
+       ]
+      },
+      {
+       "name": "Bee29",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.06179,
+        -0.05176,
+        0.5281
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        173.6023
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 360,
+    "lod1_triangles": 360,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_BeeSwarm": 360
+    },
+    "bounds_min": [
+     -0.425,
+     -0.4409,
+     0.2104
+    ],
+    "bounds_max": [
+     0.2592,
+     0.4048,
+     0.8294
+    ],
+    "dimensions": [
+     0.6842,
+     0.8457,
+     0.619
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "48c1c134f3bde688e35839412ef6803c8596f781d3403b9304cdaa90b4e5cadb"
+  }
+ ]
+}

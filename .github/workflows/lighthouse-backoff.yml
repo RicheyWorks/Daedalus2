@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Lighthouse Backoff
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/lighthouse_backoff.py'
+      - 'tools/streaming/lighthouse_backoff_test.py'
+      - 'data/islands/disk-saver/lighthouse-backoff-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/lighthouse-backoff.yml'
+permissions:
+  contents: read
+jobs:
+  lighthouse-backoff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G134 Lighthouse Backoff rules (retry storm vs thundering herd, jitter wins, G86 tie-in)
+        run: python -m unittest tools/streaming/lighthouse_backoff_test.py -v
+      - name: CLI smoke (full jitter wins)
+        run: python tools/streaming/lighthouse_backoff.py data/islands/disk-saver/lighthouse-backoff-v1.json

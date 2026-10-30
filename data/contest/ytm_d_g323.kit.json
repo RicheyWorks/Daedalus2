@@ -1,0 +1,442 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_MessageConch",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G323",
+    "ask": "youtube-master 55456",
+    "lod": "LOD0/1",
+    "size_m": "0.3 m message conch",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Mouth",
+     "SOCKET_Hand",
+     "SOCKET_Message"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_MessageConch_M0",
+     "colour": "conch (G66 shell)",
+     "hex": "F0D8C8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_MessageConch_M1",
+     "colour": "pink lip",
+     "hex": "E8A0A0",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_MessageConch",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Shell",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01,
+         0
+        ],
+        [
+         0.08,
+         0.04
+        ],
+        [
+         0.11,
+         0.12
+        ],
+        [
+         0.07,
+         0.22
+        ],
+        [
+         0.01,
+         0.3
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        80,
+        0
+       ]
+      },
+      {
+       "name": "Lip",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        0.05,
+        -0.08,
+        0.06
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Mouth",
+     "location": [
+      -0.15,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.15,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Message",
+     "location": [
+      0.05,
+      -0.1,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.06,
+      0.1
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 140,
+    "lod1_triangles": 140,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_MessageConch": 140
+    },
+    "bounds_min": [
+     -0.01,
+     -0.1046,
+     -0.0875
+    ],
+    "bounds_max": [
+     0.2972,
+     0.1046,
+     0.1292
+    ],
+    "dimensions": [
+     0.3072,
+     0.2092,
+     0.2167
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "bd6d1e8a008289174b985e181ea8472e30dae574c5144faa0b4d1d24698afe04"
+  },
+  {
+   "asset": "Prop_YTM_VillageGreenMarker",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G323",
+    "ask": "youtube-master 55456",
+    "lod": "LOD0/1",
+    "size_m": "1.40 m village green marker",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Base",
+     "SOCKET_Text"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_VillageGreenMarker_M0",
+     "colour": "post (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_VillageGreenMarker_M1",
+     "colour": "cap / marks (G66)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_VillageGreenMarker_M2",
+     "colour": "detail",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_VillageGreenMarker",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.09,
+       "r2": 0.0765,
+       "length": 1.4,
+       "centre": [
+        0,
+        0,
+        0.7
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.108,
+       "r2": 0.027,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        1.44
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Plaque",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.04,
+        0.25
+       ],
+       "centre": [
+        0,
+        -0.1,
+        1.1
+       ],
+       "slot": 2,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      1.48
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.48,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Text",
+     "location": [
+      0,
+      -0.125,
+      1.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.1,
+      0.125
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_VillageGreenMarker_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.09,
+     "r2": 0.09,
+     "length": 1.4,
+     "centre": [
+      0,
+      0,
+      0.7
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_VillageGreenMarker": 100
+    },
+    "bounds_min": [
+     -0.2,
+     -0.12,
+     0.0
+    ],
+    "bounds_max": [
+     0.2,
+     0.108,
+     1.48
+    ],
+    "dimensions": [
+     0.4,
+     0.228,
+     1.48
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "04a40453feb55325525f5751cabf0e01a72e7f344ef1146bed2faaf6845147db"
+  }
+ ]
+}

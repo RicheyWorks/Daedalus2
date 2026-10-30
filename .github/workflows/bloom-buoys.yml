@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Bloom Buoys
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/bloom_buoys.py'
+      - 'tools/streaming/bloom_buoys_test.py'
+      - 'data/islands/disk-saver/bloom-buoys-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/bloom-buoys.yml'
+permissions:
+  contents: read
+jobs:
+  bloom-buoys:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G99 Bloom Buoys rules (no false negatives, hash-count traps, G86 tie-in)
+        run: python -m unittest tools/streaming/bloom_buoys_test.py -v
+      - name: CLI smoke (tuned buoys win)
+        run: python tools/streaming/bloom_buoys.py data/islands/disk-saver/bloom-buoys-v1.json

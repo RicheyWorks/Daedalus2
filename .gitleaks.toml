@@ -1,0 +1,42 @@
+# gitleaks config: default rules + narrow allowlists for known false positives.
+# Allowlists are attached to the generic-api-key rule with condition = "AND", so a
+# finding is skipped only when BOTH the exact file path AND the exact line shape match
+# (top-level [[allowlists]] paths would skip the whole file, so do not use them).
+# Never add whole-directory paths or broad value regexes here; each entry must be
+# limited to one exact file AND one exact line shape.
+title = "Daedalus2 gitleaks config"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+# Hardhat/Anvil well-known public dev keys (local chain 31337) used as test fixtures.
+# Only these exact files, only these exact constant names.
+[[rules.allowlists]]
+description = "Hardhat default dev keys in wallet unit tests (public, local chain 31337 only)"
+condition = "AND"
+regexTarget = "line"
+paths = [
+  '''^daedalus-server/src/test/java/com/daedalus/server/controller/WalletControllerTest\.java$''',
+  '''^daedalus-wallet/src/test/java/com/daedalus/wallet/WalletTest\.java$''',
+]
+regexes = [
+  '''^\s*(private\s+)?(static\s+)?(final\s+)?String\s+(PLAYER|OTHER|REALM|TEST)_KEY\s*=\s*"(0x)?[0-9a-fA-F]{64}";\s*$''',
+]
+
+[[rules.allowlists]]
+description = "Hardhat default dev key in local realm harness docs (public, chain 31337 only)"
+condition = "AND"
+regexTarget = "line"
+paths = ['''^harness/realm/README\.md$''']
+regexes = ['''^\s*DAEDALUS_WALLET_DEED_SIGNER_KEY=(0x)?[0-9a-fA-F]{64}\s*\\?\s*$''']
+
+# Proof JSON maps source file paths to their SHA-256 content hashes (not secrets).
+[[rules.allowlists]]
+description = "SHA-256 file hashes in realm directory proof"
+condition = "AND"
+regexTarget = "line"
+paths = ['''^docs/production/realm-directory-proof\.json$''']
+regexes = ['''^\s*"[A-Za-z0-9_./-]+\.java":\s*"[0-9a-f]{64}",?\s*$''']

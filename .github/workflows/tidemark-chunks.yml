@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: MIT
+name: Tidemark Chunks
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/tidemark_chunks.py'
+      - 'tools/streaming/tidemark_chunks_test.py'
+      - 'data/islands/disk-saver/tidemark-chunks-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - 'data/islands/disk-saver/byte-spring-v1.json'
+      - '.github/workflows/tidemark-chunks.yml'
+permissions:
+  contents: read
+jobs:
+  tidemark-chunks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G175 Tidemark Chunks rules (rolling hash = from scratch, exact rebuild, boundary shift, mean chunk, cost oracle, golden fixture, replay, G86 + G39 tie-ins)
+        run: python -m unittest tools/streaming/tidemark_chunks_test.py -v
+      - name: CLI smoke (content-defined chunks fit the vault)
+        run: python tools/streaming/tidemark_chunks.py data/islands/disk-saver/tidemark-chunks-v1.json

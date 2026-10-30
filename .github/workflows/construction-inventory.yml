@@ -1,0 +1,29 @@
+name: Construction delivery inventory
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/realms/construction_inventory.py'
+      - 'tools/realms/test_construction_inventory.py'
+      - '.github/workflows/construction-inventory.yml'
+  pull_request:
+    paths:
+      - 'tools/realms/construction_inventory.py'
+      - 'tools/realms/test_construction_inventory.py'
+      - '.github/workflows/construction-inventory.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: Verify offline inventory boundaries
+        run: python -B -m unittest discover -s tools/realms -p test_construction_inventory.py -v

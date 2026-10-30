@@ -1,0 +1,270 @@
+# SPDX-License-Identifier: MIT
+#
+# Continuous integration for Daedalus.
+#
+# Runs the full Maven reactor (`mvn -B install`) on every push / PR against
+# main, then builds every example module so the worked examples don't
+# silently rot.
+#
+# The examples build AFTER the reactor on purpose — their poms resolve
+# daedalus-plugin-api (and friends) from the local Maven repo (~/.m2), which
+# only the `install` phase populates. (`verify` runs all tests but installs
+# nothing, which is why the reactor step must run `install`, not `verify`.)
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    # Validate approved integration stacks before their parent merges.
+    branches: [ main, codex/realm-production-queue ]
+
+# Cancel superseded pull_request runs on the same ref (saves CI minutes on
+# rapid pushes / rebases), but never cancel push runs on main: every merge
+# must finish its own run so main always has a completed result.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# contents: write is needed only by the coverage-badge commit step on main
+# (Coverage job).
+permissions:
+  contents: write
+
+jobs:
+  windows-host:
+    name: Windows plugin host
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      # Plugin JAR-lock and host destroyMethod are Windows-specific. Ubuntu
+      # already runs the full reactor; this job is the half that was invisible
+      # on linux file locks.
+      - name: Plugin host shutdown on Windows
+        shell: bash
+        run: mvn -B -ntp -pl daedalus-server -am test -Dtest=PluginHostShutdownTest -Dsurefire.failIfNoSpecifiedTests=false
+      - name: Minimal Unreal packaging fixture scope guards
+        run: python -m unittest discover -s tools/unreal/packaging-witness -p test_prepare_fixture.py -v
+      - name: Unattended ingestion checkpoint and refusal guards
+        run: python -m unittest tools/unreal_mcp/test_unattended_ingestion.py tools/unreal_mcp/test_unattended_codex_adapter.py -v
+
+  build:
+    name: Build & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    # The Codecov step's guard needs the secret visible to a step-level `if:`.
+    # The `secrets` context is not recognized there (using it makes the whole
+    # workflow file invalid, and an invalid file fails every run at parse time
+    # without executing a single step — which is exactly what happened between
+    # 2026-07-28 and 2026-07-31). Hoisting it into job-level env is the
+    # documented workaround: job env may reference secrets, and step `if:` may
+    # reference env.
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          # setup-java's built-in cache covers ~/.m2/repository keyed on the
+          # pom set — equivalent to a manual actions/cache step but maintained
+          # upstream.
+          cache: maven
+
+      # Force English locale + UTC so any test that asserts on formatted text
+      # or timestamps behaves identically on every runner. Cheap insurance.
+      - name: Set deterministic locale
+        run: |
+          echo "LANG=en_US.UTF-8"  >> "$GITHUB_ENV"
+          echo "LC_ALL=en_US.UTF-8" >> "$GITHUB_ENV"
+          echo "TZ=UTC"             >> "$GITHUB_ENV"
+
+      # -T 1C: one thread per core. Modules still fork their own surefire JVMs
+      # and the graph keeps Core -> Plugin Runtime -> Server -> Desktop serial;
+      # only Plugin API, Wallet and Explore overlap, and their tests use no
+      # ports, user.home or shared paths (checked 2026-10-26, item 19).
+      - name: Build & test the reactor
+        # Server tests (com.daedalus.api/server) run in the parallel
+        # "Server tests" job; this job still builds and installs the server.
+        run: mvn -B -ntp -T 1C clean install -Dsurefire.excludesFile=${{ github.workspace }}/.github/ci/server-test-excludes.txt
+
+      - name: Build the reference biome-plugin
+        # Runs after the reactor so daedalus-plugin-api is in ~/.m2. Tests in
+        # the example pom run via the default surefire binding.
+        run: mvn -B -ntp -f examples/biome-plugin/pom.xml clean package
+
+      - name: Build the remaining examples
+        # Same ordering constraint as biome-plugin: these poms resolve the
+        # reactor's artifacts from ~/.m2, so they must run after `install`.
+        # Their tests pin the claims the examples' narratives make — without
+        # this step, 17 test methods across these three modules never execute
+        # on any push, and a core API change that breaks an example ships
+        # green (TESTING.md, former gap P1 — closed 2026-07-31).
+        run: |
+          mvn -B -ntp -f examples/loadbalancer-topology/pom.xml clean package
+          mvn -B -ntp -f examples/dungeon-layout/pom.xml clean package
+          mvn -B -ntp -f examples/benchmark-harness/pom.xml clean package
+          mvn -B -ntp -f examples/openxr-plugin/pom.xml clean package
+
+      # WebUiSmokeTest is a source-shape pin, not a feature sweep. This is the
+      # real HTTP pass: generate, solve, live, traffic, sessions, breed, tour.
+      # Playwright ui-sweep.js stays local — it needs a browser and minutes.
+      - name: API sweep against a test-profile server
+        run: |
+          set -euo pipefail
+          JAR=$(echo daedalus-server/target/daedalus-server-*-exec.jar)
+          SPRING_PROFILES_ACTIVE=test java -jar "$JAR" &
+          SERVER_PID=$!
+          cleanup() { kill "$SERVER_PID" 2>/dev/null || true; wait "$SERVER_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:8080/actuator/health >/dev/null; then
+              break
+            fi
+            sleep 2
+          done
+          curl -sf http://localhost:8080/actuator/health >/dev/null
+          python3 -m unittest discover -s sweep -p 'test_*.py'
+          python3 sweep/api-sweep.py
+
+      - name: Upload coverage reports for the coverage job
+        uses: actions/upload-artifact@v7
+        with:
+          name: jacoco-build
+          path: '**/target/site/jacoco/'
+          if-no-files-found: ignore
+          retention-days: 3
+
+      - name: Upload server JAR (for inspection on failure)
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: daedalus-server-jar
+          path: daedalus-server/target/*.jar
+          if-no-files-found: ignore
+          retention-days: 7
+
+  server-tests:
+    name: Server tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Set up Java 21 (Temurin)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Set deterministic locale
+        run: |
+          echo "LANG=en_US.UTF-8"  >> "$GITHUB_ENV"
+          echo "LC_ALL=en_US.UTF-8" >> "$GITHUB_ENV"
+          echo "TZ=UTC"             >> "$GITHUB_ENV"
+      - name: Install server dependencies (tests run in Build & test)
+        # Build & test already runs tests, SpotBugs, Checkstyle and JaCoCo on
+        # these modules; here they are only dependencies (no test-jars used).
+        run: mvn -B -ntp -T 1C install -pl daedalus-plugin-runtime,daedalus-wallet -am -Dmaven.test.skip=true -Dspotbugs.skip=true -Dcheckstyle.skip=true -Djacoco.skip=true
+      - name: Server tests and coverage check
+        # Server SpotBugs/Checkstyle already run in Build & test's reactor.
+        run: mvn -B -ntp verify -pl daedalus-server -Dspotbugs.skip=true -Dcheckstyle.skip=true
+      - name: Upload server coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: jacoco-server
+          path: daedalus-server/target/site/jacoco/
+          if-no-files-found: ignore
+          retention-days: 3
+
+  coverage:
+    name: Coverage
+    needs: [ build, server-tests ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Job-level env so the Codecov step's `if:` can see the secret (see the
+    # 2026-07-28 parse-failure note history in git).
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Download build coverage reports
+        uses: actions/download-artifact@v5
+        with:
+          name: jacoco-build
+          path: .
+      - name: Download server coverage report
+        uses: actions/download-artifact@v5
+        with:
+          name: jacoco-server
+          path: daedalus-server/target/site/jacoco
+
+      # Coverage upload (BACKLOG: the last outstanding piece of the original
+      # "GitHub Actions CI" item). Guarded on the CODECOV_TOKEN secret —
+      # tokenless uploads are unreliable for private repos, so without the
+      # secret configured this step is skipped and CI behaves exactly as
+      # before. To activate: create the repo on codecov.io and add its upload
+      # token as the CODECOV_TOKEN Actions secret.
+      - name: Upload coverage to Codecov
+        if: ${{ env.CODECOV_TOKEN != '' }}
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7
+        with:
+          token: ${{ env.CODECOV_TOKEN }}
+          files: daedalus-core/target/site/jacoco/jacoco.xml,daedalus-plugin-api/target/site/jacoco/jacoco.xml,daedalus-plugin-runtime/target/site/jacoco/jacoco.xml,daedalus-server/target/site/jacoco/jacoco.xml,daedalus-desktop/target/site/jacoco/jacoco.xml,daedalus-explore/target/site/jacoco/jacoco.xml
+          fail_ci_if_error: false
+
+      # Coverage badge: only on pushes to main (not PRs — no commit rights
+      # there, and the badge should reflect main anyway).
+      - name: Collect JaCoCo reports
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        id: jacoco
+        run: |
+          FILES="$(find . -path '*/target/site/jacoco/jacoco.csv' | tr '\n' ' ')"
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          echo "Found reports: $FILES"
+
+      - name: Generate coverage badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.jacoco.outputs.files != ''
+        uses: cicirello/jacoco-badge-generator@72266185b7ee48a6fd74eaf0238395cc8b14fef8 # v2
+        with:
+          jacoco-csv-file: ${{ steps.jacoco.outputs.files }}
+          badges-directory: .github/badges
+
+      - name: Commit updated coverage badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          if [[ -n "$(git status --porcelain .github/badges)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .github/badges
+            git commit -m "chore: update coverage badge [skip ci]"
+            # Main runs are no longer cancelled by the next merge, so main may have
+            # moved on while this run was testing. Rebase the badge commit onto the
+            # latest main and retry; the badge is cosmetic, so never fail the build
+            # over it (the next main run refreshes it).
+            ok=0
+            for i in 1 2 3; do
+              if git pull --rebase --quiet origin main && git push; then ok=1; break; fi
+              git rebase --abort 2>/dev/null || true
+              sleep $((i * 5))
+            done
+            if [[ $ok -ne 1 ]]; then
+              echo "::warning::coverage badge not pushed (main moved on); the next main run refreshes it"
+            fi
+          else
+            echo "Badge unchanged — nothing to commit."
+          fi

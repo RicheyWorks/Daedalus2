@@ -1,0 +1,239 @@
+# disksaver rope_run parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit
+C real_seed0
+L 1111#1/11#311/111111/1111#1/111431 2.2 2.4
+P 32 SSWNWNENWNEEESSSSEENNNWS 0
+T SSWNWNENWNEEESSSSEENNNWS ok 32 1 taut
+T - ok 1 0 loose
+T SSWNWNENWNEEESSSSEENNNW ok 31 0 loose
+T SSWNWNENWNEEESSSSEENNNWSN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err dock
+T WWWWWW err off
+T NS err off
+T EW err cross
+T SWNNNEESSSSEEENWNENWNWSS err off
+T SSEEENNNN ok 15 0 loose
+T ESWNESWN err cross
+C real_seed1
+L 311111/11#141/1#1111/#11111/311111 0.1 4.1
+P 24 EESSSENNNESSSSWWWNWS 0
+T EESSSENNNESSSSWWWNWS ok 24 1 taut
+T - ok 1 0 loose
+T EESSSENNNESSSSWWWNW ok 23 0 loose
+T EESSSENNNESSSSWWWNWSN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err off
+T NS err off
+T EW err cross
+T SWNWWWSSSSENNNESSSEE err off
+T WSS ok 6 0 loose
+T ESWNESWN err off
+C real_seed7
+L #111##/131#11/11111#/111111/111143 2.4 1.2
+P 29 SESWWNNWSSWWNENWNENES 0
+T SESWWNNWSSWWNENWNENES ok 29 1 taut
+T - ok 1 0 loose
+T SESWWNNWSSWWNENWNENE ok 28 0 loose
+T SESWWNNWSSWWNENWNENESN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err off
+T NS err cross
+T EW err off
+T SENENWNENWWSSWNNWWSES err off
+T NE ok 3 0 loose
+T ESWNESWN err off
+C real_seed42
+L 1311#1/311111/11#111/11#114/#111#1 2.0 3.0
+P 29 NNESENESSENESSWWSWWNW 0
+T NNESENESSENESSWWSWWNW ok 29 1 taut
+T - ok 1 0 loose
+T NNESENESSENESSWWSWWN ok 28 0 loose
+T NNESENESSENESSWWSWWNWN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err dock
+T EEEEEE err off
+T WWWWWW err off
+T NS err cross
+T EW err cross
+T WNWWSWWSSENESSENESENN err off
+T NNESSSSEENNNNWS ok 20 0 loose
+T ESWNESWN err dock
+C syn5_seed1
+L 41131#/111131/311111/111114/1111## 3.3 0.1
+P 38 SWNNEESENNWNWSWWSSSWNNNNE 0
+T SWNNEESENNWNWSWWSSSWNNNNE ok 38 1 taut
+T - ok 1 0 loose
+T SWNNEESENNWNWSWWSSSWNNNN ok 37 0 loose
+T SWNNEESENNWNWSWWSSSWNNNNEN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err off
+T NS err cross
+T EW err cross
+T ENNNNWSSSWWSWNWNNESEENNWS err off
+T NNNESSSENN ok 18 0 loose
+T ESWNESWN err off
+C syn5_seed7
+L 11114#/111#1#/111141/113313/1#111# 1.1 0.0
+P 35 NEEESSESWSWWNENWWSWNNN 0
+T NEEESSESWSWWNENWWSWNNN ok 35 1 taut
+T - ok 1 0 loose
+T NEEESSESWSWWNENWWSWNN ok 34 0 loose
+T NEEESSESWSWWNENWWSWNNNN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err off
+T NS err cross
+T EW err cross
+T NNNWSWWNENWWSWSESSEEEN err off
+T NESSSENENNW ok 22 0 loose
+T ESWNESWN err cross
+C syn6_seed1
+L 11##11/145113/114#11/111#51/11111# 2.5 1.4
+P 35 SWSWWNNWSSWNNNNESEEE 7
+T SWSWWNNWSSWNNNNESEEE ok 35 1 taut
+T - ok 1 0 loose
+T SWSWWNNWSSWNNNNESEE ok 34 0 loose
+T SWSWWNNWSSWNNNNESEEEN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err off
+T NS err cross
+T EW err off
+T EEESENNNNWSSWNNWWSWS err off
+T NNWS ok 7 1 slack
+T ESWNESWN err off
+C syn6_seed7
+L 111441/111151/1#3111/511111/111##1 1.5 3.1
+P 41 NWSSESWWNNNWWWSEESSSWWNE 0
+T NWSSESWWNNNWWWSEESSSWWNE ok 41 1 taut
+T - ok 1 0 loose
+T NWSSESWWNNNWWWSEESSSWWN ok 40 0 loose
+T NWSSESWWNNNWWWSEESSSWWNEN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err off
+T NS err cross
+T EW err off
+T ENWWSSSEESWWWNNNWWSESSWN err off
+T WNWSSWNNWSWN ok 25 0 loose
+T ESWNESWN err off
+C syn8_seed1
+L #15111/311##1/111411/1115#4/1111#1 1.2 1.1
+P 35 NEEESSWWSSWNNWSSWNNNE 0
+T NEEESSWWSSWNNWSSWNNNE ok 35 1 taut
+T - ok 1 0 loose
+T NEEESSWWSSWNNWSSWNNN ok 34 0 loose
+T NEEESSWWSSWNNWSSWNNNEN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err dock
+T NS err cross
+T EW err off
+T ENNNWSSWNNWSSWWSSEEEN err off
+T NEEESSSS ok 16 0 loose
+T ESWNESWN err off
+C syn8_seed7
+L 114#51/#11##1/111151/111141/1#3111 4.4 4.3
+P 32 ENNWSWNWNNWSSWSEESE 0
+T ENNWSWNWNNWSSWSEESE ok 32 1 taut
+T - ok 1 0 loose
+T ENNWSWNWNNWSSWSEES ok 31 0 loose
+T ENNWSWNWNNWSSWSEESEN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err dock
+T NS err cross
+T EW err cross
+T ESEESWSSWNNWNWSWNNE err off
+T NNENNW ok 18 0 loose
+T ESWNESWN err off
+C syn14_seed1
+L 1141#1/14#111/141#11/111113/1113#1 0.0 4.5
+P 37 SSSSEEENWNWNNEESEESWSES 0
+T SSSSEEENWNWNNEESEESWSES ok 37 1 taut
+T - ok 1 0 loose
+T SSSSEEENWNWNNEESEESWSE ok 36 0 loose
+T SSSSEEENWNWNNEESEESWSESN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err off
+T NS err off
+T EW err cross
+T SESWSEESEENNWNWNEEESSSS err off
+T SESSSEENEENNN ok 24 0 loose
+T ESWNESWN err cross
+C syn14_seed7
+L 111111/111311/1134##/4#11#1/111114 4.3 1.1
+P 32 NNNEENWWWSSSSWWNNNNES 0
+T NNNEENWWWSSSSWWNNNNES ok 32 1 taut
+T - ok 1 0 loose
+T NNNEENWWWSSSSWWNNNNE ok 31 0 loose
+T NNNEENWWWSSSSWWNNNNESN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err off
+T NS err cross
+T EW err cross
+T SENNNNWWSSSSWWWNEENNN err off
+T NNNNESEN ok 14 0 loose
+T ESWNESWN err off
+C hand_dock_boxed_in
+L 111111/111111/1111#1/111#1#/1111#1 0.0 3.4
+P -1 - 0
+T - ok 1 0 loose
+T - ok 1 0 loose
+T - ok 1 0 loose
+T N err off
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err off
+T WWWWWW err off
+T NS err off
+T EW err cross
+T - ok 1 0 loose
+T SSSSENNNNESSSSE ok 16 0 loose
+T ESWNESWN err cross
+C hand_next_door
+L 511111/141111/111111/111111/111115 0.0 0.1
+P 41 SSSSENNNESSSENNNESSSENNNNWWWW 11
+T SSSSENNNESSSENNNESSSENNNNWWWW ok 41 1 taut
+T - ok 5 0 loose
+T SSSSENNNESSSENNNESSSENNNNWWW ok 40 0 loose
+T SSSSENNNESSSENNNESSSENNNNWWWWN err dock
+T X err letter
+T NNNNN err off
+T SSSSS err off
+T EEEEEE err dock
+T WWWWWW err off
+T NS err off
+T EW err dock
+T WWWWNNNNESSSENNNESSSENNNESSSS err off
+T SEN ok 11 1 slack
+T ESWNESWN err dock

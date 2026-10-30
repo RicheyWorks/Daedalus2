@@ -1,0 +1,936 @@
+{
+  "schema": "daedalus.minigames.catalog/v1",
+  "generated_by": "tools/minigames/minigame_catalog.py",
+  "realm_placement": "Spawn one ADaedalusDesktopArcade cabinet per entry, or one cabinet with a picker; call StartGame(id, seed) on use. Derive the seed from realm id + player for repeatable runs.",
+  "leaderboard_feed": {
+    "source_format": "DSB1",
+    "source_file": "best_scores.dgs",
+    "feed_format": "daedalus.leaderboard.feed/v1",
+    "text_format": "DLB1",
+    "tool": "tools/minigames/leaderboard_feed.py",
+    "hook": "python tools/minigames/leaderboard_feed.py --check",
+    "network": "none",
+    "tie_break": "score_desc_then_game_id_asc",
+    "rank_rule": "ordinal"
+  },
+  "games": [
+    {
+      "id": "beacon_sweep",
+      "title": "Beacon Sweep",
+      "summary": "Arrows/stick: select; J/Space: reveal; K: flag; Shift: chord",
+      "how_to_play": "HOW Move the mark, then reveal or flag a cell.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_oddsreaper",
+      "daedalus_spot": "Oddsreaper island, the puzzle row",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"beacon_sweep\", Seed)",
+      "portable_tests": [
+        "desktop_beacon_sweep",
+        "desktop_beacon_sweep_guidance",
+        "desktop_beacon_sweep_new_puzzle",
+        "desktop_beacon_sweep_pointer",
+        "desktop_beacon_sweep_replay"
+      ],
+      "option_count": 3,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "pointer",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "twinwake",
+      "title": "Twinwake Volley",
+      "summary": "A fast duel across the twinwake court. Up/Down or left stick: paddle",
+      "how_to_play": "HOW Move the paddle to meet the ball.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the court row",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"twinwake\", Seed)",
+      "portable_tests": [
+        "desktop_twinwake",
+        "desktop_twinwake_practice",
+        "desktop_twinwake_quick_match",
+        "desktop_twinwake_save",
+        "desktop_twinwake_spin",
+        "desktop_twinwake_target_rally"
+      ],
+      "option_count": 4,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "dungeon",
+      "title": "Dungeon Prototype",
+      "summary": "Light the Threadlight lanterns and unlock the exit. Move: WASD/arrows or left stick; Shift/pad Y: trail",
+      "how_to_play": "HOW Walk to the NEXT lantern and light it.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "labyrinth",
+      "daedalus_spot": "Labyrinth, the lantern passage",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"dungeon\", Seed)",
+      "portable_tests": [
+        "desktop_dungeon_circuit",
+        "desktop_dungeon_switchback",
+        "desktop_dungeon_trail",
+        "desktop_dungeon_view",
+        "desktop_maze",
+        "desktop_maze_saves"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "driftstone",
+      "title": "Driftstone Patrol",
+      "summary": "Pilot the driftstone belt and clear the rocks. Left/Right: turn; Up: thrust; K/LT: brake; J/X: shoot",
+      "how_to_play": "HOW Turn, thrust, and clear the rocks.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the rock yard",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"driftstone\", Seed)",
+      "portable_tests": [
+        "desktop_driftstone_brake",
+        "desktop_driftstone_flight_practice",
+        "desktop_driftstone_voyage",
+        "desktop_shooters"
+      ],
+      "option_count": 3,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "football",
+      "title": "Football / Soccer",
+      "summary": "A ninety-second duel on the Daedalus pitch. Move: WASD/arrows or left stick; J/X: kick",
+      "how_to_play": "HOW Move the player and kick the ball into the goal.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the pitch",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"football\", Seed)",
+      "portable_tests": [
+        "desktop_football_match",
+        "desktop_football_practice",
+        "desktop_sports"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "glowtrail",
+      "title": "Glowtrail Chase",
+      "summary": "Gather the glowtrail, evade pursuers, and clear the maze. Move: WASD/arrows or left stick",
+      "how_to_play": "HOW Gather the trail and stay away from the pursuers.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "gallery_city",
+      "daedalus_spot": "Gallery City, the chase court",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"glowtrail\", Seed)",
+      "portable_tests": [
+        "desktop_glowtrail_fruit",
+        "desktop_glowtrail_input",
+        "desktop_glowtrail_power",
+        "desktop_glowtrail_pursuit",
+        "desktop_glowtrail_tunnel",
+        "desktop_glowtrail_view",
+        "desktop_maze",
+        "desktop_maze_saves"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "riftwing",
+      "title": "Riftwing Vanguard",
+      "summary": "Push the rift frontier with a changing arsenal. Move: WASD/arrows or left stick; J/X: shoot",
+      "how_to_play": "HOW Hold fire and collect the pickups.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the rift line",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"riftwing\", Seed)",
+      "portable_tests": [
+        "desktop_riftwing_boss_rehearsal",
+        "desktop_riftwing_enemy_health",
+        "desktop_riftwing_terminal_pickup",
+        "desktop_shooter_saves",
+        "desktop_shooter_terminal",
+        "desktop_shooters"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "emberstep",
+      "title": "Emberstep Ascent",
+      "summary": "Scale the ember terraces and face the sentinel. Space/pad A: jump; J/Z/X or pad B/X: sword; K/C or pad Y/RB: star; Shift/V or LB: spin; Up/Down: climb",
+      "how_to_play": "HOW Jump the terraces and face the sentinel.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the terrace grid",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"emberstep\", Seed)",
+      "portable_tests": [
+        "desktop_ninja_enemy_health",
+        "desktop_ninja_jump",
+        "desktop_ninja_replay",
+        "desktop_ninja_terrace_course",
+        "desktop_platformers"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "star_shooter",
+      "title": "Star Shooter",
+      "summary": "Hold the starlanes through escalating waves. Move: WASD/arrows or left stick; J/X: shoot; P/Start: pause/save menu",
+      "how_to_play": "HOW Hold the lanes and clear each wave.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "orrery_reach",
+      "daedalus_spot": "Orrery Reach, the star lane",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"star_shooter\", Seed)",
+      "portable_tests": [
+        "desktop_shooters",
+        "desktop_star_save_pause",
+        "desktop_star_terminal_pickup"
+      ],
+      "option_count": 3,
+      "capabilities": [
+        "contrast_mark",
+        "core_pause",
+        "difficulty",
+        "focus_freeze",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "dodge_ball",
+      "title": "Courtyard Clash",
+      "summary": "Lead three teammates through four courtyard rounds. Move: WASD/arrows or left stick; throw/catch/jump actions",
+      "how_to_play": "HOW Lead the team, then throw or catch the ball.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the courtyard",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"dodge_ball\", Seed)",
+      "portable_tests": [
+        "desktop_dodge_country_stick",
+        "desktop_dodge_guard",
+        "desktop_dodge_pass",
+        "desktop_dodge_target",
+        "desktop_dodge_tournament",
+        "desktop_sports"
+      ],
+      "option_count": 8,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "ironwake",
+      "title": "Ironwake Advance",
+      "summary": "Run the ironwake route through platforms and enemy fire. Move: WASD/arrows or left stick; Down: crouch; J/X: shoot; Space/pad A: jump",
+      "how_to_play": "HOW Run the route, shoot, and jump the gaps.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the iron route",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"ironwake\", Seed)",
+      "portable_tests": [
+        "desktop_ironwake_ledge",
+        "desktop_ironwake_target_range",
+        "desktop_platformers"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys",
+        "title_screen"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "lanternwild",
+      "title": "Lanternwild Quest",
+      "summary": "Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword",
+      "how_to_play": "HOW Explore, swing once, and recover the key.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "portal_realm",
+      "daedalus_spot": "Portal realm, the wild path",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"lanternwild\", Seed)",
+      "portable_tests": [
+        "desktop_lanternwild_sword_assist",
+        "desktop_lanternwild_terminal",
+        "desktop_lanternwild_view",
+        "desktop_platformers"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "gloam_latch",
+      "title": "Gloam Latch",
+      "summary": "Darken every lamp. Arrows or stick: move; J/Space or pad A: flip a lamp and its neighbors",
+      "how_to_play": "HOW Flip a lamp and its neighbors until the board is dark.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "gallery_city",
+      "daedalus_spot": "Gallery City, the lamp corner",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"gloam_latch\", Seed)",
+      "portable_tests": [
+        "desktop_gloam_latch"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "options",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "reedbeat",
+      "title": "Reedbeat",
+      "summary": "Strike the reed when it glows. J/Space or pad A: strike",
+      "how_to_play": "HOW Strike while the reed is bright.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "orrery_reach",
+      "daedalus_spot": "Orrery Reach, the reed bench",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"reedbeat\", Seed)",
+      "portable_tests": [
+        "desktop_reedbeat"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "options",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "cairnwell",
+      "title": "Cairnwell",
+      "summary": "Stack stones in the well. Left/Right or stick: slide; Down: drop",
+      "how_to_play": "HOW Slide the falling stone and clear a full layer.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "bricks",
+      "daedalus_spot": "Bricks, the stacking yard",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"cairnwell\", Seed)",
+      "portable_tests": [
+        "desktop_cairnwell"
+      ],
+      "option_count": 3,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "options",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shardring",
+      "title": "Shardring Resonance",
+      "summary": "Set Prism Shards in the sphere ring; three of one hue resonate. Left/Right or stick: pick a facet; J/Space or pad A: set",
+      "how_to_play": "HOW Set each shard in an empty facet; three of one hue in a row resonate.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the Warden shrine",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shardring\", Seed)",
+      "portable_tests": [
+        "desktop_shardring"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "lumenpath",
+      "title": "Lumenpath Refraction",
+      "summary": "Bend the prism beam through every crystal with shard mirrors. Arrows or stick: move; J/Space or pad A: toggle a mirror",
+      "how_to_play": "HOW Toggle shard mirrors to bend the prism beam through every crystal before your moves run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the refraction gallery",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"lumenpath\", Seed)",
+      "portable_tests": [
+        "desktop_lumenpath"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "wardens_accord",
+      "title": "Wardens' Accord",
+      "summary": "Take altar shards and spend them to summon Warden spirits. Left/Right or stick: pick; J/Space or pad A: take or summon",
+      "how_to_play": "HOW Take one of three altar shards each round, then spend matching shards to summon spirits before the rounds end.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the Warden altar",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"wardens_accord\", Seed)",
+      "portable_tests": [
+        "desktop_wardens_accord"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "facetlock",
+      "title": "Facetlock Lattice",
+      "summary": "Slide wrapping rows and columns until each row is one hue. Arrows or stick: cursor; J/K or pad A/B: slide row; Space/Shift or pad X/Y: slide column",
+      "how_to_play": "HOW Slide lattice rows and columns, which wrap, until each row shows a single hue inside the move budget.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the vault door",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"facetlock\", Seed)",
+      "portable_tests": [
+        "desktop_facetlock"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "prismcairn",
+      "title": "Prismcairn Duel",
+      "summary": "Out-think the Warden at the shard cairns; lift the last shard. Left/Right or stick: pick a cairn; J/K/Space/Shift or pad A/B/X/Y: take 1/2/3/4",
+      "how_to_play": "HOW Take one or more shards, up to the limit, from one cairn each turn; lift the last shard to win the round, best of three.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the cairn field",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"prismcairn\", Seed)",
+      "portable_tests": [
+        "desktop_prismcairn"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "prismvault",
+      "title": "Prismvault Weigh",
+      "summary": "Find the hollow shard with the Warden's balance. Left/Right or stick: pick; J or pad A: pan it; Space or pad X: weigh; Shift or pad Y: name",
+      "how_to_play": "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the balance chamber",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"prismvault\", Seed)",
+      "portable_tests": [
+        "desktop_prismvault"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shardfall",
+      "title": "Shardfall Gamble",
+      "summary": "Draw glowing shards from the seam and bank before it cracks. J/Space or pad A: draw; K/Shift or pad B/X: bank",
+      "how_to_play": "HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot; reach the target by the last round.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the glowing seam",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shardfall\", Seed)",
+      "portable_tests": [
+        "desktop_shardfall"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "siltlane",
+      "title": "Siltlane",
+      "summary": "Switch lanes so the drifting silt passes you. Left/Right or stick: change lane",
+      "how_to_play": "HOW Switch lanes so the drifting silt passes you.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "spawn_overlook",
+      "daedalus_spot": "Spawn overlook, the silt course",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"siltlane\", Seed)",
+      "portable_tests": [
+        "desktop_siltlane"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "options",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shadewatch",
+      "title": "Shadewatch Vigil",
+      "summary": "Hold the lanes against creeping shades. Left/Right or stick: pick a lane; J or pad A: flare; K or pad B: kindle; Space or pad X: nova",
+      "how_to_play": "HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the watch lanes",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shadewatch\", Seed)",
+      "portable_tests": [
+        "desktop_shadewatch"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    }
+  ],
+  "java_cabinets": [
+    {
+      "id": "sudoku",
+      "title": "SudokuPro",
+      "summary": "Account-scoped Sudoku boards with pencil notes, hints and saved boards.",
+      "host": "ADaedalusJavaArcade",
+      "game_enum": "EDaedalusJavaGame::Sudoku",
+      "source_repo": "RicheyWorks/sudokupro",
+      "requires": "local Java game service (rules stay in Java)",
+      "portable_tests": [
+        "java_arcade_protocol",
+        "sudoku_saved_games"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "blackjack",
+      "title": "BlackJackPro",
+      "summary": "Blackjack table with Java-approved actions, table options and recovery context.",
+      "host": "ADaedalusJavaArcade",
+      "game_enum": "EDaedalusJavaGame::Blackjack",
+      "source_repo": "RicheyWorks/BlackJackPro",
+      "requires": "local Java game service (rules stay in Java)",
+      "portable_tests": [
+        "java_arcade_protocol"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild",
+      "actions": [
+        "bet",
+        "clearBet",
+        "rebet",
+        "deal",
+        "hit",
+        "stand",
+        "double",
+        "split",
+        "surrender",
+        "insurance",
+        "setRule",
+        "setDecks",
+        "setSplitLimit",
+        "reload",
+        "newSession"
+      ]
+    }
+  ],
+  "python_games": [
+    {
+      "id": "spiritkite",
+      "title": "Spiritkite Weave",
+      "summary": "fly a spirit kite across Prismheart's sky isles, gather lanterns and return to the anchor.",
+      "how_to_play": "HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out.",
+      "module": "tools/minigames/spiritkite.py",
+      "start": "spiritkite.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_spiritkite.py"
+      ]
+    },
+    {
+      "id": "glimmerloom",
+      "title": "Glimmerloom Ledger",
+      "summary": "trade hued Prism Shards at the Glimmerloom market and grow your purse.",
+      "how_to_play": "HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target.",
+      "module": "tools/minigames/glimmerloom.py",
+      "start": "glimmerloom.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_glimmerloom.py"
+      ]
+    }
+  ]
+}

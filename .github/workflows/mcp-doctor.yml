@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: MIT
+name: MCP doctor readback
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/unreal_mcp/doctor.py'
+      - 'tools/unreal_mcp/test_doctor.py'
+      - 'tools/unreal_mcp/DOCTOR.md'
+      - '.github/workflows/mcp-doctor.yml'
+permissions:
+  contents: read
+jobs:
+  doctor:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: Fake MCP readback regressions
+        run: python -m unittest tools.unreal_mcp.test_doctor -v

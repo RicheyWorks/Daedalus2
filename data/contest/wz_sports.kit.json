@@ -1,0 +1,2096 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_WZ_SportsHoop",
+   "kind": "Prop",
+   "seed": 1111,
+   "spec": {
+    "row": 10,
+    "gap": "G11",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "size_m": "hoop 3.05 m rim",
+    "collision": "UCX; rim torus as 8 boxes",
+    "sockets": [
+     "Rim"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_WZ_SportsHoop_M0",
+     "colour": "painted steel",
+     "hex": "2F5D8C",
+     "roughness": 0.6,
+     "metallic": 0.5,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_WZ_SportsHoop_M1",
+     "colour": "backboard white",
+     "hex": "EDEDE8",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_WZ_SportsHoop_M2",
+     "colour": "rim orange",
+     "hex": "E0662B",
+     "roughness": 0.5,
+     "metallic": 0.4,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_WZ_SportsHoop",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.8,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Base_L1",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.8,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Pole",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 3.3,
+       "centre": [
+        0,
+        0,
+        1.75
+       ],
+       "slot": 0,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Arm",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.8,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.4,
+        3.35
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Arm_L1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.8,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.4,
+        3.35
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Board",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.05,
+        1.05
+       ],
+       "centre": [
+        0,
+        -0.8,
+        3.43
+       ],
+       "slot": 1,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Board_L1",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.05,
+        1.05
+       ],
+       "centre": [
+        0,
+        -0.8,
+        3.43
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Square",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.06,
+        0.45
+       ],
+       "centre": [
+        0,
+        -0.802,
+        3.2
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RimBracket",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.17,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.91,
+        3.05
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Rim0",
+       "shape": "box",
+       "size": [
+        0.19,
+        0.02,
+        0.02
+       ],
+       "centre": [
+        0.23,
+        -1.205,
+        3.05
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        90.0
+       ]
+      },
+      {
+       "name": "Rim1",
+       "shape": "box",
+       "size": [
+        0.19,
+        0.02,
+        0.02
+       ],
+       "centre": [
+        0.16263,
+        -1.04237,
+        3.05
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        135.0
+       ]
+      },
+      {
+       "name": "Rim2",
+       "shape": "box",
+       "size": [
+        0.19,
+        0.02,
+        0.02
+       ],
+       "centre": [
+        0.0,
+        -0.975,
+        3.05
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        180.0
+       ]
+      },
+      {
+       "name": "Rim3",
+       "shape": "box",
+       "size": [
+        0.19,
+        0.02,
+        0.02
+       ],
+       "centre": [
+        -0.16263,
+        -1.04237,
+        3.05
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        225.0
+       ]
+      },
+      {
+       "name": "Rim4",
+       "shape": "box",
+       "size": [
+        0.19,
+        0.02,
+        0.02
+       ],
+       "centre": [
+        -0.23,
+        -1.205,
+        3.05
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        270.0
+       ]
+      },
+      {
+       "name": "Rim5",
+       "shape": "box",
+       "size": [
+        0.19,
+        0.02,
+        0.02
+       ],
+       "centre": [
+        -0.16263,
+        -1.36763,
+        3.05
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        315.0
+       ]
+      },
+      {
+       "name": "Rim6",
+       "shape": "box",
+       "size": [
+        0.19,
+        0.02,
+        0.02
+       ],
+       "centre": [
+        -0.0,
+        -1.435,
+        3.05
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        360.0
+       ]
+      },
+      {
+       "name": "Rim7",
+       "shape": "box",
+       "size": [
+        0.19,
+        0.02,
+        0.02
+       ],
+       "centre": [
+        0.16263,
+        -1.36763,
+        3.05
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        405.0
+       ]
+      },
+      {
+       "name": "Net",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.23,
+         3.05
+        ],
+        [
+         0.17,
+         2.83
+        ],
+        [
+         0.14,
+         2.65
+        ]
+       ],
+       "centre": [
+        0,
+        -1.205,
+        0
+       ],
+       "slot": 1,
+       "segments": 12,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Rim",
+     "location": [
+      0,
+      -1.205,
+      3.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      3.05,
+      1.205
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_00",
+     "shape": "box",
+     "size": [
+      0.8,
+      0.8,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_01",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.06,
+     "r2": 0.06,
+     "length": 3.3,
+     "centre": [
+      0,
+      0,
+      1.75
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_02",
+     "shape": "box",
+     "size": [
+      1.8,
+      0.05,
+      1.05
+     ],
+     "centre": [
+      0,
+      -0.8,
+      3.43
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_03",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.07,
+      0.03
+     ],
+     "centre": [
+      0.23,
+      -1.205,
+      3.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_04",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.07,
+      0.03
+     ],
+     "centre": [
+      0.16263,
+      -1.04237,
+      3.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_05",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.07,
+      0.03
+     ],
+     "centre": [
+      0.0,
+      -0.975,
+      3.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_06",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.07,
+      0.03
+     ],
+     "centre": [
+      -0.16263,
+      -1.04237,
+      3.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_07",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.07,
+      0.03
+     ],
+     "centre": [
+      -0.23,
+      -1.205,
+      3.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_08",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.07,
+      0.03
+     ],
+     "centre": [
+      -0.16263,
+      -1.36763,
+      3.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_09",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.07,
+      0.03
+     ],
+     "centre": [
+      -0.0,
+      -1.435,
+      3.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_SportsHoop_10",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.07,
+      0.03
+     ],
+     "centre": [
+      0.16263,
+      -1.36763,
+      3.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "off_centre_ok": "origin = base plate centre; the board and rim overhang the front (-Y)",
+   "predicted": {
+    "triangles": 344,
+    "lod1_triangles": 188,
+    "lod1_ratio": 0.547,
+    "objects": {
+     "Prop_WZ_SportsHoop": 344
+    },
+    "bounds_min": [
+     -0.9,
+     -1.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.9,
+     0.4,
+     3.955
+    ],
+    "dimensions": [
+     1.8,
+     1.845,
+     3.955
+    ],
+    "collision_tris": 148
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "45ff6256efd5d360567f9f1a604b8ce5780cc98b0a6ade07beab9e0b9b6ad003"
+  },
+  {
+   "asset": "Prop_WZ_Bat",
+   "kind": "Prop",
+   "seed": 1111,
+   "spec": {
+    "row": 10,
+    "gap": "G11",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "size_m": "bat 0.85 m",
+    "collision": "UCX prism",
+    "sockets": [
+     "Grip",
+     "Tip"
+    ],
+    "held": "attach sockets +X up the bat"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_WZ_Bat_M0",
+     "colour": "ash wood",
+     "hex": "C9A46E",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_WZ_Bat_M1",
+     "colour": "grip tape",
+     "hex": "2B2A33",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_WZ_Bat",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bat",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.005,
+         0.0
+        ],
+        [
+         0.03,
+         0.0
+        ],
+        [
+         0.03,
+         0.02
+        ],
+        [
+         0.014,
+         0.04
+        ],
+        [
+         0.014,
+         0.35
+        ],
+        [
+         0.024,
+         0.55
+        ],
+        [
+         0.033,
+         0.7
+        ],
+        [
+         0.033,
+         0.83
+        ],
+        [
+         0.02,
+         0.85
+        ],
+        [
+         0.005,
+         0.85
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ],
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Tape",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0155,
+       "r2": 0.0155,
+       "length": 0.22,
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.15,
+      0.0
+     ],
+     "attach": {
+      "barrel": [
+       0,
+       0,
+       1
+      ],
+      "up": [
+       0,
+       1,
+       0
+      ]
+     }
+    },
+    {
+     "name": "SOCKET_Tip",
+     "location": [
+      0,
+      0,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.85,
+      0.0
+     ],
+     "attach": {
+      "barrel": [
+       0,
+       0,
+       1
+      ],
+      "up": [
+       0,
+       1,
+       0
+      ]
+     }
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_WZ_Bat_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.034,
+     "r2": 0.034,
+     "length": 0.85,
+     "centre": [
+      0,
+      0,
+      0.425
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 280,
+    "lod1_triangles": 136,
+    "lod1_ratio": 0.486,
+    "objects": {
+     "Prop_WZ_Bat": 280
+    },
+    "bounds_min": [
+     -0.033,
+     -0.033,
+     0.0
+    ],
+    "bounds_max": [
+     0.033,
+     0.033,
+     0.85
+    ],
+    "dimensions": [
+     0.066,
+     0.066,
+     0.85
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2d89a1e135c32d080ac5857ff30c0251b67fc8299a0a9b098f3f606e7b6a1a73"
+  },
+  {
+   "asset": "Prop_WZ_Glove",
+   "kind": "Prop",
+   "seed": 1111,
+   "spec": {
+    "row": 10,
+    "gap": "G11",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "size_m": "glove 0.3 m",
+    "collision": "UCX box",
+    "sockets": [
+     "Hand"
+    ],
+    "held": "attach socket +X along the fingers, +Z out of the pocket (-Y)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_WZ_Glove_M0",
+     "colour": "tan leather",
+     "hex": "A8692F",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_WZ_Glove_M1",
+     "colour": "dark lacing",
+     "hex": "4A2E1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_WZ_Glove",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Palm",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.08,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Cuff",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.065,
+       "length": 0.05,
+       "centre": [
+        0,
+        0.01,
+        0.025
+       ],
+       "slot": 0,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Finger0",
+       "shape": "box",
+       "size": [
+        0.042,
+        0.06,
+        0.11
+       ],
+       "centre": [
+        -0.06,
+        0.005,
+        0.235
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Finger0_L1",
+       "shape": "box",
+       "size": [
+        0.042,
+        0.06,
+        0.11
+       ],
+       "centre": [
+        -0.06,
+        0.005,
+        0.235
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Finger1",
+       "shape": "box",
+       "size": [
+        0.042,
+        0.06,
+        0.125
+       ],
+       "centre": [
+        -0.02,
+        0.005,
+        0.2425
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Finger1_L1",
+       "shape": "box",
+       "size": [
+        0.042,
+        0.06,
+        0.125
+       ],
+       "centre": [
+        -0.02,
+        0.005,
+        0.2425
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Finger2",
+       "shape": "box",
+       "size": [
+        0.042,
+        0.06,
+        0.12
+       ],
+       "centre": [
+        0.02,
+        0.005,
+        0.24
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Finger2_L1",
+       "shape": "box",
+       "size": [
+        0.042,
+        0.06,
+        0.12
+       ],
+       "centre": [
+        0.02,
+        0.005,
+        0.24
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Finger3",
+       "shape": "box",
+       "size": [
+        0.042,
+        0.06,
+        0.1
+       ],
+       "centre": [
+        0.06,
+        0.005,
+        0.23
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Finger3_L1",
+       "shape": "box",
+       "size": [
+        0.042,
+        0.06,
+        0.1
+       ],
+       "centre": [
+        0.06,
+        0.005,
+        0.23
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Thumb",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.06,
+        0.11
+       ],
+       "centre": [
+        -0.115,
+        -0.01,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        30,
+        0
+       ]
+      },
+      {
+       "name": "Web",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.015,
+        0.09
+       ],
+       "centre": [
+        -0.09,
+        -0.04,
+        0.2
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        25,
+        0
+       ]
+      },
+      {
+       "name": "Lace",
+       "shape": "box",
+       "size": [
+        0.17,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0,
+        -0.045,
+        0.18
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0.03,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      -0.03
+     ],
+     "attach": {
+      "barrel": [
+       0,
+       0,
+       1
+      ],
+      "up": [
+       0,
+       -1,
+       0
+      ]
+     }
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_WZ_Glove_00",
+     "shape": "box",
+     "size": [
+      0.26,
+      0.1,
+      0.31
+     ],
+     "centre": [
+      -0.01,
+      0,
+      0.155
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 332,
+    "lod1_triangles": 168,
+    "lod1_ratio": 0.506,
+    "objects": {
+     "Prop_WZ_Glove": 332
+    },
+    "bounds_min": [
+     -0.1612,
+     -0.055,
+     0.0
+    ],
+    "bounds_max": [
+     0.09,
+     0.075,
+     0.3073
+    ],
+    "dimensions": [
+     0.2512,
+     0.13,
+     0.3073
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "dffd5801b970b49be618308a7fdaa908663f9300689ed1b52de4f5d78365baaa"
+  },
+  {
+   "asset": "Prop_WZ_GoalNet",
+   "kind": "Prop",
+   "seed": 1111,
+   "spec": {
+    "row": 10,
+    "gap": "G11",
+    "tri_cap": 2500,
+    "lod": "LOD0/1",
+    "size_m": "goal 3 x 2 m",
+    "collision": "UCX posts, crossbar, net"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_WZ_GoalNet_M0",
+     "colour": "white posts",
+     "hex": "EDEDE8",
+     "roughness": 0.5,
+     "metallic": 0.2,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_WZ_GoalNet_M1",
+     "colour": "net rope",
+     "hex": "D9D2BF",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_WZ_GoalNet",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "PostL",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.05,
+       "r2": 0.05,
+       "length": 2.0,
+       "centre": [
+        -1.5,
+        -0.45,
+        1.0
+       ],
+       "slot": 0,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "PostR",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.05,
+       "r2": 0.05,
+       "length": 2.0,
+       "centre": [
+        1.5,
+        -0.45,
+        1.0
+       ],
+       "slot": 0,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Crossbar",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.05,
+       "r2": 0.05,
+       "length": 3.1,
+       "centre": [
+        0,
+        -0.45,
+        2.0
+       ],
+       "slot": 0,
+       "segments": 12,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "BackBar",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 3.0,
+       "centre": [
+        0,
+        0.45,
+        0.03
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "TopBack",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 3.0,
+       "centre": [
+        0,
+        0.2,
+        1.75
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "GroundL",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 0.9,
+       "centre": [
+        -1.5,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "StayL",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.72,
+       "centre": [
+        -1.5,
+        -0.13,
+        1.88
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        -20,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "GroundR",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 0.9,
+       "centre": [
+        1.5,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "segments": 8,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "StayR",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.72,
+       "centre": [
+        1.5,
+        -0.13,
+        1.88
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        -20,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NetV00",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        -1.5,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "NetV01",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        -1.2,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NetV02",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        -0.9,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "NetV03",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        -0.6,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NetV04",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        -0.3,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "NetV05",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        0.0,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NetV06",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        0.3,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "NetV07",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        0.6,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NetV08",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        0.9,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "NetV09",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        1.2,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NetV10",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.012,
+        1.8
+       ],
+       "centre": [
+        1.5,
+        0.325,
+        0.8925
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -8,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "NetH0",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0,
+        0.42857,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "NetH1",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0,
+        0.39286,
+        0.4
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NetH2",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0,
+        0.35714,
+        0.65
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "NetH3",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0,
+        0.32143,
+        0.9
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NetH4",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0,
+        0.28571,
+        1.15
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": false
+       }
+      },
+      {
+       "name": "NetH5",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0,
+        0.25,
+        1.4
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NetH6",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0,
+        0.21429,
+        1.65
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": false
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [
+    {
+     "name": "UCX_Prop_WZ_GoalNet_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.05,
+     "r2": 0.05,
+     "length": 2.0,
+     "centre": [
+      -1.5,
+      -0.45,
+      1.0
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_GoalNet_01",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.05,
+     "r2": 0.05,
+     "length": 2.0,
+     "centre": [
+      1.5,
+      -0.45,
+      1.0
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_GoalNet_02",
+     "shape": "box",
+     "size": [
+      3.1,
+      0.1,
+      0.1
+     ],
+     "centre": [
+      0,
+      -0.45,
+      2.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_WZ_GoalNet_03",
+     "shape": "box",
+     "size": [
+      3.0,
+      0.3,
+      1.8
+     ],
+     "centre": [
+      0,
+      0.33,
+      0.9
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 516,
+    "lod1_triangles": 228,
+    "lod1_ratio": 0.442,
+    "objects": {
+     "Prop_WZ_GoalNet": 516
+    },
+    "bounds_min": [
+     -1.55,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     1.55,
+     0.48,
+     2.05
+    ],
+    "dimensions": [
+     3.1,
+     0.98,
+     2.05
+    ],
+    "collision_tris": 80
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4e455a1fc493dd6c9b2793da656dd92f7d7c098c3f54af6ccd8a8572cc81506c"
+  }
+ ]
+}

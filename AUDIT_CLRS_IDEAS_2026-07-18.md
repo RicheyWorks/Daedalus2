@@ -1,0 +1,357 @@
+# Daedalus — CLRS Idea Audit (hit-list)
+
+**Framing**: an ideation pass, not a code review — mining *Introduction to
+Algorithms* (Cormen, Leiserson, Rivest, Stein) for interesting, buildable
+directions across the engine. Chapter numbers reference **CLRS 3rd ed.**; each
+result is also named so it survives edition renumbering.
+**Scope**: generators, solvers, core data structures, concurrency, theory, and
+the maze-as-a-service surface.
+**Grounding**: the current code — 20 generators (`AlgorithmConfig`), 9 solvers
+(`solver/solvers/`), `util/DSU.java`, `WeightedMazeGrid`, `MazeStats`, the
+maze cache, and the `theory.ComplexityAnalyzer` that landed 2026-07-18.
+**Status**: nothing here is committed or scheduled — it's a menu.
+
+---
+
+## Status — all ideas resolved 2026-07-18
+
+Every idea below has been worked to a conclusion. **13 shipped**, **2 verified as
+already correct** (D1, S3), **5 measured and declined** (D3, G3, X4, C1, C2), and
+**1 reframed** (C3 — worth building as a dungeon-layout feature, not for speed).
+
+Five of the declines came from measuring first, and three of them inverted the
+audit's own guess: D3 was ranked an easy win and turned out to be noise, while D2
+— ranked merely Medium — proved to be the single biggest performance lever at
+1.42–1.72×. Two premises were simply wrong and are corrected in place: G1's
+weight-variance texture knob (an MST is invariant under monotone reweighting) and
+G3's reservoir frontier (Algorithm R doesn't apply to persistent mutable state).
+Each entry carries its own measurements.
+
+## TL;DR
+
+Twenty ideas, each anchored to a CLRS chapter and mapped to a real file.
+The cheapest high-payoff move is **T1** (auto Big-O labelling — a ~40-line
+extension of the analyzer shipped today). The most *interesting* is **X1**
+(max-flow / min-cut as a maze difficulty metric — a genuinely novel feature
+straight out of Ch. 26). See **Top 5 to build first** at the end.
+
+Read each entry as: **`ID · title`** — `CLRS ref · Impact · Effort` — then the
+hook, the code it touches, and the payoff.
+
+---
+
+## 1. Generators
+
+**G1 · Weighted Prim with a real priority queue** — `Ch. 23 (MST/Prim) + Ch. 6/19 (heaps) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `WeightedPrimsGenerator` (id `weighted-prims`).**
+⚠️ **The texture premise below was wrong** and is corrected in the shipped class:
+an MST depends only on the relative *order* of edge weights, so any monotone
+reweighting — including any change of variance — produces an identical tree.
+Low- vs high-variance weights give the same family of mazes. Breaking *isotropy*
+is what actually changes texture, so the knob shipped is a `horizontalBias` on
+east–west walls.
+`PrimsGenerator` grows an *unweighted* frontier today. Give the grid edges
+random weights and pull the minimum with a d-ary heap: Prim's now produces a
+tunable texture (low-variance weights → lattice-like; high-variance → long
+winding rivers). The weight store already exists in `WeightedMazeGrid`.
+
+**G2 · Uniform spanning trees, measured** — `Ch. 5 (randomized analysis) · Impact Med · Effort Low`
+**Shipped 2026-07-18** (with **T4**) — required instrumenting both generators
+first: they counted only cells *added*, which is `n` for both, so `MazeStats`
+couldn't see the walking at all. With walk steps now counted, Aldous-Broder runs
+4–5× more steps than Wilson's and its cost *per cell* climbs 19 → 35 as Wilson's
+stays flat at ~5–7. Locked in `RandomWalkCoverTimeTest`.
+Wilson's (loop-erased random walk) and Aldous-Broder both sample a *uniform*
+spanning tree, but Wilson's is asymptotically faster. Run both through the new
+`ComplexityAnalyzer` and let the CSV show Aldous-Broder's cover-time blow-up
+against Wilson's as n grows — theory you can now demonstrate empirically.
+
+**G3 · Reservoir-sampled frontier** — `Ch. 5 (reservoir sampling) · Impact Med · Effort Med`
+**Measured 2026-07-18 — declined on two independent grounds.**
+
+*It solves a non-problem.* Peak frontier for randomized Prim's, from the
+`maxFrontierSize` the generator already records:
+
+| maze | cells | peak frontier | % of cells | approx memory |
+|---|---:|---:|---:|---:|
+| 64² | 4,096 | 561 | 13.7% | 0.03 MB |
+| 128² | 16,384 | 1,210 | 7.4% | 0.06 MB |
+| 256² | 65,536 | 2,525 | 3.9% | 0.12 MB |
+| 512² | 262,144 | 4,866 | **1.9%** | **0.22 MB** |
+
+The frontier tracks the perimeter of the grown region, not its area, so it grows
+far slower than the maze and its *share* shrinks as mazes get bigger. There is no
+memory pressure to relieve.
+
+*And the technique doesn't fit anyway.* Algorithm R draws a uniform sample from a
+single pass over a stream. Prim's frontier isn't a stream — it's live mutable
+state that must survive across steps, since each carve removes one wall and adds
+others. Sampling it with a reservoir would mean re-enumerating the frontier every
+step by scanning the grid: O(n) per step over n steps, i.e. O(n²), catastrophically
+worse than the O(frontier) set it replaces. If frontier memory ever did matter,
+the fix is encoding each wall as a single `int` (cell id × 4 + direction) instead
+of a two-`Point` object — roughly 10× smaller with no algorithmic change.
+For mazes too large to hold the whole frontier set, keep a running uniform
+sample (Algorithm R) and carve from it: O(1) extra memory per step. Turns
+frontier-based generators into streaming ones for 512²+ grids.
+
+**G4 · Randomized-weight Kruskal + braiding** — `Ch. 23 (Kruskal) + Ch. 21 (disjoint sets) · Impact Low · Effort Low`
+**Braiding half shipped 2026-07-18 as `engine.Braider`.** **Texture half
+declined 2026-08-17** — see [ADR-015](docs/adr/ADR-015-kruskal-texture.md).
+Random unique weights are a shuffle, which `KruskalsGenerator` already does
+(the G1 MST-order lesson). Directional bias is `WeightedPrimsGenerator`;
+Kruskal and Prim produce the same MST for the same weights. Re-admitting
+rejected edges is `Braider`, composable with everyone.
+
+## 2. Solvers
+
+**S1 · Dial's algorithm (bucket-queue Dijkstra)** — `Ch. 24 (SSSP) + Ch. 20 (bounded-key structures) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `solver.solvers.DialSolver` (id `dial`).** Maze edge
+weights are small bounded integers, so a bucket/radix priority queue (Dial)
+beats a comparison heap: near-linear shortest paths. Drop-in behind
+`DijkstraSolver` for `WeightedMazeGrid`, and a clean before/after for the
+analyzer to quantify.
+
+**S2 · Landmark (ALT) heuristic for A\*** — `Ch. 25 (Johnson reweighting — same triangle-inequality idea) · Impact High · Effort Med`
+**Shipped 2026-07-18 as `solver.LandmarkHeuristic`** — measured at ~55% fewer A\*
+expansions than Manhattan (58,799 → 26,167 across 45 mazes at 25²/40²/60²).
+Precompute BFS distance trees from a handful of "landmark" cells (corners);
+at query time, max over landmarks gives an admissible lower bound far tighter
+than Manhattan → dramatically fewer expansions in `AStarSolver` on large mazes.
+The precompute is exactly Johnson's "reweight by a potential" trick.
+
+**S3 · Correct bidirectional stopping rule** — `Ch. 24 · Impact Med · Effort Low`
+**Audited 2026-07-18 — no defect found.** The suspicion was measured, not
+assumed: across 4,320 randomized braided mazes the solver never disagreed with
+BFS on path length, so it was documented and guarded with a braided-maze sweep
+rather than rewritten. (Perfect mazes can't exercise this — one route only.)
+Audit `BidirectionalSolver` for the textbook bug: terminate when the sum of the
+two frontier minima exceeds the best meeting-path found — *not* on first
+touch, which can miss the optimal path. Pure correctness, near-zero cost.
+
+**S4 · Distance oracle for stored mazes** — `Ch. 25 (all-pairs shortest paths) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `theory.DistanceOracle`** — O(1) queries, plus
+eccentricity and diameter. The `O(V²)` memory warning below turned out to be the
+whole story: 32² costs 2 MB, 64² costs 32 MB, 128² would cost 512 MB, so it hard-
+caps at 4,096 cells and throws with a pointer to the single-source alternative.
+Precompute all-pairs distances once per stored maze (unweighted ⇒ BFS from
+every cell, O(V·E)); afterwards any start/goal query — and the leaderboard's
+"optimal time" baseline — is O(1). Johnson's makes the weighted version cheap.
+
+## 3. Core data structures
+
+**D1 · Certify the DSU is α(n)** — `Ch. 21 (disjoint sets) + Ch. 17 (amortized) · Impact Low · Effort Low`
+**Verified 2026-07-18 — already correct**, with both union-by-rank and two-pass
+path compression plus the inverse-Ackermann note. No production change; added
+structural tests that read `parent` directly, since behavioural tests can't tell
+whether compression is still happening.
+Confirm `util/DSU.java` uses union-by-rank *and* path compression (or
+path-halving) and add the inverse-Ackermann note. Both Kruskal and Borůvka
+ride on it, so this is a load-bearing few lines with an outsized story.
+
+**D2 · Bitset maze grid** — `Ch. 11 flavor + bit tricks · Impact` **High** `(upgraded) · Effort Med`
+**Solver half shipped 2026-07-18 as `solver.GridIndex`** + refactored
+`DijkstraSolver` / `AStarSolver`: distance, parent and closed state now live in
+flat arrays indexed by `row * cols + col` instead of `HashMap<Point,…>` /
+`HashSet<Point>`. Measured **1.42–1.72× faster** in the real solvers (a prototype
+predicted 1.47–2.00×), on the same 12×80² workload where the d-ary heap (D3)
+showed nothing — behaviour identical, all 124 tests untouched.
+**`long[]` `MazeGrid` declined 2026-08-17** — see
+[ADR-016](docs/adr/ADR-016-bitset-maze-grid.md). A packed neighbor sweep is
+~150 µs faster at 128² against a 1.6 ms Dijkstra and a 2 s living tick;
+`copy()` is tens of times slower than memcpy and still a fraction of a
+millisecond. The cheap leftovers landed: `Cell` stores a nibble, not an
+`EnumSet`, and `MazeGraph.neighbors` no longer boxes a `Point` per hop.
+
+**D3 · d-ary heap tuned to grid degree** — `Ch. 6 (heaps) · Impact Low · Effort Low`
+**Measured 2026-07-18 — declined, no code shipped.** A 4-ary heap was
+benchmarked against `java.util.PriorityQueue` in a real Dijkstra workload
+(12 mazes at 80², warmed up, three reps): the difference was −1.5%, −8.5%,
+−1.8% — inside the noise band, and a d=2 variant swung from 11.8ms to 22.7ms
+across reps. The reason is that **the heap isn't the bottleneck**: at ~13ms the
+loop is dominated by `HashMap`/`HashSet` operations on `Point` keys, not by
+sift-down comparisons. Shipping it would have been a placebo optimization. The
+measurement redirected the effort to **D2**, which is where the real win is. Small, self-contained, and easy to A/B
+with the analyzer.
+
+## 4. Concurrency & parallelism
+
+**C1 · Parallel Borůvka** — `Ch. 23 (MST) + Ch. 27 (multithreaded) · Impact Med · Effort Med`
+**Measured 2026-07-18 — declined.** Generation timings (this box reports 2
+cores):
+
+| maze | cells | Borůvka | Kruskal | RecBacktracker |
+|---|---:|---:|---:|---:|
+| 64² | 4,096 | 1.96 ms | 1.23 ms | 1.76 ms |
+| 128² | 16,384 | 5.01 ms | 3.32 ms | 7.44 ms |
+| 256² | 65,536 | 18.3 ms | 26.3 ms | 18.7 ms |
+| 512² | 262,144 | 106 ms | 155 ms | 60.7 ms |
+
+At the sizes this project actually uses (≤128², what `ComplexityAnalyzer` sweeps
+and the API serves) generation is **2–5 ms**. Fork/join setup would eat that,
+and the ceiling is the core count anyway. The decisive objection isn't speed
+though: `MazeGenerator`'s contract promises *"same seed ⇒ same maze"*, and the
+analyzer, the growth estimator and a large share of the test suite are built on
+that determinism. Parallel rounds would put it at risk for a few milliseconds.
+Revisit only if ≥512² mazes become a real use case **and** a design preserves
+seed-stable output.
+Borůvka's rounds are embarrassingly parallel — each component finds its
+cheapest outgoing edge independently. Parallelize `BoruvkasGenerator` with
+fork/join for the flagship "parallel MST" demo the audits keep gesturing at.
+
+**C2 · Parallel BFS frontier** — `Ch. 27 · Impact Med · Effort Med`
+**Declined 2026-07-18 — the target is too small to be worth it.** A full Dijkstra
+over an 80² maze now runs in **under a millisecond** (the D2 benchmark solved 12
+of them in 9.5 ms). Parallelising a sub-millisecond traversal is pure overhead,
+and layer-synchronised BFS would need a sort per layer to stay deterministic —
+paying to preserve a property the serial version gets for free. D2's array
+indexing already took 29–42% off this path with none of that risk.
+Expand each BFS layer in parallel for solving huge mazes; stays deterministic
+if the next frontier is sorted before dedup. Pairs naturally with D2's bitsets.
+
+**C3 · Divide-and-conquer tiled generation** — `Ch. 4 flavor + Ch. 27 · Impact Med · Effort High`
+**Shipped 2026-07-18 as `DungeonGenerator` (id `dungeon`)** — single-threaded, as
+argued below. Reframed first, then built.
+
+**Reframed 2026-07-18 — worth building, but not for the parallelism.** The speed
+argument dies with C1 (generation is milliseconds at realistic sizes). The
+*feature* argument stands on its own: quadrant generation with doorways punched
+through the seams is how you get rooms-and-corridors dungeon layouts, which is a
+genuine gap — every current generator produces uniform perfect mazes. Build it as
+the "procedural dungeon mode" backlog item, single-threaded, and judge it on the
+layouts it produces rather than on wall-clock.
+Generate quadrants concurrently, then carve doorways on the seams. Doubles as
+the "procedural dungeon" backlog item and scales generation across cores.
+
+## 5. Theory & analysis
+
+**T1 · Auto Big-O labelling in `ComplexityAnalyzer`** — `Ch. 3 (growth of functions) · Impact High · Effort Low`
+**Shipped 2026-07-18 as `theory.GrowthEstimator`.** The analyzer already emits
+deterministic `visited(n)` per size; the estimator fits those points against
+{1, log n, √n, n, n log n, n²} by least-squares + R² model selection and reports
+each generator's empirical growth class plus a log-log exponent.
+
+**T2 · "Hardest maze" = longest simple path is NP-hard** — `Ch. 34 (NP-completeness) + Ch. 35 (approximation) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `theory.LongestPath`.** Finding the longest simple path
+(the "hardest" route) reduces from Hamiltonian path — genuinely NP-hard. Document it honestly, then ship a
+heuristic "make this harder" mode. Portfolio-grade: shows you know where the
+tractability cliff is.
+
+**T3 · Diameter → auto start/goal placement** — `Ch. 22 (BFS) · Impact Med · Effort Low`
+**Shipped 2026-07-18 as `theory.MazeMetrics`.** Double-BFS finds the two
+farthest-apart cells (the maze's diameter — exact for perfect mazes);
+`placeStartAndGoalAtExtremes` drops start and goal there for a
+guaranteed-maximal challenge.
+
+**T4 · Random-walk cover/mixing time** — `Ch. 5 (probabilistic analysis) · Impact Low · Effort Low`
+**Shipped 2026-07-18 alongside G2** — see the cover-time table in `CHANGELOG.md`.
+Also surfaced a limitation of T1's `GrowthEstimator`: single-seed fits of a
+high-variance randomized algorithm give unstable class labels (Aldous-Broder
+swung `O(n)` ↔ `O(n^2)` across seeds), so randomized metrics must be averaged
+over seeds before fitting. Now documented on the estimator.
+Frame a pure random-walk solver and Aldous-Broder generation as Markov-chain
+cover time; the expected-step formulas explain the very curves T1 will plot.
+Theory that pays for itself in narrative.
+
+**T5 · Held–Karp for "collect all the coins"** — `Ch. 15 (DP) + Ch. 34 (TSP) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `theory.WaypointTour`** — exact optimal order, capped at
+16 waypoints, cross-checked against brute-force permutation enumeration.
+Shortest tour visiting k waypoints via the O(2^k·k²) DP → a game mode with an
+optimal-score oracle. Bounded k keeps it tractable and shows off DP over
+subsets.
+
+## 6. Distributed / maze-as-a-service
+
+**X1 · Min-cut chokepoints** — `Ch. 26 (max-flow / max-flow–min-cut theorem) · Impact High · Effort Med`
+**Shipped 2026-07-18 as `theory.MazeFlow`.** Model passages as unit-capacity
+edges; the minimum start→goal cut is the fewest walls that would seal the exit. That single number is both a
+**difficulty metric** and a **level-design tool** ("where's the bottleneck?").
+Novel, visual, and a direct application of the chapter's headline theorem.
+
+**X2 · Vertex-disjoint paths = robustness** — `Ch. 26 (Menger via max-flow) · Impact Med · Effort Med`
+**Shipped 2026-07-18 as `MazeFlow.vertexDisjointPaths`** — vertex-splitting
+reduction (`v_in → v_out`, capacity 1) on the same max-flow machinery as X1;
+always `<=` edge connectivity, and exactly 1 on a perfect maze.
+The count of vertex-disjoint start→goal routes measures redundancy and powers
+non-colliding multiplayer routing (a backlog stretch goal). Same max-flow
+machinery as X1, split-vertex trick for the vertex version.
+
+**X3 · Compact maze wire-encoding** — `Ch. 32 (string algorithms / RLE) · Impact Low · Effort Low`
+**Shipped 2026-07-18 as `util.TileGridCodec`** — measured **36–38% saving**,
+steady from 16² to 128², and it can never expand the payload. But the measurement
+also showed RLE is the wrong lever here: a rendered maze alternates cell/wall
+almost every column. Sending the underlying **two wall bits per cell** instead of
+the `(2r+1)²` glyph grid is **~16× smaller** — that's the real fix, and it needs a
+client-side renderer rather than a codec.
+Run-length + delta encode the `char[][]` tile grid for REST/STOMP payloads,
+and you get maze "diffs" for frame streaming almost for free. Shrinks the
+generation/solve frame traffic the WebSocket layer pushes.
+
+**X4 · Consistent hashing for the maze cache** — `Ch. 11 (hashing) · Impact Low · Effort Med`
+**Declined 2026-07-18 — it's the datastore's job, and there's no second node.**
+The maze cache is a single-process bounded map (`daedalus.cache.maze-cache-size`);
+Redis is wired for the leaderboard, not for sharding mazes. Hand-rolling a hash
+ring would be building distribution infrastructure for a system that isn't
+distributed. And if it ever is, Redis Cluster already shards by hash slot with
+minimal reshuffling on topology change — reimplementing that in the application
+would duplicate the datastore's own mechanism and add a second thing to get
+wrong. Revisit only if the cache genuinely becomes multi-node *and* the store in
+front of it can't shard.
+If the cache goes multi-node (Redis is already wired for the leaderboard),
+consistent hashing spreads stored mazes with minimal reshuffling when nodes
+join or leave. Standard, but the right tool if scale-out ever happens.
+
+---
+
+## Top 5 to build first
+
+Ranked by payoff-to-effort, biased toward what the current code makes cheap.
+**All five shipped 2026-07-18** — see the per-idea "Shipped" notes above.
+
+| # | Idea | Why now | CLRS |
+|---|------|---------|------|
+| 1 | **T1 — auto Big-O labelling** *(shipped)* | done — `theory.GrowthEstimator` turns raw counts into an at-a-glance growth class | Ch. 3 |
+| 2 | **T3 — diameter start/goal** *(shipped)* | done — `theory.MazeMetrics`, one double-BFS; immediate, visible gameplay/UX win | Ch. 22 |
+| 3 | **X1 — min-cut difficulty metric** *(shipped)* | done — `theory.MazeFlow`, novel feature + flagship theorem; reuses the grid graph you already build | Ch. 26 |
+| 4 | **S1 — Dial's bucket-queue Dijkstra** *(shipped)* | done — `solver.solvers.DialSolver` (id `dial`); classic optimization on `WeightedMazeGrid` | Ch. 24 |
+| 5 | **T2 — longest-path/NP-hardness writeup** *(shipped)* | done — `theory.LongestPath`, budget-bounded exact/heuristic longest simple path | Ch. 34/35 |
+
+## Traps & non-starters
+
+- **Fibonacci heaps as a default (Ch. 19).** The O(1) amortized decrease-key is
+  a theoretical trophy; on the grid sizes you'll actually run, its constants
+  lose to a d-ary or pairing heap. Cite it, benchmark it, but don't ship it as
+  the production queue — CLRS itself flags the constant-factor caveat.
+- **van Emde Boas trees (Ch. 20).** Gorgeous O(log log u), but the space and
+  constants only pay off at huge key universes. For bounded maze weights,
+  **Dial's buckets (S1)** are the pragmatic win — same idea, none of the
+  overhead.
+- **All-pairs precompute (S4) memory is O(V²).** Fine for a stored 64² maze,
+  ruinous at 512². Gate it behind a size cap.
+- **Don't parallelize inherently sequential generators.** Recursive
+  backtracker is a DFS — its state is a stack, not independent subproblems.
+  Spend concurrency on the ones with real independence: Borůvka (C1), tiled
+  generation (C3), layer-parallel BFS (C2).
+
+## Appendix — CLRS chapters referenced
+
+| Ch. (3e) | Topic | Used by |
+|----------|-------|---------|
+| 3 | Growth of functions | T1 |
+| 5 | Probabilistic analysis & randomized algorithms | G2, G3, T4 |
+| 6 | Heapsort / binary heaps | G1, D3 |
+| 11 | Hash tables | D2, X4 |
+| 15 | Dynamic programming | T5 |
+| 17 | Amortized analysis | D1 |
+| 19 | Fibonacci heaps | G1 (and Traps) |
+| 20 | van Emde Boas / bounded-key structures | S1 (and Traps) |
+| 21 | Disjoint sets (union-find) | G4, D1 |
+| 22 | Elementary graph algorithms (BFS/DFS) | S4, T3 |
+| 23 | Minimum spanning trees (Kruskal, Prim, Borůvka) | G1, G4, C1 |
+| 24 | Single-source shortest paths (Dijkstra, Bellman-Ford) | S1, S3 |
+| 25 | All-pairs shortest paths (Johnson, Floyd-Warshall) | S2, S4 |
+| 26 | Maximum flow (max-flow–min-cut, Menger) | X1, X2 |
+| 27 | Multithreaded algorithms | C1, C2, C3 |
+| 32 | String matching / encoding | X3 |
+| 34 | NP-completeness | T2, T5 |
+| 35 | Approximation algorithms | T2 |

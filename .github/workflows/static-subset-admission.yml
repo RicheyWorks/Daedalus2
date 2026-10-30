@@ -1,0 +1,34 @@
+name: Static subset admission
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'connectors/claude-asset-pipeline/asset_pipeline/subset.py'
+      - 'connectors/claude-asset-pipeline/harness/subset_test.py'
+      - 'connectors/claude-asset-pipeline/docs/static-subset-admission.md'
+      - '.github/workflows/static-subset-admission.yml'
+  pull_request:
+    paths:
+      - 'connectors/claude-asset-pipeline/asset_pipeline/subset.py'
+      - 'connectors/claude-asset-pipeline/harness/subset_test.py'
+      - 'connectors/claude-asset-pipeline/docs/static-subset-admission.md'
+      - '.github/workflows/static-subset-admission.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.12']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: connectors/claude-asset-pipeline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python harness/subset_test.py

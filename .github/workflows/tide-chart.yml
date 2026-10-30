@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Tide Chart Cache
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/tide_chart_cache.py'
+      - 'tools/streaming/tide_chart_cache_test.py'
+      - 'data/islands/disk-saver/tide-chart-v1.json'
+      - 'data/islands/disk-saver/byte-spring-v1.json'
+      - '.github/workflows/tide-chart.yml'
+permissions:
+  contents: read
+jobs:
+  tide-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G70 Tide Chart Cache rules (chart vs LRU, capacity, seeded runs, G39 tie-in)
+        run: python -m unittest tools/streaming/tide_chart_cache_test.py -v
+      - name: CLI smoke (seed 1 wins)
+        run: python tools/streaming/tide_chart_cache.py data/islands/disk-saver/tide-chart-v1.json --seed 1

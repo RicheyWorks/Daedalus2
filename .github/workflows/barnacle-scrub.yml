@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+name: Barnacle Scrub
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/barnacle_scrub.py'
+      - 'tools/streaming/barnacle_scrub_test.py'
+      - 'data/islands/disk-saver/barnacle-scrub-v1.json'
+      - 'data/islands/disk-saver/compaction-shoals-v1.json'
+      - '.github/workflows/barnacle-scrub.yml'
+permissions:
+  contents: read
+jobs:
+  barnacle-scrub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G151 Barnacle Scrub rules (checksums, scrub interval vs read budget, blind repair trap, G86 tie-in)
+        run: python -m unittest tools/streaming/barnacle_scrub_test.py -v
+      - name: CLI smoke (tuned checksum scrub wins)
+        run: python tools/streaming/barnacle_scrub.py data/islands/disk-saver/barnacle-scrub-v1.json

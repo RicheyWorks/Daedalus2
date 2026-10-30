@@ -1,0 +1,5 @@
+# java=21.0.4; os=Windows 11; warmup_per_worker=5; samples_per_worker=30; units=3; storage=system-temp; workload=closed-loop-independent-sessions
+workers,samples,throughput_per_s,total_p50_us,total_p95_us,total_p99_us,pre_brain_p95_us,brain_to_return_p95_us
+1,30,369.887,2606.300,3205.400,3609.600,97.000,3042.500
+4,120,429.803,8299.000,15114.100,17946.000,12728.200,2848.800
+8,240,418.078,16990.700,33706.300,40900.100,31335.100,3005.400

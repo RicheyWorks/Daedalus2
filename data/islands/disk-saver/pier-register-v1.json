@@ -1,0 +1,11 @@
+{
+  "v": 1,
+  "quest": "q_pier_register",
+  "lore": "Every island that ties up at DiskSaver harbour signs the pier register: its quest, its keeper's name, where its rules are posted and which workshop built it. Pier Registrar Abelard reads the register end to end each evening. He refuses a berth to any island with a torn page or a quest already taken, and he queries, politely, when two keepers answer to the same name or an island's rules are nowhere to be found.",
+  "hook": {"report_format": "daedalus-pier-register", "field": "verdict", "values": ["registered", "queried", "unregistered"],
+           "register_pages": "berths[]", "queries": "findings[]", "name_check": "name_check.free"},
+  "npc": {"name": "Pier Registrar Abelard", "lines": {
+    "registered": "Every berth signed, every keeper named once. The register is in order.",
+    "queried": "All berths are valid, but I have queries: keepers sharing a name, or rules I cannot find.",
+    "unregistered": "A torn page or a quest taken twice. No berth until the register is put right."}}
+}

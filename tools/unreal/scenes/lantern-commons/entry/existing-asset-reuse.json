@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Prop_Orr_Aqueduct_Arch",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Aqueduct_Arch/Prop_Orr_Aqueduct_Arch/StaticMeshes/Prop_Orr_Aqueduct_Arch.Prop_Orr_Aqueduct_Arch",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Aqueduct_Arch.json",
+    "report_sha256": "081e61badb9b35a059e769c0f058c50d55ffc2bbef93b2e39c4956d7ec499ab4",
+    "historical_report_ok": true,
+    "scope": "Historical comparison plus current native mesh load; no new import/admission."
+  },
+  {
+    "name": "Prop_Orr_Fence_Low",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Fence_Low/Prop_Orr_Fence_Low/StaticMeshes/Prop_Orr_Fence_Low.Prop_Orr_Fence_Low",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Fence_Low.json",
+    "report_sha256": "0c2507e0437bd7f6826fccd1414f0332b266e438f3b4297b5fe9d199a7446604",
+    "historical_report_ok": true,
+    "scope": "Historical comparison plus current native mesh load; no new import/admission."
+  },
+  {
+    "name": "Prop_Shrub_Hedge",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Shrub_Hedge/Prop_Shrub_Hedge/StaticMeshes/Prop_Shrub_Hedge.Prop_Shrub_Hedge",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Shrub_Hedge.json",
+    "report_sha256": "68edb4a6bcbe0bd9e54821f01137857221ace5f6639071c21d948c7cb135d524",
+    "historical_report_ok": true,
+    "scope": "Historical comparison plus current native mesh load; no new import/admission."
+  },
+  {
+    "name": "Prop_Crater_RimRock",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Crater_RimRock/Prop_Crater_RimRock/StaticMeshes/Prop_Crater_RimRock.Prop_Crater_RimRock",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Crater_RimRock.json",
+    "report_sha256": "08fc3df2b1f7912bf9c4cb613af00bf68addb46418bddc6c8e154f5b58d129e7",
+    "historical_report_ok": true,
+    "scope": "Historical comparison plus current native mesh load; no new import/admission."
+  },
+  {
+    "name": "Prop_Island_RockCluster_K11V0",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Island_RockCluster_K11V0/Prop_Island_RockCluster_K11V0/StaticMeshes/Prop_Island_RockCluster_K11V0.Prop_Island_RockCluster_K11V0",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Island_RockCluster_K11V0.json",
+    "report_sha256": "1e1b38d0844adebeedd0693dcd1c195e74200cce499146ae9d1af810908076bf",
+    "historical_report_ok": true,
+    "scope": "Historical comparison plus current native mesh load; no new import/admission."
+  },
+  {
+    "name": "Prop_Orr_Lantern_Post",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Lantern_Post/Prop_Orr_Lantern_Post/StaticMeshes/Prop_Orr_Lantern_Post.Prop_Orr_Lantern_Post",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Lantern_Post.json",
+    "report_sha256": "3e7a9af45b24d8869f53a8cedfa06ef5abaece4648d2a129496daf0051282d22",
+    "historical_report_ok": true,
+    "scope": "Historical comparison plus current native mesh load; no new import/admission."
+  },
+  {
+    "name": "Prop_Orr_Planter_Long",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Planter_Long/Prop_Orr_Planter_Long/StaticMeshes/Prop_Orr_Planter_Long.Prop_Orr_Planter_Long",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Planter_Long.json",
+    "report_sha256": "82c7c4cca3580b399fffbc98e1213d4cd62133d48b16c9e02c06d459e2e1e4a1",
+    "historical_report_ok": true,
+    "scope": "Historical comparison plus current native mesh load; no new import/admission."
+  },
+  {
+    "name": "Prop_Orr_Path_Tile_Cobble",
+    "object_path": "/Game/Daedalus/Art/Prop/Prop_Orr_Path_Tile_Cobble/Prop_Orr_Path_Tile_Cobble/StaticMeshes/Prop_Orr_Path_Tile_Cobble.Prop_Orr_Path_Tile_Cobble",
+    "report_path": "C:\\Users\\730ri\\projects\\bot-team\\art\\reports\\Prop_Orr_Path_Tile_Cobble.json",
+    "report_sha256": "00f7b0f6c4a868c269d0711ed2f4eca2de97b1d1e54d07ca5ab8d8c9c44d1927",
+    "historical_report_ok": true,
+    "scope": "Historical comparison plus current native mesh load; no new import/admission."
+  }
+]

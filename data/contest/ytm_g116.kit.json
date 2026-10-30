@@ -1,0 +1,6100 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_CardShelf",
+   "kind": "Prop",
+   "seed": 11616,
+   "spec": {
+    "gap": "G116",
+    "ask": "youtube-master 49939",
+    "lod": "LOD0/1",
+    "style": "G66 stall palette (ytm_g66)",
+    "size_m": "1.2 x 0.32 m, 0.96 m to the box rims",
+    "tri_cap": 4000,
+    "collision": "UCX body + box row",
+    "sockets": [
+     "Box<k>_Card<j> x20",
+     "Label_1..5",
+     "Deck"
+    ],
+    "code": "TOP_BOX 5, INTERVALS 1/2/4/8/16 d",
+    "labels": {
+     "Label_1": "1 day",
+     "Label_2": "2 days",
+     "Label_3": "4 days",
+     "Label_4": "8 days",
+     "Label_5": "16 days"
+    }
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_CardShelf_M0",
+     "colour": "loft timber (G66 stall timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_CardShelf_M1",
+     "colour": "label plaque / card stock (G66 sign board)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_CardShelf_M2",
+     "colour": "ink pips",
+     "hex": "2A2420",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_CardShelf",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.32,
+        0.86
+       ],
+       "centre": [
+        -0.585,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SideR_L1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.32,
+        0.86
+       ],
+       "centre": [
+        -0.585,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.32,
+        0.86
+       ],
+       "centre": [
+        0.585,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SideL_L1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.32,
+        0.86
+       ],
+       "centre": [
+        0.585,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Top",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.32,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.845
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Top_L1",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.32,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.845
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "MidShelf",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.3,
+        0.025
+       ],
+       "centre": [
+        0,
+        0,
+        0.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.3,
+        0.025
+       ],
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Back",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.012,
+        0.76
+       ],
+       "centre": [
+        0,
+        0.154,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Kick",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.02,
+        0.07
+       ],
+       "centre": [
+        0,
+        -0.13,
+        0.035
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box1_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        -0.47,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.564,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.376,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        -0.47,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        -0.47,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        -0.47,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.51,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box2_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        -0.235,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.329,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.141,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        -0.235,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        -0.235,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        -0.235,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.275,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box2_Pip1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.255,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box3_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        0.0,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.094,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.094,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        0.0,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        0.0,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        0.0,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.04,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box3_Pip1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.02,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box3_Pip2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.0,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box4_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        0.235,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.141,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.329,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        0.235,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        0.235,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        0.235,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.195,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box4_Pip1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.215,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box4_Pip2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.235,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box4_Pip3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.255,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        0.47,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.376,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.564,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        0.47,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        0.47,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        0.47,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.43,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Pip1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.45,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Pip2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.47,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Pip3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.49,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Pip4",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.51,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "DeckCard0",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.13,
+        0.004
+       ],
+       "centre": [
+        0.32,
+        -0.02,
+        0.4345
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "DeckCard1",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.13,
+        0.004
+       ],
+       "centre": [
+        0.324,
+        -0.017,
+        0.4385
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "DeckCard2",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.13,
+        0.004
+       ],
+       "centre": [
+        0.328,
+        -0.014,
+        0.4425
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Box1_Card0",
+     "location": [
+      -0.47,
+      -0.046,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.47,
+      0.872,
+      0.046
+     ]
+    },
+    {
+     "name": "SOCKET_Box1_Card1",
+     "location": [
+      -0.47,
+      -0.016,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.47,
+      0.872,
+      0.016
+     ]
+    },
+    {
+     "name": "SOCKET_Box1_Card2",
+     "location": [
+      -0.47,
+      0.014,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.47,
+      0.872,
+      -0.014
+     ]
+    },
+    {
+     "name": "SOCKET_Box1_Card3",
+     "location": [
+      -0.47,
+      0.044,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.47,
+      0.872,
+      -0.044
+     ]
+    },
+    {
+     "name": "SOCKET_Box2_Card0",
+     "location": [
+      -0.235,
+      -0.046,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.235,
+      0.872,
+      0.046
+     ]
+    },
+    {
+     "name": "SOCKET_Box2_Card1",
+     "location": [
+      -0.235,
+      -0.016,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.235,
+      0.872,
+      0.016
+     ]
+    },
+    {
+     "name": "SOCKET_Box2_Card2",
+     "location": [
+      -0.235,
+      0.014,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.235,
+      0.872,
+      -0.014
+     ]
+    },
+    {
+     "name": "SOCKET_Box2_Card3",
+     "location": [
+      -0.235,
+      0.044,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.235,
+      0.872,
+      -0.044
+     ]
+    },
+    {
+     "name": "SOCKET_Box3_Card0",
+     "location": [
+      0.0,
+      -0.046,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.872,
+      0.046
+     ]
+    },
+    {
+     "name": "SOCKET_Box3_Card1",
+     "location": [
+      0.0,
+      -0.016,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.872,
+      0.016
+     ]
+    },
+    {
+     "name": "SOCKET_Box3_Card2",
+     "location": [
+      0.0,
+      0.014,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.872,
+      -0.014
+     ]
+    },
+    {
+     "name": "SOCKET_Box3_Card3",
+     "location": [
+      0.0,
+      0.044,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.872,
+      -0.044
+     ]
+    },
+    {
+     "name": "SOCKET_Box4_Card0",
+     "location": [
+      0.235,
+      -0.046,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.235,
+      0.872,
+      0.046
+     ]
+    },
+    {
+     "name": "SOCKET_Box4_Card1",
+     "location": [
+      0.235,
+      -0.016,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.235,
+      0.872,
+      0.016
+     ]
+    },
+    {
+     "name": "SOCKET_Box4_Card2",
+     "location": [
+      0.235,
+      0.014,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.235,
+      0.872,
+      -0.014
+     ]
+    },
+    {
+     "name": "SOCKET_Box4_Card3",
+     "location": [
+      0.235,
+      0.044,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.235,
+      0.872,
+      -0.044
+     ]
+    },
+    {
+     "name": "SOCKET_Box5_Card0",
+     "location": [
+      0.47,
+      -0.046,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.47,
+      0.872,
+      0.046
+     ]
+    },
+    {
+     "name": "SOCKET_Box5_Card1",
+     "location": [
+      0.47,
+      -0.016,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.47,
+      0.872,
+      0.016
+     ]
+    },
+    {
+     "name": "SOCKET_Box5_Card2",
+     "location": [
+      0.47,
+      0.014,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.47,
+      0.872,
+      -0.014
+     ]
+    },
+    {
+     "name": "SOCKET_Box5_Card3",
+     "location": [
+      0.47,
+      0.044,
+      0.872
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.47,
+      0.872,
+      -0.044
+     ]
+    },
+    {
+     "name": "SOCKET_Label_1",
+     "location": [
+      -0.47,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.47,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Label_2",
+     "location": [
+      -0.235,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.235,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Label_3",
+     "location": [
+      0.0,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Label_4",
+     "location": [
+      0.235,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.235,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Label_5",
+     "location": [
+      0.47,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.47,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Deck",
+     "location": [
+      0.32,
+      -0.02,
+      0.4325
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0.32,
+      0.4325,
+      0.02
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_CardShelf_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.32,
+      0.86
+     ],
+     "centre": [
+      0,
+      0,
+      0.43
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_CardShelf_01",
+     "shape": "box",
+     "size": [
+      1.175,
+      0.17,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.91
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 876,
+    "lod1_triangles": 444,
+    "lod1_ratio": 0.507,
+    "objects": {
+     "Prop_YTM_CardShelf": 876
+    },
+    "bounds_min": [
+     -0.6,
+     -0.16,
+     0.0
+    ],
+    "bounds_max": [
+     0.6,
+     0.16,
+     0.96
+    ],
+    "dimensions": [
+     1.2,
+     0.32,
+     0.96
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1467391b7361f9d6d54e8fcc6509754c90354e22944fa4b71a15158ccc81c6fe"
+  },
+  {
+   "asset": "Prop_YTM_SongCard",
+   "kind": "Prop",
+   "seed": 11616,
+   "spec": {
+    "gap": "G116",
+    "ask": "youtube-master 49939",
+    "lod": "LOD0/1",
+    "style": "G66 stall palette (ytm_g66)",
+    "size_m": "0.15 x 0.13 m song card",
+    "tri_cap": 300,
+    "collision": "UCX card",
+    "sockets": [
+     "Grip"
+    ],
+    "mi": "slot 1 tab: MI param PupilColour (one per pupil), slot 0 card stock, slot 2 ink"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_SongCard_M0",
+     "colour": "card stock",
+     "hex": "D8C9A8",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_SongCard_M1",
+     "colour": "pupil tab (MI PupilColour)",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_SongCard_M2",
+     "colour": "ink note",
+     "hex": "2A2420",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_SongCard",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Card",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.065
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Tab",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.045,
+        0.0,
+        0.139
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.01,
+        -0.0026,
+        0.05
+       ],
+       "slot": 2,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.0015,
+        -0.0026,
+        0.07
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      -0.045,
+      0,
+      0.139
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      -0.045,
+      0.139,
+      0.0
+     ],
+     "attach": {
+      "barrel": [
+       0,
+       0,
+       1
+      ],
+      "up": [
+       0,
+       -1,
+       0
+      ]
+     }
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_SongCard_00",
+     "shape": "box",
+     "size": [
+      0.15,
+      0.006,
+      0.148
+     ],
+     "centre": [
+      0,
+      0,
+      0.074
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": false,
+   "predicted": {
+    "triangles": 64,
+    "lod1_triangles": 24,
+    "lod1_ratio": 0.375,
+    "objects": {
+     "Prop_YTM_SongCard": 64
+    },
+    "bounds_min": [
+     -0.075,
+     -0.0032,
+     0.0
+    ],
+    "bounds_max": [
+     0.075,
+     0.0025,
+     0.148
+    ],
+    "dimensions": [
+     0.15,
+     0.0057,
+     0.148
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "edeff29d560c6b7b1d0789702f92051fe2170e8b2149fe92b6e3b8153273e89c"
+  },
+  {
+   "asset": "Prop_YTM_CardShelf_Filled",
+   "kind": "Prop",
+   "seed": 11616,
+   "spec": {
+    "gap": "G116",
+    "ask": "youtube-master 49939",
+    "lod": "LOD0/1",
+    "style": "G66 stall palette (ytm_g66)",
+    "size_m": "as Prop_YTM_CardShelf + 16 cards",
+    "tri_cap": 9000,
+    "collision": "as the shelf",
+    "state": "static set dressing; gameplay uses shelf + SongCard",
+    "cards": "by box [4, 4, 4, 3, 1]"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_CardShelf_Filled_M0",
+     "colour": "loft timber (G66 stall timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_CardShelf_Filled_M1",
+     "colour": "label plaque / card stock (G66 sign board)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_CardShelf_Filled_M2",
+     "colour": "ink pips",
+     "hex": "2A2420",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_YTM_CardShelf_Filled_M3",
+     "colour": "card stock",
+     "hex": "D8C9A8",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_YTM_CardShelf_Filled_M4",
+     "colour": "pupil tabs",
+     "hex": "E3C25A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_YTM_CardShelf_Filled_M5",
+     "colour": "ink notes",
+     "hex": "2A2420",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_CardShelf_Filled",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.32,
+        0.86
+       ],
+       "centre": [
+        -0.585,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SideR_L1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.32,
+        0.86
+       ],
+       "centre": [
+        -0.585,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.32,
+        0.86
+       ],
+       "centre": [
+        0.585,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "SideL_L1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.32,
+        0.86
+       ],
+       "centre": [
+        0.585,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Top",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.32,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.845
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Top_L1",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.32,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.845
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "MidShelf",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.3,
+        0.025
+       ],
+       "centre": [
+        0,
+        0,
+        0.42
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.3,
+        0.025
+       ],
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Back",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.012,
+        0.76
+       ],
+       "centre": [
+        0,
+        0.154,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Kick",
+       "shape": "box",
+       "size": [
+        1.14,
+        0.02,
+        0.07
+       ],
+       "centre": [
+        0,
+        -0.13,
+        0.035
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box1_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        -0.47,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.564,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.376,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        -0.47,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        -0.47,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        -0.47,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box1_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.51,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box2_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        -0.235,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.329,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.141,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        -0.235,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        -0.235,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        -0.235,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box2_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.275,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box2_Pip1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.255,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box3_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        0.0,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        -0.094,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.094,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        0.0,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        0.0,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        0.0,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box3_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.04,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box3_Pip1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        -0.02,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box3_Pip2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.0,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box4_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        0.235,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.141,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.329,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        0.235,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        0.235,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        0.235,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box4_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.195,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box4_Pip1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.215,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box4_Pip2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.235,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box4_Pip3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.255,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Floor",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.16,
+        0.012
+       ],
+       "centre": [
+        0.47,
+        0,
+        0.866
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Side0",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.376,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Side1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.16,
+        0.1
+       ],
+       "centre": [
+        0.564,
+        0,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Front",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.07
+       ],
+       "centre": [
+        0.47,
+        -0.074,
+        0.895
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_BackWall",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.012,
+        0.1
+       ],
+       "centre": [
+        0.47,
+        0.074,
+        0.91
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Plaque",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.005,
+        0.04
+       ],
+       "centre": [
+        0.47,
+        -0.0825,
+        0.895
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Box5_Pip0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.43,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Pip1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.45,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Pip2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.47,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Pip3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.49,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Box5_Pip4",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.003,
+       "centre": [
+        0.51,
+        -0.0862,
+        0.883
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "DeckCard0",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.13,
+        0.004
+       ],
+       "centre": [
+        0.32,
+        -0.02,
+        0.4345
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "DeckCard1",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.13,
+        0.004
+       ],
+       "centre": [
+        0.324,
+        -0.017,
+        0.4385
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "DeckCard2",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.13,
+        0.004
+       ],
+       "centre": [
+        0.328,
+        -0.014,
+        0.4425
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_YTM_CardShelf_Filled_Cards",
+     "parent": "Prop_YTM_CardShelf_Filled",
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "16 song cards in the slots",
+     "parts": [
+      {
+       "name": "Card_B1_0",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        -0.47,
+        -0.046,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B1_0",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.515,
+        -0.046,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B1_0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.48,
+        -0.0486,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B1_0",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.4715,
+        -0.0486,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B1_1",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        -0.47,
+        -0.016,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B1_1",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.515,
+        -0.016,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B1_1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.48,
+        -0.0186,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B1_1",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.4715,
+        -0.0186,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B1_2",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        -0.47,
+        0.014,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B1_2",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.515,
+        0.014,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B1_2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.48,
+        0.0114,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B1_2",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.4715,
+        0.0114,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B1_3",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        -0.47,
+        0.044,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B1_3",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.515,
+        0.044,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B1_3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.48,
+        0.0414,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B1_3",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.4715,
+        0.0414,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B2_0",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        -0.235,
+        -0.046,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B2_0",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.28,
+        -0.046,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B2_0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.245,
+        -0.0486,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B2_0",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.2365,
+        -0.0486,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B2_1",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        -0.235,
+        -0.016,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B2_1",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.28,
+        -0.016,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B2_1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.245,
+        -0.0186,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B2_1",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.2365,
+        -0.0186,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B2_2",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        -0.235,
+        0.014,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B2_2",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.28,
+        0.014,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B2_2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.245,
+        0.0114,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B2_2",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.2365,
+        0.0114,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B2_3",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        -0.235,
+        0.044,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B2_3",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.28,
+        0.044,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B2_3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.245,
+        0.0414,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B2_3",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.2365,
+        0.0414,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B3_0",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        0.0,
+        -0.046,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B3_0",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.045,
+        -0.046,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B3_0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.01,
+        -0.0486,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B3_0",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.0015,
+        -0.0486,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B3_1",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        0.0,
+        -0.016,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B3_1",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.045,
+        -0.016,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B3_1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.01,
+        -0.0186,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B3_1",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.0015,
+        -0.0186,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B3_2",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        0.0,
+        0.014,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B3_2",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.045,
+        0.014,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B3_2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.01,
+        0.0114,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B3_2",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.0015,
+        0.0114,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B3_3",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        0.0,
+        0.044,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B3_3",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        -0.045,
+        0.044,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B3_3",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        -0.01,
+        0.0414,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B3_3",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        -0.0015,
+        0.0414,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B4_0",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        0.235,
+        -0.046,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B4_0",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        0.19,
+        -0.046,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B4_0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        0.225,
+        -0.0486,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B4_0",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        0.2335,
+        -0.0486,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B4_1",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        0.235,
+        -0.016,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B4_1",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        0.19,
+        -0.016,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B4_1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        0.225,
+        -0.0186,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B4_1",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        0.2335,
+        -0.0186,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B4_2",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        0.235,
+        0.014,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B4_2",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        0.19,
+        0.014,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B4_2",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        0.225,
+        0.0114,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B4_2",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        0.2335,
+        0.0114,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Card_B5_0",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.004,
+        0.13
+       ],
+       "centre": [
+        0.47,
+        -0.046,
+        0.937
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Tab_B5_0",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.005,
+        0.018
+       ],
+       "centre": [
+        0.425,
+        -0.046,
+        1.011
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "NoteHead_B5_0",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.009,
+       "length": 0.0012,
+       "centre": [
+        0.46,
+        -0.0486,
+        0.922
+       ],
+       "slot": 5,
+       "segments": 8,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "NoteStem_B5_0",
+       "shape": "box",
+       "size": [
+        0.0025,
+        0.0012,
+        0.04
+       ],
+       "centre": [
+        0.4685,
+        -0.0486,
+        0.942
+       ],
+       "slot": 5,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Label_1",
+     "location": [
+      -0.47,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.47,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Label_2",
+     "location": [
+      -0.235,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.235,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Label_3",
+     "location": [
+      0.0,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Label_4",
+     "location": [
+      0.235,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.235,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Label_5",
+     "location": [
+      0.47,
+      -0.085,
+      0.895
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.47,
+      0.895,
+      0.085
+     ]
+    },
+    {
+     "name": "SOCKET_Deck",
+     "location": [
+      0.32,
+      -0.02,
+      0.4325
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0.32,
+      0.4325,
+      0.02
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_CardShelf_Filled_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.32,
+      0.86
+     ],
+     "centre": [
+      0,
+      0,
+      0.43
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_CardShelf_Filled_01",
+     "shape": "box",
+     "size": [
+      1.175,
+      0.17,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.91
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 1900,
+    "lod1_triangles": 828,
+    "lod1_ratio": 0.436,
+    "objects": {
+     "Prop_YTM_CardShelf_Filled": 876,
+     "Prop_YTM_CardShelf_Filled_Cards": 1024
+    },
+    "bounds_min": [
+     -0.6,
+     -0.16,
+     0.0
+    ],
+    "bounds_max": [
+     0.6,
+     0.16,
+     1.02
+    ],
+    "dimensions": [
+     1.2,
+     0.32,
+     1.02
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "308232fadf522b0b1556a6cdb71609e721f6b3e67f29d70867560435759cfe5e"
+  },
+  {
+   "asset": "Prop_YTM_SchoolBench",
+   "kind": "Prop",
+   "seed": 11616,
+   "spec": {
+    "gap": "G116",
+    "ask": "youtube-master 49939",
+    "lod": "LOD0/1",
+    "style": "G66 stall palette (ytm_g66)",
+    "size_m": "1.4 m bench + desk, seat 0.38 m, desk 0.62 m",
+    "tri_cap": 2500,
+    "collision": "UCX seat + desk",
+    "sockets": [
+     "Seat_0..2",
+     "Slate_0..2"
+    ],
+    "code": "GRADUATES_NEEDED 3"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_SchoolBench_M0",
+     "colour": "loft timber (G66 stall timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_SchoolBench_M1",
+     "colour": "worn rail (G66 sign board)",
+     "hex": "D8C9A8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_SchoolBench",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Seat",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.26,
+        0.035
+       ],
+       "centre": [
+        0,
+        0.18,
+        0.3625
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Seat_L1",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.26,
+        0.035
+       ],
+       "centre": [
+        0,
+        0.18,
+        0.3625
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Desk",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.34,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.16,
+        0.62
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Desk_L1",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.34,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.16,
+        0.62
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        -6,
+        0,
+        0
+       ],
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Ledge",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.03,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.33,
+        0.625
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SeatLegsR",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.22,
+        0.345
+       ],
+       "centre": [
+        -0.65,
+        0.18,
+        0.1725
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "DeskLegsR",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.05,
+        0.59
+       ],
+       "centre": [
+        -0.65,
+        -0.27,
+        0.295
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "RunnerR",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.5,
+        0.05
+       ],
+       "centre": [
+        -0.65,
+        -0.04,
+        0.025
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "SeatLegsL",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.22,
+        0.345
+       ],
+       "centre": [
+        0.65,
+        0.18,
+        0.1725
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "DeskLegsL",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.05,
+        0.59
+       ],
+       "centre": [
+        0.65,
+        -0.27,
+        0.295
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "RunnerL",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.5,
+        0.05
+       ],
+       "centre": [
+        0.65,
+        -0.04,
+        0.025
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Stretcher",
+       "shape": "box",
+       "size": [
+        1.3,
+        0.04,
+        0.04
+       ],
+       "centre": [
+        0,
+        0.05,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "InkWellRail",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.06,
+        0.015
+       ],
+       "centre": [
+        0,
+        -0.03,
+        0.64
+       ],
+       "slot": 1,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Seat_0",
+     "location": [
+      -0.45,
+      0.18,
+      0.38
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      0.38,
+      -0.18
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_1",
+     "location": [
+      0.0,
+      0.18,
+      0.38
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.38,
+      -0.18
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_2",
+     "location": [
+      0.45,
+      0.18,
+      0.38
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      0.38,
+      -0.18
+     ]
+    },
+    {
+     "name": "SOCKET_Slate_0",
+     "location": [
+      -0.45,
+      -0.2,
+      0.6392
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.45,
+      0.6392,
+      0.2
+     ]
+    },
+    {
+     "name": "SOCKET_Slate_1",
+     "location": [
+      0.0,
+      -0.2,
+      0.6392
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.6392,
+      0.2
+     ]
+    },
+    {
+     "name": "SOCKET_Slate_2",
+     "location": [
+      0.45,
+      -0.2,
+      0.6392
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.45,
+      0.6392,
+      0.2
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_SchoolBench_00",
+     "shape": "box",
+     "size": [
+      1.4,
+      0.3,
+      0.38
+     ],
+     "centre": [
+      0,
+      0.18,
+      0.19
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_SchoolBench_01",
+     "shape": "box",
+     "size": [
+      1.4,
+      0.36,
+      0.65
+     ],
+     "centre": [
+      0,
+      -0.16,
+      0.325
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 196,
+    "lod1_triangles": 120,
+    "lod1_ratio": 0.612,
+    "objects": {
+     "Prop_YTM_SchoolBench": 196
+    },
+    "bounds_min": [
+     -0.7,
+     -0.345,
+     0.0
+    ],
+    "bounds_max": [
+     0.7,
+     0.31,
+     0.6523
+    ],
+    "dimensions": [
+     1.4,
+     0.655,
+     0.6523
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7511d957d6b007cc135744e95800c4822faedb474f1b3164e3a53947e8c8935c"
+  },
+  {
+   "asset": "Prop_YTM_Slate",
+   "kind": "Prop",
+   "seed": 11616,
+   "spec": {
+    "gap": "G116",
+    "ask": "youtube-master 49939",
+    "lod": "LOD0/1",
+    "style": "G66 stall palette (ytm_g66)",
+    "size_m": "0.28 x 0.2 m slate + chalk",
+    "tri_cap": 600,
+    "collision": "UCX slate",
+    "sockets": [
+     "Grip",
+     "Write"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Slate_M0",
+     "colour": "slate frame (G66 stall timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Slate_M1",
+     "colour": "slate",
+     "hex": "2F3538",
+     "roughness": 0.75,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_Slate_M2",
+     "colour": "chalk",
+     "hex": "EEEBE2",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Slate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Slate",
+       "shape": "box",
+       "size": [
+        0.248,
+        0.168,
+        0.0072
+       ],
+       "centre": [
+        0,
+        0,
+        0.0036
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Frame0",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.018,
+        0.012
+       ],
+       "centre": [
+        0,
+        0.091,
+        0.006
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Frame1",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.018,
+        0.012
+       ],
+       "centre": [
+        0,
+        -0.091,
+        0.006
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Frame2",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.164,
+        0.012
+       ],
+       "centre": [
+        0.131,
+        0,
+        0.006
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Frame3",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.164,
+        0.012
+       ],
+       "centre": [
+        -0.131,
+        0,
+        0.006
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Chalk",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.005,
+       "r2": 0.005,
+       "length": 0.06,
+       "centre": [
+        0.03,
+        -0.112,
+        0.005
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "CordHole",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.02,
+       "centre": [
+        0,
+        0.091,
+        0.006
+       ],
+       "slot": 2,
+       "segments": 6,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ChalkScrawl",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.003,
+        0.0006
+       ],
+       "centre": [
+        -0.02,
+        0.02,
+        0.0075
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "ChalkScrawl2",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.003,
+        0.0006
+       ],
+       "centre": [
+        -0.04,
+        -0.01,
+        0.0075
+       ],
+       "slot": 2,
+       "bevel": false,
+       "lod1": {
+        "drop": true
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0.131,
+      0,
+      0.006
+     ],
+     "parent": null,
+     "forward": [
+      1,
+      0,
+      0
+     ],
+     "location_gltf": [
+      0.131,
+      0.006,
+      0.0
+     ],
+     "attach": {
+      "barrel": [
+       0,
+       1,
+       0
+      ],
+      "up": [
+       0,
+       0,
+       1
+      ]
+     }
+    },
+    {
+     "name": "SOCKET_Write",
+     "location": [
+      0,
+      0,
+      0.0072
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0,
+      0.0072,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_Slate_00",
+     "shape": "box",
+     "size": [
+      0.28,
+      0.23,
+      0.012
+     ],
+     "centre": [
+      0,
+      -0.012,
+      0.006
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": false,
+   "off_centre_ok": "chalk lies against the front edge (-Y); origin = slate bottom centre",
+   "predicted": {
+    "triangles": 124,
+    "lod1_triangles": 72,
+    "lod1_ratio": 0.581,
+    "objects": {
+     "Prop_YTM_Slate": 124
+    },
+    "bounds_min": [
+     -0.14,
+     -0.117,
+     0.0
+    ],
+    "bounds_max": [
+     0.14,
+     0.101,
+     0.012
+    ],
+    "dimensions": [
+     0.28,
+     0.218,
+     0.012
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "642f72ac706a30c3ce198aa6d7524810552b1673c246ca167aded63c0eafad98"
+  },
+  {
+   "asset": "Prop_YTM_LessonCandles",
+   "kind": "Prop",
+   "seed": 11616,
+   "spec": {
+    "gap": "G116",
+    "ask": "youtube-master 49939",
+    "lod": "LOD0/1",
+    "style": "G66 stall palette (ytm_g66)",
+    "size_m": "0.75 m tray, 6 candles",
+    "tri_cap": 2500,
+    "collision": "UCX tray + candle row",
+    "sockets": [
+     "Flame_0..5"
+    ],
+    "code": "LESSONS_PER_DAY 6: candle k lit while k < lessonsLeft()"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_LessonCandles_M0",
+     "colour": "loft timber (G66 stall timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_LessonCandles_M1",
+     "colour": "beeswax",
+     "hex": "EFE2BE",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_LessonCandles_M2",
+     "colour": "flame (emissive, masked by LitCount)",
+     "hex": "FFB347",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_LessonCandles",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Tray",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.14,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.015
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Tray_L1",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.14,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.015
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "HandleR",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.06,
+        0.05
+       ],
+       "centre": [
+        -0.375,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "HandleL",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.06,
+        0.05
+       ],
+       "centre": [
+        0.375,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Holder0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.032,
+       "r2": 0.026,
+       "length": 0.018,
+       "centre": [
+        -0.275,
+        0,
+        0.039
+       ],
+       "slot": 0,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Wax0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.019,
+       "r2": 0.018,
+       "length": 0.1274,
+       "centre": [
+        -0.275,
+        0,
+        0.1117
+       ],
+       "slot": 1,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Drip0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0195,
+         0.1454
+        ],
+        [
+         0.022,
+         0.1634
+        ],
+        [
+         0.0185,
+         0.1754
+        ]
+       ],
+       "centre": [
+        -0.275,
+        0.0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 10,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Wick0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0015,
+       "r2": 0.0012,
+       "length": 0.01,
+       "centre": [
+        -0.275,
+        0,
+        0.1804
+       ],
+       "slot": 0,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Flame0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.001,
+         0.1814
+        ],
+        [
+         0.007,
+         0.1894
+        ],
+        [
+         0.005,
+         0.2014
+        ],
+        [
+         0.0006,
+         0.2154
+        ]
+       ],
+       "centre": [
+        -0.275,
+        0.0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 8,
+       "caps": [
+        true,
+        false
+       ],
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Holder1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.032,
+       "r2": 0.026,
+       "length": 0.018,
+       "centre": [
+        -0.165,
+        0,
+        0.039
+       ],
+       "slot": 0,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Wax1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.019,
+       "r2": 0.018,
+       "length": 0.1315,
+       "centre": [
+        -0.165,
+        0,
+        0.11375
+       ],
+       "slot": 1,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Drip1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0195,
+         0.1495
+        ],
+        [
+         0.022,
+         0.1675
+        ],
+        [
+         0.0185,
+         0.1795
+        ]
+       ],
+       "centre": [
+        -0.165,
+        0.0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 10,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Wick1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0015,
+       "r2": 0.0012,
+       "length": 0.01,
+       "centre": [
+        -0.165,
+        0,
+        0.1845
+       ],
+       "slot": 0,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Flame1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.001,
+         0.1855
+        ],
+        [
+         0.007,
+         0.1935
+        ],
+        [
+         0.005,
+         0.2055
+        ],
+        [
+         0.0006,
+         0.2195
+        ]
+       ],
+       "centre": [
+        -0.165,
+        0.0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 8,
+       "caps": [
+        true,
+        false
+       ],
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Holder2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.032,
+       "r2": 0.026,
+       "length": 0.018,
+       "centre": [
+        -0.055,
+        0,
+        0.039
+       ],
+       "slot": 0,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Wax2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.019,
+       "r2": 0.018,
+       "length": 0.1652,
+       "centre": [
+        -0.055,
+        0,
+        0.1306
+       ],
+       "slot": 1,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Drip2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0195,
+         0.1832
+        ],
+        [
+         0.022,
+         0.2012
+        ],
+        [
+         0.0185,
+         0.2132
+        ]
+       ],
+       "centre": [
+        -0.055,
+        0.0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 10,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Wick2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0015,
+       "r2": 0.0012,
+       "length": 0.01,
+       "centre": [
+        -0.055,
+        0,
+        0.2182
+       ],
+       "slot": 0,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Flame2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.001,
+         0.2192
+        ],
+        [
+         0.007,
+         0.2272
+        ],
+        [
+         0.005,
+         0.2392
+        ],
+        [
+         0.0006,
+         0.2532
+        ]
+       ],
+       "centre": [
+        -0.055,
+        0.0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 8,
+       "caps": [
+        true,
+        false
+       ],
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Holder3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.032,
+       "r2": 0.026,
+       "length": 0.018,
+       "centre": [
+        0.055,
+        0,
+        0.039
+       ],
+       "slot": 0,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Wax3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.019,
+       "r2": 0.018,
+       "length": 0.1128,
+       "centre": [
+        0.055,
+        0,
+        0.1044
+       ],
+       "slot": 1,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Drip3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0195,
+         0.1308
+        ],
+        [
+         0.022,
+         0.1488
+        ],
+        [
+         0.0185,
+         0.1608
+        ]
+       ],
+       "centre": [
+        0.055,
+        0.0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 10,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Wick3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0015,
+       "r2": 0.0012,
+       "length": 0.01,
+       "centre": [
+        0.055,
+        0,
+        0.1658
+       ],
+       "slot": 0,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Flame3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.001,
+         0.1668
+        ],
+        [
+         0.007,
+         0.1748
+        ],
+        [
+         0.005,
+         0.1868
+        ],
+        [
+         0.0006,
+         0.2008
+        ]
+       ],
+       "centre": [
+        0.055,
+        0.0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 8,
+       "caps": [
+        true,
+        false
+       ],
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Holder4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.032,
+       "r2": 0.026,
+       "length": 0.018,
+       "centre": [
+        0.165,
+        0,
+        0.039
+       ],
+       "slot": 0,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Wax4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.019,
+       "r2": 0.018,
+       "length": 0.1603,
+       "centre": [
+        0.165,
+        0,
+        0.12815
+       ],
+       "slot": 1,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Drip4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0195,
+         0.1783
+        ],
+        [
+         0.022,
+         0.1963
+        ],
+        [
+         0.0185,
+         0.2083
+        ]
+       ],
+       "centre": [
+        0.165,
+        0.0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 10,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Wick4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0015,
+       "r2": 0.0012,
+       "length": 0.01,
+       "centre": [
+        0.165,
+        0,
+        0.2133
+       ],
+       "slot": 0,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Flame4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.001,
+         0.2143
+        ],
+        [
+         0.007,
+         0.2223
+        ],
+        [
+         0.005,
+         0.2343
+        ],
+        [
+         0.0006,
+         0.2483
+        ]
+       ],
+       "centre": [
+        0.165,
+        0.0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 8,
+       "caps": [
+        true,
+        false
+       ],
+       "lod1": {
+        "segments": 4
+       }
+      },
+      {
+       "name": "Holder5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.032,
+       "r2": 0.026,
+       "length": 0.018,
+       "centre": [
+        0.275,
+        0,
+        0.039
+       ],
+       "slot": 0,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Wax5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.019,
+       "r2": 0.018,
+       "length": 0.1692,
+       "centre": [
+        0.275,
+        0,
+        0.1326
+       ],
+       "slot": 1,
+       "segments": 10,
+       "lod1": {
+        "segments": 6
+       }
+      },
+      {
+       "name": "Drip5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.0195,
+         0.1872
+        ],
+        [
+         0.022,
+         0.2052
+        ],
+        [
+         0.0185,
+         0.2172
+        ]
+       ],
+       "centre": [
+        0.275,
+        0.0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 10,
+       "caps": [
+        false,
+        false
+       ],
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Wick5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.0015,
+       "r2": 0.0012,
+       "length": 0.01,
+       "centre": [
+        0.275,
+        0,
+        0.2222
+       ],
+       "slot": 0,
+       "segments": 4,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Flame5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.001,
+         0.2232
+        ],
+        [
+         0.007,
+         0.2312
+        ],
+        [
+         0.005,
+         0.2432
+        ],
+        [
+         0.0006,
+         0.2572
+        ]
+       ],
+       "centre": [
+        0.275,
+        0.0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 8,
+       "caps": [
+        true,
+        false
+       ],
+       "lod1": {
+        "segments": 4
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Flame_0",
+     "location": [
+      -0.275,
+      0,
+      0.1874
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      -0.275,
+      0.1874,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Flame_1",
+     "location": [
+      -0.165,
+      0,
+      0.1915
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      -0.165,
+      0.1915,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Flame_2",
+     "location": [
+      -0.055,
+      0,
+      0.2252
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      -0.055,
+      0.2252,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Flame_3",
+     "location": [
+      0.055,
+      0,
+      0.1728
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0.055,
+      0.1728,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Flame_4",
+     "location": [
+      0.165,
+      0,
+      0.2203
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0.165,
+      0.2203,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Flame_5",
+     "location": [
+      0.275,
+      0,
+      0.2292
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      0,
+      1
+     ],
+     "location_gltf": [
+      0.275,
+      0.2292,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_LessonCandles_00",
+     "shape": "box",
+     "size": [
+      0.79,
+      0.14,
+      0.03
+     ],
+     "centre": [
+      0,
+      0,
+      0.015
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    },
+    {
+     "name": "UCX_Prop_YTM_LessonCandles_01",
+     "shape": "box",
+     "size": [
+      0.66,
+      0.065,
+      0.2
+     ],
+     "centre": [
+      0.0,
+      0,
+      0.13
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": false,
+   "predicted": {
+    "triangles": 1136,
+    "lod1_triangles": 432,
+    "lod1_ratio": 0.38,
+    "objects": {
+     "Prop_YTM_LessonCandles": 1136
+    },
+    "bounds_min": [
+     -0.395,
+     -0.07,
+     0.0
+    ],
+    "bounds_max": [
+     0.395,
+     0.07,
+     0.2572
+    ],
+    "dimensions": [
+     0.79,
+     0.14,
+     0.2572
+    ],
+    "collision_tris": 24
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ecc23cf077634464c66e38bef4956f4fd51e2eb1416eced87adc280f5cd27115"
+  }
+ ]
+}

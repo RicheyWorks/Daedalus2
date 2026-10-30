@@ -1,0 +1,1901 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Gal_LivingFrame_Faded",
+   "kind": "Prop",
+   "seed": 1313,
+   "state": "Faded",
+   "state_of": "Prop_Gal_LivingFrame",
+   "fade": 0.85,
+   "spec": {
+    "row": 13,
+    "gap": "G13",
+    "size_m": "2 x 1.5 m frame",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX slab",
+    "sockets": [
+     "Canvas",
+     "Light"
+    ],
+    "states": [
+     "Faded",
+     "Half",
+     "Restored"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Gal_LivingFrame_Faded_M0",
+     "colour": "gilded frame",
+     "hex": "B8923A",
+     "roughness": 0.45,
+     "metallic": 0.7,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Gal_LivingFrame_Faded_M1",
+     "colour": "dark backing",
+     "hex": "3B2A1E",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Gal_LivingFrame_Faded_M2",
+     "colour": "sky",
+     "hex": "ACADA1",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Gal_LivingFrame_Faded_M3",
+     "colour": "hills",
+     "hex": "A9AB89",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Gal_LivingFrame_Faded_M4",
+     "colour": "sun",
+     "hex": "C2B28A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Gal_LivingFrame_Faded",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "RailT",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailT_L1",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "RailB",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailB_L1",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "RailL",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        -0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailL_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        -0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "RailR",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailR_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Backing",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.02,
+        1.3
+       ],
+       "centre": [
+        0,
+        0.03,
+        0.75
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Rosette0",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette0_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Rosette1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette1_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Rosette2",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette2_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Rosette3",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette3_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_Gal_LivingFrame_Faded_Canvas",
+     "parent": "Prop_Gal_LivingFrame_Faded",
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "canvas (painting; colours change per state)",
+     "parts": [
+      {
+       "name": "Sky",
+       "shape": "box",
+       "size": [
+        1.76,
+        0.01,
+        1.26
+       ],
+       "centre": [
+        0,
+        0.015,
+        0.75
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Meadow",
+       "shape": "box",
+       "size": [
+        1.76,
+        0.008,
+        0.2
+       ],
+       "centre": [
+        0,
+        0.004,
+        0.22
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Hill0",
+       "shape": "box",
+       "size": [
+        1.056,
+        0.008,
+        0.42
+       ],
+       "centre": [
+        -0.35201,
+        0.006,
+        0.31
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        -1.13,
+        0
+       ]
+      },
+      {
+       "name": "Hill1",
+       "shape": "box",
+       "size": [
+        1.0299,
+        0.008,
+        0.42
+       ],
+       "centre": [
+        0.07752,
+        0.004,
+        0.36
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        12.092,
+        0
+       ]
+      },
+      {
+       "name": "Hill2",
+       "shape": "box",
+       "size": [
+        0.7756,
+        0.008,
+        0.42
+       ],
+       "centre": [
+        0.4922,
+        0.002,
+        0.41
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        -1.448,
+        0
+       ]
+      },
+      {
+       "name": "Sun",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.13,
+       "r2": 0.13,
+       "length": 0.008,
+       "centre": [
+        0.5,
+        0.004,
+        1.12
+       ],
+       "slot": 4,
+       "segments": 16,
+       "lod1": {
+        "segments": 8
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Canvas",
+     "location": [
+      0,
+      -0.03,
+      0.75
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.75,
+      0.03
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.25,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.25
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Gal_LivingFrame_Faded_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      0.1,
+      1.5
+     ],
+     "centre": [
+      0,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 484,
+    "lod1_triangles": 196,
+    "lod1_ratio": 0.405,
+    "objects": {
+     "Prop_Gal_LivingFrame_Faded": 364,
+     "Prop_Gal_LivingFrame_Faded_Canvas": 120
+    },
+    "bounds_min": [
+     -1.0,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     0.04,
+     1.5
+    ],
+    "dimensions": [
+     2.0,
+     0.1,
+     1.5
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ee3b91e89ea54ee46d0a08cfe5100abef489c5292e9df103c1d6c971ca07da1d"
+  },
+  {
+   "asset": "Prop_Gal_LivingFrame_Half",
+   "kind": "Prop",
+   "seed": 1313,
+   "state": "Half",
+   "state_of": "Prop_Gal_LivingFrame",
+   "fade": 0.45,
+   "spec": {
+    "row": 13,
+    "gap": "G13",
+    "size_m": "2 x 1.5 m frame",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX slab",
+    "sockets": [
+     "Canvas",
+     "Light"
+    ],
+    "states": [
+     "Faded",
+     "Half",
+     "Restored"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Gal_LivingFrame_Half_M0",
+     "colour": "gilded frame",
+     "hex": "B8923A",
+     "roughness": 0.45,
+     "metallic": 0.7,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Gal_LivingFrame_Half_M1",
+     "colour": "dark backing",
+     "hex": "3B2A1E",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Gal_LivingFrame_Half_M2",
+     "colour": "sky",
+     "hex": "88ABBF",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Gal_LivingFrame_Half_M3",
+     "colour": "hills",
+     "hex": "7EA366",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Gal_LivingFrame_Half_M4",
+     "colour": "sun",
+     "hex": "D8BC69",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Gal_LivingFrame_Half",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "RailT",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailT_L1",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "RailB",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailB_L1",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "RailL",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        -0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailL_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        -0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "RailR",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailR_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Backing",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.02,
+        1.3
+       ],
+       "centre": [
+        0,
+        0.03,
+        0.75
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Rosette0",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette0_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Rosette1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette1_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Rosette2",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette2_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Rosette3",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette3_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_Gal_LivingFrame_Half_Canvas",
+     "parent": "Prop_Gal_LivingFrame_Half",
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "canvas (painting; colours change per state)",
+     "parts": [
+      {
+       "name": "Sky",
+       "shape": "box",
+       "size": [
+        1.76,
+        0.01,
+        1.26
+       ],
+       "centre": [
+        0,
+        0.015,
+        0.75
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Meadow",
+       "shape": "box",
+       "size": [
+        1.76,
+        0.008,
+        0.2
+       ],
+       "centre": [
+        0,
+        0.004,
+        0.22
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Hill0",
+       "shape": "box",
+       "size": [
+        1.056,
+        0.008,
+        0.42
+       ],
+       "centre": [
+        -0.35201,
+        0.006,
+        0.31
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        -1.13,
+        0
+       ]
+      },
+      {
+       "name": "Hill1",
+       "shape": "box",
+       "size": [
+        1.0299,
+        0.008,
+        0.42
+       ],
+       "centre": [
+        0.07752,
+        0.004,
+        0.36
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        12.092,
+        0
+       ]
+      },
+      {
+       "name": "Hill2",
+       "shape": "box",
+       "size": [
+        0.7756,
+        0.008,
+        0.42
+       ],
+       "centre": [
+        0.4922,
+        0.002,
+        0.41
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        -1.448,
+        0
+       ]
+      },
+      {
+       "name": "Sun",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.13,
+       "r2": 0.13,
+       "length": 0.008,
+       "centre": [
+        0.5,
+        0.004,
+        1.12
+       ],
+       "slot": 4,
+       "segments": 16,
+       "lod1": {
+        "segments": 8
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Canvas",
+     "location": [
+      0,
+      -0.03,
+      0.75
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.75,
+      0.03
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.25,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.25
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Gal_LivingFrame_Half_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      0.1,
+      1.5
+     ],
+     "centre": [
+      0,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 484,
+    "lod1_triangles": 196,
+    "lod1_ratio": 0.405,
+    "objects": {
+     "Prop_Gal_LivingFrame_Half": 364,
+     "Prop_Gal_LivingFrame_Half_Canvas": 120
+    },
+    "bounds_min": [
+     -1.0,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     0.04,
+     1.5
+    ],
+    "dimensions": [
+     2.0,
+     0.1,
+     1.5
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e5599bf11f58d50b9817aa69754ab0afc7a4dfa8dc93fad8abdc854b42fc9f0c"
+  },
+  {
+   "asset": "Prop_Gal_LivingFrame_Restored",
+   "kind": "Prop",
+   "seed": 1313,
+   "state": "Restored",
+   "state_of": "Prop_Gal_LivingFrame",
+   "fade": 0.0,
+   "spec": {
+    "row": 13,
+    "gap": "G13",
+    "size_m": "2 x 1.5 m frame",
+    "tri_cap": 3000,
+    "lod": "LOD0/1",
+    "collision": "UCX slab",
+    "sockets": [
+     "Canvas",
+     "Light"
+    ],
+    "states": [
+     "Faded",
+     "Half",
+     "Restored"
+    ]
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Gal_LivingFrame_Restored_M0",
+     "colour": "gilded frame",
+     "hex": "B8923A",
+     "roughness": 0.45,
+     "metallic": 0.7,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Gal_LivingFrame_Restored_M1",
+     "colour": "dark backing",
+     "hex": "3B2A1E",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Gal_LivingFrame_Restored_M2",
+     "colour": "sky",
+     "hex": "5FA8E0",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Gal_LivingFrame_Restored_M3",
+     "colour": "hills",
+     "hex": "4E9A3E",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Gal_LivingFrame_Restored_M4",
+     "colour": "sun",
+     "hex": "F2C744",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Gal_LivingFrame_Restored",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "RailT",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailT_L1",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "RailB",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailB_L1",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.08,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "RailL",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        -0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailL_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        -0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "RailR",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "RailR_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.08,
+        1.26
+       ],
+       "centre": [
+        0.94,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Backing",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.02,
+        1.3
+       ],
+       "centre": [
+        0,
+        0.03,
+        0.75
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Rosette0",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette0_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Rosette1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette1_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        1.44
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Rosette2",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette2_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        -0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      },
+      {
+       "name": "Rosette3",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true,
+       "lod1": {
+        "drop": true
+       }
+      },
+      {
+       "name": "Rosette3_L1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.1,
+        0.12
+       ],
+       "centre": [
+        0.94,
+        -0.01,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": false,
+       "lod1": {
+        "only": true
+       }
+      }
+     ]
+    },
+    {
+     "name": "Prop_Gal_LivingFrame_Restored_Canvas",
+     "parent": "Prop_Gal_LivingFrame_Restored",
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "canvas (painting; colours change per state)",
+     "parts": [
+      {
+       "name": "Sky",
+       "shape": "box",
+       "size": [
+        1.76,
+        0.01,
+        1.26
+       ],
+       "centre": [
+        0,
+        0.015,
+        0.75
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Meadow",
+       "shape": "box",
+       "size": [
+        1.76,
+        0.008,
+        0.2
+       ],
+       "centre": [
+        0,
+        0.004,
+        0.22
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Hill0",
+       "shape": "box",
+       "size": [
+        1.056,
+        0.008,
+        0.42
+       ],
+       "centre": [
+        -0.35201,
+        0.006,
+        0.31
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        -1.13,
+        0
+       ]
+      },
+      {
+       "name": "Hill1",
+       "shape": "box",
+       "size": [
+        1.0299,
+        0.008,
+        0.42
+       ],
+       "centre": [
+        0.07752,
+        0.004,
+        0.36
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        12.092,
+        0
+       ]
+      },
+      {
+       "name": "Hill2",
+       "shape": "box",
+       "size": [
+        0.7756,
+        0.008,
+        0.42
+       ],
+       "centre": [
+        0.4922,
+        0.002,
+        0.41
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        -1.448,
+        0
+       ]
+      },
+      {
+       "name": "Sun",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.13,
+       "r2": 0.13,
+       "length": 0.008,
+       "centre": [
+        0.5,
+        0.004,
+        1.12
+       ],
+       "slot": 4,
+       "segments": 16,
+       "lod1": {
+        "segments": 8
+       }
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Canvas",
+     "location": [
+      0,
+      -0.03,
+      0.75
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.75,
+      0.03
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.25,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.25
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Gal_LivingFrame_Restored_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      0.1,
+      1.5
+     ],
+     "centre": [
+      0,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 484,
+    "lod1_triangles": 196,
+    "lod1_ratio": 0.405,
+    "objects": {
+     "Prop_Gal_LivingFrame_Restored": 364,
+     "Prop_Gal_LivingFrame_Restored_Canvas": 120
+    },
+    "bounds_min": [
+     -1.0,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     0.04,
+     1.5
+    ],
+    "dimensions": [
+     2.0,
+     0.1,
+     1.5
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "79ba20de915ae1ead04569412bbc129d1cbfc05fdff98e7230022bb2bb108bd4"
+  }
+ ]
+}

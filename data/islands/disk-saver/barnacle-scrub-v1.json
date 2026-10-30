@@ -1,0 +1,25 @@
+{
+  "v": 1,
+  "quest": "q_barnacle_scrub",
+  "lore": "Down on the archive reef every save is kept twice, two stone tablets side by side. Barnacles settle on the tablets all season and quietly eat the carving; nobody can tell until Diver Pell swims down and reads them. Pell carries a checksum slate that says what each tablet should read. If both tablets of a save are eaten before Pell gets there, the save is gone. Swim too often, though, and Pell runs out of air for the season.",
+  "reef": {"keys_per_island": 200, "ticks": 8000, "barnacles_per_kilotick": 720, "rate": 10, "checksum": true, "max_lost": 105, "max_reads": 200000},
+  "islands": [
+    {"id": "cache_north"},
+    {"id": "cache_south"},
+    {"id": "vault_east"},
+    {"id": "archive_a"},
+    {"id": "archive_b"},
+    {"id": "archive_c"}
+  ],
+  "seed": 1,
+  "npc": {
+    "name": "Diver Pell",
+    "lines": {
+      "start": "Twelve hundred saves, two tablets each, and the barnacles never sleep.",
+      "dive": "Down I go. Read both tablets, check the slate, fix the eaten one.",
+      "barnacle": "Another barnacle on the left tablet. Good thing the right one's clean.",
+      "win": "Season's over and the reef still reads true. Hardly a save lost.",
+      "fail": "Too many saves eaten on both tablets, or I'm out of air. Plan the dives better."
+    }
+  }
+}

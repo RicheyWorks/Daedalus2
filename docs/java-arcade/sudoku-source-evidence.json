@@ -1,0 +1,246 @@
+{
+  "sourceRepository": "RicheyWorks/sudokupro",
+  "sourceCommit": "973c73a35f8659a17022232f0996d4ffb0095997",
+  "verification": "Source text inspected through authorized GitHub tools. No Java compilation, Java tests or live requests were run.",
+  "sources": [
+    {
+      "path": "model/src/main/java/com/xai/sudokupro/model/api/BoardState.java",
+      "gitBlobSha": "f0b1b37acaac35cde5822f6c3c2d6425d0d2fcab",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/model/src/main/java/com/xai/sudokupro/model/api/BoardState.java"
+    },
+    {
+      "path": "model/src/main/java/com/xai/sudokupro/model/api/SessionInfo.java",
+      "gitBlobSha": "30c087fc472f24c38867e9c8e1ee8497df7eb330",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/model/src/main/java/com/xai/sudokupro/model/api/SessionInfo.java"
+    },
+    {
+      "path": "model/src/main/java/com/xai/sudokupro/model/SudokuCellView.java",
+      "gitBlobSha": "c0c611b10cc3b2cabe2fc40c648f0a6085b6b4d3",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/model/src/main/java/com/xai/sudokupro/model/SudokuCellView.java"
+    },
+    {
+      "path": "model/src/main/java/com/xai/sudokupro/model/SudokuCell.java",
+      "gitBlobSha": "76345430123d948fbc52357e9dd9c6bb5f9f1758",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/model/src/main/java/com/xai/sudokupro/model/SudokuCell.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/controller/SudokuGameController.java",
+      "gitBlobSha": "66e5bd7ed6fdf8ceb53e10964e00ad4e616ce5e3",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/controller/SudokuGameController.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/controller/WebSocketController.java",
+      "gitBlobSha": "0ff64661aab3b80119499b4096f6115aff061b9b",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/controller/WebSocketController.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/config/SecurityConfig.java",
+      "gitBlobSha": "438d5593563582da313e4401615aadc1aff915d7",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/config/SecurityConfig.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/controller/SessionController.java",
+      "gitBlobSha": "3a76306dd202881b2fccd5a2dbe7220843ca3240",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/controller/SessionController.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/websocket/MultiplayerBroadcaster.java",
+      "gitBlobSha": "e22723b5cab51814f02ff9c490d02d8a74371ad6",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/websocket/MultiplayerBroadcaster.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/controller/ApiExceptionAdvice.java",
+      "gitBlobSha": "656c253c2b3c88e4588c1b739415d9f542507e2c",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/controller/ApiExceptionAdvice.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/service/GameService.java",
+      "gitBlobSha": "47c309ac041166544a608c4e08fe8449a2934995",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/service/GameService.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/service/GameLockManager.java",
+      "gitBlobSha": "554a19f875ce6c658d2594224731cfeb658ec200",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/service/GameLockManager.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/service/auth/WsTicketService.java",
+      "gitBlobSha": "225d6ae407a99bbafab66c0abefef67b8f039d31",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/service/auth/WsTicketService.java"
+    },
+    {
+      "path": "server/src/main/java/com/xai/sudokupro/config/TicketHandshakeHandler.java",
+      "gitBlobSha": "a27bc94c490932bdd7d8d6c288668ed5e165a10d",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/main/java/com/xai/sudokupro/config/TicketHandshakeHandler.java"
+    },
+    {
+      "path": "client/src/main/java/com/xai/sudokupro/client/GameClient.java",
+      "gitBlobSha": "dd22b0e151ea7ae712aa94ec3fd0d8f4c2e475f7",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/client/src/main/java/com/xai/sudokupro/client/GameClient.java"
+    },
+    {
+      "path": "client/src/main/java/com/xai/sudokupro/client/net/ServerApi.java",
+      "gitBlobSha": "a8eaecb28c800ed02bc459953812f1b92b993160",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/client/src/main/java/com/xai/sudokupro/client/net/ServerApi.java"
+    },
+    {
+      "path": "client/src/main/java/com/xai/sudokupro/client/net/ReconnectPolicy.java",
+      "gitBlobSha": "421cc6b9b3fc2647979550f96cbc8ed81b52d10d",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/client/src/main/java/com/xai/sudokupro/client/net/ReconnectPolicy.java"
+    },
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/model/api/BoardStateTest.java",
+      "gitBlobSha": "728cdac12665677c768db30ba571e88ae90edfff",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/test/java/com/xai/sudokupro/model/api/BoardStateTest.java"
+    },
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/controller/SessionCsrfBootstrapTest.java",
+      "gitBlobSha": "8fddf5237618ba0cbc189c3df0e3c7bef83c8a4d",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/test/java/com/xai/sudokupro/controller/SessionCsrfBootstrapTest.java"
+    },
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/controller/WebSocketControllerTest.java",
+      "gitBlobSha": "0d814641811554936685f0ec24f8b5300e62b9f3",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/test/java/com/xai/sudokupro/controller/WebSocketControllerTest.java"
+    },
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/controller/WebSocketCredentialTest.java",
+      "gitBlobSha": "587366c6210eca0af037a044f5e205a68e8ef439",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/test/java/com/xai/sudokupro/controller/WebSocketCredentialTest.java"
+    },
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/config/SecurityRulesTest.java",
+      "gitBlobSha": "00a946f480254f4900d9bd4eb166c84fc4206e27",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/test/java/com/xai/sudokupro/config/SecurityRulesTest.java"
+    },
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/service/RewardOwnershipTest.java",
+      "gitBlobSha": "6c7d5c25cec359d320976435db0fd85b1a5f1a0e",
+      "url": "https://github.com/RicheyWorks/sudokupro/blob/973c73a35f8659a17022232f0996d4ffb0095997/server/src/test/java/com/xai/sudokupro/service/RewardOwnershipTest.java"
+    }
+  ],
+  "boardFields": [
+    "gameId",
+    "playerId",
+    "difficulty",
+    "chaosMode",
+    "mirrorMode",
+    "solved",
+    "lives",
+    "score",
+    "hintCount",
+    "moveCount",
+    "elapsedSeconds",
+    "timeLimitSeconds",
+    "secondsLeft",
+    "timeUp",
+    "cells"
+  ],
+  "cellFields": [
+    "value",
+    "isGiven",
+    "lastModified",
+    "moveSource",
+    "pencilMarks",
+    "conflicts",
+    "hintStrength",
+    "strategy",
+    "isEditable",
+    "playerId",
+    "displayColor"
+  ],
+  "sourceChecks": [
+    {
+      "id": "board_has_no_hidden_solution_field",
+      "passed": true,
+      "basis": "BoardState record fields; BoardStateTest serializedStateContainsNoSolutionAndFullGrid checks serialized output."
+    },
+    {
+      "id": "ws_anonymous_rejected",
+      "passed": true,
+      "basis": "WebSocketController.afterConnectionEstablished"
+    },
+    {
+      "id": "ws_mutations_reject_spectator",
+      "passed": true,
+      "basis": "WebSocketController switch"
+    },
+    {
+      "id": "client_move_source_stamped_player",
+      "passed": true,
+      "basis": "WebSocketController.readClientMove"
+    },
+    {
+      "id": "new_game_is_direct_board_state",
+      "passed": true,
+      "basis": "SudokuGameController.createGame"
+    },
+    {
+      "id": "native_basic_auth_supported",
+      "passed": true,
+      "basis": "ServerApi request builder and GameSocket native WS described by current client"
+    },
+    {
+      "id": "csrf_cookie_repository",
+      "passed": true,
+      "basis": "SecurityConfig"
+    },
+    {
+      "id": "generic_error_from_is_socket_id",
+      "passed": true,
+      "basis": "WebSocketController generic exception handler"
+    },
+    {
+      "id": "game_end_is_string_notification",
+      "passed": true,
+      "basis": "MultiplayerBroadcaster.onGameEnd; not a win response"
+    },
+    {
+      "id": "editable_view_is_empty_only",
+      "passed": true,
+      "basis": "SudokuCell.isEditable; board ownership/rules remain authoritative"
+    },
+    {
+      "id": "wire_has_no_revision_or_command_id",
+      "passed": true,
+      "basis": "BoardState fields and inspected WS envelope; no general idempotency guarantee"
+    }
+  ],
+  "existingTestsReadNotExecuted": [
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/model/api/BoardStateTest.java",
+      "methods": [
+        "serializedStateContainsNoSolutionAndFullGrid",
+        "toBoardRoundTripsValuesGivensAndIdentity",
+        "aBoardBuiltFromTheWireKeepsTheServersClock"
+      ]
+    },
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/controller/SessionCsrfBootstrapTest.java",
+      "methods": [
+        "sessionReportsTheConfiguredHeaderAndIssuesTheXsrfCookie",
+        "theBootstrappedTokenActuallySatisfiesTheCsrfFilter",
+        "sessionIsNotReachableAnonymously"
+      ]
+    },
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/controller/WebSocketControllerTest.java",
+      "methods": [
+        "unauthenticatedConnectionIsClosedAndCreatesNoGame",
+        "ownerMoveWithoutSourceFieldIsAppliedAndStampedPlayer",
+        "clientSuppliedSourceIsIgnoredSoMovesCannotMasqueradeAsAutosolve",
+        "competitiveGamesCannotBeSpectated",
+        "freePlayGamesRemainSpectatable",
+        "spectatorsCanWatchButNotMutate"
+      ]
+    },
+    {
+      "path": "server/src/test/java/com/xai/sudokupro/config/SecurityRulesTest.java",
+      "methods": [
+        "gameAndEconomyApisRequireAuthentication",
+        "mutatingApiCallsWithoutACsrfTokenAreRejected",
+        "adminEndpointsAreForbiddenToAnOrdinaryAuthenticatedPlayer"
+      ]
+    }
+  ]
+}

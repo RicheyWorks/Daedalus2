@@ -1,0 +1,121 @@
+{
+  "schema": "daedalus.source-snapshot-request.v1",
+  "profile": "legacy-r22-saved-boundary.v1",
+  "campaign": "fixture-campaign",
+  "captured_utc": "2026-10-26T10:03:00Z",
+  "max_source_age_seconds": 120,
+  "identity": {
+    "owner": "fixture-outgoing",
+    "session": "fixture-session-1",
+    "host": "fixture-host"
+  },
+  "session_ref": "C:/Synthetic/Original/fixture-session-1",
+  "runtime": {
+    "name": "fixture-runtime",
+    "version": "3.10",
+    "artifact_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+    "generation": "editor:9000@2026-10-26T09:00:00.1234567Z"
+  },
+  "source_state": {
+    "dirty": null,
+    "exceptions": []
+  },
+  "inputs": {
+    "session": {
+      "status": "present",
+      "path": "source-snapshot-session.json",
+      "logical_path": "C:/Synthetic/Original/session.json",
+      "sha256": "9e59542ca3ca355e66d058f73cad3a601043c7bc042d315f07bfa5bc6e02d5e7",
+      "bytes": 335,
+      "reason": null
+    },
+    "launch": {
+      "status": "present",
+      "path": "source-snapshot-launch.json",
+      "logical_path": "C:/Synthetic/Original/launch.json",
+      "sha256": "787809ced6ec23dd2454486a449dc514781be91e0440ff5a286b5145cf436142",
+      "bytes": 52,
+      "reason": null
+    },
+    "config": {
+      "status": "present",
+      "path": "source-snapshot-config.json",
+      "logical_path": "C:/Synthetic/Original/config.json",
+      "sha256": "53f1e751b306c04a75a62c8846981e960949d596db7e3d277e65adc29884f17b",
+      "bytes": 167,
+      "reason": null
+    },
+    "owner": {
+      "status": "present",
+      "path": "source-snapshot-owner.json",
+      "logical_path": "C:/Synthetic/Original/owner.json",
+      "sha256": "fa06803b95d8f1611c6d4efd60f137f7881380e81e49e5cfdd50236ec8773a6f",
+      "bytes": 200,
+      "reason": null
+    },
+    "terminal": {
+      "status": "present",
+      "path": "source-snapshot-terminal.json",
+      "logical_path": "C:/Synthetic/Original/terminal.json",
+      "sha256": "468a97a3f6da1a120e60b33ee62d2daeaed8359c6c45efd28f7490fd2dea0fcf",
+      "bytes": 251,
+      "reason": null
+    },
+    "ledger": {
+      "status": "present",
+      "path": "source-snapshot-ledger.json",
+      "logical_path": "C:/Synthetic/Original/ledger.json",
+      "sha256": "6d23901e297afe718861b41bb091c8df9938614c6bd310e6b12fa436b699b25e",
+      "bytes": 198,
+      "reason": null
+    },
+    "monitor": {
+      "status": "present",
+      "path": "source-snapshot-monitor.json",
+      "logical_path": "C:/Synthetic/Original/monitor.json",
+      "sha256": "2d0ac16f147fec0891ae64cf2e808c3565772f4aa909ca06ffadb820c507b6f7",
+      "bytes": 296,
+      "reason": null
+    },
+    "native": {
+      "status": "present",
+      "path": "source-snapshot-native.json",
+      "logical_path": "C:/Synthetic/Original/native.json",
+      "sha256": "bc6b6d79b7a324c8e4d121bd28fad34cb914c2ee8f4597bba3c97201e2584f82",
+      "bytes": 222,
+      "reason": null
+    },
+    "catalog": {
+      "status": "present",
+      "path": "source-snapshot-catalog.json",
+      "logical_path": "C:/Synthetic/Original/catalog.json",
+      "sha256": "4d6eb7c6ee5eba2fadd75d09233f0fc4918840bb6d5f6f2fcaef90f88ea1eb77",
+      "bytes": 68,
+      "reason": null
+    },
+    "journal": {
+      "status": "present",
+      "path": "source-snapshot-journal.json",
+      "logical_path": "C:/Synthetic/Original/journal.json",
+      "sha256": "b6a8fa5974730a9d9d8ac54332e251348d6a1e0f293888d15221993fea2aaf44",
+      "bytes": 465,
+      "reason": null
+    },
+    "source": {
+      "status": "unknown",
+      "path": null,
+      "logical_path": null,
+      "sha256": null,
+      "bytes": null,
+      "reason": "No historical build-time fixture evidence"
+    },
+    "build": {
+      "status": "unknown",
+      "path": null,
+      "logical_path": null,
+      "sha256": null,
+      "bytes": null,
+      "reason": "No historical build-time fixture evidence"
+    }
+  }
+}

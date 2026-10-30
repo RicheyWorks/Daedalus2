@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "quest": "q_twin_pilots",
+  "lore": "Fog is coming in and every berth and buoy on the DiskSaver chart needs a pilot's call before it closes the harbour. Pilotmaster Cuthbert has two pilot boats and one bell. Every bell each boat runs one channel or holds. Split the round between the boats so that every call is made and both are home before the fog.",
+  "hook": {
+    "report_format": "daedalus-twin-pilots",
+    "field": "verdict",
+    "values": ["in_step", "late", "adrift"],
+    "par": "par",
+    "trap": "solo_bells",
+    "log": "routes[]"
+  },
+  "npc": {
+    "name": "Pilotmaster Cuthbert",
+    "lines": {
+      "in_step": "Both boats home on the par bell and not a berth missed. That's pilotage.",
+      "late": "Every call made, but the bell rang longer than it needed. Split the round more evenly.",
+      "adrift": "A berth uncalled or a boat still out in the fog. Bring them both home."
+    }
+  }
+}

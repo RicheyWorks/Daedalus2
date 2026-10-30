@@ -1,0 +1,11 @@
+.git
+.github
+.idea
+**/target
+PDFs
+Audit
+Code
+Vision
+_migration
+examples
+*.md

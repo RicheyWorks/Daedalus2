@@ -1,0 +1,81 @@
+{
+ "schema": "daedalus.decal/v1",
+ "asset": "Decal_Arcade_Poster_StarRun",
+ "seed": 2610264,
+ "generator": "tools/blender/arcade_prism_props_d.py",
+ "status": "NOT READY",
+ "textures": {
+  "BaseColor": {
+   "file": "T_Decal_Arcade_Poster_StarRun_BC.png",
+   "size": [
+    400,
+    600
+   ],
+   "srgb": true,
+   "compression": "TC_Default",
+   "sha12": "117c3326f054"
+  },
+  "Normal": {
+   "file": "T_Decal_Arcade_Poster_StarRun_N.png",
+   "size": [
+    400,
+    600
+   ],
+   "srgb": false,
+   "compression": "TC_Normalmap",
+   "green": "DirectX (UE native, no flip)",
+   "sha12": "a33bde352f6b"
+  },
+  "Opacity": {
+   "file": "T_Decal_Arcade_Poster_StarRun_M.png",
+   "size": [
+    400,
+    600
+   ],
+   "srgb": false,
+   "compression": "TC_Grayscale",
+   "sha12": "83ca5098d7f3"
+  }
+ },
+ "material": {
+  "name": "MI_Decal_Arcade_Poster_StarRun",
+  "parent": "M_Decal_ArcadePoster",
+  "domain": "DeferredDecal",
+  "blend_mode": "Translucent",
+  "decal_response": "ColorNormalRoughness",
+  "params": {
+   "BaseColorTex": "T_Decal_Arcade_Poster_StarRun_BC.png",
+   "NormalTex": "T_Decal_Arcade_Poster_StarRun_N.png",
+   "OpacityTex": "T_Decal_Arcade_Poster_StarRun_M.png",
+   "BaseColorTint": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "NormalStrength": 1.0,
+   "Roughness": 0.6,
+   "OpacityPower": 1.0,
+   "OpacityContrast": 1.0,
+   "Fade": 0.0,
+   "Tint": "FF4AD0",
+   "Title": "overlay text via MI/widget, no baked words"
+  },
+  "wiring": "BaseColor = BaseColorTex.rgb * BaseColorTint; Normal = FlattenNormal(NormalTex, 1-NormalStrength); Roughness = Roughness; Opacity = saturate(pow(OpacityTex.r, OpacityPower) * OpacityContrast)"
+ },
+ "projection": {
+  "size_cm": [
+   2.0,
+   60.0,
+   90.0
+  ],
+  "ue_DecalSize_half_extent": [
+   1.0,
+   30.0,
+   45.0
+  ],
+  "axes": "project along local -X into the surface; texture U = +Y, V = -Z (top of texture = up)",
+  "placement": "retro wall poster, 60 x 90 cm; any arcade wall",
+  "mesh": null
+ },
+ "relief_cm": 1.0
+}
