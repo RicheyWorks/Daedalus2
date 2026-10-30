@@ -8,6 +8,7 @@ import fair_par as fp  # noqa: E402
 import glimmerloom  # noqa: E402
 import glowmoss  # noqa: E402
 import spiritkite  # noqa: E402
+import wardens_accord  # noqa: E402
 
 
 class FairParTest(unittest.TestCase):
@@ -44,7 +45,7 @@ class FairParTest(unittest.TestCase):
                             break
                         g.step(bot(g, seed, k))  # raises ValueError on an illegal move
                     self.assertTrue(g.over)
-                    if start is not glimmerloom.start:  # Glimmerloom rolls each new day from its own RNG
+                    if start not in (glimmerloom.start, wardens_accord.start):  # these roll from their own RNG
                         self.assertEqual(before, g.rng.getstate())
 
     def test_fixture_is_current_and_tiers_are_ordered(self):

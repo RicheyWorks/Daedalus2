@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 		if (L.rfind("game=", 0) == 0) Rows.push_back(L);
 		else if (L.rfind("hash ", 0) == 0) Hashes.push_back(L);
 	}
-	Check("fixture has 9 par rows and 4 hash rows", Rows.size() == 9 && Hashes.size() == 4);
+	Check("fixture has one par row per game and difficulty, and 4 hash rows", Rows.size() == 3 * GameCount && Hashes.size() == 4);
 	for (const std::string& H : Hashes)
 	{
 		const int Run = Int(H, "run");
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 	}
 	bool Ok = false;
 	const std::vector<Row> Table = daedalus::prismpar::Table(Ok);
-	Check("every bot and demo move was legal", Ok && Table.size() == 9);
+	Check("every bot and demo move was legal", Ok && Table.size() == 3 * GameCount);
 	for (size_t I = 0; I < Table.size() && I < Rows.size(); ++I)
 	{
 		const Row& R = Table[I];

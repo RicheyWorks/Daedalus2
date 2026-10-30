@@ -19,8 +19,11 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import glimmerloom  # noqa: E402
+import facetlock  # noqa: E402
 import glowmoss  # noqa: E402
+import lumenpath  # noqa: E402
 import spiritkite  # noqa: E402
+import wardens_accord  # noqa: E402
 
 FIXTURE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "engines", "unreal", "core-test",
                        "prism_fair_par_parity.txt")
@@ -90,8 +93,41 @@ def glimmerloom_bot(g, run, k):
     return ("rest", 0, 0)
 
 
+def mixed(random_move):
+    """Casual bot for puzzle cabinets (G604 on): each move, a coin flip (salt 9) either follows the game's own
+    demo_action() (a player who sees the right idea) or makes a random legal move."""
+    def bot(g, run, k):
+        if uniform(BOT_SEED, run, k, 9) < 0.5:
+            return g.demo_action()
+        return random_move(g, run, k)
+    return bot
+
+
+def lumenpath_random(g, run, k):
+    """Toggle a random cell that can hold a mirror (row-major order)."""
+    n = len(g.grid)
+    cells = [(r, c) for r in range(n) for c in range(n) if g.grid[r][c] not in "*#"]
+    return cells[pick(BOT_SEED, run, k, 10, len(cells) - 1)]
+
+
+def wardens_random(g, run, k):
+    """Take one of the three offers or summon any affordable spirit, uniformly."""
+    options = [("take", i) for i in range(3)] + [("summon", i) for i in range(len(g.spirits)) if g.affordable(i)]
+    return options[pick(BOT_SEED, run, k, 11, len(options) - 1)]
+
+
+def facetlock_random(g, run, k):
+    """Slide a random row or column either way: v in [0, 4n) -> kind by v % 2, index (v // 2) % n, dir by v // 2n."""
+    n = g.cfg["size"]
+    v = pick(BOT_SEED, run, k, 12, 4 * n - 1)
+    return ("r" if v % 2 == 0 else "c", (v // 2) % n, 1 if v // (2 * n) == 0 else -1)
+
+
 GAMES = (("glowmoss", glowmoss.start, glowmoss_bot), ("spiritkite", spiritkite.start, spiritkite_bot),
-         ("glimmerloom", glimmerloom.start, glimmerloom_bot))
+         ("glimmerloom", glimmerloom.start, glimmerloom_bot),
+         ("lumenpath", lumenpath.start, mixed(lumenpath_random)),
+         ("wardens_accord", wardens_accord.start, mixed(wardens_random)),
+         ("facetlock", facetlock.start, mixed(facetlock_random)))
 
 
 def bot_round(start, bot, seed, difficulty):
