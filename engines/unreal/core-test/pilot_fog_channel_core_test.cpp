@@ -119,6 +119,13 @@ int main(int argc, char** argv)
 	static_assert(noexcept(FogBestCost(H)) && noexcept(FogCost(H, {})) && noexcept(FogValid(H)), "hot paths are noexcept");
 	Check("par without lanes = best cost", FogBestCost(H) == FogBest(H).Cost && FogBestCost(Good) == 0);
 
+	// Plug-in hook: same measures as Java FogChannelPilotAdapterTest pins for fog-1 (best 13, greedy 19).
+	const FogHarbour F1 = FogSeed("fog-1");
+	const FogReceiptMeasures MBest = FogMeasures(F1, FogBest(F1).Lanes), MGreedy = FogMeasures(F1, FogLoudestEcho(F1).Lanes);
+	Check("plug: best reading measures", MBest.Valid && MBest.Values == std::array<long long, 5>({ 5, 13, 0, 3, 1 }));
+	Check("plug: greedy reading measures", MGreedy.Valid && MGreedy.Values == std::array<long long, 5>({ 5, 19, 6, 1, 0 }));
+	Check("plug: fake reading refused", !FogMeasures(F1, { 9 }).Valid && std::string(FogActivityId) == "pilot.fog-channel");
+
 	// Missed echoes: free everywhere, and the dockhand holds course through the silence.
 	const FogHarbour Quiet{ { 0, 3 }, { { 0, 4 }, { 4, 0 } }, { { 5, 0, 2 }, { 0, 5, 2 } }, { 1, FogMissed, 0, FogMissed } };
 	Check("dockhand holds course on a missed echo", FogLoudestEcho(Quiet).Lanes == std::vector<int>({ 0, 0, 1, 1 }));

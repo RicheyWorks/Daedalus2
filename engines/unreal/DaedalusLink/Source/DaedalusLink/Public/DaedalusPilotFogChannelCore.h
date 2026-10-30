@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
 // G586 Fog Channel Pilot (2hot2trot), plain C++17, header-only, no Unreal types.
+// Daedalus placement: Shattered Planet harbour, quest q_pilot_through_fog. A host (Unreal or the Java server) builds
+// a harbour with FogSeed/FogSeedTier, lets the player name a lane per blast, then reports FogMeasures under activity
+// pilot.fog-channel; Java's FogChannelPilotAdapter issues the same G12 receipt (docs/contracts/activity-result-v1/ADAPTERS.md).
 // Must agree with com.daedalus.world.pilot.FogChannelPilot line for line (pilot_fog_channel_parity.txt, written by
 // FogChannelPilotTest.java and replayed by pilot_fog_channel_core_test.cpp). Scenarios are drawn from
 // daedalus::pyrandom::PyRandom (CPython random.Random(str)), the same draws as Java's PyStringRandom.
@@ -254,6 +257,22 @@ inline std::vector<std::string> FogExplainText(const FogHarbour& H)
 		Out.push_back(Line);
 	}
 	return Out;
+}
+
+// Daedalus plug-in hook: the G12 activity id and measures Java's FogChannelPilotAdapter reports, so an Unreal host
+// can fill the same receipt. Valid is false (and the measures zero) when Lanes is not a track through H.
+constexpr const char* FogActivityId = "pilot.fog-channel";
+constexpr const char* FogMeasureNames[5] = { "blasts", "cost", "over_par", "stars", "quest_done" };
+struct FogReceiptMeasures { bool Valid = false; std::array<long long, 5> Values{}; };
+
+inline FogReceiptMeasures FogMeasures(const FogHarbour& H, const std::vector<int>& Lanes) noexcept
+{
+	FogReceiptMeasures M;
+	const FogJudgement J = FogJudge(H, Lanes);
+	if (J.Cost == FogInvalid) return M;
+	M.Valid = true;
+	M.Values = { H.Blasts(), J.Cost, J.Cost - J.Par, J.Stars, J.QuestDone ? 1 : 0 };
+	return M;
 }
 
 } } // namespace daedalus::pilot
