@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2).
+"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -9,6 +9,7 @@ DaedalusDiskSaver<Game>Core.h ports replay every line in disksaver_<game>_core_t
 
 Batch 1: G556 Manifest Match, G557 Twin Pilots, G558 Quayside Shove, G559 Sack Chute.
 Batch 2: G560 Seal Roll, G561 Channel Dash, G562 Boom Defence, G563 Salvage Sale.
+Batch 3: G564 Rope Run, G565 Belfry Changes, G566 Tram Shunt.
 Cases cover the real tools/world_census fixtures (several seeds), synthetic censuses, and
 hand-laid edge layouts (unsolvable, stuck, disconnected) injected through the tool's own
 play() by swapping its layout function for one call.
@@ -27,14 +28,17 @@ from contextlib import contextmanager
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import belfry_changes as bc  # noqa: E402
 import boom_defence as bd  # noqa: E402
 import census_budget as cb  # noqa: E402
 import channel_dash as cd  # noqa: E402
 import manifest_match as mm  # noqa: E402
 import quayside_shove as qs  # noqa: E402
+import rope_run as rr  # noqa: E402
 import sack_chute as sc  # noqa: E402
 import salvage_sale as ss  # noqa: E402
 import seal_roll as sr  # noqa: E402
+import tram_shunt as ts  # noqa: E402
 import twin_pilots as tp  # noqa: E402
 
 ROOT = cb.ROOT
@@ -530,8 +534,167 @@ def ss_lines():
                     out.append(f"T {t or '-'} err {r}")
     return out
 
+
+# ---------------------------------------------------------------- G564 Rope Run
+RR_KINDS = [("is not N", "letter"), ("already on the dock", "dock"), ("runs off the quay", "off"),
+            ("cross itself", "cross")]
+
+
+def rr_layout(q):
+    rows = "/".join("".join(str(q["grip"][(r, c)]) if (r, c) in q["grip"] else "#" for c in range(rr.COLS))
+                    for r in range(rr.ROWS))
+    return f"L {rows} {rc(q['start'])} {rc(q['dock'])}"
+
+
+def rr_greedy_route(q):
+    open_cells, cell, seen, out = set(q["grip"]), q["start"], {q["start"]}, ""
+    while cell != q["dock"]:
+        opts = [(q["grip"][n], -"NSEW".index(d), n, d) for d, n in rr.neighbours(cell, open_cells) if n not in seen]
+        if not opts:
+            break
+        _, _, cell, d = max(opts)
+        seen.add(cell)
+        out += d
+    return out
+
+
+def rr_hand(rows, start, dock):
+    grip = {(r, c): int(ch) for r, row in enumerate(rows) for c, ch in enumerate(row) if ch != "#"}
+    par, route = rr.solve(grip, start, dock)
+    return {"labels": ["h"], "cleats": [], "crates": {(r, c) for r, row in enumerate(rows) for c, ch in enumerate(row) if ch == "#"},
+            "grip": grip, "start": start, "dock": dock, "par": par, "route": route}
+
+
+def rr_lines():
+    out = ["# disksaver rope_run parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    cases.append(("hand_dock_boxed_in", SYN["syn5"], 0, rr_hand(["111111", "111111", "1111#1", "111#1#", "1111#1"], (0, 0), (3, 4))))
+    cases.append(("hand_next_door", SYN["syn5"], 0, rr_hand(["511111", "141111", "111111", "111111", "111115"], (0, 0), (0, 1))))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(rr, "quay", lambda d, s=0, h=hand: h) if hand else patched(rr, "FORMAT", rr.FORMAT)
+        with ctx:
+            q = rr.quay(doc, seed)
+            route = q["route"] or ""
+            out.append(f"C {cname}")
+            out.append(rr_layout(q))
+            out.append(f"P {-1 if q['par'] is None else q['par']} {route or '-'} {rr.greedy(q['grip'], q['start'], q['dock'])}")
+            tries = [route, "", route[:-1], route + "N", "X", "NNNNN", "SSSSS", "EEEEEE", "WWWWWW", "NS", "EW",
+                     route[::-1], rr_greedy_route(q), "ESWN" * 2]
+            for t in tries:
+                ok, r = run(lambda m=t: rr.play(doc, seed, route=m), RR_KINDS)
+                if ok:
+                    out.append(f"T {t or '-'} ok {r['grip']} {int(r['on_dock'])} {r['verdict']}")
+                else:
+                    out.append(f"T {t or '-'} err {r}")
+    return out
+
+
+# ---------------------------------------------------------------- G565 Belfry Changes
+BC_KINDS = [("is not places", "format"), ("places run", "range"), ("pairs overlap", "overlap"), ("must rest", "rest")]
+
+
+def bc_text(changes):
+    return ",".join("+".join(str(p + 1) for p in c) for c in changes)
+
+
+def bc_lines():
+    out = ["# disksaver belfry_changes parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    for k, h in {"hand_one_island": (1, 1, (2, 1, 3, 4, 5)), "hand_tenor_last": (5, 5, (5, 4, 3, 2, 1)),
+                 "hand_six_bells": (6, 3, (3, 1, 2, 6, 4, 5))}.items():
+        cases.append((k, SYN["syn5"], 0, h))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(bc, "ring", lambda d, s=0, h=hand: (["h"] * len(h[2]), frozenset(range(1, h[0] + 1)), h[1], tuple(h[2]))) \
+            if hand else patched(bc, "FORMAT", bc.FORMAT)
+        with ctx:
+            names, islands, tenor, start = bc.ring(doc, seed)
+            n = len(start)
+            out.append(f"C {cname}")
+            out.append(f"L {lst(start)} {len(islands)} {tenor}")
+            par, plan = bc.solve(start, islands, tenor)
+            spar, splan = bc.solve(start, islands, tenor, single=True)
+            out.append(f"P {par} {bc_text(plan) or '-'} {spar}")
+            p = bc_text(plan)
+            tries = [p, "", bc_text(plan[:-1]), (p + ",1") if p else "1", bc_text(splan), "1+2", "0", str(n), "x",
+                     "1+3,1+3", "1,1,1,1", "2,1,2,1,2,1", "1+3,2+4", "+1", "3+1", ",".join(["1"] * 12)]
+            for t in tries:
+                ok, r = run(lambda m=t: bc.play(doc, seed, changes=m), BC_KINDS)
+                if ok:
+                    out.append(f"T {t or '-'} ok {r['count']} {lst(r['final'])} {lst(r['led'])} {r['verdict']}")
+                else:
+                    out.append(f"T {t or '-'} err {r}")
+    return out
+
+
+# ---------------------------------------------------------------- G566 Tram Shunt
+TS_KINDS = [("is not FROM+TO", "format"), ("already out", "out"), ("not possible", "impossible")]
+
+
+def ts_greedy_moves(order):
+    s, n, out = (tuple(order), (), (), 1), len(order), []
+    while s[3] <= n and len(out) <= 200:
+        for m in ("inout", "Aout", "Bout"):
+            t = ts.step(s, m)
+            if t is not None:
+                s = t
+                out.append(m)
+                break
+        else:
+            if not s[0]:
+                break
+            w = s[0][0]
+            fits = [(top, m) for top, m in ((s[1][-1] if s[1] else None, "inA"), (s[2][-1] if s[2] else None, "inB"))
+                    if top is not None and top > w]
+            m = min(fits)[1] if fits else ("inA" if not s[1] else "inB" if not s[2] else "inA")
+            s = ts.step(s, m)
+            out.append(m)
+    return out
+
+
+def ts_lines():
+    out = ["# disksaver tram_shunt parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    for k, order in {"hand_in_order": (1, 2, 3, 4, 5, 6), "hand_reversed": (6, 5, 4, 3, 2, 1),
+                     "hand_four": (3, 1, 4, 2), "hand_one": (1,)}.items():
+        cases.append((k, SYN["syn5"], 0, order))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(ts, "train", lambda d, s=0, h=hand: (["h"] * len(h), tuple(h))) if hand else \
+            patched(ts, "FORMAT", ts.FORMAT)
+        with ctx:
+            names, order = ts.train(doc, seed)
+            out.append(f"C {cname}")
+            out.append(f"L {lst(order)}")
+            ok, pr = run(lambda: ts.solve(order), [("cannot marshal", "unsolvable")])
+            if not ok:
+                out.append(f"P err {pr}")
+                continue
+            par, plan = pr
+            g = ts.greedy(order)
+            out.append(f"P {par} {','.join(plan) or '-'} {-1 if g is None else g}")
+            p = ",".join(plan)
+            tries = [p, "", ",".join(plan[:-1]), p + ",inout", "inout", "xx", "AA", "inA,inB,inA,inB,inA,inB",
+                     ",".join(ts_greedy_moves(order)), "inA,Aout", "inB,BA,Aout", "Bout", "outA",
+                     p.replace("inA", "inB", 1)]
+            for t in tries:
+                ok, r = run(lambda m=t: ts.play(doc, seed, moves=m), TS_KINDS)
+                if ok:
+                    out.append(f"T {t or '-'} ok {r['count']} {r['out']} {r['verdict']}")
+                else:
+                    out.append(f"T {t or '-'} err {r}")
+    return out
+
 GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": qs_lines, "sack_chute": sc_lines,
-         "seal_roll": sr_lines, "channel_dash": cd_lines, "boom_defence": bd_lines, "salvage_sale": ss_lines}
+         "seal_roll": sr_lines, "channel_dash": cd_lines, "boom_defence": bd_lines, "salvage_sale": ss_lines,
+         "rope_run": rr_lines, "belfry_changes": bc_lines, "tram_shunt": ts_lines}
 
 
 def texts():
