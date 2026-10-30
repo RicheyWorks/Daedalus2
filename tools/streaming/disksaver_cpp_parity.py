@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: MIT
-"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5, G578 batch 6, G579 batch 7, G580 batch 8).
+"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5, G578 batch 6, G579 batch 7, G580 batch 8;
+G581 seed spec draws from tools/streaming/disksaver_seed_spec.py).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -52,6 +53,7 @@ import budget_ledger as bl  # noqa: E402
 import caulking_check as ck  # noqa: E402
 import census_budget as cb  # noqa: E402
 import census_riddles as cr  # noqa: E402
+import disksaver_seed_spec as dss  # noqa: E402
 import ebb_eviction as ee  # noqa: E402
 import harbour_cryptogram as hc  # noqa: E402
 import last_crate as lc  # noqa: E402
@@ -2050,7 +2052,7 @@ GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": 
          "bottle_census": bc_census_lines, "ebb_eviction": ee_lines, "beacon_watch": bw_lines,
          "budget_fathoms": bf_lines, "fleet_flags": ff_lines,
          "stray_cargo": sgc_lines, "memory_footprint": mf_lines, "budget_ledger": bl_lines,
-         "caulking_check": cc_lines}
+         "caulking_check": cc_lines, "seed_spec": dss.lines}
 
 
 def texts():
