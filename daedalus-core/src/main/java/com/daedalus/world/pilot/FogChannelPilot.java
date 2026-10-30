@@ -356,8 +356,13 @@ public final class FogChannelPilot {
     public static Judgement judge(Harbour h, int[] lanes) {
         int got = cost(h, lanes);
         int p = par(h);
-        int stars = got == INVALID ? 0 : got == p ? 3 : got <= p + PAR_SLACK ? 2 : 1;
+        int stars = stars(got, p);
         return new Judgement(got, p, stars, stars == 3);
+    }
+
+    /** Stars for a cost against par, the rule {@link #judge} uses (same as FogStars in C++). */
+    public static int stars(int cost, int par) {
+        return cost == INVALID || par == INVALID ? 0 : cost == par ? 3 : cost <= par + PAR_SLACK ? 2 : 1;
     }
 
     /** One blast of the best reading: the lane, what was heard, what it cost and what the echo alone suggested. */

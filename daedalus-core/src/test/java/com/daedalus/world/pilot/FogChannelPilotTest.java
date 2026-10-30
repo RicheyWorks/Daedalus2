@@ -25,6 +25,8 @@ class FogChannelPilotTest {
     private static final String TIERS_PARITY = "pilot_fog_channel_tiers_parity.txt";
     private static final int TIER_PARITY_SEEDS = 30;
     private static final int BRUTE_LIMIT = 300_000;
+    private static final String BENCH_PARITY = "pilot_fog_channel_bench_parity.txt";
+    private static final int BENCH_SEEDS = 2000;
     private static final int CALM_LOSSES_MIN = 120; // measured 146/300
     private static final int SOUP_LOSSES_MIN = 240; // measured 264/300 (FOG 233/300)
 
@@ -303,5 +305,46 @@ class FogChannelPilotTest {
         }
         assertThat(Files.readAllLines(path, StandardCharsets.UTF_8).stream().filter(l -> !l.startsWith("#") && !l.isBlank()).toList())
                 .isEqualTo(actual);
+    }
+
+    static List<String> benchLines() {
+        List<String> out = new ArrayList<>();
+        for (FogChannelPilot.Tier tier : FogChannelPilot.Tier.values()) {
+            long bestSum = 0;
+            long loudSum = 0;
+            int losses = 0;
+            int threeStars = 0;
+            for (int s = 1; s <= BENCH_SEEDS; s++) {
+                FogChannelPilot.Harbour h = FogChannelPilot.harbour(tier.seedPrefix() + s, tier);
+                int b = FogChannelPilot.best(h).cost();
+                int g = FogChannelPilot.loudestEcho(h).cost();
+                bestSum += b;
+                loudSum += g;
+                losses += g > b ? 1 : 0;
+                threeStars += FogChannelPilot.stars(g, b) == 3 ? 1 : 0;
+            }
+            out.add("tier=" + tier + " seeds=" + BENCH_SEEDS + " best_sum=" + bestSum + " loudest_sum=" + loudSum + " losses=" + losses
+                    + " loudest_three_stars=" + threeStars);
+        }
+        return out;
+    }
+
+    @Test
+    void benchChecksumsMatchCpp() throws IOException {
+        long start = System.nanoTime();
+        List<String> actual = benchLines();
+        System.out.println("G586 bench: " + (System.nanoTime() - start) / 1_000_000 + " ms for " + 3 * BENCH_SEEDS + " tiered harbours");
+        Path path = CORE_TEST.resolve(BENCH_PARITY);
+        if (Boolean.getBoolean("pilot.parity.write")) {
+            List<String> body = new ArrayList<>();
+            body.add("# G586 FogChannelPilot bench checksums: written by FogChannelPilotTest.java; pilot_fog_channel_core_test.cpp times"
+                    + " FogBest over the same " + BENCH_SEEDS + " seeds per tier and must reach these sums.");
+            body.addAll(actual);
+            Files.write(path, body, StandardCharsets.UTF_8);
+        }
+        assertThat(Files.readAllLines(path, StandardCharsets.UTF_8).stream().filter(l -> !l.startsWith("#") && !l.isBlank()).toList())
+                .isEqualTo(actual);
+        assertThat(FogChannelPilot.stars(FogChannelPilot.INVALID, 3)).isZero();
+        assertThat(FogChannelPilot.stars(5, FogChannelPilot.INVALID)).isZero();
     }
 }
