@@ -153,7 +153,8 @@ class MarshCoresParityTest {
         // start, budget, perYear, releaseYears, horizon, threshold, sigma, cohort, runs
         double[][] plans = {{12, 10, 6, 5, 30, 10, 0.2, 3, 120}, {8, 6, 3, 3, 20, 6, 0.3, 3, 100},
             {12, 8, 4, 4, 25, 10, 0.25, 2, 100}, {5, 4, 4, 2, 15, 4, 0.0, 0, 50}, {20, 0, 2, 3, 10, 12, 0.4, 1, 80},
-            {10, 9, 5, 4, 30, 8, 0.35, 3, 90}};
+            {10, 9, 5, 4, 30, 8, 0.35, 3, 90}, {12, 3, 3, 1, 1, 10, 0.2, 3, 60}, {5, 0, 0, 2, 10, 10, 0.2, 3, 40},
+            {30, 6, 2, 3, 12, 5, 0.5, 0, 70}};
         List<String> out = new ArrayList<>();
         for (int c = 0; c < plans.length; c++) {
             double[] f = flocks[c % flocks.length];
@@ -176,7 +177,8 @@ class MarshCoresParityTest {
                     + plan.risk(plan.backLoaded()) + " best=" + csv(best.schedule()) + " bestRisk=" + best.risk()
                     + " greedy=" + csv(greedy.schedule()) + " greedyRisk=" + greedy.risk() + " bestLo="
                     + plan.riskInterval(toArray(best.schedule()))[0] + " bestHi="
-                    + plan.riskInterval(toArray(best.schedule()))[1]);
+                    + plan.riskInterval(toArray(best.schedule()))[1] + " survival=" + csvD(survivalSample(plan,
+                    toArray(best.schedule()))));
         }
         // start, budget, perYear, releaseYears, horizon, threshold, sigma, cohort, runs
         double[][] bad = {{-1, 0, 0, 1, 1, 10, 0.2, 3, 5}, {0, -1, 0, 1, 1, 10, 0.2, 3, 5},
@@ -201,6 +203,16 @@ class MarshCoresParityTest {
             s.append(i == 0 ? "" : ",").append(a[i]);
         }
         return s.toString();
+    }
+
+    private static List<Double> survivalSample(TranslocationPlan plan, int[] schedule) {
+        double[] s = plan.survival(schedule);
+        List<Double> out = new ArrayList<>();
+        for (int t = 0; t < s.length; t += 5) {
+            out.add(s[t]);
+        }
+        out.add(s[s.length - 1]);
+        return out;
     }
 
     private static int[] toArray(List<Integer> a) {

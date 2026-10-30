@@ -4,7 +4,8 @@
 // authority. Plans how to spend an aviary budget of birds over the first release years so the G194 Leslie flock
 // (DaedalusMarshCraneCohortsCore.h) is least likely to fall below a crash threshold under log-normal environmental
 // shocks. All schedules share the same hashed shocks (common random numbers). Best() searches every schedule; Greedy()
-// adds one bird at a time. BackLoaded() and RiskInterval() (Wilson 95 %) and Problem() came with the G589 iterations.
+// adds one bird at a time. BackLoaded(), RiskInterval() (Wilson 95 %), Problem(), Survival() and the pruned search came with the G589
+// iterations.
 // Golden vectors: engines/unreal/core-test/marsh_translocation_plan_parity.txt, written by MarshCoresParityTest.java.
 //
 // Seeding: as in G570/G583/G585, the Java core hashes (seed, run, year, salt) statelessly with the SplitMix64
@@ -150,6 +151,26 @@ public:
 		return Out;
 	}
 
+	// Share of runs not yet crashed by the census at the end of each year (horizon entries); empty for a bad schedule.
+	std::vector<double> Survival(const std::vector<int>& Schedule) const
+	{
+		if (!ValidSchedule(Schedule)) return {};
+		std::vector<int> CrashedBy(S.Horizon, 0);
+		for (int R = 0; R < S.Runs; ++R)
+		{
+			const int Year = FirstCrash(Schedule, R);
+			if (Year >= 0) ++CrashedBy[Year];
+		}
+		std::vector<double> Out(S.Horizon);
+		int Crashed = 0;
+		for (int T = 0; T < S.Horizon; ++T)
+		{
+			Crashed += CrashedBy[T];
+			Out[T] = 1 - static_cast<double>(Crashed) / S.Runs;
+		}
+		return Out;
+	}
+
 	// Every bird as late as possible (the last year first).
 	std::vector<int> BackLoaded() const
 	{
@@ -195,14 +216,20 @@ private:
 		return true;
 	}
 
+	// Pruned exhaustive search (same answer as scoring every schedule): stop at zero risk, and stop counting a
+	// schedule's crashes once they reach the best so far, since only a strictly lower count can replace it.
 	void Search(int Year, int Left, std::vector<int>& Cur, TranslocationPlanResult& Holder, bool& Have) const
 	{
+		if (Have && Holder.Risk == 0) return;
 		if (Year == static_cast<int>(Cur.size()) - 1)
 		{
 			if (Left > S.PerYear) return;
 			Cur[Year] = Left;
-			const double R = Risk(Cur);
-			if (!Have || R < Holder.Risk) { Holder = { Cur, R }; Have = true; }
+			const int Limit = Have ? static_cast<int>(std::floor(Holder.Risk * S.Runs + 0.5)) : std::numeric_limits<int>::max();
+			int Crashes = 0;
+			for (int R = 0; R < S.Runs && Crashes < Limit; ++R)
+				if (Crashes_(Cur, R)) ++Crashes;
+			if (Crashes < Limit) { Holder = { Cur, static_cast<double>(Crashes) / S.Runs }; Have = true; }
 			Cur[Year] = 0;
 			return;
 		}
@@ -214,7 +241,10 @@ private:
 		Cur[Year] = 0;
 	}
 
-	bool Crashes_(const std::vector<int>& Schedule, int Run) const
+	bool Crashes_(const std::vector<int>& Schedule, int Run) const { return FirstCrash(Schedule, Run) >= 0; }
+
+	// First census year the run falls below the threshold, or -1.
+	int FirstCrash(const std::vector<int>& Schedule, int Run) const
 	{
 		CraneCohorts::Vec N{};
 		N[CraneCohorts::Adult] = S.Start;
@@ -225,9 +255,9 @@ private:
 			const double F = Shock[static_cast<size_t>(Run) * S.Horizon + T];
 			double Total = 0;
 			for (double& V : N) { V *= F; Total += V; }
-			if (Total < S.Threshold) return true;
+			if (Total < S.Threshold) return T;
 		}
-		return false;
+		return -1;
 	}
 };
 

@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 	const char* Path = argc > 1 ? argv[1] : "marsh_translocation_plan_parity.txt";
 	std::vector<std::string> Lines, Problems;
 	for (const std::string& L : marsh_test::ParityLines(Path)) (L.rfind("problem ", 0) == 0 ? Problems : Lines).push_back(L);
-	Check("golden file has 6 plans and 12 settings checks", Lines.size() == 6 && Problems.size() == 12);
+	Check("golden file has 9 plans and 12 settings checks", Lines.size() == 9 && Problems.size() == 12);
 	const CohortSettings Flocks[3] = { { 0.5, 0.7, 0.85, 0.9, 0.15, 0.45, 10 }, { 0.5, 0.7, 0.85, 0.8, 0.15, 0.45, 10 },
 		{ 0.6, 0.8, 0.9, 0.95, 0.3, 1.2, 10 } };
 	int Exact = 0, Risks = 0;
@@ -67,10 +67,22 @@ int main(int argc, char** argv)
 		const auto Ci = P.RiskInterval(B.Schedule);
 		Check(Tag + " Wilson interval", marsh_test::Close(Ci[0], Num(H, "bestLo"), 1e-12) && marsh_test::Close(Ci[1], Num(H, "bestHi"), 1e-12)
 			&& Ci[0] <= B.Risk && B.Risk <= Ci[1]);
+		{
+			const std::vector<double> Sv = P.Survival(B.Schedule);
+			std::vector<double> Sample;
+			for (size_t T = 0; T < Sv.size(); T += 5) Sample.push_back(Sv[T]);
+			Sample.push_back(Sv.back());
+			std::stringstream Ws(marsh_test::Field(H, "survival"));
+			std::string Part;
+			bool SvOk = Sv.size() == static_cast<size_t>(S.Horizon);
+			size_t K = 0;
+			while (std::getline(Ws, Part, ',')) SvOk = SvOk && K < Sample.size() && marsh_test::Close(Sample[K++], std::strtod(Part.c_str(), nullptr), 1e-12);
+			Check(Tag + " survival curve", SvOk && K == Sample.size() && marsh_test::Close(Sv.back(), 1 - B.Risk, 1e-12));
+		}
 		Check(Tag + " best is no worse than greedy, front or even",
 			B.Risk <= G.Risk && B.Risk <= P.Risk(P.FrontLoaded()) && B.Risk <= P.Risk(P.Even()));
 	}
-	Check("risks identical on every case", Risks == 30 && Exact == Risks);
+	Check("risks identical on every case", Risks == 45 && Exact == Risks);
 	for (const std::string& Q : Problems)
 	{
 		TranslocationSettings S;
@@ -98,6 +110,12 @@ int main(int argc, char** argv)
 	Check("same seed same risk", P.Risk(P.Even()) == Q.Risk(Q.Even()));
 	Check("front-loaded fills year 0 first", P.FrontLoaded() == std::vector<int>({ 6, 4, 0, 0, 0 }));
 	Check("even spreads the budget", P.Even() == std::vector<int>({ 2, 2, 2, 2, 2 }));
+	{
+		const std::vector<double> Sv = P.Survival(P.Even());
+		bool Falls = true;
+		for (size_t T = 1; T < Sv.size(); ++T) Falls = Falls && Sv[T] <= Sv[T - 1];
+		Check("survival never rises and rejects a bad schedule", Falls && P.Survival({ 1 }).empty());
+	}
 	Check("back-loaded fills the last years", P.BackLoaded() == std::vector<int>({ 0, 0, 0, 4, 6 }));
 	const auto Bad = P.RiskInterval({ 1, 2 });
 	Check("interval rejects a bad schedule", Bad[0] < 0 && Bad[1] < 0);
@@ -107,6 +125,25 @@ int main(int argc, char** argv)
 	TranslocationSettings Lots = Small; Lots.Threshold = 1e9;
 	const TranslocationPlan X(CraneCohorts(CohortSettings()), Lots, 3);
 	Check("unreachable threshold: certain crash", X.Risk(X.Even()) == 1);
+	{
+		// The pruned Best() must equal scoring every schedule (earliest-heavy first, ties keep the first).
+		TranslocationSettings E = Small; E.Budget = 7;
+		const TranslocationPlan Pe(CraneCohorts(CohortSettings()), E, 7);
+		std::vector<int> Odo(E.ReleaseYears, E.PerYear), BestSeen;
+		double BestRisk = 2;
+		while (true)
+		{
+			int Sum = 0;
+			for (int V : Odo) Sum += V;
+			if (Sum == E.Budget) { const double R = Pe.Risk(Odo); if (R < BestRisk) { BestRisk = R; BestSeen = Odo; } }
+			int I = E.ReleaseYears - 1;
+			while (I >= 0 && Odo[I] == 0) Odo[I--] = E.PerYear;
+			if (I < 0) break;
+			--Odo[I];
+		}
+		const TranslocationPlanResult Bp = Pe.Best();
+		Check("pruned best equals scoring every schedule", Bp.Risk == BestRisk && Bp.Schedule == BestSeen);
+	}
 	Check("bad schedules rejected", P.Risk({ 1, 2 }) < 0 && P.Risk({ 7, 0, 0, 0, 0 }) < 0 && P.Risk({ -1, 0, 0, 0, 0 }) < 0);
 	TranslocationSettings Bad1 = D; Bad1.PerYear = 1;
 	TranslocationSettings Bad2 = D; Bad2.Cohort = 4;

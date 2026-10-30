@@ -1,7 +1,7 @@
 # TRANS01 - Translocation Plan (contest G251)
 
 Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/TranslocationPlan.java`
-Tests: `TranslocationPlanTest` (11 tests). Source only; no Unreal, no new assets.
+Tests: `TranslocationPlanTest` (14 tests). Source only; no Unreal, no new assets.
 
 ## Story / Daedalus hook
 
@@ -36,7 +36,7 @@ The lesson: release early and release breeders. Exact best schedules among the e
 the Monte Carlo noise (about 0.02 at 400 runs). Adults halve the risk compared with chicks, matching the G194
 reproductive values.
 
-## Tests (TranslocationPlanTest, 11)
+## Tests (TranslocationPlanTest, 14)
 
 1. Best spends the whole budget and beats even, front-loaded, late and no-release schedules.
 2. Greedy is never better than exact and stays within 0.03 of it (budgets 4, 10, 16).
@@ -51,6 +51,10 @@ reproductive values.
 10. `backLoaded()` fills the last years first and loses to front-loaded.
 11. `riskInterval` brackets the estimate, narrows with more runs, and is exactly 0 at the low end when nothing
     crashed.
+12. The pruned `best()` equals scoring every schedule (three tunings).
+13. Edge cases run: one release year with horizon 1, and a zero budget with `perYear` 0 below the threshold
+    (risk 1).
+14. `survival` never rises, ends at 1 - risk, and front-loaded is ahead of back-loaded by year 10.
 
 ## Assets
 
@@ -81,3 +85,12 @@ them.
 3. **Risk confidence.** `riskInterval(schedule)` (C++ `RiskInterval`) is the 95 % Wilson score interval of the
    Monte Carlo risk. Its ends are exact at 0 and 1 crashes. Two schedules with overlapping intervals are not
    reliably different. The golden vectors include the interval for each best plan.
+4. **Pruned exact search.** `best()` stops counting a schedule's crashes once they reach the best so far, and
+   stops at zero risk. It returns the same answer as scoring every schedule (tested in both languages), and the
+   existing golden rows are byte-identical. The speed-up is modest at the default tuning (about 5 %) and larger
+   when a low-risk plan turns up early.
+5. **Survival curve.** `survival(schedule)` (C++ `Survival`) gives, for each census year, the share of runs not yet
+   crashed. It ends at 1 - risk, and the board can draw it as the release's safety margin. The golden vectors
+   sample the best plan's curve every 5 years.
+6. **Edge-case vectors.** Three new golden plans: one release year with horizon 1, a zero budget with `perYear` 0
+   that starts below the threshold (risk 1), and a chick release with heavy noise.
