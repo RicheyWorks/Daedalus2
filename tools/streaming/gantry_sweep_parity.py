@@ -5,22 +5,24 @@ Gantry Sweep (DiskSaver Island, quest q_gantry_sweep) is a C++ minigame core; th
 fixture generator. A gantry crane rides one quay rail of RAIL berths, like a disk head over cylinders.
 Seeded ships ask for the crane: each has a berth and an arrival tick. The crane moves one berth per tick,
 waits at a berth until the ship there has arrived, and serves it at once. The player picks the service
-order; the score is the total ticks the ships wait (serve tick - arrival). The core also shows three
-yard habits (first come first served, nearest arrived ship, the elevator sweep) and the exact best order.
+order; the score is the total ticks the ships wait (serve tick - arrival). The core also shows four
+yard habits (first come first served, nearest arrived ship, the elevator sweep, the one-way sweep) and
+the exact best order. Each seed names a tide profile: calm (arrivals over 24 ticks), rush (6: ships pile
+up at once) or spread (60: the crane often idles).
 
 The layout comes from random.Random(seed string), the only seeding that DaedalusPyRandomCore.h has, with
 draws it supports: randrange(RAIL) and randrange(4) (_randbelow), sample(range(RAIL), n), random() (the
-arrival ticks, int(random() * ARRIVAL_SPAN)) and shuffle (the berth names). Every draw this script makes
+arrival ticks, int(random() * span) for the profile's span) and shuffle (the berth names). Every draw this script makes
 is checked against that header's semantics by the C++ test that replays the file.
 
   python tools/streaming/gantry_sweep_parity.py            # print the golden file
   python tools/streaming/gantry_sweep_parity.py --check    # exit 1 if the checked-in file is stale
   python tools/streaming/gantry_sweep_parity.py --write    # rewrite it
 
-Golden lines: `C name`; `S hex` (seed string, utf-8 hex) or `H start pos:arrive,...` (a hand layout);
-`O L start n`, `O R i label pos arrive` per ship, `O P policy order waits travel` for fcfs, sstf, scan, best;
+Golden lines: `C name`; `S profile hex` (tide profile, seed string as utf-8 hex) or `H start pos:arrive,...` (a hand layout);
+`O L start n`, `O R i label pos arrive` per ship, `O P policy order waits travel` for fcfs, sstf, scan, cscan, best;
 then `M order` plays (comma-separated ship indices, `-` for none) answered by `O m waits travel verdict` or
-`O refused kind`.
+`O refused kind` (short, long, range, repeat).
 """
 import itertools
 import os
@@ -31,18 +33,19 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 GOLDEN = os.path.join(ROOT, "engines", "unreal", "core-test", "disksaver_gantry_sweep_parity.txt")
 RAIL = 40
-ARRIVAL_SPAN = 24
+PROFILES = {"calm": 24, "rush": 6, "spread": 60}  # arrival span in ticks
 MIN_SHIPS, MAX_SHIPS = 5, 8
 BERTHS = ("anchor", "bollard", "capstan", "davit", "eyebolt", "fairlead", "gunwale", "hawser",
           "jetty", "keel", "lanyard", "mooring")
 
 
-def layout(seed):
+def layout(seed, profile="calm"):
+    span = PROFILES[profile]
     r = random.Random(seed)
     start = r.randrange(RAIL)
     n = MIN_SHIPS + r.randrange(MAX_SHIPS - MIN_SHIPS + 1)
     pos = r.sample(range(RAIL), n)
-    arrive = [int(r.random() * ARRIVAL_SPAN) for _ in range(n)]
+    arrive = [int(r.random() * span) for _ in range(n)]
     names = list(BERTHS)
     r.shuffle(names)
     return start, [(names[i], pos[i], arrive[i]) for i in range(n)]
@@ -101,6 +104,27 @@ def scan(start, ships):
     return out
 
 
+def cscan(start, ships):
+    """The one-way sweep (C-SCAN): serve the nearest arrived ship at or above the crane; when none is
+    above, run back to the lowest arrived ship and sweep up again; idle, go to the next arrival."""
+    t, x, left, out = 0, start, set(range(len(ships))), []
+    while left:
+        ready = [i for i in left if ships[i][2] <= t]
+        if ready:
+            ahead = [i for i in ready if ships[i][1] >= x]
+            i = min(ahead, key=lambda i: (ships[i][1], i)) if ahead else min(ready, key=lambda i: (ships[i][1], i))
+        else:
+            i = _fallback(ships, left, x)
+        t = max(t + abs(ships[i][1] - x), ships[i][2])
+        x = ships[i][1]
+        left.discard(i)
+        out.append(i)
+    return out
+
+
+HABITS = (("fcfs", fcfs), ("sstf", sstf), ("scan", scan), ("cscan", cscan))
+
+
 def best(start, ships):
     top = None
     for p in itertools.permutations(range(len(ships))):
@@ -112,15 +136,17 @@ def best(start, ships):
 
 def play(start, ships, order):
     n = len(ships)
-    if len(order) != n:
-        return "O refused length"
+    if len(order) < n:
+        return "O refused short"
+    if len(order) > n:
+        return "O refused long"
     if any(not 0 <= i < n for i in order):
         return "O refused range"
     if len(set(order)) != n:
         return "O refused repeat"
     w, tr = run(start, ships, order)
     opt = run(start, ships, best(start, ships))[0]
-    habit = min(run(start, ships, f(start, ships))[0] for f in (fcfs, sstf, scan))
+    habit = min(run(start, ships, f(start, ships))[0] for _, f in HABITS)
     verdict = "sweet" if w == opt else "fair" if w <= habit else "jammed"
     return f"O m {w} {tr} {verdict}"
 
@@ -135,7 +161,7 @@ def case(out, name, head, start, ships, plays):
     out.append(f"O L {start} {len(ships)}")
     for i, (l, p, a) in enumerate(ships):
         out.append(f"O R {i} {l} {p} {a}")
-    for nm, f in (("fcfs", fcfs), ("sstf", sstf), ("scan", scan), ("best", best)):
+    for nm, f in HABITS + (("best", best),):
         o = f(start, ships)
         w, tr = run(start, ships, o)
         out.append(f"O P {nm} {j(o)} {w} {tr}")
@@ -150,19 +176,22 @@ def plays_for(start, ships, rng):
     rev = ident[::-1]
     shuffled = ident[:]
     rng.shuffle(shuffled)  # a fixture-only Random: picks a play, not part of the layout
-    return [best(start, ships), ident, rev, shuffled, fcfs(start, ships), sstf(start, ships), scan(start, ships), ident[:-1], ident[:-1] + [n],
+    return [best(start, ships), ident, rev, shuffled, fcfs(start, ships), sstf(start, ships), scan(start, ships), cscan(start, ships), ident[:-1], ident + [0], ident[:-1] + [n],
             ident[:-1] + [0], []]
 
 
 def lines():
-    out = ["# disksaver gantry_sweep parity v1: written by tools/streaming/gantry_sweep_parity.py; do not edit"]
+    out = ["# disksaver gantry_sweep parity v2: written by tools/streaming/gantry_sweep_parity.py; do not edit"]
     pick = random.Random("gantry-sweep fixture plays")
     seeds = [f"gantry-sweep|2026-10-26|{s}" for s in (0, 1, 7, 42, -3)] + ["", "a", "gantry-sweep|keel",
                                                                           "unicode:\u00e9\u03bb\u2603"]
     seeds += [f"gantry-sweep|bulk|{k}" for k in range(24)]
-    for k, s in enumerate(seeds):
-        start, ships = layout(s)
-        case(out, f"seed{k}", "S x" + s.encode("utf-8").hex(), start, ships, plays_for(start, ships, pick))
+    tides = [(s, "calm") for s in seeds]
+    tides += [(f"gantry-sweep|rush|{k}", "rush") for k in range(8)] + [(f"gantry-sweep|spread|{k}", "spread") for k in range(8)]
+    tides += [("gantry-sweep|2026-10-26|42", "rush"), ("gantry-sweep|2026-10-26|42", "spread")]  # one seed, three tides
+    for k, (s, prof) in enumerate(tides):
+        start, ships = layout(s, prof)
+        case(out, f"seed{k}", f"S {prof} x" + s.encode("utf-8").hex(), start, ships, plays_for(start, ships, pick))
     hands = {"one_ship_waiting": (0, [(0, 5)]), "already_there": (7, [(7, 0), (7, 3)]),
              "far_rail": (0, [(1000000, 0), (0, 1000000000), (500000, 999999999)]),
              "all_at_once": (20, [(p, 0) for p in (3, 39, 21, 19, 0, 38, 2, 22)]),
