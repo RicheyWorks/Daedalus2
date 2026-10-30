@@ -36,6 +36,24 @@ std::vector<StarPoint> Stars(daedalus::stable::StableRng& Rng, int N, int Span)
 	return Pts;
 }
 
+std::string JoinWith(const std::vector<int>& V, const char* Sep)
+{
+	if (V.empty()) return "-";
+	std::string Out;
+	for (size_t i = 0; i < V.size(); ++i) Out += (i ? Sep : "") + S(V[i]);
+	return Out;
+}
+
+// Same bad skies as StarMeshParityTest.REFUSED, one per refusal reason, then a good one.
+std::vector<std::vector<StarPoint>> RefusedSkies()
+{
+	std::vector<StarPoint> Many;
+	for (int64_t i = 0; i <= StarMeshMaxPoints; ++i) Many.push_back({ i, i * i });
+	return { { { 0, 0 }, { 1, 1 } }, Many, { { 0, 0 }, { 1, 0 }, { 0, StarMeshMaxCoord + 1 } },
+		{ { 0, 0 }, { 0, 0 }, { 2, 3 } }, { { 0, 0 }, { 1, 1 }, { 2, 2 } },
+		{ { 0, 0 }, { 5, 1 }, { 2, 3 }, { 7, 4 }, { 9, 9 }, { -3, -3 } }, { { 0, 0 }, { 4, 0 }, { 0, 4 } } };
+}
+
 std::vector<std::string> ParityLines()
 {
 	std::vector<std::string> Out;
@@ -46,12 +64,31 @@ std::vector<std::string> ParityLines()
 		const std::vector<StarPoint> Pts = Stars(Rng, N, s <= 40 ? 100 : static_cast<int>(StarMeshMaxCoord));
 		std::string Line = "seed=" + S(s) + " n=" + S(N) + " stars=";
 		for (int i = 0; i < N; ++i) Line += (i ? "," : "") + S(Pts[i].X) + ":" + S(Pts[i].Y);
-		const std::vector<StarTriangle> Tris = StarMeshTriangulate(Pts);
+		const StarMesh Mesh = StarMeshBuild(Pts);
+		const std::vector<StarTriangle>& Tris = Mesh.Triangles;
 		Line += " tris=" + S(static_cast<int64_t>(Tris.size())) + " ";
 		for (size_t i = 0; i < Tris.size(); ++i)
 			Line += (i ? "," : "") + S(Tris[i].A) + "." + S(Tris[i].B) + "." + S(Tris[i].C);
+		Line += " hull=" + JoinWith(Mesh.Hull, ",") + " flips=" + S(Mesh.Flips) + " nbrs=";
+		const std::vector<std::vector<int>> Nbrs = StarMeshNeighbours(N, Tris);
+		for (int i = 0; i < N; ++i) Line += (i ? "|" : "") + JoinWith(Nbrs[static_cast<size_t>(i)], ".");
+		const int Span = s <= 40 ? 100 : static_cast<int>(StarMeshMaxCoord);
+		Line += " locate=";
+		for (int q = 0; q < 5; ++q)
+		{
+			StarPoint At = Pts[0];
+			if (q < 4)
+			{
+				const int64_t X = Rng.NextInt(2 * Span + 1) - Span;
+				At = { X, Rng.NextInt(2 * Span + 1) - Span };
+			}
+			Line += (q ? "," : "") + S(At.X) + ":" + S(At.Y) + ">" + S(StarMeshLocate(Pts, Tris, At));
+		}
 		Out.push_back(Line);
 	}
+	const std::vector<std::vector<StarPoint>> Refused = RefusedSkies();
+	for (size_t i = 0; i < Refused.size(); ++i)
+		Out.push_back("refused=" + S(static_cast<int64_t>(i)) + " why=" + StarMeshProblemName(StarMeshCheck(Refused[i])));
 	return Out;
 }
 
@@ -135,6 +172,48 @@ bool FullSky()
 	return static_cast<int>(T.size()) == 2 * StarMeshMaxPoints - 2 - HullSize(P) && StarMeshEmptyCircles(P, T);
 }
 
+// Hull, neighbours and locate against brute force on random skies (same checks as StarMeshTest).
+bool QueriesMatchBruteForce()
+{
+	daedalus::stable::StableRng Rng(4411);
+	for (int Round = 0; Round < 60; ++Round)
+	{
+		const std::vector<StarPoint> P = Stars(Rng, 3 + Rng.NextInt(25), 1000);
+		const StarMesh Mesh = StarMeshBuild(P);
+		const std::vector<int>& H = Mesh.Hull;
+		const int N = static_cast<int>(P.size()), Hn = static_cast<int>(H.size());
+		if (Hn != HullSize(P)) return false;
+		for (int i = 0; i < Hn; ++i)
+			for (int k = 0; k < N; ++k)
+				if (k != H[i] && k != H[(i + 1) % Hn] && Orient(P[H[i]], P[H[(i + 1) % Hn]], P[k]) <= 0) return false;
+		const std::vector<std::vector<int>> Nb = StarMeshNeighbours(N, Mesh.Triangles);
+		int Degrees = 0;
+		for (int i = 0; i < N; ++i)
+		{
+			Degrees += static_cast<int>(Nb[i].size());
+			for (int j : Nb[i])
+				if (!std::binary_search(Nb[j].begin(), Nb[j].end(), i)) return false;
+		}
+		if (Degrees != 2 * (3 * N - 3 - Hn)) return false;
+		for (int q = 0; q < 50; ++q)
+		{
+			const int64_t X = Rng.NextInt(2401) - 1200;
+			const StarPoint At{ X, Rng.NextInt(2401) - 1200 };
+			const int Found = StarMeshLocate(P, Mesh.Triangles, At);
+			bool Inside = true;
+			for (int i = 0; i < Hn; ++i) Inside = Inside && Orient(P[H[i]], P[H[(i + 1) % Hn]], At) >= 0;
+			if ((Found >= 0) != Inside) return false;
+			if (Found >= 0)
+			{
+				const StarTriangle& T = Mesh.Triangles[static_cast<size_t>(Found)];
+				if (Orient(P[T.A], P[T.B], At) < 0 || Orient(P[T.B], P[T.C], At) < 0 || Orient(P[T.C], P[T.A], At) < 0)
+					return false;
+			}
+		}
+	}
+	return true;
+}
+
 } // namespace
 
 int main(int argc, char** argv)
@@ -153,6 +232,12 @@ int main(int argc, char** argv)
 		&& StarMeshTriangulate({ { 0, 0 }, { 0, 0 }, { 2, 3 } }).empty()
 		&& StarMeshTriangulate({ { 0, 0 }, { 1, 0 }, { 0, M + 1 } }).empty()
 		&& StarMeshTriangulate(std::vector<StarPoint>(StarMeshMaxPoints + 1)).empty());
+	Check("hull, neighbours and locate match brute force", QueriesMatchBruteForce());
+	const StarMesh Quad = StarMeshBuild({ { 0, 0 }, { 1, 5 }, { 2, -5 }, { 3, 0 } });
+	Check("a badly inserted quadrilateral takes one flip", Quad.Flips == 1 && Quad.Hull == std::vector<int>{ 0, 2, 3, 1 });
+	Check("refusals are named", StarMeshCheck({ { 0, 0 }, { 0, 0 }, { 2, 3 } }) == StarMeshProblem::Duplicate
+		&& StarMeshBuild({ { 0, 0 }, { 1, 1 }, { 2, 2 } }).Hull.empty()
+		&& std::string(StarMeshProblemName(StarMeshProblem::Collinear)) == "collinear");
 	Check("the quest counts triangles", StarMeshQuestAnswer({ { 0, 0 }, { 4, 0 }, { 0, 4 }, { 5, 5 } }, 2)
 		&& !StarMeshQuestAnswer({ { 0, 0 }, { 4, 0 }, { 0, 4 } }, 2) && !StarMeshQuestAnswer({ { 0, 0 } }, 0));
 	return stable_test::Finish();

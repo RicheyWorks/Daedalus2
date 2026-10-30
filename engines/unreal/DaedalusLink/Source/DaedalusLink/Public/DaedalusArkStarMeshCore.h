@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 // G441 The Star Mesh (art-master-flex), plain C++17, header-only, no Unreal types (G588 port).
 // Exact Delaunay triangulation of integer stars: insert in x order, join each star to the hull edges it sees, then
-// flip edges (Lawson) until every edge is locally Delaunay. Orientation fits in int64; the in-circle determinant is
+// flip edges (Lawson) until every edge is locally Delaunay. StarMeshBuild also returns the hull and the flip count;
+// StarMeshNeighbours and StarMeshLocate answer adjacency and point-location queries; StarMeshProblem names why a sky
+// is refused. Orientation fits in int64; the in-circle determinant is
 // summed exactly in 128-bit two's complement, so no floating point and no big integers. Must agree with
 // com.daedalus.world.ark.StarMesh line for line (ark_star_mesh_parity.txt, checked by StarMeshParityTest.java and
 // ark_star_mesh_core_test.cpp).
@@ -21,6 +23,32 @@ constexpr int64_t StarMeshMaxCoord = 1000000;
 
 struct StarPoint { int64_t X, Y; };
 struct StarTriangle { int A, B, C; }; // counter-clockwise indices into the input stars
+
+// A built mesh: triangles in StarMesh.triangulate order, the hull counter-clockwise from the lowest-x (then lowest-y)
+// star, and how many Lawson flips the build made. Empty when the sky is refused.
+struct StarMesh
+{
+	std::vector<StarTriangle> Triangles;
+	std::vector<int> Hull;
+	int Flips = 0;
+};
+
+// Why a sky is refused, checked in this order (names match StarMesh.problem in Java).
+enum class StarMeshProblem { None, Few, Many, Range, Duplicate, Collinear };
+
+inline const char* StarMeshProblemName(StarMeshProblem P)
+{
+	switch (P)
+	{
+	case StarMeshProblem::None: return "ok";
+	case StarMeshProblem::Few: return "few";
+	case StarMeshProblem::Many: return "many";
+	case StarMeshProblem::Range: return "range";
+	case StarMeshProblem::Duplicate: return "duplicate";
+	case StarMeshProblem::Collinear: return "collinear";
+	}
+	return "?";
+}
 
 namespace star_detail {
 
@@ -92,30 +120,34 @@ inline int StarInCircle(const StarPoint& A, const StarPoint& B, const StarPoint&
 	return Det.Sign();
 }
 
-// 3..StarMeshMaxPoints distinct stars within +-StarMeshMaxCoord, no three collinear.
-inline bool StarMeshValid(const std::vector<StarPoint>& Pts)
+// Needs 3..StarMeshMaxPoints distinct stars within +-StarMeshMaxCoord, no three collinear.
+inline StarMeshProblem StarMeshCheck(const std::vector<StarPoint>& Pts)
 {
 	const int N = static_cast<int>(Pts.size());
-	if (N < 3 || N > StarMeshMaxPoints) return false;
+	if (N < 3) return StarMeshProblem::Few;
+	if (N > StarMeshMaxPoints) return StarMeshProblem::Many;
 	for (const StarPoint& P : Pts)
-		if (std::llabs(P.X) > StarMeshMaxCoord || std::llabs(P.Y) > StarMeshMaxCoord) return false;
+		if (std::llabs(P.X) > StarMeshMaxCoord || std::llabs(P.Y) > StarMeshMaxCoord) return StarMeshProblem::Range;
 	for (int i = 0; i < N; ++i)
 		for (int j = i + 1; j < N; ++j)
-		{
-			if (Pts[i].X == Pts[j].X && Pts[i].Y == Pts[j].Y) return false;
+			if (Pts[i].X == Pts[j].X && Pts[i].Y == Pts[j].Y) return StarMeshProblem::Duplicate;
+	for (int i = 0; i < N; ++i)
+		for (int j = i + 1; j < N; ++j)
 			for (int k = j + 1; k < N; ++k)
-				if (star_detail::Orient(Pts[i], Pts[j], Pts[k]) == 0) return false;
-		}
-	return true;
+				if (star_detail::Orient(Pts[i], Pts[j], Pts[k]) == 0) return StarMeshProblem::Collinear;
+	return StarMeshProblem::None;
 }
 
-// Delaunay triangles in the same order as StarMesh.triangulate; empty when the stars are not StarMeshValid.
-inline std::vector<StarTriangle> StarMeshTriangulate(const std::vector<StarPoint>& Pts)
+inline bool StarMeshValid(const std::vector<StarPoint>& Pts) { return StarMeshCheck(Pts) == StarMeshProblem::None; }
+
+// The Delaunay mesh (same order as StarMesh.build); empty when the stars are not StarMeshValid.
+inline StarMesh StarMeshBuild(const std::vector<StarPoint>& Pts)
 {
 	using star_detail::Key;
 	using star_detail::Orient;
+	StarMesh Mesh;
 	std::vector<StarTriangle> Tris;
-	if (!StarMeshValid(Pts)) return Tris;
+	if (!StarMeshValid(Pts)) return Mesh;
 	const int N = static_cast<int>(Pts.size());
 	std::vector<int> Order(N);
 	std::iota(Order.begin(), Order.end(), 0);
@@ -142,6 +174,7 @@ inline std::vector<StarTriangle> StarMeshTriangulate(const std::vector<StarPoint
 		const int T1 = E1->second, T2 = E2->second;
 		const int C = Third(Tris[T1], U, V), D = Third(Tris[T2], U, V);
 		if (StarInCircle(Pts[U], Pts[V], Pts[C], Pts[D]) <= 0) return;
+		++Mesh.Flips;
 		for (int Id : { T1, T2 })
 		{
 			const StarTriangle T = Tris[Id];
@@ -191,10 +224,51 @@ inline std::vector<StarTriangle> StarMeshTriangulate(const std::vector<StarPoint
 			Legalize(E.A, E.B);
 		}
 	}
-	std::vector<StarTriangle> Out;
 	for (size_t t = 0; t < Tris.size(); ++t)
-		if (Alive[t]) Out.push_back(Tris[t]);
+		if (Alive[t]) Mesh.Triangles.push_back(Tris[t]);
+	const int First = static_cast<int>(std::find(Hull.begin(), Hull.end(), Order[0]) - Hull.begin());
+	for (size_t k = 0; k < Hull.size(); ++k) Mesh.Hull.push_back(Hull[(First + k) % Hull.size()]);
+	return Mesh;
+}
+
+// Delaunay triangles in the same order as StarMesh.triangulate; empty when the stars are not StarMeshValid.
+inline std::vector<StarTriangle> StarMeshTriangulate(const std::vector<StarPoint>& Pts)
+{
+	return StarMeshBuild(Pts).Triangles;
+}
+
+// Each star's mesh neighbours, ascending.
+inline std::vector<std::vector<int>> StarMeshNeighbours(int N, const std::vector<StarTriangle>& Tris)
+{
+	std::vector<std::vector<int>> Out(static_cast<size_t>(N));
+	for (const StarTriangle& T : Tris)
+	{
+		const int V[3] = { T.A, T.B, T.C };
+		for (int k = 0; k < 3; ++k)
+		{
+			Out[static_cast<size_t>(V[k])].push_back(V[(k + 1) % 3]);
+			Out[static_cast<size_t>(V[(k + 1) % 3])].push_back(V[k]);
+		}
+	}
+	for (std::vector<int>& L : Out)
+	{
+		std::sort(L.begin(), L.end());
+		L.erase(std::unique(L.begin(), L.end()), L.end());
+	}
 	return Out;
+}
+
+// The first triangle (in mesh order) holding Q, edges and corners included, or -1 when Q is outside the hull.
+inline int StarMeshLocate(const std::vector<StarPoint>& Pts, const std::vector<StarTriangle>& Tris, const StarPoint& Q)
+{
+	using star_detail::Orient;
+	for (size_t i = 0; i < Tris.size(); ++i)
+	{
+		const StarTriangle& T = Tris[i];
+		if (Orient(Pts[T.A], Pts[T.B], Q) >= 0 && Orient(Pts[T.B], Pts[T.C], Q) >= 0 && Orient(Pts[T.C], Pts[T.A], Q) >= 0)
+			return static_cast<int>(i);
+	}
+	return -1;
 }
 
 // True when no star lies strictly inside any triangle's circumcircle.

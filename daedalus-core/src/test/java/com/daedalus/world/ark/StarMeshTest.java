@@ -147,4 +147,64 @@ class StarMeshTest {
         assertThatThrownBy(() -> StarMesh.triangulate(new long[][] {{0, 0}, {1, 0}, {0, 2_000_000}}))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void hullNeighboursAndLocateMatchBruteForce() {
+        SplittableRandom rnd = new SplittableRandom(4411);
+        for (int t = 0; t < 30; t++) {
+            long[][] p = general(rnd, 3 + rnd.nextInt(25), 1_000);
+            StarMesh.Mesh mesh = StarMesh.build(p);
+            // Hull: every consecutive pair is a hull edge with all other stars on its left, and it has every hull star.
+            int[] hull = mesh.hull();
+            assertThat(hull.length).isEqualTo(hullSize(p));
+            for (int i = 0; i < hull.length; i++) {
+                for (int k = 0; k < p.length; k++) {
+                    if (k != hull[i] && k != hull[(i + 1) % hull.length]) {
+                        assertThat(orient(p[hull[i]], p[hull[(i + 1) % hull.length]], p[k])).isPositive();
+                    }
+                }
+            }
+            // Neighbours: symmetric, and 2 * edges = 2 * (3n - 3 - h).
+            int[][] nb = StarMesh.neighbours(p.length, mesh.triangles());
+            int degrees = 0;
+            for (int i = 0; i < p.length; i++) {
+                degrees += nb[i].length;
+                for (int j : nb[i]) {
+                    assertThat(nb[j]).contains(i);
+                }
+            }
+            assertThat(degrees).isEqualTo(2 * (3 * p.length - 3 - hull.length));
+            // Locate: inside the hull exactly when some triangle holds the point, and that triangle does.
+            for (int q = 0; q < 50; q++) {
+                long[] at = {rnd.nextInt(2_401) - 1_200, rnd.nextInt(2_401) - 1_200};
+                int found = StarMesh.locate(p, mesh.triangles(), at);
+                boolean inside = true;
+                for (int i = 0; i < hull.length; i++) {
+                    inside &= orient(p[hull[i]], p[hull[(i + 1) % hull.length]], at) >= 0;
+                }
+                assertThat(found >= 0).isEqualTo(inside);
+                if (found >= 0) {
+                    int[] tr = mesh.triangles()[found];
+                    assertThat(orient(p[tr[0]], p[tr[1]], at)).isNotNegative();
+                    assertThat(orient(p[tr[1]], p[tr[2]], at)).isNotNegative();
+                    assertThat(orient(p[tr[2]], p[tr[0]], at)).isNotNegative();
+                }
+            }
+        }
+    }
+
+    @Test
+    void flipsAndRefusalReasons() {
+        // A convex quadrilateral inserted badly needs exactly one flip.
+        StarMesh.Mesh quad = StarMesh.build(new long[][] {{0, 0}, {1, 5}, {2, -5}, {3, 0}});
+        assertThat(quad.flips()).isEqualTo(1);
+        assertThat(quad.hull()).containsExactly(0, 2, 3, 1);
+        assertThat(StarMesh.problem(new long[][] {{0, 0}, {1, 1}})).isEqualTo("few");
+        assertThat(StarMesh.problem(new long[][] {{0, 0}, {0, 0}, {2, 3}})).isEqualTo("duplicate");
+        assertThat(StarMesh.problem(new long[][] {{0, 0}, {1, 1}, {2, 2}})).isEqualTo("collinear");
+        assertThat(StarMesh.problem(new long[][] {{0, 0}, {1, 0}, {0, 1_000_001}})).isEqualTo("range");
+        assertThat(StarMesh.problem(new long[][] {{0, 0}, {4, 0}, {0, 4}})).isNull();
+        assertThatThrownBy(() -> StarMesh.build(new long[][] {{0, 0}, {1, 1}, {2, 2}}))
+                .hasMessageContaining("collinear");
+    }
 }
