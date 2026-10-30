@@ -11,7 +11,9 @@ on:
     branches: [ main ]
     paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
-    # Match the approved cabinet dependency stack as well as main.
+    # Match the approved cabinet dependency stack as well as main. "edited" covers a stacked PR whose base is
+    # retargeted to main after its parent merges; without it that PR never gets these checks.
+    types: [ opened, synchronize, reopened, edited ]
     branches: [ main, codex/realm-production-queue ]
     paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
@@ -97,6 +99,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test && ./shardfall_core_test shardfall_parity.txt
       - name: Shardfall Gamble core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test_clang && ./shardfall_core_test_clang shardfall_parity.txt
+      - name: PyRandom core (DaedalusPyRandomCore.h matches CPython random.Random(str) call by call)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public pyrandom_core_test.cpp -o pyrandom_core_test && ./pyrandom_core_test pyrandom_parity.txt
+      - name: PyRandom core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public pyrandom_core_test.cpp -o pyrandom_core_test_clang && ./pyrandom_core_test_clang pyrandom_parity.txt
       - name: G206 Census Budget cost model core (DaedalusCensusBudgetCore.h replays census_budget_parity.txt from census_budget.py; 40000/32768 KiB edges)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fno-exceptions -fno-rtti -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public census_budget_core_test.cpp -o census_budget_core_test && ./census_budget_core_test census_budget_parity.txt
       - name: G206 Census Budget cost model core, clang
