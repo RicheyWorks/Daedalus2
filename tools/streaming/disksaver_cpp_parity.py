@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5, G578 batch 6).
+"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5, G578 batch 6, G579 batch 7).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -16,6 +16,10 @@ Batch 5: G551 Fleet Soundings, G550 Quay Duel, G549 Last Crate, G546 Census Ridd
 and their answers are written into the file).
 Batch 6: G166 Tide Clocks, G171 Lighthouse Leases, G175 Tidemark Chunks, G179 Bottle Census: seeded
 simulations over the G86 shoals data; every random draw the tool makes is recorded as a tape.
+Batch 7: G253 Ebb Tide Eviction, G505 Beacon Watch, G529 Budget Fathoms, G533 Fleet Flags: the
+G206 census budget tools. Each case writes its inputs (census or report, budget, config) and the
+tool's expected output lines; seeded variants of the real census are made here with Python's
+random and written out, so the C++ side only reads them.
 Cases cover the real tools/world_census fixtures (several seeds), synthetic censuses, and
 hand-laid edge layouts (unsolvable, stuck, disconnected) injected through the tool's own
 play() by swapping its layout function for one call.
@@ -37,15 +41,19 @@ from contextlib import contextmanager
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import beacon_watch as bw  # noqa: E402
 import belfry_changes as bc  # noqa: E402
 import boom_defence as bd  # noqa: E402
 import bottle_census as bcs  # noqa: E402
+import budget_fathoms as bf  # noqa: E402
 import census_budget as cb  # noqa: E402
 import census_riddles as cr  # noqa: E402
+import ebb_eviction as ee  # noqa: E402
 import harbour_cryptogram as hc  # noqa: E402
 import last_crate as lc  # noqa: E402
 import lighthouse_leases as ll  # noqa: E402
 import channel_dash as cd  # noqa: E402
+import fleet_flags as ff  # noqa: E402
 import fleet_soundings as fs  # noqa: E402
 import manifest_match as mm  # noqa: E402
 import quay_duel as qd  # noqa: E402
@@ -1306,13 +1314,383 @@ def bc_census_lines():
     return out
 
 
+# ---------------------------------------------------------------- batch 7 shared census lines
+def b7_realm(w):
+    if "realm_id" not in w or w["realm_id"] is None:
+        return "-"
+    r = w["realm_id"]
+    return hx(r) if isinstance(r, str) else "!"
+
+
+def b7_census(doc, tag="W", side=None):
+    """Census input lines: W [side] id realm world_asset_definitions slot:n,..."""
+    pre = f"{tag} {side} " if side else f"{tag} "
+    out = []
+    for w in doc["worlds"]:
+        wad = w.get("asset_definitions")
+        out.append(pre + f"{hx(w['id'])} {b7_realm(w)} {'-' if wad is None else wad} "
+                   + lst(f"{i['slot']}:{i['asset_definitions']}" for i in w["islands"]))
+    return out
+
+
+def b7_budget(cfg, side=None):
+    b = cfg["budget"]
+    return (f"U {side} " if side else "U ") + f"{b['ram_budget_kib']} {b['disk_budget_kib']} {b['warn_permille']}"
+
+
+def b7_refusal(e, kinds):
+    msg = str(e)
+    for needle, kind in kinds:
+        if needle in msg:
+            return "O refused " + kind
+    raise e
+
+
+def b7_seeded(seed):
+    """The real tools/world_census census, re-weighted with Python's random (inputs only)."""
+    doc = real_census()
+    rng = random.Random(seed)
+    realms = [None, "synthetic-realm", "harbour", "reef"]
+    for w in doc["worlds"]:
+        for i in w["islands"]:
+            i["asset_definitions"] = rng.randrange(0, 1200)
+        for s in range(rng.randrange(0, 5)):
+            slot = 20 + s * rng.randrange(1, 4)
+            if all(i["slot"] != slot for i in w["islands"]):
+                w["islands"].append({"slot": slot, "asset_definitions": rng.randrange(0, 1200)})
+        if seed % 2:
+            w["realm_id"] = rng.choice(realms)
+    if seed % 3 == 0:
+        doc["worlds"].append({"id": f"seed-{seed}", "realm_id": rng.choice(realms), "asset_definitions": rng.randrange(0, 50),
+                              "islands": [{"slot": s, "asset_definitions": rng.randrange(0, 900)} for s in range(rng.randrange(1, 7))]})
+    return doc
+
+
+def b7_censuses():
+    yield "real", real_census()
+    for s in SEEDS:
+        yield f"real_seed{s}", b7_seeded(s)
+    for k, v in SYN.items():
+        yield k, v
+
+
+B7_BUDGETS = [("shipped", {"budget": {"ram_budget_kib": 40000, "disk_budget_kib": 32768, "warn_permille": 900}}),
+              ("roomy", {"budget": {"ram_budget_kib": 200000, "disk_budget_kib": 400000, "warn_permille": 750}}),
+              ("tight", {"budget": {"ram_budget_kib": 16384, "disk_budget_kib": 4096, "warn_permille": 1000}})]
+CB_KINDS = [("kib out of range", "budget_range"), ("warn_permille", "budget_warn"), ("nonempty list", "no_worlds"),
+            ("world id missing", "world_id"), ("duplicate world", "duplicate_world"), ("duplicate slot", "duplicate_slot")]
+
+
+def b7_bad_censuses():
+    good = census([("a", [(0, 1)])])
+    yield "refuse_no_worlds", {"budget": dict(B7_BUDGETS[0][1]["budget"])}, census([])
+    yield "refuse_blank_id", B7_BUDGETS[0][1], census([(" \t", [(0, 1)])])
+    yield "refuse_dup_world", B7_BUDGETS[0][1], census([("a", [(0, 1)]), ("a", [(1, 2)])])
+    yield "refuse_dup_slot", B7_BUDGETS[0][1], census([("a", [(3, 1), (3, 2)])])
+    yield "refuse_ram_zero", {"budget": {"ram_budget_kib": 0, "disk_budget_kib": 10, "warn_permille": 900}}, good
+    yield "refuse_disk_big", {"budget": {"ram_budget_kib": 10, "disk_budget_kib": 100000001, "warn_permille": 900}}, good
+    yield "refuse_warn", {"budget": {"ram_budget_kib": 10, "disk_budget_kib": 10, "warn_permille": 1001}}, good
+
+
+def b7_edge_censuses():
+    # 40000 KiB RAM: one island of n assets costs 16384 + 24n KiB
+    yield "edge_ram_at_budget", B7_BUDGETS[0][1], census([("at", [(0, 984)]), ("over", [(0, 985)])])
+    yield "edge_world_at_budget", {"budget": {"ram_budget_kib": 32816, "disk_budget_kib": 8384, "warn_permille": 900}}, \
+        census([("pair", [(0, 1), (1, 1)]), ("pair_over", [(0, 1), (1, 2)])])
+    yield "edge_near", {"budget": {"ram_budget_kib": 20000, "disk_budget_kib": 30000, "warn_permille": 900}}, \
+        census([("near", [(0, 67), (1, 68), (2, 0)])])
+    yield "edge_empty_world", B7_BUDGETS[0][1], census([("bare", []), ("one", [(5, 3)])])
+
+
+# ---------------------------------------------------------------- G253 Ebb Tide Eviction
+EE_KINDS = [("weights must be 1..", "weight_range"), ("duplicate world", "duplicate_world"),
+            ("duplicate slot", "duplicate_slot"), ("islands", "too_many_islands")]
+
+
+def ee_view(v):
+    return "-" if v is None else f"{v['weight']}/{v['count']}/{lst(v['unload_slots'])}"
+
+
+def ee_case(name, cfg, report, out, src):
+    out.append(f"C {name}")
+    out.append(f"K {lst(cfg.get('pinned_slots', []))} {cfg.get('default_weight', 1)}")
+    for wid, m in sorted(cfg.get("weights", {}).items()):
+        for k, v in sorted(m.items()):
+            out.append(f"X {hx(wid)} {k} {v}")
+    out.extend(src)
+    try:
+        p = ee.plan(report, cfg)
+    except ee.EvictionError as e:
+        out.append(b7_refusal(e, EE_KINDS))
+        return
+    for w in p["worlds"]:
+        out.append(f"O w {hx(w['id'])} {w['total_ram_kib']} {w['need_kib']} {lst(w['pinned_slots'])} {w['tide']} "
+                   f"{ee_view(w['optimal'])} {ee_view(w['greedy_heaviest_first'])} {ee_view(w['greedy_lowest_weight_first'])}")
+    s = p["summary"]
+    out.append(f"O s {s['worlds']} {s['over_budget']} {s['cannot_fit']} {s['unloads']} {s['greedy_heaviest_worse']} {s['greedy_weight_worse']}")
+
+
+def ee_raw(budget, worlds):
+    doc = {"format": "daedalus-census-budget", "version": 1, "budget": {"ram_budget_kib": budget},
+           "worlds": [{"id": w, "islands": [{"slot": s, "ram_kib": r} for s, r in isl]} for w, isl in worlds]}
+    src = [f"Q {budget}"] + [f"R {hx(w)} " + lst(f"{s}:{r}" for s, r in isl) for w, isl in worlds]
+    return doc, src
+
+
+def ee_lines():
+    out = ["# disksaver ebb_eviction parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    shipped = cfg_json("data/islands/disk-saver/ebb-eviction-v1.json")
+    heavy = dict(shipped, weights={"alpha": {"2": 9}, "seed-0": {"1": 7, "2": 3}, "big": {"3": 5, "7": 2, "11": 40}})
+    nopin = dict(shipped, pinned_slots=[], default_weight=3)
+    for cname, c in b7_censuses():
+        for bname, b in (B7_BUDGETS[0], ("ebb", {"budget": {"ram_budget_kib": 20000, "disk_budget_kib": 32768, "warn_permille": 900}})):
+            rep = cb.plan(c, b)
+            src = [b7_budget(b)] + b7_census(c)
+            for kname, k in (("shipped", shipped), ("weighted", heavy), ("nopin", nopin)):
+                ee_case(f"{cname}_{bname}_{kname}", k, rep, out, src)
+    for cname, b, c in b7_edge_censuses():
+        ee_case(cname, shipped, cb.plan(c, b), out, [b7_budget(b)] + b7_census(c))
+    hand = [
+        ("hand_greedy_trap", 100, [("w", [(0, 10), (1, 60), (2, 50), (3, 50)])], {"w": {"1": 5, "2": 2, "3": 2}}),
+        ("hand_at_budget", 100, [("w", [(0, 40), (1, 60)])], {}),
+        ("hand_one_over", 100, [("w", [(0, 40), (1, 61)])], {}),
+        ("hand_stranded", 50, [("w", [(0, 60), (1, 5)])], {}),
+        ("hand_zero_budget", 0, [("z", [(1, 0), (2, 0)]), ("y", [(1, 3), (4, 0)])], {"y": {"4": 1000}}),
+        ("hand_ties", 30, [("t", [(5, 10), (6, 10), (7, 10), (8, 10), (9, 20)])], {"t": {"9": 2}}),
+        ("hand_no_islands", 10, [("e", [])], {}),
+        ("hand_many", 1000, [("m", [(s, 37 * s % 101 + 50) for s in range(1, 15)])],
+         {"m": {str(s): s % 4 + 1 for s in range(1, 15)}}),
+    ]
+    for name, budget, worlds, weights in hand:
+        doc, src = ee_raw(budget, worlds)
+        ee_case(name, dict(shipped, weights=weights), doc, out, src)
+    bad = [
+        ("refuse_weight_zero", dict(shipped, default_weight=0), [("w", [(0, 5)])]),
+        ("refuse_weight_big", dict(shipped, weights={"w": {"1": 1001}}), [("w", [(0, 5)])]),
+        ("refuse_dup_world", shipped, [("w", [(0, 5)]), ("w", [(1, 5)])]),
+        ("refuse_dup_slot", shipped, [("w", [(1, 5), (1, 6)])]),
+        ("refuse_513_islands", shipped, [("w", [(s, 1) for s in range(513)])]),
+    ]
+    for name, k, worlds in bad:
+        doc, src = ee_raw(10, worlds)
+        ee_case(name, k, doc, out, src)
+    return out
+
+
+# ---------------------------------------------------------------- G505 Beacon Watch
+BW_KINDS = [("world id missing", "world_id"), ("duplicate world", "duplicate_world"), ("fits_all_resident", "fits"),
+            ("max_resident", "max_resident"), ("beacon must be", "beacon"), ("duplicate slot", "duplicate_slot")]
+
+
+def bw_raw_lines(side, doc):
+    out = []
+    for w in doc["worlds"]:
+        f = w["fits_all_resident"]
+        out.append(f"R {side} {hx(w['id'])} {int(f) if isinstance(f, bool) else '!'} {w['max_resident']} "
+                   + lst(f"{i['slot']}:{i['beacon']}" for i in w["islands"]))
+    return out
+
+
+def bw_case(name, src, bdoc, cdoc, out):
+    out.append(f"C {name}")
+    out.extend(src)
+    try:
+        v = bw.watch(bdoc, cdoc)
+    except bw.BeaconWatchError as e:
+        side = str(e).split(":")[0]
+        line = b7_refusal(e, BW_KINDS)
+        out.append(line.replace("O refused ", f"O refused {side}_"))
+        return
+    for f in v["findings"]:
+        out.append(f"O f {hx(f['world'])} {'-' if f['slot'] is None else f['slot']} {f['kind']} {f['before']} {f['after']} {int(f['fails'])}")
+    out.append(f"O v {v['verdict']} {v['regressions']} " + lst(f"{k}={n}" for k, n in v["counts"].items()))
+
+
+def bw_raw(worlds):
+    return {"format": "daedalus-census-budget", "version": 1,
+            "worlds": [{"id": w, "fits_all_resident": f, "max_resident": m,
+                        "islands": [{"slot": s, "beacon": b} for s, b in isl]} for w, f, m, isl in worlds]}
+
+
+def bw_lines():
+    out = ["# disksaver beacon_watch parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cs = list(b7_censuses())
+    pairs = []
+    for i, (an, a) in enumerate(cs):
+        bn, b = cs[(i + 1) % len(cs)]
+        pairs.append((an, a, an, a))
+        pairs.append((an, a, bn, b))
+    for an, a, bn, b in pairs:
+        for (n1, c1), (n2, c2) in ((B7_BUDGETS[1], B7_BUDGETS[0]), (B7_BUDGETS[0], B7_BUDGETS[2]), (B7_BUDGETS[0], B7_BUDGETS[1])):
+            src = [b7_budget(c1, "b"), b7_budget(c2, "c")] + b7_census(a, "W", "b") + b7_census(b, "W", "c")
+            bw_case(f"{an}_{n1}_to_{bn}_{n2}", src, cb.plan(a, c1), cb.plan(b, c2), out)
+    for name, cfg, c in b7_edge_censuses():
+        tighter = {"budget": dict(cfg["budget"], ram_budget_kib=cfg["budget"]["ram_budget_kib"] - 1)}
+        src = [b7_budget(cfg, "b"), b7_budget(tighter, "c")] + b7_census(c, "W", "b") + b7_census(c, "W", "c")
+        bw_case(name + "_minus_one", src, cb.plan(c, cfg), cb.plan(c, tighter), out)
+    G, A, R = "green", "amber", "red"
+    hand = [
+        ("hand_all_kinds", [("keep", True, 3, [(0, G), (1, A), (2, R), (3, G)]), ("gone", True, 1, [(0, G)]),
+                            ("spill", True, 2, [(0, G)]), ("unspill", False, 0, [(0, R)])],
+         [("keep", True, 2, [(0, A), (1, G), (2, R), (4, A), (5, G)]), ("new", False, 1, [(0, R), (1, G)]),
+          ("spill", False, 2, [(0, G)]), ("unspill", True, 4, [(0, G)])]),
+        ("hand_calm", [("w", True, 5, [(0, R)])], [("w", True, 6, [(0, A), (1, G)])]),
+        ("hand_empty_both", [], []),
+        ("hand_all_gone", [("a", True, 1, [(0, G)]), ("b", False, 0, [])], []),
+    ]
+    for name, bws, cws in hand:
+        bd_, cd_ = bw_raw(bws), bw_raw(cws)
+        bw_case(name, bw_raw_lines("b", bd_) + bw_raw_lines("c", cd_), bd_, cd_, out)
+    ok = [("w", True, 1, [(0, G)])]
+    bad = [
+        ("refuse_blank_id", [(" ", True, 1, [(0, G)])], ok),
+        ("refuse_dup_world", ok, ok + ok),
+        ("refuse_fits", [("w", 1, 1, [(0, G)])], ok),
+        ("refuse_beacon", ok, [("w", True, 1, [(0, "blue")])]),
+        ("refuse_dup_slot", [("w", True, 1, [(0, G), (0, R)])], ok),
+        ("refuse_beacon_before_dup", ok, [("w", True, 1, [(0, G), (0, "Red")])]),
+    ]
+    for name, bws, cws in bad:
+        bd_, cd_ = bw_raw(bws), bw_raw(cws)
+        bw_case(name, bw_raw_lines("b", bd_) + bw_raw_lines("c", cd_), bd_, cd_, out)
+    return out
+
+
+# ---------------------------------------------------------------- G529 Budget Fathoms
+BF_KINDS = [("--sweep-ram", "sweep_ram"), ("--sweep-disk", "sweep_disk")] + CB_KINDS
+
+
+def bf_case(name, cfg, c, sr_, sd_, out):
+    out.append(f"C {name}")
+    out.append(b7_budget(cfg))
+    out.extend(b7_census(c))
+    out.append(f"S {'n' if sr_ is None else hx(sr_)} {'n' if sd_ is None else hx(sd_)}")
+    try:
+        r = bf.build(bf.to_report(c, cfg), bf.parse_list(sr_, "--sweep-ram"), bf.parse_list(sd_, "--sweep-disk"))
+    except bf.FathomError as e:
+        out.append(b7_refusal(e, BF_KINDS))
+        return
+    for dim in ("ram", "disk"):
+        n, s = r["need_kib"][dim], r["slack_kib"][dim]
+        out.append(f"O n {dim} {n['all_green']} {n['no_red']} {n['all_fit']} {n['deep']} "
+                   f"{s['all_green']} {s['no_red']} {s['all_fit']} {s['deep']}")
+    for w in r["worlds"]:
+        out.append(f"O w {hx(w['world'])} {w['ram_fit_kib']} {w['disk_fit_kib']} "
+                   + lst(f"{i['slot']}:{i['ram_green_kib']}:{i['ram_clear_kib']}:{i['disk_green_kib']}:{i['disk_clear_kib']}" for i in w["islands"]))
+    for s in r["sweep"]:
+        out.append(f"O s {s['dim']} {s['budget_kib']} {s['green']} {s['amber']} {s['red']} {s['worlds_spilling']} {s['verdict']}")
+    n = r["now"]
+    out.append(f"O now {n['green']} {n['amber']} {n['red']} {n['worlds_spilling']} {r['verdict']}")
+
+
+def bf_lines():
+    out = ["# disksaver budget_fathoms parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    for cname, c in b7_censuses():
+        for bname, b in B7_BUDGETS:
+            bf_case(f"{cname}_{bname}", b, c, "16384,40000, 39999,100000000" if bname == "shipped" else None,
+                    "32768,4096,8000" if bname != "tight" else "1", out)
+    for name, b, c in b7_edge_censuses():
+        bf_case(name, b, c, "1,2", None, out)
+    for name, b, c in b7_bad_censuses():
+        bf_case(name, b, c, None, None, out)
+    good = census([("a", [(0, 1)])])
+    sweeps = [("sweep_leading_zeros", "007,7,0000000000000000000000040000", None),
+              ("sweep_dupes_sorted", "9,3,9,3,1", "5,5"),
+              ("refuse_sweep_zero", "0", None), ("refuse_sweep_empty", "", None), ("refuse_sweep_trailing_comma", "1,", None),
+              ("refuse_sweep_sign", "+5", None), ("refuse_sweep_big", "100000001", None),
+              ("refuse_sweep_long_digits", "1" * 30, None), ("refuse_sweep_disk_word", "1", "ten"),
+              ("refuse_sweep_65", ",".join(str(i) for i in range(1, 66)), None),
+              ("sweep_64", ",".join(str(i * 1000) for i in range(1, 65)), None),
+              ("refuse_sweep_65_dupes", ",".join("5" for _ in range(65)), None),
+              ("sweep_spaces", " 12 ,\t13", None),
+              ("refuse_census_before_sweep", None, "0")]
+    for name, a, d in sweeps:
+        c = census([]) if name == "refuse_census_before_sweep" else good
+        bf_case(name, B7_BUDGETS[0][1], c, a, d, out)
+    return out
+
+
+# ---------------------------------------------------------------- G533 Fleet Flags
+FF_KINDS = [("realm_id must be", "realm")] + CB_KINDS
+
+
+def ff_claim(c):
+    rid = c["id"]
+    vals = [str(c[k]) if k in c else "?" for k in ("worlds", "islands", "asset_definitions")]
+    return f"M {'-' if rid is None else hx(rid)} " + " ".join(vals)
+
+
+def ff_case(name, cfg, c, out):
+    out.append(f"C {name}")
+    out.append(b7_budget(cfg))
+    out.extend(b7_census(c))
+    for m in c.get("realms") or []:
+        out.append(ff_claim(m))
+    if c.get("realms") is None:
+        out.append("M none")
+    try:
+        r = ff.muster(c, cfg)
+    except ff.FlagError as e:
+        out.append(b7_refusal(e, FF_KINDS))
+        return
+    for g in r["realms"]:
+        out.append(f"O r {'-' if g['realm'] is None else hx(g['realm'])} {g['worlds']} {g['islands']} {g['asset_definitions']} "
+                   f"{g['ram_kib']} {g['disk_kib']} {g['green']} {g['amber']} {g['red']} {g['worlds_spilling']} "
+                   f"{hx(g['heaviest_world'])} {g['flag']}")
+    for m in r["tally_mismatches"]:
+        out.append(f"O m {'-' if m['realm'] is None else hx(m['realm'])} {m['field']} "
+                   f"{'-' if m['claimed'] is None else m['claimed']} {m['found']}")
+    out.append(f"O v {r['verdict']}")
+
+
+def ff_realmed(worlds, realms=None):
+    doc = census([(w, isl) for w, _, _, isl in worlds])
+    for d, (_, rid, wad, _) in zip(doc["worlds"], worlds):
+        if rid != "absent":
+            d["realm_id"] = rid
+        if wad is not None:
+            d["asset_definitions"] = wad
+    if realms is not None:
+        doc["realms"] = realms
+    return doc
+
+
+def ff_lines():
+    out = ["# disksaver fleet_flags parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    for cname, c in b7_censuses():
+        for bname, b in B7_BUDGETS:
+            ff_case(f"{cname}_{bname}", b, c, out)
+    for name, b, c in b7_edge_censuses():
+        ff_case(name, b, c, out)
+    for name, b, c in b7_bad_censuses():
+        ff_case(name, b, c, out)
+    sb = B7_BUDGETS[0][1]
+    hand = [
+        ("hand_realms_heaviest_tie", [("b", "r", 5, [(0, 10)]), ("a", "r", 5, [(0, 10)]), ("c", None, 0, [(0, 1)])],
+         [{"id": "r", "worlds": 2, "islands": 2, "asset_definitions": 10}, {"id": None, "worlds": 1}]),
+        ("hand_mismatches", [("w1", "north", 3, [(0, 1), (1, 2)]), ("w2", "absent", None, [(0, 900)]), ("w3", "south", 7, [])],
+         [{"id": "north", "worlds": 2, "islands": 2, "asset_definitions": 4}, {"id": "ghost", "worlds": 0, "islands": 1},
+          {"id": "south", "asset_definitions": 7}, {"id": "north", "islands": 2}]),
+        ("hand_no_claims_list", [("w", "x", 1, [(0, 1)])], None),
+        ("hand_empty_claims", [("w", "x", 1, [(0, 1)]), ("v", None, None, [(0, 1)])], []),
+        ("hand_amber_signal", [("w", "x", 0, [(0, 980)])], [{"id": "x", "worlds": 1}]),
+        ("hand_spill_red", [("w", "x", 0, [(0, 1), (1, 1), (2, 1)])], None),
+    ]
+    for name, worlds, realms in hand:
+        ff_case(name, sb, ff_realmed(worlds, realms), out)
+    for name, rid in (("refuse_realm_blank", " "), ("refuse_realm_empty", ""), ("refuse_realm_number", 5)):
+        ff_case(name, sb, ff_realmed([("ok", "r", 0, [(0, 1)]), ("bad", rid, 0, [(0, 1)])]), out)
+    return out
+
+
 GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": qs_lines, "sack_chute": sc_lines,
          "seal_roll": sr_lines, "channel_dash": cd_lines, "boom_defence": bd_lines, "salvage_sale": ss_lines,
          "rope_run": rr_lines, "belfry_changes": bc_lines, "tram_shunt": ts_lines,
          "watchfires": wf_lines, "tide_lock": tl_lines, "smugglers_island": si_lines, "harbour_cryptogram": hc_lines,
          "fleet_soundings": fs_lines, "quay_duel": qd_lines, "last_crate": lc_lines, "census_riddles": cr_lines,
          "tide_clocks": tc_lines, "lighthouse_leases": ll_lines, "tidemark_chunks": tm_lines,
-         "bottle_census": bc_census_lines}
+         "bottle_census": bc_census_lines, "ebb_eviction": ee_lines, "beacon_watch": bw_lines,
+         "budget_fathoms": bf_lines, "fleet_flags": ff_lines}
 
 
 def texts():
