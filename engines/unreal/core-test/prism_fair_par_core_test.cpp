@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 // Prismheart Fair Par parity: DaedalusPrismFairParCore.h must replay the whole par table in prism_fair_par_parity.txt
 // (written by tools/minigames/fair_par.py) exactly, by playing the casual bot and the demo through the C++ cores of
-// Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, and match the bot hash vectors bit for bit.
+// every Prismheart game but Shardring (Oracle-fed, no PRNG port: its rows are checked for shape and tier order), and
+// match the bot hash vectors bit for bit.
 //   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prism_fair_par_core_test.cpp -o prism_fair_par_core_test && ./prism_fair_par_core_test prism_fair_par_parity.txt
 #include "DaedalusPrismFairParCore.h"
 #include <cstdio>
@@ -51,7 +52,7 @@ int main(int argc, char** argv)
 	}
 	bool Ok = false;
 	const std::vector<Row> Table = daedalus::prismpar::Table(Ok);
-	Check("every bot and demo move was legal", Ok && Table.size() == 3 * GameCount);
+	Check("every bot and demo move was legal", Ok && Table.size() == 3 * ReplayCount);
 	for (size_t I = 0; I < Table.size() && I < Rows.size(); ++I)
 	{
 		const Row& R = Table[I];
@@ -65,6 +66,19 @@ int main(int argc, char** argv)
 		Check(Tag + " separated", (Field(H, "separated") == "true") == R.Separated);
 		Check(Tag + " tiers", TierOf(R, false, 999) == Tier::None && TierOf(R, true, R.Bronze) == Tier::Bronze
 			&& (R.Gold == 0 || TierOf(R, true, R.Gold) == Tier::Gold) && (R.Silver == 0 || R.Silver == R.Gold || TierOf(R, true, R.Silver) == Tier::Silver));
+	}
+	for (size_t I = Table.size(); I < Rows.size(); ++I)
+	{
+		const std::string& H = Rows[I];
+		Row R;
+		R.Game = Field(H, "game"); R.Difficulty = Field(H, "difficulty");
+		R.Bronze = Int(H, "bronze"); R.Silver = Int(H, "silver"); R.Gold = Int(H, "gold");
+		const std::string Tag = R.Game + " " + R.Difficulty + " (fixture only)";
+		Check(Tag + " names", R.Game == "shardring" && Int(H, "seeds") == Seeds);
+		Check(Tag + " order", R.Bronze == 1 && R.Silver <= R.Gold && Int(H, "bronzeHit") >= Int(H, "silverHit")
+			&& Int(H, "silverHit") >= Int(H, "goldHit") && Int(H, "botWin") == Int(H, "bronzeHit"));
+		Check(Tag + " tiers", TierOf(R, false, 999) == Tier::None && TierOf(R, true, R.Bronze) == Tier::Bronze
+			&& (R.Gold == 0 || TierOf(R, true, R.Gold) == Tier::Gold));
 	}
 	std::printf("%s prism fair par core: %d/%d checks passed\n", Passed == Total ? "OK" : "FAIL", Passed, Total);
 	return Passed == Total ? 0 : 1;

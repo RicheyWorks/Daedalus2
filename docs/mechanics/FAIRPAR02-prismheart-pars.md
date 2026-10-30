@@ -1,10 +1,12 @@
-# FAIRPAR02 - Prismheart Fair Par (G603-G605; Prismheart balance lane)
+# FAIRPAR02 - Prismheart Fair Par (G603-G606; Prismheart balance lane)
 
 Code: `tools/minigames/fair_par.py` (authority; read-only on the games' rules)
 C++: `engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPrismFairParCore.h` (namespace `daedalus::prismpar`)
 Tests: `tools/minigames/test_fair_par.py` (6 tests); `engines/unreal/core-test/prism_fair_par_core_test.cpp`
-(168 checks). The C++ core plays the same bot through each game's own C++ core and must
-rebuild `prism_fair_par_parity.txt` exactly. CI: `engines.yml` (g++ ASan+UBSan, clang++) and `desktop-games.yml`
+(195 checks). The C++ core plays the same bot through each game's own C++ core and must
+rebuild `prism_fair_par_parity.txt` exactly.
+Shardring is the exception: its core is Oracle-fed (no PRNG port), so its rows are Python-only and the C++ test
+checks them for shape and tier order. CI: `engines.yml` (g++ ASan+UBSan, clang++) and `desktop-games.yml`
 (`fair_par.py --check`). Source only; no editor, no new assets.
 
 Marsh cabinets: see `FAIRPAR01-fair-par.md` (G600/G602). This is the first par table for the Prismheart games, as
@@ -19,10 +21,11 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
    - Glowmoss: dig a random ledge that still leaves light to climb out; climb out once the target is met.
    - Spiritkite: fly random lanes that keep a way home; head home once the target is met; then land.
    - Glimmerloom: sell what the rumor does not favour; buy a random amount of the hue rumored to rise; rest.
-   - G604/G605 cabinets (Lumenpath, Wardens' Accord, Facetlock, Prismvault, Shardfall, Prismcairn): a mixed bot.
-     Each move, a coin flip either plays the game's own demo move or a random legal move (a random mirror cell; a
-     random take or affordable summon; a random row or column slide; name a random remaining candidate; draw or
-     bank on a coin; any legal take).
+   - G604-G606 cabinets (Lumenpath, Wardens' Accord, Facetlock, Prismvault, Shardfall, Prismcairn, Shadewatch,
+     Shardring): a mixed bot. Each move, a coin flip either plays the game's own demo move (Shardring: greedy_move)
+     or a random legal move (a random mirror cell; a random take or affordable summon; a random row or column slide;
+     name a random remaining candidate; draw or bank on a coin; any legal take; flare any lane, kindle or nova; any
+     empty facet).
 4. Bot choices come from the stateless SplitMix64 hash shared with FairPar.java (bot seed 600), never from the
    game's own RNG. Each game uses seeds 0-399.
 5. **Daedalus hook:** `prismpar::TierOf(row, won, score)` gives the result-screen tier. Satchel tiers, Almanac daily
@@ -59,10 +62,16 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
 | prismcairn | easy | 54.5 % | 105 | 105 | 545 / 292 / 292 | 105 | 100.0 % | 105 | no |
 | prismcairn | normal | 28.5 % | 105 | 105 | 285 / 117 / 117 | 100 | 100.0 % | 105 | no |
 | prismcairn | hard | 0.0 % | 0 | 0 | 0 / 0 / 0 | 0 | 100.0 % | 105 | no |
+| shadewatch | easy | 83.0 % | 115 | 125 | 830 / 372 / 125 | 110 | 96.2 % | 120 | yes |
+| shadewatch | normal | 45.7 % | 129 | 144 | 457 / 237 / 80 | 129 | 79.2 % | 134 | yes |
+| shadewatch | hard | 14.0 % | 148 | 163 | 140 / 75 / 25 | 148 | 49.5 % | 0 | yes |
+| shardring | easy | 14.5 % | 289 | 330 | 145 / 60 / 15 | 285 | 68.7 % | 287 | yes |
+| shardring | normal | 3.2 % | 242 | 264 | 32 / 15 / 5 | 233 | 34.7 % | 0 | yes |
+| shardring | hard | 2.2 % | 188 | 215 | 22 / 10 / 2 | 183 | 20.2 % | 0 | yes |
 
 ## Balance findings
 
-- Every G603/G604 row is separated: a win, silver and gold need strictly better scores. Five G605 rows are not
+- Every G603/G604/G606 row is separated: a win, silver and gold need strictly better scores. Five G605 rows are not
   (below).
 - **Hard is very hard for casual play.** Spiritkite hard: 2 % of casual rounds win (8 of 400), so its silver and gold
   rest on 8 rounds and are low-confidence. Glowmoss hard: 4.5 %. A careful player with the exact plan always wins
@@ -85,3 +94,8 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
 - **Prismcairn has a perfect-play wall**: the demo (exact Grundy play) wins 100 %, the casual bot wins 0 % on hard,
   and scores cap at 105 (50 per round + 5 per round left), so silver = gold. There is no room for a gold tier
   without a new score source (for example a bonus for fast rounds).
+- **Shadewatch is the best-tuned cabinet**: casual play wins 83 % / 46 % / 14 %, the demo 96 % / 79 % / 50 %, and
+  every row is separated. Hard is a real test even for the demo.
+- **Shardring is the harshest**: casual play wins 14.5 % / 3 % / 2 %, and the greedy helper only 69 % / 35 % / 20 %.
+  The normal and hard pars rest on 13 and 9 winning rounds, so they are low-confidence. The ring fills up too fast
+  for casual play; worth a look by the game's owner.

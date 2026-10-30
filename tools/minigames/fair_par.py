@@ -23,7 +23,9 @@ import facetlock  # noqa: E402
 import glowmoss  # noqa: E402
 import lumenpath  # noqa: E402
 import prismcairn  # noqa: E402
+import prism_shard  # noqa: E402
 import prismvault  # noqa: E402
+import shadewatch  # noqa: E402
 import shardfall  # noqa: E402
 import spiritkite  # noqa: E402
 import wardens_accord  # noqa: E402
@@ -144,6 +146,37 @@ def prismcairn_random(g, run, k):
     return options[pick(BOT_SEED, run, k, 15, len(options) - 1)]
 
 
+def shadewatch_random(g, run, k):
+    """Flare any lane, kindle, or nova when there is light for it, uniformly."""
+    options = [("flare", i) for i in range(len(g.lanes))] + [("kindle", 0)]
+    options += [("nova", 0)] if g.light >= shadewatch.NOVA_COST else []
+    return options[pick(BOT_SEED, run, k, 16, len(options) - 1)]
+
+
+class ShardringPlay:
+    """Step/demo_action view of prism_shard.ShardringGame (it predates PrismGame): demo = greedy_move."""
+
+    def __init__(self, seed, difficulty):
+        self.game = prism_shard.start(seed, difficulty)
+        self.rng = self.game.rng
+
+    over = property(lambda self: self.game.over)
+    won = property(lambda self: self.game.won)
+    score = property(lambda self: self.game.score)
+
+    def step(self, facet):
+        return self.game.place(facet)
+
+    def demo_action(self):
+        return prism_shard.greedy_move(self.game)
+
+
+def shardring_random(g, run, k):
+    """Set the shard in any empty facet, uniformly."""
+    empty = g.game.empty_facets()
+    return empty[pick(BOT_SEED, run, k, 17, len(empty) - 1)]
+
+
 GAMES = (("glowmoss", glowmoss.start, glowmoss_bot), ("spiritkite", spiritkite.start, spiritkite_bot),
          ("glimmerloom", glimmerloom.start, glimmerloom_bot),
          ("lumenpath", lumenpath.start, mixed(lumenpath_random)),
@@ -151,7 +184,9 @@ GAMES = (("glowmoss", glowmoss.start, glowmoss_bot), ("spiritkite", spiritkite.s
          ("facetlock", facetlock.start, mixed(facetlock_random)),
          ("prismvault", prismvault.start, mixed(prismvault_random)),
          ("shardfall", shardfall.start, mixed(shardfall_random)),
-         ("prismcairn", prismcairn.start, mixed(prismcairn_random)))
+         ("prismcairn", prismcairn.start, mixed(prismcairn_random)),
+         ("shadewatch", shadewatch.start, mixed(shadewatch_random)),
+         ("shardring", ShardringPlay, mixed(shardring_random)))
 
 
 def bot_round(start, bot, seed, difficulty):

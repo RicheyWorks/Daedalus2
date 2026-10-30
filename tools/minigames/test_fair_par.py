@@ -8,6 +8,7 @@ import fair_par as fp  # noqa: E402
 import glimmerloom  # noqa: E402
 import glowmoss  # noqa: E402
 import prismcairn  # noqa: E402
+import shadewatch  # noqa: E402
 import shardfall  # noqa: E402
 import spiritkite  # noqa: E402
 import wardens_accord  # noqa: E402
@@ -37,7 +38,8 @@ class FairParTest(unittest.TestCase):
         self.assertEqual(fp.tier(pars, 120), "GOLD")
 
     def test_bots_only_make_legal_moves_and_never_touch_the_game_rng(self):
-        own_rng = (glimmerloom.start, wardens_accord.start, shardfall.start, prismcairn.start)
+        own_rng = (glimmerloom.start, wardens_accord.start, shardfall.start, prismcairn.start, shadewatch.start,
+                   fp.ShardringPlay)
         for _, start, bot in fp.GAMES:
             for d in fp.DIFFICULTIES:
                 for seed in range(15):
