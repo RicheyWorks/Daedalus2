@@ -46,6 +46,14 @@ Why: in V1 one answer (315 Hz tone) was best in 35% of rounds and two bands carr
 rounds no single answer is best in more than 25% (the top is 315 Hz tone at about 23%), every band is the answer at
 least 5% of the time, and trills win about 37%.
 
+## V2 scoring and tone-only play
+
+- **Partial-credit tiers (V2).** Best call 100; within 1 dB 90; within 3 dB 75; within 6 dB 50; heard 25; not heard 0.
+  A near miss now clearly beats a call that barely carried. V1 keeps its point per 0.1 dB slope.
+- **Tone-only (accessibility).** `Game::Begin(seed, difficulty, Ruleset::V2, true)`. For listeners who find fast
+  trills hard to hear or tell apart: trills are refused and each round is scored against the best tone. It selects V2,
+  where every crossing is solvable with a tone, and plays the same crossings as V2.
+
 ## Feedback (free, after any call)
 
 `Advise(crossing, band, form)` says how far the call fell short of the best one (in 0.1 dB), whether the mate heard
@@ -82,3 +90,5 @@ under 800 Hz, with soft two-harmonic tones and no piercing sounds.
 | 4 | iter PR 2 | Ruleset V2: marsh and rock strips (V1 frozen and default) | V2 only; new golden v2 |
 | 5 | iter PR 2 | V2: per-round wind and a singing flock masking one band (balance: no answer above 25%) | V2 only |
 | 6 | iter PR 2 | V2: gentle first round and a difficulty ramp; tone-solvable guarantee | V2 only |
+| 7 | iter PR 3 | V2 partial-credit tiers (100/90/75/50/25/0) | V2 only; fixture unchanged |
+| 8 | iter PR 3 | tone-only accessibility mode (trills refused, scored against the best tone) | opt-in; fixture unchanged |

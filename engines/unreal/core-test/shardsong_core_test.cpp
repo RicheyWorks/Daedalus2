@@ -332,6 +332,54 @@ static std::size_t Compare(const std::string& Path, const std::vector<std::strin
 	return Same;
 }
 
+// Iteration 7: V2 partial-credit tiers. Iteration 8: tone-only accessibility mode.
+static void TiersAndToneOnly()
+{
+	int Bad = 0;
+	for (std::uint64_t Token = 0; Token < 3000; ++Token)
+	{
+		const Difficulty D = static_cast<Difficulty>(Token % 3);
+		Game G = Game::Begin(TokenSeed(Token), D, Ruleset::V2), T = Game::Begin(TokenSeed(Token), D, Ruleset::V1, true);
+		if (!T.ToneOnly || T.Rules != Ruleset::V2) ++Bad;
+		for (int R = 0; R < Rounds; ++R)
+		{
+			const Crossing& C = G.Rounds_[R];
+			const Crossing& TC = T.Rounds_[R];  // same crossings in both modes
+			bool SameC = TC.Count == C.Count && TC.Air == C.Air && TC.Chorus == C.Chorus;
+			for (int I = 0; I < C.Count; ++I) SameC = SameC && TC.Seg[I].H == C.Seg[I].H && TC.Seg[I].LengthM == C.Seg[I].LengthM;
+			if (!SameC) ++Bad;
+			const int BestSnr = Best(C).Snr, ToneSnr = BestTone(C).Snr;
+			for (int Band = 0; Band < Bands; ++Band)
+				for (int Fm = 0; Fm < 2; ++Fm)
+				{
+					const Form F = static_cast<Form>(Fm);
+					const int S = SnrTenths(C, Band, F), Sh = BestSnr - S, P = ScoreV2(C, Band, F);
+					const int Want = S < HeardSnr ? 0 : (Sh <= 0 ? 100 : Sh <= 10 ? 90 : Sh <= 30 ? 75 : Sh <= 60 ? 50 : 25);
+					if (P != Want) ++Bad;
+					// Tiers never rank a weaker call above a stronger one, and never undercut V1's 0/100 ends.
+					for (int B2 = 0; B2 < Bands; ++B2)
+						if (SnrTenths(C, B2, Form::Tone) > S && ScoreV2(C, B2, Form::Tone) < P) ++Bad;
+					if ((Score(C, Band, F) == 100) != (P == 100) || (Score(C, Band, F) == 0 && S >= HeardSnr && Sh < 100)) ++Bad;
+					const int TP = ScoreV2(C, Band, F, true), Ts = ToneSnr - S;
+					const int TWant = F == Form::Trill || S < HeardSnr ? 0 : (Ts <= 0 ? 100 : Ts <= 10 ? 90 : Ts <= 30 ? 75 : Ts <= 60 ? 50 : 25);
+					if (TP != TWant || (F == Form::Tone && TP < P)) ++Bad;  // tone-only never scores a tone lower
+				}
+			const Choice BT = BestTone(C);
+			if (T.Choose(BT.Band, Form::Trill) != -1 || T.Choose(BT.Band, Form::Tone) != 100) ++Bad;
+			const Choice B = Best(C);
+			if (G.Choose(B.Band, B.F) != 100) ++Bad;
+		}
+		if (T.Total() != 100 * Rounds || G.Total() != 100 * Rounds) ++Bad;
+	}
+	Check(Bad == 0, "V2 tiers exact and monotone; tone-only refuses trills, uses V2, best tone scores 100 (" + std::to_string(Bad) + " bad)");
+	Crossing C; C.Count = 1; C.Seg[0] = { Habitat::Forest, 100 };  // best 250 tone at 15.0 dB (see the hand case)
+	Check(ScoreV2(C, 1, Form::Tone) == 100 && ScoreV2(C, 0, Form::Tone) == 90 && ScoreV2(C, 0, Form::Trill) == 50
+		&& ScoreV2(C, -1, Form::Tone) == 0 && ScoreV2(C, Bands, Form::Tone) == 0, "tier hand case (15.0 / 14.0 / 9.0 dB)");
+	Check(Score(C, 0, Form::Trill) == 40, "V1 slope unchanged for the same call (100 - 60)");
+	Game V1 = Game::Begin(9, Difficulty::Easy);
+	Check(!V1.ToneOnly && V1.Choose(0, Form::Trill) >= 0, "V1 default still allows trills");
+}
+
 int main(int argc, char** argv)
 {
 	const std::vector<std::string> Want = GoldenLines(), WantV2 = GoldenLinesV2();
@@ -348,6 +396,7 @@ int main(int argc, char** argv)
 	BoundaryAndFuzz();
 	EarAndHeap();
 	RulesetV2();
+	TiersAndToneOnly();
 	const std::string Path = argc > 1 ? argv[1] : "engines/unreal/core-test/shardsong_golden.txt";
 	const std::string PathV2 = Path.substr(0, Path.size() - 4) + "_v2.txt";  // shardsong_golden_v2.txt beside it
 	const std::size_t Same = Compare(Path, Want), SameV2 = Compare(PathV2, WantV2);

@@ -290,6 +290,18 @@ inline Crossing GenerateV2(Rng& R, Difficulty D, int Round)
 	return C;
 }
 
+/** V2 score, 0..100 in partial-credit tiers by how far the call falls short of the best (the best tone in tone-only
+ *  play): best 100, within 1 dB 90, within 3 dB 75, within 6 dB 50, heard 25, not heard 0. Coarse steps reward a
+ *  near miss clearly instead of V1's point-per-0.1-dB slope. */
+inline int ScoreV2(const Crossing& C, int Band, Form F, bool ToneOnly = false)
+{
+	if (Band < 0 || Band >= Bands || (ToneOnly && F == Form::Trill)) return 0;
+	const int S = SnrTenths(C, Band, F);
+	if (S < HeardSnr) return 0;
+	const int Short = (ToneOnly ? BestTone(C) : Best(C)).Snr - S;
+	return Short <= 0 ? 100 : (Short <= 10 ? 90 : (Short <= 30 ? 75 : (Short <= 60 ? 50 : 25)));
+}
+
 /** The pitched call the bird plays for a choice, made ear-safe (base and peak under 800 Hz). */
 inline earrule::CallSpec CallFor(int Band, Form F)
 {
@@ -310,14 +322,19 @@ struct Game
 {
 	Difficulty D = Difficulty::Normal;
 	Ruleset Rules = Ruleset::V1;
+	/** Accessibility: tone-only play for listeners who find fast trills hard to hear or tell apart. Trills are refused
+	 *  and rounds are scored against the best tone. Needs V2 (every V2 crossing is tone-solvable), so it selects V2. */
+	bool ToneOnly = false;
 	Crossing Rounds_[Rounds];
 	int Scores[Rounds] = {};
 	int Index = 0;
 
-	static Game Begin(std::uint64_t Seed, Difficulty Level, Ruleset Rs = Ruleset::V1)
+	static Game Begin(std::uint64_t Seed, Difficulty Level, Ruleset Rs = Ruleset::V1, bool TonesOnly = false)
 	{
 		Game G;
 		G.D = Level;
+		G.ToneOnly = TonesOnly;
+		if (TonesOnly) Rs = Ruleset::V2;
 		G.Rules = Rs;
 		Rng R(Seed);
 		for (int I = 0; I < Rounds; ++I) G.Rounds_[I] = Rs == Ruleset::V1 ? Generate(R, Level) : GenerateV2(R, Level, I);
@@ -325,11 +342,12 @@ struct Game
 	}
 	bool Over() const { return Index >= Rounds; }
 	const Crossing& Current() const { return Rounds_[Index < Rounds ? Index : Rounds - 1]; }
-	/** Plays the current round; returns its score, or -1 if the game is over or the band is invalid. */
+	/** Plays the current round; returns its score, or -1 if the game is over, the band is invalid, or a trill is
+	 *  played in tone-only mode. */
 	int Choose(int Band, Form F)
 	{
-		if (Over() || Band < 0 || Band >= Bands) return -1;
-		const int S = Score(Rounds_[Index], Band, F);
+		if (Over() || Band < 0 || Band >= Bands || (ToneOnly && F == Form::Trill)) return -1;
+		const int S = Rules == Ruleset::V1 ? Score(Rounds_[Index], Band, F) : ScoreV2(Rounds_[Index], Band, F, ToneOnly);
 		Scores[Index++] = S;
 		return S;
 	}
