@@ -62,9 +62,13 @@ enum class Hammer : std::uint8_t { Q, Conway };
 /** Grade band (same names as the Java Grade). */
 enum class Grade : std::uint8_t { Turned, Slipped };
 
-/** Q(0..n) into buf[0..n] (buf[0] = 0); needs len >= n + 1 and 0 <= n <= kMaxN. */
-constexpr Status QSequence(std::int32_t n, std::int32_t* buf, std::size_t len) {
-    if (n < 0 || n > kMaxN) {
+/**
+ * Extend a Q table: buf[0..from] already holds Q(0..from) (from >= 0) and this fills buf[from+1..n].
+ * Lets a caller grow a cached table (for example a TArray) without recomputing the prefix.
+ * Needs from <= n <= kMaxN and len >= n + 1; argument failures write nothing.
+ */
+constexpr Status QExtend(std::int32_t from, std::int32_t n, std::int32_t* buf, std::size_t len) {
+    if (from < 0 || n < from || n > kMaxN) {
         return Status::BadArgument;
     }
     if (buf == nullptr) {
@@ -73,8 +77,10 @@ constexpr Status QSequence(std::int32_t n, std::int32_t* buf, std::size_t len) {
     if (len < static_cast<std::size_t>(n) + 1) {
         return Status::BufferTooSmall;
     }
-    buf[0] = 0;
-    for (std::int32_t i = 1; i <= n; ++i) {
+    if (from == 0) {
+        buf[0] = 0;
+    }
+    for (std::int32_t i = from + 1; i <= n; ++i) {
         if (i <= 2) {
             buf[i] = 1;
         } else {
@@ -89,9 +95,9 @@ constexpr Status QSequence(std::int32_t n, std::int32_t* buf, std::size_t len) {
     return Status::Ok;
 }
 
-/** a(0..n) into buf[0..n] (buf[0] = 0); needs len >= n + 1 and 0 <= n <= kMaxN. */
-constexpr Status ConwaySequence(std::int32_t n, std::int32_t* buf, std::size_t len) {
-    if (n < 0 || n > kMaxN) {
+/** Extend a Conway table: buf[0..from] already holds a(0..from); fills buf[from+1..n]. Same rules as QExtend. */
+constexpr Status ConwayExtend(std::int32_t from, std::int32_t n, std::int32_t* buf, std::size_t len) {
+    if (from < 0 || n < from || n > kMaxN) {
         return Status::BadArgument;
     }
     if (buf == nullptr) {
@@ -100,11 +106,31 @@ constexpr Status ConwaySequence(std::int32_t n, std::int32_t* buf, std::size_t l
     if (len < static_cast<std::size_t>(n) + 1) {
         return Status::BufferTooSmall;
     }
-    buf[0] = 0;
-    for (std::int32_t i = 1; i <= n; ++i) {
-        buf[i] = i <= 2 ? 1 : buf[buf[i - 1]] + buf[i - buf[i - 1]];
+    if (from == 0) {
+        buf[0] = 0;
+    }
+    for (std::int32_t i = from + 1; i <= n; ++i) {
+        if (i <= 2) {
+            buf[i] = 1;
+        } else {
+            const std::int32_t prev = buf[i - 1];
+            if (prev < 1 || prev >= i) {
+                return Status::IndexFell;  // a corrupt prefix; never happens on a table this header filled
+            }
+            buf[i] = buf[prev] + buf[i - prev];
+        }
     }
     return Status::Ok;
+}
+
+/** Q(0..n) into buf[0..n] (buf[0] = 0); needs len >= n + 1 and 0 <= n <= kMaxN; argument failures write nothing. */
+constexpr Status QSequence(std::int32_t n, std::int32_t* buf, std::size_t len) {
+    return n < 0 ? Status::BadArgument : QExtend(0, n, buf, len);
+}
+
+/** a(0..n) into buf[0..n] (buf[0] = 0); needs len >= n + 1 and 0 <= n <= kMaxN; argument failures write nothing. */
+constexpr Status ConwaySequence(std::int32_t n, std::int32_t* buf, std::size_t len) {
+    return n < 0 ? Status::BadArgument : ConwayExtend(0, n, buf, len);
 }
 
 /** The strike of hammer h at n (1 <= n <= kMaxN) into *out, using scratch[0..n] as work space. */
