@@ -60,5 +60,9 @@
  * <p>G547 Stall Plaques ({@link StallPlaques}, quest {@code q_neat_plaques}): letter the stable roll onto fixed-width
  * plaque lines so the squared leftover space on every line but the last is least (Knuth-Plass-style word wrap); exact
  * DP over line starts vs. fill-each-line, which leaves short stub lines.
+ *
+ * <p>G548 Barn Upgrades ({@link BarnUpgrades}, quest {@code q_paying_barn}): choose stable upgrades, each earning or
+ * costing coin, so every prerequisite is included and net coin is greatest (maximum-weight closure / project
+ * selection); exact min cut vs. one-at-a-time, which skips groundwork that only pays when shared.
  */
 package com.daedalus.world.stable;
