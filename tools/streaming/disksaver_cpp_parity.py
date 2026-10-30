@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: MIT
 """Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5, G578 batch 6, G579 batch 7, G580 batch 8;
 G581 seed spec draws from tools/streaming/disksaver_seed_spec.py;
-G590 Gantry Sweep from tools/streaming/gantry_sweep_parity.py).
+G590 Gantry Sweep from tools/streaming/gantry_sweep_parity.py;
+G597 Buddy Berths from tools/streaming/buddy_berths_parity.py).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -56,6 +57,7 @@ import census_budget as cb  # noqa: E402
 import census_riddles as cr  # noqa: E402
 import disksaver_seed_spec as dss  # noqa: E402
 import gantry_sweep_parity as gsp  # noqa: E402
+import buddy_berths_parity as bbp  # noqa: E402
 import ebb_eviction as ee  # noqa: E402
 import harbour_cryptogram as hc  # noqa: E402
 import last_crate as lc  # noqa: E402
@@ -2055,7 +2057,8 @@ GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": 
          "budget_fathoms": bf_lines, "fleet_flags": ff_lines,
          "stray_cargo": sgc_lines, "memory_footprint": mf_lines, "budget_ledger": bl_lines,
          "caulking_check": cc_lines, "seed_spec": dss.lines,
-         "gantry_sweep": gsp.lines}
+         "gantry_sweep": gsp.lines,
+         "buddy_berths": bbp.lines}
 
 
 def texts():

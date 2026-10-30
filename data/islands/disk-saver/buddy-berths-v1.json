@@ -1,0 +1,11 @@
+{
+  "v": 1,
+  "quest": "q_buddy_berths",
+  "lore": "Dockmother Imelda chalks the long quay into halves, quarters and eighths every dawn. A ship moors on its own chalked run or not at all, and when two neighbouring runs empty she rubs out the line between them. She keeps the best mooring plan on her slate beside the dock crews' habits, and counts every ship sent back to sea because the quay was chopped into scraps.",
+  "hook": {"core": "DaedalusDiskSaverBuddyBerthsCore.h", "field": "verdict", "values": ["snug", "fair", "crowded"],
+           "quay": "island streaming pool", "ship": "chunk stream-in (power-of-two slab, held for later requests)", "score": "requests turned away"},
+  "npc": {"name": "Dockmother Imelda", "lines": {
+    "snug": "Every run where it belongs. Not one keel over a chalk line.",
+    "fair": "As tidy as the crews would manage. My slate says one more could have moored; go and read it.",
+    "crowded": "You chopped my quay to scraps. Even the lowest-berth habit turned fewer away."}}
+}

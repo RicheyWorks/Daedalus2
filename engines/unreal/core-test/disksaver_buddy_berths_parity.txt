@@ -1,0 +1,1470 @@
+# disksaver buddy_berths parity v1: written by tools/streaming/buddy_berths_parity.py; do not edit
+C seed0
+S x62756464792d6265727468737c323032362d31302d32367c30
+O L 10
+O R 0 pinnace 1 2
+O R 1 coracle 8 4
+O R 2 junk 1 3
+O R 3 felucca 1 4
+O R 4 albatross 1 3
+O R 5 galleon 2 4
+O R 6 schooner 1 1
+O R 7 brigantine 2 1
+O R 8 yawl 4 1
+O R 9 dhow 1 2
+O P lowest 0,8,0,1,2,4,0,0,0,0 0
+O P tightest 0,8,0,1,2,4,0,6,0,0 0
+O P highest 15,0,15,14,13,10,15,14,12,15 0
+O P best 0,8,0,1,2,4,0,0,0,0 0
+M 0,8,0,1,2,4,0,0,0,0
+O m 0 snug
+M 0,8,0,1,2,4,0,0,0,0
+O m 0 snug
+M 0,8,0,1,2,4,0,6,0,0
+O m 0 snug
+M 15,0,15,14,13,10,15,14,12,15
+O m 0 snug
+M -,-,-,-,-,-,-,-,-,-
+O m 10 crowded
+M 14,0,11,8,11,14,6,3,10,3
+O refused busy
+M 0,8,0,1,2,4,0,0,0
+O refused length
+M 0,8,0,1,2,4,0,0,0,0,-
+O refused length
+M 0,9,0,1,2,4,0,0,0,0
+O refused align
+M 0,0,0,0,0,0,0,0,0,0
+O refused busy
+C seed1
+S x62756464792d6265727468737c323032362d31302d32367c31
+O L 9
+O R 0 schooner 1 3
+O R 1 yawl 4 1
+O R 2 pinnace 8 1
+O R 3 galleon 1 2
+O R 4 dhow 2 2
+O R 5 albatross 2 4
+O R 6 ketch 4 2
+O R 7 brigantine 1 3
+O R 8 felucca 4 3
+O P lowest 0,4,8,0,2,0,4,2,4 0
+O P tightest 0,4,8,0,2,0,4,2,4 0
+O P highest 15,8,0,15,12,14,8,13,8 0
+O P best 0,4,8,0,2,0,4,2,4 0
+M 0,4,8,0,2,0,4,2,4
+O m 0 snug
+M 0,4,8,0,2,0,4,2,4
+O m 0 snug
+M 0,4,8,0,2,0,4,2,4
+O m 0 snug
+M 15,8,0,15,12,14,8,13,8
+O m 0 snug
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 2,2,15,10,8,15,1,1,13
+O refused align
+M 0,4,8,0,2,0,4,2
+O refused length
+M 0,4,8,0,2,0,4,2,4,-
+O refused length
+M 0,5,8,0,2,0,4,2,4
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C seed2
+S x62756464792d6265727468737c323032362d31302d32367c37
+O L 10
+O R 0 brigantine 1 1
+O R 1 felucca 2 4
+O R 2 lugger 8 1
+O R 3 dhow 1 5
+O R 4 galleon 4 3
+O R 5 coracle 4 5
+O R 6 albatross 8 1
+O R 7 ketch 2 4
+O R 8 junk 8 3
+O R 9 schooner 1 4
+O P lowest 0,0,8,2,4,8,-,0,-,2 2
+O P tightest 0,0,8,2,4,8,-,0,-,2 2
+O P highest 15,14,0,13,8,4,-,14,-,13 2
+O P best 0,0,8,2,4,8,-,12,0,14 1
+M 0,0,8,2,4,8,-,12,0,14
+O m 1 snug
+M 0,0,8,2,4,8,-,0,-,2
+O m 2 fair
+M 0,0,8,2,4,8,-,0,-,2
+O m 2 fair
+M 15,14,0,13,8,4,-,14,-,13
+O m 2 fair
+M -,-,-,-,-,-,-,-,-,-
+O m 10 crowded
+M 2,4,4,6,0,2,6,0,10,8
+O refused align
+M 0,0,8,2,4,8,-,12,0
+O refused length
+M 0,0,8,2,4,8,-,12,0,14,-
+O refused length
+M 0,1,8,2,4,8,-,12,0,14
+O refused align
+M 0,0,0,0,0,0,0,0,0,0
+O refused busy
+C seed3
+S x62756464792d6265727468737c323032362d31302d32367c3432
+O L 8
+O R 0 schooner 2 4
+O R 1 felucca 2 5
+O R 2 brigantine 1 5
+O R 3 lugger 1 5
+O R 4 galleon 1 3
+O R 5 coracle 8 4
+O R 6 dhow 2 1
+O R 7 junk 8 2
+O P lowest 0,2,4,5,0,8,2,- 1
+O P tightest 0,2,4,5,0,8,2,- 1
+O P highest 14,12,11,10,15,0,12,- 1
+O P best 0,2,4,5,0,8,2,- 1
+M 0,2,4,5,0,8,2,-
+O m 1 snug
+M 0,2,4,5,0,8,2,-
+O m 1 snug
+M 0,2,4,5,0,8,2,-
+O m 1 snug
+M 14,12,11,10,15,0,12,-
+O m 1 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 7,0,6,3,3,4,10,10
+O refused align
+M 0,2,4,5,0,8,2
+O refused length
+M 0,2,4,5,0,8,2,-,-
+O refused length
+M 1,2,4,5,0,8,2,-
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed4
+S x62756464792d6265727468737c323032362d31302d32367c2d33
+O L 9
+O R 0 galleon 8 2
+O R 1 schooner 2 2
+O R 2 lugger 1 1
+O R 3 yawl 2 4
+O R 4 coracle 4 4
+O R 5 felucca 8 2
+O R 6 ketch 8 2
+O R 7 dhow 8 4
+O R 8 junk 8 1
+O P lowest 0,8,0,0,4,8,-,8,0 1
+O P tightest 0,8,10,0,4,8,-,8,0 1
+O P highest 8,6,15,14,8,0,-,0,8 1
+O P best 0,8,0,0,4,8,-,8,0 1
+M 0,8,0,0,4,8,-,8,0
+O m 1 snug
+M 0,8,0,0,4,8,-,8,0
+O m 1 snug
+M 0,8,10,0,4,8,-,8,0
+O m 1 snug
+M 8,6,15,14,8,0,-,0,8
+O m 1 snug
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 6,7,2,14,7,7,13,10,12
+O refused align
+M 0,8,0,0,4,8,-,8
+O refused length
+M 0,8,0,0,4,8,-,8,0,-
+O refused length
+M 1,8,0,0,4,8,-,8,0
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C seed5
+S x
+O L 10
+O R 0 brigantine 4 4
+O R 1 pinnace 8 2
+O R 2 albatross 8 5
+O R 3 junk 1 5
+O R 4 felucca 4 3
+O R 5 lugger 8 4
+O R 6 ketch 2 2
+O R 7 schooner 8 5
+O R 8 galleon 2 1
+O R 9 coracle 1 3
+O P lowest 0,8,-,4,0,8,6,-,0,0 2
+O P tightest 0,8,-,4,0,8,6,-,0,0 2
+O P highest 12,0,-,11,12,0,8,-,14,15 2
+O P best 0,8,-,4,0,8,6,-,0,0 2
+M 0,8,-,4,0,8,6,-,0,0
+O m 2 snug
+M 0,8,-,4,0,8,6,-,0,0
+O m 2 snug
+M 0,8,-,4,0,8,6,-,0,0
+O m 2 snug
+M 12,0,-,11,12,0,8,-,14,15
+O m 2 snug
+M -,-,-,-,-,-,-,-,-,-
+O m 10 crowded
+M 8,0,14,10,2,7,8,3,2,15
+O refused align
+M 0,8,-,4,0,8,6,-,0
+O refused length
+M 0,8,-,4,0,8,6,-,0,0,-
+O refused length
+M 1,8,-,4,0,8,6,-,0,0
+O refused align
+M 0,0,0,0,0,0,0,0,0,0
+O refused busy
+C seed6
+S x62
+O L 7
+O R 0 ketch 4 2
+O R 1 albatross 8 5
+O R 2 felucca 8 5
+O R 3 yawl 4 3
+O R 4 lugger 1 2
+O R 5 brigantine 4 4
+O R 6 pinnace 1 3
+O P lowest 0,8,0,-,-,-,8 3
+O P tightest 0,8,0,-,-,-,8 3
+O P highest 12,0,8,-,-,-,7 3
+O P best 0,8,-,0,4,-,0 2
+M 0,8,-,0,4,-,0
+O m 2 snug
+M 0,8,0,-,-,-,8
+O m 3 fair
+M 0,8,0,-,-,-,8
+O m 3 fair
+M 12,0,8,-,-,-,7
+O m 3 fair
+M -,-,-,-,-,-,-
+O m 7 crowded
+M 15,7,14,1,1,4,9
+O refused align
+M 0,8,-,0,4,-
+O refused length
+M 0,8,-,0,4,-,0,-
+O refused length
+M 1,8,-,0,4,-,0
+O refused align
+M 0,0,0,0,0,0,0
+O refused busy
+C seed7
+S x62756464792d6265727468737c6b65656c
+O L 7
+O R 0 felucca 2 1
+O R 1 coracle 1 4
+O R 2 pinnace 8 3
+O R 3 junk 8 3
+O R 4 yawl 1 3
+O R 5 ketch 1 3
+O R 6 schooner 2 5
+O P lowest 0,0,8,-,1,0,2 1
+O P tightest 0,0,8,-,1,0,2 1
+O P highest 14,15,0,-,14,15,12 1
+O P best 0,0,8,-,1,0,2 1
+M 0,0,8,-,1,0,2
+O m 1 snug
+M 0,0,8,-,1,0,2
+O m 1 snug
+M 0,0,8,-,1,0,2
+O m 1 snug
+M 14,15,0,-,14,15,12
+O m 1 snug
+M -,-,-,-,-,-,-
+O m 7 crowded
+M 13,0,7,3,13,11,14
+O refused align
+M 0,0,8,-,1,0
+O refused length
+M 0,0,8,-,1,0,2,-
+O refused length
+M 1,0,8,-,1,0,2
+O refused align
+M 0,0,0,0,0,0,0
+O refused busy
+C seed8
+S x756e69636f64653ac3a9cebbe29883
+O L 9
+O R 0 lugger 1 1
+O R 1 felucca 4 2
+O R 2 albatross 2 3
+O R 3 junk 4 1
+O R 4 schooner 8 5
+O R 5 ketch 8 1
+O R 6 pinnace 8 3
+O R 7 yawl 8 5
+O R 8 brigantine 1 2
+O P lowest 0,0,4,0,8,0,0,-,- 2
+O P tightest 0,0,4,0,8,0,0,-,- 2
+O P highest 15,12,10,12,0,8,8,-,- 2
+O P best 0,0,4,0,8,0,0,-,- 2
+M 0,0,4,0,8,0,0,-,-
+O m 2 snug
+M 0,0,4,0,8,0,0,-,-
+O m 2 snug
+M 0,0,4,0,8,0,0,-,-
+O m 2 snug
+M 15,12,10,12,0,8,8,-,-
+O m 2 snug
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 1,14,3,2,14,1,15,0,5
+O refused align
+M 0,0,4,0,8,0,0,-
+O refused length
+M 0,0,4,0,8,0,0,-,-,-
+O refused length
+M 0,1,4,0,8,0,0,-,-
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C seed9
+S x62756464792d6265727468737c62756c6b7c30
+O L 8
+O R 0 brigantine 8 3
+O R 1 ketch 1 3
+O R 2 albatross 2 1
+O R 3 felucca 8 1
+O R 4 yawl 2 4
+O R 5 dhow 2 2
+O R 6 junk 8 1
+O R 7 pinnace 2 1
+O P lowest 0,8,10,0,0,2,8,2 0
+O P tightest 0,8,10,0,0,2,8,2 0
+O P highest 8,7,4,8,14,12,0,12 0
+O P best 0,8,10,0,0,2,8,2 0
+M 0,8,10,0,0,2,8,2
+O m 0 snug
+M 0,8,10,0,0,2,8,2
+O m 0 snug
+M 0,8,10,0,0,2,8,2
+O m 0 snug
+M 8,7,4,8,14,12,0,12
+O m 0 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 1,1,0,12,8,15,14,8
+O refused align
+M 0,8,10,0,0,2,8
+O refused length
+M 0,8,10,0,0,2,8,2,-
+O refused length
+M 1,8,10,0,0,2,8,2
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed10
+S x62756464792d6265727468737c62756c6b7c31
+O L 9
+O R 0 galleon 2 2
+O R 1 pinnace 1 3
+O R 2 felucca 4 2
+O R 3 junk 4 1
+O R 4 albatross 1 4
+O R 5 coracle 1 3
+O R 6 dhow 1 1
+O R 7 brigantine 8 4
+O R 8 ketch 4 4
+O P lowest 0,2,4,8,0,1,2,8,0 0
+O P tightest 0,2,4,8,0,1,2,8,0 0
+O P highest 14,13,8,4,15,14,13,0,12 0
+O P best 0,2,4,8,0,1,2,8,0 0
+M 0,2,4,8,0,1,2,8,0
+O m 0 snug
+M 0,2,4,8,0,1,2,8,0
+O m 0 snug
+M 0,2,4,8,0,1,2,8,0
+O m 0 snug
+M 14,13,8,4,15,14,13,0,12
+O m 0 snug
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 6,11,14,3,4,5,12,14,6
+O refused align
+M 0,2,4,8,0,1,2,8
+O refused length
+M 0,2,4,8,0,1,2,8,0,-
+O refused length
+M 1,2,4,8,0,1,2,8,0
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C seed11
+S x62756464792d6265727468737c62756c6b7c32
+O L 8
+O R 0 felucca 4 4
+O R 1 lugger 4 3
+O R 2 albatross 8 5
+O R 3 schooner 4 3
+O R 4 dhow 8 2
+O R 5 brigantine 1 5
+O R 6 junk 1 5
+O R 7 pinnace 1 3
+O P lowest 0,4,8,-,0,-,0,1 2
+O P tightest 0,4,8,-,0,-,0,1 2
+O P highest 12,8,0,-,8,-,15,14 2
+O P best 0,4,-,8,0,12,0,1 1
+M 0,4,-,8,0,12,0,1
+O m 1 snug
+M 0,4,8,-,0,-,0,1
+O m 2 fair
+M 0,4,8,-,0,-,0,1
+O m 2 fair
+M 12,8,0,-,8,-,15,14
+O m 2 fair
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 7,10,7,3,11,12,5,6
+O refused align
+M 0,4,-,8,0,12,0
+O refused length
+M 0,4,-,8,0,12,0,1,-
+O refused length
+M 1,4,-,8,0,12,0,1
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed12
+S x62756464792d6265727468737c62756c6b7c33
+O L 8
+O R 0 coracle 4 1
+O R 1 pinnace 2 1
+O R 2 felucca 4 3
+O R 3 brigantine 8 3
+O R 4 ketch 8 2
+O R 5 junk 1 4
+O R 6 lugger 1 1
+O R 7 yawl 1 3
+O P lowest 0,0,0,8,-,0,1,1 1
+O P tightest 0,0,0,8,-,0,1,1 1
+O P highest 12,14,12,0,-,15,14,14 1
+O P best 0,0,0,8,-,0,1,1 1
+M 0,0,0,8,-,0,1,1
+O m 1 snug
+M 0,0,0,8,-,0,1,1
+O m 1 snug
+M 0,0,0,8,-,0,1,1
+O m 1 snug
+M 12,14,12,0,-,15,14,14
+O m 1 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 15,5,9,10,3,8,13,11
+O refused align
+M 0,0,0,8,-,0,1
+O refused length
+M 0,0,0,8,-,0,1,1,-
+O refused length
+M 1,0,0,8,-,0,1,1
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed13
+S x62756464792d6265727468737c62756c6b7c34
+O L 9
+O R 0 yawl 1 4
+O R 1 junk 1 3
+O R 2 brigantine 8 5
+O R 3 galleon 8 3
+O R 4 dhow 2 2
+O R 5 schooner 4 3
+O R 6 felucca 8 2
+O R 7 lugger 4 5
+O R 8 albatross 8 1
+O P lowest 0,1,8,-,0,4,-,0,8 2
+O P tightest 0,1,8,-,0,4,-,0,8 2
+O P highest 15,14,0,-,14,8,-,12,0 2
+O P best 0,1,-,8,0,4,8,0,8 1
+M 0,1,-,8,0,4,8,0,8
+O m 1 snug
+M 0,1,8,-,0,4,-,0,8
+O m 2 fair
+M 0,1,8,-,0,4,-,0,8
+O m 2 fair
+M 15,14,0,-,14,8,-,12,0
+O m 2 fair
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 3,15,0,15,4,12,9,13,0
+O refused busy
+M 0,1,-,8,0,4,8,0
+O refused length
+M 0,1,-,8,0,4,8,0,8,-
+O refused length
+M 0,1,1,8,0,4,8,0,8
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C seed14
+S x62756464792d6265727468737c62756c6b7c35
+O L 10
+O R 0 pinnace 1 1
+O R 1 yawl 4 4
+O R 2 junk 8 5
+O R 3 brigantine 4 1
+O R 4 dhow 2 2
+O R 5 albatross 2 1
+O R 6 schooner 2 4
+O R 7 galleon 1 5
+O R 8 ketch 2 4
+O R 9 coracle 1 1
+O P lowest 0,0,8,4,4,0,0,2,4,3 0
+O P tightest 0,0,8,4,4,6,0,2,4,3 0
+O P highest 15,12,0,8,10,14,14,13,10,12 0
+O P best 0,0,8,4,4,0,0,2,4,3 0
+M 0,0,8,4,4,0,0,2,4,3
+O m 0 snug
+M 0,0,8,4,4,0,0,2,4,3
+O m 0 snug
+M 0,0,8,4,4,6,0,2,4,3
+O m 0 snug
+M 15,12,0,8,10,14,14,13,10,12
+O m 0 snug
+M -,-,-,-,-,-,-,-,-,-
+O m 10 crowded
+M 0,11,1,3,7,15,7,2,14,2
+O refused align
+M 0,0,8,4,4,0,0,2,4
+O refused length
+M 0,0,8,4,4,0,0,2,4,3,-
+O refused length
+M 0,1,8,4,4,0,0,2,4,3
+O refused align
+M 0,0,0,0,0,0,0,0,0,0
+O refused busy
+C seed15
+S x62756464792d6265727468737c62756c6b7c36
+O L 7
+O R 0 felucca 8 1
+O R 1 brigantine 2 4
+O R 2 lugger 4 5
+O R 3 galleon 8 3
+O R 4 schooner 2 2
+O R 5 albatross 8 1
+O R 6 pinnace 8 3
+O P lowest 0,0,4,8,2,-,8 1
+O P tightest 0,0,4,8,2,-,8 1
+O P highest 8,14,8,0,12,-,0 1
+O P best 0,0,4,8,2,-,8 1
+M 0,0,4,8,2,-,8
+O m 1 snug
+M 0,0,4,8,2,-,8
+O m 1 snug
+M 0,0,4,8,2,-,8
+O m 1 snug
+M 8,14,8,0,12,-,0
+O m 1 snug
+M -,-,-,-,-,-,-
+O m 7 crowded
+M 3,7,14,9,10,8,13
+O refused align
+M 0,0,4,8,2,-
+O refused length
+M 0,0,4,8,2,-,8,-
+O refused length
+M 1,0,4,8,2,-,8
+O refused align
+M 0,0,0,0,0,0,0
+O refused busy
+C seed16
+S x62756464792d6265727468737c62756c6b7c37
+O L 9
+O R 0 galleon 8 1
+O R 1 coracle 2 1
+O R 2 dhow 2 1
+O R 3 junk 8 2
+O R 4 pinnace 4 4
+O R 5 felucca 4 2
+O R 6 albatross 8 3
+O R 7 yawl 4 2
+O R 8 ketch 4 5
+O P lowest 0,0,0,0,8,0,-,0,4 1
+O P tightest 0,0,0,0,8,12,0,12,8 0
+O P highest 8,14,14,8,4,12,-,12,8 1
+O P best 0,0,0,0,8,12,0,12,8 0
+M 0,0,0,0,8,12,0,12,8
+O m 0 snug
+M 0,0,0,0,8,0,-,0,4
+O m 1 crowded
+M 0,0,0,0,8,12,0,12,8
+O m 0 snug
+M 8,14,14,8,4,12,-,12,8
+O m 1 crowded
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 3,15,5,9,13,13,12,11,7
+O refused align
+M 0,0,0,0,8,12,0,12
+O refused length
+M 0,0,0,0,8,12,0,12,8,-
+O refused length
+M 1,0,0,0,8,12,0,12,8
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C seed17
+S x62756464792d6265727468737c62756c6b7c38
+O L 10
+O R 0 lugger 2 5
+O R 1 galleon 4 5
+O R 2 albatross 1 2
+O R 3 pinnace 1 1
+O R 4 junk 2 3
+O R 5 yawl 2 3
+O R 6 brigantine 1 2
+O R 7 schooner 8 5
+O R 8 coracle 1 1
+O R 9 felucca 8 5
+O P lowest 0,4,2,3,2,0,4,8,0,0 0
+O P tightest 0,4,2,3,2,0,4,8,0,0 0
+O P highest 14,8,13,12,12,14,11,0,15,8 0
+O P best 0,4,2,3,2,0,4,8,0,0 0
+M 0,4,2,3,2,0,4,8,0,0
+O m 0 snug
+M 0,4,2,3,2,0,4,8,0,0
+O m 0 snug
+M 0,4,2,3,2,0,4,8,0,0
+O m 0 snug
+M 14,8,13,12,12,14,11,0,15,8
+O m 0 snug
+M -,-,-,-,-,-,-,-,-,-
+O m 10 crowded
+M 8,15,11,5,10,5,10,10,4,1
+O refused align
+M 0,4,2,3,2,0,4,8,0
+O refused length
+M 0,4,2,3,2,0,4,8,0,0,-
+O refused length
+M 1,4,2,3,2,0,4,8,0,0
+O refused align
+M 0,0,0,0,0,0,0,0,0,0
+O refused busy
+C seed18
+S x62756464792d6265727468737c62756c6b7c39
+O L 9
+O R 0 felucca 1 3
+O R 1 schooner 1 5
+O R 2 coracle 4 3
+O R 3 galleon 8 2
+O R 4 ketch 4 4
+O R 5 yawl 2 1
+O R 6 dhow 2 3
+O R 7 brigantine 8 3
+O R 8 albatross 2 2
+O P lowest 0,1,4,8,-,2,0,8,2 1
+O P tightest 0,1,4,8,-,2,0,8,2 1
+O P highest 15,14,8,0,-,12,14,0,12 1
+O P best 0,1,4,8,-,2,0,8,2 1
+M 0,1,4,8,-,2,0,8,2
+O m 1 snug
+M 0,1,4,8,-,2,0,8,2
+O m 1 snug
+M 0,1,4,8,-,2,0,8,2
+O m 1 snug
+M 15,14,8,0,-,12,14,0,12
+O m 1 snug
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 13,2,12,7,6,7,5,9,8
+O refused busy
+M 0,1,4,8,-,2,0,8
+O refused length
+M 0,1,4,8,-,2,0,8,2,-
+O refused length
+M 0,1,5,8,-,2,0,8,2
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C seed19
+S x62756464792d6265727468737c62756c6b7c3130
+O L 8
+O R 0 galleon 8 4
+O R 1 junk 1 2
+O R 2 pinnace 2 4
+O R 3 ketch 2 4
+O R 4 albatross 8 5
+O R 5 felucca 2 4
+O R 6 dhow 4 2
+O R 7 coracle 2 1
+O P lowest 0,8,10,8,0,12,-,8 1
+O P tightest 0,8,10,8,0,12,-,14 1
+O P highest 8,7,4,6,8,2,-,6 1
+O P best 0,8,10,12,0,14,8,12 0
+M 0,8,10,12,0,14,8,12
+O m 0 snug
+M 0,8,10,8,0,12,-,8
+O m 1 fair
+M 0,8,10,8,0,12,-,14
+O m 1 fair
+M 8,7,4,6,8,2,-,6
+O m 1 fair
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 11,5,0,6,4,10,13,6
+O refused align
+M 0,8,10,12,0,14,8
+O refused length
+M 0,8,10,12,0,14,8,12,-
+O refused length
+M 1,8,10,12,0,14,8,12
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed20
+S x62756464792d6265727468737c62756c6b7c3131
+O L 8
+O R 0 felucca 1 2
+O R 1 albatross 2 3
+O R 2 pinnace 4 5
+O R 3 schooner 4 2
+O R 4 junk 4 2
+O R 5 dhow 8 4
+O R 6 brigantine 8 2
+O R 7 galleon 4 1
+O P lowest 0,2,4,8,0,8,-,0 1
+O P tightest 0,2,4,8,0,8,-,0 1
+O P highest 15,12,8,4,12,0,-,12 1
+O P best 0,2,4,8,0,8,-,0 1
+M 0,2,4,8,0,8,-,0
+O m 1 snug
+M 0,2,4,8,0,8,-,0
+O m 1 snug
+M 0,2,4,8,0,8,-,0
+O m 1 snug
+M 15,12,8,4,12,0,-,12
+O m 1 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 10,8,6,3,14,5,8,4
+O refused align
+M 0,2,4,8,0,8,-
+O refused length
+M 0,2,4,8,0,8,-,0,-
+O refused length
+M 0,3,4,8,0,8,-,0
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed21
+S x62756464792d6265727468737c62756c6b7c3132
+O L 10
+O R 0 lugger 1 5
+O R 1 junk 1 1
+O R 2 felucca 1 5
+O R 3 dhow 4 3
+O R 4 coracle 4 4
+O R 5 ketch 8 4
+O R 6 schooner 8 2
+O R 7 brigantine 4 2
+O R 8 pinnace 2 5
+O R 9 galleon 8 5
+O P lowest 0,1,1,4,8,-,-,0,4,8 2
+O P tightest 0,1,1,4,8,-,-,12,8,0 2
+O P highest 15,14,14,8,4,-,-,12,10,0 2
+O P best 0,1,1,8,4,-,8,0,4,8 1
+M 0,1,1,8,4,-,8,0,4,8
+O m 1 snug
+M 0,1,1,4,8,-,-,0,4,8
+O m 2 fair
+M 0,1,1,4,8,-,-,12,8,0
+O m 2 fair
+M 15,14,14,8,4,-,-,12,10,0
+O m 2 fair
+M -,-,-,-,-,-,-,-,-,-
+O m 10 crowded
+M 5,5,4,9,15,13,0,0,3,13
+O refused busy
+M 0,1,1,8,4,-,8,0,4
+O refused length
+M 0,1,1,8,4,-,8,0,4,8,-
+O refused length
+M 0,1,1,9,4,-,8,0,4,8
+O refused align
+M 0,0,0,0,0,0,0,0,0,0
+O refused busy
+C seed22
+S x62756464792d6265727468737c62756c6b7c3133
+O L 8
+O R 0 albatross 4 4
+O R 1 schooner 2 5
+O R 2 junk 1 2
+O R 3 lugger 4 5
+O R 4 brigantine 1 3
+O R 5 coracle 2 5
+O R 6 ketch 1 4
+O R 7 felucca 8 2
+O P lowest 0,4,6,8,0,2,1,- 1
+O P tightest 0,4,6,8,6,0,7,- 1
+O P highest 12,10,9,4,15,12,14,- 1
+O P best 0,4,6,8,0,12,14,0 0
+M 0,4,6,8,0,12,14,0
+O m 0 snug
+M 0,4,6,8,0,2,1,-
+O m 1 fair
+M 0,4,6,8,6,0,7,-
+O m 1 fair
+M 12,10,9,4,15,12,14,-
+O m 1 fair
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 15,8,2,10,6,2,5,2
+O refused align
+M 0,4,6,8,0,12,14
+O refused length
+M 0,4,6,8,0,12,14,0,-
+O refused length
+M 1,4,6,8,0,12,14,0
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed23
+S x62756464792d6265727468737c62756c6b7c3134
+O L 8
+O R 0 junk 4 1
+O R 1 galleon 4 1
+O R 2 lugger 1 3
+O R 3 schooner 4 2
+O R 4 ketch 4 1
+O R 5 brigantine 4 2
+O R 6 pinnace 4 5
+O R 7 coracle 4 2
+O P lowest 0,0,0,4,8,0,4,0 0
+O P tightest 0,0,0,4,8,0,4,0 0
+O P highest 12,12,15,8,4,12,8,12 0
+O P best 0,0,0,4,8,0,4,0 0
+M 0,0,0,4,8,0,4,0
+O m 0 snug
+M 0,0,0,4,8,0,4,0
+O m 0 snug
+M 0,0,0,4,8,0,4,0
+O m 0 snug
+M 12,12,15,8,4,12,8,12
+O m 0 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 2,14,4,14,11,8,1,2
+O refused align
+M 0,0,0,4,8,0,4
+O refused length
+M 0,0,0,4,8,0,4,0,-
+O refused length
+M 1,0,0,4,8,0,4,0
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed24
+S x62756464792d6265727468737c62756c6b7c3135
+O L 8
+O R 0 pinnace 1 5
+O R 1 albatross 2 2
+O R 2 coracle 4 4
+O R 3 ketch 2 5
+O R 4 junk 8 4
+O R 5 galleon 2 5
+O R 6 schooner 8 2
+O R 7 felucca 4 4
+O P lowest 0,2,4,2,8,0,-,4 1
+O P tightest 0,2,4,2,8,0,-,4 1
+O P highest 15,12,8,12,0,14,-,8 1
+O P best 0,2,4,2,8,0,-,4 1
+M 0,2,4,2,8,0,-,4
+O m 1 snug
+M 0,2,4,2,8,0,-,4
+O m 1 snug
+M 0,2,4,2,8,0,-,4
+O m 1 snug
+M 15,12,8,12,0,14,-,8
+O m 1 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 11,2,0,2,3,9,3,5
+O refused busy
+M 0,2,4,2,8,0,-
+O refused length
+M 0,2,4,2,8,0,-,4,-
+O refused length
+M 0,3,4,2,8,0,-,4
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed25
+S x62756464792d6265727468737c62756c6b7c3136
+O L 7
+O R 0 albatross 8 5
+O R 1 ketch 2 1
+O R 2 dhow 2 3
+O R 3 pinnace 8 5
+O R 4 coracle 8 1
+O R 5 galleon 1 5
+O R 6 schooner 8 1
+O P lowest 0,8,8,-,-,0,8 2
+O P tightest 0,8,8,-,-,0,8 2
+O P highest 8,6,6,-,-,15,0 2
+O P best 0,8,8,-,-,0,8 2
+M 0,8,8,-,-,0,8
+O m 2 snug
+M 0,8,8,-,-,0,8
+O m 2 snug
+M 0,8,8,-,-,0,8
+O m 2 snug
+M 8,6,6,-,-,15,0
+O m 2 snug
+M -,-,-,-,-,-,-
+O m 7 crowded
+M 1,14,11,2,14,7,15
+O refused align
+M 0,8,8,-,-,0
+O refused length
+M 0,8,8,-,-,0,8,-
+O refused length
+M 1,8,8,-,-,0,8
+O refused align
+M 0,0,0,0,0,0,0
+O refused busy
+C seed26
+S x62756464792d6265727468737c62756c6b7c3137
+O L 8
+O R 0 galleon 2 4
+O R 1 coracle 8 4
+O R 2 lugger 4 2
+O R 3 junk 4 3
+O R 4 pinnace 8 2
+O R 5 brigantine 1 3
+O R 6 schooner 2 5
+O R 7 yawl 2 1
+O P lowest 0,8,4,-,0,8,0,2 1
+O P tightest 0,8,4,-,0,8,10,12 1
+O P highest 14,0,8,-,8,7,14,12 1
+O P best 0,8,4,-,0,8,0,2 1
+M 0,8,4,-,0,8,0,2
+O m 1 snug
+M 0,8,4,-,0,8,0,2
+O m 1 snug
+M 0,8,4,-,0,8,10,12
+O m 1 snug
+M 14,0,8,-,8,7,14,12
+O m 1 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 11,7,0,12,1,3,7,12
+O refused align
+M 0,8,4,-,0,8,0
+O refused length
+M 0,8,4,-,0,8,0,2,-
+O refused length
+M 1,8,4,-,0,8,0,2
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed27
+S x62756464792d6265727468737c62756c6b7c3138
+O L 8
+O R 0 galleon 8 4
+O R 1 brigantine 8 2
+O R 2 junk 8 1
+O R 3 albatross 2 3
+O R 4 lugger 4 2
+O R 5 ketch 8 4
+O R 6 pinnace 4 2
+O R 7 coracle 4 1
+O P lowest 0,8,-,8,0,-,0,4 2
+O P tightest 0,8,-,8,12,0,8,12 1
+O P highest 8,0,-,6,12,-,12,8 2
+O P best 0,8,-,8,12,0,8,12 1
+M 0,8,-,8,12,0,8,12
+O m 1 snug
+M 0,8,-,8,0,-,0,4
+O m 2 crowded
+M 0,8,-,8,12,0,8,12
+O m 1 snug
+M 8,0,-,6,12,-,12,8
+O m 2 crowded
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 15,11,8,6,2,9,2,14
+O refused align
+M 0,8,-,8,12,0,8
+O refused length
+M 0,8,-,8,12,0,8,12,-
+O refused length
+M 1,8,-,8,12,0,8,12
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed28
+S x62756464792d6265727468737c62756c6b7c3139
+O L 10
+O R 0 coracle 4 1
+O R 1 galleon 8 4
+O R 2 junk 1 5
+O R 3 felucca 8 3
+O R 4 albatross 2 1
+O R 5 ketch 8 5
+O R 6 brigantine 2 4
+O R 7 schooner 4 1
+O R 8 yawl 2 4
+O R 9 pinnace 8 5
+O P lowest 0,0,8,-,10,0,10,12,8,- 2
+O P tightest 0,0,8,-,10,0,10,12,8,- 2
+O P highest 12,8,7,-,4,8,4,0,6,- 2
+O P best 0,0,8,-,10,0,10,12,8,- 2
+M 0,0,8,-,10,0,10,12,8,-
+O m 2 snug
+M 0,0,8,-,10,0,10,12,8,-
+O m 2 snug
+M 0,0,8,-,10,0,10,12,8,-
+O m 2 snug
+M 12,8,7,-,4,8,4,0,6,-
+O m 2 snug
+M -,-,-,-,-,-,-,-,-,-
+O m 10 crowded
+M 15,7,9,11,4,12,10,3,5,8
+O refused align
+M 0,0,8,-,10,0,10,12,8
+O refused length
+M 0,0,8,-,10,0,10,12,8,-,-
+O refused length
+M 1,0,8,-,10,0,10,12,8,-
+O refused align
+M 0,0,0,0,0,0,0,0,0,0
+O refused busy
+C seed29
+S x62756464792d6265727468737c62756c6b7c3230
+O L 7
+O R 0 junk 2 4
+O R 1 galleon 1 1
+O R 2 ketch 8 5
+O R 3 albatross 1 2
+O R 4 felucca 4 5
+O R 5 pinnace 1 3
+O R 6 dhow 4 5
+O P lowest 0,2,8,2,4,0,- 1
+O P tightest 0,2,8,2,4,0,- 1
+O P highest 14,13,0,13,8,15,- 1
+O P best 0,2,8,2,4,0,- 1
+M 0,2,8,2,4,0,-
+O m 1 snug
+M 0,2,8,2,4,0,-
+O m 1 snug
+M 0,2,8,2,4,0,-
+O m 1 snug
+M 14,13,0,13,8,15,-
+O m 1 snug
+M -,-,-,-,-,-,-
+O m 7 crowded
+M 14,7,1,3,7,8,11
+O refused align
+M 0,2,8,2,4,0
+O refused length
+M 0,2,8,2,4,0,-,-
+O refused length
+M 1,2,8,2,4,0,-
+O refused align
+M 0,0,0,0,0,0,0
+O refused busy
+C seed30
+S x62756464792d6265727468737c62756c6b7c3231
+O L 8
+O R 0 lugger 1 2
+O R 1 albatross 1 1
+O R 2 yawl 2 4
+O R 3 ketch 2 3
+O R 4 coracle 8 3
+O R 5 galleon 2 3
+O R 6 schooner 1 5
+O R 7 junk 2 4
+O P lowest 0,1,0,2,8,4,0,2 0
+O P tightest 0,1,0,2,8,4,6,0 0
+O P highest 15,14,14,12,0,10,15,12 0
+O P best 0,1,0,2,8,4,0,2 0
+M 0,1,0,2,8,4,0,2
+O m 0 snug
+M 0,1,0,2,8,4,0,2
+O m 0 snug
+M 0,1,0,2,8,4,6,0
+O m 0 snug
+M 15,14,14,12,0,10,15,12
+O m 0 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 7,12,5,4,10,12,14,9
+O refused align
+M 0,1,0,2,8,4,0
+O refused length
+M 0,1,0,2,8,4,0,2,-
+O refused length
+M 0,1,1,2,8,4,0,2
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed31
+S x62756464792d6265727468737c62756c6b7c3232
+O L 7
+O R 0 ketch 4 3
+O R 1 pinnace 2 3
+O R 2 galleon 4 1
+O R 3 coracle 4 2
+O R 4 dhow 8 5
+O R 5 albatross 8 3
+O R 6 brigantine 2 3
+O P lowest 0,4,8,0,8,0,- 1
+O P tightest 0,4,8,0,8,0,- 1
+O P highest 12,10,4,12,0,8,- 1
+O P best 0,4,8,0,8,0,- 1
+M 0,4,8,0,8,0,-
+O m 1 snug
+M 0,4,8,0,8,0,-
+O m 1 snug
+M 0,4,8,0,8,0,-
+O m 1 snug
+M 12,10,4,12,0,8,-
+O m 1 snug
+M -,-,-,-,-,-,-
+O m 7 crowded
+M 1,2,3,4,2,12,13
+O refused align
+M 0,4,8,0,8,0
+O refused length
+M 0,4,8,0,8,0,-,-
+O refused length
+M 1,4,8,0,8,0,-
+O refused align
+M 0,0,0,0,0,0,0
+O refused busy
+C seed32
+S x62756464792d6265727468737c62756c6b7c3233
+O L 9
+O R 0 galleon 4 5
+O R 1 dhow 8 2
+O R 2 albatross 8 2
+O R 3 junk 4 3
+O R 4 pinnace 4 1
+O R 5 felucca 2 2
+O R 6 ketch 2 2
+O R 7 brigantine 2 4
+O R 8 yawl 4 3
+O P lowest 0,8,-,4,8,0,2,0,4 1
+O P tightest 0,8,-,4,8,0,2,0,4 1
+O P highest 12,0,-,8,4,14,12,14,8 1
+O P best 0,8,-,4,8,0,2,0,4 1
+M 0,8,-,4,8,0,2,0,4
+O m 1 snug
+M 0,8,-,4,8,0,2,0,4
+O m 1 snug
+M 0,8,-,4,8,0,2,0,4
+O m 1 snug
+M 12,0,-,8,4,14,12,14,8
+O m 1 snug
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 12,3,6,8,9,6,4,9,14
+O refused align
+M 0,8,-,4,8,0,2,0
+O refused length
+M 0,8,-,4,8,0,2,0,4,-
+O refused length
+M 1,8,-,4,8,0,2,0,4
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C seed33
+S x62756464792d6265727468737c62756c6b7c3234
+O L 8
+O R 0 dhow 2 2
+O R 1 yawl 2 1
+O R 2 ketch 2 5
+O R 3 schooner 8 3
+O R 4 pinnace 4 5
+O R 5 brigantine 2 2
+O R 6 albatross 2 2
+O R 7 lugger 8 3
+O P lowest 0,2,0,8,4,2,8,- 1
+O P tightest 0,2,0,8,4,2,8,- 1
+O P highest 14,12,14,0,8,12,6,- 1
+O P best 0,2,0,8,4,2,8,- 1
+M 0,2,0,8,4,2,8,-
+O m 1 snug
+M 0,2,0,8,4,2,8,-
+O m 1 snug
+M 0,2,0,8,4,2,8,-
+O m 1 snug
+M 14,12,14,0,8,12,6,-
+O m 1 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 2,5,12,3,1,1,8,9
+O refused align
+M 0,2,0,8,4,2,8
+O refused length
+M 0,2,0,8,4,2,8,-,-
+O refused length
+M 1,2,0,8,4,2,8,-
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C seed34
+S x62756464792d6265727468737c62756c6b7c3235
+O L 9
+O R 0 ketch 8 4
+O R 1 schooner 1 1
+O R 2 felucca 1 5
+O R 3 galleon 2 3
+O R 4 pinnace 8 4
+O R 5 junk 1 1
+O R 6 yawl 8 2
+O R 7 dhow 1 4
+O R 8 brigantine 1 4
+O P lowest 0,8,8,10,0,9,-,8,0 1
+O P tightest 0,8,8,10,0,9,-,8,9 1
+O P highest 8,7,7,4,8,6,-,7,15 1
+O P best 0,8,8,10,0,9,-,8,0 1
+M 0,8,8,10,0,9,-,8,0
+O m 1 snug
+M 0,8,8,10,0,9,-,8,0
+O m 1 snug
+M 0,8,8,10,0,9,-,8,9
+O m 1 snug
+M 8,7,7,4,8,6,-,7,15
+O m 1 snug
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 11,5,14,10,1,3,1,1,15
+O refused align
+M 0,8,8,10,0,9,-,8
+O refused length
+M 0,8,8,10,0,9,-,8,0,-
+O refused length
+M 1,8,8,10,0,9,-,8,0
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C seed35
+S x62756464792d6265727468737c62756c6b7c3236
+O L 9
+O R 0 dhow 2 1
+O R 1 junk 8 1
+O R 2 coracle 8 1
+O R 3 yawl 1 5
+O R 4 schooner 4 3
+O R 5 felucca 8 4
+O R 6 ketch 8 3
+O R 7 lugger 8 2
+O R 8 brigantine 1 3
+O P lowest 0,0,0,0,4,8,-,-,0 2
+O P tightest 0,0,0,0,4,8,-,-,0 2
+O P highest 14,8,8,15,8,0,-,-,15 2
+O P best 0,0,0,0,4,8,-,-,0 2
+M 0,0,0,0,4,8,-,-,0
+O m 2 snug
+M 0,0,0,0,4,8,-,-,0
+O m 2 snug
+M 0,0,0,0,4,8,-,-,0
+O m 2 snug
+M 14,8,8,15,8,0,-,-,15
+O m 2 snug
+M -,-,-,-,-,-,-,-,-
+O m 9 crowded
+M 15,13,9,2,7,7,4,2,8
+O refused align
+M 0,0,0,0,4,8,-,-
+O refused length
+M 0,0,0,0,4,8,-,-,0,-
+O refused length
+M 1,0,0,0,4,8,-,-,0
+O refused align
+M 0,0,0,0,0,0,0,0,0
+O refused busy
+C one_dinghy
+H 1:1
+O L 1
+O R 0 ship0 1 1
+O P lowest 0 0
+O P tightest 0 0
+O P highest 15 0
+O P best 0 0
+M 0
+O m 0 snug
+M 0
+O m 0 snug
+M 0
+O m 0 snug
+M 15
+O m 0 snug
+M -
+O m 1 crowded
+M 0
+O m 0 snug
+M none
+O refused length
+M 0,-
+O refused length
+M 15
+O m 0 snug
+M 0
+O m 0 snug
+C whole_quay
+H 16:1,1:1
+O L 2
+O R 0 ship0 16 1
+O R 1 ship1 1 1
+O P lowest 0,0 0
+O P tightest 0,0 0
+O P highest 0,15 0
+O P best 0,0 0
+M 0,0
+O m 0 snug
+M 0,0
+O m 0 snug
+M 0,0
+O m 0 snug
+M 0,15
+O m 0 snug
+M -,-
+O m 2 crowded
+M 3,11
+O refused align
+M 0
+O refused length
+M 0,0,-
+O refused length
+M 1,0
+O refused align
+M 0,0
+O m 0 snug
+C four_eights
+H 8:4,8:4,8:4,8:4
+O L 4
+O R 0 ship0 8 4
+O R 1 ship1 8 4
+O R 2 ship2 8 4
+O R 3 ship3 8 4
+O P lowest 0,8,-,- 2
+O P tightest 0,8,-,- 2
+O P highest 8,0,-,- 2
+O P best 0,8,-,- 2
+M 0,8,-,-
+O m 2 snug
+M 0,8,-,-
+O m 2 snug
+M 0,8,-,-
+O m 2 snug
+M 8,0,-,-
+O m 2 snug
+M -,-,-,-
+O m 4 crowded
+M 7,4,6,13
+O refused align
+M 0,8,-
+O refused length
+M 0,8,-,-,-
+O refused length
+M 1,8,-,-
+O refused align
+M 0,0,0,0
+O refused busy
+C halves_then_whole
+H 8:2,8:2,16:1,1:4
+O L 4
+O R 0 ship0 8 2
+O R 1 ship1 8 2
+O R 2 ship2 16 1
+O R 3 ship3 1 4
+O P lowest 0,8,-,0 1
+O P tightest 0,8,-,0 1
+O P highest 8,0,-,15 1
+O P best 0,8,-,0 1
+M 0,8,-,0
+O m 1 snug
+M 0,8,-,0
+O m 1 snug
+M 0,8,-,0
+O m 1 snug
+M 8,0,-,15
+O m 1 snug
+M -,-,-,-
+O m 4 crowded
+M 5,8,5,3
+O refused align
+M 0,8,-
+O refused length
+M 0,8,-,0,-
+O refused length
+M 1,8,-,0
+O refused align
+M 0,0,0,0
+O refused busy
+C fragmenting_ones
+H 1:4,1:4,1:4,1:4,1:4,8:1,4:2,8:1
+O L 8
+O R 0 ship0 1 4
+O R 1 ship1 1 4
+O R 2 ship2 1 4
+O R 3 ship3 1 4
+O R 4 ship4 1 4
+O R 5 ship5 8 1
+O R 6 ship6 4 2
+O R 7 ship7 8 1
+O P lowest 0,1,2,3,0,8,4,8 0
+O P tightest 0,1,2,3,0,8,4,8 0
+O P highest 15,14,13,12,15,0,8,0 0
+O P best 0,1,2,3,0,8,4,8 0
+M 0,1,2,3,0,8,4,8
+O m 0 snug
+M 0,1,2,3,0,8,4,8
+O m 0 snug
+M 0,1,2,3,0,8,4,8
+O m 0 snug
+M 15,14,13,12,15,0,8,0
+O m 0 snug
+M -,-,-,-,-,-,-,-
+O m 8 crowded
+M 9,7,2,9,0,5,10,3
+O refused busy
+M 0,1,2,3,0,8,4
+O refused length
+M 0,1,2,3,0,8,4,8,-
+O refused length
+M 0,1,2,3,0,9,4,8
+O refused align
+M 0,0,0,0,0,0,0,0
+O refused busy
+C ten_long_stays
+H 4:4,2:4,8:4,1:4,4:4,2:4,8:4,1:4,4:4,2:4
+O L 10
+O R 0 ship0 4 4
+O R 1 ship1 2 4
+O R 2 ship2 8 4
+O R 3 ship3 1 4
+O R 4 ship4 4 4
+O R 5 ship5 2 4
+O R 6 ship6 8 4
+O R 7 ship7 1 4
+O R 8 ship8 4 4
+O R 9 ship9 2 4
+O P lowest 0,4,8,6,0,4,8,6,0,4 0
+O P tightest 0,4,8,6,0,4,8,6,0,4 0
+O P highest 12,10,0,9,12,10,0,9,12,10 0
+O P best 0,4,8,6,0,4,8,6,0,4 0
+M 0,4,8,6,0,4,8,6,0,4
+O m 0 snug
+M 0,4,8,6,0,4,8,6,0,4
+O m 0 snug
+M 0,4,8,6,0,4,8,6,0,4
+O m 0 snug
+M 12,10,0,9,12,10,0,9,12,10
+O m 0 snug
+M -,-,-,-,-,-,-,-,-,-
+O m 10 crowded
+M 2,8,9,12,1,8,12,3,4,10
+O refused align
+M 0,4,8,6,0,4,8,6,0
+O refused length
+M 0,4,8,6,0,4,8,6,0,4,-
+O refused length
+M 1,4,8,6,0,4,8,6,0,4
+O refused align
+M 0,0,0,0,0,0,0,0,0,0
+O refused busy
