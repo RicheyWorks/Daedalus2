@@ -13,7 +13,7 @@
 #include "DaedalusPyRandomCore.h"
 #include <algorithm>
 #include <cstdint>
-#include <deque>
+#include <array>
 #include <string>
 #include <vector>
 
@@ -37,6 +37,23 @@ inline const Difficulty* FindDifficulty(const std::string& Name)
 	return nullptr;
 }
 
+constexpr int MaxChimes = 16;
+
+/**
+ * Peal queue for one tap, in fill order. Every push is a charge increment that reached Peal, and a tap makes at
+ * most 4 increments itself plus 2 per peal; each peal nets -2 charge, so peals <= (3N + 4) / 2 and pushes
+ * <= 3N + 8 < 8N for N >= 2. Eight slots per chime is therefore a hard bound and the core never allocates
+ * while playing (iteration 6).
+ */
+struct PealQueue
+{
+	std::array<int, MaxChimes * 8> Slots{};
+	int Head = 0, Tail = 0;
+	bool Empty() const noexcept { return Head == Tail; }
+	void Push(int I) noexcept { if (Tail < static_cast<int>(Slots.size())) Slots[static_cast<size_t>(Tail++)] = I; }
+	int Pop() noexcept { return Slots[static_cast<size_t>(Head++)]; }
+};
+
 struct Game
 {
 	const Difficulty* Diff = nullptr;
@@ -50,7 +67,7 @@ struct Game
 	enum class Act { Ok, BadChime, GameOver };
 
 	int Chimes() const { return static_cast<int>(Charge.size()); }
-	int Wrap(int I) const { const int N = Chimes(); return ((I % N) + N) % N; }
+	int Wrap(int I) const noexcept { const int N = Chimes(); return ((I % N) + N) % N; }
 	int LitCount() const { int C = 0; for (bool L : Lit) if (L) ++C; return C; }
 	bool AllLit() const { return LitCount() == Chimes(); }
 
@@ -58,7 +75,7 @@ struct Game
 	bool Start(std::uint32_t Seed, const std::string& DifficultyName)
 	{
 		Diff = FindDifficulty(DifficultyName);
-		if (!Diff) return false;
+		if (!Diff || Diff->Chimes > MaxChimes) return false;
 		Rng.Seed(std::string(GameId()) + ":" + std::to_string(Seed) + ":" + DifficultyName);
 		Score = 0; Over = Won = false;
 		const size_t N = static_cast<size_t>(Diff->Chimes);
@@ -77,17 +94,17 @@ struct Game
 		Pealed = 0;
 		if (Over) return Act::GameOver;
 		if (I < 0 || I >= Chimes()) return Act::BadChime;
-		std::deque<int> Queue;
+		PealQueue Queue;
 		int Cur = I;
 		for (int Hop = 0, Hops = Charge[static_cast<size_t>(I)]; Hop < Hops; ++Hop)
 		{
 			Cur = Wrap(Cur + Facing[static_cast<size_t>(I)]);
-			if (++Charge[static_cast<size_t>(Cur)] >= Peal) Queue.push_back(Cur);
+			if (++Charge[static_cast<size_t>(Cur)] >= Peal) Queue.Push(Cur);
 		}
-		if (++Charge[static_cast<size_t>(I)] >= Peal) Queue.push_back(I);   // the rung chime resonates
-		while (!Queue.empty())
+		if (++Charge[static_cast<size_t>(I)] >= Peal) Queue.Push(I);   // the rung chime resonates
+		while (!Queue.Empty())
 		{
-			const int J = Queue.front(); Queue.pop_front();
+			const int J = Queue.Pop();
 			if (Charge[static_cast<size_t>(J)] < Peal) continue;   // a neighbour's peal may already have drained it
 			PealChime(J, Queue);
 			++Pealed;
@@ -132,14 +149,14 @@ struct Game
 
 private:
 	/** Chime I peals: score, light, reset, and charge both neighbours, queueing any that fill. */
-	void PealChime(int I, std::deque<int>& Queue)
+	void PealChime(int I, PealQueue& Queue) noexcept
 	{
 		Charge[static_cast<size_t>(I)] = 0;
 		Lit[static_cast<size_t>(I)] = true;
 		++Peals;
 		Score += PealScore;
 		for (int J : { Wrap(I - 1), Wrap(I + 1) })
-			if (++Charge[static_cast<size_t>(J)] >= Peal) Queue.push_back(J);
+			if (++Charge[static_cast<size_t>(J)] >= Peal) Queue.Push(J);
 	}
 };
 
