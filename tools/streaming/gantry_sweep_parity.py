@@ -23,7 +23,8 @@ is checked against that header's semantics by the C++ test that replays the file
 
 Golden lines: `C name`; `S profile hex` (tide profile, seed string as utf-8 hex) or `H start pos:arrive,...` (a hand layout);
 `O L start n`, `O R i label pos arrive` per ship, `O P policy order waits travel` for fcfs, sstf, scan, cscan, best;
-then `M order` plays (comma-separated ship indices, `-` for none) answered by `O m waits travel verdict` or
+a hand line the core refuses is answered by `O hand_refused kind` (no_ships, too_many_ships, coord)
+and has no plays; then `M order` plays (comma-separated ship indices, `-` for none) answered by `O m waits travel verdict` or
 `O refused kind` (short, long, range, repeat).
 """
 import os
@@ -37,6 +38,7 @@ RAIL = 40
 PROFILES = {"calm": 24, "rush": 6, "spread": 60, "storm": 24}  # arrival span in ticks
 STORM_SHIPS = (8, 10)
 HAND_MAX_SHIPS = 10
+MAX_COORD = 10 ** 9  # hand berths, start and arrivals
 MIN_SHIPS, MAX_SHIPS = 5, 8
 BERTHS = ("anchor", "bollard", "capstan", "davit", "eyebolt", "fairlead", "gunwale", "hawser",
           "jetty", "keel", "lanyard", "mooring")
@@ -233,12 +235,33 @@ def lines():
              "rail_ends": (39, [(0, 0), (39, 0), (0, 100), (39, 100)]),
              "late_idle": (20, [(10, 1000), (30, 1000), (25, 1000), (20, 2000)]),  # fallback: same arrival, nearest
              "equal_fallback": (20, [(30, 50), (10, 50)]),  # same arrival and distance: lower index
-             "ten_ship_hand": (0, [(i * 4, (i * 7) % 11) for i in range(10)])}
+             "ten_ship_hand": (0, [(i * 4, (i * 7) % 11) for i in range(10)]),
+             # guards: the largest coordinates, and duplicate arrival ticks
+             "max_coord_rail": (MAX_COORD, [(0, MAX_COORD), (MAX_COORD, 0), (MAX_COORD // 2, MAX_COORD)]),
+             "ten_far_ships": (0, [(MAX_COORD - i * 99999999, MAX_COORD - i) for i in range(10)]),
+             "dup_arrivals": (12, [(p, 7) for p in (3, 30, 12, 20, 3, 25)]),
+             "dup_arrivals_ties": (20, [(10, 5), (30, 5), (10, 5), (30, 5)])}
+    bad_hands = {"no_ships": (5, []), "eleven_ships": (0, [(i, i) for i in range(11)]),
+                 "start_past_max": (MAX_COORD + 1, [(0, 0)]), "berth_past_max": (0, [(1, 1), (MAX_COORD + 1, 0)]),
+                 "arrival_past_max": (0, [(0, MAX_COORD + 1)])}
     for name, (start, hs) in hands.items():
         ships = [(f"berth{i}", p, a) for i, (p, a) in enumerate(hs)]
         head = f"H {start} " + ",".join(f"{p}:{a}" for p, a in hs)
         case(out, name, head, start, ships, plays_for(start, ships, pick))
+    for name, (start, hs) in bad_hands.items():
+        out += [f"C {name}", f"H {start} " + (",".join(f"{p}:{a}" for p, a in hs) or "-"), f"O hand_refused {hand_error(start, hs)}"]
     return out
+
+
+def hand_error(start, hs):
+    """The core's MakeHand checks, in its order."""
+    if not hs:
+        return "no_ships"
+    if len(hs) > HAND_MAX_SHIPS:
+        return "too_many_ships"
+    if not 0 <= start <= MAX_COORD or any(not (0 <= p <= MAX_COORD and 0 <= a <= MAX_COORD) for p, a in hs):
+        return "coord"
+    return None
 
 
 def main(argv):
