@@ -91,3 +91,84 @@ class Rules(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Properties(unittest.TestCase):
+    """Iteration 1: invariants on every voyage, every move, every seed (no rule change)."""
+    SEEDS = range(60)
+
+    def check(self, g, before):
+        s = g.size()
+        self.assertEqual(g.turn, before["turn"] + 1, "every action is one turn")
+        self.assertEqual(g.tide, g.turn // gm.TIDE_EVERY)
+        self.assertEqual(g.heights, before["heights"], "heights never change")
+        self.assertEqual(g.aboard + len(g.passengers), g.cfg["passengers"], "lanterns are aboard or waiting, never lost")
+        self.assertTrue(all(0 <= r < s and 0 <= c < s for r, c in [g.ferry]))
+        self.assertLessEqual(abs(g.ferry[0] - before["ferry"][0]) + abs(g.ferry[1] - before["ferry"][1]), 1, "the ferry moves at most one cell")
+        if g.over:
+            at_harbour = g.ferry == g.harbour
+            self.assertTrue(at_harbour or g.flooded(*g.ferry), "a voyage ends only at the harbour or under water")
+            self.assertEqual(g.won, at_harbour and g.aboard >= g.cfg["need"])
+            if at_harbour:
+                self.assertEqual(g.score, gm.PASSENGER_SCORE * g.aboard + gm.TIDE_SCORE * max(0, gm.TIDE_EVERY * s - g.turn))
+        else:
+            self.assertFalse(g.flooded(*g.ferry), "a live ferry is never under water")
+            self.assertEqual(g.score, 0, "score is settled only at the harbour")
+
+    def legal_moves(self, g):
+        s = g.size()
+        out = []
+        for name, (dr, dc) in gm.MOVES.items():
+            r, c = g.ferry[0] + dr, g.ferry[1] + dc
+            if 0 <= r < s and 0 <= c < s and not g.flooded(r, c):
+                out.append(name)
+        return out
+
+    def test_random_legal_moves_keep_invariants(self):
+        import random
+        for d in gm.DIFFICULTY:
+            for seed in self.SEEDS:
+                g = gm.start(seed, d)
+                rng = random.Random(seed * 13 + 5)
+                while not g.over:
+                    before = {"turn": g.turn, "heights": [row[:] for row in g.heights], "ferry": list(g.ferry)}
+                    moves = self.legal_moves(g)
+                    self.assertTrue(moves, "wait is always legal while the ferry is dry")
+                    g.step(rng.choice(moves))
+                    self.check(g, before)
+
+    def test_demo_moves_keep_invariants_and_are_legal(self):
+        for d in gm.DIFFICULTY:
+            for seed in self.SEEDS:
+                g = gm.start(seed, d)
+                while not g.over:
+                    before = {"turn": g.turn, "heights": [row[:] for row in g.heights], "ferry": list(g.ferry)}
+                    a = g.demo_action()
+                    self.assertIn(a, self.legal_moves(g))
+                    g.step(a)
+                    self.check(g, before)
+
+    def test_every_voyage_ends(self):
+        for d in gm.DIFFICULTY:
+            for seed in self.SEEDS:
+                g = gm.start(seed, d)
+                while not g.over:
+                    g.step("wait")
+                self.assertLessEqual(g.turn, gm.TIDE_EVERY * g.size())
+
+
+class Balance(unittest.TestCase):
+    """Iteration 3: the greedy watcher's win rate per difficulty is pinned to a band."""
+    BANDS = {"easy": (0.70, 0.95), "normal": (0.35, 0.65), "hard": (0.20, 0.50)}
+
+    def test_greedy_win_rate_bands(self):
+        import io
+        for d, (lo, hi) in self.BANDS.items():
+            wins = sum(gm.demo(s, d, io.StringIO()).won for s in range(100))
+            self.assertTrue(lo <= wins / 100 <= hi, f"{d}: greedy wins {wins}/100, band {lo}-{hi}")
+
+    def test_voyages_are_not_trivial(self):
+        import io
+        for d in gm.DIFFICULTY:
+            turns = [gm.demo(s, d, io.StringIO()).turn for s in range(100)]
+            self.assertGreaterEqual(sum(turns) / 100, 10, f"{d}: average voyage too short")
