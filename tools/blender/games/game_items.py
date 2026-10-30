@@ -606,6 +606,110 @@ def prismchime():
     return out
 
 
+
+# ---------------------------------------------------------------- Disk Saver shared kit
+def slate(a, note):
+    P = [K.box("Frame", (1.0, 0.06, 1.5), (0, 0, 1.25), 0), K.box("Slate", (0.9, 0.01, 1.4), (0, -0.031, 1.25), 1, bevel=False)] + [K.box("Leg%d" % k, (0.06, 0.06, 0.5), (k * 0.42, 0, 0.25), 0) for k in (-1, 1)]
+    P += [K.box("ChalkTray", (0.9, 0.08, 0.03), (0, -0.05, 0.53), 0)]
+    return simple(a, P, [("wood frame", WOOD, 0.7), ("slate (runtime chalk UI over this face)", "2A2E30", 0.9)], [K.socket("Floor", (0, 0, 0)), K.socket("UI_Face", (0, -0.037, 1.25)), K.socket("ChalkTray", (0, -0.05, 0.56))],
+                  "1 x 1.5 m slate on legs: " + note, (1.0, 0.1, 2.0), (0, 0, 1.0))
+
+
+def flag(a, cloth_hex, note, pole=4.0, w=1.0, h=0.6, ragged=False):
+    P = [K.cyl("Pole", "z", 0.035, 0.03, pole, (0, 0, pole / 2), 0, 8), ball("Finial", (0, 0, pole + 0.04), 0.05, 0, 6)]
+    if ragged:
+        P += [K.box("Cloth%d" % k, (w / 4, 0.01, h * (1 - 0.15 * (k % 2))), (0.04 + w / 8 + k * w / 4, 0, pole - 0.05 - h / 2 + 0.03 * (k % 2)), 1, bevel=False) for k in range(4)]
+    else:
+        P += [K.box("Cloth", (w, 0.01, h), (0.04 + w / 2, 0, pole - 0.05 - h / 2), 1, bevel=False)]
+    return simple(a, P, [("pole", "E8E4D8", 0.6), ("cloth", cloth_hex, 0.95)], [K.socket("Floor", (0, 0, 0)), K.socket("Cloth", (0.04, 0, pole - 0.05))],
+                  "%.1f x %.1f m flag on %.0f m pole: %s" % (w, h, pole, note), (w + 0.1, 0.07, pole + 0.1), (w / 2, 0, (pole + 0.1) / 2))
+
+
+def pennant(a, cloth_hex, note, w=1.0, h=0.5):
+    P = [K.cyl("Batten", "x", 0.015, 0.015, w + 0.1, (0, 0, h), 0, 6), K.box("Cloth", (w, 0.01, h * 0.6), (0, 0, h * 0.68), 1, bevel=False)]
+    P += [K.box("Tail%d" % s, (w / 2, 0.01, h * 0.35), (s * w / 4, 0, h * 0.22), 1, bevel=False, rot=(0, s * 25, 0)) for s in (-1, 1)]
+    return simple(a, P, [("batten", WOOD, 0.7), ("cloth", cloth_hex, 0.95)], [K.socket("Hang", (0, 0, h)), K.socket("Name", (0, -0.01, h * 0.68))], "%.1f x %.1f m pennant: %s" % (w, h, note), (w + 0.1, 0.03, h), (0, 0, h / 2))
+
+
+def signal_lamp(a, hx, note, h=0.3):
+    P = [K.box("Base", (0.14, 0.14, 0.04), (0, 0, 0.02), 1), K.cyl("Glass", "z", 0.07, 0.07, h * 0.55, (0, 0, 0.04 + h * 0.275), 0, 10), K.cyl("Cap", "z", 0.03, 0.09, 0.05, (0, 0, 0.065 + h * 0.55), 1, 10),
+         K.box("Hood", (0.16, 0.06, 0.02), (0, -0.05, 0.05 + h * 0.55), 1, bevel=False)]
+    return simple(a, P, [("lamp glass (emissive)", hx, 0.15, 0.0, True), ("iron", "2A2A30", 0.5, 0.8)], [K.socket("Base", (0, 0, 0)), K.socket("Light", (0, 0, 0.04 + h * 0.275))], "%.2f m signal lamp: %s" % (h, note), (0.18, 0.18, h), (0, 0, h / 2))
+
+
+def hull(a, L, hull_hex, masts=1, cabin=False, hatch=None, note="", sail_hex="E8DCC0"):
+    W = max(1.4, L * 0.26); H = max(0.8, L * 0.1)
+    P = [K.box("Hull", (W, L * 0.8, H), (0, L * 0.1, H / 2), 0), K.box("Bow", (W * 0.71, W * 0.71, H), (0, -L * 0.3, H / 2), 0, rot=(0, 0, 45)), K.box("Deck", (W - 0.1, L * 0.8 - 0.1, 0.05), (0, L * 0.1, H + 0.02), 1),
+         K.box("Rail", (W, 0.05, 0.25), (0, L * 0.5 - 0.03, H + 0.15), 0)]
+    S = [K.socket("Floor", (0, 0, 0)), K.socket("Bow", (0, -L * 0.3 - W * 0.5, H)), K.socket("Stern", (0, L * 0.5, H)), K.socket("Deck", (0, L * 0.1, H + 0.05)), K.socket("Pennant", (0, 0, H + L * 0.45))]
+    for m in range(masts):
+        y = L * (0.1 - 0.25 * (m - (masts - 1) / 2)); mh = L * 0.45
+        P += [K.cyl("Mast%d" % m, "z", 0.06 + L * 0.003, 0.04, mh, (0, y, H + mh / 2), 2, 6), K.box("Sail%d" % m, (W * 1.1, 0.02, mh * 0.55), (0, y + 0.05, H + mh * 0.5), 3, bevel=False)]
+    if cabin:
+        P += [K.box("Cabin", (W * 0.7, L * 0.18, H * 0.9), (0, L * 0.38, H * 1.45), 1)]
+    if hatch:
+        open_ = hatch == "Open"; P += [K.box("HatchCoaming", (W * 0.5, L * 0.15, 0.15), (0, L * 0.05, H + 0.1), 2)]
+        P += [K.box("HatchLid", (W * 0.5, L * 0.15, 0.05), (W * 0.27 + 0.02, L * 0.05, H + 0.3), 2, rot=(0, 75, 0))] if open_ else [K.box("HatchLid", (W * 0.52, L * 0.16, 0.05), (0, L * 0.05, H + 0.2), 2)]
+        S.append(K.socket("Hatch", (0, L * 0.05, H + 0.2)))
+    mats = [("hull", hull_hex, 0.7), ("deck", WOOD, 0.8), ("spars / hatch", "5A3A22", 0.8), ("sail", sail_hex, 0.95)]
+    return simple(a, P, mats, S, "%.0f m moored hull: %s" % (L, note), (W, L, H + L * 0.45), (0, 0, (H + L * 0.45) / 2))
+
+
+def crate(a, s):
+    P = [K.box("Box", (s, s, s), (0, 0, s / 2), 0)] + [K.box("Band%d" % k, (s + 0.02, s + 0.02, s * 0.06), (0, 0, s * (0.2 + 0.6 * k)), 1, bevel=False) for k in range(2)] + [K.cyl("Eye", "y", s * 0.06, s * 0.06, s * 0.03, (0, 0, s + s * 0.05), 1, 8)]
+    return simple(a, P, [("crate wood", "A07A4A", 0.8), ("iron bands", "3A3A40", 0.6, 0.8)], [K.socket("Floor", (0, 0, 0)), K.socket("HookAttach", (0, 0, s + s * 0.1))], "%.1f m cargo crate (hook on top)" % s, (s + 0.02, s + 0.02, s * 1.1), (0, 0, s * 0.55))
+
+
+def tick_board(a, cols, rows, note, w=2.0, h=1.2):
+    P = [K.box("Frame", (w, 0.06, h), (0, 0, 1.0 + h / 2), 0), K.box("Face", (w - 0.1, 0.01, h - 0.1), (0, -0.031, 1.0 + h / 2), 1, bevel=False)] + [K.box("Leg%d" % k, (0.07, 0.07, 1.0), (k * (w / 2 - 0.1), 0, 0.5), 0) for k in (-1, 1)]
+    cw = (w - 0.2) / cols
+    P += [K.box("Tick%d" % c, (0.006, 0.004, 0.06 if c % 10 else 0.12), (-(w - 0.2) / 2 + c * cw, -0.037, 1.0 + h - 0.15), 2, bevel=False) for c in range(cols + 1)]
+    P += [K.box("Row%d" % r, (w - 0.2, 0.004, 0.006), (0, -0.037, 1.0 + h - 0.25 - r * (h - 0.35) / rows), 2, bevel=False) for r in range(rows)]
+    return simple(a, P, [("wood frame", WOOD, 0.7), ("board", "1E2A24", 0.9), ("chalk ticks", "E8E8E0", 0.95)], [K.socket("Floor", (0, 0, 0)), K.socket("Tick0", (-(w - 0.2) / 2, -0.04, 1.0 + h - 0.15)), K.socket("UI_Face", (0, -0.04, 1.0 + h / 2))],
+                  "%.1f x %.1f m board: %s" % (w, h, note), (w, 0.08, 1.0 + h), (0, 0, (1.0 + h) / 2))
+
+
+# ================================================================ gantry_sweep (disk-saver, READY 59154)
+@game("gantry_sweep")
+def gantry_sweep():
+    G = "Prop_GantrySweep_"; out = []
+    top = [K.box("MarqRail", (0.84, 0.04, 0.03), (0, -0.05, 2.1), 5, bevel=False), K.box("MarqGantry", (0.06, 0.06, 0.18), (-0.1, -0.05, 2.2), 6), K.box("MarqBeam", (0.3, 0.05, 0.04), (0, -0.05, 2.3), 6, bevel=False)]
+    out.append(cabinet("Prop_Arcade_Cab_GantrySweep", "3A4A5A", "D8C8A0", "FFB03A", top, [("rail steel", "6A6A70", 0.4, 0.9), ("crane yellow", "E0B030", 0.5)], "rail-and-crane marquee, tick-board side art"))
+    a = G + "GantryCrane"; Y = "E0B030"
+    P = [K.box("Leg%d%d" % (sx, sy), (0.35, 0.35, 7.4), (sx * 2.8, sy * 1.0, 3.7), 0) for sx in (-1, 1) for sy in (-1, 1)]
+    P += [K.box("Bogie%d" % sx, (0.6, 2.8, 0.5), (sx * 2.8, 0, 0.25), 1) for sx in (-1, 1)] + [K.box("Girder%d" % sy, (6.2, 0.4, 0.6), (0, sy * 1.0, 7.6), 0) for sy in (-1, 1)]
+    P += [K.box("Brace%d" % sx, (0.15, 2.0, 0.15), (sx * 2.8, 0, 5.0), 0, bevel=False) for sx in (-1, 1)]
+    P += [K.box("Trolley", (0.9, 2.4, 0.5), (0.8, 0, 8.15), 1), K.box("CraneCab", (1.0, 1.0, 1.0), (-2.2, -1.5, 6.7), 2), K.box("CabWindow", (0.8, 0.02, 0.5), (-2.2, -2.01, 6.8), 3, bevel=False),
+          K.cyl("Cable", "z", 0.02, 0.02, 3.0, (0.8, 0, 6.4), 1, 4), K.box("HookBlock", (0.3, 0.2, 0.35), (0.8, 0, 4.75), 1), K.lathe("Hook", [(0.0, 0.0), (0.05, 0.02), (0.04, 0.25), (0, 0.27)], (0.8, 0, 4.3), 1, 6)]
+    S = [K.socket("RailCentre", (0, 0, 0)), K.socket("Trolley", (0.8, 0, 7.9)), K.socket("Hook", (0.8, 0, 4.3)), K.socket("CabLamp", (-2.2, -2.05, 7.3))]
+    out.append(simple(a, P, [("crane yellow", Y, 0.5), ("steel", "4A4A50", 0.5, 0.8), ("cab", "E8E4D8", 0.7), ("glass", "1A2A3A", 0.1)], S,
+                      "8.4 m gantry crane spanning the rail (travel along Y, hoist the Hook socket; rig pending)", (6.2, 3.2, 8.4), (0, -0.3, 4.2)))
+    a = G + "QuayRail"; P = [K.box("Quay", (8.0, 4.0, 0.3), (0, 0, -0.15), 0, bevel=False)] + [K.box("Rail%d" % sx, (0.15, 4.0, 0.15), (sx * 2.8, 0, 0.075), 1, bevel=False) for sx in (-1, 1)]
+    P += [K.box("Sleeper%d" % k, (6.2, 0.25, 0.05), (0, -1.5 + 1.0 * k, 0.02), 2, bevel=False) for k in range(4)] + [K.box("Stencil", (0.8, 0.5, 0.01), (-3.5, 0, 0.005), 3, bevel=False)]
+    out.append(simple(a, P, [("quay stone", STONE, 0.9), ("rail steel", "6A6A70", 0.4, 0.9), ("sleepers", "4A3A2A", 0.9), ("berth number stencil (decal)", "F2F2E8", 0.8)],
+                      [K.socket("Start", (0, -2, 0)), K.socket("End", (0, 2, 0)), K.socket("BerthStencil", (-3.5, 0, 0.01)), K.socket("Bollard", (3.6, 0, 0))], "4 m quay rail segment (one berth, tile along Y)", (8.0, 4.0, 0.45), (0, 0, 0.0)))
+    a = G + "BerthBollard"; P = [K.cyl("Body", "z", 0.18, 0.2, 0.45, (0, 0, 0.225), 0, 10), K.cyl("Cap", "z", 0.26, 0.22, 0.1, (0, 0, 0.5), 0, 10), K.box("PlatePost", (0.06, 0.06, 0.5), (0.35, 0, 0.25), 0), K.box("Plate", (0.4, 0.02, 0.16), (0.35, -0.04, 0.55), 1, bevel=False)]
+    out.append(simple(a, P, [("cast iron", "2A2A30", 0.5, 0.8), ("name plate (12 decal variants)", "C8B48A", 0.5, 0.6)], [K.socket("Floor", (0, 0, 0)), K.socket("Rope", (0, 0, 0.35)), K.socket("Plate", (0.35, -0.05, 0.55))],
+                      "0.6 m mooring bollard with swappable name plate", (0.75, 0.52, 0.63), (0.12, 0, 0.315)))
+    for nm, L, hx, m, cab in (("TraderCog", 16, "6A4A2A", 1, True), ("FishingSmack", 12, "3A5A6A", 1, False), ("RiverBarge", 20, "4A4A3A", 0, True)):
+        for st in ("Closed", "Open"):
+            out.append(hull(G + "Ship_%s_Hatch%s" % (nm, st), L, hx, m, cab, st, "%s, hatch %s" % (nm, st.lower())))
+    out.append(tick_board(G + "ArrivalTickBoard", 60, 5, "arrival ticks 0-60"))
+    out.append(slate(G + "RailPostSlate", "Ossian's order slate"))
+    for nm, hx in (("Calm", "6AB0E0"), ("Rush", "E0B030"), ("Spread", "6AC07A")):
+        out.append(flag(G + "TideFlag_" + nm, hx, "tide profile " + nm.lower()))
+    out.append(flag(G + "TideFlag_Storm", "C03030", "tide profile storm (ragged)", ragged=True))
+    for nm, hx in (("Sweet", "40E070"), ("Fair", "FFB03A"), ("Jammed", "FF3A3A")):
+        out.append(signal_lamp(G + "VerdictLamp_" + nm, hx, nm.lower()))
+    for s in (0.5, 1.0, 2.0):
+        out.append(crate(G + "Crate_%02dm" % int(s * 10), s))
+    a = G + "GreaseTin"; P = [K.cyl("Tin", "z", 0.05, 0.05, 0.08, (0, 0, 0.04), 0, 12), K.cyl("Lid", "z", 0.052, 0.052, 0.012, (0, 0, 0.086), 1, 12), K.box("Bail", (0.1, 0.006, 0.006), (0, 0, 0.13), 1, bevel=False)]
+    P += [K.box("BailSide%d" % s, (0.006, 0.006, 0.05), (s * 0.05, 0, 0.11), 1, bevel=False) for s in (-1, 1)]
+    out.append(simple(a, P, [("tin", "6A6A60", 0.5, 0.8), ("lid / bail", "3A3A30", 0.6, 0.8)], [K.socket("Grip", (0, 0, 0.13)), K.socket("Base", (0, 0, 0))], "0.14 m grease tin (attach Grip to Ossian HandR)", (0.11, 0.11, 0.14), (0, 0, 0.07)))
+    out.append(npc("Mob_GantrySweep_RailwrightOssian", "3A4A5A", "4A3A2A", [K.cyl("OTin", "z", 0.05, 0.05, 0.08, (-0.37, 0, 0.82), 4, 10)], [("grease tin", "6A6A60", 0.5, 0.8)], "Railwright Ossian (rig pending: idle, chalk, grumble)"))
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)
