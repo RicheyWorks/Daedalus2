@@ -2,8 +2,8 @@
 // Key hints and colour-blind safe marks. The mark is a word plus a shape on a
 // dark plate: a triangle for MARK ACT and a bar for MARK WAIT. Colour is not
 // the only signal. Twinwake keeps its six-command match opening.
-// catalog-capability: key_hint: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell prismcairn prismvault siltlane
-// catalog-capability: contrast_mark: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell prismcairn prismvault siltlane
+// catalog-capability: key_hint: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell shardring lumenpath wardens_accord facetlock prismcairn prismvault siltlane
+// catalog-capability: contrast_mark: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell shardring lumenpath wardens_accord facetlock prismcairn prismvault siltlane
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <string>
