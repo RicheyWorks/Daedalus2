@@ -1,0 +1,2520 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_PrismcairnDuel",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: cairn-stack topper",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_PrismcairnDuel_M0",
+     "colour": "cabinet body",
+     "hex": "4A4A5A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_PrismcairnDuel_M1",
+     "colour": "trim / side art panel",
+     "hex": "8A8A9A",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_PrismcairnDuel_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "A6E6FF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_PrismcairnDuel_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_PrismcairnDuel_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_PrismcairnDuel_M5",
+     "colour": "cairn stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_PrismcairnDuel",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Stone0",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.12,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.16,
+        2.08
+       ],
+       "slot": 5,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        8
+       ]
+      },
+      {
+       "name": "Stone1",
+       "shape": "box",
+       "size": [
+        0.24,
+        0.12,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.16,
+        2.16
+       ],
+       "slot": 5,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -8
+       ]
+      },
+      {
+       "name": "Stone2",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.12,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.16,
+        2.24
+       ],
+       "slot": 5,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        8
+       ]
+      },
+      {
+       "name": "Stone3",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.12,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.16,
+        2.32
+       ],
+       "slot": 5,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -8
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_PrismcairnDuel_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 660,
+    "lod1_triangles": 660,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_PrismcairnDuel": 660
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.36
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.36
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9bf27f1529b4e5fb9ee24e7776d1c21d3513e4bfd4f2365a5f9ed65e2a72584d"
+  },
+  {
+   "asset": "Prop_Prismcairn_CairnPiece_1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "cairn piece 1, 0.50 m wide (stack via SOCKET_Top)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Bottom",
+     "SOCKET_Top"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Prismcairn_CairnPiece_1_M0",
+     "colour": "cairn stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Prismcairn_CairnPiece_1_M1",
+     "colour": "prism inlay (emissive)",
+     "hex": "FF6B2E",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Prismcairn_CairnPiece_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.4,
+        0.18
+       ],
+       "centre": [
+        0,
+        0,
+        0.09
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Inlay",
+       "shape": "box",
+       "size": [
+        0.25,
+        0.01,
+        0.072
+       ],
+       "centre": [
+        0,
+        -0.204,
+        0.09
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bottom",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.18
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.18,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Prismcairn_CairnPiece_1_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.4,
+      0.18
+     ],
+     "centre": [
+      0,
+      0,
+      0.09
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Prismcairn_CairnPiece_1": 56
+    },
+    "bounds_min": [
+     -0.25,
+     -0.209,
+     0.0
+    ],
+    "bounds_max": [
+     0.25,
+     0.2,
+     0.18
+    ],
+    "dimensions": [
+     0.5,
+     0.409,
+     0.18
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "40d9b26eb2afaf775fd38e3c9b044126ce46fcfb0d7120b9102f4bef189cb43f"
+  },
+  {
+   "asset": "Prop_Prismcairn_CairnPiece_2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "cairn piece 2, 0.42 m wide (stack via SOCKET_Top)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Bottom",
+     "SOCKET_Top"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Prismcairn_CairnPiece_2_M0",
+     "colour": "cairn stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Prismcairn_CairnPiece_2_M1",
+     "colour": "prism inlay (emissive)",
+     "hex": "338CFF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Prismcairn_CairnPiece_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.336,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Inlay",
+       "shape": "box",
+       "size": [
+        0.21,
+        0.01,
+        0.064
+       ],
+       "centre": [
+        0,
+        -0.172,
+        0.08
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bottom",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.16
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.16,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Prismcairn_CairnPiece_2_00",
+     "shape": "box",
+     "size": [
+      0.42,
+      0.336,
+      0.16
+     ],
+     "centre": [
+      0,
+      0,
+      0.08
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Prismcairn_CairnPiece_2": 56
+    },
+    "bounds_min": [
+     -0.21,
+     -0.177,
+     0.0
+    ],
+    "bounds_max": [
+     0.21,
+     0.168,
+     0.16
+    ],
+    "dimensions": [
+     0.42,
+     0.345,
+     0.16
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "dece79d5fdf85b4ceb76bccdcf4340e926a86c20e60fb3b4f3718c76ac0ad4e3"
+  },
+  {
+   "asset": "Prop_Prismcairn_CairnPiece_3",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "cairn piece 3, 0.34 m wide (stack via SOCKET_Top)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Bottom",
+     "SOCKET_Top"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Prismcairn_CairnPiece_3_M0",
+     "colour": "cairn stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Prismcairn_CairnPiece_3_M1",
+     "colour": "prism inlay (emissive)",
+     "hex": "73F28C",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Prismcairn_CairnPiece_3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.272,
+        0.14
+       ],
+       "centre": [
+        0,
+        0,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Inlay",
+       "shape": "box",
+       "size": [
+        0.17,
+        0.01,
+        0.056
+       ],
+       "centre": [
+        0,
+        -0.14,
+        0.07
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bottom",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.14
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.14,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Prismcairn_CairnPiece_3_00",
+     "shape": "box",
+     "size": [
+      0.34,
+      0.272,
+      0.14
+     ],
+     "centre": [
+      0,
+      0,
+      0.07
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Prismcairn_CairnPiece_3": 56
+    },
+    "bounds_min": [
+     -0.17,
+     -0.145,
+     0.0
+    ],
+    "bounds_max": [
+     0.17,
+     0.136,
+     0.14
+    ],
+    "dimensions": [
+     0.34,
+     0.281,
+     0.14
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f7bf66f52ee7af6c667861698de25291d0bbf5cfde56a3c3c3501d703d7b0a5e"
+  },
+  {
+   "asset": "Prop_Prismcairn_CairnPiece_4",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "cairn piece 4, 0.26 m wide (stack via SOCKET_Top)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Bottom",
+     "SOCKET_Top"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Prismcairn_CairnPiece_4_M0",
+     "colour": "cairn stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Prismcairn_CairnPiece_4_M1",
+     "colour": "prism inlay (emissive)",
+     "hex": "FFF299",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Prismcairn_CairnPiece_4",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        0.26,
+        0.208,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Inlay",
+       "shape": "box",
+       "size": [
+        0.13,
+        0.01,
+        0.048
+       ],
+       "centre": [
+        0,
+        -0.108,
+        0.06
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bottom",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Prismcairn_CairnPiece_4_00",
+     "shape": "box",
+     "size": [
+      0.26,
+      0.208,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Prismcairn_CairnPiece_4": 56
+    },
+    "bounds_min": [
+     -0.13,
+     -0.113,
+     0.0
+    ],
+    "bounds_max": [
+     0.13,
+     0.104,
+     0.12
+    ],
+    "dimensions": [
+     0.26,
+     0.217,
+     0.12
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "394a8488ec1cc367eba09bf127dac17ea0707248babdeaff344c460e491794ca"
+  },
+  {
+   "asset": "Prop_Prismcairn_CairnPiece_5",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "cairn piece 5, 0.18 m wide (stack via SOCKET_Top)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Bottom",
+     "SOCKET_Top"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Prismcairn_CairnPiece_5_M0",
+     "colour": "cairn stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Prismcairn_CairnPiece_5_M1",
+     "colour": "prism inlay (emissive)",
+     "hex": "B36BFF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Prismcairn_CairnPiece_5",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.144,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Inlay",
+       "shape": "box",
+       "size": [
+        0.09,
+        0.01,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.076,
+        0.05
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Bottom",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Prismcairn_CairnPiece_5_00",
+     "shape": "box",
+     "size": [
+      0.18,
+      0.144,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Prismcairn_CairnPiece_5": 56
+    },
+    "bounds_min": [
+     -0.09,
+     -0.081,
+     0.0
+    ],
+    "bounds_max": [
+     0.09,
+     0.072,
+     0.1
+    ],
+    "dimensions": [
+     0.18,
+     0.153,
+     0.1
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "60b26134ba9daede1dc72d9976fdc38e0c4bc04f82cd1306c7e15203bb6a6491"
+  },
+  {
+   "asset": "Prop_Prismcairn_CairnCircleBase",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "3.1 m cairn circle base, 6 seats",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Centre",
+     "SOCKET_Seat_0",
+     "SOCKET_Seat_1",
+     "SOCKET_Seat_2",
+     "SOCKET_Seat_3",
+     "SOCKET_Seat_4",
+     "SOCKET_Seat_5"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Prismcairn_CairnCircleBase_M0",
+     "colour": "flagstone",
+     "hex": "8A8680",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Prismcairn_CairnCircleBase_M1",
+     "colour": "standing marker",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Prismcairn_CairnCircleBase",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 1.5,
+       "r2": 1.55,
+       "length": 0.12,
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "segments": 16
+      },
+      {
+       "name": "Marker0",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.18,
+        0.3
+       ],
+       "centre": [
+        1.3,
+        0.0,
+        0.27
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        0.0
+       ]
+      },
+      {
+       "name": "Marker1",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.18,
+        0.3
+       ],
+       "centre": [
+        0.65,
+        1.12583,
+        0.27
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        60.0
+       ]
+      },
+      {
+       "name": "Marker2",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.18,
+        0.3
+       ],
+       "centre": [
+        -0.65,
+        1.12583,
+        0.27
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        120.0
+       ]
+      },
+      {
+       "name": "Marker3",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.18,
+        0.3
+       ],
+       "centre": [
+        -1.3,
+        0.0,
+        0.27
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        180.0
+       ]
+      },
+      {
+       "name": "Marker4",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.18,
+        0.3
+       ],
+       "centre": [
+        -0.65,
+        -1.12583,
+        0.27
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        240.0
+       ]
+      },
+      {
+       "name": "Marker5",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.18,
+        0.3
+       ],
+       "centre": [
+        0.65,
+        -1.12583,
+        0.27
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        300.0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_0",
+     "location": [
+      0.8,
+      0.0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.8,
+      0.12,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_1",
+     "location": [
+      0.4,
+      0.69282,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      0.12,
+      -0.69282
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_2",
+     "location": [
+      -0.4,
+      0.69282,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      0.12,
+      -0.69282
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_3",
+     "location": [
+      -0.8,
+      0.0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.8,
+      0.12,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_4",
+     "location": [
+      -0.4,
+      -0.69282,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      0.12,
+      0.69282
+     ]
+    },
+    {
+     "name": "SOCKET_Seat_5",
+     "location": [
+      0.4,
+      -0.69282,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      0.12,
+      0.69282
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Prismcairn_CairnCircleBase_00",
+     "shape": "box",
+     "size": [
+      3.1,
+      3.1,
+      0.42
+     ],
+     "centre": [
+      0,
+      0,
+      0.21
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 324,
+    "lod1_triangles": 324,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Prismcairn_CairnCircleBase": 324
+    },
+    "bounds_min": [
+     -1.55,
+     -1.55,
+     0.0
+    ],
+    "bounds_max": [
+     1.55,
+     1.55,
+     0.42
+    ],
+    "dimensions": [
+     3.1,
+     3.1,
+     0.42
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "319ba1b13f6934e176cb6fa1006ef3de1a4b1599dbb5e28f04b62ae13e63d23a"
+  },
+  {
+   "asset": "Mob_Prismcairn_CairnWarden",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Cairn Warden",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Prismcairn_CairnWarden_M0",
+     "colour": "coat",
+     "hex": "5A5A6A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Prismcairn_CairnWarden_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A4A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Prismcairn_CairnWarden_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Prismcairn_CairnWarden_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Prismcairn_CairnWarden_M4",
+     "colour": "staff",
+     "hex": "8A6440",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Mob_Prismcairn_CairnWarden_M5",
+     "colour": "staff gem (emissive)",
+     "hex": "A6E6FF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Prismcairn_CairnWarden",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Staff",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02,
+       "r2": 0.02,
+       "length": 1.7,
+       "centre": [
+        -0.37,
+        0,
+        0.85
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StaffGem",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.027,
+         0.012
+        ],
+        [
+         0.027,
+         0.1125
+        ],
+        [
+         0,
+         0.15
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        1.7
+       ],
+       "slot": 5,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Prismcairn_CairnWarden_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 684,
+    "lod1_triangles": 684,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Prismcairn_CairnWarden": 684
+    },
+    "bounds_min": [
+     -0.42,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     1.85
+    ],
+    "dimensions": [
+     0.84,
+     0.285,
+     1.85
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9c938d4772861e121d8ebdc5fb6615e9d7d4f4c96cfd4985b06b1b21e706b35f"
+  }
+ ]
+}

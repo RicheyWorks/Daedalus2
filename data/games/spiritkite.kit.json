@@ -1,0 +1,3240 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_SpiritkiteWeave",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: sky-blue, kite marquee",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_SpiritkiteWeave_M0",
+     "colour": "cabinet body",
+     "hex": "4A7FB8",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_SpiritkiteWeave_M1",
+     "colour": "trim / side art panel",
+     "hex": "DDEEFF",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_SpiritkiteWeave_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "8CCBFF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_SpiritkiteWeave_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_SpiritkiteWeave_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_SpiritkiteWeave_M5",
+     "colour": "kite cloth",
+     "hex": "F7F2E6",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_SpiritkiteWeave",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "KiteSail",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.16
+        ],
+        [
+         0.11,
+         0
+        ],
+        [
+         0,
+         -0.2
+        ],
+        [
+         -0.11,
+         0
+        ]
+       ],
+       "thickness": 0.006,
+       "centre": [
+        0,
+        -0.16,
+        2.17
+       ],
+       "slot": 5,
+       "segments": 4,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "KiteSpar",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.36,
+       "centre": [
+        0,
+        -0.17,
+        2.15
+       ],
+       "slot": 4,
+       "segments": 4
+      },
+      {
+       "name": "Tail0",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        0.0,
+        -0.17,
+        1.96
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      },
+      {
+       "name": "Tail1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        0.03728,
+        -0.17,
+        1.91
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      },
+      {
+       "name": "Tail2",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        0.02702,
+        -0.17,
+        1.86
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      },
+      {
+       "name": "Tail3",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.006,
+        0.03
+       ],
+       "centre": [
+        -0.0177,
+        -0.17,
+        1.81
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_SpiritkiteWeave_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 556,
+    "lod1_triangles": 556,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_SpiritkiteWeave": 556
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.33
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.33
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "45145158b6db282fba332f570e03c7790e374069d84495012062ded0a31d98dd"
+  },
+  {
+   "asset": "Prop_Spiritkite_SpiritKite",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.6 x 1.45 m spirit kite; tail = 5 chained child nodes",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Line",
+     "SOCKET_TailRoot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Spiritkite_SpiritKite_M0",
+     "colour": "spirit cloth (emissive soft)",
+     "hex": "F7F2E6",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Spiritkite_SpiritKite_M1",
+     "colour": "frame (bamboo)",
+     "hex": "C8A86A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Spiritkite_SpiritKite_M2",
+     "colour": "tail ribbons",
+     "hex": "FF4AD0",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Spiritkite_SpiritKite",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Sail",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0.45
+        ],
+        [
+         0.3,
+         0.05
+        ],
+        [
+         0,
+         -0.5
+        ],
+        [
+         -0.3,
+         0.05
+        ]
+       ],
+       "thickness": 0.008,
+       "centre": [
+        0,
+        0,
+        0.5
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Spine",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.95,
+       "centre": [
+        0,
+        -0.025,
+        0.51
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Spar",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.6,
+       "centre": [
+        0,
+        0.05,
+        0.51
+       ],
+       "slot": 1,
+       "segments": 6
+      }
+     ]
+    },
+    {
+     "name": "Prop_Spiritkite_SpiritKite_Tail0",
+     "parent": "Prop_Spiritkite_SpiritKite",
+     "pivot": [
+      0,
+      -0.5,
+      0.5
+     ],
+     "role": "tail segment (chain; sway driven in UE or via a later armature)",
+     "parts": [
+      {
+       "name": "TailSeg0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.55,
+        0.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Prop_Spiritkite_SpiritKite_Tail1",
+     "parent": "Prop_Spiritkite_SpiritKite_Tail0",
+     "pivot": [
+      0,
+      -0.6,
+      0.5
+     ],
+     "role": "tail segment (chain; sway driven in UE or via a later armature)",
+     "parts": [
+      {
+       "name": "TailSeg1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.65,
+        0.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Prop_Spiritkite_SpiritKite_Tail2",
+     "parent": "Prop_Spiritkite_SpiritKite_Tail1",
+     "pivot": [
+      0,
+      -0.7,
+      0.5
+     ],
+     "role": "tail segment (chain; sway driven in UE or via a later armature)",
+     "parts": [
+      {
+       "name": "TailSeg2",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.75,
+        0.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Prop_Spiritkite_SpiritKite_Tail3",
+     "parent": "Prop_Spiritkite_SpiritKite_Tail2",
+     "pivot": [
+      0,
+      -0.8,
+      0.5
+     ],
+     "role": "tail segment (chain; sway driven in UE or via a later armature)",
+     "parts": [
+      {
+       "name": "TailSeg3",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.85,
+        0.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Prop_Spiritkite_SpiritKite_Tail4",
+     "parent": "Prop_Spiritkite_SpiritKite_Tail3",
+     "pivot": [
+      0,
+      -0.9,
+      0.5
+     ],
+     "role": "tail segment (chain; sway driven in UE or via a later armature)",
+     "parts": [
+      {
+       "name": "TailSeg4",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.95,
+        0.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Line",
+     "location": [
+      0,
+      0.05,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      -0.05
+     ]
+    },
+    {
+     "name": "SOCKET_TailRoot",
+     "location": [
+      0,
+      -0.5,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.5
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Spiritkite_SpiritKite_00",
+     "shape": "box",
+     "size": [
+      0.6,
+      0.95,
+      0.03
+     ],
+     "centre": [
+      0,
+      -0.025,
+      0.5
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 112,
+    "lod1_triangles": 112,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Spiritkite_SpiritKite": 52,
+     "Prop_Spiritkite_SpiritKite_Tail0": 12,
+     "Prop_Spiritkite_SpiritKite_Tail1": 12,
+     "Prop_Spiritkite_SpiritKite_Tail2": 12,
+     "Prop_Spiritkite_SpiritKite_Tail3": 12,
+     "Prop_Spiritkite_SpiritKite_Tail4": 12
+    },
+    "bounds_min": [
+     -0.3,
+     -0.9924,
+     0.496
+    ],
+    "bounds_max": [
+     0.3,
+     0.45,
+     0.5169
+    ],
+    "dimensions": [
+     0.6,
+     1.4424,
+     0.0209
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "62d5c5fb129a8ea948909671a1f655f4f3bbd35739883002d6578f77759e70fb"
+  },
+  {
+   "asset": "Prop_Spiritkite_SkyIsle_0",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "floating isle variant 0, 1.8 m across (graph node)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Land",
+     "SOCKET_Lantern",
+     "SOCKET_Lane"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Spiritkite_SkyIsle_0_M0",
+     "colour": "floating rock",
+     "hex": "7A7470",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Spiritkite_SkyIsle_0_M1",
+     "colour": "sky turf",
+     "hex": "6FBF5A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Spiritkite_SkyIsle_0",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rock",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.99
+        ],
+        [
+         0.45,
+         -0.63
+        ],
+        [
+         0.855,
+         -0.135
+        ],
+        [
+         0.9,
+         0
+        ],
+        [
+         0,
+         0
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 9,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Turf",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.918,
+       "r2": 0.9,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 1,
+       "segments": 9
+      },
+      {
+       "name": "Boulder0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.10501
+        ],
+        [
+         0.05072,
+         -0.08495
+        ],
+        [
+         0.10711,
+         -0.03245
+        ],
+        [
+         0.08798,
+         0.03245
+        ],
+        [
+         0.06313,
+         0.08495
+        ],
+        [
+         0,
+         0.05834
+        ]
+       ],
+       "centre": [
+        0.45,
+        0.0,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.10403
+        ],
+        [
+         0.05229,
+         -0.08416
+        ],
+        [
+         0.09675,
+         -0.03215
+        ],
+        [
+         0.1064,
+         0.03215
+        ],
+        [
+         0.05801,
+         0.08416
+        ],
+        [
+         0,
+         0.0578
+        ]
+       ],
+       "centre": [
+        -0.22718,
+        0.38844,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Land",
+     "location": [
+      0,
+      0,
+      0.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.08,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lantern",
+     "location": [
+      0.36,
+      0,
+      0.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.36,
+      0.08,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lane",
+     "location": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Spiritkite_SkyIsle_0_00",
+     "shape": "box",
+     "size": [
+      1.8,
+      1.8,
+      1.08
+     ],
+     "centre": [
+      0,
+      0,
+      -0.45
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 278,
+    "lod1_triangles": 278,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Spiritkite_SkyIsle_0": 278
+    },
+    "bounds_min": [
+     -0.8626,
+     -0.9041,
+     -0.99
+    ],
+    "bounds_max": [
+     0.918,
+     0.9041,
+     0.2049
+    ],
+    "dimensions": [
+     1.7806,
+     1.8082,
+     1.1949
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "52185fa0c231e4d6ad652f405ad18c673969fc13d7c483b19d0f778ba506b31d"
+  },
+  {
+   "asset": "Prop_Spiritkite_SkyIsle_1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "floating isle variant 1, 2.5 m across (graph node)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Land",
+     "SOCKET_Lantern",
+     "SOCKET_Lane"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Spiritkite_SkyIsle_1_M0",
+     "colour": "floating rock",
+     "hex": "7A7470",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Spiritkite_SkyIsle_1_M1",
+     "colour": "sky turf",
+     "hex": "6FBF5A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Spiritkite_SkyIsle_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rock",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -1.375
+        ],
+        [
+         0.625,
+         -0.875
+        ],
+        [
+         1.1875,
+         -0.1875
+        ],
+        [
+         1.25,
+         0
+        ],
+        [
+         0,
+         0
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 9,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Turf",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 1.275,
+       "r2": 1.25,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 1,
+       "segments": 9
+      },
+      {
+       "name": "Boulder0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.0907
+        ],
+        [
+         0.04381,
+         -0.07338
+        ],
+        [
+         0.09252,
+         -0.02803
+        ],
+        [
+         0.076,
+         0.02803
+        ],
+        [
+         0.05453,
+         0.07338
+        ],
+        [
+         0,
+         0.05039
+        ]
+       ],
+       "centre": [
+        0.33769,
+        0.52592,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.10346
+        ],
+        [
+         0.052,
+         -0.0837
+        ],
+        [
+         0.09623,
+         -0.03197
+        ],
+        [
+         0.10582,
+         0.03197
+        ],
+        [
+         0.05769,
+         0.0837
+        ],
+        [
+         0,
+         0.05748
+        ]
+       ],
+       "centre": [
+        -0.62446,
+        0.02599,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.1303
+        ],
+        [
+         0.07065,
+         -0.10541
+        ],
+        [
+         0.09963,
+         -0.04026
+        ],
+        [
+         0.12553,
+         0.04026
+        ],
+        [
+         0.06355,
+         0.10541
+        ],
+        [
+         0,
+         0.07239
+        ]
+       ],
+       "centre": [
+        0.29282,
+        -0.55216,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Land",
+     "location": [
+      0,
+      0,
+      0.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.08,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lantern",
+     "location": [
+      0.5,
+      0,
+      0.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.5,
+      0.08,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lane",
+     "location": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Spiritkite_SkyIsle_1_00",
+     "shape": "box",
+     "size": [
+      2.5,
+      2.5,
+      1.5
+     ],
+     "centre": [
+      0,
+      0,
+      -0.625
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 358,
+    "lod1_triangles": 358,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Spiritkite_SkyIsle_1": 358
+    },
+    "bounds_min": [
+     -1.1981,
+     -1.2556,
+     -1.375
+    ],
+    "bounds_max": [
+     1.275,
+     1.2556,
+     0.2254
+    ],
+    "dimensions": [
+     2.4731,
+     2.5112,
+     1.6004
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ab7b23834fa339d9b8f669855623555ad3a4249ee62f0feeaa79943d9a9569e4"
+  },
+  {
+   "asset": "Prop_Spiritkite_SkyIsle_2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "floating isle variant 2, 3.2 m across (graph node)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Land",
+     "SOCKET_Lantern",
+     "SOCKET_Lane"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Spiritkite_SkyIsle_2_M0",
+     "colour": "floating rock",
+     "hex": "7A7470",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Spiritkite_SkyIsle_2_M1",
+     "colour": "sky turf",
+     "hex": "6FBF5A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Spiritkite_SkyIsle_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rock",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -1.76
+        ],
+        [
+         0.8,
+         -1.12
+        ],
+        [
+         1.52,
+         -0.24
+        ],
+        [
+         1.6,
+         0
+        ],
+        [
+         0,
+         0
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 9,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Turf",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 1.632,
+       "r2": 1.6,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 1,
+       "segments": 9
+      },
+      {
+       "name": "Boulder0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.11073
+        ],
+        [
+         0.05349,
+         -0.08958
+        ],
+        [
+         0.11295,
+         -0.03422
+        ],
+        [
+         0.09278,
+         0.03422
+        ],
+        [
+         0.06657,
+         0.08958
+        ],
+        [
+         0,
+         0.06152
+        ]
+       ],
+       "centre": [
+        -0.33292,
+        0.72744,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.09633
+        ],
+        [
+         0.04842,
+         -0.07793
+        ],
+        [
+         0.08959,
+         -0.02977
+        ],
+        [
+         0.09852,
+         0.02977
+        ],
+        [
+         0.05372,
+         0.07793
+        ],
+        [
+         0,
+         0.05352
+        ]
+       ],
+       "centre": [
+        -0.45986,
+        -0.65462,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.10057
+        ],
+        [
+         0.05454,
+         -0.08137
+        ],
+        [
+         0.0769,
+         -0.03108
+        ],
+        [
+         0.09689,
+         0.03108
+        ],
+        [
+         0.04905,
+         0.08137
+        ],
+        [
+         0,
+         0.05587
+        ]
+       ],
+       "centre": [
+        0.79723,
+        -0.06647,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13059
+        ],
+        [
+         0.08206,
+         -0.10565
+        ],
+        [
+         0.12933,
+         -0.04035
+        ],
+        [
+         0.09969,
+         0.04035
+        ],
+        [
+         0.07228,
+         0.10565
+        ],
+        [
+         0,
+         0.07255
+        ]
+       ],
+       "centre": [
+        -0.3451,
+        0.72174,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Land",
+     "location": [
+      0,
+      0,
+      0.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.08,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lantern",
+     "location": [
+      0.64,
+      0,
+      0.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.64,
+      0.08,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Lane",
+     "location": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Spiritkite_SkyIsle_2_00",
+     "shape": "box",
+     "size": [
+      3.2,
+      3.2,
+      1.92
+     ],
+     "centre": [
+      0,
+      0,
+      -0.8
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 438,
+    "lod1_triangles": 438,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Spiritkite_SkyIsle_2": 438
+    },
+    "bounds_min": [
+     -1.5336,
+     -1.6072,
+     -1.76
+    ],
+    "bounds_max": [
+     1.632,
+     1.6072,
+     0.2256
+    ],
+    "dimensions": [
+     3.1656,
+     3.2144,
+     1.9856
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f06a3a1e3813a288ba1d4a9f4cd94699ff8b343ddc040c17582ffd6674fd4c39"
+  },
+  {
+   "asset": "Prop_Spiritkite_SpiritLantern",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.4 m spirit lantern; value 1-6 = MI tint",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Glow",
+     "SOCKET_Hang"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Spiritkite_SpiritLantern_M0",
+     "colour": "paper shade (emissive, tint = value MI)",
+     "hex": "FFF0C0",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Spiritkite_SpiritLantern_M1",
+     "colour": "frame",
+     "hex": "3A2A20",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Spiritkite_SpiritLantern",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Shade",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.12,
+       "length": 0.26,
+       "centre": [
+        0,
+        0,
+        0.16
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Top",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.05,
+       "r2": 0.1,
+       "length": 0.03,
+       "centre": [
+        0,
+        0,
+        0.305
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Bottom",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.1,
+       "length": 0.03,
+       "centre": [
+        0,
+        0,
+        0.015
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Hook",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        0.36
+       ],
+       "slot": 1,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Glow",
+     "location": [
+      0,
+      0,
+      0.16
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.16,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.4,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Spiritkite_SpiritLantern_00",
+     "shape": "box",
+     "size": [
+      0.24,
+      0.24,
+      0.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 120,
+    "lod1_triangles": 120,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Spiritkite_SpiritLantern": 120
+    },
+    "bounds_min": [
+     -0.12,
+     -0.1141,
+     0.0
+    ],
+    "bounds_max": [
+     0.12,
+     0.1141,
+     0.4
+    ],
+    "dimensions": [
+     0.24,
+     0.2282,
+     0.4
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ef27ac3ded99639e30a91329e76ac50e37303edcc6510b7e5c07294d5a95a202",
+   "material_variants": {
+    "MI_Prop_Spiritkite_SpiritLantern_V1": {
+     "Tint": "FF6B2E",
+     "Value": 1
+    },
+    "MI_Prop_Spiritkite_SpiritLantern_V2": {
+     "Tint": "338CFF",
+     "Value": 2
+    },
+    "MI_Prop_Spiritkite_SpiritLantern_V3": {
+     "Tint": "73F28C",
+     "Value": 3
+    },
+    "MI_Prop_Spiritkite_SpiritLantern_V4": {
+     "Tint": "FFF299",
+     "Value": 4
+    },
+    "MI_Prop_Spiritkite_SpiritLantern_V5": {
+     "Tint": "B36BFF",
+     "Value": 5
+    },
+    "MI_Prop_Spiritkite_SpiritLantern_V6": {
+     "Tint": "FF4AD0",
+     "Value": 6
+    }
+   }
+  },
+  {
+   "asset": "Prop_Spiritkite_SkiffMooringPost",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.56 m Prism Skiff mooring post (anchor isle)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Mooring",
+     "SOCKET_Floor",
+     "SOCKET_Beacon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Spiritkite_SkiffMooringPost_M0",
+     "colour": "weathered post",
+     "hex": "8A6440",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Spiritkite_SkiffMooringPost_M1",
+     "colour": "iron fittings",
+     "hex": "3A3A3E",
+     "roughness": 0.6,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Spiritkite_SkiffMooringPost_M2",
+     "colour": "rope",
+     "hex": "B89A6A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Spiritkite_SkiffMooringPost_M3",
+     "colour": "prism (emissive)",
+     "hex": "A6E6FF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Spiritkite_SkiffMooringPost",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.1,
+       "r2": 0.12,
+       "length": 1.3,
+       "centre": [
+        0,
+        0,
+        0.65
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.14,
+       "r2": 0.12,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        1.34
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Cleat",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.3,
+       "centre": [
+        0,
+        -0.12,
+        1.0
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "RopeCoil",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.15,
+       "r2": 0.15,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        0.3
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Prism",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0324,
+         0.0144
+        ],
+        [
+         0.0324,
+         0.135
+        ],
+        [
+         0,
+         0.18
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        1.38
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Mooring",
+     "location": [
+      0,
+      -0.15,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.0,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Beacon",
+     "location": [
+      0,
+      0,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.5,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Spiritkite_SkiffMooringPost_00",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.3,
+      1.56
+     ],
+     "centre": [
+      0,
+      0,
+      0.78
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 172,
+    "lod1_triangles": 172,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Spiritkite_SkiffMooringPost": 172
+    },
+    "bounds_min": [
+     -0.15,
+     -0.145,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.1427,
+     1.56
+    ],
+    "dimensions": [
+     0.3,
+     0.2877,
+     1.56
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3cb3ab22be1c57292c6f8b4bc88d80322ceec11a6324c42e0d953477c7301f13"
+  },
+  {
+   "asset": "Mob_Spiritkite_SkyLarkSpirit",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Sky Lark Spirit, kite-flier",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Spiritkite_SkyLarkSpirit_M0",
+     "colour": "coat",
+     "hex": "BFE6FF",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Spiritkite_SkyLarkSpirit_M1",
+     "colour": "accent / trousers",
+     "hex": "8CCBFF",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Spiritkite_SkyLarkSpirit_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Spiritkite_SkyLarkSpirit_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Spiritkite_SkyLarkSpirit_M4",
+     "colour": "spirit wings (emissive soft)",
+     "hex": "E6F6FF",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Spiritkite_SkyLarkSpirit",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Wing-1",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0
+        ],
+        [
+         -0.5,
+         0.15
+        ],
+        [
+         -0.45,
+         -0.05
+        ]
+       ],
+       "thickness": 0.01,
+       "centre": [
+        -0.2,
+        0.1,
+        1.35
+       ],
+       "slot": 4,
+       "segments": 3
+      },
+      {
+       "name": "Wing1",
+       "shape": "slab",
+       "outline": [
+        [
+         0,
+         0
+        ],
+        [
+         0.5,
+         0.15
+        ],
+        [
+         0.45,
+         -0.05
+        ]
+       ],
+       "thickness": 0.01,
+       "centre": [
+        0.2,
+        0.1,
+        1.35
+       ],
+       "slot": 4,
+       "segments": 3
+      },
+      {
+       "name": "KiteLine",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.004,
+       "r2": 0.004,
+       "length": 0.5,
+       "centre": [
+        -0.37,
+        0,
+        1.12
+       ],
+       "slot": 4,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Spiritkite_SkyLarkSpirit_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 648,
+    "lod1_triangles": 648,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Spiritkite_SkyLarkSpirit": 648
+    },
+    "bounds_min": [
+     -0.7,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.7,
+     0.25,
+     1.76
+    ],
+    "dimensions": [
+     1.4,
+     0.4,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a4cb7f6f7314bffd4e050835a33011b11bc5dcdab913fb2f2bccee4ce7a57b77"
+  }
+ ]
+}

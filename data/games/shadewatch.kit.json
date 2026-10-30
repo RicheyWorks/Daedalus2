@@ -1,0 +1,3195 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_ShadewatchVigil",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: night styling",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_ShadewatchVigil_M0",
+     "colour": "cabinet body",
+     "hex": "141A30",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_ShadewatchVigil_M1",
+     "colour": "trim / side art panel",
+     "hex": "2A3A6A",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_ShadewatchVigil_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "7A9CFF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_ShadewatchVigil_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_ShadewatchVigil_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_ShadewatchVigil_M5",
+     "colour": "stars / moon (emissive)",
+     "hex": "FFF2C8",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_ShadewatchVigil",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Star0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.015
+        ],
+        [
+         0.01061,
+         -0.01061
+        ],
+        [
+         0.015,
+         -0.0
+        ],
+        [
+         0.01061,
+         0.01061
+        ],
+        [
+         0,
+         0.015
+        ]
+       ],
+       "centre": [
+        -0.3,
+        -0.17,
+        2.1
+       ],
+       "slot": 5,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Star1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.015
+        ],
+        [
+         0.01061,
+         -0.01061
+        ],
+        [
+         0.015,
+         -0.0
+        ],
+        [
+         0.01061,
+         0.01061
+        ],
+        [
+         0,
+         0.015
+        ]
+       ],
+       "centre": [
+        -0.18,
+        -0.17,
+        2.13
+       ],
+       "slot": 5,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Star2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.015
+        ],
+        [
+         0.01061,
+         -0.01061
+        ],
+        [
+         0.015,
+         -0.0
+        ],
+        [
+         0.01061,
+         0.01061
+        ],
+        [
+         0,
+         0.015
+        ]
+       ],
+       "centre": [
+        -0.06,
+        -0.17,
+        2.1
+       ],
+       "slot": 5,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Star3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.015
+        ],
+        [
+         0.01061,
+         -0.01061
+        ],
+        [
+         0.015,
+         -0.0
+        ],
+        [
+         0.01061,
+         0.01061
+        ],
+        [
+         0,
+         0.015
+        ]
+       ],
+       "centre": [
+        0.06,
+        -0.17,
+        2.13
+       ],
+       "slot": 5,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Star4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.015
+        ],
+        [
+         0.01061,
+         -0.01061
+        ],
+        [
+         0.015,
+         -0.0
+        ],
+        [
+         0.01061,
+         0.01061
+        ],
+        [
+         0,
+         0.015
+        ]
+       ],
+       "centre": [
+        0.18,
+        -0.17,
+        2.1
+       ],
+       "slot": 5,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Star5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.015
+        ],
+        [
+         0.01061,
+         -0.01061
+        ],
+        [
+         0.015,
+         -0.0
+        ],
+        [
+         0.01061,
+         0.01061
+        ],
+        [
+         0,
+         0.015
+        ]
+       ],
+       "centre": [
+        0.3,
+        -0.17,
+        2.13
+       ],
+       "slot": 5,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Moon",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.02,
+       "centre": [
+        0.32,
+        -0.16,
+        2.12
+       ],
+       "slot": 5,
+       "segments": 10
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_ShadewatchVigil_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 736,
+    "lod1_triangles": 736,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_ShadewatchVigil": 736
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.1771
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.1771
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ea4e48a64157202902cf252074c01c4ed4a977bd5a58d868a30aafdbbb1e0980"
+  },
+  {
+   "asset": "Prop_Shadewatch_HeartCrystal",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.05 m heart-crystal; states via MI",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Glow",
+     "SOCKET_Floor",
+     "SOCKET_Hit"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shadewatch_HeartCrystal_M0",
+     "colour": "heart crystal (emissive, state = MI)",
+     "hex": "FF4A7A",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shadewatch_HeartCrystal_M1",
+     "colour": "plinth stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Shadewatch_HeartCrystal_M2",
+     "colour": "rune",
+     "hex": "FFD27A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shadewatch_HeartCrystal",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.35,
+       "r2": 0.4,
+       "length": 0.15,
+       "centre": [
+        0,
+        0,
+        0.075
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Heart",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.162,
+         0.072
+        ],
+        [
+         0.162,
+         0.675
+        ],
+        [
+         0,
+         0.9
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Rune",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.02,
+        0.06
+       ],
+       "centre": [
+        0,
+        -0.37,
+        0.1
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Glow",
+     "location": [
+      0,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hit",
+     "location": [
+      0,
+      -0.2,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      0.2
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shadewatch_HeartCrystal_00",
+     "shape": "box",
+     "size": [
+      0.8,
+      0.8,
+      1.05
+     ],
+     "centre": [
+      0,
+      0,
+      0.525
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shadewatch_HeartCrystal": 84
+    },
+    "bounds_min": [
+     -0.4,
+     -0.4,
+     0.0
+    ],
+    "bounds_max": [
+     0.4,
+     0.4,
+     1.05
+    ],
+    "dimensions": [
+     0.8,
+     0.8,
+     1.05
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c5becea1b3aef19b770983a03131af25427fed7e823c13f9e9258c23105c5cea",
+   "material_variants": {
+    "MI_Prop_Shadewatch_HeartCrystal_Whole": {
+     "Emissive": 6.0,
+     "Crack": 0.0
+    },
+    "MI_Prop_Shadewatch_HeartCrystal_Cracked": {
+     "Emissive": 3.0,
+     "Crack": 0.6
+    },
+    "MI_Prop_Shadewatch_HeartCrystal_Shattered": {
+     "Emissive": 0.5,
+     "Crack": 1.0
+    }
+   }
+  },
+  {
+   "asset": "Prop_Shadewatch_LaneTile_Straight",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2 x 2 m lane tile (straight)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Entry",
+     "SOCKET_Exit"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shadewatch_LaneTile_Straight_M0",
+     "colour": "night ground",
+     "hex": "2A3028",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shadewatch_LaneTile_Straight_M1",
+     "colour": "lane path (faint glow)",
+     "hex": "4A5A8A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shadewatch_LaneTile_Straight",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        2.0,
+        2.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Path",
+       "shape": "box",
+       "size": [
+        0.6,
+        2.0,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.11
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Entry",
+     "location": [
+      0,
+      -1.0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      1.0
+     ]
+    },
+    {
+     "name": "SOCKET_Exit",
+     "location": [
+      0,
+      1.0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      -1.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shadewatch_LaneTile_Straight_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      2.0,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shadewatch_LaneTile_Straight": 56
+    },
+    "bounds_min": [
+     -1.0,
+     -1.0,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     1.0,
+     0.12
+    ],
+    "dimensions": [
+     2.0,
+     2.0,
+     0.12
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7c9db929b7fc0365ee94bc46a1d2e359bfebe8b92be566223ae2045005fbe213"
+  },
+  {
+   "asset": "Prop_Shadewatch_LaneTile_Fork",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2 x 2 m lane tile (fork)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Entry",
+     "SOCKET_Exit"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shadewatch_LaneTile_Fork_M0",
+     "colour": "night ground",
+     "hex": "2A3028",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shadewatch_LaneTile_Fork_M1",
+     "colour": "lane path (faint glow)",
+     "hex": "4A5A8A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shadewatch_LaneTile_Fork",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        2.0,
+        2.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Path",
+       "shape": "box",
+       "size": [
+        0.6,
+        2.0,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.11
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Branch",
+       "shape": "box",
+       "size": [
+        0.6,
+        1.2,
+        0.02
+       ],
+       "centre": [
+        0.5,
+        0.5,
+        0.11
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -45
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Entry",
+     "location": [
+      0,
+      -1.0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      1.0
+     ]
+    },
+    {
+     "name": "SOCKET_Exit",
+     "location": [
+      0,
+      1.0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      -1.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shadewatch_LaneTile_Fork_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      2.0,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 68,
+    "lod1_triangles": 68,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shadewatch_LaneTile_Fork": 68
+    },
+    "bounds_min": [
+     -1.0,
+     -1.0,
+     0.0
+    ],
+    "bounds_max": [
+     1.1364,
+     1.1364,
+     0.12
+    ],
+    "dimensions": [
+     2.1364,
+     2.1364,
+     0.12
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "91743fdf22b33069b0c32124e7765ef8ace3b7557f69eaa5f8e96675ac182d98"
+  },
+  {
+   "asset": "Prop_Shadewatch_LaneTile_End",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2 x 2 m lane tile (end)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Entry",
+     "SOCKET_Exit"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shadewatch_LaneTile_End_M0",
+     "colour": "night ground",
+     "hex": "2A3028",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shadewatch_LaneTile_End_M1",
+     "colour": "lane path (faint glow)",
+     "hex": "4A5A8A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shadewatch_LaneTile_End",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        2.0,
+        2.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Path",
+       "shape": "box",
+       "size": [
+        0.6,
+        1.2,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.4,
+        0.11
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Entry",
+     "location": [
+      0,
+      -1.0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      1.0
+     ]
+    },
+    {
+     "name": "SOCKET_Exit",
+     "location": [
+      0,
+      1.0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      -1.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shadewatch_LaneTile_End_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      2.0,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shadewatch_LaneTile_End": 56
+    },
+    "bounds_min": [
+     -1.0,
+     -1.0,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     1.0,
+     0.12
+    ],
+    "dimensions": [
+     2.0,
+     2.0,
+     0.12
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1957c7ca54609d9b5b3d8fc6b81b9760b053d147383a8315da9acf1de5204d2d"
+  },
+  {
+   "asset": "Mob_Shadewatch_ShadeCreature",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.95 m wispy shade (dissolvable via MI Dissolve 0..1)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Core",
+     "SOCKET_Floor"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Shadewatch_ShadeCreature_M0",
+     "colour": "shade body (dissolve = MI param)",
+     "hex": "1A1030",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Shadewatch_ShadeCreature_M1",
+     "colour": "eyes (emissive)",
+     "hex": "B3FF4A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Shadewatch_ShadeCreature",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Core",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.25
+        ],
+        [
+         0.17678,
+         -0.17678
+        ],
+        [
+         0.25,
+         -0.0
+        ],
+        [
+         0.17678,
+         0.17678
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.7
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Wisp0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.08,
+         0.15
+        ],
+        [
+         0.03,
+         0.5
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        0.15,
+        0.0,
+        0.1
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        10.0,
+        0.0,
+        0
+       ]
+      },
+      {
+       "name": "Wisp1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.08,
+         0.15
+        ],
+        [
+         0.03,
+         0.5
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        -0.07573,
+        0.12948,
+        0.1
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        5.403,
+        8.4147,
+        0
+       ]
+      },
+      {
+       "name": "Wisp2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.08,
+         0.15
+        ],
+        [
+         0.03,
+         0.5
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        -0.07354,
+        -0.13074,
+        0.1
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        -4.1615,
+        9.093,
+        0
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.035
+        ],
+        [
+         0.02475,
+         -0.02475
+        ],
+        [
+         0.035,
+         -0.0
+        ],
+        [
+         0.02475,
+         0.02475
+        ],
+        [
+         0,
+         0.035
+        ]
+       ],
+       "centre": [
+        -0.08,
+        -0.22,
+        0.78
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.035
+        ],
+        [
+         0.02475,
+         -0.02475
+        ],
+        [
+         0.035,
+         -0.0
+        ],
+        [
+         0.02475,
+         0.02475
+        ],
+        [
+         0,
+         0.035
+        ]
+       ],
+       "centre": [
+        0.08,
+        -0.22,
+        0.78
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Core",
+     "location": [
+      0,
+      0,
+      0.7
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.7,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Shadewatch_ShadeCreature_00",
+     "shape": "box",
+     "size": [
+      0.6,
+      0.6,
+      0.95
+     ],
+     "centre": [
+      0,
+      0,
+      0.475
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 340,
+    "lod1_triangles": 340,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Shadewatch_ShadeCreature": 340
+    },
+    "bounds_min": [
+     -0.25,
+     -0.2503,
+     0.1
+    ],
+    "bounds_max": [
+     0.25,
+     0.2378,
+     0.95
+    ],
+    "dimensions": [
+     0.5,
+     0.4881,
+     0.85
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1971ee7c30b11d0dd3be2f89f0497168e86d961d63375166edfa42cee21d07b3"
+  },
+  {
+   "asset": "Prop_Shadewatch_FlareTorch",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.62 m flare torch",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Flame"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shadewatch_FlareTorch_M0",
+     "colour": "handle",
+     "hex": "8A6440",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shadewatch_FlareTorch_M1",
+     "colour": "iron head",
+     "hex": "3A3A3E",
+     "roughness": 0.6,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Shadewatch_FlareTorch_M2",
+     "colour": "flare (emissive red)",
+     "hex": "FF5A3A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shadewatch_FlareTorch",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Handle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02,
+       "r2": 0.025,
+       "length": 0.4,
+       "centre": [
+        0,
+        0,
+        0.2
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Head",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.03,
+       "length": 0.1,
+       "centre": [
+        0,
+        0,
+        0.45
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Flare",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.035,
+         0.03
+        ],
+        [
+         0,
+         0.12
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.5
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.15,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Flame",
+     "location": [
+      0,
+      0,
+      0.56
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.56,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shadewatch_FlareTorch_00",
+     "shape": "box",
+     "size": [
+      0.1,
+      0.1,
+      0.62
+     ],
+     "centre": [
+      0,
+      0,
+      0.31
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 88,
+    "lod1_triangles": 88,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shadewatch_FlareTorch": 88
+    },
+    "bounds_min": [
+     -0.04,
+     -0.04,
+     0.0
+    ],
+    "bounds_max": [
+     0.04,
+     0.04,
+     0.62
+    ],
+    "dimensions": [
+     0.08,
+     0.08,
+     0.62
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "07a0819de33693757794ee39c5158b239f25edd95ef70ed864dd17bdcd144b2d"
+  },
+  {
+   "asset": "Prop_Shadewatch_NovaBurstMesh",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.2 m nova burst VFX mesh (origin = centre)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Centre"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shadewatch_NovaBurstMesh_M0",
+     "colour": "nova (emissive, scale/fade in VFX)",
+     "hex": "FFF2C8",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shadewatch_NovaBurstMesh",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Core",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.15
+        ],
+        [
+         0.10607,
+         -0.10607
+        ],
+        [
+         0.15,
+         -0.0
+        ],
+        [
+         0.10607,
+         0.10607
+        ],
+        [
+         0,
+         0.15
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Ray0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.04,
+         0.05
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Ray1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.04,
+         0.05
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        45,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Ray2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.04,
+         0.05
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        180
+       ]
+      },
+      {
+       "name": "Ray3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.04,
+         0.05
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        45,
+        0,
+        270
+       ]
+      },
+      {
+       "name": "Ray4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.04,
+         0.05
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Ray5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.04,
+         0.05
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        135,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Ray6",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.04,
+         0.05
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        90,
+        0,
+        180
+       ]
+      },
+      {
+       "name": "Ray7",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.04,
+         0.05
+        ],
+        [
+         0,
+         0.6
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        135,
+        0,
+        270
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 256,
+    "lod1_triangles": 256,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shadewatch_NovaBurstMesh": 256
+    },
+    "bounds_min": [
+     -0.4243,
+     -0.6,
+     -0.4243
+    ],
+    "bounds_max": [
+     0.4243,
+     0.6,
+     0.6
+    ],
+    "dimensions": [
+     0.8486,
+     1.2,
+     1.0243
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4165e72530404812f1d029ba8069aadd45ae9f1166bc81b3b2973f8437cc3e2a"
+  },
+  {
+   "asset": "Mob_Shadewatch_WardenWatcher",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Warden watcher",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Shadewatch_WardenWatcher_M0",
+     "colour": "coat",
+     "hex": "2A3A6A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Shadewatch_WardenWatcher_M1",
+     "colour": "accent / trousers",
+     "hex": "1A1A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Shadewatch_WardenWatcher_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Shadewatch_WardenWatcher_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Shadewatch_WardenWatcher_M4",
+     "colour": "spear shaft",
+     "hex": "8A6440",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Mob_Shadewatch_WardenWatcher_M5",
+     "colour": "spear tip (emissive)",
+     "hex": "7A9CFF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Shadewatch_WardenWatcher",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Spear",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 1.9,
+       "centre": [
+        -0.37,
+        0,
+        0.95
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "Tip",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03,
+         0.03
+        ],
+        [
+         0,
+         0.15
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        1.9
+       ],
+       "slot": 5,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Shadewatch_WardenWatcher_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 660,
+    "lod1_triangles": 660,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Shadewatch_WardenWatcher": 660
+    },
+    "bounds_min": [
+     -0.42,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     2.05
+    ],
+    "dimensions": [
+     0.84,
+     0.285,
+     2.05
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7b709b397ba140b95604fd61f534d908ae4f883ba3116901fb25cd26371927b0"
+  }
+ ]
+}

@@ -1,0 +1,4393 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_FacetlockLattice",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: vault-lattice topper",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_FacetlockLattice_M0",
+     "colour": "cabinet body",
+     "hex": "2A2A3A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_FacetlockLattice_M1",
+     "colour": "trim / side art panel",
+     "hex": "6A6A8A",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_FacetlockLattice_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "73F28C",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_FacetlockLattice_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_FacetlockLattice_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_FacetlockLattice_M5",
+     "colour": "lattice tiles (emissive)",
+     "hex": "A6E6FF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_FacetlockLattice",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Lat0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.06
+       ],
+       "centre": [
+        -0.08,
+        -0.17,
+        2.03
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "Lat1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.06
+       ],
+       "centre": [
+        0.0,
+        -0.17,
+        2.03
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "Lat2",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.06
+       ],
+       "centre": [
+        0.08,
+        -0.17,
+        2.03
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "Lat3",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.06
+       ],
+       "centre": [
+        -0.08,
+        -0.17,
+        2.1
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "Lat4",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.06
+       ],
+       "centre": [
+        0.0,
+        -0.17,
+        2.1
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "Lat5",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.06
+       ],
+       "centre": [
+        0.08,
+        -0.17,
+        2.1
+       ],
+       "slot": 5,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_FacetlockLattice_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 556,
+    "lod1_triangles": 556,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_FacetlockLattice": 556
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.13
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.13
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3690b9c7ce91ea364d1aa4a40481b3432959ce69e09bb64a975920762ac692a0"
+  },
+  {
+   "asset": "Prop_Facetlock_VaultDoor_3x3",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.0 m vault door, 3x3 facet lattice",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Tile_0_0",
+     "SOCKET_Tile_0_1",
+     "SOCKET_Tile_0_2",
+     "SOCKET_Tile_1_0",
+     "SOCKET_Tile_1_1",
+     "SOCKET_Tile_1_2",
+     "SOCKET_Tile_2_0",
+     "SOCKET_Tile_2_1",
+     "SOCKET_Tile_2_2"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Facetlock_VaultDoor_3x3_M0",
+     "colour": "vault stone",
+     "hex": "6A6A7A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Facetlock_VaultDoor_3x3_M1",
+     "colour": "vault door (bronze)",
+     "hex": "8A6A3A",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Facetlock_VaultDoor_3x3_M2",
+     "colour": "tile recess",
+     "hex": "1A1A2A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Facetlock_VaultDoor_3x3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.4,
+        2.0
+       ],
+       "centre": [
+        0,
+        0.2,
+        1.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Door",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.1,
+        1.6
+       ],
+       "centre": [
+        0,
+        -0.05,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Recess00",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.4,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess01",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.0,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess02",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.4,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess10",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.4,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess11",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.0,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess12",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.4,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess20",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.4,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess21",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.0,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess22",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.4,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_0",
+     "location": [
+      -0.4,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_1",
+     "location": [
+      0.0,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_2",
+     "location": [
+      0.4,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_0",
+     "location": [
+      -0.4,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_1",
+     "location": [
+      0.0,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_2",
+     "location": [
+      0.4,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_0",
+     "location": [
+      -0.4,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      0.6,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_1",
+     "location": [
+      0.0,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.6,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_2",
+     "location": [
+      0.4,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      0.6,
+      0.12
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Facetlock_VaultDoor_3x3_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      0.4,
+      2.0
+     ],
+     "centre": [
+      0,
+      0.2,
+      1.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 196,
+    "lod1_triangles": 196,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Facetlock_VaultDoor_3x3": 196
+    },
+    "bounds_min": [
+     -1.0,
+     -0.115,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     0.4,
+     2.0
+    ],
+    "dimensions": [
+     2.0,
+     0.515,
+     2.0
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "df2247d210eb05f645bd2e1cad6b89621fdb08e426f32058bc3893cdfcdfe2f2"
+  },
+  {
+   "asset": "Prop_Facetlock_VaultDoor_4x4",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.4 m vault door, 4x4 facet lattice",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Tile_0_0",
+     "SOCKET_Tile_0_1",
+     "SOCKET_Tile_0_2",
+     "SOCKET_Tile_0_3",
+     "SOCKET_Tile_1_0",
+     "SOCKET_Tile_1_1",
+     "SOCKET_Tile_1_2",
+     "SOCKET_Tile_1_3",
+     "SOCKET_Tile_2_0",
+     "SOCKET_Tile_2_1",
+     "SOCKET_Tile_2_2",
+     "SOCKET_Tile_2_3",
+     "SOCKET_Tile_3_0",
+     "SOCKET_Tile_3_1",
+     "SOCKET_Tile_3_2",
+     "SOCKET_Tile_3_3"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Facetlock_VaultDoor_4x4_M0",
+     "colour": "vault stone",
+     "hex": "6A6A7A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Facetlock_VaultDoor_4x4_M1",
+     "colour": "vault door (bronze)",
+     "hex": "8A6A3A",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Facetlock_VaultDoor_4x4_M2",
+     "colour": "tile recess",
+     "hex": "1A1A2A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Facetlock_VaultDoor_4x4",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        2.4,
+        0.4,
+        2.4
+       ],
+       "centre": [
+        0,
+        0.2,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Door",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.1,
+        2.0
+       ],
+       "centre": [
+        0,
+        -0.05,
+        1.2
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Recess00",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.6,
+        -0.105,
+        1.8
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess01",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.2,
+        -0.105,
+        1.8
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess02",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.2,
+        -0.105,
+        1.8
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess03",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.6,
+        -0.105,
+        1.8
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess10",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.6,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess11",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.2,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess12",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.2,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess13",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.6,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess20",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.6,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess21",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.2,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess22",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.2,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess23",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.6,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess30",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.6,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess31",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.2,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess32",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.2,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess33",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.6,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_0",
+     "location": [
+      -0.6,
+      -0.12,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      1.8,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_1",
+     "location": [
+      -0.2,
+      -0.12,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.2,
+      1.8,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_2",
+     "location": [
+      0.2,
+      -0.12,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.2,
+      1.8,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_3",
+     "location": [
+      0.6,
+      -0.12,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      1.8,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_0",
+     "location": [
+      -0.6,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_1",
+     "location": [
+      -0.2,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.2,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_2",
+     "location": [
+      0.2,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.2,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_3",
+     "location": [
+      0.6,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_0",
+     "location": [
+      -0.6,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_1",
+     "location": [
+      -0.2,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.2,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_2",
+     "location": [
+      0.2,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.2,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_3",
+     "location": [
+      0.6,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_3_0",
+     "location": [
+      -0.6,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0.6,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_3_1",
+     "location": [
+      -0.2,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.2,
+      0.6,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_3_2",
+     "location": [
+      0.2,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.2,
+      0.6,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_3_3",
+     "location": [
+      0.6,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      0.6,
+      0.12
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Facetlock_VaultDoor_4x4_00",
+     "shape": "box",
+     "size": [
+      2.4,
+      0.4,
+      2.4
+     ],
+     "centre": [
+      0,
+      0.2,
+      1.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 280,
+    "lod1_triangles": 280,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Facetlock_VaultDoor_4x4": 280
+    },
+    "bounds_min": [
+     -1.2,
+     -0.115,
+     0.0
+    ],
+    "bounds_max": [
+     1.2,
+     0.4,
+     2.4
+    ],
+    "dimensions": [
+     2.4,
+     0.515,
+     2.4
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4cd3c94ac90f84e7b6ede1a66e9f2adf9db42832b2b0a8f1eac968677c262596"
+  },
+  {
+   "asset": "Prop_Facetlock_VaultDoor_5x5",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.8 m vault door, 5x5 facet lattice",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Tile_0_0",
+     "SOCKET_Tile_0_1",
+     "SOCKET_Tile_0_2",
+     "SOCKET_Tile_0_3",
+     "SOCKET_Tile_0_4",
+     "SOCKET_Tile_1_0",
+     "SOCKET_Tile_1_1",
+     "SOCKET_Tile_1_2",
+     "SOCKET_Tile_1_3",
+     "SOCKET_Tile_1_4",
+     "SOCKET_Tile_2_0",
+     "SOCKET_Tile_2_1",
+     "SOCKET_Tile_2_2",
+     "SOCKET_Tile_2_3",
+     "SOCKET_Tile_2_4",
+     "SOCKET_Tile_3_0",
+     "SOCKET_Tile_3_1",
+     "SOCKET_Tile_3_2",
+     "SOCKET_Tile_3_3",
+     "SOCKET_Tile_3_4",
+     "SOCKET_Tile_4_0",
+     "SOCKET_Tile_4_1",
+     "SOCKET_Tile_4_2",
+     "SOCKET_Tile_4_3",
+     "SOCKET_Tile_4_4"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Facetlock_VaultDoor_5x5_M0",
+     "colour": "vault stone",
+     "hex": "6A6A7A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Facetlock_VaultDoor_5x5_M1",
+     "colour": "vault door (bronze)",
+     "hex": "8A6A3A",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Facetlock_VaultDoor_5x5_M2",
+     "colour": "tile recess",
+     "hex": "1A1A2A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Facetlock_VaultDoor_5x5",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        2.8,
+        0.4,
+        2.8
+       ],
+       "centre": [
+        0,
+        0.2,
+        1.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Door",
+       "shape": "box",
+       "size": [
+        2.4,
+        0.1,
+        2.4
+       ],
+       "centre": [
+        0,
+        -0.05,
+        1.4
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Recess00",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.8,
+        -0.105,
+        2.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess01",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.4,
+        -0.105,
+        2.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess02",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.0,
+        -0.105,
+        2.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess03",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.4,
+        -0.105,
+        2.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess04",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.8,
+        -0.105,
+        2.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess10",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.8,
+        -0.105,
+        1.8
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess11",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.4,
+        -0.105,
+        1.8
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess12",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.0,
+        -0.105,
+        1.8
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess13",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.4,
+        -0.105,
+        1.8
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess14",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.8,
+        -0.105,
+        1.8
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess20",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.8,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess21",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.4,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess22",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.0,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess23",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.4,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess24",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.8,
+        -0.105,
+        1.4
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess30",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.8,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess31",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.4,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess32",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.0,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess33",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.4,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess34",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.8,
+        -0.105,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess40",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.8,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess41",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        -0.4,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess42",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.0,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess43",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.4,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Recess44",
+       "shape": "box",
+       "size": [
+        0.36,
+        0.02,
+        0.36
+       ],
+       "centre": [
+        0.8,
+        -0.105,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_0",
+     "location": [
+      -0.8,
+      -0.12,
+      2.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.8,
+      2.2,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_1",
+     "location": [
+      -0.4,
+      -0.12,
+      2.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      2.2,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_2",
+     "location": [
+      0.0,
+      -0.12,
+      2.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      2.2,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_3",
+     "location": [
+      0.4,
+      -0.12,
+      2.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      2.2,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_0_4",
+     "location": [
+      0.8,
+      -0.12,
+      2.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.8,
+      2.2,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_0",
+     "location": [
+      -0.8,
+      -0.12,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.8,
+      1.8,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_1",
+     "location": [
+      -0.4,
+      -0.12,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      1.8,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_2",
+     "location": [
+      0.0,
+      -0.12,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      1.8,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_3",
+     "location": [
+      0.4,
+      -0.12,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      1.8,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_1_4",
+     "location": [
+      0.8,
+      -0.12,
+      1.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.8,
+      1.8,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_0",
+     "location": [
+      -0.8,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.8,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_1",
+     "location": [
+      -0.4,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_2",
+     "location": [
+      0.0,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_3",
+     "location": [
+      0.4,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_2_4",
+     "location": [
+      0.8,
+      -0.12,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.8,
+      1.4,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_3_0",
+     "location": [
+      -0.8,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.8,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_3_1",
+     "location": [
+      -0.4,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_3_2",
+     "location": [
+      0.0,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_3_3",
+     "location": [
+      0.4,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_3_4",
+     "location": [
+      0.8,
+      -0.12,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.8,
+      1.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_4_0",
+     "location": [
+      -0.8,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.8,
+      0.6,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_4_1",
+     "location": [
+      -0.4,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      0.6,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_4_2",
+     "location": [
+      0.0,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.6,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_4_3",
+     "location": [
+      0.4,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      0.6,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Tile_4_4",
+     "location": [
+      0.8,
+      -0.12,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.8,
+      0.6,
+      0.12
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Facetlock_VaultDoor_5x5_00",
+     "shape": "box",
+     "size": [
+      2.8,
+      0.4,
+      2.8
+     ],
+     "centre": [
+      0,
+      0.2,
+      1.4
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 388,
+    "lod1_triangles": 388,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Facetlock_VaultDoor_5x5": 388
+    },
+    "bounds_min": [
+     -1.4,
+     -0.115,
+     0.0
+    ],
+    "bounds_max": [
+     1.4,
+     0.4,
+     2.8
+    ],
+    "dimensions": [
+     2.8,
+     0.515,
+     2.8
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "568afb8ae2e31a62f4af5b7e7a83369d2f0e78fae2e7309705d92f1e9ebdc259"
+  },
+  {
+   "asset": "Prop_Facetlock_FacetTile_1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.34 m facet tile, hue 1",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Mount"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Facetlock_FacetTile_1_M0",
+     "colour": "tile body",
+     "hex": "3A3A4A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Facetlock_FacetTile_1_M1",
+     "colour": "facet (emissive)",
+     "hex": "FF6B2E",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Facetlock_FacetTile_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Tile",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.04,
+        0.34
+       ],
+       "centre": [
+        0,
+        0,
+        0.17
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Facet",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.04
+        ]
+       ],
+       "centre": [
+        0,
+        -0.02,
+        0.17
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Mount",
+     "location": [
+      0,
+      0.02,
+      0.17
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.17,
+      -0.02
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Facetlock_FacetTile_1_00",
+     "shape": "box",
+     "size": [
+      0.34,
+      0.08,
+      0.34
+     ],
+     "centre": [
+      0,
+      0,
+      0.17
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 76,
+    "lod1_triangles": 76,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Facetlock_FacetTile_1": 76
+    },
+    "bounds_min": [
+     -0.17,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     0.17,
+     0.02,
+     0.34
+    ],
+    "dimensions": [
+     0.34,
+     0.08,
+     0.34
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b1925b4624b2f1c5b34a99cad174b0a7a6458c7d0e52e1f52220fcd8fcada353"
+  },
+  {
+   "asset": "Prop_Facetlock_FacetTile_2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.34 m facet tile, hue 2",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Mount"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Facetlock_FacetTile_2_M0",
+     "colour": "tile body",
+     "hex": "3A3A4A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Facetlock_FacetTile_2_M1",
+     "colour": "facet (emissive)",
+     "hex": "338CFF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Facetlock_FacetTile_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Tile",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.04,
+        0.34
+       ],
+       "centre": [
+        0,
+        0,
+        0.17
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Facet",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.04
+        ]
+       ],
+       "centre": [
+        0,
+        -0.02,
+        0.17
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Mount",
+     "location": [
+      0,
+      0.02,
+      0.17
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.17,
+      -0.02
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Facetlock_FacetTile_2_00",
+     "shape": "box",
+     "size": [
+      0.34,
+      0.08,
+      0.34
+     ],
+     "centre": [
+      0,
+      0,
+      0.17
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 76,
+    "lod1_triangles": 76,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Facetlock_FacetTile_2": 76
+    },
+    "bounds_min": [
+     -0.17,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     0.17,
+     0.02,
+     0.34
+    ],
+    "dimensions": [
+     0.34,
+     0.08,
+     0.34
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "69ed02d8245f723ae6e51050712ff8c0031a8064a660213e352f50b94ba83509"
+  },
+  {
+   "asset": "Prop_Facetlock_FacetTile_3",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.34 m facet tile, hue 3",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Mount"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Facetlock_FacetTile_3_M0",
+     "colour": "tile body",
+     "hex": "3A3A4A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Facetlock_FacetTile_3_M1",
+     "colour": "facet (emissive)",
+     "hex": "73F28C",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Facetlock_FacetTile_3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Tile",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.04,
+        0.34
+       ],
+       "centre": [
+        0,
+        0,
+        0.17
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Facet",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.04
+        ]
+       ],
+       "centre": [
+        0,
+        -0.02,
+        0.17
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Mount",
+     "location": [
+      0,
+      0.02,
+      0.17
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.17,
+      -0.02
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Facetlock_FacetTile_3_00",
+     "shape": "box",
+     "size": [
+      0.34,
+      0.08,
+      0.34
+     ],
+     "centre": [
+      0,
+      0,
+      0.17
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 76,
+    "lod1_triangles": 76,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Facetlock_FacetTile_3": 76
+    },
+    "bounds_min": [
+     -0.17,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     0.17,
+     0.02,
+     0.34
+    ],
+    "dimensions": [
+     0.34,
+     0.08,
+     0.34
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "260ec05f3ccae621a996e5326fcb17e646bd43aa14553bfe914b8a200e527bfc"
+  },
+  {
+   "asset": "Prop_Facetlock_FacetTile_4",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.34 m facet tile, hue 4",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Mount"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Facetlock_FacetTile_4_M0",
+     "colour": "tile body",
+     "hex": "3A3A4A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Facetlock_FacetTile_4_M1",
+     "colour": "facet (emissive)",
+     "hex": "FFF299",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Facetlock_FacetTile_4",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Tile",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.04,
+        0.34
+       ],
+       "centre": [
+        0,
+        0,
+        0.17
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Facet",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.04
+        ]
+       ],
+       "centre": [
+        0,
+        -0.02,
+        0.17
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Mount",
+     "location": [
+      0,
+      0.02,
+      0.17
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.17,
+      -0.02
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Facetlock_FacetTile_4_00",
+     "shape": "box",
+     "size": [
+      0.34,
+      0.08,
+      0.34
+     ],
+     "centre": [
+      0,
+      0,
+      0.17
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 76,
+    "lod1_triangles": 76,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Facetlock_FacetTile_4": 76
+    },
+    "bounds_min": [
+     -0.17,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     0.17,
+     0.02,
+     0.34
+    ],
+    "dimensions": [
+     0.34,
+     0.08,
+     0.34
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9f1a0cc42d5cc30c7de32436fd6cd4822371f0936ca9ebadf5f196d83c3fd4fd"
+  },
+  {
+   "asset": "Prop_Facetlock_FacetTile_5",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.34 m facet tile, hue 5",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Mount"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Facetlock_FacetTile_5_M0",
+     "colour": "tile body",
+     "hex": "3A3A4A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Facetlock_FacetTile_5_M1",
+     "colour": "facet (emissive)",
+     "hex": "B36BFF",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Facetlock_FacetTile_5",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Tile",
+       "shape": "box",
+       "size": [
+        0.34,
+        0.04,
+        0.34
+       ],
+       "centre": [
+        0,
+        0,
+        0.17
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Facet",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.04
+        ]
+       ],
+       "centre": [
+        0,
+        -0.02,
+        0.17
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Mount",
+     "location": [
+      0,
+      0.02,
+      0.17
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.17,
+      -0.02
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Facetlock_FacetTile_5_00",
+     "shape": "box",
+     "size": [
+      0.34,
+      0.08,
+      0.34
+     ],
+     "centre": [
+      0,
+      0,
+      0.17
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 76,
+    "lod1_triangles": 76,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Facetlock_FacetTile_5": 76
+    },
+    "bounds_min": [
+     -0.17,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     0.17,
+     0.02,
+     0.34
+    ],
+    "dimensions": [
+     0.34,
+     0.08,
+     0.34
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "30680fb16d58ce01678feba435d873e81c9b5fa399b6c61b7ed8754713b982d3"
+  },
+  {
+   "asset": "Mob_Facetlock_VaultKeeper",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Vault keeper",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Facetlock_VaultKeeper_M0",
+     "colour": "coat",
+     "hex": "4A4A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Facetlock_VaultKeeper_M1",
+     "colour": "accent / trousers",
+     "hex": "2A2A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Facetlock_VaultKeeper_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Facetlock_VaultKeeper_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Facetlock_VaultKeeper_M4",
+     "colour": "brass keys",
+     "hex": "B08D3C",
+     "roughness": 0.4,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Facetlock_VaultKeeper",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "KeyRing",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.01,
+       "centre": [
+        -0.37,
+        0,
+        0.8
+       ],
+       "slot": 4,
+       "segments": 10
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Facetlock_VaultKeeper_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 656,
+    "lod1_triangles": 656,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Facetlock_VaultKeeper": 656
+    },
+    "bounds_min": [
+     -0.43,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     1.76
+    ],
+    "dimensions": [
+     0.85,
+     0.285,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4b260772ebd0d3ddf636e68753a4bf3d36bf01b5310d08994f546d01d30f97d1"
+  }
+ ]
+}
