@@ -14,10 +14,11 @@ import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
 /**
- * Java = C++ golden vectors for the marsh-lane ecology cores (G570 port of G202 DroughtOdds, G583 port of G200
- * CraneSpread; later ecology ports add a method here). Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with
- * -Dmarsh.parity.write=true) and replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h.
- * Doubles are printed with Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
+ * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
+ * CraneSpread) and G585 (G194 CraneCohorts); later ecology ports add a method here. Each
+ * engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
+ * replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
+ * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
  */
 class MarshCoresParityTest {
 
@@ -47,6 +48,56 @@ class MarshCoresParityTest {
             }
         }
         return out;
+    }
+
+    static List<String> craneCohorts() {
+        double[][] rates = {{0.5, 0.7, 0.85, 0.9, 0.15, 0.45}, {0.5, 0.7, 0.85, 0.8, 0.15, 0.45},
+            {0.5, 0.7, 0.85, 0.9, 0, 0}, {0.6, 0.8, 0.9, 0.95, 0.3, 1.2}, {0.3, 0.5, 0.6, 0, 1.5, 0},
+            {0.4, 0.6, 0.7, 0.85, 0, 0.6}, {0.9, 0.9, 0.9, 0.97, 0.8, 2.5}};
+        int[][] starts = {{20, 10, 8, 30}, {0, 0, 0, 12}, {40, 0, 0, 0}, {5, 5, 5, 5}, {0, 0, 50, 0},
+            {100, 60, 40, 120}, {2, 1, 1, 3}};
+        List<String> out = new ArrayList<>();
+        for (int c = 0; c < rates.length; c++) {
+            double[] r = rates[c];
+            CraneCohorts m = CraneCohorts.marsh(new CraneCohorts.Settings(r[0], r[1], r[2], r[3], r[4], r[5], 25), 1);
+            StringBuilder s = new StringBuilder();
+            s.append("s0=").append(r[0]).append(" s1=").append(r[1]).append(" s2=").append(r[2]).append(" p=")
+                    .append(r[3]).append(" fs=").append(r[4]).append(" fa=").append(r[5]).append(" years=25")
+                    .append(" lambda=").append(m.lambda()).append(" trend=").append(m.trend().ordinal())
+                    .append(" best=").append(m.bestRelease());
+            for (int i = 0; i < CraneCohorts.COHORTS; i++) {
+                s.append(" w").append(i).append('=').append(m.stableAges().get(i))
+                        .append(" v").append(i).append('=').append(m.reproductiveValue().get(i));
+            }
+            for (int i = 0; i < CraneCohorts.COHORTS; i++) {
+                for (int j = 0; j < CraneCohorts.COHORTS; j++) {
+                    s.append(" e").append(i).append(j).append('=').append(m.elasticity(i, j));
+                }
+            }
+            double[] stepped = m.step(new double[] {10, 20, 30, 40});
+            for (int i = 0; i < CraneCohorts.COHORTS; i++) {
+                s.append(" step").append(i).append('=').append(stepped[i]);
+            }
+            int[] st = starts[c];
+            s.append(" start=").append(st[0]).append(',').append(st[1]).append(',').append(st[2]).append(',')
+                    .append(st[3]).append(" ae=").append(m.adultEquivalents(st));
+            out.add(s.toString());
+            long seed = 101 + 13L * c;
+            CraneCohorts.Report rep = m.project(st, seed);
+            StringBuilder p = new StringBuilder("seed=" + seed + " outcome=" + rep.outcome().ordinal() + " flock="
+                    + rep.flock() + " nyears=" + rep.years().size());
+            for (CraneCohorts.Year y : rep.years()) {
+                p.append(" y").append(y.index()).append('=').append(y.chicks()).append(',').append(y.juveniles())
+                        .append(',').append(y.subadults()).append(',').append(y.adults());
+            }
+            out.add(p.toString());
+        }
+        return out;
+    }
+
+    @Test
+    void craneCohortsMatchesCpp() throws IOException {
+        check("marsh_crane_cohorts_parity.txt", "G194 CraneCohorts", MarshCoresParityTest::craneCohorts);
     }
 
     static List<String> craneSpread() {
