@@ -92,5 +92,44 @@ class Rules(unittest.TestCase):
         self.assertEqual(g.score, 0)
 
 
+    def test_hint_follows_the_best_delve(self):
+        for d in gm.DIFFICULTY:
+            for s in range(10):
+                g = gm.start(s, d)
+                while not g.over:
+                    self.assertEqual(g.hint(), g.demo_action(), (d, s, g.path))
+                    g.step(g.demo_action())
+        g = gm.start(1)
+        g.row = g.cfg["rows"] - 1
+        self.assertEqual(g.hint(), ("climb", 0))
+
+    def test_seed_codes_and_daily_seed(self):
+        self.assertEqual(gm.seed_code(1337, "normal"), "GLOW-N-1337")
+        self.assertEqual(gm.parse_seed_code("  glow-h-42 "), (42, "hard"))
+        for d in gm.DIFFICULTY:
+            self.assertEqual(gm.parse_seed_code(gm.seed_code(7, d)), (7, d))
+        for bad in ("x", "GLOW-Q-1", "GLOW-N-", "GLOW-N-1x", "GLOWN-1"):
+            with self.assertRaises(ValueError):
+                gm.parse_seed_code(bad)
+        self.assertEqual(gm.daily_seed(2026, 10, 30), 20261030)
+
+    def test_clear_errors(self):
+        g = gm.start(1)
+        cases = {("dig", 9): "you can dig columns 1-3", ("fly", 1): "unknown action", ("dig", "1"): "not '1'"}
+        for action, text in cases.items():
+            with self.assertRaises(ValueError) as e:
+                g.step(action)
+            self.assertIn(text, str(e.exception))
+        g.row = g.cfg["rows"] - 1
+        with self.assertRaisesRegex(ValueError, "shaft floor"):
+            g.step(("dig", g.col))
+        self.assertEqual(gm.Game.parse(" Climb "), ("climb", 0))
+        self.assertEqual(gm.Game.parse("DIG 2"), ("dig", 2))
+        with self.assertRaisesRegex(ValueError, "column number"):
+            gm.Game.parse("dig x")
+        with self.assertRaisesRegex(ValueError, "use dig"):
+            gm.Game.parse("dig")
+
+
 if __name__ == "__main__":
     unittest.main()

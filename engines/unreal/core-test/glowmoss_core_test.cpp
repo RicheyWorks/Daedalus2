@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Glowmoss Delve parity: DaedalusGlowmossCore.h must regenerate every shaft in glowmoss_parity.txt (crystals,
 // darkness, glowmoss, footing, the exact best delve's target and plan) from seed + difficulty alone (CPython-compatible
-// seeding) and replay every demo dig byte for byte.
+// seeding) and replay every demo dig, hint and mid-shaft probe byte for byte.
 //   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test && ./glowmoss_core_test glowmoss_parity.txt
 #include "DaedalusGlowmossCore.h"
 #include <cstdio>
@@ -48,13 +48,14 @@ std::string ActString(const Action& A)
 std::string StateString(const Game& G)
 {
 	std::ostringstream O;
-	O << "row=" << G.Row << " col=" << G.Col << " light=" << G.Light << " crystals=" << G.Crystals << " score=" << G.Score << " path=" << Ints(G.Path);
+	O << "row=" << G.Row << " col=" << G.Col << " light=" << G.Light << " crystals=" << G.Crystals << " score=" << G.Score << " path=" << Ints(G.Path)
+	  << " hint=" << (G.Over ? std::string("-") : ActString(G.Hint()));
 	return O.str();
 }
 
 std::string Opening(std::uint32_t Seed, const std::string& Diff, const Game& G)
 {
-	return "game s=" + std::to_string(Seed) + " d=" + Diff + " gems=" + GridString(G.Cells.Gems) + " dark=" + GridString(G.Cells.Dark)
+	return "game s=" + std::to_string(Seed) + " d=" + Diff + " code=" + SeedCode(Seed, *G.Diff) + " gems=" + GridString(G.Cells.Gems) + " dark=" + GridString(G.Cells.Dark)
 		+ " moss=" + GridString(G.Cells.Moss) + " unstable=" + GridString(G.Cells.Unstable) + " best=" + std::to_string(G.Best) + " target=" + std::to_string(G.Target) + " plan=" + Ints(G.Plan) + " " + StateString(G);
 }
 
@@ -85,7 +86,20 @@ int UnitChecks()
 	Game G; std::string Res;
 	if (G.Start(0, "mythic")) { std::printf("FAIL unknown difficulty accepted\n"); ++Fails; }
 	if (!G.Start(1, "hard") || G.Cells.Unstable.size() != 12 || G.Col != 2 || G.Light != 10 || G.Target < 1 || G.Target > G.Best) { std::printf("FAIL hard start\n"); ++Fails; }
-	if (G.Step({ Kind::Dig, G.Col + 2 }, Res) != Game::Act::NoLedge) { std::printf("FAIL far dig accepted\n"); ++Fails; }
+	if (G.Step({ Kind::Dig, G.Col + 2 }, Res) != Game::Act::OutOfReach) { std::printf("FAIL far dig accepted\n"); ++Fails; }
+	G.Row = G.Diff->Rows - 1;
+	if (G.Step({ Kind::Dig, G.Col }, Res) != Game::Act::Floor || G.Hint().K != Kind::Climb) { std::printf("FAIL dig through the floor\n"); ++Fails; }
+
+	std::uint32_t CodeSeed = 0; const Difficulty* CodeDiff = nullptr;
+	if (SeedCode(1337, *FindDifficulty("normal")) != "GLOW-N-1337" || !ParseSeedCode("  glow-h-42 ", CodeSeed, CodeDiff) || CodeSeed != 42 || CodeDiff != FindDifficulty("hard"))
+	{
+		std::printf("FAIL seed code round trip\n"); ++Fails;
+	}
+	for (const char* Bad : { "x", "GLOW-Q-1", "GLOW-N-", "GLOW-N-1x", "GLOWN-1", "GLOW-N-1234567890" })
+	{
+		if (ParseSeedCode(Bad, CodeSeed, CodeDiff)) { std::printf("FAIL bad seed code accepted: %s\n", Bad); ++Fails; }
+	}
+	if (DailySeed(2026, 10, 30) != 20261030u) { std::printf("FAIL daily seed\n"); ++Fails; }
 	G.Start(3, "normal");
 	const size_t Mid = static_cast<size_t>(G.Col);
 	G.Light = 1 + G.Cells.Dark[0][Mid];
@@ -119,6 +133,14 @@ int main(int Argc, char** Argv)
 			if (!G.Start(Seed, Diff)) { std::printf("FAIL %s: unknown difficulty\n", Line.c_str()); ++Fails; Skip = true; continue; }
 			const std::string Got = Opening(Seed, Diff, G);
 			if (Got != Line) { std::printf("FAIL opening differs\n  want %s\n  got  %s\n", Line.c_str(), Got.c_str()); ++Fails; Skip = true; }
+		}
+		else if (Line.rfind("probe ", 0) == 0)
+		{
+			if (Skip) continue;
+			const int C = std::stoi(Field(Line, "c"));
+			const Delve Probe = BestDelve(*G.Diff, G.Cells, { C, C, G.Diff->Light - 1 - C });
+			const std::string Got = "probe c=" + std::to_string(C) + " best=" + std::to_string(Probe.Best) + " plan=" + Ints(Probe.Plan);
+			if (Got != Line) { std::printf("FAIL s=%u %s probe\n  want %s\n  got  %s\n", Seed, Diff.c_str(), Line.c_str(), Got.c_str()); ++Fails; }
 		}
 		else if (Line.rfind("move ", 0) == 0)
 		{

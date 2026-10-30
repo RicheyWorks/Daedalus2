@@ -91,10 +91,16 @@ inline Landing Land(const Difficulty& D, const Shaft& S, int Row, int Col, int L
 
 struct Delve { int Best = 0; std::vector<int> Plan; };
 
-/** Best crystals and dig columns over every delve that can still climb out (glowmoss.best_delve). Exact. */
-inline Delve BestDelve(const Difficulty& D, const Shaft& S)
+struct Spot { int Row; int Col; int Light; };
+inline bool operator==(const Spot& A, const Spot& B) { return A.Row == B.Row && A.Col == B.Col && A.Light == B.Light; }
+inline bool operator!=(const Spot& A, const Spot& B) { return !(A == B); }
+
+/** The surface spot every delve starts from. */
+inline Spot SurfaceSpot(const Difficulty& D) { return { Surface, D.Cols / 2, D.Light }; }
+
+/** Best extra crystals and dig columns over every delve from Start that can still climb out (glowmoss.best_delve). Exact. */
+inline Delve BestDelve(const Difficulty& D, const Shaft& S, const Spot& Start)
 {
-	struct Spot { int Row; int Col; int Light; };
 	struct Entry { int Crystals; Spot From; };
 	using Layer = std::map<std::pair<int, int>, Entry>;  // (col, light) -> best entry
 	std::vector<Layer> Layers(static_cast<size_t>(D.Rows));
@@ -110,9 +116,9 @@ inline Delve BestDelve(const Difficulty& D, const Shaft& S)
 			if (Found == Target.end() || Total > Found->second.Crystals) Target[{ U, L.Light }] = { Total, From };
 		}
 	};
-	Expand({ Surface, D.Cols / 2, D.Light }, 0);
+	if (Start.Row + 1 < D.Rows) Expand(Start, 0);
 	Delve Result;
-	Spot BestAt{ Surface, 0, 0 };
+	Spot BestAt = Start;
 	for (int R = 0; R < D.Rows; ++R)
 	{
 		for (const auto& [Key, E] : Layers[static_cast<size_t>(R)])
@@ -121,7 +127,7 @@ inline Delve BestDelve(const Difficulty& D, const Shaft& S)
 			if (R + 1 < D.Rows) Expand({ R, Key.first, Key.second }, E.Crystals);
 		}
 	}
-	for (Spot At = BestAt; At.Row != Surface;)
+	for (Spot At = BestAt; At != Start;)
 	{
 		Result.Plan.push_back(At.Col);
 		At = Layers[static_cast<size_t>(At.Row)].at({ At.Col, At.Light }).From;
@@ -129,6 +135,43 @@ inline Delve BestDelve(const Difficulty& D, const Shaft& S)
 	std::reverse(Result.Plan.begin(), Result.Plan.end());
 	return Result;
 }
+
+inline Delve BestDelve(const Difficulty& D, const Shaft& S) { return BestDelve(D, S, SurfaceSpot(D)); }
+
+constexpr const char* CodePrefix = "GLOW";
+
+/** Shareable code for a shaft, e.g. GLOW-N-1337 (glowmoss.seed_code). */
+inline std::string SeedCode(std::uint32_t Seed, const Difficulty& D)
+{
+	const char Initial = static_cast<char>(D.Name[0] - 'a' + 'A');
+	return std::string(CodePrefix) + "-" + Initial + "-" + std::to_string(Seed);
+}
+
+/** Seed and difficulty from a seed code (glowmoss.parse_seed_code: trimmed, case-insensitive). False when it is not
+ *  one. Native seeds are uint32, so codes with more than 9 seed digits are refused here. */
+inline bool ParseSeedCode(const std::string& Code, std::uint32_t& Seed, const Difficulty*& D)
+{
+	const char* Space = " \t\r\n";
+	const size_t First = Code.find_first_not_of(Space);
+	if (First == std::string::npos) return false;
+	std::string Upper = Code.substr(First, Code.find_last_not_of(Space) - First + 1);
+	for (char& Ch : Upper) if (Ch >= 'a' && Ch <= 'z') Ch = static_cast<char>(Ch - 'a' + 'A');
+	const std::string Prefix = std::string(CodePrefix) + "-";
+	if (Upper.rfind(Prefix, 0) != 0 || Upper.size() < Prefix.size() + 3 || Upper[Prefix.size() + 1] != '-') return false;
+	D = nullptr;
+	for (int I = 0; I < DifficultyCount; ++I)
+	{
+		if (Difficulties()[I].Name[0] - 'a' + 'A' == Upper[Prefix.size()]) D = &Difficulties()[I];
+	}
+	const std::string Digits = Upper.substr(Prefix.size() + 2);
+	if (!D || Digits.empty() || Digits.size() > 9) return false;
+	for (char Ch : Digits) if (Ch < '0' || Ch > '9') return false;
+	Seed = static_cast<std::uint32_t>(std::stoul(Digits));
+	return true;
+}
+
+/** Everyone delves the same shaft on the same day: the date as YYYYMMDD (glowmoss.daily_seed). */
+inline std::uint32_t DailySeed(int Year, int Month, int Day) { return static_cast<std::uint32_t>(Year * 10000 + Month * 100 + Day); }
 
 enum class Kind : int { Dig = 0, Climb };
 struct Action { Kind K = Kind::Climb; int Col = 0; };
@@ -142,7 +185,7 @@ struct Game
 	int Score = 0; bool Over = false, Won = false, Perfect = false;
 	pyrandom::PyRandom Rng;
 
-	enum class Act { Ok, NoLedge, GameOver };
+	enum class Act { Ok, Floor, OutOfReach, GameOver };
 
 	/** PrismGame.start + Game.setup. False on an unknown difficulty. */
 	bool Start(std::uint32_t Seed, const std::string& DifficultyName)
@@ -190,7 +233,8 @@ struct Game
 			Result = "climbed out with " + std::to_string(Crystals) + (Perfect ? " (perfect delve)" : "");
 			return Act::Ok;
 		}
-		if (Row + 1 >= Diff->Rows || A.Col < FirstDigCol(Col) || A.Col > LastDigCol(Col, Diff->Cols)) return Act::NoLedge;
+		if (Row + 1 >= Diff->Rows) return Act::Floor;
+		if (A.Col < FirstDigCol(Col) || A.Col > LastDigCol(Col, Diff->Cols)) return Act::OutOfReach;
 		const Landing L = Land(*Diff, Cells, Row + 1, A.Col, Light);
 		Row = L.Row;
 		Light = L.Light;
@@ -206,6 +250,14 @@ struct Game
 		}
 		Result = "+" + std::to_string(L.Got) + (L.Mossy ? " glowmoss" : "") + (L.Fell ? " crumble" : "");
 		return Act::Ok;
+	}
+
+	/** Game.hint: the first dig of the best delve from the current ledge, else climb out. */
+	Action Hint() const
+	{
+		const Delve FromHere = BestDelve(*Diff, Cells, { Row, Col, Light });
+		if (FromHere.Plan.empty()) return { Kind::Climb, 0 };
+		return { Kind::Dig, FromHere.Plan.front() };
 	}
 
 	/** Game.demo_action: dig the best plan, then climb out. */

@@ -24,6 +24,12 @@ Score on a win: crystals + light left after the climb, plus `PERFECT_BONUS` (5) 
 
 Before tuning (first release, no unstable ledges): greedy 93% / 46% / 15%, random 59% / 9% / 1%.
 
+## Helpers
+- Hint: `g.hint()` is the first move of the best delve from where you stand (`("climb", 0)` when no dig adds crystals safely). Following hints from the surface digs exactly the demo's best delve.
+- Seed codes: `seed_code(1337, "normal")` is `GLOW-N-1337`; `parse_seed_code(code)` reads one back (trimmed, any case) and raises `ValueError` saying what is wrong. The native core refuses codes with more than 9 seed digits (uint32 seeds).
+- Daily shaft: `daily_seed(2026, 10, 30)` is `20261030`, so everyone delves the same shaft on the same day.
+- Errors name the problem: the shaft floor, the columns you can reach, an unknown action, or a dig without a column number.
+
 ## API
 Actions: `("dig", column)`, `("climb", 0)`. Default difficulty: normal. API: `g = glowmoss.start(seed, "normal")`, `g.step(action)`, `g.status()`, `g.to_state()` / `Game.from_state(d)` (JSON-safe, RNG included).
 CLI: `python -m tools.minigames.glowmoss --play --difficulty normal --seed N`, `--demo --seed N` (digs the best delve, then climbs out).
