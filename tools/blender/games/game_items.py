@@ -494,6 +494,57 @@ def fog_channel_pilot():
     return out
 
 
+
+def strip(a, ground_hex, parts, mats_extra, note, h=0.3):
+    """10 m tileable habitat module (X = along the crossing, 10 m; Y = 4 m wide). Ends at x = +-5 for snapping."""
+    P = [K.box("Ground", (10.0, 4.0, 0.2), (0, 0, -0.1), 0, bevel=False)] + list(parts)
+    return simple(a, P, [("ground", ground_hex, 0.95)] + list(mats_extra), [K.socket("Start", (-5, 0, 0)), K.socket("End", (5, 0, 0)), K.socket("Centre", (0, 0, 0))],
+                  "10 x 4 m tileable habitat strip: " + note, (10.0, 4.0, h + 0.2), (0, 0, (h - 0.2) / 2))
+
+
+def scatter(name, n, seed, fn, xr=4.6, yr=1.7):
+    R = K.rng(SEED + seed, name); return [fn("%s%d" % (name, i), R.uniform(-xr, xr), R.uniform(-yr, yr), R) for i in range(n)]
+
+
+# ================================================================ shardsong_crossing (prometheus, READY 59004)
+@game("shardsong_crossing")
+def shardsong_crossing():
+    G = "Prop_Shardsong_"; out = []
+    birds = [ball("MarqBirdL", (-0.28, -0.18, 2.1), 0.035, 5, 8), ball("MarqBirdR", (0.28, -0.18, 2.1), 0.035, 5, 8),
+             crystal("MarqShardL", (-0.3, -0.12, 1.98), 0.1, 6, rot=(180, 0, 0)), crystal("MarqShardR", (0.3, -0.12, 1.98), 0.1, 6, rot=(180, 0, 0))]
+    out.append(cabinet("Prop_Arcade_Cab_ShardsongCrossing", "4A3A5A", "D89A7A", "FFC89A", birds, [("songbirds", "F2D04A", 0.6), ("shard rock", "6A5A7A", 0.8)], "dusk palette, two birds calling across a shard gap"))
+    for i, (b, w) in enumerate((("E8B040", "8A5A2A"), ("6AB0E0", "2A4A7A"), ("E07070", "6A2A3A"))):
+        out.append(bird("Mob_Shardsong_Songbird_Caller_%d" % (i + 1), b, w, "F2A030", 0.5, "caller, open-beak call pose, colour variant %d" % (i + 1)))
+    m = bird("Mob_Shardsong_Songbird_Mate", "D8C8A0", "7A6A4A", "F2A030", 0.5, "mate, listen pose (head tilt in rig)")
+    out.append(m)
+    for v in (1, 2):
+        a = G + "IslandShard_%d" % v; R = K.rng(SEED + v, a)
+        P = [K.lathe("Rock", [(0, -2.2 + 0.3 * v), (0.4, -1.6), (1.0, -0.9), (1.4, -0.3), (1.5, 0.0), (0, 0.0)], (0, 0, 0), 0, 7 + v), K.cyl("Top", "z", 1.5, 1.5, 0.12, (0, 0, 0.06), 1, 7 + v)]
+        P += [rock("Boulder%d" % k, (R.uniform(-0.9, 0.9), R.uniform(-0.9, 0.9), 0.17), 0.12, 0, k) for k in range(3)] + [K.cyl("Perch", "z", 0.03, 0.03, 0.6, (0.6, 0, 0.42), 2, 6)]
+        out.append(simple(a, P, [("shard rock", "5A4A6A", 0.9), ("moss top", "5A8A4A", 0.95), ("perch branch", WOOD, 0.8)], [K.socket("Perch", (0.6, 0, 0.72)), K.socket("Top", (0, 0, 0.12))],
+                          "3 m floating island shard v%d, flat top, perch branch" % v, (3.0, 3.0, 2.3), (0, 0, -0.9)))
+    tree = lambda n, x, y, R: [K.cyl(n + "Trunk", "z", 0.12, 0.09, 1.8, (x, y, 0.9), 1, 6), K.lathe(n + "Crown", [(0, 0), (0.9, 0.2), (0.6, 1.2), (0, 1.8)], (x, y, 1.4), 2, 7)]
+    P = sum(scatter("Tree", 7, 1, tree, 4.0, 1.0), []) + sum(scatter("Bush", 6, 2, lambda n, x, y, R: [ball(n, (x, y, 0.2), 0.3, 2, 6)]), [])
+    out.append(strip(G + "Habitat_Forest", "4A3A22", P, [("trunk", "5A3A22", 0.9), ("foliage", "2E6A34", 0.95)], "forest", 3.2))
+    P = sum(scatter("Tuft", 18, 3, lambda n, x, y, R: [K.lathe(n, [(0, 0), (0.12, 0.0), (0, 0.25)], (x, y, 0), 1, 4)]), [])
+    out.append(strip(G + "Habitat_Grass", "6A9A4A", P, [("tufts", "8AB85A", 0.95)], "open grass", 0.25))
+    P = [K.box("Water", (10.0, 3.2, 0.02), (0, 0, 0.01), 1, bevel=False)] + [K.box("Surf%d" % k, (10.0, 0.25, 0.04), (0, k * 1.65, 0.02), 2, bevel=False) for k in (-1, 1)]
+    out.append(strip(G + "Habitat_Water", "8A7A5A", P, [("water (animated shader in UE)", "2A6A9A", 0.05), ("surf foam", "E8F0F2", 0.6)], "calm open water, low surf at edges", 0.04))
+    P = sum(scatter("Scrub", 12, 4, lambda n, x, y, R: [ball(n, (x, y, 0.15), 0.22 + 0.1 * R.random(), 1, 6)]), [])
+    out.append(strip(G + "Habitat_Scrub", "A89060", P, [("dry bush", "7A7A40", 0.95)], "scrub, low bushes on dry ground", 0.4))
+    P = [K.box("Pool%d" % k, (1.6, 1.0, 0.02), (-3 + 3 * k, (-1) ** k * 0.6, 0.01), 2, bevel=False) for k in range(3)]
+    P += sum(scatter("Reed", 16, 5, lambda n, x, y, R: [K.cyl(n, "z", 0.04, 0.01, 1.2, (x, y, 0.6), 1, 4)]), [])
+    out.append(strip(G + "Habitat_Marsh", "4A5A3A", P, [("reeds", "8A9A4A", 0.95), ("shallow pool", "3A5A6A", 0.1)], "marsh, reed beds and shallow pools (V2)", 1.2))
+    P = sum(scatter("Slab", 8, 6, lambda n, x, y, R: [rock(n, (x, y, 0.15), 0.4 + 0.3 * R.random(), 1, int(R.random() * 9))]), [])
+    out.append(strip(G + "Habitat_Rock", "6A6A6A", P, [("rock", "8A8A88", 0.9)], "bare rock faces and slabs (V2)", 0.6))
+    a = G + "FlockSilhouette"; P = []
+    for k, (x, z) in enumerate(((0, 0.4), (-0.5, 0.3), (0.5, 0.32), (-1.0, 0.15), (1.0, 0.2), (-0.2, 0.0), (0.3, 0.05))):
+        P += [K.box("Bird%dL" % k, (0.22, 0.01, 0.03), (x - 0.09, 0, z + 0.03), 0, bevel=False, rot=(0, -20, 0)), K.box("Bird%dR" % k, (0.22, 0.01, 0.03), (x + 0.09, 0, z + 0.03), 0, bevel=False, rot=(0, 20, 0))]
+    out.append(simple(a, P, [("silhouette (flat dark)", "2A2A34", 1.0)], [K.socket("Centre", (0, 0, 0.2))], "2.4 m distant flock silhouette (flock-masking indicator, V2)", (2.4, 0.02, 0.55), (0, 0, 0.25)))
+    out.append(npc("Mob_Shardsong_WarblerKeeper", "5A6A3A", "4A3A2A", [ball("PerchBird", (-0.37, -0.02, 0.95), 0.04, 4, 8)], [("perched bird", "E8B040", 0.6)], "Shard Warbler keeper"))
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)

@@ -31,3 +31,7 @@ Notes
 ## fog_channel_pilot (2hot2trot, READY 59012)
 
 21 assets: foghorn cabinet, pilot boat, 4 lane buoys (bob about the Pivot socket), foghorn, 4 echo glyph discs (dull, ring, clang, silence), drifting ship silhouette, 3 fog bank cards (calm, fog, pea soup), lane chart board (4 x 16), 3-star plaque, harbour gull (perch and glide), Harbour Pilot and Dockhand NPCs. The gull and NPCs are static, rigs pending. Sheet: fog_channel_pilot.png.
+
+## shardsong_crossing (prometheus, READY 59004)
+
+15 assets: dusk cabinet, 3 caller songbirds, mate songbird, 2 island shard platforms, 6 habitat strips (forest, grass, water, scrub, marsh, rock; 10 m tileable with Start and End sockets), distant flock silhouette, Warbler keeper NPC. The birds and NPC are static, rigs pending. Not Blender items: the UI widgets, audio, and the wind and wave FX. Sheet: shardsong_crossing.png.

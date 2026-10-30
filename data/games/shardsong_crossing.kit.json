@@ -1,0 +1,7111 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_ShardsongCrossing",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: dusk palette, two birds calling across a shard gap",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_ShardsongCrossing_M0",
+     "colour": "cabinet body",
+     "hex": "4A3A5A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_ShardsongCrossing_M1",
+     "colour": "trim / side art panel",
+     "hex": "D89A7A",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_ShardsongCrossing_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "FFC89A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_ShardsongCrossing_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_ShardsongCrossing_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_ShardsongCrossing_M5",
+     "colour": "songbirds",
+     "hex": "F2D04A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 6,
+     "name": "Prop_Arcade_Cab_ShardsongCrossing_M6",
+     "colour": "shard rock",
+     "hex": "6A5A7A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_ShardsongCrossing",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "MarqBirdL",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.035
+        ],
+        [
+         0.02475,
+         -0.02475
+        ],
+        [
+         0.035,
+         -0.0
+        ],
+        [
+         0.02475,
+         0.02475
+        ],
+        [
+         0,
+         0.035
+        ]
+       ],
+       "centre": [
+        -0.28,
+        -0.18,
+        2.1
+       ],
+       "slot": 5,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "MarqBirdR",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.035
+        ],
+        [
+         0.02475,
+         -0.02475
+        ],
+        [
+         0.035,
+         -0.0
+        ],
+        [
+         0.02475,
+         0.02475
+        ],
+        [
+         0,
+         0.035
+        ]
+       ],
+       "centre": [
+        0.28,
+        -0.18,
+        2.1
+       ],
+       "slot": 5,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "MarqShardL",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.018,
+         0.008
+        ],
+        [
+         0.018,
+         0.075
+        ],
+        [
+         0,
+         0.1
+        ]
+       ],
+       "centre": [
+        -0.3,
+        -0.12,
+        1.98
+       ],
+       "slot": 6,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        180,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "MarqShardR",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.018,
+         0.008
+        ],
+        [
+         0.018,
+         0.075
+        ],
+        [
+         0,
+         0.1
+        ]
+       ],
+       "centre": [
+        0.3,
+        -0.12,
+        1.98
+       ],
+       "slot": 6,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        180,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_ShardsongCrossing_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 724,
+    "lod1_triangles": 724,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_ShardsongCrossing": 724
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.135
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.135
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "347fbb420f91b99e0a00bcd6b0ae875355f9bed4609e0cbb7407d895052cde7a"
+  },
+  {
+   "asset": "Mob_Shardsong_Songbird_Caller_1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.15 m bird, perch pose (static, rig pending): caller, open-beak call pose, colour variant 1",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Perch",
+     "SOCKET_Head",
+     "SOCKET_Beak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Shardsong_Songbird_Caller_1_M0",
+     "colour": "feathers",
+     "hex": "E8B040",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Shardsong_Songbird_Caller_1_M1",
+     "colour": "wings / tail",
+     "hex": "8A5A2A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Shardsong_Songbird_Caller_1_M2",
+     "colour": "beak / legs",
+     "hex": "F2A030",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Shardsong_Songbird_Caller_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.03182,
+         -0.03182
+        ],
+        [
+         0.045,
+         -0.0
+        ],
+        [
+         0.03182,
+         0.03182
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0,
+        -0.05,
+        0.1
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Beak",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.001,
+       "length": 0.03,
+       "centre": [
+        0,
+        -0.085,
+        0.0975
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Tail",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.0075
+       ],
+       "centre": [
+        0,
+        0.06,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        15,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Wing-1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.08,
+        0.035
+       ],
+       "centre": [
+        -0.0425,
+        0.01,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Wing1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.08,
+        0.035
+       ],
+       "centre": [
+        0.0425,
+        0.01,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Leg-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.025,
+       "centre": [
+        -0.015,
+        0,
+        0.0125
+       ],
+       "slot": 2,
+       "segments": 4
+      },
+      {
+       "name": "Leg1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.025,
+       "centre": [
+        0.015,
+        0,
+        0.0125
+       ],
+       "slot": 2,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Perch",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      -0.05,
+      0.11
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.11,
+      0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Beak",
+     "location": [
+      0,
+      -0.1,
+      0.0975
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0975,
+      0.1
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Shardsong_Songbird_Caller_1_00",
+     "shape": "box",
+     "size": [
+      0.1,
+      0.16,
+      0.13
+     ],
+     "centre": [
+      0,
+      -0.01,
+      0.065
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 252,
+    "lod1_triangles": 252,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Shardsong_Songbird_Caller_1": 252
+    },
+    "bounds_min": [
+     -0.0475,
+     -0.1,
+     0.0
+    ],
+    "bounds_max": [
+     0.0475,
+     0.0851,
+     0.125
+    ],
+    "dimensions": [
+     0.095,
+     0.1851,
+     0.125
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d53477cb9b05557b2fce04e2d89e46306b8492238b2c21b627225debd68c5346"
+  },
+  {
+   "asset": "Mob_Shardsong_Songbird_Caller_2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.15 m bird, perch pose (static, rig pending): caller, open-beak call pose, colour variant 2",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Perch",
+     "SOCKET_Head",
+     "SOCKET_Beak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Shardsong_Songbird_Caller_2_M0",
+     "colour": "feathers",
+     "hex": "6AB0E0",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Shardsong_Songbird_Caller_2_M1",
+     "colour": "wings / tail",
+     "hex": "2A4A7A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Shardsong_Songbird_Caller_2_M2",
+     "colour": "beak / legs",
+     "hex": "F2A030",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Shardsong_Songbird_Caller_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.03182,
+         -0.03182
+        ],
+        [
+         0.045,
+         -0.0
+        ],
+        [
+         0.03182,
+         0.03182
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0,
+        -0.05,
+        0.1
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Beak",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.001,
+       "length": 0.03,
+       "centre": [
+        0,
+        -0.085,
+        0.0975
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Tail",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.0075
+       ],
+       "centre": [
+        0,
+        0.06,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        15,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Wing-1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.08,
+        0.035
+       ],
+       "centre": [
+        -0.0425,
+        0.01,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Wing1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.08,
+        0.035
+       ],
+       "centre": [
+        0.0425,
+        0.01,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Leg-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.025,
+       "centre": [
+        -0.015,
+        0,
+        0.0125
+       ],
+       "slot": 2,
+       "segments": 4
+      },
+      {
+       "name": "Leg1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.025,
+       "centre": [
+        0.015,
+        0,
+        0.0125
+       ],
+       "slot": 2,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Perch",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      -0.05,
+      0.11
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.11,
+      0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Beak",
+     "location": [
+      0,
+      -0.1,
+      0.0975
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0975,
+      0.1
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Shardsong_Songbird_Caller_2_00",
+     "shape": "box",
+     "size": [
+      0.1,
+      0.16,
+      0.13
+     ],
+     "centre": [
+      0,
+      -0.01,
+      0.065
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 252,
+    "lod1_triangles": 252,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Shardsong_Songbird_Caller_2": 252
+    },
+    "bounds_min": [
+     -0.0475,
+     -0.1,
+     0.0
+    ],
+    "bounds_max": [
+     0.0475,
+     0.0851,
+     0.125
+    ],
+    "dimensions": [
+     0.095,
+     0.1851,
+     0.125
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e915d1d964edb4cf8877fb90fc143730564937ae11758440cc40391d7e6089ca"
+  },
+  {
+   "asset": "Mob_Shardsong_Songbird_Caller_3",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.15 m bird, perch pose (static, rig pending): caller, open-beak call pose, colour variant 3",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Perch",
+     "SOCKET_Head",
+     "SOCKET_Beak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Shardsong_Songbird_Caller_3_M0",
+     "colour": "feathers",
+     "hex": "E07070",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Shardsong_Songbird_Caller_3_M1",
+     "colour": "wings / tail",
+     "hex": "6A2A3A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Shardsong_Songbird_Caller_3_M2",
+     "colour": "beak / legs",
+     "hex": "F2A030",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Shardsong_Songbird_Caller_3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.03182,
+         -0.03182
+        ],
+        [
+         0.045,
+         -0.0
+        ],
+        [
+         0.03182,
+         0.03182
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0,
+        -0.05,
+        0.1
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Beak",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.001,
+       "length": 0.03,
+       "centre": [
+        0,
+        -0.085,
+        0.0975
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Tail",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.0075
+       ],
+       "centre": [
+        0,
+        0.06,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        15,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Wing-1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.08,
+        0.035
+       ],
+       "centre": [
+        -0.0425,
+        0.01,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Wing1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.08,
+        0.035
+       ],
+       "centre": [
+        0.0425,
+        0.01,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Leg-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.025,
+       "centre": [
+        -0.015,
+        0,
+        0.0125
+       ],
+       "slot": 2,
+       "segments": 4
+      },
+      {
+       "name": "Leg1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.025,
+       "centre": [
+        0.015,
+        0,
+        0.0125
+       ],
+       "slot": 2,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Perch",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      -0.05,
+      0.11
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.11,
+      0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Beak",
+     "location": [
+      0,
+      -0.1,
+      0.0975
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0975,
+      0.1
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Shardsong_Songbird_Caller_3_00",
+     "shape": "box",
+     "size": [
+      0.1,
+      0.16,
+      0.13
+     ],
+     "centre": [
+      0,
+      -0.01,
+      0.065
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 252,
+    "lod1_triangles": 252,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Shardsong_Songbird_Caller_3": 252
+    },
+    "bounds_min": [
+     -0.0475,
+     -0.1,
+     0.0
+    ],
+    "bounds_max": [
+     0.0475,
+     0.0851,
+     0.125
+    ],
+    "dimensions": [
+     0.095,
+     0.1851,
+     0.125
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9a6f9f0fe04409b9bfa2fe61e92dc54a5ca08ad9c45a0214cfaaedc96c7a9caa"
+  },
+  {
+   "asset": "Mob_Shardsong_Songbird_Mate",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.15 m bird, perch pose (static, rig pending): mate, listen pose (head tilt in rig)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Perch",
+     "SOCKET_Head",
+     "SOCKET_Beak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Shardsong_Songbird_Mate_M0",
+     "colour": "feathers",
+     "hex": "D8C8A0",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Shardsong_Songbird_Mate_M1",
+     "colour": "wings / tail",
+     "hex": "7A6A4A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Shardsong_Songbird_Mate_M2",
+     "colour": "beak / legs",
+     "hex": "F2A030",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Shardsong_Songbird_Mate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.03182,
+         -0.03182
+        ],
+        [
+         0.045,
+         -0.0
+        ],
+        [
+         0.03182,
+         0.03182
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0,
+        -0.05,
+        0.1
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Beak",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.009,
+       "r2": 0.001,
+       "length": 0.03,
+       "centre": [
+        0,
+        -0.085,
+        0.0975
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Tail",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.0075
+       ],
+       "centre": [
+        0,
+        0.06,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        15,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Wing-1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.08,
+        0.035
+       ],
+       "centre": [
+        -0.0425,
+        0.01,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Wing1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.08,
+        0.035
+       ],
+       "centre": [
+        0.0425,
+        0.01,
+        0.065
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Leg-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.025,
+       "centre": [
+        -0.015,
+        0,
+        0.0125
+       ],
+       "slot": 2,
+       "segments": 4
+      },
+      {
+       "name": "Leg1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.003,
+       "r2": 0.003,
+       "length": 0.025,
+       "centre": [
+        0.015,
+        0,
+        0.0125
+       ],
+       "slot": 2,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Perch",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      -0.05,
+      0.11
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.11,
+      0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Beak",
+     "location": [
+      0,
+      -0.1,
+      0.0975
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0975,
+      0.1
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Shardsong_Songbird_Mate_00",
+     "shape": "box",
+     "size": [
+      0.1,
+      0.16,
+      0.13
+     ],
+     "centre": [
+      0,
+      -0.01,
+      0.065
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 252,
+    "lod1_triangles": 252,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Shardsong_Songbird_Mate": 252
+    },
+    "bounds_min": [
+     -0.0475,
+     -0.1,
+     0.0
+    ],
+    "bounds_max": [
+     0.0475,
+     0.0851,
+     0.125
+    ],
+    "dimensions": [
+     0.095,
+     0.1851,
+     0.125
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4aa7fcb6f5f0f59752f8a19a47f7d98f9a03cec1e0665227d8ae4f309056ba1c"
+  },
+  {
+   "asset": "Prop_Shardsong_IslandShard_1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "3 m floating island shard v1, flat top, perch branch",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Perch",
+     "SOCKET_Top"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shardsong_IslandShard_1_M0",
+     "colour": "shard rock",
+     "hex": "5A4A6A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shardsong_IslandShard_1_M1",
+     "colour": "moss top",
+     "hex": "5A8A4A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Shardsong_IslandShard_1_M2",
+     "colour": "perch branch",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shardsong_IslandShard_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rock",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -1.9
+        ],
+        [
+         0.4,
+         -1.6
+        ],
+        [
+         1.0,
+         -0.9
+        ],
+        [
+         1.4,
+         -0.3
+        ],
+        [
+         1.5,
+         0.0
+        ],
+        [
+         0,
+         0.0
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Top",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 1.5,
+       "r2": 1.5,
+       "length": 0.12,
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boulder0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.05217,
+         -0.08737
+        ],
+        [
+         0.11017,
+         -0.03337
+        ],
+        [
+         0.09049,
+         0.03337
+        ],
+        [
+         0.06493,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        -0.39887,
+        -0.19104,
+        0.17
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.05428,
+         -0.08737
+        ],
+        [
+         0.10044,
+         -0.03337
+        ],
+        [
+         0.11046,
+         0.03337
+        ],
+        [
+         0.06022,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        0.0945,
+        -0.374,
+        0.17
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.05856,
+         -0.08737
+        ],
+        [
+         0.08258,
+         -0.03337
+        ],
+        [
+         0.10405,
+         0.03337
+        ],
+        [
+         0.05267,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        0.21709,
+        0.77254,
+        0.17
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Perch",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 0.6,
+       "centre": [
+        0.6,
+        0,
+        0.42
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Perch",
+     "location": [
+      0.6,
+      0,
+      0.72
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      0.72,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shardsong_IslandShard_1_00",
+     "shape": "box",
+     "size": [
+      3.0,
+      3.0,
+      2.3
+     ],
+     "centre": [
+      0,
+      0,
+      -0.9
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 380,
+    "lod1_triangles": 380,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shardsong_IslandShard_1": 380
+    },
+    "bounds_min": [
+     -1.5,
+     -1.5,
+     -1.9
+    ],
+    "bounds_max": [
+     1.5,
+     1.5,
+     0.72
+    ],
+    "dimensions": [
+     3.0,
+     3.0,
+     2.62
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "16dd36b90ee12d42a195a7f5c1d23955d416007d86f3cc075dca38269859b90b"
+  },
+  {
+   "asset": "Prop_Shardsong_IslandShard_2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "3 m floating island shard v2, flat top, perch branch",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Perch",
+     "SOCKET_Top"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shardsong_IslandShard_2_M0",
+     "colour": "shard rock",
+     "hex": "5A4A6A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shardsong_IslandShard_2_M1",
+     "colour": "moss top",
+     "hex": "5A8A4A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Shardsong_IslandShard_2_M2",
+     "colour": "perch branch",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shardsong_IslandShard_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rock",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -1.6
+        ],
+        [
+         0.4,
+         -1.6
+        ],
+        [
+         1.0,
+         -0.9
+        ],
+        [
+         1.4,
+         -0.3
+        ],
+        [
+         1.5,
+         0.0
+        ],
+        [
+         0,
+         0.0
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 9,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Top",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 1.5,
+       "r2": 1.5,
+       "length": 0.12,
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 1,
+       "segments": 9
+      },
+      {
+       "name": "Boulder0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.05217,
+         -0.08737
+        ],
+        [
+         0.11017,
+         -0.03337
+        ],
+        [
+         0.09049,
+         0.03337
+        ],
+        [
+         0.06493,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        0.38239,
+        -0.52473,
+        0.17
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.05428,
+         -0.08737
+        ],
+        [
+         0.10044,
+         -0.03337
+        ],
+        [
+         0.11046,
+         0.03337
+        ],
+        [
+         0.06022,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        0.703,
+        0.63804,
+        0.17
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Boulder2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.05856,
+         -0.08737
+        ],
+        [
+         0.08258,
+         -0.03337
+        ],
+        [
+         0.10405,
+         0.03337
+        ],
+        [
+         0.05267,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        0.85846,
+        0.3018,
+        0.17
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Perch",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 0.6,
+       "centre": [
+        0.6,
+        0,
+        0.42
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Perch",
+     "location": [
+      0.6,
+      0,
+      0.72
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      0.72,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shardsong_IslandShard_2_00",
+     "shape": "box",
+     "size": [
+      3.0,
+      3.0,
+      2.3
+     ],
+     "centre": [
+      0,
+      0,
+      -0.9
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 396,
+    "lod1_triangles": 396,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shardsong_IslandShard_2": 396
+    },
+    "bounds_min": [
+     -1.4095,
+     -1.4772,
+     -1.6
+    ],
+    "bounds_max": [
+     1.5,
+     1.4772,
+     0.72
+    ],
+    "dimensions": [
+     2.9095,
+     2.9544,
+     2.32
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b4ee5a3d6476e5aa32d9fe89304bc920989e7dbdb177b2b67b0d3aadd0fd06ca"
+  },
+  {
+   "asset": "Prop_Shardsong_Habitat_Forest",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "10 x 4 m tileable habitat strip: forest",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End",
+     "SOCKET_Centre"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shardsong_Habitat_Forest_M0",
+     "colour": "ground",
+     "hex": "4A3A22",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shardsong_Habitat_Forest_M1",
+     "colour": "trunk",
+     "hex": "5A3A22",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Shardsong_Habitat_Forest_M2",
+     "colour": "foliage",
+     "hex": "2E6A34",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shardsong_Habitat_Forest",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ground",
+       "shape": "box",
+       "size": [
+        10.0,
+        4.0,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        -0.1
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Tree0Trunk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.09,
+       "length": 1.8,
+       "centre": [
+        -2.61565,
+        -0.93719,
+        0.9
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Tree0Crown",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.9,
+         0.2
+        ],
+        [
+         0.6,
+         1.2
+        ],
+        [
+         0,
+         1.8
+        ]
+       ],
+       "centre": [
+        -2.61565,
+        -0.93719,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tree1Trunk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.09,
+       "length": 1.8,
+       "centre": [
+        3.32279,
+        0.98688,
+        0.9
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Tree1Crown",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.9,
+         0.2
+        ],
+        [
+         0.6,
+         1.2
+        ],
+        [
+         0,
+         1.8
+        ]
+       ],
+       "centre": [
+        3.32279,
+        0.98688,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tree2Trunk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.09,
+       "length": 1.8,
+       "centre": [
+        -1.3172,
+        -0.26515,
+        0.9
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Tree2Crown",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.9,
+         0.2
+        ],
+        [
+         0.6,
+         1.2
+        ],
+        [
+         0,
+         1.8
+        ]
+       ],
+       "centre": [
+        -1.3172,
+        -0.26515,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tree3Trunk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.09,
+       "length": 1.8,
+       "centre": [
+        1.56678,
+        -0.07133,
+        0.9
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Tree3Crown",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.9,
+         0.2
+        ],
+        [
+         0.6,
+         1.2
+        ],
+        [
+         0,
+         1.8
+        ]
+       ],
+       "centre": [
+        1.56678,
+        -0.07133,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tree4Trunk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.09,
+       "length": 1.8,
+       "centre": [
+        -2.84069,
+        0.12716,
+        0.9
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Tree4Crown",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.9,
+         0.2
+        ],
+        [
+         0.6,
+         1.2
+        ],
+        [
+         0,
+         1.8
+        ]
+       ],
+       "centre": [
+        -2.84069,
+        0.12716,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tree5Trunk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.09,
+       "length": 1.8,
+       "centre": [
+        0.30851,
+        0.93822,
+        0.9
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Tree5Crown",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.9,
+         0.2
+        ],
+        [
+         0.6,
+         1.2
+        ],
+        [
+         0,
+         1.8
+        ]
+       ],
+       "centre": [
+        0.30851,
+        0.93822,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tree6Trunk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.09,
+       "length": 1.8,
+       "centre": [
+        2.18017,
+        0.12946,
+        0.9
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Tree6Crown",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.9,
+         0.2
+        ],
+        [
+         0.6,
+         1.2
+        ],
+        [
+         0,
+         1.8
+        ]
+       ],
+       "centre": [
+        2.18017,
+        0.12946,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Bush0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.3
+        ],
+        [
+         0.21213,
+         -0.21213
+        ],
+        [
+         0.3,
+         -0.0
+        ],
+        [
+         0.21213,
+         0.21213
+        ],
+        [
+         0,
+         0.3
+        ]
+       ],
+       "centre": [
+        -1.68587,
+        1.56382,
+        0.2
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Bush1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.3
+        ],
+        [
+         0.21213,
+         -0.21213
+        ],
+        [
+         0.3,
+         -0.0
+        ],
+        [
+         0.21213,
+         0.21213
+        ],
+        [
+         0,
+         0.3
+        ]
+       ],
+       "centre": [
+        1.34766,
+        -1.58399,
+        0.2
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Bush2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.3
+        ],
+        [
+         0.21213,
+         -0.21213
+        ],
+        [
+         0.3,
+         -0.0
+        ],
+        [
+         0.21213,
+         0.21213
+        ],
+        [
+         0,
+         0.3
+        ]
+       ],
+       "centre": [
+        3.35114,
+        -1.09701,
+        0.2
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Bush3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.3
+        ],
+        [
+         0.21213,
+         -0.21213
+        ],
+        [
+         0.3,
+         -0.0
+        ],
+        [
+         0.21213,
+         0.21213
+        ],
+        [
+         0,
+         0.3
+        ]
+       ],
+       "centre": [
+        -0.05907,
+        -1.14942,
+        0.2
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Bush4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.3
+        ],
+        [
+         0.21213,
+         -0.21213
+        ],
+        [
+         0.3,
+         -0.0
+        ],
+        [
+         0.21213,
+         0.21213
+        ],
+        [
+         0,
+         0.3
+        ]
+       ],
+       "centre": [
+        -2.97538,
+        0.54985,
+        0.2
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Bush5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.3
+        ],
+        [
+         0.21213,
+         -0.21213
+        ],
+        [
+         0.3,
+         -0.0
+        ],
+        [
+         0.21213,
+         0.21213
+        ],
+        [
+         0,
+         0.3
+        ]
+       ],
+       "centre": [
+        3.51074,
+        1.28886,
+        0.2
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      -5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shardsong_Habitat_Forest_00",
+     "shape": "box",
+     "size": [
+      10.0,
+      4.0,
+      3.4
+     ],
+     "centre": [
+      0,
+      0,
+      1.5
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 852,
+    "lod1_triangles": 852,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shardsong_Habitat_Forest": 852
+    },
+    "bounds_min": [
+     -5.0,
+     -2.0,
+     -0.2
+    ],
+    "bounds_max": [
+     5.0,
+     2.0,
+     3.2
+    ],
+    "dimensions": [
+     10.0,
+     4.0,
+     3.4
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ebcd579db2e366cb4ec87008c51e8012d1d0377606c97eec73536b1aaed12fb6"
+  },
+  {
+   "asset": "Prop_Shardsong_Habitat_Grass",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "10 x 4 m tileable habitat strip: open grass",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End",
+     "SOCKET_Centre"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shardsong_Habitat_Grass_M0",
+     "colour": "ground",
+     "hex": "6A9A4A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shardsong_Habitat_Grass_M1",
+     "colour": "tufts",
+     "hex": "8AB85A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shardsong_Habitat_Grass",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ground",
+       "shape": "box",
+       "size": [
+        10.0,
+        4.0,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        -0.1
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Tuft0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -1.10476,
+        -1.36532,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        3.34765,
+        0.30465,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -3.71379,
+        0.56608,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -0.92088,
+        1.27187,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        2.86739,
+        1.56222,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        1.77364,
+        -0.12643,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft6",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -0.17222,
+        0.90806,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft7",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        3.45635,
+        0.27785,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft8",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -1.27888,
+        0.59593,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft9",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -3.22046,
+        -0.39116,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft10",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        3.17583,
+        1.20949,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft11",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -2.60917,
+        -0.67743,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft12",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        3.73568,
+        1.48005,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft13",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -3.56637,
+        -1.07834,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft14",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -3.24067,
+        -1.04719,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft15",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -0.16559,
+        -1.49836,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft16",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -1.18234,
+        0.43298,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft17",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.12,
+         0.0
+        ],
+        [
+         0,
+         0.25
+        ]
+       ],
+       "centre": [
+        -0.78093,
+        1.04318,
+        0
+       ],
+       "slot": 1,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      -5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shardsong_Habitat_Grass_00",
+     "shape": "box",
+     "size": [
+      10.0,
+      4.0,
+      0.45
+     ],
+     "centre": [
+      0,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 372,
+    "lod1_triangles": 372,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shardsong_Habitat_Grass": 372
+    },
+    "bounds_min": [
+     -5.0,
+     -2.0,
+     -0.2
+    ],
+    "bounds_max": [
+     5.0,
+     2.0,
+     0.25
+    ],
+    "dimensions": [
+     10.0,
+     4.0,
+     0.45
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "882d6ea63490620c2b165ab3015155d89b5bacae1a28a22728b2fb2c93120c10"
+  },
+  {
+   "asset": "Prop_Shardsong_Habitat_Water",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "10 x 4 m tileable habitat strip: calm open water, low surf at edges",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End",
+     "SOCKET_Centre"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shardsong_Habitat_Water_M0",
+     "colour": "ground",
+     "hex": "8A7A5A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shardsong_Habitat_Water_M1",
+     "colour": "water (animated shader in UE)",
+     "hex": "2A6A9A",
+     "roughness": 0.05,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Shardsong_Habitat_Water_M2",
+     "colour": "surf foam",
+     "hex": "E8F0F2",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shardsong_Habitat_Water",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ground",
+       "shape": "box",
+       "size": [
+        10.0,
+        4.0,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        -0.1
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Water",
+       "shape": "box",
+       "size": [
+        10.0,
+        3.2,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Surf-1",
+       "shape": "box",
+       "size": [
+        10.0,
+        0.25,
+        0.04
+       ],
+       "centre": [
+        0,
+        -1.65,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Surf1",
+       "shape": "box",
+       "size": [
+        10.0,
+        0.25,
+        0.04
+       ],
+       "centre": [
+        0,
+        1.65,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      -5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shardsong_Habitat_Water_00",
+     "shape": "box",
+     "size": [
+      10.0,
+      4.0,
+      0.24
+     ],
+     "centre": [
+      0,
+      0,
+      -0.08
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 48,
+    "lod1_triangles": 48,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shardsong_Habitat_Water": 48
+    },
+    "bounds_min": [
+     -5.0,
+     -2.0,
+     -0.2
+    ],
+    "bounds_max": [
+     5.0,
+     2.0,
+     0.04
+    ],
+    "dimensions": [
+     10.0,
+     4.0,
+     0.24
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "00c227f04a74b38a23351f4abaabac1cea03840d1d30412b1902bfc12e4541c5"
+  },
+  {
+   "asset": "Prop_Shardsong_Habitat_Scrub",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "10 x 4 m tileable habitat strip: scrub, low bushes on dry ground",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End",
+     "SOCKET_Centre"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shardsong_Habitat_Scrub_M0",
+     "colour": "ground",
+     "hex": "A89060",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shardsong_Habitat_Scrub_M1",
+     "colour": "dry bush",
+     "hex": "7A7A40",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shardsong_Habitat_Scrub",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ground",
+       "shape": "box",
+       "size": [
+        10.0,
+        4.0,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        -0.1
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Scrub0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.30178
+        ],
+        [
+         0.21339,
+         -0.21339
+        ],
+        [
+         0.30178,
+         -0.0
+        ],
+        [
+         0.21339,
+         0.21339
+        ],
+        [
+         0,
+         0.30178
+        ]
+       ],
+       "centre": [
+        3.20197,
+        1.66169,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.2248
+        ],
+        [
+         0.15896,
+         -0.15896
+        ],
+        [
+         0.2248,
+         -0.0
+        ],
+        [
+         0.15896,
+         0.15896
+        ],
+        [
+         0,
+         0.2248
+        ]
+       ],
+       "centre": [
+        -3.10313,
+        0.37258,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.30587
+        ],
+        [
+         0.21628,
+         -0.21628
+        ],
+        [
+         0.30587,
+         -0.0
+        ],
+        [
+         0.21628,
+         0.21628
+        ],
+        [
+         0,
+         0.30587
+        ]
+       ],
+       "centre": [
+        1.02387,
+        1.6172,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.30792
+        ],
+        [
+         0.21773,
+         -0.21773
+        ],
+        [
+         0.30792,
+         -0.0
+        ],
+        [
+         0.21773,
+         0.21773
+        ],
+        [
+         0,
+         0.30792
+        ]
+       ],
+       "centre": [
+        0.86964,
+        0.12043,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.23929
+        ],
+        [
+         0.16921,
+         -0.16921
+        ],
+        [
+         0.23929,
+         -0.0
+        ],
+        [
+         0.16921,
+         0.16921
+        ],
+        [
+         0,
+         0.23929
+        ]
+       ],
+       "centre": [
+        -0.918,
+        1.57146,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.24621
+        ],
+        [
+         0.17409,
+         -0.17409
+        ],
+        [
+         0.24621,
+         -0.0
+        ],
+        [
+         0.17409,
+         0.17409
+        ],
+        [
+         0,
+         0.24621
+        ]
+       ],
+       "centre": [
+        1.72992,
+        1.62705,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub6",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.30201
+        ],
+        [
+         0.21355,
+         -0.21355
+        ],
+        [
+         0.30201,
+         -0.0
+        ],
+        [
+         0.21355,
+         0.21355
+        ],
+        [
+         0,
+         0.30201
+        ]
+       ],
+       "centre": [
+        1.98054,
+        -1.45203,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub7",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.22918
+        ],
+        [
+         0.16205,
+         -0.16205
+        ],
+        [
+         0.22918,
+         -0.0
+        ],
+        [
+         0.16205,
+         0.16205
+        ],
+        [
+         0,
+         0.22918
+        ]
+       ],
+       "centre": [
+        3.81903,
+        -1.18991,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub8",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.24347
+        ],
+        [
+         0.17216,
+         -0.17216
+        ],
+        [
+         0.24347,
+         -0.0
+        ],
+        [
+         0.17216,
+         0.17216
+        ],
+        [
+         0,
+         0.24347
+        ]
+       ],
+       "centre": [
+        4.46289,
+        -0.47216,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub9",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.25444
+        ],
+        [
+         0.17992,
+         -0.17992
+        ],
+        [
+         0.25444,
+         -0.0
+        ],
+        [
+         0.17992,
+         0.17992
+        ],
+        [
+         0,
+         0.25444
+        ]
+       ],
+       "centre": [
+        0.89907,
+        -1.18698,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub10",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.29669
+        ],
+        [
+         0.20979,
+         -0.20979
+        ],
+        [
+         0.29669,
+         -0.0
+        ],
+        [
+         0.20979,
+         0.20979
+        ],
+        [
+         0,
+         0.29669
+        ]
+       ],
+       "centre": [
+        4.44042,
+        0.09842,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Scrub11",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.24491
+        ],
+        [
+         0.17317,
+         -0.17317
+        ],
+        [
+         0.24491,
+         -0.0
+        ],
+        [
+         0.17317,
+         0.17317
+        ],
+        [
+         0,
+         0.24491
+        ]
+       ],
+       "centre": [
+        0.99285,
+        -0.39307,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      -5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shardsong_Habitat_Scrub_00",
+     "shape": "box",
+     "size": [
+      10.0,
+      4.0,
+      0.6
+     ],
+     "centre": [
+      0,
+      0,
+      0.1
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 684,
+    "lod1_triangles": 684,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shardsong_Habitat_Scrub": 684
+    },
+    "bounds_min": [
+     -5.0,
+     -2.0,
+     -0.2
+    ],
+    "bounds_max": [
+     5.0,
+     2.0,
+     0.4579
+    ],
+    "dimensions": [
+     10.0,
+     4.0,
+     0.6579
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "397eec951d060bb0e3dece7de03fe19039e1aa07f30e340a6d03ed5034a5b3ef"
+  },
+  {
+   "asset": "Prop_Shardsong_Habitat_Marsh",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "10 x 4 m tileable habitat strip: marsh, reed beds and shallow pools (V2)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End",
+     "SOCKET_Centre"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shardsong_Habitat_Marsh_M0",
+     "colour": "ground",
+     "hex": "4A5A3A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shardsong_Habitat_Marsh_M1",
+     "colour": "reeds",
+     "hex": "8A9A4A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Shardsong_Habitat_Marsh_M2",
+     "colour": "shallow pool",
+     "hex": "3A5A6A",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shardsong_Habitat_Marsh",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ground",
+       "shape": "box",
+       "size": [
+        10.0,
+        4.0,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        -0.1
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Pool0",
+       "shape": "box",
+       "size": [
+        1.6,
+        1.0,
+        0.02
+       ],
+       "centre": [
+        -3,
+        0.6,
+        0.01
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Pool1",
+       "shape": "box",
+       "size": [
+        1.6,
+        1.0,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.6,
+        0.01
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Pool2",
+       "shape": "box",
+       "size": [
+        1.6,
+        1.0,
+        0.02
+       ],
+       "centre": [
+        3,
+        0.6,
+        0.01
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Reed0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -1.62506,
+        1.35106,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -1.54904,
+        -0.95827,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -0.26373,
+        -1.39297,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -1.92172,
+        1.30442,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        2.97224,
+        -0.93345,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -3.13552,
+        1.34756,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed6",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -1.96934,
+        -0.59659,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed7",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -2.78499,
+        -0.48248,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed8",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -3.88056,
+        -1.61729,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed9",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        0.11029,
+        -1.60011,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed10",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -4.53471,
+        1.58693,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed11",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        3.2557,
+        1.2215,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed12",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        -0.20179,
+        -0.81837,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed13",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        2.15809,
+        -1.5551,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed14",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        3.90453,
+        -1.33328,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed15",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.01,
+       "length": 1.2,
+       "centre": [
+        0.23997,
+        0.85687,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      -5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shardsong_Habitat_Marsh_00",
+     "shape": "box",
+     "size": [
+      10.0,
+      4.0,
+      1.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.5
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 240,
+    "lod1_triangles": 240,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shardsong_Habitat_Marsh": 240
+    },
+    "bounds_min": [
+     -5.0,
+     -2.0,
+     -0.2
+    ],
+    "bounds_max": [
+     5.0,
+     2.0,
+     1.2
+    ],
+    "dimensions": [
+     10.0,
+     4.0,
+     1.4
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "da49aff69978d4c12e755237e1aa4fe0f9fe5dc6145173245f377abcb30fc6df"
+  },
+  {
+   "asset": "Prop_Shardsong_Habitat_Rock",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "10 x 4 m tileable habitat strip: bare rock faces and slabs (V2)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End",
+     "SOCKET_Centre"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shardsong_Habitat_Rock_M0",
+     "colour": "ground",
+     "hex": "6A6A6A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Shardsong_Habitat_Rock_M1",
+     "colour": "rock",
+     "hex": "8A8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shardsong_Habitat_Rock",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ground",
+       "shape": "box",
+       "size": [
+        10.0,
+        4.0,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        -0.1
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Slab0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.45215
+        ],
+        [
+         0.29368,
+         -0.3658
+        ],
+        [
+         0.35709,
+         -0.13972
+        ],
+        [
+         0.39818,
+         0.13972
+        ],
+        [
+         0.2127,
+         0.3658
+        ],
+        [
+         0,
+         0.2512
+        ]
+       ],
+       "centre": [
+        -2.52447,
+        -0.95396,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Slab1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.5023
+        ],
+        [
+         0.2856,
+         -0.40637
+        ],
+        [
+         0.42341,
+         -0.15522
+        ],
+        [
+         0.4459,
+         0.15522
+        ],
+        [
+         0.27939,
+         0.40637
+        ],
+        [
+         0,
+         0.27906
+        ]
+       ],
+       "centre": [
+        -1.29724,
+        -1.14933,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Slab2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.4678
+        ],
+        [
+         0.27207,
+         -0.37846
+        ],
+        [
+         0.45023,
+         -0.14456
+        ],
+        [
+         0.42408,
+         0.14456
+        ],
+        [
+         0.29892,
+         0.37846
+        ],
+        [
+         0,
+         0.25989
+        ]
+       ],
+       "centre": [
+        1.73689,
+        1.21748,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Slab3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.60273
+        ],
+        [
+         0.34184,
+         -0.48762
+        ],
+        [
+         0.52702,
+         -0.18625
+        ],
+        [
+         0.49977,
+         0.18625
+        ],
+        [
+         0.34335,
+         0.48762
+        ],
+        [
+         0,
+         0.33485
+        ]
+       ],
+       "centre": [
+        -2.23391,
+        -0.50678,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Slab4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.53646
+        ],
+        [
+         0.2675,
+         -0.434
+        ],
+        [
+         0.49584,
+         -0.16578
+        ],
+        [
+         0.45693,
+         0.16578
+        ],
+        [
+         0.30163,
+         0.434
+        ],
+        [
+         0,
+         0.29803
+        ]
+       ],
+       "centre": [
+        2.53481,
+        0.07943,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Slab5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.62234
+        ],
+        [
+         0.34096,
+         -0.50349
+        ],
+        [
+         0.59508,
+         -0.19232
+        ],
+        [
+         0.57313,
+         0.19232
+        ],
+        [
+         0.30717,
+         0.50349
+        ],
+        [
+         0,
+         0.34575
+        ]
+       ],
+       "centre": [
+        3.0491,
+        -0.20294,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Slab6",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.58192
+        ],
+        [
+         0.37375,
+         -0.47078
+        ],
+        [
+         0.5981,
+         -0.17982
+        ],
+        [
+         0.57265,
+         0.17982
+        ],
+        [
+         0.31252,
+         0.47078
+        ],
+        [
+         0,
+         0.32329
+        ]
+       ],
+       "centre": [
+        4.29306,
+        -1.31302,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Slab7",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.50973
+        ],
+        [
+         0.31001,
+         -0.41238
+        ],
+        [
+         0.43279,
+         -0.15752
+        ],
+        [
+         0.52309,
+         0.15752
+        ],
+        [
+         0.30096,
+         0.41238
+        ],
+        [
+         0,
+         0.28319
+        ]
+       ],
+       "centre": [
+        4.30883,
+        0.52152,
+        0.15
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      -5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shardsong_Habitat_Rock_00",
+     "shape": "box",
+     "size": [
+      10.0,
+      4.0,
+      0.8
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 652,
+    "lod1_triangles": 652,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shardsong_Habitat_Rock": 652
+    },
+    "bounds_min": [
+     -5.0,
+     -2.0,
+     -0.4723
+    ],
+    "bounds_max": [
+     5.0,
+     2.0,
+     0.6535
+    ],
+    "dimensions": [
+     10.0,
+     4.0,
+     1.1258
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "487626dc140768dd2559deab249e35b39a9cff0a28cc2cd14d53285cda8106c1"
+  },
+  {
+   "asset": "Prop_Shardsong_FlockSilhouette",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.4 m distant flock silhouette (flock-masking indicator, V2)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Centre"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Shardsong_FlockSilhouette_M0",
+     "colour": "silhouette (flat dark)",
+     "hex": "2A2A34",
+     "roughness": 1.0,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Shardsong_FlockSilhouette",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bird0L",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.09,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -20,
+        0
+       ]
+      },
+      {
+       "name": "Bird0R",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.09,
+        0,
+        0.43
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        20,
+        0
+       ]
+      },
+      {
+       "name": "Bird1L",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.59,
+        0,
+        0.33
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -20,
+        0
+       ]
+      },
+      {
+       "name": "Bird1R",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.41,
+        0,
+        0.33
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        20,
+        0
+       ]
+      },
+      {
+       "name": "Bird2L",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.41,
+        0,
+        0.35
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -20,
+        0
+       ]
+      },
+      {
+       "name": "Bird2R",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.59,
+        0,
+        0.35
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        20,
+        0
+       ]
+      },
+      {
+       "name": "Bird3L",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -1.09,
+        0,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -20,
+        0
+       ]
+      },
+      {
+       "name": "Bird3R",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.91,
+        0,
+        0.18
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        20,
+        0
+       ]
+      },
+      {
+       "name": "Bird4L",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.91,
+        0,
+        0.23
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -20,
+        0
+       ]
+      },
+      {
+       "name": "Bird4R",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        1.09,
+        0,
+        0.23
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        20,
+        0
+       ]
+      },
+      {
+       "name": "Bird5L",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.29,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -20,
+        0
+       ]
+      },
+      {
+       "name": "Bird5R",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.11,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        20,
+        0
+       ]
+      },
+      {
+       "name": "Bird6L",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.21,
+        0,
+        0.08
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        -20,
+        0
+       ]
+      },
+      {
+       "name": "Bird6R",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.39,
+        0,
+        0.08
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        0,
+        20,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Shardsong_FlockSilhouette_00",
+     "shape": "box",
+     "size": [
+      2.4,
+      0.02,
+      0.55
+     ],
+     "centre": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Shardsong_FlockSilhouette": 168
+    },
+    "bounds_min": [
+     -1.1985,
+     -0.005,
+     -0.0217
+    ],
+    "bounds_max": [
+     1.1985,
+     0.005,
+     0.4817
+    ],
+    "dimensions": [
+     2.397,
+     0.01,
+     0.5034
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "707dd359ed1be9c8e77eb731cafde466f208ae24b74a582ca2543328a02bed05"
+  },
+  {
+   "asset": "Mob_Shardsong_WarblerKeeper",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Shard Warbler keeper",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Shardsong_WarblerKeeper_M0",
+     "colour": "coat",
+     "hex": "5A6A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Shardsong_WarblerKeeper_M1",
+     "colour": "accent / trousers",
+     "hex": "4A3A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Shardsong_WarblerKeeper_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Shardsong_WarblerKeeper_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Shardsong_WarblerKeeper_M4",
+     "colour": "perched bird",
+     "hex": "E8B040",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Shardsong_WarblerKeeper",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "PerchBird",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.04
+        ],
+        [
+         0.02828,
+         -0.02828
+        ],
+        [
+         0.04,
+         -0.0
+        ],
+        [
+         0.02828,
+         0.02828
+        ],
+        [
+         0,
+         0.04
+        ]
+       ],
+       "centre": [
+        -0.37,
+        -0.02,
+        0.95
+       ],
+       "slot": 4,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Shardsong_WarblerKeeper_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 696,
+    "lod1_triangles": 696,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Shardsong_WarblerKeeper": 696
+    },
+    "bounds_min": [
+     -0.42,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     1.76
+    ],
+    "dimensions": [
+     0.84,
+     0.285,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "28eceb8ed2c051c42c0d645918e18f2776e232ae0ac7131fcdabd02da36ff749"
+  }
+ ]
+}
