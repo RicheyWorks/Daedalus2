@@ -836,6 +836,23 @@
       "tests": [
         "test_shadewatch.py"
       ]
+    },
+    {
+      "id": "glimmerloom",
+      "title": "Glimmerloom Ledger",
+      "summary": "trade hued Prism Shards at the Glimmerloom market and grow your purse.",
+      "how_to_play": "HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target.",
+      "module": "tools/minigames/glimmerloom.py",
+      "start": "glimmerloom.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_glimmerloom.py"
+      ]
     }
   ]
 }
