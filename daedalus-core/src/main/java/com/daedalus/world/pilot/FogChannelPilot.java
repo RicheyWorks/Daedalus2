@@ -2,7 +2,9 @@
 
 package com.daedalus.world.pilot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * G586 Fog Channel Pilot (Shattered Planet harbour): a ship drifts between {@code channels} buoyed lanes in thick
@@ -21,6 +23,10 @@ public final class FogChannelPilot {
     public static final int MAX_CHANNELS = 4;
     public static final int MAX_BLASTS = 8;
     public static final int INVALID = -1;
+    /** A reading within this many points of par still earns two stars. */
+    public static final int PAR_SLACK = 2;
+    /** Display names of the echo kinds, by index. */
+    public static final List<String> ECHO_NAMES = List.of("dull", "ring", "clang");
 
     /** A foggy harbour: opening, drift and echo costs plus the echoes heard, one per blast. */
     public record Harbour(int[] open, int[][] drift, int[][] echo, int[] heard) {
@@ -244,5 +250,55 @@ public final class FogChannelPilot {
     public static boolean quest(Harbour h, int[] lanes) {
         int got = cost(h, lanes);
         return got != INVALID && got == best(h).cost();
+    }
+
+    /** How a reading scores against par (the best possible cost): stars 3 at par, 2 within PAR_SLACK, 1 otherwise, 0 invalid. */
+    public record Judgement(int cost, int par, int stars, boolean questDone) { }
+
+    /** Par for a harbour: the cost of the best reading. */
+    public static int par(Harbour h) {
+        return best(h).cost();
+    }
+
+    /** Scores a reading for the host (stars, par, quest flag) without the host re-running the solver. */
+    public static Judgement judge(Harbour h, int[] lanes) {
+        int got = cost(h, lanes);
+        int p = par(h);
+        int stars = got == INVALID ? 0 : got == p ? 3 : got <= p + PAR_SLACK ? 2 : 1;
+        return new Judgement(got, p, stars, stars == 3);
+    }
+
+    /** One blast of the best reading: the lane, what was heard, what it cost and what the echo alone suggested. */
+    public record Step(int blast, int lane, int heard, int moveCost, int echoCost, int greedyLane) {
+        /** Plain words for the step, identical to FogExplain in the C++ core. */
+        public String text(int previousLane) {
+            String move = blast == 0 ? "open" : lane == previousLane ? "hold" : "drift";
+            String why = blast == 0 ? "open" : lane == previousLane ? "stay" : "drift";
+            return "blast " + (blast + 1) + ": heard " + ECHO_NAMES.get(heard) + ", " + move + " lane " + lane + " (+" + moveCost
+                    + " " + why + ", +" + echoCost + " echo)" + (greedyLane != lane ? "; the echo alone says lane " + greedyLane : "");
+        }
+    }
+
+    /** Why the pilot chose each lane: the best reading step by step, against the trust-each-echo lane. */
+    public static List<Step> explain(Harbour h) {
+        int[] b = best(h).lanes();
+        int[] g = loudestEcho(h).lanes();
+        List<Step> out = new ArrayList<>();
+        for (int k = 0; k < b.length; k++) {
+            int l = b[k];
+            int move = k == 0 ? h.open[l] : h.drift[b[k - 1]][l];
+            out.add(new Step(k, l, h.heard[k], move, h.echo[l][h.heard[k]], g[k]));
+        }
+        return out;
+    }
+
+    /** The explanation as text, one line per blast. */
+    public static List<String> explainText(Harbour h) {
+        List<Step> steps = explain(h);
+        List<String> out = new ArrayList<>();
+        for (int k = 0; k < steps.size(); k++) {
+            out.add(steps.get(k).text(k == 0 ? -1 : steps.get(k - 1).lane()));
+        }
+        return out;
     }
 }
