@@ -26,14 +26,18 @@ constexpr int Bands = 6, Rounds = 5, MaxSegments = 4, MaxTotalM = 400, SourceLev
 constexpr int BandHz[Bands] = { 200, 250, 315, 400, 500, 630 };
 static_assert(BandHz[Bands - 1] < 800, "every call band must stay under the 800 Hz ear rule");
 
-enum class Habitat : std::uint8_t { Forest, Grass, Water, Scrub };
+enum class Habitat : std::uint8_t { Forest, Grass, Water, Scrub, Marsh, Rock };
 enum class Form : std::uint8_t { Tone, Trill };
 enum class Difficulty : std::uint8_t { Easy, Normal, Hard };
-constexpr int HabitatCount = 4;
+/** Ruleset V1 is the frozen launch game (four habitats, still air; shardsong_golden.txt). V2 adds reed marsh and bare
+ *  rock, per-round wind, a gentle first round and a difficulty ramp (shardsong_golden_v2.txt). V1 stays the default. */
+enum class Ruleset : std::uint8_t { V1, V2 };
+enum class Wind : std::uint8_t { Calm, Breeze, Gusty };
+constexpr int HabitatCount = 6, V1HabitatCount = 4, WindCount = 3;
 
 inline const char* HabitatName(Habitat H)
 {
-	static const char* const N[HabitatCount] = { "forest", "grass", "water", "scrub" };
+	static const char* const N[HabitatCount] = { "forest", "grass", "water", "scrub", "marsh", "rock" };
 	return N[static_cast<int>(H)];
 }
 
@@ -47,6 +51,8 @@ constexpr int ExcessTenths[HabitatCount][Bands] = {
 	{ 9, 10, 7, 4, 3, 3 },  // grass: ground dip in the low bands
 	{ 1, 1, 1, 1, 1, 2 },   // water: open and quiet
 	{ 3, 4, 4, 5, 6, 7 },   // scrub: in between
+	{ 3, 4, 6, 9, 12, 15 }, // marsh (V2): dense reed stems scatter the upper bands hardest
+	{ 1, 1, 1, 2, 2, 2 },   // rock (V2): bare and open
 };
 /** Ambient noise at the listener's fragment, tenths of dB, by habitat and band (illustrative). */
 constexpr int NoiseTenths[HabitatCount][Bands] = {
@@ -54,9 +60,25 @@ constexpr int NoiseTenths[HabitatCount][Bands] = {
 	{ 360, 340, 310, 320, 350, 380 },  // grass: wind low, crickets high
 	{ 420, 390, 350, 320, 300, 290 },  // water: surf in the low bands
 	{ 350, 330, 310, 320, 330, 350 },  // scrub
+	{ 330, 350, 390, 410, 370, 340 },  // marsh (V2): frog chorus in the middle bands
+	{ 300, 300, 300, 310, 320, 330 },  // rock (V2): quiet, a little wind hiss up high
 };
-/** Trills smear in forest reverberation; steady tones blur in wind over open ground. Tenths of dB per 10 m. */
-constexpr int TrillInForestTenths = 5, ToneInOpenTenths = 2;
+/** Wind noise added at the mate, tenths of dB by band (wind roar is low-pitched); halved for a mate in forest shelter.
+ *  Calm in V1 always. */
+constexpr int WindNoiseTenths[WindCount][Bands] = {
+	{ 0, 0, 0, 0, 0, 0 },
+	{ 40, 30, 20, 10, 0, 0 },
+	{ 80, 60, 40, 20, 10, 0 },
+};
+inline const char* WindName(Wind W)
+{
+	static const char* const N[WindCount] = { "calm", "breeze", "gusty" };
+	return N[static_cast<int>(W)];
+}
+/** Trills smear in forest reverberation (and off rock faces in V2); steady tones blur in wind over open ground, twice as
+ *  much when gusty. Tenths of dB per 10 m. */
+constexpr int ChorusTenths = 80;
+constexpr int TrillInForestTenths = 5, TrillOffRockTenths = 3, ToneInOpenTenths = 2;
 
 /** SplitMix64, integer only, so every compiler draws the same numbers. */
 struct Rng
@@ -86,10 +108,20 @@ struct Crossing
 {
 	Segment Seg[MaxSegments];
 	int Count = 0;
+	Wind Air = Wind::Calm;
+	/** V2: band where another flock is singing at the mate's fragment (-1: none). Adds ChorusTenths there and half on
+	 *  the neighbouring bands, so a call has to find a free band (the acoustic niche idea, illustrative). */
+	int Chorus = -1;
 	Habitat Listener() const { return Seg[Count - 1].H; }
 	int TotalM() const { int T = 0; for (int I = 0; I < Count; ++I) T += Seg[I].LengthM; return T; }
 };
 
+/** Smearing of one strip for a form, tenths of dB per 10 m. */
+inline int SmearPerStep(Habitat H, Form F, Wind W)
+{
+	if (F == Form::Trill) return H == Habitat::Forest ? TrillInForestTenths : (H == Habitat::Rock ? TrillOffRockTenths : 0);
+	return (H == Habitat::Grass || H == Habitat::Water) ? ToneInOpenTenths * (W == Wind::Gusty ? 2 : 1) : 0;
+}
 /** Received level at the mate, tenths of dB. */
 inline int ReceivedTenths(const Crossing& C, int Band, Form F)
 {
@@ -98,16 +130,22 @@ inline int ReceivedTenths(const Crossing& C, int Band, Form F)
 	{
 		const Segment& S = C.Seg[I];
 		const int Steps = S.LengthM / 10;
-		L -= ExcessTenths[static_cast<int>(S.H)][Band] * Steps;
-		if (F == Form::Trill && S.H == Habitat::Forest) L -= TrillInForestTenths * Steps;
-		if (F == Form::Tone && (S.H == Habitat::Grass || S.H == Habitat::Water)) L -= ToneInOpenTenths * Steps;
+		L -= (ExcessTenths[static_cast<int>(S.H)][Band] + SmearPerStep(S.H, F, C.Air)) * Steps;
 	}
 	return L;
+}
+/** Noise at the mate: habitat noise plus wind (halved in forest shelter), tenths of dB. */
+inline int NoiseAt(const Crossing& C, int Band)
+{
+	const int W = WindNoiseTenths[static_cast<int>(C.Air)][Band];
+	const int Gap = C.Chorus < 0 ? 9 : (Band > C.Chorus ? Band - C.Chorus : C.Chorus - Band);
+	const int Flock = Gap == 0 ? ChorusTenths : (Gap == 1 ? ChorusTenths / 2 : 0);
+	return NoiseTenths[static_cast<int>(C.Listener())][Band] + (C.Listener() == Habitat::Forest ? W / 2 : W) + Flock;
 }
 /** Signal-to-noise ratio at the mate, tenths of dB. */
 inline int SnrTenths(const Crossing& C, int Band, Form F)
 {
-	return ReceivedTenths(C, Band, F) - NoiseTenths[static_cast<int>(C.Listener())][Band];
+	return ReceivedTenths(C, Band, F) - NoiseAt(C, Band);
 }
 
 struct Choice { int Band = 0; Form F = Form::Tone; int Snr = 0; };
@@ -145,10 +183,9 @@ inline Breakdown Explain(const Crossing& C, int Band, Form F)
 		const Segment& S = C.Seg[I];
 		const int Steps = S.LengthM / 10;
 		B.Absorbed += ExcessTenths[static_cast<int>(S.H)][Band] * Steps;
-		if (F == Form::Trill && S.H == Habitat::Forest) B.Smeared += TrillInForestTenths * Steps;
-		if (F == Form::Tone && (S.H == Habitat::Grass || S.H == Habitat::Water)) B.Smeared += ToneInOpenTenths * Steps;
+		B.Smeared += SmearPerStep(S.H, F, C.Air) * Steps;
 	}
-	B.Noise = NoiseTenths[static_cast<int>(C.Listener())][Band];
+	B.Noise = NoiseAt(C, Band);
 	B.Snr = SourceLevel - B.Spread - B.Absorbed - B.Smeared - B.Noise;
 	return B;
 }
@@ -184,8 +221,20 @@ inline Feedback Advise(const Crossing& C, int Band, Form F)
 	return Out;
 }
 
-/** One crossing from the generator: 1-2 (easy), 2-3 (normal) or 3-4 (hard) strips of 10-120 m, at most 400 m,
- *  shortened (longest strip first) until the best call is heard, so every crossing is solvable. */
+/** Best tone only (ties keep the lowest band). */
+inline Choice BestTone(const Crossing& C)
+{
+	Choice B; B.Snr = SnrTenths(C, 0, Form::Tone);
+	for (int Band = 1; Band < Bands; ++Band)
+	{
+		const int S = SnrTenths(C, Band, Form::Tone);
+		if (S > B.Snr) { B.Band = Band; B.Snr = S; }
+	}
+	return B;
+}
+
+/** V1 crossing: 1-2 (easy), 2-3 (normal) or 3-4 (hard) strips of 10-120 m in four habitats, still air, at most 400 m,
+ *  shortened (longest strip first) until the best call is heard, so every crossing is solvable. Frozen. */
 inline Crossing Generate(Rng& R, Difficulty D)
 {
 	const int Min = D == Difficulty::Easy ? 1 : (D == Difficulty::Normal ? 2 : 3);
@@ -193,10 +242,45 @@ inline Crossing Generate(Rng& R, Difficulty D)
 	C.Count = Min + R.Below(2);
 	for (int I = 0; I < C.Count; ++I)
 	{
-		C.Seg[I].H = static_cast<Habitat>(R.Below(HabitatCount));
+		C.Seg[I].H = static_cast<Habitat>(R.Below(V1HabitatCount));
 		C.Seg[I].LengthM = 10 * (1 + R.Below(12));
 	}
 	for (int Guard = 0; Guard < 64 && (C.TotalM() > MaxTotalM || Best(C).Snr < HeardSnr); ++Guard)
+	{
+		int L = 0;
+		for (int I = 1; I < C.Count; ++I) if (C.Seg[I].LengthM > C.Seg[L].LengthM) L = I;
+		if (C.Seg[L].LengthM <= 10) break;
+		C.Seg[L].LengthM -= 10;
+	}
+	return C;
+}
+
+/** V2 crossing for round Round (0-based). Round 0 is gentle at every difficulty: one strip of 20-60 m in still air.
+ *  Later rounds ramp: rounds 1-2 use the difficulty's base strip count, rounds 3-4 one more, and the longest strip
+ *  allowed grows by 20 m a round (60 m up to 120 m). Six habitats; wind drawn per round (calm 2/4, breeze, gusty).
+ *  Shortened like V1 until both the best call and the best tone are heard (so tone-only play is always solvable). */
+inline Crossing GenerateV2(Rng& R, Difficulty D, int Round)
+{
+	Crossing C;
+	if (Round == 0)
+	{
+		C.Count = 1;
+		C.Seg[0].H = static_cast<Habitat>(R.Below(HabitatCount));
+		C.Seg[0].LengthM = 10 * (2 + R.Below(5));
+		return C;
+	}
+	const int Base = D == Difficulty::Easy ? 1 : (D == Difficulty::Normal ? 2 : 3);
+	C.Count = Base + (Round >= 3 ? 1 : 0);
+	const int MaxSteps = 4 + 2 * Round;  // 6, 8, 10, 12 steps of 10 m
+	for (int I = 0; I < C.Count; ++I)
+	{
+		C.Seg[I].H = static_cast<Habitat>(R.Below(HabitatCount));
+		C.Seg[I].LengthM = 10 * (1 + R.Below(MaxSteps));
+	}
+	const int W = R.Below(4);
+	C.Air = W < 2 ? Wind::Calm : static_cast<Wind>(W - 1);
+	C.Chorus = R.Below(Bands + 1) - 1;  // none 1/7, else one band
+	for (int Guard = 0; Guard < 64 && (C.TotalM() > MaxTotalM || Best(C).Snr < HeardSnr || BestTone(C).Snr < HeardSnr); ++Guard)
 	{
 		int L = 0;
 		for (int I = 1; I < C.Count; ++I) if (C.Seg[I].LengthM > C.Seg[L].LengthM) L = I;
@@ -225,16 +309,18 @@ inline earrule::CallSpec CallFor(int Band, Form F)
 struct Game
 {
 	Difficulty D = Difficulty::Normal;
+	Ruleset Rules = Ruleset::V1;
 	Crossing Rounds_[Rounds];
 	int Scores[Rounds] = {};
 	int Index = 0;
 
-	static Game Begin(std::uint64_t Seed, Difficulty Level)
+	static Game Begin(std::uint64_t Seed, Difficulty Level, Ruleset Rs = Ruleset::V1)
 	{
 		Game G;
 		G.D = Level;
+		G.Rules = Rs;
 		Rng R(Seed);
-		for (int I = 0; I < Rounds; ++I) G.Rounds_[I] = Generate(R, Level);
+		for (int I = 0; I < Rounds; ++I) G.Rounds_[I] = Rs == Ruleset::V1 ? Generate(R, Level) : GenerateV2(R, Level, I);
 		return G;
 	}
 	bool Over() const { return Index >= Rounds; }
