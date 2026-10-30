@@ -180,3 +180,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Smuggler's Island (G553, disk-saver)
 
 `smugglers_island.py` is a yes/no deduction game over the world census: a seed hides contraband on one island, and the player asks census-built yes/no questions (world, realm, slot, cargo, empty) before accusing `world:slot`. An exact memoised minimax gives par (the fewest questions that always find it) and `--auto` plays it. Verdict sharp/caught/escaped. NPC Exciseman Bartholomew; hook `data/islands/disk-saver/smugglers-island-v1.json`; doc `docs/islands/DISKSAVER-SMUGGLERS-ISLAND.md`.
+
+## Tide Lock (G554, disk-saver)
+
+`tide_lock.py` is a lock-scheduling puzzle over the world census: every island sends a boat as long as its G206 RAM cost, arriving at seeded minutes; one chamber (the G206 RAM budget by default) lifts boats in arrival order, one fixed-length cycle at a time, and the player groups them (`--plan 2,1,3`) to minimise total waiting. An exact memoised search (checked against every grouping) gives par, greedy fill is shown as the trap, and `--auto` plays par. Verdict smooth/slow/jammed. NPC Lockkeeper Wilhelmina; hook `data/islands/disk-saver/tide-lock-v1.json`; doc `docs/islands/DISKSAVER-TIDE-LOCK.md`.
