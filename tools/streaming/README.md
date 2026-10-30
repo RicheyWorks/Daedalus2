@@ -281,3 +281,18 @@ simulator). `greedy_through` shows the most-reach trap. Verdicts are `watertight
 python tools/streaming/boom_defence.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/boom_defence_test.py
 ```
+
+## Salvage Sale (G563)
+
+`salvage_sale.py` is a sealed-bid auction over the world census, played against a
+deterministic rival. Each island puts up a salvage lot. The Broker bids half the value plus 3
+for every lot it has lost, so early wins make later lots dearer. Par is the best value by exact
+search, checked against a brute force over every win-or-pass plan. `greedy_value` shows the
+win-what-you-can trap. Verdicts are `shrewd`, `fair` and `fleeced`. Hook:
+`data/islands/disk-saver/salvage-sale-v1.json` (Auctioneer Barnaby). Doc:
+`docs/islands/DISKSAVER-SALVAGE-SALE.md`. CI: `salvage-sale.yml`.
+
+```
+python tools/streaming/salvage_sale.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/salvage_sale_test.py
+```
