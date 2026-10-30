@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Stable-lane seeding (G567 port), plain C++17, header-only: java.util.SplittableRandom as used by the
 // com.daedalus.world.stable cores (new SplittableRandom(seed), nextInt(bound), nextBoolean()), bit for bit.
+// nextLong() too, for the ark treap priorities (G572).
 #pragma once
 #include <cstdint>
 
@@ -28,6 +29,8 @@ public:
 
 	bool NextBoolean() { return NextInt() < 0; }
 
+	int64_t NextLong() { return static_cast<int64_t>(Mix64(Next())); }
+
 private:
 	static constexpr uint64_t Golden = 0x9e3779b97f4a7c15ULL;
 	uint64_t State;
@@ -38,6 +41,13 @@ private:
 	{
 		Z = (Z ^ (Z >> 33)) * 0x62a9d9ed799705f5ULL;
 		return static_cast<int32_t>(static_cast<uint32_t>(((Z ^ (Z >> 28)) * 0xcb24d0a5c88c35b3ULL) >> 32));
+	}
+
+	static uint64_t Mix64(uint64_t Z)
+	{
+		Z = (Z ^ (Z >> 30)) * 0xbf58476d1ce4e5b9ULL;
+		Z = (Z ^ (Z >> 27)) * 0x94d049bb133111ebULL;
+		return Z ^ (Z >> 31);
 	}
 };
 
