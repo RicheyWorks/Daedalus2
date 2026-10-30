@@ -13,7 +13,7 @@ void Check(bool Ok,const std::string& What) {++Checks;if(!Ok){++Failed;std::cerr
 }
 
 int main() {
-    Check(Catalog().size()==25,"difficulty covers every registered game");
+    Check(Catalog().size()==26,"difficulty covers every registered game");
     for(const Entry& E:Catalog()) {
         auto G=CreateGame(E.Id);
         Check(bool(G),E.Id+": factory");

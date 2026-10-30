@@ -883,6 +883,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "prismchime",
+      "title": "Prismchime Ring",
+      "summary": "Tap chimes so their charge pulses the ring and peals chain. Left/Right or stick: pick a chime; J/Space or pad A: tap",
+      "how_to_play": "HOW Tap a chime to ring it: its charge pulses along its facing and it gains one; a chime that fills to four peals and charges both neighbours. Light every chime before your taps run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the chime ring",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"prismchime\", Seed)",
+      "portable_tests": [
+        "desktop_prismchime"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -964,23 +998,6 @@
       "default_difficulty": "normal",
       "tests": [
         "test_glowmoss.py"
-      ]
-    },
-    {
-      "id": "prismchime",
-      "title": "Prismchime Ring",
-      "summary": "tap crystal chimes so their charge hops the ring, peals chain, and every chime rings once.",
-      "how_to_play": "HOW Tap a chime to ring it: its charge pulses along its facing and it gains one; a chime that fills to four peals and charges both neighbours. Light every chime before your taps run out.",
-      "module": "tools/minigames/prismchime.py",
-      "start": "prismchime.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_prismchime.py"
       ]
     }
   ]

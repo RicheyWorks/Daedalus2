@@ -6,7 +6,7 @@ merged or queued on `main`; nothing here touches the editor until the custodian'
 
 ## What is ready
 
-Nine Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each one regenerates its game from
+Ten Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each one regenerates its game from
 `StartGame(id, seed)` alone with a CPython-compatible PRNG, so the Unreal cabinet, the Python rules
 (`tools/minigames/<id>.py`, prism-shard-dev's, the authority) and the web page all play the same seed identically.
 
@@ -21,8 +21,9 @@ Nine Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each one
 | `shardfall` | Shardfall Gamble | `DesktopGames/DaedalusDesktopShardfallCore.h` | #988 |
 | `shadewatch` | Shadewatch Vigil | `DesktopGames/DaedalusDesktopShadewatchCore.h` | #1048 |
 | `glimmerloom` | Glimmerloom Ledger | `DesktopGames/DaedalusDesktopGlimmerloomCore.h` | #1050 |
+| `prismchime` | Prismchime Ring | `DesktopGames/DaedalusDesktopPrismchimeCore.h` | #1064 / cabinet PR |
 
-All nine share `DesktopGames/DaedalusDesktopSaveText.h` (save text, input names, edge latches) after the #993
+All ten share `DesktopGames/DaedalusDesktopSaveText.h` (save text, input names, edge latches) after the #993
 beauty pass. Every cabinet has a save slot in `DaedalusDesktopSaveSlots.h` (`<id>.dgs`, manual style) and a
 fixture-replay test under `engines/unreal/core-test/desktop_games/`. Portable proof is in CI (desktop-games.yml,
 engines.yml); what it does **not** prove is the installed plugin, native class loading, PIE input, file I/O and
@@ -34,20 +35,21 @@ nothing for it.
 ## Placement
 
 `data/minigames/realm-cabinets.json` → realm `prismheart_realm`, anchor marker `arcade_plaza`, layout `row`,
-2.5 m spacing, every cabinet yaw 180° (facing the anchor). Offsets are metres from the anchor; seeds are
+2.5 m spacing (the row re-centres as cabinets are added, so offsets shift by 1.25 m per addition; read the JSON), every cabinet yaw 180° (facing the anchor). Offsets are metres from the anchor; seeds are
 `crc32("prismheart_realm:<id>")` and are stable. Realm id is still `id_status: unconfirmed` (REALMS.md rule).
 
 | id | offset (x, y, z) m | yaw | `StartGame` | option |
 |---|---|---|---|---|
-| `shardring` | 0, −6.25, 0 | 180 | `StartGame("shardring", 2061739538)` | 0 |
-| `lumenpath` | 0, −3.75, 0 | 180 | `StartGame("lumenpath", 2037330375)` | 0 |
-| `wardens_accord` | 0, −1.25, 0 | 180 | `StartGame("wardens_accord", 450290639)` | 0 |
-| `facetlock` | 0, 1.25, 0 | 180 | `StartGame("facetlock", 1644454135)` | 0 |
-| `prismcairn` | 0, 3.75, 0 | 180 | `StartGame("prismcairn", 557933909)` | 0 |
-| `prismvault` | 0, 6.25, 0 | 180 | `StartGame("prismvault", 895410454)` | 0 |
-| `shardfall` | 0, 8.75, 0 | 180 | `StartGame("shardfall", 242191464)` | 0 |
-| `shadewatch` | 0, 11.25, 0 | 180 | `StartGame("shadewatch", 1433643621)` | 0 |
-| `glimmerloom` | 0, 13.75, 0 | 180 | `StartGame("glimmerloom", 1712892515)` | 0 |
+| `shardring` | 0, −7.5, 0 | 180 | `StartGame("shardring", 2061739538)` | 0 |
+| `lumenpath` | 0, −5, 0 | 180 | `StartGame("lumenpath", 2037330375)` | 0 |
+| `wardens_accord` | 0, −2.5, 0 | 180 | `StartGame("wardens_accord", 450290639)` | 0 |
+| `facetlock` | 0, 0, 0 | 180 | `StartGame("facetlock", 1644454135)` | 0 |
+| `prismcairn` | 0, 2.5, 0 | 180 | `StartGame("prismcairn", 557933909)` | 0 |
+| `prismvault` | 0, 5, 0 | 180 | `StartGame("prismvault", 895410454)` | 0 |
+| `shardfall` | 0, 7.5, 0 | 180 | `StartGame("shardfall", 242191464)` | 0 |
+| `shadewatch` | 0, 10, 0 | 180 | `StartGame("shadewatch", 1433643621)` | 0 |
+| `glimmerloom` | 0, 12.5, 0 | 180 | `StartGame("glimmerloom", 1712892515)` | 0 |
+| `prismchime` | 0, 15, 0 | 180 | `StartGame("prismchime", 113376713)` | 0 |
 
 The same row also lists four canonical cabinets (`dungeon`, `riftwing`, `star_shooter`, `lanternwild` at
 y = −16.25 … −8.75) that already exist elsewhere; place them the same way or leave them for a later pass. Read the
@@ -80,6 +82,7 @@ reproduce them bit for bit in the portable tests. In PIE, open each cabinet and 
 | `shardfall` | round 1/5, pot 0, seam of 15 shards (3 cracked); first draw is a **4** (the bag's top is the last value) |
 | `shadewatch` | three lanes; shades at the far end of lanes 1 and 3, lane 2 empty; hearts 3, light 1 |
 | `glimmerloom` | day 1/10, purse 100; prices **12, 9, 6, 11** (ember, tide, verdant, gale); rumor: **tide falls** |
+| `prismchime` | eight dark chimes, taps 8; charges **2, 2, 2, 1, 1, 2, 2, 2**; facings ← → → ← → → ← → |
 
 Then per cabinet, in this order, with the evidence named in parentheses:
 1. Keyboard and pad input both act (one key press and one pad press change the frame).

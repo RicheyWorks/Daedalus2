@@ -101,6 +101,10 @@
     "glimmerloom": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the Glimmerloom market"
+    },
+    "prismchime": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the chime ring"
     }
   }
 }
