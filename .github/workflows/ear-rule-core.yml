@@ -1,0 +1,29 @@
+name: Ear rule core
+on:
+  pull_request:
+    paths:
+      - 'engines/unreal/**/DaedalusEarRuleCore.h'
+      - 'engines/unreal/core-test/ear_rule_core_test.cpp'
+      - 'engines/unreal/core-test/ear_rule_parity.txt'
+      - '.github/workflows/ear-rule-core.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'engines/unreal/**/DaedalusEarRuleCore.h'
+      - 'engines/unreal/core-test/ear_rule_core_test.cpp'
+      - 'engines/unreal/core-test/ear_rule_parity.txt'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: C++ ear rule = Java golden vectors (sanitized, no FMA contraction)
+        run: |
+          ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Werror -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer engines/unreal/core-test/ear_rule_core_test.cpp -o "$RUNNER_TEMP/ear_rule"
+          "$RUNNER_TEMP/ear_rule" engines/unreal/core-test/ear_rule_parity.txt
