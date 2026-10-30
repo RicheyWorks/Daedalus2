@@ -85,17 +85,17 @@ static void Lay(Case& K) {
     for (std::size_t I = 0; I < L.Ships.size(); ++I)
         K.Got.push_back("R " + std::to_string(I) + " " + L.Ships[I].Label + " " + std::to_string(L.Ships[I].Pos) + " " +
                         std::to_string(L.Ships[I].Arrive));
-    const char* Names[4] = {"fcfs", "sstf", "scan", "best"};
-    const GS::Order Orders[4] = {GS::Fcfs(L), GS::Sstf(L), GS::Scan(L), GS::Best(L)};
+    const char* Names[5] = {"fcfs", "sstf", "scan", "cscan", "best"};
+    const GS::Order Orders[5] = {GS::Fcfs(L), GS::Sstf(L), GS::Scan(L), GS::Cscan(L), GS::Best(L)};
     std::int64_t BestW = 0;
-    for (int P = 0; P < 4; ++P) {
+    for (int P = 0; P < 5; ++P) {
         Check(GS::CheckOrder(L, Orders[P]) == GS::Error::None, K.Name + ": habit order is a permutation");
         std::int64_t W = 0, Tr = 0;
         GS::Run(L, Orders[P], W, Tr);
-        if (P == 3) BestW = W;
+        if (P == 4) BestW = W;
         K.Got.push_back(std::string("P ") + Names[P] + " " + Join(Orders[P]) + " " + std::to_string(W) + " " + std::to_string(Tr));
     }
-    for (int P = 0; P < 3; ++P) {  // no habit beats the exhaustive best
+    for (int P = 0; P < 4; ++P) {  // no habit beats the exhaustive best
         std::int64_t W = 0, Tr = 0;
         GS::Run(L, Orders[P], W, Tr);
         Check(W >= BestW, K.Name + ": best is no worse than a habit");
@@ -121,9 +121,13 @@ int main(int argc, char** argv) {
             Check(false, "line before the first case: " + T[0]);
             continue;
         }
-        if (T[0] == "S" && T.size() == 2 && !K->Laid) {
+        if (T[0] == "S" && T.size() == 3 && !K->Laid) {
             std::string Seed;
-            if (Unhex(T[1], Seed) && GS::FromSeed(Seed, K->L) == GS::Error::None) Lay(*K);
+            GS::Profile P = GS::Profile::Calm;
+            const bool Known = T[1] == "calm" || T[1] == "rush" || T[1] == "spread";
+            if (T[1] == "rush") P = GS::Profile::Rush;
+            if (T[1] == "spread") P = GS::Profile::Spread;
+            if (Known && Unhex(T[2], Seed) && GS::FromSeed(Seed, P, K->L) == GS::Error::None) Lay(*K);
             else K->Ok = false;
         } else if (T[0] == "H" && T.size() == 3 && !K->Laid) {
             std::int64_t Start = 0;

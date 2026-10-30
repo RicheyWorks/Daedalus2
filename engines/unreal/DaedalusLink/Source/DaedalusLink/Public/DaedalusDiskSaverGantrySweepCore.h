@@ -4,8 +4,8 @@
 // tick, waits at a berth until its ship arrives, and serves it at once. The player orders the service; the
 // score is the total ticks ships wait. The core lays out a seeded rail with DaedalusPyRandomCore.h (CPython
 // random.Random(str) draws: randrange, sample, random, and shuffle built from its _randbelow), plays an
-// order, and shows three yard habits (first come first served, nearest arrived ship, elevator sweep) and
-// the exact best order. Golden file: tools/streaming/gantry_sweep_parity.py.
+// order, and shows four yard habits (first come first served, nearest arrived ship, elevator sweep,
+// one-way sweep) and the exact best order. A tide profile sets the arrival span: calm 24, rush 6, spread 60. Golden file: tools/streaming/gantry_sweep_parity.py.
 // Header-only C++17; no Unreal includes, no exceptions, no RTTI; errors are return codes.
 #pragma once
 #include "DaedalusPyRandomCore.h"
@@ -20,19 +20,22 @@ namespace DaedalusDiskSaver {
 namespace GantrySweep {
 
 constexpr std::uint32_t Rail = 40;
-constexpr int ArrivalSpan = 24;
+enum class Profile { Calm, Rush, Spread };
+inline int ArrivalSpan(Profile P) { return P == Profile::Rush ? 6 : P == Profile::Spread ? 60 : 24; }
+inline const char* ProfileName(Profile P) { return P == Profile::Rush ? "rush" : P == Profile::Spread ? "spread" : "calm"; }
 constexpr std::uint32_t MinShips = 5, MaxShips = 8;
 constexpr std::int64_t MaxCoord = 1000000000;  // hand layouts: berths and arrivals; every time stays < 2^40
 constexpr std::size_t MaxSeedBytes = 4096;
 static const char* const Berths[12] = {"anchor", "bollard", "capstan", "davit", "eyebolt", "fairlead",
                                         "gunwale", "hawser", "jetty", "keel", "lanyard", "mooring"};
 
-enum class Error { None, Length, Range, Repeat, NoShips, TooManyShips, Coord, Seed };
+enum class Error { None, Short, Long, Range, Repeat, NoShips, TooManyShips, Coord, Seed };
 
 inline const char* ErrorName(Error E) {
     switch (E) {
         case Error::None: return "none";
-        case Error::Length: return "length";
+        case Error::Short: return "short";
+        case Error::Long: return "long";
         case Error::Range: return "range";
         case Error::Repeat: return "repeat";
         case Error::NoShips: return "no_ships";
@@ -65,8 +68,8 @@ inline void Shuffle(daedalus::pyrandom::PyRandom& R, std::vector<T>& X) {
 }
 
 // random.Random(Seed): start = randrange(40); n = 5 + randrange(4); pos = sample(range(40), n);
-// arrive = int(random() * 24) per ship; names = shuffle(BERTHS)[:n].
-inline Error FromSeed(const std::string& Seed, Layout& Out) {
+// arrive = int(random() * span) per ship (span from the tide profile); names = shuffle(BERTHS)[:n].
+inline Error FromSeed(const std::string& Seed, Profile P, Layout& Out) {
     if (Seed.size() > MaxSeedBytes) return Error::Seed;
     daedalus::pyrandom::PyRandom R(Seed);
     Out = Layout{};
@@ -74,7 +77,7 @@ inline Error FromSeed(const std::string& Seed, Layout& Out) {
     const std::size_t N = MinShips + R.RandRange(MaxShips - MinShips + 1);
     const std::vector<std::size_t> Pos = R.SampleIndices(Rail, N);
     std::vector<std::int64_t> Arrive(N);
-    for (std::size_t I = 0; I < N; ++I) Arrive[I] = static_cast<std::int64_t>(R.RandomDouble() * ArrivalSpan);
+    for (std::size_t I = 0; I < N; ++I) Arrive[I] = static_cast<std::int64_t>(R.RandomDouble() * ArrivalSpan(P));
     std::vector<std::string> Names(Berths, Berths + 12);
     Shuffle(R, Names);
     for (std::size_t I = 0; I < N; ++I) Out.Ships.push_back(Ship{Names[I], static_cast<std::int64_t>(Pos[I]), Arrive[I]});
@@ -115,7 +118,8 @@ inline void Run(const Layout& L, const Order& O, std::int64_t& Waits, std::int64
 
 inline Error CheckOrder(const Layout& L, const Order& O) {
     const std::size_t N = L.Ships.size();
-    if (O.size() != N) return Error::Length;
+    if (O.size() < N) return Error::Short;
+    if (O.size() > N) return Error::Long;
     for (std::size_t I : O)
         if (I >= N) return Error::Range;
     std::vector<bool> Seen(N, false);
@@ -213,6 +217,31 @@ inline Order Scan(const Layout& L) {
     return O;
 }
 
+// Habit 4: the one-way sweep (C-SCAN). Serve the nearest arrived ship at or above the crane (lower index on
+// a shared berth); when none is above, run back to the lowest arrived ship and sweep up again; idle, go to
+// the next arrival.
+inline Order Cscan(const Layout& L) {
+    const std::size_t N = L.Ships.size();
+    std::vector<bool> Left(N, true);
+    std::int64_t T = 0, X = L.Start;
+    Order O;
+    for (std::size_t K = 0; K < N; ++K) {
+        std::size_t Up = N, Low = N;
+        for (std::size_t I = 0; I < N; ++I) {
+            if (!Left[I] || L.Ships[I].Arrive > T) continue;
+            const std::int64_t P = L.Ships[I].Pos;
+            if (Low == N || P < L.Ships[Low].Pos) Low = I;
+            if (P >= X && (Up == N || P < L.Ships[Up].Pos)) Up = I;
+        }
+        const std::size_t Pick = Up != N ? Up : Low != N ? Low : Fallback(L, Left, X);
+        T = std::max(T + Dist(L.Ships[Pick].Pos, X), L.Ships[Pick].Arrive);
+        X = L.Ships[Pick].Pos;
+        Left[Pick] = false;
+        O.push_back(Pick);
+    }
+    return O;
+}
+
 // The exact best order: fewest waiting ticks, the first in lexicographic order among ties (n <= 8: 40320 orders).
 inline Order Best(const Layout& L) {
     Order P(L.Ships.size()), Top;
@@ -237,14 +266,14 @@ struct PlayResult {
     Verdict V = Verdict::Jammed;
 };
 
-// sweet = as few waiting ticks as the best order; fair = no worse than the best of the three habits.
+// sweet = as few waiting ticks as the best order; fair = no worse than the best of the four habits.
 inline Error Play(const Layout& L, const Order& O, PlayResult& R) {
     const Error E = CheckOrder(L, O);
     if (E != Error::None) return E;
     Run(L, O, R.Waits, R.Travel);
     std::int64_t Opt = 0, Habit = -1, W = 0, Tr = 0;
     Run(L, Best(L), Opt, Tr);
-    for (const Order& H : {Fcfs(L), Sstf(L), Scan(L)}) {
+    for (const Order& H : {Fcfs(L), Sstf(L), Scan(L), Cscan(L)}) {
         Run(L, H, W, Tr);
         if (Habit < 0 || W < Habit) Habit = W;
     }
