@@ -837,10 +837,12 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
