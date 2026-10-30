@@ -2054,6 +2054,349 @@ M 0,1,2,3,0
 O refused repeat
 M -
 O refused short
+C seed51
+S storm x67616e7472792d73776565707c73746f726d7c30
+O L 6 8
+O R 0 gunwale 27 14
+O R 1 jetty 22 15
+O R 2 lanyard 19 2
+O R 3 fairlead 26 9
+O R 4 mooring 15 2
+O R 5 hawser 0 8
+O R 6 bollard 32 8
+O R 7 capstan 38 14
+O P fcfs 4,2,5,6,3,0,7,1 367 98
+O P sstf 4,2,3,0,1,6,7,5 175 80
+O P scan 4,2,3,0,6,7,1,5 167 70
+O P cscan 4,2,3,0,6,7,5,1 211 92
+O P best 4,2,1,3,0,6,7,5 135 70
+M 4,2,1,3,0,6,7,5
+O m 135 70 sweet
+M 0,1,2,3,4,5,6,7
+O m 343 100 jammed
+M 7,6,5,4,3,2,1,0
+O m 569 111 jammed
+M 2,7,4,5,0,3,1,6
+O m 507 112 jammed
+M 4,2,5,6,3,0,7,1
+O m 367 98 jammed
+M 4,2,3,0,1,6,7,5
+O m 175 80 jammed
+M 4,2,3,0,6,7,1,5
+O m 167 70 fair
+M 4,2,3,0,6,7,5,1
+O m 211 92 jammed
+M 0,1,2,3,4,5,6
+O refused short
+M 0,1,2,3,4,5,6,7,0
+O refused long
+M 0,1,2,3,4,5,6,8
+O refused range
+M 0,1,2,3,4,5,6,0
+O refused repeat
+M -
+O refused short
+C seed52
+S storm x67616e7472792d73776565707c73746f726d7c31
+O L 30 9
+O R 0 hawser 28 16
+O R 1 jetty 11 19
+O R 2 anchor 0 17
+O R 3 capstan 16 23
+O R 4 gunwale 30 19
+O R 5 lanyard 36 0
+O R 6 mooring 7 20
+O R 7 bollard 12 14
+O R 8 keel 24 5
+O P fcfs 5,8,7,0,2,1,4,6,3 493 136
+O P sstf 5,8,0,4,3,7,1,6,2 161 54
+O P scan 5,8,7,1,6,2,3,0,4 229 72
+O P cscan 5,8,0,4,2,6,1,7,3 253 70
+O P best 5,0,4,8,3,7,1,6,2 132 46
+M 5,0,4,8,3,7,1,6,2
+O m 132 46 sweet
+M 0,1,2,3,4,5,6,7,8
+O m 523 112 jammed
+M 8,7,6,5,4,3,2,1,0
+O m 399 116 jammed
+M 1,4,2,8,0,3,7,5,6
+O m 701 165 jammed
+M 5,8,7,0,2,1,4,6,3
+O m 493 136 jammed
+M 5,8,0,4,3,7,1,6,2
+O m 161 54 fair
+M 5,8,7,1,6,2,3,0,4
+O m 229 72 jammed
+M 5,8,0,4,2,6,1,7,3
+O m 253 70 jammed
+M 0,1,2,3,4,5,6,7
+O refused short
+M 0,1,2,3,4,5,6,7,8,0
+O refused long
+M 0,1,2,3,4,5,6,7,9
+O refused range
+M 0,1,2,3,4,5,6,7,0
+O refused repeat
+M -
+O refused short
+C seed53
+S storm x67616e7472792d73776565707c73746f726d7c32
+O L 2 9
+O R 0 mooring 12 19
+O R 1 gunwale 6 8
+O R 2 bollard 38 2
+O R 3 capstan 1 18
+O R 4 lanyard 7 23
+O R 5 fairlead 4 22
+O R 6 hawser 8 16
+O R 7 jetty 27 20
+O R 8 keel 30 7
+O P fcfs 2,8,1,6,3,0,7,5,4 606 129
+O P sstf 2,8,7,0,6,4,1,5,3 398 73
+O P scan 2,8,7,0,6,4,1,5,3 398 73
+O P cscan 2,3,5,1,4,6,0,7,8 572 102
+O P best 1,3,5,4,6,0,7,8,2 143 46
+M 1,3,5,4,6,0,7,8,2
+O m 143 46 sweet
+M 0,1,2,3,4,5,6,7,8
+O m 625 120 jammed
+M 8,7,6,5,4,3,2,1,0
+O m 518 138 jammed
+M 7,1,5,8,0,3,6,4,2
+O m 616 142 jammed
+M 2,8,1,6,3,0,7,5,4
+O m 606 129 jammed
+M 2,8,7,0,6,4,1,5,3
+O m 398 73 fair
+M 2,8,7,0,6,4,1,5,3
+O m 398 73 fair
+M 2,3,5,1,4,6,0,7,8
+O m 572 102 jammed
+M 0,1,2,3,4,5,6,7
+O refused short
+M 0,1,2,3,4,5,6,7,8,0
+O refused long
+M 0,1,2,3,4,5,6,7,9
+O refused range
+M 0,1,2,3,4,5,6,7,0
+O refused repeat
+M -
+O refused short
+C seed54
+S storm x67616e7472792d73776565707c73746f726d7c33
+O L 20 8
+O R 0 fairlead 8 23
+O R 1 lanyard 38 17
+O R 2 eyebolt 15 13
+O R 3 jetty 6 21
+O R 4 davit 4 1
+O R 5 hawser 17 7
+O R 6 mooring 32 23
+O R 7 gunwale 1 9
+O P fcfs 4,5,7,2,1,3,0,6 487 140
+O P sstf 4,7,2,5,0,3,6,1 229 78
+O P scan 4,7,2,5,6,1,0,3 269 88
+O P cscan 4,2,5,6,1,7,3,0 325 94
+O P best 5,2,3,4,7,0,6,1 135 56
+M 5,2,3,4,7,0,6,1
+O m 135 56 sweet
+M 0,1,2,3,4,5,6,7
+O m 571 135 jammed
+M 7,6,5,4,3,2,1,0
+O m 521 142 jammed
+M 6,1,4,3,0,2,5,7
+O m 375 81 jammed
+M 4,5,7,2,1,3,0,6
+O m 487 140 jammed
+M 4,7,2,5,0,3,6,1
+O m 229 78 fair
+M 4,7,2,5,6,1,0,3
+O m 269 88 jammed
+M 4,2,5,6,1,7,3,0
+O m 325 94 jammed
+M 0,1,2,3,4,5,6
+O refused short
+M 0,1,2,3,4,5,6,7,0
+O refused long
+M 0,1,2,3,4,5,6,8
+O refused range
+M 0,1,2,3,4,5,6,0
+O refused repeat
+M -
+O refused short
+C seed55
+S storm x67616e7472792d73776565707c73746f726d7c34
+O L 30 9
+O R 0 davit 21 20
+O R 1 keel 27 10
+O R 2 jetty 39 14
+O R 3 gunwale 19 6
+O R 4 eyebolt 34 16
+O R 5 hawser 16 18
+O R 6 lanyard 23 9
+O R 7 mooring 18 10
+O R 8 anchor 31 7
+O P fcfs 3,8,6,7,1,2,4,5,0 320 85
+O P sstf 3,7,6,1,8,4,2,0,5 144 56
+O P scan 3,7,6,1,8,4,2,0,5 144 56
+O P cscan 3,6,1,8,4,2,5,7,0 184 59
+O P best 8,1,6,3,7,5,0,4,2 96 39
+M 8,1,6,3,7,5,0,4,2
+O m 96 39 sweet
+M 0,1,2,3,4,5,6,7,8
+O m 513 105 jammed
+M 8,7,6,5,4,3,2,1,0
+O m 374 97 jammed
+M 4,3,8,5,7,6,0,1,2
+O m 388 73 jammed
+M 3,8,6,7,1,2,4,5,0
+O m 320 85 jammed
+M 3,7,6,1,8,4,2,0,5
+O m 144 56 fair
+M 3,7,6,1,8,4,2,0,5
+O m 144 56 fair
+M 3,6,1,8,4,2,5,7,0
+O m 184 59 jammed
+M 0,1,2,3,4,5,6,7
+O refused short
+M 0,1,2,3,4,5,6,7,8,0
+O refused long
+M 0,1,2,3,4,5,6,7,9
+O refused range
+M 0,1,2,3,4,5,6,7,0
+O refused repeat
+M -
+O refused short
+C seed56
+S storm x67616e7472792d73776565707c73746f726d7c35
+O L 0 9
+O R 0 keel 38 19
+O R 1 gunwale 19 3
+O R 2 fairlead 20 11
+O R 3 anchor 29 0
+O R 4 hawser 6 5
+O R 5 davit 14 14
+O R 6 mooring 9 23
+O R 7 lanyard 0 16
+O R 8 jetty 32 12
+O P fcfs 3,1,4,2,8,5,7,0,6 692 177
+O P sstf 3,8,0,2,1,5,6,4,7 384 76
+O P scan 3,8,0,2,1,5,6,4,7 384 76
+O P cscan 3,8,0,7,4,6,5,1,2 520 96
+O P best 4,7,6,5,1,2,3,8,0 192 50
+M 4,7,6,5,1,2,3,8,0
+O m 192 50 sweet
+M 0,1,2,3,4,5,6,7,8
+O m 664 144 jammed
+M 8,7,6,5,4,3,2,1,0
+O m 714 138 jammed
+M 1,3,5,0,6,8,2,4,7
+O m 704 152 jammed
+M 3,1,4,2,8,5,7,0,6
+O m 692 177 jammed
+M 3,8,0,2,1,5,6,4,7
+O m 384 76 fair
+M 3,8,0,2,1,5,6,4,7
+O m 384 76 fair
+M 3,8,0,7,4,6,5,1,2
+O m 520 96 jammed
+M 0,1,2,3,4,5,6,7
+O refused short
+M 0,1,2,3,4,5,6,7,8,0
+O refused long
+M 0,1,2,3,4,5,6,7,9
+O refused range
+M 0,1,2,3,4,5,6,7,0
+O refused repeat
+M -
+O refused short
+C seed57
+S storm x67616e7472792d73776565707c73746f726d7c36
+O L 1 10
+O R 0 fairlead 20 16
+O R 1 davit 29 13
+O R 2 keel 10 19
+O R 3 mooring 13 20
+O R 4 lanyard 15 13
+O R 5 eyebolt 35 12
+O R 6 hawser 24 23
+O R 7 capstan 25 6
+O R 8 gunwale 26 0
+O R 9 anchor 34 19
+O P fcfs 8,7,5,4,1,0,2,9,3,6 632 145
+O P sstf 8,7,6,0,4,3,2,1,9,5 274 66
+O P scan 8,1,9,5,7,6,0,4,3,2 286 59
+O P cscan 8,1,9,5,2,3,4,0,6,7 380 74
+O P best 4,2,3,0,6,7,8,1,9,5 170 44
+M 4,2,3,0,6,7,8,1,9,5
+O m 170 44 sweet
+M 0,1,2,3,4,5,6,7,8,9
+O m 472 93 jammed
+M 9,8,7,6,5,4,3,2,1,0
+O m 506 107 jammed
+M 5,9,8,6,1,7,4,0,2,3
+O m 414 82 jammed
+M 8,7,5,4,1,0,2,9,3,6
+O m 632 145 jammed
+M 8,7,6,0,4,3,2,1,9,5
+O m 274 66 fair
+M 8,1,9,5,7,6,0,4,3,2
+O m 286 59 jammed
+M 8,1,9,5,2,3,4,0,6,7
+O m 380 74 jammed
+M 0,1,2,3,4,5,6,7,8
+O refused short
+M 0,1,2,3,4,5,6,7,8,9,0
+O refused long
+M 0,1,2,3,4,5,6,7,8,10
+O refused range
+M 0,1,2,3,4,5,6,7,8,0
+O refused repeat
+M -
+O refused short
+C seed58
+S storm x67616e7472792d73776565707c73746f726d7c37
+O L 0 9
+O R 0 jetty 0 15
+O R 1 keel 28 12
+O R 2 lanyard 12 13
+O R 3 mooring 3 8
+O R 4 davit 17 17
+O R 5 capstan 14 18
+O R 6 anchor 18 17
+O R 7 eyebolt 39 2
+O R 8 bollard 23 15
+O P fcfs 7,3,1,2,0,8,4,6,5 969 162
+O P sstf 7,1,8,6,4,5,2,3,0 431 78
+O P scan 7,1,8,6,4,5,2,3,0 431 78
+O P cscan 7,0,3,2,5,4,6,8,1 661 106
+O P best 3,2,5,4,6,8,1,7,0 160 78
+M 3,2,5,4,6,8,1,7,0
+O m 160 78 sweet
+M 0,1,2,3,4,5,6,7,8
+O m 560 111 jammed
+M 8,7,6,5,4,3,2,1,0
+O m 547 134 jammed
+M 1,3,0,8,4,5,7,6,2
+O m 659 140 jammed
+M 7,3,1,2,0,8,4,6,5
+O m 969 162 jammed
+M 7,1,8,6,4,5,2,3,0
+O m 431 78 fair
+M 7,1,8,6,4,5,2,3,0
+O m 431 78 fair
+M 7,0,3,2,5,4,6,8,1
+O m 661 106 jammed
+M 0,1,2,3,4,5,6,7
+O refused short
+M 0,1,2,3,4,5,6,7,8,0
+O refused long
+M 0,1,2,3,4,5,6,7,9
+O refused range
+M 0,1,2,3,4,5,6,7,0
+O refused repeat
+M -
+O refused short
 C one_ship_waiting
 H 0 0:5
 O L 0 1
@@ -2142,7 +2485,7 @@ M 0,1,2
 O m 1500001 2500000 jammed
 M 2,1,0
 O m 1001999998 2000000 jammed
-M 2,1,0
+M 2,0,1
 O m 1001999998 2000000 jammed
 M 0,2,1
 O m 1499999 2000000 sweet
@@ -2184,8 +2527,8 @@ M 0,1,2,3,4,5,6,7
 O m 788 186 jammed
 M 7,6,5,4,3,2,1,0
 O m 716 171 jammed
-M 5,1,2,4,6,7,3,0
-O m 454 99 jammed
+M 6,4,3,2,0,7,5,1
+O m 444 95 jammed
 M 4,6,0,3,2,7,5,1
 O m 304 59 jammed
 M 3,2,7,5,1,0,6,4
@@ -2226,8 +2569,8 @@ M 0,1,2,3,4,5,6,7
 O m 224 45 jammed
 M 7,6,5,4,3,2,1,0
 O m 184 60 fair
-M 7,2,5,4,1,3,0,6
-O m 484 140 jammed
+M 5,4,6,0,3,1,2,7
+O m 334 115 jammed
 M 7,6,5,4,3,2,1,0
 O m 184 60 fair
 M 7,6,5,4,3,2,1,0
@@ -2265,8 +2608,8 @@ M 0,1,2,3,4
 O m 178 85 jammed
 M 4,3,2,1,0
 O m 298 95 jammed
-M 4,1,3,2,0
-O m 228 75 jammed
+M 0,4,3,1,2
+O m 178 70 jammed
 M 1,0,2,3,4
 O m 148 75 jammed
 M 1,3,0,2,4
@@ -2282,6 +2625,275 @@ O refused long
 M 0,1,2,3,5
 O refused range
 M 0,1,2,3,0
+O refused repeat
+M -
+O refused short
+C tie_twins
+H 10 15:0,5:0
+O L 10 2
+O R 0 berth0 15 0
+O R 1 berth1 5 0
+O P fcfs 1,0 20 15
+O P sstf 1,0 20 15
+O P scan 0,1 20 15
+O P cscan 0,1 20 15
+O P best 0,1 20 15
+M 0,1
+O m 20 15 sweet
+M 0,1
+O m 20 15 sweet
+M 1,0
+O m 20 15 sweet
+M 0,1
+O m 20 15 sweet
+M 1,0
+O m 20 15 sweet
+M 1,0
+O m 20 15 sweet
+M 0,1
+O m 20 15 sweet
+M 0,1
+O m 20 15 sweet
+M 0
+O refused short
+M 0,1,0
+O refused long
+M 0,2
+O refused range
+M 0,0
+O refused repeat
+M -
+O refused short
+C same_berth
+H 3 3:4,3:0,3:0,3:2
+O L 3 4
+O R 0 berth0 3 4
+O R 1 berth1 3 0
+O R 2 berth2 3 0
+O R 3 berth3 3 2
+O P fcfs 1,2,3,0 0 0
+O P sstf 1,2,3,0 0 0
+O P scan 1,2,3,0 0 0
+O P cscan 1,2,3,0 0 0
+O P best 1,2,3,0 0 0
+M 1,2,3,0
+O m 0 0 sweet
+M 0,1,2,3
+O m 10 0 jammed
+M 3,2,1,0
+O m 4 0 jammed
+M 3,0,1,2
+O m 8 0 jammed
+M 1,2,3,0
+O m 0 0 sweet
+M 1,2,3,0
+O m 0 0 sweet
+M 1,2,3,0
+O m 0 0 sweet
+M 1,2,3,0
+O m 0 0 sweet
+M 0,1,2
+O refused short
+M 0,1,2,3,0
+O refused long
+M 0,1,2,4
+O refused range
+M 0,1,2,0
+O refused repeat
+M -
+O refused short
+C cscan_wrap
+H 30 35:0,5:0,10:0,38:5,30:0
+O L 30 5
+O R 0 berth0 35 0
+O R 1 berth1 5 0
+O R 2 berth2 10 0
+O R 3 berth3 38 5
+O R 4 berth4 30 0
+O P fcfs 1,2,4,0,3 213 58
+O P sstf 4,0,3,2,1 85 41
+O P scan 4,0,3,2,1 85 41
+O P cscan 4,0,3,1,2 95 46
+O P best 4,0,3,2,1 85 41
+M 4,0,3,2,1
+O m 85 41 sweet
+M 0,1,2,3,4
+O m 219 76 jammed
+M 4,3,2,1,0
+O m 151 71 jammed
+M 1,0,3,4,2
+O m 285 86 jammed
+M 1,2,4,0,3
+O m 213 58 jammed
+M 4,0,3,2,1
+O m 85 41 sweet
+M 4,0,3,2,1
+O m 85 41 sweet
+M 4,0,3,1,2
+O m 95 46 jammed
+M 0,1,2,3
+O refused short
+M 0,1,2,3,4,0
+O refused long
+M 0,1,2,3,5
+O refused range
+M 0,1,2,3,0
+O refused repeat
+M -
+O refused short
+C rail_ends
+H 39 0:0,39:0,0:100,39:100
+O L 39 4
+O R 0 berth0 0 0
+O R 1 berth1 39 0
+O R 2 berth2 0 100
+O R 3 berth3 39 100
+O P fcfs 0,1,2,3 190 156
+O P sstf 1,0,2,3 78 78
+O P scan 1,0,2,3 78 78
+O P cscan 1,0,2,3 78 78
+O P best 1,0,2,3 78 78
+M 1,0,2,3
+O m 78 78 sweet
+M 0,1,2,3
+O m 190 156 jammed
+M 3,2,1,0
+O m 434 117 jammed
+M 1,0,2,3
+O m 78 78 sweet
+M 0,1,2,3
+O m 190 156 jammed
+M 1,0,2,3
+O m 78 78 sweet
+M 1,0,2,3
+O m 78 78 sweet
+M 1,0,2,3
+O m 78 78 sweet
+M 0,1,2
+O refused short
+M 0,1,2,3,0
+O refused long
+M 0,1,2,4
+O refused range
+M 0,1,2,0
+O refused repeat
+M -
+O refused short
+C late_idle
+H 20 10:1000,30:1000,25:1000,20:2000
+O L 20 4
+O R 0 berth0 10 1000
+O R 1 berth1 30 1000
+O R 2 berth2 25 1000
+O R 3 berth3 20 2000
+O P fcfs 0,2,1,3 35 40
+O P sstf 2,1,0,3 30 40
+O P scan 2,1,0,3 30 40
+O P cscan 2,1,0,3 30 40
+O P best 1,2,0,3 25 40
+M 1,2,0,3
+O m 25 40 sweet
+M 0,1,2,3
+O m 45 40 jammed
+M 3,2,1,0
+O m 3045 30 jammed
+M 2,3,0,1
+O m 2040 40 jammed
+M 0,2,1,3
+O m 35 40 jammed
+M 2,1,0,3
+O m 30 40 fair
+M 2,1,0,3
+O m 30 40 fair
+M 2,1,0,3
+O m 30 40 fair
+M 0,1,2
+O refused short
+M 0,1,2,3,0
+O refused long
+M 0,1,2,4
+O refused range
+M 0,1,2,0
+O refused repeat
+M -
+O refused short
+C equal_fallback
+H 20 30:50,10:50
+O L 20 2
+O R 0 berth0 30 50
+O R 1 berth1 10 50
+O P fcfs 1,0 20 30
+O P sstf 0,1 20 30
+O P scan 0,1 20 30
+O P cscan 0,1 20 30
+O P best 0,1 20 30
+M 0,1
+O m 20 30 sweet
+M 0,1
+O m 20 30 sweet
+M 1,0
+O m 20 30 sweet
+M 1,0
+O m 20 30 sweet
+M 1,0
+O m 20 30 sweet
+M 0,1
+O m 20 30 sweet
+M 0,1
+O m 20 30 sweet
+M 0,1
+O m 20 30 sweet
+M 0
+O refused short
+M 0,1,0
+O refused long
+M 0,2
+O refused range
+M 0,0
+O refused repeat
+M -
+O refused short
+C ten_ship_hand
+H 0 0:0,4:7,8:3,12:10,16:6,20:2,24:9,28:5,32:1,36:8
+O L 0 10
+O R 0 berth0 0 0
+O R 1 berth1 4 7
+O R 2 berth2 8 3
+O R 3 berth3 12 10
+O R 4 berth4 16 6
+O R 5 berth5 20 2
+O R 6 berth6 24 9
+O R 7 berth7 28 5
+O R 8 berth8 32 1
+O R 9 berth9 36 8
+O P fcfs 0,8,5,2,7,4,1,9,6,3 777 156
+O P sstf 0,8,7,6,5,4,3,2,1,9 409 92
+O P scan 0,8,9,7,6,5,4,3,2,1 409 68
+O P cscan 0,8,9,1,2,3,4,5,6,7 577 92
+O P best 0,1,2,3,4,5,6,7,8,9 156 36
+M 0,1,2,3,4,5,6,7,8,9
+O m 156 36 sweet
+M 0,1,2,3,4,5,6,7,8,9
+O m 156 36 sweet
+M 9,8,7,6,5,4,3,2,1,0
+O m 489 72 jammed
+M 4,7,3,6,1,8,9,5,2,0
+O m 785 144 jammed
+M 0,8,5,2,7,4,1,9,6,3
+O m 777 156 jammed
+M 0,8,7,6,5,4,3,2,1,9
+O m 409 92 fair
+M 0,8,9,7,6,5,4,3,2,1
+O m 409 68 fair
+M 0,8,9,1,2,3,4,5,6,7
+O m 577 92 jammed
+M 0,1,2,3,4,5,6,7,8
+O refused short
+M 0,1,2,3,4,5,6,7,8,9,0
+O refused long
+M 0,1,2,3,4,5,6,7,8,10
+O refused range
+M 0,1,2,3,4,5,6,7,8,0
 O refused repeat
 M -
 O refused short

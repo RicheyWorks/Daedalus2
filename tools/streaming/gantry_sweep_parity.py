@@ -8,7 +8,9 @@ waits at a berth until the ship there has arrived, and serves it at once. The pl
 order; the score is the total ticks the ships wait (serve tick - arrival). The core also shows four
 yard habits (first come first served, nearest arrived ship, the elevator sweep, the one-way sweep) and
 the exact best order. Each seed names a tide profile: calm (arrivals over 24 ticks), rush (6: ships pile
-up at once) or spread (60: the crane often idles).
+up at once) or spread (60: the crane often idles); storm is the harder tier, 8 to 10 ships over 24 ticks. The best
+order is a depth-first search in lexicographic order that prunes on the best wait so far and on
+dominated (ships served, last ship) states, so it is exact for up to 10 ships.
 
 The layout comes from random.Random(seed string), the only seeding that DaedalusPyRandomCore.h has, with
 draws it supports: randrange(RAIL) and randrange(4) (_randbelow), sample(range(RAIL), n), random() (the
@@ -24,7 +26,6 @@ Golden lines: `C name`; `S profile hex` (tide profile, seed string as utf-8 hex)
 then `M order` plays (comma-separated ship indices, `-` for none) answered by `O m waits travel verdict` or
 `O refused kind` (short, long, range, repeat).
 """
-import itertools
 import os
 import random
 import sys
@@ -33,7 +34,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 GOLDEN = os.path.join(ROOT, "engines", "unreal", "core-test", "disksaver_gantry_sweep_parity.txt")
 RAIL = 40
-PROFILES = {"calm": 24, "rush": 6, "spread": 60}  # arrival span in ticks
+PROFILES = {"calm": 24, "rush": 6, "spread": 60, "storm": 24}  # arrival span in ticks
+STORM_SHIPS = (8, 10)
+HAND_MAX_SHIPS = 10
 MIN_SHIPS, MAX_SHIPS = 5, 8
 BERTHS = ("anchor", "bollard", "capstan", "davit", "eyebolt", "fairlead", "gunwale", "hawser",
           "jetty", "keel", "lanyard", "mooring")
@@ -43,7 +46,8 @@ def layout(seed, profile="calm"):
     span = PROFILES[profile]
     r = random.Random(seed)
     start = r.randrange(RAIL)
-    n = MIN_SHIPS + r.randrange(MAX_SHIPS - MIN_SHIPS + 1)
+    lo, hi = STORM_SHIPS if profile == "storm" else (MIN_SHIPS, MAX_SHIPS)
+    n = lo + r.randrange(hi - lo + 1)
     pos = r.sample(range(RAIL), n)
     arrive = [int(r.random() * span) for _ in range(n)]
     names = list(BERTHS)
@@ -126,11 +130,35 @@ HABITS = (("fcfs", fcfs), ("sstf", sstf), ("scan", scan), ("cscan", cscan))
 
 
 def best(start, ships):
-    top = None
-    for p in itertools.permutations(range(len(ships))):
-        w = run(start, ships, p)[0]
-        if top is None or w < top[0]:
-            top = (w, list(p))
+    """Fewest waiting ticks; the first such order in lexicographic order. Depth-first in index order,
+    pruning a prefix whose waits already reach the best found, or whose (served set, last ship) state was
+    reached before with no later time and no more waits (that earlier, lexicographically smaller prefix
+    does at least as well with any suffix)."""
+    n = len(ships)
+    top = [None, None]
+    seen = {}
+
+    def go(mask, last, t, x, w, prefix):
+        if top[0] is not None and w >= top[0]:
+            return
+        if mask == (1 << n) - 1:
+            top[0], top[1] = w, list(prefix)
+            return
+        key = (mask, last)
+        for t2, w2 in seen.get(key, ()):
+            if t2 <= t and w2 <= w:
+                return
+        seen.setdefault(key, []).append((t, w))
+        for i in range(n):
+            if mask >> i & 1:
+                continue
+            _, p, a = ships[i]
+            t1 = max(t + abs(p - x), a)
+            prefix.append(i)
+            go(mask | 1 << i, i, t1, p, w + t1 - a, prefix)
+            prefix.pop()
+
+    go(0, -1, 0, start, 0, [])
     return top[1]
 
 
@@ -189,6 +217,7 @@ def lines():
     tides = [(s, "calm") for s in seeds]
     tides += [(f"gantry-sweep|rush|{k}", "rush") for k in range(8)] + [(f"gantry-sweep|spread|{k}", "spread") for k in range(8)]
     tides += [("gantry-sweep|2026-10-26|42", "rush"), ("gantry-sweep|2026-10-26|42", "spread")]  # one seed, three tides
+    tides += [(f"gantry-sweep|storm|{k}", "storm") for k in range(8)]
     for k, (s, prof) in enumerate(tides):
         start, ships = layout(s, prof)
         case(out, f"seed{k}", f"S {prof} x" + s.encode("utf-8").hex(), start, ships, plays_for(start, ships, pick))
@@ -196,7 +225,15 @@ def lines():
              "far_rail": (0, [(1000000, 0), (0, 1000000000), (500000, 999999999)]),
              "all_at_once": (20, [(p, 0) for p in (3, 39, 21, 19, 0, 38, 2, 22)]),
              "staggered": (10, [(i * 5, 30 - 3 * i) for i in range(8)]),
-             "scan_turns": (20, [(25, 0), (15, 0), (30, 1), (5, 2), (35, 9)])}
+             "scan_turns": (20, [(25, 0), (15, 0), (30, 1), (5, 2), (35, 9)]),
+             # tie-breaks and edges
+             "tie_twins": (10, [(15, 0), (5, 0)]),  # sstf: equal distance, lower berth wins; best: lower index on ties
+             "same_berth": (3, [(3, 4), (3, 0), (3, 0), (3, 2)]),  # every ship under the crane
+             "cscan_wrap": (30, [(35, 0), (5, 0), (10, 0), (38, 5), (30, 0)]),  # one-way sweep runs back to 5
+             "rail_ends": (39, [(0, 0), (39, 0), (0, 100), (39, 100)]),
+             "late_idle": (20, [(10, 1000), (30, 1000), (25, 1000), (20, 2000)]),  # fallback: same arrival, nearest
+             "equal_fallback": (20, [(30, 50), (10, 50)]),  # same arrival and distance: lower index
+             "ten_ship_hand": (0, [(i * 4, (i * 7) % 11) for i in range(10)])}
     for name, (start, hs) in hands.items():
         ships = [(f"berth{i}", p, a) for i, (p, a) in enumerate(hs)]
         head = f"H {start} " + ",".join(f"{p}:{a}" for p, a in hs)

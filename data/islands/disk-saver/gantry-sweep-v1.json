@@ -3,9 +3,13 @@
   "quest": "q_gantry_sweep",
   "lore": "Railwright Ossian keeps the one gantry crane on the counting-house quay. Ships call for it from every berth on the rail and at every hour of the tide, and the crane can only be in one place. Ossian chalks the order he would have served them on the rail post, beside the habits of the yard crews, and grumbles at every tick a ship spends waiting with its hatches open.",
   "hook": {"core": "DaedalusDiskSaverGantrySweepCore.h", "field": "verdict", "values": ["sweet", "fair", "jammed"],
-           "rail": "stream load queue", "ship": "island stream request (pack offset, request tick)", "score": "waiting ticks"},
+           "rail": "stream load queue", "ship": "island stream request (pack offset, request tick)", "score": "waiting ticks",
+           "profiles": {"calm": "arrivals over 24 ticks, 5-8 ships", "rush": "arrivals over 6 ticks, 5-8 ships",
+                        "spread": "arrivals over 60 ticks, 5-8 ships", "storm": "arrivals over 24 ticks, 8-10 ships (harder tier)"},
+           "habits": ["fcfs", "sstf", "scan", "cscan"], "refusals": ["short", "long", "range", "repeat"]},
   "npc": {"name": "Railwright Ossian", "lines": {
     "sweet": "Not a tick wasted. I could not have swung her better myself.",
     "fair": "As good as the yard habit. The rail post says there was a better order; go and read it.",
-    "jammed": "Ships rolling at anchor with their hatches open. Even first come, first served would have done better."}}
+    "jammed": "Ships rolling at anchor with their hatches open. Even first come, first served would have done better."},
+    "tier_lines": {"storm": "Ten hulls on one rail and one crane. Read my post before you swing her."}}
 }

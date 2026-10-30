@@ -14,16 +14,19 @@
 #include <cstddef>
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace DaedalusDiskSaver {
 namespace GantrySweep {
 
 constexpr std::uint32_t Rail = 40;
-enum class Profile { Calm, Rush, Spread };
+enum class Profile { Calm, Rush, Spread, Storm };
 inline int ArrivalSpan(Profile P) { return P == Profile::Rush ? 6 : P == Profile::Spread ? 60 : 24; }
-inline const char* ProfileName(Profile P) { return P == Profile::Rush ? "rush" : P == Profile::Spread ? "spread" : "calm"; }
-constexpr std::uint32_t MinShips = 5, MaxShips = 8;
+inline const char* ProfileName(Profile P) { return P == Profile::Rush ? "rush" : P == Profile::Spread ? "spread" : P == Profile::Storm ? "storm" : "calm"; }
+constexpr std::uint32_t MinShips = 5, MaxShips = 8;          // calm, rush, spread
+constexpr std::uint32_t StormMinShips = 8, StormMaxShips = 10;  // the harder tier
+constexpr std::size_t HandMaxShips = 10;
 constexpr std::int64_t MaxCoord = 1000000000;  // hand layouts: berths and arrivals; every time stays < 2^40
 constexpr std::size_t MaxSeedBytes = 4096;
 static const char* const Berths[12] = {"anchor", "bollard", "capstan", "davit", "eyebolt", "fairlead",
@@ -67,14 +70,15 @@ inline void Shuffle(daedalus::pyrandom::PyRandom& R, std::vector<T>& X) {
     }
 }
 
-// random.Random(Seed): start = randrange(40); n = 5 + randrange(4); pos = sample(range(40), n);
+// random.Random(Seed): start = randrange(40); n = 5 + randrange(4) (storm: 8 + randrange(3)); pos = sample(range(40), n);
 // arrive = int(random() * span) per ship (span from the tide profile); names = shuffle(BERTHS)[:n].
 inline Error FromSeed(const std::string& Seed, Profile P, Layout& Out) {
     if (Seed.size() > MaxSeedBytes) return Error::Seed;
     daedalus::pyrandom::PyRandom R(Seed);
     Out = Layout{};
     Out.Start = R.RandRange(Rail);
-    const std::size_t N = MinShips + R.RandRange(MaxShips - MinShips + 1);
+    const std::uint32_t Lo = P == Profile::Storm ? StormMinShips : MinShips, Hi = P == Profile::Storm ? StormMaxShips : MaxShips;
+    const std::size_t N = Lo + R.RandRange(Hi - Lo + 1);
     const std::vector<std::size_t> Pos = R.SampleIndices(Rail, N);
     std::vector<std::int64_t> Arrive(N);
     for (std::size_t I = 0; I < N; ++I) Arrive[I] = static_cast<std::int64_t>(R.RandomDouble() * ArrivalSpan(P));
@@ -84,10 +88,10 @@ inline Error FromSeed(const std::string& Seed, Profile P, Layout& Out) {
     return Error::None;
 }
 
-// A hand-laid rail: 1..8 ships, berths and arrivals in 0..MaxCoord.
+// A hand-laid rail: 1..10 ships, berths and arrivals in 0..MaxCoord.
 inline Error MakeHand(std::int64_t Start, const std::vector<std::pair<std::int64_t, std::int64_t>>& PosArrive, Layout& Out) {
     if (PosArrive.empty()) return Error::NoShips;
-    if (PosArrive.size() > MaxShips) return Error::TooManyShips;
+    if (PosArrive.size() > HandMaxShips) return Error::TooManyShips;
     if (Start < 0 || Start > MaxCoord) return Error::Coord;
     Out = Layout{};
     Out.Start = Start;
@@ -242,21 +246,48 @@ inline Order Cscan(const Layout& L) {
     return O;
 }
 
-// The exact best order: fewest waiting ticks, the first in lexicographic order among ties (n <= 8: 40320 orders).
-inline Order Best(const Layout& L) {
-    Order P(L.Ships.size()), Top;
-    for (std::size_t I = 0; I < P.size(); ++I) P[I] = I;
-    std::int64_t TopW = -1;
-    do {
-        std::int64_t W = 0, Tr = 0;
-        Run(L, P, W, Tr);
-        if (TopW < 0 || W < TopW) {
-            TopW = W;
-            Top = P;
+// The exact best order: fewest waiting ticks, the first in lexicographic order among ties. Depth-first in
+// index order; prune a prefix whose waits reach the best found, or whose (served set, last ship) state was
+// reached before with no later time and no more waits: that earlier, lexicographically smaller prefix does
+// at least as well with any suffix. Exact for up to 10 ships.
+class BestSearch {
+public:
+    explicit BestSearch(const Layout& L) : L_(L), N_(L.Ships.size()), Seen_((std::size_t{1} << N_) * (N_ + 1)) {}
+    Order Run() {
+        Order Prefix;
+        Go(0, N_, 0, L_.Start, 0, Prefix);
+        return Top_;
+    }
+
+private:
+    void Go(std::size_t Mask, std::size_t Last, std::int64_t T, std::int64_t X, std::int64_t W, Order& Prefix) {
+        if (TopW_ >= 0 && W >= TopW_) return;
+        if (Mask == (std::size_t{1} << N_) - 1) {
+            TopW_ = W;
+            Top_ = Prefix;
+            return;
         }
-    } while (std::next_permutation(P.begin(), P.end()));
-    return Top;
-}
+        std::vector<std::pair<std::int64_t, std::int64_t>>& S = Seen_[Mask * (N_ + 1) + Last];
+        for (const auto& TW : S)
+            if (TW.first <= T && TW.second <= W) return;
+        S.emplace_back(T, W);
+        for (std::size_t I = 0; I < N_; ++I) {
+            if (Mask >> I & 1) continue;
+            const Ship& Sh = L_.Ships[I];
+            const std::int64_t T1 = std::max(T + Dist(Sh.Pos, X), Sh.Arrive);
+            Prefix.push_back(I);
+            Go(Mask | std::size_t{1} << I, I, T1, Sh.Pos, W + T1 - Sh.Arrive, Prefix);
+            Prefix.pop_back();
+        }
+    }
+    const Layout& L_;
+    std::size_t N_;
+    std::vector<std::vector<std::pair<std::int64_t, std::int64_t>>> Seen_;
+    Order Top_;
+    std::int64_t TopW_ = -1;
+};
+
+inline Order Best(const Layout& L) { return BestSearch(L).Run(); }
 
 enum class Verdict { Sweet, Fair, Jammed };
 inline const char* VerdictName(Verdict V) { return V == Verdict::Sweet ? "sweet" : V == Verdict::Fair ? "fair" : "jammed"; }
