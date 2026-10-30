@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.10'
       - name: G206 Census Budget Beacons (cost = DSB estimate, exact budget edges, greedy = brute-force oracle, seeded replay, golden report from real census)

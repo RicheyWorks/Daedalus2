@@ -32,5 +32,37 @@
  * <p>G532 Hay Wagon Round ({@link HayWagonRound}, quest {@code q_hay_on_time}): feed every stall inside its feeding
  * window and get the hay wagon home earliest (travelling salesman with time windows, waiting allowed); exact
  * Held-Karp over (stalls fed, last stall) vs. nearest-open-stall, which a stall by the barn strands.
+ *
+ * <p>G535 Farrier's Two Anvils ({@link FarriersTwoAnvils}, quest {@code q_two_anvils}): shoeing jobs with
+ * must-finish-first links on two identical anvils, finish the last job earliest (P2|prec|Cmax); exact memoised event
+ * search, which may idle an anvil on purpose, vs. Graham list scheduling in job order.
+ *
+ * <p>G537 Bridle Rack Matching ({@link BridleRackMatching}, quest {@code q_all_tacked}): give every horse its own
+ * groom whose skill covers the horse's temperament so the last horse is ready earliest (bottleneck assignment with
+ * compatibility); exact threshold search with augmenting paths vs. cheapest-pair-first, which strands or delays.
+ *
+ * <p>G539 Water Trough Fill ({@link WaterTroughFill}, quest {@code q_troughs_full}): pump the required buckets from
+ * the well to the trough through pipes with capacities and per-bucket costs at least cost (min-cost flow); exact
+ * successive shortest paths on the residual network vs. cheapest-path-without-undo, which runs dry or pays more.
+ *
+ * <p>G540 Lantern Posts ({@link LanternPosts}, quest {@code q_paths_lit}): light every path of the tree-shaped yard
+ * with lanterns at junctions, each with its own price and lighting at most {@code reach} adjacent paths (capacitated
+ * weighted vertex cover on a tree); exact tree DP vs. busiest-junction-per-coin, which pays more on most seeds.
+ *
+ * <p>G542 Hay Bale Stacking ({@link HayBaleStacking}, quest {@code q_tall_stack}): build the tallest stack of bales,
+ * each strictly smaller on both footprint sides than the one below (turning allowed) and carrying at most its strength
+ * (box stacking with load limits); exact DP over (bottom bale, stack weight) vs. biggest-first, usually shorter.
+ *
+ * <p>G545 Tack Ledger Index ({@link TackLedgerIndex}, quest {@code q_quick_ledger}): file the horses' ledger cards
+ * as a binary search tree so lookups, weighted by how often each card is asked for, flip the fewest cards (optimal
+ * binary search tree); exact Knuth interval DP vs. most-asked-card-at-the-root, which files lopsided ledgers.
+ *
+ * <p>G547 Stall Plaques ({@link StallPlaques}, quest {@code q_neat_plaques}): letter the stable roll onto fixed-width
+ * plaque lines so the squared leftover space on every line but the last is least (Knuth-Plass-style word wrap); exact
+ * DP over line starts vs. fill-each-line, which leaves short stub lines.
+ *
+ * <p>G548 Barn Upgrades ({@link BarnUpgrades}, quest {@code q_paying_barn}): choose stable upgrades, each earning or
+ * costing coin, so every prerequisite is included and net coin is greatest (maximum-weight closure / project
+ * selection); exact min cut vs. one-at-a-time, which skips groundwork that only pays when shared.
  */
 package com.daedalus.world.stable;

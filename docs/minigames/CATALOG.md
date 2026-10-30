@@ -27,6 +27,8 @@ batched rebuild under the editor custodian.
 | `lumenpath` | Lumenpath Refraction | 1 |
 | `wardens_accord` | Wardens' Accord | 1 |
 | `facetlock` | Facetlock Lattice | 1 |
+| `prismcairn` | Prismcairn Duel | 1 |
+| `prismvault` | Prismvault Weigh | 1 |
 | `siltlane` | Siltlane | 1 |
 
 ## How to play
@@ -54,6 +56,8 @@ One original line per game, read from `HowToLine()`.
 | `lumenpath` | HOW Toggle shard mirrors to bend the prism beam through every crystal before your moves run out. |
 | `wardens_accord` | HOW Take one of three altar shards each round, then spend matching shards to summon spirits before the rounds end. |
 | `facetlock` | HOW Slide lattice rows and columns, which wrap, until each row shows a single hue inside the move budget. |
+| `prismcairn` | HOW Take one or more shards, up to the limit, from one cairn each turn; lift the last shard to win the round, best of three. |
+| `prismvault` | HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out. |
 | `siltlane` | HOW Switch lanes so the drifting silt passes you. |
 
 ## Difficulty
@@ -81,6 +85,8 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `lumenpath` | normal |
 | `wardens_accord` | normal |
 | `facetlock` | normal |
+| `prismcairn` | normal |
+| `prismvault` | normal |
 | `siltlane` | normal |
 
 ## Daedalus spots
@@ -108,6 +114,8 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `lumenpath` | `prismheart_realm` | Prismheart, the refraction gallery |
 | `wardens_accord` | `prismheart_realm` | Prismheart, the Warden altar |
 | `facetlock` | `prismheart_realm` | Prismheart, the vault door |
+| `prismcairn` | `prismheart_realm` | Prismheart, the cairn field |
+| `prismvault` | `prismheart_realm` | Prismheart, the balance chamber |
 | `siltlane` | `spawn_overlook` | Spawn overlook, the silt course |
 
 ## Capabilities
@@ -136,6 +144,8 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `lumenpath` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 | `wardens_accord` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 | `facetlock` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
+| `prismcairn` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `prismvault` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `siltlane` |  |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 
 ## Leaderboard feed
@@ -171,3 +181,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `prismcairn` | Prismcairn Duel | `tools/minigames/prismcairn.py` | HOW Take 1 or more shards (up to the limit) from one cairn each turn; the Warden replies. Lift the last shard to win the round; best of three. |
 | `spiritkite` | Spiritkite Weave | `tools/minigames/spiritkite.py` | HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out. |
 | `shadewatch` | Shadewatch Vigil | `tools/minigames/shadewatch.py` | HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends. |
+| `glimmerloom` | Glimmerloom Ledger | `tools/minigames/glimmerloom.py` | HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target. |

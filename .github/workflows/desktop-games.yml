@@ -29,7 +29,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.10"
       # ccache (item 19): the gcc sanitizer compile is the slowest step
@@ -60,6 +60,10 @@ jobs:
         run: python tools/minigames/wardens_accord_parity.py --check
       - name: Facetlock parity fixture is current (engines/unreal/core-test/facetlock_parity.txt)
         run: python tools/minigames/facetlock_parity.py --check
+      - name: Prismcairn parity fixture is current (engines/unreal/core-test/prismcairn_parity.txt)
+        run: python tools/minigames/prismcairn_parity.py --check
+      - name: Prismvault parity fixture is current (engines/unreal/core-test/prismvault_parity.txt)
+        run: python tools/minigames/prismvault_parity.py --check
       - name: Realm cabinet placements are current and tested
         run: |
           python tools/minigames/realm_cabinets.py --check

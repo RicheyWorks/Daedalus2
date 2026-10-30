@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "quest": "q_last_crate",
+  "lore": "On slow tides the dockhands of DiskSaver harbour play Last Crate. Every island in the census is a crate, heavy as the memory it needs, stacked face down on the quay. You hoist them aboard one by one and choose when to sail. Load one too many and the hold bursts and everything goes over the side. Dockhand Ambrose has never lost, because he counts what is left in the stack.",
+  "hook": {
+    "report_format": "daedalus-last-crate",
+    "field": "outcome",
+    "values": ["full", "light", "overboard"],
+    "carried": "carried_kib",
+    "best": "best_kib",
+    "tips": "turns[].advice"
+  },
+  "npc": {
+    "name": "Dockhand Ambrose",
+    "lines": {
+      "full": "You sailed with every crate that stack could give you. Not a kilobyte left on the quay. Well played.",
+      "light": "Safe home, but light. The next crate would have fit. Count what's left in the stack before you cast off.",
+      "overboard": "One crate too many and the hold burst. The whole load's at the bottom of the harbour. Again?"
+    }
+  }
+}

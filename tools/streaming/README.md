@@ -135,3 +135,209 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 
 ## Fleet Flags (G533, quest q_fleet_flags)
 - `fleet_flags.py`: reads `census.json` (read-only), prices it with G206 and rolls the streaming budget up by realm (unrealmed worlds grouped first): worlds, islands, RAM/disk totals, beacon counts, spilling worlds, heaviest world and a realm flag (green/amber/red), and checks the census `realms[]` tallies against the worlds list. Verdict `fair`/`signal`/`distress`; `--fail-on-distress` exits 1 (also on any tally mismatch). Signal Yeoman Marisol flies the flags in game (`fleet_flags_test.py`; CI `Fleet Flags`). Rules: `docs/islands/DISKSAVER-FLEET-FLAGS.md`.
+
+## Pier Register (G534, quest q_pier_register)
+- `pier_register.py`: audits every DiskSaver hook file `data/islands/disk-saver/*-v1.json` (read-only) with its rules doc and tool: errors `bad_json`, `no_quest`, `duplicate_quest`, `lines_mismatch`; advisories `no_doc`, `no_tool`, `no_npc`, `name_reused` (same NPC given name on several islands). `--name` checks a new NPC name is free. Verdict `registered`/`queried`/`unregistered`; `--fail-on` exits 1. Dev tooling only, nothing runs in Unreal. Pier Registrar Abelard keeps the register in game (`pier_register_test.py`; CI `Pier Register`). Rules: `docs/islands/DISKSAVER-PIER-REGISTER.md`.
+
+## Channel Chart (G536, quest q_channel_chart)
+- `channel_chart.py`: a static chart of `tools/streaming` (parsed with `ast`, never executed, read-only): per tool its local imports and importers, external imports, the disk-saver data files it names, its test and the CI workflows that run it, plus a dependency-first run order. Errors `syntax_error`, `import_cycle`, `missing_module`; advisories `no_test`, `no_workflow`, `external_import`, `unnamed_data`. Verdict `charted`/`shoals`/`uncharted`; `--fail-on` exits 1. Dev tooling only, nothing runs in Unreal. Chartmaker Isaura inks the chart in game (`channel_chart_test.py`; CI `Channel Chart`). Rules: `docs/islands/DISKSAVER-CHANNEL-CHART.md`.
+
+## Bell Buoys (G538, quest q_bell_buoys)
+- `bell_buoys.py`: checks every `.github/workflows` pull_request `paths` filter against the repo files its run steps use (read-only, plain-text parse): errors `unguarded` (a used file, module or directory no pattern matches, so changing it never triggers the check) and `missing_file`; advisory `stale_pattern` (a pattern matching no file). `--under PREFIX` scopes to one lane. Verdict `ringing`/`muffled`/`silent`; `--fail-on` exits 1. Dev tooling only, nothing runs in Unreal. Buoy-tender Ottoline checks the buoys in game (`bell_buoys_test.py`; CI `Bell Buoys`). Rules: `docs/islands/DISKSAVER-BELL-BUOYS.md`.
+
+## Rigging Check (G541, disk-saver)
+
+`rigging_check.py` surveys `.github/workflows` read-only: `uses:` actions with no ref or a moving branch ref (error), action major-version drift, third-party tags instead of SHAs, `python-version` drift and missing top-level `permissions:` (advisories). `--under PREFIX` scopes findings; verdict taut/slack/frayed. NPC Bosun Thaddeus; hook `data/islands/disk-saver/rigging-check-v1.json`; doc `docs/islands/DISKSAVER-RIGGING-CHECK.md`.
+
+## Leading Lights (G543, disk-saver)
+
+`leading_lights.py` follows every relative link and image in the repo's Markdown, read-only and without network access: broken targets are errors; missing `#anchors`, machine-local paths, links out of the repo and stale inline-code repo paths are advisories. `--under PREFIX` scopes the files; verdict lit/dim/dark. NPC Lightkeeper Seraphine; hook `data/islands/disk-saver/leading-lights-v1.json`; doc `docs/islands/DISKSAVER-LEADING-LIGHTS.md`.
+
+## Caulking Check (G544, disk-saver)
+
+`caulking_check.py` checks the byte-level seams of the lane's text files, read-only: invalid UTF-8, unparseable JSON/JSONL and duplicate JSON keys are errors; BOMs, CRLF or mixed line endings, a missing final newline, trailing whitespace and tab indentation in .py/.yml are advisories. `--under` (repeatable) picks the lane; verdict sound/weeping/leaking. NPC Caulker Evander; hook `data/islands/disk-saver/caulking-check-v1.json`; doc `docs/islands/DISKSAVER-CAULKING-CHECK.md`.
+
+## Census Riddles (G546, disk-saver)
+
+`census_riddles.py` is a playable harbour quiz: it reads a world census and the G206 budget config (read-only), draws a seeded set of riddles (islands charted, empty islands, heaviest island, a world's RAM/disk need, how many islands fit the hold, most islands resident at once) whose answers come from the G206 cost model, and grades an answer file: shipshape/adrift/aground. The same seed gives the same quiz everywhere. NPC Tide-clerk Leocadia; hook `data/islands/disk-saver/census-riddles-v1.json`; doc `docs/islands/DISKSAVER-CENSUS-RIDDLES.md`.
+
+## Last Crate (G549, disk-saver)
+
+`last_crate.py` is a push-your-luck game over the world census: every island becomes a crate weighing its G206 RAM cost, a seed shuffles them face down, and you `load` or `sail` each turn; go over the hold (the G206 RAM budget by default) and the load goes overboard. Outcome full/light/overboard against the best stop for that stack. An exact advisor (fractions, using only what a player can know) gives the bust chance and load-vs-sail value, and `--auto` plays it. NPC Dockhand Ambrose; hook `data/islands/disk-saver/last-crate-v1.json`; doc `docs/islands/DISKSAVER-LAST-CRATE.md`.
+
+## Quay Duel (G550, disk-saver)
+
+`quay_duel.py` is a two-captain draft duel over the world census: every island becomes a crate worth its G206 RAM cost, a seed lines them up on the quay, and the captains take turns hauling one crate from either end (L/R); more cargo wins. You play Wharfinger Casimir, who plays perfectly by exact interval DP (checked against plain minimax). Each turn shows the best move and the margin a weaker move gave away. Outcome won/tied/lost plus a perfect flag. NPC Wharfinger Casimir; hook `data/islands/disk-saver/quay-duel-v1.json`; doc `docs/islands/DISKSAVER-QUAY-DUEL.md`.
+
+## Fleet Soundings (G551, disk-saver)
+
+`fleet_soundings.py` is a daily solitaire-battleship puzzle over the world census: every island is a ship sized by its cargo, a seed moors the fleet in a 6x6 or 7x7 anchorage, and the player gets only row/column soundings. An exact backtracking solver reveals hint cells until exactly one solution remains, and `--check` grades a player grid charted/short/reefed. NPC Tugmaster Ignatius; hook `data/islands/disk-saver/fleet-soundings-v1.json`; doc `docs/islands/DISKSAVER-FLEET-SOUNDINGS.md`.
+
+## Harbour Cryptogram (G552, disk-saver)
+
+`harbour_cryptogram.py` is a word/cipher puzzle: true harbour news built from the world census (world titles, island counts, cargo names, empty islands, totals) is sent in a seeded letter-substitution cipher where no letter stands for itself, with a few letters given and a frequency table. Answer with `--guess` or a partial key via `--mapping`; every letter position is graded decoded/partial/garbled. NPC Telegraphist Philippa; hook `data/islands/disk-saver/harbour-cryptogram-v1.json`; doc `docs/islands/DISKSAVER-HARBOUR-CRYPTOGRAM.md`.
+
+## Smuggler's Island (G553, disk-saver)
+
+`smugglers_island.py` is a yes/no deduction game over the world census: a seed hides contraband on one island, and the player asks census-built yes/no questions (world, realm, slot, cargo, empty) before accusing `world:slot`. An exact memoised minimax gives par (the fewest questions that always find it) and `--auto` plays it. Verdict sharp/caught/escaped. NPC Exciseman Bartholomew; hook `data/islands/disk-saver/smugglers-island-v1.json`; doc `docs/islands/DISKSAVER-SMUGGLERS-ISLAND.md`.
+
+## Tide Lock (G554, disk-saver)
+
+`tide_lock.py` is a lock-scheduling puzzle over the world census: every island sends a boat as long as its G206 RAM cost, arriving at seeded minutes; one chamber (the G206 RAM budget by default) lifts boats in arrival order, one fixed-length cycle at a time, and the player groups them (`--plan 2,1,3`) to minimise total waiting. An exact memoised search (checked against every grouping) gives par, greedy fill is shown as the trap, and `--auto` plays par. Verdict smooth/slow/jammed. NPC Lockkeeper Wilhelmina; hook `data/islands/disk-saver/tide-lock-v1.json`; doc `docs/islands/DISKSAVER-TIDE-LOCK.md`.
+
+## Watchfires (G555, disk-saver)
+
+`watchfires.py` is a graph puzzle between islands: census islands form a seeded, connected ferry chart, a watchfire lights its island and every neighbour, and the player lights the whole chart with the fewest fires (minimum dominating set). Exact branch-and-bound par (checked against every set), greedy shown as the trap, `--auto` plays par. Verdict blazing/smoky/dark. NPC Firekeeper Leofric; hook `data/islands/disk-saver/watchfires-v1.json`; doc `docs/islands/DISKSAVER-WATCHFIRES.md`.
+
+## Manifest Match (G556, disk-saver)
+
+`manifest_match.py` is a memory (Concentration) game over the world census: every island has an ISLAND card and a MANIFEST card (its G206 RAM cost), a seed deals up to 12 pairs face down, and each turn flips two cards (`--turns 1-2,3-4`, replayed so the log reveals the faces). Par is the perfect-memory turn count for that layout and `--auto` plays it. Verdict sharp/matched/unfinished. NPC Wharf Clerk Godfrey; hook `data/islands/disk-saver/manifest-match-v1.json`; doc `docs/islands/DISKSAVER-MANIFEST-MATCH.md`.
+
+## Twin Pilots (G557)
+
+`twin_pilots.py` is a cooperative two-boat round over the world census. Islands and seeded buoys
+are berths on a channel chart. Two pilot boats each move one channel per bell and together must
+call at every berth and return home. Par is an exact BFS over the joint state, checked against a
+split-and-tour brute-force oracle. `solo_bells` shows the single-boat trap. Verdicts are
+`in_step`, `late` and `adrift`. Hook: `data/islands/disk-saver/twin-pilots-v1.json`
+(Pilotmaster Cuthbert). Doc: `docs/islands/DISKSAVER-TWIN-PILOTS.md`. CI: `twin-pilots.yml`.
+
+```
+python tools/streaming/twin_pilots.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/twin_pilots_test.py
+```
+
+## Quayside Shove (G558)
+
+`quayside_shove.py` is a crate-pushing puzzle over the world census. The up to three costliest
+islands each ship a crate into a seeded 7x7 yard. The yard is built by reverse pulls, so it is
+always solvable. Yardmaster Hamish pushes (never pulls) the crates onto the chalk marks. Par is
+the fewest steps by exact BFS, checked against an independent layered search, and a `stuck`
+result reports whether the yard is deadlocked. Verdicts are `tidy`, `shuffled` and `stuck`.
+Hook: `data/islands/disk-saver/quayside-shove-v1.json`. Doc: `docs/islands/DISKSAVER-QUAYSIDE-SHOVE.md`.
+CI: `quayside-shove.yml`.
+
+```
+python tools/streaming/quayside_shove.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/quayside_shove_test.py
+```
+
+## Sack Chute (G559)
+
+`sack_chute.py` is a solitaire sowing (mancala-style) game over the world census. Islands are
+bins on a looping chute that passes the hold, and a seed fills them with sacks. Tipping a bin
+sows its sacks one at a time down the chute, banking one each time the sowing passes the hold.
+Par is the fewest moves by exact BFS, checked against an independent memoised recursion.
+`greedy_moves` shows the nearest-the-hold trap. Verdicts are `stowed`, `slow` and `loose`.
+Hook: `data/islands/disk-saver/sack-chute-v1.json` (Hold Master Peregrine). Doc:
+`docs/islands/DISKSAVER-SACK-CHUTE.md`. CI: `sack-chute.yml`.
+
+```
+python tools/streaming/sack_chute.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/sack_chute_test.py
+```
+
+## Seal Roll (G560)
+
+`seal_roll.py` is a rolling-cube puzzle over the world census. Up to four islands each get a
+chalk mark on a seeded 7x7 quay. Sealwright Cornelius tips a cube with the seal on one face,
+edge over edge, and must land it seal-up on every mark and then finish on the dock. Par is the
+fewest tips by exact BFS over (square, seal side, marks), checked against an independent 3-D
+vector solver. Verdicts are `true`, `wobbly` and `off_mark`. Hook:
+`data/islands/disk-saver/seal-roll-v1.json`. Doc: `docs/islands/DISKSAVER-SEAL-ROLL.md`.
+CI: `seal-roll.yml`.
+
+```
+python tools/streaming/seal_roll.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/seal_roll_test.py
+```
+
+## Channel Dash (G561)
+
+`channel_dash.py` is a timing crossing game over the world census. Each island is a lane of
+seeded barges drifting east or west and wrapping round a 9-cell channel. Courier Isadora moves
+or waits one cell a tick and must reach the far dock without a barge landing on her. Par is the
+fewest ticks by exact BFS over (row, column, tick mod 9), checked against an independent
+real-time search. Verdicts are `swift`, `safe` and `swamped`. Hook:
+`data/islands/disk-saver/channel-dash-v1.json`. Doc: `docs/islands/DISKSAVER-CHANNEL-DASH.md`.
+CI: `channel-dash.yml`.
+
+```
+python tools/streaming/channel_dash.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/channel_dash_test.py
+```
+
+## Boom Defence (G562)
+
+`boom_defence.py` is a tower-defence-lite game over the world census. Each island sends a
+smuggler skiff up a seeded winding channel, and Boom-master Leopold picks two of up to twelve
+post sites. Each post snags the furthest-along skiff in reach once a tick. Par is the fewest
+skiffs through over every pair of sites (exhaustive, checked against an independent
+simulator). `greedy_through` shows the most-reach trap. Verdicts are `watertight`, `leaky` and
+`overrun`. Hook: `data/islands/disk-saver/boom-defence-v1.json`. Doc:
+`docs/islands/DISKSAVER-BOOM-DEFENCE.md`. CI: `boom-defence.yml`.
+
+```
+python tools/streaming/boom_defence.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/boom_defence_test.py
+```
+
+## Salvage Sale (G563)
+
+`salvage_sale.py` is a sealed-bid auction over the world census, played against a
+deterministic rival. Each island puts up a salvage lot. The Broker bids half the value plus 3
+for every lot it has lost, so early wins make later lots dearer. Par is the best value by exact
+search, checked against a brute force over every win-or-pass plan. `greedy_value` shows the
+win-what-you-can trap. Verdicts are `shrewd`, `fair` and `fleeced`. Hook:
+`data/islands/disk-saver/salvage-sale-v1.json` (Auctioneer Barnaby). Doc:
+`docs/islands/DISKSAVER-SALVAGE-SALE.md`. CI: `salvage-sale.yml`.
+
+```
+python tools/streaming/salvage_sale.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/salvage_sale_test.py
+```
+
+## Rope Run (G564)
+
+`rope_run.py` is a path-drawing puzzle over the world census. On a seeded 5x6 quay, Ropewalker
+Theodora lays one rope from the start bollard to the dock post without crossing itself or a
+crate. Island cleats are worth 3 to 5 grip and plain rings 1. Par is the best grip over every
+simple path (exact search, checked against an independent recursive search). `greedy_grip`
+shows the best-neighbour trap. Verdicts are `taut`, `slack` and `loose`. Hook:
+`data/islands/disk-saver/rope-run-v1.json`. Doc: `docs/islands/DISKSAVER-ROPE-RUN.md`.
+CI: `rope-run.yml`.
+
+```
+python tools/streaming/rope_run.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/rope_run_test.py
+```
+
+## Belfry Changes (G565)
+
+`belfry_changes.py` is a change-ringing puzzle over the world census. Each island casts a bell,
+and a seed jumbles the row. Each change swaps any set of non-overlapping neighbouring pairs, and
+the heavy tenor must rest after each change it moves in. Every island bell must ring at lead
+before the ring comes round. Par is the fewest changes by exact BFS, checked against an
+independent search. `single_swap_par` shows the one-pair-at-a-time cost. Verdicts are `rung`,
+`clattered` and `unfinished`. Hook: `data/islands/disk-saver/belfry-changes-v1.json` (Ringer
+Agatha). Doc: `docs/islands/DISKSAVER-BELFRY-CHANGES.md`. CI: `belfry-changes.yml`.
+
+```
+python tools/streaming/belfry_changes.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/belfry_changes_test.py
+```
+
+## Tram Shunt (G566)
+
+`tram_shunt.py` is a railway-shunting (stack sorting) puzzle over the world census. Each island
+loads a tram wagon, and a seed jumbles the inbound order. Shunter Rosalind uses two dead-end
+sidings to send the wagons out in number order. Par is the fewest moves by exact BFS, checked
+against an independent search for every train of up to five wagons. `greedy_moves` shows the
+yardman's-habit trap. Verdicts are `smart`, `slow` and `jammed`. Hook:
+`data/islands/disk-saver/tram-shunt-v1.json`. Doc: `docs/islands/DISKSAVER-TRAM-SHUNT.md`.
+CI: `tram-shunt.yml`.
+
+```
+python tools/streaming/tram_shunt.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/tram_shunt_test.py
+```

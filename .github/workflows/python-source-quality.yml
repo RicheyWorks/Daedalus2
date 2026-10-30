@@ -21,7 +21,7 @@ jobs:
         with:
           # PR merge + its two parents; unavailable older push history selects both.
           fetch-depth: 2
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.10'
           cache: 'pip'
@@ -59,7 +59,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.10'
           cache: 'pip'

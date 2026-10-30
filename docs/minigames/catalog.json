@@ -675,6 +675,74 @@
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
     {
+      "id": "prismcairn",
+      "title": "Prismcairn Duel",
+      "summary": "Out-think the Warden at the shard cairns; lift the last shard. Left/Right or stick: pick a cairn; J/K/Space/Shift or pad A/B/X/Y: take 1/2/3/4",
+      "how_to_play": "HOW Take one or more shards, up to the limit, from one cairn each turn; lift the last shard to win the round, best of three.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the cairn field",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"prismcairn\", Seed)",
+      "portable_tests": [
+        "desktop_prismcairn"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "prismvault",
+      "title": "Prismvault Weigh",
+      "summary": "Find the hollow shard with the Warden's balance. Left/Right or stick: pick; J or pad A: pan it; Space or pad X: weigh; Shift or pad Y: name",
+      "how_to_play": "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the balance chamber",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"prismvault\", Seed)",
+      "portable_tests": [
+        "desktop_prismvault"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
       "id": "siltlane",
       "title": "Siltlane",
       "summary": "Switch lanes so the drifting silt passes you. Left/Right or stick: change lane",
@@ -754,23 +822,6 @@
   ],
   "python_games": [
     {
-      "id": "prismvault",
-      "title": "Prismvault Weigh",
-      "summary": "find the one hollow Prism Shard with a Warden's balance and few weighings.",
-      "how_to_play": "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out.",
-      "module": "tools/minigames/prismvault.py",
-      "start": "prismvault.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_prismvault.py"
-      ]
-    },
-    {
       "id": "shardfall",
       "title": "Shardfall Gamble",
       "summary": "draw glowing shards from the Prismheart seam and bank them before it cracks.",
@@ -785,23 +836,6 @@
       "default_difficulty": "normal",
       "tests": [
         "test_shardfall.py"
-      ]
-    },
-    {
-      "id": "prismcairn",
-      "title": "Prismcairn Duel",
-      "summary": "out-think a Warden at the shard cairns; whoever lifts the last shard wins the round.",
-      "how_to_play": "HOW Take 1 or more shards (up to the limit) from one cairn each turn; the Warden replies. Lift the last shard to win the round; best of three.",
-      "module": "tools/minigames/prismcairn.py",
-      "start": "prismcairn.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_prismcairn.py"
       ]
     },
     {
@@ -836,6 +870,23 @@
       "default_difficulty": "normal",
       "tests": [
         "test_shadewatch.py"
+      ]
+    },
+    {
+      "id": "glimmerloom",
+      "title": "Glimmerloom Ledger",
+      "summary": "trade hued Prism Shards at the Glimmerloom market and grow your purse.",
+      "how_to_play": "HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target.",
+      "module": "tools/minigames/glimmerloom.py",
+      "start": "glimmerloom.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_glimmerloom.py"
       ]
     }
   ]
