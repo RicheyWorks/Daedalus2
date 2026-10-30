@@ -2,7 +2,6 @@
 
 package com.daedalus.world.ark;
 
-import java.math.BigInteger;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,12 +15,19 @@ import java.util.TreeSet;
  * G441 The Star Mesh: the navigator joins fixed stars (integer points) into the Delaunay mesh,
  * the triangulation where no star lies inside any triangle's circumcircle. Points are inserted in
  * x order, each joined to the hull edges it sees, then edges are flipped (Lawson) until every
- * edge is locally Delaunay. Orientation uses long arithmetic and the in-circle test BigInteger,
- * so results are exact. Requires no three points collinear; with four cocircular stars either diagonal is
+ * edge is locally Delaunay. Orientation uses long arithmetic and the in-circle test exact 128-bit
+ * sums, so results are exact. Requires no three points collinear; with four cocircular stars either diagonal is
  * Delaunay and the insertion order picks one.
  *
- * <p>Beyond the triangles, {@link #build} returns the hull, the number of Lawson flips and the neighbour lists,
- * and {@link #locate} finds the triangle under a query point. {@link #problem} names why a sky is refused.
+ * <p>API, mirrored one for one by DaedalusArkStarMeshCore.h:
+ * <ul>
+ *   <li>{@link #problem}: why a sky is refused (few, many, range, duplicate, collinear), or null;</li>
+ *   <li>{@link #build}: triangles, counter-clockwise hull and Lawson flip count; {@link #triangulate}: triangles;</li>
+ *   <li>{@link #neighbours}, {@link #edges}: adjacency, and each edge once (3n - 3 - hull of them);</li>
+ *   <li>{@link #chartLines}: the Euclidean minimum spanning tree over the mesh edges;</li>
+ *   <li>{@link #locate}, {@link #nearest}: the triangle under a point, the nearest star by a greedy walk;</li>
+ *   <li>{@link #inCircle}, {@link #emptyCircles}: the exact predicate and the Delaunay check.</li>
+ * </ul>
  */
 public final class StarMesh {
 
@@ -35,21 +41,42 @@ public final class StarMesh {
         return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
     }
 
-    /** Positive when d lies inside the circumcircle of counter-clockwise a, b, c. */
+    /**
+     * Positive when d lies inside the circumcircle of counter-clockwise a, b, c, zero on it, negative outside. Exact
+     * for coordinates within 10^6: the determinant is six products (dx_i * dy_j) * sq_k, each under 2^107, summed in
+     * 128 bits (Math.multiplyHigh), the same expansion as StarInCircle in DaedalusArkStarMeshCore.h. No BigInteger.
+     */
     public static int inCircle(long[] a, long[] b, long[] c, long[] d) {
-        BigInteger[] r = new BigInteger[9];
         long[][] p = {a, b, c};
+        long[] dx = new long[3];
+        long[] dy = new long[3];
+        long[] sq = new long[3];
         for (int i = 0; i < 3; i++) {
-            BigInteger dx = BigInteger.valueOf(p[i][0] - d[0]);
-            BigInteger dy = BigInteger.valueOf(p[i][1] - d[1]);
-            r[3 * i] = dx;
-            r[3 * i + 1] = dy;
-            r[3 * i + 2] = dx.multiply(dx).add(dy.multiply(dy));
+            dx[i] = p[i][0] - d[0];
+            dy[i] = p[i][1] - d[1];
+            sq[i] = dx[i] * dx[i] + dy[i] * dy[i];
         }
-        BigInteger det = r[0].multiply(r[4].multiply(r[8]).subtract(r[5].multiply(r[7])))
-                .subtract(r[1].multiply(r[3].multiply(r[8]).subtract(r[5].multiply(r[6]))))
-                .add(r[2].multiply(r[3].multiply(r[7]).subtract(r[4].multiply(r[6]))));
-        return det.signum();
+        long[] sum = new long[2];
+        add(sum, dx[0] * dy[1], sq[2], 1);
+        add(sum, dx[0] * dy[2], sq[1], -1);
+        add(sum, dx[1] * dy[0], sq[2], -1);
+        add(sum, dx[1] * dy[2], sq[0], 1);
+        add(sum, dx[2] * dy[0], sq[1], 1);
+        add(sum, dx[2] * dy[1], sq[0], -1);
+        return sum[1] < 0 ? -1 : (sum[0] | sum[1]) != 0 ? 1 : 0;
+    }
+
+    /** sum (hi:lo, two's complement) += sign * x * y, with x * y taken exactly in 128 bits. */
+    private static void add(long[] sum, long x, long y, int sign) {
+        long lo = x * y;
+        long hi = Math.multiplyHigh(x, y);
+        if (sign < 0) {
+            lo = -lo;
+            hi = ~hi + (lo == 0 ? 1 : 0);
+        }
+        long nlo = sum[0] + lo;
+        sum[1] += hi + (Long.compareUnsigned(nlo, sum[0]) < 0 ? 1 : 0);
+        sum[0] = nlo;
     }
 
     /**
@@ -322,6 +349,33 @@ public final class StarMesh {
             x = parent[x];
         }
         return x;
+    }
+
+    /**
+     * The star nearest q, by a greedy walk over mesh edges from star 0: step to the neighbour closest to q (ties to
+     * the lower index) while it is strictly closer. On a Delaunay mesh the walk always ends at a nearest star.
+     */
+    public static int nearest(long[][] pts, int[][] tris, long[] q) {
+        int[][] nb = neighbours(pts.length, tris);
+        int at = 0;
+        while (true) {
+            int best = at;
+            for (int v : nb[at]) {
+                if (dist2(pts[v], q) < dist2(pts[best], q)) {
+                    best = v; // neighbours ascend, so ties keep the lower index
+                }
+            }
+            if (best == at) {
+                return at;
+            }
+            at = best;
+        }
+    }
+
+    private static long dist2(long[] p, long[] q) {
+        long dx = p[0] - q[0];
+        long dy = p[1] - q[1];
+        return dx * dx + dy * dy;
     }
 
     /**

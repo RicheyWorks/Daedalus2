@@ -7,6 +7,16 @@
 // summed exactly in 128-bit two's complement, so no floating point and no big integers. Must agree with
 // com.daedalus.world.ark.StarMesh line for line (ark_star_mesh_parity.txt, checked by StarMeshParityTest.java and
 // ark_star_mesh_core_test.cpp).
+//
+// API (all exact, all free functions in daedalus::ark; a refused sky gives empty results, never a throw):
+//   StarMeshCheck / StarMeshProblemName / StarMeshValid   why a sky is refused (few, many, range, duplicate, collinear)
+//   StarMeshBuild -> StarMesh { Triangles, Hull, Flips }   the mesh, its counter-clockwise hull, Lawson flips made
+//   StarMeshTriangulate                                    just the triangles
+//   StarMeshNeighbours / StarMeshEdges                     adjacency lists; each edge once (3n - 3 - hull edges)
+//   StarMeshChartLines                                     Euclidean minimum spanning tree over the mesh edges
+//   StarMeshLocate / StarMeshNearest                       triangle under a point; nearest star by a greedy walk
+//   StarInCircle / StarMeshEmptyCircles                    the exact predicate and the Delaunay check
+//   StarMeshQuestAnswer                                    quest q_star_mesh: name the triangle count
 #pragma once
 #include <algorithm>
 #include <cstdint>
@@ -306,6 +316,27 @@ inline std::vector<StarEdge> StarMeshChartLines(const std::vector<StarPoint>& Pt
 		}
 	}
 	return Out;
+}
+
+// The star nearest Q, by a greedy walk over mesh edges from star 0: step to the neighbour closest to Q (ties to the
+// lower index) while it is strictly closer. On a Delaunay mesh the walk always ends at a nearest star. -1 if empty.
+inline int StarMeshNearest(const std::vector<StarPoint>& Pts, const std::vector<StarTriangle>& Tris, const StarPoint& Q)
+{
+	if (Pts.empty()) return -1;
+	const std::vector<std::vector<int>> Nb = StarMeshNeighbours(static_cast<int>(Pts.size()), Tris);
+	auto Dist = [&](int V) {
+		const int64_t Dx = Pts[V].X - Q.X, Dy = Pts[V].Y - Q.Y;
+		return Dx * Dx + Dy * Dy;
+	};
+	int At = 0;
+	for (;;)
+	{
+		int Best = At;
+		for (int V : Nb[static_cast<size_t>(At)])
+			if (Dist(V) < Dist(Best)) Best = V; // neighbours ascend, so ties keep the lower index
+		if (Best == At) return At;
+		At = Best;
+	}
 }
 
 // The first triangle (in mesh order) holding Q, edges and corners included, or -1 when Q is outside the hull.

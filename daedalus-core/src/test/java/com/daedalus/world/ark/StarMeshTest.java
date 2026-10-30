@@ -277,4 +277,56 @@ class StarMeshTest {
         int[] one = StarMesh.triangulate(cw)[0];
         assertThat(orient(cw[one[0]], cw[one[1]], cw[one[2]])).isPositive();
     }
+
+    @Test
+    void nearestStarMatchesBruteForce() {
+        SplittableRandom rnd = new SplittableRandom(4413);
+        for (int t = 0; t < 30; t++) {
+            long[][] p = general(rnd, 3 + rnd.nextInt(40), t % 2 == 0 ? 60 : 1_000_000);
+            int[][] tris = StarMesh.triangulate(p);
+            int span = t % 2 == 0 ? 80 : 1_000_000;
+            for (int q = 0; q < 40; q++) {
+                long[] at = {rnd.nextInt(2 * span + 1) - span, rnd.nextInt(2 * span + 1) - span};
+                long best = Long.MAX_VALUE;
+                for (long[] s : p) {
+                    best = Math.min(best, (s[0] - at[0]) * (s[0] - at[0]) + (s[1] - at[1]) * (s[1] - at[1]));
+                }
+                long[] got = p[StarMesh.nearest(p, tris, at)];
+                assertThat((got[0] - at[0]) * (got[0] - at[0]) + (got[1] - at[1]) * (got[1] - at[1])).isEqualTo(best);
+            }
+        }
+    }
+
+    /** The old BigInteger determinant, kept here as the reference for the 128-bit one. */
+    private static int inCircleBig(long[] a, long[] b, long[] c, long[] d) {
+        java.math.BigInteger[] r = new java.math.BigInteger[9];
+        long[][] p = {a, b, c};
+        for (int i = 0; i < 3; i++) {
+            java.math.BigInteger dx = java.math.BigInteger.valueOf(p[i][0] - d[0]);
+            java.math.BigInteger dy = java.math.BigInteger.valueOf(p[i][1] - d[1]);
+            r[3 * i] = dx;
+            r[3 * i + 1] = dy;
+            r[3 * i + 2] = dx.multiply(dx).add(dy.multiply(dy));
+        }
+        return r[0].multiply(r[4].multiply(r[8]).subtract(r[5].multiply(r[7])))
+                .subtract(r[1].multiply(r[3].multiply(r[8]).subtract(r[5].multiply(r[6]))))
+                .add(r[2].multiply(r[3].multiply(r[7]).subtract(r[4].multiply(r[6])))).signum();
+    }
+
+    @Test
+    void inCircleMatchesBigInteger() {
+        SplittableRandom rnd = new SplittableRandom(4414);
+        long m = StarMesh.MAX_COORD;
+        for (int t = 0; t < 200_000; t++) {
+            long[][] q = new long[4][];
+            for (int i = 0; i < 4; i++) {
+                // Mostly the sky's rim, so the products are near their largest; some near-cocircular small cases.
+                q[i] = t % 3 == 0 ? new long[] {rnd.nextLong(-3, 4), rnd.nextLong(-3, 4)}
+                        : new long[] {rnd.nextBoolean() ? m - rnd.nextLong(3) : -m + rnd.nextLong(3),
+                            rnd.nextLong(-m, m + 1)};
+            }
+            assertThat(StarMesh.inCircle(q[0], q[1], q[2], q[3])).as("quad %d", t)
+                    .isEqualTo(inCircleBig(q[0], q[1], q[2], q[3]));
+        }
+    }
 }
