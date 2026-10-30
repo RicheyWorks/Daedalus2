@@ -176,3 +176,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Harbour Cryptogram (G552, disk-saver)
 
 `harbour_cryptogram.py` is a word/cipher puzzle: true harbour news built from the world census (world titles, island counts, cargo names, empty islands, totals) is sent in a seeded letter-substitution cipher where no letter stands for itself, with a few letters given and a frequency table. Answer with `--guess` or a partial key via `--mapping`; every letter position is graded decoded/partial/garbled. NPC Telegraphist Philippa; hook `data/islands/disk-saver/harbour-cryptogram-v1.json`; doc `docs/islands/DISKSAVER-HARBOUR-CRYPTOGRAM.md`.
+
+## Smuggler's Island (G553, disk-saver)
+
+`smugglers_island.py` is a yes/no deduction game over the world census: a seed hides contraband on one island, and the player asks census-built yes/no questions (world, realm, slot, cargo, empty) before accusing `world:slot`. An exact memoised minimax gives par (the fewest questions that always find it) and `--auto` plays it. Verdict sharp/caught/escaped. NPC Exciseman Bartholomew; hook `data/islands/disk-saver/smugglers-island-v1.json`; doc `docs/islands/DISKSAVER-SMUGGLERS-ISLAND.md`.
