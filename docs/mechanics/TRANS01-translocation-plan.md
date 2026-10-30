@@ -1,7 +1,7 @@
 # TRANS01 - Translocation Plan (contest G251)
 
 Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/TranslocationPlan.java`
-Tests: `TranslocationPlanTest` (8 tests). Source only; no Unreal, no new assets.
+Tests: `TranslocationPlanTest` (11 tests). Source only; no Unreal, no new assets.
 
 ## Story / Daedalus hook
 
@@ -36,7 +36,7 @@ The lesson: release early and release breeders. Exact best schedules among the e
 the Monte Carlo noise (about 0.02 at 400 runs). Adults halve the risk compared with chicks, matching the G194
 reproductive values.
 
-## Tests (TranslocationPlanTest, 8)
+## Tests (TranslocationPlanTest, 11)
 
 1. Best spends the whole budget and beats even, front-loaded, late and no-release schedules.
 2. Greedy is never better than exact and stays within 0.03 of it (budgets 4, 10, 16).
@@ -47,6 +47,10 @@ reproductive values.
 6. With sigma 0 a 40-bird flock has zero risk.
 7. Seeded plans replay exactly; `risk(best schedule)` equals the reported risk.
 8. Bad tuning and schedules are rejected.
+9. `Settings.problem` names the first bad field, and the exception message carries it.
+10. `backLoaded()` fills the last years first and loses to front-loaded.
+11. `riskInterval` brackets the estimate, narrows with more runs, and is exactly 0 at the low end when nothing
+    crashed.
 
 ## Assets
 
@@ -63,3 +67,17 @@ It covers the shared seeded shocks, `Risk`, the exhaustive `Best`, `Greedy`, `Fr
 zero-budget cases) to `engines/unreal/core-test/marsh_translocation_plan_parity.txt`.
 `marsh_translocation_plan_core_test.cpp` replays them in `.github/workflows/marsh-cores.yml`. Pattern:
 [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md).
+
+## Improvements (G589 iterations)
+
+Each change lands in Java first. `MarshCoresParityTest` regenerates the golden vectors, and the C++ core replays
+them.
+
+1. **Clearer validation.** `Settings.problem(...)` (C++ `Problem()`) returns the first reason a tuning cannot run,
+   in a fixed order with the same strings in both languages. The constructor's exception carries it. The golden file
+   has 12 settings rows, one per rule plus a valid one.
+2. **Back-loaded baseline.** `backLoaded()` (C++ `BackLoaded()`) is the late-heavy schedule the quest compares
+   against. It is in the golden vectors with its risk.
+3. **Risk confidence.** `riskInterval(schedule)` (C++ `RiskInterval`) is the 95 % Wilson score interval of the
+   Monte Carlo risk. Its ends are exact at 0 and 1 crashes. Two schedules with overlapping intervals are not
+   reliably different. The golden vectors include the interval for each best plan.

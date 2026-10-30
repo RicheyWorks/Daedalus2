@@ -3,7 +3,7 @@
 //   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public marsh_translocation_plan_core_test.cpp
 //   ./a.out marsh_translocation_plan_parity.txt
 // Replays the Java-written golden vectors (MarshCoresParityTest.java): front-loaded, even, best and greedy schedules,
-// each with its crash risk. Risks are crash counts over seeded runs, so they must match within one run (a libm last-ulp
+// each with its crash risk, plus back-loaded, the Wilson interval of the best risk and the settings problem strings. Risks are crash counts over seeded runs, so they must match within one run (a libm last-ulp
 // difference in exp/log/cos could move one borderline run). Schedules must match exactly.
 #include "DaedalusMarshTranslocationPlanCore.h"
 #include "marsh_parity.h"
@@ -26,8 +26,9 @@ static std::vector<int> ParseCsv(const std::string& V)
 int main(int argc, char** argv)
 {
 	const char* Path = argc > 1 ? argv[1] : "marsh_translocation_plan_parity.txt";
-	const std::vector<std::string> Lines = marsh_test::ParityLines(Path);
-	Check("golden file has 6 plans", Lines.size() == 6);
+	std::vector<std::string> Lines, Problems;
+	for (const std::string& L : marsh_test::ParityLines(Path)) (L.rfind("problem ", 0) == 0 ? Problems : Lines).push_back(L);
+	Check("golden file has 6 plans and 12 settings checks", Lines.size() == 6 && Problems.size() == 12);
 	const CohortSettings Flocks[3] = { { 0.5, 0.7, 0.85, 0.9, 0.15, 0.45, 10 }, { 0.5, 0.7, 0.85, 0.8, 0.15, 0.45, 10 },
 		{ 0.6, 0.8, 0.9, 0.95, 0.3, 1.2, 10 } };
 	int Exact = 0, Risks = 0;
@@ -56,16 +57,37 @@ int main(int argc, char** argv)
 		};
 		Check(Tag + " front-loaded", P.FrontLoaded() == ParseCsv(marsh_test::Field(H, "front")) && RiskOk(P.Risk(P.FrontLoaded()), "frontRisk"));
 		Check(Tag + " even", P.Even() == ParseCsv(marsh_test::Field(H, "even")) && RiskOk(P.Risk(P.Even()), "evenRisk"));
+		Check(Tag + " back-loaded", P.BackLoaded() == ParseCsv(marsh_test::Field(H, "back")) && RiskOk(P.Risk(P.BackLoaded()), "backRisk"));
 		const TranslocationPlanResult B = P.Best();
 		Check(Tag + " best schedule", B.Schedule == ParseCsv(marsh_test::Field(H, "best")) && B.Total() == S.Budget);
 		Check(Tag + " best risk", RiskOk(B.Risk, "bestRisk"));
 		const TranslocationPlanResult G = P.Greedy();
 		Check(Tag + " greedy schedule", G.Schedule == ParseCsv(marsh_test::Field(H, "greedy")) && G.Total() == S.Budget);
 		Check(Tag + " greedy risk", RiskOk(G.Risk, "greedyRisk"));
+		const auto Ci = P.RiskInterval(B.Schedule);
+		Check(Tag + " Wilson interval", marsh_test::Close(Ci[0], Num(H, "bestLo"), 1e-12) && marsh_test::Close(Ci[1], Num(H, "bestHi"), 1e-12)
+			&& Ci[0] <= B.Risk && B.Risk <= Ci[1]);
 		Check(Tag + " best is no worse than greedy, front or even",
 			B.Risk <= G.Risk && B.Risk <= P.Risk(P.FrontLoaded()) && B.Risk <= P.Risk(P.Even()));
 	}
-	Check("risks identical on every case", Risks == 24 && Exact == Risks);
+	Check("risks identical on every case", Risks == 30 && Exact == Risks);
+	for (const std::string& Q : Problems)
+	{
+		TranslocationSettings S;
+		S.Start = static_cast<int>(marsh_test::Int(Q, "start"));
+		S.Budget = static_cast<int>(marsh_test::Int(Q, "budget"));
+		S.PerYear = static_cast<int>(marsh_test::Int(Q, "perYear"));
+		S.ReleaseYears = static_cast<int>(marsh_test::Int(Q, "releaseYears"));
+		S.Horizon = static_cast<int>(marsh_test::Int(Q, "horizon"));
+		S.Threshold = Num(Q, "threshold");
+		S.Sigma = Num(Q, "sigma");
+		S.Cohort = static_cast<int>(marsh_test::Int(Q, "cohort"));
+		S.Runs = static_cast<int>(marsh_test::Int(Q, "runs"));
+		std::string Want = marsh_test::Field(Q, "why");
+		for (char& C : Want) if (C == '_') C = ' ';
+		const char* Got = S.Problem();
+		Check("settings problem: " + Want, Want == "ok" ? Got == nullptr && S.Valid() : Got != nullptr && Want == Got && !S.Valid());
+	}
 
 	// Engine-free property checks mirroring TranslocationPlanTest.
 	const TranslocationSettings D;
@@ -76,6 +98,9 @@ int main(int argc, char** argv)
 	Check("same seed same risk", P.Risk(P.Even()) == Q.Risk(Q.Even()));
 	Check("front-loaded fills year 0 first", P.FrontLoaded() == std::vector<int>({ 6, 4, 0, 0, 0 }));
 	Check("even spreads the budget", P.Even() == std::vector<int>({ 2, 2, 2, 2, 2 }));
+	Check("back-loaded fills the last years", P.BackLoaded() == std::vector<int>({ 0, 0, 0, 4, 6 }));
+	const auto Bad = P.RiskInterval({ 1, 2 });
+	Check("interval rejects a bad schedule", Bad[0] < 0 && Bad[1] < 0);
 	TranslocationSettings Calm = Small; Calm.Sigma = 0;
 	const TranslocationPlan C(CraneCohorts(CohortSettings()), Calm, 3);
 	Check("no noise, growing flock above threshold: no crash", C.Risk(C.Even()) == 0);

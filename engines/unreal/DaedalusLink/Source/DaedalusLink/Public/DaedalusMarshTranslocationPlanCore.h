@@ -4,7 +4,7 @@
 // authority. Plans how to spend an aviary budget of birds over the first release years so the G194 Leslie flock
 // (DaedalusMarshCraneCohortsCore.h) is least likely to fall below a crash threshold under log-normal environmental
 // shocks. All schedules share the same hashed shocks (common random numbers). Best() searches every schedule; Greedy()
-// adds one bird at a time.
+// adds one bird at a time. BackLoaded() and RiskInterval() (Wilson 95 %) and Problem() came with the G589 iterations.
 // Golden vectors: engines/unreal/core-test/marsh_translocation_plan_parity.txt, written by MarshCoresParityTest.java.
 //
 // Seeding: as in G570/G583/G585, the Java core hashes (seed, run, year, salt) statelessly with the SplitMix64
@@ -12,6 +12,7 @@
 #pragma once
 #include "DaedalusMarshCraneCohortsCore.h"
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstdint>
 #include <limits>
@@ -31,12 +32,22 @@ struct TranslocationSettings
 	int Cohort = CraneCohorts::Adult;
 	int Runs = 400;
 
-	bool Valid() const
+	// The first reason this tuning cannot run, or nullptr if it can (same order and strings as Java's problem()).
+	const char* Problem() const
 	{
-		return !(Start < 0 || Budget < 0 || PerYear < 0 || ReleaseYears < 1 || Horizon < ReleaseYears || !(Threshold > 0)
-			|| !(Sigma >= 0) || std::isinf(Sigma) || Cohort < 0 || Cohort >= CraneCohorts::Cohorts || Runs < 1
-			|| static_cast<int64_t>(PerYear) * ReleaseYears < Budget);
+		if (Start < 0) return "start must be at least 0";
+		if (Budget < 0) return "budget must be at least 0";
+		if (PerYear < 0) return "perYear must be at least 0";
+		if (ReleaseYears < 1) return "releaseYears must be at least 1";
+		if (Horizon < ReleaseYears) return "horizon must cover the release years";
+		if (!(Threshold > 0)) return "threshold must be above 0";
+		if (!(Sigma >= 0) || std::isinf(Sigma)) return "sigma must be finite and at least 0";
+		if (Cohort < 0 || Cohort >= CraneCohorts::Cohorts) return "cohort must be a G194 cohort index";
+		if (Runs < 1) return "runs must be at least 1";
+		if (static_cast<int64_t>(PerYear) * ReleaseYears < Budget) return "budget does not fit perYear x releaseYears";
+		return nullptr;
 	}
+	bool Valid() const { return Problem() == nullptr; }
 };
 
 struct TranslocationPlanResult
@@ -137,6 +148,30 @@ public:
 			Left -= Out[Y];
 		}
 		return Out;
+	}
+
+	// Every bird as late as possible (the last year first).
+	std::vector<int> BackLoaded() const
+	{
+		std::vector<int> Out(S.ReleaseYears, 0);
+		int Left = S.Budget;
+		for (int Y = S.ReleaseYears - 1; Y >= 0 && Left > 0; --Y)
+		{
+			Out[Y] = std::min(S.PerYear, Left);
+			Left -= Out[Y];
+		}
+		return Out;
+	}
+
+	// 95 % Wilson score interval {low, high} for a schedule's crash risk; {-1, -1} for a bad schedule.
+	std::array<double, 2> RiskInterval(const std::vector<int>& Schedule) const
+	{
+		const double P = Risk(Schedule);
+		if (P < 0) return { -1, -1 };
+		const double N = S.Runs, Z = 1.959963984540054, Z2 = Z * Z;
+		const double Centre = (P + Z2 / (2 * N)) / (1 + Z2 / N);
+		const double Half = Z / (1 + Z2 / N) * std::sqrt(P * (1 - P) / N + Z2 / (4 * N * N));
+		return { P == 0 ? 0.0 : std::fmax(0.0, Centre - Half), P == 1 ? 1.0 : std::fmin(1.0, Centre + Half) };
 	}
 
 	std::vector<int> Even() const

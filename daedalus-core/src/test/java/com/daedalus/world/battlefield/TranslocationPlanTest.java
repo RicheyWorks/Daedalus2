@@ -2,7 +2,9 @@
 
 package com.daedalus.world.battlefield;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -95,5 +97,41 @@ class TranslocationPlanTest {
         TranslocationPlan p = plan(D);
         assertThrows(IllegalArgumentException.class, () -> p.risk(new int[] {1, 2}));
         assertThrows(IllegalArgumentException.class, () -> p.risk(new int[] {7, 0, 0, 0, 3}));
+    }
+
+    @Test
+    void problemNamesTheFirstBadField() {
+        assertNull(Settings.problem(12, 10, 6, 5, 30, 10, 0.2, 3, 400));
+        assertEquals("budget does not fit perYear x releaseYears", Settings.problem(12, 40, 6, 5, 30, 10, 0.2, 3, 1));
+        assertEquals("horizon must cover the release years", Settings.problem(12, 10, 6, 5, 3, 10, 0.2, 3, 1));
+        assertEquals("sigma must be finite and at least 0",
+                Settings.problem(12, 10, 6, 5, 30, 10, Double.POSITIVE_INFINITY, 3, 1));
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                () -> new Settings(12, 10, 6, 5, 30, 10, 0.2, 4, 100));
+        assertTrue(e.getMessage().endsWith("cohort must be a G194 cohort index"), e.getMessage());
+    }
+
+    @Test
+    void backLoadedFillsTheLastYearsAndLosesToFrontLoaded() {
+        TranslocationPlan p = plan(D);
+        assertArrayEquals(new int[] {0, 0, 0, 4, 6}, p.backLoaded());
+        assertTrue(p.risk(p.frontLoaded()) < p.risk(p.backLoaded()));
+        assertTrue(p.best().risk() <= p.risk(p.backLoaded()));
+    }
+
+    @Test
+    void riskIntervalBracketsTheEstimateAndShrinksWithRuns() {
+        TranslocationPlan few = plan(new Settings(12, 10, 6, 5, 30, 10, 0.2, 3, 50));
+        TranslocationPlan many = plan(D);
+        int[] even = many.even();
+        double[] a = few.riskInterval(even);
+        double[] b = many.riskInterval(even);
+        assertTrue(a[0] <= few.risk(even) && few.risk(even) <= a[1]);
+        assertTrue(b[0] <= many.risk(even) && many.risk(even) <= b[1]);
+        assertTrue(b[1] - b[0] < a[1] - a[0]);
+        TranslocationPlan calm = plan(new Settings(40, 4, 4, 2, 30, 10, 0, CraneCohorts.ADULT, 10));
+        double[] z = calm.riskInterval(calm.even());
+        assertEquals(0, z[0], 0);
+        assertTrue(z[1] > 0 && z[1] < 0.3, "zero crashes still leave doubt with 10 runs");
     }
 }
