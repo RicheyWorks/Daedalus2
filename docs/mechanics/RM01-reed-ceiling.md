@@ -54,3 +54,13 @@ carrying-capacity-driven Hopf threshold.
 ## Assets
 
 None needed. Reuses Mob_Sky_Crane and the marsh kits. A marsh hawk mob would be a later, optional Blender ask.
+
+## Native C++ core (G591)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshReedCeilingCore.h` (namespace `daedalus::marsh`)
+is a header-only C++17 port of this core. It covers N*, P*, the Hopf capacity, cycle and hawk hectares, the regime,
+`Rate`, `Trace`, the RK4 `Integrate`, the seeded `Noisy` seasons, `FromCohorts` (on the G585
+`DaedalusMarshCraneCohortsCore.h`) and `ReedSettings::Valid`. It uses the standard library only. The Java class stays
+the rules authority. `MarshCoresParityTest.reedCeiling` writes golden vectors for 6 marshes (stable and
+cycling regimes; the no-hawk regime is a property check) to `engines/unreal/core-test/marsh_reed_ceiling_parity.txt`. `marsh_reed_ceiling_core_test.cpp`
+replays them in `.github/workflows/marsh-cores.yml`. Pattern: [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md).
