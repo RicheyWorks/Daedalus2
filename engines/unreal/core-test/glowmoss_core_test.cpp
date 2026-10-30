@@ -115,6 +115,41 @@ int UnitChecks()
 	return Fails;
 }
 
+/** Invariants every shaft keeps, swept over seeds beyond the fixture (mirrors test_glowmoss.Properties). */
+int PropertySweep(int& Shafts)
+{
+	constexpr std::uint32_t SweepSeeds = 200;
+	int Fails = 0;
+	for (int I = 0; I < DifficultyCount; ++I)
+	{
+		const std::string Name = Difficulties()[I].Name;
+		for (std::uint32_t Seed = 0; Seed < SweepSeeds; ++Seed)
+		{
+			++Shafts;
+			Game G, Twin; std::string Res;
+			G.Start(Seed, Name);
+			Twin.Start(Seed, Name);
+			std::uint32_t CodeSeed = 0; const Difficulty* CodeDiff = nullptr;
+			const bool Same = G.Cells.Gems == Twin.Cells.Gems && G.Cells.Unstable == Twin.Cells.Unstable && G.Plan == Twin.Plan && G.Target == Twin.Target;
+			const bool Code = ParseSeedCode(SeedCode(Seed, *G.Diff), CodeSeed, CodeDiff) && CodeSeed == Seed && CodeDiff == G.Diff;
+			bool HintsMatch = true;
+			while (!G.Over)
+			{
+				const Action A = G.DemoAction();
+				const Action H = G.Hint();
+				HintsMatch = HintsMatch && H.K == A.K && H.Col == A.Col;
+				G.Step(A, Res);
+			}
+			if (!Same || !Code || !HintsMatch || G.Target < 1 || G.Target > G.Best || !G.Won || !G.Perfect || G.Crystals != G.Best)
+			{
+				std::printf("FAIL property s=%u %s same=%d code=%d hints=%d target=%d best=%d won=%d\n", Seed, Name.c_str(), Same, Code, HintsMatch, G.Target, G.Best, G.Won);
+				++Fails;
+			}
+		}
+	}
+	return Fails;
+}
+
 } // namespace
 
 int main(int Argc, char** Argv)
@@ -122,7 +157,8 @@ int main(int Argc, char** Argv)
 	if (Argc < 2) { std::printf("usage: glowmoss_core_test glowmoss_parity.txt\n"); return 2; }
 	std::ifstream In(Argv[1]);
 	if (!In) { std::printf("FAIL cannot open %s\n", Argv[1]); return 2; }
-	int Fails = UnitChecks(), Games = 0;
+	int Swept = 0;
+	int Fails = UnitChecks() + PropertySweep(Swept), Games = 0;
 	std::string Line; Game G; std::uint32_t Seed = 0; std::string Diff; int Turn = 0; bool Skip = false;
 	while (std::getline(In, Line))
 	{
@@ -161,6 +197,6 @@ int main(int Argc, char** Argv)
 		}
 		else { std::printf("FAIL unknown line: %s\n", Line.c_str()); return 1; }
 	}
-	std::printf("%s glowmoss: %d shafts regenerated from seed, %d failures\n", Fails ? "FAIL" : "OK", Games, Fails);
+	std::printf("%s glowmoss: %d shafts regenerated from seed, %d swept for invariants, %d failures\n", Fails ? "FAIL" : "OK", Games, Swept, Fails);
 	return Fails ? 1 : 0;
 }
