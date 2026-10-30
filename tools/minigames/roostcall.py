@@ -198,6 +198,15 @@ class Game(pc.PrismGame):
             self.birds = original
         return flights
 
+    def tutorial(self):
+        """First-turn teaching rows for the screen (iteration 7)."""
+        return ["WALK   n/e/s/w move the whistler one cell a turn; wait stands still",
+                "SCARE  birds within %d cells fly one step to the open cell farthest from you" % SCARE_RANGE,
+                "ROOST  a bird that lands in the # corner perches; settle all %d before dusk" % self.cfg["birds"]]
+
+    def fresh(self):
+        return self.turns == self.cfg["turns"] and not self.over
+
     def _walk_distances(self):
         """Breadth-first walking distance from the whistler to every cell, avoiding birds (None = unreachable)."""
         s = self.size()
@@ -258,6 +267,8 @@ class Game(pc.PrismGame):
 
     def render(self):
         s = self.size()
+        # birds that would fly if the whistler simply waited are drawn lower-case (iteration 9)
+        skittish = [] if self.over else [self.birds[i] for i in self.preview("wait")]
         rows = []
         for r in range(s):
             row = ""
@@ -265,13 +276,15 @@ class Game(pc.PrismGame):
                 if [r, c] == self.whistler:
                     row += "W"
                 elif [r, c] in self.birds:
-                    row += "B"
+                    row += "b" if [r, c] in skittish else "B"
                 elif self.in_roost(r, c):
                     row += "#"
                 else:
                     row += "."
             rows.append(row)
         lines = [f"{TITLE} [{self.difficulty}] turns {self.turns} home {self.settled}/{self.cfg['birds']} score {self.score}"] + rows
+        if self.fresh():
+            lines += self.tutorial()
         if self.over:
             lines.append("WON: every bird is home" if self.won else "LOST: dusk falls")
         return "\n".join(lines)

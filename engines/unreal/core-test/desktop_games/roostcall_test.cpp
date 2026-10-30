@@ -131,7 +131,46 @@ int main(int Argc, char** Argv) {
         for(const auto& Cmd : GF.Commands) if(Cmd.Kind == Shape::Rectangle && Cmd.Tint.R == 120 && Cmd.Tint.G == 225 && Cmd.Tint.B == 255) ++Marks;
         Check(Marks == 1, "guide marks exactly one cell");
     }
+    Check(D.HintLine().find("watcher's pick") != std::string::npos, "guide v2 describes the watcher's move");
     Check(D.SetOption(0, 730) && D.GetOption() == 0, "option 0 returns to the yard");
+    {
+        // Iteration 7: tutorial rows on the first turn only. Iteration 9: wing marks on birds that would fly on a wait.
+        RoostcallGame T;
+        T.Reset(5);
+        T.SetCabinetDifficulty("easy");
+        const auto Rows = [](const Frame& F) {
+            int N = 0;
+            for(const auto& Cmd : F.Commands) if(Cmd.Kind == Shape::Text && Cmd.Label.rfind("WALK  arrows", 0) == 0) ++N;
+            return N;
+        };
+        const auto Wings = [](const Frame& F) {
+            int N = 0;
+            for(const auto& Cmd : F.Commands) if(Cmd.Kind == Shape::Rectangle && Cmd.Tint.R == 255 && Cmd.Tint.G == 255 && Cmd.Tint.B == 255 && Cmd.B.Y == 3) ++N;
+            return N;
+        };
+        Frame F1;
+        T.Render(F1);
+        Check(Rows(F1) == 1, "a fresh yard shows the tutorial rows");
+        Check(Wings(F1) == 0, "birds start out of scare range, so none is winged");
+        Press(T, "wait");
+        Frame F2;
+        T.Render(F2);
+        Check(Rows(F2) == 0, "the tutorial leaves after the first turn");
+        // Walk toward the flock until a wait would scatter something, then the wings must match the preview
+        int Winged = 0;
+        for(int N = 0; N < 12 && Winged == 0 && !T.GetStatus().Over; ++N) {
+            const auto Guide = T.CoreState().DemoAction();
+            Press(T, daedalus::roostcall::MoveName(Guide));
+            daedalus::roostcall::Game::Flight Flights[64];
+            int Count = 0;
+            T.CoreState().Preview(daedalus::roostcall::Move::Wait, Flights, Count);
+            Frame F3;
+            T.Render(F3);
+            Check(Wings(F3) == Count, "wing marks equal the birds a wait would scatter");
+            Winged = Count;
+        }
+        Check(Winged > 0, "the watcher reaches the flock within twelve turns");
+    }
 
     RoostcallGame X;
     X.Reset(730);

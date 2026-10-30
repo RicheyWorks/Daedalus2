@@ -6,7 +6,7 @@
 //   Arrows / d-pad / stick   walk the whistler one cell (each press is one turn)
 //   pad A / J / Space        wait a turn (the birds near you still fly)
 //   R / pad Start            restart a finished yard
-//   option 0 Roostcall; option 1 Guide practice marks the cell the watcher would walk to
+//   option 0 Roostcall; option 1 Guide practice marks the cell the watcher would walk to and says what it scatters
 #pragma once
 #include "DaedalusDesktopGameTypes.h"
 #include "DaedalusDesktopSaveText.h"
@@ -198,7 +198,14 @@ public:
             return Core.Won ? "HINT Every bird is home. Pad A or R scatters a new flock."
                             : "HINT Dusk fell. Pad A or R scatters a new flock.";
         }
-        if(Option == 1) return "HINT Practice: the blue cell is where the watcher would stand next.";
+        if(Option == 1) {
+            const roostcall::Move Guide = Core.DemoAction();
+            roostcall::Game::Flight Flights[roostcall::MaxSize * roostcall::MaxSize];
+            int Count = 0;
+            Core.Preview(Guide, Flights, Count);
+            const std::string What = Count == 0 ? "no bird flies yet" : Count == 1 ? "one bird flies" : std::to_string(Count) + " birds fly";
+            return "HINT Practice: the blue cell is the watcher's pick; " + What + ". Winged birds would scatter if you waited.";
+        }
         if(Core.Birds.size() == 1) return "HINT One left. Stand beside a cornered bird to send it along the edge.";
         return "HINT Birds fly to the open cell farthest from you. Walk up behind them, roost-side last.";
     }
@@ -213,7 +220,7 @@ public:
     std::string ContrastMark() const override { return Core.Over ? "MARK WAIT" : "MARK ACT"; }
 
     void Render(Frame& F) const override {
-        const Color Moss{200, 230, 200, 255}, Gold{255, 236, 180, 255}, Sky{120, 225, 255, 255}, Bird{255, 210, 120, 255}, RoostTint{60, 120, 90, 255};
+        const Color Moss{200, 230, 200, 255}, Gold{255, 236, 180, 255}, Sky{120, 225, 255, 255}, Bird{255, 210, 120, 255}, Wing{255, 255, 255, 255}, RoostTint{60, 120, 90, 255};
         const int S = Core.Size();
         const int Total = Core.Diff ? Core.Diff->Birds : 0;
 
@@ -226,13 +233,25 @@ public:
         const double Cell = 380.0 / S, GridLeft = 200, GridTop = 100;
         const bool HasGuide = Option == 1 && !Core.Over;
         const roostcall::Move Guide = HasGuide ? Core.DemoAction() : roostcall::Move::Wait;
+        // Skittish birds (they would fly if the whistler waited) carry a small wing mark
+        roostcall::Game::Flight Skittish[roostcall::MaxSize * roostcall::MaxSize];
+        int SkittishCount = 0;
+        if(!Core.Over) Core.Preview(roostcall::Move::Wait, Skittish, SkittishCount);
+        const auto IsSkittish = [&](int Index) {
+            for(int I = 0; I < SkittishCount; ++I) if(Skittish[I].Bird == Index) return true;
+            return false;
+        };
         F.AddRect(GridLeft - 8, GridTop - 8, S * Cell + 16, S * Cell + 16, {28, 44, 32, 255});
         for(int R = 0; R < S; ++R) {
             for(int C = 0; C < S; ++C) {
                 const double X = GridLeft + C * Cell, Y = GridTop + R * Cell;
                 const roostcall::Cell Here{R, C};
                 F.AddRect(X + 1, Y + 1, Cell - 2, Cell - 2, Core.InRoost(Here) ? RoostTint : Color{40, 60, 44, 255});
-                if(Core.BirdAt(Here) >= 0) F.AddCircle(X + Cell / 2, Y + Cell / 2, Cell * 0.26, Bird);
+                const int Perched = Core.BirdAt(Here);
+                if(Perched >= 0) {
+                    F.AddCircle(X + Cell / 2, Y + Cell / 2, Cell * 0.26, Bird);
+                    if(IsSkittish(Perched)) F.AddRect(X + Cell * 0.3, Y + Cell * 0.12, Cell * 0.4, 3, Wing);
+                }
             }
         }
         // Scare range around the whistler: a faint frame two cells out
@@ -250,6 +269,11 @@ public:
         }
         F.AddCircle(GridLeft + Core.Whistler.C * Cell + Cell / 2, GridTop + Core.Whistler.R * Cell + Cell / 2, Cell * 0.3, Gold);
 
+        if(Core.FreshYard()) {
+            F.AddText(600, 360, "WALK  arrows move one cell a turn; A waits", Moss, 11);
+            F.AddText(600, 378, "SCARE birds within " + std::to_string(roostcall::ScareRange) + " cells fly one step away", Moss, 11);
+            F.AddText(600, 396, "ROOST settle all " + std::to_string(Total) + " in the corner before dusk", Moss, 11);
+        }
         F.AddText(600, 110, "ROOST", Moss, 14);
         F.AddRect(600, 130, 70, 30, RoostTint);
         F.AddText(600, 170, "south-east corner", Moss, 11);
