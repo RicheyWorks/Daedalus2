@@ -985,6 +985,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "emberkiln",
+      "title": "Emberkiln",
+      "summary": "Set coals so every clay tile glazes at its exact heat before the coals run out. Arrows or stick: move the tongs; J/Space or pad A: set a coal",
+      "how_to_play": "HOW Set a coal: the clay under it gains 2 heat and its neighbours gain 1 (stone and finished tiles only warm neighbours). A tile glazes at exactly its target and cracks past it. Glaze every tile before the coals run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the ember kiln",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"emberkiln\", Seed)",
+      "portable_tests": [
+        "desktop_emberkiln"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
