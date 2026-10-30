@@ -100,6 +100,35 @@ static void Lay(Case& K) {
         GS::Run(L, Orders[P], W, Tr);
         Check(W >= BestW, K.Name + ": best is no worse than a habit");
     }
+    // Invariants that hold whatever the golden file says.
+    std::int64_t Lo = L.Start, Hi = L.Start;
+    for (const GS::Ship& S : L.Ships) {
+        Lo = S.Pos < Lo ? S.Pos : Lo;
+        Hi = S.Pos > Hi ? S.Pos : Hi;
+    }
+    std::int64_t MinHabit = -1;
+    for (int P = 0; P < 4; ++P) {
+        std::int64_t W = 0, Tr = 0;
+        GS::Run(L, Orders[P], W, Tr);
+        if (MinHabit < 0 || W < MinHabit) MinHabit = W;
+    }
+    for (int P = 0; P < 5; ++P) {
+        std::int64_t W = 0, Tr = 0;
+        GS::Run(L, Orders[P], W, Tr);
+        Check(W >= 0 && Tr >= Hi - Lo, K.Name + ": waits are non-negative and travel covers the rail span");
+        GS::PlayResult R;
+        Check(GS::Play(L, Orders[P], R) == GS::Error::None && R.Waits == W && R.Travel == Tr &&
+                  (R.V == GS::Verdict::Sweet) == (W == BestW) && (W > MinHabit) == (R.V == GS::Verdict::Jammed),
+              K.Name + ": playing a habit or the best order agrees with Run and its verdict");
+    }
+    const GS::Order& B = Orders[4];
+    for (std::size_t I = 0; I + 1 < B.size(); ++I) {  // swapping two neighbours never beats the best
+        GS::Order S = B;
+        std::swap(S[I], S[I + 1]);
+        std::int64_t W = 0, Tr = 0;
+        GS::Run(L, S, W, Tr);
+        Check(W >= BestW, K.Name + ": no neighbour swap beats the best");
+    }
     K.Laid = true;
     ++Layouts;
 }
@@ -124,9 +153,10 @@ int main(int argc, char** argv) {
         if (T[0] == "S" && T.size() == 3 && !K->Laid) {
             std::string Seed;
             GS::Profile P = GS::Profile::Calm;
-            const bool Known = T[1] == "calm" || T[1] == "rush" || T[1] == "spread";
+            const bool Known = T[1] == "calm" || T[1] == "rush" || T[1] == "spread" || T[1] == "storm";
             if (T[1] == "rush") P = GS::Profile::Rush;
             if (T[1] == "spread") P = GS::Profile::Spread;
+            if (T[1] == "storm") P = GS::Profile::Storm;
             if (Known && Unhex(T[2], Seed) && GS::FromSeed(Seed, P, K->L) == GS::Error::None) Lay(*K);
             else K->Ok = false;
         } else if (T[0] == "H" && T.size() == 3 && !K->Laid) {
