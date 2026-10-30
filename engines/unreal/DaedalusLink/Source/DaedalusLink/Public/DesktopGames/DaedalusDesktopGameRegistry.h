@@ -23,6 +23,7 @@
 #include "DaedalusDesktopFogbellCore.h"
 #include "DaedalusDesktopRoostcallCore.h"
 #include "DaedalusDesktopEmberkilnCore.h"
+#include "DaedalusDesktopSluicegateCore.h"
 #include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
@@ -59,7 +60,8 @@ inline const std::vector<Entry>& Catalog() {
         {"prismchime","Prismchime Ring","Tap chimes so their charge pulses the ring and peals chain. Left/Right or stick: pick a chime; J/Space or pad A: tap"},
         {"fogbell","Fogbell Ferry","Steer the ferry over the tidal flat, collect lanterns, make harbour before the tide. Arrows or stick: steer one cell; J/Space or pad A: wait"},
         {"roostcall","Roostcall","Walk up behind the glimmer-birds and drive them into the roost corner before dusk. Arrows or stick: walk one cell; J/Space or pad A: wait"},
-        {"emberkiln","Emberkiln","Set coals so every clay tile glazes at its exact heat before the coals run out. Arrows or stick: move the tongs; J/Space or pad A: set a coal"}
+        {"emberkiln","Emberkiln","Set coals so every clay tile glazes at its exact heat before the coals run out. Arrows or stick: move the tongs; J/Space or pad A: set a coal"},
+        {"sluicegate","Sluicegate","Steer the headgate's water into every cistern and off the mill wheel. Arrows or stick: move the marker; J/Space or pad A: drop a gate; K or pad B: wait"}
     };
     return Entries;
 }
@@ -94,6 +96,7 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="fogbell") return std::make_unique<FogbellGame>();
     if(Id=="roostcall") return std::make_unique<RoostcallGame>();
     if(Id=="emberkiln") return std::make_unique<EmberkilnGame>();
+    if(Id=="sluicegate") return std::make_unique<SluicegateGame>();
     return nullptr;
 }
 

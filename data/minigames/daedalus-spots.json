@@ -117,6 +117,10 @@
     "emberkiln": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the ember kiln"
+    },
+    "sluicegate": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the sluice field"
     }
   }
 }
