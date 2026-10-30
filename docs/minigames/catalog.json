@@ -813,6 +813,38 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shadewatch",
+      "title": "Shadewatch Vigil",
+      "summary": "Hold the lanes against creeping shades. Left/Right or stick: pick a lane; J or pad A: flare; K or pad B: kindle; Space or pad X: nova",
+      "how_to_play": "HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the watch lanes",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shadewatch\", Seed)",
+      "portable_tests": [
+        "desktop_shadewatch"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -877,23 +909,6 @@
       "default_difficulty": "normal",
       "tests": [
         "test_spiritkite.py"
-      ]
-    },
-    {
-      "id": "shadewatch",
-      "title": "Shadewatch Vigil",
-      "summary": "hold the Prismheart's lanes against creeping shades with shard flares and a nova.",
-      "how_to_play": "HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends.",
-      "module": "tools/minigames/shadewatch.py",
-      "start": "shadewatch.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_shadewatch.py"
       ]
     },
     {

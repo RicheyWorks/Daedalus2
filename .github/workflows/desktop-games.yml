@@ -72,6 +72,8 @@ jobs:
         run: python tools/minigames/shardfall_parity.py --check
       - name: PyRandom parity fixture is current (engines/unreal/core-test/pyrandom_parity.txt)
         run: python tools/minigames/pyrandom_parity.py --check
+      - name: Shadewatch parity fixture is current (engines/unreal/core-test/shadewatch_parity.txt)
+        run: python tools/minigames/shadewatch_parity.py --check
       - name: Realm cabinet placements are current and tested
         run: |
           python tools/minigames/realm_cabinets.py --check

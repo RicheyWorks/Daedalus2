@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Short action chips beside the hint line. The chip names the immediate action
 // and stays out of score, movement, and saved status text.
-// catalog-capability: action_cue: beacon_sweep cairnwell dodge_ball driftstone dungeon facetlock gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shardfall shardring siltlane twinwake wardens_accord
+// catalog-capability: action_cue: beacon_sweep cairnwell dodge_ball driftstone dungeon facetlock gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shadewatch shardfall shardring siltlane twinwake wardens_accord
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -82,6 +82,11 @@ void PrismvaultCues() {
     PrismvaultGame G;G.Reset(730);
     Expect(G,"CUE Load the pans","a fresh vault cues loading the pans");
 }
+void ShadewatchCues() {
+    ShadewatchGame G;G.Reset(730);
+    Expect(G,G.ActionCue(),"a fresh vigil cues flare or kindle");
+    Check(G.ActionCue()=="CUE Flare or kindle","a fresh vigil has one light, so no nova yet");
+}
 void ShardfallCues() {
     ShardfallGame G;G.Reset(730);
     Expect(G,"CUE Draw","a fresh seam cues a draw");
@@ -112,7 +117,7 @@ void LanternwildCues() {
 }
 
 int main() {
-    try { BeaconCues();CairnwellCues();FacetlockCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();LumenpathCues();PrismcairnCues();PrismvaultCues();ReedbeatCues();RiftwingCues();ShardfallCues();ShardringCues();TwinwakeCues();WardensAccordCues(); }
+    try { BeaconCues();CairnwellCues();FacetlockCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();LumenpathCues();PrismcairnCues();PrismvaultCues();ReedbeatCues();RiftwingCues();ShadewatchCues();ShardfallCues();ShardringCues();TwinwakeCues();WardensAccordCues(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

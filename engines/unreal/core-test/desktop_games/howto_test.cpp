@@ -23,7 +23,7 @@ bool Original(const std::string& Line) {
 }
 
 int main() {
-    Check(Catalog().size()==23,"how-to covers every registered game");
+    Check(Catalog().size()==24,"how-to covers every registered game");
     for(const Entry& E:Catalog()) {
         auto G=CreateGame(E.Id);
         Check(bool(G),E.Id+": factory");
