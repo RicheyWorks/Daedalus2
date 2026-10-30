@@ -86,6 +86,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public prismvault_core_test.cpp -o prismvault_core_test && ./prismvault_core_test prismvault_parity.txt
       - name: Prismvault Weigh core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prismvault_core_test.cpp -o prismvault_core_test_clang && ./prismvault_core_test_clang prismvault_parity.txt
+      - name: Shardfall Gamble core (DaedalusShardfallCore.h regenerates shardfall_parity.txt from seed with CPython-compatible seeding and shuffle)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test && ./shardfall_core_test shardfall_parity.txt
+      - name: Shardfall Gamble core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test_clang && ./shardfall_core_test_clang shardfall_parity.txt
       - name: G206 Census Budget cost model core (DaedalusCensusBudgetCore.h replays census_budget_parity.txt from census_budget.py; 40000/32768 KiB edges)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fno-exceptions -fno-rtti -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public census_budget_core_test.cpp -o census_budget_core_test && ./census_budget_core_test census_budget_parity.txt
       - name: G206 Census Budget cost model core, clang

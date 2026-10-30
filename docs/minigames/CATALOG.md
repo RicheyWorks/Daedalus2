@@ -29,6 +29,7 @@ batched rebuild under the editor custodian.
 | `facetlock` | Facetlock Lattice | 1 |
 | `prismcairn` | Prismcairn Duel | 1 |
 | `prismvault` | Prismvault Weigh | 1 |
+| `shardfall` | Shardfall Gamble | 1 |
 | `siltlane` | Siltlane | 1 |
 
 ## How to play
@@ -58,6 +59,7 @@ One original line per game, read from `HowToLine()`.
 | `facetlock` | HOW Slide lattice rows and columns, which wrap, until each row shows a single hue inside the move budget. |
 | `prismcairn` | HOW Take one or more shards, up to the limit, from one cairn each turn; lift the last shard to win the round, best of three. |
 | `prismvault` | HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out. |
+| `shardfall` | HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot; reach the target by the last round. |
 | `siltlane` | HOW Switch lanes so the drifting silt passes you. |
 
 ## Difficulty
@@ -87,6 +89,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `facetlock` | normal |
 | `prismcairn` | normal |
 | `prismvault` | normal |
+| `shardfall` | normal |
 | `siltlane` | normal |
 
 ## Daedalus spots
@@ -116,6 +119,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `facetlock` | `prismheart_realm` | Prismheart, the vault door |
 | `prismcairn` | `prismheart_realm` | Prismheart, the cairn field |
 | `prismvault` | `prismheart_realm` | Prismheart, the balance chamber |
+| `shardfall` | `prismheart_realm` | Prismheart, the glowing seam |
 | `siltlane` | `spawn_overlook` | Spawn overlook, the silt course |
 
 ## Capabilities
@@ -146,6 +150,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `facetlock` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `prismcairn` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `prismvault` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `shardfall` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 | `siltlane` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 
 ## Leaderboard feed

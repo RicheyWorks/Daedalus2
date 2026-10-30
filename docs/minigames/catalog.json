@@ -751,6 +751,38 @@
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     },
     {
+      "id": "shardfall",
+      "title": "Shardfall Gamble",
+      "summary": "Draw glowing shards from the seam and bank before it cracks. J/Space or pad A: draw; K/Shift or pad B/X: bank",
+      "how_to_play": "HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot; reach the target by the last round.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the glowing seam",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shardfall\", Seed)",
+      "portable_tests": [
+        "desktop_shardfall"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
       "id": "siltlane",
       "title": "Siltlane",
       "summary": "Switch lanes so the drifting silt passes you. Left/Right or stick: change lane",
@@ -830,23 +862,6 @@
     }
   ],
   "python_games": [
-    {
-      "id": "shardfall",
-      "title": "Shardfall Gamble",
-      "summary": "draw glowing shards from the Prismheart seam and bank them before it cracks.",
-      "how_to_play": "HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot. Reach the target by the last round.",
-      "module": "tools/minigames/shardfall.py",
-      "start": "shardfall.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_shardfall.py"
-      ]
-    },
     {
       "id": "spiritkite",
       "title": "Spiritkite Weave",

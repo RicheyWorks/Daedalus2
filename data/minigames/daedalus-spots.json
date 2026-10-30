@@ -89,6 +89,10 @@
     "siltlane": {
       "realm": "spawn_overlook",
       "spot": "Spawn overlook, the silt course"
+    },
+    "shardfall": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the glowing seam"
     }
   }
 }
