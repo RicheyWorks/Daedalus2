@@ -36,6 +36,7 @@ batched rebuild under the editor custodian.
 | `prismchime` | Prismchime Ring | 1 |
 | `fogbell` | Fogbell Ferry | 1 |
 | `roostcall` | Roostcall | 1 |
+| `emberkiln` | Emberkiln | 1 |
 
 ## How to play
 
@@ -71,6 +72,7 @@ One original line per game, read from `HowToLine()`.
 | `prismchime` | HOW Tap a chime to ring it: its charge pulses along its facing and it gains one; a chime that fills to four peals and charges both neighbours. Light every chime before your taps run out. |
 | `fogbell` | HOW Move the ferry one cell a turn across the tidal flat, pick up the lantern passengers from their docks and reach the harbour before the rising tide floods your cell. |
 | `roostcall` | HOW Walk up behind the glimmer-birds so they flee one step at a time; drive every bird into the roost corner before your turns run out. |
+| `emberkiln` | HOW Set a coal: the clay under it gains 2 heat and its neighbours gain 1 (stone and finished tiles only warm neighbours). A tile glazes at exactly its target and cracks past it. Glaze every tile before the coals run out. |
 
 ## Difficulty
 
@@ -106,6 +108,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `prismchime` | normal |
 | `fogbell` | normal |
 | `roostcall` | normal |
+| `emberkiln` | normal |
 
 ## Daedalus spots
 
@@ -141,6 +144,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `prismchime` | `prismheart_realm` | Prismheart, the chime ring |
 | `fogbell` | `prismheart_realm` | Prismheart, the fogbell quay |
 | `roostcall` | `prismheart_realm` | Prismheart, the roost yard |
+| `emberkiln` | `prismheart_realm` | Prismheart, the ember kiln |
 
 ## Capabilities
 
@@ -177,6 +181,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `prismchime` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `fogbell` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `roostcall` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `emberkiln` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 
 ## Leaderboard feed
 
@@ -216,3 +221,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `prismchime` | Prismchime Ring | `tools/minigames/prismchime.py` | HOW Tap a chime to ring it: its charge pulses along its facing and it gains one; a chime that fills to four peals and charges both neighbours. Light every chime before your taps run out. |
 | `fogbell` | Fogbell Ferry | `tools/minigames/fogbell.py` | HOW Move the ferry one cell a turn across the tidal flat, pick up the lantern passengers from their docks and reach the harbour before the rising tide floods your cell. |
 | `roostcall` | Roostcall | `tools/minigames/roostcall.py` | HOW Walk up behind the glimmer-birds so they flee one step at a time; drive every bird into the roost corner before your turns run out. |
+| `emberkiln` | Emberkiln | `tools/minigames/emberkiln.py` | HOW Set a coal: the clay under it gains 2 heat and its neighbours gain 1 (stone and finished tiles only warm neighbours). A tile glazes at exactly its target and cracks past it. Glaze every tile before the coals run out. |

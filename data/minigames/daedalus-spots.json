@@ -113,6 +113,10 @@
     "roostcall": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the roost yard"
+    },
+    "emberkiln": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the ember kiln"
     }
   }
 }
