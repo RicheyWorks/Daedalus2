@@ -244,6 +244,23 @@ public final class TranslocationPlan {
         return out;
     }
 
+    /**
+     * The census-board release calendar for a schedule: one line per year with birds, such as
+     * "year 2: 6 birds into ADULT". Years are counted from 0, the year of the first census.
+     */
+    public List<String> releaseCalendar(int[] schedule) {
+        check(schedule);
+        String[] names = {"CHICK", "JUVENILE", "SUBADULT", "ADULT"};
+        List<String> out = new ArrayList<>();
+        for (int y = 0; y < schedule.length; y++) {
+            if (schedule[y] > 0) {
+                out.add("year " + y + ": " + schedule[y] + (schedule[y] == 1 ? " bird" : " birds") + " into "
+                        + names[settings.cohort()]);
+            }
+        }
+        return out;
+    }
+
     /** Every bird in year 0 (as many as the per-year cap allows, the rest the next years). */
     public int[] frontLoaded() {
         int[] s = new int[settings.releaseYears()];

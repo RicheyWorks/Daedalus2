@@ -5,7 +5,7 @@
 // (DaedalusMarshCraneCohortsCore.h) is least likely to fall below a crash threshold under log-normal environmental
 // shocks. All schedules share the same hashed shocks (common random numbers). Best() searches every schedule; Greedy()
 // adds one bird at a time. BackLoaded(), RiskInterval() (Wilson 95 %), Problem(), Survival(), the pruned search, Polish(),
-// GreedyPolished() and CohortRisks() came with the G589 iterations.
+// GreedyPolished(), CohortRisks() and ReleaseCalendar() came with the G589 iterations.
 // Golden vectors: engines/unreal/core-test/marsh_translocation_plan_parity.txt, written by MarshCoresParityTest.java.
 //
 // Seeding: as in G570/G583/G585, the Java core hashes (seed, run, year, salt) statelessly with the SplitMix64
@@ -17,6 +17,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <string>
 #include <vector>
 
 namespace daedalus { namespace marsh {
@@ -176,6 +177,19 @@ public:
 			Sc.Cohort = C;
 			Out[C] = TranslocationPlan(Flock, Sc, SeedValue).GreedyPolished().Risk;
 		}
+		return Out;
+	}
+
+	// Census-board release calendar: "year 2: 6 birds into ADULT" per year with birds; empty for a bad schedule.
+	std::vector<std::string> ReleaseCalendar(const std::vector<int>& Schedule) const
+	{
+		std::vector<std::string> Out;
+		if (!ValidSchedule(Schedule)) return Out;
+		static const char* const Names[4] = { "CHICK", "JUVENILE", "SUBADULT", "ADULT" };
+		for (size_t Y = 0; Y < Schedule.size(); ++Y)
+			if (Schedule[Y] > 0)
+				Out.push_back("year " + std::to_string(Y) + ": " + std::to_string(Schedule[Y])
+					+ (Schedule[Y] == 1 ? " bird" : " birds") + " into " + Names[S.Cohort]);
 		return Out;
 	}
 
