@@ -83,6 +83,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test && ./glowmoss_core_test glowmoss_parity.txt
       - name: Glowmoss Delve core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test_clang && ./glowmoss_core_test_clang glowmoss_parity.txt
+      - name: Prismheart Fair Par (DaedalusPrismFairParCore.h replays prism_fair_par_parity.txt through the Glowmoss, Spiritkite and Glimmerloom cores)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public prism_fair_par_core_test.cpp -o prism_fair_par_core_test && ./prism_fair_par_core_test prism_fair_par_parity.txt
+      - name: Prismheart Fair Par, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prism_fair_par_core_test.cpp -o prism_fair_par_core_test_clang && ./prism_fair_par_core_test_clang prism_fair_par_parity.txt
       - name: Prism Satchel + Warden Trials core (DaedalusPrismSatchelCore.h reproduces prism_satchel_parity.txt)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public prism_satchel_core_test.cpp -o prism_satchel_core_test && ./prism_satchel_core_test prism_satchel_parity.txt
       - name: Prism Satchel core, clang
