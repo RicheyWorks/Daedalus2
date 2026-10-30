@@ -20,6 +20,7 @@
 #include "DaedalusDesktopShadewatchCore.h"
 #include "DaedalusDesktopGlimmerloomCore.h"
 #include "DaedalusDesktopPrismchimeCore.h"
+#include "DaedalusDesktopFogbellCore.h"
 #include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
@@ -53,7 +54,8 @@ inline const std::vector<Entry>& Catalog() {
         {"siltlane","Siltlane","Switch lanes so the drifting silt passes you. Left/Right or stick: change lane"},
         {"shadewatch","Shadewatch Vigil","Hold the lanes against creeping shades. Left/Right or stick: pick a lane; J or pad A: flare; K or pad B: kindle; Space or pad X: nova"},
         {"glimmerloom","Glimmerloom Ledger","Trade hued shards as prices drift and heed the rumor. Left/Right or stick: pick a hue; J or pad A: buy; K or pad B: sell; Shift or pad Y: buy all; Space or pad X: rest"},
-        {"prismchime","Prismchime Ring","Tap chimes so their charge pulses the ring and peals chain. Left/Right or stick: pick a chime; J/Space or pad A: tap"}
+        {"prismchime","Prismchime Ring","Tap chimes so their charge pulses the ring and peals chain. Left/Right or stick: pick a chime; J/Space or pad A: tap"},
+        {"fogbell","Fogbell Ferry","Steer the ferry over the tidal flat, collect lanterns, make harbour before the tide. Arrows or stick: steer one cell; J/Space or pad A: wait"}
     };
     return Entries;
 }
@@ -85,6 +87,7 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="shadewatch") return std::make_unique<ShadewatchGame>();
     if(Id=="glimmerloom") return std::make_unique<GlimmerloomGame>();
     if(Id=="prismchime") return std::make_unique<PrismchimeGame>();
+    if(Id=="fogbell") return std::make_unique<FogbellGame>();
     return nullptr;
 }
 

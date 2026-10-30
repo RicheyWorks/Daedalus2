@@ -917,6 +917,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "fogbell",
+      "title": "Fogbell Ferry",
+      "summary": "Steer the ferry over the tidal flat, collect lanterns, make harbour before the tide. Arrows or stick: steer one cell; J/Space or pad A: wait",
+      "how_to_play": "HOW Move the ferry one cell a turn across the tidal flat, pick up the lantern passengers from their docks and reach the harbour before the rising tide floods your cell.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the fogbell quay",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"fogbell\", Seed)",
+      "portable_tests": [
+        "desktop_fogbell"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -998,23 +1032,6 @@
       "default_difficulty": "normal",
       "tests": [
         "test_glowmoss.py"
-      ]
-    },
-    {
-      "id": "fogbell",
-      "title": "Fogbell Ferry",
-      "summary": "steer a ferry over a tidal flat, collect lantern passengers from the docks, and make harbour before the tide takes your cell.",
-      "how_to_play": "HOW Move the ferry one cell a turn across the tidal flat, pick up the lantern passengers from their docks and reach the harbour before the rising tide floods your cell.",
-      "module": "tools/minigames/fogbell.py",
-      "start": "fogbell.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_fogbell.py"
       ]
     }
   ]

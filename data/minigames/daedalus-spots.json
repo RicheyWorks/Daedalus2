@@ -105,6 +105,10 @@
     "prismchime": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the chime ring"
+    },
+    "fogbell": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the fogbell quay"
     }
   }
 }

@@ -539,7 +539,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             12.5,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -548,12 +548,26 @@
           "start": "StartGame(\"prismchime\", 1893908471)"
         },
         {
+          "game": "fogbell",
+          "title": "Fogbell Ferry",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            12.5,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1972091195,
+          "option": 0,
+          "start": "StartGame(\"fogbell\", 1972091195)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -567,7 +581,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            2.5,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -949,12 +963,26 @@
           "start": "StartGame(\"prismchime\", 212661951)"
         },
         {
+          "game": "fogbell",
+          "title": "Fogbell Ferry",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            15.0,
+            1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 890040248,
+          "option": 0,
+          "start": "StartGame(\"fogbell\", 890040248)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             15.0,
-            1.25,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -967,8 +995,8 @@
           "title": "BlackJackPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            15.0,
-            3.75,
+            17.5,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1563,24 +1591,22 @@
           "start": "StartGame(\"prismchime\", 113376713)"
         },
         {
-          "game": "spiritkite",
-          "title": "Spiritkite Weave",
-          "host": "PythonMinigame",
+          "game": "fogbell",
+          "title": "Fogbell Ferry",
+          "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
             16.25,
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 630418058,
-          "difficulty": "normal",
-          "module": "tools/minigames/spiritkite.py",
-          "start": "spiritkite.start(630418058, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
+          "seed": 404876817,
+          "option": 0,
+          "start": "StartGame(\"fogbell\", 404876817)"
         },
         {
-          "game": "fogbell",
-          "title": "Fogbell Ferry",
+          "game": "spiritkite",
+          "title": "Spiritkite Weave",
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
@@ -1588,10 +1614,10 @@
             0.0
           ],
           "yaw_deg": 180.0,
-          "seed": 404876817,
+          "seed": 630418058,
           "difficulty": "normal",
-          "module": "tools/minigames/fogbell.py",
-          "start": "fogbell.start(404876817, difficulty)",
+          "module": "tools/minigames/spiritkite.py",
+          "start": "spiritkite.start(630418058, difficulty)",
           "requires": "no native host yet; rules run in the Python module"
         }
       ]
