@@ -51,3 +51,7 @@ Notes
 ## buddy_berths (disk-saver, READY 59156; BB01-BB11)
 
 21 assets: cabinet (BB01), 3 m quay unit, 16 tile to 48 m (BB02), chalk-line decal strips for halves, quarters, eighths and sixteenths (BB03), dinghy, ketch, schooner, galleon and great galleon hulls (BB04), ship name pennant with 12 decal variants (BB05), stay hourglass (BB06), Dockmother slate (BB07), turned-away buoy with counter ring (BB08), verdict lanterns snug, fair and crowded (BB09), chalk stick and duster (BB10), Dockmother Imelda (BB11). Imelda is static, rig pending. Sheet: buddy_berths.png.
+
+## golf / Tidelinks Golf (disk-saver, READY 59158; TG01-TG13)
+
+26 assets: cabinet with dune and flag (TG01), tee box with hole plate (TG02), 10 m fairway plus a rough-edge variant (TG03), 20 m green with cup, pin and numbered flag (TG04), 20 m tidal pool band (TG05), OOB stake (TG06), 8 clubs (driver, 3-wood, 5/7/9-iron, wedge, chip, putter) each with a Grip socket, plus an 8-slot rack (TG07), 42.7 mm ball with Trail socket (TG08), 4 m wind sock (TG09), scorecard slate (TG10), verdict pennants masterful, steady and rough (TG11), caddies safe, bold and lay-up (TG12), Greenkeeper Talwyn (TG13). TG08: Prop_Sport_Golf_Ball appears on main only as a data entry in data/sports/throwables-v1.json, with no mesh found, so the ball is built here. All figures are static, rigs pending. Sheet: golf.png.

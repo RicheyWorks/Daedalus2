@@ -1,0 +1,7877 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_TidelinksGolf",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: dune-and-flag marquee",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_TidelinksGolf_M0",
+     "colour": "cabinet body",
+     "hex": "3A6A4A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_TidelinksGolf_M1",
+     "colour": "trim / side art panel",
+     "hex": "E8D8A8",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_TidelinksGolf_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "FFF2B3",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_TidelinksGolf_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_TidelinksGolf_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_TidelinksGolf_M5",
+     "colour": "dune sand",
+     "hex": "E0C890",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 6,
+     "name": "Prop_Arcade_Cab_TidelinksGolf_M6",
+     "colour": "pin",
+     "hex": "F2F2F2",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 7,
+     "name": "Prop_Arcade_Cab_TidelinksGolf_M7",
+     "colour": "flag",
+     "hex": "E03A3A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_TidelinksGolf",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "MarqDune",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.3,
+         0.0
+        ],
+        [
+         0,
+         0.12
+        ]
+       ],
+       "centre": [
+        0.1,
+        0.05,
+        2.06
+       ],
+       "slot": 5,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "MarqPin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.25,
+       "centre": [
+        -0.25,
+        0.05,
+        2.18
+       ],
+       "slot": 6,
+       "segments": 4
+      },
+      {
+       "name": "MarqFlag",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.01,
+        0.05
+       ],
+       "centre": [
+        -0.21,
+        0.05,
+        2.27
+       ],
+       "slot": 7,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_TidelinksGolf_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 540,
+    "lod1_triangles": 540,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_TidelinksGolf": 540
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.305
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.305
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1580412ed86d664ab806a975c9ae9b5f6f23849f5fafa258683a757f1a74cc74"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_TeeBox",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "6 x 4 m raised tee box (plays toward -Y)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Tee",
+     "SOCKET_Aim",
+     "SOCKET_HolePlate"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_TeeBox_M0",
+     "colour": "tee turf",
+     "hex": "5AA04A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_TeeBox_M1",
+     "colour": "tee markers",
+     "hex": "F2F2F2",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_TeeBox_M2",
+     "colour": "post",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_TidelinksGolf_TeeBox_M3",
+     "colour": "hole number plate (decal)",
+     "hex": "E8D8A8",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_TeeBox",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Tee",
+       "shape": "box",
+       "size": [
+        6.0,
+        4.0,
+        0.3
+       ],
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Marker-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.08
+        ],
+        [
+         0.05657,
+         -0.05657
+        ],
+        [
+         0.08,
+         -0.0
+        ],
+        [
+         0.05657,
+         0.05657
+        ],
+        [
+         0,
+         0.08
+        ]
+       ],
+       "centre": [
+        -1.5,
+        -1.2,
+        0.36
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Marker1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.08
+        ],
+        [
+         0.05657,
+         -0.05657
+        ],
+        [
+         0.08,
+         -0.0
+        ],
+        [
+         0.05657,
+         0.05657
+        ],
+        [
+         0,
+         0.08
+        ]
+       ],
+       "centre": [
+        1.5,
+        -1.2,
+        0.36
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "PlatePost",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.08,
+        0.6
+       ],
+       "centre": [
+        2.6,
+        1.6,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "HolePlate",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.03,
+        0.3
+       ],
+       "centre": [
+        2.6,
+        1.56,
+        0.95
+       ],
+       "slot": 3,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Tee",
+     "location": [
+      0,
+      -1.0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      1.0
+     ]
+    },
+    {
+     "name": "SOCKET_Aim",
+     "location": [
+      0,
+      -2.0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.3,
+      2.0
+     ]
+    },
+    {
+     "name": "SOCKET_HolePlate",
+     "location": [
+      2.6,
+      1.54,
+      0.95
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      2.6,
+      0.95,
+      -1.54
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_TeeBox_00",
+     "shape": "box",
+     "size": [
+      6.0,
+      4.0,
+      1.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.55
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 252,
+    "lod1_triangles": 252,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_TeeBox": 252
+    },
+    "bounds_min": [
+     -3.0,
+     -2.0,
+     0.0
+    ],
+    "bounds_max": [
+     3.0,
+     2.0,
+     1.1
+    ],
+    "dimensions": [
+     6.0,
+     4.0,
+     1.1
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c513bc417dc9b71ab990fd5d62b8cb041b88bbe498685b6756f03e22bc4cb73c"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Fairway",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "10 m fairway section, 25 m wide (tile along Y)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Fairway_M0",
+     "colour": "fairway",
+     "hex": "5AA04A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Fairway_M1",
+     "colour": "mown stripe",
+     "hex": "6AB85A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Fairway_M2",
+     "colour": "rough",
+     "hex": "4A7A3A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Fairway",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Fairway",
+       "shape": "box",
+       "size": [
+        25.0,
+        10.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        -0.05
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Stripe0",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        -11.25,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe1",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        -6.25,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe2",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        -1.25,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe3",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        3.75,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe4",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        8.75,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      0,
+      5,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -5.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      0,
+      -5,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      5.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Fairway_00",
+     "shape": "box",
+     "size": [
+      25.0,
+      10.0,
+      0.14
+     ],
+     "centre": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 72,
+    "lod1_triangles": 72,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Fairway": 72
+    },
+    "bounds_min": [
+     -12.5,
+     -5.0,
+     -0.1
+    ],
+    "bounds_max": [
+     12.5,
+     5.0,
+     0.0055
+    ],
+    "dimensions": [
+     25.0,
+     10.0,
+     0.1055
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "572f4c32195669b7dc18eef9953d263f85f60bbfe6b171d3f9da888662768cb7"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_FairwayRoughEdge",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "10 m fairway section, 25 m wide + rough edges (tile along Y)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_FairwayRoughEdge_M0",
+     "colour": "fairway",
+     "hex": "5AA04A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_FairwayRoughEdge_M1",
+     "colour": "mown stripe",
+     "hex": "6AB85A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_FairwayRoughEdge_M2",
+     "colour": "rough",
+     "hex": "4A7A3A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_FairwayRoughEdge",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Fairway",
+       "shape": "box",
+       "size": [
+        25.0,
+        10.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        -0.05
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Stripe0",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        -11.25,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe1",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        -6.25,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe2",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        -1.25,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe3",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        3.75,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stripe4",
+       "shape": "box",
+       "size": [
+        2.5,
+        10.0,
+        0.005
+       ],
+       "centre": [
+        8.75,
+        0,
+        0.003
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Rough-1",
+       "shape": "box",
+       "size": [
+        6.0,
+        10.0,
+        0.08
+       ],
+       "centre": [
+        -15.5,
+        0,
+        0.0
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Rough1",
+       "shape": "box",
+       "size": [
+        6.0,
+        10.0,
+        0.08
+       ],
+       "centre": [
+        15.5,
+        0,
+        0.0
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      0,
+      5,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -5.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      0,
+      -5,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      5.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_FairwayRoughEdge_00",
+     "shape": "box",
+     "size": [
+      37.0,
+      10.0,
+      0.14
+     ],
+     "centre": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 96,
+    "lod1_triangles": 96,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_FairwayRoughEdge": 96
+    },
+    "bounds_min": [
+     -18.5,
+     -5.0,
+     -0.1
+    ],
+    "bounds_max": [
+     18.5,
+     5.0,
+     0.04
+    ],
+    "dimensions": [
+     37.0,
+     10.0,
+     0.14
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "65337b7275139533b3ad8f5ae2c21d586494f596cea59d3fd9fd77665e0e55d5"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Green",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "20 m green (10 m radius) with cup, 2.1 m pin and numbered flag",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Cup",
+     "SOCKET_FlagNumber"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Green_M0",
+     "colour": "green",
+     "hex": "6AC05A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Green_M1",
+     "colour": "fringe",
+     "hex": "5AA04A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Green_M2",
+     "colour": "cup",
+     "hex": "1A1A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_TidelinksGolf_Green_M3",
+     "colour": "pin",
+     "hex": "F2F2F2",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_TidelinksGolf_Green_M4",
+     "colour": "numbered flag (decal)",
+     "hex": "E03A3A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Green",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Green",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 10.0,
+       "r2": 10.0,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 24
+      },
+      {
+       "name": "Fringe",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 10.6,
+       "r2": 10.6,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        0.025
+       ],
+       "slot": 1,
+       "segments": 24
+      },
+      {
+       "name": "Cup",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.054,
+       "r2": 0.054,
+       "length": 0.01,
+       "centre": [
+        0,
+        0,
+        0.085
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Pin",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 2.1,
+       "centre": [
+        0,
+        0,
+        1.13
+       ],
+       "slot": 3,
+       "segments": 6
+      },
+      {
+       "name": "Flag",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.01,
+        0.35
+       ],
+       "centre": [
+        0.26,
+        0,
+        1.98
+       ],
+       "slot": 4,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Cup",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_FlagNumber",
+     "location": [
+      0.26,
+      -0.01,
+      1.98
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.26,
+      1.98,
+      0.01
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Green_00",
+     "shape": "box",
+     "size": [
+      21.2,
+      21.2,
+      2.18
+     ],
+     "centre": [
+      0,
+      0,
+      1.09
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 252,
+    "lod1_triangles": 252,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Green": 252
+    },
+    "bounds_min": [
+     -10.6,
+     -10.6,
+     0.0
+    ],
+    "bounds_max": [
+     10.6,
+     10.6,
+     2.18
+    ],
+    "dimensions": [
+     21.2,
+     21.2,
+     2.18
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e15120a0615f97e46e1e3ab8e329230b13dfa7661286b8cf0437702f9cd39b94"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_WaterHazard",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "20 m tidal pool band, 25 m wide",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End",
+     "SOCKET_Splash"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_WaterHazard_M0",
+     "colour": "sand bed",
+     "hex": "C8B080",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_WaterHazard_M1",
+     "colour": "tidal water (shader)",
+     "hex": "2A6A8A",
+     "roughness": 0.05,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_WaterHazard_M2",
+     "colour": "bank",
+     "hex": "8A7A5A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_WaterHazard",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bed",
+       "shape": "box",
+       "size": [
+        25.0,
+        20.0,
+        0.4
+       ],
+       "centre": [
+        0,
+        0,
+        -0.45
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Water",
+       "shape": "box",
+       "size": [
+        24.0,
+        19.0,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        -0.12
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Bank-1",
+       "shape": "box",
+       "size": [
+        25.0,
+        0.6,
+        0.12
+       ],
+       "centre": [
+        0,
+        -9.8,
+        -0.04
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bank1",
+       "shape": "box",
+       "size": [
+        25.0,
+        0.6,
+        0.12
+       ],
+       "centre": [
+        0,
+        9.8,
+        -0.04
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      0,
+      10,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -10.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      0,
+      -10,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      10.0
+     ]
+    },
+    {
+     "name": "SOCKET_Splash",
+     "location": [
+      0,
+      0,
+      -0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      -0.1,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_WaterHazard_00",
+     "shape": "box",
+     "size": [
+      25.0,
+      20.0,
+      0.67
+     ],
+     "centre": [
+      0,
+      0,
+      -0.32
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 48,
+    "lod1_triangles": 48,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_WaterHazard": 48
+    },
+    "bounds_min": [
+     -12.5,
+     -10.1,
+     -0.65
+    ],
+    "bounds_max": [
+     12.5,
+     10.1,
+     0.02
+    ],
+    "dimensions": [
+     25.0,
+     20.2,
+     0.67
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "32c1d8c373f6d91f45015fb24b4fcd89b9fd7ea378807401afd6f2774d29296f"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_OOBStake",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 m white out-of-bounds stake (instanced)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Ground"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_OOBStake_M0",
+     "colour": "white stake",
+     "hex": "F2F2F2",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_OOBStake",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stake",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.05,
+        1.0
+       ],
+       "centre": [
+        0,
+        0,
+        0.5
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Tip",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.04,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        -0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Ground",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_OOBStake_00",
+     "shape": "box",
+     "size": [
+      0.05,
+      0.05,
+      1.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.45
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 88,
+    "lod1_triangles": 88,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_OOBStake": 88
+    },
+    "bounds_min": [
+     -0.025,
+     -0.025,
+     -0.1
+    ],
+    "bounds_max": [
+     0.025,
+     0.025,
+     1.0
+    ],
+    "dimensions": [
+     0.05,
+     0.05,
+     1.1
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "103512ed9e207314294f3ea95df3a515dc10f633e8b608e98a9c861e233ef457"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Club_Driver",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.15 m Driver",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Club_Driver_M0",
+     "colour": "grip",
+     "hex": "1A1A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Club_Driver_M1",
+     "colour": "shaft",
+     "hex": "C8CCD4",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Club_Driver_M2",
+     "colour": "head",
+     "hex": "2A2A30",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Club_Driver",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Grip",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.012,
+       "length": 0.26,
+       "centre": [
+        0,
+        0,
+        1.02
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.007,
+       "r2": 0.006,
+       "length": 0.85,
+       "centre": [
+        0,
+        0,
+        0.465
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.03182,
+         -0.03182
+        ],
+        [
+         0.045,
+         -0.0
+        ],
+        [
+         0.03182,
+         0.03182
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0.04,
+        0,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      1.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.05,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Face",
+     "location": [
+      0.04,
+      -0.03,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.04,
+      0.02,
+      0.03
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Club_Driver_00",
+     "shape": "box",
+     "size": [
+      0.12,
+      0.09,
+      1.15
+     ],
+     "centre": [
+      0.03,
+      0,
+      0.575
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 116,
+    "lod1_triangles": 116,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Club_Driver": 116
+    },
+    "bounds_min": [
+     -0.013,
+     -0.045,
+     -0.015
+    ],
+    "bounds_max": [
+     0.085,
+     0.045,
+     1.15
+    ],
+    "dimensions": [
+     0.098,
+     0.09,
+     1.165
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "0054bb045df69371aeefa8a171573a52a99096159d880f8993bc14b7b15e8ae2"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Club_3Wood",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.08 m 3Wood",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Club_3Wood_M0",
+     "colour": "grip",
+     "hex": "1A1A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Club_3Wood_M1",
+     "colour": "shaft",
+     "hex": "C8CCD4",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Club_3Wood_M2",
+     "colour": "head",
+     "hex": "2A2A30",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Club_3Wood",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Grip",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.012,
+       "length": 0.26,
+       "centre": [
+        0,
+        0,
+        0.95
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.007,
+       "r2": 0.006,
+       "length": 0.78,
+       "centre": [
+        0,
+        0,
+        0.43
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.035
+        ],
+        [
+         0.02475,
+         -0.02475
+        ],
+        [
+         0.035,
+         -0.0
+        ],
+        [
+         0.02475,
+         0.02475
+        ],
+        [
+         0,
+         0.035
+        ]
+       ],
+       "centre": [
+        0.04,
+        0,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.98
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.98,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Face",
+     "location": [
+      0.04,
+      -0.03,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.04,
+      0.02,
+      0.03
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Club_3Wood_00",
+     "shape": "box",
+     "size": [
+      0.12,
+      0.09,
+      1.08
+     ],
+     "centre": [
+      0.03,
+      0,
+      0.54
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 116,
+    "lod1_triangles": 116,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Club_3Wood": 116
+    },
+    "bounds_min": [
+     -0.013,
+     -0.035,
+     -0.005
+    ],
+    "bounds_max": [
+     0.075,
+     0.035,
+     1.08
+    ],
+    "dimensions": [
+     0.088,
+     0.07,
+     1.085
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3d23d192fc16a3dae0d8f8fcfbe26c865f9b8f42ff0c4b420830ae8692b62065"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Club_5Iron",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.97 m 5Iron",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Club_5Iron_M0",
+     "colour": "grip",
+     "hex": "1A1A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Club_5Iron_M1",
+     "colour": "shaft",
+     "hex": "C8CCD4",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Club_5Iron_M2",
+     "colour": "head",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Club_5Iron",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Grip",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.012,
+       "length": 0.26,
+       "centre": [
+        0,
+        0,
+        0.84
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.007,
+       "r2": 0.006,
+       "length": 0.67,
+       "centre": [
+        0,
+        0,
+        0.375
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Head",
+       "shape": "box",
+       "size": [
+        0.075,
+        0.012,
+        0.045
+       ],
+       "centre": [
+        0.035,
+        -0.004,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": true,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.87
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.87,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Face",
+     "location": [
+      0.04,
+      -0.03,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.04,
+      0.02,
+      0.03
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Club_5Iron_00",
+     "shape": "box",
+     "size": [
+      0.12,
+      0.09,
+      0.97
+     ],
+     "centre": [
+      0.03,
+      0,
+      0.485
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Club_5Iron": 84
+    },
+    "bounds_min": [
+     -0.013,
+     -0.0168,
+     -0.0027
+    ],
+    "bounds_max": [
+     0.0725,
+     0.0113,
+     0.97
+    ],
+    "dimensions": [
+     0.0855,
+     0.0281,
+     0.9727
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7449c2be9f2461ba424a11fc921c3ba3e06501d90a43eb3ef18655bf86c6e525"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Club_7Iron",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.94 m 7Iron",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Club_7Iron_M0",
+     "colour": "grip",
+     "hex": "1A1A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Club_7Iron_M1",
+     "colour": "shaft",
+     "hex": "C8CCD4",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Club_7Iron_M2",
+     "colour": "head",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Club_7Iron",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Grip",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.012,
+       "length": 0.26,
+       "centre": [
+        0,
+        0,
+        0.81
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.007,
+       "r2": 0.006,
+       "length": 0.64,
+       "centre": [
+        0,
+        0,
+        0.36
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Head",
+       "shape": "box",
+       "size": [
+        0.075,
+        0.012,
+        0.045
+       ],
+       "centre": [
+        0.035,
+        -0.004,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": true,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.84
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.84,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Face",
+     "location": [
+      0.04,
+      -0.03,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.04,
+      0.02,
+      0.03
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Club_7Iron_00",
+     "shape": "box",
+     "size": [
+      0.12,
+      0.09,
+      0.94
+     ],
+     "centre": [
+      0.03,
+      0,
+      0.47
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Club_7Iron": 84
+    },
+    "bounds_min": [
+     -0.013,
+     -0.0168,
+     -0.0027
+    ],
+    "bounds_max": [
+     0.0725,
+     0.0113,
+     0.94
+    ],
+    "dimensions": [
+     0.0855,
+     0.0281,
+     0.9427
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c75b18f23b61db4bf0b8f7d40a253a3565d0e48150d9f1bc8bfe33c8d0ce2970"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Club_9Iron",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.91 m 9Iron",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Club_9Iron_M0",
+     "colour": "grip",
+     "hex": "1A1A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Club_9Iron_M1",
+     "colour": "shaft",
+     "hex": "C8CCD4",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Club_9Iron_M2",
+     "colour": "head",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Club_9Iron",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Grip",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.012,
+       "length": 0.26,
+       "centre": [
+        0,
+        0,
+        0.78
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.007,
+       "r2": 0.006,
+       "length": 0.61,
+       "centre": [
+        0,
+        0,
+        0.345
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Head",
+       "shape": "box",
+       "size": [
+        0.075,
+        0.012,
+        0.045
+       ],
+       "centre": [
+        0.035,
+        -0.004,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": true,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.81
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.81,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Face",
+     "location": [
+      0.04,
+      -0.03,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.04,
+      0.02,
+      0.03
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Club_9Iron_00",
+     "shape": "box",
+     "size": [
+      0.12,
+      0.09,
+      0.91
+     ],
+     "centre": [
+      0.03,
+      0,
+      0.455
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Club_9Iron": 84
+    },
+    "bounds_min": [
+     -0.013,
+     -0.0168,
+     -0.0027
+    ],
+    "bounds_max": [
+     0.0725,
+     0.0113,
+     0.91
+    ],
+    "dimensions": [
+     0.0855,
+     0.0281,
+     0.9127
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "de124a6757a4808e9d5f9bb4381c40690b33817bd1d85be5a7788c325a9d6966"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Club_Wedge",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.89 m Wedge",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Club_Wedge_M0",
+     "colour": "grip",
+     "hex": "1A1A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Club_Wedge_M1",
+     "colour": "shaft",
+     "hex": "C8CCD4",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Club_Wedge_M2",
+     "colour": "head",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Club_Wedge",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Grip",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.012,
+       "length": 0.26,
+       "centre": [
+        0,
+        0,
+        0.76
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.007,
+       "r2": 0.006,
+       "length": 0.59,
+       "centre": [
+        0,
+        0,
+        0.335
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Head",
+       "shape": "box",
+       "size": [
+        0.075,
+        0.012,
+        0.045
+       ],
+       "centre": [
+        0.035,
+        -0.004,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": true,
+       "rot": [
+        -45,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.79
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.79,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Face",
+     "location": [
+      0.04,
+      -0.03,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.04,
+      0.02,
+      0.03
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Club_Wedge_00",
+     "shape": "box",
+     "size": [
+      0.12,
+      0.09,
+      0.89
+     ],
+     "centre": [
+      0.03,
+      0,
+      0.445
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Club_Wedge": 84
+    },
+    "bounds_min": [
+     -0.013,
+     -0.0231,
+     0.0009
+    ],
+    "bounds_max": [
+     0.0725,
+     0.0151,
+     0.89
+    ],
+    "dimensions": [
+     0.0855,
+     0.0382,
+     0.8891
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "8dc27f6a70b35df58817c045388750f7861c8e6221fc2fa9120bd7369d88243d"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Club_Chip",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.88 m Chip",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Club_Chip_M0",
+     "colour": "grip",
+     "hex": "1A1A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Club_Chip_M1",
+     "colour": "shaft",
+     "hex": "C8CCD4",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Club_Chip_M2",
+     "colour": "head",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Club_Chip",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Grip",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.012,
+       "length": 0.26,
+       "centre": [
+        0,
+        0,
+        0.75
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.007,
+       "r2": 0.006,
+       "length": 0.58,
+       "centre": [
+        0,
+        0,
+        0.33
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Head",
+       "shape": "box",
+       "size": [
+        0.075,
+        0.012,
+        0.045
+       ],
+       "centre": [
+        0.035,
+        -0.004,
+        0.02
+       ],
+       "slot": 2,
+       "bevel": true,
+       "rot": [
+        -45,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.78
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.78,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Face",
+     "location": [
+      0.04,
+      -0.03,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.04,
+      0.02,
+      0.03
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Club_Chip_00",
+     "shape": "box",
+     "size": [
+      0.12,
+      0.09,
+      0.88
+     ],
+     "centre": [
+      0.03,
+      0,
+      0.44
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Club_Chip": 84
+    },
+    "bounds_min": [
+     -0.013,
+     -0.0231,
+     0.0009
+    ],
+    "bounds_max": [
+     0.0725,
+     0.0151,
+     0.88
+    ],
+    "dimensions": [
+     0.0855,
+     0.0382,
+     0.8791
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b6a46eb22f8907dc968775bacbf279af8c0978efc61d4971bf11a3d5a86a75a9"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Club_Putter",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 m Putter",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Club_Putter_M0",
+     "colour": "grip",
+     "hex": "1A1A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_Club_Putter_M1",
+     "colour": "shaft",
+     "hex": "C8CCD4",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_Club_Putter_M2",
+     "colour": "head",
+     "hex": "C8CCD4",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Club_Putter",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Grip",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.013,
+       "r2": 0.012,
+       "length": 0.26,
+       "centre": [
+        0,
+        0,
+        0.73
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Shaft",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.007,
+       "r2": 0.006,
+       "length": 0.56,
+       "centre": [
+        0,
+        0,
+        0.32
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Head",
+       "shape": "box",
+       "size": [
+        0.11,
+        0.025,
+        0.025
+       ],
+       "centre": [
+        0.04,
+        0,
+        0.0125
+       ],
+       "slot": 2,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Face",
+     "location": [
+      0.04,
+      -0.03,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.04,
+      0.02,
+      0.03
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Club_Putter_00",
+     "shape": "box",
+     "size": [
+      0.12,
+      0.09,
+      0.86
+     ],
+     "centre": [
+      0.03,
+      0,
+      0.43
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Club_Putter": 84
+    },
+    "bounds_min": [
+     -0.015,
+     -0.0125,
+     0.0
+    ],
+    "bounds_max": [
+     0.095,
+     0.0125,
+     0.86
+    ],
+    "dimensions": [
+     0.11,
+     0.025,
+     0.86
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4ab90bff236fea3aaf216125679137b72d7e8282991ce290b510f355f5f3a8bd"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_ClubRack",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 m rack, 8 club slots",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Slot_0",
+     "SOCKET_Slot_1",
+     "SOCKET_Slot_2",
+     "SOCKET_Slot_3",
+     "SOCKET_Slot_4",
+     "SOCKET_Slot_5",
+     "SOCKET_Slot_6",
+     "SOCKET_Slot_7"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_ClubRack_M0",
+     "colour": "rack wood",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_ClubRack_M1",
+     "colour": "slot ring",
+     "hex": "3A2A1A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_ClubRack",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.35,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Back",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.04,
+        0.9
+       ],
+       "centre": [
+        0,
+        0.15,
+        0.48
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "TopRail",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.3,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.95
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Hole0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.02,
+       "centre": [
+        -0.42,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Hole1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.02,
+       "centre": [
+        -0.3,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Hole2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.02,
+       "centre": [
+        -0.18,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Hole3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.02,
+       "centre": [
+        -0.06,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Hole4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.02,
+       "centre": [
+        0.06,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Hole5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Hole6",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.02,
+       "centre": [
+        0.3,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Hole7",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.02,
+       "centre": [
+        0.42,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "segments": 8
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot_0",
+     "location": [
+      -0.42,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.42,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot_1",
+     "location": [
+      -0.3,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.3,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot_2",
+     "location": [
+      -0.18,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.18,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot_3",
+     "location": [
+      -0.06,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.06,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot_4",
+     "location": [
+      0.06,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.06,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot_5",
+     "location": [
+      0.18,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.18,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot_6",
+     "location": [
+      0.3,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.3,
+      0.06,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot_7",
+     "location": [
+      0.42,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.42,
+      0.06,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_ClubRack_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      0.35,
+      0.97
+     ],
+     "centre": [
+      0,
+      0,
+      0.485
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 356,
+    "lod1_triangles": 356,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_ClubRack": 356
+    },
+    "bounds_min": [
+     -0.5,
+     -0.175,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.175,
+     0.98
+    ],
+    "dimensions": [
+     1.0,
+     0.35,
+     0.98
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3d07b57acb770d72421364bfce4440e66ef24d070d8a735e60b7b591b85b06c9"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_Ball",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "42.7 mm golf ball (trail FX at Trail)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Centre",
+     "SOCKET_Trail"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_Ball_M0",
+     "colour": "ball",
+     "hex": "F8F8F8",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_Ball",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ball",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.02135
+        ],
+        [
+         0.0151,
+         -0.0151
+        ],
+        [
+         0.02135,
+         -0.0
+        ],
+        [
+         0.0151,
+         0.0151
+        ],
+        [
+         0,
+         0.02135
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.02135
+       ],
+       "slot": 0,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Centre",
+     "location": [
+      0,
+      0,
+      0.02135
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.02135,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Trail",
+     "location": [
+      0,
+      0.02,
+      0.02135
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.02135,
+      -0.02
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_Ball_00",
+     "shape": "box",
+     "size": [
+      0.043,
+      0.043,
+      0.043
+     ],
+     "centre": [
+      0,
+      0,
+      0.02135
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 116,
+    "lod1_triangles": 116,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_Ball": 116
+    },
+    "bounds_min": [
+     -0.0214,
+     -0.0214,
+     0.0
+    ],
+    "bounds_max": [
+     0.0214,
+     0.0214,
+     0.0427
+    ],
+    "dimensions": [
+     0.0428,
+     0.0428,
+     0.0427
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3b36765dabc1de63634fc8b3ba20f6ce68ba2b5fd4e9b14762d195eb37e0f27b"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_WindSock",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "4 m wind sock (yaw + droop about Pivot by wind -5..+5)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Pivot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_WindSock_M0",
+     "colour": "pole",
+     "hex": "E8E4D8",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_WindSock_M1",
+     "colour": "ring",
+     "hex": "3A3A40",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_TidelinksGolf_WindSock_M2",
+     "colour": "sock orange",
+     "hex": "F07A2A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_TidelinksGolf_WindSock_M3",
+     "colour": "sock white",
+     "hex": "F2F2F2",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_WindSock",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Pole",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.035,
+       "length": 4.0,
+       "centre": [
+        0,
+        0,
+        2.0
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Ring",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.2,
+       "r2": 0.2,
+       "length": 0.03,
+       "centre": [
+        0.06,
+        0,
+        3.85
+       ],
+       "slot": 1,
+       "segments": 12
+      },
+      {
+       "name": "Sock0",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.19,
+       "r2": 0.17,
+       "length": 0.3,
+       "centre": [
+        0.23,
+        0,
+        3.85
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Sock1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.165,
+       "r2": 0.145,
+       "length": 0.3,
+       "centre": [
+        0.53,
+        0,
+        3.79
+       ],
+       "slot": 3,
+       "segments": 10
+      },
+      {
+       "name": "Sock2",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.14,
+       "r2": 0.12,
+       "length": 0.3,
+       "centre": [
+        0.83,
+        0,
+        3.73
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Sock3",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.115,
+       "r2": 0.095,
+       "length": 0.3,
+       "centre": [
+        1.13,
+        0,
+        3.67
+       ],
+       "slot": 3,
+       "segments": 10
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Pivot",
+     "location": [
+      0,
+      0,
+      3.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      3.85,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_WindSock_00",
+     "shape": "box",
+     "size": [
+      1.45,
+      0.4,
+      4.05
+     ],
+     "centre": [
+      0.62,
+      0,
+      2.02
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 216,
+    "lod1_triangles": 216,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_WindSock": 216
+    },
+    "bounds_min": [
+     -0.04,
+     -0.2,
+     0.0
+    ],
+    "bounds_max": [
+     1.28,
+     0.2,
+     4.05
+    ],
+    "dimensions": [
+     1.32,
+     0.4,
+     4.05
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c2817cbad00f1fea51093a9e13d79dd73751013522961d8c12fb5135977a15c6"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_ScorecardSlate",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1.5 m slate on legs: Talwyn's scorecard vs par",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_UI_Face",
+     "SOCKET_ChalkTray"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_ScorecardSlate_M0",
+     "colour": "wood frame",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_ScorecardSlate_M1",
+     "colour": "slate (runtime chalk UI over this face)",
+     "hex": "2A2E30",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_ScorecardSlate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.06,
+        1.5
+       ],
+       "centre": [
+        0,
+        0,
+        1.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Slate",
+       "shape": "box",
+       "size": [
+        0.9,
+        0.01,
+        1.4
+       ],
+       "centre": [
+        0,
+        -0.031,
+        1.25
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Leg-1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.5
+       ],
+       "centre": [
+        -0.42,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.5
+       ],
+       "centre": [
+        0.42,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "ChalkTray",
+       "shape": "box",
+       "size": [
+        0.9,
+        0.08,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.05,
+        0.53
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_UI_Face",
+     "location": [
+      0,
+      -0.037,
+      1.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.25,
+      0.037
+     ]
+    },
+    {
+     "name": "SOCKET_ChalkTray",
+     "location": [
+      0,
+      -0.05,
+      0.56
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.56,
+      0.05
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_ScorecardSlate_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      0.1,
+      2.0
+     ],
+     "centre": [
+      0,
+      0,
+      1.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 188,
+    "lod1_triangles": 188,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_ScorecardSlate": 188
+    },
+    "bounds_min": [
+     -0.5,
+     -0.09,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.03,
+     2.0
+    ],
+    "dimensions": [
+     1.0,
+     0.12,
+     2.0
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b05a5d792cec529d7a0d89ecc166bd232292e881aeac176d4ab84a48687dc696"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_VerdictPennant_Masterful",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.0 x 0.5 m pennant: masterful",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Name"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_VerdictPennant_Masterful_M0",
+     "colour": "batten",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_VerdictPennant_Masterful_M1",
+     "colour": "cloth",
+     "hex": "E0B030",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_VerdictPennant_Masterful",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Batten",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 1.1,
+       "centre": [
+        0,
+        0,
+        0.5
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Cloth",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.01,
+        0.3
+       ],
+       "centre": [
+        0,
+        0,
+        0.34
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tail-1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.01,
+        0.15
+       ],
+       "centre": [
+        -0.3,
+        0,
+        0.12
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tail1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.01,
+        0.15
+       ],
+       "centre": [
+        0.3,
+        0,
+        0.12
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Name",
+     "location": [
+      0,
+      -0.01,
+      0.34
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.34,
+      0.01
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_VerdictPennant_Masterful_00",
+     "shape": "box",
+     "size": [
+      1.1,
+      0.03,
+      0.5
+     ],
+     "centre": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_VerdictPennant_Masterful": 56
+    },
+    "bounds_min": [
+     -0.55,
+     -0.015,
+     0.045
+    ],
+    "bounds_max": [
+     0.55,
+     0.015,
+     0.513
+    ],
+    "dimensions": [
+     1.1,
+     0.03,
+     0.468
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "fcf3901e81c105fa5d7c77440f6b22fa1f7bcd332098d139bb92a6cd2677fc2c"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_VerdictPennant_Steady",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.0 x 0.5 m pennant: steady",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Name"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_VerdictPennant_Steady_M0",
+     "colour": "batten",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_VerdictPennant_Steady_M1",
+     "colour": "cloth",
+     "hex": "40A060",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_VerdictPennant_Steady",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Batten",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 1.1,
+       "centre": [
+        0,
+        0,
+        0.5
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Cloth",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.01,
+        0.3
+       ],
+       "centre": [
+        0,
+        0,
+        0.34
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tail-1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.01,
+        0.15
+       ],
+       "centre": [
+        -0.3,
+        0,
+        0.12
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tail1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.01,
+        0.15
+       ],
+       "centre": [
+        0.3,
+        0,
+        0.12
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Name",
+     "location": [
+      0,
+      -0.01,
+      0.34
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.34,
+      0.01
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_VerdictPennant_Steady_00",
+     "shape": "box",
+     "size": [
+      1.1,
+      0.03,
+      0.5
+     ],
+     "centre": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_VerdictPennant_Steady": 56
+    },
+    "bounds_min": [
+     -0.55,
+     -0.015,
+     0.045
+    ],
+    "bounds_max": [
+     0.55,
+     0.015,
+     0.513
+    ],
+    "dimensions": [
+     1.1,
+     0.03,
+     0.468
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "27240f0a641e40f1de094dab60b9033fc76a6f16960ae8108d6505efb8ce692c"
+  },
+  {
+   "asset": "Prop_TidelinksGolf_VerdictPennant_Rough",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.0 x 0.5 m pennant: rough",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Name"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_TidelinksGolf_VerdictPennant_Rough_M0",
+     "colour": "batten",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_TidelinksGolf_VerdictPennant_Rough_M1",
+     "colour": "cloth",
+     "hex": "7A5A3A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_TidelinksGolf_VerdictPennant_Rough",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Batten",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 1.1,
+       "centre": [
+        0,
+        0,
+        0.5
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Cloth",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.01,
+        0.3
+       ],
+       "centre": [
+        0,
+        0,
+        0.34
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tail-1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.01,
+        0.15
+       ],
+       "centre": [
+        -0.3,
+        0,
+        0.12
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tail1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.01,
+        0.15
+       ],
+       "centre": [
+        0.3,
+        0,
+        0.12
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Name",
+     "location": [
+      0,
+      -0.01,
+      0.34
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.34,
+      0.01
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_TidelinksGolf_VerdictPennant_Rough_00",
+     "shape": "box",
+     "size": [
+      1.1,
+      0.03,
+      0.5
+     ],
+     "centre": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_TidelinksGolf_VerdictPennant_Rough": 56
+    },
+    "bounds_min": [
+     -0.55,
+     -0.015,
+     0.045
+    ],
+    "bounds_max": [
+     0.55,
+     0.015,
+     0.513
+    ],
+    "dimensions": [
+     1.1,
+     0.03,
+     0.468
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d11807535c70c7040e588a4392adfbdefbfc8441d8dd3b314591eabb033a94dc"
+  },
+  {
+   "asset": "Mob_TidelinksGolf_Caddie_Safe",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): caddie (safe habit; rig pending: idle, point, shrug)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_TidelinksGolf_Caddie_Safe_M0",
+     "colour": "coat",
+     "hex": "4A6A8A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_TidelinksGolf_Caddie_Safe_M1",
+     "colour": "accent / trousers",
+     "hex": "E8E4D8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_TidelinksGolf_Caddie_Safe_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_TidelinksGolf_Caddie_Safe_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_TidelinksGolf_Caddie_Safe_M4",
+     "colour": "caddie bag",
+     "hex": "E8E4D8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_TidelinksGolf_Caddie_Safe",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Bag",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.12,
+       "length": 0.8,
+       "centre": [
+        0.3,
+        0.2,
+        0.9
+       ],
+       "slot": 4,
+       "segments": 10,
+       "rot": [
+        0,
+        -15,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_TidelinksGolf_Caddie_Safe_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 656,
+    "lod1_triangles": 656,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_TidelinksGolf_Caddie_Safe": 656
+    },
+    "bounds_min": [
+     -0.42,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.5194,
+     0.3141,
+     1.76
+    ],
+    "dimensions": [
+     0.9394,
+     0.4641,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e5e0468e2c658353dddf438e42b7c6596cc246895adae4ed8057b2634191a3ce"
+  },
+  {
+   "asset": "Mob_TidelinksGolf_Caddie_Bold",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): caddie (bold habit; rig pending: idle, point, shrug)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_TidelinksGolf_Caddie_Bold_M0",
+     "colour": "coat",
+     "hex": "C04030",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_TidelinksGolf_Caddie_Bold_M1",
+     "colour": "accent / trousers",
+     "hex": "2A2A30",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_TidelinksGolf_Caddie_Bold_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_TidelinksGolf_Caddie_Bold_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_TidelinksGolf_Caddie_Bold_M4",
+     "colour": "caddie bag",
+     "hex": "2A2A30",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_TidelinksGolf_Caddie_Bold",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Bag",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.12,
+       "length": 0.8,
+       "centre": [
+        0.3,
+        0.2,
+        0.9
+       ],
+       "slot": 4,
+       "segments": 10,
+       "rot": [
+        0,
+        -15,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_TidelinksGolf_Caddie_Bold_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 656,
+    "lod1_triangles": 656,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_TidelinksGolf_Caddie_Bold": 656
+    },
+    "bounds_min": [
+     -0.42,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.5194,
+     0.3141,
+     1.76
+    ],
+    "dimensions": [
+     0.9394,
+     0.4641,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3eb40c2f63e85a5d2195e0d183f2852d5eb4f511b1abfada1ccb92f86fec8295"
+  },
+  {
+   "asset": "Mob_TidelinksGolf_Caddie_LayUp",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): caddie (layup habit; rig pending: idle, point, shrug)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_TidelinksGolf_Caddie_LayUp_M0",
+     "colour": "coat",
+     "hex": "5A7A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_TidelinksGolf_Caddie_LayUp_M1",
+     "colour": "accent / trousers",
+     "hex": "C8B48A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_TidelinksGolf_Caddie_LayUp_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_TidelinksGolf_Caddie_LayUp_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_TidelinksGolf_Caddie_LayUp_M4",
+     "colour": "caddie bag",
+     "hex": "C8B48A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_TidelinksGolf_Caddie_LayUp",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Bag",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.12,
+       "r2": 0.12,
+       "length": 0.8,
+       "centre": [
+        0.3,
+        0.2,
+        0.9
+       ],
+       "slot": 4,
+       "segments": 10,
+       "rot": [
+        0,
+        -15,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_TidelinksGolf_Caddie_LayUp_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 656,
+    "lod1_triangles": 656,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_TidelinksGolf_Caddie_LayUp": 656
+    },
+    "bounds_min": [
+     -0.42,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.5194,
+     0.3141,
+     1.76
+    ],
+    "dimensions": [
+     0.9394,
+     0.4641,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "12664c224e4e2109cb59a7d39e01863b34f3f0dd93e0fc4a2c430489eeb1ddfe"
+  },
+  {
+   "asset": "Mob_TidelinksGolf_GreenkeeperTalwyn",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Greenkeeper Talwyn (rig pending)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_TidelinksGolf_GreenkeeperTalwyn_M0",
+     "colour": "coat",
+     "hex": "3A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_TidelinksGolf_GreenkeeperTalwyn_M1",
+     "colour": "accent / trousers",
+     "hex": "6A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_TidelinksGolf_GreenkeeperTalwyn_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_TidelinksGolf_GreenkeeperTalwyn_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_TidelinksGolf_GreenkeeperTalwyn_M4",
+     "colour": "rake wood",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_TidelinksGolf_GreenkeeperTalwyn",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Rake",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 1.4,
+       "centre": [
+        -0.37,
+        -0.05,
+        0.75
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "RakeHead",
+       "shape": "box",
+       "size": [
+        0.35,
+        0.04,
+        0.04
+       ],
+       "centre": [
+        -0.37,
+        -0.05,
+        0.06
+       ],
+       "slot": 4,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_TidelinksGolf_GreenkeeperTalwyn_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 684,
+    "lod1_triangles": 684,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_TidelinksGolf_GreenkeeperTalwyn": 684
+    },
+    "bounds_min": [
+     -0.545,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     1.76
+    ],
+    "dimensions": [
+     0.965,
+     0.285,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "0eb90f9ef3facc1d82fde23af8ee1263d27a502b637ba413fa8feb33e7002577"
+  }
+ ]
+}
