@@ -612,7 +612,7 @@ int main(int Argc, char** Argv)
             const auto& Mon = Sh.World().Monsters[static_cast<size_t>(Sh.Foes()[0].Kind)];
             Check("the shiny glitters when it appears", Sh.Foes()[0].Shiny && Sh.ShiniesSeen() == 1 && Sh.Foes()[0].MaxHp == Mon.Hp * 3 / 2, Sh.Describe());
             bool Heard = false;
-            for (const std::string& S : Sh.TakeSfx()) Heard |= S == "SHINY";
+            for (const std::string& Sfx : Sh.TakeSfx()) Heard |= Sfx == "SHINY";
             Check("and its chime is raised for the jukebox", Heard);
             int Popped = 0;
             for (int k = 0; k < 200 && Popped == 0 && Sh.CurrentMode() == Mode::Battle; ++k)

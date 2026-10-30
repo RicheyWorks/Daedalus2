@@ -108,15 +108,15 @@ public:
 
     /** A person: the pack's 8-frame sprite when it has one (down/up/left/right x 2 steps), else the drawn figure.
      * Sprites are drawn with their feet on the tile's bottom edge, centred, so a taller sprite stands up out of it. */
-    void Person(Frame& F, int X, int Y, const std::string& Key, const Look& L, int Facing, int Step) const
+    void Person(Frame& F, int X, int Y, const std::string& Key, const Look& L, int Dir, int Step) const
     {
         if (const Sprite* S = Art.Find(Key))
         {
-            const int Fr = (Facing == 0 ? 0 : Facing == 1 ? 2 : Facing == 2 ? 4 : 6) + (Step % 2);
+            const int Fr = (Dir == 0 ? 0 : Dir == 1 ? 2 : Dir == 2 ? 4 : 6) + (Step % 2);
             SpritePack::Draw(F, X + (TileSize - S->W) / 2, Y + TileSize - S->H, *S, S->Frames >= 8 ? Fr : Step % S->Frames);
             return;
         }
-        DrawPerson(F, X, Y, L, Facing, Step);
+        DrawPerson(F, X, Y, L, Dir, Step);
     }
 
     /** A monster in battle: the pack's sprite (rarity tier ":2"/":3" first, then the base id), else the drawn shape. */
@@ -1845,8 +1845,8 @@ inline void Realm::RenderBattle(Frame& F, int Anim)
             Ui::TextB(F, FoeSlotX[static_cast<size_t>(P.Foe)] + 32 - static_cast<int>(T.size()) * 4, 96 - Rise, T, P.Life > 0.3 ? Pal::White : Ui::Current().Dim);
         else if (P.Mem >= 0)
         {
-            const int N = static_cast<int>(Party.size());
-            const int CardX = (ScreenW - (N * 56 + (N - 1) * 4)) / 2 + P.Mem * 60;
+            const int PartyN = static_cast<int>(Party.size());
+            const int CardX = (ScreenW - (PartyN * 56 + (PartyN - 1) * 4)) / 2 + P.Mem * 60;
             Ui::TextB(F, CardX + 16, 40 - Rise / 3, T, Pal::Red);
         }
     }

@@ -151,8 +151,8 @@ inline void PartyStrip(Frame& F, const std::vector<MemberT>& Party, int Hot, con
     const Style& St = Current();
     const int N = static_cast<int>(Party.size());
     const int CardW = 56, Gap = 4;
-    const int Total = N * CardW + (N - 1) * Gap;
-    int X = (ScreenW - Total) / 2;
+    const int StripW = N * CardW + (N - 1) * Gap;
+    int X = (ScreenW - StripW) / 2;
     for (int i = 0; i < N; ++i)
     {
         const MemberT& P = Party[static_cast<size_t>(i)];
