@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <random>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -152,6 +153,111 @@ static void StatusNames() {
     Check(static_cast<int>(hh::Status::NullPointer) == 4, "status values are stable");
 }
 
+// Iteration 4: growing a table in chunks with *Extend equals one full fill.
+static void Extend(const std::vector<std::int32_t>& q, const std::vector<std::int32_t>& a) {
+    const std::int32_t n = 200000;
+    std::vector<std::int32_t> gq(static_cast<std::size_t>(n) + 1, -1);
+    std::vector<std::int32_t> ga(static_cast<std::size_t>(n) + 1, -1);
+    std::int32_t from = 0;
+    std::int32_t step = 1;
+    bool ok = true;
+    while (from < n) {
+        const std::int32_t to = from + step > n ? n : from + step;
+        ok = ok && hh::QExtend(from, to, gq.data(), gq.size()) == hh::Status::Ok;
+        ok = ok && hh::ConwayExtend(from, to, ga.data(), ga.size()) == hh::Status::Ok;
+        from = to;
+        step = step * 3 + 1;
+    }
+    Check(ok, "chunked extend ok");
+    bool same = gq[0] == 0 && ga[0] == 0;
+    for (std::int32_t i = 1; i <= n; ++i) {
+        same = same && gq[i] == q[i] && ga[i] == a[i];
+    }
+    Check(same, "chunked extend equals full fill");
+    std::int32_t buf[8] = {0, 1, 1, 2, 3, 3, 4, 5};
+    Check(hh::QExtend(7, 7, buf, 8) == hh::Status::Ok && buf[7] == 5, "empty extend is a no-op");
+    Check(hh::QExtend(5, 4, buf, 8) == hh::Status::BadArgument, "n < from");
+    Check(hh::ConwayExtend(-1, 4, buf, 8) == hh::Status::BadArgument, "from < 0");
+    Check(hh::ConwayExtend(2, 8, buf, 8) == hh::Status::BufferTooSmall, "extend buffer");
+    Check(hh::QExtend(2, 5, nullptr, 8) == hh::Status::NullPointer, "extend null");
+    std::int32_t bad[6] = {0, 1, 1, 9, 0, 0};
+    Check(hh::ConwayExtend(3, 5, bad, 6) == hh::Status::IndexFell, "corrupt Conway prefix detected");
+    Check(hh::QExtend(3, 5, bad, 6) == hh::Status::IndexFell, "corrupt Q prefix detected");
+}
+
+// Iteration 5: an independent memoized-recursion model and a full re-check of both recurrences.
+static std::int32_t MemoQ(std::int32_t n, std::vector<std::int32_t>& memo) {
+    if (n <= 2) {
+        return 1;
+    }
+    if (memo[static_cast<std::size_t>(n)] == 0) {
+        memo[static_cast<std::size_t>(n)] = MemoQ(n - MemoQ(n - 1, memo), memo) + MemoQ(n - MemoQ(n - 2, memo), memo);
+    }
+    return memo[static_cast<std::size_t>(n)];
+}
+
+static std::int32_t MemoA(std::int32_t n, std::vector<std::int32_t>& memo) {
+    if (n <= 2) {
+        return 1;
+    }
+    if (memo[static_cast<std::size_t>(n)] == 0) {
+        const std::int32_t p = MemoA(n - 1, memo);
+        memo[static_cast<std::size_t>(n)] = MemoA(p, memo) + MemoA(n - p, memo);
+    }
+    return memo[static_cast<std::size_t>(n)];
+}
+
+static void Model(const std::vector<std::int32_t>& q, const std::vector<std::int32_t>& a) {
+    const std::int32_t n = 4000;
+    std::vector<std::int32_t> mq(static_cast<std::size_t>(n) + 1, 0);
+    std::vector<std::int32_t> ma(static_cast<std::size_t>(n) + 1, 0);
+    bool same = true;
+    for (std::int32_t i = 1; i <= n; ++i) {  // ascending keeps the recursion shallow
+        same = same && MemoQ(i, mq) == q[i] && MemoA(i, ma) == a[i];
+    }
+    Check(same, "memoized recursion model agrees 1..4000");
+    bool rec = q[1] == 1 && q[2] == 1 && a[1] == 1 && a[2] == 1;
+    for (std::int32_t i = 3; i <= hh::kMaxN; ++i) {
+        rec = rec && q[i] == q[i - q[i - 1]] + q[i - q[i - 2]] && a[i] == a[a[i - 1]] + a[i - a[i - 1]];
+    }
+    Check(rec, "both recurrences hold at every n to kMaxN");
+}
+
+// Iteration 6: canary guards; randomized n and buffer lengths around n + 1 never write past len,
+// and argument failures leave the whole buffer untouched.
+static void Canaries() {
+    std::mt19937 rng(58921u);
+    const std::int32_t kCanary = 0x5A5A5A5A;
+    int writes_past = 0;
+    int dirty_failures = 0;
+    int wrong_status = 0;
+    for (int trial = 0; trial < 3000; ++trial) {
+        const std::int32_t n = static_cast<std::int32_t>(rng() % 3000);
+        const int delta = static_cast<int>(rng() % 5) - 2;  // len in n-1 .. n+3
+        const long long want_len = static_cast<long long>(n) + 1 + delta;
+        if (want_len < 0) {
+            continue;
+        }
+        const std::size_t len = static_cast<std::size_t>(want_len);
+        std::vector<std::int32_t> buf(len + 8, kCanary);
+        const bool use_q = (trial & 1) == 0;
+        const hh::Status st = use_q ? hh::QSequence(n, buf.data(), len) : hh::ConwaySequence(n, buf.data(), len);
+        const hh::Status want = len >= static_cast<std::size_t>(n) + 1 ? hh::Status::Ok : hh::Status::BufferTooSmall;
+        wrong_status += st != want ? 1 : 0;
+        for (std::size_t i = len; i < buf.size(); ++i) {
+            writes_past += buf[i] != kCanary ? 1 : 0;
+        }
+        if (st != hh::Status::Ok) {
+            for (std::size_t i = 0; i < len; ++i) {
+                dirty_failures += buf[i] != kCanary ? 1 : 0;
+            }
+        }
+    }
+    Check(wrong_status == 0, "randomized status matches the length rule");
+    Check(writes_past == 0, "no write past len");
+    Check(dirty_failures == 0, "argument failures write nothing");
+}
+
 static void Edges() {
     std::int32_t buf[16] = {};
     std::int32_t out = 77;
@@ -186,6 +292,9 @@ int main(int argc, char** argv) {
     Golden(path, q, a);
     Properties(q, a);
     SingleIndex();
+    Extend(q, a);
+    Model(q, a);
+    Canaries();
     Edges();
     StatusNames();
     std::printf("%s: %d checks, %d failures\n", g_failures == 0 ? "PASS" : "FAIL", g_checks, g_failures);
