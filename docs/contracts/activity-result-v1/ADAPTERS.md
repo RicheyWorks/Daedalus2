@@ -250,3 +250,29 @@ at the shard (losses kept as a measure), and a stable lantern-night announcement
 Tie-in: the far-island families are housed, the scar gives up its starmetal, the ark crosses the void, and the
 children find their masters. The loft hound, the scar goat and the crew companions each earn their G12 credit once
 per run, replayable from the G49 journal.
+
+## Receipts hub XV (contest G187): Tag and Count, Birth Night Lanterns, Cricket Thermometer, Parting Jars
+
+Registered in `ActivityRouter.contestAll` with inactive `mastery.observation`, `mastery.reckoning`,
+`mastery.listening` and `mastery.island-story` policies respectively. These adapters only snapshot existing core
+results. They do not run a census, lodge guesses, judge a temperature, schedule jars, harvest, or advance quests.
+The host supplies terminal evidence and session authority through the existing G12 contract.
+
+| Adapter | Game (owner) | Activity id | Result snapshot | Measures | Who learns (profiles / roles) |
+| --- | --- | --- | --- | --- | --- |
+| `TagAndCountAdapter` | G156 Tag and Count, `world.battlefield.MarkRecapture` (pythagoras) | `ecology.tag-and-count` | `Census.of(census, abandoned)` | marked, caught, recaptured (each capped at 1,000,000), accurate (0-1) | animal, bird / counting, observation, scouting |
+| `BirthNightLanternsAdapter` | G157 Birth Night Lanterns, `world.odds.match.BirthNightQuest` (oddsreaper) | `odds.birth-night-lanterns` | `Muster.of(quest, abandoned)` | nods (0-2), closest_gap (0-365), shared (0-1) | animal, bird / counting, observation, companionship |
+| `CricketThermometerAdapter` | G159 Cricket Thermometer, `world.audio.CricketThermometer` (prometheus) | `audio.cricket-thermometer` | `Listening.of(verdict, abandoned)` | correct (0-1), score (0-100) | animal, bird / listening, observation, counting |
+| `PartingJarsAdapter` | G167 The Parting Jars, `world.brew.parting.PartingJars` (youtube-master) | `brew.parting-jars` | `Shelf.of(jars, abandoned)` | orders, on_time, best (each capped at 64) | animal, bird / hauling, planning, companionship |
+
+Completion mappings are adapter choices using the cores' existing judgements: an `ACCURATE` census (not a new
+quota rule), both Keeper nods regardless of random birthday matches, a correct cricket verdict including the
+silent-night answer, and a full-shelf accepted jar plan (`lastOnTime == best.size()`). Other judged results fail.
+A missing census or cricket verdict, a quest still `GUESSING`, or jars with no accepted plan are refused unless
+abandoned. Invalid/duplicate jar requests do not replace the last accepted plan. An abandonment always takes
+precedence, including after a successful result. Census truth and non-finite cricket error values are not exported.
+
+The census keeper's companion, the muster observer, the cricket listener and Aunt Brine's jar carrier use the
+unchanged settlement and G49 journal: identical retries settle once, conflicting payloads are rejected, and replay
+restores the same awards. Registering these adapters activates no reward amounts. `HubFifteenAdaptersTest` exercises
+real finished/failed cores, unfinished refusal, abandonment, bounded measures, inactive defaults and journal replay.
