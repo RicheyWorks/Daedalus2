@@ -1,0 +1,21 @@
+# luckyfeather parity v1: N r i runs seed fix exact steps simfixed simsteps capped need50 need90
+case N=2 r=0.8 i=1 runs=200 seed=1 fix=0.44444444444444453 exact=0.44444444444444453 steps=2.0 simfixed=95 simsteps=1.88 capped=0 need50=2 need90=2
+case N=2 r=1.0 i=1 runs=200 seed=2 fix=0.5 exact=0.5 steps=2.0 simfixed=105 simsteps=1.85 capped=0 need50=1 need90=2
+case N=2 r=1.1 i=1 runs=200 seed=3 fix=0.5238095238095238 exact=0.5238095238095238 steps=2.0 simfixed=106 simsteps=2.165 capped=0 need50=1 need90=2
+case N=2 r=1.5 i=1 runs=200 seed=4 fix=0.6000000000000001 exact=0.6 steps=2.0 simfixed=124 simsteps=1.97 capped=0 need50=1 need90=2
+case N=2 r=2.0 i=1 runs=200 seed=5 fix=0.6666666666666666 exact=0.6666666666666666 steps=2.0 simfixed=119 simsteps=2.185 capped=0 need50=1 need90=2
+case N=5 r=0.8 i=1 runs=200 seed=6 fix=0.12184673964778679 exact=0.12184673964778672 steps=9.551007456766616 simfixed=32 simsteps=8.91 capped=0 need50=4 need90=5
+case N=5 r=1.0 i=1 runs=200 seed=7 fix=0.2 exact=0.20000000000000004 steps=10.416666666666668 simfixed=34 simsteps=10.01 capped=0 need50=3 need90=5
+case N=5 r=1.1 i=1 runs=200 seed=8 fix=0.23981589163158673 exact=0.23981589163158676 steps=10.740371438087283 simfixed=48 simsteps=12.215 capped=0 need50=3 need90=5
+case N=5 r=1.5 i=1 runs=200 seed=9 fix=0.38388625592417064 exact=0.3838862559241707 steps=11.48696682464455 simfixed=71 simsteps=11.875 capped=0 need50=2 need90=4
+case N=5 r=2.0 i=1 runs=200 seed=10 fix=0.5161290322580645 exact=0.5161290322580646 steps=11.747311827956992 simfixed=102 simsteps=12.33 capped=0 need50=1 need90=3
+case N=20 r=0.8 i=2 runs=200 seed=11 fix=0.006560824621352633 exact=0.006560824621352654 steps=75.1035133755389 simfixed=3 simsteps=81.78 capped=0 need50=17 need90=20
+case N=20 r=1.0 i=2 runs=200 seed=12 fix=0.1 exact=0.09999999999999987 steps=120.85695470679984 simfixed=17 simsteps=115.02 capped=0 need50=10 need90=18
+case N=20 r=1.1 i=2 runs=200 seed=13 fix=0.20385554712590598 exact=0.2038555471259064 steps=138.73386632175024 simfixed=45 simsteps=144.165 capped=0 need50=6 need90=16
+case N=20 r=1.5 i=2 runs=200 seed=14 fix=0.55572267729153 exact=0.5557226772915306 steps=143.42856953130047 simfixed=121 simsteps=150.72 capped=0 need50=2 need90=6
+case N=20 r=2.0 i=2 runs=200 seed=15 fix=0.7500007152564194 exact=0.7500007152564189 steps=126.9614675123747 simfixed=151 simsteps=122.095 capped=0 need50=1 need90=4
+case N=50 r=0.8 i=5 runs=200 seed=16 fix=2.9284083995233735E-5 exact=2.928408399523377E-5 steps=307.15792626244206 simfixed=0 simsteps=317.965 capped=0 need50=47 need90=50
+case N=50 r=1.0 i=5 runs=200 seed=17 fix=0.1 exact=0.09999999999999927 steps=788.546752499751 simfixed=13 simsteps=835.655 capped=0 need50=25 need90=45
+case N=50 r=1.1 i=5 runs=200 seed=18 fix=0.3823356225474957 exact=0.38233562254749576 steps=966.8406147813515 simfixed=69 simsteps=855.86 capped=0 need50=8 need90=24
+case N=50 r=1.5 i=5 runs=200 seed=19 fix=0.8683127585634458 exact=0.8683127585634473 steps=675.7409563585238 simfixed=172 simsteps=702.925 capped=0 need50=2 need90=6
+case N=50 r=2.0 i=5 runs=200 seed=20 fix=0.9687500000000009 exact=0.96875 steps=488.80695559454676 simfixed=189 simsteps=490.495 capped=0 need50=1 need90=4
