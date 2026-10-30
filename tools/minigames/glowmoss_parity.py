@@ -4,13 +4,15 @@
 Writes engines/unreal/core-test/glowmoss_parity.txt from tools/minigames/glowmoss.py for a fixed set of
 seeds x difficulties, playing demo_action to the end:
 
-  game s=<seed> d=<difficulty> gems=<row/row..> dark=<row/row..> moss=<row/row..> unstable=<row/row..> best=<b> target=<t> plan=<..> row=<r> col=<c> light=<l> crystals=<n> score=<s>
-  move t=<turn> act=<dig:c|climb> row=.. col=.. light=.. crystals=.. score=.. path=<..> over=<0|1> won=<0|1> res=<text>
+  game s=<seed> d=<difficulty> code=<seed code> gems=<row/row..> dark=<row/row..> moss=<row/row..> unstable=<row/row..> best=<b> target=<t> plan=<..> row=<r> col=<c> light=<l> crystals=<n> score=<s>
+  probe c=<c> best=<extra crystals> plan=<..>   (best delve from row c, column c, light cap - 1 - c: one per column)
+  move t=<turn> act=<dig:c|climb> row=.. col=.. light=.. crystals=.. score=.. path=<..> hint=<dig:c|climb> over=<0|1> won=<0|1> res=<text>
   end  score=<s> won=<0|1> perfect=<0|1>
 
 No RNG events are recorded: DaedalusGlowmossCore.h seeds its own CPython-compatible stream from
 "glowmoss:<seed>:<difficulty>", so every ledge's crystals, darkness, glowmoss and footing, the exact best delve (target
-and plan) and every demo dig are part of the parity check. All rules math is integer.
+and plan) every demo dig and the hint after it are part of the parity check;
+probe lines pin the best delve from mid-shaft starts as well. All rules math is integer.
 Run `python tools/minigames/glowmoss_parity.py --check` to verify the committed file is current.
 """
 import argparse
@@ -39,14 +41,19 @@ def grid(rows):
 
 
 def state_str(g):
-    return "row=%d col=%d light=%d crystals=%d score=%d path=%s" % (g.row, g.col, g.light, g.crystals, g.score, ints(g.path))
+    hint = act_str(g.hint()) if not g.over else "-"
+    return "row=%d col=%d light=%d crystals=%d score=%d path=%s hint=%s" % (
+        g.row, g.col, g.light, g.crystals, g.score, ints(g.path), hint)
 
 
 def play(seed, difficulty):
     g = gm.Game(seed, difficulty)
-    lines = ["game s=%d d=%s gems=%s dark=%s moss=%s unstable=%s best=%d target=%d plan=%s %s" % (
-        seed, difficulty, grid(g.gems), grid(g.dark), grid(g.moss), grid(g.unstable), g.best, g.target, ints(g.plan),
+    lines = ["game s=%d d=%s code=%s gems=%s dark=%s moss=%s unstable=%s best=%d target=%d plan=%s %s" % (
+        seed, difficulty, gm.seed_code(seed, difficulty), grid(g.gems), grid(g.dark), grid(g.moss), grid(g.unstable), g.best, g.target, ints(g.plan),
         state_str(g))]
+    for c in range(g.cfg["cols"]):
+        best, plan = gm.best_delve(g.cfg, g.shaft(), (c, c, g.cfg["light"] - 1 - c))
+        lines.append("probe c=%d best=%d plan=%s" % (c, best, ints(plan)))
     turn = 0
     while not g.over:
         a = g.demo_action()

@@ -34,6 +34,30 @@ MAX_DARK = 2
 MIN_GEMS, MAX_GEMS = 1, 5
 PERCENT = 100
 PERFECT_BONUS = 5  # added to a winning score that gathered the best possible crystal total
+CODE_PREFIX = "GLOW"
+
+
+def seed_code(seed, difficulty):
+    """Shareable code for a shaft, e.g. GLOW-N-1337 (difficulty initial, then the seed)."""
+    return f"{CODE_PREFIX}-{difficulty[0].upper()}-{seed}"
+
+
+def parse_seed_code(code):
+    """(seed, difficulty) from a seed code; ValueError says what is wrong."""
+    parts = code.strip().upper().split("-")
+    if len(parts) != 3 or parts[0] != CODE_PREFIX:
+        raise ValueError(f"seed codes look like {CODE_PREFIX}-N-1337, not {code!r}")
+    names = {name[0].upper(): name for name in DIFFICULTY}
+    if parts[1] not in names:
+        raise ValueError(f"difficulty letter must be one of {''.join(sorted(names))}")
+    if not parts[2].isdigit():
+        raise ValueError("the seed must be a whole number")
+    return int(parts[2]), names[parts[1]]
+
+
+def daily_seed(year, month, day):
+    """Everyone delves the same shaft on the same day: the date as YYYYMMDD."""
+    return year * 10000 + month * 100 + day
 
 
 def climb_cost(row):
@@ -67,14 +91,15 @@ def land(cfg, shaft, row, col, light):
     return row, light, got, mossy, fell
 
 
-def best_delve(cfg, shaft):
-    """(best crystals, dig columns) over every delve that can still climb out. Exact DP over (row, col, light).
+def best_delve(cfg, shaft, start=None):
+    """(best extra crystals, dig columns) over every delve from start (row, col, light; default the surface) that can
+    still climb out. Exact DP over (row, col, light).
 
     A fall lands two rows down, so layers are kept per row and each is expanded once all rows above it are done.
     """
-    rows, cols, cap = cfg["rows"], cfg["cols"], cfg["light"]
+    rows, cols = cfg["rows"], cfg["cols"]
     layers = [dict() for _ in range(rows)]  # row -> {(col, light): (crystals, previous (row, col, light))}
-    start = (SURFACE, cols // 2, cap)
+    start = start or (SURFACE, cols // 2, cfg["light"])
     best, best_at = 0, None
 
     def expand(r0, c, l, v):
@@ -87,7 +112,8 @@ def best_delve(cfg, shaft):
             if key not in layers[fr] or nv > layers[fr][key][0]:
                 layers[fr][key] = (nv, (r0, c, l))
 
-    expand(*start, 0)
+    if start[0] + 1 < rows:
+        expand(*start, 0)
     for r in range(rows):
         for (c, l), (v, _) in sorted(layers[r].items()):
             if v > best:
@@ -96,7 +122,7 @@ def best_delve(cfg, shaft):
                 expand(r, c, l, v)
     plan = []
     at = best_at
-    while at and at[0] != SURFACE:
+    while at and at != start:
         r, c, l = at
         prev = layers[r][(c, l)][1]
         plan.append(c)
@@ -141,8 +167,13 @@ class Game(pc.PrismGame):
             self.score = self.crystals + (self.light if won else 0) + (PERFECT_BONUS if self.perfect else 0)
             self.finish(won)
             return f"climbed out with {self.crystals}" + (" (perfect delve)" if self.perfect else "")
-        if kind != "dig" or self.row + 1 >= self.cfg["rows"] or c not in dig_cols(self.col, self.cfg["cols"]):
-            raise ValueError(f"no ledge {c} below column {self.col}")
+        if kind != "dig":
+            raise ValueError(f"unknown action {kind!r}: use dig or climb")
+        if self.row + 1 >= self.cfg["rows"]:
+            raise ValueError(f"row {self.row} is the shaft floor; nothing left but to climb")
+        if not isinstance(c, int) or c not in dig_cols(self.col, self.cfg["cols"]):
+            reach = dig_cols(self.col, self.cfg["cols"])
+            raise ValueError(f"from column {self.col} you can dig columns {reach.start}-{reach.stop - 1}, not {c!r}")
         self.row, self.light, got, mossy, fell = land(self.cfg, self.shaft(), self.row + 1, c, self.light)
         self.col = c
         self.path.append(c)
@@ -152,6 +183,11 @@ class Game(pc.PrismGame):
             self.finish(False)
             return "the lamp gutters out"
         return f"+{got}" + (" glowmoss" if mossy else "") + (" crumble" if fell else "")
+
+    def hint(self):
+        """Best next move from here: the first dig of the best delve from the current ledge, else climb out."""
+        _, plan = best_delve(self.cfg, self.shaft(), (self.row, self.col, self.light))
+        return ("dig", plan[0]) if plan else ("climb", 0)
 
     def demo_action(self):
         if len(self.path) < len(self.plan):
@@ -174,10 +210,12 @@ class Game(pc.PrismGame):
 
     @staticmethod
     def parse(line):
-        parts = line.split()
-        if parts[0] == "climb":
+        parts = line.lower().split()
+        if parts == ["climb"]:
             return ("climb", 0)
-        if parts[0] == "dig" and len(parts) == 2:
+        if len(parts) == 2 and parts[0] == "dig":
+            if not parts[1].isdigit():
+                raise ValueError(f"dig needs a column number, not {parts[1]!r}")
             return ("dig", int(parts[1]))
         raise ValueError("use dig <column> or climb")
 
