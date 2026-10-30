@@ -9,6 +9,12 @@
 #include "DaedalusDesktopShootersCore.h"
 #include "DaedalusDesktopSportsCore.h"
 #include "DaedalusDesktopPlatformersCore.h"
+#include "DaedalusDesktopShardringCore.h"
+#include "DaedalusDesktopLumenpathCore.h"
+#include "DaedalusDesktopWardensAccordCore.h"
+#include "DaedalusDesktopFacetlockCore.h"
+#include "DaedalusDesktopPrismcairnCore.h"
+#include "DaedalusDesktopPrismvaultCore.h"
 #include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
@@ -31,7 +37,13 @@ inline const std::vector<Entry>& Catalog() {
         {"lanternwild","Lanternwild Quest","Explore Lanternwild, defeat the guardians, and recover the key. Move: WASD/arrows or left stick; J/X: sword"},
         {"gloam_latch","Gloam Latch","Darken every lamp. Arrows or stick: move; J/Space or pad A: flip a lamp and its neighbors"},
         {"reedbeat","Reedbeat","Strike the reed when it glows. J/Space or pad A: strike"},
-        {"cairnwell","Cairnwell","Stack stones in the well. Left/Right or stick: slide; Down: drop"}
+        {"cairnwell","Cairnwell","Stack stones in the well. Left/Right or stick: slide; Down: drop"},
+        {"shardring","Shardring Resonance","Set Prism Shards in the sphere ring; three of one hue resonate. Left/Right or stick: pick a facet; J/Space or pad A: set"},
+        {"lumenpath","Lumenpath Refraction","Bend the prism beam through every crystal with shard mirrors. Arrows or stick: move; J/Space or pad A: toggle a mirror"},
+        {"wardens_accord","Wardens' Accord","Take altar shards and spend them to summon Warden spirits. Left/Right or stick: pick; J/Space or pad A: take or summon"},
+        {"facetlock","Facetlock Lattice","Slide wrapping rows and columns until each row is one hue. Arrows or stick: cursor; J/K or pad A/B: slide row; Space/Shift or pad X/Y: slide column"},
+        {"prismcairn","Prismcairn Duel","Out-think the Warden at the shard cairns; lift the last shard. Left/Right or stick: pick a cairn; J/K/Space/Shift or pad A/B/X/Y: take 1/2/3/4"},
+        {"prismvault","Prismvault Weigh","Find the hollow shard with the Warden's balance. Left/Right or stick: pick; J or pad A: pan it; Space or pad X: weigh; Shift or pad Y: name"}
     };
     return Entries;
 }
@@ -52,6 +64,12 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="gloam_latch") return std::make_unique<GloamLatchGame>();
     if(Id=="reedbeat") return std::make_unique<ReedbeatGame>();
     if(Id=="cairnwell") return std::make_unique<CairnwellGame>();
+    if(Id=="shardring") return std::make_unique<ShardringGame>();
+    if(Id=="lumenpath") return std::make_unique<LumenpathGame>();
+    if(Id=="wardens_accord") return std::make_unique<WardensAccordGame>();
+    if(Id=="facetlock") return std::make_unique<FacetlockGame>();
+    if(Id=="prismcairn") return std::make_unique<PrismcairnGame>();
+    if(Id=="prismvault") return std::make_unique<PrismvaultGame>();
     return nullptr;
 }
 

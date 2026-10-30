@@ -1,0 +1,71 @@
+{
+ "asset": "Tool_WZ_FishingRod",
+ "units": "cm",
+ "space": "unreal",
+ "note": "UE +X forward, +Y right, +Z up, cm; UE = 100 * (x_b, -y_b, z_b) = 100 * (gx, gz, gy) (UEB 48725); location relative to parent node; rotation [pitch, yaw, roll] deg: plain sockets [0, 0, 0] = mesh-aligned, attach sockets +X along barrel/shaft, +Z up; native empties pre-rotated to match",
+ "sockets": [
+  {
+   "name": "SOCKET_Grip",
+   "parent": "Tool_WZ_FishingRod",
+   "location": [
+    0.0,
+    0.0,
+    17.0
+   ],
+   "rotation": [
+    90.0,
+    0.0,
+    -90.0
+   ],
+   "kind": "attach",
+   "native_rotation_predicted": [
+    90.0,
+    0.0,
+    -90.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Reel",
+   "parent": "Tool_WZ_FishingRod",
+   "location": [
+    0.0,
+    4.5,
+    37.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Tip",
+   "parent": "Tool_WZ_FishingRod",
+   "location": [
+    0.0,
+    0.0,
+    180.0
+   ],
+   "rotation": [
+    90.0,
+    0.0,
+    -90.0
+   ],
+   "kind": "attach",
+   "native_rotation_predicted": [
+    90.0,
+    0.0,
+    -90.0
+   ],
+   "native_matches": true
+  }
+ ]
+}

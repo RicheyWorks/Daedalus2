@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Accessibility hints for the three cabinets that only had options and focus freeze.
 // The line is drawn on the frame. It does not change score, movement, or saves.
-// catalog-capability: hints: beacon_sweep cairnwell driftstone dungeon dodge_ball gloam_latch lanternwild reedbeat riftwing twinwake
+// catalog-capability: hints: beacon_sweep cairnwell driftstone facetlock dungeon dodge_ball gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shardring twinwake wardens_accord
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -75,6 +75,54 @@ void CairnwellHints() {
     Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"cairnwell hint is on the frame and stays out of status");
     Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"practice hint names the slower well");
 }
+void LumenpathHints() {
+    LumenpathGame G;G.Reset(730);
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine().rfind("HINT Mirrors cycle",0)==0,"fresh lattice teaches the mirror cycle");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"lumenpath hint is on the frame and stays out of status");
+    Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"guide hint names the practice marker");
+}
+void WardensAccordHints() {
+    WardensAccordGame G;G.Reset(730);
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine()=="HINT Take a shard each round; spend matching shards to summon.","fresh altar teaches the loop");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"wardens hint is on the frame and stays out of status");
+    Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"guide hint names the practice marker");
+}
+void FacetlockHints() {
+    FacetlockGame G;G.Reset(730);
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine()=="HINT Rows and columns wrap. Make every row one hue.","fresh lattice teaches the wrap");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"facetlock hint is on the frame and stays out of status");
+    Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"guide hint names the practice marker");
+}
+void PrismcairnHints() {
+    PrismcairnGame G;G.Reset(730);
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine()=="HINT Lift the last shard. Leave the Warden a balanced field.","fresh duel teaches the goal");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"prismcairn hint is on the frame and stays out of status");
+    Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"guide hint names the practice marker");
+}
+void PrismvaultHints() {
+    PrismvaultGame G;G.Reset(730);
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine()=="HINT Split the suspects in three; the lighter pan holds the hollow one.","fresh vault teaches the split");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"prismvault hint is on the frame and stays out of status");
+    Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"guide hint names the practice marker");
+}
+void ShardringHints() {
+    ShardringGame G;G.Reset(730);
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine()=="HINT Three of one hue in a row resonate and clear.","fresh ring teaches resonance");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"shardring hint is on the frame and stays out of status");
+    Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"guide hint names the practice marker");
+}
 void ReedbeatHints() {
     ReedbeatGame G;G.Reset(730);
     const auto Note=G.GetStatus().Note;
@@ -113,7 +161,7 @@ void LanternwildHints() {
 }
 
 int main() {
-    try { BeaconHints();CairnwellHints();DriftstoneHints();DungeonHints();DodgeHints();GloamLatchHints();LanternwildHints();ReedbeatHints();RiftwingHints();TwinwakeHints(); }
+    try { BeaconHints();CairnwellHints();FacetlockHints();DriftstoneHints();DungeonHints();DodgeHints();GloamLatchHints();LanternwildHints();LumenpathHints();PrismcairnHints();PrismvaultHints();ReedbeatHints();RiftwingHints();ShardringHints();TwinwakeHints();WardensAccordHints(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

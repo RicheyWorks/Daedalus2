@@ -1,0 +1,1726 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_GrassTussock_1",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G470",
+    "ask": "youtube-master 56271",
+    "lod": "LOD0/1",
+    "size_m": "0.5 m grass tussock var 1",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Root"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_GrassTussock_1_M0",
+     "colour": "marsh grass (G66 green)",
+     "hex": "5E9A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_GrassTussock_1_M1",
+     "colour": "dry tips",
+     "hex": "B8A060",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_GrassTussock_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Blade0",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.363623
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.06,
+        0.0,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        78.8757,
+        0,
+        0.0
+       ]
+      },
+      {
+       "name": "Blade1",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.421722
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.032418,
+        0.050488,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        70.9918,
+        0,
+        51.5662
+       ]
+      },
+      {
+       "name": "Blade2",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.410528
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.024969,
+        0.054558,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        70.0407,
+        0,
+        103.1324
+       ]
+      },
+      {
+       "name": "Blade3",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.499798
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.0594,
+        0.008467,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        72.6278,
+        0,
+        154.6986
+       ]
+      },
+      {
+       "name": "Blade4",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.488993
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.039219,
+        -0.045408,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        78.9149,
+        0,
+        206.2648
+       ]
+      },
+      {
+       "name": "Blade5",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.397612
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.01702,
+        -0.057535,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        85.1362,
+        0,
+        257.831
+       ]
+      },
+      {
+       "name": "Blade6",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.408566
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.05761,
+        -0.016765,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        75.5463,
+        0,
+        309.3972
+       ]
+      },
+      {
+       "name": "Blade7",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.469044
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.045234,
+        0.039419,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        65.9428,
+        0,
+        360.9634
+       ]
+      },
+      {
+       "name": "Blade8",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.49972
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.00873,
+        0.059361,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        79.6731,
+        0,
+        412.5296
+       ]
+      },
+      {
+       "name": "Blade9",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.364632
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.054668,
+        0.024727,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        85.35,
+        0,
+        464.0958
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Root",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 80,
+    "lod1_triangles": 80,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_GrassTussock_1": 80
+    },
+    "bounds_min": [
+     -0.1633,
+     -0.1315,
+     -0.0008
+    ],
+    "bounds_max": [
+     0.1379,
+     0.2324,
+     0.492
+    ],
+    "dimensions": [
+     0.3012,
+     0.3639,
+     0.4928
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b744bb53db7355fea8e2ffe373d1aea3b361eed3583c93df4ec2c97d53eebae8"
+  },
+  {
+   "asset": "Prop_YTM_GrassTussock_2",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G470",
+    "ask": "youtube-master 56271",
+    "lod": "LOD0/1",
+    "size_m": "0.5 m grass tussock var 2",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Root"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_GrassTussock_2_M0",
+     "colour": "marsh grass (G66 green)",
+     "hex": "5E9A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_GrassTussock_2_M1",
+     "colour": "dry tips",
+     "hex": "B8A060",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_GrassTussock_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Blade0",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.371458
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.06,
+        0.0,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        85.6034,
+        0,
+        0.0
+       ]
+      },
+      {
+       "name": "Blade1",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.36428
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.032418,
+        0.050488,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        75.4663,
+        0,
+        51.5662
+       ]
+      },
+      {
+       "name": "Blade2",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.487172
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.024969,
+        0.054558,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        71.2807,
+        0,
+        103.1324
+       ]
+      },
+      {
+       "name": "Blade3",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.358611
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.0594,
+        0.008467,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        81.4637,
+        0,
+        154.6986
+       ]
+      },
+      {
+       "name": "Blade4",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.393015
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.039219,
+        -0.045408,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        70.9729,
+        0,
+        206.2648
+       ]
+      },
+      {
+       "name": "Blade5",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.384472
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.01702,
+        -0.057535,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        86.5427,
+        0,
+        257.831
+       ]
+      },
+      {
+       "name": "Blade6",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.389339
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.05761,
+        -0.016765,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        74.6126,
+        0,
+        309.3972
+       ]
+      },
+      {
+       "name": "Blade7",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.4113
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.045234,
+        0.039419,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        80.8324,
+        0,
+        360.9634
+       ]
+      },
+      {
+       "name": "Blade8",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.381587
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.00873,
+        0.059361,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        73.8688,
+        0,
+        412.5296
+       ]
+      },
+      {
+       "name": "Blade9",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.461132
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.054668,
+        0.024727,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        75.4829,
+        0,
+        464.0958
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Root",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 80,
+    "lod1_triangles": 80,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_GrassTussock_2": 80
+    },
+    "bounds_min": [
+     -0.1791,
+     -0.162,
+     -0.0007
+    ],
+    "bounds_max": [
+     0.1389,
+     0.125,
+     0.462
+    ],
+    "dimensions": [
+     0.318,
+     0.287,
+     0.4627
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "81f2c5f96650caf48b3c9a73fabaaf2ff00c1942c4789d411aae0973c67d3067"
+  },
+  {
+   "asset": "Prop_YTM_GrassTussock_3",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G470",
+    "ask": "youtube-master 56271",
+    "lod": "LOD0/1",
+    "size_m": "0.5 m grass tussock var 3",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Root"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_GrassTussock_3_M0",
+     "colour": "marsh grass (G66 green)",
+     "hex": "5E9A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_GrassTussock_3_M1",
+     "colour": "dry tips",
+     "hex": "B8A060",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_GrassTussock_3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Blade0",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.35672
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.06,
+        0.0,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        77.3245,
+        0,
+        0.0
+       ]
+      },
+      {
+       "name": "Blade1",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.473758
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.032418,
+        0.050488,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        66.4832,
+        0,
+        51.5662
+       ]
+      },
+      {
+       "name": "Blade2",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.37639
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.024969,
+        0.054558,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        89.6746,
+        0,
+        103.1324
+       ]
+      },
+      {
+       "name": "Blade3",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.444456
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.0594,
+        0.008467,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        80.1013,
+        0,
+        154.6986
+       ]
+      },
+      {
+       "name": "Blade4",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.498971
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.039219,
+        -0.045408,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        89.4526,
+        0,
+        206.2648
+       ]
+      },
+      {
+       "name": "Blade5",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.46547
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.01702,
+        -0.057535,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        89.4951,
+        0,
+        257.831
+       ]
+      },
+      {
+       "name": "Blade6",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.485278
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.05761,
+        -0.016765,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        85.0562,
+        0,
+        309.3972
+       ]
+      },
+      {
+       "name": "Blade7",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.452674
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        0.045234,
+        0.039419,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        69.7539,
+        0,
+        360.9634
+       ]
+      },
+      {
+       "name": "Blade8",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.464634
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.00873,
+        0.059361,
+        0
+       ],
+       "slot": 0,
+       "segments": 3,
+       "rot": [
+        72.8555,
+        0,
+        412.5296
+       ]
+      },
+      {
+       "name": "Blade9",
+       "shape": "slab",
+       "outline": [
+        [
+         -0.02,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.0,
+         0.394516
+        ]
+       ],
+       "thickness": 0.004,
+       "centre": [
+        -0.054668,
+        0.024727,
+        0
+       ],
+       "slot": 1,
+       "segments": 3,
+       "rot": [
+        88.1353,
+        0,
+        464.0958
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Root",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 80,
+    "lod1_triangles": 80,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_GrassTussock_3": 80
+    },
+    "bounds_min": [
+     -0.119,
+     -0.0775,
+     -0.0008
+    ],
+    "bounds_max": [
+     0.0915,
+     0.1979,
+     0.499
+    ],
+    "dimensions": [
+     0.2105,
+     0.2754,
+     0.4998
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "597b4dff3427b2d335bf3d0076ab6edfeb32b62afba60532eeb26ab360f14e8c"
+  },
+  {
+   "asset": "Prop_YTM_ReedBedClump",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G470",
+    "ask": "youtube-master 56271",
+    "lod": "LOD0/1",
+    "size_m": "0.5 m reed clump, 1.3 m tall",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Root"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_ReedBedClump_M0",
+     "colour": "reed stems (G66 green)",
+     "hex": "5E9A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_ReedBedClump_M1",
+     "colour": "dry reed",
+     "hex": "B8A060",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_ReedBedClump_M2",
+     "colour": "bulrush heads",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_ReedBedClump",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Reed0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.2,
+       "centre": [
+        0.0,
+        0.0,
+        0.6
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Reed1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.23,
+       "centre": [
+        -0.01152,
+        0.01055,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.26,
+       "centre": [
+        0.00273,
+        -0.03113,
+        0.6
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Reed3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.29,
+       "centre": [
+        0.02852,
+        0.0372,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.32,
+       "centre": [
+        -0.06154,
+        -0.0109,
+        0.6
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Reed5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.2,
+       "centre": [
+        0.06593,
+        -0.04192,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed6",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.23,
+       "centre": [
+        -0.02436,
+        0.09053,
+        0.6
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Reed7",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.26,
+       "centre": [
+        -0.05039,
+        -0.09708,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed8",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.29,
+       "centre": [
+        0.1174,
+        0.04291,
+        0.6
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Reed9",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.32,
+       "centre": [
+        -0.13,
+        0.05361,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed10",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.2,
+       "centre": [
+        0.06628,
+        -0.1415,
+        0.6
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Reed11",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.23,
+       "centre": [
+        0.05137,
+        0.16402,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed12",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.26,
+       "centre": [
+        -0.16219,
+        -0.09409,
+        0.6
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Reed13",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.29,
+       "centre": [
+        0.19841,
+        -0.04352,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Reed14",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.32,
+       "centre": [
+        -0.1259,
+        0.17889,
+        0.6
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Reed15",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.008,
+       "r2": 0.004,
+       "length": 1.2,
+       "centre": [
+        -0.02999,
+        -0.23245,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 4
+      },
+      {
+       "name": "Head0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.1,
+       "centre": [
+        0.0,
+        0.0,
+        1.25
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Head3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.1,
+       "centre": [
+        0.02852,
+        0.0372,
+        1.25
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Head6",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.1,
+       "centre": [
+        -0.02436,
+        0.09053,
+        1.25
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Head9",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.1,
+       "centre": [
+        -0.13,
+        0.05361,
+        1.25
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Head12",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.1,
+       "centre": [
+        -0.16219,
+        -0.09409,
+        1.25
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Head15",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.1,
+       "centre": [
+        -0.02999,
+        -0.23245,
+        1.25
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Root",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 312,
+    "lod1_triangles": 312,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_ReedBedClump": 312
+    },
+    "bounds_min": [
+     -0.1772,
+     -0.2454,
+     -0.06
+    ],
+    "bounds_max": [
+     0.2064,
+     0.1869,
+     1.3
+    ],
+    "dimensions": [
+     0.3836,
+     0.4323,
+     1.36
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ae2e88827e63b10a402d87fd58c686e0e210c5db077192398ee936d862e145d0"
+  }
+ ]
+}

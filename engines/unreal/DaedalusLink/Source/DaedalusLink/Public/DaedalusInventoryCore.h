@@ -173,6 +173,7 @@ inline const std::map<std::string, Theme>& Themes()
         Theme L; L.Name = "labyrinth"; L.Panel = 0x101418; L.Ink = 0x6AA0FF; L.Hot = 0xFF6A6A; L.Focus = 0xC8E0FF; L.Corner = 0; L.Decor = "stone"; M["labyrinth"] = L;
         Theme R; R.Name = "retro"; R.Font = "PIXEL"; R.Panel = 0x000000; R.Ink = 0xF8A070; R.Text = 0xFCFCFC; R.Dim = 0x7C7C7C; R.Hot = 0xF8D878; R.Focus = 0xFCFCFC; R.Corner = 0; R.Cols = 1; R.Decor = "rule"; M["retro"] = R;
         Theme Z; Z.Name = "zero"; Z.Panel = 0x0B1F14; Z.Ink = 0x7CFF9A; Z.Hot = 0xFFE066; Z.Focus = 0xFFFFFF; Z.Corner = 8; Z.Decor = "vines"; M["zero"] = Z;
+        Theme O; O.Name = "ocean"; O.Panel = 0x071F2C; O.Ink = 0x65D8E8; O.Text = 0xEAF9FC; O.Dim = 0x8AAFB8; O.Hot = 0xFFD183; O.Focus = 0xFFFFFF; O.Corner = 8; O.Decor = "rule"; M["ocean"] = O;
         return M;
     }();
     return T;

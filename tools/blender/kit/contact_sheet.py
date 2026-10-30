@@ -18,7 +18,11 @@ def render(o):
         glb = os.path.join(o.dir, a, a + ".glb")
         bpy.ops.import_scene.gltf(filepath=glb)
         meshes = []
+        # glTF import adds an unlinked 'Icosphere' bone-display mesh (custom shape) for skinned assets: never measure or show it
+        shapes = {pb.custom_shape for ob in bpy.data.objects if ob.type == "ARMATURE" for pb in ob.pose.bones if pb.custom_shape}
         for ob in list(bpy.data.objects):
+            if ob in shapes or (ob.type == "MESH" and ob.name not in bpy.context.scene.objects):
+                continue
             if ob.name.startswith(("UCX_", "USP_", "UCP_", "UBX_")):
                 bpy.data.objects.remove(ob, do_unlink=True)
             elif ob.type == "MESH":

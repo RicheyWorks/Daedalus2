@@ -11,7 +11,8 @@ import catalog_validate as cv  # noqa: E402
 def game(gid, **kw):
     g = {"id": gid, "title": gid.title() + " Run", "summary": "An original round.",
          "how_to_play": "HOW Do the thing.", "difficulty": ["easy", "normal", "hard"],
-         "default_difficulty": "normal", "capabilities": ["scoreboard"]}
+         "default_difficulty": "normal", "daedalus_realm": "r1", "daedalus_spot": "The test row",
+         "capabilities": ["scoreboard"]}
     g.update(kw)
     return g
 
@@ -60,9 +61,75 @@ class Validate(unittest.TestCase):
         errs = cv.validate({"games": [game("alpha", default_difficulty="easy")]}, {"alpha"}, {})
         self.assertTrue(any("difficulty" in e for e in errs))
 
+    def test_every_game_has_a_daedalus_spot(self):
+        cat = json.loads(cv.CATALOG.read_text(encoding="utf-8"))
+        cabinets = json.loads((cv.CATALOG.parents[2] / "data/minigames/realm-cabinets.json").read_text(encoding="utf-8"))
+        by_realm = {r["realm"]: {c["game"] for c in r["cabinets"]} for r in cabinets["realms"]}
+        self.assertGreaterEqual(len(cat["games"]), 1)
+        for g in cat["games"]:
+            self.assertTrue((g.get("daedalus_spot") or "").strip(), g["id"])
+            self.assertEqual(cv.trademark_hits(g["daedalus_spot"]), [], g["id"])
+            self.assertIn(g["id"], by_realm.get(g.get("daedalus_realm"), set()), g["id"])
+
     def test_repo_catalog_is_valid(self):
         cat = json.loads(cv.CATALOG.read_text(encoding="utf-8"))
         self.assertEqual(cv.validate(cat, cv.slot_ids(cv.SLOTS_HDR.read_text(encoding="utf-8"))), [])
+
+
+class Identity(unittest.TestCase):
+    def cat(self, games=(), python=(), java=()):
+        return {"games": list(games), "python_games": list(python), "java_cabinets": list(java)}
+
+    def errs(self, catalog):
+        ids = {g.get("id") for g in catalog["games"]}
+        return cv.validate(catalog, ids, {})
+
+    def test_duplicate_desktop_id(self):
+        errs = self.errs(self.cat([game("alpha"), game("alpha", title="Other Run")]))
+        self.assertTrue(any("id is also used by games[0]" in e for e in errs), errs)
+
+    def test_duplicate_id_across_sections(self):
+        errs = self.errs(self.cat([game("alpha")], python=[game("alpha", title="Py Run")]))
+        self.assertTrue(any("python game 'alpha' id is also used" in e for e in errs), errs)
+        errs = self.errs(self.cat([game("alpha")], java=[{"id": "alpha", "title": "J", "summary": "s"}]))
+        self.assertTrue(any("Java cabinet 'alpha' id is also used" in e for e in errs), errs)
+
+    def test_missing_or_bad_id(self):
+        errs = self.errs(self.cat(python=[{"title": "T", "summary": "s", "how_to_play": "h", "difficulty": ["normal"]}]))
+        self.assertTrue(any("python game at python_games[0] has no id" in e for e in errs), errs)
+        for bad in ("Alpha", "al-pha", "a" * 33, "al pha"):
+            errs = self.errs(self.cat([game(bad, title="Bad Run")]))
+            self.assertTrue(any("must match" in e for e in errs), (bad, errs))
+        self.assertFalse(any("must match" in e for e in self.errs(self.cat([game("a" * 32), game("x_9")]))))
+
+    def test_missing_summary(self):
+        errs = self.errs(self.cat([game("alpha", summary="  ")]))
+        self.assertTrue(any("'alpha' has no summary" in e for e in errs), errs)
+        errs = self.errs(self.cat(java=[{"id": "jj", "title": "Jay"}]))
+        self.assertTrue(any("Java cabinet 'jj' has no summary" in e for e in errs), errs)
+
+    def test_python_titles_unique_and_against_desktop(self):
+        py = dict(how_to_play="h", difficulty=["normal"])
+        errs = self.errs(self.cat([game("alpha", title="Glow Run")], python=[game("beta", title="glow run", **py)]))
+        self.assertTrue(any("python game 'beta' title 'glow run' is also used by 'alpha'" in e for e in errs), errs)
+        errs = self.errs(self.cat(python=[game("p1", title="T", **py), game("p2", title="T", **py)]))
+        self.assertTrue(any("'p2' title 'T' is also used by 'p1'" in e for e in errs), errs)
+
+    def test_titles_colliding_on_the_leaderboard(self):
+        errs = self.errs(self.cat([game("alpha", title="Rally!"), game("beta", title="Rally")]))
+        self.assertTrue(any("same leaderboard name as 'alpha'" in e for e in errs), errs)
+        errs = self.errs(self.cat([game("alpha", title="Glow-Run"), game("beta", title="Glow  Run")]))
+        self.assertTrue(any("same leaderboard name" in e for e in errs), errs)
+
+    def test_exact_duplicate_title_reported_once(self):
+        errs = self.errs(self.cat([game("alpha", title="Same"), game("beta", title="Same")]))
+        self.assertEqual(sum("Same" in e for e in errs), 1, errs)
+
+    def test_feed_name_mirrors_leaderboard_feed(self):
+        import leaderboard_feed as lf
+        for title in ("Pebblecourt Rally", "Wardens' Accord", "Glow--Run!!", "  x  y ", "A" * 70 + " B"):
+            self.assertEqual(cv.feed_name(title), lf.sanitize_name(title).lower(), title)
+        self.assertEqual(cv.ID_RE.pattern, lf._ID.pattern)
 
 
 if __name__ == "__main__":

@@ -25,6 +25,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_oddsreaper",
+      "daedalus_spot": "Oddsreaper island, the puzzle row",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"beacon_sweep\", Seed)",
       "portable_tests": [
@@ -61,6 +63,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the court row",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"twinwake\", Seed)",
       "portable_tests": [
@@ -97,6 +101,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "labyrinth",
+      "daedalus_spot": "Labyrinth, the lantern passage",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"dungeon\", Seed)",
       "portable_tests": [
@@ -132,6 +138,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the rock yard",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"driftstone\", Seed)",
       "portable_tests": [
@@ -167,6 +175,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the pitch",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"football\", Seed)",
       "portable_tests": [
@@ -198,6 +208,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "gallery_city",
+      "daedalus_spot": "Gallery City, the chase court",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"glowtrail\", Seed)",
       "portable_tests": [
@@ -234,6 +246,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the rift line",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"riftwing\", Seed)",
       "portable_tests": [
@@ -271,6 +285,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the terrace grid",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"emberstep\", Seed)",
       "portable_tests": [
@@ -305,6 +321,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "orrery_reach",
+      "daedalus_spot": "Orrery Reach, the star lane",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"star_shooter\", Seed)",
       "portable_tests": [
@@ -336,6 +354,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_prometheus",
+      "daedalus_spot": "Prometheus island, the courtyard",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"dodge_ball\", Seed)",
       "portable_tests": [
@@ -371,6 +391,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "island_hephaestus",
+      "daedalus_spot": "Hephaestus island, the iron route",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"ironwake\", Seed)",
       "portable_tests": [
@@ -404,6 +426,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "portal_realm",
+      "daedalus_spot": "Portal realm, the wild path",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"lanternwild\", Seed)",
       "portable_tests": [
@@ -437,6 +461,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "gallery_city",
+      "daedalus_spot": "Gallery City, the lamp corner",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"gloam_latch\", Seed)",
       "portable_tests": [
@@ -469,6 +495,8 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "orrery_reach",
+      "daedalus_spot": "Orrery Reach, the reed bench",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"reedbeat\", Seed)",
       "portable_tests": [
@@ -501,12 +529,14 @@
         "hard"
       ],
       "default_difficulty": "normal",
+      "daedalus_realm": "bricks",
+      "daedalus_spot": "Bricks, the stacking yard",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"cairnwell\", Seed)",
       "portable_tests": [
         "desktop_cairnwell"
       ],
-      "option_count": 2,
+      "option_count": 3,
       "capabilities": [
         "action_cue",
         "contrast_mark",
@@ -515,6 +545,198 @@
         "hints",
         "key_hint",
         "options",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shardring",
+      "title": "Shardring Resonance",
+      "summary": "Set Prism Shards in the sphere ring; three of one hue resonate. Left/Right or stick: pick a facet; J/Space or pad A: set",
+      "how_to_play": "HOW Set each shard in an empty facet; three of one hue in a row resonate.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the Warden shrine",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shardring\", Seed)",
+      "portable_tests": [
+        "desktop_shardring"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "lumenpath",
+      "title": "Lumenpath Refraction",
+      "summary": "Bend the prism beam through every crystal with shard mirrors. Arrows or stick: move; J/Space or pad A: toggle a mirror",
+      "how_to_play": "HOW Toggle shard mirrors to bend the prism beam through every crystal before your moves run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the refraction gallery",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"lumenpath\", Seed)",
+      "portable_tests": [
+        "desktop_lumenpath"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "wardens_accord",
+      "title": "Wardens' Accord",
+      "summary": "Take altar shards and spend them to summon Warden spirits. Left/Right or stick: pick; J/Space or pad A: take or summon",
+      "how_to_play": "HOW Take one of three altar shards each round, then spend matching shards to summon spirits before the rounds end.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the Warden altar",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"wardens_accord\", Seed)",
+      "portable_tests": [
+        "desktop_wardens_accord"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "facetlock",
+      "title": "Facetlock Lattice",
+      "summary": "Slide wrapping rows and columns until each row is one hue. Arrows or stick: cursor; J/K or pad A/B: slide row; Space/Shift or pad X/Y: slide column",
+      "how_to_play": "HOW Slide lattice rows and columns, which wrap, until each row shows a single hue inside the move budget.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the vault door",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"facetlock\", Seed)",
+      "portable_tests": [
+        "desktop_facetlock"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "prismcairn",
+      "title": "Prismcairn Duel",
+      "summary": "Out-think the Warden at the shard cairns; lift the last shard. Left/Right or stick: pick a cairn; J/K/Space/Shift or pad A/B/X/Y: take 1/2/3/4",
+      "how_to_play": "HOW Take one or more shards, up to the limit, from one cairn each turn; lift the last shard to win the round, best of three.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the cairn field",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"prismcairn\", Seed)",
+      "portable_tests": [
+        "desktop_prismcairn"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "prismvault",
+      "title": "Prismvault Weigh",
+      "summary": "Find the hollow shard with the Warden's balance. Left/Right or stick: pick; J or pad A: pan it; Space or pad X: weigh; Shift or pad Y: name",
+      "how_to_play": "HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the balance chamber",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"prismvault\", Seed)",
+      "portable_tests": [
+        "desktop_prismvault"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "options",
+        "save_restore",
         "scoreboard",
         "source_keys"
       ],
@@ -569,12 +791,12 @@
   ],
   "python_games": [
     {
-      "id": "shardring",
-      "title": "Shardring Resonance",
-      "summary": "a prism sphere shard-setting puzzle for Prismheart.",
-      "how_to_play": "HOW Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill.",
-      "module": "tools/minigames/prism_shard.py",
-      "start": "prism_shard.start(seed, difficulty)",
+      "id": "shardfall",
+      "title": "Shardfall Gamble",
+      "summary": "draw glowing shards from the Prismheart seam and bank them before it cracks.",
+      "how_to_play": "HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot. Reach the target by the last round.",
+      "module": "tools/minigames/shardfall.py",
+      "start": "shardfall.start(seed, difficulty)",
       "difficulty": [
         "easy",
         "hard",
@@ -582,7 +804,58 @@
       ],
       "default_difficulty": "normal",
       "tests": [
-        "test_prism_shard.py"
+        "test_shardfall.py"
+      ]
+    },
+    {
+      "id": "spiritkite",
+      "title": "Spiritkite Weave",
+      "summary": "fly a spirit kite across Prismheart's sky isles, gather lanterns and return to the anchor.",
+      "how_to_play": "HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out.",
+      "module": "tools/minigames/spiritkite.py",
+      "start": "spiritkite.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_spiritkite.py"
+      ]
+    },
+    {
+      "id": "shadewatch",
+      "title": "Shadewatch Vigil",
+      "summary": "hold the Prismheart's lanes against creeping shades with shard flares and a nova.",
+      "how_to_play": "HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends.",
+      "module": "tools/minigames/shadewatch.py",
+      "start": "shadewatch.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_shadewatch.py"
+      ]
+    },
+    {
+      "id": "glimmerloom",
+      "title": "Glimmerloom Ledger",
+      "summary": "trade hued Prism Shards at the Glimmerloom market and grow your purse.",
+      "how_to_play": "HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target.",
+      "module": "tools/minigames/glimmerloom.py",
+      "start": "glimmerloom.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_glimmerloom.py"
       ]
     }
   ]

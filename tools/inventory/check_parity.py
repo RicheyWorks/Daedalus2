@@ -16,7 +16,8 @@ def main():
     root=Path(__file__).resolve().parents[2]
     native=[args.cpp]; java=[args.java,'-cp',args.classpath,'InventoryCatalogDump']
     fixtures=sorted((root/'engines/unreal/DaedalusLink/Content/Inventory').glob('*.dic'))
-    if len(fixtures)!=5: raise RuntimeError('Expected the five canonical realm catalogs')
+    expected={'world-zero','gallery-city','parcels','bricks','labyrinth','ocean'}
+    if {path.stem for path in fixtures}!=expected: raise RuntimeError('Canonical realm catalog set differs')
     for path in fixtures:
         a,b=run(native,path),run(java,path)
         if a.returncode or b.returncode or a.stdout!=b.stdout:

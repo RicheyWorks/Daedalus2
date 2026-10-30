@@ -1,0 +1,962 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_BeadBraid",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G407",
+    "ask": "youtube-master 55890",
+    "lod": "LOD0/1",
+    "size_m": "0.6 m bead braid, 12 bead sockets; hang EndA/EndB",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_EndA",
+     "SOCKET_EndB",
+     "SOCKET_Bead_0",
+     "SOCKET_Bead_1",
+     "SOCKET_Bead_2",
+     "SOCKET_Bead_3",
+     "SOCKET_Bead_4",
+     "SOCKET_Bead_5",
+     "SOCKET_Bead_6",
+     "SOCKET_Bead_7",
+     "SOCKET_Bead_8",
+     "SOCKET_Bead_9",
+     "SOCKET_Bead_10",
+     "SOCKET_Bead_11"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_BeadBraid_M0",
+     "colour": "line",
+     "hex": "6E7F99",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_BeadBraid_M1",
+     "colour": "items A (G66)",
+     "hex": "C98A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_BeadBraid_M2",
+     "colour": "items B (G66)",
+     "hex": "F0D8C8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_BeadBraid",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rope0",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.085,
+       "centre": [
+        -0.2625,
+        0,
+        -0.0
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        0.0,
+        0
+       ]
+      },
+      {
+       "name": "Rope1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.085,
+       "centre": [
+        -0.1875,
+        0,
+        -0.0
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        0.0,
+        0
+       ]
+      },
+      {
+       "name": "Rope2",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.085,
+       "centre": [
+        -0.1125,
+        0,
+        -0.0
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        0.0,
+        0
+       ]
+      },
+      {
+       "name": "Rope3",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.085,
+       "centre": [
+        -0.0375,
+        0,
+        -0.0
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        0.0,
+        0
+       ]
+      },
+      {
+       "name": "Rope4",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.085,
+       "centre": [
+        0.0375,
+        0,
+        -0.0
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        -0.0,
+        0
+       ]
+      },
+      {
+       "name": "Rope5",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.085,
+       "centre": [
+        0.1125,
+        0,
+        -0.0
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        -0.0,
+        0
+       ]
+      },
+      {
+       "name": "Rope6",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.085,
+       "centre": [
+        0.1875,
+        0,
+        -0.0
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        -0.0,
+        0
+       ]
+      },
+      {
+       "name": "Rope7",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.085,
+       "centre": [
+        0.2625,
+        0,
+        -0.0
+       ],
+       "slot": 0,
+       "segments": 5,
+       "rot": [
+        0,
+        -0.0,
+        0
+       ]
+      },
+      {
+       "name": "Bead0",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        -0.275,
+        0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Bead1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        -0.225,
+        0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bead2",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        -0.175,
+        0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Bead3",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        -0.125,
+        0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bead4",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        -0.075,
+        0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Bead5",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        -0.025,
+        0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bead6",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        0.025,
+        0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Bead7",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        0.075,
+        0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bead8",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        0.125,
+        0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Bead9",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        0.175,
+        0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bead10",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        0.225,
+        0,
+        0.0
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Bead11",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.012,
+       "centre": [
+        0.275,
+        0,
+        0.0
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_EndA",
+     "location": [
+      -0.3,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.3,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_EndB",
+     "location": [
+      0.3,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.3,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_0",
+     "location": [
+      -0.275,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.275,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_1",
+     "location": [
+      -0.225,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.225,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_2",
+     "location": [
+      -0.175,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.175,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_3",
+     "location": [
+      -0.125,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.125,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_4",
+     "location": [
+      -0.075,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.075,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_5",
+     "location": [
+      -0.025,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.025,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_6",
+     "location": [
+      0.025,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.025,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_7",
+     "location": [
+      0.075,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.075,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_8",
+     "location": [
+      0.125,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.125,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_9",
+     "location": [
+      0.175,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.175,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_10",
+     "location": [
+      0.225,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.225,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bead_11",
+     "location": [
+      0.275,
+      0,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.275,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 368,
+    "lod1_triangles": 368,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_BeadBraid": 368
+    },
+    "bounds_min": [
+     -0.305,
+     -0.008,
+     -0.0076
+    ],
+    "bounds_max": [
+     0.305,
+     0.008,
+     0.0076
+    ],
+    "dimensions": [
+     0.61,
+     0.016,
+     0.0152
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "19d33d63ac8bb5575a0312dc98f3ed2652a1953362d10b713bad3a09c29d060c"
+  },
+  {
+   "asset": "Prop_YTM_BraidingBench",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G407",
+    "ask": "youtube-master 55890",
+    "lod": "LOD0/1",
+    "size_m": "1.2 m braiding bench",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Sit_0",
+     "SOCKET_Sit_1",
+     "SOCKET_Braid"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_BraidingBench_M0",
+     "colour": "bench (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_BraidingBench_M1",
+     "colour": "braiding hook",
+     "hex": "C8A040",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_BraidingBench",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Seat",
+       "shape": "box",
+       "size": [
+        1.2,
+        0.35,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg-1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.3,
+        0.42
+       ],
+       "centre": [
+        -0.5,
+        0,
+        0.21
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.3,
+        0.42
+       ],
+       "centre": [
+        0.5,
+        0,
+        0.21
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Hook",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.04,
+        0.25
+       ],
+       "centre": [
+        0.55,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Sit_0",
+     "location": [
+      -0.3,
+      0,
+      0.47
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.3,
+      0.47,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Sit_1",
+     "location": [
+      0.3,
+      0,
+      0.47
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.3,
+      0.47,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Braid",
+     "location": [
+      0.55,
+      0,
+      0.72
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.55,
+      0.72,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_BraidingBench_00",
+     "shape": "box",
+     "size": [
+      1.2,
+      0.35,
+      0.47
+     ],
+     "centre": [
+      0,
+      0,
+      0.235
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 176,
+    "lod1_triangles": 176,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_BraidingBench": 176
+    },
+    "bounds_min": [
+     -0.6,
+     -0.175,
+     0.0
+    ],
+    "bounds_max": [
+     0.6,
+     0.175,
+     0.725
+    ],
+    "dimensions": [
+     1.2,
+     0.35,
+     0.725
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "70131f3ff80e06471e213583d29d2b619763ecc9674268f2d0ebcf65b1888925"
+  }
+ ]
+}

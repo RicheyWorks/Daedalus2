@@ -23,9 +23,9 @@ HUES = ("ember", "tide", "verdant", "gale", "umbra")
 SPIRITS = {"ember": "Cinder Wisp", "tide": "Mere Sprite", "verdant": "Thornkin",
            "gale": "Sky Lark Spirit", "umbra": "Hollow Moth"}
 DIFFICULTY = {
-    "easy": {"facets": 12, "hues": 3, "shards": 60},
-    "normal": {"facets": 10, "hues": 4, "shards": 50},
-    "hard": {"facets": 8, "hues": 5, "shards": 40},
+    "easy": {"facets": 14, "hues": 3, "shards": 60},
+    "normal": {"facets": 10, "hues": 3, "shards": 50},
+    "hard": {"facets": 8, "hues": 3, "shards": 40},
 }
 DEFAULT_DIFFICULTY = "normal"
 RUN = 3

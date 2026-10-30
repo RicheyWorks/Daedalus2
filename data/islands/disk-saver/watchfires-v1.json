@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "quest": "q_watchfires",
+  "lore": "On storm nights the ferries of DiskSaver run by watchfire. A fire burning on an island lights that island and every island one ferry crossing away, so a captain can always see the next landing. Wood is scarce. Firekeeper Leofric studies the ferry chart and chooses where to build, so that no island lies dark and not one fire burns more than the chart needs.",
+  "hook": {
+    "report_format": "daedalus-watchfires",
+    "field": "verdict",
+    "values": ["blazing", "smoky", "dark"],
+    "chart": "routes[]",
+    "par": "par",
+    "dark_islands": "unlit[]"
+  },
+  "npc": {
+    "name": "Firekeeper Leofric",
+    "lines": {
+      "blazing": "Every island lit and not a log wasted. The ferries will run all night.",
+      "smoky": "Nobody's in the dark, but we're burning more wood than the chart needs. Some of those fires overlap.",
+      "dark": "There's an island with no light. A ferry heading there tonight will miss the landing."
+    }
+  }
+}

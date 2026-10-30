@@ -1,0 +1,12 @@
+{
+  "v": 1,
+  "quest": "q_plimsoll_lines",
+  "lore": "Surveyor Odile paints three lines on every island's hull before the cargo boats come in: a white line where its lamp would turn amber, a red line where it would sink below budget, and a long blue line along the whole harbour wall where the world could no longer keep every island afloat at once. Bring her a cargo list and she will tell you, before a single crate is loaded, whether the islands stay afloat.",
+  "hook": {"report_format": "daedalus-plimsoll-lines", "field": "verdict", "values": ["afloat", "awash", "sunk"],
+           "hull_lines": ["worlds[].islands[].to_amber", "worlds[].islands[].to_red"],
+           "harbour_wall": "worlds[].to_spill", "cargo": "cargo[]"},
+  "npc": {"name": "Surveyor Odile", "lines": {
+    "afloat": "Every hull rides above its lines. Load away.",
+    "awash": "That cargo puts an island over its white line. She will float, but her lamp turns amber.",
+    "sunk": "That cargo sinks her past the red line, or the harbour wall cannot hold the world. Leave it on the quay."}}
+}

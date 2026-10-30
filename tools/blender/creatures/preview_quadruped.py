@@ -6,7 +6,8 @@ clip in the exported glb (side view), so the sheet shows the rig actually moves.
 import argparse, json, math, os, sys
 
 SAMPLES = {"Idle": (0.5,), "Walk": (0.0, 0.25, 0.5, 0.75), "Run": (0.0, 0.33, 0.66), "Flutter": (0.0, 0.25, 0.5, 0.75),
-           "Hop": (0.0, 0.33, 0.66), "Freeze": (0.0,), "Swim": (0.0, 0.25, 0.5, 0.75)}
+           "Hop": (0.0, 0.33, 0.66), "Freeze": (0.0,), "Swim": (0.0, 0.25, 0.5, 0.75),
+           "Fly": (0.0, 0.25, 0.5, 0.75), "Squawk": (0.5,), "Dance": (0.0, 0.33, 0.66)}
 VIEWS = {"side": (1.0, -0.12, 0.18), "front": (0.15, -1.0, 0.35), "top": (0.35, -0.45, 1.0)}
 
 

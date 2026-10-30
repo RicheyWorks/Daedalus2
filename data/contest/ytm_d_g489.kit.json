@@ -1,0 +1,1490 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_StoneCairn_1",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G489",
+    "ask": "youtube-master 56408",
+    "lod": "LOD0/1",
+    "size_m": "0.60 m numbered cairn (4 stones)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Number"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "mi_set": [
+     "MI_YTM_StoneCairn_0",
+     "MI_YTM_StoneCairn_1",
+     "MI_YTM_StoneCairn_2",
+     "MI_YTM_StoneCairn_3",
+     "MI_YTM_StoneCairn_4",
+     "MI_YTM_StoneCairn_5",
+     "MI_YTM_StoneCairn_6",
+     "MI_YTM_StoneCairn_7",
+     "MI_YTM_StoneCairn_8",
+     "MI_YTM_StoneCairn_9"
+    ],
+    "mi_param": "Number (0..9)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_StoneCairn_1_M0",
+     "colour": "cairn stone",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_StoneCairn_1_M1",
+     "colour": "painted number (MI 0-9)",
+     "hex": "F0E8D8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_StoneCairn_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.425,
+        0.15
+       ],
+       "centre": [
+        -0.02416,
+        -0.00544,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        26.641
+       ]
+      },
+      {
+       "name": "Stone1",
+       "shape": "box",
+       "size": [
+        0.44,
+        0.374,
+        0.15
+       ],
+       "centre": [
+        -0.00133,
+        -0.00815,
+        0.225
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        77.8056
+       ]
+      },
+      {
+       "name": "Stone2",
+       "shape": "box",
+       "size": [
+        0.38,
+        0.323,
+        0.15
+       ],
+       "centre": [
+        0.01812,
+        0.00338,
+        0.375
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        41.1929
+       ]
+      },
+      {
+       "name": "Stone3",
+       "shape": "box",
+       "size": [
+        0.32,
+        0.272,
+        0.15
+       ],
+       "centre": [
+        -0.02067,
+        -0.00886,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        72.8275
+       ]
+      },
+      {
+       "name": "Number",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.01,
+        0.1
+       ],
+       "centre": [
+        0,
+        -0.2,
+        0.25
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Number",
+     "location": [
+      0,
+      -0.21,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.25,
+      0.21
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_StoneCairn_1_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.45,
+      0.6
+     ],
+     "centre": [
+      0,
+      0,
+      0.3
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 188,
+    "lod1_triangles": 188,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_StoneCairn_1": 188
+    },
+    "bounds_min": [
+     -0.3348,
+     -0.2994,
+     0.0
+    ],
+    "bounds_max": [
+     0.2865,
+     0.2885,
+     0.6
+    ],
+    "dimensions": [
+     0.6213,
+     0.5879,
+     0.6
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "708c2ef6289b11159311b5ac705818e13f856913cabdb000b50aa86fd67c0a33"
+  },
+  {
+   "asset": "Prop_YTM_ToppledStones_1",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G489",
+    "ask": "youtube-master 56408",
+    "lod": "LOD0/1",
+    "size_m": "toppled cairn 1 (fallen state)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Restack"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "state": "Toppled (pair of Prop_YTM_StoneCairn_1)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_ToppledStones_1_M0",
+     "colour": "cairn stone",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_ToppledStones_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        -0.12243,
+        0.14871,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        6.3175,
+        0.1866,
+        158.424
+       ]
+      },
+      {
+       "name": "Stone1",
+       "shape": "box",
+       "size": [
+        0.44,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0.21714,
+        -0.22375,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -5.3436,
+        -1.1822,
+        8.5757
+       ]
+      },
+      {
+       "name": "Stone2",
+       "shape": "box",
+       "size": [
+        0.38,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        -0.45316,
+        0.02919,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        4.104,
+        -5.8073,
+        79.7206
+       ]
+      },
+      {
+       "name": "Stone3",
+       "shape": "box",
+       "size": [
+        0.32,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0.17053,
+        -0.21522,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.3911,
+        7.4186,
+        79.7804
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Restack",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 176,
+    "lod1_triangles": 176,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_ToppledStones_1": 176
+    },
+    "bounds_min": [
+     -0.6832,
+     -0.4559,
+     -0.0298
+    ],
+    "bounds_max": [
+     0.4633,
+     0.4248,
+     0.1798
+    ],
+    "dimensions": [
+     1.1465,
+     0.8807,
+     0.2096
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1bf39d0276aad6a1aeb0f6496ba1c1a447e29bc6d6032310d5deaf61628482cb"
+  },
+  {
+   "asset": "Prop_YTM_StoneCairn_2",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G489",
+    "ask": "youtube-master 56408",
+    "lod": "LOD0/1",
+    "size_m": "0.75 m numbered cairn (5 stones)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Number"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "mi_set": [
+     "MI_YTM_StoneCairn_0",
+     "MI_YTM_StoneCairn_1",
+     "MI_YTM_StoneCairn_2",
+     "MI_YTM_StoneCairn_3",
+     "MI_YTM_StoneCairn_4",
+     "MI_YTM_StoneCairn_5",
+     "MI_YTM_StoneCairn_6",
+     "MI_YTM_StoneCairn_7",
+     "MI_YTM_StoneCairn_8",
+     "MI_YTM_StoneCairn_9"
+    ],
+    "mi_param": "Number (0..9)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_StoneCairn_2_M0",
+     "colour": "cairn stone",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_StoneCairn_2_M1",
+     "colour": "painted number (MI 0-9)",
+     "hex": "F0E8D8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_StoneCairn_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.425,
+        0.15
+       ],
+       "centre": [
+        0.01837,
+        -0.00066,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        61.2225
+       ]
+      },
+      {
+       "name": "Stone1",
+       "shape": "box",
+       "size": [
+        0.44,
+        0.374,
+        0.15
+       ],
+       "centre": [
+        -0.00508,
+        0.02248,
+        0.225
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        44.3801
+       ]
+      },
+      {
+       "name": "Stone2",
+       "shape": "box",
+       "size": [
+        0.38,
+        0.323,
+        0.15
+       ],
+       "centre": [
+        0.00243,
+        -0.00095,
+        0.375
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        39.5048
+       ]
+      },
+      {
+       "name": "Stone3",
+       "shape": "box",
+       "size": [
+        0.32,
+        0.272,
+        0.15
+       ],
+       "centre": [
+        -0.01415,
+        0.02215,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        3.9732
+       ]
+      },
+      {
+       "name": "Stone4",
+       "shape": "box",
+       "size": [
+        0.26,
+        0.221,
+        0.15
+       ],
+       "centre": [
+        -0.01556,
+        -0.02262,
+        0.675
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        79.9519
+       ]
+      },
+      {
+       "name": "Number",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.01,
+        0.1
+       ],
+       "centre": [
+        0,
+        -0.2,
+        0.25
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.75
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.75,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Number",
+     "location": [
+      0,
+      -0.21,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.25,
+      0.21
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_StoneCairn_2_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.45,
+      0.75
+     ],
+     "centre": [
+      0,
+      0,
+      0.375
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 232,
+    "lod1_triangles": 232,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_StoneCairn_2": 232
+    },
+    "bounds_min": [
+     -0.2805,
+     -0.3134,
+     0.0
+    ],
+    "bounds_max": [
+     0.3163,
+     0.3121,
+     0.75
+    ],
+    "dimensions": [
+     0.5968,
+     0.6255,
+     0.75
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "0c0dd55f1f84b63a72d6232d2c01b00cf36317c3a92172b87035b779eb08723d"
+  },
+  {
+   "asset": "Prop_YTM_ToppledStones_2",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G489",
+    "ask": "youtube-master 56408",
+    "lod": "LOD0/1",
+    "size_m": "toppled cairn 2 (fallen state)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Restack"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "state": "Toppled (pair of Prop_YTM_StoneCairn_2)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_ToppledStones_2_M0",
+     "colour": "cairn stone",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_ToppledStones_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0.09744,
+        -0.07033,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0.5459,
+        -6.7072,
+        51.7731
+       ]
+      },
+      {
+       "name": "Stone1",
+       "shape": "box",
+       "size": [
+        0.44,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        -0.20456,
+        -0.0467,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        8.8829,
+        4.7026,
+        154.736
+       ]
+      },
+      {
+       "name": "Stone2",
+       "shape": "box",
+       "size": [
+        0.38,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        -0.17929,
+        0.35934,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -5.5368,
+        -3.6452,
+        90.0864
+       ]
+      },
+      {
+       "name": "Stone3",
+       "shape": "box",
+       "size": [
+        0.32,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        -0.08043,
+        0.15869,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -3.888,
+        -7.4016,
+        117.3373
+       ]
+      },
+      {
+       "name": "Stone4",
+       "shape": "box",
+       "size": [
+        0.26,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0.34156,
+        -0.26588,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        9.2008,
+        -3.1778,
+        22.1591
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Restack",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 220,
+    "lod1_triangles": 220,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_ToppledStones_2": 220
+    },
+    "bounds_min": [
+     -0.4821,
+     -0.4999,
+     -0.0434
+    ],
+    "bounds_max": [
+     0.5316,
+     0.5534,
+     0.1934
+    ],
+    "dimensions": [
+     1.0137,
+     1.0533,
+     0.2368
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3649b1c8e592ce499f176ccbaeffba4ae30efd7de854c21b5964d7b24bdaf132"
+  },
+  {
+   "asset": "Prop_YTM_StoneCairn_3",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G489",
+    "ask": "youtube-master 56408",
+    "lod": "LOD0/1",
+    "size_m": "0.90 m numbered cairn (6 stones)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Top",
+     "SOCKET_Number"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "mi_set": [
+     "MI_YTM_StoneCairn_0",
+     "MI_YTM_StoneCairn_1",
+     "MI_YTM_StoneCairn_2",
+     "MI_YTM_StoneCairn_3",
+     "MI_YTM_StoneCairn_4",
+     "MI_YTM_StoneCairn_5",
+     "MI_YTM_StoneCairn_6",
+     "MI_YTM_StoneCairn_7",
+     "MI_YTM_StoneCairn_8",
+     "MI_YTM_StoneCairn_9"
+    ],
+    "mi_param": "Number (0..9)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_StoneCairn_3_M0",
+     "colour": "cairn stone",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_StoneCairn_3_M1",
+     "colour": "painted number (MI 0-9)",
+     "hex": "F0E8D8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_StoneCairn_3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.425,
+        0.15
+       ],
+       "centre": [
+        0.00892,
+        0.01566,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        60.6088
+       ]
+      },
+      {
+       "name": "Stone1",
+       "shape": "box",
+       "size": [
+        0.44,
+        0.374,
+        0.15
+       ],
+       "centre": [
+        -0.0093,
+        -0.01418,
+        0.225
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        54.918
+       ]
+      },
+      {
+       "name": "Stone2",
+       "shape": "box",
+       "size": [
+        0.38,
+        0.323,
+        0.15
+       ],
+       "centre": [
+        -0.02671,
+        -0.01179,
+        0.375
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        3.3839
+       ]
+      },
+      {
+       "name": "Stone3",
+       "shape": "box",
+       "size": [
+        0.32,
+        0.272,
+        0.15
+       ],
+       "centre": [
+        -0.0126,
+        0.02435,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        23.6498
+       ]
+      },
+      {
+       "name": "Stone4",
+       "shape": "box",
+       "size": [
+        0.26,
+        0.221,
+        0.15
+       ],
+       "centre": [
+        0.01127,
+        -0.01832,
+        0.675
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        60.5883
+       ]
+      },
+      {
+       "name": "Stone5",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.17,
+        0.15
+       ],
+       "centre": [
+        0.02994,
+        0.00903,
+        0.825
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        27.0344
+       ]
+      },
+      {
+       "name": "Number",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.01,
+        0.1
+       ],
+       "centre": [
+        0,
+        -0.2,
+        0.25
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.9,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Number",
+     "location": [
+      0,
+      -0.21,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.25,
+      0.21
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_StoneCairn_3_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.45,
+      0.9
+     ],
+     "centre": [
+      0,
+      0,
+      0.45
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 276,
+    "lod1_triangles": 276,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_StoneCairn_3": 276
+    },
+    "bounds_min": [
+     -0.2901,
+     -0.2976,
+     0.0
+    ],
+    "bounds_max": [
+     0.3079,
+     0.3289,
+     0.9
+    ],
+    "dimensions": [
+     0.598,
+     0.6265,
+     0.9
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e5196e0070ec55c0036b32abcbc1bd1e9200175b3f4a813070bb988dff7479ee"
+  },
+  {
+   "asset": "Prop_YTM_ToppledStones_3",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G489",
+    "ask": "youtube-master 56408",
+    "lod": "LOD0/1",
+    "size_m": "toppled cairn 3 (fallen state)",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Restack"
+    ],
+    "style": "G66 stall palette (ytm_g116)",
+    "state": "Toppled (pair of Prop_YTM_StoneCairn_3)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_ToppledStones_3_M0",
+     "colour": "cairn stone",
+     "hex": "8E8478",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_ToppledStones_3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        -0.19416,
+        -0.34115,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        4.1964,
+        7.9036,
+        76.3677
+       ]
+      },
+      {
+       "name": "Stone1",
+       "shape": "box",
+       "size": [
+        0.44,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        -0.15394,
+        0.37966,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -7.9676,
+        7.9485,
+        48.7937
+       ]
+      },
+      {
+       "name": "Stone2",
+       "shape": "box",
+       "size": [
+        0.38,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0.4404,
+        0.36764,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -7.0276,
+        0.4031,
+        73.6254
+       ]
+      },
+      {
+       "name": "Stone3",
+       "shape": "box",
+       "size": [
+        0.32,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        -0.12956,
+        -0.13647,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -7.5503,
+        2.7958,
+        12.455
+       ]
+      },
+      {
+       "name": "Stone4",
+       "shape": "box",
+       "size": [
+        0.26,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0.0999,
+        0.17989,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        5.0298,
+        2.8197,
+        20.3378
+       ]
+      },
+      {
+       "name": "Stone5",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.4,
+        0.15
+       ],
+       "centre": [
+        0.2604,
+        -0.1035,
+        0.075
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        -0.8399,
+        4.6413,
+        148.8019
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Restack",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_ToppledStones_3": 264
+    },
+    "bounds_min": [
+     -0.4476,
+     -0.633,
+     -0.0515
+    ],
+    "bounds_max": [
+     0.686,
+     0.6708,
+     0.2015
+    ],
+    "dimensions": [
+     1.1336,
+     1.3038,
+     0.253
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1f020b81dd54f36dfb075019d90c3ee56b59a3769daec40e480176ffbd1a1f76"
+  }
+ ]
+}

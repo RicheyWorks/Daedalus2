@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shardring Resonance</title>
+<style>
+  body { margin: 0; background: radial-gradient(circle at 50% 40%, #1c1440, #07060f 70%); color: #e8e4ff;
+         font: 15px/1.4 system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+  h1 { font-weight: 300; letter-spacing: .12em; margin: 18px 0 4px; text-shadow: 0 0 12px #b9a4ff; }
+  .bar { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; margin: 6px; }
+  .bar input, .bar select, .bar button { background: #1d1838; color: #e8e4ff; border: 1px solid #5b4fa8; border-radius: 6px; padding: 4px 8px; font: inherit; }
+  .bar button:focus-visible, .facet:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  #stage { position: relative; width: 420px; height: 420px; max-width: 94vw; max-height: 94vw; }
+  #sphere { position: absolute; inset: 22%; border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff6b6b55, #ffd16655, #6bffb855, #6bc8ff55, #c86bff55, #ff6b6b55);
+            box-shadow: 0 0 60px #9d7dff88, inset 0 0 40px #ffffff44; animation: spin 24s linear infinite; }
+  #core { position: absolute; inset: 36%; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+          background: radial-gradient(circle, #ffffff22, #0000); text-align: center; font-size: 13px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .facet { position: absolute; width: 48px; height: 48px; margin: -24px; border-radius: 30%; border: 2px solid #8a7fd6;
+           background: #120f24; color: #fff; font-weight: 700; cursor: pointer; transform: rotate(45deg); }
+  .facet span { display: inline-block; transform: rotate(-45deg); }
+  .facet.empty:hover { box-shadow: 0 0 14px #fff; }
+  .shard { display: inline-block; width: 26px; height: 26px; border-radius: 30%; transform: rotate(45deg); vertical-align: middle; margin: 0 4px; }
+  .ember { background: #ff5a4e; box-shadow: 0 0 14px #ff5a4e; } .tide { background: #3fa9ff; box-shadow: 0 0 14px #3fa9ff; }
+  .verdant { background: #3ee08a; box-shadow: 0 0 14px #3ee08a; } .gale { background: #f4e04d; box-shadow: 0 0 14px #f4e04d; color: #222; }
+  .umbra { background: #b06bff; box-shadow: 0 0 14px #b06bff; }
+  #msg { min-height: 1.4em; margin: 6px; text-align: center; } #spirits { color: #cbbfff; font-size: 13px; }
+  .help { max-width: 520px; text-align: center; color: #aaa3d6; font-size: 13px; margin: 6px 12px 20px; }
+</style>
+</head>
+<body>
+<h1>SHARDRING RESONANCE</h1>
+<div class="bar">
+  <label>Seed <input id="seed" type="number" value="0" style="width:90px"></label>
+  <label>Difficulty <select id="diff"><option>easy</option><option selected>normal</option><option>hard</option></select></label>
+  <button id="restart">Restart (R)</button>
+</div>
+<div class="bar" id="hud"></div>
+<div id="stage"><div id="sphere"></div><div id="core"></div></div>
+<div id="msg" aria-live="polite"></div>
+<div id="spirits"></div>
+<p class="help">Set each Prism Shard in an empty facet of the sphere ring; 3 or more of one hue in a row resonate and clear. Do not let the ring fill.
+Click a facet, or use Left/Right to pick and Enter/Space to set. Keys 1-9 and 0 set facets 1-10 directly; R restarts. Controller: D-pad or left stick picks, A sets, Start restarts.</p>
+<!-- Optional: the shared DaedalusPad controller layer, read from this repo checkout (no network).
+     If it is missing, the page still plays with mouse and keyboard. -->
+<script src="../../../../daedalus-server/src/main/resources/static/controllers/daedalus-pad.js"></script>
+<script id="shardring-core">
+// Shardring Resonance rules: an exact port of tools/minigames/prism_shard.py,
+// including CPython's random.Random(str) seeding (SHA-512 + MT19937) and choice().
+var Shardring = (function () {
+  "use strict";
+  var M64 = (1n << 64n) - 1n;
+  var K = ("428a2f98d728ae22 7137449123ef65cd b5c0fbcfec4d3b2f e9b5dba58189dbbc 3956c25bf348b538 59f111f1b605d019 923f82a4af194f9b ab1c5ed5da6d8118 " +
+    "d807aa98a3030242 12835b0145706fbe 243185be4ee4b28c 550c7dc3d5ffb4e2 72be5d74f27b896f 80deb1fe3b1696b1 9bdc06a725c71235 c19bf174cf692694 " +
+    "e49b69c19ef14ad2 efbe4786384f25e3 0fc19dc68b8cd5b5 240ca1cc77ac9c65 2de92c6f592b0275 4a7484aa6ea6e483 5cb0a9dcbd41fbd4 76f988da831153b5 " +
+    "983e5152ee66dfab a831c66d2db43210 b00327c898fb213f bf597fc7beef0ee4 c6e00bf33da88fc2 d5a79147930aa725 06ca6351e003826f 142929670a0e6e70 " +
+    "27b70a8546d22ffc 2e1b21385c26c926 4d2c6dfc5ac42aed 53380d139d95b3df 650a73548baf63de 766a0abb3c77b2a8 81c2c92e47edaee6 92722c851482353b " +
+    "a2bfe8a14cf10364 a81a664bbc423001 c24b8b70d0f89791 c76c51a30654be30 d192e819d6ef5218 d69906245565a910 f40e35855771202a 106aa07032bbd1b8 " +
+    "19a4c116b8d2d0c8 1e376c085141ab53 2748774cdf8eeb99 34b0bcb5e19b48a8 391c0cb3c5c95a63 4ed8aa4ae3418acb 5b9cca4f7763e373 682e6ff3d6b2b8a3 " +
+    "748f82ee5defb2fc 78a5636f43172f60 84c87814a1f0ab72 8cc702081a6439ec 90befffa23631e28 a4506cebde82bde9 bef9a3f7b2c67915 c67178f2e372532b " +
+    "ca273eceea26619c d186b8c721c0c207 eada7dd6cde0eb1e f57d4f7fee6ed178 06f067aa72176fba 0a637dc5a2c898a6 113f9804bef90dae 1b710b35131c471b " +
+    "28db77f523047d84 32caab7b40c72493 3c9ebe0a15c9bebc 431d67c49c100d4c 4cc5d4becb3e42b6 597f299cfc657e2a 5fcb6fab3ad6faec 6c44198c4a475817")
+    .split(" ").map(function (h) { return BigInt("0x" + h); });
+  function rotr(x, n) { return ((x >> n) | (x << (64n - n))) & M64; }
+  function sha512(bytes) {
+    var H = ["6a09e667f3bcc908", "bb67ae8584caa73b", "3c6ef372fe94f82b", "a54ff53a5f1d36f1",
+             "510e527fade682d1", "9b05688c2b3e6c1f", "1f83d9abfb41bd6b", "5be0cd19137e2179"].map(function (h) { return BigInt("0x" + h); });
+    var len = bytes.length, total = Math.ceil((len + 17) / 128) * 128, m = new Uint8Array(total);
+    m.set(bytes); m[len] = 0x80;
+    var bits = BigInt(len) * 8n;
+    for (var i = 0; i < 16; i++) m[total - 1 - i] = Number((bits >> BigInt(8 * i)) & 255n);
+    for (var off = 0; off < total; off += 128) {
+      var w = [];
+      for (var t = 0; t < 80; t++) {
+        if (t < 16) { var v = 0n; for (var b = 0; b < 8; b++) v = (v << 8n) | BigInt(m[off + t * 8 + b]); w.push(v); }
+        else {
+          var s0 = rotr(w[t - 15], 1n) ^ rotr(w[t - 15], 8n) ^ (w[t - 15] >> 7n);
+          var s1 = rotr(w[t - 2], 19n) ^ rotr(w[t - 2], 61n) ^ (w[t - 2] >> 6n);
+          w.push((w[t - 16] + s0 + w[t - 7] + s1) & M64);
+        }
+      }
+      var a = H[0], bb = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+      for (t = 0; t < 80; t++) {
+        var S1 = rotr(e, 14n) ^ rotr(e, 18n) ^ rotr(e, 41n), ch = (e & f) ^ (~e & M64 & g);
+        var t1 = (h + S1 + ch + K[t] + w[t]) & M64;
+        var S0 = rotr(a, 28n) ^ rotr(a, 34n) ^ rotr(a, 39n), mj = (a & bb) ^ (a & c) ^ (bb & c);
+        var t2 = (S0 + mj) & M64;
+        h = g; g = f; f = e; e = (d + t1) & M64; d = c; c = bb; bb = a; a = (t1 + t2) & M64;
+      }
+      H = [a, bb, c, d, e, f, g, h].map(function (x, k) { return (H[k] + x) & M64; });
+    }
+    var out = [];
+    H.forEach(function (x) { for (var b = 7; b >= 0; b--) out.push(Number((x >> BigInt(8 * b)) & 255n)); });
+    return out;
+  }
+  // MT19937 seeded like CPython random.seed(str, version=2).
+  function PyRandom(seedStr) {
+    var enc = Array.from(new TextEncoder().encode(seedStr));
+    var bytes = enc.concat(sha512(enc));
+    var key = [];
+    for (var i = bytes.length; i > 0; i -= 4) {
+      var v = 0;
+      for (var j = Math.max(0, i - 4); j < i; j++) v = (v * 256 + bytes[j]) >>> 0;
+      key.push(v);
+    }
+    while (key.length > 1 && key[key.length - 1] === 0) key.pop();
+    var mt = new Uint32Array(624), idx = 624;
+    mt[0] = 19650218;
+    for (i = 1; i < 624; i++) mt[i] = (Math.imul(1812433253, mt[i - 1] ^ (mt[i - 1] >>> 30)) + i) >>> 0;
+    i = 1; j = 0;
+    for (var k = Math.max(624, key.length); k; k--) {
+      mt[i] = ((mt[i] ^ Math.imul(mt[i - 1] ^ (mt[i - 1] >>> 30), 1664525)) + key[j] + j) >>> 0;
+      i++; j++;
+      if (i >= 624) { mt[0] = mt[623]; i = 1; }
+      if (j >= key.length) j = 0;
+    }
+    for (k = 623; k; k--) {
+      mt[i] = ((mt[i] ^ Math.imul(mt[i - 1] ^ (mt[i - 1] >>> 30), 1566083941)) - i) >>> 0;
+      i++;
+      if (i >= 624) { mt[0] = mt[623]; i = 1; }
+    }
+    mt[0] = 0x80000000;
+    function u32() {
+      if (idx >= 624) {
+        for (var kk = 0; kk < 624; kk++) {
+          var y = (mt[kk] & 0x80000000) | (mt[(kk + 1) % 624] & 0x7fffffff);
+          mt[kk] = mt[(kk + 397) % 624] ^ (y >>> 1) ^ (y & 1 ? 0x9908b0df : 0);
+        }
+        idx = 0;
+      }
+      var z = mt[idx++];
+      z ^= z >>> 11; z ^= (z << 7) & 0x9d2c5680; z ^= (z << 15) & 0xefc60000; z ^= z >>> 18;
+      return z >>> 0;
+    }
+    function below(n) { // _randbelow_with_getrandbits, n < 2^32
+      var kbits = 32 - Math.clz32(n);
+      var r = u32() >>> (32 - kbits);
+      while (r >= n) r = u32() >>> (32 - kbits);
+      return r;
+    }
+    return { u32: u32, choice: function (seq) { return seq[below(seq.length)]; } };
+  }
+
+  var HUES = ["ember", "tide", "verdant", "gale", "umbra"];
+  var SPIRITS = { ember: "Cinder Wisp", tide: "Mere Sprite", verdant: "Thornkin", gale: "Sky Lark Spirit", umbra: "Hollow Moth" };
+  var DIFFICULTY = { easy: { facets: 14, hues: 3, shards: 60 }, normal: { facets: 10, hues: 3, shards: 50 }, hard: { facets: 8, hues: 3, shards: 40 } };
+  var RUN = 3, SPIRIT_EVERY = 3, SPIRIT_BONUS = 25;
+
+  function Game(seed, difficulty) {
+    this.seed = seed | 0; this.difficulty = difficulty || "normal";
+    if (!DIFFICULTY[this.difficulty]) throw new Error("unknown difficulty '" + difficulty + "'");
+    this.start();
+  }
+  Game.prototype.start = function () {
+    var cfg = DIFFICULTY[this.difficulty];
+    this.rng = PyRandom("shardring:" + this.seed + ":" + this.difficulty);
+    this.hues = HUES.slice(0, cfg.hues);
+    this.ring = new Array(cfg.facets).fill(null);
+    this.pouch = cfg.shards; this.score = 0; this.chain = 0;
+    this.resonance = {}; var self = this; this.hues.forEach(function (h) { self.resonance[h] = 0; });
+    this.spirits = []; this.over = false; this.won = false;
+    this.current = this.rng.choice(this.hues); this.next = this.rng.choice(this.hues);
+    return this;
+  };
+  Game.prototype.empty = function () { var o = []; this.ring.forEach(function (h, i) { if (h === null) o.push(i); }); return o; };
+  Game.prototype.runAt = function (i) {
+    var n = this.ring.length, hue = this.ring[i], run = new Set([i]);
+    [1, -1].forEach(function (step) {
+      var j = ((i + step) % n + n) % n;
+      while (this.ring[j] === hue && !run.has(j)) { run.add(j); j = ((j + step) % n + n) % n; }
+    }, this);
+    return run;
+  };
+  Game.prototype.place = function (facet) {
+    if (this.over) throw new Error("game over");
+    if (!(facet >= 0 && facet < this.ring.length) || this.ring[facet] !== null) throw new Error("facet " + facet + " is not empty");
+    var hue = this.current, gained = 0, ev = { run: 0, spirit: null };
+    this.ring[facet] = hue; this.pouch -= 1;
+    var run = this.runAt(facet);
+    if (run.size >= RUN) {
+      this.chain += 1; gained = run.size * run.size * this.chain; ev.run = run.size;
+      var self = this; run.forEach(function (j) { self.ring[j] = null; });
+      this.resonance[hue] += 1;
+      if (this.resonance[hue] % SPIRIT_EVERY === 0) {
+        this.spirits.push(SPIRITS[hue]); gained += SPIRIT_BONUS; ev.spirit = SPIRITS[hue];
+        var filled = []; this.ring.forEach(function (h, j) { if (h !== null) filled.push(j); });
+        if (filled.length) this.ring[this.rng.choice(filled)] = null;
+      }
+    } else this.chain = 0;
+    this.score += gained;
+    this.current = this.next; this.next = this.rng.choice(this.hues);
+    if (!this.empty().length) { this.over = true; this.won = false; }
+    else if (this.pouch <= 0) { this.over = true; this.won = true; }
+    ev.gained = gained; this.last = ev;
+    return gained;
+  };
+  Game.prototype.greedyMove = function () { // same tie-breaks as prism_shard.greedy_move
+    var best = null, bk = null, self = this;
+    this.empty().forEach(function (i) {
+      self.ring[i] = self.current; var size = self.runAt(i).size; self.ring[i] = null;
+      var key = [size >= RUN ? 1 : 0, size, -i];
+      if (bk === null || key[0] > bk[0] || (key[0] === bk[0] && (key[1] > bk[1] || (key[1] === bk[1] && key[2] > bk[2])))) { best = i; bk = key; }
+    });
+    return best;
+  };
+  Game.prototype.status = function () {
+    return { id: "shardring", score: this.score, over: this.over, won: this.won, pouch: this.pouch,
+             current: this.current, next: this.next, ring: this.ring.slice(), spirits: this.spirits.slice() };
+  };
+  // Controller: logical DaedalusPad actions -> Shardring verbs (D-pad/left stick pick, A/confirm places, Start/menu restarts).
+  var PAD_ACTIONS = { left: "prev", up: "prev", right: "next", down: "next", confirm: "place", menu: "restart" };
+  // One input step shared by keyboard and pad: returns the new selection and whether to restart.
+  function applyVerb(game, sel, verb) {
+    var n = game.ring.length, out = { sel: sel, placed: false, restart: false };
+    if (verb === "prev") out.sel = (sel - 1 + n) % n;
+    else if (verb === "next") out.sel = (sel + 1) % n;
+    else if (verb === "restart") out.restart = true;
+    else if (verb === "place" && !game.over && game.ring[sel] === null) { game.place(sel); out.placed = true; }
+    return out;
+  }
+  return { Game: Game, PyRandom: PyRandom, PAD_ACTIONS: PAD_ACTIONS, applyVerb: applyVerb, sha512: sha512, DIFFICULTY: DIFFICULTY, HUES: HUES };
+})();
+if (typeof module !== "undefined") module.exports = Shardring;
+</script>
+<script>
+(function () {
+  if (typeof document === "undefined") return;
+  var g, sel = 0;
+  var $ = function (id) { return document.getElementById(id); };
+  function newGame() {
+    g = new Shardring.Game(parseInt($("seed").value, 10) || 0, $("diff").value);
+    sel = 0; $("msg").textContent = "Set the first shard."; draw();
+  }
+  function shard(h) { return '<span class="shard ' + h + '" title="' + h + '"></span>'; }
+  function draw() {
+    $("hud").innerHTML = "Score <b>" + g.score + "</b> &middot; Chain " + g.chain + " &middot; Pouch " + g.pouch +
+      " &middot; Shard " + shard(g.current) + g.current + " &middot; Next " + shard(g.next);
+    $("core").innerHTML = g.over ? (g.won ? "<b>The sphere is whole</b>" : "<b>The sphere shattered</b>") + "<br>Score " + g.score + "<br>R to restart"
+      : shard(g.current) + "<div>" + g.current + "</div>";
+    var stage = $("stage"); stage.querySelectorAll(".facet").forEach(function (e) { e.remove(); });
+    var n = g.ring.length;
+    g.ring.forEach(function (h, i) {
+      var a = -Math.PI / 2 + 2 * Math.PI * i / n, b = document.createElement("button");
+      b.className = "facet " + (h || "empty"); b.style.left = (50 + 40 * Math.cos(a)) + "%"; b.style.top = (50 + 40 * Math.sin(a)) + "%";
+      b.innerHTML = "<span>" + (i + 1) + "</span>"; b.setAttribute("aria-label", "facet " + (i + 1) + " " + (h || "empty"));
+      if (i === sel && !g.over) b.style.boxShadow = "0 0 0 3px #fff";
+      b.onclick = function () { setAt(i); };
+      stage.appendChild(b);
+    });
+    $("spirits").textContent = g.spirits.length ? "Spirits summoned: " + g.spirits.join(", ") : "";
+  }
+  function verb(v) {
+    var r = Shardring.applyVerb(g, sel, v);
+    if (r.restart) return newGame();
+    sel = r.sel;
+    if (r.placed) report(); else draw();
+  }
+  function setAt(i) {
+    if (g.over || g.ring[i] !== null) return;
+    sel = i; verb("place");
+  }
+  function report() {
+    var pts = g.last.gained, ev = g.last;
+    $("msg").textContent = ev.spirit ? ev.spirit + " answers the resonance! +" + pts
+      : ev.run ? "Resonance of " + ev.run + " (chain " + g.chain + ") +" + pts : "Shard set.";
+    if (g.over) $("msg").textContent = g.won ? "The pouch is empty and the sphere holds. You win!" : "Every facet is full. The sphere shatters.";
+    draw();
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+    var n = g.ring.length;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") { verb("next"); e.preventDefault(); }
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { verb("prev"); e.preventDefault(); }
+    else if (e.key === "Enter" || e.key === " ") { verb("place"); e.preventDefault(); }
+    else if (e.key === "r" || e.key === "R") verb("restart");
+    else if (/^[0-9]$/.test(e.key)) { var k = e.key === "0" ? 9 : +e.key - 1; if (k < n) { sel = k; setAt(k); } }
+  });
+  if (window.DaedalusPad) {   /* feature-detect: no pad module, no controller support, nothing breaks */
+    DaedalusPad.create({ storageKey: "shardring.pad.v1", onChange: function (e) {
+      if (e.type === "down" && Shardring.PAD_ACTIONS[e.action]) verb(Shardring.PAD_ACTIONS[e.action]);
+      if (e.type === "connect") $("msg").textContent = e.pad.name + " connected: D-pad/stick picks, A sets, Start restarts.";
+    } });
+  }
+  $("restart").onclick = newGame; $("diff").onchange = newGame; $("seed").onchange = newGame;
+  newGame();
+})();
+</script>
+</body>
+</html>

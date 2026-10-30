@@ -27,6 +27,7 @@ JAVA_TESTS = ROOT / "engines/unreal/core-test/java_arcade/CMakeLists.txt"
 SLOTS_HDR = REG.parent / "DaedalusDesktopSaveSlots.h"
 OUT_JSON = ROOT / "docs/minigames/catalog.json"
 OUT_MD = ROOT / "docs/minigames/CATALOG.md"
+SPOTS = ROOT / "data/minigames/daedalus-spots.json"
 
 # Test-file prefixes per game id (shared-family suites included).
 TEST_PREFIX = {
@@ -82,7 +83,7 @@ def parse_java(errors):
 
 
 # Pure-Python minigames: rules live in a stdlib module under tools/minigames.
-PY_GAMES = ["prism_shard"]
+PY_GAMES = ["prism_shard", "lumenpath", "wardens_accord", "facetlock", "prismvault", "shardfall", "prismcairn", "spiritkite", "shadewatch", "glimmerloom"]
 
 
 def parse_python(errors):
@@ -215,6 +216,9 @@ def build():
     cmake = parse_cmake((TESTS / "CMakeLists.txt").read_text(encoding="utf-8"))
     verified, errors = parse_verified(cmake)
     ids = [e[0] for e in entries]
+    spots = json.loads(SPOTS.read_text(encoding="utf-8")).get("spots", {})
+    for gid in sorted(set(spots) - set(ids)):
+        errors.append(f"Daedalus spot names unknown game '{gid}'")
     for gid in sorted(set(verified) - set(ids)):
         errors.append(f"catalog-capability names unknown game '{gid}'")
     for gid in sorted(set(ids) - factories):
@@ -238,6 +242,11 @@ def build():
         line = howto.get(cls)
         if not line:
             errors.append(f"game '{gid}' has no HowToLine")
+        home = spots.get(gid) or {}
+        spot = (home.get("spot") or "").strip()
+        realm = (home.get("realm") or "").strip()
+        if not spot or not realm:
+            errors.append(f"game '{gid}' has no Daedalus spot in data/minigames/daedalus-spots.json")
         games.append({
             "id": gid,
             "title": title,
@@ -245,6 +254,8 @@ def build():
             "how_to_play": line or "",
             "difficulty": ["easy", "normal", "hard"],
             "default_difficulty": "normal",
+            "daedalus_realm": realm,
+            "daedalus_spot": spot,
             "host": "ADaedalusDesktopArcade",
             "start": f'StartGame("{gid}", Seed)',
             "portable_tests": tests,
@@ -273,7 +284,9 @@ def build():
         "leaderboard_feed": dict(CATALOG_HOOK),
         "games": games,
         "java_cabinets": java,
-        "python_games": py,
+        # A Python game that now has a native factory is a desktop cabinet; its module stays the rules
+        # authority (parity fixtures), but realm builders place the ADaedalusDesktopArcade host.
+        "python_games": [g for g in py if g["id"] not in {x["id"] for x in games}],
     }
     md = [
         "# Minigame catalog", "",
@@ -295,6 +308,11 @@ def build():
            "| id | default |", "|---|---|"]
     for g in games:
         md.append(f"| `{g['id']}` | {g['default_difficulty']} |")
+    md += ["", "## Daedalus spots", "",
+           "One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm already places that cabinet.", "",
+           "| id | realm | spot |", "|---|---|---|"]
+    for g in games:
+        md.append(f"| `{g['id']}` | `{g['daedalus_realm']}` | {g['daedalus_spot']} |")
     md += ["", "## Capabilities", "",
            "Read from each core's overrides, plus behavior proven by a portable test that declares",
            "`// catalog-capability: <cap>: <ids>` (for games that handle it inside `Step`). A blank cell is a gap.", "",

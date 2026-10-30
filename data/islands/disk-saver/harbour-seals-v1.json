@@ -1,0 +1,12 @@
+{
+  "v": 1,
+  "quest": "q_harbour_seals",
+  "lore": "Every crate of figures that leaves the counting house is sealed in wax with the census it was counted from. Customs Officer Perpetua breaks no seals: she recounts the cargo herself against tonight's census and the harbour's current rules, and only then presses her stamp. A crate counted from an old census, a crate whose seal is missing, and a crate whose numbers were changed after sealing all stay on the quay.",
+  "hook": {"report_format": "daedalus-harbour-seals", "field": "verdict", "values": ["sealed", "stale", "tampered", "unsealed"],
+           "wax": "census_sources", "ledger_marks": "diffs[].path", "failing": ["stale", "tampered", "unsealed"]},
+  "npc": {"name": "Customs Officer Perpetua", "lines": {
+    "sealed": "Recounted and true. My stamp is on it; let it sail.",
+    "stale": "This was counted from an old census or under old rules. Count it again.",
+    "tampered": "Same census, different numbers. Someone wrote on this after the wax set.",
+    "unsealed": "No seal, no census named. I cannot tell where these figures came from."}}
+}

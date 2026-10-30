@@ -1,0 +1,214 @@
+{
+ "schema": "blender-kit/v1 manifest",
+ "generated_by": "tools/blender/arcade_hall_kit.py + tools/blender/arcade_hall_assembler.py",
+ "realm": "Prismheart",
+ "status": "NOT READY",
+ "staging": "bot-team\\staging\\arcade-hall-20261029",
+ "grid_m": 2.0,
+ "wall_height_m": 4.0,
+ "conventions": "origin bottom-centre on the grid line, wall interior face -Y, ceiling bay origin = ceiling plane (z 4 m), foundation origin = top (floor level)",
+ "hook": {
+  "java": "daedalus-core/src/main/java/com/daedalus/world/arcade/ArcadeHall.java",
+  "resource": "daedalus-core/src/main/resources/com/daedalus/world/arcade/arcade_hall_layouts.tsv",
+  "quest": "q_arcade_hall_enter",
+  "how": "ArcadeHall.onIsland(layoutId, world, doorAnchor) puts the doorway portal on an island block; enter() opens it and returns the inside spawn"
+ },
+ "assets": [
+  {
+   "name": "Prop_ArcadeHall_Wall_2m",
+   "tris": 156,
+   "size_m": [
+    2.0,
+    0.24,
+    4.0
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Poster",
+    "SOCKET_SOCKET_Sconce",
+    "SOCKET_SOCKET_Edge_L",
+    "SOCKET_SOCKET_Edge_R",
+    "SOCKET_SOCKET_Edge_Top",
+    "SOCKET_SOCKET_Floor"
+   ],
+   "materials": [
+    "Prop_ArcadeHall_Wall_2m_M0",
+    "Prop_ArcadeHall_Wall_2m_M1",
+    "Prop_ArcadeHall_Wall_2m_M2",
+    "Prop_ArcadeHall_Wall_2m_M3"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_ArcadeHall_Corner",
+   "tris": 144,
+   "size_m": [
+    0.36,
+    0.36,
+    4.1
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Edge_X",
+    "SOCKET_SOCKET_Edge_Y",
+    "SOCKET_SOCKET_Edge_Top",
+    "SOCKET_SOCKET_Floor"
+   ],
+   "materials": [
+    "Prop_ArcadeHall_Corner_M0",
+    "Prop_ArcadeHall_Corner_M1",
+    "Prop_ArcadeHall_Corner_M2",
+    "Prop_ArcadeHall_Corner_M3"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_ArcadeHall_Doorway_2m",
+   "tris": 664,
+   "size_m": [
+    2.0,
+    0.4,
+    4.0
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Door",
+    "SOCKET_SOCKET_Entry_Outside",
+    "SOCKET_SOCKET_Entry_Inside",
+    "SOCKET_SOCKET_Sign",
+    "SOCKET_SOCKET_Edge_L",
+    "SOCKET_SOCKET_Edge_R",
+    "SOCKET_SOCKET_Edge_Top",
+    "SOCKET_SOCKET_Floor"
+   ],
+   "materials": [
+    "Prop_ArcadeHall_Doorway_2m_M0",
+    "Prop_ArcadeHall_Doorway_2m_M1",
+    "Prop_ArcadeHall_Doorway_2m_M2",
+    "Prop_ArcadeHall_Doorway_2m_M3",
+    "Prop_ArcadeHall_Doorway_2m_M4",
+    "Prop_ArcadeHall_Doorway_2m_M5"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_ArcadeHall_Window_2m",
+   "tris": 464,
+   "size_m": [
+    2.0,
+    0.34,
+    4.0
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Window",
+    "SOCKET_SOCKET_Poster",
+    "SOCKET_SOCKET_Edge_L",
+    "SOCKET_SOCKET_Edge_R",
+    "SOCKET_SOCKET_Edge_Top",
+    "SOCKET_SOCKET_Floor"
+   ],
+   "materials": [
+    "Prop_ArcadeHall_Window_2m_M0",
+    "Prop_ArcadeHall_Window_2m_M1",
+    "Prop_ArcadeHall_Window_2m_M2",
+    "Prop_ArcadeHall_Window_2m_M3",
+    "Prop_ArcadeHall_Window_2m_M4"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_ArcadeHall_CeilingBay_2m",
+   "tris": 232,
+   "size_m": [
+    2.0,
+    2.0,
+    0.29
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Edge_N",
+    "SOCKET_SOCKET_Edge_S",
+    "SOCKET_SOCKET_Edge_E",
+    "SOCKET_SOCKET_Edge_W",
+    "SOCKET_SOCKET_Hang"
+   ],
+   "materials": [
+    "Prop_ArcadeHall_CeilingBay_2m_M0",
+    "Prop_ArcadeHall_CeilingBay_2m_M1",
+    "Prop_ArcadeHall_CeilingBay_2m_M2",
+    "Prop_ArcadeHall_CeilingBay_2m_M3"
+   ],
+   "status": "NOT READY"
+  },
+  {
+   "name": "Prop_ArcadeHall_Foundation_2m",
+   "tris": 88,
+   "size_m": [
+    2.0,
+    2.0,
+    0.4
+   ],
+   "sockets": [
+    "SOCKET_SOCKET_Edge_N",
+    "SOCKET_SOCKET_Edge_S",
+    "SOCKET_SOCKET_Edge_E",
+    "SOCKET_SOCKET_Edge_W",
+    "SOCKET_SOCKET_Floor"
+   ],
+   "materials": [
+    "Prop_ArcadeHall_Foundation_2m_M0",
+    "Prop_ArcadeHall_Foundation_2m_M1"
+   ],
+   "status": "NOT READY"
+  }
+ ],
+ "layouts": [
+  {
+   "id": "corner_arcade",
+   "title": "Corner Arcade (8 x 6 m)",
+   "cells": [
+    4,
+    3
+   ],
+   "counts": {
+    "kit": 42,
+    "props": 12,
+    "decals": 14
+   },
+   "issues": [],
+   "sheet": "layout_corner_arcade_sheet.jpg"
+  },
+  {
+   "id": "prize_hall",
+   "title": "Prize Hall (12 x 8 m)",
+   "cells": [
+    6,
+    4
+   ],
+   "counts": {
+    "kit": 72,
+    "props": 24,
+    "decals": 23
+   },
+   "issues": [],
+   "sheet": "layout_prize_hall_sheet.jpg"
+  },
+  {
+   "id": "heart_hall",
+   "title": "Heart Hall (10 x 10 m)",
+   "cells": [
+    5,
+    5
+   ],
+   "counts": {
+    "kit": 74,
+    "props": 23,
+    "decals": 25
+   },
+   "issues": [],
+   "sheet": "layout_heart_hall_sheet.jpg"
+  }
+ ],
+ "sheets": [
+  "pieces_sheet.jpg",
+  "layout_corner_arcade_sheet.jpg",
+  "layout_prize_hall_sheet.jpg",
+  "layout_heart_hall_sheet.jpg"
+ ]
+}

@@ -1,0 +1,1259 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_YTM_AppleTree",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G258",
+    "ask": "youtube-master 55087",
+    "lod": "LOD0/1",
+    "size_m": "3.2 m apple tree, fruit cluster sockets",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Trunk",
+     "SOCKET_Cluster_0",
+     "SOCKET_Cluster_1",
+     "SOCKET_Cluster_2",
+     "SOCKET_Cluster_3",
+     "SOCKET_Cluster_4",
+     "SOCKET_Cluster_5",
+     "SOCKET_Cluster_6",
+     "SOCKET_Cluster_7",
+     "SOCKET_Cluster_8",
+     "SOCKET_Cluster_9"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_AppleTree_M0",
+     "colour": "bark",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_AppleTree_M1",
+     "colour": "leaves (G66 green)",
+     "hex": "5E9A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_AppleTree_M2",
+     "colour": "fruit",
+     "hex": "C83A30",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_AppleTree",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Trunk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.14,
+       "r2": 0.08,
+       "length": 1.76,
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Crown0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01,
+         -0.55
+        ],
+        [
+         0.6,
+         -0.3
+        ],
+        [
+         0.65,
+         0.1
+        ],
+        [
+         0.01,
+         0.5
+        ]
+       ],
+       "centre": [
+        0.45,
+        0.0,
+        2.71491
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Crown1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01,
+         -0.55
+        ],
+        [
+         0.6,
+         -0.3
+        ],
+        [
+         0.65,
+         0.1
+        ],
+        [
+         0.01,
+         0.5
+        ]
+       ],
+       "centre": [
+        0.13906,
+        0.42798,
+        2.7136
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Crown2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01,
+         -0.55
+        ],
+        [
+         0.6,
+         -0.3
+        ],
+        [
+         0.65,
+         0.1
+        ],
+        [
+         0.01,
+         0.5
+        ]
+       ],
+       "centre": [
+        -0.36406,
+        0.2645,
+        2.71351
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Crown3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01,
+         -0.55
+        ],
+        [
+         0.6,
+         -0.3
+        ],
+        [
+         0.65,
+         0.1
+        ],
+        [
+         0.01,
+         0.5
+        ]
+       ],
+       "centre": [
+        -0.36406,
+        -0.2645,
+        2.51862
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Crown4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01,
+         -0.55
+        ],
+        [
+         0.6,
+         -0.3
+        ],
+        [
+         0.65,
+         0.1
+        ],
+        [
+         0.01,
+         0.5
+        ]
+       ],
+       "centre": [
+        0.13906,
+        -0.42798,
+        2.62943
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CrownTop",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.01,
+         -0.5
+        ],
+        [
+         0.7,
+         -0.2
+        ],
+        [
+         0.6,
+         0.25
+        ],
+        [
+         0.01,
+         0.55
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        2.8
+       ],
+       "slot": 1,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Fruit0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        0.95,
+        0.0,
+        2.3
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Fruit1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        -0.69988,
+        0.64239,
+        2.485
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Fruit2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        0.08123,
+        -0.94652,
+        2.67
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Fruit3",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        0.58019,
+        0.75225,
+        2.355
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Fruit4",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        -0.93611,
+        -0.16187,
+        2.54
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Fruit5",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        0.7991,
+        -0.51375,
+        2.725
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Fruit6",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        -0.24132,
+        0.91884,
+        2.41
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Fruit7",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        -0.44354,
+        -0.8401,
+        2.595
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Fruit8",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        0.89484,
+        0.319,
+        2.78
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Fruit9",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.04,
+       "length": 0.08,
+       "centre": [
+        -0.87495,
+        0.37008,
+        2.465
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Trunk",
+     "location": [
+      0,
+      -0.15,
+      1.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.0,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_0",
+     "location": [
+      0.95,
+      0.0,
+      2.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.95,
+      2.3,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_1",
+     "location": [
+      -0.69988,
+      0.64239,
+      2.485
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.69988,
+      2.485,
+      -0.64239
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_2",
+     "location": [
+      0.08123,
+      -0.94652,
+      2.67
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.08123,
+      2.67,
+      0.94652
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_3",
+     "location": [
+      0.58019,
+      0.75225,
+      2.355
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.58019,
+      2.355,
+      -0.75225
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_4",
+     "location": [
+      -0.93611,
+      -0.16187,
+      2.54
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.93611,
+      2.54,
+      0.16187
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_5",
+     "location": [
+      0.7991,
+      -0.51375,
+      2.725
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.7991,
+      2.725,
+      0.51375
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_6",
+     "location": [
+      -0.24132,
+      0.91884,
+      2.41
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.24132,
+      2.41,
+      -0.91884
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_7",
+     "location": [
+      -0.44354,
+      -0.8401,
+      2.595
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.44354,
+      2.595,
+      0.8401
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_8",
+     "location": [
+      0.89484,
+      0.319,
+      2.78
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.89484,
+      2.78,
+      -0.319
+     ]
+    },
+    {
+     "name": "SOCKET_Cluster_9",
+     "location": [
+      -0.87495,
+      0.37008,
+      2.465
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.87495,
+      2.465,
+      -0.37008
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_AppleTree_00",
+     "shape": "cyl",
+     "axis": "z",
+     "r1": 0.15,
+     "r2": 0.15,
+     "length": 1.7600000000000002,
+     "centre": [
+      0,
+      0,
+      0.88
+     ],
+     "segments": 8,
+     "parent": null,
+     "tris": 28,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 604,
+    "lod1_triangles": 604,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_AppleTree": 604
+    },
+    "bounds_min": [
+     -1.0141,
+     -1.078,
+     0.0
+    ],
+    "bounds_max": [
+     1.1,
+     1.078,
+     3.35
+    ],
+    "dimensions": [
+     2.1141,
+     2.156,
+     3.35
+    ],
+    "collision_tris": 28
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4838d1c35cebe53e4ca6ee616024f220eda7664d32c6dcdafc2eb3ec6461b85e"
+  },
+  {
+   "asset": "Prop_YTM_AppleBasket",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G258",
+    "ask": "youtube-master 55087",
+    "lod": "LOD0/1",
+    "size_m": "0.44 m dia x 0.25 m apple basket",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Contents",
+     "SOCKET_Hand"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_AppleBasket_M0",
+     "colour": "wicker (G66)",
+     "hex": "C8A060",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_AppleBasket_M1",
+     "colour": "rim / handle",
+     "hex": "6A4E36",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_AppleBasket_M2",
+     "colour": "apples",
+     "hex": "C83A30",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_AppleBasket",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Weave",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.176,
+         0
+        ],
+        [
+         0.22,
+         0.2125
+        ],
+        [
+         0.2288,
+         0.25
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 14,
+       "caps": [
+        true,
+        false
+       ]
+      },
+      {
+       "name": "Rim",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.2156,
+         0.238
+        ],
+        [
+         0.2376,
+         0.238
+        ],
+        [
+         0.2376,
+         0.268
+        ],
+        [
+         0.2156,
+         0.268
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 1,
+       "segments": 14,
+       "caps": [
+        false,
+        false
+       ]
+      },
+      {
+       "name": "Handle",
+       "shape": "slab",
+       "outline": [
+        [
+         0.209,
+         0.0
+        ],
+        [
+         0.198771,
+         0.064585
+        ],
+        [
+         0.169085,
+         0.122847
+        ],
+        [
+         0.122847,
+         0.169085
+        ],
+        [
+         0.064585,
+         0.198771
+        ],
+        [
+         0.0,
+         0.209
+        ],
+        [
+         -0.064585,
+         0.198771
+        ],
+        [
+         -0.122847,
+         0.169085
+        ],
+        [
+         -0.169085,
+         0.122847
+        ],
+        [
+         -0.198771,
+         0.064585
+        ],
+        [
+         -0.209,
+         0.0
+        ],
+        [
+         -0.1958,
+         0.0
+        ],
+        [
+         -0.186217,
+         0.060506
+        ],
+        [
+         -0.158406,
+         0.115088
+        ],
+        [
+         -0.115088,
+         0.158406
+        ],
+        [
+         -0.060506,
+         0.186217
+        ],
+        [
+         0.0,
+         0.1958
+        ],
+        [
+         0.060506,
+         0.186217
+        ],
+        [
+         0.115088,
+         0.158406
+        ],
+        [
+         0.158406,
+         0.115088
+        ],
+        [
+         0.186217,
+         0.060506
+        ],
+        [
+         0.1958,
+         0.0
+        ]
+       ],
+       "thickness": 0.02,
+       "centre": [
+        0,
+        0,
+        0.25
+       ],
+       "slot": 1,
+       "segments": 22,
+       "rot": [
+        90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Fill",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.209,
+       "r2": 0.132,
+       "length": 0.0625,
+       "centre": [
+        0,
+        0,
+        0.2375
+       ],
+       "slot": 2,
+       "segments": 12
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Contents",
+     "location": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.25,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hand",
+     "location": [
+      0,
+      0,
+      0.437
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.437,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 280,
+    "lod1_triangles": 280,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_AppleBasket": 280
+    },
+    "bounds_min": [
+     -0.2376,
+     -0.2316,
+     0
+    ],
+    "bounds_max": [
+     0.2376,
+     0.2316,
+     0.459
+    ],
+    "dimensions": [
+     0.4752,
+     0.4632,
+     0.459
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "aad74ae11ad7912d8fd676982b4710c0e4e31eaee8bac25fdcfcb6c59cf50399"
+  },
+  {
+   "asset": "Prop_YTM_Beehive",
+   "kind": "Prop",
+   "seed": 26102026,
+   "spec": {
+    "gap": "G258",
+    "ask": "youtube-master 55087",
+    "lod": "LOD0/1",
+    "size_m": "0.54 m straw skep on a stand",
+    "tri_cap": 6000,
+    "sockets": [
+     "SOCKET_Entrance",
+     "SOCKET_Swarm"
+    ],
+    "style": "G66 stall palette (ytm_g116)"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_YTM_Beehive_M0",
+     "colour": "stand (G66 timber)",
+     "hex": "7A5A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_YTM_Beehive_M1",
+     "colour": "straw skep",
+     "hex": "C8A858",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_YTM_Beehive_M2",
+     "colour": "entrance",
+     "hex": "2A2420",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_YTM_Beehive",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stand",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.5,
+        0.4
+       ],
+       "centre": [
+        0,
+        0,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Skep",
+       "shape": "lathe",
+       "profile": [
+        [
+         0.25,
+         0
+        ],
+        [
+         0.27,
+         0.15
+        ],
+        [
+         0.2,
+         0.38
+        ],
+        [
+         0.02,
+         0.48
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.4
+       ],
+       "slot": 1,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Entry",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.02,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.43
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Entrance",
+     "location": [
+      0,
+      -0.27,
+      0.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.43,
+      0.27
+     ]
+    },
+    {
+     "name": "SOCKET_Swarm",
+     "location": [
+      0,
+      -0.4,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      0.4
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_YTM_Beehive_00",
+     "shape": "box",
+     "size": [
+      0.55,
+      0.55,
+      0.9
+     ],
+     "centre": [
+      0,
+      0,
+      0.45
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 148,
+    "lod1_triangles": 148,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_YTM_Beehive": 148
+    },
+    "bounds_min": [
+     -0.27,
+     -0.27,
+     0.0
+    ],
+    "bounds_max": [
+     0.27,
+     0.27,
+     0.88
+    ],
+    "dimensions": [
+     0.54,
+     0.54,
+     0.88
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "8ca7cb756c49d59275c86f1339f0abfa6401093074f7f92a7e7e66698d957322"
+  }
+ ]
+}

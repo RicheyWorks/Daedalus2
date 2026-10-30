@@ -12,7 +12,7 @@
 namespace daedalus { namespace desktop {
 enum class SaveStyle { Manual, SourceMenu };
 struct SaveSlot { const char* Id; const char* File; SaveStyle Style; };
-inline constexpr std::array<SaveSlot,14> SaveSlots{{
+inline constexpr std::array<SaveSlot,20> SaveSlots{{
     {"beacon_sweep","beacon_sweep.dgs",SaveStyle::Manual},
     {"star_shooter","star_shooter.dgs",SaveStyle::SourceMenu},
     {"twinwake","twinwake.dgs",SaveStyle::Manual},
@@ -25,6 +25,12 @@ inline constexpr std::array<SaveSlot,14> SaveSlots{{
     {"emberstep","emberstep.dgs",SaveStyle::Manual},
     {"dodge_ball","dodge_ball.dgs",SaveStyle::Manual},
     {"ironwake","ironwake.dgs",SaveStyle::Manual},
+    {"shardring","shardring.dgs",SaveStyle::Manual},
+    {"lumenpath","lumenpath.dgs",SaveStyle::Manual},
+    {"wardens_accord","wardens_accord.dgs",SaveStyle::Manual},
+    {"facetlock","facetlock.dgs",SaveStyle::Manual},
+    {"prismcairn","prismcairn.dgs",SaveStyle::Manual},
+    {"prismvault","prismvault.dgs",SaveStyle::Manual},
     {"gloam_latch","gloam_latch.dgs",SaveStyle::Manual},
     {"reedbeat","reedbeat.dgs",SaveStyle::Manual},
 }};

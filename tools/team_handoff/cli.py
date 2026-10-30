@@ -9,6 +9,7 @@ from .packet import read_json, read_packet, seal
 from .source_snapshot import capture, read_snapshot
 from . import operation_journal
 from . import checkpoint_store
+from . import source_request
 
 
 def main(argv=None):
@@ -26,6 +27,10 @@ def main(argv=None):
     inspect_snapshot = commands.add_parser("inspect-source-snapshot", help="Verify the composite source capture and sealed packet")
     inspect_snapshot.add_argument("--store", required=True)
     inspect_snapshot.add_argument("--expected-receipt", help="Advertised source capture result SHA-256")
+    source_request_command = commands.add_parser("source-request", help="Pin only explicitly selected retained files into an existing source request")
+    source_request_command.add_argument("--selection", required=True)
+    source_request_command.add_argument("--source-root", required=True)
+    source_request_command.add_argument("--captured-utc", required=True, help="Explicit caller UTC declaration, never a worker START or saved event")
     checkpoint_publish = commands.add_parser("checkpoint-publish", help="Advertise a complete composite snapshot in an owned rolling index")
     checkpoint_publish.add_argument("--store", required=True)
     checkpoint_publish.add_argument("--request", required=True)
@@ -56,7 +61,9 @@ def main(argv=None):
             command.add_argument("--request", required=True)
     args = parser.parse_args(argv)
     try:
-        if args.command == "checkpoint-publish":
+        if args.command == "source-request":
+            result = source_request.build_request(read_json(args.selection), args.source_root, args.captured_utc)
+        elif args.command == "checkpoint-publish":
             result = checkpoint_store.publish(args.store, read_json(args.request), args.source_root,
                                               None if args.expected_current == "none" else args.expected_current)
         elif args.command == "checkpoint-inspect":

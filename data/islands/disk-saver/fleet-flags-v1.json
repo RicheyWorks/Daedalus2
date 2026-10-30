@@ -1,0 +1,11 @@
+{
+  "v": 1,
+  "quest": "q_fleet_flags",
+  "lore": "Each realm sails as one squadron, and from the signal tower Signal Yeoman Marisol runs a single flag up the mast for each of them: green when every island in the squadron rides easy, amber when one is near its limit, red when one is over or a world cannot keep all its islands afloat. She also checks the squadron rolls against the ships actually in harbour and hoists a query pennant when they disagree.",
+  "hook": {"report_format": "daedalus-fleet-flags", "field": "verdict", "values": ["fair", "signal", "distress"],
+           "masts": "realms[].flag", "query_pennants": "tally_mismatches[]", "flagship": "realms[].heaviest_world"},
+  "npc": {"name": "Signal Yeoman Marisol", "lines": {
+    "fair": "Green flags on every mast. The whole fleet rides easy.",
+    "signal": "An amber flag is flying. One squadron has an island close to its limit.",
+    "distress": "Red at the masthead. A squadron has an island over budget or a world it cannot hold."}}
+}

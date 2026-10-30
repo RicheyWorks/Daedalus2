@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: MIT
+name: Budget Trend Ledger
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/streaming/budget_ledger.py'
+      - 'tools/streaming/budget_ledger_test.py'
+      - 'tools/streaming/census_budget.py'
+      - 'tools/world_census/**'
+      - 'data/islands/disk-saver/budget-ledger-v1.json'
+      - 'data/islands/disk-saver/budget-ledger-example.jsonl'
+      - 'data/islands/disk-saver/census-budget-v1.json'
+      - '.github/workflows/budget-ledger.yml'
+permissions:
+  contents: read
+jobs:
+  budget-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - name: G517 Budget Trend Ledger (drift kinds, deltas = brute force, trend, example ledger = real census pipeline)
+        run: python -B -m unittest tools/streaming/budget_ledger_test.py -v
+      - name: Ledger round trip (real world census -> record twice -> diff --fail-on-worse is steady)
+        run: |
+          python -B -m tools.world_census tools/world_census/fixtures/alpha.json tools/world_census/fixtures/beta.json --snapshot-date 2026-10-26 --bindings tools/world_census/fixtures/bindings.json --output-dir "$RUNNER_TEMP/census"
+          python tools/streaming/budget_ledger.py record "$RUNNER_TEMP/census/census.json" --ledger "$RUNNER_TEMP/ledger.jsonl" --run ci-1 --at 2026-10-26
+          python tools/streaming/budget_ledger.py record "$RUNNER_TEMP/census/census.json" --ledger "$RUNNER_TEMP/ledger.jsonl" --run ci-2 --at 2026-10-26
+          python tools/streaming/budget_ledger.py diff --ledger "$RUNNER_TEMP/ledger.jsonl" --fail-on-worse
+          python tools/streaming/budget_ledger.py trend --ledger "$RUNNER_TEMP/ledger.jsonl" --json --fail-on-worse

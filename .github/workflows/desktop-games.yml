@@ -29,12 +29,20 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.10"
+      # ccache (item 19): the gcc sanitizer compile is the slowest step
+      # (450-595 s on the runs that needed reruns); cache objects per compiler.
+      - name: Compiler cache (Linux)
+        if: runner.os == 'Linux'
+        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2
+        with:
+          key: desktop-games-${{ matrix.compiler }}
+          max-size: 500M
       - name: Configure Linux with sanitizers
         if: runner.os == 'Linux'
-        run: cmake -S engines/unreal/core-test/desktop_games -B desktop-build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DDESKTOP_SANITIZERS=ON
+        run: cmake -S engines/unreal/core-test/desktop_games -B desktop-build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DDESKTOP_SANITIZERS=ON
       - name: Configure MSVC
         if: runner.os == 'Windows'
         run: cmake -S engines/unreal/core-test/desktop_games -B desktop-build
@@ -44,6 +52,20 @@ jobs:
         run: python tools/minigames/catalog_validate.py
       - name: Leaderboard feed hook matches the catalog and does not post
         run: python tools/minigames/leaderboard_feed.py --check
+      - name: Shardring parity fixture is current (engines/unreal/core-test/shardring_parity.txt)
+        run: python tools/minigames/shardring_parity.py --check
+      - name: Lumenpath parity fixture is current (engines/unreal/core-test/lumenpath_parity.txt)
+        run: python tools/minigames/lumenpath_parity.py --check
+      - name: Shadewatch parity fixture is current (engines/unreal/core-test/shadewatch_parity.txt)
+        run: python tools/minigames/shadewatch_parity.py --check
+      - name: Wardens' Accord parity fixture is current (engines/unreal/core-test/wardens_accord_parity.txt)
+        run: python tools/minigames/wardens_accord_parity.py --check
+      - name: Facetlock parity fixture is current (engines/unreal/core-test/facetlock_parity.txt)
+        run: python tools/minigames/facetlock_parity.py --check
+      - name: Prismcairn parity fixture is current (engines/unreal/core-test/prismcairn_parity.txt)
+        run: python tools/minigames/prismcairn_parity.py --check
+      - name: Prismvault parity fixture is current (engines/unreal/core-test/prismvault_parity.txt)
+        run: python tools/minigames/prismvault_parity.py --check
       - name: Realm cabinet placements are current and tested
         run: |
           python tools/minigames/realm_cabinets.py --check

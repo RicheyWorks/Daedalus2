@@ -54,6 +54,34 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public kennel_voyage_core_test.cpp -o kennel_voyage_core_test && ./kennel_voyage_core_test kennel_voyage_parity.txt
       - name: Kennel Isle voyage + landfall core, clang (G154)
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public kennel_voyage_core_test.cpp -o kennel_voyage_core_test_clang && ./kennel_voyage_core_test_clang kennel_voyage_parity.txt
+      - name: Shardring Resonance core (DaedalusShardringCore.h replays shardring_parity.txt generated from tools/minigames/prism_shard.py; Oracle-fed, no PRNG port)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shardring_core_test.cpp -o shardring_core_test && ./shardring_core_test shardring_parity.txt
+      - name: Shardring Resonance core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardring_core_test.cpp -o shardring_core_test_clang && ./shardring_core_test_clang shardring_parity.txt
+      - name: Lumenpath Refraction core (DaedalusLumenpathCore.h regenerates lumenpath_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public lumenpath_core_test.cpp -o lumenpath_core_test && ./lumenpath_core_test lumenpath_parity.txt
+      - name: Lumenpath Refraction core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public lumenpath_core_test.cpp -o lumenpath_core_test_clang && ./lumenpath_core_test_clang lumenpath_parity.txt
+      - name: Shadewatch Vigil core (DaedalusShadewatchCore.h regenerates shadewatch_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shadewatch_core_test.cpp -o shadewatch_core_test && ./shadewatch_core_test shadewatch_parity.txt
+      - name: Shadewatch Vigil core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shadewatch_core_test.cpp -o shadewatch_core_test_clang && ./shadewatch_core_test_clang shadewatch_parity.txt
+      - name: Wardens' Accord core (DaedalusWardensAccordCore.h regenerates wardens_accord_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public wardens_accord_core_test.cpp -o wardens_accord_core_test && ./wardens_accord_core_test wardens_accord_parity.txt
+      - name: Wardens' Accord core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public wardens_accord_core_test.cpp -o wardens_accord_core_test_clang && ./wardens_accord_core_test_clang wardens_accord_parity.txt
+      - name: Facetlock Lattice core (DaedalusFacetlockCore.h regenerates facetlock_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public facetlock_core_test.cpp -o facetlock_core_test && ./facetlock_core_test facetlock_parity.txt
+      - name: Facetlock Lattice core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public facetlock_core_test.cpp -o facetlock_core_test_clang && ./facetlock_core_test_clang facetlock_parity.txt
+      - name: Prismcairn Duel core (DaedalusPrismcairnCore.h regenerates prismcairn_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public prismcairn_core_test.cpp -o prismcairn_core_test && ./prismcairn_core_test prismcairn_parity.txt
+      - name: Prismcairn Duel core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prismcairn_core_test.cpp -o prismcairn_core_test_clang && ./prismcairn_core_test_clang prismcairn_parity.txt
+      - name: Prismvault Weigh core (DaedalusPrismvaultCore.h regenerates prismvault_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public prismvault_core_test.cpp -o prismvault_core_test && ./prismvault_core_test prismvault_parity.txt
+      - name: Prismvault Weigh core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prismvault_core_test.cpp -o prismvault_core_test_clang && ./prismvault_core_test_clang prismvault_parity.txt
       - name: LAB03 Echo Bell gate session (AEchoBellGate cue scheduling, taps, judge, retry; replays docs/contracts/echo-bell-v1 CUE-SHEET.md + peals.ebg)
         run: |
           cmp echo_bell/DaedalusEchoBellCore.h ../DaedalusLink/Source/DaedalusLink/Public/DaedalusEchoBellCore.h
