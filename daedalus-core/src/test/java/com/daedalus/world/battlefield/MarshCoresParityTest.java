@@ -178,7 +178,9 @@ class MarshCoresParityTest {
                     + " greedy=" + csv(greedy.schedule()) + " greedyRisk=" + greedy.risk() + " bestLo="
                     + plan.riskInterval(toArray(best.schedule()))[0] + " bestHi="
                     + plan.riskInterval(toArray(best.schedule()))[1] + " survival=" + csvD(survivalSample(plan,
-                    toArray(best.schedule()))));
+                    toArray(best.schedule()))) + " polished=" + csv(plan.greedyPolished().schedule())
+                    + " polishedRisk=" + plan.greedyPolished().risk() + " cohortRisks="
+                    + csvD(java.util.Arrays.stream(plan.cohortRisks()).boxed().toList()));
         }
         // start, budget, perYear, releaseYears, horizon, threshold, sigma, cohort, runs
         double[][] bad = {{-1, 0, 0, 1, 1, 10, 0.2, 3, 5}, {0, -1, 0, 1, 1, 10, 0.2, 3, 5},

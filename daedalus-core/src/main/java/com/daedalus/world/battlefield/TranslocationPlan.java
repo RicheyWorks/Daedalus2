@@ -120,10 +120,12 @@ public final class TranslocationPlan {
     private final CraneCohorts flock;
     private final Settings settings;
     private final double[][] shock;
+    private final long seed;
 
     private TranslocationPlan(CraneCohorts flock, Settings settings, long seed) {
         this.flock = flock;
         this.settings = settings;
+        this.seed = seed;
         this.shock = new double[settings.runs()][settings.horizon()];
         double s = settings.sigma();
         for (int r = 0; r < settings.runs(); r++) {
@@ -191,6 +193,55 @@ public final class TranslocationPlan {
             cur[bestYear]++;
         }
         return new Plan(list(cur), risk(cur));
+    }
+
+    /**
+     * Local search from a schedule: move one bird from year i to year j (first improving move, i then j ascending)
+     * while the risk strictly drops. Never worse than the start, and much cheaper than {@link #best()}.
+     */
+    public Plan polish(int[] schedule) {
+        check(schedule);
+        int[] cur = schedule.clone();
+        double r = risk(cur);
+        boolean moved = true;
+        while (moved && r > 0) {
+            moved = false;
+            for (int i = 0; i < cur.length && !moved; i++) {
+                for (int j = 0; j < cur.length && !moved; j++) {
+                    if (i == j || cur[i] == 0 || cur[j] >= settings.perYear()) {
+                        continue;
+                    }
+                    cur[i]--;
+                    cur[j]++;
+                    double next = risk(cur);
+                    if (next < r) {
+                        r = next;
+                        moved = true;
+                    } else {
+                        cur[i]++;
+                        cur[j]--;
+                    }
+                }
+            }
+        }
+        return new Plan(list(cur), r);
+    }
+
+    /** Greedy, then polished by single-bird moves. */
+    public Plan greedyPolished() {
+        return polish(greedy().schedule().stream().mapToInt(Integer::intValue).toArray());
+    }
+
+    /**
+     * Polished-greedy risk for releasing into each G194 cohort (index = cohort), on the same shocks. The keeper's
+     * "which birds?" answer is the lowest entry; it should agree with {@link CraneCohorts#bestRelease()}.
+     */
+    public double[] cohortRisks() {
+        double[] out = new double[CraneCohorts.COHORTS];
+        for (int c = 0; c < out.length; c++) {
+            out[c] = of(flock, settings.withCohort(c), seed).greedyPolished().risk();
+        }
+        return out;
     }
 
     /** Every bird in year 0 (as many as the per-year cap allows, the rest the next years). */

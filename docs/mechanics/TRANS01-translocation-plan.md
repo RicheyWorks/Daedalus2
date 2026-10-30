@@ -1,7 +1,7 @@
 # TRANS01 - Translocation Plan (contest G251)
 
 Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/TranslocationPlan.java`
-Tests: `TranslocationPlanTest` (14 tests). Source only; no Unreal, no new assets.
+Tests: `TranslocationPlanTest` (16 tests). Source only; no Unreal, no new assets.
 
 ## Story / Daedalus hook
 
@@ -36,7 +36,7 @@ The lesson: release early and release breeders. Exact best schedules among the e
 the Monte Carlo noise (about 0.02 at 400 runs). Adults halve the risk compared with chicks, matching the G194
 reproductive values.
 
-## Tests (TranslocationPlanTest, 14)
+## Tests (TranslocationPlanTest, 16)
 
 1. Best spends the whole budget and beats even, front-loaded, late and no-release schedules.
 2. Greedy is never better than exact and stays within 0.03 of it (budgets 4, 10, 16).
@@ -55,6 +55,9 @@ reproductive values.
 13. Edge cases run: one release year with horizon 1, and a zero budget with `perYear` 0 below the threshold
     (risk 1).
 14. `survival` never rises, ends at 1 - risk, and front-loaded is ahead of back-loaded by year 10.
+15. Polishing never hurts: polished greedy is between greedy and exact best (budgets 4, 10, 16), and polishing
+    back-loaded lowers its risk.
+16. `cohortRisks()` puts the G194 `bestRelease()` cohort lowest, and chicks above adults.
 
 ## Assets
 
@@ -94,3 +97,9 @@ them.
    sample the best plan's curve every 5 years.
 6. **Edge-case vectors.** Three new golden plans: one release year with horizon 1, a zero budget with `perYear` 0
    that starts below the threshold (risk 1), and a chick release with heavy noise.
+7. **Polish.** `polish(schedule)` (C++ `Polish`) hill-climbs by single-bird moves while the risk strictly drops.
+   `greedyPolished()` closes part of the greedy gap at a fraction of `best()`'s cost: on the first golden plan,
+   greedy 0.233 becomes 0.225, against an exact 0.208.
+8. **Which birds?** `cohortRisks()` (C++ `CohortRisks`) gives the polished-greedy risk for releasing into each G194
+   cohort on the same shocks, so the quest can show why adults are the answer. The golden vectors carry all four
+   risks for every plan.
