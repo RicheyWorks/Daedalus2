@@ -1,0 +1,433 @@
+# disksaver quay_duel parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit
+C real_seed0
+L 16384,16384,16408
+P 16408
+T 0 auto ok 32792 16384 16408 0 RLL won
+T 0 R,L ok 32792 16384 16408 0 RLL won
+T 0 L,L ok 32768 16408 16408 48 LRL won
+T 0 R,R ok 32792 16384 16408 0 RLR won
+T 0 R err short
+T 0 R,L,L err long
+T 0 X,L err move
+T 0 - err short
+T 0 L,R ok 32768 16408 16408 48 LRR won
+T 0 l,l err move
+T 1 auto ok 16384 32792 -16408 0 RLL lost
+T 1 L ok 16384 32792 -16408 0 RLL lost
+T 1 L ok 16384 32792 -16408 0 RLL lost
+T 1 R ok 16384 32792 -16408 0 RRL lost
+T 1 - err short
+T 1 L,L err long
+T 1 X err move
+T 1 - err short
+T 1 L ok 16384 32792 -16408 0 RLL lost
+T 1 l err move
+T 1 both err mode
+C real_seed1
+L 16384,16384,16408
+P 16408
+T 0 auto ok 32792 16384 16408 0 RLL won
+T 0 R,L ok 32792 16384 16408 0 RLL won
+T 0 L,L ok 32768 16408 16408 48 LRL won
+T 0 R,R ok 32792 16384 16408 0 RLR won
+T 0 R err short
+T 0 R,L,L err long
+T 0 X,L err move
+T 0 - err short
+T 0 L,R ok 32768 16408 16408 48 LRR won
+T 0 l,l err move
+T 1 auto ok 16384 32792 -16408 0 RLL lost
+T 1 L ok 16384 32792 -16408 0 RLL lost
+T 1 L ok 16384 32792 -16408 0 RLL lost
+T 1 R ok 16384 32792 -16408 0 RRL lost
+T 1 - err short
+T 1 L,L err long
+T 1 X err move
+T 1 - err short
+T 1 L ok 16384 32792 -16408 0 RLL lost
+T 1 l err move
+T 1 both err mode
+C real_seed7
+L 16384,16408,16384
+P 16360
+T 0 auto ok 32768 16408 16360 0 LLL won
+T 0 L,L ok 32768 16408 16360 0 LLL won
+T 0 L,L ok 32768 16408 16360 0 LLL won
+T 0 R,R ok 32768 16408 16360 0 RRR won
+T 0 L err short
+T 0 L,L,L err long
+T 0 X,L err move
+T 0 - err short
+T 0 L,R ok 32768 16408 16360 0 LLR won
+T 0 l,l err move
+T 1 auto ok 16408 32768 -16360 0 LLL lost
+T 1 L ok 16408 32768 -16360 0 LLL lost
+T 1 L ok 16408 32768 -16360 0 LLL lost
+T 1 R ok 16384 32792 -16360 48 LRL lost
+T 1 - err short
+T 1 L,L err long
+T 1 X err move
+T 1 - err short
+T 1 L ok 16408 32768 -16360 0 LLL lost
+T 1 l err move
+T 1 both err mode
+C real_seed42
+L 16384,16408,16384
+P 16360
+T 0 auto ok 32768 16408 16360 0 LLL won
+T 0 L,L ok 32768 16408 16360 0 LLL won
+T 0 L,L ok 32768 16408 16360 0 LLL won
+T 0 R,R ok 32768 16408 16360 0 RRR won
+T 0 L err short
+T 0 L,L,L err long
+T 0 X,L err move
+T 0 - err short
+T 0 L,R ok 32768 16408 16360 0 LLR won
+T 0 l,l err move
+T 1 auto ok 16408 32768 -16360 0 LLL lost
+T 1 L ok 16408 32768 -16360 0 LLL lost
+T 1 L ok 16408 32768 -16360 0 LLL lost
+T 1 R ok 16384 32792 -16360 48 LRL lost
+T 1 - err short
+T 1 L,L err long
+T 1 X err move
+T 1 - err short
+T 1 L ok 16408 32768 -16360 0 LLL lost
+T 1 l err move
+T 1 both err mode
+C syn5_seed1
+L 16672,16456,16552,18544,17344
+P 15568
+T 0 auto ok 50568 35000 15568 0 LLLLL won
+T 0 L,L,L ok 50568 35000 15568 0 LLLLL won
+T 0 L,L,L ok 50568 35000 15568 0 LLLLL won
+T 0 R,R,R ok 50352 35216 15568 432 RRRLR won
+T 0 L,L err short
+T 0 L,L,L,L err long
+T 0 X,L,L err move
+T 0 - err short
+T 0 L,R,L ok 50568 35000 15568 0 LLRRL won
+T 0 l,l,l err move
+T 1 auto ok 35000 50568 -15568 0 LLLLL lost
+T 1 L,L ok 35000 50568 -15568 0 LLLLL lost
+T 1 L,L ok 35000 50568 -15568 0 LLLLL lost
+T 1 R,R ok 33896 51672 -15568 2208 LRRRL lost
+T 1 L err short
+T 1 L,L,L err long
+T 1 X,L err move
+T 1 - err short
+T 1 L,R ok 33800 51768 -15568 2400 LLLRL lost
+T 1 l,l err move
+T 1 both err mode
+C syn5_seed7
+L 16672,16456,17344,16552,18544
+P 17536
+T 0 auto ok 51552 34016 17536 0 RLLLL won
+T 0 R,L,L ok 51552 34016 17536 0 RLLLL won
+T 0 L,L,L ok 49680 35888 17536 3744 LRLLL won
+T 0 R,R,R ok 51552 34016 17536 0 RLRRR won
+T 0 R,L err short
+T 0 R,L,L,L err long
+T 0 X,L,L err move
+T 0 - err short
+T 0 L,R,L ok 49680 35888 17536 3744 LRRRL won
+T 0 l,l,l err move
+T 1 auto ok 34016 51552 -17536 0 RLLLL lost
+T 1 L,L ok 34016 51552 -17536 0 RLLLL lost
+T 1 L,L ok 34016 51552 -17536 0 RLLLL lost
+T 1 R,R ok 33008 52560 -17536 2016 RRRRL lost
+T 1 L err short
+T 1 L,L,L err long
+T 1 X,L err move
+T 1 - err short
+T 1 L,R ok 33224 52344 -17536 1584 RLLRL lost
+T 1 l,l err move
+T 1 both err mode
+C syn6_seed1
+L 16456,16432,16408,16480,16504,30784
+P 14328
+T 0 auto ok 63696 49368 14328 0 RRRLLL won
+T 0 R,R,L ok 63696 49368 14328 0 RRRLLL won
+T 0 L,L,L ok 49296 63768 14328 28800 LRLRLL lost
+T 0 R,R,R ok 63672 49392 14328 48 RRRLRL won
+T 0 R,R err short
+T 0 R,R,L,L err long
+T 0 X,R,L err move
+T 0 - err short
+T 0 L,R,L ok 49392 63672 14328 28608 LRRRLL lost
+T 0 l,l,l err move
+T 1 auto ok 49368 63696 -14328 0 RRRLLL lost
+T 1 R,L,L ok 49368 63696 -14328 0 RRRLLL lost
+T 1 L,L,L ok 49296 63768 -14328 144 RLRLRL lost
+T 1 R,R,R ok 49344 63720 -14328 48 RRRRLR lost
+T 1 R,L err short
+T 1 R,L,L,L err long
+T 1 X,L,L err move
+T 1 - err short
+T 1 L,R,L ok 49344 63720 -14328 48 RLRRLL lost
+T 1 l,l,l err move
+T 1 both err mode
+C syn6_seed7
+L 16408,16480,16504,16456,30784,16432
+P 14328
+T 0 auto ok 63696 49368 14328 0 LLLLLL won
+T 0 L,L,L ok 63696 49368 14328 0 LLLLLL won
+T 0 L,L,L ok 63696 49368 14328 0 LLLLLL won
+T 0 R,R,R ok 49368 63696 14328 28656 RRRRRL lost
+T 0 L,L err short
+T 0 L,L,L,L err long
+T 0 X,L,L err move
+T 0 - err short
+T 0 L,R,L ok 49344 63720 14328 28704 LLRRLL lost
+T 0 l,l,l err move
+T 1 auto ok 49368 63696 -14328 0 LLLLLL lost
+T 1 L,L,L ok 49368 63696 -14328 0 LLLLLL lost
+T 1 L,L,L ok 49368 63696 -14328 0 LLLLLL lost
+T 1 R,R,R ok 49368 63696 -14328 0 LRRRRR lost
+T 1 L,L err short
+T 1 L,L,L,L err long
+T 1 X,L,L err move
+T 1 - err short
+T 1 L,R,L ok 49368 63696 -14328 0 LLLRRL lost
+T 1 l,l,l err move
+T 1 both err mode
+C syn8_seed1
+L 16552,16408,17128,16648,16720,16888,17368,16384
+P 1440
+T 0 auto ok 67768 66328 1440 0 LLLLLLLL won
+T 0 L,L,L,L ok 67768 66328 1440 0 LLLLLLLL won
+T 0 L,L,L,L ok 67768 66328 1440 0 LLLLLLLL won
+T 0 R,R,R,R ok 66328 67768 1440 2880 RRRRRRRL lost
+T 0 L,L,L err short
+T 0 L,L,L,L,L err long
+T 0 X,L,L,L err move
+T 0 - err short
+T 0 L,R,L,R ok 66784 67312 1440 1968 LLRRLRRL lost
+T 0 l,l,l,l err move
+T 1 auto ok 66328 67768 -1440 0 LLLLLLLL lost
+T 1 L,L,L,L ok 66328 67768 -1440 0 LLLLLLLL lost
+T 1 L,L,L,L ok 66328 67768 -1440 0 LLLLLLLL lost
+T 1 R,R,R,R ok 66328 67768 -1440 0 LRRRRRRR lost
+T 1 L,L,L err short
+T 1 L,L,L,L,L err long
+T 1 X,L,L,L err move
+T 1 - err short
+T 1 L,R,L,R ok 66160 67936 -1440 336 LLLRRLRR lost
+T 1 l,l,l,l err move
+T 1 both err mode
+C syn8_seed7
+L 16648,16552,16408,16384,16888,16720,17128,17368
+P 528
+T 0 auto ok 67312 66784 528 0 RRLLLLLL won
+T 0 R,L,L,L ok 67312 66784 528 0 RRLLLLLL won
+T 0 L,L,L,L ok 66496 67600 528 1632 LRLRLLLL lost
+T 0 R,R,R,R ok 66880 67216 528 864 RRRRRLRL lost
+T 0 R,L,L err short
+T 0 R,L,L,L,L err long
+T 0 X,L,L,L err move
+T 0 - err short
+T 0 L,R,L,R ok 66904 67192 528 816 LRRLLLRL lost
+T 0 l,l,l,l err move
+T 1 auto ok 66784 67312 -528 0 RRLLLLLL lost
+T 1 R,L,L,L ok 66784 67312 -528 0 RRLLLLLL lost
+T 1 L,L,L,L ok 66304 67792 -528 960 RLRLLLLL lost
+T 1 R,R,R,R ok 66640 67456 -528 288 RRLRRRLR lost
+T 1 R,L,L err short
+T 1 R,L,L,L,L err long
+T 1 X,L,L,L err move
+T 1 - err short
+T 1 L,R,L,R ok 66304 67792 -528 960 RLRRRLLR lost
+T 1 l,l,l,l err move
+T 1 both err mode
+C syn14_seed1
+L 17272,18640,17752,16384,17344,18232,18160,16456,17512,18400,16624,17992,16864,17104
+P 1680
+T 0 auto ok 123208 121528 1680 0 RLLLLLLLLLLLLL won
+T 0 R,L,L,L,L,L,L ok 123208 121528 1680 0 RLLLLLLLLLLLLL won
+T 0 L,L,L,L,L,L,L ok 122488 122248 1680 1440 LLLRLLLLLLLLLL won
+T 0 R,R,R,R,R,R,R ok 120712 124024 1680 4992 RLRLRLRRRLRLRL lost
+T 0 R,L,L,L,L,L err short
+T 0 R,L,L,L,L,L,L,L err long
+T 0 X,L,L,L,L,L,L err move
+T 0 - err short
+T 0 L,R,L,R,L,R,L ok 118864 125872 1680 8688 LLRLLLRLLRRRLL lost
+T 0 l,l,l,l,l,l,l err move
+T 1 auto ok 121528 123208 -1680 0 RLLLLLLLLLLLLL lost
+T 1 L,L,L,L,L,L,L ok 121528 123208 -1680 0 RLLLLLLLLLLLLL lost
+T 1 L,L,L,L,L,L,L ok 121528 123208 -1680 0 RLLLLLLLLLLLLL lost
+T 1 R,R,R,R,R,R,R ok 119344 125392 -1680 4368 RRRRRRLRLRRRLR lost
+T 1 L,L,L,L,L,L err short
+T 1 L,L,L,L,L,L,L,L err long
+T 1 X,L,L,L,L,L,L err move
+T 1 - err short
+T 1 L,R,L,R,L,R,L ok 121288 123448 -1680 480 RLLRRLRRRLLRLL lost
+T 1 l,l,l,l,l,l,l err move
+T 1 both err mode
+C syn14_seed7
+L 17752,17104,16456,18160,17992,16624,17344,16384,18400,16864,17272,18232,17512,18640
+P 3600
+T 0 auto ok 124168 120568 3600 0 RLLRRRLLLLLLLL won
+T 0 R,L,R,L,L,L,L ok 124168 120568 3600 0 RLLRRRLLLLLLLL won
+T 0 L,L,L,L,L,L,L ok 119344 125392 3600 9648 LRLRLRLLLLLLLL lost
+T 0 R,R,R,R,R,R,R ok 121288 123448 3600 5760 RLRRRLRRRRRLRL lost
+T 0 R,L,R,L,L,L err short
+T 0 R,L,R,L,L,L,L,L err long
+T 0 X,L,R,L,L,L,L err move
+T 0 - err short
+T 0 L,R,L,R,L,R,L ok 118696 126040 3600 10944 LRRRLRRRLLRLLL lost
+T 0 l,l,l,l,l,l,l err move
+T 1 auto ok 120568 124168 -3600 0 RLLRRRLLLLLLLL lost
+T 1 L,R,R,L,L,L,L ok 120568 124168 -3600 0 RLLRRRLLLLLLLL lost
+T 1 L,L,L,L,L,L,L ok 119416 125320 -3600 2304 RLLLLLRLRLRLLL lost
+T 1 R,R,R,R,R,R,R ok 119104 125632 -3600 2928 RRRRLRRRRRLRRR lost
+T 1 L,R,R,L,L,L err short
+T 1 L,R,R,L,L,L,L,L err long
+T 1 X,R,R,L,L,L,L err move
+T 1 - err short
+T 1 L,R,L,R,L,R,L ok 118864 125872 -3600 3408 RLLRRLLRLLLRRL lost
+T 1 l,l,l,l,l,l,l err move
+T 1 both err mode
+C hand_one
+L 5
+P 5
+T 0 auto ok 5 0 5 0 L won
+T 0 L ok 5 0 5 0 L won
+T 0 L ok 5 0 5 0 L won
+T 0 R ok 5 0 5 0 R won
+T 0 - err short
+T 0 L,L err long
+T 0 X err move
+T 0 - err short
+T 0 L ok 5 0 5 0 L won
+T 0 l err move
+T 1 auto ok 0 5 -5 0 L lost
+T 1 - ok 0 5 -5 0 L lost
+T 1 - ok 0 5 -5 0 L lost
+T 1 - ok 0 5 -5 0 L lost
+T 1 - ok 0 5 -5 0 L lost
+T 1 L err long
+T 1 X err long
+T 1 - ok 0 5 -5 0 L lost
+T 1 - ok 0 5 -5 0 L lost
+T 1 - ok 0 5 -5 0 L lost
+T 1 both err mode
+C hand_twin
+L 7,7
+P 0
+T 0 auto ok 7 7 0 0 LL tied
+T 0 L ok 7 7 0 0 LL tied
+T 0 L ok 7 7 0 0 LL tied
+T 0 R ok 7 7 0 0 RL tied
+T 0 - err short
+T 0 L,L err long
+T 0 X err move
+T 0 - err short
+T 0 L ok 7 7 0 0 LL tied
+T 0 l err move
+T 1 auto ok 7 7 0 0 LL tied
+T 1 L ok 7 7 0 0 LL tied
+T 1 L ok 7 7 0 0 LL tied
+T 1 R ok 7 7 0 0 LR tied
+T 1 - err short
+T 1 L,L err long
+T 1 X err move
+T 1 - err short
+T 1 L ok 7 7 0 0 LL tied
+T 1 l err move
+T 1 both err mode
+C hand_trap
+L 1,100,1
+P -98
+T 0 auto ok 2 100 -98 0 LLL lost
+T 0 L,L ok 2 100 -98 0 LLL lost
+T 0 L,L ok 2 100 -98 0 LLL lost
+T 0 R,R ok 2 100 -98 0 RRR lost
+T 0 L err short
+T 0 L,L,L err long
+T 0 X,L err move
+T 0 - err short
+T 0 L,R ok 2 100 -98 0 LLR lost
+T 0 l,l err move
+T 1 auto ok 100 2 98 0 LLL won
+T 1 L ok 100 2 98 0 LLL won
+T 1 L ok 100 2 98 0 LLL won
+T 1 R ok 1 101 98 198 LRL lost
+T 1 - err short
+T 1 L,L err long
+T 1 X err move
+T 1 - err short
+T 1 L ok 100 2 98 0 LLL won
+T 1 l err move
+T 1 both err mode
+C hand_classic
+L 3,9,1,2
+P 7
+T 0 auto ok 11 4 7 0 RLLL won
+T 0 R,L ok 11 4 7 0 RLLL won
+T 0 L,L ok 4 11 7 14 LLLL lost
+T 0 R,R ok 3 12 7 16 RLRL lost
+T 0 R err short
+T 0 R,L,L err long
+T 0 X,L err move
+T 0 - err short
+T 0 L,R ok 5 10 7 12 LLRL lost
+T 0 l,l err move
+T 1 auto ok 4 11 -7 0 RLLL lost
+T 1 L,L ok 4 11 -7 0 RLLL lost
+T 1 L,L ok 4 11 -7 0 RLLL lost
+T 1 R,R ok 4 11 -7 0 RRRR lost
+T 1 L err short
+T 1 L,L,L err long
+T 1 X,L err move
+T 1 - err short
+T 1 L,R ok 4 11 -7 0 RLLR lost
+T 1 l,l err move
+T 1 both err mode
+C hand_flat
+L 4,4,4,4,4
+P 4
+T 0 auto ok 12 8 4 0 LLLLL won
+T 0 L,L,L ok 12 8 4 0 LLLLL won
+T 0 L,L,L ok 12 8 4 0 LLLLL won
+T 0 R,R,R ok 12 8 4 0 RLRLR won
+T 0 L,L err short
+T 0 L,L,L,L err long
+T 0 X,L,L err move
+T 0 - err short
+T 0 L,R,L ok 12 8 4 0 LLRLL won
+T 0 l,l,l err move
+T 1 auto ok 8 12 -4 0 LLLLL lost
+T 1 L,L ok 8 12 -4 0 LLLLL lost
+T 1 L,L ok 8 12 -4 0 LLLLL lost
+T 1 R,R ok 8 12 -4 0 LRLRL lost
+T 1 L err short
+T 1 L,L,L err long
+T 1 X,L err move
+T 1 - err short
+T 1 L,R ok 8 12 -4 0 LLLRL lost
+T 1 l,l err move
+T 1 both err mode
+C hand_zero
+L 0,0,0
+P 0
+T 0 auto ok 0 0 0 0 LLL tied
+T 0 L,L ok 0 0 0 0 LLL tied
+T 0 L,L ok 0 0 0 0 LLL tied
+T 0 R,R ok 0 0 0 0 RLR tied
+T 0 L err short
+T 0 L,L,L err long
+T 0 X,L err move
+T 0 - err short
+T 0 L,R ok 0 0 0 0 LLR tied
+T 0 l,l err move
+T 1 auto ok 0 0 0 0 LLL tied
+T 1 L ok 0 0 0 0 LLL tied
+T 1 L ok 0 0 0 0 LLL tied
+T 1 R ok 0 0 0 0 LRL tied
+T 1 - err short
+T 1 L,L err long
+T 1 X err move
+T 1 - err short
+T 1 L ok 0 0 0 0 LLL tied
+T 1 l err move
+T 1 both err mode
