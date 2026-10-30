@@ -156,6 +156,10 @@ inline StarMesh StarMeshBuild(const std::vector<StarPoint>& Pts)
 	});
 	std::vector<bool> Alive;
 	std::unordered_map<int64_t, int> Edge;
+	// Presized for a typical build (about 2n live triangles plus two per flip, 3 directed edges per live one).
+	Tris.reserve(static_cast<size_t>(4 * N));
+	Alive.reserve(static_cast<size_t>(4 * N));
+	Edge.reserve(static_cast<size_t>(6 * N));
 	auto Add = [&](int A, int B, int C) {
 		const int Id = static_cast<int>(Tris.size());
 		Tris.push_back({ A, B, C });
@@ -254,6 +258,52 @@ inline std::vector<std::vector<int>> StarMeshNeighbours(int N, const std::vector
 	{
 		std::sort(L.begin(), L.end());
 		L.erase(std::unique(L.begin(), L.end()), L.end());
+	}
+	return Out;
+}
+
+struct StarEdge { int A, B; }; // A < B
+
+// Every mesh edge once, sorted by A then B; there are 3n - 3 - hull of them.
+inline std::vector<StarEdge> StarMeshEdges(int N, const std::vector<StarTriangle>& Tris)
+{
+	std::vector<StarEdge> Out;
+	const std::vector<std::vector<int>> Nb = StarMeshNeighbours(N, Tris);
+	for (int A = 0; A < N; ++A)
+		for (int B : Nb[static_cast<size_t>(A)])
+			if (A < B) Out.push_back({ A, B });
+	return Out;
+}
+
+// The navigator's chart lines: the Euclidean minimum spanning tree, taken from the mesh edges (it always lies inside
+// the Delaunay mesh). Kruskal over edges ordered by exact squared length, then A, then B; n - 1 edges.
+inline std::vector<StarEdge> StarMeshChartLines(const std::vector<StarPoint>& Pts, const std::vector<StarTriangle>& Tris)
+{
+	const int N = static_cast<int>(Pts.size());
+	std::vector<StarEdge> All = StarMeshEdges(N, Tris);
+	auto Length = [&Pts](const StarEdge& E) {
+		const int64_t Dx = Pts[E.A].X - Pts[E.B].X, Dy = Pts[E.A].Y - Pts[E.B].Y;
+		return Dx * Dx + Dy * Dy;
+	};
+	std::sort(All.begin(), All.end(), [&](const StarEdge& L, const StarEdge& R) {
+		const int64_t Ll = Length(L), Rl = Length(R);
+		return Ll != Rl ? Ll < Rl : L.A != R.A ? L.A < R.A : L.B < R.B;
+	});
+	std::vector<int> Parent(static_cast<size_t>(N));
+	std::iota(Parent.begin(), Parent.end(), 0);
+	auto Root = [&Parent](int X) {
+		while (Parent[X] != X) X = Parent[X] = Parent[Parent[X]];
+		return X;
+	};
+	std::vector<StarEdge> Out;
+	for (const StarEdge& E : All)
+	{
+		const int Ra = Root(E.A), Rb = Root(E.B);
+		if (Ra != Rb)
+		{
+			Parent[Ra] = Rb;
+			Out.push_back(E);
+		}
 	}
 	return Out;
 }

@@ -207,4 +207,74 @@ class StarMeshTest {
         assertThatThrownBy(() -> StarMesh.build(new long[][] {{0, 0}, {1, 1}, {2, 2}}))
                 .hasMessageContaining("collinear");
     }
+
+    /** Prim on the complete graph: the sorted squared lengths of a minimum spanning tree (the same for every MST). */
+    private static long[] primLengths(long[][] p) {
+        int n = p.length;
+        long[] best = new long[n];
+        boolean[] in = new boolean[n];
+        Arrays.fill(best, Long.MAX_VALUE);
+        best[0] = 0;
+        long[] out = new long[n - 1];
+        for (int step = 0; step < n; step++) {
+            int u = -1;
+            for (int i = 0; i < n; i++) {
+                if (!in[i] && (u < 0 || best[i] < best[u])) {
+                    u = i;
+                }
+            }
+            in[u] = true;
+            if (step > 0) {
+                out[step - 1] = best[u];
+            }
+            for (int i = 0; i < n; i++) {
+                long dx = p[u][0] - p[i][0];
+                long dy = p[u][1] - p[i][1];
+                best[i] = Math.min(best[i], dx * dx + dy * dy);
+            }
+        }
+        Arrays.sort(out);
+        return out;
+    }
+
+    @Test
+    void edgesAndChartLinesMatchBruteForce() {
+        SplittableRandom rnd = new SplittableRandom(4412);
+        for (int t = 0; t < 40; t++) {
+            long[][] p = general(rnd, 3 + rnd.nextInt(30), t % 2 == 0 ? 40 : 1_000_000);
+            int[][] tris = StarMesh.triangulate(p);
+            assertThat(StarMesh.edges(p.length, tris)).hasNumberOfRows(3 * p.length - 3 - hullSize(p));
+            int[][] chart = StarMesh.chartLines(p, tris);
+            assertThat(chart).hasNumberOfRows(p.length - 1);
+            long[] lengths = new long[chart.length];
+            for (int i = 0; i < chart.length; i++) {
+                long dx = p[chart[i][0]][0] - p[chart[i][1]][0];
+                long dy = p[chart[i][0]][1] - p[chart[i][1]][1];
+                lengths[i] = dx * dx + dy * dy;
+            }
+            Arrays.sort(lengths);
+            assertThat(lengths).containsExactly(primLengths(p));
+        }
+    }
+
+    @Test
+    void edgeSkies() {
+        // Four cocircular corners: two triangles either way, and every circumcircle is still empty.
+        long[][] square = {{0, 0}, {2, 0}, {2, 2}, {0, 2}};
+        assertThat(StarMesh.triangulate(square)).hasNumberOfRows(2);
+        assertThat(StarMesh.emptyCircles(square, StarMesh.triangulate(square))).isTrue();
+        // Six stars on one circle: a fan of four triangles with empty circles.
+        long[][] ring = {{5, 0}, {3, 4}, {-3, 4}, {-5, 0}, {0, -5}, {4, -3}};
+        assertThat(StarMesh.triangulate(ring)).hasNumberOfRows(4);
+        assertThat(StarMesh.emptyCircles(ring, StarMesh.triangulate(ring))).isTrue();
+        // The whole sky's corners around a centre star, given in any order.
+        long m = StarMesh.MAX_COORD;
+        long[][] corners = {{-m, -m}, {m, -m}, {m, m}, {-m, m}, {0, 1}};
+        assertThat(StarMesh.triangulate(corners)).hasNumberOfRows(4);
+        assertThat(StarMesh.build(corners).hull()).containsExactly(0, 1, 2, 3);
+        // Three stars given clockwise still come back counter-clockwise.
+        long[][] cw = {{0, 0}, {0, 1}, {1, 0}};
+        int[] one = StarMesh.triangulate(cw)[0];
+        assertThat(orient(cw[one[0]], cw[one[1]], cw[one[2]])).isPositive();
+    }
 }
