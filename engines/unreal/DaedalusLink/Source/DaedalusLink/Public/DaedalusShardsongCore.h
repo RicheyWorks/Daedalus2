@@ -102,6 +102,33 @@ inline std::uint64_t TokenSeed(std::uint64_t TokenId)
 	return R.Next();
 }
 
+/** Daily seed: a token's island has a new five-crossing game each day (Day = days since any fixed epoch the caller
+ *  picks, e.g. the UTC day number). Integer only, so every platform agrees on today's game. */
+inline std::uint64_t DailySeed(std::uint64_t TokenId, std::uint32_t Day)
+{
+	Rng R(TokenSeed(TokenId) ^ (0xD1B54A32D192ED03ULL * (static_cast<std::uint64_t>(Day) + 1)));
+	return R.Next();
+}
+
+/** Daily streak: a day counts if that day's game totals at least StreakTotal (70%). Consecutive counted days extend
+ *  the streak; a missed day or a low total starts again; replaying a day already recorded changes nothing. */
+constexpr int StreakTotal = 350;
+struct Streak
+{
+	std::int64_t LastDay = -1;
+	int Current = 0, Longest = 0;
+	/** Records a finished daily game; returns the streak after it. */
+	int Record(std::uint32_t Day, int Total)
+	{
+		if (static_cast<std::int64_t>(Day) <= LastDay) return Current;
+		const bool Next = LastDay >= 0 && static_cast<std::int64_t>(Day) == LastDay + 1;
+		LastDay = Day;
+		Current = Total >= StreakTotal ? (Next ? Current + 1 : 1) : 0;
+		if (Current > Longest) Longest = Current;
+		return Current;
+	}
+};
+
 struct Segment { Habitat H = Habitat::Forest; int LengthM = 10; };
 
 struct Crossing
