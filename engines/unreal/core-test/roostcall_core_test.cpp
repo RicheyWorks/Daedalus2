@@ -78,6 +78,50 @@ int UnitChecks()
 	return Fails;
 }
 
+/** Iteration 2: 600 random yards walked with random legal moves; every state must satisfy the rules' invariants. */
+int InvariantSweep()
+{
+	int Fails = 0, Steps = 0;
+	const char* Diffs[] = { "easy", "normal", "hard" };
+	for (std::uint32_t Seed = 0; Seed < 200 && Fails == 0; ++Seed)
+		for (const char* Diff : Diffs)
+		{
+			Game G; G.Start(Seed, Diff);
+			std::uint32_t Pick = Seed * 2654435761u + 13u;
+			while (!G.Over)
+			{
+				std::vector<Move> Legal;
+				for (int I = 0; I < MoveCount; ++I)
+				{
+					const Move M = static_cast<Move>(I);
+					const Cell X{ G.Whistler.R + MoveDR(M), G.Whistler.C + MoveDC(M) };
+					if (G.Inside(X) && G.BirdAt(X) < 0) Legal.push_back(M);
+				}
+				if (Legal.empty()) { std::printf("FAIL sweep: no legal move (seed %u %s)\n", Seed, Diff); ++Fails; break; }
+				Pick = Pick * 1664525u + 1013904223u;
+				const Move M = Legal[(Pick >> 16) % Legal.size()];
+				const int TurnsBefore = G.Turns, SettledBefore = G.Settled; const size_t BirdsBefore = G.Birds.size();
+				int Flew = 0, Perched = 0; std::string Text;
+				if (G.Step(M, Flew, Perched, Text) != Game::Act::Ok) { std::printf("FAIL sweep: legal move refused (seed %u %s)\n", Seed, Diff); ++Fails; break; }
+				++Steps;
+				bool Ok = G.Turns == TurnsBefore - 1 && G.Settled == SettledBefore + Perched && G.Birds.size() + static_cast<size_t>(Perched) == BirdsBefore
+				          && G.Settled + static_cast<int>(G.Birds.size()) == G.Diff->Birds && Flew >= Perched && G.BirdAt(G.Whistler) < 0;
+				for (size_t A = 0; A < G.Birds.size() && Ok; ++A)
+				{
+					if (!G.Inside(G.Birds[A]) || G.InRoost(G.Birds[A])) Ok = false;
+					for (size_t B = A + 1; B < G.Birds.size(); ++B) if (G.Birds[A] == G.Birds[B]) Ok = false;
+				}
+				Ok = Ok && G.Over == (G.Birds.empty() || G.Turns <= 0) && G.Won == G.Birds.empty();
+				Ok = Ok && (G.Over ? G.Score == BirdScore * G.Settled + (G.Won ? G.Turns : 0) : G.Score == 0);
+				if (!Ok) { std::printf("FAIL sweep invariant (seed %u %s turns %d): %s\n", Seed, Diff, G.Turns, Text.c_str()); ++Fails; break; }
+			}
+			int Flew = 0, Perched = 0; std::string Text;
+			if (G.Step(Move::Wait, Flew, Perched, Text) != Game::Act::GameOver) { std::printf("FAIL sweep: finished yard accepted a move\n"); ++Fails; }
+		}
+	if (!Fails) std::printf("sweep: 600 yards, %d random legal moves, invariants held\n", Steps);
+	return Fails;
+}
+
 } // namespace
 
 int main(int Argc, char** Argv)
@@ -85,7 +129,7 @@ int main(int Argc, char** Argv)
 	if (Argc < 2) { std::printf("usage: roostcall_core_test roostcall_parity.txt\n"); return 2; }
 	std::ifstream In(Argv[1]);
 	if (!In) { std::printf("FAIL cannot open %s\n", Argv[1]); return 2; }
-	int Fails = UnitChecks(), Games = 0;
+	int Fails = UnitChecks() + InvariantSweep(), Games = 0;
 	std::string Line; Game G; std::uint32_t Seed = 0; std::string Diff; int Turn = 0; bool Skip = false;
 	while (std::getline(In, Line))
 	{
