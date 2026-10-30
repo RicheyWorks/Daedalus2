@@ -91,6 +91,12 @@ int main(int argc, char** argv)
 			while (std::getline(Ws, Part, ',')) { CrOk = CrOk && K < 4 && Cr[K] == std::strtod(Part.c_str(), nullptr); ++K; }
 			Check(Tag + " cohort risks", CrOk && K == 4);
 		}
+		{
+			std::string Cal;
+			for (const std::string& E : P.ReleaseCalendar(B.Schedule)) Cal += (Cal.empty() ? "" : ";") + E;
+			for (char& C : Cal) if (C == ' ') C = '_';
+			Check(Tag + " release calendar", Cal == marsh_test::Field(H, "calendar"));
+		}
 		Check(Tag + " best is no worse than greedy, front or even",
 			B.Risk <= G.Risk && B.Risk <= P.Risk(P.FrontLoaded()) && B.Risk <= P.Risk(P.Even()));
 	}
@@ -127,6 +133,20 @@ int main(int argc, char** argv)
 		bool Falls = true;
 		for (size_t T = 1; T < Sv.size(); ++T) Falls = Falls && Sv[T] <= Sv[T - 1];
 		Check("survival never rises and rejects a bad schedule", Falls && P.Survival({ 1 }).empty());
+	}
+	Check("release calendar", P.ReleaseCalendar({ 4, 0, 6, 0, 0 }) == std::vector<std::string>({ "year 0: 4 birds into ADULT", "year 2: 6 birds into ADULT" })
+		&& P.ReleaseCalendar({ 0, 0, 0, 0, 0 }).empty() && P.ReleaseCalendar({ 1 }).empty());
+	{
+		double Prev = -1;
+		bool Up = true;
+		for (double Th : { 2.0, 5.0, 10.0, 15.0, 25.0 })
+		{
+			TranslocationSettings St = Small; St.Threshold = Th;
+			const double R = TranslocationPlan(CraneCohorts(CohortSettings()), St, 3).Risk(P.Even());
+			Up = Up && R >= Prev;
+			Prev = R;
+		}
+		Check("a higher crash threshold never lowers the risk", Up);
 	}
 	Check("back-loaded fills the last years", P.BackLoaded() == std::vector<int>({ 0, 0, 0, 4, 6 }));
 	const auto Bad = P.RiskInterval({ 1, 2 });

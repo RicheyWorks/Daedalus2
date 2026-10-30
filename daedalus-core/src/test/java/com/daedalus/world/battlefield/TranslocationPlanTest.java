@@ -230,4 +230,30 @@ class TranslocationPlanTest {
         assertEquals(FLOCK.bestRelease(), lowest);
         assertTrue(r[CraneCohorts.CHICK] > r[CraneCohorts.ADULT]);
     }
+
+    @Test
+    void releaseCalendarListsTheReleaseYears() {
+        TranslocationPlan p = plan(D);
+        assertEquals(List.of("year 0: 4 birds into ADULT", "year 2: 6 birds into ADULT"),
+                p.releaseCalendar(new int[] {4, 0, 6, 0, 0}));
+        assertEquals(List.of("year 4: 1 bird into CHICK"),
+                plan(D.withCohort(CraneCohorts.CHICK)).releaseCalendar(new int[] {0, 0, 0, 0, 1}));
+        assertEquals(List.of(), p.releaseCalendar(new int[5]));
+        assertThrows(IllegalArgumentException.class, () -> p.releaseCalendar(new int[] {1}));
+    }
+
+    @Test
+    void riskRespondsSensiblyToThresholdAndNoise() {
+        int[] even = plan(D).even();
+        double prev = -1;
+        for (double threshold : new double[] {2, 5, 10, 15, 25}) {
+            double r = plan(new Settings(12, 10, 6, 5, 30, threshold, 0.2, 3, 200)).risk(even);
+            assertTrue(r >= prev, threshold + " " + r);
+            prev = r;
+        }
+        for (double threshold : new double[] {5, 12, 40}) {
+            double r = plan(new Settings(12, 10, 6, 5, 30, threshold, 0, 3, 20)).risk(even);
+            assertTrue(r == 0 || r == 1, "without noise every run is the same run");
+        }
+    }
 }

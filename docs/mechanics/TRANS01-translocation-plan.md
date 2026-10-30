@@ -1,7 +1,7 @@
 # TRANS01 - Translocation Plan (contest G251)
 
 Code: `daedalus-core/src/main/java/com/daedalus/world/battlefield/TranslocationPlan.java`
-Tests: `TranslocationPlanTest` (16 tests). Source only; no Unreal, no new assets.
+Tests: `TranslocationPlanTest` (18 tests). Source only; no Unreal, no new assets.
 
 ## Story / Daedalus hook
 
@@ -23,12 +23,16 @@ they go out, and which cohort?
 | Schedule | Crash risk |
 |---|---|
 | no release | 0.530 |
-| late [0,0,0,4,6] | 0.253 |
+| back-loaded [0,0,0,4,6] | 0.253 |
 | front-loaded [6,4,0,0,0] | 0.215 |
 | even [2,2,2,2,2] | 0.213 |
-| greedy [4,3,0,2,1] | 0.210 |
-| exact best [4,0,6,0,0] | 0.203 |
+| greedy [4,3,0,2,1] (polishing finds no better single move) | 0.210 |
+| exact best [4,0,6,0,0] | 0.203 (95 % interval 0.166-0.245) |
 | exact best, chicks instead of adults | 0.403 |
+
+Polished-greedy risk by release cohort (chick, juvenile, subadult, adult): 0.405, 0.293, 0.225, 0.210. The board
+shows the best plan as "year 0: 4 birds into ADULT; year 2: 6 birds into ADULT". Greedy, even and front-loaded all
+sit inside the best plan's interval, so at 400 runs they are not reliably worse.
 
 Best risk by budget (0, 4, 8, 12, 16, 20 birds): 0.53, 0.36, 0.23, 0.17, 0.13, 0.10. It never rises.
 
@@ -36,7 +40,7 @@ The lesson: release early and release breeders. Exact best schedules among the e
 the Monte Carlo noise (about 0.02 at 400 runs). Adults halve the risk compared with chicks, matching the G194
 reproductive values.
 
-## Tests (TranslocationPlanTest, 16)
+## Tests (TranslocationPlanTest, 18)
 
 1. Best spends the whole budget and beats even, front-loaded, late and no-release schedules.
 2. Greedy is never better than exact and stays within 0.03 of it (budgets 4, 10, 16).
@@ -58,6 +62,8 @@ reproductive values.
 15. Polishing never hurts: polished greedy is between greedy and exact best (budgets 4, 10, 16), and polishing
     back-loaded lowers its risk.
 16. `cohortRisks()` puts the G194 `bestRelease()` cohort lowest, and chicks above adults.
+17. `releaseCalendar` lists only the years with birds, uses "bird" for one, and rejects bad schedules.
+18. A higher crash threshold never lowers a schedule's risk, and with no noise every risk is 0 or 1.
 
 ## Assets
 
@@ -103,3 +109,9 @@ them.
 8. **Which birds?** `cohortRisks()` (C++ `CohortRisks`) gives the polished-greedy risk for releasing into each G194
    cohort on the same shocks, so the quest can show why adults are the answer. The golden vectors carry all four
    risks for every plan.
+9. **Release calendar.** `releaseCalendar(schedule)` (C++ `ReleaseCalendar`) gives the census-board lines
+   ("year 2: 6 birds into ADULT"). The golden vectors carry each best plan's calendar, so both languages print the
+   same text.
+10. **Sanity tests and docs.** New property tests: risk never falls as the crash threshold rises (Java and C++), and
+    without noise every risk is 0 or 1 (Java). The default table above was recomputed with the new baselines,
+    interval, cohort risks and calendar.
