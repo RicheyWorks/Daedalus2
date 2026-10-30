@@ -130,7 +130,23 @@ int main(int Argc, char** Argv) {
         for(const auto& Cmd : GF.Commands) if(Cmd.Kind == Shape::Rectangle && Cmd.Tint.R == 120 && Cmd.Tint.G == 225 && Cmd.Tint.B == 255) ++Marks;
         Check(Marks == 1, "guide marks exactly one cell");
     }
+    Check(D.HintLine().find("watcher's pick") != std::string::npos, "guide v2 describes the watcher's move");
     Check(D.SetOption(0, 730) && D.GetOption() == 0, "option 0 returns to the ferry");
+    {
+        FogbellGame T;
+        T.Reset(5);
+        Frame F1;
+        T.Render(F1);
+        int Rows = 0;
+        for(const auto& Cmd : F1.Commands) if(Cmd.Kind == Shape::Text && Cmd.Label.rfind("STEER arrows", 0) == 0) ++Rows;
+        Check(Rows == 1, "a fresh voyage shows the tutorial rows");
+        Press(T, "wait");
+        Frame F2;
+        T.Render(F2);
+        Rows = 0;
+        for(const auto& Cmd : F2.Commands) if(Cmd.Kind == Shape::Text && Cmd.Label.rfind("STEER arrows", 0) == 0) ++Rows;
+        Check(Rows == 0, "the tutorial leaves after the first turn");
+    }
 
     FogbellGame X;
     X.Reset(730);

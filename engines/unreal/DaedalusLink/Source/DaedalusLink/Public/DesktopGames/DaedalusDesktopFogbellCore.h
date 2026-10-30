@@ -214,7 +214,13 @@ public:
             return Core.Won ? "HINT The bell rings clear. Pad A or R sets out again."
                             : "HINT The voyage is lost. Pad A or R sets out again.";
         }
-        if(Option == 1) return "HINT Practice: the blue cell is where the watcher would steer.";
+        if(Option == 1) {
+            bool Picks = false, Lands = false, Floods = false;
+            const fogbell::Move Guide = Core.DemoAction();
+            Core.Preview(Guide, Picks, Lands, Floods);
+            std::string What = Picks ? "takes a lantern" : Lands ? "makes harbour" : Guide == fogbell::Move::Wait ? "waits" : "crosses open water";
+            return "HINT Practice: the blue cell is the watcher's pick; it " + What + ". Red-edged cells flood at the next toll.";
+        }
         const int Need = Core.Diff ? Core.Diff->Need : 0;
         if(Core.Aboard >= Need) return "HINT Enough lanterns aboard: make for the harbour before the tide cuts the way.";
         return "HINT Low ground floods first. Pick up lanterns on the way and keep a dry route home.";
@@ -257,6 +263,7 @@ public:
                     F.AddRect(X + 1, Y + 1, Cell - 2, Cell - 2, {Shade, static_cast<std::uint8_t>(Shade - 10), static_cast<std::uint8_t>(Shade - 30), 255});
                     F.AddText(X + Cell / 2 - 4, Y + Cell / 2 - 7, std::to_string(H), {20, 20, 30, 255}, 11);
                 }
+                if(!Core.Flooded(R, C) && Core.Flooded(R, C, Core.Turn + 1) && !Core.Over) F.AddRect(X + 1, Y + Cell - 5, Cell - 2, 4, {220, 80, 70, 255});   // floods at the next toll
                 if(Core.PassengerAt(R, C) >= 0) F.AddCircle(X + Cell / 2, Y + Cell / 2, Cell * 0.22, Lantern);
                 if(fogbell::Cell{R, C} == Core.Harbour) F.AddRect(X + 4, Y + 4, Cell - 8, Cell - 8, {60, 160, 120, 255});
             }
@@ -268,6 +275,11 @@ public:
         // The ferry
         F.AddCircle(GridLeft + Core.Ferry.C * Cell + Cell / 2, GridTop + Core.Ferry.R * Cell + Cell / 2, Cell * 0.3, Gold);
 
+        if(Core.FreshVoyage()) {
+            F.AddText(600, 360, "STEER arrows move one cell a turn; A waits", Mist, 11);
+            F.AddText(600, 378, "TIDE  the bell tolls every " + std::to_string(fogbell::TideEvery) + " turns; low cells flood", Mist, 11);
+            F.AddText(600, 396, "LAND  board lanterns; reach the harbour with " + std::to_string(Need) + " aboard", Mist, 11);
+        }
         F.AddText(600, 110, "TIDE", Mist, 14);
         for(int L = 1; L <= S; ++L) F.AddRect(600, 130 + (S - L) * 14, 70, 10, L <= Core.Tide() ? Water : Color{50, 60, 80, 255});
         F.AddText(600, 130 + S * 14 + 6, "bell every " + std::to_string(fogbell::TideEvery) + " turns", Mist, 11);

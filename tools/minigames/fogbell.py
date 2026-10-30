@@ -142,6 +142,26 @@ class Game(pc.PrismGame):
             frontier = nxt
         return None
 
+    def tutorial(self):
+        """First-turn teaching rows for the screen (iteration 7)."""
+        return ["STEER  arrows move the ferry one cell a turn; A waits",
+                "TIDE   the bell tolls every %d turns; cells at or below the tide flood for good" % TIDE_EVERY,
+                "LAND   lanterns (L) board when you enter their dock; reach H with %d aboard to win" % self.cfg["need"]]
+
+    def preview(self, action):
+        """What a move would do without doing it (iteration 8): (legal, picks_up, lands, floods)."""
+        dr, dc = MOVES.get(action, (None, None))
+        if dr is None:
+            return (False, False, False, False)
+        r, c = self.ferry[0] + dr, self.ferry[1] + dc
+        s = self.size()
+        if not (0 <= r < s and 0 <= c < s) or self.flooded(r, c):
+            return (False, False, False, False)
+        picks = [r, c] in self.passengers
+        lands = [r, c] == self.harbour
+        floods = not lands and self.heights[r][c] <= self.tide_at(self.turn + 1)
+        return (True, picks, lands, floods)
+
     def demo_action(self):
         """Nearest reachable passenger until enough are aboard, then the harbour; wait when nothing is reachable."""
         if self.aboard < self.cfg["need"] and self.passengers:
@@ -175,6 +195,12 @@ class Game(pc.PrismGame):
                     row += str(self.heights[r][c])
             rows.append(row)
         lines = [f"{TITLE} [{self.difficulty}] turn {self.turn} tide {self.tide} aboard {self.aboard}/{self.cfg['need']} score {self.score}"] + rows
+        if self.turn == 0 and not self.over:
+            lines += self.tutorial()
+        if not self.over:
+            danger = [m for m in ORDER if self.preview(m)[3]]
+            if danger:
+                lines.append("next toll floods: " + " ".join(danger))
         if self.over:
             lines.append("WON: the bell rings clear" if self.won else "LOST: the tide takes the ferry")
         return "\n".join(lines)
