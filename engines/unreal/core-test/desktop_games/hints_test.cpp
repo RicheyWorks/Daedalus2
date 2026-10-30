@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Accessibility hints for the three cabinets that only had options and focus freeze.
 // The line is drawn on the frame. It does not change score, movement, or saves.
-// catalog-capability: hints: beacon_sweep cairnwell dodge_ball driftstone dungeon facetlock gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shadewatch shardfall shardring siltlane twinwake wardens_accord
+// catalog-capability: hints: beacon_sweep cairnwell dodge_ball driftstone dungeon facetlock glimmerloom gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shadewatch shardfall shardring siltlane twinwake wardens_accord
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -115,6 +115,14 @@ void PrismvaultHints() {
     Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"prismvault hint is on the frame and stays out of status");
     Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"guide hint names the practice marker");
 }
+void GlimmerloomHints() {
+    GlimmerloomGame G;G.Reset(730);
+    const auto Note=G.GetStatus().Note;
+    Check(G.HintLine().rfind("HINT Rumor: ",0)==0,"fresh market hint carries the rumor");
+    Frame F;G.Render(F);
+    Check(HasText(F,G.HintLine()) && G.GetStatus().Note==Note && Note.find("HINT")==std::string::npos,"glimmerloom hint is on the frame and stays out of status");
+    Check(G.SetOption(1,730) && G.HintLine().find("Practice")!=std::string::npos,"guide hint names the practice counsel");
+}
 void ShadewatchHints() {
     ShadewatchGame G;G.Reset(730);
     const auto Note=G.GetStatus().Note;
@@ -177,7 +185,7 @@ void LanternwildHints() {
 }
 
 int main() {
-    try { BeaconHints();CairnwellHints();FacetlockHints();DriftstoneHints();DungeonHints();DodgeHints();GloamLatchHints();LanternwildHints();LumenpathHints();PrismcairnHints();PrismvaultHints();ReedbeatHints();RiftwingHints();ShadewatchHints();ShardfallHints();ShardringHints();TwinwakeHints();WardensAccordHints(); }
+    try { BeaconHints();CairnwellHints();FacetlockHints();DriftstoneHints();DungeonHints();DodgeHints();GloamLatchHints();LanternwildHints();LumenpathHints();PrismcairnHints();PrismvaultHints();ReedbeatHints();RiftwingHints();GlimmerloomHints();ShadewatchHints();ShardfallHints();ShardringHints();TwinwakeHints();WardensAccordHints(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";

@@ -32,6 +32,7 @@ batched rebuild under the editor custodian.
 | `shardfall` | Shardfall Gamble | 1 |
 | `siltlane` | Siltlane | 1 |
 | `shadewatch` | Shadewatch Vigil | 1 |
+| `glimmerloom` | Glimmerloom Ledger | 1 |
 
 ## How to play
 
@@ -63,6 +64,7 @@ One original line per game, read from `HowToLine()`.
 | `shardfall` | HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot; reach the target by the last round. |
 | `siltlane` | HOW Switch lanes so the drifting silt passes you. |
 | `shadewatch` | HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends. |
+| `glimmerloom` | HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target. |
 
 ## Difficulty
 
@@ -94,6 +96,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `shardfall` | normal |
 | `siltlane` | normal |
 | `shadewatch` | normal |
+| `glimmerloom` | normal |
 
 ## Daedalus spots
 
@@ -125,6 +128,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `shardfall` | `prismheart_realm` | Prismheart, the glowing seam |
 | `siltlane` | `spawn_overlook` | Spawn overlook, the silt course |
 | `shadewatch` | `prismheart_realm` | Prismheart, the watch lanes |
+| `glimmerloom` | `prismheart_realm` | Prismheart, the Glimmerloom market |
 
 ## Capabilities
 
@@ -157,6 +161,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `shardfall` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `siltlane` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 | `shadewatch` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `glimmerloom` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 
 ## Leaderboard feed
 

@@ -12,7 +12,7 @@
 namespace daedalus { namespace desktop {
 enum class SaveStyle { Manual, SourceMenu };
 struct SaveSlot { const char* Id; const char* File; SaveStyle Style; };
-inline constexpr std::array<SaveSlot,20> SaveSlots{{
+inline constexpr std::array<SaveSlot,21> SaveSlots{{
     {"beacon_sweep","beacon_sweep.dgs",SaveStyle::Manual},
     {"star_shooter","star_shooter.dgs",SaveStyle::SourceMenu},
     {"twinwake","twinwake.dgs",SaveStyle::Manual},
@@ -33,6 +33,7 @@ inline constexpr std::array<SaveSlot,20> SaveSlots{{
     {"prismvault","prismvault.dgs",SaveStyle::Manual},
     {"shardfall","shardfall.dgs",SaveStyle::Manual},
     {"shadewatch","shadewatch.dgs",SaveStyle::Manual},
+    {"glimmerloom","glimmerloom.dgs",SaveStyle::Manual},
 }};
 // Original names replaced the earlier working ids (2026-10-25). Old ids still resolve, and a
 // save written under the old file name is still offered by Continue until the new file exists.

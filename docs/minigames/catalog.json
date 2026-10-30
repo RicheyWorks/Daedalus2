@@ -849,6 +849,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "glimmerloom",
+      "title": "Glimmerloom Ledger",
+      "summary": "Trade hued shards as prices drift and heed the rumor. Left/Right or stick: pick a hue; J or pad A: buy; K or pad B: sell; Shift or pad Y: buy all; Space or pad X: rest",
+      "how_to_play": "HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the Glimmerloom market",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"glimmerloom\", Seed)",
+      "portable_tests": [
+        "desktop_glimmerloom"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -913,23 +947,6 @@
       "default_difficulty": "normal",
       "tests": [
         "test_spiritkite.py"
-      ]
-    },
-    {
-      "id": "glimmerloom",
-      "title": "Glimmerloom Ledger",
-      "summary": "trade hued Prism Shards at the Glimmerloom market and grow your purse.",
-      "how_to_play": "HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target.",
-      "module": "tools/minigames/glimmerloom.py",
-      "start": "glimmerloom.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_glimmerloom.py"
       ]
     },
     {
