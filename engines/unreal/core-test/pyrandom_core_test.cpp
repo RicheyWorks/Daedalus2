@@ -24,6 +24,23 @@ std::string Field(const std::string& Line, const std::string& Key)
 	return Line.substr(S, E == std::string::npos ? std::string::npos : E - S);
 }
 
+
+/** "0aff" -> {0x0a, 0xff}; the fixture only writes even-length lowercase hex. */
+std::vector<std::uint8_t> HexBytes(const std::string& Hex)
+{
+	std::vector<std::uint8_t> Out;
+	for (std::size_t I = 0; I + 1 < Hex.size(); I += 2) Out.push_back(static_cast<std::uint8_t>(std::stoul(Hex.substr(I, 2), nullptr, 16)));
+	return Out;
+}
+
+/** Seeds `Rng` the way the fixture block header says. */
+void Reseed(PyRandom& Rng, const std::string& Kind, const std::string& Text)
+{
+	if (Kind == "seedint") Rng.SeedInt(std::stoll(Text));
+	else if (Kind == "seedhex") { const std::vector<std::uint8_t> Bytes = HexBytes(Text); Rng.SeedBigEndian(Bytes.data(), Bytes.size()); }
+	else Rng.Seed(Text);
+}
+
 /** The last space-separated token of a line (the recorded result). */
 std::string Last(const std::string& Line)
 {
@@ -60,6 +77,16 @@ int UnitChecks()
 	if (C.Drawn() != 3) { std::printf("FAIL U32 draws one word and RandomDouble two (got %llu)\n", static_cast<unsigned long long>(C.Drawn())); ++Fails; }
 	if (C.Below(0) != 0 || C.Drawn() != 3) { std::printf("FAIL Below(0) is 0 and draws nothing\n"); ++Fails; }
 	if (!C.SampleIndices(3, 5).empty()) { std::printf("FAIL sample k > n is empty\n"); ++Fails; }
+	PyRandom Pos, Neg, Hex, Str;
+	Pos.SeedInt(12345); Neg.SeedInt(-12345);
+	if (Pos.U32() != Neg.U32()) { std::printf("FAIL negative integer seeds hash as abs(n)\n"); ++Fails; }
+	const std::uint8_t Seven[] = { 0, 0, 0, 0, 0, 0, 0, 7 };
+	Hex.SeedBigEndian(Seven, sizeof Seven); Pos.SeedInt(7);
+	if (Hex.U32() != Pos.U32()) { std::printf("FAIL big-endian bytes and the integer agree\n"); ++Fails; }
+	Hex.SeedBigEndian(nullptr, 0); Pos.SeedInt(0);
+	if (Hex.U32() != Pos.U32()) { std::printf("FAIL an empty byte string is the integer 0\n"); ++Fails; }
+	Str.Seed("7"); Pos.SeedInt(7);
+	if (Str.U32() == Pos.U32()) { std::printf("FAIL the str path must differ from the int path (CPython appends sha512 for str)\n"); ++Fails; }
 	std::vector<int> One{ 7 }; C.Shuffle(One);
 	if (One.size() != 1 || One[0] != 7) { std::printf("FAIL shuffle of one element is a no-op\n"); ++Fails; }
 	return Fails;
@@ -73,7 +100,7 @@ int main(int Argc, char** Argv)
 	std::ifstream In(Argv[1]);
 	if (!In) { std::printf("FAIL cannot open %s\n", Argv[1]); return 2; }
 	int Fails = UnitChecks(), Seeds = 0, Calls = 0;
-	std::string Line, SeedText;
+	std::string Line, SeedText, Kind2;
 	PyRandom Rng;
 	bool Skip = false;
 	while (std::getline(In, Line))
@@ -81,10 +108,12 @@ int main(int Argc, char** Argv)
 		if (Line.empty() || Line[0] == '#') continue;
 		const std::string Kind = Line.substr(0, Line.find(' '));
 		std::string Got;
-		if (Kind == "seed")
+		if (Kind == "seed" || Kind == "seedint" || Kind == "seedhex")
 		{
-			SeedText = Line.size() > 5 ? Line.substr(5) : "";
-			Rng.Seed(SeedText); Skip = false; ++Seeds;
+			SeedText = Line.size() > Kind.size() + 1 ? Line.substr(Kind.size() + 1) : "";
+			Kind2 = Kind;
+			Reseed(Rng, Kind, SeedText);
+			Skip = false; ++Seeds;
 			continue;
 		}
 		if (Skip) continue;
@@ -110,7 +139,7 @@ int main(int Argc, char** Argv)
 		{
 			Got = std::to_string(Rng.Drawn());
 			// Prove the save fast-forward: a fresh generator discarded this far must continue identically.
-			PyRandom Fresh; Fresh.Seed(SeedText); Fresh.Discard(Rng.Drawn());
+			PyRandom Fresh; Reseed(Fresh, Kind2, SeedText); Fresh.Discard(Rng.Drawn());
 			std::string Next;
 			if (std::getline(In, Next) && Next.rfind("u32 ", 0) == 0)
 			{
