@@ -77,6 +77,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public spiritkite_core_test.cpp -o spiritkite_core_test && ./spiritkite_core_test spiritkite_parity.txt
       - name: Spiritkite Weave core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public spiritkite_core_test.cpp -o spiritkite_core_test_clang && ./spiritkite_core_test_clang spiritkite_parity.txt
+      - name: Glowmoss Delve core (DaedalusGlowmossCore.h regenerates glowmoss_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test && ./glowmoss_core_test glowmoss_parity.txt
+      - name: Glowmoss Delve core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test_clang && ./glowmoss_core_test_clang glowmoss_parity.txt
       - name: Wardens' Accord core (DaedalusWardensAccordCore.h regenerates wardens_accord_parity.txt from seed with CPython-compatible seeding)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public wardens_accord_core_test.cpp -o wardens_accord_core_test && ./wardens_accord_core_test wardens_accord_parity.txt
       - name: Wardens' Accord core, clang
