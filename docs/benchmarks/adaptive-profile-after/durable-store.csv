@@ -1,3 +1,0 @@
-# java=21.0.4; os=Windows 11; warmup=20; samples=100; location=system-temp; includes=forced-save+atomic-replace+load+validation
-workload,p50_us,p95_us,p99_us
-tactical_checkpoint,5211.500,7352.400,8218.500

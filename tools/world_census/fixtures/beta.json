@@ -1,9 +1,0 @@
-{
-  "format": "daedalus-world-package",
-  "version": 1,
-  "generator": "synthetic census fixture",
-  "world": {"id": "beta", "style": "GALLERY", "title": "Synthetic Beta", "seed": -8, "revision": 0},
-  "geometry": {"file": "world.glb", "chunkSize": 16, "chunks": 0, "triangles": 0, "materials": []},
-  "islands": [{"slot": 4, "seed": 4, "radius": 8, "origin": [0, 0, 0], "dock": [1, 0, 0], "owner": ""}],
-  "assets": [{"name": "ark", "file": "assets/ark.glb", "use": "world-specific definition, not a global file count"}]
-}

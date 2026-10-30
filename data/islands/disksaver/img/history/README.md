@@ -1,1 +1,0 @@
-﻿Earlier DiskSaver Island screenshots (v1 to v4, the first overexposed v5 capture, the round-5 base-colour pass). The current shot is ../../diskSaver_island_v5.png. Archived so nothing lives only on BLACKBEARD.

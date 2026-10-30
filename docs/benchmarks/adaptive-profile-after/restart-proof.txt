@@ -1,2 +1,0 @@
-checkpoint reload + identical frame -> identical decision and memory
-contact=true; elevation=0; losses=0; weapon=LONG_RANGE

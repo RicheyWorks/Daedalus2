@@ -1,2 +1,0 @@
-$r=[math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory/1MB,2); "RAM $r GB at $(Get-Date -Format HH:mm:ss)"
-Get-Content C:\Users\730ri\projects\bot-team\link\log.jsonl -Tail 60 | Where-Object { $_ -match 'disk-saver|Disk Saver|round 3|Round 3|HANDOFF|BRIDGE' -and $_ -notmatch '"from": "disk-saver"|"ack"' } | Select-Object -Last 4 | % { $_.Substring(0,[Math]::Min(280,$_.Length)) }

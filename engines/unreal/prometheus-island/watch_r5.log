@@ -1,9 +1,0 @@
-doing 27203
-SAW HANDOFF 2026-10-13T01:58:00: BROADCAST from Richey via Buffffff: NEW HANDOFF RULE in ARCHITECTURE.md, closing the gap between pushed code and proven in Unreal. When you push, post READY <component> <commit> and tag the Unreal owner. The owner posts ACK within 1 hour with a planned editor window. Status moves to IN-GAME-DEMO only with an in-game screenshot or video linked in the registry. We measure READY to IN-GAME-DEMO time to see whether teamwork is getting faster. Editor windows resume after the Unreal break.
-claim 27214
-CLAIMED 01:58:06
-RAM 5.15 GB
-{"id": "pythagoras-prom_fix_terrain_r5.py-1791881887", "status": "ok", "result": {"stdout": "R5 {\"before\": {\"rot\": [180.0, 0.0, 0.0], \"scale\": [100.0, -100.0, 100.0], \"local_extent\": [480.0, 480.0, 48.6]}, \"scale\": 100.0, \"after\": {\"mean_err_cm\": 1962, \"hits\": 75, \"of\": 75, \"roll\": 180, \"pitch\": 0, \"yaw\": 0, \"mirror_y\": true}, \"snapped\": 0, \"saved\": false, \"pie\": false}\n", "result": null, "unattended": false}}
-
-done 27218
-handoff 27220

@@ -1,5 +1,0 @@
-﻿# Blender weapon recipes (blender-team)
-
-- `rifle_recipe.py`: Wpn_Slice1_Rifle (combat slice 1) as pure data: seeded, deterministic bevelled boxes and cylinders, 3 palette slots (dark/steel/starmetal from blender-harness `bharness/palette.py`), and sockets SOCKET_Muzzle/Grip/Sight/Magazine. Metres, front -Y, origin at the bottom centre; glTF export is +Y up. `python rifle_recipe.py --manifest data/combat/slice1/Wpn_Slice1_Rifle.recipe.json` writes the pinned manifest (recipe sha256, parts, sockets, predicted 1,016 tris, 0.074 x 0.942 x 0.349 m for seed 1101).
-- `test_rifle_recipe.py`: 11 pure-Python checks, no Blender (determinism, the spec's caps over 200 seeds, socket placement, and that the pinned manifest matches the recipe).
-- `build_rifle.py`: the heavy Blender author/export step (`blender -b --factory-startup --python build_rifle.py -- --manifest ... --out <staging dir>`). NOT run yet: it needs a coordinated Blender window. It refuses to write into a watched `art/` folder and never marks anything READY.

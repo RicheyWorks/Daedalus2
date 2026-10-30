@@ -1,7 +1,0 @@
-TONIC 1
-brew tonic_barkbalm_pawmint_dewclaw 1.0 120 0 overTime 0.0
-mod hearts add 1.0
-mod cooldownPct add -0.05
-grant swim
-grant livestockWaterCross
-end

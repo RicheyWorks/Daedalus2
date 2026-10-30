@@ -1,6 +1,0 @@
-DaedalusLink/Binaries/
-DaedalusLink/Intermediate/
-core-test/mesh_core_test
-core-test/mesh_core_test.exe
-core-test/live*.mesh.txt
-__pycache__/

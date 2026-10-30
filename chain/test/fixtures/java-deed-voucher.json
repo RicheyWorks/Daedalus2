@@ -1,9 +1,0 @@
-{
-  "note": "Made by daedalus-wallet DeedVoucher (Java). WalletTest re-signs it and must get the same bytes; the contract test must accept it.",
-  "chainId": 31337,
-  "contract": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
-  "signer": "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc",
-  "deed": { "to": "0x70997970c51812dc3a010c7d01b50e0d17dc79c8", "slot": 7, "seed": "18446744073709551605", "radius": 18, "deadline": 4102444800 },
-  "digest": "0x1446cb721a46892c2b62747a9aec0afc8506277e922f0b6eed6e729fda61b5f2",
-  "signature": "0x03bbbd6c26a5e76a4c67cb7e03ec3d2538f7ed48213ab9e20608fe98889dc53f38101493f7d6e33ba5067a928e2aff1ffa29f18a5c3e79c1e5f9629c091b51c01b"
-}

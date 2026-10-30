@@ -1,7 +1,0 @@
-{
-  "asset": "Prop_PracticeCrate",
-  "space": "unreal (+X forward, +Z up), cm, degrees",
-  "sockets": [
-    {"name": "SOCKET_Top", "parent": "Prop_PracticeCrate", "location_cm": [0, 0, 50], "rotation": {"pitch": 0, "yaw": 0, "roll": 0}}
-  ]
-}

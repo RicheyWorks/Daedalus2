@@ -1,8 +1,0 @@
-AUD 1
-jukebox FIELD
-layer birds_day 0.421 18000.000 1.000
-layer leaves 0.126 18000.000 0.500
-layer water 0.101 18000.000 0.000
-layer wind 0.252 18000.000 0.000
-PCS 1 hz=300.000 sweep=-0.400 harm=1 bright=0.000 pulses=1 pulse_ms=223 gap_ms=0 vib_hz=3.000 vib_st=0.000 breath=0.000
-end
