@@ -268,6 +268,7 @@ class HandoffTest(unittest.TestCase):
         self.assertFalse(any(m['type']=='request.accepted' for m in self.broker.messages))
 
     def test_cli_request_poll_and_response_work_with_real_state_files(self):
+        self.b.register(role='test receiver')
         def run(me, path, *args):
             with contextlib.redirect_stdout(io.StringIO()) as output:
                 live.main(['--me', me, '--state', str(path), '--port', str(self.server.server_port),
@@ -286,6 +287,48 @@ class HandoffTest(unittest.TestCase):
         result = run('b', self.path, 'poll')
         self.assertEqual(result['pending_count'], 1)
         self.assertEqual(result['messages'][0]['state'], 'accepted')
+
+    def test_cli_refuses_typo_without_persisting_or_sending(self):
+        self.b.register(role='test receiver')
+        args = ['--me','a','--state',str(self.root/'a.json'),'--port',str(self.server.server_port),
+                '--start-after','0','request','--to','bb','--key','typo','--text','build']
+        with self.assertRaisesRegex(ValueError, 'Unknown recipient'):
+            live.main(args)
+        self.assertFalse((self.root/'a.json').exists())
+        self.assertFalse(any(m['type']=='request' for m in self.broker.messages))
+
+    def test_cli_new_bot_override_and_saved_retry_do_not_require_registration(self):
+        args = ['--me','a','--state',str(self.root/'a.json'),'--port',str(self.server.server_port),
+                '--start-after','0','request','--to','new-bot','--key','new','--text','build']
+        with contextlib.redirect_stdout(io.StringIO()):
+            live.main(args + ['--allow-unregistered'])
+            live.main(args)
+        self.assertEqual(len([m for m in self.broker.messages if m['type']=='request']), 1)
+
+    def test_cli_registry_outage_does_not_persist_or_send(self):
+        original = teamlink.Link._call
+        def outage(link, method, route, *args, **kwargs):
+            return None if route == '/bots' else original(link, method, route, *args, **kwargs)
+        with patch.object(teamlink.Link, '_call', outage), self.assertRaises(ConnectionError):
+            live.main(['--me','a','--state',str(self.root/'a.json'),'--port',str(self.server.server_port),
+                       '--start-after','0','request','--to','b','--key','outage','--text','build'])
+        self.assertFalse((self.root/'a.json').exists())
+        self.assertFalse(any(m['type']=='request' for m in self.broker.messages))
+
+    def test_cli_uncertain_delivery_retries_even_if_registration_disappears(self):
+        self.b.register(role='test receiver')
+        args = ['--me','a','--state',str(self.root/'a.json'),'--port',str(self.server.server_port),
+                '--start-after','0','request','--to','b','--key','retry','--text','build']
+        original = teamlink.Link._call
+        def lose_confirmation(link, method, route, *params, **kwargs):
+            result = original(link, method, route, *params, **kwargs)
+            return None if route == '/v1/messages' else result
+        with patch.object(teamlink.Link, '_call', lose_confirmation), self.assertRaises(ConnectionError):
+            live.main(args)
+        self.broker.bots.pop('b')
+        with contextlib.redirect_stdout(io.StringIO()):
+            live.main(args)
+        self.assertEqual(len([m for m in self.broker.messages if m['type']=='request']), 1)
 
 
 if __name__ == '__main__':

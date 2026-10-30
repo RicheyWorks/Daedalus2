@@ -1,5 +1,8 @@
 """Original two-metre modular Gallery City kit; static export, no interaction proof."""
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from static_uv import ensure_static_uv
 exec(compile(Path(__file__).with_name('portal_common.py').read_text(),__file__,'exec'))
 stone=mat('Gallery pale stone',(.43,.48,.51));wood=mat('Gallery walnut',(.21,.11,.07))
 paint=mat('Gallery cobalt pigment',(.055,.22,.43));glass=mat('Gallery painted glass',(.17,.45,.49))
@@ -87,7 +90,8 @@ for i,(name,role) in enumerate(KIT):
     for obj in parts:obj.select_set(True)
     bpy.context.view_layer.objects.active=parts[0];bpy.ops.object.join();obj=bpy.context.object;obj.name='Prop_Gallery_'+name
     bpy.context.scene.cursor.location=(0,0,0);bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-    path=OUT/(obj.name+'.glb');bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',use_selection=True,export_animations=False)
+    if name=='Ramp':ensure_static_uv(obj)
+    path=OUT/(obj.name+'.glb');bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',use_selection=True,export_animations=False,export_tangents=(name=='Ramp'))
     triangles=sum(len(p.vertices)-2 for p in obj.data.polygons);radius=math.ceil(max(Vector(c).length for c in obj.bound_box)*100)
     records.append(dict(id=obj.name,file=path.name,role=role,triangles=triangles,bones=0,rig='static',radius_cm=radius,
         sha256=hashlib.sha256(path.read_bytes()).hexdigest(),role_count=0,snap_grid_metres=2,interaction='native binding pending'))

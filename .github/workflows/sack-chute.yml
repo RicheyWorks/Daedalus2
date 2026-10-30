@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: MIT
+name: sack-chute
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/streaming/sack_chute*.py'
+      - 'tools/streaming/census_budget.py'
+      - 'tools/world_census/**'
+      - 'data/islands/disk-saver/sack-chute-v1.json'
+  pull_request:
+    paths:
+      - 'tools/streaming/sack_chute*.py'
+      - 'tools/streaming/census_budget.py'
+      - 'tools/world_census/**'
+      - 'data/islands/disk-saver/sack-chute-v1.json'
+permissions:
+  contents: read
+jobs:
+  sack-chute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - run: python -B -m unittest tools/streaming/sack_chute_test.py -v
+      - run: |
+          python -B -m tools.world_census tools/world_census/fixtures/alpha.json tools/world_census/fixtures/beta.json --snapshot-date 2026-10-26 --bindings tools/world_census/fixtures/bindings.json --output-dir "$RUNNER_TEMP/census"
+          python -B tools/streaming/sack_chute.py "$RUNNER_TEMP/census/census.json" --seed 7 --auto

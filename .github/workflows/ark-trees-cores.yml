@@ -1,0 +1,41 @@
+name: Ark tree cores
+# G572: header-only C++ ports of the ark tree cores (G520 Shroud Paths, G524 Berth Leases, G527 Swell Crests) must
+# replay the Java-written ark_*_parity.txt line for line and agree with their brute-force checks. Engine-free; no
+# Unreal needed.
+on:
+  pull_request:
+    paths:
+      - 'engines/unreal/**/DaedalusArkShroudPathsCore.h'
+      - 'engines/unreal/**/DaedalusArkBerthLeasesCore.h'
+      - 'engines/unreal/**/DaedalusArkSwellCrestsCore.h'
+      - 'engines/unreal/**/DaedalusStableRandom.h'
+      - 'engines/unreal/core-test/ark_trees_test.h'
+      - 'engines/unreal/core-test/ark_shroud_paths_*'
+      - 'engines/unreal/core-test/ark_berth_leases_*'
+      - 'engines/unreal/core-test/ark_swell_crests_*'
+      - '.github/workflows/ark-trees-cores.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'engines/unreal/**/DaedalusArk*Core.h'
+      - 'engines/unreal/**/DaedalusStableRandom.h'
+      - 'engines/unreal/core-test/ark_*'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ark tree cores replay the Java parity files (sanitized, warnings as errors)
+        working-directory: engines/unreal/core-test
+        run: |
+          for name in ark_shroud_paths ark_berth_leases ark_swell_crests; do
+            ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -fno-omit-frame-pointer \
+              -I../DaedalusLink/Source/DaedalusLink/Public "${name}_core_test.cpp" -o "$RUNNER_TEMP/$name"
+            "$RUNNER_TEMP/$name" "${name}_parity.txt"
+          done

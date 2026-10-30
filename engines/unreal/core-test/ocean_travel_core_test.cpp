@@ -1,5 +1,7 @@
 #include "../DaedalusLink/Source/DaedalusLink/Public/DaedalusOceanTravelCore.h"
 #include <iostream>
+#include <cstdlib>
+#include "../DaedalusLink/Source/DaedalusLink/Public/DaedalusRealmSessionCore.h"
 using namespace DaedalusOceanTravel;
 #define CHECK(x) do { if (!(x)) return 1; ++checks; } while (0)
 int main()
@@ -81,5 +83,35 @@ int main()
     CHECK(registry.Resolve("Portal Realm","home","sea",Vessel::Boat).ArrivalAnchor=="sea_pier");
     CHECK(registry.Configure(realms,docks,{}));
     CHECK(!registry.Resolve("Portal Realm","home","sea",Vessel::Boat).Allowed);
+    // Use the exact IDs emitted by the native session and Java realm directory.
+    const Dock canonicalHome{"home", "PORTAL", "home_pier", false};
+    const Dock canonicalSea{"sea", "OCEAN", "sea_pier", false};
+    const Dock canonicalReef{"reef", "OCEAN", "reef_airlock", true};
+    const Dock canonicalGallery{"gallery", "GALLERY-CITY", "gallery_airlock", true};
+    DockRegistry canonical;
+    const std::vector<std::string> canonicalRealms{"PORTAL","OCEAN","GALLERY-CITY"};
+    CHECK(canonical.Configure(canonicalRealms,{canonicalHome,canonicalSea,canonicalReef,canonicalGallery},connections));
+    daedalus::session::Session session;
+    auto enterPortal=session.Go("PORTAL",daedalus::session::Via::Portal);
+    CHECK(enterPortal.Ok);session.Apply(enterPortal);
+    const auto out=canonical.Resolve(session.Current(),"home","sea",Vessel::Boat);
+    CHECK(out.Allowed && out.DestinationRealm=="OCEAN");
+    auto board=session.Go(out.DestinationRealm,daedalus::session::Via::Dock,"boat:home");
+    CHECK(board.Ok);session.Apply(board);
+    const auto back=canonical.Resolve(session.Current(),"sea","home",Vessel::Boat);
+    CHECK(back.Allowed && back.DestinationRealm=="PORTAL");
+    CHECK(session.Go(back.DestinationRealm,daedalus::session::Via::Shore).Ok);
+    const auto sub=canonical.Resolve(session.Current(),"reef","gallery",Vessel::Submarine);
+    CHECK(sub.Allowed && sub.DestinationRealm=="GALLERY-CITY");
+    CHECK(session.Go(sub.DestinationRealm,daedalus::session::Via::Dock,"sub:gallery").Ok);
+    CHECK(!canonical.Resolve("OCEAN","reef","gallery",Vessel::Boat).Allowed);
+    CHECK(!Board("OCEAN",canonicalSea,canonicalReef,Vessel::Submarine).Allowed);
+    CHECK(!Land("OCEAN",canonicalSea,Vessel::Submarine).Allowed);
+    CHECK(!Board("PORTAL",canonicalHome,{"bad","ocean","bad",false},Vessel::Boat).Allowed);
+    auto aliases=canonicalRealms;aliases.push_back("Ocean Realm");
+    CHECK(!canonical.Configure(aliases,{canonicalHome,canonicalSea},{}));
+    aliases=canonicalRealms;aliases.push_back("Portal Realm");
+    CHECK(!canonical.Configure(aliases,{canonicalHome,canonicalSea},{}));
+    CHECK(canonical.Resolve("PORTAL","home","sea",Vessel::Boat).DestinationRealm=="OCEAN");
     std::cout << "OCEAN_TRAVEL_PASS " << checks << " checks\n";
 }

@@ -695,10 +695,12 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -727,10 +729,12 @@
       "option_count": 2,
       "capabilities": [
         "action_cue",
+        "contrast_mark",
         "difficulty",
         "focus_freeze",
         "fresh_pad_replay",
         "hints",
+        "key_hint",
         "options",
         "save_restore",
         "scoreboard",
@@ -765,6 +769,38 @@
         "hints",
         "options",
         "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "siltlane",
+      "title": "Siltlane",
+      "summary": "Switch lanes so the drifting silt passes you. Left/Right or stick: change lane",
+      "how_to_play": "HOW Switch lanes so the drifting silt passes you.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "spawn_overlook",
+      "daedalus_spot": "Spawn overlook, the silt course",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"siltlane\", Seed)",
+      "portable_tests": [
+        "desktop_siltlane"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "options",
         "scoreboard",
         "source_keys"
       ],
@@ -850,6 +886,23 @@
       "default_difficulty": "normal",
       "tests": [
         "test_shadewatch.py"
+      ]
+    },
+    {
+      "id": "glimmerloom",
+      "title": "Glimmerloom Ledger",
+      "summary": "trade hued Prism Shards at the Glimmerloom market and grow your purse.",
+      "how_to_play": "HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target.",
+      "module": "tools/minigames/glimmerloom.py",
+      "start": "glimmerloom.start(seed, difficulty)",
+      "difficulty": [
+        "easy",
+        "hard",
+        "normal"
+      ],
+      "default_difficulty": "normal",
+      "tests": [
+        "test_glimmerloom.py"
       ]
     }
   ]

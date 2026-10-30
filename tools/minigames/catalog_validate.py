@@ -30,6 +30,7 @@ SAVE_SLOT_PENDING = {
     "gloam_latch": "PR 492 (held for rebuild 5)",
     "reedbeat": "PR 492 (held for rebuild 5)",
     "cairnwell": "PR pending (held for the next rebuild)",
+    "siltlane": "PR pending (held for the next rebuild)",
 }
 
 # Matched as whole words, case-insensitive, with spaces/hyphens/underscores between parts optional.

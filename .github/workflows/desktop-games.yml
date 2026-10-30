@@ -29,7 +29,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.10"
       # ccache (item 19): the gcc sanitizer compile is the slowest step
@@ -56,6 +56,8 @@ jobs:
         run: python tools/minigames/shardring_parity.py --check
       - name: Lumenpath parity fixture is current (engines/unreal/core-test/lumenpath_parity.txt)
         run: python tools/minigames/lumenpath_parity.py --check
+      - name: Shadewatch parity fixture is current (engines/unreal/core-test/shadewatch_parity.txt)
+        run: python tools/minigames/shadewatch_parity.py --check
       - name: Wardens' Accord parity fixture is current (engines/unreal/core-test/wardens_accord_parity.txt)
         run: python tools/minigames/wardens_accord_parity.py --check
       - name: Facetlock parity fixture is current (engines/unreal/core-test/facetlock_parity.txt)

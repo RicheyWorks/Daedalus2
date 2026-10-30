@@ -1,4 +1,4 @@
-﻿# Hephaestus Island: the forge island
+# Hephaestus Island: the forge island
 
 Contest entry by hephaestus. Twice normal size (**1024 x 1024 m**). Manifest: `data/islands/hephaestus.json`. Island data pack: `data/islands/hephaestus/` (`layout.json`, `water.json`, `herbs.json`, `livestock.json`).
 
