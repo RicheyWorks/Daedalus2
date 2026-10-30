@@ -4,6 +4,7 @@
 //   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public fogbell_core_test.cpp -o fogbell_core_test && ./fogbell_core_test fogbell_parity.txt
 #include "DaedalusFogbellCore.h"
 #include <cstdio>
+#include <cstdlib>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -77,6 +78,53 @@ int UnitChecks()
 	return Fails;
 }
 
+/** Iteration 2: 600 random voyages steered with random legal moves; every state must satisfy the rules' invariants. */
+int InvariantSweep()
+{
+	int Fails = 0, Steps = 0;
+	const char* Diffs[] = { "easy", "normal", "hard" };
+	for (std::uint32_t Seed = 0; Seed < 200 && Fails == 0; ++Seed)
+		for (const char* Diff : Diffs)
+		{
+			Game G; G.Start(Seed, Diff);
+			const std::vector<std::vector<int>> Heights = G.Heights;
+			std::uint32_t Pick = Seed * 2654435761u + 11u;
+			while (!G.Over)
+			{
+				// collect the legal moves the way the rules define them, then pick one
+				std::vector<Move> Legal;
+				for (int I = 0; I < MoveCount; ++I)
+				{
+					const Move M = static_cast<Move>(I);
+					const int R = G.Ferry.R + MoveDR(M), C = G.Ferry.C + MoveDC(M);
+					if (G.Inside(R, C) && !G.Flooded(R, C)) Legal.push_back(M);
+				}
+				if (Legal.empty()) { std::printf("FAIL sweep: no legal move while dry (seed %u %s)\n", Seed, Diff); ++Fails; break; }
+				Pick = Pick * 1664525u + 1013904223u;
+				const Move M = Legal[(Pick >> 16) % Legal.size()];
+				const int TurnBefore = G.Turn; const Cell FerryBefore = G.Ferry;
+				std::string Text;
+				if (G.Step(M, Text) != Game::Act::Ok) { std::printf("FAIL sweep: legal move refused (seed %u %s)\n", Seed, Diff); ++Fails; break; }
+				++Steps;
+				bool Ok = G.Turn == TurnBefore + 1 && G.Heights == Heights && G.Aboard + static_cast<int>(G.Passengers.size()) == G.Diff->Passengers;
+				Ok = Ok && std::abs(G.Ferry.R - FerryBefore.R) + std::abs(G.Ferry.C - FerryBefore.C) <= 1;
+				if (G.Over)
+				{
+					const bool AtHarbour = G.Ferry == G.Harbour;
+					Ok = Ok && (AtHarbour || G.Flooded(G.Ferry.R, G.Ferry.C)) && G.Won == (AtHarbour && G.Aboard >= G.Diff->Need);
+					if (AtHarbour) Ok = Ok && G.Score == PassengerScore * G.Aboard + TideScore * std::max(0, TideEvery * G.Size() - G.Turn);
+				}
+				else Ok = Ok && !G.Flooded(G.Ferry.R, G.Ferry.C) && G.Score == 0;
+				if (!Ok) { std::printf("FAIL sweep invariant (seed %u %s turn %d): %s\n", Seed, Diff, G.Turn, Text.c_str()); ++Fails; break; }
+				if (G.Turn > TideEvery * G.Size()) { std::printf("FAIL sweep: voyage outlived the tide\n"); ++Fails; break; }
+			}
+			std::string Text;
+			if (G.Step(Move::Wait, Text) != Game::Act::GameOver) { std::printf("FAIL sweep: finished voyage accepted a move\n"); ++Fails; }
+		}
+	if (!Fails) std::printf("sweep: 600 voyages, %d random legal moves, invariants held\n", Steps);
+	return Fails;
+}
+
 } // namespace
 
 int main(int Argc, char** Argv)
@@ -84,7 +132,7 @@ int main(int Argc, char** Argv)
 	if (Argc < 2) { std::printf("usage: fogbell_core_test fogbell_parity.txt\n"); return 2; }
 	std::ifstream In(Argv[1]);
 	if (!In) { std::printf("FAIL cannot open %s\n", Argv[1]); return 2; }
-	int Fails = UnitChecks(), Games = 0;
+	int Fails = UnitChecks() + InvariantSweep(), Games = 0;
 	std::string Line; Game G; std::uint32_t Seed = 0; std::string Diff; bool Skip = false;
 	while (std::getline(In, Line))
 	{
