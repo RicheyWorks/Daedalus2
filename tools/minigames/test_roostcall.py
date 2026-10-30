@@ -113,6 +113,23 @@ class Saves(unittest.TestCase):
         self.bad(won=True)
 
 
+class Screen(unittest.TestCase):
+    """Iterations 7 and 9: tutorial rows on the first turn only; skittish birds drawn lower-case."""
+    def test_tutorial_only_on_the_first_turn(self):
+        g = gm.start(2)
+        self.assertIn("WALK   n/e/s/w", g.render())
+        g.step("wait")
+        self.assertNotIn("WALK   n/e/s/w", g.render())
+
+    def test_skittish_birds_are_marked(self):
+        g = gm.start(1)
+        g.cfg = dict(g.cfg, size=6, birds=1)
+        g.whistler, g.birds, g.turns = [1, 1], [[2, 1]], 10
+        self.assertIn("b", g.render().split("\n")[3])
+        g.birds = [[5, 1]]
+        self.assertIn("B", g.render().split("\n")[6])
+
+
 class Preview(unittest.TestCase):
     """Iteration 8: preview reports exactly the flights the move would cause, without moving anything."""
     def test_preview_matches_the_real_move(self):

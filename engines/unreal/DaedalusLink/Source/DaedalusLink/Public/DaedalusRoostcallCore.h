@@ -72,6 +72,8 @@ struct Game
 	bool Inside(Cell X) const noexcept { return X.R >= 0 && X.R < Size() && X.C >= 0 && X.C < Size(); }
 	bool InRoost(Cell X) const noexcept { return X.R >= Size() - Roost && X.C >= Size() - Roost; }
 	int BirdAt(Cell X) const noexcept { for (size_t I = 0; I < Birds.size(); ++I) if (Birds[I] == X) return static_cast<int>(I); return -1; }
+	/** Game.fresh: no turn taken yet, so the screen shows its tutorial rows. */
+	bool FreshYard() const noexcept { return Diff && Turns == Diff->Turns && !Over; }
 	/** Manhattan distance to the nearest roost cell. */
 	int RoostDistance(Cell X) const noexcept { return std::max(0, (Size() - Roost) - X.R) + std::max(0, (Size() - Roost) - X.C); }
 
