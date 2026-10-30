@@ -1,0 +1,6222 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_BuddyBerths",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: chalked-halves marquee, quay side art",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_BuddyBerths_M0",
+     "colour": "cabinet body",
+     "hex": "2A4A5A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_BuddyBerths_M1",
+     "colour": "trim / side art panel",
+     "hex": "C8B48A",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_BuddyBerths_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "9AD8FF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_BuddyBerths_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_BuddyBerths_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_BuddyBerths_M5",
+     "colour": "chalk",
+     "hex": "F2F2E8",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_BuddyBerths",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "MarqChalk",
+       "shape": "box",
+       "size": [
+        0.005,
+        0.02,
+        0.2
+       ],
+       "centre": [
+        0,
+        -0.17,
+        1.93
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "MarqChalkQ-1",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.2,
+        -0.17,
+        1.93
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "MarqChalkQ1",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        0.2,
+        -0.17,
+        1.93
+       ],
+       "slot": 5,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_BuddyBerths_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 520,
+    "lod1_triangles": 520,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_BuddyBerths": 520
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.06
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.06
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5f7757c123cc9d8efd7b939a022b4dbed2acac0d918f5e485ae5e0dacf1a1c00"
+  },
+  {
+   "asset": "Prop_BuddyBerths_QuayUnit",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "3 m quay unit (16 tile to 48 m along X; ships moor on -Y)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Start",
+     "SOCKET_End",
+     "SOCKET_Stencil",
+     "SOCKET_Mooring"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_QuayUnit_M0",
+     "colour": "quay planks",
+     "hex": "7A6040",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_QuayUnit_M1",
+     "colour": "plank gaps",
+     "hex": "3A2A1A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_BuddyBerths_QuayUnit_M2",
+     "colour": "kerb stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_BuddyBerths_QuayUnit_M3",
+     "colour": "unit number stencil (decal)",
+     "hex": "F2F2E8",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_QuayUnit",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        3.0,
+        4.0,
+        0.3
+       ],
+       "centre": [
+        0,
+        0,
+        -0.15
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Plank0",
+       "shape": "box",
+       "size": [
+        0.02,
+        4.0,
+        0.01
+       ],
+       "centre": [
+        -1.25,
+        0,
+        0.005
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Plank1",
+       "shape": "box",
+       "size": [
+        0.02,
+        4.0,
+        0.01
+       ],
+       "centre": [
+        -0.75,
+        0,
+        0.005
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Plank2",
+       "shape": "box",
+       "size": [
+        0.02,
+        4.0,
+        0.01
+       ],
+       "centre": [
+        -0.25,
+        0,
+        0.005
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Plank3",
+       "shape": "box",
+       "size": [
+        0.02,
+        4.0,
+        0.01
+       ],
+       "centre": [
+        0.25,
+        0,
+        0.005
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Plank4",
+       "shape": "box",
+       "size": [
+        0.02,
+        4.0,
+        0.01
+       ],
+       "centre": [
+        0.75,
+        0,
+        0.005
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Plank5",
+       "shape": "box",
+       "size": [
+        0.02,
+        4.0,
+        0.01
+       ],
+       "centre": [
+        1.25,
+        0,
+        0.005
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Kerb",
+       "shape": "box",
+       "size": [
+        3.0,
+        0.2,
+        0.15
+       ],
+       "centre": [
+        0,
+        -1.9,
+        0.075
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Stencil",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.4,
+        0.01
+       ],
+       "centre": [
+        0,
+        1.5,
+        0.006
+       ],
+       "slot": 3,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Start",
+     "location": [
+      -1.5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -1.5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_End",
+     "location": [
+      1.5,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      1.5,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Stencil",
+     "location": [
+      0,
+      1.5,
+      0.01
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.01,
+      -1.5
+     ]
+    },
+    {
+     "name": "SOCKET_Mooring",
+     "location": [
+      0,
+      -2.0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      2.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_QuayUnit_00",
+     "shape": "box",
+     "size": [
+      3.0,
+      4.0,
+      0.45
+     ],
+     "centre": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 140,
+    "lod1_triangles": 140,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_QuayUnit": 140
+    },
+    "bounds_min": [
+     -1.5,
+     -2.0,
+     -0.3
+    ],
+    "bounds_max": [
+     1.5,
+     2.0,
+     0.15
+    ],
+    "dimensions": [
+     3.0,
+     4.0,
+     0.45
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9f3fb9db36fe9dc5ec7403307595424ca738225d67315dbca70a37d6daca8b9e"
+  },
+  {
+   "asset": "Prop_BuddyBerths_ChalkLines_Halves",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "decal strips for halves over the 48 m quay",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_QuayStart"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_ChalkLines_Halves_M0",
+     "colour": "chalk decal (fade on merge)",
+     "hex": "F2F2E8",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_ChalkLines_Halves",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Line1",
+       "shape": "box",
+       "size": [
+        0.12,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        0.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_QuayStart",
+     "location": [
+      -24,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -24,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_ChalkLines_Halves_00",
+     "shape": "box",
+     "size": [
+      48.0,
+      3.6,
+      0.01
+     ],
+     "centre": [
+      0,
+      0,
+      0.002
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 12,
+    "lod1_triangles": 12,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_ChalkLines_Halves": 12
+    },
+    "bounds_min": [
+     -0.06,
+     -1.8,
+     0.0
+    ],
+    "bounds_max": [
+     0.06,
+     1.8,
+     0.004
+    ],
+    "dimensions": [
+     0.12,
+     3.6,
+     0.004
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f74dba9403580c351ad26193cf0cbd14712bebfa385680aa3d54c7046b0d8cf4"
+  },
+  {
+   "asset": "Prop_BuddyBerths_ChalkLines_Quarters",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "decal strips for quarters over the 48 m quay",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_QuayStart"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_ChalkLines_Quarters_M0",
+     "colour": "chalk decal (fade on merge)",
+     "hex": "F2F2E8",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_ChalkLines_Quarters",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Line1",
+       "shape": "box",
+       "size": [
+        0.09,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -12.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line2",
+       "shape": "box",
+       "size": [
+        0.09,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        0.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line3",
+       "shape": "box",
+       "size": [
+        0.09,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        12.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_QuayStart",
+     "location": [
+      -24,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -24,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_ChalkLines_Quarters_00",
+     "shape": "box",
+     "size": [
+      48.0,
+      3.6,
+      0.01
+     ],
+     "centre": [
+      0,
+      0,
+      0.002
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 36,
+    "lod1_triangles": 36,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_ChalkLines_Quarters": 36
+    },
+    "bounds_min": [
+     -12.045,
+     -1.8,
+     0.0
+    ],
+    "bounds_max": [
+     12.045,
+     1.8,
+     0.004
+    ],
+    "dimensions": [
+     24.09,
+     3.6,
+     0.004
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "069eff76a8f0b1491bf3b9494c824eb552b173b770abd1d41e05055766ac1055"
+  },
+  {
+   "asset": "Prop_BuddyBerths_ChalkLines_Eighths",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "decal strips for eighths over the 48 m quay",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_QuayStart"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_ChalkLines_Eighths_M0",
+     "colour": "chalk decal (fade on merge)",
+     "hex": "F2F2E8",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_ChalkLines_Eighths",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Line1",
+       "shape": "box",
+       "size": [
+        0.06,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -18.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line2",
+       "shape": "box",
+       "size": [
+        0.06,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -12.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line3",
+       "shape": "box",
+       "size": [
+        0.06,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -6.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line4",
+       "shape": "box",
+       "size": [
+        0.06,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        0.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line5",
+       "shape": "box",
+       "size": [
+        0.06,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        6.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line6",
+       "shape": "box",
+       "size": [
+        0.06,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        12.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line7",
+       "shape": "box",
+       "size": [
+        0.06,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        18.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_QuayStart",
+     "location": [
+      -24,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -24,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_ChalkLines_Eighths_00",
+     "shape": "box",
+     "size": [
+      48.0,
+      3.6,
+      0.01
+     ],
+     "centre": [
+      0,
+      0,
+      0.002
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_ChalkLines_Eighths": 84
+    },
+    "bounds_min": [
+     -18.03,
+     -1.8,
+     0.0
+    ],
+    "bounds_max": [
+     18.03,
+     1.8,
+     0.004
+    ],
+    "dimensions": [
+     36.06,
+     3.6,
+     0.004
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "da4dfeed80941e85af2421521d436ed66c197120c394491635f53bb749c078ab"
+  },
+  {
+   "asset": "Prop_BuddyBerths_ChalkLines_Sixteenths",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "decal strips for sixteenths over the 48 m quay",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_QuayStart"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_ChalkLines_Sixteenths_M0",
+     "colour": "chalk decal (fade on merge)",
+     "hex": "F2F2E8",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_ChalkLines_Sixteenths",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Line1",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -21.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line2",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -18.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line3",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -15.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line4",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -12.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line5",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -9.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line6",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -6.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line7",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        -3.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line8",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        0.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line9",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        3.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line10",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        6.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line11",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        9.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line12",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        12.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line13",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        15.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line14",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        18.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Line15",
+       "shape": "box",
+       "size": [
+        0.04,
+        3.6,
+        0.004
+       ],
+       "centre": [
+        21.0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_QuayStart",
+     "location": [
+      -24,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -24,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_ChalkLines_Sixteenths_00",
+     "shape": "box",
+     "size": [
+      48.0,
+      3.6,
+      0.01
+     ],
+     "centre": [
+      0,
+      0,
+      0.002
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 180,
+    "lod1_triangles": 180,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_ChalkLines_Sixteenths": 180
+    },
+    "bounds_min": [
+     -21.02,
+     -1.8,
+     0.0
+    ],
+    "bounds_max": [
+     21.02,
+     1.8,
+     0.004
+    ],
+    "dimensions": [
+     42.04,
+     3.6,
+     0.004
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ef32df14a2eb592406c972641c51d5ab1d4feaca42a5d2d0b8c63fab70482b60"
+  },
+  {
+   "asset": "Prop_BuddyBerths_Ship_Dinghy",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "3 m moored hull: size 1 dinghy",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Bow",
+     "SOCKET_Stern",
+     "SOCKET_Deck",
+     "SOCKET_Pennant"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_Ship_Dinghy_M0",
+     "colour": "hull",
+     "hex": "C8A06A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_Ship_Dinghy_M1",
+     "colour": "deck",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_BuddyBerths_Ship_Dinghy_M2",
+     "colour": "spars / hatch",
+     "hex": "5A3A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_BuddyBerths_Ship_Dinghy_M3",
+     "colour": "sail",
+     "hex": "E8DCC0",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_Ship_Dinghy",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Hull",
+       "shape": "box",
+       "size": [
+        1.4,
+        2.4,
+        0.8
+       ],
+       "centre": [
+        0,
+        0.3,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bow",
+       "shape": "box",
+       "size": [
+        0.994,
+        0.994,
+        0.8
+       ],
+       "centre": [
+        0,
+        -0.9,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        1.3,
+        2.3,
+        0.05
+       ],
+       "centre": [
+        0,
+        0.3,
+        0.82
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Rail",
+       "shape": "box",
+       "size": [
+        1.4,
+        0.05,
+        0.25
+       ],
+       "centre": [
+        0,
+        1.47,
+        0.95
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bow",
+     "location": [
+      0,
+      -1.6,
+      0.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.8,
+      1.6
+     ]
+    },
+    {
+     "name": "SOCKET_Stern",
+     "location": [
+      0,
+      1.5,
+      0.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.8,
+      -1.5
+     ]
+    },
+    {
+     "name": "SOCKET_Deck",
+     "location": [
+      0,
+      0.3,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.85,
+      -0.3
+     ]
+    },
+    {
+     "name": "SOCKET_Pennant",
+     "location": [
+      0,
+      0,
+      2.15
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.15,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_Ship_Dinghy_00",
+     "shape": "box",
+     "size": [
+      1.4,
+      3.0,
+      2.15
+     ],
+     "centre": [
+      0,
+      0,
+      1.075
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 176,
+    "lod1_triangles": 176,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_Ship_Dinghy": 176
+    },
+    "bounds_min": [
+     -0.7,
+     -1.535,
+     0.0
+    ],
+    "bounds_max": [
+     0.7,
+     1.5,
+     1.075
+    ],
+    "dimensions": [
+     1.4,
+     3.035,
+     1.075
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "20897f40546c1ae55494eecaf7818e777e84fec511ddeed8ad09de70165b383f"
+  },
+  {
+   "asset": "Prop_BuddyBerths_Ship_Ketch",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "6 m moored hull: size 2 ketch",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Bow",
+     "SOCKET_Stern",
+     "SOCKET_Deck",
+     "SOCKET_Pennant"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_Ship_Ketch_M0",
+     "colour": "hull",
+     "hex": "4A6A8A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_Ship_Ketch_M1",
+     "colour": "deck",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_BuddyBerths_Ship_Ketch_M2",
+     "colour": "spars / hatch",
+     "hex": "5A3A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_BuddyBerths_Ship_Ketch_M3",
+     "colour": "sail",
+     "hex": "E8DCC0",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_Ship_Ketch",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Hull",
+       "shape": "box",
+       "size": [
+        1.56,
+        4.8,
+        0.8
+       ],
+       "centre": [
+        0,
+        0.6,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bow",
+       "shape": "box",
+       "size": [
+        1.1076,
+        1.1076,
+        0.8
+       ],
+       "centre": [
+        0,
+        -1.8,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        1.46,
+        4.7,
+        0.05
+       ],
+       "centre": [
+        0,
+        0.6,
+        0.82
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Rail",
+       "shape": "box",
+       "size": [
+        1.56,
+        0.05,
+        0.25
+       ],
+       "centre": [
+        0,
+        2.97,
+        0.95
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Mast0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.078,
+       "r2": 0.04,
+       "length": 2.7,
+       "centre": [
+        0,
+        1.35,
+        2.15
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail0",
+       "shape": "box",
+       "size": [
+        1.716,
+        0.02,
+        1.485
+       ],
+       "centre": [
+        0,
+        1.4,
+        2.15
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Mast1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.078,
+       "r2": 0.04,
+       "length": 2.7,
+       "centre": [
+        0,
+        -0.15,
+        2.15
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail1",
+       "shape": "box",
+       "size": [
+        1.716,
+        0.02,
+        1.485
+       ],
+       "centre": [
+        0,
+        -0.1,
+        2.15
+       ],
+       "slot": 3,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bow",
+     "location": [
+      0,
+      -2.58,
+      0.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.8,
+      2.58
+     ]
+    },
+    {
+     "name": "SOCKET_Stern",
+     "location": [
+      0,
+      3.0,
+      0.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.8,
+      -3.0
+     ]
+    },
+    {
+     "name": "SOCKET_Deck",
+     "location": [
+      0,
+      0.6,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.85,
+      -0.6
+     ]
+    },
+    {
+     "name": "SOCKET_Pennant",
+     "location": [
+      0,
+      0,
+      3.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      3.5,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_Ship_Ketch_00",
+     "shape": "box",
+     "size": [
+      1.56,
+      6.0,
+      3.5
+     ],
+     "centre": [
+      0,
+      0,
+      1.75
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 240,
+    "lod1_triangles": 240,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_Ship_Ketch": 240
+    },
+    "bounds_min": [
+     -0.858,
+     -2.5153,
+     0.0
+    ],
+    "bounds_max": [
+     0.858,
+     3.0,
+     3.5
+    ],
+    "dimensions": [
+     1.716,
+     5.5153,
+     3.5
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9370db9f1c55bab788a7360c78e23f416a2932c8fae731e5c5287fcb0d222378"
+  },
+  {
+   "asset": "Prop_BuddyBerths_Ship_Schooner",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "12 m moored hull: size 4 schooner",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Bow",
+     "SOCKET_Stern",
+     "SOCKET_Deck",
+     "SOCKET_Pennant"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_Ship_Schooner_M0",
+     "colour": "hull",
+     "hex": "3A5A4A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_Ship_Schooner_M1",
+     "colour": "deck",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_BuddyBerths_Ship_Schooner_M2",
+     "colour": "spars / hatch",
+     "hex": "5A3A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_BuddyBerths_Ship_Schooner_M3",
+     "colour": "sail",
+     "hex": "E8DCC0",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_Ship_Schooner",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Hull",
+       "shape": "box",
+       "size": [
+        3.12,
+        9.6,
+        1.2
+       ],
+       "centre": [
+        0,
+        1.2,
+        0.6
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bow",
+       "shape": "box",
+       "size": [
+        2.2152,
+        2.2152,
+        1.2
+       ],
+       "centre": [
+        0,
+        -3.6,
+        0.6
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        3.02,
+        9.5,
+        0.05
+       ],
+       "centre": [
+        0,
+        1.2,
+        1.22
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Rail",
+       "shape": "box",
+       "size": [
+        3.12,
+        0.05,
+        0.25
+       ],
+       "centre": [
+        0,
+        5.97,
+        1.35
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Mast0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.096,
+       "r2": 0.04,
+       "length": 5.4,
+       "centre": [
+        0,
+        2.7,
+        3.9
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail0",
+       "shape": "box",
+       "size": [
+        3.432,
+        0.02,
+        2.97
+       ],
+       "centre": [
+        0,
+        2.75,
+        3.9
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Mast1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.096,
+       "r2": 0.04,
+       "length": 5.4,
+       "centre": [
+        0,
+        -0.3,
+        3.9
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail1",
+       "shape": "box",
+       "size": [
+        3.432,
+        0.02,
+        2.97
+       ],
+       "centre": [
+        0,
+        -0.25,
+        3.9
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Cabin",
+       "shape": "box",
+       "size": [
+        2.184,
+        2.16,
+        1.08
+       ],
+       "centre": [
+        0,
+        4.56,
+        1.74
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bow",
+     "location": [
+      0,
+      -5.16,
+      1.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.2,
+      5.16
+     ]
+    },
+    {
+     "name": "SOCKET_Stern",
+     "location": [
+      0,
+      6.0,
+      1.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.2,
+      -6.0
+     ]
+    },
+    {
+     "name": "SOCKET_Deck",
+     "location": [
+      0,
+      1.2,
+      1.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.25,
+      -1.2
+     ]
+    },
+    {
+     "name": "SOCKET_Pennant",
+     "location": [
+      0,
+      0,
+      6.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      6.6,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_Ship_Schooner_00",
+     "shape": "box",
+     "size": [
+      3.12,
+      12.0,
+      6.6
+     ],
+     "centre": [
+      0,
+      0,
+      3.3
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 284,
+    "lod1_triangles": 284,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_Ship_Schooner": 284
+    },
+    "bounds_min": [
+     -1.716,
+     -5.0646,
+     0.0
+    ],
+    "bounds_max": [
+     1.716,
+     6.0,
+     6.6
+    ],
+    "dimensions": [
+     3.432,
+     11.0646,
+     6.6
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "8c68a9afd1e0d801571f9721a0db998ac0abdbd89c30b50632afd39c27767f74"
+  },
+  {
+   "asset": "Prop_BuddyBerths_Ship_Galleon",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "24 m moored hull: size 8 galleon",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Bow",
+     "SOCKET_Stern",
+     "SOCKET_Deck",
+     "SOCKET_Pennant"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_Ship_Galleon_M0",
+     "colour": "hull",
+     "hex": "6A3A2A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_Ship_Galleon_M1",
+     "colour": "deck",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_BuddyBerths_Ship_Galleon_M2",
+     "colour": "spars / hatch",
+     "hex": "5A3A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_BuddyBerths_Ship_Galleon_M3",
+     "colour": "sail",
+     "hex": "E8DCC0",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_Ship_Galleon",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Hull",
+       "shape": "box",
+       "size": [
+        6.24,
+        19.2,
+        2.4
+       ],
+       "centre": [
+        0,
+        2.4,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bow",
+       "shape": "box",
+       "size": [
+        4.4304,
+        4.4304,
+        2.4
+       ],
+       "centre": [
+        0,
+        -7.2,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        6.14,
+        19.1,
+        0.05
+       ],
+       "centre": [
+        0,
+        2.4,
+        2.42
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Rail",
+       "shape": "box",
+       "size": [
+        6.24,
+        0.05,
+        0.25
+       ],
+       "centre": [
+        0,
+        11.97,
+        2.55
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Mast0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.132,
+       "r2": 0.04,
+       "length": 10.8,
+       "centre": [
+        0,
+        8.4,
+        7.8
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail0",
+       "shape": "box",
+       "size": [
+        6.864,
+        0.02,
+        5.94
+       ],
+       "centre": [
+        0,
+        8.45,
+        7.8
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Mast1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.132,
+       "r2": 0.04,
+       "length": 10.8,
+       "centre": [
+        0,
+        2.4,
+        7.8
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail1",
+       "shape": "box",
+       "size": [
+        6.864,
+        0.02,
+        5.94
+       ],
+       "centre": [
+        0,
+        2.45,
+        7.8
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Mast2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.132,
+       "r2": 0.04,
+       "length": 10.8,
+       "centre": [
+        0,
+        -3.6,
+        7.8
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail2",
+       "shape": "box",
+       "size": [
+        6.864,
+        0.02,
+        5.94
+       ],
+       "centre": [
+        0,
+        -3.55,
+        7.8
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Cabin",
+       "shape": "box",
+       "size": [
+        4.368,
+        4.32,
+        2.16
+       ],
+       "centre": [
+        0,
+        9.12,
+        3.48
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bow",
+     "location": [
+      0,
+      -10.32,
+      2.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.4,
+      10.32
+     ]
+    },
+    {
+     "name": "SOCKET_Stern",
+     "location": [
+      0,
+      12.0,
+      2.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.4,
+      -12.0
+     ]
+    },
+    {
+     "name": "SOCKET_Deck",
+     "location": [
+      0,
+      2.4,
+      2.45
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.45,
+      -2.4
+     ]
+    },
+    {
+     "name": "SOCKET_Pennant",
+     "location": [
+      0,
+      0,
+      13.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      13.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_Ship_Galleon_00",
+     "shape": "box",
+     "size": [
+      6.24,
+      24.0,
+      13.2
+     ],
+     "centre": [
+      0,
+      0,
+      6.6
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 316,
+    "lod1_triangles": 316,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_Ship_Galleon": 316
+    },
+    "bounds_min": [
+     -3.432,
+     -10.1291,
+     0.0
+    ],
+    "bounds_max": [
+     3.432,
+     12.0,
+     13.2
+    ],
+    "dimensions": [
+     6.864,
+     22.1291,
+     13.2
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "43e437c56541008d91504a46acd2b362dbb782db7fd14d40100748b9a8002072"
+  },
+  {
+   "asset": "Prop_BuddyBerths_Ship_GreatGalleon",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "48 m moored hull: size 16 greatgalleon",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Bow",
+     "SOCKET_Stern",
+     "SOCKET_Deck",
+     "SOCKET_Pennant"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_Ship_GreatGalleon_M0",
+     "colour": "hull",
+     "hex": "4A2A3A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_Ship_GreatGalleon_M1",
+     "colour": "deck",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_BuddyBerths_Ship_GreatGalleon_M2",
+     "colour": "spars / hatch",
+     "hex": "5A3A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_BuddyBerths_Ship_GreatGalleon_M3",
+     "colour": "sail",
+     "hex": "E8DCC0",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_Ship_GreatGalleon",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Hull",
+       "shape": "box",
+       "size": [
+        12.48,
+        38.4,
+        4.8
+       ],
+       "centre": [
+        0,
+        4.8,
+        2.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bow",
+       "shape": "box",
+       "size": [
+        8.8608,
+        8.8608,
+        4.8
+       ],
+       "centre": [
+        0,
+        -14.4,
+        2.4
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        12.38,
+        38.3,
+        0.05
+       ],
+       "centre": [
+        0,
+        4.8,
+        4.82
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Rail",
+       "shape": "box",
+       "size": [
+        12.48,
+        0.05,
+        0.25
+       ],
+       "centre": [
+        0,
+        23.97,
+        4.95
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Mast0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.204,
+       "r2": 0.04,
+       "length": 21.6,
+       "centre": [
+        0,
+        16.8,
+        15.6
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail0",
+       "shape": "box",
+       "size": [
+        13.728,
+        0.02,
+        11.88
+       ],
+       "centre": [
+        0,
+        16.85,
+        15.6
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Mast1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.204,
+       "r2": 0.04,
+       "length": 21.6,
+       "centre": [
+        0,
+        4.8,
+        15.6
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail1",
+       "shape": "box",
+       "size": [
+        13.728,
+        0.02,
+        11.88
+       ],
+       "centre": [
+        0,
+        4.85,
+        15.6
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Mast2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.204,
+       "r2": 0.04,
+       "length": 21.6,
+       "centre": [
+        0,
+        -7.2,
+        15.6
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Sail2",
+       "shape": "box",
+       "size": [
+        13.728,
+        0.02,
+        11.88
+       ],
+       "centre": [
+        0,
+        -7.15,
+        15.6
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Cabin",
+       "shape": "box",
+       "size": [
+        8.736,
+        8.64,
+        4.32
+       ],
+       "centre": [
+        0,
+        18.24,
+        6.96
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Bow",
+     "location": [
+      0,
+      -20.64,
+      4.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      4.8,
+      20.64
+     ]
+    },
+    {
+     "name": "SOCKET_Stern",
+     "location": [
+      0,
+      24.0,
+      4.8
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      4.8,
+      -24.0
+     ]
+    },
+    {
+     "name": "SOCKET_Deck",
+     "location": [
+      0,
+      4.8,
+      4.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      4.85,
+      -4.8
+     ]
+    },
+    {
+     "name": "SOCKET_Pennant",
+     "location": [
+      0,
+      0,
+      26.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      26.4,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_Ship_GreatGalleon_00",
+     "shape": "box",
+     "size": [
+      12.48,
+      48.0,
+      26.4
+     ],
+     "centre": [
+      0,
+      0,
+      13.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 316,
+    "lod1_triangles": 316,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_Ship_GreatGalleon": 316
+    },
+    "bounds_min": [
+     -6.864,
+     -20.2582,
+     0.0
+    ],
+    "bounds_max": [
+     6.864,
+     24.0,
+     26.4
+    ],
+    "dimensions": [
+     13.728,
+     44.2582,
+     26.4
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "728fae3037574f6871780066d02a52818154963385eeb9f90aad6e5b6b7a0d2c"
+  },
+  {
+   "asset": "Prop_BuddyBerths_ShipPennant",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.0 x 0.4 m pennant: ship name (12 decal variants)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Name"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_ShipPennant_M0",
+     "colour": "batten",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_ShipPennant_M1",
+     "colour": "cloth",
+     "hex": "E8DCC0",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_ShipPennant",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Batten",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 1.1,
+       "centre": [
+        0,
+        0,
+        0.4
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "Cloth",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.01,
+        0.24
+       ],
+       "centre": [
+        0,
+        0,
+        0.272
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tail-1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.01,
+        0.12
+       ],
+       "centre": [
+        -0.3,
+        0,
+        0.096
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Tail1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.01,
+        0.12
+       ],
+       "centre": [
+        0.3,
+        0,
+        0.096
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.4,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Name",
+     "location": [
+      0,
+      -0.01,
+      0.272
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.272,
+      0.01
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_ShipPennant_00",
+     "shape": "box",
+     "size": [
+      1.1,
+      0.03,
+      0.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_ShipPennant": 56
+    },
+    "bounds_min": [
+     -0.55,
+     -0.015,
+     0.036
+    ],
+    "bounds_max": [
+     0.55,
+     0.015,
+     0.413
+    ],
+    "dimensions": [
+     1.1,
+     0.03,
+     0.377
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "6836882f0b705e48508ce6b3ed89e743e988064e149bb59f93ff07c1157be375"
+  },
+  {
+   "asset": "Prop_BuddyBerths_StayHourglass",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.3 m stay hourglass",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_SandTop"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_StayHourglass_M0",
+     "colour": "wood",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_StayHourglass_M1",
+     "colour": "glass",
+     "hex": "D8E8F0",
+     "roughness": 0.05,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_BuddyBerths_StayHourglass_M2",
+     "colour": "sand (level at runtime)",
+     "hex": "E0C080",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_StayHourglass",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.08,
+       "length": 0.02,
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Top",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.08,
+       "length": 0.02,
+       "centre": [
+        0,
+        0,
+        0.29
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Glass",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0.02
+        ],
+        [
+         0.06,
+         0.04
+        ],
+        [
+         0.06,
+         0.1
+        ],
+        [
+         0.008,
+         0.15
+        ],
+        [
+         0.06,
+         0.2
+        ],
+        [
+         0.06,
+         0.26
+        ],
+        [
+         0,
+         0.28
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 1,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Post0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.26,
+       "centre": [
+        0.07,
+        0.0,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Post1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.26,
+       "centre": [
+        -0.03498,
+        0.06064,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Post2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.26,
+       "centre": [
+        -0.03505,
+        -0.06059,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 4
+      },
+      {
+       "name": "Sand",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.045,
+       "r2": 0.01,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        0.055
+       ],
+       "slot": 2,
+       "segments": 8
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_SandTop",
+     "location": [
+      0,
+      0,
+      0.26
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.26,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_StayHourglass_00",
+     "shape": "box",
+     "size": [
+      0.16,
+      0.16,
+      0.3
+     ],
+     "centre": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 256,
+    "lod1_triangles": 256,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_StayHourglass": 256
+    },
+    "bounds_min": [
+     -0.08,
+     -0.08,
+     0.0
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     0.3
+    ],
+    "dimensions": [
+     0.16,
+     0.16,
+     0.3
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "78b695cd71425814e847f81dc195c4fdd2e06d1fc6a9cae72a8122f8c1de6ea2"
+  },
+  {
+   "asset": "Prop_BuddyBerths_DockmotherSlate",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1.5 m slate on legs: Imelda's plan slate",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_UI_Face",
+     "SOCKET_ChalkTray"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_DockmotherSlate_M0",
+     "colour": "wood frame",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_DockmotherSlate_M1",
+     "colour": "slate (runtime chalk UI over this face)",
+     "hex": "2A2E30",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_DockmotherSlate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.06,
+        1.5
+       ],
+       "centre": [
+        0,
+        0,
+        1.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Slate",
+       "shape": "box",
+       "size": [
+        0.9,
+        0.01,
+        1.4
+       ],
+       "centre": [
+        0,
+        -0.031,
+        1.25
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Leg-1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.5
+       ],
+       "centre": [
+        -0.42,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.06,
+        0.5
+       ],
+       "centre": [
+        0.42,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "ChalkTray",
+       "shape": "box",
+       "size": [
+        0.9,
+        0.08,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.05,
+        0.53
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_UI_Face",
+     "location": [
+      0,
+      -0.037,
+      1.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.25,
+      0.037
+     ]
+    },
+    {
+     "name": "SOCKET_ChalkTray",
+     "location": [
+      0,
+      -0.05,
+      0.56
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.56,
+      0.05
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_DockmotherSlate_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      0.1,
+      2.0
+     ],
+     "centre": [
+      0,
+      0,
+      1.0
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 188,
+    "lod1_triangles": 188,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_DockmotherSlate": 188
+    },
+    "bounds_min": [
+     -0.5,
+     -0.09,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.03,
+     2.0
+    ],
+    "dimensions": [
+     1.0,
+     0.12,
+     2.0
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f0710118f48a1b57d7caa5686a893281bd2da00254c4434bd2723fb05ce67e8e"
+  },
+  {
+   "asset": "Prop_BuddyBerths_TurnedAwayBuoy",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.5 m turned-away buoy with emissive counter ring",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Pivot",
+     "SOCKET_Counter",
+     "SOCKET_Anchor"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_TurnedAwayBuoy_M0",
+     "colour": "buoy red",
+     "hex": "C04030",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_TurnedAwayBuoy_M1",
+     "colour": "counter ring (emissive)",
+     "hex": "FFD27A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 2,
+     "name": "Prop_BuddyBerths_TurnedAwayBuoy_M2",
+     "colour": "mast",
+     "hex": "2A2A30",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_TurnedAwayBuoy",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Float",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.4,
+       "r2": 0.35,
+       "length": 0.5,
+       "centre": [
+        0,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "segments": 12
+      },
+      {
+       "name": "Ring",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.42,
+       "r2": 0.42,
+       "length": 0.12,
+       "centre": [
+        0,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 16
+      },
+      {
+       "name": "Mast",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.8,
+       "centre": [
+        0,
+        0,
+        1.0
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Top",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.06
+        ],
+        [
+         0.04243,
+         -0.04243
+        ],
+        [
+         0.06,
+         -0.0
+        ],
+        [
+         0.04243,
+         0.04243
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        1.45
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Pivot",
+     "location": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Counter",
+     "location": [
+      0,
+      -0.42,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.6,
+      0.42
+     ]
+    },
+    {
+     "name": "SOCKET_Anchor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_TurnedAwayBuoy_00",
+     "shape": "box",
+     "size": [
+      0.84,
+      0.84,
+      1.51
+     ],
+     "centre": [
+      0,
+      0,
+      0.755
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 180,
+    "lod1_triangles": 180,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_TurnedAwayBuoy": 180
+    },
+    "bounds_min": [
+     -0.42,
+     -0.42,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.42,
+     1.51
+    ],
+    "dimensions": [
+     0.84,
+     0.84,
+     1.51
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e07663bed7602bc9816450fed75527d736aaa9126cba7804634f19efe549b4c6"
+  },
+  {
+   "asset": "Prop_BuddyBerths_VerdictLantern_Snug",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.40 m signal lamp: snug",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Light"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_VerdictLantern_Snug_M0",
+     "colour": "lamp glass (emissive)",
+     "hex": "40E070",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_VerdictLantern_Snug_M1",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_VerdictLantern_Snug",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.14,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.02
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Glass",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.07,
+       "r2": 0.07,
+       "length": 0.22,
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.03,
+       "r2": 0.09,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        0.285
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Hood",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.06,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.05,
+        0.27
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.15,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_VerdictLantern_Snug_00",
+     "shape": "box",
+     "size": [
+      0.18,
+      0.18,
+      0.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 128,
+    "lod1_triangles": 128,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_VerdictLantern_Snug": 128
+    },
+    "bounds_min": [
+     -0.09,
+     -0.0856,
+     0.0
+    ],
+    "bounds_max": [
+     0.09,
+     0.0856,
+     0.31
+    ],
+    "dimensions": [
+     0.18,
+     0.1712,
+     0.31
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "95d8fa6405c4c258203d708aa15143b6289c6b7b2c7e5d13554f7cd4ff4db48b"
+  },
+  {
+   "asset": "Prop_BuddyBerths_VerdictLantern_Fair",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.40 m signal lamp: fair",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Light"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_VerdictLantern_Fair_M0",
+     "colour": "lamp glass (emissive)",
+     "hex": "FFB03A",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_VerdictLantern_Fair_M1",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_VerdictLantern_Fair",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.14,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.02
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Glass",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.07,
+       "r2": 0.07,
+       "length": 0.22,
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.03,
+       "r2": 0.09,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        0.285
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Hood",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.06,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.05,
+        0.27
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.15,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_VerdictLantern_Fair_00",
+     "shape": "box",
+     "size": [
+      0.18,
+      0.18,
+      0.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 128,
+    "lod1_triangles": 128,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_VerdictLantern_Fair": 128
+    },
+    "bounds_min": [
+     -0.09,
+     -0.0856,
+     0.0
+    ],
+    "bounds_max": [
+     0.09,
+     0.0856,
+     0.31
+    ],
+    "dimensions": [
+     0.18,
+     0.1712,
+     0.31
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3a13472a446260d129284642f38c64fdc2c175c1f37f41ad98ceaee8e80fe615"
+  },
+  {
+   "asset": "Prop_BuddyBerths_VerdictLantern_Crowded",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.40 m signal lamp: crowded",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Light"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_VerdictLantern_Crowded_M0",
+     "colour": "lamp glass (emissive)",
+     "hex": "FF3A3A",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_VerdictLantern_Crowded_M1",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_VerdictLantern_Crowded",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.14,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.02
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Glass",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.07,
+       "r2": 0.07,
+       "length": 0.22,
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Cap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.03,
+       "r2": 0.09,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        0.285
+       ],
+       "slot": 1,
+       "segments": 10
+      },
+      {
+       "name": "Hood",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.06,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.05,
+        0.27
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.15,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_VerdictLantern_Crowded_00",
+     "shape": "box",
+     "size": [
+      0.18,
+      0.18,
+      0.4
+     ],
+     "centre": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 128,
+    "lod1_triangles": 128,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_VerdictLantern_Crowded": 128
+    },
+    "bounds_min": [
+     -0.09,
+     -0.0856,
+     0.0
+    ],
+    "bounds_max": [
+     0.09,
+     0.0856,
+     0.31
+    ],
+    "dimensions": [
+     0.18,
+     0.1712,
+     0.31
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3e3dc39f9b5b3cfddb46411e9f42c6b624e83051c8d6a14239d870515ae6ca39"
+  },
+  {
+   "asset": "Prop_BuddyBerths_ChalkStick",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.1 m chalk stick (HandR)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Tip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_ChalkStick_M0",
+     "colour": "chalk",
+     "hex": "F2F2E8",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_ChalkStick",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.1,
+       "centre": [
+        0,
+        0,
+        0.006
+       ],
+       "slot": 0,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0.02,
+      0.006
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.006,
+      -0.02
+     ]
+    },
+    {
+     "name": "SOCKET_Tip",
+     "location": [
+      0,
+      -0.05,
+      0.006
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.006,
+      0.05
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_ChalkStick_00",
+     "shape": "box",
+     "size": [
+      0.012,
+      0.1,
+      0.012
+     ],
+     "centre": [
+      0,
+      0,
+      0.006
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 20,
+    "lod1_triangles": 20,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_ChalkStick": 20
+    },
+    "bounds_min": [
+     -0.006,
+     -0.05,
+     0.0008
+    ],
+    "bounds_max": [
+     0.006,
+     0.05,
+     0.0112
+    ],
+    "dimensions": [
+     0.012,
+     0.1,
+     0.0104
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "582493902bc5c042fe9d86b937015da8500e0952af7865adb41ce0d1ce414c78"
+  },
+  {
+   "asset": "Prop_BuddyBerths_Duster",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.2 m chalk duster (HandL)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Wipe"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_BuddyBerths_Duster_M0",
+     "colour": "wood",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_BuddyBerths_Duster_M1",
+     "colour": "felt",
+     "hex": "3A3A40",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_BuddyBerths_Duster",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Block",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.06,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.02
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Felt",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.06,
+        0.015
+       ],
+       "centre": [
+        0,
+        0,
+        -0.005
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Wipe",
+     "location": [
+      0,
+      0,
+      -0.013
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      -0.013,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_BuddyBerths_Duster_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.06,
+      0.055
+     ],
+     "centre": [
+      0,
+      0,
+      0.015
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_BuddyBerths_Duster": 56
+    },
+    "bounds_min": [
+     -0.1,
+     -0.03,
+     -0.0125
+    ],
+    "bounds_max": [
+     0.1,
+     0.03,
+     0.04
+    ],
+    "dimensions": [
+     0.2,
+     0.06,
+     0.0525
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ace4695d3c23312f041cf65c093efadbbd370bf71fd68460c5326becb1963abb"
+  },
+  {
+   "asset": "Mob_BuddyBerths_DockmotherImelda",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Dockmother Imelda (rig pending: idle, chalk, rub-out, scold)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_BuddyBerths_DockmotherImelda_M0",
+     "colour": "coat",
+     "hex": "5A3A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_BuddyBerths_DockmotherImelda_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_BuddyBerths_DockmotherImelda_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_BuddyBerths_DockmotherImelda_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_BuddyBerths_DockmotherImelda_M4",
+     "colour": "chalk",
+     "hex": "F2F2E8",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Mob_BuddyBerths_DockmotherImelda_M5",
+     "colour": "duster",
+     "hex": "3A3A40",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_BuddyBerths_DockmotherImelda",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "IChalk",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.006,
+       "r2": 0.006,
+       "length": 0.1,
+       "centre": [
+        -0.37,
+        -0.03,
+        0.85
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "IDuster",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.2,
+        0.04
+       ],
+       "centre": [
+        0.37,
+        -0.04,
+        0.86
+       ],
+       "slot": 5,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_BuddyBerths_DockmotherImelda_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 684,
+    "lod1_triangles": 684,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_BuddyBerths_DockmotherImelda": 684
+    },
+    "bounds_min": [
+     -0.42,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     1.76
+    ],
+    "dimensions": [
+     0.84,
+     0.285,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3758bc325e57e16b308ef21e5b605ae991e22ca192f89cc7c7e5da829f642b35"
+  }
+ ]
+}

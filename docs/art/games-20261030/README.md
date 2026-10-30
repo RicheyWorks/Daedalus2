@@ -47,3 +47,7 @@ Notes
 ## gantry_sweep (disk-saver, READY 59154; GS01-GS12)
 
 24 assets: cabinet (GS01), gantry crane (GS02), 4 m quay rail segment (GS03), berth bollard with swappable plate (GS04), trader cog, fishing smack and river barge each with hatch open and closed (GS05), arrival tick board 0-60 (GS06), rail-post slate (GS07), tide flags calm, rush, spread and ragged storm (GS08), verdict lamps sweet, fair and jammed (GS09), crates 0.5, 1 and 2 m (GS10), grease tin (GS11), Railwright Ossian (GS12). The crane and Ossian are static, rigs pending. Plate text is a decal variant. Sheet: gantry_sweep.png.
+
+## buddy_berths (disk-saver, READY 59156; BB01-BB11)
+
+21 assets: cabinet (BB01), 3 m quay unit, 16 tile to 48 m (BB02), chalk-line decal strips for halves, quarters, eighths and sixteenths (BB03), dinghy, ketch, schooner, galleon and great galleon hulls (BB04), ship name pennant with 12 decal variants (BB05), stay hourglass (BB06), Dockmother slate (BB07), turned-away buoy with counter ring (BB08), verdict lanterns snug, fair and crowded (BB09), chalk stick and duster (BB10), Dockmother Imelda (BB11). Imelda is static, rig pending. Sheet: buddy_berths.png.

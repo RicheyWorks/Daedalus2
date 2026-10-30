@@ -627,7 +627,7 @@ def flag(a, cloth_hex, note, pole=4.0, w=1.0, h=0.6, ragged=False):
 
 def pennant(a, cloth_hex, note, w=1.0, h=0.5):
     P = [K.cyl("Batten", "x", 0.015, 0.015, w + 0.1, (0, 0, h), 0, 6), K.box("Cloth", (w, 0.01, h * 0.6), (0, 0, h * 0.68), 1, bevel=False)]
-    P += [K.box("Tail%d" % s, (w / 2, 0.01, h * 0.35), (s * w / 4, 0, h * 0.22), 1, bevel=False, rot=(0, s * 25, 0)) for s in (-1, 1)]
+    P += [K.box("Tail%d" % s, (w * 0.4, 0.01, h * 0.3), (s * w * 0.3, 0, h * 0.24), 1, bevel=False) for s in (-1, 1)]
     return simple(a, P, [("batten", WOOD, 0.7), ("cloth", cloth_hex, 0.95)], [K.socket("Hang", (0, 0, h)), K.socket("Name", (0, -0.01, h * 0.68))], "%.1f x %.1f m pennant: %s" % (w, h, note), (w + 0.1, 0.03, h), (0, 0, h / 2))
 
 
@@ -707,6 +707,87 @@ def gantry_sweep():
     P += [K.box("BailSide%d" % s, (0.006, 0.006, 0.05), (s * 0.05, 0, 0.11), 1, bevel=False) for s in (-1, 1)]
     out.append(simple(a, P, [("tin", "6A6A60", 0.5, 0.8), ("lid / bail", "3A3A30", 0.6, 0.8)], [K.socket("Grip", (0, 0, 0.13)), K.socket("Base", (0, 0, 0))], "0.14 m grease tin (attach Grip to Ossian HandR)", (0.11, 0.11, 0.14), (0, 0, 0.07)))
     out.append(npc("Mob_GantrySweep_RailwrightOssian", "3A4A5A", "4A3A2A", [K.cyl("OTin", "z", 0.05, 0.05, 0.08, (-0.37, 0, 0.82), 4, 10)], [("grease tin", "6A6A60", 0.5, 0.8)], "Railwright Ossian (rig pending: idle, chalk, grumble)"))
+    return out
+
+
+
+# ================================================================ buddy_berths (disk-saver, READY 59156)
+@game("buddy_berths")
+def buddy_berths():
+    G = "Prop_BuddyBerths_"; out = []
+    top = [K.box("MarqChalk", (0.005, 0.02, 0.2), (0, -0.17, 1.93), 5, bevel=False)] + [K.box("MarqChalkQ%d" % s, (0.004, 0.02, 0.1), (s * 0.2, -0.17, 1.93), 5, bevel=False) for s in (-1, 1)]
+    out.append(cabinet("Prop_Arcade_Cab_BuddyBerths", "2A4A5A", "C8B48A", "9AD8FF", top, [("chalk", "F2F2E8", 0.95)], "chalked-halves marquee, quay side art"))
+    a = G + "QuayUnit"; P = [K.box("Deck", (3.0, 4.0, 0.3), (0, 0, -0.15), 0, bevel=False)] + [K.box("Plank%d" % k, (0.02, 4.0, 0.01), (-1.25 + 0.5 * k, 0, 0.005), 1, bevel=False) for k in range(6)]
+    P += [K.box("Kerb", (3.0, 0.2, 0.15), (0, -1.9, 0.075), 2), K.box("Stencil", (0.5, 0.4, 0.01), (0, 1.5, 0.006), 3, bevel=False)]
+    out.append(simple(a, P, [("quay planks", "7A6040", 0.85), ("plank gaps", "3A2A1A", 0.9), ("kerb stone", STONE, 0.9), ("unit number stencil (decal)", "F2F2E8", 0.8)],
+                      [K.socket("Start", (-1.5, 0, 0)), K.socket("End", (1.5, 0, 0)), K.socket("Stencil", (0, 1.5, 0.01)), K.socket("Mooring", (0, -2.0, 0.1))], "3 m quay unit (16 tile to 48 m along X; ships moor on -Y)", (3.0, 4.0, 0.45), (0, 0, 0)))
+    for lvl, n in (("Halves", 2), ("Quarters", 4), ("Eighths", 8), ("Sixteenths", 16)):
+        a = G + "ChalkLines_" + lvl; w = 0.12 if n == 2 else 0.09 if n == 4 else 0.06 if n == 8 else 0.04
+        P = [K.box("Line%d" % k, (w, 3.6, 0.004), (-24 + 48.0 * k / n, 0, 0.002), 0, bevel=False) for k in range(1, n)]
+        out.append(simple(a, P, [("chalk decal (fade on merge)", "F2F2E8", 0.95)], [K.socket("QuayStart", (-24, 0, 0))], "decal strips for %s over the 48 m quay" % lvl.lower(), (48.0, 3.6, 0.01), (0, 0, 0.002)))
+    for sz, nm, hx, m in ((1, "Dinghy", "C8A06A", 0), (2, "Ketch", "4A6A8A", 2), (4, "Schooner", "3A5A4A", 2), (8, "Galleon", "6A3A2A", 3), (16, "GreatGalleon", "4A2A3A", 3)):
+        out.append(hull("Prop_BuddyBerths_Ship_%s" % nm, max(3.0, sz * 3.0), hx, m, sz >= 4, None, "size %d %s" % (sz, nm.lower())))
+    out.append(pennant(G + "ShipPennant", "E8DCC0", "ship name (12 decal variants)", 1.0, 0.4))
+    a = G + "StayHourglass"; P = [K.cyl("Base", "z", 0.08, 0.08, 0.02, (0, 0, 0.01), 0, 8), K.cyl("Top", "z", 0.08, 0.08, 0.02, (0, 0, 0.29), 0, 8),
+                                  K.lathe("Glass", [(0, 0.02), (0.06, 0.04), (0.06, 0.1), (0.008, 0.15), (0.06, 0.2), (0.06, 0.26), (0, 0.28)], (0, 0, 0), 1, 10)]
+    P += [K.cyl("Post%d" % k, "z", 0.006, 0.006, 0.26, (0.07 * math.cos(k * 2.094), 0.07 * math.sin(k * 2.094), 0.15), 0, 4) for k in range(3)] + [K.cyl("Sand", "z", 0.045, 0.01, 0.05, (0, 0, 0.055), 2, 8)]
+    out.append(simple(a, P, [("wood", WOOD, 0.7), ("glass", "D8E8F0", 0.05), ("sand (level at runtime)", "E0C080", 0.9)], [K.socket("Base", (0, 0, 0)), K.socket("SandTop", (0, 0, 0.26))], "0.3 m stay hourglass", (0.16, 0.16, 0.3), (0, 0, 0.15)))
+    out.append(slate(G + "DockmotherSlate", "Imelda's plan slate"))
+    a = G + "TurnedAwayBuoy"; P = [K.cyl("Float", "z", 0.4, 0.35, 0.5, (0, 0, 0.25), 0, 12), K.cyl("Ring", "z", 0.42, 0.42, 0.12, (0, 0, 0.6), 1, 16), K.cyl("Mast", "z", 0.06, 0.05, 0.8, (0, 0, 1.0), 2, 6), ball("Top", (0, 0, 1.45), 0.06, 1, 6)]
+    out.append(simple(a, P, [("buoy red", "C04030", 0.5), ("counter ring (emissive)", "FFD27A", 0.3, 0.0, True), ("mast", "2A2A30", 0.6)], [K.socket("Pivot", (0, 0, 0.2)), K.socket("Counter", (0, -0.42, 0.6)), K.socket("Anchor", (0, 0, 0))], "1.5 m turned-away buoy with emissive counter ring", (0.84, 0.84, 1.51), (0, 0, 0.755)))
+    for nm, hx in (("Snug", "40E070"), ("Fair", "FFB03A"), ("Crowded", "FF3A3A")):
+        out.append(signal_lamp(G + "VerdictLantern_" + nm, hx, nm.lower(), 0.4))
+    a = G + "ChalkStick"; out.append(simple(a, [K.cyl("Stick", "y", 0.006, 0.006, 0.1, (0, 0, 0.006), 0, 6)], [("chalk", "F2F2E8", 0.95)], [K.socket("Grip", (0, 0.02, 0.006)), K.socket("Tip", (0, -0.05, 0.006))], "0.1 m chalk stick (HandR)", (0.012, 0.1, 0.012), (0, 0, 0.006)))
+    a = G + "Duster"; out.append(simple(a, [K.box("Block", (0.2, 0.06, 0.04), (0, 0, 0.02), 0), K.box("Felt", (0.2, 0.06, 0.015), (0, 0, -0.005), 1, bevel=False)], [("wood", WOOD, 0.7), ("felt", "3A3A40", 0.95)],
+                                         [K.socket("Grip", (0, 0, 0.04)), K.socket("Wipe", (0, 0, -0.013))], "0.2 m chalk duster (HandL)", (0.2, 0.06, 0.055), (0, 0, 0.015)))
+    out.append(npc("Mob_BuddyBerths_DockmotherImelda", "5A3A4A", "3A3A48", [K.cyl("IChalk", "z", 0.006, 0.006, 0.1, (-0.37, -0.03, 0.85), 4, 6), K.box("IDuster", (0.06, 0.2, 0.04), (0.37, -0.04, 0.86), 5)], [("chalk", "F2F2E8", 0.95), ("duster", "3A3A40", 0.9)], "Dockmother Imelda (rig pending: idle, chalk, rub-out, scold)"))
+    return out
+
+
+# ================================================================ golf / Tidelinks Golf (disk-saver, READY 59158)
+@game("golf")
+def golf():
+    G = "Prop_TidelinksGolf_"; out = []
+    top = [K.lathe("MarqDune", [(0, 0), (0.3, 0.0), (0, 0.12)], (0.1, 0.05, 2.06), 5, 6), K.cyl("MarqPin", "z", 0.006, 0.006, 0.25, (-0.25, 0.05, 2.18), 6, 4), K.box("MarqFlag", (0.08, 0.01, 0.05), (-0.21, 0.05, 2.27), 7, bevel=False)]
+    out.append(cabinet("Prop_Arcade_Cab_TidelinksGolf", "3A6A4A", "E8D8A8", "FFF2B3", top, [("dune sand", "E0C890", 0.9), ("pin", "F2F2F2", 0.4), ("flag", "E03A3A", 0.9)], "dune-and-flag marquee"))
+    a = G + "TeeBox"; P = [K.box("Tee", (6.0, 4.0, 0.3), (0, 0, 0.15), 0)] + [ball("Marker%d" % s, (s * 1.5, -1.2, 0.36), 0.08, 1, 8) for s in (-1, 1)] + [K.box("PlatePost", (0.08, 0.08, 0.6), (2.6, 1.6, 0.6), 2), K.box("HolePlate", (0.4, 0.03, 0.3), (2.6, 1.56, 0.95), 3, bevel=False)]
+    out.append(simple(a, P, [("tee turf", "5AA04A", 0.95), ("tee markers", "F2F2F2", 0.5), ("post", WOOD, 0.7), ("hole number plate (decal)", "E8D8A8", 0.6)],
+                      [K.socket("Tee", (0, -1.0, 0.3)), K.socket("Aim", (0, -2.0, 0.3)), K.socket("HolePlate", (2.6, 1.54, 0.95))], "6 x 4 m raised tee box (plays toward -Y)", (6.0, 4.0, 1.1), (0, 0, 0.55)))
+    for nm, rough in (("Fairway", False), ("FairwayRoughEdge", True)):
+        a = G + nm; P = [K.box("Fairway", (25.0, 10.0, 0.1), (0, 0, -0.05), 0, bevel=False)] + [K.box("Stripe%d" % k, (2.5, 10.0, 0.005), (-11.25 + 5 * k, 0, 0.003), 1, bevel=False) for k in range(5)]
+        if rough: P += [K.box("Rough%d" % s, (6.0, 10.0, 0.08), (s * 15.5, 0, 0.0), 2, bevel=False) for s in (-1, 1)]
+        out.append(simple(a, P, [("fairway", "5AA04A", 0.95), ("mown stripe", "6AB85A", 0.95), ("rough", "4A7A3A", 0.95)], [K.socket("Start", (0, 5, 0)), K.socket("End", (0, -5, 0))],
+                          "10 m fairway section, 25 m wide%s (tile along Y)" % (" + rough edges" if rough else ""), (37.0 if rough else 25.0, 10.0, 0.14), (0, 0, 0)))
+    a = G + "Green"; P = [K.cyl("Green", "z", 10.0, 10.0, 0.08, (0, 0, 0.04), 0, 24), K.cyl("Fringe", "z", 10.6, 10.6, 0.05, (0, 0, 0.025), 1, 24), K.cyl("Cup", "z", 0.054, 0.054, 0.01, (0, 0, 0.085), 2, 10),
+                         K.cyl("Pin", "z", 0.012, 0.012, 2.1, (0, 0, 1.13), 3, 6), K.box("Flag", (0.5, 0.01, 0.35), (0.26, 0, 1.98), 4, bevel=False)]
+    out.append(simple(a, P, [("green", "6AC05A", 0.9), ("fringe", "5AA04A", 0.95), ("cup", "1A1A1A", 0.9), ("pin", "F2F2F2", 0.4), ("numbered flag (decal)", "E03A3A", 0.9)],
+                      [K.socket("Cup", (0, 0, 0.085)), K.socket("FlagNumber", (0.26, -0.01, 1.98))], "20 m green (10 m radius) with cup, 2.1 m pin and numbered flag", (21.2, 21.2, 2.18), (0, 0, 1.09)))
+    a = G + "WaterHazard"; P = [K.box("Bed", (25.0, 20.0, 0.4), (0, 0, -0.45), 0, bevel=False), K.box("Water", (24.0, 19.0, 0.02), (0, 0, -0.12), 1, bevel=False)] + [K.box("Bank%d" % s, (25.0, 0.6, 0.12), (0, s * 9.8, -0.04), 2, bevel=False) for s in (-1, 1)]
+    out.append(simple(a, P, [("sand bed", "C8B080", 0.9), ("tidal water (shader)", "2A6A8A", 0.05), ("bank", "8A7A5A", 0.9)], [K.socket("Start", (0, 10, 0)), K.socket("End", (0, -10, 0)), K.socket("Splash", (0, 0, -0.1))], "20 m tidal pool band, 25 m wide", (25.0, 20.0, 0.67), (0, 0, -0.32)))
+    a = G + "OOBStake"; P = [K.box("Stake", (0.05, 0.05, 1.0), (0, 0, 0.5), 0), K.box("Tip", (0.04, 0.04, 0.1), (0, 0, -0.05), 0)]
+    out.append(simple(a, P, [("white stake", "F2F2F2", 0.6)], [K.socket("Ground", (0, 0, 0))], "1 m white out-of-bounds stake (instanced)", (0.05, 0.05, 1.1), (0, 0, 0.45)))
+    for nm, L, head in (("Driver", 1.15, "wood"), ("3Wood", 1.08, "wood"), ("5Iron", 0.97, "iron"), ("7Iron", 0.94, "iron"), ("9Iron", 0.91, "iron"), ("Wedge", 0.89, "wedge"), ("Chip", 0.88, "wedge"), ("Putter", 0.86, "putter")):
+        a = G + "Club_" + nm; P = [K.cyl("Grip", "z", 0.013, 0.012, 0.26, (0, 0, L - 0.13), 0, 6), K.cyl("Shaft", "z", 0.007, 0.006, L - 0.3, (0, 0, 0.04 + (L - 0.3) / 2), 1, 6)]
+        if head == "wood": P.append(ball("Head", (0.04, 0, 0.03), 0.045 if nm == "Driver" else 0.035, 2, 8))
+        elif head == "putter": P.append(K.box("Head", (0.11, 0.025, 0.025), (0.04, 0, 0.0125), 2))
+        else: P.append(K.box("Head", (0.075, 0.012, 0.045), (0.035, -0.004, 0.02), 2, rot=(-(20 if head == "iron" else 45), 0, 0)))
+        out.append(simple(a, P, [("grip", "1A1A1A", 0.9), ("shaft", CHROME, 0.25, 1.0), ("head", "2A2A30" if head == "wood" else CHROME, 0.3, 0.9)], [K.socket("Grip", (0, 0, L - 0.1)), K.socket("Face", (0.04, -0.03, 0.02))],
+                          "%.2f m %s" % (L, nm), (0.12, 0.09, L), (0.03, 0, L / 2)))
+    a = G + "ClubRack"; P = [K.box("Base", (1.0, 0.35, 0.06), (0, 0, 0.03), 0), K.box("Back", (1.0, 0.04, 0.9), (0, 0.15, 0.48), 0), K.box("TopRail", (1.0, 0.3, 0.04), (0, 0, 0.95), 0)]
+    S = [K.socket("Floor", (0, 0, 0))] + [K.socket("Slot_%d" % k, (-0.42 + 0.12 * k, 0, 0.06)) for k in range(8)]
+    P += [K.cyl("Hole%d" % k, "z", 0.025, 0.025, 0.02, (-0.42 + 0.12 * k, 0, 0.97), 1, 8) for k in range(8)]
+    out.append(simple(a, P, [("rack wood", WOOD, 0.7), ("slot ring", "3A2A1A", 0.8)], S, "1 m rack, 8 club slots", (1.0, 0.35, 0.97), (0, 0, 0.485)))
+    a = G + "Ball"; out.append(simple(a, [ball("Ball", (0, 0, 0.02135), 0.02135, 0, 12)], [("ball", "F8F8F8", 0.4)], [K.socket("Centre", (0, 0, 0.02135)), K.socket("Trail", (0, 0.02, 0.02135))], "42.7 mm golf ball (trail FX at Trail)", (0.043, 0.043, 0.043), (0, 0, 0.02135)))
+    a = G + "WindSock"; P = [K.cyl("Pole", "z", 0.04, 0.035, 4.0, (0, 0, 2.0), 0, 8), K.cyl("Ring", "x", 0.2, 0.2, 0.03, (0.06, 0, 3.85), 1, 12)]
+    P += [K.cyl("Sock%d" % k, "x", 0.19 - 0.025 * k, 0.17 - 0.025 * k, 0.3, (0.23 + 0.3 * k, 0, 3.85 - 0.06 * k), 2 + k % 2, 10) for k in range(4)]
+    out.append(simple(a, P, [("pole", "E8E4D8", 0.6), ("ring", "3A3A40", 0.5, 0.8), ("sock orange", "F07A2A", 0.9), ("sock white", "F2F2F2", 0.9)], [K.socket("Floor", (0, 0, 0)), K.socket("Pivot", (0, 0, 3.85))],
+                      "4 m wind sock (yaw + droop about Pivot by wind -5..+5)", (1.45, 0.4, 4.05), (0.62, 0, 2.02)))
+    out.append(slate(G + "ScorecardSlate", "Talwyn's scorecard vs par"))
+    for nm, hx in (("Masterful", "E0B030"), ("Steady", "40A060"), ("Rough", "7A5A3A")):
+        out.append(pennant(G + "VerdictPennant_" + nm, hx, nm.lower(), 1.0, 0.5))
+    for nm, coat, acc in (("Safe", "4A6A8A", "E8E4D8"), ("Bold", "C04030", "2A2A30"), ("LayUp", "5A7A4A", "C8B48A")):
+        out.append(npc("Mob_TidelinksGolf_Caddie_" + nm, coat, acc, [K.cyl("Bag", "z", 0.12, 0.12, 0.8, (0.3, 0.2, 0.9), 4, 10, rot=(0, -15, 0))], [("caddie bag", acc, 0.8)], "caddie (%s habit; rig pending: idle, point, shrug)" % nm.lower()))
+    out.append(npc("Mob_TidelinksGolf_GreenkeeperTalwyn", "3A5A3A", "6A5A3A", [K.cyl("Rake", "z", 0.012, 0.012, 1.4, (-0.37, -0.05, 0.75), 4, 6), K.box("RakeHead", (0.35, 0.04, 0.04), (-0.37, -0.05, 0.06), 4)], [("rake wood", WOOD, 0.7)], "Greenkeeper Talwyn (rig pending)"))
     return out
 
 
