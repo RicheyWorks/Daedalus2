@@ -11,7 +11,9 @@ on:
     branches: [ main ]
     paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
   pull_request:
-    # Match the approved cabinet dependency stack as well as main.
+    # Match the approved cabinet dependency stack as well as main. "edited" covers a stacked PR whose base is
+    # retargeted to main after its parent merges; without it that PR never gets these checks.
+    types: [ opened, synchronize, reopened, edited ]
     branches: [ main, codex/realm-production-queue ]
     paths: [ "engines/**", "tools/unreal/*runtime_data.py", "tools/realm/**", "daedalus-core/src/main/java/com/daedalus/world/export/**", ".github/workflows/engines.yml" ]
 
