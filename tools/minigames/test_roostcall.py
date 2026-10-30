@@ -88,6 +88,55 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class Saves(unittest.TestCase):
+    """Iteration 5: from_state refuses saves that break the rules."""
+    def bad(self, **fields):
+        st = gm.start(3).to_state()
+        st.update(fields)
+        with self.assertRaises(ValueError):
+            gm.Game.from_state(st)
+
+    def test_round_trip_still_works(self):
+        g = gm.start(3)
+        for _ in range(4):
+            g.step(g.demo_action())
+        self.assertEqual(gm.Game.from_state(g.to_state()).status(), g.status())
+
+    def test_bad_saves_are_refused(self):
+        g = gm.start(3)
+        self.bad(birds=g.birds + [[6, 6]])
+        self.bad(birds=[g.birds[0], g.birds[0]] + g.birds[2:])
+        self.bad(whistler=list(g.birds[0]))
+        self.bad(whistler=[9, 9])
+        self.bad(turns=0, over=False)
+        self.bad(settled=3)
+        self.bad(won=True)
+
+
+class Preview(unittest.TestCase):
+    """Iteration 8: preview reports exactly the flights the move would cause, without moving anything."""
+    def test_preview_matches_the_real_move(self):
+        for s in range(30):
+            g = gm.start(s, "hard")
+            while not g.over:
+                a = g.demo_action()
+                flights = g.preview(a)
+                self.assertIsNotNone(flights)
+                state = g.to_state()
+                self.assertEqual(g.to_state(), state)
+                before = [list(b) for b in g.birds]
+                res = g.step(a)
+                flew = int(res.split(": ")[1].split(" ")[0])
+                self.assertEqual(flew, len(flights))
+                for i, to in flights.items():
+                    self.assertNotEqual(before[i], to)
+
+    def test_preview_refuses_illegal(self):
+        g = gm.start(3)
+        self.assertIsNone(g.preview("n"))
+        self.assertIsNone(g.preview("x"))
+
+
 class Properties(unittest.TestCase):
     """Iteration 1: invariants on every yard, every move, every seed (no rule change)."""
     SEEDS = range(60)

@@ -54,8 +54,8 @@ inline int MoveDR(Move M) { static const int D[] = { -1, 0, 1, 0, 0 }; return D[
 inline int MoveDC(Move M) { static const int D[] = { 0, 1, 0, -1, 0 }; return D[static_cast<int>(M)]; }
 
 struct Cell { int R = 0, C = 0; bool operator==(const Cell& O) const { return R == O.R && C == O.C; } bool operator!=(const Cell& O) const { return !(*this == O); } };
-inline int Chebyshev(Cell A, Cell B) { return std::max(std::abs(A.R - B.R), std::abs(A.C - B.C)); }
-inline int Manhattan(Cell A, Cell B) { return std::abs(A.R - B.R) + std::abs(A.C - B.C); }
+inline int Chebyshev(Cell A, Cell B) noexcept { return std::max(std::abs(A.R - B.R), std::abs(A.C - B.C)); }
+inline int Manhattan(Cell A, Cell B) noexcept { return std::abs(A.R - B.R) + std::abs(A.C - B.C); }
 
 struct Game
 {
@@ -68,12 +68,12 @@ struct Game
 
 	enum class Act { Ok, BadMove, OffYard, BirdThere, GameOver };
 
-	int Size() const { return Diff ? Diff->Size : 0; }
-	bool Inside(Cell X) const { return X.R >= 0 && X.R < Size() && X.C >= 0 && X.C < Size(); }
-	bool InRoost(Cell X) const { return X.R >= Size() - Roost && X.C >= Size() - Roost; }
-	int BirdAt(Cell X) const { for (size_t I = 0; I < Birds.size(); ++I) if (Birds[I] == X) return static_cast<int>(I); return -1; }
+	int Size() const noexcept { return Diff ? Diff->Size : 0; }
+	bool Inside(Cell X) const noexcept { return X.R >= 0 && X.R < Size() && X.C >= 0 && X.C < Size(); }
+	bool InRoost(Cell X) const noexcept { return X.R >= Size() - Roost && X.C >= Size() - Roost; }
+	int BirdAt(Cell X) const noexcept { for (size_t I = 0; I < Birds.size(); ++I) if (Birds[I] == X) return static_cast<int>(I); return -1; }
 	/** Manhattan distance to the nearest roost cell. */
-	int RoostDistance(Cell X) const { return std::max(0, (Size() - Roost) - X.R) + std::max(0, (Size() - Roost) - X.C); }
+	int RoostDistance(Cell X) const noexcept { return std::max(0, (Size() - Roost) - X.R) + std::max(0, (Size() - Roost) - X.C); }
 
 	/** PrismGame.start + Game.setup. False on an unknown difficulty. Draw order: bird rows and columns in pairs. */
 	bool Start(std::uint32_t Seed, const std::string& DifficultyName)
@@ -99,7 +99,7 @@ struct Game
 	}
 
 	/** Game.flee_step: where bird I steps with the whistler at `From`; false when it stays. */
-	bool FleeStep(int I, Cell From, Cell& To) const
+	bool FleeStep(int I, Cell From, Cell& To) const noexcept
 	{
 		const Cell B = Birds[static_cast<size_t>(I)];
 		if (Chebyshev(B, From) > ScareRange) return false;
@@ -116,6 +116,30 @@ struct Game
 			}
 		}
 		return Found;
+	}
+
+	/** One bird's flight in a preview: `Bird` is its index in Birds, `To` where it would land. */
+	struct Flight { int Bird = 0; Cell To; };
+
+	/**
+	 * Game.preview (iteration 8): the flights `M` would cause right now, in bird order, each seeing the earlier
+	 * flights; false when the move is illegal. Nothing in the game changes; `Count` never exceeds Birds.size().
+	 */
+	bool Preview(Move M, Flight* Out, int& Count) const noexcept
+	{
+		Count = 0;
+		if (Over) return false;
+		const Cell Next{ Whistler.R + MoveDR(M), Whistler.C + MoveDC(M) };
+		if (!Inside(Next) || BirdAt(Next) >= 0) return false;
+		Game Scratch = *this;   // the flock is copied once so later birds see the earlier flights
+		for (size_t I = 0; I < Scratch.Birds.size(); ++I)
+		{
+			Cell To;
+			if (!Scratch.FleeStep(static_cast<int>(I), Next, To)) continue;
+			Scratch.Birds[I] = To;
+			Out[Count++] = { static_cast<int>(I), To };
+		}
+		return true;
 	}
 
 	/** Game.act. `Flew`, `Perched` and `Result` mirror the Python result text. */
