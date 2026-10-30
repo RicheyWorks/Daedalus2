@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "quest": "q_belfry_changes",
+  "lore": "Every island in the census has given the harbour belfry a bell, and after a ragged practice they stand all out of order. Ringer Agatha calls the changes. Each change swaps neighbouring bells, as many pairs at once as you like so long as no bell swaps twice. The great tenor needs a breath after every change it moves in. Let every island's bell ring at lead before the band comes round.",
+  "hook": {
+    "report_format": "daedalus-belfry-changes",
+    "field": "verdict",
+    "values": ["rung", "clattered", "unfinished"],
+    "par": "par",
+    "trap": "single_swap_par",
+    "log": "rows[]"
+  },
+  "npc": {
+    "name": "Ringer Agatha",
+    "lines": {
+      "rung": "Every island led and round in par changes. That's ringing the whole harbour can hear.",
+      "clattered": "We came round, but there were changes we didn't need. Swap more pairs at once.",
+      "unfinished": "We're not in rounds yet, or a bell never had its turn at lead. Call the next change."
+    }
+  }
+}
