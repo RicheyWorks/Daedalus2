@@ -40,8 +40,8 @@ int main(int argc, char** argv)
 {
 	const char* Path = argc > 1 ? argv[1] : "marsh_fair_par_parity.txt";
 	const std::vector<std::string> Lines = marsh_test::ParityLines(Path);
-	Check("golden file has 16 lines", Lines.size() == 16);
-	if (Lines.size() != 16) return marsh_test::Summary("marsh fair par core");
+	Check("golden file has 27 lines", Lines.size() == 27);
+	if (Lines.size() != 27) return marsh_test::Summary("marsh fair par core");
 
 	const std::vector<double> Fixed[5] = { List({ 0.5 }), List({ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 }),
 		List({ 0.3, 0.3, 0.3, 0.3 }), List({ 0.9, 0.2, 0.55, 0.7, 0.2, 0.35, 0.8 }),
@@ -96,6 +96,34 @@ int main(int argc, char** argv)
 		bool Ok = false;
 		const FairPars P = FairPar::ReedReleasePars(R, Bots[C], 700 + C, Ok);
 		Check("REEDREL01 pars " + std::to_string(C), Ok && ParsOk(P, H, 1.0 / S.Runs + 1e-12, 2.0 / Bots[C] + 1e-12));
+	}
+
+	{
+		const double D[2][5] = { { -0.02, 0.2, 30, 10, 10 }, { 0.03, 0.1, 40, 10, 50 } };
+		for (int C = 0; C < 2; ++C)
+		{
+			DroughtSettings S; S.Mu = D[C][0]; S.Sigma = D[C][1]; S.Start = static_cast<int>(D[C][2]); S.Threshold = static_cast<int>(D[C][3]);
+			bool Ok = false;
+			const FairPars P = FairPar::DroughtOddsPars(DroughtOdds(S), D[C][4], 90, 810 + C, Ok);
+			Check("DROUGHT01 pars " + std::to_string(C), Ok && ParsOk(P, Lines[16 + C], 1e-12, 1e-15));
+		}
+		SpreadSettings Sp; Sp.Lambda = 1.2; Sp.Dispersal = 0.8; Sp.Cell = 0.2; Sp.Capacity = 60; Sp.Years = 30;
+		bool Ok = false;
+		Check("SPREAD01 pars", ParsOk(FairPar::CraneSpreadPars(CraneSpread(Sp), 3, 5, 70, 820, Ok), Lines[18], 1e-12, 1e-15) && Ok);
+		const CraneCohorts Fl(CohortSettings{ 0.6, 0.8, 0.9, 0.95, 0.3, 1.2, 10 });
+		Check("COHORTS01 pars", ParsOk(FairPar::Cohorts(Fl, 7, 80, 830, Ok), Lines[19], 0, 1e-15) && Ok);
+		const ReedSettings Rs{ 0.8, 30, 3, 0.05, 0.3, 0.4, 0.1 };
+		Check("REEDCEIL01 pars", ParsOk(FairPar::ReedCeilingPars(Rs, { 6, 20, 45 }, 3, 25, 9, 50, 840, Ok), Lines[20], 1e-9, 1e-15) && Ok);
+		Check("REEDCEIL01 refuses no options", (FairPar::ReedCeilingPars(Rs, {}, 3, 25, 9, 50, 840, Ok), !Ok));
+		const auto Table = FairPar::MarshTable(Ok);
+		Check("par board has six cabinets", Ok && Table.size() == 6);
+		for (size_t I = 0; I < Table.size() && I < 6; ++I)
+		{
+			const std::string& H = Lines[21 + I];
+			const double Tol = Table[I].first == "TRANS01" ? 1.0 / 400 + 1e-12 : Table[I].first == "REEDREL01" ? 1.0 / 150 + 1e-12 : 1e-9;
+			Check("par board " + Table[I].first, marsh_test::Field(H, "table") == Table[I].first
+				&& ParsOk(Table[I].second, H, Tol, 2.0 / Table[I].second.Runs + 1e-12));
+		}
 	}
 
 	// Properties: whole budget within the cap, refusals, tiers.
