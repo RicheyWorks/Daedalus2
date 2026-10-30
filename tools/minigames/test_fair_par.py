@@ -7,6 +7,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fair_par as fp  # noqa: E402
 import glimmerloom  # noqa: E402
 import glowmoss  # noqa: E402
+import prismcairn  # noqa: E402
+import shardfall  # noqa: E402
 import spiritkite  # noqa: E402
 import wardens_accord  # noqa: E402
 
@@ -35,6 +37,7 @@ class FairParTest(unittest.TestCase):
         self.assertEqual(fp.tier(pars, 120), "GOLD")
 
     def test_bots_only_make_legal_moves_and_never_touch_the_game_rng(self):
+        own_rng = (glimmerloom.start, wardens_accord.start, shardfall.start, prismcairn.start)
         for _, start, bot in fp.GAMES:
             for d in fp.DIFFICULTIES:
                 for seed in range(15):
@@ -45,7 +48,7 @@ class FairParTest(unittest.TestCase):
                             break
                         g.step(bot(g, seed, k))  # raises ValueError on an illegal move
                     self.assertTrue(g.over)
-                    if start not in (glimmerloom.start, wardens_accord.start):  # these roll from their own RNG
+                    if start not in own_rng:  # these roll from their own RNG
                         self.assertEqual(before, g.rng.getstate())
 
     def test_fixture_is_current_and_tiers_are_ordered(self):

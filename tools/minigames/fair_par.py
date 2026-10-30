@@ -22,6 +22,9 @@ import glimmerloom  # noqa: E402
 import facetlock  # noqa: E402
 import glowmoss  # noqa: E402
 import lumenpath  # noqa: E402
+import prismcairn  # noqa: E402
+import prismvault  # noqa: E402
+import shardfall  # noqa: E402
 import spiritkite  # noqa: E402
 import wardens_accord  # noqa: E402
 
@@ -123,11 +126,32 @@ def facetlock_random(g, run, k):
     return ("r" if v % 2 == 0 else "c", (v // 2) % n, 1 if v // (2 * n) == 0 else -1)
 
 
+def prismvault_random(g, run, k):
+    """Guess early: name a random remaining candidate."""
+    c = g.candidates
+    return ("name", c[pick(BOT_SEED, run, k, 13, len(c) - 1)])
+
+
+def shardfall_random(g, run, k):
+    """Draw or bank on a fair coin (bank when the seam is empty)."""
+    return "bank" if not g.bag or pick(BOT_SEED, run, k, 14, 1) == 1 else "draw"
+
+
+def prismcairn_random(g, run, k):
+    """Any legal take, uniformly: cairns in order, then 1..limit."""
+    m = g.cfg["take_max"]
+    options = [(i, t) for i, h in enumerate(g.cairns) for t in range(1, min(m, h) + 1)]
+    return options[pick(BOT_SEED, run, k, 15, len(options) - 1)]
+
+
 GAMES = (("glowmoss", glowmoss.start, glowmoss_bot), ("spiritkite", spiritkite.start, spiritkite_bot),
          ("glimmerloom", glimmerloom.start, glimmerloom_bot),
          ("lumenpath", lumenpath.start, mixed(lumenpath_random)),
          ("wardens_accord", wardens_accord.start, mixed(wardens_random)),
-         ("facetlock", facetlock.start, mixed(facetlock_random)))
+         ("facetlock", facetlock.start, mixed(facetlock_random)),
+         ("prismvault", prismvault.start, mixed(prismvault_random)),
+         ("shardfall", shardfall.start, mixed(shardfall_random)),
+         ("prismcairn", prismcairn.start, mixed(prismcairn_random)))
 
 
 def bot_round(start, bot, seed, difficulty):
