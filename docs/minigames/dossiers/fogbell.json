@@ -1,0 +1,182 @@
+{
+  "id": "fogbell",
+  "title": "Fogbell Ferry",
+  "realm": "prismheart_realm",
+  "status": "core + cabinet + 9 iterations in PR; dossier is iteration 10",
+  "summary": "A fog-bound tidal flat below the Prismheart quay. The ferry sets out from the north-west corner as the fog bell begins to toll; every third toll the tide rises and the lowest ground is lost for good. Lantern passengers wait on docks scattered over the flat; take them aboard and reach the harbour in the south-east before the water takes your cell. Deterministic per seed, bit-exact between the Python rules, the C++ core and the Unreal cabinet.",
+  "mechanics": [
+    {
+      "name": "Flat",
+      "text": "S x S cells (7 / 8 / 9 by difficulty) with integer heights 1..S, each the higher of two draws, so the flat is mostly firm with scattered low channels. The ferry's start (north-west) and the harbour (south-east) sit on height S. Docks are raised to at least 2.",
+      "code": "fogbell.Game.setup / fogbell::Game::Start"
+    },
+    {
+      "name": "Turn",
+      "text": "Move n/e/s/w one cell or wait. Moving off the flat or into water is refused and costs nothing. Then the turn counter advances.",
+      "code": "Game.act / Game::Step"
+    },
+    {
+      "name": "Tide",
+      "text": "tide = turn // 3. A cell is flooded when height <= tide, permanently. The whole flat is under water by turn 3S, so every voyage ends.",
+      "code": "TIDE_EVERY, flooded()"
+    },
+    {
+      "name": "Lanterns",
+      "text": "Entering a dock takes its passenger aboard (3 / 4 / 5 waiting). Aboard + waiting is always the total: lanterns are never lost.",
+      "code": "passengers, aboard"
+    },
+    {
+      "name": "Harbour",
+      "text": "Entering the harbour ends the voyage: won with at least need aboard (2 / 3 / 4), otherwise lost with too few lanterns. Score = 10 x aboard + 2 x tide steps still to come (3S - turn, floored at 0).",
+      "code": "PASSENGER_SCORE, TIDE_SCORE"
+    },
+    {
+      "name": "Drowning",
+      "text": "If the ferry's own cell is flooded after a turn the voyage is lost and the score stays 0.",
+      "code": "the tide takes the ferry"
+    },
+    {
+      "name": "Watcher (demo)",
+      "text": "Flood-aware breadth-first search in n/e/s/w order: a cell may be entered at step k only if it is still dry at turn + k. Nearest reachable lantern until enough are aboard, then the harbour, else wait. Greedy wins 82 / 50 / 35 percent over 14-20 turn voyages; a planning player can do better.",
+      "code": "Game._bfs / Game::FirstStepTo"
+    },
+    {
+      "name": "Guide (option 1)",
+      "text": "Practice mode marks the watcher's cell in blue and the hint says what the move does; cells that flood at the next toll are edged in red on both the Python screen and the cabinet."
+    },
+    {
+      "name": "Saves",
+      "text": "Text save (shared DaedalusDesktopSaveText shape): difficulty, seed, turn, aboard, score, over, won, ferry, heights, passengers. Restore regenerates the flat from the seed and refuses a reshaped flat, a dock that was never drawn, bad counts or a live ferry under water."
+    },
+    {
+      "name": "Controls",
+      "text": "Arrows / d-pad / stick steer one cell per press (one turn each); A / J / Space wait; R or pad Start restart. Cabinet class DesktopGames/DaedalusDesktopFogbellCore.h, registry id fogbell, save slot fogbell.dgs."
+    }
+  ],
+  "items": [
+    {
+      "item": "Lantern ferry",
+      "kind": "player craft",
+      "text": "A flat-bottomed punt with a brass fog lantern at the bow; gold disc on the board.",
+      "in_game": "Ferry"
+    },
+    {
+      "item": "Dock lantern",
+      "kind": "pickup",
+      "text": "A hooded amber lantern on a dock post; a passenger stands beneath it until the ferry arrives.",
+      "in_game": "Passengers[i]"
+    },
+    {
+      "item": "Harbour wall",
+      "kind": "goal",
+      "text": "A low green-stone quay wall with a bell gantry; the voyage ends when the ferry enters.",
+      "in_game": "Harbour"
+    },
+    {
+      "item": "Tidal flat cell",
+      "kind": "terrain",
+      "text": "Mud and shingle shaded by height; darker as it nears the tide, red-edged the toll before it floods, blue once under water.",
+      "in_game": "Heights[r][c], Flooded()"
+    },
+    {
+      "item": "Fog bell",
+      "kind": "fixture",
+      "text": "A great bell on the quay that tolls each turn; every third toll the tide gauge rises one step.",
+      "in_game": "TideEvery, Tide()"
+    },
+    {
+      "item": "Tide gauge",
+      "kind": "HUD",
+      "text": "A vertical post of S marks beside the board filling from the bottom as the tide rises.",
+      "in_game": "Tide() rendering"
+    }
+  ],
+  "storyline": [
+    {
+      "beat": "Hook",
+      "text": "Fog has closed the Prismheart quay. The lantern-bearers who light the inner court are stranded on the docks of the tidal flat and the tide is coming in."
+    },
+    {
+      "beat": "Teaching",
+      "text": "The harbourmaster hands you the ferry: arrows move one cell a turn, the bell tolls, and every third toll the lowest ground goes under for good. (The tutorial rows appear only on the first turn.)"
+    },
+    {
+      "beat": "Rising",
+      "text": "Each difficulty is a wider flat with more bearers to collect and more required at the harbour: 2 of 3, 3 of 4, then 4 of 5 on a nine-wide flat."
+    },
+    {
+      "beat": "Climax",
+      "text": "Making harbour with enough lanterns rings the bell clear; the tide steps still to come are the harbourmaster's thanks (+2 each)."
+    },
+    {
+      "beat": "Failure",
+      "text": "Too few lanterns, or the tide takes the ferry. Pad A or R sets out again on the same seed so the flat can be learned."
+    },
+    {
+      "beat": "Place in Prismheart",
+      "text": "The fogbell quay sits at the end of the Prismheart arcade row beside the chime ring; it is a side voyage, not a campaign gate, and landed lanterns add to the arcade scoreboard."
+    }
+  ],
+  "placement": [
+    {
+      "name": "Realm row",
+      "text": "data/minigames/realm-cabinets.json, realm prismheart_realm, anchor arcade_plaza, layout row, 2.5 m spacing, yaw 180; seed crc32('prismheart_realm:fogbell') = 404876817; StartGame(\"fogbell\", 404876817), SetGameOption(0)."
+    },
+    {
+      "name": "First frame at the realm seed",
+      "text": "normal 8x8 flat, ferry north-west, harbour south-east, tide 0; lanterns (draw order) at (4,2), (6,5), (2,0), (3,7); top row heights 87736483 (native == Python)."
+    },
+    {
+      "name": "Spot",
+      "text": "data/minigames/daedalus-spots.json: 'Prismheart, the fogbell quay'."
+    },
+    {
+      "name": "Handoff",
+      "text": "docs/minigames/PRISMHEART-CABINET-HANDOFF.md lists the cabinet among the eleven with its acceptance steps for codex-play-guard's editor window."
+    }
+  ],
+  "blender_items": [
+    {
+      "name": "Cab_Fogbell",
+      "kind": "cabinet",
+      "text": "Arcade cabinet shell in the shared ADaedalusDesktopArcade footprint with a bell-and-lantern marquee; same sockets as the other Prismheart cabinets.",
+      "priority": "1"
+    },
+    {
+      "name": "Prop_Fogbell_Ferry",
+      "kind": "prop",
+      "text": "Flat-bottomed punt with bow lantern, ~2.4 m, one seat row.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Fogbell_DockLantern",
+      "kind": "prop",
+      "text": "Dock post with hooded amber lantern; lit and unlit material variants.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Fogbell_Bell",
+      "kind": "prop",
+      "text": "Quay fog bell on a gantry, ~1.2 m bell; swings on a socket.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Fogbell_TideGauge",
+      "kind": "prop",
+      "text": "Graduated post, 9 marks, for the quay edge.",
+      "priority": "3"
+    },
+    {
+      "name": "NPC_Fogbell_Harbourmaster",
+      "kind": "NPC",
+      "text": "Harbourmaster on the shared 8-bone rig (reuse Mob_Prism townsfolk base) who hands over the ferry and rings the bell.",
+      "priority": "3"
+    },
+    {
+      "name": "NPC_Fogbell_LanternBearer",
+      "kind": "NPC",
+      "text": "Lantern-bearer townsfolk variant holding a lantern, idle on a dock, boards the ferry.",
+      "priority": "3"
+    }
+  ]
+}
