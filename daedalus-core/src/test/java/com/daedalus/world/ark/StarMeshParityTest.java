@@ -58,15 +58,60 @@ class StarMeshParityTest {
             for (int i = 0; i < n; i++) {
                 line.append(i == 0 ? "" : ",").append(pts[i][0]).append(':').append(pts[i][1]);
             }
-            int[][] tris = StarMesh.triangulate(pts);
+            StarMesh.Mesh mesh = StarMesh.build(pts);
+            int[][] tris = mesh.triangles();
             line.append(" tris=").append(tris.length).append(' ');
             for (int i = 0; i < tris.length; i++) {
                 line.append(i == 0 ? "" : ",").append(tris[i][0]).append('.').append(tris[i][1]).append('.')
                         .append(tris[i][2]);
             }
+            line.append(" hull=").append(join(mesh.hull(), ",")).append(" flips=").append(mesh.flips());
+            line.append(" nbrs=");
+            int[][] nbrs = StarMesh.neighbours(n, tris);
+            for (int i = 0; i < n; i++) {
+                line.append(i == 0 ? "" : "|").append(join(nbrs[i], "."));
+            }
+            // Four random sightings in the same sky, then star 0 itself (a corner of its triangles).
+            int span = s <= 40 ? 100 : (int) StarMesh.MAX_COORD;
+            line.append(" locate=");
+            for (int q = 0; q < 5; q++) {
+                long[] at = q < 4 ? new long[] {rng.nextInt(2 * span + 1) - span, rng.nextInt(2 * span + 1) - span}
+                        : pts[0];
+                line.append(q == 0 ? "" : ",").append(at[0]).append(':').append(at[1]).append('>')
+                        .append(StarMesh.locate(pts, tris, at));
+            }
             out.add(line.toString());
         }
+        for (int i = 0; i < REFUSED.length; i++) {
+            String why = StarMesh.problem(REFUSED[i]);
+            out.add("refused=" + i + " why=" + (why == null ? "ok" : why));
+        }
         return out;
+    }
+
+    /** Bad skies, one per refusal reason (C++ builds the same list). */
+    static final long[][][] REFUSED = {
+        {{0, 0}, {1, 1}},
+        new long[StarMesh.MAX_POINTS + 1][],
+        {{0, 0}, {1, 0}, {0, StarMesh.MAX_COORD + 1}},
+        {{0, 0}, {0, 0}, {2, 3}},
+        {{0, 0}, {1, 1}, {2, 2}},
+        {{0, 0}, {5, 1}, {2, 3}, {7, 4}, {9, 9}, {-3, -3}},
+        {{0, 0}, {4, 0}, {0, 4}},
+    };
+
+    static {
+        for (int i = 0; i < REFUSED[1].length; i++) {
+            REFUSED[1][i] = new long[] {i, (long) i * i};
+        }
+    }
+
+    static String join(int[] v, String sep) {
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < v.length; i++) {
+            b.append(i == 0 ? "" : sep).append(v[i]);
+        }
+        return b.length() == 0 ? "-" : b.toString();
     }
 
     @Test
@@ -75,14 +120,15 @@ class StarMeshParityTest {
         if (Boolean.getBoolean("ark.parity.write")) {
             List<String> body = new ArrayList<>();
             body.add("# G441 StarMesh parity (G588): written by StarMeshParityTest.java, replayed by"
-                    + " ark_star_mesh_core_test.cpp. Seeds 1.." + SEEDS + ".");
+                    + " ark_star_mesh_core_test.cpp. Seeds 1.." + SEEDS + " (triangles, hull, flips, neighbours,"
+                    + " locate), then one refused sky per reason.");
             body.addAll(actual);
             Files.write(FILE, body, StandardCharsets.UTF_8);
         }
         List<String> expected = Files.readAllLines(FILE, StandardCharsets.UTF_8).stream()
                 .filter(l -> !l.startsWith("#") && !l.isBlank()).toList();
-        assertThat(expected).hasSize(SEEDS);
-        IntStream.range(0, SEEDS)
+        assertThat(expected).hasSize(actual.size());
+        IntStream.range(0, actual.size())
                 .forEach(i -> assertThat(actual.get(i)).as("line %d", i).isEqualTo(expected.get(i)));
     }
 }
