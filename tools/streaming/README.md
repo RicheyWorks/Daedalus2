@@ -353,3 +353,5 @@ python -B -m unittest tools/streaming/tram_shunt_test.py
 Batch 2 (G574): `DaedalusDiskSaver{SealRoll,ChannelDash,BoomDefence,SalvageSale}Core.h` port Seal Roll, Channel Dash, Boom Defence and Salvage Sale the same way. Their golden files are written by the same `disksaver_cpp_parity.py`.
 
 Batch 3 (G575): `DaedalusDiskSaver{RopeRun,BelfryChanges,TramShunt}Core.h` port Rope Run, Belfry Changes and Tram Shunt the same way, with explicit caps on the route DFS and the state searches.
+
+Batch 4 (G576): `DaedalusDiskSaver{Watchfires,TideLock,SmugglersIsland,HarbourCryptogram}Core.h` port Watchfires, Tide Lock, Smuggler's Island and Harbour Cryptogram the same way; the golden files carry the smuggler's hidden island and the cryptogram's cipher, key and plain text.
