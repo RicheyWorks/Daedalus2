@@ -74,6 +74,43 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class Screen(unittest.TestCase):
+    """Iterations 7-9: tutorial on the first ring, peal meter, preview, and the fast demo_action."""
+    def test_tutorial_only_on_a_fresh_ring(self):
+        g = gm.start(2)
+        self.assertIn("TAP   a chime rings", g.render())
+        self.assertIn("peal at 4:", g.render())
+        g.step(0)
+        self.assertNotIn("TAP   a chime rings", g.render())
+
+    def test_preview_matches_the_real_tap(self):
+        for s in range(20):
+            g = gm.start(s, "hard")
+            while not g.over:
+                i = g.demo_action()
+                pealed, newly = g.preview(i)
+                lit_before, state_before = sum(g.lit), g.to_state()
+                self.assertEqual(g.to_state(), state_before, "preview must not change the game")
+                res = g.step(i)
+                self.assertEqual(int(res.split(": ")[1].split(" ")[0]), pealed)
+                self.assertEqual(sum(g.lit) - lit_before, newly)
+
+    def test_fast_demo_matches_the_slow_one(self):
+        for d in gm.DIFFICULTY:
+            for s in range(30):
+                g = gm.start(s, d)
+                while not g.over:
+                    slow = None
+                    for i in range(len(g.charge)):
+                        trial = gm.Game.from_state(g.to_state())
+                        trial.act(i)
+                        key = (sum(trial.lit) - sum(g.lit), trial.score - g.score, -i)
+                        if slow is None or key > slow[0]:
+                            slow = (key, i)
+                    self.assertEqual(g.demo_action(), slow[1])
+                    g.step(slow[1])
+
+
 class Saves(unittest.TestCase):
     """Iteration 5: from_state refuses saves that break the rules."""
     def bad(self, **fields):

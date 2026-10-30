@@ -195,7 +195,11 @@ public:
             return Core.Won ? "HINT Every chime rings. Pad A or R hangs a new ring."
                             : "HINT The ring fell silent. Pad A or R hangs a new ring.";
         }
-        if(Option == 1) return "HINT Practice: the blue ring marks the chime the watcher would tap.";
+        if(Option == 1) {
+            int Pealed = 0, NewlyLit = 0;
+            Core.Preview(Cursor, Pealed, NewlyLit);
+            return "HINT Practice: the blue ring is the watcher's pick; this chime would peal " + std::to_string(Pealed) + " and light " + std::to_string(NewlyLit) + ".";
+        }
         if(LastPealed > 1) return "HINT Chain! Peals charge their neighbours; look for the next chime one short of four.";
         return "HINT A tap pulses a chime's charge along its arrow; a chime at four peals and lights.";
     }
@@ -244,6 +248,11 @@ public:
         if(LastPealed >= 0 && !Core.Over) F.AddText(CX - 60, CY - 10, std::to_string(LastPealed) + (LastPealed == 1 ? " peal" : " peals"), Gold, 22);
         if(Core.Over) F.AddText(CX - 120, CY - 12, Core.Won ? "WON: EVERY CHIME RINGS" : "LOST: THE RING FALLS SILENT", Gold, 22);
 
+        if(Core.FreshRing()) {
+            F.AddText(560, 300, "TAP  a chime rings: its charge pulses along its arrow and it gains one", Pearl, 11);
+            F.AddText(560, 318, "PEAL a chime at 4 peals: +5, lights, resets, charges both neighbours", Pearl, 11);
+            F.AddText(560, 336, "WIN  light every chime before the taps run out", Pearl, 11);
+        }
         F.AddText(580, 120, "PEAL AT 4", Pearl, 14);
         for(int P = 0; P < prismchime::Peal; ++P) F.AddRect(580, 150 + P * 14, 60, 10, P < Core.Charge[static_cast<size_t>(Cursor)] ? Gold : Dark);
         F.AddText(580, 215, "chime " + std::to_string(Cursor + 1), White, 14);

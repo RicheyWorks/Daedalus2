@@ -70,6 +70,8 @@ struct Game
 	int Wrap(int I) const noexcept { const int N = Chimes(); return ((I % N) + N) % N; }
 	int LitCount() const { int C = 0; for (bool L : Lit) if (L) ++C; return C; }
 	bool AllLit() const { return LitCount() == Chimes(); }
+	/** Game.tutorial: the first ring's teaching rows (iteration 7). */
+	bool FreshRing() const { return Diff && Taps == Diff->Taps && !Over; }
 
 	/** PrismGame.start + Game.setup. False on an unknown difficulty. Draw order: all charges, then all facings. */
 	bool Start(std::uint32_t Seed, const std::string& DifficultyName)
@@ -126,6 +128,16 @@ struct Game
 		}
 		Result = Head;
 		return Act::Ok;
+	}
+
+	/** Game.preview: peals and newly lit chimes a tap on `I` would produce, leaving this game untouched (iteration 8). */
+	void Preview(int I, int& Pealed, int& NewlyLit) const
+	{
+		Game Trial = *this;
+		std::string Text;
+		Pealed = 0;
+		if (Trial.Tap(I, Pealed, Text) != Act::Ok) { Pealed = 0; NewlyLit = 0; return; }
+		NewlyLit = Trial.LitCount() - LitCount();
 	}
 
 	/** Game.demo_action: try every chime on a copy; most newly lit, then most score, then the lowest index. */

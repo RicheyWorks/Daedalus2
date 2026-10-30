@@ -102,20 +102,46 @@ class Game(pc.PrismGame):
             return f"tap {i}: {pealed} peal(s), the ring falls silent"
         return f"tap {i}: {pealed} peal(s)"
 
+    def preview(self, i):
+        """Peals and newly lit chimes a tap on chime i would produce, without changing the game (iteration 8)."""
+        trial = self._copy()
+        before = sum(trial.lit)
+        res = trial.act(i)
+        pealed = int(res.split(": ", 1)[1].split(" ", 1)[0])
+        return pealed, sum(trial.lit) - before
+
     def demo_action(self):
-        """Try every chime on a copy; most newly lit, then most score, then lowest index."""
+        """Try every chime on a copy; most newly lit, then most score, then lowest index (iteration 9: no JSON copy)."""
         best = None
         for i in range(len(self.charge)):
-            trial = self.__class__.from_state(self.to_state())
+            trial = self._copy()
             trial.act(i)
             key = (sum(trial.lit) - sum(self.lit), trial.score - self.score, -i)
             if best is None or key > best[0]:
                 best = (key, i)
         return best[1]
 
+    def _copy(self):
+        """A playable copy for look-ahead: act() never draws, so the RNG is shared, not copied."""
+        c = self.__class__.__new__(self.__class__)
+        c.cfg, c.rng, c.seed, c.difficulty = self.cfg, self.rng, self.seed, self.difficulty
+        c.score, c.over, c.won = self.score, self.over, self.won
+        c.charge, c.facing, c.lit = list(self.charge), list(self.facing), list(self.lit)
+        c.taps, c.peals = self.taps, self.peals
+        return c
+
+    def tutorial(self):
+        """First-ring teaching rows for the screen (iteration 7)."""
+        return ["TAP   a chime rings: its charge pulses along its arrow, one chime per point, and it gains one",
+                "PEAL  a chime at %d peals: +%d, it lights, resets, and charges both neighbours" % (PEAL, PEAL_SCORE),
+                "WIN   light every chime before the taps run out; +%d per tap left" % TAP_BONUS]
+
     def render(self):
         row = " ".join(f"{'*' if l else '.'}{c}{'>' if f > 0 else '<'}" for c, f, l in zip(self.charge, self.facing, self.lit))
-        lines = [f"{TITLE} [{self.difficulty}] taps {self.taps} score {self.score} lit {sum(self.lit)}/{len(self.lit)}", row]
+        lines = [f"{TITLE} [{self.difficulty}] taps {self.taps} score {self.score} lit {sum(self.lit)}/{len(self.lit)}", row,
+                 "peal at %d: %s" % (PEAL, "  ".join("[%s]" % ("#" * c + "." * (PEAL - c)) for c in self.charge))]
+        if self.taps == self.cfg["taps"] and not self.over:
+            lines += self.tutorial()
         if self.over:
             lines.append("WON: every chime rings" if self.won else "LOST: the ring falls silent")
         return "\n".join(lines)
