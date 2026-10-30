@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5).
+"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5, G578 batch 6).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -14,6 +14,8 @@ Batch 4: G555 Watchfires, G554 Tide Lock, G553 Smugglers Island, G552 Harbour Cr
 (the cryptogram's cipher, key and plain text and the smuggler's hidden island are written into the file).
 Batch 5: G551 Fleet Soundings, G550 Quay Duel, G549 Last Crate, G546 Census Riddles (the riddles
 and their answers are written into the file).
+Batch 6: G166 Tide Clocks, G171 Lighthouse Leases, G175 Tidemark Chunks, G179 Bottle Census: seeded
+simulations over the G86 shoals data; every random draw the tool makes is recorded as a tape.
 Cases cover the real tools/world_census fixtures (several seeds), synthetic censuses, and
 hand-laid edge layouts (unsolvable, stuck, disconnected) injected through the tool's own
 play() by swapping its layout function for one call.
@@ -22,11 +24,14 @@ play() by swapping its layout function for one call.
   python tools/streaming/disksaver_cpp_parity.py --check    # exit 1 if a checked-in file is stale
   python tools/streaming/disksaver_cpp_parity.py --write    # rewrite the checked-in files
 """
+import dataclasses
 import json
 import os
+import random
 import subprocess
 import sys
 import tempfile
+import types
 from collections import deque
 from contextlib import contextmanager
 
@@ -34,10 +39,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import belfry_changes as bc  # noqa: E402
 import boom_defence as bd  # noqa: E402
+import bottle_census as bcs  # noqa: E402
 import census_budget as cb  # noqa: E402
 import census_riddles as cr  # noqa: E402
 import harbour_cryptogram as hc  # noqa: E402
 import last_crate as lc  # noqa: E402
+import lighthouse_leases as ll  # noqa: E402
 import channel_dash as cd  # noqa: E402
 import fleet_soundings as fs  # noqa: E402
 import manifest_match as mm  # noqa: E402
@@ -48,7 +55,9 @@ import sack_chute as sc  # noqa: E402
 import salvage_sale as ss  # noqa: E402
 import seal_roll as sr  # noqa: E402
 import smugglers_island as si  # noqa: E402
+import tide_clocks as tc  # noqa: E402
 import tide_lock as tl  # noqa: E402
+import tidemark_chunks as tm  # noqa: E402
 import tram_shunt as ts  # noqa: E402
 import twin_pilots as tp  # noqa: E402
 import watchfires as wf  # noqa: E402
@@ -1087,11 +1096,223 @@ def cr_lines():
     return out
 
 
+# ---------------------------------------------------------------- batch 6: seeded simulations (G166, G171, G175, G179)
+# These tools interleave Python's random with their simulation, so the generator records every
+# draw the tool makes (a "tape": randrange/randint results and sample picks, in call order) and the
+# C++ core replays the tape through the ported simulation, checking each draw against its own bound.
+class _Tape(random.Random):
+    last = None
+
+    def __init__(self, seed):
+        self.tape, self.depth = [], 0
+        super().__init__(seed)
+        _Tape.last = self
+
+    def randrange(self, start, stop=None, step=1):
+        self.depth += 1
+        v = super().randrange(start, stop, step)
+        self.depth -= 1
+        if not self.depth:
+            self.tape.append(v)
+        return v
+
+    def randint(self, a, b):
+        self.depth += 1
+        v = super().randint(a, b)
+        self.depth -= 1
+        if not self.depth:
+            self.tape.append(v)
+        return v
+
+    def sample(self, population, k, **kw):
+        self.depth += 1
+        v = super().sample(population, k, **kw)
+        self.depth -= 1
+        if not self.depth:
+            self.tape.extend(v)
+        return v
+
+
+def taped(mod, fn):
+    """(result, tape) of fn() with mod.random.Random recording every draw."""
+    with patched(mod, "random", types.SimpleNamespace(Random=_Tape)):
+        r = fn()
+    return r, lst(_Tape.last.tape)
+
+
+def cfg_json(rel):
+    with open(os.path.join(ROOT, rel), encoding="utf-8") as f:
+        return json.load(f)
+
+
+def vlines(mod, base, section, fields):
+    out = []
+    for k, vals in fields.items():
+        for v in vals:
+            cfg = json.loads(json.dumps(base))
+            cfg[section][k] = v
+            try:
+                mod.validate(cfg)
+                out.append(f"V {k} {v} ok")
+            except ValueError:
+                out.append(f"V {k} {v} err")
+    return out
+
+
+def tc_lines():
+    out = ["# disksaver tide_clocks parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    base = cfg_json("data/islands/disk-saver/tide-clocks-v1.json")
+    real = tc.validate(base)
+    ids, kpi = tc.islands_from_shoals(cfg_json(base["shoals_data"]))
+    out.append(f"K {len(ids)} {kpi}")
+    out.append(f"B {len(real.islands)} {len(real.saves)} {real.steps} {real.edit_permille} {real.max_skew}")
+    out += vlines(tc, base, "clocks", {"islands": [1, 2, len(ids), len(ids) + 1], "saves": [0, 1, kpi, kpi + 1],
+                                        "steps": [0, 1, 5000], "edit_permille": [0, 1, 999, 1000],
+                                        "max_skew": [-1, 0, 1000]})
+    R = dataclasses.replace
+    cases = [(f"real_seed{s}", R(real, seed=s)) for s in (real.seed, 1, 7, 42)]
+    isl = lambda n: tuple(f"i{k}" for k in range(n))  # noqa: E731
+    sv = lambda n: tuple(f"save_{k:03d}" for k in range(n))  # noqa: E731
+    cases += [("hand_two_one_step", R(real, islands=isl(2), saves=sv(1), steps=1)),
+              ("hand_edit_heavy", R(real, edit_permille=999, steps=200)),
+              ("hand_ferry_heavy", R(real, edit_permille=1, steps=200)),
+              ("hand_no_skew", R(real, max_skew=0, steps=300)),
+              ("hand_wild_skew", R(real, max_skew=500, steps=300, islands=isl(3), saves=sv(2))),
+              ("hand_six_isles", R(real, islands=isl(6), saves=sv(3), steps=400, seed=9))]
+    for name, c in cases:
+        out.append(f"C {name}")
+        out.append(f"L {len(c.islands)} {len(c.saves)} {c.steps} {c.edit_permille} {c.max_skew}")
+        tapes = set()
+        for clock in tc.CLOCKS:
+            (r, _), tape = taped(tc, lambda k=clock: tc.run(c, k))
+            tapes.add(tape)
+            out.append(f"T {clock} {r.status} {r.edits} {r.lost} {r.detected_conflicts} {r.oracle_conflicts} "
+                       f"{r.causal_inversions} {r.survivors} {lst(r.lost_vids)}")
+        assert len(tapes) == 1
+        out.insert(len(out) - 3, f"R {tapes.pop()}")
+    return out
+
+
+def ll_lines():
+    out = ["# disksaver lighthouse_leases parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    for lease, drift, guard in ((20, 150, 4), (20, 0, 0), (1000, 500, 0), (2, 499, 1), (7, -200, 3), (100, 33, 99)):
+        out.append(f"D {lease} {drift} {guard} {ll.drift_bound(lease, drift)} {ll.last_valid_elapsed(lease, drift, guard)}")
+    base = cfg_json("data/islands/disk-saver/lighthouse-leases-v1.json")
+    real = ll.validate(base)
+    c = real
+    out.append(f"B {len(c.keepers)} {c.lease} {c.epochs} {c.write_permille} {c.max_drift_permille} {c.pause_permille} "
+               f"{c.max_pause} {c.news_delay} {c.guard}")
+    out += vlines(ll, base, "leases", {"lease": [1, 2, 1000, 1001], "epochs": [0, 1, 10000, 10001],
+                                        "write_permille": [0, 1, 1000, 1001], "max_drift_permille": [-1, 0, 500, 501],
+                                        "pause_permille": [-1, 1000, 1001], "max_pause": [-1, 1000, 1001],
+                                        "news_delay": [-1, 0, 1001], "guard": [-1, 0, 19, 20]})
+    R = dataclasses.replace
+    cases = [(f"real_seed{s}", R(real, seed=s)) for s in (real.seed, 1, 7, 42)]
+    cases += [("hand_two_keepers", R(real, keepers=("a", "b"), epochs=12)),
+              ("hand_no_pause", R(real, pause_permille=0, max_pause=0)),
+              ("hand_no_drift", R(real, max_drift_permille=0, epochs=15)),
+              ("hand_tiny_lease", R(real, lease=2, guard=1, epochs=30)),
+              ("hand_one_epoch", R(real, epochs=1, news_delay=0)),
+              ("hand_wide_guard", R(real, guard=19, write_permille=1000, epochs=10)),
+              ("hand_long_pause", R(real, pause_permille=1000, max_pause=40, epochs=8))]
+    for name, c in cases:
+        out.append(f"C {name}")
+        out.append(f"L {len(c.keepers)} {c.lease} {c.epochs} {c.write_permille} {c.max_drift_permille} {c.pause_permille} "
+                   f"{c.max_pause} {c.news_delay} {c.guard}")
+        for mode in ll.MODES:
+            r, tape = taped(ll, lambda m=mode: ll.run(c, m))
+            out.append(f"T {mode} {tape} {r.writes} {r.accepted} {r.rejected} {r.stale_accepted} {r.outside_lease} {r.status}")
+    return out
+
+
+def tm_lines():
+    out = ["# disksaver tidemark_chunks parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    for w in (b"", b"a", bytes(range(16)), b"\xff" * 16, b"tidemark chunks!"):
+        out.append(f"H x{w.hex()} {tm.window_hash(w)}")
+    base = cfg_json("data/islands/disk-saver/tidemark-chunks-v1.json")
+    real = tm.validate(base)
+    c = real
+    out.append(f"S {cfg_json('data/islands/disk-saver/byte-spring-v1.json')['cistern']['budget_cap']}")
+    out.append(f"B {lst(it.weight for it in c.islands)} {c.versions} {c.bytes_per_weight} {c.edits} {c.max_run} "
+               f"{c.insert_permille} {c.delete_permille} {c.window} {c.mask_bits} {c.min_chunk} {c.max_chunk} "
+               f"{c.fixed_size} {c.ref_bytes} {c.quota} {c.byte_unit}")
+    out += vlines(tm, base, "chunks", {"versions": [0, 1, 1000, 1001], "insert_permille": [-1, 0, 1000, 1001],
+                                        "delete_permille": [0, 600, 601], "window": [15, 16, 17], "mask_bits": [6, 7, 8],
+                                        "min_chunk": [0, 1, 1024, 1025], "max_chunk": [31, 32, 1 << 20, (1 << 20) + 1],
+                                        "fixed_size": [0, 1, 1 << 20], "ref_bytes": [-1, 0, 1024, 1025],
+                                        "byte_unit": [0, 1, 1 << 20, (1 << 20) + 1], "edits": [-1, 0, 1000, 1001],
+                                        "max_run": [0, 1, 4096, 4097], "bytes_per_weight": [0, 1, 65536, 65537]})
+    R = dataclasses.replace
+    Isl = tm.Island
+    cases = [(f"real_seed{s}", R(real, seed=s)) for s in (real.seed, 1)]
+    small = (Isl("a", 3), Isl("b", 1))
+    cases += [("hand_small", R(real, islands=small, bytes_per_weight=64, versions=6, seed=3)),
+              ("hand_no_edits", R(real, islands=small, bytes_per_weight=40, versions=4, edits=0)),
+              ("hand_deletes", R(real, islands=(Isl("a", 1),), bytes_per_weight=30, versions=8, insert_permille=0,
+                                 delete_permille=1000, max_run=40, edits=3)),
+              ("hand_overwrites", R(real, islands=small, bytes_per_weight=50, versions=5, insert_permille=0,
+                                    delete_permille=0)),
+              ("hand_tight_chunks", R(real, islands=small, bytes_per_weight=60, versions=5, min_chunk=5, max_chunk=5,
+                                      fixed_size=1, ref_bytes=0)),
+              ("hand_one_version", R(real, islands=small, bytes_per_weight=100, versions=1, quota=1)),
+              ("hand_big_runs", R(real, islands=small, bytes_per_weight=20, versions=6, max_run=300, quota=10 ** 9))]
+    for name, c in cases:
+        out.append(f"C {name}")
+        out.append(f"L {lst(it.weight for it in c.islands)} {c.versions} {c.bytes_per_weight} {c.edits} {c.max_run} "
+                   f"{c.insert_permille} {c.delete_permille} {c.window} {c.mask_bits} {c.min_chunk} {c.max_chunk} "
+                   f"{c.fixed_size} {c.ref_bytes} {c.quota}")
+        hist, tape = taped(tm, lambda: tm.saves(c))
+        out.append(f"R {tape}")
+        last = hist[-1][0]
+        for mode in tm.MODES:
+            r, t2 = taped(tm, lambda m=mode: tm.run(c, m))
+            assert t2 == tape
+            rec = [tm.chunk(s, c, mode) for ver in hist for s in ver]
+            out.append(f"T {mode} {r.raw_bytes} {r.refs} {r.unique_chunks} {r.stored_bytes} {r.cost} "
+                       f"{tm.cost_oracle(rec, c.ref_bytes)} {r.status} {lst(len(x) for x in tm.chunk(last, c, mode))}")
+    return out
+
+
+def bc_census_lines():
+    out = ["# disksaver bottle_census parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    base = cfg_json("data/islands/disk-saver/bottle-census-v1.json")
+    real = bcs.validate(base)
+    c = real
+    out.append(f"B {lst(it.weight for it in c.islands)} {c.credits_per_weight} {c.ticks} {c.send_permille} "
+               f"{c.max_amount} {c.max_delay} {c.start} {c.max_skew} {c.initiator}")
+    out += vlines(bcs, base, "census", {"ticks": [1, 2, 100000, 100001], "credits_per_weight": [0, 1, 10 ** 6, 10 ** 6 + 1],
+                                         "send_permille": [-1, 0, 1000, 1001], "max_amount": [0, 1, 10 ** 6 + 1],
+                                         "max_delay": [0, 1, 1000, 1001], "start": [-1, 0, 119, 120],
+                                         "max_skew": [-1, 0, 1000, 1001], "initiator": [-1, 0, 5, 6]})
+    R = dataclasses.replace
+    Isl = bcs.Island
+    cases = [(f"real_seed{s}", R(real, seed=s)) for s in (real.seed, 1, 7, 42)]
+    cases += [("hand_two_isles", R(real, islands=(Isl("a", 2), Isl("b", 1)), initiator=1, ticks=60, start=20)),
+              ("hand_silent", R(real, send_permille=0, ticks=30, start=10)),
+              ("hand_fast_lanes", R(real, max_delay=1, ticks=60, start=30)),
+              ("hand_start_zero", R(real, start=0, ticks=40)),
+              ("hand_start_last", R(real, start=59, ticks=60, max_skew=0)),
+              ("hand_flood", R(real, send_permille=1000, max_amount=10 ** 6, max_delay=30, ticks=50, start=25))]
+    for name, c in cases:
+        out.append(f"C {name}")
+        out.append(f"L {lst(it.weight for it in c.islands)} {c.credits_per_weight} {c.ticks} {c.send_permille} "
+                   f"{c.max_amount} {c.max_delay} {c.start} {c.max_skew} {c.initiator}")
+        for mode in bcs.MODES:
+            for fifo in (True, False):
+                r, tape = taped(bcs, lambda m=mode, f=fifo: bcs.run(c, m, f))
+                out.append(f"T {mode} {int(fifo)} {tape} {r.true_total} {r.census_total} {r.counted_balances} "
+                           f"{r.counted_at_sea} {r.bottles} {int(r.consistent)} {r.status} {r.reason or '-'} "
+                           f"{lst(r.cut)} {lst(r.lane_bottles)}")
+    return out
+
+
 GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": qs_lines, "sack_chute": sc_lines,
          "seal_roll": sr_lines, "channel_dash": cd_lines, "boom_defence": bd_lines, "salvage_sale": ss_lines,
          "rope_run": rr_lines, "belfry_changes": bc_lines, "tram_shunt": ts_lines,
          "watchfires": wf_lines, "tide_lock": tl_lines, "smugglers_island": si_lines, "harbour_cryptogram": hc_lines,
-         "fleet_soundings": fs_lines, "quay_duel": qd_lines, "last_crate": lc_lines, "census_riddles": cr_lines}
+         "fleet_soundings": fs_lines, "quay_duel": qd_lines, "last_crate": lc_lines, "census_riddles": cr_lines,
+         "tide_clocks": tc_lines, "lighthouse_leases": ll_lines, "tidemark_chunks": tm_lines,
+         "bottle_census": bc_census_lines}
 
 
 def texts():

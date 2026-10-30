@@ -357,3 +357,5 @@ Batch 3 (G575): `DaedalusDiskSaver{RopeRun,BelfryChanges,TramShunt}Core.h` port 
 Batch 4 (G576): `DaedalusDiskSaver{Watchfires,TideLock,SmugglersIsland,HarbourCryptogram}Core.h` port Watchfires, Tide Lock, Smuggler's Island and Harbour Cryptogram the same way; the golden files carry the smuggler's hidden island and the cryptogram's cipher, key and plain text.
 
 Batch 5 (G577): `DaedalusDiskSaver{FleetSoundings,QuayDuel,LastCrate,CensusRiddles}Core.h` port Fleet Soundings, Quay Duel, Last Crate and Census Riddles (grading; the riddles and answers are in the golden file). That completes the C++ ports of the DiskSaver Python games.
+
+Batch 6 (G578): `DaedalusDiskSaver{TideClocks,LighthouseLeases,TidemarkChunks,BottleCensus}Core.h` port the earlier simulations Tide Clocks (G166), Lighthouse Leases (G171), Tidemark Chunks (G175) and Bottle Census (G179). The golden files record each run's random draws, so C++ replays the same simulation without reimplementing Python's `random`. Config files, NPC lines and the CLI stay in Python. Bottle Census was first committed under another bot's name; this port only adds files.
