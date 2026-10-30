@@ -44,6 +44,22 @@ class Game(pc.PrismGame):
         self.lit = [False] * n
         self.taps, self.peals = self.cfg["taps"], 0
 
+    @classmethod
+    def from_state(cls, state):
+        """A save is checked against the rules before it is trusted (iteration 5)."""
+        g = super().from_state(state)
+        n = g.cfg["chimes"]
+        ok = (len(g.charge) == n and len(g.facing) == n and len(g.lit) == n
+              and all(isinstance(c, int) and 0 <= c < PEAL for c in g.charge)
+              and all(f in (-1, 1) for f in g.facing)
+              and all(isinstance(x, bool) for x in g.lit)
+              and isinstance(g.taps, int) and 0 <= g.taps <= g.cfg["taps"]
+              and isinstance(g.peals, int) and g.peals >= 0
+              and g.over == (all(g.lit) or g.taps <= 0) and g.won == all(g.lit))
+        if not ok:
+            raise ValueError("prismchime save does not satisfy the rules")
+        return g
+
     def _peal(self, i, queue):
         """Chime i peals: score, light, reset, and charge both neighbours (queued in order)."""
         n = len(self.charge)

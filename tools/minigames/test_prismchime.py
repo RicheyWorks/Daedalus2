@@ -74,6 +74,29 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class Saves(unittest.TestCase):
+    """Iteration 5: from_state refuses saves that break the rules."""
+    def bad(self, **fields):
+        st = gm.start(3).to_state()
+        st.update(fields)
+        with self.assertRaises(ValueError):
+            gm.Game.from_state(st)
+
+    def test_round_trip_still_works(self):
+        g = gm.start(3)
+        g.step(g.demo_action())
+        self.assertEqual(gm.Game.from_state(g.to_state()).status(), g.status())
+
+    def test_bad_saves_are_refused(self):
+        self.bad(charge=[4, 1, 1, 1, 1, 1, 1, 1])
+        self.bad(charge=[1, 1, 1])
+        self.bad(facing=[2, 1, 1, 1, 1, 1, 1, 1])
+        self.bad(lit=[True] * 7)
+        self.bad(taps=99)
+        self.bad(taps=0, over=False)
+        self.bad(won=True)
+
+
 class Properties(unittest.TestCase):
     """Iteration 1: invariants that hold on every ring, every tap, every seed (no rule change)."""
     SEEDS = range(60)

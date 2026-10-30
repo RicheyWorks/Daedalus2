@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 using namespace daedalus::prismchime;
 
@@ -19,6 +20,14 @@ std::string Field(const std::string& Line, const std::string& Key)
 	if (P == std::string::npos) return "";
 	const size_t S = P + Needle.size(), E = Line.find(' ', S);
 	return Line.substr(S, E == std::string::npos ? std::string::npos : E - S);
+}
+
+std::vector<std::string> Split(const std::string& S, char Sep)
+{
+	std::vector<std::string> Out; std::string Tok;
+	for (char Ch : S) { if (Ch == Sep) { Out.push_back(Tok); Tok.clear(); } else Tok.push_back(Ch); }
+	if (!S.empty()) Out.push_back(Tok);
+	return Out;
 }
 
 std::string GameLine(std::uint32_t Seed, const std::string& Diff, const Game& G)
@@ -105,7 +114,7 @@ int main(int Argc, char** Argv)
 	if (Argc < 2) { std::printf("usage: prismchime_core_test prismchime_parity.txt\n"); return 2; }
 	std::ifstream In(Argv[1]);
 	if (!In) { std::printf("FAIL cannot open %s\n", Argv[1]); return 2; }
-	int Fails = UnitChecks() + InvariantSweep(), Games = 0;
+	int Fails = UnitChecks() + InvariantSweep(), Games = 0, Vectors = 0;
 	std::string Line; Game G; std::uint32_t Seed = 0; std::string Diff; int Turn = 0; bool Skip = false;
 	while (std::getline(In, Line))
 	{
@@ -133,8 +142,29 @@ int main(int Argc, char** Argv)
 			std::ostringstream E; E << "end  score=" << G.Score << " won=" << (G.Won ? 1 : 0) << " peals=" << G.Peals;
 			if (E.str() != Line || !G.Over) { std::printf("FAIL s=%u %s end\n  want %s\n  got  %s\n", Seed, Diff.c_str(), Line.c_str(), E.str().c_str()); ++Fails; }
 		}
+		else if (Line.rfind("vector ", 0) == 0)
+		{
+			// Hand-set ring: charge / facing / lit / taps replace the seeded state; the next line is one scripted tap.
+			Diff = "vector:" + Line.substr(7, Line.find(' ', 7) - 7); Turn = 0; Skip = false; ++Vectors;
+			G.Start(1, "easy");
+			G.Charge.clear(); for (const std::string& Tok : Split(Field(Line, "charge"), ',')) G.Charge.push_back(std::stoi(Tok));
+			G.Facing.clear(); for (const std::string& Tok : Split(Field(Line, "facing"), ',')) G.Facing.push_back(std::stoi(Tok));
+			G.Lit.clear(); for (char Ch : Field(Line, "lit")) G.Lit.push_back(Ch == '1');
+			G.Taps = std::stoi(Field(Line, "taps"));
+		}
+		else if (Line.rfind("tap ", 0) == 0)
+		{
+			if (Skip) continue;
+			const int I = std::stoi(Field(Line, "i"));
+			int Pealed = 0; std::string Result;
+			const Game::Act R = G.Tap(I, Pealed, Result);
+			std::ostringstream O;
+			O << "tap i=" << I << " pealed=" << Pealed << " score=" << G.Score << " taps=" << G.Taps << " lit=" << G.LitString() << " charge=" << G.ChargeString()
+			  << " over=" << (G.Over ? 1 : 0) << " won=" << (G.Won ? 1 : 0) << " res=" << Result;
+			if (R != Game::Act::Ok || O.str() != Line) { std::printf("FAIL %s\n  want %s\n  got  %s\n", Diff.c_str(), Line.c_str(), O.str().c_str()); ++Fails; }
+		}
 		else { std::printf("FAIL unknown line: %s\n", Line.c_str()); return 1; }
 	}
-	std::printf("%s prismchime: %d games regenerated from seed, %d failures\n", Fails ? "FAIL" : "OK", Games, Fails);
+	std::printf("%s prismchime: %d games regenerated from seed, %d edge vectors, %d failures\n", Fails ? "FAIL" : "OK", Games, Vectors, Fails);
 	return Fails ? 1 : 0;
 }
