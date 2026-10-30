@@ -103,6 +103,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test && ./shardfall_core_test shardfall_parity.txt
       - name: Shardfall Gamble core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shardfall_core_test.cpp -o shardfall_core_test_clang && ./shardfall_core_test_clang shardfall_parity.txt
+      - name: Siltlane core (DaedalusSiltlaneCore.h replays siltlane_parity.txt from siltlane_parity.py)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public siltlane_core_test.cpp -o siltlane_core_test && ./siltlane_core_test siltlane_parity.txt
+      - name: Siltlane core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public siltlane_core_test.cpp -o siltlane_core_test_clang && ./siltlane_core_test_clang siltlane_parity.txt
       - name: PyRandom core (DaedalusPyRandomCore.h matches CPython random.Random(str) call by call)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public pyrandom_core_test.cpp -o pyrandom_core_test && ./pyrandom_core_test pyrandom_parity.txt
       - name: PyRandom core, clang
