@@ -369,3 +369,7 @@ Seed spec (G581): `docs/islands/DISKSAVER-SEED-SPEC.md` specifies how the DiskSa
 ## Gantry Sweep (G590)
 
 `gantry_sweep_parity.py` is the fixture generator for the C++ minigame core `DaedalusDiskSaverGantrySweepCore.h` (DiskSaver Island, quest `q_gantry_sweep`, NPC Railwright Ossian): a gantry crane rides one quay rail like a disk head, seeded ships call it at a berth and an arrival tick, and the player orders the service to keep the waiting ticks low against three yard habits and the exact best order. Rules: `docs/islands/DISKSAVER-GANTRY-SWEEP.md`; hook: `data/islands/disk-saver/gantry-sweep-v1.json`. The layout is `random.Random(seed string)` drawn through the shared `DaedalusPyRandomCore.h`. `--write/--check` writes `engines/unreal/core-test/disksaver_gantry_sweep_parity.txt`.
+
+## Buddy Berths (G597)
+
+`buddy_berths_parity.py` is the fixture generator for the C++ minigame core `DaedalusDiskSaverBuddyBerthsCore.h` (DiskSaver Island, quest `q_buddy_berths`, NPC Dockmother Imelda): the long quay is split buddy-style, a ship of size 2^k may only moor on an aligned run of 2^k free units, and the player places each seeded arrival (or turns it away) to turn as few ships away as possible against three dock habits (lowest, tightest fit, highest) and the exact best plan. Rules: `docs/islands/DISKSAVER-BUDDY-BERTHS.md`; hook: `data/islands/disk-saver/buddy-berths-v1.json`. The layout is `random.Random(seed string)` drawn through the shared `DaedalusPyRandomCore.h`. `--write/--check` writes `engines/unreal/core-test/disksaver_buddy_berths_parity.txt`.
