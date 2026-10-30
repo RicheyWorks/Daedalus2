@@ -43,3 +43,7 @@ Notes
 ## prismchime (unreal-team, READY 59142/59143; 'Blender items' sheet)
 
 6 assets. Name mapping: Cab_Prismchime is built as Prop_Arcade_Cab_Prismchime (shared cabinet sockets, ring-of-bells topper), and NPC_Prismchime_Warden as Mob_Prismchime_Warden (static; shared 8-bone rig pending). Hoop: 1.6 m silver double hoop on a short chain with 8 bell sockets; scale it for the 6- and 10-bell variants. Bell_Dark and Bell_Lit: crystal bell on a rod with 3 pip sockets; Lit is amber emissive. Mallet: prism head. Sheet: prismchime.png.
+
+## gantry_sweep (disk-saver, READY 59154; GS01-GS12)
+
+24 assets: cabinet (GS01), gantry crane (GS02), 4 m quay rail segment (GS03), berth bollard with swappable plate (GS04), trader cog, fishing smack and river barge each with hatch open and closed (GS05), arrival tick board 0-60 (GS06), rail-post slate (GS07), tide flags calm, rush, spread and ragged storm (GS08), verdict lamps sweet, fair and jammed (GS09), crates 0.5, 1 and 2 m (GS10), grease tin (GS11), Railwright Ossian (GS12). The crane and Ossian are static, rigs pending. Plate text is a decal variant. Sheet: gantry_sweep.png.
