@@ -2897,3 +2897,177 @@ M 0,1,2,3,4,5,6,7,8,0
 O refused repeat
 M -
 O refused short
+C max_coord_rail
+H 1000000000 0:1000000000,1000000000:0,500000000:1000000000
+O L 1000000000 3
+O R 0 berth0 0 1000000000
+O R 1 berth1 1000000000 0
+O R 2 berth2 500000000 1000000000
+O P fcfs 1,0,2 500000000 1500000000
+O P sstf 1,2,0 500000000 1000000000
+O P scan 1,2,0 500000000 1000000000
+O P cscan 1,2,0 500000000 1000000000
+O P best 1,0,2 500000000 1500000000
+M 1,0,2
+O m 500000000 1500000000 sweet
+M 0,1,2
+O m 3500000000 2500000000 jammed
+M 2,1,0
+O m 3000000000 2000000000 jammed
+M 1,2,0
+O m 500000000 1000000000 sweet
+M 1,0,2
+O m 500000000 1500000000 sweet
+M 1,2,0
+O m 500000000 1000000000 sweet
+M 1,2,0
+O m 500000000 1000000000 sweet
+M 1,2,0
+O m 500000000 1000000000 sweet
+M 0,1
+O refused short
+M 0,1,2,0
+O refused long
+M 0,1,3
+O refused range
+M 0,1,0
+O refused repeat
+M -
+O refused short
+C ten_far_ships
+H 0 1000000000:1000000000,900000001:999999999,800000002:999999998,700000003:999999997,600000004:999999996,500000005:999999995,400000006:999999994,300000007:999999993,200000008:999999992,100000009:999999991
+O L 0 10
+O R 0 berth0 1000000000 1000000000
+O R 1 berth1 900000001 999999999
+O R 2 berth2 800000002 999999998
+O R 3 berth3 700000003 999999997
+O R 4 berth4 600000004 999999996
+O R 5 berth5 500000005 999999995
+O R 6 berth6 400000006 999999994
+O R 7 berth7 300000007 999999993
+O R 8 berth8 200000008 999999992
+O R 9 berth9 100000009 999999991
+O P fcfs 9,8,7,6,5,4,3,2,1,0 4499999910 1000000000
+O P sstf 9,8,7,6,5,4,3,2,1,0 4499999910 1000000000
+O P scan 9,8,7,6,5,4,3,2,1,0 4499999910 1000000000
+O P cscan 9,8,7,6,5,4,3,2,1,0 4499999910 1000000000
+O P best 9,8,7,6,5,4,3,2,1,0 4499999910 1000000000
+M 9,8,7,6,5,4,3,2,1,0
+O m 4499999910 1000000000 sweet
+M 0,1,2,3,4,5,6,7,8,9
+O m 4500000000 1899999991 jammed
+M 9,8,7,6,5,4,3,2,1,0
+O m 4499999910 1000000000 sweet
+M 9,2,0,3,8,6,1,5,4,7
+O m 17699999778 3299999977 jammed
+M 9,8,7,6,5,4,3,2,1,0
+O m 4499999910 1000000000 sweet
+M 9,8,7,6,5,4,3,2,1,0
+O m 4499999910 1000000000 sweet
+M 9,8,7,6,5,4,3,2,1,0
+O m 4499999910 1000000000 sweet
+M 9,8,7,6,5,4,3,2,1,0
+O m 4499999910 1000000000 sweet
+M 0,1,2,3,4,5,6,7,8
+O refused short
+M 0,1,2,3,4,5,6,7,8,9,0
+O refused long
+M 0,1,2,3,4,5,6,7,8,10
+O refused range
+M 0,1,2,3,4,5,6,7,8,0
+O refused repeat
+M -
+O refused short
+C dup_arrivals
+H 12 3:7,30:7,12:7,20:7,3:7,25:7
+O L 12 6
+O R 0 berth0 3 7
+O R 1 berth1 30 7
+O R 2 berth2 12 7
+O R 3 berth3 20 7
+O R 4 berth4 3 7
+O R 5 berth5 25 7
+O P fcfs 0,4,2,3,5,1 87 36
+O P sstf 2,3,5,1,0,4 129 45
+O P scan 2,3,5,1,0,4 129 45
+O P cscan 2,3,5,1,0,4 129 45
+O P best 0,4,2,3,5,1 87 36
+M 0,4,2,3,5,1
+O m 87 36 sweet
+M 0,1,2,3,4,5
+O m 299 101 jammed
+M 5,4,3,2,1,0
+O m 301 105 jammed
+M 3,2,5,1,4,0
+O m 167 61 jammed
+M 0,4,2,3,5,1
+O m 87 36 sweet
+M 2,3,5,1,0,4
+O m 129 45 jammed
+M 2,3,5,1,0,4
+O m 129 45 jammed
+M 2,3,5,1,0,4
+O m 129 45 jammed
+M 0,1,2,3,4
+O refused short
+M 0,1,2,3,4,5,0
+O refused long
+M 0,1,2,3,4,6
+O refused range
+M 0,1,2,3,4,0
+O refused repeat
+M -
+O refused short
+C dup_arrivals_ties
+H 20 10:5,30:5,10:5,30:5
+O L 20 4
+O R 0 berth0 10 5
+O R 1 berth1 30 5
+O R 2 berth2 10 5
+O R 3 berth3 30 5
+O P fcfs 0,2,1,3 60 30
+O P sstf 0,2,1,3 60 30
+O P scan 0,2,1,3 60 30
+O P cscan 0,2,1,3 60 30
+O P best 0,2,1,3 60 30
+M 0,2,1,3
+O m 60 30 sweet
+M 0,1,2,3
+O m 140 70 jammed
+M 3,2,1,0
+O m 140 70 jammed
+M 1,3,0,2
+O m 60 30 sweet
+M 0,2,1,3
+O m 60 30 sweet
+M 0,2,1,3
+O m 60 30 sweet
+M 0,2,1,3
+O m 60 30 sweet
+M 0,2,1,3
+O m 60 30 sweet
+M 0,1,2
+O refused short
+M 0,1,2,3,0
+O refused long
+M 0,1,2,4
+O refused range
+M 0,1,2,0
+O refused repeat
+M -
+O refused short
+C no_ships
+H 5 -
+O hand_refused no_ships
+C eleven_ships
+H 0 0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10
+O hand_refused too_many_ships
+C start_past_max
+H 1000000001 0:0
+O hand_refused coord
+C berth_past_max
+H 0 1:1,1000000001:0
+O hand_refused coord
+C arrival_past_max
+H 0 0:1000000001
+O hand_refused coord

@@ -5,6 +5,7 @@
 #include "DaedalusDiskSaverGantrySweepCore.h"
 #include "disksaver_parity.h"
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <string>
@@ -64,12 +65,12 @@ static std::string Join(const GS::Order& O) {
 
 struct Case {
     std::string Name;
-    bool Open = false, Ok = true, Laid = false;
+    bool Open = false, Ok = true, Laid = false, Refused = false;
     GS::Layout L;
     std::vector<std::string> Got, Want;
 };
 
-static int Plays = 0, Layouts = 0;
+static int Plays = 0, Layouts = 0, Oracled = 0;
 
 static void Flush(Case& K) {
     if (!K.Open) return;
@@ -121,6 +122,21 @@ static void Lay(Case& K) {
                   (R.V == GS::Verdict::Sweet) == (W == BestW) && (W > MinHabit) == (R.V == GS::Verdict::Jammed),
               K.Name + ": playing a habit or the best order agrees with Run and its verdict");
     }
+    if (L.Ships.size() <= 8) {  // an independent oracle for the pruned search: every order, first minimum wins
+        GS::Order P(L.Ships.size()), Top;
+        for (std::size_t I = 0; I < P.size(); ++I) P[I] = I;
+        std::int64_t TopW = -1;
+        do {
+            std::int64_t W = 0, Tr = 0;
+            GS::Run(L, P, W, Tr);
+            if (TopW < 0 || W < TopW) {
+                TopW = W;
+                Top = P;
+            }
+        } while (std::next_permutation(P.begin(), P.end()));
+        Check(Top == Orders[4], K.Name + ": pruned best equals the all-orders best");
+        ++Oracled;
+    }
     const GS::Order& B = Orders[4];
     for (std::size_t I = 0; I + 1 < B.size(); ++I) {  // swapping two neighbours never beats the best
         GS::Order S = B;
@@ -169,9 +185,16 @@ int main(int argc, char** argv) {
                 Ok = F.size() == 2 && ToI64(F[0], V.first) && ToI64(F[1], V.second) && Ok;
                 PA.push_back(V);
             }
-            if (Ok && GS::MakeHand(Start, PA, K->L) == GS::Error::None) Lay(*K);
-            else K->Ok = false;
-        } else if (T[0] == "M" && T.size() == 2 && K->Laid) {
+            const GS::Error E = Ok ? GS::MakeHand(Start, PA, K->L) : GS::Error::None;
+            if (!Ok) K->Ok = false;
+            else if (E == GS::Error::None) Lay(*K);
+            else {  // a refused hand rail: no layout, no plays
+                K->Got.push_back(std::string("hand_refused ") + GS::ErrorName(E));
+                K->Laid = true;
+                ++Layouts;
+                K->Refused = true;
+            }
+        } else if (T[0] == "M" && T.size() == 2 && K->Laid && !K->Refused) {
             GS::Order O;
             if (T[1] != "-") {
                 for (const std::string& P : Split(T[1], ',')) {
@@ -198,5 +221,6 @@ int main(int argc, char** argv) {
     Flush(*K);
     delete K;
     Check(Layouts == Cases, "every case laid out");
+    Check(Oracled >= 50, "the all-orders oracle ran on the small rails");
     return Finish("gantry_sweep", Cases, Plays);
 }
