@@ -2,8 +2,8 @@
 // G504 Reed Ceiling C++ port (G591), checked without Unreal:
 //   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public marsh_reed_ceiling_core_test.cpp
 //   ./a.out marsh_reed_ceiling_parity.txt
-// Replays the Java-written golden vectors (MarshCoresParityTest.java) for 6 marshes: the closed-form equilibrium, Hopf
-// capacity, regime and trace (1e-12 relative), the RK4 run sampled every 5 years (1e-9) and the seeded noisy seasons
+// Replays the Java-written golden vectors (MarshCoresParityTest.java) for 7 marshes (stable, cycling and no-hawks):
+// the closed-form equilibrium, Hopf capacity, regime and trace (1e-12 relative), the RK4 run sampled every 5 years (1e-9) and the seeded noisy seasons
 // (1e-7, because the yearly shock goes through exp/log/cos and libm may differ in the last ulp).
 #include "DaedalusMarshReedCeilingCore.h"
 #include "marsh_parity.h"
@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 {
 	const char* Path = argc > 1 ? argv[1] : "marsh_reed_ceiling_parity.txt";
 	const std::vector<std::string> Lines = marsh_test::ParityLines(Path);
-	Check("golden file has 6 marshes x 3 lines", Lines.size() == 18);
+	Check("golden file has 7 marshes x 3 lines", Lines.size() == 21);
 	for (size_t L = 0; L + 2 < Lines.size(); L += 3)
 	{
 		const std::string& H = Lines[L];

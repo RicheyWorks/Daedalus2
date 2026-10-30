@@ -1,0 +1,5 @@
+# G507 ReedRelease golden vectors: written by MarshCoresParityTest.java, replayed by marsh_reed_release_core_test.cpp.
+reed=10.0,40.0,80.0,150.0 n0=6.0 p0=3.0 budget=6 perYear=3 releaseYears=3 horizon=25 threshold=4.0 sigma=0.15 runs=40 seed=23 sched0=3,3,0 risk0=0.0 sched1=3,3,0 risk1=0.65 sched2=3,3,0 risk2=1.0 sched3=3,3,0 risk3=1.0 bestHa=10.0 best=3,3,0 bestRisk=0.0 fastHa=10.0 fast=3,3,0 fastRisk=0.0
+reed=25.0,55.0 n0=10.0 p0=2.0 budget=4 perYear=2 releaseYears=2 horizon=20 threshold=6.0 sigma=0.25 runs=50 seed=42 sched0=2,2 risk0=0.1 sched1=2,2 risk1=0.72 bestHa=25.0 best=2,2 bestRisk=0.1 fastHa=25.0 fast=2,2 fastRisk=0.1
+reed=5.0,40.0,110.0 n0=3.0 p0=4.0 budget=3 perYear=3 releaseYears=2 horizon=15 threshold=2.0 sigma=0.0 runs=20 seed=61 sched0=3,0 risk0=0.0 sched1=3,0 risk1=0.0 sched2=3,0 risk2=0.0 bestHa=5.0 best=3,0 bestRisk=0.0 fastHa=5.0 fast=3,0 fastRisk=0.0
+reed=30.0,64.0,90.0 n0=20.0 p0=5.0 budget=0 perYear=1 releaseYears=2 horizon=30 threshold=8.0 sigma=0.3 runs=40 seed=80 sched0=0,0 risk0=0.9 sched1=0,0 risk1=1.0 sched2=0,0 risk2=1.0 bestHa=30.0 best=0,0 bestRisk=0.9 fastHa=30.0 fast=0,0 fastRisk=0.9
