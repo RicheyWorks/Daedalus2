@@ -341,3 +341,7 @@ CI: `tram-shunt.yml`.
 python tools/streaming/tram_shunt.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/tram_shunt_test.py
 ```
+
+### G206 cost model in C++17 (`census_budget_parity.py`, G571)
+
+`DaedalusCensusBudgetCore.h` is a header-only, engine-free C++17 port of the `census_budget.py` cost model and its 40000 KiB RAM / 32768 KiB disk beacon checks. `census_budget_parity.py --write|--check` produces its golden file `engines/unreal/core-test/census_budget_parity.txt` from this tool. See `docs/islands/DISKSAVER-CENSUS-BUDGET-CPP.md`.
