@@ -172,8 +172,25 @@ class MarshCoresParityTest {
                     + s.perYear() + " releaseYears=" + s.releaseYears() + " horizon=" + s.horizon() + " threshold="
                     + s.threshold() + " sigma=" + s.sigma() + " cohort=" + s.cohort() + " runs=" + s.runs() + " seed="
                     + seed + " front=" + csv(front) + " frontRisk=" + plan.risk(front) + " even=" + csv(even)
-                    + " evenRisk=" + plan.risk(even) + " best=" + csv(best.schedule()) + " bestRisk=" + best.risk()
-                    + " greedy=" + csv(greedy.schedule()) + " greedyRisk=" + greedy.risk());
+                    + " evenRisk=" + plan.risk(even) + " back=" + csv(plan.backLoaded()) + " backRisk="
+                    + plan.risk(plan.backLoaded()) + " best=" + csv(best.schedule()) + " bestRisk=" + best.risk()
+                    + " greedy=" + csv(greedy.schedule()) + " greedyRisk=" + greedy.risk() + " bestLo="
+                    + plan.riskInterval(toArray(best.schedule()))[0] + " bestHi="
+                    + plan.riskInterval(toArray(best.schedule()))[1]);
+        }
+        // start, budget, perYear, releaseYears, horizon, threshold, sigma, cohort, runs
+        double[][] bad = {{-1, 0, 0, 1, 1, 10, 0.2, 3, 5}, {0, -1, 0, 1, 1, 10, 0.2, 3, 5},
+            {0, 0, -1, 1, 1, 10, 0.2, 3, 5}, {0, 0, 0, 0, 1, 10, 0.2, 3, 5}, {0, 0, 1, 2, 1, 10, 0.2, 3, 5},
+            {0, 0, 1, 1, 1, 0, 0.2, 3, 5}, {0, 0, 1, 1, 1, 10, -0.1, 3, 5},
+            {0, 0, 1, 1, 1, 10, Double.POSITIVE_INFINITY, 3, 5}, {0, 0, 1, 1, 1, 10, 0.2, 4, 5},
+            {0, 0, 1, 1, 1, 10, 0.2, 3, 0}, {0, 9, 2, 3, 5, 10, 0.2, 3, 5}, {5, 4, 2, 2, 5, 10, 0.2, 0, 5}};
+        for (double[] q : bad) {
+            String why = TranslocationPlan.Settings.problem((int) q[0], (int) q[1], (int) q[2], (int) q[3],
+                    (int) q[4], q[5], q[6], (int) q[7], (int) q[8]);
+            out.add("problem start=" + (int) q[0] + " budget=" + (int) q[1] + " perYear=" + (int) q[2]
+                    + " releaseYears=" + (int) q[3] + " horizon=" + (int) q[4] + " threshold=" + q[5] + " sigma="
+                    + q[6] + " cohort=" + (int) q[7] + " runs=" + (int) q[8] + " why="
+                    + (why == null ? "ok" : why.replace(' ', '_')));
         }
         return out;
     }
@@ -184,6 +201,10 @@ class MarshCoresParityTest {
             s.append(i == 0 ? "" : ",").append(a[i]);
         }
         return s.toString();
+    }
+
+    private static int[] toArray(List<Integer> a) {
+        return a.stream().mapToInt(Integer::intValue).toArray();
     }
 
     private static String csv(List<Integer> a) {

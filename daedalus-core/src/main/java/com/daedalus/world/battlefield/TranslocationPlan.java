@@ -41,13 +41,51 @@ public final class TranslocationPlan {
         /** 12 marsh adults, 10 aviary adults over 5 years (at most 6 a year), 30-year horizon, crash at 10, sigma 0.2. */
         public static final Settings DEFAULT = new Settings(12, 10, 6, 5, 30, 10, 0.2, CraneCohorts.ADULT, 400);
 
-        /** Rejects tuning that cannot run. */
+        /** Rejects tuning that cannot run, naming the first problem (see {@link #problem}). */
         public Settings {
-            if (start < 0 || budget < 0 || perYear < 0 || releaseYears < 1 || horizon < releaseYears
-                    || !(threshold > 0) || !(sigma >= 0) || Double.isInfinite(sigma) || cohort < 0
-                    || cohort >= CraneCohorts.COHORTS || runs < 1 || (long) perYear * releaseYears < budget) {
-                throw new IllegalArgumentException("bad translocation settings");
+            String why = problem(start, budget, perYear, releaseYears, horizon, threshold, sigma, cohort, runs);
+            if (why != null) {
+                throw new IllegalArgumentException("bad translocation settings: " + why);
             }
+        }
+
+        /**
+         * The first reason this tuning cannot run, or null if it can. Checked in this order so a UI can show one
+         * clear message (the C++ core returns the same strings).
+         */
+        public static String problem(int start, int budget, int perYear, int releaseYears, int horizon,
+                double threshold, double sigma, int cohort, int runs) {
+            if (start < 0) {
+                return "start must be at least 0";
+            }
+            if (budget < 0) {
+                return "budget must be at least 0";
+            }
+            if (perYear < 0) {
+                return "perYear must be at least 0";
+            }
+            if (releaseYears < 1) {
+                return "releaseYears must be at least 1";
+            }
+            if (horizon < releaseYears) {
+                return "horizon must cover the release years";
+            }
+            if (!(threshold > 0)) {
+                return "threshold must be above 0";
+            }
+            if (!(sigma >= 0) || Double.isInfinite(sigma)) {
+                return "sigma must be finite and at least 0";
+            }
+            if (cohort < 0 || cohort >= CraneCohorts.COHORTS) {
+                return "cohort must be a G194 cohort index";
+            }
+            if (runs < 1) {
+                return "runs must be at least 1";
+            }
+            if ((long) perYear * releaseYears < budget) {
+                return "budget does not fit perYear x releaseYears";
+            }
+            return null;
         }
 
         /** The same plan with another budget. */
@@ -160,6 +198,32 @@ public final class TranslocationPlan {
             left -= s[y];
         }
         return s;
+    }
+
+    /** Every bird as late as possible (the last year first, as many as the per-year cap allows). */
+    public int[] backLoaded() {
+        int[] s = new int[settings.releaseYears()];
+        int left = settings.budget();
+        for (int y = s.length - 1; y >= 0 && left > 0; y--) {
+            s[y] = Math.min(settings.perYear(), left);
+            left -= s[y];
+        }
+        return s;
+    }
+
+    /**
+     * 95 % Wilson score interval {low, high} for a schedule's crash risk: how far the Monte Carlo estimate can be
+     * trusted with this many runs. Two schedules whose intervals overlap are not reliably different.
+     */
+    public double[] riskInterval(int[] schedule) {
+        double p = risk(schedule);
+        double n = settings.runs();
+        double z = 1.959963984540054;
+        double z2 = z * z;
+        double centre = (p + z2 / (2 * n)) / (1 + z2 / n);
+        double half = z / (1 + z2 / n) * Math.sqrt(p * (1 - p) / n + z2 / (4 * n * n));
+        // Exact ends when no run (or every run) crashed, so rounding cannot leave the estimate outside its interval.
+        return new double[] {p == 0 ? 0 : Math.max(0, centre - half), p == 1 ? 1 : Math.min(1, centre + half)};
     }
 
     /** The budget spread as evenly as the years allow (extra birds early). */

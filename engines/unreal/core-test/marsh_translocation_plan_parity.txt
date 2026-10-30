@@ -1,7 +1,19 @@
 # G251 TranslocationPlan golden vectors: written by MarshCoresParityTest.java, replayed by marsh_translocation_plan_core_test.cpp.
-flock=0 start=12 budget=10 perYear=6 releaseYears=5 horizon=30 threshold=10.0 sigma=0.2 cohort=3 runs=120 seed=7 front=6,4,0,0,0 frontRisk=0.23333333333333334 even=2,2,2,2,2 evenRisk=0.23333333333333334 best=4,0,6,0,0 bestRisk=0.20833333333333334 greedy=6,1,2,1,0 greedyRisk=0.23333333333333334
-flock=1 start=8 budget=6 perYear=3 releaseYears=3 horizon=20 threshold=6.0 sigma=0.3 cohort=3 runs=100 seed=38 front=3,3,0 frontRisk=0.77 even=2,2,2 evenRisk=0.78 best=3,3,0 bestRisk=0.77 greedy=3,2,1 greedyRisk=0.77
-flock=2 start=12 budget=8 perYear=4 releaseYears=4 horizon=25 threshold=10.0 sigma=0.25 cohort=2 runs=100 seed=69 front=4,4,0,0 frontRisk=0.0 even=2,2,2,2 evenRisk=0.0 best=4,4,0,0 bestRisk=0.0 greedy=4,3,0,1 greedyRisk=0.0
-flock=0 start=5 budget=4 perYear=4 releaseYears=2 horizon=15 threshold=4.0 sigma=0.0 cohort=0 runs=50 seed=100 front=4,0 frontRisk=0.0 even=2,2 evenRisk=0.0 best=4,0 bestRisk=0.0 greedy=4,0 greedyRisk=0.0
-flock=1 start=20 budget=0 perYear=2 releaseYears=3 horizon=10 threshold=12.0 sigma=0.4 cohort=1 runs=80 seed=131 front=0,0,0 frontRisk=0.7875 even=0,0,0 evenRisk=0.7875 best=0,0,0 bestRisk=0.7875 greedy=0,0,0 greedyRisk=0.7875
-flock=2 start=10 budget=9 perYear=5 releaseYears=4 horizon=30 threshold=8.0 sigma=0.35 cohort=3 runs=90 seed=162 front=5,4,0,0 frontRisk=0.011111111111111112 even=3,2,2,2 evenRisk=0.011111111111111112 best=5,4,0,0 bestRisk=0.011111111111111112 greedy=5,1,1,2 greedyRisk=0.011111111111111112
+flock=0 start=12 budget=10 perYear=6 releaseYears=5 horizon=30 threshold=10.0 sigma=0.2 cohort=3 runs=120 seed=7 front=6,4,0,0,0 frontRisk=0.23333333333333334 even=2,2,2,2,2 evenRisk=0.23333333333333334 back=0,0,0,4,6 backRisk=0.275 best=4,0,6,0,0 bestRisk=0.20833333333333334 greedy=6,1,2,1,0 greedyRisk=0.23333333333333334 bestLo=0.14528439608109694 bestHi=0.2894767843298135
+flock=1 start=8 budget=6 perYear=3 releaseYears=3 horizon=20 threshold=6.0 sigma=0.3 cohort=3 runs=100 seed=38 front=3,3,0 frontRisk=0.77 even=2,2,2 evenRisk=0.78 back=0,3,3 backRisk=0.81 best=3,3,0 bestRisk=0.77 greedy=3,2,1 greedyRisk=0.77 bestLo=0.6784561697712622 bestHi=0.8415673411969654
+flock=2 start=12 budget=8 perYear=4 releaseYears=4 horizon=25 threshold=10.0 sigma=0.25 cohort=2 runs=100 seed=69 front=4,4,0,0 frontRisk=0.0 even=2,2,2,2 evenRisk=0.0 back=0,0,4,4 backRisk=0.0 best=4,4,0,0 bestRisk=0.0 greedy=4,3,0,1 greedyRisk=0.0 bestLo=0.0 bestHi=0.03699349820698568
+flock=0 start=5 budget=4 perYear=4 releaseYears=2 horizon=15 threshold=4.0 sigma=0.0 cohort=0 runs=50 seed=100 front=4,0 frontRisk=0.0 even=2,2 evenRisk=0.0 back=0,4 backRisk=0.0 best=4,0 bestRisk=0.0 greedy=4,0 greedyRisk=0.0 bestLo=0.0 bestHi=0.07134759913335872
+flock=1 start=20 budget=0 perYear=2 releaseYears=3 horizon=10 threshold=12.0 sigma=0.4 cohort=1 runs=80 seed=131 front=0,0,0 frontRisk=0.7875 even=0,0,0 evenRisk=0.7875 back=0,0,0 backRisk=0.7875 best=0,0,0 bestRisk=0.7875 greedy=0,0,0 greedyRisk=0.7875 bestLo=0.6857784426940333 bestHi=0.8628761328230384
+flock=2 start=10 budget=9 perYear=5 releaseYears=4 horizon=30 threshold=8.0 sigma=0.35 cohort=3 runs=90 seed=162 front=5,4,0,0 frontRisk=0.011111111111111112 even=3,2,2,2 evenRisk=0.011111111111111112 back=0,0,4,5 backRisk=0.044444444444444446 best=5,4,0,0 bestRisk=0.011111111111111112 greedy=5,1,1,2 greedyRisk=0.011111111111111112 bestLo=0.0019640841009183445 bestHi=0.06028408311753451
+problem start=-1 budget=0 perYear=0 releaseYears=1 horizon=1 threshold=10.0 sigma=0.2 cohort=3 runs=5 why=start_must_be_at_least_0
+problem start=0 budget=-1 perYear=0 releaseYears=1 horizon=1 threshold=10.0 sigma=0.2 cohort=3 runs=5 why=budget_must_be_at_least_0
+problem start=0 budget=0 perYear=-1 releaseYears=1 horizon=1 threshold=10.0 sigma=0.2 cohort=3 runs=5 why=perYear_must_be_at_least_0
+problem start=0 budget=0 perYear=0 releaseYears=0 horizon=1 threshold=10.0 sigma=0.2 cohort=3 runs=5 why=releaseYears_must_be_at_least_1
+problem start=0 budget=0 perYear=1 releaseYears=2 horizon=1 threshold=10.0 sigma=0.2 cohort=3 runs=5 why=horizon_must_cover_the_release_years
+problem start=0 budget=0 perYear=1 releaseYears=1 horizon=1 threshold=0.0 sigma=0.2 cohort=3 runs=5 why=threshold_must_be_above_0
+problem start=0 budget=0 perYear=1 releaseYears=1 horizon=1 threshold=10.0 sigma=-0.1 cohort=3 runs=5 why=sigma_must_be_finite_and_at_least_0
+problem start=0 budget=0 perYear=1 releaseYears=1 horizon=1 threshold=10.0 sigma=Infinity cohort=3 runs=5 why=sigma_must_be_finite_and_at_least_0
+problem start=0 budget=0 perYear=1 releaseYears=1 horizon=1 threshold=10.0 sigma=0.2 cohort=4 runs=5 why=cohort_must_be_a_G194_cohort_index
+problem start=0 budget=0 perYear=1 releaseYears=1 horizon=1 threshold=10.0 sigma=0.2 cohort=3 runs=0 why=runs_must_be_at_least_1
+problem start=0 budget=9 perYear=2 releaseYears=3 horizon=5 threshold=10.0 sigma=0.2 cohort=3 runs=5 why=budget_does_not_fit_perYear_x_releaseYears
+problem start=5 budget=4 perYear=2 releaseYears=2 horizon=5 threshold=10.0 sigma=0.2 cohort=0 runs=5 why=ok
