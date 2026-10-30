@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5, G578 batch 6, G579 batch 7).
+"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5, G578 batch 6, G579 batch 7, G580 batch 8).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -20,6 +20,8 @@ Batch 7: G253 Ebb Tide Eviction, G505 Beacon Watch, G529 Budget Fathoms, G533 Fl
 G206 census budget tools. Each case writes its inputs (census or report, budget, config) and the
 tool's expected output lines; seeded variants of the real census are made here with Python's
 random and written out, so the C++ side only reads them.
+Batch 8: G531 Stray Cargo, G519 Memory Footprint, G517 Budget Trend Ledger, G544 Caulking Check:
+the survey, ranking, ledger diff/trend and byte checks; file walks, ledger files and CLIs stay in Python.
 Cases cover the real tools/world_census fixtures (several seeds), synthetic censuses, and
 hand-laid edge layouts (unsolvable, stuck, disconnected) injected through the tool's own
 play() by swapping its layout function for one call.
@@ -46,6 +48,8 @@ import belfry_changes as bc  # noqa: E402
 import boom_defence as bd  # noqa: E402
 import bottle_census as bcs  # noqa: E402
 import budget_fathoms as bf  # noqa: E402
+import budget_ledger as bl  # noqa: E402
+import caulking_check as ck  # noqa: E402
 import census_budget as cb  # noqa: E402
 import census_riddles as cr  # noqa: E402
 import ebb_eviction as ee  # noqa: E402
@@ -56,6 +60,7 @@ import channel_dash as cd  # noqa: E402
 import fleet_flags as ff  # noqa: E402
 import fleet_soundings as fs  # noqa: E402
 import manifest_match as mm  # noqa: E402
+import memory_footprint as mf  # noqa: E402
 import quay_duel as qd  # noqa: E402
 import quayside_shove as qs  # noqa: E402
 import rope_run as rr  # noqa: E402
@@ -63,6 +68,7 @@ import sack_chute as sc  # noqa: E402
 import salvage_sale as ss  # noqa: E402
 import seal_roll as sr  # noqa: E402
 import smugglers_island as si  # noqa: E402
+import stray_cargo as sgc  # noqa: E402
 import tide_clocks as tc  # noqa: E402
 import tide_lock as tl  # noqa: E402
 import tidemark_chunks as tm  # noqa: E402
@@ -1683,6 +1689,358 @@ def ff_lines():
     return out
 
 
+# ---------------------------------------------------------------- batch 8 shared
+def b8_jhex(obj, compact=False):
+    """Python's json.dumps(obj, sort_keys=True) text, hex-encoded for the golden line."""
+    kw = {"separators": (",", ":")} if compact else {}
+    return hx(json.dumps(obj, sort_keys=True, **kw))
+
+
+def b8_shex(s):
+    return "x" + s.encode("utf-8", "surrogatepass").hex()
+
+
+def b8_val(v):
+    """A JSON scalar golden token: - null, iN int, s<hex> string, t/f bool."""
+    if v is None:
+        return "-"
+    if isinstance(v, bool):
+        return "t" if v else "f"
+    if isinstance(v, int):
+        return f"i{v}"
+    return "s" + b8_shex(v)[1:]
+
+
+def b8_refusal(e, kinds):
+    msg = str(e)
+    for needle, kind in kinds:
+        if needle in msg:
+            return "O refused " + kind
+    raise e
+
+
+# ---------------------------------------------------------------- G531 Stray Cargo
+SG_KINDS = [("nonempty list", "no_worlds"), ("duplicate world id", "world_id"), ("bad island", "bad_island"),
+            ("bad asset", "bad_asset")]
+
+
+def sg_lines_for(doc):
+    out = []
+    for w in doc["worlds"]:
+        isl = lst(f"{'!' if not isinstance(i.get('slot'), int) or isinstance(i.get('slot'), bool) else i['slot']}:"
+                  f"{'-' if i.get('asset_definitions') is None else i['asset_definitions']}" for i in w.get("islands") or [])
+        claimed = w.get("assets_without_island")
+        out.append(f"W {hx(w['id'])} {'-' if w.get('realm_id') is None else 'r'} {'-' if claimed is None else claimed} {isl}")
+        for a in w.get("assets") or []:
+            name = a.get("name")
+            out.append(f"A {hx(name) if isinstance(name, str) else '!'} {b8_val(a.get('island_slot'))} {b8_val(a.get('file'))}")
+    return out
+
+
+def sg_case(name, doc, out):
+    out.append(f"C {name}")
+    out.extend(sg_lines_for(doc))
+    try:
+        r = sgc.survey(doc)
+    except sgc.StrayError as e:
+        out.append(b8_refusal(e, SG_KINDS))
+        return
+    for f in r["findings"]:
+        out.append(f"O f {b8_jhex(f)}")
+    c = r["counts"]
+    out.append("O k " + " ".join(str(c[k]) for k in sgc.ERRORS + sgc.ADVISORIES))
+    out.append(f"O v {r['verdict']} {r['hidden_cost_kib']['ram_kib']} {r['hidden_cost_kib']['disk_kib']} "
+               f"{r['empty_hull_ram_kib']} {r['shared_disk_kib']}")
+
+
+def sg_seeded(seed):
+    doc = real_census()
+    rng = random.Random(seed)
+    files = ["assets/ark.glb", "assets/beacon.glb", "assets/crate.glb", ""]
+    for w in doc["worlds"]:
+        slots = [i["slot"] for i in w["islands"]]
+        for i in w["islands"]:
+            i["asset_definitions"] = rng.choice([0, 0, 1, 3, 12])
+        for k in range(rng.randrange(0, 6)):
+            slot = rng.choice(slots + [None, None, 77])
+            w["assets"].append({"name": rng.choice(["ark", "beacon", f"crate{k}", "mast"]), "island_slot": slot,
+                                "file": rng.choice(files + [None])})
+        w["assets_without_island"] = sum(1 for a in w["assets"] if a.get("island_slot") is None) + rng.choice([0, 0, 1])
+        if seed % 2:
+            w["realm_id"] = rng.choice([None, "harbour"])
+    return doc
+
+
+def sg_doc(worlds):
+    return {"format": "daedalus-world-census", "version": 1, "count_semantics": "asset-definitions", "worlds": worlds}
+
+
+def sgc_lines():
+    out = ["# disksaver stray_cargo parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    sg_case("real", real_census(), out)
+    for s in SEEDS:
+        sg_case(f"real_seed{s}", sg_seeded(s), out)
+    for k, v in SYN.items():
+        sg_case(k, v, out)
+    A = lambda n, s, f=None: {"name": n, "island_slot": s, "file": f}  # noqa: E731
+    hand = [
+        ("hand_every_kind", [
+            {"id": "w1", "islands": [{"slot": 0, "asset_definitions": 0}, {"slot": 3, "asset_definitions": 2}],
+             "assets": [A("ark", 3, "a.glb"), A("ark", None, "a.glb"), A("mast", 9), A("rope", None), A("sail", "3"), A("keel", True)],
+             "assets_without_island": 5},
+            {"id": "w0", "realm_id": "r", "islands": [{"slot": -2, "asset_definitions": 0}], "assets": [A("ark", -2, "a.glb")]},
+        ]),
+        ("hand_tidy", [{"id": "t", "realm_id": "r", "islands": [{"slot": 1, "asset_definitions": 4}], "assets": [A("a", 1, "x.glb")],
+                        "assets_without_island": 0}]),
+        ("hand_littered_only", [{"id": "l", "islands": [], "assets": [A("s", None, "f.glb")]}]),
+        ("hand_dup_island_slot", [{"id": "d", "realm_id": "r", "islands": [{"slot": 1, "asset_definitions": 0}, {"slot": 1, "asset_definitions": 5}],
+                                   "assets": [A("a", 1)]}]),
+        ("hand_text_escapes", [{"id": "q\"\\", "islands": [], "assets": [A("tab\tname", None, "dir/\u00e9\u2603.glb"), A("\U0001f600", 4, "\x7f")]}]),
+        ("hand_shared_three", [{"id": f"s{k}", "realm_id": "r", "islands": [{"slot": 0, "asset_definitions": 1}], "assets": [A("x", 0, "same.glb")]}
+                               for k in (2, 0, 1)]),
+        ("hand_dangling_order", [{"id": "o", "realm_id": "r", "islands": [], "assets": [A("b", 5), A("a", "x"), A("a", 4), A("a", False)]}]),
+        ("refuse_no_worlds", []),
+        ("refuse_blank_id", [{"id": " ", "islands": []}]),
+        ("refuse_dup_world", [{"id": "a", "islands": []}, {"id": "a", "islands": []}]),
+        ("refuse_island_slot", [{"id": "a", "islands": [{"slot": "1", "asset_definitions": 0}]}]),
+        ("refuse_asset_name", [{"id": "a", "islands": [], "assets": [A(5, None)]}]),
+        ("refuse_after_finding", [{"id": "a", "islands": [], "assets": [A("ok", None)]}, {"id": "b", "islands": [{"slot": True}]}]),
+    ]
+    for name, worlds in hand:
+        sg_case(name, sg_doc(worlds), out)
+    return out
+
+
+# ---------------------------------------------------------------- G519 Memory Footprint
+MF_KINDS = [("--top and --wins", "top_wins"), ("nonnegative integer", "negative"), ("budgets must be positive", "budget_positive"),
+            ("duplicate world id", "world_id")]
+
+
+def mf_case(name, src, report, top, wins, out):
+    out.append(f"C {name}")
+    out.extend(src)
+    out.append(f"P {top} {wins}")
+    try:
+        r = mf.build(report, top, wins)
+    except mf.FootprintError as e:
+        out.append(b8_refusal(e, MF_KINDS))
+        return
+    for w in r["worlds"]:
+        out.append(f"O w {hx(w['world'])} {w['ram_kib']} {w['disk_kib']} {w['ram_permille']} {w['disk_permille']} {int(w['over'])} "
+                   f"{w['islands']} " + lst(f"{t['slot']}:{t['ram_kib']}:{t['disk_kib']}:{t['ram_share_permille']}" for t in w["top"]))
+    t = r["totals"]
+    out.append(f"O t {t['worlds']} {t['islands']} {t['ram_kib']} {t['disk_kib']} {t['peak_permille']}")
+    for c in r["top_consumers"]:
+        out.append(f"O c {hx(c['world'])} {c['slot']} {c['ram_kib']} {c['disk_kib']}")
+    for c in r["wins"]:
+        out.append(f"O n {c['rank']} {hx(c['world'])} {c['slot']} {c['action']} {c['ram_free_kib']} {c['disk_free_kib']} "
+                   f"{int(c['world_over'])} {int(c['clears'])}")
+    out.append(f"O v {r['verdict']}")
+
+
+def mf_raw(budget, worlds):
+    rb, db, warn = budget
+    doc = {"format": "daedalus-census-budget", "version": 1,
+           "budget": {"ram_budget_kib": rb, "disk_budget_kib": db, "warn_permille": warn},
+           "worlds": [{"id": w, "islands": [{"slot": s, "ram_kib": r, "disk_kib": d, "asset_definitions": n} for s, r, d, n in isl]}
+                      for w, isl in worlds]}
+    src = [f"Q {rb} {db} {warn}"] + [f"R {hx(w)} " + lst(f"{s}:{r}:{d}:{n}" for s, r, d, n in isl) for w, isl in worlds]
+    return doc, src
+
+
+def mf_lines():
+    out = ["# disksaver memory_footprint parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    for cname, c in b7_censuses():
+        for bname, b in B7_BUDGETS:
+            for top, wins in ((3, 10), (1, 1), (50, 100)):
+                if bname != "shipped" and top != 3:
+                    continue
+                mf_case(f"{cname}_{bname}_{top}_{wins}", [b7_budget(b)] + b7_census(c), cb.plan(c, b), top, wins, out)
+    for name, b, c in b7_edge_censuses():
+        mf_case(name, [b7_budget(b)] + b7_census(c), cb.plan(c, b), 3, 10, out)
+    hand = [
+        ("hand_clears", (100, 100, 900), [("w", [(0, 60, 10, 1), (1, 50, 95, 2), (2, 1, 1, 0)])]),
+        ("hand_ties_dup_slots", (100, 100, 500), [("t", [(1, 10, 10, 1), (1, 10, 10, 1), (0, 10, 10, 0)]), ("a", [(5, 10, 10, 1)])]),
+        ("hand_laden_at_warn", (1000, 1000, 900), [("w", [(0, 900, 0, 0)])]),
+        ("hand_just_under_warn", (1000, 1000, 900), [("w", [(0, 899, 0, 0)])]),
+        ("hand_at_budget", (1000, 1000, 900), [("w", [(0, 1000, 1000, 3)])]),
+        ("hand_just_over", (1000, 1000, 900), [("w", [(0, 1001, 10, 3)])]),
+        ("hand_zero_ram_world", (10, 10, 0), [("z", [(0, 0, 0, 0)]), ("e", [])]),
+        ("hand_no_worlds", (10, 10, 900), []),
+        ("refuse_top_zero", (10, 10, 900), [("w", [])]),
+        ("refuse_negative_ram", (10, 10, 900), [("w", [(0, -1, 0, 0)])]),
+        ("refuse_zero_disk", (10, 0, 900), [("w", [])]),
+        ("refuse_negative_warn", (10, 10, -1), [("w", [])]),
+        ("refuse_dup_world", (10, 10, 900), [("w", []), ("w", [])]),
+        ("refuse_blank_world", (10, 10, 900), [("\t", [])]),
+    ]
+    for name, budget, worlds in hand:
+        doc, src = mf_raw(budget, worlds)
+        mf_case(name, src, doc, 0 if name == "refuse_top_zero" else 2, 3, out)
+    doc, src = mf_raw((10, 10, 900), [("w", [])])
+    mf_case("refuse_wins_zero", src, doc, 1, 0, out)
+    return out
+
+
+# ---------------------------------------------------------------- G517 Budget Trend Ledger
+BL_KINDS = [("run id must be", "run"), ("at must be", "at"), ("duplicate world id", "world_id"),
+            ("nonnegative integer", "negative"), ("bad beacon or duplicate slot", "beacon_slot"), ("fits_all_resident", "fits"),
+            ("--last must be", "last"), ("ledger is empty", "empty")]
+
+
+def bl_raw(budget, worlds):
+    doc = {"format": "daedalus-census-budget", "version": 1, "worlds": []}
+    if budget is not None:
+        doc["budget"] = budget
+    src = ["B " + " ".join("?" if budget is None or k not in budget else ("-" if budget[k] is None else str(budget[k]))
+                           for k in ("ram_budget_kib", "disk_budget_kib", "warn_permille"))]
+    for w, fits, ram, disk, isl in worlds:
+        doc["worlds"].append({"id": w, "fits_all_resident": fits, "total_ram_kib": ram, "total_disk_kib": disk,
+                              "islands": [{"slot": s, "beacon": b} for s, b in isl]})
+        src.append(f"R {hx(w)} {int(fits) if isinstance(fits, bool) else '!'} {ram} {disk} " + lst(f"{s}:{b}" for s, b in isl))
+    return doc, src
+
+
+def bl_case(name, runs, lasts, out):
+    """runs = [(run, at, src_lines, report)]; records made in order, then diffs of neighbours and trends."""
+    out.append(f"C {name}")
+    recs = []
+    for run, at, src, rep in runs:
+        out.append(f"N {hx(run) if isinstance(run, str) else '!'} {'-' if at is None else (hx(at) if isinstance(at, str) else '!')}")
+        out.extend(src)
+        try:
+            rec = bl.make_record(rep, run, at)
+        except bl.LedgerError as e:
+            out.append(b8_refusal(e, BL_KINDS))
+            continue
+        recs.append(rec)
+        out.append("O r " + hx(bl.dumps_line(rec).rstrip("\n")))
+    for a, b in zip(recs, recs[1:]):
+        d = bl.diff(a, b)
+        out.append(f"O d {hx(d['from'])} {hx(d['to'])} {d['verdict']}")
+        for w in d["worlds"]:
+            out.append(f"O dw {hx(w['world'])} {w['ram_delta_kib']} {w['disk_delta_kib']}")
+        for f in d["findings"]:
+            out.append(f"O df {hx(f['world'])} {f['kind']} {f.get('slot', '-')} {f.get('before', '-')} {f.get('after', '-')}")
+    for last in lasts:
+        out.append(f"L {last}")
+        try:
+            t = bl.trend(recs, last)
+        except bl.LedgerError as e:
+            out.append(b8_refusal(e, BL_KINDS))
+            continue
+        out.append(f"O t {lst(hx(r) for r in t['runs'])} {t['tally']}")
+        for w in t["worlds"]:
+            out.append(f"O tw {hx(w['world'])} {w['runs']} {lst(w['ram_kib'])} {w['net_kib']} {w['trend']}")
+
+
+def bl_lines():
+    out = ["# disksaver budget_ledger parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cs = list(b7_censuses())
+    for bname, b in B7_BUDGETS:
+        runs = []
+        for k, (cname, c) in enumerate(cs):
+            runs.append((f"{bname}-{cname}", f"2026-10-{20 + k:02d}T00:00:00Z" if k % 3 else None,
+                         [b7_budget(b)] + b7_census(c), cb.plan(c, b)))
+        bl_case(f"ledger_{bname}", runs, (2, 3, 5, 100), out)
+    seq = []
+    for k, (cname, cfg, c) in enumerate(b7_edge_censuses()):
+        seq.append((f"edge-{k}", "\u00e9t\u00e9 \"quoted\"", [b7_budget(cfg)] + b7_census(c), cb.plan(c, cfg)))
+    bl_case("ledger_edges", seq, (2, 4), out)
+    G, A, R = "green", "amber", "red"
+    hand_runs = []
+    for run, budget, worlds in [
+        ("h1", {"ram_budget_kib": 100, "disk_budget_kib": 50, "warn_permille": 900},
+         [("keep", True, 10, 5, [(2, G), (10, A), (9, R)]), ("drop", True, 1, 1, [(0, G)]), ("calm", True, 3, 3, [(0, G)])]),
+        ("h2", {"ram_budget_kib": 100, "disk_budget_kib": None},
+         [("keep", False, 20, 1, [(2, R), (10, G), (11, A)]), ("new_hot", True, 1, 1, [(0, A)]), ("new", True, 0, 0, []),
+          ("calm", True, 3, 3, [(0, G)])]),
+        ("h3", None, [("keep", True, 15, 1, [(2, G), (10, G)]), ("calm", False, 3, 3, [(0, G)])]),
+        ("h4", {}, [("keep", True, 15, 1, [(2, G)])]),
+    ]:
+        doc, src = bl_raw(budget, worlds)
+        hand_runs.append((run, None, src, doc))
+    bl_case("ledger_hand", hand_runs, (1, 2, 3), out)
+    ok_doc, ok_src = bl_raw({}, [("w", True, 1, 1, [(0, G)])])
+    bad = [("blank", None, ok_src, ok_doc), (5, None, ok_src, ok_doc), ("r1", 7, ok_src, ok_doc)]
+    for run, worlds in [("dupw", [("w", True, 1, 1, []), ("w", True, 1, 1, [])]), ("blankw", [(" ", True, 1, 1, [])]),
+                        ("negslot", [("w", True, 1, 1, [(-1, G)])]), ("badbeacon", [("w", True, 1, 1, [(0, "Green")])]),
+                        ("dupslot", [("w", True, 1, 1, [(0, G), (0, R)])]), ("fits", [("w", 1, 1, 1, [])]),
+                        ("negram", [("w", True, -5, 1, [])]), ("negdisk", [("w", True, 1, -1, [])])]:
+        doc, src = bl_raw({"ram_budget_kib": 1}, worlds)
+        bad.append((run, None, src, doc))
+    bad[0] = (" \t", None, ok_src, ok_doc)
+    bl_case("ledger_refusals", bad, (2,), out)
+    bl_case("ledger_empty", [], (2, 1), out)
+    for cname, c in cs[1:6]:
+        runs = [(f"{cname}-{bname}", None, [b7_budget(b)] + b7_census(c), cb.plan(c, b)) for bname, b in (B7_BUDGETS[1], B7_BUDGETS[0], B7_BUDGETS[2])]
+        bl_case(f"ledger_tighten_{cname}", runs, (2, 3), out)
+    one = cs[0][1]
+    bl_case("ledger_single", [("only", "2026-10-29", [b7_budget(B7_BUDGETS[0][1])] + b7_census(one), cb.plan(one, B7_BUDGETS[0][1]))], (2,), out)
+    return out
+
+
+# ---------------------------------------------------------------- G544 Caulking Check
+def cc_case(name, files, out):
+    out.append(f"C {name}")
+    for rel, raw in files:
+        out.append(f"F {hx(rel)} x{raw.hex()}")
+    findings = []
+    for rel in sorted(dict(files)):
+        findings += ck.check_bytes(rel, dict(files)[rel])
+    order = {k: i for i, k in enumerate(ck.ORDER)}
+    findings.sort(key=lambda x: (order[x["kind"]], x["file"]))
+    for f in findings:
+        out.append(f"O f {b8_jhex(f)}")
+    counts = [sum(1 for x in findings if x["kind"] == k) for k in ck.ORDER]
+    verdict = "leaking" if any(counts[:len(ck.ERRORS)]) else "weeping" if findings else "sound"
+    out.append(f"O k {' '.join(map(str, counts))} {verdict}")
+
+
+CC_JSON = [  # one .json file each; CPython 3.10 json messages (no trailing-comma or 4300-digit cases: those differ by version)
+    b'{"a": 1, "b": [true, false, null, NaN, Infinity, -Infinity, 1.5e3, -0, 0.25]}\n',
+    b'{"a": 1, "a": 2}\n', b'{"x": {"k": 1, "k": 2}, "x": 3}\n', b'{"x":1,"y":1,"y":2,"x":2}\n',
+    b'{"\\u00e9": 1, "\xc3\xa9": 2}\n', b'{"\\ud83d\\ude00": 1, "\xf0\x9f\x98\x80": 2}\n', b'{"\\ud800": 1, "\\ud800": 2}\n',
+    b'{"\\ud800\\u0041": 1}\n', b'{"": 1, "": 2}\n', b'[{"a": 1}, {"a": 1, "a": 1}]\n',
+    b'', b'   \n', b'{', b'[', b'{"a"', b'{"a" 1}', b'{"a": }', b'{"a": 1 "b": 2}', b'{1: 2}', b'[1 2]',
+    b'"abc', b'"a\\qb"', b'"\\u12"', b'"\\u12G4"', b'"\\u0041', b'"\\ud800\\uZZZZ"', b'"tab\there"', b'nul', b'tru', b'-',
+    b'-Infinit', b'01', b'1.', b'1e', b'1e+', b'.5', b'{"a": 1} x', b'[] []', b'\xef\xbb\xbf{}', b'{"a": [1, {"b": "c\\"d"}]}',
+    b'{"a":\t1,\r\n"b":2}', b'[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]',
+    b'{"deep": [[[[[[[[[[{"a": 1, "a": 2}]]]]]]]]]]}', b'"\\/\\b\\f\\n\\r\\t\\\\\\""', b'{"a": "\x1f"}',
+    b'123456789012345678901234567890', b'{"k": 1}\x00',
+]
+
+
+def cc_lines():
+    out = ["# disksaver caulking_check parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    real = []
+    for rel in ("tools/world_census/fixtures/alpha.json", "tools/world_census/fixtures/beta.json",
+                "tools/world_census/fixtures/bindings.json", "data/islands/disk-saver/ebb-eviction-v1.json",
+                "data/islands/disk-saver/census-budget-v1.json"):
+        with open(os.path.join(ROOT, rel), "rb") as f:
+            real.append((rel, f.read()))
+    cc_case("real_fixtures", real, out)
+    for k, raw in enumerate(CC_JSON):
+        cc_case(f"json_{k:02d}", [(f"j/case{k:02d}.json", raw)], out)
+    text = [
+        ("bom_only.md", b"\xef\xbb\xbf"), ("double_bom.json", b"\xef\xbb\xbf\xef\xbb\xbf{}\n"), ("crlf.txt", b"a\r\nb\r\n"),
+        ("mixed.py", b"a\r\nb\nc\r\n"), ("lone_cr.txt", b"a\rb\n"), ("nofinal.yml", b"a: 1"), ("empty.txt", b""),
+        ("trail.py", b"x = 1 \n\ty = 2\n  \tz\n"), ("trail.md", b"keep  \n\tTab\n"), ("tabs.yaml", b" \t- a\n\t- b\n- c\t\n"),
+        ("tabs.txt", b"\tnot checked\n"), ("UPPER.JSON", b'{"a":1,"a":2}'), ("a/.json", b"{"), ("a/b.c/noext", b"x \n"),
+        ("a/..json", b"{"), ("x.tar.json", b"[]\n"), ("bad1.txt", b"ok\xff"), ("bad2.txt", b"\xc3"), ("bad3.txt", b"\xe2\x82"),
+        ("overlong.txt", b"a\xc0\xafb"), ("surrogate.txt", b"\xed\xa0\x80"), ("big.txt", b"\xf4\x90\x80\x80"),
+        ("bom_bad.txt", b"\xef\xbb\xbfab\x80"), ("cont.txt", b"\x80abc"), ("f5.txt", b"\xf5\x80\x80\x80"),
+        ("e0.txt", b"\xe0\x80\x80"), ("f0.txt", b"\xf0\x8f\xbf\xbf"), ("ok4.txt", b"\xf0\x9f\x98\x80\n"),
+        ("lines.jsonl", b'{"a":1}\n\n   \n{"b":2,"b":3}\n{bad\n'), ("lines2.jsonl", b'{"a":1}\r\n[1,\r\n'),
+        ("spaces.jsonl", b'\x0b\n\xc2\xa0\n\xe3\x80\x80\n{"ok":1}\n'), ("nel.jsonl", b'\xc2\x85\n{"x":1,"x":1}\n'),
+        ("ctrl.jsonl", b'\x1c\n"a\x1fb"\n'),
+    ]
+    for rel, raw in text:
+        cc_case("file_" + rel.replace("/", "_").replace(".", "_"), [(rel, raw)], out)
+    cc_case("survey_sorted", [(rel, raw) for rel, raw in text[:12]], out)
+    return out
+
+
 GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": qs_lines, "sack_chute": sc_lines,
          "seal_roll": sr_lines, "channel_dash": cd_lines, "boom_defence": bd_lines, "salvage_sale": ss_lines,
          "rope_run": rr_lines, "belfry_changes": bc_lines, "tram_shunt": ts_lines,
@@ -1690,7 +2048,9 @@ GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": 
          "fleet_soundings": fs_lines, "quay_duel": qd_lines, "last_crate": lc_lines, "census_riddles": cr_lines,
          "tide_clocks": tc_lines, "lighthouse_leases": ll_lines, "tidemark_chunks": tm_lines,
          "bottle_census": bc_census_lines, "ebb_eviction": ee_lines, "beacon_watch": bw_lines,
-         "budget_fathoms": bf_lines, "fleet_flags": ff_lines}
+         "budget_fathoms": bf_lines, "fleet_flags": ff_lines,
+         "stray_cargo": sgc_lines, "memory_footprint": mf_lines, "budget_ledger": bl_lines,
+         "caulking_check": cc_lines}
 
 
 def texts():
