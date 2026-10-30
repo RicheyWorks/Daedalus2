@@ -5,6 +5,8 @@
 #include "DaedalusArkStarMeshCore.h"
 #include "DaedalusStableRandom.h"
 #include "ark_trees_test.h"
+#include <climits>
+#include <cstdint>
 #include <set>
 #include <tuple>
 using namespace daedalus::ark;
@@ -44,6 +46,28 @@ std::string JoinWith(const std::vector<int>& V, const char* Sep)
 	return Out;
 }
 
+// Triangles, hull, flip count, edge count and chart lines, as StarMeshParityTest.describe writes them.
+std::string Describe(const std::vector<StarPoint>& Pts, const StarMesh& Mesh)
+{
+	const std::vector<StarTriangle>& Tris = Mesh.Triangles;
+	std::string Line = " tris=" + S(static_cast<int64_t>(Tris.size())) + " ";
+	for (size_t i = 0; i < Tris.size(); ++i) Line += (i ? "," : "") + S(Tris[i].A) + "." + S(Tris[i].B) + "." + S(Tris[i].C);
+	Line += " hull=" + JoinWith(Mesh.Hull, ",") + " flips=" + S(Mesh.Flips);
+	Line += " edges=" + S(static_cast<int64_t>(StarMeshEdges(static_cast<int>(Pts.size()), Tris).size())) + " chart=";
+	const std::vector<StarEdge> Chart = StarMeshChartLines(Pts, Tris);
+	for (size_t i = 0; i < Chart.size(); ++i) Line += (i ? "," : "") + S(Chart[i].A) + "-" + S(Chart[i].B);
+	return Line;
+}
+
+// Same hand edge skies as StarMeshParityTest.EDGE_SKIES.
+std::vector<std::vector<StarPoint>> EdgeSkies()
+{
+	const int64_t M = StarMeshMaxCoord;
+	return { { { 0, 0 }, { 2, 0 }, { 2, 2 }, { 0, 2 } }, { { 5, 0 }, { 3, 4 }, { -3, 4 }, { -5, 0 }, { 0, -5 }, { 4, -3 } },
+		{ { -M, -M }, { M, -M }, { M, M }, { -M, M }, { 0, 1 } }, { { 0, 2 }, { 2, 2 }, { 2, 0 }, { 0, 0 } },
+		{ { -M, 0 }, { -1, 1 }, { 1, 2 }, { M, 1 }, { 0, -M } }, { { 0, 0 }, { 1, 0 }, { 0, 1 } } };
+}
+
 // Same bad skies as StarMeshParityTest.REFUSED, one per refusal reason, then a good one.
 std::vector<std::vector<StarPoint>> RefusedSkies()
 {
@@ -66,10 +90,7 @@ std::vector<std::string> ParityLines()
 		for (int i = 0; i < N; ++i) Line += (i ? "," : "") + S(Pts[i].X) + ":" + S(Pts[i].Y);
 		const StarMesh Mesh = StarMeshBuild(Pts);
 		const std::vector<StarTriangle>& Tris = Mesh.Triangles;
-		Line += " tris=" + S(static_cast<int64_t>(Tris.size())) + " ";
-		for (size_t i = 0; i < Tris.size(); ++i)
-			Line += (i ? "," : "") + S(Tris[i].A) + "." + S(Tris[i].B) + "." + S(Tris[i].C);
-		Line += " hull=" + JoinWith(Mesh.Hull, ",") + " flips=" + S(Mesh.Flips) + " nbrs=";
+		Line += Describe(Pts, Mesh) + " nbrs=";
 		const std::vector<std::vector<int>> Nbrs = StarMeshNeighbours(N, Tris);
 		for (int i = 0; i < N; ++i) Line += (i ? "|" : "") + JoinWith(Nbrs[static_cast<size_t>(i)], ".");
 		const int Span = s <= 40 ? 100 : static_cast<int>(StarMeshMaxCoord);
@@ -86,6 +107,10 @@ std::vector<std::string> ParityLines()
 		}
 		Out.push_back(Line);
 	}
+	const std::vector<std::vector<StarPoint>> Edge = EdgeSkies();
+	for (size_t i = 0; i < Edge.size(); ++i)
+		Out.push_back("sky=" + S(static_cast<int64_t>(i)) + " n=" + S(static_cast<int64_t>(Edge[i].size()))
+			+ Describe(Edge[i], StarMeshBuild(Edge[i])));
 	const std::vector<std::vector<StarPoint>> Refused = RefusedSkies();
 	for (size_t i = 0; i < Refused.size(); ++i)
 		Out.push_back("refused=" + S(static_cast<int64_t>(i)) + " why=" + StarMeshProblemName(StarMeshCheck(Refused[i])));
@@ -172,6 +197,42 @@ bool FullSky()
 	return static_cast<int>(T.size()) == 2 * StarMeshMaxPoints - 2 - HullSize(P) && StarMeshEmptyCircles(P, T);
 }
 
+// Chart lines against Prim on the complete graph: the same sorted squared lengths (equal for every spanning tree
+// of least weight), n - 1 of them, and 3n - 3 - hull mesh edges.
+bool ChartLinesMatchPrim()
+{
+	daedalus::stable::StableRng Rng(4412);
+	for (int Round = 0; Round < 60; ++Round)
+	{
+		const std::vector<StarPoint> P = Stars(Rng, 3 + Rng.NextInt(30), Round % 2 ? static_cast<int>(StarMeshMaxCoord) : 40);
+		const int N = static_cast<int>(P.size());
+		const std::vector<StarTriangle> T = StarMeshTriangulate(P);
+		if (static_cast<int>(StarMeshEdges(N, T).size()) != 3 * N - 3 - HullSize(P)) return false;
+		auto Sq = [&P](int A, int B) {
+			const int64_t Dx = P[A].X - P[B].X, Dy = P[A].Y - P[B].Y;
+			return Dx * Dx + Dy * Dy;
+		};
+		std::vector<int64_t> Got, Want;
+		for (const StarEdge& E : StarMeshChartLines(P, T)) Got.push_back(Sq(E.A, E.B));
+		std::vector<int64_t> Best(static_cast<size_t>(N), INT64_MAX);
+		std::vector<bool> In(static_cast<size_t>(N), false);
+		Best[0] = 0;
+		for (int Step = 0; Step < N; ++Step)
+		{
+			int U = -1;
+			for (int i = 0; i < N; ++i)
+				if (!In[i] && (U < 0 || Best[i] < Best[U])) U = i;
+			In[U] = true;
+			if (Step) Want.push_back(Best[U]);
+			for (int i = 0; i < N; ++i) Best[i] = std::min(Best[i], Sq(U, i));
+		}
+		std::sort(Got.begin(), Got.end());
+		std::sort(Want.begin(), Want.end());
+		if (Got != Want) return false;
+	}
+	return true;
+}
+
 // Hull, neighbours and locate against brute force on random skies (same checks as StarMeshTest).
 bool QueriesMatchBruteForce()
 {
@@ -233,6 +294,16 @@ int main(int argc, char** argv)
 		&& StarMeshTriangulate({ { 0, 0 }, { 1, 0 }, { 0, M + 1 } }).empty()
 		&& StarMeshTriangulate(std::vector<StarPoint>(StarMeshMaxPoints + 1)).empty());
 	Check("hull, neighbours and locate match brute force", QueriesMatchBruteForce());
+	Check("chart lines are a minimum spanning tree (Prim)", ChartLinesMatchPrim());
+	bool EdgeOk = true;
+	for (const std::vector<StarPoint>& Sky : EdgeSkies())
+	{
+		const std::vector<StarTriangle> T = StarMeshTriangulate(Sky);
+		EdgeOk = EdgeOk && static_cast<int>(T.size()) == 2 * static_cast<int>(Sky.size()) - 2 - HullSize(Sky)
+			&& StarMeshEmptyCircles(Sky, T);
+		for (const StarTriangle& X : T) EdgeOk = EdgeOk && Orient(Sky[X.A], Sky[X.B], Sky[X.C]) > 0;
+	}
+	Check("edge skies (cocircular, sky corners, clockwise input, slivers) mesh cleanly", EdgeOk);
 	const StarMesh Quad = StarMeshBuild({ { 0, 0 }, { 1, 5 }, { 2, -5 }, { 3, 0 } });
 	Check("a badly inserted quadrilateral takes one flip", Quad.Flips == 1 && Quad.Hull == std::vector<int>{ 0, 2, 3, 1 });
 	Check("refusals are named", StarMeshCheck({ { 0, 0 }, { 0, 0 }, { 2, 3 } }) == StarMeshProblem::Duplicate

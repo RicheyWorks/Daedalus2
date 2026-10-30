@@ -146,8 +146,9 @@ public final class StarMesh {
             order[i] = i;
         }
         Arrays.sort(order, Comparator.<Integer>comparingLong(i -> pts[i][0]).thenComparingLong(i -> pts[i][1]));
-        List<int[]> tris = new ArrayList<>();
-        Map<Long, Integer> edge = new HashMap<>();
+        // Presized for a typical build (about 2n live triangles plus two per flip, 3 directed edges per live one).
+        List<int[]> tris = new ArrayList<>(4 * n);
+        Map<Long, Integer> edge = new HashMap<>(8 * n);
         int a = order[0];
         int b = order[1];
         int c = order[2];
@@ -268,6 +269,59 @@ public final class StarMesh {
             out[i] = sets.get(i).stream().mapToInt(Integer::intValue).toArray();
         }
         return out;
+    }
+
+    /** Every mesh edge once, as {a, b} with a < b, sorted by a then b. There are 3n - 3 - hull of them. */
+    public static int[][] edges(int n, int[][] tris) {
+        int[][] nb = neighbours(n, tris);
+        List<int[]> out = new ArrayList<>();
+        for (int a = 0; a < n; a++) {
+            for (int b : nb[a]) {
+                if (a < b) {
+                    out.add(new int[] {a, b});
+                }
+            }
+        }
+        return out.toArray(new int[0][]);
+    }
+
+    private static long squaredLength(long[][] pts, int[] e) {
+        long dx = pts[e[0]][0] - pts[e[1]][0];
+        long dy = pts[e[0]][1] - pts[e[1]][1];
+        return dx * dx + dy * dy;
+    }
+
+    /**
+     * The navigator's chart lines: the Euclidean minimum spanning tree, taken from the mesh edges (it always lies
+     * inside the Delaunay mesh). Kruskal over edges ordered by exact squared length, then a, then b; n - 1 edges.
+     */
+    public static int[][] chartLines(long[][] pts, int[][] tris) {
+        int n = pts.length;
+        int[][] all = edges(n, tris);
+        Arrays.sort(all, Comparator.<int[]>comparingLong(e -> squaredLength(pts, e))
+                .thenComparingInt(e -> e[0]).thenComparingInt(e -> e[1]));
+        int[] parent = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+        List<int[]> out = new ArrayList<>();
+        for (int[] e : all) {
+            int ra = root(parent, e[0]);
+            int rb = root(parent, e[1]);
+            if (ra != rb) {
+                parent[ra] = rb;
+                out.add(e);
+            }
+        }
+        return out.toArray(new int[0][]);
+    }
+
+    private static int root(int[] parent, int x) {
+        while (parent[x] != x) {
+            parent[x] = parent[parent[x]];
+            x = parent[x];
+        }
+        return x;
     }
 
     /**
