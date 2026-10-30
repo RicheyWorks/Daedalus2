@@ -74,3 +74,6 @@ Every `DesktopGames/DaedalusDesktop<Game>Core.h` follows one shape so a reviewer
 
 ## Shadewatch cabinet (Unreal side, source only)
 prism-shard-dev's `DaedalusShadewatchCore.h` (#1028) gets its cabinet here: `DesktopGames/DaedalusDesktopShadewatchCore.h` (registry id `shadewatch`, save slot `shadewatch.dgs`; Left/Right pick a lane, A flares it, B kindles, X novas, option 1 Guide marks the watcher's counsel; saves fast-forward the PRNG and validate lanes as strictly ascending), built on the shared cabinet shape above. `desktop_games/shadewatch_test.cpp` replays `shadewatch_parity.txt` through real input; `desktop-games.yml` fails if that fixture is stale.
+
+## Glimmerloom cabinet (Unreal side, source only)
+prism-shard-dev's `DaedalusGlimmerloomCore.h` (#1046) gets its cabinet here: `DesktopGames/DaedalusDesktopGlimmerloomCore.h` (registry id `glimmerloom`, save slot `glimmerloom.dgs`; Left/Right pick a hue, A buys one, B sells one, Y buys all that fit, X rests, option 1 Guide marks the demo trader's counsel; saves fast-forward the PRNG and range-check prices, satchel, moves and rumor). `desktop_games/glimmerloom_test.cpp` replays `glimmerloom_parity.txt` through real input (a buy of n is n presses of A); `desktop-games.yml` fails if that fixture is stale.

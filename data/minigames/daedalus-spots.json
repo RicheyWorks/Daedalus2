@@ -97,6 +97,10 @@
     "shadewatch": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the watch lanes"
+    },
+    "glimmerloom": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the Glimmerloom market"
     }
   }
 }
