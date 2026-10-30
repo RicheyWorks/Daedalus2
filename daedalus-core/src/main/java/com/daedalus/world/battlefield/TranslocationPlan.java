@@ -158,7 +158,11 @@ public final class TranslocationPlan {
         return (double) crashes / settings.runs();
     }
 
-    /** The lowest-risk schedule over every way to spend the budget (ties go to the earliest-heavy schedule). */
+    /**
+     * The lowest-risk schedule over every way to spend the budget (ties go to the earliest-heavy schedule). The search
+     * is pruned: it stops counting a schedule's crashes once they reach the best so far, and stops entirely at zero
+     * risk; the answer is the same as scoring every schedule.
+     */
     public Plan best() {
         int[] cur = new int[settings.releaseYears()];
         Plan[] holder = new Plan[1];
@@ -200,6 +204,29 @@ public final class TranslocationPlan {
         return s;
     }
 
+    /**
+     * Survival curve: entry t is the share of seeded runs that have not crashed by the census at the end of year t
+     * (t = 0 .. horizon - 1). The last entry is 1 - risk(schedule). The census board can draw this as the release's
+     * safety margin over time.
+     */
+    public double[] survival(int[] schedule) {
+        check(schedule);
+        int[] crashedBy = new int[settings.horizon()];
+        for (int r = 0; r < settings.runs(); r++) {
+            int year = firstCrash(schedule, r);
+            if (year >= 0) {
+                crashedBy[year]++;
+            }
+        }
+        double[] out = new double[settings.horizon()];
+        int crashed = 0;
+        for (int t = 0; t < out.length; t++) {
+            crashed += crashedBy[t];
+            out[t] = 1 - (double) crashed / settings.runs();
+        }
+        return out;
+    }
+
     /** Every bird as late as possible (the last year first, as many as the per-year cap allows). */
     public int[] backLoaded() {
         int[] s = new int[settings.releaseYears()];
@@ -236,14 +263,19 @@ public final class TranslocationPlan {
     }
 
     private void search(int year, int left, int[] cur, Plan[] holder) {
+        if (holder[0] != null && holder[0].risk() == 0) {
+            return; // nothing can beat zero risk, and ties keep the first schedule found
+        }
         if (year == cur.length - 1) {
             if (left > settings.perYear()) {
                 return;
             }
             cur[year] = left;
-            double r = risk(cur);
-            if (holder[0] == null || r < holder[0].risk()) {
-                holder[0] = new Plan(list(cur), r);
+            // Only a strictly lower crash count can replace the holder, so stop counting once it is matched.
+            int limit = holder[0] == null ? Integer.MAX_VALUE : crashCount(holder[0]);
+            int crashes = crashesUpTo(cur, limit);
+            if (crashes < limit) {
+                holder[0] = new Plan(list(cur), (double) crashes / settings.runs());
             }
             cur[year] = 0;
             return;
@@ -255,7 +287,27 @@ public final class TranslocationPlan {
         cur[year] = 0;
     }
 
+    private int crashCount(Plan p) {
+        return (int) Math.round(p.risk() * settings.runs());
+    }
+
+    /** Crashing runs for a schedule, counting no further than {@code limit}. */
+    private int crashesUpTo(int[] schedule, int limit) {
+        int crashes = 0;
+        for (int r = 0; r < settings.runs() && crashes < limit; r++) {
+            if (crashes(schedule, r)) {
+                crashes++;
+            }
+        }
+        return crashes;
+    }
+
     private boolean crashes(int[] schedule, int run) {
+        return firstCrash(schedule, run) >= 0;
+    }
+
+    /** First census year the run falls below the threshold, or -1 if it never does. */
+    private int firstCrash(int[] schedule, int run) {
         double[] n = new double[CraneCohorts.COHORTS];
         n[CraneCohorts.ADULT] = settings.start();
         for (int t = 0; t < settings.horizon(); t++) {
@@ -270,10 +322,10 @@ public final class TranslocationPlan {
                 total += n[i];
             }
             if (total < settings.threshold()) {
-                return true;
+                return t;
             }
         }
-        return false;
+        return -1;
     }
 
     private void check(int[] schedule) {

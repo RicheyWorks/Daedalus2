@@ -134,4 +134,71 @@ class TranslocationPlanTest {
         assertEquals(0, z[0], 0);
         assertTrue(z[1] > 0 && z[1] < 0.3, "zero crashes still leave doubt with 10 runs");
     }
+
+    @Test
+    void prunedBestMatchesScoringEverySchedule() {
+        for (Settings s : new Settings[] {D.withBudget(7), new Settings(8, 6, 3, 3, 20, 6, 0.3, 3, 120),
+            new Settings(40, 4, 4, 2, 30, 10, 0, CraneCohorts.ADULT, 10)}) {
+            TranslocationPlan p = plan(s);
+            int[] bestSeen = null;
+            double bestRisk = 2;
+            int n = s.releaseYears();
+            int[] cur = new int[n];
+            // Odometer over every schedule, earliest-heavy first, matching the search order.
+            int[] odo = new int[n];
+            for (int i = 0; i < n; i++) {
+                odo[i] = s.perYear();
+            }
+            while (true) {
+                int sum = 0;
+                for (int v : odo) {
+                    sum += v;
+                }
+                if (sum == s.budget()) {
+                    System.arraycopy(odo, 0, cur, 0, n);
+                    double r = p.risk(cur);
+                    if (r < bestRisk) {
+                        bestRisk = r;
+                        bestSeen = cur.clone();
+                    }
+                }
+                int i = n - 1;
+                while (i >= 0 && odo[i] == 0) {
+                    odo[i] = s.perYear();
+                    i--;
+                }
+                if (i < 0) {
+                    break;
+                }
+                odo[i]--;
+            }
+            Plan best = p.best();
+            assertEquals(bestRisk, best.risk(), 0);
+            assertArrayEquals(bestSeen, best.schedule().stream().mapToInt(Integer::intValue).toArray());
+        }
+    }
+
+    @Test
+    void edgeCasesRun() {
+        TranslocationPlan one = plan(new Settings(12, 3, 3, 1, 1, 10, 0.2, CraneCohorts.ADULT, 60));
+        assertEquals(List.of(3), one.best().schedule());
+        assertArrayEquals(new int[] {3}, one.backLoaded());
+        TranslocationPlan none = plan(new Settings(5, 0, 0, 2, 10, 10, 0.2, CraneCohorts.ADULT, 40));
+        assertEquals(List.of(0, 0), none.best().schedule());
+        assertEquals(1, none.best().risk(), 0, "a flock below the threshold crashes at the first census");
+        assertEquals(none.best(), none.greedy());
+    }
+
+    @Test
+    void survivalFallsAndEndsAtOneMinusRisk() {
+        TranslocationPlan p = plan(D);
+        int[] even = p.even();
+        double[] s = p.survival(even);
+        assertEquals(D.horizon(), s.length);
+        for (int t = 1; t < s.length; t++) {
+            assertTrue(s[t] <= s[t - 1]);
+        }
+        assertEquals(1 - p.risk(even), s[s.length - 1], 1e-12);
+        assertTrue(p.survival(p.frontLoaded())[9] >= p.survival(p.backLoaded())[9], "early birds help early");
+    }
 }
