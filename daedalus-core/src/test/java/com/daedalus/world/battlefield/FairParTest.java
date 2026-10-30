@@ -78,4 +78,26 @@ class FairParTest {
         assertTrue(p.bronze() <= p.silver() && p.silver() <= p.gold() && p.gold() <= p.perfect());
         assertTrue(p.bronzeHit() >= 0.60);
     }
+
+    @Test
+    void marshTableCoversSixCabinetsInOrderWithOrderedPars() {
+        var table = FairPar.marshTable();
+        assertEquals(FairPar.MARSH_CABINETS, java.util.List.copyOf(table.keySet()));
+        for (FairPar.Pars p : table.values()) {
+            assertTrue(p.bronze() <= p.silver() && p.silver() <= p.gold() && p.gold() <= p.perfect());
+            assertTrue(p.bronzeHit() >= 0.60 && p.silverHit() >= 0.25 && p.goldHit() >= 0.05);
+        }
+        assertEquals(1.0, table.get("DROUGHT01").perfect());
+    }
+
+    @Test
+    void cohortOptimumTriesEverySplitAndGuessesScoreAtMostOne() {
+        CraneCohorts flock = CraneCohorts.marsh(CraneCohorts.Settings.DEFAULT, 1);
+        FairPar.Pars p = FairPar.cohorts(flock, 12, 100, 3);
+        assertEquals(flock.adultEquivalents(new int[] {0, 0, 0, 12}), p.perfect()); // adults are worth the most here
+        FairPar.Pars d = FairPar.droughtOdds(DroughtOdds.of(DroughtOdds.Settings.DEFAULT), 20, 100, 3);
+        assertTrue(d.gold() <= 1 && d.bronze() > 0);
+        assertThrows(IllegalArgumentException.class, () -> FairPar.reedCeiling(ReedCeiling.Settings.DEFAULT,
+                new double[0], 5, 40, 17, 10, 1));
+    }
 }

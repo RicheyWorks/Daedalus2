@@ -15,3 +15,14 @@ case=trans1 years=10 seed=38 botRuns=60 runs=60 bronze=0.22999999999999998 silve
 case=trans2 years=10 seed=69 botRuns=50 runs=50 bronze=0.65 silver=0.6699999999999999 gold=0.6699999999999999 perfect=0.6699999999999999 bronzeHit=0.6 silverHit=0.4 goldHit=0.4 median=0.6599999999999999 separated=false
 case=reed0 seed=23 botRuns=120 runs=120 bronze=0.00666666666666671 silver=0.9 gold=1.0 perfect=1.0 bronzeHit=0.8166666666666667 silverHit=0.2916666666666667 goldHit=0.14166666666666666 median=0.07333333333333336 separated=false
 case=reed1 seed=42 botRuns=60 runs=60 bronze=0.275 silver=1.0 gold=1.0 perfect=1.0 bronzeHit=0.6166666666666667 silverHit=0.26666666666666666 goldHit=0.26666666666666666 median=0.275 separated=false
+case=drought0 runs=90 bronze=0.5227658837967271 silver=0.8742812270859226 gold=0.9798575908197666 perfect=1.0 bronzeHit=0.6 silverHit=0.25555555555555554 goldHit=0.05555555555555555 median=0.5707762722846546 separated=true
+case=drought1 runs=90 bronze=0.4432423925706711 silver=0.7515969377948528 gold=0.9331343753805705 perfect=1.0 bronzeHit=0.6 silverHit=0.25555555555555554 goldHit=0.05555555555555555 median=0.5032368222481617 separated=true
+case=spread0 runs=70 bronze=0.6666666666666667 silver=0.8 gold=0.9666666666666667 perfect=1.0 bronzeHit=0.6428571428571429 silverHit=0.3 goldHit=0.1 median=0.7 separated=true
+case=cohorts0 runs=80 bronze=3.0 silver=4.0 gold=5.0 perfect=7.0 bronzeHit=0.6 silverHit=0.25 goldHit=0.0875 median=3.0 separated=true
+case=ceiling0 runs=50 bronze=2.584586583670274E-6 silver=5.824607514532144 gold=5.824607514532144 perfect=5.824607514532144 bronzeHit=1.0 silverHit=0.34 goldHit=0.34 median=0.3678969931332233 separated=false
+table=DROUGHT01 runs=200 bronze=0.39610612504454323 silver=0.7409046692899672 gold=0.950324483078886 perfect=1.0 bronzeHit=0.6 silverHit=0.25 goldHit=0.05 median=0.48315015122361915 separated=true
+table=SPREAD01 runs=200 bronze=0.575 silver=0.9 gold=0.975 perfect=1.0 bronzeHit=0.62 silverHit=0.275 goldHit=0.05 median=0.725 separated=true
+table=COHORTS01 runs=200 bronze=5.0 silver=7.0 gold=9.0 perfect=12.0 bronzeHit=0.73 silverHit=0.295 goldHit=0.08 median=6.0 separated=true
+table=TRANS01 runs=200 bronze=0.7875 silver=0.7875 gold=0.7925 perfect=0.7975 bronzeHit=0.61 silverHit=0.61 goldHit=0.065 median=0.7875 separated=false
+table=REEDCEIL01 runs=200 bronze=3.434013372127979 silver=15.722208355609814 gold=22.147631456124717 perfect=22.147631456124717 bronzeHit=0.735 silverHit=0.34 goldHit=0.19 median=10.96248366829447 separated=false
+table=REEDREL01 runs=120 bronze=0.00666666666666671 silver=0.9 gold=1.0 perfect=1.0 bronzeHit=0.8166666666666667 silverHit=0.2916666666666667 goldHit=0.14166666666666666 median=0.07333333333333336 separated=false

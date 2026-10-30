@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
@@ -361,6 +362,21 @@ class MarshCoresParityTest {
             int botRuns = c == 0 ? 120 : 60;
             out.add("case=reed" + c + " seed=" + seed + " botRuns=" + botRuns + " "
                     + pars(FairPar.reedRelease(ReedRelease.of(s, seed), botRuns, 700 + c)));
+        }
+        double[][] droughts = {{-0.02, 0.2, 30, 10, 10}, {0.03, 0.1, 40, 10, 50}};
+        for (int c = 0; c < droughts.length; c++) {
+            double[] d = droughts[c];
+            out.add("case=drought" + c + " " + pars(FairPar.droughtOdds(DroughtOdds.of(new DroughtOdds.Settings(d[0],
+                    d[1], (int) d[2], (int) d[3])), d[4], 90, 810 + c)));
+        }
+        out.add("case=spread0 " + pars(FairPar.craneSpread(CraneSpread.marsh(new CraneSpread.Settings(1.2, 0.8, 0.2,
+                60, 30), 1), 3, 5, 70, 820)));
+        out.add("case=cohorts0 " + pars(FairPar.cohorts(CraneCohorts.marsh(new CraneCohorts.Settings(0.6, 0.8, 0.9,
+                0.95, 0.3, 1.2, 10), 1), 7, 80, 830)));
+        out.add("case=ceiling0 " + pars(FairPar.reedCeiling(new ReedCeiling.Settings(0.8, 30, 3, 0.05, 0.3, 0.4,
+                0.1), new double[] {6, 20, 45}, 3, 25, 9, 50, 840)));
+        for (Map.Entry<String, FairPar.Pars> e : FairPar.marshTable().entrySet()) {
+            out.add("table=" + e.getKey() + " " + pars(e.getValue()));
         }
         return out;
     }
