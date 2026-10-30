@@ -1,0 +1,226 @@
+# disksaver salvage_sale parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit
+C real_seed0
+L 6,7,7,6,6 10
+P 19 0,4,0,2,2 19
+T 0,4,0,2,2 ok 19 bybyy shrewd
+T 4,0,5,0,1 ok 19 ybyby shrewd
+T 0,0,0,0,0 ok 0 bbbbb fleeced
+T 10,10,10,10,10 err coin
+T 999,0,0,0,0 err coin
+T 0,4,0,2 err count
+T 0,4,0,2,2,0 err count
+T 4,4,4,4,4 err coin
+T 1,1,1,1,1 ok 6 bbbby fleeced
+T - err count
+T x,x,x,x,1 err count
+T 007,0,0,0,0 ok 6 ybbbb fleeced
+C real_seed1
+L 7,4,5,5,7 9
+P 19 4,0,0,1,1 12
+T 4,0,0,1,1 ok 19 ybbyy shrewd
+T 4,0,5,0,0 ok 12 ybybb fair
+T 0,0,0,0,0 ok 0 bbbbb fleeced
+T 9,9,9,9,9 err coin
+T 999,0,0,0,0 err coin
+T 4,0,0,1 err count
+T 4,0,0,1,1,0 err count
+T 4,3,3,3,4 err coin
+T 1,1,1,1,1 ok 7 bbbby fleeced
+T - err count
+T x,x,x,x,1 err count
+T 007,0,0,0,0 ok 7 ybbbb fleeced
+C real_seed7
+L 4,6,5,4,6 8
+P 16 0,4,0,2,2 15
+T 0,4,0,2,2 ok 16 bybyy shrewd
+T 3,0,3,0,1 ok 15 ybyby fair
+T 0,0,0,0,0 ok 0 bbbbb fleeced
+T 8,8,8,8,8 err coin
+T 999,0,0,0,0 err coin
+T 0,4,0,2 err count
+T 0,4,0,2,2,0 err count
+T 3,4,3,3,4 err coin
+T 1,1,1,1,1 ok 6 bbbby fleeced
+T - err count
+T x,x,x,x,1 err count
+T 007,0,0,0,0 ok 4 ybbbb fleeced
+C real_seed42
+L 4,7,5,5,3 8
+P 15 0,4,0,2,2 12
+T 0,4,0,2,2 ok 15 bybyy shrewd
+T 3,0,3,0,1 ok 12 ybyby fair
+T 0,0,0,0,0 ok 0 bbbbb fleeced
+T 8,8,8,8,8 err coin
+T 999,0,0,0,0 err coin
+T 0,4,0,2 err count
+T 0,4,0,2,2,0 err count
+T 3,4,3,3,2 err coin
+T 1,1,1,1,1 ok 3 bbbby fleeced
+T - err count
+T x,x,x,x,1 err count
+T 007,0,0,0,0 ok 4 ybbbb fleeced
+C syn5_seed1
+L 7,4,5,5,3 8
+P 15 4,0,0,1,1 12
+T 4,0,0,1,1 ok 15 ybbyy shrewd
+T 4,0,4,0,0 ok 12 ybybb fair
+T 0,0,0,0,0 ok 0 bbbbb fleeced
+T 8,8,8,8,8 err coin
+T 999,0,0,0,0 err coin
+T 4,0,0,1 err count
+T 4,0,0,1,1,0 err count
+T 4,3,3,3,2 err coin
+T 1,1,1,1,1 ok 3 bbbby fleeced
+T - err count
+T x,x,x,x,1 err count
+T 007,0,0,0,0 ok 7 ybbbb fleeced
+C syn5_seed7
+L 10,5,7,6,4 10
+P 20 6,0,0,1,1 20
+T 6,0,0,1,1 ok 20 ybbyy shrewd
+T 6,0,0,1,1 ok 20 ybbyy shrewd
+T 0,0,0,0,0 ok 0 bbbbb fleeced
+T 10,10,10,10,10 err coin
+T 999,0,0,0,0 err coin
+T 6,0,0,1 err count
+T 6,0,0,1,1,0 err count
+T 6,3,4,4,3 err coin
+T 1,1,1,1,1 ok 10 bbbyy fair
+T - err count
+T x,x,x,x,1 err count
+T 007,0,0,0,0 ok 10 ybbbb fair
+C syn6_seed1
+L 8,8,7,11,6,4 14
+P 29 5,0,0,2,2,2 22
+T 5,0,0,2,2,2 ok 29 ybbyyy shrewd
+T 5,8,0,0,1,0 ok 22 yybbyb fair
+T 0,0,0,0,0,0 ok 0 bbbbbb fleeced
+T 14,14,14,14,14,14 err coin
+T 999,0,0,0,0,0 err coin
+T 5,0,0,2,2 err count
+T 5,0,0,2,2,2,0 err count
+T 5,5,4,6,4,3 err coin
+T 1,1,1,1,1,1 ok 10 bbbbyy fleeced
+T - err count
+T x,x,x,x,x,1 err count
+T 007,0,0,0,0,0 ok 8 ybbbbb fleeced
+C syn6_seed7
+L 5,6,8,9,5,6 13
+P 25 3,0,0,1,1,1 22
+T 3,0,0,1,1,1 ok 25 ybbyyy shrewd
+T 3,7,0,0,1,1 ok 22 yybbyy fair
+T 0,0,0,0,0,0 ok 0 bbbbbb fleeced
+T 13,13,13,13,13,13 err coin
+T 999,0,0,0,0,0 err coin
+T 3,0,0,1,1 err count
+T 3,0,0,1,1,1,0 err count
+T 3,4,5,5,3,4 err coin
+T 1,1,1,1,1,1 ok 11 bbbbyy fleeced
+T - err count
+T x,x,x,x,x,1 err count
+T 007,0,0,0,0,0 ok 5 ybbbbb fleeced
+C syn8_seed1
+L 5,5,4,8,4,4 10
+P 21 3,0,0,1,1,1 14
+T 3,0,0,1,1,1 ok 21 ybbyyy shrewd
+T 3,6,0,0,1,0 ok 14 yybbyb fair
+T 0,0,0,0,0,0 ok 0 bbbbbb fleeced
+T 10,10,10,10,10,10 err coin
+T 999,0,0,0,0,0 err coin
+T 3,0,0,1,1 err count
+T 3,0,0,1,1,1,0 err count
+T 3,3,3,5,3,3 err coin
+T 1,1,1,1,1,1 ok 8 bbbbyy fleeced
+T - err count
+T x,x,x,x,x,1 err count
+T 007,0,0,0,0,0 ok 5 ybbbbb fleeced
+C syn8_seed7
+L 7,7,7,8,8,4 13
+P 27 4,0,0,2,2,2 26
+T 4,0,0,2,2,2 ok 27 ybbyyy shrewd
+T 4,7,0,0,1,1 ok 26 yybbyy fair
+T 0,0,0,0,0,0 ok 0 bbbbbb fleeced
+T 13,13,13,13,13,13 err coin
+T 999,0,0,0,0,0 err coin
+T 4,0,0,2,2 err count
+T 4,0,0,2,2,2,0 err count
+T 4,4,4,5,5,3 err coin
+T 1,1,1,1,1,1 ok 12 bbbbyy fleeced
+T - err count
+T x,x,x,x,x,1 err count
+T 007,0,0,0,0,0 ok 7 ybbbbb fleeced
+C syn14_seed1
+L 7,7,6,10,4,7 13
+P 28 4,0,0,2,2,2 25
+T 4,0,0,2,2,2 ok 28 ybbyyy shrewd
+T 4,7,0,0,1,1 ok 25 yybbyy fair
+T 0,0,0,0,0,0 ok 0 bbbbbb fleeced
+T 13,13,13,13,13,13 err coin
+T 999,0,0,0,0,0 err coin
+T 4,0,0,2,2 err count
+T 4,0,0,2,2,2,0 err count
+T 4,4,4,6,3,4 err coin
+T 1,1,1,1,1,1 ok 11 bbbbyy fleeced
+T - err count
+T x,x,x,x,x,1 err count
+T 007,0,0,0,0,0 ok 7 ybbbbb fleeced
+C syn14_seed7
+L 5,6,7,7,5,8 12
+P 25 3,0,0,1,1,1 24
+T 3,0,0,1,1,1 ok 25 ybbyyy shrewd
+T 3,7,0,0,1,1 ok 24 yybbyy fair
+T 0,0,0,0,0,0 ok 0 bbbbbb fleeced
+T 12,12,12,12,12,12 err coin
+T 999,0,0,0,0,0 err coin
+T 3,0,0,1,1 err count
+T 3,0,0,1,1,1,0 err count
+T 3,4,4,4,3,5 err coin
+T 1,1,1,1,1,1 ok 8 bbbbby fleeced
+T - err count
+T x,x,x,x,x,1 err count
+T 007,0,0,0,0,0 ok 5 ybbbbb fleeced
+C hand_no_coin
+L 3,4,5,6,7 0
+P 0 0,0,0,0,0 0
+T 0,0,0,0,0 ok 0 bbbbb shrewd
+T 0,0,0,0,0 ok 0 bbbbb shrewd
+T 0,0,0,0,0 ok 0 bbbbb shrewd
+T 0,0,0,0,0 ok 0 bbbbb shrewd
+T 999,0,0,0,0 err coin
+T 0,0,0,0 err count
+T 0,0,0,0,0,0 err count
+T 2,3,3,4,4 err coin
+T 1,1,1,1,1 err coin
+T - err count
+T x,x,x,x,1 err count
+T 007,0,0,0,0 err coin
+C hand_rich
+L 9,9,9,9,9 40
+P 36 0,5,8,11,14 36
+T 0,5,8,11,14 ok 36 byyyy shrewd
+T 5,8,11,14,0 ok 36 yyyyb shrewd
+T 0,0,0,0,0 ok 0 bbbbb fleeced
+T 40,40,40,40,40 err coin
+T 999,0,0,0,0 err coin
+T 0,5,8,11 err count
+T 0,5,8,11,14,0 err count
+T 5,5,5,5,5 ok 9 ybbbb fleeced
+T 1,1,1,1,1 ok 0 bbbbb fleeced
+T - err count
+T x,x,x,x,1 err count
+T 007,0,0,0,0 ok 9 ybbbb fleeced
+C hand_six_lots
+L 3,12,5,7,4,11 14
+P 30 2,10,0,0,1,1 30
+T 2,10,0,0,1,1 ok 30 yybbyy shrewd
+T 2,10,0,0,1,1 ok 30 yybbyy shrewd
+T 0,0,0,0,0,0 ok 0 bbbbbb fleeced
+T 14,14,14,14,14,14 err coin
+T 999,0,0,0,0,0 err coin
+T 2,10,0,0,1 err count
+T 2,10,0,0,1,1,0 err count
+T 2,7,3,4,3,6 err coin
+T 1,1,1,1,1,1 ok 11 bbbbby fleeced
+T - err count
+T x,x,x,x,x,1 err count
+T 007,0,0,0,0,0 ok 3 ybbbbb fleeced

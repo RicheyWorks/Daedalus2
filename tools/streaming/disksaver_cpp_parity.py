@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1).
+"""Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -8,6 +8,7 @@ engines/unreal/core-test/disksaver_<game>_parity.txt, and the header-only
 DaedalusDiskSaver<Game>Core.h ports replay every line in disksaver_<game>_core_test.cpp.
 
 Batch 1: G556 Manifest Match, G557 Twin Pilots, G558 Quayside Shove, G559 Sack Chute.
+Batch 2: G560 Seal Roll, G561 Channel Dash, G562 Boom Defence, G563 Salvage Sale.
 Cases cover the real tools/world_census fixtures (several seeds), synthetic censuses, and
 hand-laid edge layouts (unsolvable, stuck, disconnected) injected through the tool's own
 play() by swapping its layout function for one call.
@@ -26,10 +27,14 @@ from contextlib import contextmanager
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import boom_defence as bd  # noqa: E402
 import census_budget as cb  # noqa: E402
+import channel_dash as cd  # noqa: E402
 import manifest_match as mm  # noqa: E402
 import quayside_shove as qs  # noqa: E402
 import sack_chute as sc  # noqa: E402
+import salvage_sale as ss  # noqa: E402
+import seal_roll as sr  # noqa: E402
 import twin_pilots as tp  # noqa: E402
 
 ROOT = cb.ROOT
@@ -340,7 +345,193 @@ def sc_lines():
     return out
 
 
-GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": qs_lines, "sack_chute": sc_lines}
+
+# ---------------------------------------------------------------- G560 Seal Roll
+SR_KINDS = [("is not N", "letter"), ("runs into a wall", "wall")]
+
+
+def rc(p):
+    return f"{p[0]}.{p[1]}"
+
+
+def sr_layout(q):
+    rows = "/".join("".join("#" if (r, c) in q["walls"] else "_" for c in range(sr.SIZE)) for r in range(sr.SIZE))
+    return f"L {rows} {lst(rc(m) for m in q['marks'])} {rc(q['dock'])} {rc(q['start'])}"
+
+
+def sr_hand(marks, dock, start, extra_walls=()):
+    border = {(r, c) for r in range(sr.SIZE) for c in range(sr.SIZE) if r in (0, sr.SIZE - 1) or c in (0, sr.SIZE - 1)}
+    walls = frozenset(border | set(extra_walls))
+    par, plan = sr.solve(walls, tuple(marks), dock, start)
+    return {"labels": ["h"] * len(marks), "walls": walls, "marks": tuple(marks), "dock": dock, "start": start,
+            "par": par, "plan": plan}
+
+
+def sr_lines():
+    out = ["# disksaver seal_roll parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    cases.append(("hand_mark_under_start", SYN["syn5"], 0, sr_hand([(3, 3)], (3, 5), (3, 3))))
+    cases.append(("hand_dock_walled_off", SYN["syn5"], 0,
+                  sr_hand([(2, 2)], (5, 5), (2, 3), extra_walls=[(4, 5), (5, 4), (4, 4)])))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(sr, "quay", lambda d, s=0, h=hand: h) if hand else patched(sr, "FORMAT", sr.FORMAT)
+        with ctx:
+            q = sr.quay(doc, seed)
+            out.append(f"C {cname}")
+            out.append(sr_layout(q))
+            plan = q["plan"] or ""
+            out.append(f"P {-1 if q['par'] is None else q['par']} {plan or '-'}")
+            tries = [plan, "", plan[:-1], plan + "N", plan + "NS", "X", "NNNN", "SSSS", "EEEE", "WWWW",
+                     "NESW" * 3, plan[::-1], plan + "EW" * 2]
+            for t in tries:
+                ok, r = run(lambda m=t: sr.play(doc, seed, tips=m), SR_KINDS)
+                if ok:
+                    out.append(f"T {t or '-'} ok {r['count']} {''.join(r['stamped']) or '-'} {r['seal']} "
+                               f"{int(r['on_dock'])} {r['verdict']}")
+                else:
+                    out.append(f"T {t or '-'} err {r}")
+    return out
+
+
+# ---------------------------------------------------------------- G561 Channel Dash
+CD_KINDS = [("is not U", "letter"), ("already on the dock", "dock"), ("leaves the channel", "leaves")]
+
+
+def cd_layout(lanes, dock, start):
+    ls = ",".join("".join("1" if c in cells else "0" for c in range(cd.WIDTH)) + ":" + str(v) for cells, v in lanes)
+    return f"L {ls or '-'} {dock} {start}"
+
+
+def cd_lines():
+    out = ["# disksaver channel_dash parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    hands = {
+        "hand_no_lanes": ([], 4, 2),
+        "hand_wall_of_barges": ([(frozenset(range(9)), 1), (frozenset({0}), -1)], 0, 8),
+        "hand_fast_lanes": ([(frozenset({0, 1, 2, 3, 4, 5}), 2), (frozenset({3, 4, 5}), -2), (frozenset({8}), -1)], 8, 0),
+    }
+    for k, h in hands.items():
+        cases.append((k, SYN["syn5"], 0, h))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(cd, "lanes_for", lambda d, s=0, h=hand: (["h"] * len(h[0]), list(h[0]), h[1], h[2])) if hand \
+            else patched(cd, "FORMAT", cd.FORMAT)
+        with ctx:
+            labels, lanes, dock, start = cd.lanes_for(doc, seed)
+            par, plan = cd.solve(lanes, dock, start)
+            out.append(f"C {cname}")
+            out.append(cd_layout(lanes, dock, start))
+            plan = plan or ""
+            out.append(f"P {-1 if par is None else par} {plan or '-'}")
+            tries = [plan, "", plan[:-1], plan + ".", "X", "U" * 7, "." * 9 + plan, "D", "L" * 10, "R" * 10,
+                     ("." + plan[1:]) if plan else ".", "U.U.U.U.U.U.", plan[::-1]]
+            for t in tries:
+                ok, r = run(lambda m=t: cd.play(doc, seed, moves=m), CD_KINDS)
+                if ok:
+                    out.append(f"T {t or '-'} ok {r['ticks']} {r['hit_tick'] or 0} {r['row']} {r['col']} {r['verdict']}")
+                else:
+                    out.append(f"T {t or '-'} err {r}")
+    return out
+
+
+# ---------------------------------------------------------------- G562 Boom Defence
+BD_KINDS = [("no post site", "site"), ("named twice", "twice"), ("only ", "many")]
+
+
+def bd_lines():
+    out = ["# disksaver boom_defence parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        if cname == "syn14":
+            continue
+        for s in (SEEDS[:3] if cname == "real" else SEEDS[1:2]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    line = [(3, c) for c in range(bd.COLS)]
+    cases.append(("hand_no_sites", SYN["syn5"], 0, {"skiffs": ["a", "b"], "hulls": [4, 5], "path": line, "sites": []}))
+    cases.append(("hand_one_site", SYN["syn5"], 0,
+                  {"skiffs": ["a", "b", "c"], "hulls": [1, 4, 2], "path": line, "sites": [(2, 4)]}))
+    cases.append(("hand_two_sites", SYN["syn5"], 0,
+                  {"skiffs": ["a"], "hulls": [2], "path": line, "sites": [(2, 1), (4, 7)]}))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(bd, "chart", lambda d, s=0, h=hand: h) if hand else patched(bd, "FORMAT", bd.FORMAT)
+        with ctx:
+            c = bd.chart(doc, seed)
+            par, combo = bd.best(c)
+            gt, gp = bd.greedy(c)
+            L = "ABCDEFGHIJKL"
+            out.append(f"C {cname}")
+            out.append(f"L {lst(rc(p) for p in c['path'])} {lst(rc(p) for p in c['sites'])} {lst(c['hulls'])}")
+            out.append(f"P {par} {''.join(L[i] for i in combo) or '-'} {gt} {''.join(L[i] for i in gp) or '-'}")
+            k = len(c["sites"])
+            tries = [""] if not k else [",".join(L[i] for i in combo), "", ",".join(L[i] for i in gp), "A", "A,A", "A,B,C", "Z",
+                     "a,b", L[k - 1] if k else "B", f"{L[k - 1]},A" if k > 1 else "AB", "AA"]
+            for t in tries:
+                ok, r = run(lambda m=t: bd.play(doc, seed, posts=m), BD_KINDS)
+                if ok:
+                    fates = "".join("t" if r["fates"][s] == "through" else "s" for s in c["skiffs"])
+                    out.append(f"T {t or '-'} ok {r['through']} {fates} {r['verdict']}")
+                else:
+                    out.append(f"T {t or '-'} err {r}")
+    return out
+
+
+# ---------------------------------------------------------------- G563 Salvage Sale
+SS_KINDS = [("whole-number bids", "count"), ("coin left", "coin")]
+
+
+def ss_greedy_bids(values, coin):
+    mine, theirs, lost, out = coin, coin, 0, []
+    for v in values:
+        rb = ss.broker_bid(v, theirs, lost)
+        if rb + 1 <= mine:
+            mine -= rb + 1
+            lost += 1
+            out.append(rb + 1)
+        else:
+            theirs -= rb
+            out.append(0)
+    return out
+
+
+def ss_lines():
+    out = ["# disksaver salvage_sale parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit"]
+    cases = []
+    for cname, doc in censuses():
+        for s in (SEEDS if cname == "real" else SEEDS[1:3]):
+            cases.append((f"{cname}_seed{s}", doc, s, None))
+    for k, h in {"hand_no_coin": ([3, 4, 5, 6, 7], 0), "hand_rich": ([9, 9, 9, 9, 9], 40),
+                 "hand_six_lots": ([3, 12, 5, 7, 4, 11], 14)}.items():
+        cases.append((k, SYN["syn5"], 0, h))
+    for cname, doc, seed, hand in cases:
+        ctx = patched(ss, "sale", lambda d, s=0, h=hand: (["h"] * len(h[0]), list(h[0]), h[1])) if hand else \
+            patched(ss, "FORMAT", ss.FORMAT)
+        with ctx:
+            lots, values, coin = ss.sale(doc, seed)
+            par, plan = ss.solve(values, coin)
+            n = len(values)
+            out.append(f"C {cname}")
+            out.append(f"L {lst(values)} {coin}")
+            out.append(f"P {par} {lst(plan)} {ss.greedy(values, coin)}")
+            g = ss_greedy_bids(values, coin)
+            tries = [plan, g, [0] * n, [coin] * n, [999] + [0] * (n - 1), plan[:-1], plan + [0],
+                     [v // 2 + 1 for v in values], [1] * n]
+            raw = [",".join(str(x) for x in t) for t in tries] + ["", "x," * (n - 1) + "1", "007" + ",0" * (n - 1)]
+            for t in raw:
+                ok, r = run(lambda m=t: ss.play(doc, seed, bids=m), SS_KINDS)
+                if ok:
+                    won = "".join("y" if e["winner"] == "you" else "b" for e in r["log"])
+                    out.append(f"T {t or '-'} ok {r['score']} {won} {r['verdict']}")
+                else:
+                    out.append(f"T {t or '-'} err {r}")
+    return out
+
+GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": qs_lines, "sack_chute": sc_lines,
+         "seal_roll": sr_lines, "channel_dash": cd_lines, "boom_defence": bd_lines, "salvage_sale": ss_lines}
 
 
 def texts():

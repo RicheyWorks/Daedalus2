@@ -1,0 +1,225 @@
+# disksaver seal_roll parity v1: written by tools/streaming/disksaver_cpp_parity.py; do not edit
+C real_seed0
+L #######/#____##/#___#_#/#__#__#/#_____#/#__#__#/####### 4.3,2.5,1.2 4.4 1.1
+P 16 SENSWSESEEENNSSW
+T SENSWSESEEENNSSW ok 16 abc east 1 true
+T - ok 0 - up 0 off_mark
+T SENSWSESEEENNSS ok 15 abc down 0 off_mark
+T SENSWSESEEENNSSWN ok 17 abc east 0 off_mark
+T SENSWSESEEENNSSWNS ok 18 abc east 1 wobbly
+T X err letter
+T NNNN err wall
+T SSSS ok 4 - up 0 off_mark
+T EEEE err wall
+T WWWW err wall
+T NESWNESWNESW err wall
+T WSSNNEEESESWSNES err wall
+T SENSWSESEEENNSSWEWEW ok 20 abc east 1 wobbly
+C real_seed1
+L #######/#_____#/#___#_#/#___#_#/#___#_#/#_____#/####### 1.2,3.1,5.5 1.1 1.5
+P 16 SSSSWWNWWNEENWNW
+T SSSSWWNWWNEENWNW ok 16 abc west 1 true
+T - ok 0 - up 0 off_mark
+T SSSSWWNWWNEENWN ok 15 abc up 0 off_mark
+T SSSSWWNWWNEENWNWN err wall
+T SSSSWWNWWNEENWNWNS err wall
+T X err letter
+T NNNN err wall
+T SSSS ok 4 c up 0 off_mark
+T EEEE err wall
+T WWWW ok 4 - up 1 off_mark
+T NESWNESWNESW err wall
+T WNWNEENWWNWWSSSS err wall
+T SSSSWWNWWNEENWNWEWEW ok 20 abc west 1 wobbly
+C real_seed7
+L #######/##____#/##___##/#_____#/#__#__#/#_____#/####### 4.1,2.3,2.2 1.5 4.4
+P 18 NWWWSNEEENWWNESNEE
+T NWWWSNEEENWWNESNEE ok 18 abc north 1 true
+T - ok 0 - up 0 off_mark
+T NWWWSNEEENWWNESNE ok 17 abc north 0 off_mark
+T NWWWSNEEENWWNESNEEN err wall
+T NWWWSNEEENWWNESNEENS err wall
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE err wall
+T WWWW err wall
+T NESWNESWNESW ok 12 - up 0 off_mark
+T EENSENWWNEEENSWWWN err wall
+T NWWWSNEEENWWNESNEEEWEW err wall
+C real_seed42
+L #######/#_____#/#_____#/#_#__##/#_#___#/##____#/####### 2.1,1.2,5.2 1.1 4.1
+P 23 NNNEESWWNESESSSWENNNNWW
+T NNNEESWWNESESSSWENNNNWW ok 23 abc west 1 true
+T - ok 0 - up 0 off_mark
+T NNNEESWWNESESSSWENNNNW ok 22 abc up 0 off_mark
+T NNNEESWWNESESSSWENNNNWWN err wall
+T NNNEESWWNESESSSWENNNNWWNS err wall
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE err wall
+T WWWW err wall
+T NESWNESWNESW err wall
+T WWNNNNEWSSSESENWWSEENNN err wall
+T NNNEESWWNESESSSWENNNNWWEWEW ok 27 abc west 1 wobbly
+C syn5_seed1
+L #######/#_____#/#____##/#__#__#/#_#___#/#____##/####### 1.4,1.2,2.4,4.5 2.3 1.5
+P 19 WSSSENWNWNWSEENWSEW
+T WSSSENWNWNWSEENWSEW ok 19 abcd west 1 true
+T - ok 0 - up 0 off_mark
+T WSSSENWNWNWSEENWSE ok 18 abcd up 0 off_mark
+T WSSSENWNWNWSEENWSEWN ok 20 abcd west 0 off_mark
+T WSSSENWNWNWSEENWSEWNS ok 21 abcd west 1 wobbly
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE err wall
+T WWWW ok 4 - up 0 off_mark
+T NESWNESWNESW err wall
+T WESWNEESWNWNWNESSSW err wall
+T WSSSENWNWNWSEENWSEWEWEW ok 23 abcd west 1 wobbly
+C syn5_seed7
+L #######/#_____#/#__#__#/##____#/#___#_#/#_____#/####### 2.4,1.3,3.2,3.4 1.2 5.1
+P 21 NENEEENWENWSSWWNWNEEW
+T NENEEENWENWSSWWNWNEEW ok 21 abcd west 1 true
+T - ok 0 - up 0 off_mark
+T NENEEENWENWSSWWNWNEE ok 20 abcd up 0 off_mark
+T NENEEENWENWSSWWNWNEEWN err wall
+T NENEEENWENWSSWWNWNEEWNS err wall
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE ok 4 - up 0 off_mark
+T WWWW err wall
+T NESWNESWNESW ok 12 - up 0 off_mark
+T WEENWNWWSSWNEWNEEENEN err wall
+T NENEEENWENWSSWWNWNEEWEWEW ok 25 abcd west 1 wobbly
+C syn6_seed1
+L #######/#_____#/#__#__#/#___#_#/#_____#/#_#___#/####### 3.2,1.2,4.4,1.1 4.3 4.1
+P 20 NESENWWNNESWNSESESEW
+T NESENWWNNESWNSESESEW ok 20 abcd west 1 true
+T - ok 0 - up 0 off_mark
+T NESENWWNNESWNSESESE ok 19 abcd up 0 off_mark
+T NESENWWNNESWNSESESEWN ok 21 abcd west 0 off_mark
+T NESENWWNNESWNSESESEWNS ok 22 abcd west 1 wobbly
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE ok 4 - up 0 off_mark
+T WWWW err wall
+T NESWNESWNESW ok 12 a up 0 off_mark
+T WESESESNWSENNWWNESEN err wall
+T NESENWWNNESWNSESESEWEWEW ok 24 abcd west 1 wobbly
+C syn6_seed7
+L #######/#__#__#/#_____#/#_____#/#_#__##/#__#__#/####### 5.4,2.3,5.1,4.4 2.1 3.5
+P 25 WWSESNNENWSSNENWWWSWSSNNN
+T WWSESNNENWSSNENWWWSWSSNNN ok 25 abcd south 1 true
+T - ok 0 - up 0 off_mark
+T WWSESNNENWSSNENWWWSWSSNN ok 24 abcd down 0 off_mark
+T WWSESNNENWSSNENWWWSWSSNNNN ok 26 abcd up 0 off_mark
+T WWSESNNENWSSNENWWWSWSSNNNNS ok 27 abcd south 1 wobbly
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE err wall
+T WWWW ok 4 - up 0 off_mark
+T NESWNESWNESW err wall
+T NNNSSWSWWWNENSSWNENNSESWW err wall
+T WWSESNNENWSSNENWWWSWSSNNNEWEW ok 29 abcd south 1 wobbly
+C syn8_seed1
+L #######/#____##/#____##/#_____#/####__#/#_____#/####### 4.4,4.5,5.3,3.5 5.2 3.2
+P 16 ENESSNESWNESSWWW
+T ENESSNESWNESSWWW ok 16 abcd west 1 true
+T - ok 0 - up 0 off_mark
+T ENESSNESWNESSWW ok 15 abcd up 0 off_mark
+T ENESSNESWNESSWWWN err wall
+T ENESSNESWNESSWWWNS err wall
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE err wall
+T WWWW err wall
+T NESWNESWNESW ok 12 - up 0 off_mark
+T WWWSSENWSENSSENE err wall
+T ENESSNESWNESSWWWEWEW ok 20 abcd west 1 wobbly
+C syn8_seed7
+L #######/#_#___#/#_##__#/#___#_#/#_#___#/#_#___#/####### 1.5,3.2,4.5,1.1 4.3 2.4
+P 35 NESWNESSSSWNEWSWNNWWNNSSEESESWNNWES
+T NESWNESSSSWNEWSWNNWWNNSSEESESWNNWES ok 35 abcd east 1 true
+T - ok 0 - up 0 off_mark
+T NESWNESSSSWNEWSWNNWWNNSSEESESWNNWE ok 34 abcd east 0 off_mark
+T NESWNESSSSWNEWSWNNWWNNSSEESESWNNWESN ok 36 abcd east 0 off_mark
+T NESWNESSSSWNEWSWNNWWNNSSEESESWNNWESNS ok 37 abcd east 1 wobbly
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE err wall
+T WWWW err wall
+T NESWNESWNESW ok 12 a up 0 off_mark
+T SEWNNWSESEESSNNWWNNWSWENWSSSSENWSEN err wall
+T NESWNESSSSWNEWSWNNWWNNSSEESESWNNWESEWEW ok 39 abcd east 1 wobbly
+C syn14_seed1
+L #######/#____##/##__#_#/#_____#/#_____#/#_##__#/####### 4.5,1.4,3.5,4.3 1.3 3.1
+P 18 EEEEWSENWWSNWNENEW
+T EEEEWSENWWSNWNENEW ok 18 abcd west 1 true
+T - ok 0 - up 0 off_mark
+T EEEEWSENWWSNWNENE ok 17 abcd up 0 off_mark
+T EEEEWSENWWSNWNENEWN err wall
+T EEEEWSENWWSNWNENEWNS err wall
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE ok 4 c up 0 off_mark
+T WWWW err wall
+T NESWNESWNESW err wall
+T WENENWNSWWNESWEEEE err wall
+T EEEEWSENWWSNWNENEWEWEW ok 22 abcd west 1 wobbly
+C syn14_seed7
+L #######/#_____#/##____#/##___##/#_____#/#_____#/####### 5.5,4.2,1.1,4.5 3.2 2.4
+P 23 SSWWSEEENWSENWWNWNNWESS
+T SSWWSEEENWSENWWNWNNWESS ok 23 abcd east 1 true
+T - ok 0 - up 0 off_mark
+T SSWWSEEENWSENWWNWNNWES ok 22 abcd east 0 off_mark
+T SSWWSEEENWSENWWNWNNWESSN ok 24 abcd east 0 off_mark
+T SSWWSEEENWSENWWNWNNWESSNS ok 25 abcd east 1 wobbly
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE err wall
+T WWWW err wall
+T NESWNESWNESW ok 12 - up 0 off_mark
+T SSEWNNWNWWNESWNEEESWWSS err wall
+T SSWWSEEENWSENWWNWNNWESSEWEW ok 27 abcd east 1 wobbly
+C hand_mark_under_start
+L #######/#_____#/#_____#/#_____#/#_____#/#_____#/####### 3.3 3.5 3.3
+P 2 EE
+T EE ok 2 a down 1 true
+T - ok 0 a up 0 off_mark
+T E ok 1 a east 0 off_mark
+T EEN ok 3 a south 0 off_mark
+T EENS ok 4 a down 1 wobbly
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE err wall
+T WWWW err wall
+T NESWNESWNESW ok 12 a up 0 off_mark
+T EE ok 2 a down 1 true
+T EEEWEW err wall
+C hand_dock_walled_off
+L #######/#_____#/#_____#/#_____#/#___###/#___#_#/####### 2.2 5.5 2.3
+P -1 -
+T - ok 0 - up 0 off_mark
+T - ok 0 - up 0 off_mark
+T - ok 0 - up 0 off_mark
+T N ok 1 - north 0 off_mark
+T NS ok 2 - up 0 off_mark
+T X err letter
+T NNNN err wall
+T SSSS err wall
+T EEEE err wall
+T WWWW err wall
+T NESWNESWNESW ok 12 - up 0 off_mark
+T - ok 0 - up 0 off_mark
+T EWEW ok 4 - up 0 off_mark
