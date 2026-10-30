@@ -1,0 +1,5135 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_GlowmossDelve",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: cave-mouth styling, lamp-gauge marquee",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_GlowmossDelve_M0",
+     "colour": "cabinet body",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_GlowmossDelve_M1",
+     "colour": "trim / side art panel",
+     "hex": "4A4A44",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_GlowmossDelve_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "7CFF8A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_GlowmossDelve_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_GlowmossDelve_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_GlowmossDelve_M5",
+     "colour": "cave rock",
+     "hex": "5A564E",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 6,
+     "name": "Prop_Arcade_Cab_GlowmossDelve_M6",
+     "colour": "lamp gauge (emissive amber)",
+     "hex": "FFB347",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_GlowmossDelve",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Arch0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.126
+        ],
+        [
+         0.07582,
+         -0.10194
+        ],
+        [
+         0.12692,
+         -0.03894
+        ],
+        [
+         0.12616,
+         0.03894
+        ],
+        [
+         0.07075,
+         0.10194
+        ],
+        [
+         0,
+         0.07
+        ]
+       ],
+       "centre": [
+        -0.48,
+        -0.16,
+        0.25
+       ],
+       "slot": 5,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Arch1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.126
+        ],
+        [
+         0.07589,
+         -0.10194
+        ],
+        [
+         0.11672,
+         -0.03894
+        ],
+        [
+         0.11994,
+         0.03894
+        ],
+        [
+         0.07033,
+         0.10194
+        ],
+        [
+         0,
+         0.07
+        ]
+       ],
+       "centre": [
+        -0.46,
+        -0.16,
+        0.6
+       ],
+       "slot": 5,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Arch2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.126
+        ],
+        [
+         0.06514,
+         -0.10194
+        ],
+        [
+         0.11813,
+         -0.03894
+        ],
+        [
+         0.11013,
+         0.03894
+        ],
+        [
+         0.0593,
+         0.10194
+        ],
+        [
+         0,
+         0.07
+        ]
+       ],
+       "centre": [
+        -0.44,
+        -0.16,
+        0.95
+       ],
+       "slot": 5,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Arch0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.126
+        ],
+        [
+         0.07582,
+         -0.10194
+        ],
+        [
+         0.12692,
+         -0.03894
+        ],
+        [
+         0.12616,
+         0.03894
+        ],
+        [
+         0.07075,
+         0.10194
+        ],
+        [
+         0,
+         0.07
+        ]
+       ],
+       "centre": [
+        0.48,
+        -0.16,
+        0.25
+       ],
+       "slot": 5,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Arch1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.126
+        ],
+        [
+         0.07589,
+         -0.10194
+        ],
+        [
+         0.11672,
+         -0.03894
+        ],
+        [
+         0.11994,
+         0.03894
+        ],
+        [
+         0.07033,
+         0.10194
+        ],
+        [
+         0,
+         0.07
+        ]
+       ],
+       "centre": [
+        0.46,
+        -0.16,
+        0.6
+       ],
+       "slot": 5,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Arch2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.126
+        ],
+        [
+         0.06514,
+         -0.10194
+        ],
+        [
+         0.11813,
+         -0.03894
+        ],
+        [
+         0.11013,
+         0.03894
+        ],
+        [
+         0.0593,
+         0.10194
+        ],
+        [
+         0,
+         0.07
+        ]
+       ],
+       "centre": [
+        0.44,
+        -0.16,
+        0.95
+       ],
+       "slot": 5,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "ArchTop",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.18
+        ],
+        [
+         0.09109,
+         -0.14562
+        ],
+        [
+         0.15224,
+         -0.05562
+        ],
+        [
+         0.17674,
+         0.05562
+        ],
+        [
+         0.0994,
+         0.14562
+        ],
+        [
+         0,
+         0.1
+        ]
+       ],
+       "centre": [
+        0,
+        -0.16,
+        2.12
+       ],
+       "slot": 5,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Gauge0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.08
+       ],
+       "centre": [
+        -0.3,
+        -0.17,
+        1.93
+       ],
+       "slot": 6,
+       "bevel": false
+      },
+      {
+       "name": "Gauge1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.08
+       ],
+       "centre": [
+        -0.225,
+        -0.17,
+        1.93
+       ],
+       "slot": 6,
+       "bevel": false
+      },
+      {
+       "name": "Gauge2",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.08
+       ],
+       "centre": [
+        -0.15,
+        -0.17,
+        1.93
+       ],
+       "slot": 6,
+       "bevel": false
+      },
+      {
+       "name": "Gauge3",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.08
+       ],
+       "centre": [
+        -0.075,
+        -0.17,
+        1.93
+       ],
+       "slot": 6,
+       "bevel": false
+      },
+      {
+       "name": "Gauge4",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.17,
+        1.93
+       ],
+       "slot": 6,
+       "bevel": false
+      },
+      {
+       "name": "Gauge5",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.08
+       ],
+       "centre": [
+        0.075,
+        -0.17,
+        1.93
+       ],
+       "slot": 6,
+       "bevel": false
+      },
+      {
+       "name": "Gauge6",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.08
+       ],
+       "centre": [
+        0.15,
+        -0.17,
+        1.93
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Gauge7",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.08
+       ],
+       "centre": [
+        0.225,
+        -0.17,
+        1.93
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Gauge8",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.012,
+        0.08
+       ],
+       "centre": [
+        0.3,
+        -0.17,
+        1.93
+       ],
+       "slot": 4,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_GlowmossDelve_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 1152,
+    "lod1_triangles": 1152,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_GlowmossDelve": 1152
+    },
+    "bounds_min": [
+     -0.5944,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.6069,
+     0.445,
+     2.2656
+    ],
+    "dimensions": [
+     1.2013,
+     0.89,
+     2.2656
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "bea53998d2b56f1922efdcd82de5f95de75d2195c0b59d0489176746a41c9c98"
+  },
+  {
+   "asset": "Prop_Glowmoss_LedgeTile",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m shaft ledge tile (grid cell)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Cluster",
+     "SOCKET_Climb",
+     "SOCKET_Floor"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_LedgeTile_M0",
+     "colour": "shaft stone",
+     "hex": "6A6560",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_LedgeTile",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Slab",
+       "shape": "box",
+       "size": [
+        1.0,
+        1.0,
+        0.25
+       ],
+       "centre": [
+        0,
+        0,
+        0.125
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Lip",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.08,
+        0.06
+       ],
+       "centre": [
+        0,
+        -0.46,
+        0.28
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pebble0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.02581,
+         -0.03641
+        ],
+        [
+         0.03528,
+         -0.01391
+        ],
+        [
+         0.04179,
+         0.01391
+        ],
+        [
+         0.0289,
+         0.03641
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.35,
+        0.38,
+        0.27
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Pebble1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.02148,
+         -0.03641
+        ],
+        [
+         0.03418,
+         -0.01391
+        ],
+        [
+         0.03552,
+         0.01391
+        ],
+        [
+         0.02823,
+         0.03641
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.12,
+        0.38,
+        0.27
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Pebble2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.02599,
+         -0.03641
+        ],
+        [
+         0.04686,
+         -0.01391
+        ],
+        [
+         0.04395,
+         0.01391
+        ],
+        [
+         0.02287,
+         0.03641
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.11,
+        0.38,
+        0.27
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Pebble3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.02725,
+         -0.03641
+        ],
+        [
+         0.04209,
+         -0.01391
+        ],
+        [
+         0.03957,
+         0.01391
+        ],
+        [
+         0.02837,
+         0.03641
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.34,
+        0.38,
+        0.27
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Cluster",
+     "location": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.25,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Climb",
+     "location": [
+      0,
+      0.45,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.25,
+      -0.45
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Glowmoss_LedgeTile_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      1.0,
+      0.31
+     ],
+     "centre": [
+      0,
+      0,
+      0.155
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 408,
+    "lod1_triangles": 408,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_LedgeTile": 408
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.31
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.31
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7a58a4de608a939699979d7398ced2eb92294a6cd2d0f5bbae7d0323bfb57f1a"
+  },
+  {
+   "asset": "Prop_Glowmoss_CrystalCluster_1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "crystal cluster, 1 gem (score unit)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Glow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_CrystalCluster_1_M0",
+     "colour": "crystal (emissive cyan)",
+     "hex": "9AE8FF",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Glowmoss_CrystalCluster_1_M1",
+     "colour": "root stone",
+     "hex": "5A564E",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_CrystalCluster_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Root",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.04211,
+         -0.06553
+        ],
+        [
+         0.07276,
+         -0.02503
+        ],
+        [
+         0.07363,
+         0.02503
+        ],
+        [
+         0.04967,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.02936,
+         0.01305
+        ],
+        [
+         0.02936,
+         0.12232
+        ],
+        [
+         0,
+         0.1631
+        ]
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0.0,
+        -0.0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Glow",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Glowmoss_CrystalCluster_1_00",
+     "shape": "box",
+     "size": [
+      0.24,
+      0.24,
+      0.22
+     ],
+     "centre": [
+      0,
+      0,
+      0.11
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 124,
+    "lod1_triangles": 124,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_CrystalCluster_1": 124
+    },
+    "bounds_min": [
+     -0.0663,
+     -0.0718,
+     -0.051
+    ],
+    "bounds_max": [
+     0.0736,
+     0.0718,
+     0.1831
+    ],
+    "dimensions": [
+     0.1399,
+     0.1436,
+     0.2341
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ea65bc4544099f89b6755f59b05d52072628907e1fd7f406fac9a536766c77b6"
+  },
+  {
+   "asset": "Prop_Glowmoss_CrystalCluster_2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "crystal cluster, 2 gems (score unit)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Glow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_CrystalCluster_2_M0",
+     "colour": "crystal (emissive cyan)",
+     "hex": "9AE8FF",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Glowmoss_CrystalCluster_2_M1",
+     "colour": "root stone",
+     "hex": "5A564E",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_CrystalCluster_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Root",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.04535,
+         -0.06553
+        ],
+        [
+         0.06158,
+         -0.02503
+        ],
+        [
+         0.06213,
+         0.02503
+        ],
+        [
+         0.05197,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03535,
+         0.01571
+        ],
+        [
+         0.03535,
+         0.14728
+        ],
+        [
+         0,
+         0.19638
+        ]
+       ],
+       "centre": [
+        0.06932,
+        0.0097,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        1.5521,
+        -11.0919,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0309,
+         0.01373
+        ],
+        [
+         0.0309,
+         0.12874
+        ],
+        [
+         0,
+         0.17165
+        ]
+       ],
+       "centre": [
+        -0.06996,
+        -0.00234,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        -0.3744,
+        11.1937,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Glow",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Glowmoss_CrystalCluster_2_00",
+     "shape": "box",
+     "size": [
+      0.24,
+      0.24,
+      0.22
+     ],
+     "centre": [
+      0,
+      0,
+      0.11
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_CrystalCluster_2": 168
+    },
+    "bounds_min": [
+     -0.0976,
+     -0.0606,
+     -0.051
+    ],
+    "bounds_max": [
+     0.101,
+     0.0606,
+     0.2126
+    ],
+    "dimensions": [
+     0.1986,
+     0.1212,
+     0.2636
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7c0c3822e5f949adfe6c54fca3e931b25bf5c7083ed4948d733abacb280f73a1"
+  },
+  {
+   "asset": "Prop_Glowmoss_CrystalCluster_3",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "crystal cluster, 3 gems (score unit)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Glow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_CrystalCluster_3_M0",
+     "colour": "crystal (emissive cyan)",
+     "hex": "9AE8FF",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Glowmoss_CrystalCluster_3_M1",
+     "colour": "root stone",
+     "hex": "5A564E",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_CrystalCluster_3",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Root",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.04206,
+         -0.06553
+        ],
+        [
+         0.06032,
+         -0.02503
+        ],
+        [
+         0.06487,
+         0.02503
+        ],
+        [
+         0.05085,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03819,
+         0.01697
+        ],
+        [
+         0.03819,
+         0.15911
+        ],
+        [
+         0,
+         0.21215
+        ]
+       ],
+       "centre": [
+        0.06579,
+        0.02392,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        3.8269,
+        -10.5259,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03896,
+         0.01732
+        ],
+        [
+         0.03896,
+         0.16235
+        ],
+        [
+         0,
+         0.21646
+        ]
+       ],
+       "centre": [
+        -0.03578,
+        0.06017,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        9.6265,
+        5.7246,
+        0
+       ]
+      },
+      {
+       "name": "Gem2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03821,
+         0.01698
+        ],
+        [
+         0.03821,
+         0.15921
+        ],
+        [
+         0,
+         0.21228
+        ]
+       ],
+       "centre": [
+        -0.02535,
+        -0.06525,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        -10.4397,
+        4.0563,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Glow",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Glowmoss_CrystalCluster_3_00",
+     "shape": "box",
+     "size": [
+      0.24,
+      0.24,
+      0.22
+     ],
+     "centre": [
+      0,
+      0,
+      0.11
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 212,
+    "lod1_triangles": 212,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_CrystalCluster_3": 212
+    },
+    "bounds_min": [
+     -0.0728,
+     -0.0947,
+     -0.051
+    ],
+    "bounds_max": [
+     0.1002,
+     0.0905,
+     0.2323
+    ],
+    "dimensions": [
+     0.173,
+     0.1852,
+     0.2833
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c365edd8bee18f885b9e3e164df5dbe117b3da54a9968c810c0a2c12a4b4ff89"
+  },
+  {
+   "asset": "Prop_Glowmoss_CrystalCluster_4",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "crystal cluster, 4 gems (score unit)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Glow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_CrystalCluster_4_M0",
+     "colour": "crystal (emissive cyan)",
+     "hex": "9AE8FF",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Glowmoss_CrystalCluster_4_M1",
+     "colour": "root stone",
+     "hex": "5A564E",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_CrystalCluster_4",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Root",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.04425,
+         -0.06553
+        ],
+        [
+         0.06176,
+         -0.02503
+        ],
+        [
+         0.07487,
+         0.02503
+        ],
+        [
+         0.04345,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03418,
+         0.01519
+        ],
+        [
+         0.03418,
+         0.14242
+        ],
+        [
+         0,
+         0.18989
+        ]
+       ],
+       "centre": [
+        0.07,
+        0.0002,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0.0312,
+        -11.2,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03871,
+         0.0172
+        ],
+        [
+         0.03871,
+         0.16129
+        ],
+        [
+         0,
+         0.21505
+        ]
+       ],
+       "centre": [
+        -0.02679,
+        0.06467,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        10.3474,
+        4.2862,
+        0
+       ]
+      },
+      {
+       "name": "Gem2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03645,
+         0.0162
+        ],
+        [
+         0.03645,
+         0.15186
+        ],
+        [
+         0,
+         0.20248
+        ]
+       ],
+       "centre": [
+        -0.06558,
+        -0.02448,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        -3.9167,
+        10.4928,
+        0
+       ]
+      },
+      {
+       "name": "Gem3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03042,
+         0.01352
+        ],
+        [
+         0.03042,
+         0.12674
+        ],
+        [
+         0,
+         0.16899
+        ]
+       ],
+       "centre": [
+        0.0208,
+        -0.06684,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        -10.6941,
+        -3.3281,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Glow",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Glowmoss_CrystalCluster_4_00",
+     "shape": "box",
+     "size": [
+      0.24,
+      0.24,
+      0.22
+     ],
+     "centre": [
+      0,
+      0,
+      0.11
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 256,
+    "lod1_triangles": 256,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_CrystalCluster_4": 256
+    },
+    "bounds_min": [
+     -0.0985,
+     -0.0902,
+     -0.051
+    ],
+    "bounds_max": [
+     0.1006,
+     0.0946,
+     0.231
+    ],
+    "dimensions": [
+     0.1991,
+     0.1848,
+     0.282
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "37528bf42cd67212ac9dbec609c9f3620eba0fb760d5bb1aa57dbbf75cfa1c7d"
+  },
+  {
+   "asset": "Prop_Glowmoss_CrystalCluster_5",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "crystal cluster, 5 gems (score unit)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Glow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_CrystalCluster_5_M0",
+     "colour": "crystal (emissive cyan)",
+     "hex": "9AE8FF",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Glowmoss_CrystalCluster_5_M1",
+     "colour": "root stone",
+     "hex": "5A564E",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_CrystalCluster_5",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Root",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.04933,
+         -0.06553
+        ],
+        [
+         0.08158,
+         -0.02503
+        ],
+        [
+         0.06843,
+         0.02503
+        ],
+        [
+         0.04558,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 1,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03845,
+         0.01709
+        ],
+        [
+         0.03845,
+         0.1602
+        ],
+        [
+         0,
+         0.2136
+        ]
+       ],
+       "centre": [
+        0.06666,
+        0.02136,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        3.4172,
+        -10.666,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03238,
+         0.01439
+        ],
+        [
+         0.03238,
+         0.1349
+        ],
+        [
+         0,
+         0.17987
+        ]
+       ],
+       "centre": [
+        -0.00573,
+        0.06977,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        11.1624,
+        0.9166,
+        0
+       ]
+      },
+      {
+       "name": "Gem2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03104,
+         0.0138
+        ],
+        [
+         0.03104,
+         0.12933
+        ],
+        [
+         0,
+         0.17244
+        ]
+       ],
+       "centre": [
+        -0.06145,
+        0.03352,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        5.3626,
+        9.8327,
+        0
+       ]
+      },
+      {
+       "name": "Gem3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03018,
+         0.01342
+        ],
+        [
+         0.03018,
+         0.12577
+        ],
+        [
+         0,
+         0.16769
+        ]
+       ],
+       "centre": [
+        -0.05555,
+        -0.0426,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        -6.8155,
+        8.8876,
+        0
+       ]
+      },
+      {
+       "name": "Gem4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.03918,
+         0.01741
+        ],
+        [
+         0.03918,
+         0.16324
+        ],
+        [
+         0,
+         0.21765
+        ]
+       ],
+       "centre": [
+        0.036,
+        -0.06003,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        -9.6052,
+        -5.7603,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Glow",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Glowmoss_CrystalCluster_5_00",
+     "shape": "box",
+     "size": [
+      0.24,
+      0.24,
+      0.22
+     ],
+     "centre": [
+      0,
+      0,
+      0.11
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 300,
+    "lod1_triangles": 300,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_CrystalCluster_5": 300
+    },
+    "bounds_min": [
+     -0.0897,
+     -0.0906,
+     -0.051
+    ],
+    "bounds_max": [
+     0.1013,
+     0.0945,
+     0.2335
+    ],
+    "dimensions": [
+     0.191,
+     0.1851,
+     0.2845
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4b45f3c55132e8c27f33e9cc78956d054fba3656090d25c7f19e7543d20176d3"
+  },
+  {
+   "asset": "Prop_Glowmoss_DarknessCard_0",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m darkness overlay card, level 0 (decal target)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_DarknessCard_0_M0",
+     "colour": "darkness 0 (masked decal, opacity = MI 0.00)",
+     "hex": "202838",
+     "roughness": 1.0,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_DarknessCard_0",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Card",
+       "shape": "box",
+       "size": [
+        1.0,
+        1.0,
+        0.004
+       ],
+       "centre": [
+        0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 12,
+    "lod1_triangles": 12,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_DarknessCard_0": 12
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.004
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.004
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f7dc10ee7eec2c6ea986a2c44e4ac4d2bfb658c740dabddd6f04775f3706347a"
+  },
+  {
+   "asset": "Prop_Glowmoss_DarknessCard_1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m darkness overlay card, level 1 (decal target)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_DarknessCard_1_M0",
+     "colour": "darkness 1 (masked decal, opacity = MI 0.30)",
+     "hex": "202838",
+     "roughness": 1.0,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_DarknessCard_1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Card",
+       "shape": "box",
+       "size": [
+        1.0,
+        1.0,
+        0.004
+       ],
+       "centre": [
+        0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 12,
+    "lod1_triangles": 12,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_DarknessCard_1": 12
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.004
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.004
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "30dd454adf0550c6f04e3f1b030dec29b40d4959d2a218548d1682d9c561fd39"
+  },
+  {
+   "asset": "Prop_Glowmoss_DarknessCard_2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m darkness overlay card, level 2 (decal target)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_DarknessCard_2_M0",
+     "colour": "darkness 2 (masked decal, opacity = MI 0.60)",
+     "hex": "202838",
+     "roughness": 1.0,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_DarknessCard_2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Card",
+       "shape": "box",
+       "size": [
+        1.0,
+        1.0,
+        0.004
+       ],
+       "centre": [
+        0,
+        0,
+        0.002
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 12,
+    "lod1_triangles": 12,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_DarknessCard_2": 12
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.004
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.004
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d485b207677189f76e7c1ce4f173d649bcecd0fd5179ec46407c3cacda5522a1"
+  },
+  {
+   "asset": "Prop_Glowmoss_Patch",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.6 m glowmoss patch (lamp refill)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Glow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_Patch_M0",
+     "colour": "glowmoss (emissive green)",
+     "hex": "7CFF8A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_Patch",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Mat",
+       "shape": "slab",
+       "outline": [
+        [
+         0.241098,
+         0.0
+        ],
+        [
+         0.234549,
+         0.172649
+        ],
+        [
+         0.081687,
+         0.237397
+        ],
+        [
+         -0.089654,
+         0.277833
+        ],
+        [
+         -0.22833,
+         0.163421
+        ],
+        [
+         -0.260162,
+         0.0
+        ],
+        [
+         -0.201577,
+         -0.163256
+        ],
+        [
+         -0.079485,
+         -0.255018
+        ],
+        [
+         0.081991,
+         -0.236837
+        ],
+        [
+         0.201792,
+         -0.155231
+        ]
+       ],
+       "thickness": 0.03,
+       "centre": [
+        0,
+        0,
+        0.015
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Tuft0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.035
+        ],
+        [
+         0.02475,
+         -0.02475
+        ],
+        [
+         0.035,
+         -0.0
+        ],
+        [
+         0.02475,
+         0.02475
+        ],
+        [
+         0,
+         0.035
+        ]
+       ],
+       "centre": [
+        0.18,
+        0.0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.03182,
+         -0.03182
+        ],
+        [
+         0.045,
+         -0.0
+        ],
+        [
+         0.03182,
+         0.03182
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0.04815,
+        0.17344,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.055
+        ],
+        [
+         0.03889,
+         -0.03889
+        ],
+        [
+         0.055,
+         -0.0
+        ],
+        [
+         0.03889,
+         0.03889
+        ],
+        [
+         0,
+         0.055
+        ]
+       ],
+       "centre": [
+        -0.15424,
+        0.09279,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.035
+        ],
+        [
+         0.02475,
+         -0.02475
+        ],
+        [
+         0.035,
+         -0.0
+        ],
+        [
+         0.02475,
+         0.02475
+        ],
+        [
+         0,
+         0.035
+        ]
+       ],
+       "centre": [
+        -0.13067,
+        -0.1238,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.045
+        ],
+        [
+         0.03182,
+         -0.03182
+        ],
+        [
+         0.045,
+         -0.0
+        ],
+        [
+         0.03182,
+         0.03182
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0.08433,
+        -0.15902,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.055
+        ],
+        [
+         0.03889,
+         -0.03889
+        ],
+        [
+         0.055,
+         -0.0
+        ],
+        [
+         0.03889,
+         0.03889
+        ],
+        [
+         0,
+         0.055
+        ]
+       ],
+       "centre": [
+        0.17579,
+        0.03872,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Tuft6",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.035
+        ],
+        [
+         0.02475,
+         -0.02475
+        ],
+        [
+         0.035,
+         -0.0
+        ],
+        [
+         0.02475,
+         0.02475
+        ],
+        [
+         0,
+         0.035
+        ]
+       ],
+       "centre": [
+        0.00971,
+        0.17974,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Glow",
+     "location": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "nanite": true,
+   "predicted": {
+    "triangles": 428,
+    "lod1_triangles": 428,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_Patch": 428
+    },
+    "bounds_min": [
+     -0.2602,
+     -0.255,
+     -0.015
+    ],
+    "bounds_max": [
+     0.2411,
+     0.2778,
+     0.095
+    ],
+    "dimensions": [
+     0.5013,
+     0.5328,
+     0.11
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a1f97f9dff284e777c7346e27146d0508fabc9aeb19722ee92096c5d55952f70"
+  },
+  {
+   "asset": "Prop_Glowmoss_LedgeTile_Unstable",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m unstable ledge, cracked into 4 (crumble = swap / physics)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Cluster",
+     "SOCKET_Floor"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_LedgeTile_Unstable_M0",
+     "colour": "shaft stone",
+     "hex": "6A6560",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Glowmoss_LedgeTile_Unstable_M1",
+     "colour": "crack glow (emissive ember)",
+     "hex": "FF8A3A",
+     "roughness": 0.4,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_LedgeTile_Unstable",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Shard0",
+       "shape": "box",
+       "size": [
+        0.47,
+        0.47,
+        0.25
+       ],
+       "centre": [
+        -0.26,
+        -0.24,
+        0.125
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        3
+       ]
+      },
+      {
+       "name": "Shard1",
+       "shape": "box",
+       "size": [
+        0.47,
+        0.47,
+        0.25
+       ],
+       "centre": [
+        0.25,
+        -0.26,
+        0.115
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -4
+       ]
+      },
+      {
+       "name": "Shard2",
+       "shape": "box",
+       "size": [
+        0.47,
+        0.47,
+        0.25
+       ],
+       "centre": [
+        -0.25,
+        0.25,
+        0.105
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        -2
+       ]
+      },
+      {
+       "name": "Shard3",
+       "shape": "box",
+       "size": [
+        0.47,
+        0.47,
+        0.25
+       ],
+       "centre": [
+        0.26,
+        0.25,
+        0.095
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        0,
+        5
+       ]
+      },
+      {
+       "name": "Crack0",
+       "shape": "box",
+       "size": [
+        0.02,
+        1.0,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.255
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Crack1",
+       "shape": "box",
+       "size": [
+        0.02,
+        1.0,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        0.255
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Cluster",
+     "location": [
+      0,
+      0,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.25,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Glowmoss_LedgeTile_Unstable_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      1.0,
+      0.27
+     ],
+     "centre": [
+      0,
+      0,
+      0.135
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 200,
+    "lod1_triangles": 200,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_LedgeTile_Unstable": 200
+    },
+    "bounds_min": [
+     -0.5054,
+     -0.5087,
+     -0.03
+    ],
+    "bounds_max": [
+     0.512,
+     0.502,
+     0.265
+    ],
+    "dimensions": [
+     1.0174,
+     1.0107,
+     0.295
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5e12e2d4599b43add46e7de223fd08119b12cc4656294a16b4f38c4b4ab6e3be"
+  },
+  {
+   "asset": "Prop_Glowmoss_DelversLamp",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.35 m hand lantern (light budget)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Grip",
+     "SOCKET_Light",
+     "SOCKET_Base"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_DelversLamp_M0",
+     "colour": "lamp glow (emissive amber)",
+     "hex": "FFB347",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Glowmoss_DelversLamp_M1",
+     "colour": "brass",
+     "hex": "B08D3C",
+     "roughness": 0.4,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_DelversLamp",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "LBase",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.16,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.015
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "LGlass",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.18,
+       "centre": [
+        0,
+        0,
+        0.12
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "LCap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02,
+       "r2": 0.09,
+       "length": 0.06,
+       "centre": [
+        0,
+        0,
+        0.24
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "LPost-1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.07
+       ],
+       "centre": [
+        -0.035,
+        0,
+        0.3
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "LPost1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.07
+       ],
+       "centre": [
+        0.035,
+        0,
+        0.3
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "LHandle",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        0,
+        0,
+        0.34
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.34
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.34,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      0,
+      0.13
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.13,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Glowmoss_DelversLamp_00",
+     "shape": "box",
+     "size": [
+      0.18,
+      0.18,
+      0.35
+     ],
+     "centre": [
+      0,
+      0,
+      0.175
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 136,
+    "lod1_triangles": 136,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_DelversLamp": 136
+    },
+    "bounds_min": [
+     -0.09,
+     -0.09,
+     0.0
+    ],
+    "bounds_max": [
+     0.09,
+     0.09,
+     0.346
+    ],
+    "dimensions": [
+     0.18,
+     0.18,
+     0.346
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d2c2727ab0a75be78c39d3861744ae8fccecfcbb389e0e33616492303bc6caef"
+  },
+  {
+   "asset": "Prop_Glowmoss_ClimbRopeWinch",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.9 m rope winch (climb out)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_RopeEnd",
+     "SOCKET_Crank",
+     "SOCKET_Floor"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Glowmoss_ClimbRopeWinch_M0",
+     "colour": "timber",
+     "hex": "8A6440",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Glowmoss_ClimbRopeWinch_M1",
+     "colour": "rope",
+     "hex": "B89A6A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Glowmoss_ClimbRopeWinch_M2",
+     "colour": "iron",
+     "hex": "3A3A3E",
+     "roughness": 0.6,
+     "metallic": 0.6,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Glowmoss_ClimbRopeWinch",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame-1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.08,
+        0.9
+       ],
+       "centre": [
+        -0.4,
+        0,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Frame1",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.08,
+        0.9
+       ],
+       "centre": [
+        0.4,
+        0,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Beam",
+       "shape": "box",
+       "size": [
+        0.9,
+        0.1,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.92
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Drum",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.12,
+       "r2": 0.12,
+       "length": 0.6,
+       "centre": [
+        0,
+        0,
+        0.7
+       ],
+       "slot": 1,
+       "segments": 12
+      },
+      {
+       "name": "Crank",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.02,
+       "r2": 0.02,
+       "length": 0.2,
+       "centre": [
+        0.52,
+        0,
+        0.7
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Handle",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.15
+       ],
+       "centre": [
+        0.62,
+        0,
+        0.63
+       ],
+       "slot": 2,
+       "bevel": true
+      },
+      {
+       "name": "Rope",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.7,
+       "centre": [
+        0,
+        -0.12,
+        0.35
+       ],
+       "slot": 1,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_RopeEnd",
+     "location": [
+      0,
+      -0.12,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0,
+      0.12
+     ]
+    },
+    {
+     "name": "SOCKET_Crank",
+     "location": [
+      0.62,
+      0,
+      0.7
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.62,
+      0.7,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Glowmoss_ClimbRopeWinch_00",
+     "shape": "box",
+     "size": [
+      0.9,
+      0.3,
+      0.97
+     ],
+     "centre": [
+      0,
+      0,
+      0.485
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 260,
+    "lod1_triangles": 260,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Glowmoss_ClimbRopeWinch": 260
+    },
+    "bounds_min": [
+     -0.45,
+     -0.133,
+     0.0
+    ],
+    "bounds_max": [
+     0.635,
+     0.12,
+     0.97
+    ],
+    "dimensions": [
+     1.085,
+     0.253,
+     0.97
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "777263427deccd067a9131ddd70132de6338c97f62ad118dc1388dc78c90a8f6"
+  },
+  {
+   "asset": "Mob_Glowmoss_DelverGuide",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): lamp-bearing miner",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Glowmoss_DelverGuide_M0",
+     "colour": "coat",
+     "hex": "6A5A40",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Glowmoss_DelverGuide_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A3A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Glowmoss_DelverGuide_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Glowmoss_DelverGuide_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Glowmoss_DelverGuide_M4",
+     "colour": "lamp glow (emissive amber)",
+     "hex": "FFB347",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 5,
+     "name": "Mob_Glowmoss_DelverGuide_M5",
+     "colour": "brass",
+     "hex": "B08D3C",
+     "roughness": 0.4,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Glowmoss_DelverGuide",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "LampBase",
+       "shape": "box",
+       "size": [
+        0.16,
+        0.16,
+        0.03
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.735
+       ],
+       "slot": 5,
+       "bevel": true
+      },
+      {
+       "name": "LampGlass",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.15,
+       "centre": [
+        -0.37,
+        0,
+        0.825
+       ],
+       "slot": 4,
+       "segments": 8
+      },
+      {
+       "name": "LampCap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02,
+       "r2": 0.09,
+       "length": 0.06,
+       "centre": [
+        -0.37,
+        0,
+        0.93
+       ],
+       "slot": 5,
+       "segments": 8
+      },
+      {
+       "name": "LampPost-1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.07
+       ],
+       "centre": [
+        -0.405,
+        0,
+        0.99
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "LampPost1",
+       "shape": "box",
+       "size": [
+        0.01,
+        0.01,
+        0.07
+       ],
+       "centre": [
+        -0.335,
+        0,
+        0.99
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "LampHandle",
+       "shape": "box",
+       "size": [
+        0.08,
+        0.012,
+        0.012
+       ],
+       "centre": [
+        -0.37,
+        0,
+        1.03
+       ],
+       "slot": 5,
+       "bevel": false
+      },
+      {
+       "name": "Helmet",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.15,
+       "r2": 0.14,
+       "length": 0.08,
+       "centre": [
+        0,
+        0,
+        1.74
+       ],
+       "slot": 5,
+       "segments": 10
+      },
+      {
+       "name": "HelmetLamp",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.03,
+       "centre": [
+        0,
+        -0.14,
+        1.75
+       ],
+       "slot": 4,
+       "segments": 8
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Glowmoss_DelverGuide_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 820,
+    "lod1_triangles": 820,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Glowmoss_DelverGuide": 820
+    },
+    "bounds_min": [
+     -0.46,
+     -0.155,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.1427,
+     1.785
+    ],
+    "dimensions": [
+     0.88,
+     0.2977,
+     1.785
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3f1498842b76192767ee0e06c5b735aad25f2ac1cec5ac0e2c2884b49060de9b"
+  }
+ ]
+}
