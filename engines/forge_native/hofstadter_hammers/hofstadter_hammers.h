@@ -15,6 +15,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <limits>
 
 namespace daedalus {
 namespace forge {
@@ -28,11 +29,32 @@ inline constexpr std::int32_t kMaxN = 10000000;
 
 /** Result of an operation that can fail. */
 enum class Status : std::uint8_t {
-    Ok,
-    BadArgument,  // n out of range (the Java IllegalArgumentException)
-    BufferTooSmall,  // the buffer holds fewer than n + 1 slots
-    IndexFell  // a Q look-back fell below 1 (the Java IllegalStateException); never seen up to kMaxN
+    Ok = 0,
+    BadArgument = 1,     // n out of range (the Java IllegalArgumentException)
+    BufferTooSmall = 2,  // the buffer holds fewer than n + 1 slots
+    IndexFell = 3,       // a Q look-back left 1..i-1 (the Java IllegalStateException); never seen up to kMaxN
+    NullPointer = 4      // a required buffer or output pointer was null
 };
+
+/** Stable name of a status for logs (for example UE_LOG with ANSI_TO_TCHAR). */
+constexpr const char* StatusName(Status s) {
+    switch (s) {
+        case Status::Ok:
+            return "Ok";
+        case Status::BadArgument:
+            return "BadArgument";
+        case Status::BufferTooSmall:
+            return "BufferTooSmall";
+        case Status::IndexFell:
+            return "IndexFell";
+        case Status::NullPointer:
+            return "NullPointer";
+    }
+    return "Unknown";
+}
+
+// Every term satisfies 1 <= term <= n, so a sum of two terms is below 2 * kMaxN and never overflows int32_t.
+static_assert(2LL * kMaxN <= std::numeric_limits<std::int32_t>::max(), "term sums must fit int32_t");
 
 /** Which hammer (same names as the Java Hammer). */
 enum class Hammer : std::uint8_t { Q, Conway };
@@ -45,7 +67,10 @@ constexpr Status QSequence(std::int32_t n, std::int32_t* buf, std::size_t len) {
     if (n < 0 || n > kMaxN) {
         return Status::BadArgument;
     }
-    if (buf == nullptr || len < static_cast<std::size_t>(n) + 1) {
+    if (buf == nullptr) {
+        return Status::NullPointer;
+    }
+    if (len < static_cast<std::size_t>(n) + 1) {
         return Status::BufferTooSmall;
     }
     buf[0] = 0;
@@ -55,7 +80,7 @@ constexpr Status QSequence(std::int32_t n, std::int32_t* buf, std::size_t len) {
         } else {
             const std::int32_t x = i - buf[i - 1];
             const std::int32_t y = i - buf[i - 2];
-            if (x < 1 || y < 1) {
+            if (x < 1 || y < 1 || x >= i || y >= i) {
                 return Status::IndexFell;
             }
             buf[i] = buf[x] + buf[y];
@@ -69,7 +94,10 @@ constexpr Status ConwaySequence(std::int32_t n, std::int32_t* buf, std::size_t l
     if (n < 0 || n > kMaxN) {
         return Status::BadArgument;
     }
-    if (buf == nullptr || len < static_cast<std::size_t>(n) + 1) {
+    if (buf == nullptr) {
+        return Status::NullPointer;
+    }
+    if (len < static_cast<std::size_t>(n) + 1) {
         return Status::BufferTooSmall;
     }
     buf[0] = 0;
@@ -81,7 +109,10 @@ constexpr Status ConwaySequence(std::int32_t n, std::int32_t* buf, std::size_t l
 
 /** The strike of hammer h at n (1 <= n <= kMaxN) into *out, using scratch[0..n] as work space. */
 constexpr Status Strike(Hammer h, std::int32_t n, std::int32_t* scratch, std::size_t len, std::int32_t* out) {
-    if (n < 1 || n > kMaxN || out == nullptr) {
+    if (out == nullptr) {
+        return Status::NullPointer;
+    }
+    if (n < 1 || n > kMaxN) {
         return Status::BadArgument;
     }
     const Status st = h == Hammer::Q ? QSequence(n, scratch, len) : ConwaySequence(n, scratch, len);
