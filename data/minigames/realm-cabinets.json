@@ -469,7 +469,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             10.0,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -478,12 +478,26 @@
           "start": "StartGame(\"prismvault\", 1132307240)"
         },
         {
+          "game": "siltlane",
+          "title": "Siltlane",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            10.0,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1269710344,
+          "option": 0,
+          "start": "StartGame(\"siltlane\", 1269710344)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -497,7 +511,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             10.0,
-            2.5,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -800,7 +814,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             12.5,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -809,12 +823,26 @@
           "start": "StartGame(\"prismvault\", 1060366944)"
         },
         {
+          "game": "siltlane",
+          "title": "Siltlane",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            12.5,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1071606724,
+          "option": 0,
+          "start": "StartGame(\"siltlane\", 1071606724)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -828,7 +856,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             12.5,
-            2.5,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,

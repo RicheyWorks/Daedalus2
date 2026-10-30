@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Short action chips beside the hint line. The chip names the immediate action
 // and stays out of score, movement, and saved status text.
-// catalog-capability: action_cue: beacon_sweep cairnwell driftstone facetlock dungeon dodge_ball gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shardring twinwake wardens_accord
+// catalog-capability: action_cue: beacon_sweep cairnwell driftstone facetlock dungeon dodge_ball gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shardring twinwake wardens_accord siltlane
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>

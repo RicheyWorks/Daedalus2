@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Accessibility hints for the three cabinets that only had options and focus freeze.
 // The line is drawn on the frame. It does not change score, movement, or saves.
-// catalog-capability: hints: beacon_sweep cairnwell driftstone facetlock dungeon dodge_ball gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shardring twinwake wardens_accord
+// catalog-capability: hints: beacon_sweep cairnwell driftstone facetlock dungeon dodge_ball gloam_latch lanternwild lumenpath prismcairn prismvault reedbeat riftwing shardring twinwake wardens_accord siltlane
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
