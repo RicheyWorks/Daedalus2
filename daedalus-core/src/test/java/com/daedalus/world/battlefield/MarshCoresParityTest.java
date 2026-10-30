@@ -15,10 +15,11 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
- * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan) and G591 (G504 ReedCeiling); later ecology
- * ports add a method here. Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with
- * -Dmarsh.parity.write=true) and replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h.
- * Doubles are printed with Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
+ * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan), G591 (G504 ReedCeiling) and G593 (G507
+ * ReedRelease); later ecology ports add a method here. Each engines/unreal/core-test/marsh_*_parity.txt is written
+ * from this class (run with -Dmarsh.parity.write=true) and replayed by the matching marsh_*_core_test.cpp against its
+ * DaedalusMarsh*Core.h. Doubles are printed with Double.toString (shortest round-trip form), so C++ can compare them
+ * with a tolerance.
  */
 class MarshCoresParityTest {
 
@@ -50,11 +51,62 @@ class MarshCoresParityTest {
         return out;
     }
 
+    static List<String> reedRelease() {
+        // reed options, startCranes, startHawks, budget, perYear, releaseYears, horizon, threshold, sigma, runs
+        Object[][] plans = {
+            {List.of(10.0, 40.0, 80.0, 150.0), 6.0, 3.0, 6, 3, 3, 25, 4.0, 0.15, 40},
+            {List.of(25.0, 55.0), 10.0, 2.0, 4, 2, 2, 20, 6.0, 0.25, 50},
+            {List.of(5.0, 40.0, 110.0), 3.0, 4.0, 3, 3, 2, 15, 2.0, 0.0, 20},
+            {List.of(30.0, 64.0, 90.0), 20.0, 5.0, 0, 1, 2, 30, 8.0, 0.3, 40}};
+        List<String> out = new ArrayList<>();
+        for (int c = 0; c < plans.length; c++) {
+            Object[] q = plans[c];
+            @SuppressWarnings("unchecked")
+            List<Double> reed = (List<Double>) q[0];
+            ReedRelease.Settings s = new ReedRelease.Settings(ReedCeiling.Settings.DEFAULT, reed, (double) q[1],
+                    (double) q[2], (int) q[3], (int) q[4], (int) q[5], (int) q[6], (double) q[7], (double) q[8],
+                    (int) q[9]);
+            long seed = 23 + 19L * c;
+            ReedRelease rr = ReedRelease.of(s, seed);
+            ReedRelease.Plan best = rr.best();
+            ReedRelease.Plan fast = rr.fast();
+            StringBuilder line = new StringBuilder();
+            line.append("reed=").append(csvD(reed)).append(" n0=").append(s.startCranes()).append(" p0=")
+                    .append(s.startHawks()).append(" budget=").append(s.budget()).append(" perYear=")
+                    .append(s.perYear()).append(" releaseYears=").append(s.releaseYears()).append(" horizon=")
+                    .append(s.horizon()).append(" threshold=").append(s.threshold()).append(" sigma=")
+                    .append(s.sigma()).append(" runs=").append(s.runs()).append(" seed=").append(seed);
+            for (int i = 0; i < reed.size(); i++) {
+                ReedRelease.Plan b = rr.bestSchedule(reed.get(i));
+                line.append(" sched").append(i).append('=').append(csv(b.schedule())).append(" risk").append(i)
+                        .append('=').append(b.risk());
+            }
+            line.append(" bestHa=").append(best.hectares()).append(" best=").append(csv(best.schedule()))
+                    .append(" bestRisk=").append(best.risk()).append(" fastHa=").append(fast.hectares())
+                    .append(" fast=").append(csv(fast.schedule())).append(" fastRisk=").append(fast.risk());
+            out.add(line.toString());
+        }
+        return out;
+    }
+
+    private static String csvD(List<Double> a) {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < a.size(); i++) {
+            s.append(i == 0 ? "" : ",").append(a.get(i));
+        }
+        return s.toString();
+    }
+
+    @Test
+    void reedReleaseMatchesCpp() throws IOException {
+        check("marsh_reed_release_parity.txt", "G507 ReedRelease", MarshCoresParityTest::reedRelease);
+    }
+
     static List<String> reedCeiling() {
         // r, reedHectares, cranesPerHectare, attack, handling, conversion, mortality
         double[][] marshes = {{0.4, 40, 2, 0.02, 0.5, 0.6, 0.15}, {0.4, 80, 2, 0.02, 0.5, 0.6, 0.15},
             {0.4, 10, 2, 0.02, 0.5, 0.6, 0.15}, {0.8, 30, 3, 0.05, 0.3, 0.4, 0.1}, {0.25, 60, 1.5, 0.01, 1.0, 0.5, 0.2},
-            {1.2, 25, 4, 0.03, 0.2, 0.7, 0.3}};
+            {1.2, 25, 4, 0.03, 0.2, 0.7, 0.3}, {0.4, 6, 2, 0.02, 0.5, 0.6, 0.15}};
         List<String> out = new ArrayList<>();
         for (int c = 0; c < marshes.length; c++) {
             double[] m = marshes[c];
