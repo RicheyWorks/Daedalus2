@@ -6,7 +6,7 @@
 Reads docs/minigames/dossiers/<game>.json (mechanics, items, storyline, placement, blender_items) and writes
 <game>.pdf and <game>.xlsx into DIR (default: the dossier folder next to the JSON; on Richey's PC the team uses
 bot-team/GAMES/<game>/). The PDF is written by hand (no reportlab on the build machines): Helvetica, A4, wrapped
-paragraphs, a heading per section, and a table per list. The workbook (openpyxl) has one sheet per section:
+paragraphs, a heading per section, and a table per list. The workbook is written as OOXML by hand too (no openpyxl either) with one sheet per section:
 Mechanics, Items, Storyline, plus Placement and Blender. No secrets go in either file; the JSON is the only input.
 """
 import argparse
@@ -114,41 +114,99 @@ def write_pdf(d, path):
         fh.write(pdf.build())
 
 
-# ---------------------------------------------------------------- XLSX (openpyxl)
+# ---------------------------------------------------------------- XLSX (minimal OOXML writer)
+
+def xml_escape(s):
+    return (str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;"))
+
+
+def col_letter(i):
+    out = ""
+    i += 1
+    while i:
+        i, rem = divmod(i - 1, 26)
+        out = chr(65 + rem) + out
+    return out
+
+
+def sheet_xml(rows):
+    """One worksheet: inline strings, a bold first row (style 1), column widths from the longest cell."""
+    widths = []
+    for row in rows:
+        for i, v in enumerate(row):
+            if i >= len(widths):
+                widths.append(0)
+            widths[i] = max(widths[i], len(str(v)))
+    cols = "".join('<col min="%d" max="%d" width="%d" customWidth="1"/>' % (i + 1, i + 1, min(80, max(12, w + 2)))
+                   for i, w in enumerate(widths))
+    body = []
+    for r, row in enumerate(rows, 1):
+        cells = "".join('<c r="%s%d"%s t="inlineStr"><is><t xml:space="preserve">%s</t></is></c>'
+                        % (col_letter(i), r, ' s="1"' if r == 1 else "", xml_escape(v)) for i, v in enumerate(row))
+        body.append('<row r="%d">%s</row>' % (r, cells))
+    return ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+            '<cols>%s</cols><sheetData>%s</sheetData></worksheet>' % (cols, "".join(body)))
+
 
 def write_xlsx(d, path):
-    from openpyxl import Workbook
-    from openpyxl.styles import Font
+    """A workbook with one sheet per section, written as OOXML by hand (no openpyxl on the build machines)."""
+    import zipfile
 
-    wb = Workbook()
-    wb.remove(wb.active)
+    sheets = [("About", [[k, d.get(k, "")] for k in ("title", "id", "realm", "status", "summary")])]
     for key in SECTIONS:
         rows = d.get(key) or []
-        ws = wb.create_sheet({"placement": "Placement"}.get(key, TITLES[key].split(" (")[0]))
+        name = {"placement": "Placement"}.get(key, TITLES[key].split(" (")[0])
         if rows and isinstance(rows[0], dict):
             cols = []
             for row in rows:
                 for k in row:
                     if k not in cols:
                         cols.append(k)
-            ws.append(cols)
-            for row in rows:
-                ws.append([str(row.get(c, "")) for c in cols])
+            table = [cols] + [[row.get(c, "") for c in cols] for row in rows]
         else:
-            ws.append(["text"])
-            for row in rows:
-                ws.append([row])
-        for cell in ws[1]:
-            cell.font = Font(bold=True)
-        for col in ws.columns:
-            width = max(len(str(c.value or "")) for c in col)
-            ws.column_dimensions[col[0].column_letter].width = min(80, max(12, width + 2))
-    info = wb.create_sheet("About", 0)
-    for k in ("title", "id", "realm", "status", "summary"):
-        info.append([k, d.get(k, "")])
-    info.column_dimensions["A"].width = 12
-    info.column_dimensions["B"].width = 100
-    wb.save(path)
+            table = [["text"]] + [[row] for row in rows]
+        sheets.append((name, table))
+
+    ns_r = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    workbook = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+                '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="%s"><sheets>%s</sheets></workbook>'
+                % (ns_r, "".join('<sheet name="%s" sheetId="%d" r:id="rId%d"/>' % (xml_escape(n), i, i) for i, (n, _) in enumerate(sheets, 1))))
+    wb_rels = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+               '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">%s'
+               '<Relationship Id="rId%d" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
+               '</Relationships>'
+               % ("".join('<Relationship Id="rId%d" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet%d.xml"/>' % (i, i)
+                          for i in range(1, len(sheets) + 1)), len(sheets) + 1))
+    styles = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+              '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+              '<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts>'
+              '<fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills>'
+              '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'
+              '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
+              '<cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
+              '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs>'
+              '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>')
+    content_types = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+                     '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+                     '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+                     '<Default Extension="xml" ContentType="application/xml"/>'
+                     '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+                     '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>%s</Types>'
+                     % "".join('<Override PartName="/xl/worksheets/sheet%d.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' % i
+                               for i in range(1, len(sheets) + 1)))
+    root_rels = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+                 '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                 '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'
+                 '</Relationships>')
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr("[Content_Types].xml", content_types)
+        z.writestr("_rels/.rels", root_rels)
+        z.writestr("xl/workbook.xml", workbook)
+        z.writestr("xl/_rels/workbook.xml.rels", wb_rels)
+        z.writestr("xl/styles.xml", styles)
+        for i, (_, table) in enumerate(sheets, 1):
+            z.writestr("xl/worksheets/sheet%d.xml" % i, sheet_xml(table))
 
 
 def main(argv=None):
