@@ -1,6 +1,7 @@
 """Tests for tools/minigames/glowmoss.py (Glowmoss Delve)."""
 import json
 import pathlib
+import random
 import sys
 import unittest
 
@@ -177,6 +178,59 @@ class Rules(unittest.TestCase):
         self.assertEqual(g.step(gm.Game.parse("hint")), "hint: dig %d" % g.plan[0])
         self.assertEqual(g.status(), before)
         self.assertEqual(gm.main(["--tutorial"]), 0)
+
+
+
+class Properties(unittest.TestCase):
+    """Property sweeps over many seeds: the invariants every shaft must keep."""
+    SEEDS = range(60)
+
+    def test_target_always_reachable_and_demo_perfect(self):
+        for d in gm.DIFFICULTY:
+            for s in self.SEEDS:
+                g = gm.start(s, d)
+                self.assertTrue(1 <= g.target <= g.best, (d, s))
+                g = gm.demo(s, d)
+                self.assertTrue(g.won and g.perfect, (d, s))
+                self.assertEqual(g.crystals, g.best)
+
+    def test_same_seed_same_shaft(self):
+        for d in gm.DIFFICULTY:
+            for s in self.SEEDS:
+                self.assertEqual(gm.start(s, d).status(), gm.start(s, d).status())
+
+    def test_save_load_round_trip_at_every_step(self):
+        for d in gm.DIFFICULTY:
+            for s in range(10):
+                g = gm.start(s, d)
+                while True:
+                    h = gm.Game.from_state(json.loads(json.dumps(g.to_state())))
+                    self.assertEqual(h.status(), g.status())
+                    self.assertEqual(h.render(), g.render())
+                    if g.over:
+                        break
+                    a = g.demo_action()
+                    self.assertEqual(g.step(a), h.step(a))
+
+    def test_any_legal_dig_keeps_state_consistent(self):
+        rng = random.Random("glowmoss-props")
+        for d in gm.DIFFICULTY:
+            for s in self.SEEDS:
+                g = gm.start(s, d)
+                while not g.over:
+                    if g.row + 1 >= g.cfg["rows"] or rng.random() < 0.1:
+                        g.step(("climb", 0))
+                        break
+                    g.step(("dig", rng.choice(list(gm.dig_cols(g.col, g.cfg["cols"])))))
+                    self.assertLessEqual(g.light, g.cfg["light"])
+                    self.assertLessEqual(len(g.path), g.row + 1)
+                    self.assertEqual(g.over, g.light < gm.climb_cost(g.row))
+                self.assertGreaterEqual(g.score, 0)
+
+    def test_greedy_player_beats_random(self):
+        import glowmoss_sim as sim
+        for d in gm.DIFFICULTY:
+            self.assertGreater(sim.win_rate("greedy", d, 60), sim.win_rate("random", d, 60), d)
 
 
 if __name__ == "__main__":

@@ -47,5 +47,9 @@ row  1   4    v4.   v5:   v2
 Actions: `("dig", column)`, `("climb", 0)`. Default difficulty: normal. API: `g = glowmoss.start(seed, "normal")`, `g.step(action)`, `g.status()`, `g.to_state()` / `Game.from_state(d)` (JSON-safe, RNG included).
 CLI: `python -m tools.minigames.glowmoss --play --difficulty normal --seed N`, `--demo --seed N` (digs the best delve, then climbs out).
 
+## Tests
+- `test_glowmoss.py`: the shared Prismheart contract, rules tests, and property sweeps (target always within the best delve and the demo always perfect, same seed same shaft, save/load round trip at every step, random legal digs keep the lamp and path consistent, greedy beats random).
+- `glowmoss_core_test.cpp`: replays every fixture line (shafts, probes, every dig and hint) and sweeps 200 seeds per difficulty natively (determinism, seed code round trip, hint equals the best delve at every step, target within best, demo perfect).
+
 ## Daedalus tie-in
 Below Prismheart's shard fields run crystal shafts lit only by lamps and the glowmoss that grows on some ledges; delvers bring up raw shard crystal for the Glimmerloom market. Placement: a Prismheart cave mouth beside the realm's arcade row. Source only for now: no cabinet, realm row, editor or Unreal assets; the Python module stays the rules authority. Original game by prism-shard-dev, Oct 30.
