@@ -188,3 +188,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Watchfires (G555, disk-saver)
 
 `watchfires.py` is a graph puzzle between islands: census islands form a seeded, connected ferry chart, a watchfire lights its island and every neighbour, and the player lights the whole chart with the fewest fires (minimum dominating set). Exact branch-and-bound par (checked against every set), greedy shown as the trap, `--auto` plays par. Verdict blazing/smoky/dark. NPC Firekeeper Leofric; hook `data/islands/disk-saver/watchfires-v1.json`; doc `docs/islands/DISKSAVER-WATCHFIRES.md`.
+
+## Manifest Match (G556, disk-saver)
+
+`manifest_match.py` is a memory (Concentration) game over the world census: every island has an ISLAND card and a MANIFEST card (its G206 RAM cost), a seed deals up to 12 pairs face down, and each turn flips two cards (`--turns 1-2,3-4`, replayed so the log reveals the faces). Par is the perfect-memory turn count for that layout and `--auto` plays it. Verdict sharp/matched/unfinished. NPC Wharf Clerk Godfrey; hook `data/islands/disk-saver/manifest-match-v1.json`; doc `docs/islands/DISKSAVER-MANIFEST-MATCH.md`.
