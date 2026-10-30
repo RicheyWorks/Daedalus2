@@ -578,6 +578,34 @@ def translocation_plan():
     return out
 
 
+
+# ================================================================ prismchime (unreal-team, READY 59142/59143)
+@game("prismchime")
+def prismchime():
+    G = "Prop_Prismchime_"; out = []
+    hoop = [K.cyl("TopHoop%d" % k, "y", 0.16 - 0.005 * k, 0.16 - 0.005 * k, 0.02, (0, -0.02 - 0.005 * k, 2.25), 5 + k % 2, 16) for k in range(2)] + [K.cyl("TopBell", "z", 0.05, 0.03, 0.08, (0, -0.02, 2.2), 5, 8)]
+    out.append(cabinet("Prop_Arcade_Cab_Prismchime", "2A3A5A", "A6C8E6", "C8A6FF", hoop, [("chime brass", "B08D3C", 0.35, 0.9), ("hoop inner", "2A3A5A", 0.5)], "chime-hoop topper"))
+    a = G + "Hoop"; R0, Z0 = 0.8, 0.85; P = []; SILVER = "D0D4DC"
+    for ring, r in enumerate((R0, R0 - 0.08)):
+        for k in range(24):
+            an = 2 * math.pi * k / 24; P.append(K.box("Ring%d_%d" % (ring, k), (2 * math.pi * r / 24 + 0.01, 0.035, 0.035), (r * math.cos(an), 0, Z0 + r * math.sin(an)), 0, bevel=False, rot=(0, -math.degrees(an) - 90, 0)))
+    P += [K.box("Tie%d" % k, (0.1, 0.03, 0.03), (0.76 * math.cos(k * math.pi / 4), 0, Z0 + 0.76 * math.sin(k * math.pi / 4)), 0, bevel=False, rot=(0, -math.degrees(k * math.pi / 4), 0)) for k in range(8)]
+    P += [K.cyl("Link%d" % k, "x" if k % 2 else "y", 0.03, 0.03, 0.012, (0, 0, Z0 + R0 + 0.05 + 0.05 * k), 1, 8) for k in range(5)]
+    S = [K.socket("Hang", (0, 0, Z0 + R0 + 0.28)), K.socket("Centre", (0, 0, Z0))] + [K.socket("Bell_%d" % k, (0.76 * math.cos(math.pi / 2 + k * math.pi / 4), -0.03, Z0 + 0.76 * math.sin(math.pi / 2 + k * math.pi / 4))) for k in range(8)]
+    out.append(simple(a, P, [("silver hoop", SILVER, 0.25, 1.0), ("chain", "8A8A90", 0.4, 1.0)], S, "1.6 m silver double hoop on short chain, 8 bell sockets (scale for 6/10 variants); hang from Hang", (1.64, 0.04, 1.93), (0, 0, 0.965)))
+    for st, hx, glow in (("Dark", "8AA8C8", False), ("Lit", "FFB84A", True)):
+        a = G + "Bell_" + st; P = [K.cyl("Rod", "z", 0.006, 0.006, 0.12, (0, 0, 0.2), 1, 6), K.lathe("Bell", [(0, 0.15), (0.03, 0.145), (0.05, 0.1), (0.07, 0.02), (0.08, 0.0), (0, 0.0)], (0, 0, 0), 0, 6), ball("Clapper", (0, 0, 0.02), 0.012, 1, 6)]
+        S = [K.socket("Hang", (0, 0, 0.26)), K.socket("Strike", (0, -0.075, 0.05))]
+        for k in range(3):
+            z = 0.06 + 0.03 * k; P.append(ball("Pip%d" % k, (0, -0.07 + 0.012 * k, z), 0.008, 2, 6)); S.append(K.socket("Pip_%d" % k, (0, -0.075 + 0.012 * k, z)))
+        out.append(simple(a, P, [("crystal bell" + (" (emissive amber)" if glow else ""), hx, 0.1, 0.0, glow), ("rod / clapper", SILVER, 0.25, 1.0), ("pip slot", "2A2A34", 0.5)], S,
+                          "0.26 m crystal bell on rod, 3 pip slots, %s" % st.lower(), (0.16, 0.16, 0.26), (0, 0, 0.13)))
+    a = G + "Mallet"; P = [K.cyl("Handle", "z", 0.012, 0.014, 0.26, (0, 0, 0.13), 0, 8), crystal("Head", (-0.07, 0, 0.27), 0.14, 1, rot=(0, 90, 0))]
+    out.append(simple(a, P, [("silver handle", SILVER, 0.25, 1.0), ("prism head (emissive)", "C8A6FF", 0.15, 0.0, True)], [K.socket("Grip", (0, 0, 0.06)), K.socket("Tip", (0.07, 0, 0.27))], "0.3 m prism-headed tap mallet (head along X)", (0.14, 0.06, 0.3), (0, 0, 0.15)))
+    out.append(npc("Mob_Prismchime_Warden", "4A3A6A", "2A2A3A", [K.cyl("WMallet", "z", 0.012, 0.012, 0.26, (-0.37, -0.03, 0.95), 4, 6), crystal("WMalletHead", (-0.37, -0.03, 1.08), 0.1, 5)], [("silver", "D0D4DC", 0.25, 1.0), ("prism (emissive)", "C8A6FF", 0.15, 0.0, True)], "Prismchime Warden (static; shared 8-bone rig pending)"))
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)
