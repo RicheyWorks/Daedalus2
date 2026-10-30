@@ -251,3 +251,18 @@ CI: `seal-roll.yml`.
 python tools/streaming/seal_roll.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/seal_roll_test.py
 ```
+
+## Channel Dash (G561)
+
+`channel_dash.py` is a timing crossing game over the world census. Each island is a lane of
+seeded barges drifting east or west and wrapping round a 9-cell channel. Courier Isadora moves
+or waits one cell a tick and must reach the far dock without a barge landing on her. Par is the
+fewest ticks by exact BFS over (row, column, tick mod 9), checked against an independent
+real-time search. Verdicts are `swift`, `safe` and `swamped`. Hook:
+`data/islands/disk-saver/channel-dash-v1.json`. Doc: `docs/islands/DISKSAVER-CHANNEL-DASH.md`.
+CI: `channel-dash.yml`.
+
+```
+python tools/streaming/channel_dash.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/channel_dash_test.py
+```
