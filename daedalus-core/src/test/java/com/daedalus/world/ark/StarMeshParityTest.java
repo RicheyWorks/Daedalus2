@@ -66,14 +66,15 @@ class StarMeshParityTest {
             for (int i = 0; i < n; i++) {
                 line.append(i == 0 ? "" : "|").append(join(nbrs[i], "."));
             }
-            // Four random sightings in the same sky, then star 0 itself (a corner of its triangles).
+            // Four random sightings, then star 0 itself: the triangle under each, then the nearest star.
             int span = s <= 40 ? 100 : (int) StarMesh.MAX_COORD;
             line.append(" locate=");
             for (int q = 0; q < 5; q++) {
                 long[] at = q < 4 ? new long[] {rng.nextInt(2 * span + 1) - span, rng.nextInt(2 * span + 1) - span}
                         : pts[0];
                 line.append(q == 0 ? "" : ",").append(at[0]).append(':').append(at[1]).append('>')
-                        .append(StarMesh.locate(pts, tris, at));
+                        .append(StarMesh.locate(pts, tris, at)).append('/')
+                        .append(StarMesh.nearest(pts, tris, at));
             }
             out.add(line.toString());
         }
@@ -153,7 +154,7 @@ class StarMeshParityTest {
             List<String> body = new ArrayList<>();
             body.add("# G441 StarMesh parity (G588): written by StarMeshParityTest.java, replayed by"
                     + " ark_star_mesh_core_test.cpp. Seeds 1.." + SEEDS + " (triangles, hull, flips, edges, chart"
-                    + " lines, neighbours, locate), then hand edge skies, then one refused sky per reason.");
+                    + " lines, neighbours, locate/nearest), then hand edge skies, then one refused sky per reason.");
             body.addAll(actual);
             Files.write(FILE, body, StandardCharsets.UTF_8);
         }

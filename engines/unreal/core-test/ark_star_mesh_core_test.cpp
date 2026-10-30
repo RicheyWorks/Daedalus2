@@ -103,7 +103,8 @@ std::vector<std::string> ParityLines()
 				const int64_t X = Rng.NextInt(2 * Span + 1) - Span;
 				At = { X, Rng.NextInt(2 * Span + 1) - Span };
 			}
-			Line += (q ? "," : "") + S(At.X) + ":" + S(At.Y) + ">" + S(StarMeshLocate(Pts, Tris, At));
+			Line += (q ? "," : "") + S(At.X) + ":" + S(At.Y) + ">" + S(StarMeshLocate(Pts, Tris, At)) + "/"
+				+ S(StarMeshNearest(Pts, Tris, At));
 		}
 		Out.push_back(Line);
 	}
@@ -233,6 +234,62 @@ bool ChartLinesMatchPrim()
 	return true;
 }
 
+// The nearest-star walk against a scan of every star (same distance; ties may pick either star).
+bool NearestMatchesBruteForce()
+{
+	daedalus::stable::StableRng Rng(4413);
+	for (int Round = 0; Round < 40; ++Round)
+	{
+		const std::vector<StarPoint> P = Stars(Rng, 3 + Rng.NextInt(40), Round % 2 ? static_cast<int>(StarMeshMaxCoord) : 60);
+		const std::vector<StarTriangle> T = StarMeshTriangulate(P);
+		const int Span = Round % 2 ? static_cast<int>(StarMeshMaxCoord) : 80;
+		for (int q = 0; q < 40; ++q)
+		{
+			const int64_t X = Rng.NextInt(2 * Span + 1) - Span;
+			const StarPoint At{ X, Rng.NextInt(2 * Span + 1) - Span };
+			auto Dist = [&At](const StarPoint& V) { return (V.X - At.X) * (V.X - At.X) + (V.Y - At.Y) * (V.Y - At.Y); };
+			int64_t Best = INT64_MAX;
+			for (const StarPoint& V : P) Best = std::min(Best, Dist(V));
+			if (Dist(P[static_cast<size_t>(StarMeshNearest(P, T, At))]) != Best) return false;
+		}
+	}
+	return true;
+}
+
+#if defined(__SIZEOF_INT128__)
+// The two-word 128-bit determinant against the compiler's __int128 on quads at the sky's rim and near-cocircular
+// small quads (g++ and clang++; MSVC has no __int128 and skips this check).
+bool InCircleMatchesInt128()
+{
+	daedalus::stable::StableRng Rng(4414);
+	const int64_t M = StarMeshMaxCoord;
+	for (int t = 0; t < 200000; ++t)
+	{
+		StarPoint Q[4];
+		for (StarPoint& P : Q)
+		{
+			if (t % 3 == 0) P = { Rng.NextInt(7) - 3, Rng.NextInt(7) - 3 };
+			else
+			{
+				const int64_t X = Rng.NextBoolean() ? M - Rng.NextInt(3) : -M + Rng.NextInt(3);
+				P = { X, Rng.NextInt(2000001) - M };
+			}
+		}
+		__int128 Dx[3], Dy[3], Sq[3];
+		for (int i = 0; i < 3; ++i)
+		{
+			Dx[i] = Q[i].X - Q[3].X;
+			Dy[i] = Q[i].Y - Q[3].Y;
+			Sq[i] = Dx[i] * Dx[i] + Dy[i] * Dy[i];
+		}
+		const __int128 Det = Dx[0] * (Dy[1] * Sq[2] - Sq[1] * Dy[2]) - Dy[0] * (Dx[1] * Sq[2] - Sq[1] * Dx[2])
+			+ Sq[0] * (Dx[1] * Dy[2] - Dy[1] * Dx[2]);
+		if (StarInCircle(Q[0], Q[1], Q[2], Q[3]) != (Det > 0) - (Det < 0)) return false;
+	}
+	return true;
+}
+#endif
+
 // Hull, neighbours and locate against brute force on random skies (same checks as StarMeshTest).
 bool QueriesMatchBruteForce()
 {
@@ -295,6 +352,10 @@ int main(int argc, char** argv)
 		&& StarMeshTriangulate(std::vector<StarPoint>(StarMeshMaxPoints + 1)).empty());
 	Check("hull, neighbours and locate match brute force", QueriesMatchBruteForce());
 	Check("chart lines are a minimum spanning tree (Prim)", ChartLinesMatchPrim());
+	Check("nearest-star walk matches a full scan", NearestMatchesBruteForce());
+#if defined(__SIZEOF_INT128__)
+	Check("in-circle matches __int128 on 200,000 quads", InCircleMatchesInt128());
+#endif
 	bool EdgeOk = true;
 	for (const std::vector<StarPoint>& Sky : EdgeSkies())
 	{
