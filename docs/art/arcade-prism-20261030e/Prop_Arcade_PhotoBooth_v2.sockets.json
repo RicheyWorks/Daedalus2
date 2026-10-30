@@ -1,0 +1,134 @@
+{
+ "asset": "Prop_Arcade_PhotoBooth_v2",
+ "units": "cm",
+ "space": "unreal",
+ "note": "UE +X forward, +Y right, +Z up, cm; UE = 100 * (x_b, -y_b, z_b) = 100 * (gx, gz, gy) (UEB 48725); location relative to parent node; rotation [pitch, yaw, roll] deg: plain sockets [0, 0, 0] = mesh-aligned, attach sockets +X along barrel/shaft, +Z up; native empties pre-rotated to match",
+ "sockets": [
+  {
+   "name": "SOCKET_Camera",
+   "parent": "Prop_Arcade_PhotoBooth_v2",
+   "location": [
+    -55.0,
+    0.0,
+    135.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_CurtainRail",
+   "parent": "Prop_Arcade_PhotoBooth_v2",
+   "location": [
+    0.0,
+    44.0,
+    174.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Entry",
+   "parent": "Prop_Arcade_PhotoBooth_v2",
+   "location": [
+    0.0,
+    90.0,
+    0.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_PhotoSlot",
+   "parent": "Prop_Arcade_PhotoBooth_v2",
+   "location": [
+    71.0,
+    30.0,
+    100.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Screen",
+   "parent": "Prop_Arcade_PhotoBooth_v2",
+   "location": [
+    -57.0,
+    0.0,
+    110.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Seat",
+   "parent": "Prop_Arcade_PhotoBooth_v2",
+   "location": [
+    10.0,
+    -20.0,
+    53.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  }
+ ]
+}

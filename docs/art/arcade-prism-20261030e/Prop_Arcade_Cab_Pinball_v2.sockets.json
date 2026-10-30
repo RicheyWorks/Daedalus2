@@ -1,0 +1,155 @@
+{
+ "asset": "Prop_Arcade_Cab_Pinball_v2",
+ "units": "cm",
+ "space": "unreal",
+ "note": "UE +X forward, +Y right, +Z up, cm; UE = 100 * (x_b, -y_b, z_b) = 100 * (gx, gz, gy) (UEB 48725); location relative to parent node; rotation [pitch, yaw, roll] deg: plain sockets [0, 0, 0] = mesh-aligned, attach sockets +X along barrel/shaft, +Z up; native empties pre-rotated to match",
+ "sockets": [
+  {
+   "name": "SOCKET_Backglass",
+   "parent": "Prop_Arcade_Cab_Pinball_v2",
+   "location": [
+    0.0,
+    -41.0,
+    146.812
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Ball",
+   "parent": "Prop_Arcade_Cab_Pinball_v2",
+   "location": [
+    30.0,
+    50.0,
+    96.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_FlipperL",
+   "parent": "Prop_Arcade_Cab_Pinball_v2",
+   "location": [
+    -8.0,
+    43.0,
+    96.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_FlipperR",
+   "parent": "Prop_Arcade_Cab_Pinball_v2",
+   "location": [
+    8.0,
+    43.0,
+    96.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Floor",
+   "parent": "Prop_Arcade_Cab_Pinball_v2",
+   "location": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Player1",
+   "parent": "Prop_Arcade_Cab_Pinball_v2",
+   "location": [
+    0.0,
+    115.0,
+    0.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  },
+  {
+   "name": "SOCKET_Plunger",
+   "parent": "Prop_Arcade_Cab_Pinball_v2",
+   "location": [
+    30.0,
+    75.0,
+    87.0
+   ],
+   "rotation": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kind": "plain",
+   "native_rotation_predicted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "native_matches": true
+  }
+ ]
+}
