@@ -67,6 +67,37 @@ int UnitChecks()
 	return Fails;
 }
 
+/** Iteration 2: 600 random rings played with random taps; every state must satisfy the rules' invariants. */
+int InvariantSweep()
+{
+	int Fails = 0, Taps = 0;
+	const char* Diffs[] = { "easy", "normal", "hard" };
+	for (std::uint32_t Seed = 0; Seed < 200 && Fails == 0; ++Seed)
+		for (const char* Diff : Diffs)
+		{
+			Game G; G.Start(Seed, Diff);
+			std::uint32_t Pick = Seed * 2654435761u + 7u;   // a cheap independent stream for the tap choice
+			while (!G.Over)
+			{
+				Pick = Pick * 1664525u + 1013904223u;
+				const int I = static_cast<int>(Pick >> 16) % G.Chimes();
+				const int TapsBefore = G.Taps, LitBefore = G.LitCount(), PealsBefore = G.Peals;
+				int Pealed = 0; std::string Text;
+				if (G.Tap(I, Pealed, Text) != Game::Act::Ok) { std::printf("FAIL sweep: tap refused mid-game (seed %u %s)\n", Seed, Diff); ++Fails; break; }
+				++Taps;
+				bool Ok = G.Taps == TapsBefore - 1 && G.Peals - PealsBefore == Pealed && G.LitCount() >= LitBefore && G.LitCount() - LitBefore <= Pealed;
+				for (int C : G.Charge) if (C < 0 || C >= Peal) Ok = false;
+				if (G.Score != PealScore * G.Peals + (G.Won ? TapBonus * G.Taps : 0)) Ok = false;
+				if (G.Over != (G.AllLit() || G.Taps <= 0) || G.Won != G.AllLit()) Ok = false;
+				if (!Ok) { std::printf("FAIL sweep invariant (seed %u %s tap %d): %s\n", Seed, Diff, I, Text.c_str()); ++Fails; break; }
+			}
+			int Pealed = 0; std::string Text;
+			if (G.Tap(0, Pealed, Text) != Game::Act::GameOver) { std::printf("FAIL sweep: finished ring accepted a tap\n"); ++Fails; }
+		}
+	if (!Fails) std::printf("sweep: 600 rings, %d random taps, invariants held\n", Taps);
+	return Fails;
+}
+
 } // namespace
 
 int main(int Argc, char** Argv)
@@ -74,7 +105,7 @@ int main(int Argc, char** Argv)
 	if (Argc < 2) { std::printf("usage: prismchime_core_test prismchime_parity.txt\n"); return 2; }
 	std::ifstream In(Argv[1]);
 	if (!In) { std::printf("FAIL cannot open %s\n", Argv[1]); return 2; }
-	int Fails = UnitChecks(), Games = 0;
+	int Fails = UnitChecks() + InvariantSweep(), Games = 0;
 	std::string Line; Game G; std::uint32_t Seed = 0; std::string Diff; int Turn = 0; bool Skip = false;
 	while (std::getline(In, Line))
 	{

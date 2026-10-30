@@ -72,3 +72,69 @@ class Rules(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Properties(unittest.TestCase):
+    """Iteration 1: invariants that hold on every ring, every tap, every seed (no rule change)."""
+    SEEDS = range(60)
+
+    def check_invariants(self, g, before, i):
+        n = len(g.charge)
+        self.assertTrue(all(0 <= c < gm.PEAL for c in g.charge), "a resolved ring never holds a full chime")
+        self.assertTrue(all(b <= a for b, a in zip(before["lit"], g.lit)), "lit never goes dark")
+        self.assertEqual(g.score, gm.PEAL_SCORE * g.peals + (gm.TAP_BONUS * g.taps if g.won else 0), "score is peals plus the win bonus")
+        self.assertEqual(g.taps, before["taps"] - 1, "every action spends exactly one tap")
+        # energy book-keeping: the tap added charge[i] + 1, each peal removed what the chime held and gave back 2
+        self.assertGreaterEqual(sum(g.charge), 0)
+        self.assertEqual(g.over, all(g.lit) or g.taps <= 0, "the game ends exactly when the ring is lit or the taps are spent")
+        self.assertEqual(g.won, all(g.lit), "winning means every chime lit")
+        self.assertTrue(0 <= i < n)
+
+    def test_random_taps_keep_invariants(self):
+        import random
+        for d in gm.DIFFICULTY:
+            for s in self.SEEDS:
+                g = gm.start(s, d)
+                rng = random.Random(s * 7 + 1)
+                while not g.over:
+                    before = {"lit": list(g.lit), "taps": g.taps}
+                    i = rng.randrange(len(g.charge))
+                    g.step(i)
+                    self.check_invariants(g, before, i)
+
+    def test_demo_taps_keep_invariants(self):
+        for d in gm.DIFFICULTY:
+            for s in self.SEEDS:
+                g = gm.start(s, d)
+                while not g.over:
+                    before = {"lit": list(g.lit), "taps": g.taps}
+                    i = g.demo_action()
+                    g.step(i)
+                    self.check_invariants(g, before, i)
+
+    def test_peal_is_the_only_way_to_light(self):
+        for s in self.SEEDS:
+            g = gm.start(s)
+            while not g.over:
+                peals_before = g.peals
+                lit_before = sum(g.lit)
+                g.step(g.demo_action())
+                self.assertLessEqual(sum(g.lit) - lit_before, g.peals - peals_before)
+
+
+class Balance(unittest.TestCase):
+    """Iteration 3: the greedy watcher's win rate per difficulty is pinned to a band, so a rule or tuning slip shows."""
+    BANDS = {"easy": (0.88, 1.0), "normal": (0.70, 0.95), "hard": (0.50, 0.85)}
+
+    def test_greedy_win_rate_bands(self):
+        import io
+        for d, (lo, hi) in self.BANDS.items():
+            wins = sum(gm.demo(s, d, io.StringIO()).won for s in range(100))
+            self.assertTrue(lo <= wins / 100 <= hi, f"{d}: greedy wins {wins}/100, band {lo}-{hi}")
+
+    def test_no_one_tap_wins(self):
+        import io
+        for d in gm.DIFFICULTY:
+            for s in range(100):
+                g = gm.demo(s, d, io.StringIO())
+                self.assertFalse(g.won and g.taps == gm.DIFFICULTY[d]["taps"] - 1, f"{d} seed {s} won in one tap")
