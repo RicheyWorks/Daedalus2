@@ -1,0 +1,47 @@
+{
+  "id": "prismchime",
+  "title": "Prismchime Ring",
+  "realm": "prismheart_realm",
+  "status": "core + cabinet + 9 iterations merged on main; dossier is iteration 10",
+  "summary": "A ring of crystal chimes hangs in the Prismheart. Tap a chime and its charge pulses along its facing, one chime per point, and the rung chime gains one from the resonance. A chime that fills to four peals: it scores, lights, resets and pushes one charge to each neighbour, so peals chain around the ring. Light every chime before the taps run out. Deterministic per seed, bit-exact between the Python rules, the C++ core and the Unreal cabinet.",
+  "mechanics": [
+    {"name": "Ring", "text": "6 / 8 / 10 chimes (easy / normal / hard), each with a seeded starting charge of 1 or 2 and a facing (clockwise or counter). Only randrange is drawn; nothing random happens after the ring is hung.", "code": "prismchime.Game.setup / prismchime::Game::Start"},
+    {"name": "Tap", "text": "Spends one tap. The chime sends one pulse to each of the next charge chimes in its facing (+1 each) and then gains one itself. Charge is never spent by tapping; taps inject energy.", "code": "Game.act / Game::Tap"},
+    {"name": "Peal", "text": "A chime reaching 4 peals: +5 score, it lights, resets to 0 and gives +1 to both neighbours. Peals resolve in the order chimes filled (FIFO); a chime drained by a neighbour's peal before its turn does not peal. Excess above 4 is lost, which rewards exact fills.", "code": "Game._peal / Game::PealChime, PealQueue"},
+    {"name": "Win / loss", "text": "Every chime lit (each has pealed at least once) wins and adds +3 per tap left. The last tap without a full ring loses. Score = 5 x peals (+ bonus).", "code": "TapBonus, PealScore"},
+    {"name": "Budget", "text": "8 taps on every difficulty; difficulty is ring size. Greedy watcher win rate is pinned by test: easy 88-100 %, normal 70-95 %, hard 50-85 %; no one-tap wins."},
+    {"name": "Guide (option 1)", "text": "Practice mode: a blue ring marks the chime the watcher would tap (most newly lit, then most score, then lowest index) and the hint previews the cursor chime's peals and newly lit count."},
+    {"name": "Saves", "text": "Text save (shared DaedalusDesktopSaveText shape): difficulty, seed, taps, peals, score, over, won, cursor, charge, facing, lit. Range-checked on restore; charges must be below 4, facings +1/-1, lit mask the ring's length."},
+    {"name": "Controls", "text": "Left/Right or stick walk the ring; A / J / Space tap; R or pad Start restart a finished ring. Cabinet class DesktopGames/DaedalusDesktopPrismchimeCore.h, registry id prismchime, save slot prismchime.dgs."}
+  ],
+  "items": [
+    {"item": "Prismchime (dark)", "kind": "ring chime", "text": "An unlit crystal bell on a silver rod; charge shows as 0-3 glowing pips stacked inside the bell.", "in_game": "Charge[i] with Lit[i] false"},
+    {"item": "Prismchime (lit)", "kind": "ring chime", "text": "The same bell after its first peal: warm amber glass, a faint hum; pips turn to dark brass.", "in_game": "Lit[i] true"},
+    {"item": "Facing arrow", "kind": "marker", "text": "A small sky-blue arrowhead on the ring tangent beside each chime, pointing the way its pulses travel.", "in_game": "Facing[i]"},
+    {"item": "Chime hoop", "kind": "fixture", "text": "The silver hoop the chimes hang from, two concentric rings with the bells between.", "in_game": "the ring itself"},
+    {"item": "Tap mallet", "kind": "player tool", "text": "A short prism-headed mallet; the cursor's gold ring is where it hovers.", "in_game": "Cursor"},
+    {"item": "Peal glow", "kind": "effect", "text": "A burst of light when a chime peals, with two sparks leaving to the neighbours.", "in_game": "PealChime: +1 to both neighbours"}
+  ],
+  "storyline": [
+    {"beat": "Hook", "text": "In the Prismheart's inner court a ring of chimes has fallen silent. The Wardens say the court only opens its deeper doors when every chime has rung once in a single vigil."},
+    {"beat": "Teaching", "text": "A Warden shows the first tap: charge runs the way the arrow points, and a chime brimming with four pulses sings and wakes its neighbours. (The tutorial rows appear only on a fresh ring.)"},
+    {"beat": "Rising", "text": "Each difficulty is a wider court: six chimes, then eight, then ten, with the same eight taps. The player learns to set up chains rather than ring the loudest chime."},
+    {"beat": "Climax", "text": "A full ring: every chime lit before the taps run out. The leftover taps become the Wardens' gratitude (+3 each)."},
+    {"beat": "Failure", "text": "The ring falls silent and the court stays shut; pad A or R hangs a new ring at the same seed, so the pattern can be studied and beaten."},
+    {"beat": "Place in Prismheart", "text": "The chime ring is a side-court puzzle next to the Glimmerloom market; it does not gate the main campaign but lit rings add to the arcade scoreboard like the other Prismheart cabinets."}
+  ],
+  "placement": [
+    {"name": "Realm row", "text": "data/minigames/realm-cabinets.json, realm prismheart_realm, anchor arcade_plaza, layout row, 2.5 m spacing, yaw 180; seed crc32('prismheart_realm:prismchime') = 113376713; StartGame(\"prismchime\", 113376713), SetGameOption(0)."},
+    {"name": "First frame at the realm seed", "text": "normal ring, taps 8; charges 2,2,2,1,1,2,2,2; facings <, >, >, <, >, >, <, > (native == Python)."},
+    {"name": "Spot", "text": "data/minigames/daedalus-spots.json: 'Prismheart, the chime ring'."},
+    {"name": "Handoff", "text": "docs/minigames/PRISMHEART-CABINET-HANDOFF.md lists the cabinet among the ten with its acceptance steps for codex-play-guard's editor window."}
+  ],
+  "blender_items": [
+    {"name": "Cab_Prismchime", "kind": "cabinet", "text": "Arcade cabinet shell in the shared ADaedalusDesktopArcade footprint with a ring-of-bells marquee; same sockets as the other Prismheart cabinets.", "priority": "1"},
+    {"name": "Prop_Prismchime_Hoop", "kind": "prop", "text": "Silver double hoop, ~1.6 m across, hanging from a short chain; 8 bell sockets (6 and 10 variants by scale).", "priority": "2"},
+    {"name": "Prop_Prismchime_Bell_Dark", "kind": "prop", "text": "Unlit crystal bell on a rod, 3 pip slots.", "priority": "2"},
+    {"name": "Prop_Prismchime_Bell_Lit", "kind": "prop", "text": "Lit amber variant of the bell (material swap acceptable).", "priority": "2"},
+    {"name": "Prop_Prismchime_Mallet", "kind": "prop", "text": "Prism-headed tap mallet, hand-sized.", "priority": "3"},
+    {"name": "NPC_Prismchime_Warden", "kind": "NPC", "text": "A Warden attendant on the shared 8-bone rig who stands by the hoop and demonstrates the first tap (reuse Mob_Prism townsfolk base).", "priority": "3"}
+  ]
+}
