@@ -1,17 +1,24 @@
 name: Stable cores
 # G567: header-only C++ ports of the stable-lane minigame cores (DaedalusStable*Core.h) must replay the
-# Java-written stable_*_parity.txt line for line. Engine-free; no Unreal needed.
+# Java-written stable_*_parity.txt line for line. G586+: new 2hot2trot games written in Java and C++ together
+# (DaedalusPilot*Core.h, pilot_*) ride the same job. Engine-free; no Unreal needed.
 on:
   pull_request:
     paths:
       - 'engines/unreal/**/DaedalusStable*.h'
       - 'engines/unreal/core-test/stable_*'
+      - 'engines/unreal/**/DaedalusPilot*.h'
+      - 'engines/unreal/**/DaedalusPyRandomCore.h'
+      - 'engines/unreal/core-test/pilot_*'
       - '.github/workflows/stable-cores.yml'
   push:
     branches: [main]
     paths:
       - 'engines/unreal/**/DaedalusStable*.h'
       - 'engines/unreal/core-test/stable_*'
+      - 'engines/unreal/**/DaedalusPilot*.h'
+      - 'engines/unreal/**/DaedalusPyRandomCore.h'
+      - 'engines/unreal/core-test/pilot_*'
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,10 +30,10 @@ jobs:
         compiler: [g++, clang++]
     steps:
       - uses: actions/checkout@v4
-      - name: Stable cores replay the Java parity files (sanitized, warnings as errors)
+      - name: Stable and pilot cores replay the Java parity files (sanitized, warnings as errors)
         working-directory: engines/unreal/core-test
         run: |
-          for t in stable_*_core_test.cpp; do
+          for t in stable_*_core_test.cpp pilot_*_core_test.cpp; do
             name="${t%_core_test.cpp}"
             ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -fno-omit-frame-pointer \
               -I../DaedalusLink/Source/DaedalusLink/Public "$t" -o "$RUNNER_TEMP/$name"
