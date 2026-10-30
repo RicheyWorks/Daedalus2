@@ -40,6 +40,35 @@ static_assert(CompileTimeStrike(hh::Hammer::Q, 10) == 6, "Q(10)");
 static_assert(CompileTimeStrike(hh::Hammer::Conway, 9) == 5, "a(9)");
 static_assert(CompileTimeStrike(hh::Hammer::Q, 0) == -1, "Q(0) rejected");
 
+// Iteration 7: compile-time anchors to OEIS A005185 (Q) and A004001 (Hofstadter-Conway), independent of
+// the Java fixture, so a broken recurrence fails the build before any test runs.
+constexpr std::int32_t kOeisQ[31] = {0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 6, 8, 8, 8, 10, 9,
+                                     10, 11, 11, 12, 12, 12, 12, 16, 14, 14, 16, 16, 16, 16};
+constexpr std::int32_t kOeisA[31] = {0, 1, 1, 2, 2, 3, 4, 4, 4, 5, 6, 7, 7, 8, 8, 8, 8,
+                                     9, 10, 11, 12, 12, 13, 14, 14, 15, 15, 15, 16, 16, 16};
+
+constexpr bool MatchesOeis() {
+    std::int32_t q[31] = {};
+    std::int32_t a[31] = {};
+    if (hh::QSequence(30, q, 31) != hh::Status::Ok || hh::ConwaySequence(30, a, 31) != hh::Status::Ok) {
+        return false;
+    }
+    for (int i = 0; i <= 30; ++i) {
+        if (q[i] != kOeisQ[i] || a[i] != kOeisA[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+static_assert(MatchesOeis(), "first 30 terms match OEIS A005185 and A004001");
+static_assert(hh::StatusName(hh::Status::IndexFell)[0] == 'I', "StatusName is constexpr");
+
+// Index a table by a signed term index without sign-conversion noise (the test is -Wsign-conversion clean).
+static std::int32_t At(const std::vector<std::int32_t>& v, std::int32_t i) {
+    return v[static_cast<std::size_t>(i)];
+}
+
 // Strict reader: M must come first and match kMaxN, rows are "Q n v" / "C n v" with nothing trailing,
 // each tag's n strictly increases (no duplicates), 1..3000 is dense for both hammers, and kMaxN is present.
 static void Golden(const char* path, const std::vector<std::int32_t>& q, const std::vector<std::int32_t>& a) {
@@ -119,10 +148,10 @@ static void Properties(const std::vector<std::int32_t>& q, const std::vector<std
     bool half_ok = true;
     bool q_bounds = true;
     for (std::int32_t n = 2; n <= hh::kMaxN; ++n) {
-        const std::int32_t d = a[n] - a[n - 1];
+        const std::int32_t d = At(a, n) - At(a, n - 1);
         steps_ok = steps_ok && (d == 0 || d == 1);
-        half_ok = half_ok && 2 * static_cast<std::int64_t>(a[n]) >= n;
-        q_bounds = q_bounds && q[n] >= 1 && q[n] <= n;
+        half_ok = half_ok && 2 * static_cast<std::int64_t>(At(a, n)) >= n;
+        q_bounds = q_bounds && At(q, n) >= 1 && At(q, n) <= n;
     }
     Check(steps_ok, "Conway steps are 0 or 1");
     Check(half_ok, "Conway a(n) >= n/2");
@@ -169,9 +198,9 @@ static void Extend(const std::vector<std::int32_t>& q, const std::vector<std::in
         step = step * 3 + 1;
     }
     Check(ok, "chunked extend ok");
-    bool same = gq[0] == 0 && ga[0] == 0;
+    bool same = At(gq, 0) == 0 && At(ga, 0) == 0;
     for (std::int32_t i = 1; i <= n; ++i) {
-        same = same && gq[i] == q[i] && ga[i] == a[i];
+        same = same && At(gq, i) == At(q, i) && At(ga, i) == At(a, i);
     }
     Check(same, "chunked extend equals full fill");
     std::int32_t buf[8] = {0, 1, 1, 2, 3, 3, 4, 5};
@@ -213,12 +242,12 @@ static void Model(const std::vector<std::int32_t>& q, const std::vector<std::int
     std::vector<std::int32_t> ma(static_cast<std::size_t>(n) + 1, 0);
     bool same = true;
     for (std::int32_t i = 1; i <= n; ++i) {  // ascending keeps the recursion shallow
-        same = same && MemoQ(i, mq) == q[i] && MemoA(i, ma) == a[i];
+        same = same && MemoQ(i, mq) == At(q, i) && MemoA(i, ma) == At(a, i);
     }
     Check(same, "memoized recursion model agrees 1..4000");
-    bool rec = q[1] == 1 && q[2] == 1 && a[1] == 1 && a[2] == 1;
+    bool rec = At(q, 1) == 1 && At(q, 2) == 1 && At(a, 1) == 1 && At(a, 2) == 1;
     for (std::int32_t i = 3; i <= hh::kMaxN; ++i) {
-        rec = rec && q[i] == q[i - q[i - 1]] + q[i - q[i - 2]] && a[i] == a[a[i - 1]] + a[i - a[i - 1]];
+        rec = rec && At(q, i) == At(q, i - At(q, i - 1)) + At(q, i - At(q, i - 2)) && At(a, i) == At(a, At(a, i - 1)) + At(a, i - At(a, i - 1));
     }
     Check(rec, "both recurrences hold at every n to kMaxN");
 }
