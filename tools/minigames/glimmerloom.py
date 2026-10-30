@@ -29,6 +29,12 @@ HUES = ("ember", "tide", "verdant", "gale", "umbra")
 LOW, HIGH = 3, 20
 
 
+def ints_in(xs, n, low, high):
+    """A list of n whole numbers in low..high."""
+    return (isinstance(xs, list) and len(xs) == n
+            and all(isinstance(x, int) and not isinstance(x, bool) and low <= x <= high for x in xs))
+
+
 class Game(pc.PrismGame):
     GAME_ID, TITLE, HOW_TO_PLAY = GAME_ID, TITLE, HOW_TO_PLAY
     DIFFICULTY, DEFAULT_DIFFICULTY = DIFFICULTY, DEFAULT_DIFFICULTY
@@ -49,6 +55,24 @@ class Game(pc.PrismGame):
         if self.rng.random() >= self.cfg["truth"]:
             up = not up
         self.rumor = [hue, "rise" if up else "fall"]
+
+    def check_rules(self):
+        n, cfg = self.cfg["hues"], self.cfg
+        last = cfg["days"] + 1 if self.over else cfg["days"]
+        ok = (pc.is_count(self.day) and 1 <= self.day <= last and pc.is_count(self.purse)
+              and ints_in(self.prices, n, LOW, HIGH) and ints_in(self.moves, n, -3, 3)
+              and ints_in(self.satchel, n, 0, cfg["satchel"]) and self.held() <= cfg["satchel"]
+              and isinstance(self.rumor, list) and len(self.rumor) == 2 and self.rumor[0] in range(n)
+              and self.rumor[1] in ("rise", "fall")
+              and self.over == (self.day > cfg["days"])
+              and self.won == (self.over and self.purse >= cfg["target"])
+              and (not self.over or self.held() == 0))
+        if not ok:
+            raise ValueError("glimmerloom save does not satisfy the rules")
+
+    def rescore(self):
+        """The score is the purse once you have acted; a fresh market still shows 0."""
+        return self.score if self.score == 0 and not self.over else self.purse
 
     def held(self):
         return sum(self.satchel)

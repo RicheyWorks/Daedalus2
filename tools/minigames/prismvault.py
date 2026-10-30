@@ -36,16 +36,31 @@ class Game(pc.PrismGame):
         self.log = []
         self.candidates = list(range(self.cfg["shards"]))
 
-    def to_state(self):
-        st = super().to_state()
-        st["hollow"] = self.hollow
-        return st
+    def check_rules(self):
+        """Replay the saved weighings against the hollow shard, which saves no longer carry (it is re-derived from
+        the seed's first draw, so reading a save cannot spoil the puzzle): every result and candidate must follow."""
+        n, cfg = self.cfg["shards"], self.cfg
+        ok = (pc.is_count(self.weighings) and self.weighings <= cfg["weighings"]
+              and isinstance(self.log, list) and len(self.log) == cfg["weighings"] - self.weighings)
+        candidates = list(range(n))
+        for entry in self.log if ok else []:
+            left, right, res = entry
+            groups_ok = (isinstance(left, list) and isinstance(right, list) and left and len(left) == len(right)
+                         and not set(left) & set(right) and all(isinstance(x, int) and 0 <= x < n for x in left + right))
+            if not groups_ok:
+                ok = False
+                break
+            truth = "<" if self.hollow in left else ">" if self.hollow in right else "="
+            ok = ok and res == truth
+            keep = set(left if truth == "<" else right if truth == ">" else set(range(n)) - set(left) - set(right))
+            candidates = [c for c in candidates if c in keep]
+        ok = ok and self.candidates == candidates and self.won == (self.over and self.score > 0)
+        if not ok:
+            raise ValueError("prismvault save does not satisfy the rules")
 
-    @classmethod
-    def from_state(cls, state):
-        g = super().from_state(state)
-        g.hollow = state["hollow"]
-        return g
+    def rescore(self):
+        """A correct name scores 100 + 50 per unused weighing; anything else scores 0."""
+        return 100 + 50 * self.weighings if self.won else 0
 
     def act(self, action):
         kind = action[0]

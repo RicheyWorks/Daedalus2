@@ -1,4 +1,5 @@
 """Tests for tools/minigames/glimmerloom.py (Glimmerloom Ledger)."""
+import json
 import pathlib
 import sys
 import unittest
@@ -53,6 +54,23 @@ class Rules(unittest.TestCase):
 
     def test_demo_beats_easy_usually(self):
         self.assertGreaterEqual(sum(gm.demo(s, "easy").won for s in range(30)), 20)
+
+    def test_load_rule_check(self):
+        g = gm.start(2, "hard")
+        g.step(g.demo_action())
+        st = g.to_state()
+        for breakit in (lambda d: d["prices"].__setitem__(0, gm.HIGH + 1), lambda d: d.update(day=0),
+                        lambda d: d["satchel"].__setitem__(0, 99), lambda d: d.update(rumor=[9, "rise"]),
+                        lambda d: d.update(over=True), lambda d: d.update(won=True)):
+            rejected(self, gm.Game, st, breakit, "rules")
+        rejected(self, gm.Game, st, lambda d: d.update(score=d["purse"] + 1), "does not match")
+
+
+def rejected(test, game_cls, state, breakit, text):
+    bad = json.loads(json.dumps(state))
+    breakit(bad)
+    with test.assertRaisesRegex(ValueError, text):
+        game_cls.from_state(bad)
 
 
 if __name__ == "__main__":

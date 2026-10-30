@@ -15,6 +15,11 @@ import json
 import random
 import sys
 
+try:
+    from .prism_common import check_rng_state, is_count
+except ImportError:
+    from prism_common import check_rng_state, is_count
+
 GAME_ID = "shardring"
 TITLE = "Shardring Resonance"
 HOW_TO_PLAY = ("HOW Set each Prism Shard in an empty facet of the sphere ring; "
@@ -115,16 +120,42 @@ class ShardringGame:
 
     @classmethod
     def from_state(cls, state):
-        if state.get("v") != 1 or state.get("id") != GAME_ID:
+        """Load a save checked against the rules (ValueError): shapes, hues, counts, over/won, a score floor, RNG state."""
+        if not isinstance(state, dict) or state.get("v") != 1 or state.get("id") != GAME_ID:
             raise ValueError("not a shardring v1 save")
+        if state.get("difficulty") not in DIFFICULTY or not is_count(state.get("seed")):
+            raise ValueError("shardring save has a bad seed or difficulty")
         g = cls(state["seed"], state["difficulty"])
-        if len(state["ring"]) != len(g.ring):
+        keys = ("ring", "pouch", "score", "chain", "resonance", "spirits", "over", "won", "current", "next")
+        if any(k not in state for k in keys + ("rng",)):
+            raise ValueError("shardring save is missing fields")
+        if not isinstance(state["ring"], list) or len(state["ring"]) != len(g.ring):
             raise ValueError("ring size does not match difficulty")
-        for k in ("ring", "pouch", "score", "chain", "resonance", "spirits", "over", "won", "current", "next"):
+        rng_state = check_rng_state(state["rng"])
+        for k in keys:
             setattr(g, k, state[k] if not isinstance(state[k], (list, dict)) else type(state[k])(state[k]))
-        v, internal, gauss = state["rng"]
-        g.rng.setstate((v, tuple(internal), gauss))
+        if not g.follows_rules():
+            raise ValueError("shardring save does not satisfy the rules")
+        g.rng.setstate(rng_state)
         return g
+
+    def follows_rules(self):
+        """The loaded fields must be a state play can reach. The score has no move log to replay, so it is held to
+        its floor: every resonance scores at least RUN**2 and every summoned spirit SPIRIT_BONUS."""
+        cfg = DIFFICULTY[self.difficulty]
+        res = self.resonance
+        if not (isinstance(res, dict) and set(res) == set(self.hues) and all(is_count(n) for n in res.values())):
+            return False
+        expected_spirits = sorted(SPIRITS[h] for h in self.hues for _ in range(res[h] // SPIRIT_EVERY))
+        empty = sum(h is None for h in self.ring)
+        return (all(h is None or h in self.hues for h in self.ring)
+                and self.current in self.hues and self.next in self.hues
+                and is_count(self.pouch) and self.pouch <= cfg["shards"] and is_count(self.chain)
+                and self.chain <= sum(res.values()) and is_count(self.score)
+                and isinstance(self.spirits, list) and sorted(self.spirits) == expected_spirits
+                and self.score >= RUN ** 2 * sum(res.values()) + SPIRIT_BONUS * len(self.spirits)
+                and isinstance(self.over, bool) and isinstance(self.won, bool)
+                and self.over == (empty == 0 or self.pouch <= 0) and self.won == (self.over and empty > 0))
 
     def render(self):
         mark = {h: h[0].upper() for h in self.hues}
