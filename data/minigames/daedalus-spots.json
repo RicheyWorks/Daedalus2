@@ -77,6 +77,10 @@
     "facetlock": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the vault door"
+    },
+    "siltlane": {
+      "realm": "spawn_overlook",
+      "spot": "Spawn overlook, the silt course"
     }
   }
 }

@@ -673,6 +673,37 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "siltlane",
+      "title": "Siltlane",
+      "summary": "Switch lanes so the drifting silt passes you. Left/Right or stick: change lane",
+      "how_to_play": "HOW Switch lanes so the drifting silt passes you.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "spawn_overlook",
+      "daedalus_spot": "Spawn overlook, the silt course",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"siltlane\", Seed)",
+      "portable_tests": [
+        "desktop_siltlane"
+      ],
+      "option_count": 0,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "hints",
+        "key_hint",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [

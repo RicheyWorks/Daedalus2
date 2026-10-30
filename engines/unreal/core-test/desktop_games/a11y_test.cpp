@@ -2,8 +2,8 @@
 // Key hints and colour-blind safe marks. The mark is a word plus a shape on a
 // dark plate: a triangle for MARK ACT and a bar for MARK WAIT. Colour is not
 // the only signal. Twinwake keeps its six-command match opening.
-// catalog-capability: key_hint: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell
-// catalog-capability: contrast_mark: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell
+// catalog-capability: key_hint: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell siltlane
+// catalog-capability: contrast_mark: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell siltlane
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <string>
@@ -25,7 +25,7 @@ bool HasShape(const Frame& F,const std::string& Mark) {
 }
 
 int main() {
-    Check(Catalog().size()==19,"access covers every registered game");
+    Check(Catalog().size()==20,"access covers every registered game");
     for(const Entry& E:Catalog()) {
         auto G=CreateGame(E.Id);
         Check(bool(G),E.Id+": factory");

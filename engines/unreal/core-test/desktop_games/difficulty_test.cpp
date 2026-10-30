@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Every cabinet accepts easy, normal, and hard, and starts on normal.
 // The setting does not change the option, the score, or the status note.
-// catalog-capability: difficulty: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell
+// catalog-capability: difficulty: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell siltlane
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <string>
@@ -13,7 +13,7 @@ void Check(bool Ok,const std::string& What) {++Checks;if(!Ok){++Failed;std::cerr
 }
 
 int main() {
-    Check(Catalog().size()==19,"difficulty covers every registered game");
+    Check(Catalog().size()==20,"difficulty covers every registered game");
     for(const Entry& E:Catalog()) {
         auto G=CreateGame(E.Id);
         Check(bool(G),E.Id+": factory");

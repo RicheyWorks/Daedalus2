@@ -27,6 +27,7 @@ batched rebuild under the editor custodian.
 | `lumenpath` | Lumenpath Refraction | 1 |
 | `wardens_accord` | Wardens' Accord | 1 |
 | `facetlock` | Facetlock Lattice | 1 |
+| `siltlane` | Siltlane | 1 |
 
 ## How to play
 
@@ -53,6 +54,7 @@ One original line per game, read from `HowToLine()`.
 | `lumenpath` | HOW Toggle shard mirrors to bend the prism beam through every crystal before your moves run out. |
 | `wardens_accord` | HOW Take one of three altar shards each round, then spend matching shards to summon spirits before the rounds end. |
 | `facetlock` | HOW Slide lattice rows and columns, which wrap, until each row shows a single hue inside the move budget. |
+| `siltlane` | HOW Switch lanes so the drifting silt passes you. |
 
 ## Difficulty
 
@@ -79,6 +81,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `lumenpath` | normal |
 | `wardens_accord` | normal |
 | `facetlock` | normal |
+| `siltlane` | normal |
 
 ## Daedalus spots
 
@@ -105,6 +108,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `lumenpath` | `prismheart_realm` | Prismheart, the refraction gallery |
 | `wardens_accord` | `prismheart_realm` | Prismheart, the Warden altar |
 | `facetlock` | `prismheart_realm` | Prismheart, the vault door |
+| `siltlane` | `spawn_overlook` | Spawn overlook, the silt course |
 
 ## Capabilities
 
@@ -132,6 +136,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `lumenpath` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 | `wardens_accord` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
 | `facetlock` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
+| `siltlane` |  |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 
 ## Leaderboard feed
 

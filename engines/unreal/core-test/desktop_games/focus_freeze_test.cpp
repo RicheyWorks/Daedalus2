@@ -3,7 +3,7 @@
 // freeze (no simulation, unchanged picture and status, source buttons ignored,
 // held input dropped) and resume cleanly on SetPaused(false). Games that own
 // their pause (OwnPause) freeze through the core instead of the driver.
-// catalog-capability: focus_freeze: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell shardring lumenpath wardens_accord facetlock
+// catalog-capability: focus_freeze: beacon_sweep twinwake dungeon driftstone football glowtrail riftwing emberstep star_shooter dodge_ball ironwake lanternwild gloam_latch reedbeat cairnwell shardring lumenpath wardens_accord facetlock siltlane
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <string>
