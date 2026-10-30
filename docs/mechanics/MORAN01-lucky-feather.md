@@ -50,3 +50,20 @@ aviaries, which ties back to G163 founder drift.
 8. Seeded runs replay exactly; another seed differs.
 9. The step cap is reported.
 10. Bad tuning is rejected.
+
+## Native C++ core (G568)
+
+Unreal runs C++, so the rules also ship as a header-only C++17 port:
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusLuckyFeatherCore.h`
+(namespace `daedalus::luckyfeather`, standard library only, no Unreal types). The Java class stays the rules
+authority.
+
+- Same splitmix hash and the same expression order as the Java core, so a seed gives the same aviary in both.
+- Parity fixture: `engines/unreal/core-test/luckyfeather_parity.txt`, 20 cases written by
+  `tools/minigames/LuckyFeatherParity.java` from the Java core.
+- `engines/unreal/core-test/luckyfeather_core_test.cpp` checks seeded simulation counts and mean steps exactly.
+  It checks the closed form, exact chain and mean steps to 1e-12 relative, plus the carriers-needed answers. It
+  also runs unit checks (neutral i/N, closed form = chain, selection, large-N limit, quest minimality, replay, step
+  cap, validation): 151 checks in total.
+- CI: `engines.yml` builds it with gcc (ASan + UBSan) and with clang.
+- Not done here (editor work, out of scope): an ADaedalusDesktopArcade cabinet or Blueprint wrapper.
