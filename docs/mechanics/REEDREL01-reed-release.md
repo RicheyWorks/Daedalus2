@@ -48,3 +48,13 @@ and lets the flock settle. This is the paradox of enrichment seen through a cras
 ## Assets
 
 None. Reuses the G504 / G142 marsh. The marsh hawk mob is still an optional Blender ask.
+
+## Native C++ core (G593)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshReedReleaseCore.h` (namespace `daedalus::marsh`)
+is a header-only C++17 port of this core, built on the G591 `DaedalusMarshReedCeilingCore.h`. It covers the shared
+seeded shocks, `Risk`, `BestSchedule`, the brute-force `Best`, the greedy `Fast` and `ReedReleaseSettings::Valid`, using
+the standard library only. The Java class stays the rules authority. `MarshCoresParityTest.reedRelease` writes golden
+vectors for 4 plans (no-noise, zero-budget and near-Hopf reed options included) to
+`engines/unreal/core-test/marsh_reed_release_parity.txt`. `marsh_reed_release_core_test.cpp` replays them in
+`.github/workflows/marsh-cores.yml`. Pattern: [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md).

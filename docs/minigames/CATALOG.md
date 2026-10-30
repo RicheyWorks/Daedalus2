@@ -197,3 +197,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `spiritkite` | Spiritkite Weave | `tools/minigames/spiritkite.py` | HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out. |
 | `shadewatch` | Shadewatch Vigil | `tools/minigames/shadewatch.py` | HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends. |
 | `glimmerloom` | Glimmerloom Ledger | `tools/minigames/glimmerloom.py` | HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target. |
+| `glowmoss` | Glowmoss Delve | `tools/minigames/glowmoss.py` | HOW Dig down the shaft one ledge at a time to gather crystals; glowmoss refills your lamp and unstable ledges drop you one row. Climb out before the light is too low to carry you back up. |

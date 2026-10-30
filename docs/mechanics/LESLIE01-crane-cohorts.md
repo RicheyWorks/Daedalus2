@@ -61,3 +61,15 @@ Default marsh: s0 0.5, s1 0.7, s2 0.85, p 0.9, Fs 0.15, Fa 0.45, 30 years.
 ## Assets
 
 None needed: reuses Mob_Sky_Crane (G142) and the G119 census board. Optional UI: cohort bars on the board.
+
+## Native C++ core (G585)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshCraneCohortsCore.h` (namespace `daedalus::marsh`)
+is a header-only C++17 port of this core. It covers the Leslie matrix, lambda (shifted power iteration and a Rayleigh
+quotient), stable ages, reproductive value, elasticities, `BestRelease`, `AdultEquivalents`, `Step`, the seeded `Project`
+and `CohortSettings::Valid`. It uses the standard library only. The Java class stays the rules authority.
+`MarshCoresParityTest.craneCohorts` writes golden vectors for 7 flocks (including a periodic and a no-adult flock), each
+with a 25-year seeded projection, to `engines/unreal/core-test/marsh_crane_cohorts_parity.txt`.
+`marsh_crane_cohorts_core_test.cpp` replays them in `.github/workflows/marsh-cores.yml`. `AdultEquivalents` copies Java's
+`(int) Math.round` wrap for flocks whose adults are worth almost nothing. Pattern:
+[NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md).
