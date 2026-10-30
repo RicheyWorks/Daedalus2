@@ -123,6 +123,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public emberkiln_core_test.cpp -o emberkiln_core_test && ./emberkiln_core_test emberkiln_parity.txt
       - name: Emberkiln core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public emberkiln_core_test.cpp -o emberkiln_core_test_clang && ./emberkiln_core_test_clang emberkiln_parity.txt
+      - name: Dyevat core (DaedalusDyevatCore.h regenerates dyevat_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public dyevat_core_test.cpp -o dyevat_core_test && ./dyevat_core_test dyevat_parity.txt
+      - name: Dyevat core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public dyevat_core_test.cpp -o dyevat_core_test_clang && ./dyevat_core_test_clang dyevat_parity.txt
       - name: G206 Census Budget cost model core (DaedalusCensusBudgetCore.h replays census_budget_parity.txt from census_budget.py; 40000/32768 KiB edges)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fno-exceptions -fno-rtti -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public census_budget_core_test.cpp -o census_budget_core_test && ./census_budget_core_test census_budget_parity.txt
       - name: G206 Census Budget cost model core, clang
