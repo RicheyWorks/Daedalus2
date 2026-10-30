@@ -266,3 +266,18 @@ CI: `channel-dash.yml`.
 python tools/streaming/channel_dash.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/channel_dash_test.py
 ```
+
+## Boom Defence (G562)
+
+`boom_defence.py` is a tower-defence-lite game over the world census. Each island sends a
+smuggler skiff up a seeded winding channel, and Boom-master Leopold picks two of up to twelve
+post sites. Each post snags the furthest-along skiff in reach once a tick. Par is the fewest
+skiffs through over every pair of sites (exhaustive, checked against an independent
+simulator). `greedy_through` shows the most-reach trap. Verdicts are `watertight`, `leaky` and
+`overrun`. Hook: `data/islands/disk-saver/boom-defence-v1.json`. Doc:
+`docs/islands/DISKSAVER-BOOM-DEFENCE.md`. CI: `boom-defence.yml`.
+
+```
+python tools/streaming/boom_defence.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/boom_defence_test.py
+```
