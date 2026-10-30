@@ -191,6 +191,20 @@ struct Game
 		return false;
 	}
 
+	/** Game.preview: what a move would do without doing it (iteration 8). False when the move is illegal. */
+	bool Preview(Move M, bool& PicksUp, bool& Lands, bool& Floods) const noexcept
+	{
+		PicksUp = Lands = Floods = false;
+		if (Over) return false;
+		const int R = Ferry.R + MoveDR(M), C = Ferry.C + MoveDC(M);
+		if (!Inside(R, C) || Flooded(R, C)) return false;
+		PicksUp = PassengerAt(R, C) >= 0;
+		Lands = Cell{ R, C } == Harbour;
+		Floods = !Lands && Flooded(R, C, Turn + 1);
+		return true;
+	}
+	bool FreshVoyage() const noexcept { return Turn == 0 && !Over; }
+
 	/** Game.demo_action: nearest reachable passenger until enough are aboard, then the harbour; wait when stranded. */
 	Move DemoAction() const noexcept
 	{

@@ -111,11 +111,14 @@ int InvariantSweep()
 				if (Legal.empty()) { std::printf("FAIL sweep: no legal move while dry (seed %u %s)\n", Seed, Diff); ++Fails; break; }
 				Pick = Pick * 1664525u + 1013904223u;
 				const Move M = Legal[(Pick >> 16) % Legal.size()];
-				const int TurnBefore = G.Turn; const Cell FerryBefore = G.Ferry;
+				const int TurnBefore = G.Turn; const Cell FerryBefore = G.Ferry; const int AboardBefore = G.Aboard;
+				bool PPick = false, PLand = false, PFlood = false;
+				if (!G.Preview(M, PPick, PLand, PFlood)) { std::printf("FAIL preview refused a legal move (seed %u %s)\n", Seed, Diff); ++Fails; break; }
 				std::string Text;
 				if (G.Step(M, Text) != Game::Act::Ok) { std::printf("FAIL sweep: legal move refused (seed %u %s)\n", Seed, Diff); ++Fails; break; }
 				++Steps;
 				bool Ok = G.Turn == TurnBefore + 1 && G.Heights == Heights && G.Aboard + static_cast<int>(G.Passengers.size()) == G.Diff->Passengers;
+				Ok = Ok && PPick == (G.Aboard == AboardBefore + 1) && PLand == (G.Ferry == G.Harbour) && PFlood == (G.Over && G.Ferry != G.Harbour);
 				Ok = Ok && std::abs(G.Ferry.R - FerryBefore.R) + std::abs(G.Ferry.C - FerryBefore.C) <= 1;
 				if (G.Over)
 				{
@@ -130,7 +133,7 @@ int InvariantSweep()
 			std::string Text;
 			if (G.Step(Move::Wait, Text) != Game::Act::GameOver) { std::printf("FAIL sweep: finished voyage accepted a move\n"); ++Fails; }
 		}
-	if (!Fails) std::printf("sweep: 600 voyages, %d random legal moves, invariants held\n", Steps);
+	if (!Fails) std::printf("sweep: 600 voyages, %d random legal moves, invariants held, every preview matched its move\n", Steps);
 	return Fails;
 }
 

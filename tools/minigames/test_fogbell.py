@@ -93,6 +93,34 @@ if __name__ == "__main__":
     unittest.main()
 
 
+class Screen(unittest.TestCase):
+    """Iterations 7-8: tutorial on the first turn, preview matches the real move."""
+    def test_tutorial_only_on_the_first_turn(self):
+        g = gm.start(2)
+        self.assertIn("STEER  arrows", g.render())
+        g.step("wait")
+        self.assertNotIn("STEER  arrows", g.render())
+
+    def test_preview_matches_the_real_move(self):
+        for s in range(30):
+            g = gm.start(s, "hard")
+            while not g.over:
+                a = g.demo_action()
+                legal, picks, lands, floods = g.preview(a)
+                self.assertTrue(legal)
+                aboard, state = g.aboard, g.to_state()
+                self.assertEqual(g.to_state(), state, "preview must not change the game")
+                res = g.step(a)
+                self.assertEqual(g.aboard - aboard == 1, picks)
+                self.assertEqual("harbour" in res, lands)
+                self.assertEqual("takes the ferry" in res, floods)
+
+    def test_preview_refuses_illegal(self):
+        g = gm.start(2)
+        self.assertEqual(g.preview("n"), (False, False, False, False))
+        self.assertEqual(g.preview("x"), (False, False, False, False))
+
+
 class Saves(unittest.TestCase):
     """Iteration 5: from_state refuses saves that break the rules."""
     def bad(self, **fields):
