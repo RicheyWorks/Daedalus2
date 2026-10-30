@@ -184,3 +184,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Tide Lock (G554, disk-saver)
 
 `tide_lock.py` is a lock-scheduling puzzle over the world census: every island sends a boat as long as its G206 RAM cost, arriving at seeded minutes; one chamber (the G206 RAM budget by default) lifts boats in arrival order, one fixed-length cycle at a time, and the player groups them (`--plan 2,1,3`) to minimise total waiting. An exact memoised search (checked against every grouping) gives par, greedy fill is shown as the trap, and `--auto` plays par. Verdict smooth/slow/jammed. NPC Lockkeeper Wilhelmina; hook `data/islands/disk-saver/tide-lock-v1.json`; doc `docs/islands/DISKSAVER-TIDE-LOCK.md`.
+
+## Watchfires (G555, disk-saver)
+
+`watchfires.py` is a graph puzzle between islands: census islands form a seeded, connected ferry chart, a watchfire lights its island and every neighbour, and the player lights the whole chart with the fewest fires (minimum dominating set). Exact branch-and-bound par (checked against every set), greedy shown as the trap, `--auto` plays par. Verdict blazing/smoky/dark. NPC Firekeeper Leofric; hook `data/islands/disk-saver/watchfires-v1.json`; doc `docs/islands/DISKSAVER-WATCHFIRES.md`.
