@@ -401,6 +401,39 @@ def shardring():
     out.append(npc("Mob_Shardring_ShrineWarden", "C8B48A", "5A4A3A", [K.cyl("Bell", "z", 0.06, 0.04, 0.08, (-0.37, 0, 0.8), 4, 8)], [("shrine bell", GOLD, 0.3, 0.9)], "Shrine Warden"))
     return out
 
+
+# ================================================================ star_mesh (art-master-flex, READY 59021)
+@game("star_mesh")
+def star_mesh():
+    G = "Prop_StarMesh_"; out = []
+    top = [K.cyl("OrreryPost", "z", 0.015, 0.015, 0.14, (0, 0.05, 2.13), 5, 6), ball("OrreryGlobe", (0, 0.05, 2.27), 0.09, 6, 10),
+           K.box("OrreryRing", (0.32, 0.015, 0.015), (0, 0.05, 2.27), 5, bevel=False, rot=(0, 20, 0))]
+    out.append(cabinet("Prop_Arcade_Cab_StarMeshOrrery", "6A4A28", "B08D3C", "BFD9FF", top, [("brass", "B08D3C", 0.35, 0.9), ("orrery glass (emissive)", "A6C8FF", 0.1, 0.0, True)], "brass/glass, orrery topper"))
+    a = G + "StarChartTable"; P = [K.cyl("Top", "z", 0.7, 0.7, 0.05, (0, 0, 0.775), 0, 24), K.cyl("Leg", "z", 0.08, 0.1, 0.7, (0, 0, 0.4), 0, 10), K.cyl("Foot", "z", 0.35, 0.4, 0.05, (0, 0, 0.025), 0, 12)]
+    for i in range(-3, 4):
+        L = 2 * math.sqrt(max(0.0, 0.62 ** 2 - (i * 0.17) ** 2))
+        P += [K.box("GridX%d" % i, (L, 0.008, 0.004), (0, i * 0.17, 0.802), 1, bevel=False), K.box("GridY%d" % i, (0.008, L, 0.004), (i * 0.17, 0, 0.802), 1, bevel=False)]
+    out.append(simple(a, P, [("wood", WOOD, 0.7), ("inlaid grid (brass)", "C8A65A", 0.35, 0.8)], [K.socket("Floor", (0, 0, 0)), K.socket("ChartCentre", (0, 0, 0.805))],
+                      "1.4 m round star chart table, inlaid 0.17 m grid", (1.4, 1.4, 0.8), (0, 0, 0.4)))
+    for st, hx, glow in (("Lit", "FFF2B3", True), ("Unlit", "4A5468", False)):
+        a = G + "StarPeg_" + st; P = [K.cyl("Pin", "z", 0.006, 0.006, 0.03, (0, 0, 0.015), 1, 6), ball("Star", (0, 0, 0.04), 0.015, 0, 8)]
+        out.append(simple(a, P, [("star" + (" (emissive)" if glow else ""), hx, 0.2, 0.0, glow), ("pin brass", "B08D3C", 0.35, 0.9)], [K.socket("Base", (0, 0, 0)), K.socket("Thread", (0, 0, 0.04))],
+                          "5.5 cm star peg, %s" % st.lower(), (0.03, 0.03, 0.055), (0, 0, 0.0275)))
+    a = G + "ChartThread"; out.append(simple(a, [K.cyl("Thread", "x", 0.002, 0.002, 1.0, (0.5, 0, 0.002), 0, 6)], [("silver thread", "D8DCE4", 0.2, 1.0)],
+                                             [K.socket("Start", (0, 0, 0.002)), K.socket("End", (1.0, 0, 0.002))], "1 m taut silver thread (scale X to edge length; pivot at Start)", (1.0, 0.01, 0.01), (0.5, 0, 0.005)))
+    a = G + "SightingGlass"; P = [K.cyl("Tube", "y", 0.022, 0.03, 0.26, (0, 0, 0.05), 0, 10), K.cyl("Eyepiece", "y", 0.016, 0.016, 0.04, (0, 0.15, 0.05), 0, 8),
+                                  K.cyl("Objective", "y", 0.032, 0.032, 0.01, (0, -0.135, 0.05), 1, 10), K.box("Grip", (0.025, 0.04, 0.05), (0, 0.04, 0.0), 2)]
+    out.append(simple(a, P, [("brass", "B08D3C", 0.35, 0.9), ("lens glass", "A6C8FF", 0.05), ("leather grip", "5A3A22", 0.85)], [K.socket("Grip", (0, 0.04, 0.0)), K.socket("Eye", (0, 0.17, 0.05)), K.socket("Aim", (0, -0.14, 0.05))],
+                      "0.3 m handheld brass sighting scope (aims -Y)", (0.07, 0.31, 0.11), (0, 0, 0.03)))
+    a = G + "FlipTallyBoard"; P = [K.box("Frame", (0.5, 0.04, 0.36), (0, 0, 0.18), 0), K.box("Slate", (0.44, 0.01, 0.3), (0, -0.022, 0.18), 1, bevel=False)]
+    P += [K.box("Tally%d" % i, (0.008, 0.004, 0.07), (-0.17 + 0.03 * i, -0.028, 0.25), 2, bevel=False) for i in range(4)] + [K.box("TallyX", (0.14, 0.004, 0.008), (-0.125, -0.029, 0.25), 2, bevel=False, rot=(0, -25, 0))]
+    out.append(simple(a, P, [("wood frame", WOOD, 0.7), ("slate", "2A2E30", 0.9), ("chalk", "E8E8E0", 0.95)], [K.socket("Floor", (0, 0, 0)), K.socket("Flips", (-0.12, -0.03, 0.25)), K.socket("Answer", (0.1, -0.03, 0.12))],
+                      "0.5 m slate tally board", (0.5, 0.04, 0.36), (0, 0, 0.18)))
+    coat = [K.box("CoatTail", (0.44, 0.28, 0.4), (0, 0.0, 0.72), 0), K.cyl("Hat", "z", 0.15, 0.12, 0.08, (0, -0.01, 1.78), 1, 10)]
+    out.append(npc("Mob_StarMesh_NavigatorWren", "4A3A2A", "2A3A4A", coat + [K.cyl("Scope", "y", 0.02, 0.025, 0.2, (-0.37, -0.05, 0.86), 4, 8)], [("brass scope", "B08D3C", 0.35, 0.9)], "Navigator Wren, long coat"))
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)
