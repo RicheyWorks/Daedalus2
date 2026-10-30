@@ -164,3 +164,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Last Crate (G549, disk-saver)
 
 `last_crate.py` is a push-your-luck game over the world census: every island becomes a crate weighing its G206 RAM cost, a seed shuffles them face down, and you `load` or `sail` each turn; go over the hold (the G206 RAM budget by default) and the load goes overboard. Outcome full/light/overboard against the best stop for that stack. An exact advisor (fractions, using only what a player can know) gives the bust chance and load-vs-sail value, and `--auto` plays it. NPC Dockhand Ambrose; hook `data/islands/disk-saver/last-crate-v1.json`; doc `docs/islands/DISKSAVER-LAST-CRATE.md`.
+
+## Quay Duel (G550, disk-saver)
+
+`quay_duel.py` is a two-captain draft duel over the world census: every island becomes a crate worth its G206 RAM cost, a seed lines them up on the quay, and the captains take turns hauling one crate from either end (L/R); more cargo wins. You play Wharfinger Casimir, who plays perfectly by exact interval DP (checked against plain minimax). Each turn shows the best move and the margin a weaker move gave away. Outcome won/tied/lost plus a perfect flag. NPC Wharfinger Casimir; hook `data/islands/disk-saver/quay-duel-v1.json`; doc `docs/islands/DISKSAVER-QUAY-DUEL.md`.
