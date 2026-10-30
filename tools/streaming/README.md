@@ -345,3 +345,7 @@ python -B -m unittest tools/streaming/tram_shunt_test.py
 ### G206 cost model in C++17 (`census_budget_parity.py`, G571)
 
 `DaedalusCensusBudgetCore.h` is a header-only, engine-free C++17 port of the `census_budget.py` cost model and its 40000 KiB RAM / 32768 KiB disk beacon checks. `census_budget_parity.py --write|--check` produces its golden file `engines/unreal/core-test/census_budget_parity.txt` from this tool. See `docs/islands/DISKSAVER-CENSUS-BUDGET-CPP.md`.
+
+### C++17 game cores (`disksaver_cpp_parity.py`, G573)
+
+`DaedalusDiskSaver<Game>Core.h` are header-only, engine-free C++17 ports of the pure logic of Manifest Match, Twin Pilots, Quayside Shove and Sack Chute (par solver, move validation, greedy, verdict). Layouts stay in Python. `disksaver_cpp_parity.py --write|--check` writes their golden files `engines/unreal/core-test/disksaver_<game>_parity.txt` from these tools. See `docs/islands/DISKSAVER-CPP-CORES.md`.
