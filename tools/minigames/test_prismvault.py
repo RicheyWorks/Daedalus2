@@ -1,4 +1,5 @@
 """Tests for tools/minigames/prismvault.py (Prismvault Weigh)."""
+import json
 import pathlib
 import sys
 import unittest
@@ -39,6 +40,27 @@ class Rules(unittest.TestCase):
             for s in range(40):
                 g = gm.demo(s, d)
                 self.assertTrue(g.won, (d, s))
+
+    def test_load_replays_weighings(self):
+        g = gm.start(2)
+        g.step(g.demo_action())
+        st = g.to_state()
+        self.assertNotIn("hollow", st)
+        flip = {"<": ">", ">": "=", "=": "<"}
+        for breakit in (lambda d: d["log"][0].__setitem__(2, flip[d["log"][0][2]]), lambda d: d.update(log=[]),
+                        lambda d: d.update(candidates=[0]), lambda d: d.update(weighings=99),
+                        lambda d: d["log"][0].__setitem__(1, [])):
+            rejected(self, gm.Game, st, breakit, "rules")
+        rejected(self, gm.Game, st, lambda d: d.update(score=250), "does not match")
+        old = dict(st, hollow=(g.hollow + 1) % g.cfg["shards"])
+        self.assertEqual(gm.Game.from_state(old).hollow, g.hollow)
+
+
+def rejected(test, game_cls, state, breakit, text):
+    bad = json.loads(json.dumps(state))
+    breakit(bad)
+    with test.assertRaisesRegex(ValueError, text):
+        game_cls.from_state(bad)
 
 
 if __name__ == "__main__":

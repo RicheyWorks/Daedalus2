@@ -103,6 +103,10 @@ class Game(pc.PrismGame):
         for a, b, w in self.lanes:
             self.adj[a][b] = self.adj[b][a] = w
 
+    def rescore(self):
+        """Lanterns gathered; a win adds the unused wind."""
+        return self.lanterns() + (self.wind if self.won else 0)
+
     def lanterns(self):
         return sum(self.values[i] for i in self.gathered)
 

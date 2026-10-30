@@ -76,6 +76,23 @@ class Game(pc.PrismGame):
         else:
             self._deal()
 
+    def check_rules(self):
+        cfg = self.cfg
+        need = cfg["rounds"] // 2 + 1
+        ok = (pc.is_count(self.wins) and pc.is_count(self.losses) and self.wins <= need and self.losses <= need
+              and self.round == self.wins + self.losses + (0 if self.over else 1)
+              and isinstance(self.cairns, list) and len(self.cairns) == cfg["cairns"]
+              and all(pc.is_count(h) and h <= cfg["max_height"] for h in self.cairns)
+              and (self.over or any(self.cairns))
+              and self.over == (self.wins >= need or self.losses >= need)
+              and self.won == (self.wins >= need) and isinstance(self.log, list))
+        if not ok:
+            raise ValueError("prismcairn save does not satisfy the rules")
+
+    def rescore(self):
+        """50 per round won, plus 5 per round left on a match win (Game._round_over)."""
+        return 50 * self.wins + (5 * (self.cfg["rounds"] - self.round) if self.won else 0)
+
     def act(self, action):
         i, t = action
         if not 0 <= i < len(self.cairns) or not 1 <= t <= min(self.cfg["take_max"], self.cairns[i]):

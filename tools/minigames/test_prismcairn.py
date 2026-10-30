@@ -1,4 +1,5 @@
 """Tests for tools/minigames/prismcairn.py (Prismcairn Duel)."""
+import json
 import pathlib
 import sys
 import unittest
@@ -43,6 +44,23 @@ class Rules(unittest.TestCase):
             g.step((4, 1))
         self.assertTrue(g.over and not g.won)
         self.assertEqual(g.losses, 2)
+
+    def test_load_rule_check(self):
+        g = gm.start(2)
+        g.step(g.demo_action())
+        st = g.to_state()
+        for breakit in (lambda d: d["cairns"].__setitem__(0, 99), lambda d: d.update(wins=5),
+                        lambda d: d.update(round=3), lambda d: d.update(cairns=[0] * len(d["cairns"])),
+                        lambda d: d.update(won=True)):
+            rejected(self, gm.Game, st, breakit, "rules")
+        rejected(self, gm.Game, st, lambda d: d.update(score=50), "does not match")
+
+
+def rejected(test, game_cls, state, breakit, text):
+    bad = json.loads(json.dumps(state))
+    breakit(bad)
+    with test.assertRaisesRegex(ValueError, text):
+        game_cls.from_state(bad)
 
 
 if __name__ == "__main__":

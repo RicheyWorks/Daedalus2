@@ -74,18 +74,61 @@ class PrismGame:
 
     @classmethod
     def from_state(cls, state):
-        if state.get("v") != 1 or state.get("id") != cls.GAME_ID:
+        """Load a save, trusting nothing: shape, RNG state, game rules and score are all checked (ValueError)."""
+        if not isinstance(state, dict) or state.get("v") != 1 or state.get("id") != cls.GAME_ID:
             raise ValueError(f"not a {cls.GAME_ID} v1 save")
+        if state.get("difficulty") not in cls.DIFFICULTY or not is_count(state.get("seed")):
+            raise ValueError(f"{cls.GAME_ID} save has a bad seed or difficulty")
+        missing = [k for k in ("score", "over", "won", "rng") + tuple(cls.FIELDS) if k not in state]
+        if missing:
+            raise ValueError(f"{cls.GAME_ID} save is missing {', '.join(missing)}")
+        if not is_count(state["score"]) or not isinstance(state["over"], bool) or not isinstance(state["won"], bool):
+            raise ValueError(f"{cls.GAME_ID} save score must be a whole number >= 0 and over/won true or false")
+        rng_state = check_rng_state(state["rng"])
         g = cls(state["seed"], state["difficulty"])
         for k in ("score", "over", "won") + tuple(cls.FIELDS):
             setattr(g, k, copy.deepcopy(state[k]))
-        g.restore()
-        v, internal, gauss = state["rng"]
-        g.rng.setstate((v, tuple(internal), gauss))
+        try:
+            g.restore()
+            g.check_rules()
+            expected = g.rescore()
+        except (TypeError, KeyError, IndexError, AttributeError) as e:
+            raise ValueError(f"{cls.GAME_ID} save does not satisfy the rules ({type(e).__name__})") from None
+        if expected is not None and expected != g.score:
+            raise ValueError(f"{cls.GAME_ID} save score {g.score} does not match its state ({expected})")
+        g.rng.setstate(rng_state)
         return g
+
+    def check_rules(self):
+        """Hook: raise ValueError when loaded fields break the game's rules (ranges, sizes, over/won)."""
+
+    def rescore(self):
+        """Hook: the score the loaded state implies, or None when it cannot be derived from the state alone."""
+        return None
 
     def restore(self):
         """Hook: rebuild derived (non-saved) fields after from_state."""
+
+
+MT_WORDS = 624  # Mersenne Twister state words; random.getstate() adds the position as word 625
+RNG_VERSION = 3
+
+
+def is_count(x):
+    """A whole number >= 0 (bool is not a count)."""
+    return isinstance(x, int) and not isinstance(x, bool) and x >= 0
+
+
+def check_rng_state(rng):
+    """Validate a saved [version, internal, gauss] RNG state before setstate (ValueError); returns the setstate tuple."""
+    ok = (isinstance(rng, (list, tuple)) and len(rng) == 3 and rng[0] == RNG_VERSION
+          and isinstance(rng[1], (list, tuple)) and len(rng[1]) == MT_WORDS + 1
+          and all(is_count(w) and w < 2 ** 32 for w in rng[1][:MT_WORDS])
+          and is_count(rng[1][MT_WORDS]) and rng[1][MT_WORDS] <= MT_WORDS
+          and (rng[2] is None or isinstance(rng[2], float)))
+    if not ok:
+        raise ValueError("save RNG state is not a valid Mersenne Twister state")
+    return rng[0], tuple(rng[1]), rng[2]
 
 
 def demo(cls, seed=0, difficulty=None, out=None, limit=10000):
