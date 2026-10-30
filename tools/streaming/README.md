@@ -160,3 +160,7 @@ sublevels) belongs to unreal-team / codex-play-guard (sole Unreal writer); the p
 ## Census Riddles (G546, disk-saver)
 
 `census_riddles.py` is a playable harbour quiz: it reads a world census and the G206 budget config (read-only), draws a seeded set of riddles (islands charted, empty islands, heaviest island, a world's RAM/disk need, how many islands fit the hold, most islands resident at once) whose answers come from the G206 cost model, and grades an answer file: shipshape/adrift/aground. The same seed gives the same quiz everywhere. NPC Tide-clerk Leocadia; hook `data/islands/disk-saver/census-riddles-v1.json`; doc `docs/islands/DISKSAVER-CENSUS-RIDDLES.md`.
+
+## Last Crate (G549, disk-saver)
+
+`last_crate.py` is a push-your-luck game over the world census: every island becomes a crate weighing its G206 RAM cost, a seed shuffles them face down, and you `load` or `sail` each turn; go over the hold (the G206 RAM budget by default) and the load goes overboard. Outcome full/light/overboard against the best stop for that stack. An exact advisor (fractions, using only what a player can know) gives the bust chance and load-vs-sail value, and `--auto` plays it. NPC Dockhand Ambrose; hook `data/islands/disk-saver/last-crate-v1.json`; doc `docs/islands/DISKSAVER-LAST-CRATE.md`.
