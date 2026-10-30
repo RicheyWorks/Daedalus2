@@ -58,6 +58,23 @@ class Game(pc.PrismGame):
             self.birds.append([r, c])
         self.turns, self.settled = self.cfg["turns"], 0
 
+    @classmethod
+    def from_state(cls, state):
+        """A save is checked against the rules before it is trusted (iteration 5)."""
+        g = super().from_state(state)
+        s = g.cfg["size"]
+        in_yard = lambda cell: isinstance(cell, list) and len(cell) == 2 and all(isinstance(v, int) and 0 <= v < s for v in cell)  # noqa: E731
+        ok = (in_yard(g.whistler) and all(in_yard(b) for b in g.birds)
+              and len({tuple(b) for b in g.birds}) == len(g.birds)
+              and g.whistler not in g.birds
+              and all(not g.in_roost(*b) for b in g.birds)
+              and isinstance(g.turns, int) and 0 <= g.turns <= g.cfg["turns"]
+              and isinstance(g.settled, int) and g.settled + len(g.birds) == g.cfg["birds"]
+              and g.over == (not g.birds or g.turns <= 0) and g.won == (not g.birds))
+        if not ok:
+            raise ValueError("roostcall save does not satisfy the rules")
+        return g
+
     def size(self):
         return self.cfg["size"]
 
@@ -157,6 +174,29 @@ class Game(pc.PrismGame):
         """Manhattan distance from (r, c) to the nearest roost cell."""
         s = self.size()
         return max(0, (s - ROOST) - r) + max(0, (s - ROOST) - c)
+
+    def preview(self, action):
+        """Which birds would fly and where if the whistler made `action` now (iteration 8); None if illegal."""
+        dr, dc = MOVES.get(action, (None, None))
+        if dr is None:
+            return None
+        s = self.size()
+        w = [self.whistler[0] + dr, self.whistler[1] + dc]
+        if not (0 <= w[0] < s and 0 <= w[1] < s) or w in self.birds:
+            return None
+        flights = {}
+        birds = [list(b) for b in self.birds]
+        original = self.birds
+        try:
+            self.birds = birds
+            for i in range(len(birds)):
+                to = self.flee_step(i, w)
+                if to is not None:
+                    flights[i] = to
+                    birds[i] = to
+        finally:
+            self.birds = original
+        return flights
 
     def _walk_distances(self):
         """Breadth-first walking distance from the whistler to every cell, avoiding birds (None = unreachable)."""

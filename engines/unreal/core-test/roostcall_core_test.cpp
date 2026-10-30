@@ -79,6 +79,20 @@ int UnitChecks()
 }
 
 /** Iteration 2: 600 random yards walked with random legal moves; every state must satisfy the rules' invariants. */
+/** `r,c;r,c` → cells; "-" → none. */
+std::vector<Cell> ParseCells(const std::string& Text)
+{
+	std::vector<Cell> Out;
+	if (Text == "-") return Out;
+	std::stringstream S(Text); std::string Item;
+	while (std::getline(S, Item, ';'))
+	{
+		const size_t Comma = Item.find(',');
+		Out.push_back({ std::stoi(Item.substr(0, Comma)), std::stoi(Item.substr(Comma + 1)) });
+	}
+	return Out;
+}
+
 int InvariantSweep()
 {
 	int Fails = 0, Steps = 0;
@@ -101,9 +115,16 @@ int InvariantSweep()
 				Pick = Pick * 1664525u + 1013904223u;
 				const Move M = Legal[(Pick >> 16) % Legal.size()];
 				const int TurnsBefore = G.Turns, SettledBefore = G.Settled; const size_t BirdsBefore = G.Birds.size();
+				Game::Flight Flights[64]; int FlightCount = 0;   // iteration 8: the preview must be the move
+				if (!G.Preview(M, Flights, FlightCount)) { std::printf("FAIL sweep: preview refused a legal move (seed %u %s)\n", Seed, Diff); ++Fails; break; }
+				std::vector<Cell> Expected = G.Birds;
+				for (int F = 0; F < FlightCount; ++F) Expected[static_cast<size_t>(Flights[F].Bird)] = Flights[F].To;
 				int Flew = 0, Perched = 0; std::string Text;
 				if (G.Step(M, Flew, Perched, Text) != Game::Act::Ok) { std::printf("FAIL sweep: legal move refused (seed %u %s)\n", Seed, Diff); ++Fails; break; }
 				++Steps;
+				bool PreviewOk = Flew == FlightCount;
+				for (const Cell& E : Expected) PreviewOk = PreviewOk && (G.InRoost(E) || G.BirdAt(E) >= 0);
+				if (!PreviewOk) { std::printf("FAIL sweep: preview differed from the move (seed %u %s)\n", Seed, Diff); ++Fails; break; }
 				bool Ok = G.Turns == TurnsBefore - 1 && G.Settled == SettledBefore + Perched && G.Birds.size() + static_cast<size_t>(Perched) == BirdsBefore
 				          && G.Settled + static_cast<int>(G.Birds.size()) == G.Diff->Birds && Flew >= Perched && G.BirdAt(G.Whistler) < 0;
 				for (size_t A = 0; A < G.Birds.size() && Ok; ++A)
@@ -150,6 +171,25 @@ int main(int Argc, char** Argv)
 			++Turn;
 			const std::string Got = MoveLine(Turn, M, G, Result);
 			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL s=%u %s turn %d\n  want %s\n  got  %s\n", Seed, Diff.c_str(), Turn, Line.c_str(), Got.c_str()); ++Fails; Skip = true; }
+		}
+		else if (Line.rfind("vector ", 0) == 0)   // iteration 4: hand-set corner cases, scripted move + demo pick
+		{
+			++Games; Skip = false; Turn = 0;
+			G = Yard(std::stoi(Field(Line, "size")), ParseCells(Field(Line, "whistler")).front(), ParseCells(Field(Line, "birds")), std::stoi(Field(Line, "turns")));
+			static Difficulty VectorDiff; VectorDiff = *G.Diff; VectorDiff.Birds = std::stoi(Field(Line, "total")); G.Diff = &VectorDiff;
+			G.Settled = std::stoi(Field(Line, "settled"));
+		}
+		else if (Line.rfind("step ", 0) == 0)
+		{
+			if (Skip) continue;
+			Move M = Move::Wait, Demo = Move::Wait;
+			if (!MoveFromName(Field(Line, "act"), M) || !MoveFromName(Field(Line, "demo"), Demo)) { std::printf("FAIL bad step line: %s\n", Line.c_str()); ++Fails; Skip = true; continue; }
+			if (G.DemoAction() != Demo) { std::printf("FAIL vector demo: want %s got %s\n  %s\n", MoveName(Demo), MoveName(G.DemoAction()), Line.c_str()); ++Fails; }
+			int Flew = 0, Perched = 0; std::string Result;
+			const Game::Act R = G.Step(M, Flew, Perched, Result);
+			const std::string Tail = MoveLine(0, M, G, Result);
+			const std::string Got = "step act=" + std::string(MoveName(M)) + " demo=" + MoveName(Demo) + Tail.substr(Tail.find(" whistler="));
+			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL vector step\n  want %s\n  got  %s\n", Line.c_str(), Got.c_str()); ++Fails; Skip = true; }
 		}
 		else if (Line.rfind("end  ", 0) == 0)
 		{
