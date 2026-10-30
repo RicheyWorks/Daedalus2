@@ -296,3 +296,18 @@ win-what-you-can trap. Verdicts are `shrewd`, `fair` and `fleeced`. Hook:
 python tools/streaming/salvage_sale.py census.json --seed 7 --auto
 python -B -m unittest tools/streaming/salvage_sale_test.py
 ```
+
+## Rope Run (G564)
+
+`rope_run.py` is a path-drawing puzzle over the world census. On a seeded 5x6 quay, Ropewalker
+Theodora lays one rope from the start bollard to the dock post without crossing itself or a
+crate. Island cleats are worth 3 to 5 grip and plain rings 1. Par is the best grip over every
+simple path (exact search, checked against an independent recursive search). `greedy_grip`
+shows the best-neighbour trap. Verdicts are `taut`, `slack` and `loose`. Hook:
+`data/islands/disk-saver/rope-run-v1.json`. Doc: `docs/islands/DISKSAVER-ROPE-RUN.md`.
+CI: `rope-run.yml`.
+
+```
+python tools/streaming/rope_run.py census.json --seed 7 --auto
+python -B -m unittest tools/streaming/rope_run_test.py
+```
