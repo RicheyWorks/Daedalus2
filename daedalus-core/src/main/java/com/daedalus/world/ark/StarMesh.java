@@ -99,7 +99,34 @@ public final class StarMesh {
      * A built mesh: counter-clockwise triangles (the order of {@link #triangulate}), the hull counter-clockwise
      * from the lowest-x (then lowest-y) star, and the number of Lawson flips the build made.
      */
-    public record Mesh(int[][] triangles, int[] hull, int flips) { }
+    public record Mesh(int[][] triangles, int[] hull, int flips) {
+
+        /** Copies in, so a mesh never shares arrays with its builder. */
+        public Mesh {
+            triangles = copy(triangles);
+            hull = hull.clone();
+        }
+
+        /** A copy of the triangles; changing it does not change the mesh. */
+        @Override
+        public int[][] triangles() {
+            return copy(triangles);
+        }
+
+        /** A copy of the hull; changing it does not change the mesh. */
+        @Override
+        public int[] hull() {
+            return hull.clone();
+        }
+
+        private static int[][] copy(int[][] rows) {
+            int[][] out = new int[rows.length][];
+            for (int i = 0; i < rows.length; i++) {
+                out[i] = rows[i].clone();
+            }
+            return out;
+        }
+    }
 
     private static long key(int a, int b) {
         return (long) a << 32 | b;
