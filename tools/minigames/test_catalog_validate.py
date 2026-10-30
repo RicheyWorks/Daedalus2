@@ -75,6 +75,22 @@ class Validate(unittest.TestCase):
         cat = json.loads(cv.CATALOG.read_text(encoding="utf-8"))
         self.assertEqual(cv.validate(cat, cv.slot_ids(cv.SLOTS_HDR.read_text(encoding="utf-8"))), [])
 
+    def test_every_entry_has_required_fields(self):
+        """Score hook, how-to, access marks, difficulty, and placement are present on every cabinet."""
+        cat = json.loads(cv.CATALOG.read_text(encoding="utf-8"))
+        self.assertGreaterEqual(len(cat["games"]), 1)
+        for g in cat["games"]:
+            gid = g["id"]
+            caps = g.get("capabilities") or []
+            self.assertTrue((g.get("how_to_play") or "").strip(), gid)
+            self.assertTrue(g.get("difficulty"), gid)
+            self.assertTrue((g.get("default_difficulty") or "").strip(), gid)
+            self.assertIn("scoreboard", caps, gid)
+            self.assertIn("key_hint", caps, gid)
+            self.assertIn("contrast_mark", caps, gid)
+            self.assertTrue((g.get("daedalus_realm") or "").strip(), gid)
+            self.assertTrue((g.get("daedalus_spot") or "").strip(), gid)
+
 
 class Identity(unittest.TestCase):
     def cat(self, games=(), python=(), java=()):

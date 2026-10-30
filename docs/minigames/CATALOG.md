@@ -140,10 +140,10 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `gloam_latch` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 | `reedbeat` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
 | `cairnwell` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
-| `shardring` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
-| `lumenpath` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
-| `wardens_accord` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
-| `facetlock` | yes |  | yes | yes |  |  | yes | yes |  |  | yes | yes | yes | yes |
+| `shardring` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `lumenpath` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `wardens_accord` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `facetlock` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `prismcairn` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `prismvault` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `siltlane` | yes |  |  | yes |  |  | yes | yes | yes | yes | yes | yes | yes |  |
