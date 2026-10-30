@@ -550,3 +550,19 @@ move t=14 act=s ferry=6,8 tide=4 aboard=3 passengers=2,8;4,7 score=0 over=0 won=
 move t=15 act=s ferry=7,8 tide=5 aboard=3 passengers=2,8;4,7 score=0 over=0 won=0 res=s: open water, tide 5
 move t=16 act=s ferry=8,8 tide=5 aboard=3 passengers=2,8;4,7 score=52 over=1 won=0 res=s: harbour with 3 aboard, too few lanterns
 end  score=52 won=0 aboard=3 turns=16
+vector route_around_flooding_cell size=4 heights=3133|3333|3333|3333 ferry=0,0 turn=2 aboard=0 need=1 passengers=0,3
+step act=s demo=s ferry=1,0 tide=1 aboard=0 passengers=0,3 score=0 over=0 won=0 res=s: open water, tide 1
+vector wait_on_dry_ground size=4 heights=3333|3333|3333|3333 ferry=1,1 turn=2 aboard=0 need=1 passengers=-
+step act=wait demo=e ferry=1,1 tide=1 aboard=0 passengers=- score=0 over=0 won=0 res=wait: open water, tide 1
+vector tide_takes_the_ferry size=3 heights=313|333|333 ferry=0,1 turn=2 aboard=0 need=1 passengers=-
+step act=wait demo=e ferry=0,1 tide=1 aboard=0 passengers=- score=0 over=1 won=0 res=wait: the tide takes the ferry
+vector harbour_with_enough size=2 heights=33|33 ferry=0,1 turn=1 aboard=1 need=1 passengers=-
+step act=s demo=s ferry=1,1 tide=0 aboard=1 passengers=- score=18 over=1 won=1 res=s: harbour with 1 aboard, the bell rings clear
+vector harbour_too_few size=2 heights=33|33 ferry=1,0 turn=1 aboard=0 need=1 passengers=0,1
+step act=e demo=n ferry=1,1 tide=0 aboard=0 passengers=0,1 score=8 over=1 won=0 res=e: harbour with 0 aboard, too few lanterns
+vector pick_up_on_the_way size=3 heights=333|333|333 ferry=0,0 turn=0 aboard=0 need=2 passengers=0,1;2,2
+step act=e demo=e ferry=0,1 tide=0 aboard=1 passengers=2,2 score=0 over=0 won=0 res=e: lantern aboard, tide 0
+vector stranded_waits size=2 heights=31|13 ferry=0,0 turn=3 aboard=0 need=1 passengers=-
+step act=wait demo=wait ferry=0,0 tide=1 aboard=0 passengers=- score=0 over=0 won=0 res=wait: open water, tide 1
+vector enough_aboard_heads_home size=4 heights=3333|3333|3333|3333 ferry=1,1 turn=0 aboard=1 need=1 passengers=0,3
+step act=e demo=e ferry=1,2 tide=0 aboard=1 passengers=0,3 score=0 over=0 won=0 res=e: open water, tide 0

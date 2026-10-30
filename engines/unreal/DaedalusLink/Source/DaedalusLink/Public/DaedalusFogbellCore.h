@@ -16,6 +16,7 @@
 #include <array>
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace daedalus { namespace fogbell {
@@ -141,27 +142,34 @@ struct Game
 	 * first move to take. A cell may be entered at step k only if it is still above the tide at turn + k. False when
 	 * no goal is reachable.
 	 */
-	bool FirstStepTo(const std::vector<Cell>& Goals, Move& First) const
+	bool FirstStepTo(const std::vector<Cell>& Goals, Move& First) const noexcept
 	{
-		const int S = Size();
-		std::array<std::array<int, MaxSize>, MaxSize> Via{};   // 0 unvisited, 1 start, 2 + move index otherwise
+		// Visited/parent tables and two frontier buffers are fixed arrays (MaxSize^2 cells), so the search never
+		// allocates (iteration 6). Via: 0 unvisited, 1 the ferry, 2 + move index for the move that reached a cell.
+		std::array<std::array<std::uint8_t, MaxSize>, MaxSize> Via{};
 		std::array<std::array<Cell, MaxSize>, MaxSize> Prev{};
-		for (auto& Row : Via) Row.fill(0);
+		std::array<Cell, MaxSize * MaxSize> FrontierA{}, FrontierB{};
+		Cell* Frontier = FrontierA.data(); Cell* Next = FrontierB.data();
+		int FrontierCount = 1, NextCount = 0;
+		Frontier[0] = Ferry;
 		Via[static_cast<size_t>(Ferry.R)][static_cast<size_t>(Ferry.C)] = 1;
-		std::vector<Cell> Frontier{ Ferry }, Next;
-		for (int Stepk = 1; !Frontier.empty(); ++Stepk)
+		for (int Stepk = 1; FrontierCount > 0; ++Stepk)
 		{
-			Next.clear();
-			for (const Cell& From : Frontier)
+			NextCount = 0;
+			for (int F = 0; F < FrontierCount; ++F)
+			{
+				const Cell From = Frontier[F];
 				for (int I = 0; I < 4; ++I)
 				{
 					const Move M = static_cast<Move>(I);
 					const int R = From.R + MoveDR(M), C = From.C + MoveDC(M);
 					if (!Inside(R, C) || Via[static_cast<size_t>(R)][static_cast<size_t>(C)] != 0) continue;
 					if (Flooded(R, C, Turn + Stepk)) continue;
-					Via[static_cast<size_t>(R)][static_cast<size_t>(C)] = 2 + I;
+					Via[static_cast<size_t>(R)][static_cast<size_t>(C)] = static_cast<std::uint8_t>(2 + I);
 					Prev[static_cast<size_t>(R)][static_cast<size_t>(C)] = From;
-					if (std::find(Goals.begin(), Goals.end(), Cell{ R, C }) != Goals.end())
+					bool IsGoal = false;
+					for (const Cell& G : Goals) if (G == Cell{ R, C }) { IsGoal = true; break; }
+					if (IsGoal)
 					{
 						// walk back to the ferry; the last move recorded on the way is the first step
 						Cell Cur{ R, C };
@@ -174,16 +182,17 @@ struct Game
 						First = static_cast<Move>(LastMove);
 						return true;
 					}
-					Next.push_back({ R, C });
+					Next[NextCount++] = { R, C };
 				}
-			Frontier.swap(Next);
+			}
+			std::swap(Frontier, Next);
+			FrontierCount = NextCount;
 		}
-		(void)S;
 		return false;
 	}
 
 	/** Game.demo_action: nearest reachable passenger until enough are aboard, then the harbour; wait when stranded. */
-	Move DemoAction() const
+	Move DemoAction() const noexcept
 	{
 		Move First = Move::Wait;
 		if (Aboard < Diff->Need && !Passengers.empty() && FirstStepTo(Passengers, First)) return First;

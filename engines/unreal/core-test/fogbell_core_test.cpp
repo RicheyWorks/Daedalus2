@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 using namespace daedalus::fogbell;
 
@@ -20,6 +21,14 @@ std::string Field(const std::string& Line, const std::string& Key)
 	if (P == std::string::npos) return "";
 	const size_t S = P + Needle.size(), E = Line.find(' ', S);
 	return Line.substr(S, E == std::string::npos ? std::string::npos : E - S);
+}
+
+std::vector<std::string> Split(const std::string& S, char Sep)
+{
+	std::vector<std::string> Out; std::string Tok;
+	for (char Ch : S) { if (Ch == Sep) { Out.push_back(Tok); Tok.clear(); } else Tok.push_back(Ch); }
+	if (!S.empty()) Out.push_back(Tok);
+	return Out;
 }
 
 std::string GameLine(std::uint32_t Seed, const std::string& Diff, const Game& G)
@@ -132,7 +141,7 @@ int main(int Argc, char** Argv)
 	if (Argc < 2) { std::printf("usage: fogbell_core_test fogbell_parity.txt\n"); return 2; }
 	std::ifstream In(Argv[1]);
 	if (!In) { std::printf("FAIL cannot open %s\n", Argv[1]); return 2; }
-	int Fails = UnitChecks() + InvariantSweep(), Games = 0;
+	int Fails = UnitChecks() + InvariantSweep(), Games = 0, Vectors = 0;
 	std::string Line; Game G; std::uint32_t Seed = 0; std::string Diff; bool Skip = false;
 	while (std::getline(In, Line))
 	{
@@ -159,8 +168,32 @@ int main(int Argc, char** Argv)
 			std::ostringstream E; E << "end  score=" << G.Score << " won=" << (G.Won ? 1 : 0) << " aboard=" << G.Aboard << " turns=" << G.Turn;
 			if (E.str() != Line || !G.Over) { std::printf("FAIL s=%u %s end\n  want %s\n  got  %s\n", Seed, Diff.c_str(), Line.c_str(), E.str().c_str()); ++Fails; }
 		}
+		else if (Line.rfind("vector ", 0) == 0)
+		{
+			// Hand-set flat: size / heights / ferry / turn / aboard / need / passengers replace the seeded state.
+			Diff = "vector:" + Line.substr(7, Line.find(' ', 7) - 7); Skip = false; ++Vectors;
+			G = Flat(Split(Field(Line, "heights"), '|'), {}, std::stoi(Field(Line, "need")));
+			const std::vector<std::string> F = Split(Field(Line, "ferry"), ',');
+			G.Ferry = { std::stoi(F[0]), std::stoi(F[1]) };
+			G.Turn = std::stoi(Field(Line, "turn")); G.Aboard = std::stoi(Field(Line, "aboard"));
+			G.Passengers.clear();
+			if (Field(Line, "passengers") != "-")
+				for (const std::string& Tok : Split(Field(Line, "passengers"), ';')) { const std::vector<std::string> P = Split(Tok, ','); G.Passengers.push_back({ std::stoi(P[0]), std::stoi(P[1]) }); }
+		}
+		else if (Line.rfind("step ", 0) == 0)
+		{
+			if (Skip) continue;
+			Move M = Move::Wait; MoveFromName(Field(Line, "act"), M);
+			const Move Demo = G.DemoAction();
+			std::string Result;
+			const Game::Act R = G.Step(M, Result);
+			std::ostringstream O;
+			O << "step act=" << MoveName(M) << " demo=" << MoveName(Demo) << " ferry=" << G.Ferry.R << "," << G.Ferry.C << " tide=" << G.Tide() << " aboard=" << G.Aboard
+			  << " passengers=" << Game::CellsString(G.Passengers) << " score=" << G.Score << " over=" << (G.Over ? 1 : 0) << " won=" << (G.Won ? 1 : 0) << " res=" << Result;
+			if (R != Game::Act::Ok || O.str() != Line) { std::printf("FAIL %s\n  want %s\n  got  %s\n", Diff.c_str(), Line.c_str(), O.str().c_str()); ++Fails; }
+		}
 		else { std::printf("FAIL unknown line: %s\n", Line.c_str()); return 1; }
 	}
-	std::printf("%s fogbell: %d voyages regenerated from seed, %d failures\n", Fails ? "FAIL" : "OK", Games, Fails);
+	std::printf("%s fogbell: %d voyages regenerated from seed, %d edge vectors, %d failures\n", Fails ? "FAIL" : "OK", Games, Vectors, Fails);
 	return Fails ? 1 : 0;
 }

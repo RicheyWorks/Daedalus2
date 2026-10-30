@@ -54,6 +54,23 @@ class Game(pc.PrismGame):
             self.heights[r][c] = max(self.heights[r][c], 2)
         self.aboard, self.turn = 0, 0
 
+    @classmethod
+    def from_state(cls, state):
+        """A save is checked against the rules before it is trusted (iteration 5): the flat is fixed by the seed."""
+        g = super().from_state(state)
+        fresh = cls(g.seed, g.difficulty)
+        s = g.cfg["size"]
+        in_flat = lambda cell: isinstance(cell, list) and len(cell) == 2 and all(isinstance(v, int) and 0 <= v < s for v in cell)  # noqa: E731
+        ok = (g.heights == fresh.heights and g.harbour == fresh.harbour and in_flat(g.ferry)
+              and all(in_flat(p) and p in fresh.passengers for p in g.passengers)
+              and len({tuple(p) for p in g.passengers}) == len(g.passengers)
+              and isinstance(g.aboard, int) and isinstance(g.turn, int) and 0 <= g.turn <= TIDE_EVERY * s
+              and g.aboard + len(g.passengers) == g.cfg["passengers"]
+              and (g.over or not g.flooded(*g.ferry)))
+        if not ok:
+            raise ValueError("fogbell save does not satisfy the rules")
+        return g
+
     @property
     def tide(self):
         return self.turn // TIDE_EVERY
