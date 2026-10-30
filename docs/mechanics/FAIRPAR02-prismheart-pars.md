@@ -1,9 +1,9 @@
-# FAIRPAR02 - Prismheart Fair Par (G603, Prismheart balance lane)
+# FAIRPAR02 - Prismheart Fair Par (G603, G604; Prismheart balance lane)
 
 Code: `tools/minigames/fair_par.py` (authority; read-only on the games' rules)
 C++: `engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPrismFairParCore.h` (namespace `daedalus::prismpar`)
 Tests: `tools/minigames/test_fair_par.py` (6 tests); `engines/unreal/core-test/prism_fair_par_core_test.cpp`
-(60 checks). The C++ core plays the same bot through the C++ Glowmoss, Spiritkite and Glimmerloom cores and must
+(114 checks). The C++ core plays the same bot through each game's own C++ core and must
 rebuild `prism_fair_par_parity.txt` exactly. CI: `engines.yml` (g++ ASan+UBSan, clang++) and `desktop-games.yml`
 (`fair_par.py --check`). Source only; no editor, no new assets.
 
@@ -19,6 +19,9 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
    - Glowmoss: dig a random ledge that still leaves light to climb out; climb out once the target is met.
    - Spiritkite: fly random lanes that keep a way home; head home once the target is met; then land.
    - Glimmerloom: sell what the rumor does not favour; buy a random amount of the hue rumored to rise; rest.
+   - G604 puzzle cabinets (Lumenpath, Wardens' Accord, Facetlock): a mixed bot. Each move, a coin flip either
+     plays the game's own demo move or a random legal move (a random mirror cell; a random take or affordable
+     summon; a random row or column slide).
 4. Bot choices come from the stateless SplitMix64 hash shared with FairPar.java (bot seed 600), never from the
    game's own RNG. Each game uses seeds 0-399.
 5. **Daedalus hook:** `prismpar::TierOf(row, won, score)` gives the result-screen tier. Satchel tiers, Almanac daily
@@ -37,6 +40,17 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
 | glimmerloom | easy | 58.2 % | 167 | 205 | 582 / 242 / 62 | 159 | 81.7 % | 187 | yes |
 | glimmerloom | normal | 30.2 % | 157 | 185 | 302 / 125 / 32 | 152 | 55.5 % | 142 | yes |
 | glimmerloom | hard | 20.7 % | 120 | 135 | 207 / 87 / 22 | 117 | 31.0 % | 0 | yes |
+| lumenpath | easy | 88.0 % | 190 | 230 | 880 / 435 / 145 | 180 | 100.0 % | 210 | yes |
+| lumenpath | normal | 83.0 % | 160 | 190 | 830 / 350 / 122 | 150 | 100.0 % | 170 | yes |
+| lumenpath | hard | 74.5 % | 140 | 180 | 745 / 302 / 75 | 130 | 100.0 % | 150 | yes |
+| wardens_accord | easy | 100.0 % | 50 | 55 | 1000 / 457 / 192 | 45 | 100.0 % | 45 | yes |
+| wardens_accord | normal | 83.5 % | 60 | 65 | 835 / 337 / 127 | 55 | 94.7 % | 55 | yes |
+| wardens_accord | hard | 22.0 % | 60 | 65 | 220 / 120 / 47 | 60 | 44.0 % | 0 | yes |
+| facetlock | easy | 51.5 % | 140 | 160 | 515 / 322 / 85 | 140 | 100.0 % | 140 | yes |
+| facetlock | normal | 27.5 % | 140 | 170 | 275 / 145 / 32 | 140 | 100.0 % | 150 | yes |
+| facetlock | hard | 11.5 % | 130 | 160 | 115 / 70 / 25 | 130 | 100.0 % | 130 | yes |
+
+
 
 ## Balance findings
 
@@ -48,3 +62,9 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
   true, so a target of 110-135 is luck-heavy. Worth a look by the game's owner; these rules are read-only here.
 - Gold sits above the demo median on Glimmerloom easy and normal (205 vs 187, 185 vs 142). A lucky casual trader
   beats the scripted demo, so gold is a real stretch goal.
+- **Wardens' Accord easy is a give-away**: the casual bot wins 100 %, and silver and gold (50/55) sit only one
+  spirit above the win line. Hard is the opposite: the demo itself wins 44 % (demo median 0).
+- **Facetlock falls off steeply**: casual wins 51 % / 27.5 % / 11.5 % on easy / normal / hard. The demo always
+  solves it, so pars are fair but hard is unforgiving to one wrong slide.
+- **Lumenpath is gentle on every difficulty** (casual wins 74-88 %). Gold (230/190/180) needs a near-demo solve with
+  moves to spare.

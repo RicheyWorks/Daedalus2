@@ -3,14 +3,18 @@
 // header-only, standard library only, no Unreal types. A port of tools/minigames/fair_par.py, which stays the
 // authority. A seeded casual bot plays Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger on every difficulty
 // through their own cores (read-only on their rules). BRONZE is any win; SILVER and GOLD are the scores reached by at
-// least 40 % and 10 % of the bot's winning rounds (integer rank rule). Table() replays the whole par table, which must
+// least 40 % and 10 % of the bot's winning rounds. G604 adds Lumenpath, Wardens' Accord and Facetlock with a mixed
+// casual bot (coin flip: the game's demo move or a random legal move) (integer rank rule). Table() replays the whole par table, which must
 // equal engines/unreal/core-test/prism_fair_par_parity.txt exactly (prism_fair_par_core_test.cpp).
 // Bot choices use the stateless SplitMix64 hash of (seed, run, pick, salt) from FairPar.java, never the game RNG.
 // Daedalus hook: Tier(game, difficulty, won, score) for the cabinet result screen, Satchel tiers and Almanac pars.
 #pragma once
 #include "DaedalusGlimmerloomCore.h"
+#include "DaedalusFacetlockCore.h"
 #include "DaedalusGlowmossCore.h"
+#include "DaedalusLumenpathCore.h"
 #include "DaedalusSpiritkiteCore.h"
+#include "DaedalusWardensAccordCore.h"
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
@@ -23,6 +27,7 @@ constexpr int Seeds = 400;
 constexpr std::int64_t BotSeed = 600;
 constexpr int StepLimit = 500;
 constexpr int WinPercent[2] = { 40, 10 };
+constexpr int GameCount = 6; // G603: glowmoss, spiritkite, glimmerloom; G604: lumenpath, wardens_accord, facetlock
 
 enum class Tier { None, Bronze, Silver, Gold };
 
@@ -103,6 +108,74 @@ inline glimmerloom::Action GlimmerloomBot(const glimmerloom::Game& G, int Run, i
 	return { Kind::Rest, 0, 0 };
 }
 
+// --- G604: mixed casual bot (coin flip, salt 9: the game's demo move, else a random legal move) ---
+inline bool FollowDemo(int Run, int K) { return Uniform(BotSeed, Run, K, 9) < 0.5; }
+
+inline int LumenpathRound(std::uint32_t Seed, const char* Difficulty, bool DemoOnly)
+{
+	lumenpath::Game G;
+	if (!G.Start(Seed, Difficulty)) return -1;
+	const int Run = static_cast<int>(Seed);
+	for (int K = 0; K < StepLimit && !G.Over; ++K)
+	{
+		lumenpath::Cell C = G.DemoAction();
+		if (!DemoOnly && !FollowDemo(Run, K))
+		{
+			std::vector<lumenpath::Cell> Cells;
+			for (int R = 0; R < G.Size(); ++R)
+				for (int Cc = 0; Cc < G.Size(); ++Cc)
+				{
+					const char Ch = G.Grid[static_cast<size_t>(R)][static_cast<size_t>(Cc)];
+					if (Ch != '*' && Ch != '#') Cells.push_back({ R, Cc });
+				}
+			C = Cells[static_cast<size_t>(Pick(BotSeed, Run, K, 10, static_cast<int>(Cells.size()) - 1))];
+		}
+		int Gained = 0;
+		if (G.Toggle(C.first, C.second, Gained) != lumenpath::Game::Act::Ok) return -1;
+	}
+	return G.Won ? G.Score : 0;
+}
+
+inline int WardensRound(std::uint32_t Seed, const char* Difficulty, bool DemoOnly)
+{
+	wardens::Game G;
+	if (!G.Start(Seed, Difficulty)) return -1;
+	const int Run = static_cast<int>(Seed);
+	for (int K = 0; K < StepLimit && !G.Over; ++K)
+	{
+		std::pair<bool, int> A = G.DemoAction();
+		if (!DemoOnly && !FollowDemo(Run, K))
+		{
+			std::vector<std::pair<bool, int>> Options = { { false, 0 }, { false, 1 }, { false, 2 } };
+			for (int I = 0; I < static_cast<int>(G.Spirits.size()); ++I) if (G.Affordable(I)) Options.push_back({ true, I });
+			A = Options[static_cast<size_t>(Pick(BotSeed, Run, K, 11, static_cast<int>(Options.size()) - 1))];
+		}
+		int Gained = 0;
+		if ((A.first ? G.Summon(A.second, Gained) : G.Take(A.second, Gained)) != wardens::Game::Act::Ok) return -1;
+	}
+	return G.Won ? G.Score : 0;
+}
+
+inline int FacetlockRound(std::uint32_t Seed, const char* Difficulty, bool DemoOnly)
+{
+	facetlock::Game G;
+	if (!G.Start(Seed, Difficulty)) return -1;
+	const int Run = static_cast<int>(Seed);
+	for (int K = 0; K < StepLimit && !G.Over; ++K)
+	{
+		facetlock::Move M = G.DemoAction();
+		if (!DemoOnly && !FollowDemo(Run, K))
+		{
+			const int N = G.Size();
+			const int V = Pick(BotSeed, Run, K, 12, 4 * N - 1);
+			M = facetlock::Move{ V % 2 == 0, (V / 2) % N, V / (2 * N) == 0 ? 1 : -1 };
+		}
+		int Gained = 0;
+		if (G.Apply(M, Gained) != facetlock::Game::Act::Ok) return -1;
+	}
+	return G.Won ? G.Score : 0;
+}
+
 // One round: final score if won, else 0. Demo = the game's own DemoAction(). Returns -1 on a refused move.
 template <class GameT, class BotT>
 int PlayRound(std::uint32_t Seed, const char* Difficulty, BotT Bot)
@@ -145,13 +218,14 @@ inline Row Calibrate(const std::string& Game, const std::string& Difficulty, con
 	return R;
 }
 
-// The whole par table (3 games x easy/normal/hard), in fair_par.py order. Ok false if any round refused a move.
+// The whole par table (GameCount games x easy/normal/hard), in fair_par.py order. Ok false if any round refused a move.
 inline std::vector<Row> Table(bool& Ok, int SeedCount = Seeds)
 {
 	static const char* const Diffs[3] = { "easy", "normal", "hard" };
+	static const char* const Names[GameCount] = { "glowmoss", "spiritkite", "glimmerloom", "lumenpath", "wardens_accord", "facetlock" };
 	std::vector<Row> Out;
 	Ok = true;
-	for (int Gi = 0; Gi < 3; ++Gi)
+	for (int Gi = 0; Gi < GameCount; ++Gi)
 		for (const char* D : Diffs)
 		{
 			std::vector<int> S, De;
@@ -162,11 +236,14 @@ inline std::vector<Row> Table(bool& Ok, int SeedCount = Seeds)
 				int A = 0, B = 0;
 				if (Gi == 0) { A = PlayRound<glowmoss::Game>(U, D, GlowmossBot); B = PlayRound<glowmoss::Game>(U, D, Demo); }
 				else if (Gi == 1) { A = PlayRound<spiritkite::Game>(U, D, SpiritkiteBot); B = PlayRound<spiritkite::Game>(U, D, Demo); }
-				else { A = PlayRound<glimmerloom::Game>(U, D, GlimmerloomBot); B = PlayRound<glimmerloom::Game>(U, D, Demo); }
+				else if (Gi == 2) { A = PlayRound<glimmerloom::Game>(U, D, GlimmerloomBot); B = PlayRound<glimmerloom::Game>(U, D, Demo); }
+				else if (Gi == 3) { A = LumenpathRound(U, D, false); B = LumenpathRound(U, D, true); }
+				else if (Gi == 4) { A = WardensRound(U, D, false); B = WardensRound(U, D, true); }
+				else { A = FacetlockRound(U, D, false); B = FacetlockRound(U, D, true); }
 				Ok = Ok && A >= 0 && B >= 0;
 				S.push_back(std::max(0, A)); De.push_back(std::max(0, B));
 			}
-			Out.push_back(Calibrate(Gi == 0 ? "glowmoss" : Gi == 1 ? "spiritkite" : "glimmerloom", D, S, De));
+			Out.push_back(Calibrate(Names[Gi], D, S, De));
 		}
 	return Out;
 }
