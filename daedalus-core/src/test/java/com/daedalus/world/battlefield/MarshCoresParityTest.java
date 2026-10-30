@@ -14,8 +14,8 @@ import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
 /**
- * Java = C++ golden vectors for the marsh-lane ecology cores (G570 port of G202 DroughtOdds; later ecology ports add
- * a method here). Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with
+ * Java = C++ golden vectors for the marsh-lane ecology cores (G570 port of G202 DroughtOdds, G583 port of G200
+ * CraneSpread; later ecology ports add a method here). Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with
  * -Dmarsh.parity.write=true) and replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h.
  * Doubles are printed with Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
  */
@@ -49,6 +49,37 @@ class MarshCoresParityTest {
         return out;
     }
 
+    static List<String> craneSpread() {
+        double[][] tunings = {{1.5, 1.0, 0.25, 100}, {1.2, 0.8, 0.2, 60}, {2.0, 1.5, 0.5, 150}, {0.9, 1.0, 0.25, 100},
+            {1.05, 2.0, 0.5, 80}, {3.0, 0.5, 0.25, 40}};
+        List<String> out = new ArrayList<>();
+        long seed = 11;
+        for (double[] k : tunings) {
+            CraneSpread m = CraneSpread.marsh(new CraneSpread.Settings(k[0], k[1], k[2], k[3], 40), 1);
+            out.add("lambda=" + k[0] + " dispersal=" + k[1] + " cell=" + k[2] + " capacity=" + k[3] + " years=40"
+                    + " mgf=" + m.mgf(0.3 / k[1]) + " cstar=" + m.spreadingSpeed());
+            for (int noisy = 0; noisy < 2; noisy++) {
+                CraneSpread.Report r = noisy == 0 ? m.run() : m.run(seed);
+                StringBuilder s = new StringBuilder(noisy == 0 ? "run=det" : "run=noisy seed=" + seed);
+                s.append(" speed=").append(r.speed()).append(" reach5=").append(r.yearReached(5.0));
+                for (CraneSpread.Year y : r.years()) {
+                    if (y.index() % 5 == 0) {
+                        s.append(" front").append(y.index()).append('=').append(y.front())
+                                .append(" birds").append(y.index()).append('=').append(y.birds());
+                    }
+                }
+                out.add(s.toString());
+            }
+            seed += 7;
+        }
+        return out;
+    }
+
+    @Test
+    void craneSpreadMatchesCpp() throws IOException {
+        check("marsh_crane_spread_parity.txt", "G200 CraneSpread", MarshCoresParityTest::craneSpread);
+    }
+
     @Test
     void droughtOddsMatchesCpp() throws IOException {
         check("marsh_drought_odds_parity.txt", "G202 DroughtOdds", MarshCoresParityTest::droughtOdds);
@@ -59,7 +90,7 @@ class MarshCoresParityTest {
         List<String> actual = lines.get();
         if (Boolean.getBoolean("marsh.parity.write")) {
             List<String> body = new ArrayList<>();
-            body.add("# " + game + " golden vectors (G570): written by MarshCoresParityTest.java, replayed by "
+            body.add("# " + game + " golden vectors: written by MarshCoresParityTest.java, replayed by "
                     + file.replace("_parity.txt", "_core_test.cpp") + ".");
             body.addAll(actual);
             Files.write(path, body, StandardCharsets.UTF_8);
