@@ -5,6 +5,7 @@
 // daedalus::pyrandom::PyRandom (CPython random.Random(str)), the same draws as Java's PyStringRandom.
 #pragma once
 #include "DaedalusPyRandomCore.h"
+#include <array>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -26,6 +27,11 @@ constexpr const char* FogEchoNames[FogEchoes + 1] = { "dull", "ring", "clang", "
 enum class EFogTier : int { Calm, Fog, PeaSoup };
 struct FogTierSpec { int MinBlasts, MaxBlasts, EchoSpread, MissPercent; const char* SeedPrefix; };
 constexpr FogTierSpec FogTiers[3] = { { 2, 5, 14, 0, "calm-" }, { 4, 10, 7, 10, "fog-" }, { 8, 16, 4, 30, "pea-soup-" } };
+// Stars for a cost against par, the same rule as FogJudge (usable at compile time).
+constexpr int FogStars(int Cost, int Par) noexcept
+{
+	return Cost == FogInvalid || Par == FogInvalid ? 0 : Cost == Par ? 3 : Cost <= Par + FogParSlack ? 2 : 1;
+}
 constexpr const FogTierSpec& FogTierOf(EFogTier T) noexcept { return FogTiers[static_cast<int>(T)]; }
 
 // Opening, drift (lane i to lane j) and echo (lane, echo kind) costs, plus the echo heard on every blast.
@@ -108,7 +114,7 @@ inline bool FogValid(const FogHarbour& H) noexcept
 }
 
 // Total cost of a lane sequence, or FogInvalid when it is the wrong length or names a missing lane.
-inline int FogCost(const FogHarbour& H, const std::vector<int>& Lanes)
+inline int FogCost(const FogHarbour& H, const std::vector<int>& Lanes) noexcept
 {
 	if (!FogValid(H) || static_cast<int>(Lanes.size()) != H.Blasts()) return FogInvalid;
 	int Total = 0;
@@ -121,28 +127,55 @@ inline int FogCost(const FogHarbour& H, const std::vector<int>& Lanes)
 	return Total;
 }
 
-// Cheapest lane sequence for all blasts at once (Viterbi, integer min-sum); ties go to the lower lane.
-inline FogTrack FogBest(const FogHarbour& H)
+namespace detail {
+// Viterbi tables on the stack: FogMaxBlasts x FogMaxChannels ints each, so solving never touches the heap.
+struct FogTable
 {
-	if (!FogValid(H)) return { FogInvalid, {} };
+	std::array<std::array<int, FogMaxChannels>, FogMaxBlasts> Cost{}, From{};
+	int Last = 0;
+};
+
+// Fills the tables for a valid harbour with at least one blast; ties go to the lower lane.
+inline void FogFill(const FogHarbour& H, FogTable& Tb) noexcept
+{
 	const int S = H.Channels(), T = H.Blasts();
-	if (T == 0) return {};
-	std::vector<std::vector<int>> Cost(T, std::vector<int>(S, 0)), From(T, std::vector<int>(S, 0));
-	for (int i = 0; i < S; ++i) Cost[0][i] = H.Open[i] + FogEchoCost(H, i, 0);
+	for (int i = 0; i < S; ++i) Tb.Cost[0][i] = H.Open[i] + FogEchoCost(H, i, 0);
 	for (int k = 1; k < T; ++k)
 		for (int j = 0; j < S; ++j)
 		{
 			int Prev = 0;
 			for (int i = 1; i < S; ++i)
-				if (Cost[k - 1][i] + H.Drift[i][j] < Cost[k - 1][Prev] + H.Drift[Prev][j]) Prev = i;
-			Cost[k][j] = Cost[k - 1][Prev] + H.Drift[Prev][j] + FogEchoCost(H, j, k);
-			From[k][j] = Prev;
+				if (Tb.Cost[k - 1][i] + H.Drift[i][j] < Tb.Cost[k - 1][Prev] + H.Drift[Prev][j]) Prev = i;
+			Tb.Cost[k][j] = Tb.Cost[k - 1][Prev] + H.Drift[Prev][j] + FogEchoCost(H, j, k);
+			Tb.From[k][j] = Prev;
 		}
-	int Last = 0;
+	Tb.Last = 0;
 	for (int i = 1; i < S; ++i)
-		if (Cost[T - 1][i] < Cost[T - 1][Last]) Last = i;
-	FogTrack Track{ Cost[T - 1][Last], std::vector<int>(T, Last) };
-	for (int k = T - 1; k > 0; --k) Track.Lanes[k - 1] = From[k][Track.Lanes[k]];
+		if (Tb.Cost[T - 1][i] < Tb.Cost[T - 1][Tb.Last]) Tb.Last = i;
+}
+} // namespace detail
+
+// Par: the cost of the best reading, without building the lane list (no allocation). FogInvalid for a bad harbour.
+inline int FogBestCost(const FogHarbour& H) noexcept
+{
+	if (!FogValid(H)) return FogInvalid;
+	if (H.Blasts() == 0) return 0;
+	detail::FogTable Tb;
+	detail::FogFill(H, Tb);
+	return Tb.Cost[H.Blasts() - 1][Tb.Last];
+}
+
+// Cheapest lane sequence for all blasts at once (Viterbi, integer min-sum); ties go to the lower lane.
+// One allocation: the returned lane list.
+inline FogTrack FogBest(const FogHarbour& H)
+{
+	if (!FogValid(H)) return { FogInvalid, {} };
+	const int T = H.Blasts();
+	if (T == 0) return {};
+	detail::FogTable Tb;
+	detail::FogFill(H, Tb);
+	FogTrack Track{ Tb.Cost[T - 1][Tb.Last], std::vector<int>(static_cast<std::size_t>(T), Tb.Last) };
+	for (int k = T - 1; k > 0; --k) Track.Lanes[k - 1] = Tb.From[k][Track.Lanes[k]];
 	return Track;
 }
 
@@ -169,21 +202,21 @@ inline FogTrack FogLoudestEcho(const FogHarbour& H)
 }
 
 // Quest q_pilot_through_fog: the pilot's reading is a real track and no track explains the fog better.
-inline bool FogQuestDone(const FogHarbour& H, const std::vector<int>& Lanes)
+inline bool FogQuestDone(const FogHarbour& H, const std::vector<int>& Lanes) noexcept
 {
 	const int Got = FogCost(H, Lanes);
-	return Got != FogInvalid && Got == FogBest(H).Cost;
+	return Got != FogInvalid && Got == FogBestCost(H);
 }
 
 // How a reading scores against par (the best cost): 3 stars at par, 2 within FogParSlack, 1 otherwise, 0 invalid.
 struct FogJudgement { int Cost = FogInvalid, Par = FogInvalid, Stars = 0; bool QuestDone = false; };
 
-inline FogJudgement FogJudge(const FogHarbour& H, const std::vector<int>& Lanes)
+inline FogJudgement FogJudge(const FogHarbour& H, const std::vector<int>& Lanes) noexcept
 {
 	FogJudgement J;
 	J.Cost = FogCost(H, Lanes);
-	J.Par = FogBest(H).Cost;
-	J.Stars = J.Cost == FogInvalid ? 0 : J.Cost == J.Par ? 3 : J.Cost <= J.Par + FogParSlack ? 2 : 1;
+	J.Par = FogBestCost(H);
+	J.Stars = FogStars(J.Cost, J.Par);
 	J.QuestDone = J.Stars == 3;
 	return J;
 }

@@ -4,6 +4,7 @@
 //   ./a.out pilot_fog_channel_parity.txt
 #include "DaedalusPilotFogChannelCore.h"
 #include "stable_parity.h"
+#include <chrono>
 using namespace daedalus::pilot;
 using stable_test::Check;
 using stable_test::Join;
@@ -85,6 +86,39 @@ int main(int argc, char** argv)
 	Check("refuses short echo row", Bad([](FogHarbour& B) { B.Echo[0].pop_back(); }));
 	Check("refuses negative echo", Bad([](FogHarbour& B) { B.Echo[0][1] = -2; }));
 	Check("refuses unknown echo", Bad([](FogHarbour& B) { B.Heard[0] = 4; }));
+	// Bench: FogBest over 2000 tiered harbours per tier; the sums must match the Java-written checksums.
+	std::string BenchPath = Path;
+	BenchPath.replace(BenchPath.rfind("_parity.txt"), 11, "_bench_parity.txt");
+	std::vector<std::string> BenchLines;
+	const char* TierNames[3] = { "CALM", "FOG", "PEA_SOUP" };
+	for (EFogTier Tier : { EFogTier::Calm, EFogTier::Fog, EFogTier::PeaSoup })
+	{
+		std::vector<FogHarbour> Hs;
+		for (int s = 1; s <= 2000; ++s) Hs.push_back(FogSeedTier(FogTierOf(Tier).SeedPrefix + std::to_string(s), Tier));
+		long long BestSum = 0, LoudSum = 0;
+		int Losses = 0, Three = 0;
+		const auto Start = std::chrono::steady_clock::now();
+		for (const FogHarbour& Hb : Hs)
+		{
+			const int B = FogBest(Hb).Cost, G = FogLoudestEcho(Hb).Cost;
+			BestSum += B;
+			LoudSum += G;
+			Losses += G > B;
+			Three += FogStars(G, B) == 3;
+		}
+		const double Ns = std::chrono::duration<double, std::nano>(std::chrono::steady_clock::now() - Start).count() / Hs.size();
+		std::printf("bench %s: %.0f ns per harbour (best + loudest)\n", TierNames[static_cast<int>(Tier)], Ns);
+		BenchLines.push_back(std::string("tier=") + TierNames[static_cast<int>(Tier)] + " seeds=2000 best_sum=" + std::to_string(BestSum)
+			+ " loudest_sum=" + std::to_string(LoudSum) + " losses=" + std::to_string(Losses) + " loudest_three_stars=" + std::to_string(Three));
+	}
+	stable_test::CheckParity(BenchPath.c_str(), BenchLines);
+
+	// API: compile-time star rule and allocation-free par.
+	static_assert(FogStars(7, 7) == 3 && FogStars(9, 7) == 2 && FogStars(10, 7) == 1 && FogStars(FogInvalid, 7) == 0, "star rule");
+	static_assert(FogTierOf(EFogTier::PeaSoup).MaxBlasts == FogMaxBlasts, "pea soup fills the table");
+	static_assert(noexcept(FogBestCost(H)) && noexcept(FogCost(H, {})) && noexcept(FogValid(H)), "hot paths are noexcept");
+	Check("par without lanes = best cost", FogBestCost(H) == FogBest(H).Cost && FogBestCost(Good) == 0);
+
 	// Missed echoes: free everywhere, and the dockhand holds course through the silence.
 	const FogHarbour Quiet{ { 0, 3 }, { { 0, 4 }, { 4, 0 } }, { { 5, 0, 2 }, { 0, 5, 2 } }, { 1, FogMissed, 0, FogMissed } };
 	Check("dockhand holds course on a missed echo", FogLoudestEcho(Quiet).Lanes == std::vector<int>({ 0, 0, 1, 1 }));

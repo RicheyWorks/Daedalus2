@@ -1,0 +1,4 @@
+# G586 FogChannelPilot bench checksums: written by FogChannelPilotTest.java; pilot_fog_channel_core_test.cpp times FogBest over the same 2000 seeds per tier and must reach these sums.
+tier=CALM seeds=2000 best_sum=36111 loudest_sum=41522 losses=959 loudest_three_stars=1041
+tier=FOG seeds=2000 best_sum=37118 loudest_sum=54042 losses=1531 loudest_three_stars=469
+tier=PEA_SOUP seeds=2000 best_sum=33797 loudest_sum=65430 losses=1737 loudest_three_stars=263
