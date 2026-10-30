@@ -24,6 +24,7 @@ namespace daedalus { namespace shardsong {
 constexpr int Bands = 6, Rounds = 5, MaxSegments = 4, MaxTotalM = 400, SourceLevel = 900, HeardSnr = 30;
 /** Call pitch per band, Hz (all under the ear rule). */
 constexpr int BandHz[Bands] = { 200, 250, 315, 400, 500, 630 };
+static_assert(BandHz[Bands - 1] < 800, "every call band must stay under the 800 Hz ear rule");
 
 enum class Habitat : std::uint8_t { Forest, Grass, Water, Scrub };
 enum class Form : std::uint8_t { Tone, Trill };
@@ -131,6 +132,56 @@ inline int Score(const Crossing& C, int Band, Form F)
 	if (S < HeardSnr) return 0;
 	const int P = 100 - (Best(C).Snr - S);
 	return P < 0 ? 0 : (P > 100 ? 100 : P);
+}
+
+/** Where a call's level goes, tenths of dB: Received = SourceLevel - Spread - Absorbed - Smeared; Snr = Received - Noise. */
+struct Breakdown { int Spread = 0, Absorbed = 0, Smeared = 0, Noise = 0, Snr = 0; };
+inline Breakdown Explain(const Crossing& C, int Band, Form F)
+{
+	Breakdown B;
+	B.Spread = SpreadTenths[C.TotalM() / 10 - 1];
+	for (int I = 0; I < C.Count; ++I)
+	{
+		const Segment& S = C.Seg[I];
+		const int Steps = S.LengthM / 10;
+		B.Absorbed += ExcessTenths[static_cast<int>(S.H)][Band] * Steps;
+		if (F == Form::Trill && S.H == Habitat::Forest) B.Smeared += TrillInForestTenths * Steps;
+		if (F == Form::Tone && (S.H == Habitat::Grass || S.H == Habitat::Water)) B.Smeared += ToneInOpenTenths * Steps;
+	}
+	B.Noise = NoiseTenths[static_cast<int>(C.Listener())][Band];
+	B.Snr = SourceLevel - B.Spread - B.Absorbed - B.Smeared - B.Noise;
+	return B;
+}
+
+/** The main reason a call fell short of the best one (no cost to ask): soaked up by the habitats on the path, smeared
+ *  (a trill in forest echo, a tone in open wind), or masked by noise where the mate sits. */
+enum class Cause : std::uint8_t { None, Absorbed, Smeared, Masked };
+inline const char* CauseName(Cause C)
+{
+	static const char* const N[4] = { "best call", "soaked up by the habitats on the way", "smeared on the way", "masked by noise at the mate" };
+	return N[static_cast<int>(C)];
+}
+struct Feedback
+{
+	Cause Main = Cause::None;
+	int ShortTenths = 0;  // best SNR minus this call's SNR (>= 0)
+	bool Heard = false;
+	int PitchHint = 0;    // -1: try lower, +1: try higher, 0: pitch is right
+	bool SwitchForm = false;
+};
+inline Feedback Advise(const Crossing& C, int Band, Form F)
+{
+	Feedback Out;
+	const Choice B = Best(C);
+	const Breakdown Mine = Explain(C, Band, F), Top = Explain(C, B.Band, B.F);
+	Out.ShortTenths = Top.Snr - Mine.Snr;
+	Out.Heard = Mine.Snr >= HeardSnr;
+	Out.PitchHint = B.Band < Band ? -1 : (B.Band > Band ? 1 : 0);
+	Out.SwitchForm = B.F != F;
+	if (Out.ShortTenths <= 0) return Out;
+	const int DA = Mine.Absorbed - Top.Absorbed, DS = Mine.Smeared - Top.Smeared, DN = Mine.Noise - Top.Noise;
+	Out.Main = DA >= DS && DA >= DN ? Cause::Absorbed : (DS >= DN ? Cause::Smeared : Cause::Masked);
+	return Out;
 }
 
 /** One crossing from the generator: 1-2 (easy), 2-3 (normal) or 3-4 (hard) strips of 10-120 m, at most 400 m,

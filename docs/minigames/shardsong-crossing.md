@@ -27,6 +27,13 @@ of it (0 if unheard). A game is 0 to 500.
 |---|---|---|---|---|
 | `shardsong_crossing` | normal | 1-2 strips | 2-3 strips | 3-4 strips |
 
+## Feedback (free, after any call)
+
+`Advise(crossing, band, form)` says how far the call fell short of the best one (in 0.1 dB), whether the mate heard
+it, whether to try a lower or higher pitch or the other form, and the main cause: soaked up by the habitats on the
+way, smeared (a trill in forest echo, a tone in open wind), or masked by noise where the mate sits. `Explain` gives
+the full breakdown: spreading, absorption, smearing and noise, which add up to the SNR exactly.
+
 ## Daedalus tie-in
 
 The seed for a fragment pair comes from a Daedalus token id (`TokenSeed(tokenId)`, SplitMix64 defined in the header),
@@ -45,3 +52,11 @@ numbers here are illustrative, chosen for play, not measured.
 
 Every call is built through `DaedalusEarRuleCore.h` (`EarSafePeak`): the fundamental and its peak with vibrato stay
 under 800 Hz, with soft two-harmonic tones and no piercing sounds.
+
+## Iteration log
+
+| # | PR | change | behavior |
+|---|---|---|---|
+| 1 | iter PR 1 | `Explain` / `Advise` no-cost feedback (cause: absorbed, smeared, masked; pitch and form hints) | unchanged, golden v1 identical |
+| 2 | iter PR 1 | property, boundary and fuzz tests: 10 m more path lowers every call; 10 m and 400 m edges; 30,000 raw seeds solvable | unchanged |
+| 3 | iter PR 1 | ear-rule checks (base and peak < 800 Hz, 2 harmonics, low brightness, no extra drop) and a no-heap check over 500 full games | unchanged |
