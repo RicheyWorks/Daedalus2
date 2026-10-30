@@ -1,0 +1,170 @@
+{
+  "id": "roostcall",
+  "title": "Roostcall",
+  "realm": "prismheart_realm",
+  "status": "core + cabinet + 9 iterations in PR; dossier is iteration 10",
+  "summary": "A walled roost yard behind the Prismheart arcade row. Glimmer-birds have scattered across the yard at dusk and the roost-warden's whistler must walk them home: a bird within two cells of the whistler flies one step to the open cell farthest from it, so the player herds by standing behind the flock and driving it toward the roost corner before the turns run out. Deterministic per seed, bit-exact between the Python rules, the C++ core and the Unreal cabinet.",
+  "mechanics": [
+    {
+      "name": "Yard",
+      "text": "S x S cells (6 / 7 / 8 by difficulty). The whistler starts in the north-west corner; the roost is the 2 x 2 south-east corner. 3 / 4 / 5 birds are drawn at seeded cells that are not the whistler, not the roost, not a duplicate and more than two cells (Chebyshev) from the whistler.",
+      "code": "roostcall.Game.setup / roostcall::Game::Start"
+    },
+    {
+      "name": "Turn",
+      "text": "Move n/e/s/w one cell or wait. Moving off the yard or onto a bird is refused and costs nothing. Every move or wait spends one turn (16 / 30 / 48).",
+      "code": "Game.act / Game::Step"
+    },
+    {
+      "name": "Flight",
+      "text": "After the whistler moves, each bird within SCARE_RANGE = 2 (Chebyshev) takes its open neighbour (not off-yard, not a bird, not the whistler) farthest from the whistler: Chebyshev first, Manhattan second, n/e/s/w order third, and only if that is strictly farther than where it stands. Birds are processed in draw order and see the earlier flights, so a clump peels off one bird at a time and a cornered bird slides along the edge.",
+      "code": "Game.flee_step / Game::FleeStep"
+    },
+    {
+      "name": "Perching",
+      "text": "A bird that lands in the roost perches: it leaves the yard and settled rises by one. Settled + birds in the yard always equals the flock size.",
+      "code": "in_roost, settled"
+    },
+    {
+      "name": "Win and dusk",
+      "text": "Every bird settled wins at once: score = 10 x settled + turns left. When the last turn is spent with birds still out, dusk falls and the yard is lost with 10 x settled.",
+      "code": "BIRD_SCORE"
+    },
+    {
+      "name": "Watcher (demo)",
+      "text": "Herds the bird nearest the roost (index breaks ties). Candidate spots are every reachable cell within scare range of that bird, ranked by the bird's roost distance after the flight the spot would cause, then walking distance, row, column. Pass 1 takes only flights that bring the bird nearer; pass 2 also allows an equal-distance slide east or south along an edge. Waits on the spot to make the bird fly. Greedy wins about 80 / 72 / 72 percent in a median 13 / 26 / 42 turns; a player who plans the whole flock does better.",
+      "code": "Game.demo_action / Game::DemoAction"
+    },
+    {
+      "name": "Preview",
+      "text": "preview(move) returns the flights a move would cause without moving anything; the native sweep proves it equals the real move on 18,789 random moves. It drives the Guide hint and the wing marks.",
+      "code": "Game.preview / Game::Preview"
+    },
+    {
+      "name": "Guide (option 1)",
+      "text": "Practice mode marks the watcher's next cell in blue and the hint says how many birds that pick scatters. In both modes birds that would fly if the whistler waited carry a wing mark (lower-case on the Python screen), and a faint frame shows the two-cell scare range."
+    },
+    {
+      "name": "Saves",
+      "text": "Text save (shared DaedalusDesktopSaveText shape): difficulty, seed, turns, settled, score, over, won, whistler, birds. Restore regenerates the yard from the seed and refuses off-yard or duplicate cells, a bird in the roost or under the whistler, bad counts or inconsistent over/won flags; Python from_state applies the same checks."
+    },
+    {
+      "name": "Controls",
+      "text": "Arrows / d-pad / stick walk one cell per press (one turn each); A / J / Space wait; R or pad Start restart a finished yard. Cabinet class DesktopGames/DaedalusDesktopRoostcallCore.h, registry id roostcall, save slot roostcall.dgs."
+    }
+  ],
+  "items": [
+    {
+      "item": "Whistler",
+      "kind": "player",
+      "text": "The roost-warden's apprentice with a bone whistle; gold disc on the board, ringed by the faint scare-range frame.",
+      "in_game": "Whistler"
+    },
+    {
+      "item": "Glimmer-bird",
+      "kind": "creature",
+      "text": "A small prism-feathered bird that flares when startled; amber disc, with a white wing mark when a wait would scare it.",
+      "in_game": "Birds[i]"
+    },
+    {
+      "item": "Roost",
+      "kind": "goal",
+      "text": "A 2 x 2 perch frame of moss-wood in the south-east corner; birds that land in it vanish from the yard and the HOME counter rises.",
+      "in_game": "InRoost"
+    },
+    {
+      "item": "Yard cell",
+      "kind": "terrain",
+      "text": "Packed earth squares inside a low stone wall; the roost corner is tinted green.",
+      "in_game": "Size()"
+    },
+    {
+      "item": "Dusk lamp",
+      "kind": "HUD",
+      "text": "The TURNS counter; the action cue turns to 'Dusk is close' at three turns left.",
+      "in_game": "Turns, ActionCue"
+    }
+  ],
+  "storyline": [
+    {
+      "beat": "Hook",
+      "text": "The glimmer-birds light the Prismheart lanes at night, but tonight the flock has scattered across the roost yard and dusk is falling."
+    },
+    {
+      "beat": "Teaching",
+      "text": "The roost-warden hands you the whistle: walk one cell a turn, birds within two cells fly one step away from you, and a bird that lands in the corner perches. (The WALK / SCARE / ROOST rows appear only on the first turn.)"
+    },
+    {
+      "beat": "Rising",
+      "text": "Each difficulty is a wider yard with a bigger flock: 3 birds in 16 turns, 4 in 30, then 5 birds on an 8-wide yard in 48 turns, where clumps must be peeled apart from the roost side."
+    },
+    {
+      "beat": "Climax",
+      "text": "The last bird perches and the yard goes quiet; every turn to spare is the warden's thanks on top of ten per bird."
+    },
+    {
+      "beat": "Failure",
+      "text": "Dusk falls with birds still out. Pad A or R scatters the same flock again so the yard can be learned."
+    },
+    {
+      "beat": "Place in Prismheart",
+      "text": "The roost yard sits at the end of the Prismheart arcade row after the fogbell quay; a side diversion, not a campaign gate, and settled birds add to the arcade scoreboard."
+    }
+  ],
+  "placement": [
+    {
+      "name": "Realm row",
+      "text": "data/minigames/realm-cabinets.json, realm prismheart_realm, anchor arcade_plaza, layout row, offset (0, 17.5, 0) m, yaw 180; seed crc32('prismheart_realm:roostcall') = 1603034746; StartGame(\"roostcall\", 1603034746), SetGameOption(0)."
+    },
+    {
+      "name": "First frame at the realm seed",
+      "text": "normal 7x7 yard, whistler north-west, roost south-east 2x2, turns 30; birds (draw order) at (3,4), (6,1), (5,3), (6,3) (native == Python)."
+    },
+    {
+      "name": "Spot",
+      "text": "data/minigames/daedalus-spots.json: 'Prismheart, the roost yard'."
+    },
+    {
+      "name": "Handoff",
+      "text": "docs/minigames/PRISMHEART-CABINET-HANDOFF.md lists the cabinet among the twelve with its acceptance steps for codex-play-guard's editor window."
+    }
+  ],
+  "blender_items": [
+    {
+      "name": "Cab_Roostcall",
+      "kind": "cabinet",
+      "text": "Arcade cabinet shell in the shared ADaedalusDesktopArcade footprint with a bird-and-whistle marquee; same sockets as the other Prismheart cabinets.",
+      "priority": "1"
+    },
+    {
+      "name": "Prop_Roostcall_Roost",
+      "kind": "prop",
+      "text": "Moss-wood perch frame, 2 x 2 cell footprint, ~1.6 m, open front; perched-bird socket row.",
+      "priority": "2"
+    },
+    {
+      "name": "Creature_Roostcall_GlimmerBird",
+      "kind": "creature",
+      "text": "Small prism-feathered bird, ~0.3 m, idle / startled-flare / perch poses; emissive feather material variant.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Roostcall_Whistle",
+      "kind": "prop",
+      "text": "Bone whistle on a cord, ~0.15 m, hand socket.",
+      "priority": "3"
+    },
+    {
+      "name": "Prop_Roostcall_YardWall",
+      "kind": "prop",
+      "text": "Low stone wall segment, 1 m, with corner and gate variants to ring the yard.",
+      "priority": "3"
+    },
+    {
+      "name": "NPC_Roostcall_Warden",
+      "kind": "NPC",
+      "text": "Roost-warden on the shared 8-bone rig (reuse Mob_Prism townsfolk base) who hands over the whistle and counts the flock home.",
+      "priority": "3"
+    }
+  ]
+}
