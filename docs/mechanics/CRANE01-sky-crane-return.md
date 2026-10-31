@@ -66,3 +66,17 @@ salt). `Settings.DEFAULT = (40, 40, 0.75, 30, 1.0, 150, 50)`.
   attached at `SOCKET_Door` (hinge UE (-37, 50, 0) cm, open yaw 110 from the sockets.json `hinges`). Spawn each
   released bird at `SOCKET_Crane` (inside, facing out) and walk it to `SOCKET_Release` (0.8 m in front of the door);
   `SOCKET_Carry_L/R` are for the keepers. One crate opening per `release(year, birds)` batch.
+
+## Native C++ core (G616)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshAlleeReleaseCore.h` (namespace
+`daedalus::marsh`) is a header-only C++17 port of this core: `AlleeRelease::Release`, `Left`, `Growth`, `Threshold`
+and the seeded `Run` (released birds, flock, nests and fledglings per year; final flock, peak, outcome, WETLAND/SCRUB
+band), plus `AlleeReleaseSettings::Valid`. It uses the standard library only (no Unreal headers). The Java class stays
+the rules authority. `MarshCoresParityTest.alleeRelease` writes 24 golden vectors (8 tunings x {one release of the
+whole budget, four yearly quarter releases, a half release plus three refused ones}) to
+`engines/unreal/core-test/marsh_allee_release_parity.txt`, and `marsh_allee_release_core_test.cpp` replays them
+exactly: the core uses only + - * /, min/max and ceil in Java's order, so release acceptance, the threshold, the
+growth doubles, every count and a year-weighted checksum must all match on every case. CI runs this in
+`.github/workflows/marsh-cores.yml`. See [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md). No Fair Par cabinet reads
+this core, so the par guard is unchanged.
