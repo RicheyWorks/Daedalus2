@@ -833,3 +833,23 @@ move t=31 act=2,5 heat=4323230;3334400;2443322;2444012;4402022;0232322;3402233 f
 move t=32 act=2,5 heat=4323230;3334400;2443322;2444022;4402022;0232322;3402233 floor=9999990;9999900;9999999;9999049;9909099;0999999;9909999 coals=4 glazed=40 cracked=0 score=200 over=0 won=0 res=2,5: 0 glazed, 0 cracked, 1 raw
 move t=33 act=3,5 heat=4323230;3334400;2443322;2444042;4402022;0232322;3402233 floor=9999990;9999900;9999999;9999099;9909099;0999999;9909999 coals=3 glazed=41 cracked=0 score=211 over=1 won=1 res=3,5: 1 glazed, the whole floor shines
 end  score=211 won=1 glazed=41 cracked=0 coals=3
+vector stone_passes_heat size=3 coals=10 glazed=0 cracked=0 floor=020;232;020 heat=000;000;000
+step act=0,0 demo=0,1 heat=010;100;000 floor=020;232;020 coals=9 glazed=0 cracked=0 score=0 over=0 won=0 res=0,0: 0 glazed, 0 cracked, 5 raw
+vector glazed_tile_passes_heat size=3 coals=10 glazed=2 cracked=0 floor=929;232;020 heat=202;121;000
+step act=0,1 demo=0,1 heat=222;131;000 floor=999;292;020 coals=9 glazed=4 cracked=0 score=10 over=0 won=0 res=0,1: 2 glazed, 0 cracked, 3 raw
+vector exact_target_glazes_four size=3 coals=10 glazed=0 cracked=0 floor=222;232;222 heat=010;121;010
+step act=1,1 demo=0,0 heat=020;242;020 floor=292;989;292 coals=9 glazed=4 cracked=1 score=17 over=0 won=0 res=1,1: 4 glazed, 1 cracked, 4 raw
+vector overshoot_cracks size=3 coals=10 glazed=0 cracked=0 floor=333;333;333 heat=000;020;000
+step act=1,1 demo=0,1 heat=010;141;010 floor=333;383;333 coals=9 glazed=0 cracked=1 score=-3 over=0 won=0 res=1,1: 0 glazed, 1 cracked, 8 raw
+vector spoiled_finish size=2 coals=5 glazed=1 cracked=0 floor=30;09 heat=20;00
+step act=0,0 demo=0,1 heat=40;00 floor=80;09 coals=4 glazed=1 cracked=1 score=-3 over=1 won=0 res=0,0: 0 glazed, 1 cracked; the firing is spoiled
+vector last_coal_spent size=2 coals=1 glazed=0 cracked=0 floor=44;44 heat=00;00
+step act=0,0 demo=0,0 heat=21;10 floor=44;44 coals=0 glazed=0 cracked=0 score=0 over=1 won=0 res=0,0: 0 glazed, 0 cracked; the coals are spent
+vector shining_finish_with_bonus size=2 coals=3 glazed=0 cracked=0 floor=20;00 heat=00;00
+step act=0,0 demo=0,0 heat=20;00 floor=90;00 coals=2 glazed=1 cracked=0 score=9 over=1 won=1 res=0,0: 1 glazed, the whole floor shines
+vector stoker_prefers_glazes_over_warmth size=3 coals=10 glazed=0 cracked=0 floor=222;040;222 heat=101;000;101
+step act=1,1 demo=0,1 heat=111;020;111 floor=222;040;222 coals=9 glazed=0 cracked=0 score=0 over=0 won=0 res=1,1: 0 glazed, 0 cracked, 7 raw
+vector stoker_avoids_the_crack size=2 coals=10 glazed=0 cracked=0 floor=22;22 heat=11;10
+step act=0,0 demo=1,1 heat=32;20 floor=89;92 coals=9 glazed=2 cracked=1 score=7 over=0 won=0 res=0,0: 2 glazed, 1 cracked, 1 raw
+vector stoker_ties_by_row_then_column size=2 coals=10 glazed=0 cracked=0 floor=33;33 heat=00;00
+step act=1,1 demo=0,0 heat=01;12 floor=33;33 coals=9 glazed=0 cracked=0 score=0 over=0 won=0 res=1,1: 0 glazed, 0 cracked, 4 raw

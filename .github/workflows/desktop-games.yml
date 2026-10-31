@@ -72,12 +72,18 @@ jobs:
         run: python tools/minigames/emberkiln_parity.py --check
       - name: Sluicegate parity fixture is current (engines/unreal/core-test/sluicegate_parity.txt)
         run: python tools/minigames/sluicegate_parity.py --check
+      - name: Dyevat parity fixture is current (engines/unreal/core-test/dyevat_parity.txt)
+        run: python tools/minigames/dyevat_parity.py --check
       - name: Glimmerloom parity fixture is current (engines/unreal/core-test/glimmerloom_parity.txt)
         run: python tools/minigames/glimmerloom_parity.py --check
       - name: Spiritkite parity fixture is current (engines/unreal/core-test/spiritkite_parity.txt)
         run: python tools/minigames/spiritkite_parity.py --check
       - name: Glowmoss parity fixture is current (engines/unreal/core-test/glowmoss_parity.txt)
         run: python tools/minigames/glowmoss_parity.py --check
+      - name: Prismheart Fair Par fixture is current (engines/unreal/core-test/prism_fair_par_parity.txt)
+        run: python tools/minigames/fair_par.py --check
+      - name: Prism Satchel parity fixture is current (engines/unreal/core-test/prism_satchel_parity.txt)
+        run: python tools/minigames/prism_satchel_parity.py --check
       - name: Wardens' Accord parity fixture is current (engines/unreal/core-test/wardens_accord_parity.txt)
         run: python tools/minigames/wardens_accord_parity.py --check
       - name: Facetlock parity fixture is current (engines/unreal/core-test/facetlock_parity.txt)

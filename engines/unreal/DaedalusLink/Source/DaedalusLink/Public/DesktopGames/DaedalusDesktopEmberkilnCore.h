@@ -313,6 +313,7 @@ public:
         F.AddText(624, 180, "cracked", Ash, 11);
         F.AddRect(600, 202, 18, 18, StoneTint);
         F.AddText(624, 204, "stone", Ash, 11);
+        if(!Core.Over) F.AddText(600, 280, "SAFE CELLS " + std::to_string(SafeCells()), Ash, 12);
         if(!LastResult.empty() && !Core.Over) F.AddText(600, 300, LastResult, Gold, 12);
         if(Core.Over) F.AddText(600, 330, Core.Won ? "WON: THE WHOLE FLOOR SHINES" : "LOST: THE FIRING IS SPOILED", Gold, 14);
 
@@ -328,6 +329,19 @@ public:
             return {Core.Score, 0, true, Core.Won, Outcome + "pad A or R lays a new floor; " + Tally};
         }
         return {Core.Score, 1, false, false, "Coals " + std::to_string(Core.Coals) + "; " + Tally};
+    }
+
+    /** Game.safe_cells: cells where a coal cracks nothing. */
+    int SafeCells() const {
+        int N = 0;
+        for(int R = 0; R < Core.Size(); ++R) {
+            for(int C = 0; C < Core.Size(); ++C) {
+                emberkiln::Outcome O;
+                Core.Preview({R, C}, O);
+                if(O.Cracks == 0) ++N;
+            }
+        }
+        return N;
     }
 
 private:

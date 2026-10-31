@@ -57,6 +57,28 @@ class GameContract:
         with self.assertRaises(ValueError):
             self.cls().from_state({"v": 9, "id": self.MOD.GAME_ID})
 
+    def test_tampered_saves_are_rejected(self):
+        g = self.MOD.start(5)
+        if not g.over:
+            g.step(g.demo_action())
+        good = json.loads(json.dumps(g.to_state()))
+        breakages = {
+            "negative score": lambda d: d.update(score=-1),
+            "text score": lambda d: d.update(score="9999"),
+            "rng version": lambda d: d["rng"].__setitem__(0, 2),
+            "rng too short": lambda d: d["rng"].__setitem__(1, d["rng"][1][:10]),
+            "rng word too big": lambda d: d["rng"][1].__setitem__(0, 2 ** 32),
+            "rng gauss": lambda d: d["rng"].__setitem__(2, "x"),
+            "missing field": lambda d: d.pop(self.MOD.Game.FIELDS[0]),
+        }
+        if self.cls()(5).rescore() is not None:
+            breakages["inflated score"] = lambda d: d.update(score=d["score"] + 1000)
+        for name, breakit in breakages.items():
+            bad = json.loads(json.dumps(good))
+            breakit(bad)
+            with self.assertRaises(ValueError, msg=name):
+                self.cls().from_state(bad)
+
     def test_over_blocks_moves(self):
         g = self.MOD.demo(0, "normal")
         with self.assertRaises(RuntimeError):

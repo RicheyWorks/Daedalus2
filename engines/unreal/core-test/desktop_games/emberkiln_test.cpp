@@ -181,6 +181,13 @@ int main(int Argc, char** Argv) {
             Warned = O.Cracks;
         }
         Check(Warned > 0, "the stoker's trail passes a cell where a second coal would crack");
+        {
+            Frame F4;
+            T.Render(F4);
+            bool Found = false;
+            for(const auto& Cmd : F4.Commands) if(Cmd.Kind == Shape::Text && Cmd.Label == "SAFE CELLS " + std::to_string(T.SafeCells())) Found = true;
+            Check(Found && T.SafeCells() < T.CoreState().Size() * T.CoreState().Size(), "the HUD counts the safe cells and some are no longer safe");
+        }
     }
 
     EmberkilnGame X;

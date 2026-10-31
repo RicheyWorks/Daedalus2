@@ -791,6 +791,127 @@ def golf():
     return out
 
 
+
+# ================================================================ rigs (Buffffff 59376 + fun-round lane, 2026-10-30)
+# Segment rig built from the kit frame/mover split (UEB 48812): frame = torso (root), movers = Head, ArmR, ArmL, LegR, LegL, Held.
+# Root + 6 movers + Held = the shared 8-part Prism humanoid rig. Hinge pivots ship as SOCKET_Hinge_<Part> on the frame (read by sidecar_cpp);
+# the pose library (Blender euler deg per hinge) ships in the frame spec as "poses". Open pose = Point.
+PIVOTS = {"Head": (0, 0, 1.5), "ArmR": (-0.27, 0, 1.43), "ArmL": (0.27, 0, 1.43), "LegR": (-0.11, 0, 0.82), "LegL": (0.11, 0, 0.82)}
+POSES = {"Idle": {}, "Point": {"ArmR": (-85, 0, 0), "Head": (0, 0, -10)}, "Shrug": {"ArmR": (0, -30, 0), "ArmL": (0, 30, 0), "Head": (0, 12, 0)},
+         "Cheer": {"ArmR": (0, -135, 0), "ArmL": (0, 135, 0), "Head": (-15, 0, 0)}, "Chalk": {"ArmR": (-70, 0, -20), "Head": (10, 0, 0)},
+         "Scold": {"ArmL": (-75, 0, 15), "Head": (-8, 0, 8), "ArmR": (0, -10, 0)}}
+
+
+def seg_of(p):
+    n = p["name"]; x, y, z = p["centre"]
+    if n in ("Torso", "Pelvis", "Belt", "CoatTail"):
+        return None
+    if n.startswith(("Head", "Eye")) or z > 1.55:
+        return "Head"
+    if n.startswith(("Thigh", "Shin", "Boot")):
+        return "LegR" if x < 0 else "LegL"
+    if n.startswith(("Arm", "Hand")):
+        return "ArmR" if x < 0 else "ArmL"
+    return "HeldR" if x < 0 else "HeldL"
+
+
+def rig_npc(M, poses=POSES, open_pose="Point"):
+    base = M["asset"] + "_Rig"; ca = base + "_Rest"; parts = M["objects"][0]["parts"]
+    groups = {}
+    for p in parts:
+        groups.setdefault(seg_of(p), []).append(p)
+    piv = dict(PIVOTS)
+    for side, hand in (("HeldR", (-0.37, 0, 0.88)), ("HeldL", (0.37, 0, 0.88))):
+        if side in groups:
+            piv[side] = hand
+    objs = [K.obj(ca, groups.get(None, []))]
+    for seg in ("Head", "ArmR", "ArmL", "LegR", "LegL", "HeldR", "HeldL"):
+        if seg in groups:
+            objs.append(K.obj(ca + "_" + seg, groups[seg], parent=ca, pivot=piv[seg], role="segment " + seg))
+    sk = {"SOCKET_Head": "Head", "SOCKET_HandR": "ArmR", "SOCKET_HandL": "ArmL", "SOCKET_Speak": "Head"}
+    socks = [dict(s, parent=(ca + "_" + sk[s["name"]]) if s["name"] in sk else None) for s in M["sockets"]]
+    spec = dict(M["spec"], rig="Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)", poses={k: {h: list(v) for h, v in d.items()} for k, d in poses.items()}, open_pose=open_pose, status="NOT READY")
+    closed = {"asset": ca, "state_of": base, "kind": "Mob", "seed": SEED, "spec": spec, "materials": M["materials"], "objects": objs, "sockets": socks, "collision": M["collision"]}
+    opened = {"asset": base + "_Open", "objects": [dict(o, name=o["name"].replace(ca, base + "_Open"), parts=[dict(o["parts"][0], rot=[(o["parts"][0].get("rot") or [0, 0, 0])[i] + poses[open_pose].get(o["name"][len(ca) + 1:], (0, 0, 0))[i] for i in range(3)])] + o["parts"][1:]) for o in objs]}
+    out = K.split_movers(closed, opened)
+    out[0]["spec"]["poses"] = spec["poses"]; out[0]["spec"]["open_pose"] = open_pose
+    return out
+
+
+RIG_NPCS = {"star_mesh": ["Mob_StarMesh_NavigatorWren"], "prismchime": ["Mob_Prismchime_Warden"], "gantry_sweep": ["Mob_GantrySweep_RailwrightOssian"],
+            "buddy_berths": ["Mob_BuddyBerths_DockmotherImelda"], "golf": ["Mob_TidelinksGolf_GreenkeeperTalwyn", "Mob_TidelinksGolf_Caddie_Safe", "Mob_TidelinksGolf_Caddie_Bold", "Mob_TidelinksGolf_Caddie_LayUp"]}
+
+
+def rig_crane():
+    """Gantry crane split: frame (legs, girders, cab) + Trolley mover (slides X) + Hook mover (hoists Z). Whole frame travels along Y on the rail."""
+    M = next(m for m in GAMES["gantry_sweep"]() if m["asset"] == "Prop_GantrySweep_GantryCrane")
+    parts = M["objects"][0]["parts"]; ca = "Prop_GantrySweep_GantryCrane_Rig_Rest"; base = "Prop_GantrySweep_GantryCrane_Rig"
+    tro = [p for p in parts if p["name"] == "Trolley"]; hook = [p for p in parts if p["name"] in ("Cable", "HookBlock", "Hook")]; rest = [p for p in parts if p not in tro and p not in hook]
+    objs = [K.obj(ca, rest), K.obj(ca + "_Trolley", tro, parent=ca, pivot=(0.8, 0, 7.9), role="slide X -2.4..+2.4 m"), K.obj(ca + "_Hook", hook, parent=ca, pivot=(0.8, 0, 7.9), role="follows Trolley X; hoist Z 0..-6 m")]
+    socks = [dict(s, parent=(ca + "_Hook") if s["name"] == "SOCKET_Hook" else (ca + "_Trolley") if s["name"] == "SOCKET_Trolley" else None) for s in M["sockets"]]
+    spec = dict(M["spec"], rig="crane: frame travels Y along the rail; Trolley slides X -2.4..+2.4 m; Hook follows Trolley X and hoists Z 0..-6 m; idle sway +-3 deg about Hinge_Hook X",
+                motions={"Trolley": {"slide_x_m": [-2.4, 2.4]}, "Hook": {"hoist_z_m": [-6.0, 0.0], "sway_deg": 3}}, status="NOT READY")
+    closed = {"asset": ca, "state_of": base, "kind": "Prop", "seed": SEED, "spec": spec, "materials": M["materials"], "objects": objs, "sockets": socks, "collision": M["collision"]}
+    out = K.split_movers(closed)
+    out[0]["spec"]["motions"] = spec["motions"]
+    SL = {"SOCKET_Hinge_Trolley": ("SOCKET_Slide_Trolley", [1, 0, 0], [-2.4, 2.4]), "SOCKET_Hinge_Hook": ("SOCKET_Slide_Hook", [0, 0, 1], [-6.0, 0.0])}
+    for h in out[0]["hinges"]:
+        nm, ax, tr = SL[h["socket"]]
+        h.update(socket=nm, motion="slide", slide_axis_blender=ax, slide_axis_ue=[ax[0], -ax[1], ax[2]], travel_m=tr, open_blender_euler_deg=None, open_ue_rotator=None)
+    for s_ in out[0]["sockets"]:
+        if s_["name"] in SL:
+            s_["name"] = SL[s_["name"]][0]
+    for m in out[1:]:
+        m["hinge"] = next(h for h in out[0]["hinges"] if h["mover"] == m["asset"])
+        m["off_centre_ok"] = "origin is the slide pivot (attach at %s %s)" % (out[0]["asset"], m["hinge"]["socket"])
+    out[0]["spec"]["sockets"] = [s_["name"] for s_ in out[0]["sockets"]]
+    return out
+
+
+@game("rigs_20261030")
+def rigs_20261030():
+    out = []
+    for g, names in RIG_NPCS.items():
+        for M in GAMES[g]():
+            if M["asset"] in names:
+                out += rig_npc(M)
+    return out + rig_crane()
+
+
+
+def _posed(parts, pivot, rot):
+    P = K.rot_matrix(rot); out = []
+    mv = lambda A, v: [sum(A[i][k] * v[k] for k in range(3)) for i in range(3)]
+    mul = lambda A, B: [[sum(A[i][k] * B[k][j] for k in range(3)) for j in range(3)] for i in range(3)]
+    for p in parts:
+        c = [p["centre"][i] - pivot[i] for i in range(3)]; c = mv(P, c)
+        R = mul(P, K.rot_matrix(p.get("rot") or (0, 0, 0)))
+        ry = math.degrees(math.asin(max(-1, min(1, -R[2][0])))); rx = math.degrees(math.atan2(R[2][1], R[2][2])); rz = math.degrees(math.atan2(R[1][0], R[0][0]))
+        out.append(dict(p, centre=[round(c[i] + pivot[i], 5) for i in range(3)], rot=[round(rx, 4), round(ry, 4), round(rz, 4)]))
+    return out
+
+
+@game("rigs_posepreview")
+def rigs_posepreview():
+    """Preview only (not shipped): each rigged NPC in its open pose, plus Ossian in all 6 poses, posed by the same pivots/poses as the rig sidecars."""
+    out = []; todo = []
+    for g, names in RIG_NPCS.items():
+        for M in GAMES[g]():
+            if M["asset"] in names:
+                todo.append((M, ["Point"] if "Ossian" not in M["asset"] else list(POSES)))
+    for M, poses in todo:
+        for pose in poses:
+            parts = []
+            for p in M["objects"][0]["parts"]:
+                seg = seg_of(p); seg = {"HeldR": "ArmR", "HeldL": "ArmL"}.get(seg, seg)
+                rot = POSES[pose].get(seg) if seg else None
+                parts += _posed([p], PIVOTS[seg], rot) if rot else [p]
+            a = "%s_Pose_%s" % (M["asset"], pose)
+            out.append(A(a, parts, [], [K.socket("Floor", (0, 0, 0))], [], "pose preview " + pose))
+            out[-1]["materials"] = [dict(m, name=m["name"].replace(M["asset"], a)) for m in M["materials"]]
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)

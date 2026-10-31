@@ -165,5 +165,36 @@ class Shardring(unittest.TestCase):
         self.assertIn("facet", out.getvalue())
 
 
+
+class SaveChecks(unittest.TestCase):
+    def state(self):
+        g = ps.start(3)
+        for _ in range(12):
+            g.place(ps.greedy_move(g))
+        return g, g.to_state()
+
+    def test_round_trip_still_loads(self):
+        g, st = self.state()
+        self.assertEqual(ps.ShardringGame.from_state(json.loads(json.dumps(st))).status(), g.status())
+
+    def test_rule_breaking_saves_are_rejected(self):
+        _, st = self.state()
+        breakages = {
+            "hue": lambda d: d["ring"].__setitem__(0, "glitter"),
+            "current": lambda d: d.update(current="glitter"),
+            "pouch": lambda d: d.update(pouch=999),
+            "spirit": lambda d: d.update(spirits=["Hollow Moth"]),
+            "resonance": lambda d: d.update(resonance={"ember": -1}),
+            "score floor": lambda d: d.update(score=0, resonance={h: 1 for h in d["resonance"]}),
+            "over": lambda d: d.update(over=True),
+            "rng": lambda d: d["rng"].__setitem__(1, [0] * 5),
+            "score type": lambda d: d.update(score="12"),
+        }
+        for name, breakit in breakages.items():
+            bad = json.loads(json.dumps(st))
+            breakit(bad)
+            with self.assertRaises(ValueError, msg=name):
+                ps.ShardringGame.from_state(bad)
+
 if __name__ == "__main__":
     unittest.main()

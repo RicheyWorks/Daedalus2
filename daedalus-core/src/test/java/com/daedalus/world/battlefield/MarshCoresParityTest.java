@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
@@ -316,6 +317,79 @@ class MarshCoresParityTest {
     @Test
     void droughtOddsMatchesCpp() throws IOException {
         check("marsh_drought_odds_parity.txt", "G202 DroughtOdds", MarshCoresParityTest::droughtOdds);
+    }
+
+    static List<String> fairPar() {
+        List<String> out = new ArrayList<>();
+        double[][] fixed = {{0.5}, {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}, {0.3, 0.3, 0.3, 0.3},
+            {0.9, 0.2, 0.55, 0.7, 0.2, 0.35, 0.8}, {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}};
+        double[] perfect = {0.5, 0.95, 0.3, 0.75, 2.0};
+        for (int c = 0; c < fixed.length; c++) {
+            out.add("case=fixed" + c + " " + pars(FairPar.calibrate(fixed[c], perfect[c])));
+        }
+        for (int run = 0; run < 6; run++) {
+            out.add("bot run=" + run + " sched=" + csv(FairPar.botSchedule(41, run, 10, 6, 5)) + " u="
+                    + FairPar.uniform(41, run, 2, 3) + " pick=" + FairPar.pick(41, run, 1, 0, 6));
+        }
+        double[][] flocks = {{0.5, 0.7, 0.85, 0.9, 0.15, 0.45}, {0.5, 0.7, 0.85, 0.8, 0.15, 0.45}};
+        // start, budget, perYear, releaseYears, horizon, threshold, sigma, cohort, plan runs, bot runs, flock
+        double[][] plans = {{12, 10, 6, 5, 30, 10, 0.2, 3, 400, 200, 0}, {8, 6, 3, 3, 20, 6, 0.3, 3, 100, 60, 1},
+            {12, 8, 4, 4, 25, 10, 0.25, 2, 100, 50, 0}};
+        for (int c = 0; c < plans.length; c++) {
+            double[] p = plans[c];
+            double[] f = flocks[(int) p[10]];
+            int years = c == 0 ? 30 : 10;
+            CraneCohorts flock = CraneCohorts.marsh(new CraneCohorts.Settings(f[0], f[1], f[2], f[3], f[4], f[5],
+                    years), 1);
+            TranslocationPlan.Settings s = new TranslocationPlan.Settings((int) p[0], (int) p[1], (int) p[2],
+                    (int) p[3], (int) p[4], p[5], p[6], (int) p[7], (int) p[8]);
+            long seed = c == 0 ? 7 : 7 + 31L * c;
+            TranslocationPlan plan = TranslocationPlan.of(flock, s, seed);
+            out.add("case=trans" + c + " years=" + years + " seed=" + seed + " botRuns=" + (int) p[9] + " "
+                    + pars(FairPar.translocation(plan, (int) p[9], 600 + c)));
+        }
+        Object[][] reeds = {
+            {List.of(10.0, 25.0, 40.0, 55.0, 80.0, 110.0, 150.0), 6.0, 3.0, 8, 4, 4, 40, 4.0, 0.15, 150},
+            {List.of(10.0, 40.0, 80.0, 150.0), 6.0, 3.0, 6, 3, 3, 25, 4.0, 0.15, 40}};
+        for (int c = 0; c < reeds.length; c++) {
+            Object[] q = reeds[c];
+            @SuppressWarnings("unchecked")
+            List<Double> reed = (List<Double>) q[0];
+            ReedRelease.Settings s = new ReedRelease.Settings(ReedCeiling.Settings.DEFAULT, reed, (double) q[1],
+                    (double) q[2], (int) q[3], (int) q[4], (int) q[5], (int) q[6], (double) q[7], (double) q[8],
+                    (int) q[9]);
+            long seed = 23 + 19L * c;
+            int botRuns = c == 0 ? 120 : 60;
+            out.add("case=reed" + c + " seed=" + seed + " botRuns=" + botRuns + " "
+                    + pars(FairPar.reedRelease(ReedRelease.of(s, seed), botRuns, 700 + c)));
+        }
+        double[][] droughts = {{-0.02, 0.2, 30, 10, 10}, {0.03, 0.1, 40, 10, 50}};
+        for (int c = 0; c < droughts.length; c++) {
+            double[] d = droughts[c];
+            out.add("case=drought" + c + " " + pars(FairPar.droughtOdds(DroughtOdds.of(new DroughtOdds.Settings(d[0],
+                    d[1], (int) d[2], (int) d[3])), d[4], 90, 810 + c)));
+        }
+        out.add("case=spread0 " + pars(FairPar.craneSpread(CraneSpread.marsh(new CraneSpread.Settings(1.2, 0.8, 0.2,
+                60, 30), 1), 3, 5, 70, 820)));
+        out.add("case=cohorts0 " + pars(FairPar.cohorts(CraneCohorts.marsh(new CraneCohorts.Settings(0.6, 0.8, 0.9,
+                0.95, 0.3, 1.2, 10), 1), 7, 80, 830)));
+        out.add("case=ceiling0 " + pars(FairPar.reedCeiling(new ReedCeiling.Settings(0.8, 30, 3, 0.05, 0.3, 0.4,
+                0.1), new double[] {6, 20, 45}, 3, 25, 9, 50, 840)));
+        for (Map.Entry<String, FairPar.Pars> e : FairPar.marshTable().entrySet()) {
+            out.add("table=" + e.getKey() + " " + pars(e.getValue()));
+        }
+        return out;
+    }
+
+    private static String pars(FairPar.Pars p) {
+        return "runs=" + p.runs() + " bronze=" + p.bronze() + " silver=" + p.silver() + " gold=" + p.gold()
+                + " perfect=" + p.perfect() + " bronzeHit=" + p.bronzeHit() + " silverHit=" + p.silverHit()
+                + " goldHit=" + p.goldHit() + " median=" + p.median() + " separated=" + p.separated();
+    }
+
+    @Test
+    void fairParMatchesCpp() throws IOException {
+        check("marsh_fair_par_parity.txt", "G600 FairPar", MarshCoresParityTest::fairPar);
     }
 
     private static void check(String file, String game, Supplier<List<String>> lines) throws IOException {

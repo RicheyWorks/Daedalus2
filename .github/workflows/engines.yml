@@ -83,6 +83,14 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test && ./glowmoss_core_test glowmoss_parity.txt
       - name: Glowmoss Delve core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test_clang && ./glowmoss_core_test_clang glowmoss_parity.txt
+      - name: Prismheart Fair Par (DaedalusPrismFairParCore.h replays prism_fair_par_parity.txt through the Glowmoss, Spiritkite and Glimmerloom cores)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public prism_fair_par_core_test.cpp -o prism_fair_par_core_test && ./prism_fair_par_core_test prism_fair_par_parity.txt
+      - name: Prismheart Fair Par, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prism_fair_par_core_test.cpp -o prism_fair_par_core_test_clang && ./prism_fair_par_core_test_clang prism_fair_par_parity.txt
+      - name: Prism Satchel + Warden Trials core (DaedalusPrismSatchelCore.h reproduces prism_satchel_parity.txt)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public prism_satchel_core_test.cpp -o prism_satchel_core_test && ./prism_satchel_core_test prism_satchel_parity.txt
+      - name: Prism Satchel core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prism_satchel_core_test.cpp -o prism_satchel_core_test_clang && ./prism_satchel_core_test_clang prism_satchel_parity.txt
       - name: Wardens' Accord core (DaedalusWardensAccordCore.h regenerates wardens_accord_parity.txt from seed with CPython-compatible seeding)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public wardens_accord_core_test.cpp -o wardens_accord_core_test && ./wardens_accord_core_test wardens_accord_parity.txt
       - name: Wardens' Accord core, clang
@@ -127,6 +135,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public sluicegate_core_test.cpp -o sluicegate_core_test && ./sluicegate_core_test sluicegate_parity.txt
       - name: Sluicegate core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public sluicegate_core_test.cpp -o sluicegate_core_test_clang && ./sluicegate_core_test_clang sluicegate_parity.txt
+      - name: Dyevat core (DaedalusDyevatCore.h regenerates dyevat_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public dyevat_core_test.cpp -o dyevat_core_test && ./dyevat_core_test dyevat_parity.txt
+      - name: Dyevat core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public dyevat_core_test.cpp -o dyevat_core_test_clang && ./dyevat_core_test_clang dyevat_parity.txt
       - name: G206 Census Budget cost model core (DaedalusCensusBudgetCore.h replays census_budget_parity.txt from census_budget.py; 40000/32768 KiB edges)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fno-exceptions -fno-rtti -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public census_budget_core_test.cpp -o census_budget_core_test && ./census_budget_core_test census_budget_parity.txt
       - name: G206 Census Budget cost model core, clang

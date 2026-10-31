@@ -49,6 +49,28 @@ Game Floor(const char* const* Rows, int Size, int Coals)
 	return G;
 }
 
+/** Rows of digits joined by ';' into a grid; 9 → Glazed, 8 → Cracked for the floor, digits as-is for heat. */
+void ParseGrid(const std::string& Text, bool IsFloor, Game::Grid& Out)
+{
+	for (auto& Row : Out) Row.fill(0);
+	std::stringstream S(Text); std::string Row; size_t R = 0;
+	while (std::getline(S, Row, ';'))
+	{
+		for (size_t C = 0; C < Row.size(); ++C)
+		{
+			const int D = Row[C] - '0';
+			Out[R][C] = IsFloor ? (D == 9 ? Glazed : D == 8 ? Cracked : D) : D;
+		}
+		++R;
+	}
+}
+
+Cell ParseCell(const std::string& Text)
+{
+	const size_t Comma = Text.find(',');
+	return { std::stoi(Text.substr(0, Comma)), std::stoi(Text.substr(Comma + 1)) };
+}
+
 int UnitChecks()
 {
 	int Fails = 0; Outcome Did; std::string Text;
@@ -159,6 +181,28 @@ int main(int Argc, char** Argv)
 			++Turn;
 			const std::string Got = MoveLine(Turn, X, G, Result);
 			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL s=%u %s turn %d\n  want %s\n  got  %s\n", Seed, Diff.c_str(), Turn, Line.c_str(), Got.c_str()); ++Fails; Skip = true; }
+		}
+		else if (Line.rfind("vector ", 0) == 0)   // iteration 4: hand-set corner cases, scripted coal + stoker pick
+		{
+			++Games; Skip = false; Turn = 0;
+			static const char* Blank[] = { "" };
+			G = Floor(Blank, 0, std::stoi(Field(Line, "coals")));
+			static Difficulty VectorDiff; VectorDiff = { "vector", std::stoi(Field(Line, "size")), 0, std::stoi(Field(Line, "coals")) }; G.Diff = &VectorDiff;
+			ParseGrid(Field(Line, "floor"), true, G.Target);
+			ParseGrid(Field(Line, "heat"), false, G.Heat);
+			G.GlazedCount = std::stoi(Field(Line, "glazed")); G.CrackedCount = std::stoi(Field(Line, "cracked"));
+		}
+		else if (Line.rfind("step ", 0) == 0)
+		{
+			if (Skip) continue;
+			const Cell X = ParseCell(Field(Line, "act")), Demo = ParseCell(Field(Line, "demo"));
+			const Cell Pick = G.DemoAction();
+			if (!(Pick == Demo)) { std::printf("FAIL vector stoker: want %d,%d got %d,%d\n  %s\n", Demo.R, Demo.C, Pick.R, Pick.C, Line.c_str()); ++Fails; }
+			Outcome Did; std::string Result;
+			const Game::Act R = G.Step(X, Did, Result);
+			const std::string Tail = MoveLine(0, X, G, Result);
+			const std::string Got = "step act=" + Field(Line, "act") + " demo=" + Field(Line, "demo") + Tail.substr(Tail.find(" heat="));
+			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL vector step\n  want %s\n  got  %s\n", Line.c_str(), Got.c_str()); ++Fails; Skip = true; }
 		}
 		else if (Line.rfind("end  ", 0) == 0)
 		{

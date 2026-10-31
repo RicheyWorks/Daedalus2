@@ -198,6 +198,12 @@ class Game(pc.PrismGame):
             return "the lamp gutters out"
         return f"+{got}" + (" glowmoss" if mossy else "") + (" crumble" if fell else "")
 
+    def rescore(self):
+        """Crystals while delving or after a loss; a win adds the light left and any perfect-delve bonus."""
+        if not self.won:
+            return self.crystals
+        return self.crystals + self.light + (PERFECT_BONUS if self.perfect else 0)
+
     def hint_text(self):
         kind, c = self.hint()
         return "hint: climb out now" if kind == "climb" else f"hint: dig {c}"

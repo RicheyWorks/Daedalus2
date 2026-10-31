@@ -1,0 +1,165 @@
+{
+  "id": "emberkiln",
+  "title": "Emberkiln",
+  "realm": "prismheart_realm",
+  "status": "core + cabinet + 9 iterations in PR; dossier is iteration 10",
+  "summary": "The glaze kiln behind the Prismheart arcade row. Its floor is laid with clay tiles that each want an exact firing heat, broken up by stone that takes none. The stoker sets one coal a turn: the tile under it gains two heat and its four neighbours one. Hit a tile's target exactly and it glazes; go past and it cracks. Stone and finished tiles pass the spread on, so a tile one short can always be finished from beside it, and the whole game is coal economy: glaze every tile before the coals run out, without a single crack. Deterministic per seed, bit-exact between the Python rules, the C++ core and the Unreal cabinet.",
+  "mechanics": [
+    {
+      "name": "Floor",
+      "text": "S x S cells (5 / 6 / 7 by difficulty). Every cell draws a firing target of 2, 3 or 4, then 4 / 6 / 8 distinct cells are turned to stone. Heat starts at 0 everywhere. Coals: 19 / 27 / 36.",
+      "code": "emberkiln.Game.setup / emberkiln::Game::Start"
+    },
+    {
+      "name": "Coal",
+      "text": "A coal goes on any cell. The raw tile under it gains COAL_HEAT = 2; each of its four neighbours (n, e, s, w) gains SPREAD_HEAT = 1. Stone and finished tiles take no heat themselves but the spread still reaches their neighbours. Off-floor cells are refused and cost nothing; every accepted coal spends one.",
+      "code": "Game.act / Game::Step"
+    },
+    {
+      "name": "Glaze and crack",
+      "text": "After each addition a tile whose heat equals its target glazes (finished, scores +5); a tile whose heat passes its target cracks (finished, scores -3). The check is per addition, so a single coal can glaze several tiles at once.",
+      "code": "Game.heat_cell / Game::HeatCell"
+    },
+    {
+      "name": "Win and loss",
+      "text": "When no raw tile is left: no crack wins (+2 per coal left), any crack is a spoiled firing. Running out of coals with raw clay loses. Score is kept through the loss so a near miss still reads.",
+      "code": "GLAZE_SCORE, CRACK_SCORE, COAL_BONUS"
+    },
+    {
+      "name": "Stoker (demo)",
+      "text": "For every cell, preview the coal and rank by (cracks, -glazes, -raised); ties by row then column. So it never cracks when a safe coal exists, glazes as many tiles as it can, and otherwise warms the most raw tiles. Wins about 77 / 84 / 84 percent; coal budgets sit at the 70th percentile of what it needs, so a player who plans the spread wins more often, and a careless one cracks.",
+      "code": "Game.demo_action / Game::DemoAction"
+    },
+    {
+      "name": "Preview",
+      "text": "preview(r, c) returns (glazes, cracks, raised) for a coal without placing it. The native sweep proves preview == step on 16,400 random coals; it drives the crack warnings, the safe-cell count and the Guide hint.",
+      "code": "Game.preview / Game::Preview"
+    },
+    {
+      "name": "Guide (option 1)",
+      "text": "Practice mode marks the stoker's pick in blue and the hint says what it does (glazes N tiles / warms N tiles). In both modes tiles that a coal under the tongs would crack are rimmed red and the HUD counts the cells that are still safe."
+    },
+    {
+      "name": "Saves",
+      "text": "Text save (shared DaedalusDesktopSaveText shape): difficulty, seed, coals, glazed, cracked, score, over, won, tongs, floor (one digit per cell: 0 stone, 2-4 raw, 9 glazed, 8 cracked), heat. Restore regenerates the floor from the seed and checks every cell against it: stone stays stone and cold, raw tiles keep their target with heat below it, glazed tiles sit exactly on a target the seed laid, cracked tiles past it; tallies and flags must agree. Python from_state applies the same rules."
+    },
+    {
+      "name": "Controls",
+      "text": "Arrows / d-pad / stick move the tongs one cell (free); A / J / Space set a coal (one turn); R or pad Start restart a finished firing. Cabinet class DesktopGames/DaedalusDesktopEmberkilnCore.h, registry id emberkiln, save slot emberkiln.dgs."
+    }
+  ],
+  "items": [
+    {
+      "item": "Tongs",
+      "kind": "player",
+      "text": "Long iron kiln tongs; a gold frame around the chosen cell on the board.",
+      "in_game": "Tongs"
+    },
+    {
+      "item": "Coal",
+      "kind": "consumable",
+      "text": "A fist of charcoal from the hopper; the COALS counter is the whole budget.",
+      "in_game": "Coals"
+    },
+    {
+      "item": "Clay tile",
+      "kind": "terrain",
+      "text": "Unfired brown tile showing heat/target; teal when glazed, dark red when cracked.",
+      "in_game": "Target[r][c], Heat[r][c]"
+    },
+    {
+      "item": "Stone",
+      "kind": "terrain",
+      "text": "Grey flag that takes no heat; a place to set a coal when only the neighbours should warm.",
+      "in_game": "Stone"
+    },
+    {
+      "item": "Crack warning",
+      "kind": "HUD",
+      "text": "A red rim along the top of any tile a coal under the tongs would crack; the SAFE CELLS count beside the floor.",
+      "in_game": "WouldCrack, SafeCells"
+    }
+  ],
+  "storyline": [
+    {
+      "beat": "Hook",
+      "text": "The Prismheart glaziers fire the arcade's prism tiles in the old ember kiln, and the master stoker has left you the tongs for tonight's floor."
+    },
+    {
+      "beat": "Teaching",
+      "text": "Three rows on the first coal: a coal gives +2 under and +1 around; exact heat glazes and past it cracks; stone and finished tiles pass the spread on. (They leave after the first coal.)"
+    },
+    {
+      "beat": "Rising",
+      "text": "Each difficulty is a wider floor with more stone breaking the spread and a tighter coal budget: 5x5 with 19 coals, 6x6 with 27, then 7x7 with 36."
+    },
+    {
+      "beat": "Climax",
+      "text": "The last raw tile reaches its heat and the whole floor shines; every coal left in the hopper is the glaziers' thanks."
+    },
+    {
+      "beat": "Failure",
+      "text": "A crack on a finished floor spoils the firing, or the hopper runs dry with clay still raw. Pad A or R lays the same floor again so the spread can be learned."
+    },
+    {
+      "beat": "Place in Prismheart",
+      "text": "The kiln sits at the end of the Prismheart arcade row after the roost yard; a side craft, not a campaign gate, and glazed tiles add to the arcade scoreboard."
+    }
+  ],
+  "placement": [
+    {
+      "name": "Realm row",
+      "text": "data/minigames/realm-cabinets.json, realm prismheart_realm, anchor arcade_plaza, layout row, offset (0, 18.75, 0) m, yaw 180; seed crc32('prismheart_realm:emberkiln') = 1270422306; StartGame(\"emberkiln\", 1270422306), SetGameOption(0). Also placed in spawn_overlook (seed 1373470455) and shattered_planet (seed 1132167481) by the realm generator."
+    },
+    {
+      "name": "First frame at the realm seed",
+      "text": "normal 6x6 floor, 27 coals, 30 raw tiles, tongs at (0,0); top row `## 0/3 0/2 0/2 ## 0/2`; stone at (0,0), (0,4), (1,3), (4,1), (5,0), (5,4) (native == Python)."
+    },
+    {
+      "name": "Spot",
+      "text": "data/minigames/daedalus-spots.json: 'Prismheart, the ember kiln'."
+    },
+    {
+      "name": "Handoff",
+      "text": "docs/minigames/PRISMHEART-CABINET-HANDOFF.md lists the cabinet among the thirteen with its acceptance steps for codex-play-guard's editor window."
+    }
+  ],
+  "blender_items": [
+    {
+      "name": "Cab_Emberkiln",
+      "kind": "cabinet",
+      "text": "Arcade cabinet shell in the shared ADaedalusDesktopArcade footprint with a kiln-mouth marquee and ember glow strip; same sockets as the other Prismheart cabinets.",
+      "priority": "1"
+    },
+    {
+      "name": "Prop_Emberkiln_Kiln",
+      "kind": "prop",
+      "text": "Brick beehive kiln, ~2.5 m, open firing door showing a tiled floor; emissive interior material.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Emberkiln_Tongs",
+      "kind": "prop",
+      "text": "Iron kiln tongs, ~1.2 m, hand socket; heat-scorched tip variant.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Emberkiln_CoalHopper",
+      "kind": "prop",
+      "text": "Wooden hopper of charcoal, ~1 m, with loose coal instances.",
+      "priority": "3"
+    },
+    {
+      "name": "Prop_Emberkiln_Tile",
+      "kind": "prop",
+      "text": "Square clay tile, 0.4 m, raw / glazed (prism teal) / cracked material variants.",
+      "priority": "3"
+    },
+    {
+      "name": "NPC_Emberkiln_Stoker",
+      "kind": "NPC",
+      "text": "Master stoker on the shared 8-bone rig (reuse Mob_Prism townsfolk base), leather apron, hands over the tongs.",
+      "priority": "3"
+    }
+  ]
+}
