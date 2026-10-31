@@ -123,8 +123,15 @@ result g=shardring d=hard score=27 won=0 perfect=0 pay=0 hue=tide seal=1 new=0 t
 result g=spiritkite d=hard score=26 won=1 perfect=0 pay=6 hue=gale seal=6 new=0 text=PRISMSATCHEL1;61,52,112,84,68;98;facetlock:6,glimmerloom:6,glowmoss:6,lumenpath:5,prismcairn:6,prismvault:5,shadewatch:5,shardfall:3,shardring:2,spiritkite:6,wardens_accord:3
 spend cost=verdant:2 ok=1 text=PRISMSATCHEL1;61,52,110,84,68;98;facetlock:6,glimmerloom:6,glowmoss:6,lumenpath:5,prismcairn:6,prismvault:5,shadewatch:5,shardfall:3,shardring:2,spiritkite:6,wardens_accord:3
 result g=wardens_accord d=hard score=55 won=1 perfect=0 pay=7 hue=tide seal=4 new=1 text=PRISMSATCHEL1;61,59,110,84,68;99;facetlock:6,glimmerloom:6,glowmoss:6,lumenpath:5,prismcairn:6,prismvault:5,shadewatch:5,shardfall:3,shardring:2,spiritkite:6,wardens_accord:4
+mastery mastered=11 heartglass=5
+start text=PRISMSATCHEL1;999999998,0,0,0,999999999;999999999;
+result g=shardfall d=hard score=50 won=1 perfect=0 pay=13 hue=ember seal=6 new=6 text=PRISMSATCHEL1;999999999,0,0,0,999999999;999999999;shardfall:6
+result g=prismvault d=easy score=0 won=0 perfect=0 pay=1 hue=umbra seal=1 new=1 text=PRISMSATCHEL1;999999999,0,0,0,999999999;999999999;prismvault:1,shardfall:6
+result g=lumenpath d=normal score=100 won=1 perfect=0 pay=7 hue=ember seal=3 new=3 text=PRISMSATCHEL1;999999999,0,0,0,999999999;999999999;lumenpath:3,prismvault:1,shardfall:6
+mastery mastered=2 heartglass=1
 load text=PRISMSATCHEL1;61,59,110,84,68;99;facetlock:6,glimmerloom:6,glowmoss:6,lumenpath:5,prismcairn:6,prismvault:5,shadewatch:5,shardfall:3,shardring:2,spiritkite:6,wardens_accord:4 ok=1
 load text=PRISMSATCHEL1;0,0,0,0,0;0; ok=1
+load text=PRISMSATCHEL1;999999999,0,0,0,999999999;999999999;lumenpath:3,prismvault:1,shardfall:6 ok=1
 load text=PRISMSATCHEL0;0,0,0,0,0;0; ok=0
 load text=PRISMSATCHEL1;0,0,0,0;0; ok=0
 load text=PRISMSATCHEL1;0,0,0,0,-1;0; ok=0

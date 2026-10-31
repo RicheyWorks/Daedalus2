@@ -78,6 +78,21 @@ class Record(unittest.TestCase):
         self.assertEqual(s.to_text(), ps.Satchel().to_text())
 
 
+class Ceiling(unittest.TestCase):
+    def test_full_wallet_still_saves_and_reloads(self):
+        s = ps.Satchel.from_text("%s;0,0,%d,0,0;%d;" % (ps.SAVE_TAG, ps.COUNT_MAX - 1, ps.COUNT_MAX))
+        s.record("glowmoss", "hard", 45, True, True)
+        self.assertEqual((s.shards["verdant"], s.runs), (ps.COUNT_MAX, ps.COUNT_MAX))
+        self.assertEqual(ps.Satchel.from_text(s.to_text()).to_text(), s.to_text())
+
+    def test_a_loss_is_an_attempt_not_mastery(self):
+        s = ps.Satchel()
+        s.record("glowmoss", "easy", 0, False)
+        self.assertEqual((s.seals["glowmoss"], s.mastered()), (SEAL["ember"], 0))
+        s.record("glowmoss", "easy", 0, True)
+        self.assertEqual(s.mastered(), 1)
+
+
 class Spend(unittest.TestCase):
     def test_spend_and_refusals(self):
         s = ps.Satchel()

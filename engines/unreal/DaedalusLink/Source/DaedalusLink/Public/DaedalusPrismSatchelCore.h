@@ -21,6 +21,7 @@ constexpr int ScoreCap = 4;
 constexpr int PerfectBonus = 2;
 constexpr const char* SaveTag = "PRISMSATCHEL1";
 constexpr size_t SaveMax = 4096;
+constexpr long long CountMax = 999999999;  // shard counts and runs stop here so the 9-digit save fields always reload
 
 struct Payout
 {
@@ -105,8 +106,8 @@ public:
 		const int Gained = Seal > Prev ? Seal - Prev : 0;
 		Pay += Gained;
 		if (Gained) SealsByGame[Game] = Seal;
-		Shards[P->Hue] += Pay;
-		++Runs;
+		Shards[P->Hue] = Shards[P->Hue] + Pay < CountMax ? Shards[P->Hue] + Pay : CountMax;
+		Runs = Runs < CountMax ? Runs + 1 : CountMax;
 		R.Ok = true;
 		R.Pay = Pay;
 		R.Hue = P->Hue;
@@ -128,6 +129,14 @@ public:
 		if (!Any) return false;
 		for (int H = 0; H < HueCount; ++H) Shards[H] -= Cost[H];
 		return true;
+	}
+
+	// Games with a seal past Ember (Ember only marks a finished attempt).
+	int Mastered() const
+	{
+		int N = 0;
+		for (const auto& KV : SealsByGame) N += KV.second >= SealTide;
+		return N;
 	}
 
 	int Heartglass() const

@@ -86,6 +86,16 @@ int main(int Argc, char** Argv)
 			Expect(S.ToText() == Field(Line, "text"), No, "satchel after spend " + S.ToText());
 			++Spends;
 		}
+		else if (Line.rfind("start ", 0) == 0)
+		{
+			const std::optional<Satchel> L = Satchel::FromText(Field(Line, "text"));
+			Expect(L.has_value(), No, "start save refused");
+			if (L) S = *L;
+		}
+		else if (Line.rfind("mastery ", 0) == 0)
+		{
+			Expect(std::to_string(S.Mastered()) == Field(Line, "mastered") && std::to_string(S.Heartglass()) == Field(Line, "heartglass"), No, "mastery counts differ");
+		}
 		else if (Line.rfind("load ", 0) == 0)
 		{
 			const std::string Text = Field(Line, "text");

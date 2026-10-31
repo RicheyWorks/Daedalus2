@@ -4,9 +4,10 @@
 A finished game pays hued Prism Shards into the satchel: a win pays a base by difficulty (easy 1, normal 2,
 hard 3) plus score // divisor (capped), a loss pays half of that score share, a perfect run pays a bonus, and
 each new Warden seal the run earns pays one more. Every shard is the game's home hue (ember, tide, verdant, gale,
-umbra). Spending shards is checked (never below zero).
+umbra). Spending shards is checked (never below zero); counts stop at COUNT_MAX so a save always reloads.
 
-Warden Trials rank each game's best run with seals, in order: Ember (finish a game), Tide (win), Verdant (win on
+Warden Trials rank each game's best run with seals, in order: Ember (finish a game; an attempt mark, not mastery,
+so mastered() skips it), Tide (win), Verdant (win on
 normal or hard), Gale (win on hard), Umbra (win on hard at the game's par) and Heartglass (win on hard at the
 game's heartglass par, or a perfect run where the game has one). Pars come from the Fair Par table (pythagoras,
 FAIRPAR02); changing a par changes the parity fixture.
@@ -24,6 +25,7 @@ SCORE_CAP = 4  # most shards a run's score can add
 PERFECT_BONUS = 2
 SAVE_TAG = "PRISMSATCHEL1"
 SAVE_MAX = 4096  # characters; anything longer is not a satchel
+COUNT_MAX = 999_999_999  # shard counts and runs stop here, so every satchel still fits its 9-digit save fields
 
 # game id -> (home hue, score divisor, umbra par, heartglass par or "perfect"). Pars are the Fair Par table
 # (engines/unreal/core-test/prism_fair_par_parity.txt, docs/mechanics/FAIRPAR02) on hard: umbra = silver, heartglass = gold;
@@ -89,8 +91,8 @@ class Satchel:
         pay += gained
         if gained:
             self.seals[game] = seal
-        self.shards[hue] += pay
-        self.runs += 1
+        self.shards[hue] = min(COUNT_MAX, self.shards[hue] + pay)
+        self.runs = min(COUNT_MAX, self.runs + 1)
         return pay, hue, seal, gained
 
     def spend(self, cost):
@@ -104,6 +106,10 @@ class Satchel:
             raise ValueError("satchel is short of " + ", ".join(short))
         for h, n in cost.items():
             self.shards[h] -= n
+
+    def mastered(self):
+        """Games with a seal past Ember. Ember only marks a finished attempt (a loss earns it), so mastery counts skip it."""
+        return sum(1 for s in self.seals.values() if s >= SEALS.index("tide"))
 
     def heartglass(self):
         """Games with a Heartglass seal (unlocks Spirit Boons later)."""
