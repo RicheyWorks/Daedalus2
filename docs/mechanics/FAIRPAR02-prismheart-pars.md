@@ -1,4 +1,4 @@
-# FAIRPAR02 - Prismheart Fair Par (G603-G606; Prismheart balance lane)
+# FAIRPAR02 - Prismheart Fair Par (G603-G606, G609; Prismheart balance lane)
 
 Code: `tools/minigames/fair_par.py` (authority; read-only on the games' rules)
 C++: `engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusPrismFairParCore.h` (namespace `daedalus::prismpar`)
@@ -99,3 +99,13 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
 - **Shardring is the harshest**: casual play wins 14.5 % / 3 % / 2 %, and the greedy helper only 69 % / 35 % / 20 %.
   The normal and hard pars rest on 13 and 9 winning rounds, so they are low-confidence. The ring fills up too fast
   for casual play; worth a look by the game's owner.
+- **G609 (hephaestus round 2 findings).** Shadewatch pars rising with difficulty is intended: hard runs 28 turns
+  against easy's 20, and every turn survived, shade burned and heart kept scores, so a raw score is not comparable
+  across difficulties. Pars are per difficulty, and the Satchel and Almanac read the row for the difficulty played.
+  The other two findings move pars, so they are held for a follow-up landed together with the Prism Almanac's
+  regenerated parity file (2hot2trot), which reads this fixture:
+  - Prismcairn hard caps every win at Bronze (silver/gold 0); the planned fix takes pars from the demo's wins when
+    the bot never wins (105/105).
+  - Silver equals gold on Prismcairn easy and normal (105/105); the planned fix drops silver to the best winning
+    score below gold (100/105).
+  Until then the Almanac plays uncalibrated Prismcairn hard one difficulty easier, as designed.
