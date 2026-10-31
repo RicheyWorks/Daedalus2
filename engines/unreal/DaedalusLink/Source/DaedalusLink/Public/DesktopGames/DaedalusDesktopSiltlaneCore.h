@@ -11,6 +11,7 @@ namespace daedalus { namespace desktop {
 class SiltlaneGame final : public Game {
     siltlane::Game Rules;
     std::uint32_t SessionSeed = 730;
+public:
     std::string HintLine() const {
         if (Rules.Cleared()) return "HINT Pad A or R runs the silt course again.";
         if (Rules.Lost()) return "HINT Pad A or R starts the same lane again.";
@@ -21,7 +22,6 @@ class SiltlaneGame final : public Game {
         if (Rules.Lost()) return "CUE Retry";
         return "CUE Switch";
     }
-public:
     void Reset(std::uint32_t Seed) override { SessionSeed = Seed ? Seed : 1; Rules.Reset(SessionSeed); }
     bool SetOption(int Value, std::uint32_t Seed) override {
         if (Value < 0 || Value > 1) return false;
