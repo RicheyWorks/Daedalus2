@@ -969,6 +969,44 @@ def emberkiln():
     return out
 
 
+# ---------------------------------------------------------------- forge kit (hephaestus games)
+def ui_panel(a, w, h, note, face_hex="141A22", frame_hex="3A3A40", wall=True):
+    """Wall-hung UI backing panel; runtime UI draws over SOCKET_UI_Face. wall=True: origin at the back-bottom (mount on wall)."""
+    P = [K.box("Frame", (w, 0.06, h), (0, 0, h / 2), 0), K.box("Face", (w - 0.08, 0.01, h - 0.08), (0, -0.031, h / 2), 1, bevel=False)]
+    P += [K.cyl("Bolt%d%d" % (sx, sz), "y", 0.015, 0.015, 0.01, (sx * (w / 2 - 0.025), -0.031, h / 2 + sz * (h / 2 - 0.025)), 2, 6) for sx in (-1, 1) for sz in (-1, 1)]
+    return simple(a, P, [("frame", frame_hex, 0.5, 0.7), ("UI face (runtime UI over this)", face_hex, 0.9), ("bolts", "B08A4A", 0.4, 0.9)], [K.socket("Wall", (0, 0.03, 0)), K.socket("UI_Face", (0, -0.037, h / 2))],
+                  "%.2f x %.2f m UI panel: %s" % (w, h, note), (w, 0.06, h), (0, 0, h / 2))
+
+
+def hammer(a, head_hex, note, head=(0.22, 0.1, 0.1), extra=(), extra_mats=()):
+    hx, hy, hz = head; L = 0.45
+    P = [K.cyl("Haft", "z", 0.018, 0.015, L, (0, 0, L / 2), 0, 8), K.cyl("Grip", "z", 0.021, 0.021, 0.14, (0, 0, 0.08), 1, 8), K.box("Head", head, (0, 0, L + hz / 2 - 0.01), 2)] + list(extra)
+    return simple(a, P, [("ash haft", WOOD, 0.7), ("leather grip", "4A2E1A", 0.8), ("head", head_hex, 0.35, 0.9)] + list(extra_mats),
+                  [K.socket("Grip", (0, 0, 0.08)), K.socket("Strike", (hx / 2, 0, L + hz / 2 - 0.01)), K.socket("Spark", (hx / 2 + 0.02, 0, L + hz / 2 - 0.01))],
+                  "%.2f m forge hammer: %s" % (L + hz, note), (max(hx, 0.05), max(hy, 0.05), L + hz), (0, 0, (L + hz) / 2))
+
+
+# ================================================================ hofstadter_hammers (hephaestus, READY 60513; Items sheet)
+@game("hofstadter_hammers")
+def hofstadter_hammers():
+    G = "Prop_HofstadterHammers_"; out = []
+    top = [K.box("MarqAnvil", (0.34, 0.1, 0.07), (0, -0.05, 2.1), 5), K.box("MarqAnvilFoot", (0.14, 0.1, 0.06), (0, -0.05, 2.04), 5), K.box("MarqSlot", (0.16, 0.02, 0.07), (0.3, -0.17, 1.93), 6, bevel=False)]
+    out.append(cabinet("Prop_Arcade_Cab_HofstadterHammers", "3A2A22", "B08A4A", "FF9A3A", top, [("anvil iron", "2A2A30", 0.45, 0.85), ("slot 36 plate (emissive)", "FFD08A", 0.3, 0.0, True)], "Forge Cabinet, slot 36: anvil marquee + slot plate"))
+    out.append(ui_panel(G + "SlotScreen36", 0.6, 0.45, "slot 36 title card + prompt screen (fits the cabinet SOCKET_Screen)", "1A1410", "2A2A30"))
+    out[-1]["off_centre_ok"] = "screen card; origin bottom-centre of the card"
+    out.append(hammer(G + "Hammer_Q", "C8A040", "the Q hammer: brass cross-peen, Q glyph", extra=[K.box("QGlyph", (0.004, 0.06, 0.06), (0.111, 0, 0.49), 3, bevel=False)], extra_mats=[("glyph (emissive)", "FFC870", 0.3, 0.0, True)]))
+    out.append(hammer(G + "Hammer_Conway", "6A8AA0", "the Conway hammer: blued steel, twin faces, C glyph", head=(0.26, 0.09, 0.09),
+                      extra=[K.cyl("FaceA", "x", 0.05, 0.05, 0.03, (-0.14, 0, 0.485), 2, 8), K.cyl("FaceB", "x", 0.05, 0.05, 0.03, (0.14, 0, 0.485), 2, 8), K.box("CGlyph", (0.004, 0.05, 0.05), (0.156, 0, 0.485), 3, bevel=False)],
+                      extra_mats=[("glyph (emissive)", "8AD0FF", 0.3, 0.0, True)]))
+    out[-1]["off_centre_ok"] = "hammer origin at the grip end"; out[-2]["off_centre_ok"] = "hammer origin at the grip end"
+    out.append(ui_panel(G + "StrikeReadout", 1.2, 0.4, "strikes heard so far + rule text"))
+    out.append(ui_panel(G + "ScorePanel", 0.6, 0.5, "points, streak, best streak (x5 bonus)"))
+    fm = npc("Mob_Forge_Forgemaster", "4A3A2A", "2A2A30", [K.box("Apron", (0.4, 0.03, 0.75), (0, -0.15, 1.0), 4), K.cyl("FHammer", "z", 0.015, 0.015, 0.4, (-0.37, -0.03, 0.7), 5, 6), K.box("FHammerHead", (0.16, 0.07, 0.07), (-0.37, -0.03, 0.92), 5)],
+             [("leather apron", "5A3A22", 0.8), ("iron", "2A2A30", 0.5, 0.8)], "Forgemaster of Hephaestus Island (Turned / Slipped lines); shared with crafting_rewards")
+    out += [fm] + rig_npc(fm)
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)

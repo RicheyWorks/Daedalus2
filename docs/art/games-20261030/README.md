@@ -63,3 +63,7 @@ Notes
 ## emberkiln (unreal-team, READY 60202/60203; 'Blender items' sheet)
 
 13 assets: cabinet, kiln, tongs plain and scorched, coal hopper, tile raw, glazed and cracked, and the Stoker static plus on the shared Prism segment rig (Rig_* movers, 6 poses). Sheet: emberkiln.png.
+
+## hofstadter_hammers (hephaestus, READY 60513; Items sheet)
+
+11 assets: Forge Cabinet slot 36 (anvil marquee, slot plate), slot 36 screen card, the Q hammer (brass) and the Conway hammer (blued twin-face), strike readout and score/streak UI backing panels (runtime UI over SOCKET_UI_Face), and Mob_Forge_Forgemaster static plus on the shared Prism segment rig (also used by crafting_rewards). Sheet: hofstadter_hammers.png.
