@@ -3,6 +3,7 @@
 // alone (CPython-compatible seeding, redraw-until-solvable) and shunt the same way move for move.
 //   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shuntline_core_test.cpp -o shuntline_core_test && ./shuntline_core_test shuntline_parity.txt
 #include "DaedalusShuntlineCore.h"
+#include <algorithm>
 #include <cstdio>
 #include <fstream>
 #include <sstream>
@@ -47,6 +48,22 @@ Game Lay(const std::vector<int>& Train, int Sidings, int Length, int Moves, int 
 }
 
 const Action Out = OutAction, S0{ Kind::Shunt, 0 }, S1{ Kind::Shunt, 1 }, P0{ Kind::Pull, 0 };
+
+std::vector<int> ParseInts(const std::string& Text)
+{
+	std::vector<int> Values;
+	if (Text == "-") return Values;
+	std::stringstream S(Text); std::string Item;
+	while (std::getline(S, Item, ',')) Values.push_back(std::stoi(Item));
+	return Values;
+}
+std::vector<std::string> SplitSemi(const std::string& Text)
+{
+	std::vector<std::string> Parts;
+	std::stringstream S(Text); std::string Part;
+	while (std::getline(S, Part, ';')) Parts.push_back(Part);
+	return Parts;
+}
 
 int UnitChecks()
 {
@@ -148,6 +165,31 @@ int main(int Argc, char** Argv)
 			++Turn;
 			const std::string Got = MoveLine(Turn, A, G, Result);
 			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL s=%u %s turn %d\n  want %s\n  got  %s\n", Seed, Diff.c_str(), Turn, Line.c_str(), Got.c_str()); ++Fails; Skip = true; }
+		}
+		else if (Line.rfind("vector ", 0) == 0)   // iteration 4: hand-set corner cases, scripted move + yardmaster pick
+		{
+			++Games; Skip = false; Turn = 0;
+			const std::vector<int> Train = ParseInts(Field(Line, "train"));
+			int Dest = 1; for (int T : Train) Dest = std::max(Dest, T);
+			G = Lay(Train, std::stoi(Field(Line, "sidings")), std::stoi(Field(Line, "length")), std::stoi(Field(Line, "moves")), Dest);
+			G.State.Index = std::stoi(Field(Line, "index"));
+			const std::vector<std::string> Parked = SplitSemi(Field(Line, "parked"));
+			for (size_t S = 0; S < Parked.size(); ++S) for (int T : ParseInts(Parked[S])) { Siding& Sd = G.State.Sidings[S]; Sd.Tag[static_cast<size_t>(Sd.N++)] = T; }
+			G.Outbound = ParseInts(Field(Line, "outbound"));
+			G.State.OutLast = G.Outbound.empty() ? 0 : G.Outbound.back();
+		}
+		else if (Line.rfind("step ", 0) == 0)
+		{
+			if (Skip) continue;
+			Action A, Demo;
+			if (!ActionFromText(Field(Line, "act"), A) || !ActionFromText(Field(Line, "demo"), Demo)) { std::printf("FAIL bad step line: %s\n", Line.c_str()); ++Fails; Skip = true; continue; }
+			const Action Pick = G.DemoAction();
+			if (!(Pick == Demo)) { std::printf("FAIL vector yardmaster: want %s got %s\n  %s\n", ActionText(Demo).c_str(), ActionText(Pick).c_str(), Line.c_str()); ++Fails; }
+			std::string Result;
+			const Game::Act R = G.Step(A, Result);
+			const std::string Tail = MoveLine(0, A, G, Result);
+			const std::string Got = "step act=" + Field(Line, "act") + " demo=" + Field(Line, "demo") + Tail.substr(Tail.find(" index="));
+			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL vector step\n  want %s\n  got  %s\n", Line.c_str(), Got.c_str()); ++Fails; Skip = true; }
 		}
 		else if (Line.rfind("end  ", 0) == 0)
 		{

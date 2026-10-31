@@ -497,3 +497,21 @@ move t=14 act=p0 index=11 sidings=5,5;-;- outbound=2,2,2,2,2,3,3,3,5 moves=10 sc
 move t=15 act=p0 index=11 sidings=5;-;- outbound=2,2,2,2,2,3,3,3,5,5 moves=9 score=0 over=0 won=0 res=p0: carriage 5 pulled out
 move t=16 act=p0 index=11 sidings=-;-;- outbound=2,2,2,2,2,3,3,3,5,5,5 moves=8 score=46 over=1 won=1 res=p0: carriage 5 pulled out; the train is made up
 end  score=46 won=1 out=11 moves=8
+vector front_goes_out cars=3 sidings=2 length=3 moves=10 train=1,2,3 index=0 parked=-;- outbound=-
+step act=out demo=out index=1 sidings=-;- outbound=1 moves=9 score=0 over=0 won=0 res=out: carriage 1 leaves
+vector shunt_onto_a_siding cars=3 sidings=2 length=3 moves=10 train=3,1,2 index=0 parked=-;- outbound=-
+step act=s1 demo=s0 index=1 sidings=-;3 outbound=- moves=9 score=0 over=0 won=0 res=s1: carriage 3 onto siding 1
+vector pull_in_order cars=3 sidings=2 length=3 moves=10 train=3,1,2 index=2 parked=3;- outbound=1
+step act=out demo=out index=3 sidings=3;- outbound=1,2 moves=9 score=0 over=0 won=0 res=out: carriage 2 leaves
+vector last_pull_makes_up_the_train cars=2 sidings=1 length=3 moves=10 train=2,1 index=2 parked=2 outbound=1
+step act=p0 demo=p0 index=2 sidings=- outbound=1,2 moves=9 score=38 over=1 won=1 res=p0: carriage 2 pulled out; the train is made up
+vector blocked_yard cars=4 sidings=1 length=2 moves=10 train=3,1,1,1 index=2 parked=1 outbound=3
+step act=s0 demo=s0 index=3 sidings=1,1 outbound=3 moves=9 score=10 over=1 won=0 res=s0: carriage 1 onto siding 0; the yard is blocked
+vector shift_ends cars=3 sidings=2 length=3 moves=1 train=1,2,3 index=0 parked=-;- outbound=-
+step act=out demo=out index=1 sidings=-;- outbound=1 moves=0 score=10 over=1 won=0 res=out: carriage 1 leaves; the shift ends
+vector yardmaster_parks_the_high_tag cars=3 sidings=2 length=3 moves=10 train=3,1,2 index=0 parked=-;- outbound=-
+step act=s0 demo=s0 index=1 sidings=3;- outbound=- moves=9 score=0 over=0 won=0 res=s0: carriage 3 onto siding 0
+vector yardmaster_pulls_before_sending cars=3 sidings=2 length=3 moves=10 train=2,2,3 index=1 parked=1;- outbound=-
+step act=p0 demo=s1 index=1 sidings=-;- outbound=1 moves=9 score=0 over=0 won=0 res=p0: carriage 1 pulled out
+vector yardmaster_stacks_high_under_low cars=4 sidings=1 length=3 moves=10 train=3,2,1,1 index=2 parked=3,2 outbound=-
+step act=out demo=out index=3 sidings=3,2 outbound=1 moves=9 score=0 over=0 won=0 res=out: carriage 1 leaves
