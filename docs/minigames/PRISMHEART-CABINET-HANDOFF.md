@@ -6,7 +6,7 @@ merged or queued on `main`; nothing here touches the editor until the custodian'
 
 ## What is ready
 
-Thirteen Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each one regenerates its game from
+Fourteen Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each one regenerates its game from
 `StartGame(id, seed)` alone with a CPython-compatible PRNG, so the Unreal cabinet, the Python rules
 (`tools/minigames/<id>.py`, prism-shard-dev's, the authority) and the web page all play the same seed identically.
 
@@ -25,8 +25,9 @@ Thirteen Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each
 | `fogbell` | Fogbell Ferry | `DesktopGames/DaedalusDesktopFogbellCore.h` | #1101 / #1102 |
 | `roostcall` | Roostcall | `DesktopGames/DaedalusDesktopRoostcallCore.h` | #1118 / #1120 |
 | `emberkiln` | Emberkiln | `DesktopGames/DaedalusDesktopEmberkilnCore.h` | #1126 |
+| `sluicegate` | Sluicegate | `DesktopGames/DaedalusDesktopSluicegateCore.h` | #1130 |
 
-All thirteen share `DesktopGames/DaedalusDesktopSaveText.h` (save text, input names, edge latches) after the #993
+All fourteen share `DesktopGames/DaedalusDesktopSaveText.h` (save text, input names, edge latches) after the #993
 beauty pass. Every cabinet has a save slot in `DaedalusDesktopSaveSlots.h` (`<id>.dgs`, manual style) and a
 fixture-replay test under `engines/unreal/core-test/desktop_games/`. Portable proof is in CI (desktop-games.yml,
 engines.yml); what it does **not** prove is the installed plugin, native class loading, PIE input, file I/O and
@@ -43,19 +44,20 @@ nothing for it.
 
 | id | offset (x, y, z) m | yaw | `StartGame` | option |
 |---|---|---|---|---|
-| `shardring` | 0, −11.25, 0 | 180 | `StartGame("shardring", 2061739538)` | 0 |
-| `lumenpath` | 0, −8.75, 0 | 180 | `StartGame("lumenpath", 2037330375)` | 0 |
-| `wardens_accord` | 0, −6.25, 0 | 180 | `StartGame("wardens_accord", 450290639)` | 0 |
-| `facetlock` | 0, −3.75, 0 | 180 | `StartGame("facetlock", 1644454135)` | 0 |
-| `prismcairn` | 0, −1.25, 0 | 180 | `StartGame("prismcairn", 557933909)` | 0 |
-| `prismvault` | 0, 1.25, 0 | 180 | `StartGame("prismvault", 895410454)` | 0 |
-| `shardfall` | 0, 3.75, 0 | 180 | `StartGame("shardfall", 242191464)` | 0 |
-| `shadewatch` | 0, 6.25, 0 | 180 | `StartGame("shadewatch", 1433643621)` | 0 |
-| `glimmerloom` | 0, 8.75, 0 | 180 | `StartGame("glimmerloom", 1712892515)` | 0 |
-| `prismchime` | 0, 11.25, 0 | 180 | `StartGame("prismchime", 113376713)` | 0 |
-| `fogbell` | 0, 13.75, 0 | 180 | `StartGame("fogbell", 404876817)` | 0 |
-| `roostcall` | 0, 16.25, 0 | 180 | `StartGame("roostcall", 1603034746)` | 0 |
-| `emberkiln` | 0, 18.75, 0 | 180 | `StartGame("emberkiln", 1270422306)` | 0 |
+| `shardring` | 0, −12.5, 0 | 180 | `StartGame("shardring", 2061739538)` | 0 |
+| `lumenpath` | 0, −10, 0 | 180 | `StartGame("lumenpath", 2037330375)` | 0 |
+| `wardens_accord` | 0, −7.5, 0 | 180 | `StartGame("wardens_accord", 450290639)` | 0 |
+| `facetlock` | 0, −5, 0 | 180 | `StartGame("facetlock", 1644454135)` | 0 |
+| `prismcairn` | 0, −2.5, 0 | 180 | `StartGame("prismcairn", 557933909)` | 0 |
+| `prismvault` | 0, 0, 0 | 180 | `StartGame("prismvault", 895410454)` | 0 |
+| `shardfall` | 0, 2.5, 0 | 180 | `StartGame("shardfall", 242191464)` | 0 |
+| `shadewatch` | 0, 5, 0 | 180 | `StartGame("shadewatch", 1433643621)` | 0 |
+| `glimmerloom` | 0, 7.5, 0 | 180 | `StartGame("glimmerloom", 1712892515)` | 0 |
+| `prismchime` | 0, 10, 0 | 180 | `StartGame("prismchime", 113376713)` | 0 |
+| `fogbell` | 0, 12.5, 0 | 180 | `StartGame("fogbell", 404876817)` | 0 |
+| `roostcall` | 0, 15, 0 | 180 | `StartGame("roostcall", 1603034746)` | 0 |
+| `emberkiln` | 0, 17.5, 0 | 180 | `StartGame("emberkiln", 1270422306)` | 0 |
+| `sluicegate` | 0, 20, 0 | 180 | `StartGame("sluicegate", 427050219)` | 0 |
 
 The same row also lists four canonical cabinets (`dungeon`, `riftwing`, `star_shooter`, `lanternwild` at
 y = −16.25 … −8.75) that already exist elsewhere; place them the same way or leave them for a later pass. Read the
@@ -92,6 +94,7 @@ reproduce them bit for bit in the portable tests. In PIE, open each cabinet and 
 | `fogbell` | 8×8 flat, ferry north-west, harbour south-east, tide 0; lanterns (in draw order) at (4,2), (6,5), (2,0), (3,7); top row heights `87736483` |
 | `roostcall` | 7×7 yard, whistler north-west, roost south-east 2×2, turns 30; birds (draw order) at (3,4), (6,1), (5,3), (6,3) |
 | `emberkiln` | 6×6 floor, 27 coals, 30 raw tiles, tongs at (0,0); top row `## 0/3 0/2 0/2 ## 0/2`, stone at (0,0), (0,4), (1,3), (4,1), (5,0), (5,4) |
+| `sluicegate` | 8×8 field, 12 turns, 5 gates, marker on the headgate (0,4); cisterns (draw order) at (2,3), (2,1), (4,0), (2,6); mill at (7,0); top row `.#..H+##` (+ = next push) |
 
 Then per cabinet, in this order, with the evidence named in parentheses:
 1. Keyboard and pad input both act (one key press and one pad press change the frame).

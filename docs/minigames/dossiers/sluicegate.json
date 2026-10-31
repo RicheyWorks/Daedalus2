@@ -1,0 +1,186 @@
+{
+  "id": "sluicegate",
+  "title": "Sluicegate",
+  "realm": "prismheart_realm",
+  "status": "core + cabinet + 9 iterations in PR; dossier is iteration 10",
+  "summary": "The irrigation field below the Prismheart mill race. A seeded field of channels and rock; the headgate on the north edge pushes two cells of water a turn into the nearest open channels and closes after a fixed count of turns. The gatekeeper drops one gate a turn on a dry channel to block a branch, steering scarce water into every cistern while keeping it off the mill wheel at the end of a dead-end race. Every field is winnable by construction. Deterministic per seed, bit-exact between the Python rules, the C++ core and the Unreal cabinet.",
+  "mechanics": [
+    {
+      "name": "Field",
+      "text": "S x S cells (7 / 8 / 9 by difficulty), each channel with 70 / 68 / 66 percent probability, the headgate at (0, S/2) forced open. If the headgate reaches fewer than a third of the field, a wandering channel of 2S random steps is carved from it until it does.",
+      "code": "sluicegate.Game.setup / sluicegate::Game::Start"
+    },
+    {
+      "name": "Cisterns",
+      "text": "3 / 4 / 5 distinct channel cells between 2 steps and turns - max(3, turns / 3) steps from the headgate, so every cistern can be reached inside the budget.",
+      "code": "MIN_CISTERN_DISTANCE, cistern_slack()"
+    },
+    {
+      "name": "Mill wheel",
+      "text": "A dead end at least 3 steps out whose single throat is neither cistern nor headgate and can be gated without cutting any cistern off; if no such cell exists one is carved from rock beside a fitting throat, then a two-throat pocket, else no mill. One gate on the throat always keeps the wheel dry.",
+      "code": "Game._place_mill / Game::PlaceMill"
+    },
+    {
+      "name": "Push",
+      "text": "Each turn the headgate pushes FLOW = 2 cells: the wet list is walked in wetting order, neighbours n/e/s/w, and the first dry open channels found become wet (so nearest first, deterministic ties). Gated cells are skipped. The headgate closes after 9 / 12 / 15 turns.",
+      "code": "Game.push / Game::Push"
+    },
+    {
+      "name": "Gates",
+      "text": "4 / 5 / 6 gates. A gate goes on a dry channel that is not the headgate, a cistern, the mill or already gated; it is permanent. Waiting costs nothing but the turn.",
+      "code": "Game.gateable / Game::Gateable"
+    },
+    {
+      "name": "Win and loss",
+      "text": "Water reaching a cistern fills it (+10). Every cistern filled wins (+3 per gate left, +1 per turn left). Water reaching the mill loses at once, even on the push that fills the last cistern. The headgate closing, or a push that wets nothing, with a cistern still dry loses.",
+      "code": "CISTERN_SCORE, GATE_BONUS, TURN_BONUS"
+    },
+    {
+      "name": "Gatekeeper (demo)",
+      "text": "For waiting and for every gateable cell, play the rest of the flow with no more gates and rank the ending: won, then not flooded, then more cisterns filled, then fewer turns used; ties by row then column, waiting as the baseline. Wins about 91 / 76 / 74 percent; a player who plans two gates ahead does better.",
+      "code": "Game.rollout, Game.demo_action / Game::Rollout, Game::DemoAction"
+    },
+    {
+      "name": "Preview",
+      "text": "preview(action) returns the cells the push would wet, cisterns filled and whether the mill floods, without moving anything; the native sweep proves it equals the real push in order on 5,462 actions. It draws the next push on both screens and feeds the Guide hint."
+    },
+    {
+      "name": "Guide (option 1)",
+      "text": "Practice mode marks the gatekeeper's gate in blue (or says it waits) and the hint says how the rollout ends. In both modes the next push's cells are drawn pale (+ on the Python screen) and the hint counts cells to the mill when the water is within three."
+    },
+    {
+      "name": "Saves",
+      "text": "Text save (shared DaedalusDesktopSaveText shape): difficulty, seed, turns, gates left, filled, score, over, won, marker, wet list in order, gates. Restore regenerates the field from the seed and checks the wet list starts at the headgate on open ungated channels, gates sit on legal cells, stock and turns add up, filled equals the wet cisterns and the flags follow the rules; Python from_state applies the same checks."
+    },
+    {
+      "name": "Controls",
+      "text": "Arrows / d-pad / stick move the marker (free); A / J / Space drop a gate under the marker (one push); K / pad B wait; R or pad Start restart a finished field. Cabinet class DesktopGames/DaedalusDesktopSluicegateCore.h, registry id sluicegate, save slot sluicegate.dgs."
+    }
+  ],
+  "items": [
+    {
+      "item": "Headgate",
+      "kind": "fixture",
+      "text": "Timber sluice at the north edge with a lifting wheel; H on the board. Closes when the turns run out.",
+      "in_game": "Head, Turns"
+    },
+    {
+      "item": "Gate",
+      "kind": "consumable",
+      "text": "A dropped oak board that blocks a channel for good; dark bar on the board.",
+      "in_game": "Gates, GatesLeft"
+    },
+    {
+      "item": "Cistern",
+      "kind": "goal",
+      "text": "Stone tank sunk in the field; amber until water reaches it, teal when full.",
+      "in_game": "Cisterns, Filled"
+    },
+    {
+      "item": "Mill wheel",
+      "kind": "hazard",
+      "text": "The red wheel at the end of a dead-end race; one splash and the field is lost.",
+      "in_game": "Mill"
+    },
+    {
+      "item": "Channel and rock",
+      "kind": "terrain",
+      "text": "Pale earth channels and dark rock; water blue, the next push a lighter blue.",
+      "in_game": "Field, Wet"
+    },
+    {
+      "item": "Marker",
+      "kind": "player",
+      "text": "The gatekeeper's crook; a gold frame on the chosen cell.",
+      "in_game": "Marker"
+    }
+  ],
+  "storyline": [
+    {
+      "beat": "Hook",
+      "text": "The spring melt is in the race and the Prismheart cisterns are dry; the old gatekeeper hands you the crook and a stack of boards."
+    },
+    {
+      "beat": "Teaching",
+      "text": "Three rows on the first push: the headgate pushes two cells a turn into the nearest channels; a board blocks a branch; fill every cistern and keep the wheel dry. (They leave after the first push.)"
+    },
+    {
+      "beat": "Rising",
+      "text": "Each difficulty is a wider field with more cisterns, more rock and a longer race for the water: 7x7 with 3 cisterns in 9 turns, 8x8 with 4 in 12, 9x9 with 5 in 15."
+    },
+    {
+      "beat": "Climax",
+      "text": "The last cistern brims as the headgate drops; every board and turn to spare is the miller's thanks."
+    },
+    {
+      "beat": "Failure",
+      "text": "The wheel floods, or the headgate closes with a cistern dry. Pad A or R reopens the same field so the branches can be learned."
+    },
+    {
+      "beat": "Place in Prismheart",
+      "text": "The sluice field sits at the far end of the Prismheart arcade row after the ember kiln; a side craft, not a campaign gate, and filled cisterns add to the arcade scoreboard."
+    }
+  ],
+  "placement": [
+    {
+      "name": "Realm row",
+      "text": "data/minigames/realm-cabinets.json, realm prismheart_realm, anchor arcade_plaza, layout row, offset (0, 20, 0) m, yaw 180; seed 427050219; StartGame(\"sluicegate\", 427050219), SetGameOption(0). Also placed in spawn_overlook (seed 1867974357) and shattered_planet (seed 320425885) by the realm generator."
+    },
+    {
+      "name": "First frame at the realm seed",
+      "text": "normal 8x8 field, 12 turns, 5 gates, marker on the headgate (0,4); cisterns (draw order) at (2,3), (2,1), (4,0), (2,6); mill at (7,0); top row `.#..H+##` with the next push at (0,5) and (1,4) (native == Python)."
+    },
+    {
+      "name": "Spot",
+      "text": "data/minigames/daedalus-spots.json: 'Prismheart, the sluice field'."
+    },
+    {
+      "name": "Handoff",
+      "text": "docs/minigames/PRISMHEART-CABINET-HANDOFF.md lists the cabinet among the fourteen with its acceptance steps for codex-play-guard's editor window."
+    }
+  ],
+  "blender_items": [
+    {
+      "name": "Cab_Sluicegate",
+      "kind": "cabinet",
+      "text": "Arcade cabinet shell in the shared ADaedalusDesktopArcade footprint with a sluice-wheel marquee and water-channel side art; same sockets as the other Prismheart cabinets.",
+      "priority": "1"
+    },
+    {
+      "name": "Prop_Sluicegate_Headgate",
+      "kind": "prop",
+      "text": "Timber sluice gate with lifting wheel, ~2 m wide; open and closed poses.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Sluicegate_Board",
+      "kind": "prop",
+      "text": "Oak gate board, 1 m, with iron handle; stacked and dropped variants.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Sluicegate_Cistern",
+      "kind": "prop",
+      "text": "Sunken stone tank, 1 x 1 m, dry and full material variants (teal water surface).",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Sluicegate_MillWheel",
+      "kind": "prop",
+      "text": "Undershot mill wheel, ~2.5 m, on a race end wall; idle and turning.",
+      "priority": "3"
+    },
+    {
+      "name": "Prop_Sluicegate_Channel",
+      "kind": "prop",
+      "text": "Modular earth channel segments (straight, corner, tee, dead end) with a water fill material.",
+      "priority": "3"
+    },
+    {
+      "name": "NPC_Sluicegate_Gatekeeper",
+      "kind": "NPC",
+      "text": "Old gatekeeper on the shared 8-bone rig (reuse Mob_Prism townsfolk base) with crook and board stack.",
+      "priority": "3"
+    }
+  ]
+}
