@@ -173,6 +173,25 @@ int main(int Argc, char** Argv) {
         Frame F2;
         T.Render(F2);
         Check(Rows(F2) == 0, "the tutorial leaves after the first shard");
+        // Iteration 9: the FITS line follows the preview through a whole weigher game
+        ShardscaleGame P;
+        P.Reset(9);
+        P.SetCabinetDifficulty("hard");
+        bool FitsOk = true;
+        while(!P.GetStatus().Over && FitsOk) {
+            int After = 0;
+            bool TipsL = false, TipsR = false, Ends = false;
+            P.CoreState().Preview({Kind::Left, P.HandSource()}, After, TipsL, Ends);
+            P.CoreState().Preview({Kind::Right, P.HandSource()}, After, TipsR, Ends);
+            const std::string Want = std::string("FITS ") + (!TipsL && !TipsR ? "left and right" : !TipsL ? "left" : !TipsR ? "right" : "neither pan (bench it)");
+            Frame FP;
+            P.Render(FP);
+            bool Found = false;
+            for(const auto& Cmd : FP.Commands) if(Cmd.Kind == Shape::Text && Cmd.Label == Want) Found = true;
+            FitsOk = Found;
+            Do(P, P.CoreState().DemoAction());
+        }
+        Check(FitsOk, "the FITS line matches the preview every turn");
     }
 
     ShardscaleGame X;

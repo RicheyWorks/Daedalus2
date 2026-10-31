@@ -58,6 +58,14 @@ public:
     const shardscale::Game& CoreState() const { return Core; }
     int HandSource() const { return Hand; }
     const std::string& LastResultText() const { return LastResult; }
+    /** Where the shard in hand may go without tipping: "left and right", "left", "right" or "neither pan (bench it)". */
+    std::string FitsText() const {
+        int After = 0;
+        bool Tips = false, Ends = false;
+        const bool LeftOk = Core.Preview({shardscale::Kind::Left, Hand}, After, Tips, Ends) && !Tips;
+        const bool RightOk = Core.Preview({shardscale::Kind::Right, Hand}, After, Tips, Ends) && !Tips;
+        return LeftOk && RightOk ? "left and right" : LeftOk ? "left" : RightOk ? "right" : "neither pan (bench it)";
+    }
     /** The weight of the shard in hand, 0 with nothing left. */
     int HandWeight() const {
         if(Hand == shardscale::Action::Next) return CartHasNext() ? Core.Line[static_cast<size_t>(Core.Index)] : 0;
@@ -324,6 +332,7 @@ public:
         }
         F.AddText(600, 110, "LEFT TO PLACE " + std::to_string(Core.Remaining()), Mist, 14);
         F.AddText(600, 132, "HAND " + (HandWeight() > 0 ? std::to_string(HandWeight()) : std::string("-")), Mist, 14);
+        if(!Core.Over && HandWeight() > 0) F.AddText(600, 154, "FITS " + FitsText(), Mist, 14);
         if(!LastResult.empty() && !Core.Over) F.AddText(600, 300, LastResult, Gold, 12);
         if(Core.Over) F.AddText(600, 330, Core.Won ? "WON: THE BEAM RESTS LEVEL" : (Core.Tipped ? "LOST: THE BEAM TIPS" : "LOST: THE BEAM SETTLES ASKEW"), Gold, 14);
 

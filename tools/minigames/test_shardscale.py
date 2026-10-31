@@ -147,6 +147,51 @@ class Rules(unittest.TestCase):
 
 
 
+class Screen(unittest.TestCase):
+    """Iterations 7 and 9: tutorial rows on the first turn only; the fit line follows the preview."""
+    def test_tutorial_only_on_the_first_turn(self):
+        g = gm.start(2)
+        self.assertIn("SET    l / r", g.render())
+        g.step(g.demo_action())
+        self.assertNotIn("SET    l / r", g.render())
+
+    def test_fit_line_matches_preview(self):
+        for s in range(10):
+            g = gm.start(s, "hard")
+            while not g.over:
+                if g.index < g.cfg["shards"]:
+                    left_ok = not g.preview(L)[2]
+                    right_ok = not g.preview(R)[2]
+                    want = "left and right" if left_ok and right_ok else "left" if left_ok else "right" if right_ok else "neither pan (bench it)"
+                    self.assertIn("fits: " + want, g.render())
+                g.step(g.demo_action())
+            self.assertNotIn("fits:", g.render())
+
+
+class Saves(unittest.TestCase):
+    """Iteration 5: from_state refuses saves that break the rules."""
+    def bad(self, **fields):
+        st = gm.start(3).to_state()
+        st.update(fields)
+        with self.assertRaises(ValueError):
+            gm.Game.from_state(st)
+
+    def test_round_trip_still_works(self):
+        g = gm.start(3)
+        for _ in range(4):
+            g.step(g.demo_action())
+        self.assertEqual(gm.Game.from_state(g.to_state()).status(), g.status())
+
+    def test_bad_saves_are_refused(self):
+        g = gm.start(3)
+        self.bad(left=1)                                  # weight the cart never gave
+        self.bad(index=1, held=[g.line[0]])               # a bench shard with no bench use
+        self.bad(index=1, left=g.line[0], tipped=True)    # tipped within the cap
+        self.bad(held=[5, 3], bench_used=2, index=2, left=sum(g.line[:2]) - 8)
+        self.bad(won=True)
+        self.bad(over=True)
+
+
 class Balance(unittest.TestCase):
     """Iteration 3: pinned bands. The weigher always levels; lighter-pan greedy without the bench stays rare, so a rules
     change that makes lines trivially greedy-solvable (or impossible) is caught."""

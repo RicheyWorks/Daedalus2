@@ -1,0 +1,164 @@
+{
+  "id": "shardscale",
+  "title": "Shardscale",
+  "realm": "prismheart_realm",
+  "status": "core + cabinet on main; iterations in PR; dossier is iteration 10",
+  "summary": "The weigh-house at the Prismheart arcade row, where cut shards are balanced before they are set. A seeded line of shards comes off the cart in order; each one goes on the left pan, the right pan, or onto a small bench for later. The beam may never tip past the cap, and when every shard is on it must rest level within the tolerance. Every line is solvable by construction; the trick is knowing which shard to hold back and when to bring it down. Deterministic per seed, bit-exact between the Python rules, the C++ core and the Unreal cabinet.",
+  "mechanics": [
+    {
+      "name": "Line",
+      "text": "8 / 10 / 12 shards with weights 1-9 drawn in order. Setup repeats the draw (up to 50 times) until the exact search finds a level weighing, so the puzzle always has an answer.",
+      "code": "shardscale.Game.setup / shardscale::Game::Start"
+    },
+    {
+      "name": "Turn",
+      "text": "The next shard goes left, right or onto the bench (2 / 2 / 3 slots, kept sorted); a benched shard goes left or right on a later turn. Setting and benching each take one turn; a full bench refuses a hold.",
+      "code": "Game.act, candidate_actions / Game::Step, CandidateActions"
+    },
+    {
+      "name": "Cap",
+      "text": "After every placement the pans may differ by at most the cap (6 / 5 / 5). Past it the beam tips, the shards slide off and the weighing is lost with score 0.",
+      "code": "cap, tipped"
+    },
+    {
+      "name": "Level",
+      "text": "With every shard placed (cart empty, bench empty) the beam must rest within the tolerance (1 / 1 / 0) to win: 10 + 5 per point of slack under the tolerance + 2 per bench slot never used. Otherwise the beam settles askew and the weighing is lost.",
+      "code": "WIN_SCORE, SLACK_SCORE, BENCH_SCORE"
+    },
+    {
+      "name": "Weigher (demo)",
+      "text": "An exact depth-first search over (shards taken, difference, bench) with actions in the rules' order (left, right, hold, then each bench shard left/right), memoised; it plays the first winning action and levels every seeded line. Lighter-pan greedy that never benches wins only about 12 / 6 / 1 percent, so the bench is the whole skill.",
+      "code": "solve, Game.demo_action / Solver, Game::DemoAction"
+    },
+    {
+      "name": "Preview",
+      "text": "preview(action) gives the difference after, whether it tips and whether it ends the weighing, without moving anything; the native sweep proves it equals the real move. It drives the FITS line and the tip warnings."
+    },
+    {
+      "name": "Guide (option 1)",
+      "text": "Practice mode marks the shard the weigher's line takes next (cart or bench) in blue and says which pan or the bench. In both modes the HUD says where the shard in hand fits without tipping, and the hint warns when it fits neither pan."
+    },
+    {
+      "name": "Saves",
+      "text": "Text save (shared DaedalusDesktopSaveText shape): difficulty, seed, index, left, right, held, used, hand, score, tipped, over, won. Restore regenerates the line from the seed and checks that pans + bench account for exactly the shards taken, the bench is sorted and within its slots, the beam is within the cap unless tipped, and the flags follow the rules; Python from_state applies the same checks."
+    },
+    {
+      "name": "Controls",
+      "text": "Up/Down (or stick) pick the shard in hand: the cart's next shard or a bench shard; Left/Right set it on a pan; A / J / Space bench the next shard; R or pad Start restart a finished weighing. Cabinet class DesktopGames/DaedalusDesktopShardscaleCore.h, registry id shardscale, save slot shardscale.dgs."
+    }
+  ],
+  "items": [
+    {
+      "item": "Balance beam",
+      "kind": "fixture",
+      "text": "A brass beam on a stone pillar with two hanging pans; it tilts with the difference and drops when it tips.",
+      "in_game": "Left, Right, Difference()"
+    },
+    {
+      "item": "Prism shard",
+      "kind": "pickup",
+      "text": "A cut crystal shard with its weight etched on the face; violet squares on the cart.",
+      "in_game": "Line[i]"
+    },
+    {
+      "item": "Cart",
+      "kind": "fixture",
+      "text": "The shard cart showing the next five shards in order.",
+      "in_game": "Index"
+    },
+    {
+      "item": "Bench",
+      "kind": "fixture",
+      "text": "A short stone shelf with 2-3 slots where shards wait; kept in weight order.",
+      "in_game": "Held, BenchUsed"
+    },
+    {
+      "item": "Weigher's hand",
+      "kind": "player",
+      "text": "The gold frame on the shard about to be set.",
+      "in_game": "Hand"
+    }
+  ],
+  "storyline": [
+    {
+      "beat": "Hook",
+      "text": "Every prism tile in the arcade is balanced before it is set; tonight the master weigher is out and the cart is full."
+    },
+    {
+      "beat": "Teaching",
+      "text": "Three rows on the first shard: Left/Right set the shard in hand, past the cap the beam tips, place every shard and end level. (They leave after the first shard.)"
+    },
+    {
+      "beat": "Rising",
+      "text": "Each difficulty is a longer line with a tighter beam: 8 shards with cap 6 and tolerance 1, 10 shards with cap 5, then 12 shards that must end exactly level, with a third bench slot to plan around."
+    },
+    {
+      "beat": "Climax",
+      "text": "The last shard settles and the beam rests level; every point of slack and every bench slot left clean is the weigher's thanks."
+    },
+    {
+      "beat": "Failure",
+      "text": "The beam tips and the shards slide off, or the last shard leaves it askew. Pad A or R rolls the same line again so the holds can be learned."
+    },
+    {
+      "beat": "Place in Prismheart",
+      "text": "The weigh-house sits at the end of the Prismheart arcade row after the kite anchor; a side craft, not a campaign gate, and level weighings add to the arcade scoreboard."
+    }
+  ],
+  "placement": [
+    {
+      "name": "Realm row",
+      "text": "data/minigames/realm-cabinets.json, realm prismheart_realm, anchor arcade_plaza, layout row, yaw 180; seed 644661142; StartGame(\"shardscale\", 644661142), SetGameOption(0). Also placed in spawn_overlook and shattered_planet by the realm generator."
+    },
+    {
+      "name": "First frame at the realm seed",
+      "text": "normal line 1,5,2,1,5,1,2,4,5,7; cap 5, tolerance 1, bench 2; hand on the cart's first shard (native == Python)."
+    },
+    {
+      "name": "Spot",
+      "text": "data/minigames/daedalus-spots.json: 'Prismheart, the weigh-house'."
+    },
+    {
+      "name": "Handoff",
+      "text": "docs/minigames/PRISMHEART-CABINET-HANDOFF.md lists the cabinet among the seventeen with its acceptance steps for codex-play-guard's editor window."
+    }
+  ],
+  "blender_items": [
+    {
+      "name": "Cab_Shardscale",
+      "kind": "cabinet",
+      "text": "Arcade cabinet shell in the shared ADaedalusDesktopArcade footprint with a balance-beam marquee; same sockets as the other Prismheart cabinets.",
+      "priority": "1"
+    },
+    {
+      "name": "Prop_Shardscale_Beam",
+      "kind": "prop",
+      "text": "Brass balance beam on a stone pillar, ~1.4 m span, two hanging pans; pivot bone for tilt.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Shardscale_Shard",
+      "kind": "prop",
+      "text": "Cut prism shard, 0.2 m, nine etched-weight material variants.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Shardscale_Cart",
+      "kind": "prop",
+      "text": "Low wooden shard cart with a tilted tray, ~1 m, five shard sockets.",
+      "priority": "3"
+    },
+    {
+      "name": "Prop_Shardscale_Bench",
+      "kind": "prop",
+      "text": "Stone shelf with three recessed slots, ~0.8 m.",
+      "priority": "3"
+    },
+    {
+      "name": "NPC_Shardscale_Weigher",
+      "kind": "NPC",
+      "text": "Master weigher on the shared 8-bone rig (reuse Mob_Prism townsfolk base), apron and eyeglass, hands over the tongs.",
+      "priority": "3"
+    }
+  ]
+}
