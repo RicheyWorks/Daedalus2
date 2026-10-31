@@ -26,6 +26,7 @@
 #include "DaedalusDesktopSluicegateCore.h"
 #include "DaedalusDesktopGlowmossCore.h"
 #include "DaedalusDesktopSpiritkiteCore.h"
+#include "DaedalusDesktopShardscaleCore.h"
 #include "DaedalusDesktopSaveSlots.h"
 #include <memory>
 #include <limits>
@@ -65,7 +66,8 @@ inline const std::vector<Entry>& Catalog() {
         {"emberkiln","Emberkiln","Set coals so every clay tile glazes at its exact heat before the coals run out. Arrows or stick: move the tongs; J/Space or pad A: set a coal"},
         {"sluicegate","Sluicegate","Steer the headgate's water into every cistern and off the mill wheel. Arrows or stick: move the marker; J/Space or pad A: drop a gate; K or pad B: wait"},
         {"glowmoss","Glowmoss Delve","Dig down the crystal shaft on a light budget and climb out richer. Left/Right or stick: pick the ledge; J/Space or pad A: dig; K or pad B: climb out"},
-        {"spiritkite","Spiritkite Weave","Fly wind lanes between sky isles for lanterns and land on the anchor before the wind runs out. Left/Right or stick: pick a lane; J/Space or pad A: fly; K or pad B: land"}
+        {"spiritkite","Spiritkite Weave","Fly wind lanes between sky isles for lanterns and land on the anchor before the wind runs out. Left/Right or stick: pick a lane; J/Space or pad A: fly; K or pad B: land"},
+        {"shardscale","Shardscale","Set a line of shards on a balance beam without letting it tip; end level. Up/Down or stick: pick the shard in hand; Left/Right: set it on a pan; J/Space or pad A: bench the next shard"}
     };
     return Entries;
 }
@@ -103,6 +105,7 @@ inline std::unique_ptr<Game> CreateGame(const std::string& RawId) {
     if(Id=="sluicegate") return std::make_unique<SluicegateGame>();
     if(Id=="glowmoss") return std::make_unique<GlowmossGame>();
     if(Id=="spiritkite") return std::make_unique<SpiritkiteGame>();
+    if(Id=="shardscale") return std::make_unique<ShardscaleGame>();
     return nullptr;
 }
 

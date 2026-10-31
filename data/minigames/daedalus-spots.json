@@ -129,6 +129,10 @@
     "spiritkite": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the kite anchor"
+    },
+    "shardscale": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the weigh-house"
     }
   }
 }
