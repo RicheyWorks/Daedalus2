@@ -110,9 +110,9 @@ class Game(pc.PrismGame):
     @staticmethod
     def parse(line):
         parts = line.split()
-        if parts[0] == "flare" and len(parts) == 2:
+        if len(parts) == 2 and parts[0] == "flare" and parts[1].isascii() and parts[1].isdigit():
             return ("flare", int(parts[1]))
-        if parts[0] in ("kindle", "nova") and len(parts) == 1:
+        if len(parts) == 1 and parts[0] in ("kindle", "nova"):
             return (parts[0], 0)
         raise ValueError("use flare <lane>, kindle or nova")
 

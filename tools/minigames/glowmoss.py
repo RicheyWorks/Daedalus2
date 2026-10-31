@@ -49,8 +49,14 @@ TUTORIAL = """Glowmoss Delve - how to play
 Type `hint` for the best next move, `help` for this text, `q` to quit."""
 
 
+SEED_CODE_MAX = 999_999_999  # 9 ASCII digits, the same limit as the native ParseSeedCode
+
+
 def seed_code(seed, difficulty):
-    """Shareable code for a shaft, e.g. GLOW-N-1337 (difficulty initial, then the seed)."""
+    """Shareable code for a shaft, e.g. GLOW-N-1337 (difficulty initial, then the seed). Seeds are 0..999999999 so
+    every code parses back here and in DaedalusGlowmossCore.h::ParseSeedCode (Round 2 finding, art-master-flex 2)."""
+    if not isinstance(seed, int) or isinstance(seed, bool) or not 0 <= seed <= SEED_CODE_MAX:
+        raise ValueError(f"seed codes hold seeds 0..{SEED_CODE_MAX}")
     return f"{CODE_PREFIX}-{difficulty[0].upper()}-{seed}"
 
 
@@ -62,8 +68,8 @@ def parse_seed_code(code):
     names = {name[0].upper(): name for name in DIFFICULTY}
     if parts[1] not in names:
         raise ValueError(f"difficulty letter must be one of {''.join(sorted(names))}")
-    if not parts[2].isdigit():
-        raise ValueError("the seed must be a whole number")
+    if not (1 <= len(parts[2]) <= 9 and all("0" <= ch <= "9" for ch in parts[2])):
+        raise ValueError("the seed must be a whole number of 1 to 9 digits (0-9)")
     return int(parts[2]), names[parts[1]]
 
 
