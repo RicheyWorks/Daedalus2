@@ -259,7 +259,9 @@ class WebUiPaintPinTest {
                     .contains("g.fillRect(sx, y + 4, 1, 1)")
                     .contains("g.fillStyle = halfMix(sideInk, halfMix(fade, wallInk));")
                     .contains("g.fillRect(sx, y + 5, 1, 1)")
-                    .contains("g.fillRect(sx, y + 6, 1, span - 4)")
+                    .contains("g.fillStyle = halfMix(sideInk, halfMix(halfMix(fade, wallInk), wallInk));")
+                    .contains("g.fillRect(sx, y + 6, 1, 1)")
+                    .contains("g.fillRect(sx, y + 7, 1, span - 5)")
                     .contains("g.fillRect(sx, y + 2 + span, 1, 1)")
                     .contains("paintWallSide(g, geom, r, col, tiles, wallInk,")
                     .contains("paintWallSide(g, geom, r, c, tiles,");
