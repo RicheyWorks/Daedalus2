@@ -26,9 +26,9 @@ Rules authority: `chainmail_weave_ref.py` (Python, CPython `random`). `chainmail
   edges the round is **WON**. Otherwise rust spreads to one seeded empty ring, and the round is **LOST** when the
   cheapest crossing is gone or costs more than the budget left.
 - Score on a win: 10 + 10 x budget left (0 on a loss).
-- `Demo()`: the earliest row-major empty ring on a cheapest crossing (the hint and the replay bot).
+- `Demo()`: the chokepoint ring on a cheapest crossing (the hint and the replay bot; see iteration 4). `PathCells()` gives the whole crossing.
 
-Balance (2,000 seeds, Python reference): the demo wins 86.5 %; a player who follows the hint 60 % of the time and
+Balance (2,000 seeds, Python reference): the demo wins 90.6 % (86.5 % before iteration 4); a player who follows the hint 60 % of the time and
 plays a random ring otherwise wins 47 %. Budgets run 10..12.
 
 Integer only; the grid logic is constexpr and allocation-free; no exceptions, RTTI, I/O or Unreal headers.
@@ -53,3 +53,15 @@ two static_asserts pin the empty-grid cost and a full rust wall.
    lowers the cheapest crossing by at most one, rust never lowers it, and the demo ring always lowers it.
 3. **Fixture self-test.** The replay is now a function over a stream; five tampered copies of the golden file (a grid
    cell, a status, a loss reason, a trailing token, an unknown row) must each be rejected.
+4. **Chokepoint hint.** `Demo()` now picks, among empty rings on a cheapest crossing, the one whose rusting would
+   raise the cheapest crossing most (a ring whose loss blocks every crossing counts highest), earliest row-major on
+   ties, instead of simply the earliest. Measured on 2,000 seeds (Python reference): the demo's win rate rises from
+   86.5 % to 90.6 % and its average score from 29.4 to 30.4; 923 of the 1,000 invariant rounds (was 878). Python
+   reference first, golden regenerated from it.
+5. **Hint path.** `PathCells(grid, out)` returns one cheapest crossing in path order for the hint glow
+   (deterministic smallest-cost-first search with predecessors; 0 when rust cuts every crossing). The test checks
+   2,241 paths: left edge to right edge, adjacent steps, no rust, and exactly `Crossing()` empty rings.
+6. **Stricter build and compile-time hint check.** Clean under -Wnull-dereference -Wdouble-promotion -Wformat=2
+   -Wcast-align -Wextra-semi -Wduplicated-cond -Wlogical-op on top of the earlier flags (test and header alone).
+   A static_assert pins the hint on a one-gap rust wall: it takes a ring whose loss blocks the crossing (cell 23)
+   where the old rule took cell 21, and `PathCells` threads the gap.

@@ -131,7 +131,11 @@ constexpr bool Joined(const Grid& g) {
     return Crossing(only) < kInf;
 }
 
-/** Earliest (row-major) empty ring on a cheapest crossing, or -1 when none: the demo move. */
+/**
+ * The hint and demo move: among empty rings on a cheapest crossing, the chokepoint (the ring whose rusting would
+ * raise the cheapest crossing most; one whose loss blocks every crossing counts highest), earliest row-major on
+ * ties. -1 when rust has cut every crossing.
+ */
 constexpr int DemoCell(const Grid& g) {
     int a[kCells] = {};
     int b[kCells] = {};
@@ -141,12 +145,79 @@ constexpr int DemoCell(const Grid& g) {
     if (best >= kInf) {
         return -1;
     }
+    int pick = -1;
+    int harm = -1;
     for (int i = 0; i < kCells; ++i) {
         if (g.ring[i] == kEmpty && a[i] + b[i] - CostOf(g, i) == best) {
-            return i;
+            Grid h = g;
+            h.ring[i] = kRust;
+            const int hv = Crossing(h);
+            if (hv > harm) {
+                pick = i;
+                harm = hv;
+            }
         }
     }
-    return -1;
+    return pick;
+}
+
+/**
+ * One cheapest crossing, left edge to right edge, written to out (cells in path order); returns its length, or 0
+ * when rust has cut every crossing. For the hint glow. Deterministic smallest-cost-first search from the left edge
+ * (lowest cell index on ties) that records each ring's predecessor; ends on the earliest cheapest right-edge ring.
+ */
+constexpr int PathCells(const Grid& g, int (&out)[kCells]) {
+    int d[kCells] = {};
+    int pred[kCells] = {};
+    bool done[kCells] = {};
+    for (int i = 0; i < kCells; ++i) {
+        d[i] = kInf;
+        pred[i] = -1;
+    }
+    for (int r = 0; r < kN; ++r) {
+        d[r * kN] = CostOf(g, r * kN);
+    }
+    for (int step = 0; step < kCells; ++step) {
+        int u = -1;
+        for (int i = 0; i < kCells; ++i) {
+            if (!done[i] && d[i] < kInf && (u < 0 || d[i] < d[u])) {
+                u = i;
+            }
+        }
+        if (u < 0) {
+            break;
+        }
+        done[u] = true;
+        const int r = u / kN;
+        const int c = u % kN;
+        const int nb[4] = {r > 0 ? u - kN : -1, r < kN - 1 ? u + kN : -1, c > 0 ? u - 1 : -1, c < kN - 1 ? u + 1 : -1};
+        for (int j : nb) {
+            if (j >= 0 && !done[j] && g.ring[j] != kRust && d[u] + CostOf(g, j) < d[j]) {
+                d[j] = d[u] + CostOf(g, j);
+                pred[j] = u;
+            }
+        }
+    }
+    int at = -1;
+    for (int r = 0; r < kN; ++r) {
+        const int i = r * kN + kN - 1;
+        if (d[i] < kInf && (at < 0 || d[i] < d[at])) {
+            at = i;
+        }
+    }
+    if (at < 0) {
+        return 0;
+    }
+    int rev[kCells] = {};
+    int n = 0;
+    while (at >= 0 && n < kCells) {
+        rev[n++] = at;
+        at = pred[at];
+    }
+    for (int k = 0; k < n; ++k) {
+        out[k] = rev[n - 1 - k];
+    }
+    return n;
 }
 
 /** One round. Copyable; carries its own PyRandom stream. */
@@ -237,8 +308,22 @@ constexpr bool RustWallBlocks() {
     }
     return Crossing(g) == kInf && DemoCell(g) == -1;
 }
+// One gap in a rust wall at row 3, column 3. The old earliest-ring rule picked cell 21, whose loss costs nothing;
+// the hint now picks cell 23, the first ring whose loss blocks every crossing (it walls off the gap).
+constexpr bool HintTakesChokepoint() {
+    Grid g{};
+    for (int r = 0; r < kN; ++r) {
+        g.ring[r * kN + 3] = r == 3 ? kEmpty : kRust;
+    }
+    Grid lost = g;
+    lost.ring[3 * kN + 2] = kRust;
+    int path[kCells] = {};
+    return Crossing(g) == kN && DemoCell(g) == 3 * kN + 2 && Crossing(lost) == kInf && PathCells(g, path) == kN &&
+           path[3] == 3 * kN + 3;
+}
 }  // namespace detail
 
+static_assert(detail::HintTakesChokepoint(), "the hint links the chokepoint first");
 static_assert(detail::EmptyGridCosts(), "an empty grid needs one full row of links");
 static_assert(detail::RustWallBlocks(), "a full rust column blocks every crossing");
 
