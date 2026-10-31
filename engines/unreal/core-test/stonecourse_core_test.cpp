@@ -49,6 +49,22 @@ Game Lay(const std::vector<int>& Stones, int Width, const std::vector<std::strin
 	return G;
 }
 
+std::vector<int> ParseInts(const std::string& Text)
+{
+	std::vector<int> Out;
+	if (Text == "-") return Out;
+	std::stringstream S(Text); std::string Item;
+	while (std::getline(S, Item, ',')) Out.push_back(std::stoi(Item));
+	return Out;
+}
+std::vector<std::string> SplitRows(const std::string& Text)
+{
+	std::vector<std::string> Rows;
+	std::stringstream S(Text); std::string Row;
+	while (std::getline(S, Row, ';')) Rows.push_back(Row);
+	return Rows;
+}
+
 int UnitChecks()
 {
 	int Fails = 0; std::string Text;
@@ -153,6 +169,25 @@ int main(int Argc, char** Argv)
 			++Turn;
 			const std::string Got = MoveLine(Turn, A, G, Result);
 			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL s=%u %s turn %d\n  want %s\n  got  %s\n", Seed, Diff.c_str(), Turn, Line.c_str(), Got.c_str()); ++Fails; Skipping = true; }
+		}
+		else if (Line.rfind("vector ", 0) == 0)   // iteration 4: hand-set corner cases, scripted action + mason pick
+		{
+			++Games; Skipping = false; Turn = 0;
+			G = Lay(ParseInts(Field(Line, "stones")), std::stoi(Field(Line, "width")), SplitRows(Field(Line, "wall")), std::stoi(Field(Line, "skips")));
+			G.Index = std::stoi(Field(Line, "index"));
+		}
+		else if (Line.rfind("step ", 0) == 0)
+		{
+			if (Skipping) continue;
+			int A = 0, Demo = 0;
+			if (!ActionFromText(Field(Line, "act"), A) || !ActionFromText(Field(Line, "demo"), Demo)) { std::printf("FAIL bad step line: %s\n", Line.c_str()); ++Fails; Skipping = true; continue; }
+			const int Pick = G.DemoAction();
+			if (Pick != Demo) { std::printf("FAIL vector mason: want %s got %s\n  %s\n", ActionText(Demo).c_str(), ActionText(Pick).c_str(), Line.c_str()); ++Fails; }
+			std::string Result;
+			const Game::Act R = G.Step(A, Result);
+			const std::string Tail = MoveLine(0, A, G, Result);
+			const std::string Got = "step act=" + Field(Line, "act") + " demo=" + Field(Line, "demo") + Tail.substr(Tail.find(" index="));
+			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL vector step\n  want %s\n  got  %s\n", Line.c_str(), Got.c_str()); ++Fails; Skipping = true; }
 		}
 		else if (Line.rfind("end  ", 0) == 0)
 		{
