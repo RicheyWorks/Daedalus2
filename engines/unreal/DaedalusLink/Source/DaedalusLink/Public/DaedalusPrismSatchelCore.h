@@ -31,19 +31,19 @@ struct Payout
 	int HeartPar;  // hard win at or above this earns Heartglass; -1 means "a perfect run"
 };
 
-// Sorted by game id (the save writes seals in this order). Pars are placeholders until Fair Par calibrates them.
+// Sorted by game id (the save writes seals in this order). Pars: Fair Par hard silver/gold (prism_fair_par_parity.txt).
 inline const std::array<Payout, 11> Payouts = {{
 	{"facetlock", 3, 40, 130, 160},
-	{"glimmerloom", 1, 50, 110, 140},
-	{"glowmoss", 2, 12, 45, -1},
-	{"lumenpath", 0, 50, 140, 190},
-	{"prismcairn", 2, 35, 100, 105},
-	{"prismvault", 4, 40, 100, 100},
-	{"shadewatch", 4, 40, 140, 180},
-	{"shardfall", 0, 12, 32, 42},
-	{"shardring", 1, 60, 45, 200},
-	{"spiritkite", 3, 8, 26, 32},
-	{"wardens_accord", 1, 15, 55, 65},
+	{"glimmerloom", 1, 50, 120, 135},
+	{"glowmoss", 2, 12, 29, -1},
+	{"lumenpath", 0, 50, 140, 180},
+	{"prismcairn", 2, 35, 105, 105},
+	{"prismvault", 4, 40, 100, 200},
+	{"shadewatch", 4, 40, 148, 163},
+	{"shardfall", 0, 12, 34, 38},
+	{"shardring", 1, 60, 188, 215},
+	{"spiritkite", 3, 8, 22, 25},
+	{"wardens_accord", 1, 15, 60, 65},
 }};
 
 inline const Payout* FindPayout(const std::string& Game)
