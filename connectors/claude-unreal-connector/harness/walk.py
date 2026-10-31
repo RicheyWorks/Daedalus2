@@ -34,7 +34,7 @@ EXCLUDE = {
 # Every bridge must list these. A bridge that silently drops one fails the walk, which otherwise only drives
 # what is listed and could not notice a command vanishing.
 CORE = ("ping", "list_commands", "get_level_info", "get_actor_info", "execute_python", "viewport_screenshot",
-        "play", "stop", "save", "output_log", "capture_view", "batch", "job_result")
+        "play", "stop", "save", "output_log", "capture_view", "batch", "job_result", "scene_snapshot", "scene_verify")
 
 # How to form a value for a declared param, by name first, then by type. A target can add pools with --pool.
 POOLS = {
@@ -88,11 +88,22 @@ def walk(port, host="127.0.0.1", max_risk="DESTRUCTIVE", target="standin"):
             bucket, detail = "declined", "%s is above --max-risk %s" % (risk, max_risk)
         else:
             args, missing = form(c.get("params"), first_actor)
+            if name == "scene_verify":
+                # Its required identity comes from a fresh read, never a guessed label or stale pool.
+                snapshot = call("scene_snapshot", {"limit": 1}, host=host, port=port).get("result") or {}
+                values = snapshot.get("actors") or []
+                if snapshot.get("available") is True and values:
+                    args = {"schema_version": 1, "context": snapshot["context"],
+                            "actors": [{"path": values[0]["path"],
+                                        "expected": {"location": values[0]["location"]}}]}
+                    missing = None
             if args is None:
                 bucket, detail = "unschemable", "can't form required param %r" % missing
             else:
                 r = call(name, args, host=host, port=port, timeout=60)
-                if r.get("status") == "ok":
+                if name == "scene_verify" and r.get("status") == "ok" and (r.get("result") or {}).get("passed") is not True:
+                    bucket, detail = "failed", "scene_verify did not confirm its fresh readback"
+                elif r.get("status") == "ok":
                     bucket, detail = "driven", "ok"
                 elif r.get("code") == "REFUSED":
                     bucket, detail = "refused", r.get("message", "")

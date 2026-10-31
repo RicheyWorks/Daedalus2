@@ -1,0 +1,43 @@
+name: Scene observation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "connectors/claude-unreal-connector/**"
+      - ".github/workflows/scene-observation.yml"
+  push:
+    branches: [main]
+    paths:
+      - "connectors/claude-unreal-connector/**"
+      - ".github/workflows/scene-observation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    name: Offline scene (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Exact identities and predicates (no sockets)
+        run: python connectors/claude-unreal-connector/tests/scene_observation_test.py
+      - name: Seven meaningful in-memory mutations
+        run: python connectors/claude-unreal-connector/tests/scene_observation_mutation_test.py
+      - name: Existing transport contract against the stand-in
+        working-directory: connectors/claude-unreal-connector
+        run: python -m harness.contract
+      - name: Existing discovery walk against the stand-in
+        working-directory: connectors/claude-unreal-connector
+        run: python -m harness.walk --standin
+      - name: Daedalus registration and yielding-step contract
+        working-directory: engines/unreal/core-test
+        run: python bridge_commands_test.py
