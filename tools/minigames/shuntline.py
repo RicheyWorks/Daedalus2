@@ -216,10 +216,12 @@ class Game(pc.PrismGame):
 
     def render(self):
         cfg = self.cfg
+        last = self.out_last()
+        mark = lambda v: ("%d!" % v) if v < last else str(v)   # noqa: E731  (iteration 9: a dead carriage can never leave)
         lines = [f"{TITLE} [{self.difficulty}] moves {self.moves} out {len(self.outbound)}/{cfg['cars']} score {self.score}",
-                 "inbound:  " + (" ".join(str(v) for v in self.inbound()) or "-") + "   (front first)"]
+                 "inbound:  " + (" ".join(mark(v) for v in self.inbound()) or "-") + "   (front first)"]
         for i, s in enumerate(self.sidings):
-            lines.append(f"siding {i}: " + (" ".join(str(v) for v in s) or "-") + ("   (top last)" if s else ""))
+            lines.append(f"siding {i}: " + (" ".join(mark(v) for v in s) or "-") + ("   (top last)" if s else ""))
         lines.append("outbound: " + (" ".join(str(v) for v in self.outbound) or "-"))
         if not self.over:
             lines.append("legal: " + " ".join(self.actions()))
