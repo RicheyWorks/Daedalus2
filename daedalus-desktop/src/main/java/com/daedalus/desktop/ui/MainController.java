@@ -3399,9 +3399,16 @@ public class MainController {
                         side.x(), side.y() + joinH, side.w(), fadeH),
                         Color.web(DesktopPaint.wallSideFadeInk(wallInk, floorInk, shineInk)));
             }
-            if (mid - fadeH > 0) {
+            double tailH = fadeH > 0 && mid - fadeH >= px ? px : 0;
+            if (tailH > 0) {
                 paintHairline(g, new DesktopPaint.Hairline(
-                        side.x(), side.y() + joinH + fadeH, side.w(), mid - fadeH),
+                        side.x(), side.y() + joinH + fadeH, side.w(), tailH),
+                        Color.web(DesktopPaint.wallSideTailInk(wallInk, floorInk, shineInk)));
+            }
+            if (mid - fadeH - tailH > 0) {
+                paintHairline(g, new DesktopPaint.Hairline(
+                        side.x(), side.y() + joinH + fadeH + tailH, side.w(),
+                        mid - fadeH - tailH),
                         Color.web(DesktopPaint.wallFootInk(wallInk, floorInk)));
             }
         }
