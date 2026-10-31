@@ -62,6 +62,7 @@ static Replay ReplayGolden(std::istream& f, bool quiet) {
     std::string line;
     std::string seed;
     std::unique_ptr<cw::Game> game;
+    cw::Difficulty difficulty = cw::Difficulty::Normal;
     bool have_seed = false;
     int line_no = 0;
     int& rounds = out.rounds;
@@ -78,9 +79,13 @@ static Replay ReplayGolden(std::istream& f, bool quiet) {
         }
         const std::string where = "line " + std::to_string(line_no);
         if (line.rfind("S ", 0) == 0) {
-            const std::size_t sp = line.find(' ', 2);
-            const long n = sp == std::string::npos ? -1 : std::strtol(line.substr(2, sp - 2).c_str(), nullptr, 10);
-            const bool ok = n >= 0 && sp + 1 + static_cast<std::size_t>(n) == line.size();
+            // "S <difficulty> <len> <seed>": the seed may hold spaces, so it is taken by length.
+            const std::size_t d_end = line.find(' ', 2);
+            const std::string dname = d_end == std::string::npos ? std::string() : line.substr(2, d_end - 2);
+            const bool d_ok = cw::ParseDifficulty(dname.c_str(), &difficulty);
+            const std::size_t sp = d_ok ? line.find(' ', d_end + 1) : std::string::npos;
+            const long n = sp == std::string::npos ? -1 : std::strtol(line.substr(d_end + 1, sp - d_end - 1).c_str(), nullptr, 10);
+            const bool ok = d_ok && n >= 0 && sp + 1 + static_cast<std::size_t>(n) == line.size();
             expect(ok, "S " + where);
             seed = ok ? line.substr(sp + 1) : std::string();
             have_seed = ok;
@@ -93,7 +98,7 @@ static Replay ReplayGolden(std::istream& f, bool quiet) {
             std::string extra;
             in >> grid >> budget;
             expect(!in.fail() && !(in >> extra), "malformed N " + where);
-            game.reset(new cw::Game(seed));
+            game.reset(new cw::Game(seed, difficulty));
             expect(Text(game->GetGrid()) == grid && game->Budget() == budget, "new grid for '" + seed + "' " + where);
             have_seed = false;
             ++rounds;
@@ -173,8 +178,12 @@ static void Golden(const char* path) {
     std::string extra_token = text;
     extra_token.insert(text.find('\n', p + 1), " 7");
     std::string unknown_row = text + "Q nonsense\n";
+    std::string flip_difficulty = text;
+    const std::size_t sn = text.find("\nS normal ");
+    flip_difficulty.replace(sn + 3, 6, "hard");
     const Tamper tampers[] = {{"grid", flip_grid}, {"status", flip_status}, {"reason", flip_reason},
-                              {"trailing token", extra_token}, {"unknown row", unknown_row}};
+                              {"trailing token", extra_token}, {"unknown row", unknown_row},
+                              {"difficulty", flip_difficulty}};
     for (const Tamper& t : tampers) {
         std::istringstream tin(t.body);
         Check(ReplayGolden(tin, true).problems > 0, std::string("tampered fixture rejected: ") + t.name);
@@ -290,6 +299,44 @@ static void Invariants() {
     std::printf("invariants: 1000 rounds, demo won %d\n", demo_wins);
 }
 
+// Difficulty changes only the budget: same grid, same rust stream, budgets 4 / 3 / 2 over the cheapest crossing.
+// A copied round continues exactly like the original (the PyRandom stream is copied too), for save and rewind.
+static void DifficultyAndCopies() {
+    bool ok = true;
+    int rounds = 0;
+    for (int s = 0; s < 300; ++s) {
+        const std::string seed = "d" + std::to_string(s);
+        cw::Game e(seed, cw::Difficulty::Easy);
+        cw::Game n(seed, cw::Difficulty::Normal);
+        cw::Game h(seed, cw::Difficulty::Hard);
+        ok = ok && std::memcmp(&e.GetGrid(), &h.GetGrid(), sizeof(cw::Grid)) == 0;
+        ok = ok && e.Budget() == n.Budget() + 1 && h.Budget() == n.Budget() - 1;
+        while (e.GetState() == cw::State::Playing && h.GetState() == cw::State::Playing) {
+            const int cell = h.Demo();
+            ok = ok && e.Place(cell) == cw::Status::Ok && h.Place(cell) == cw::Status::Ok;
+            ok = ok && (std::memcmp(&e.GetGrid(), &h.GetGrid(), sizeof(cw::Grid)) == 0 || e.GetState() == cw::State::Won);
+        }
+        cw::Game a(seed);
+        if (a.GetState() == cw::State::Playing) {
+            a.Place(a.Demo());
+        }
+        cw::Game b = a;  // copy mid-round
+        while (a.GetState() == cw::State::Playing) {
+            const int cell = a.Demo();
+            ok = ok && a.Place(cell) == b.Place(cell);
+        }
+        ok = ok && std::memcmp(&a.GetGrid(), &b.GetGrid(), sizeof(cw::Grid)) == 0 && a.Score() == b.Score() &&
+             a.GetState() == b.GetState();
+        ++rounds;
+    }
+    cw::Difficulty d = cw::Difficulty::Hard;
+    ok = ok && !cw::ParseDifficulty("Hard", &d) && !cw::ParseDifficulty("har", &d) && !cw::ParseDifficulty("hardx", &d) &&
+         !cw::ParseDifficulty("", &d) && !cw::ParseDifficulty(nullptr, &d) && d == cw::Difficulty::Hard;
+    ok = ok && cw::ParseDifficulty("easy", &d) && d == cw::Difficulty::Easy;
+    Check(ok, "difficulty changes only the budget; copies continue identically; strict difficulty names");
+    std::printf("difficulty/copies: %d seeds\n", rounds);
+}
+
 static void Edges() {
     cw::Game g("edges");
     Check(g.Place(-1) == cw::Status::BadCell && g.Place(cw::kCells) == cw::Status::BadCell && g.Placed() == 0, "bad cells");
@@ -316,6 +363,7 @@ int main(int argc, char** argv) {
     Invariants();
     RefusalsDrawNothing();
     CostMoves();
+    DifficultyAndCopies();
     Edges();
     std::printf("%s: %d checks, %d failures\n", g_failures == 0 ? "PASS" : "FAIL", g_checks, g_failures);
     return g_failures == 0 ? EXIT_SUCCESS : EXIT_FAILURE;

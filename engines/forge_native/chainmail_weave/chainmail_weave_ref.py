@@ -5,7 +5,8 @@ Rules authority for DaedalusChainmailWeaveCore.h. A seeded 7x7 mail grid in the 
 are rusted. Place links one at a time; win by joining the left edge to the right edge with orthogonally adjacent
 links before the link budget runs out. After each placement that does not win, rust spreads to one seeded empty ring.
 All randomness is CPython random seeded "chainmail|<seed>" (DaedalusPyRandomCore.h in C++). Integer only.
-`python chainmail_weave_ref.py > chainmail_weave_golden.txt`; `--check chainmail_weave_golden.txt` verifies it.
+`python chainmail_weave_ref.py > chainmail_weave_golden.txt`; `--check chainmail_weave_golden.txt` verifies it;
+`--selftest` runs the rules-side property checks.
 """
 import random
 import sys
@@ -15,7 +16,9 @@ CELLS = N * N
 EMPTY, RUST, LINK = 0, 1, 2
 RUST_DRAWS = 9        # initial rust draws (duplicates land on the same ring)
 MAX_ROLLS = 20        # rerolls until the grid is crossable; after that the rust is cleared
-SLACK = 3             # budget = cheapest crossing + SLACK
+SLACK = 3             # normal budget = cheapest crossing + SLACK
+DIFFICULTIES = ["easy", "normal", "hard"]
+SLACKS = [4, 3, 2]    # per difficulty; the grid and rust stream do not depend on it
 INF = 10 ** 6
 PLAYING, WON, LOST = range(3)
 STATE = ["PLAYING", "WON", "LOST"]
@@ -76,7 +79,9 @@ def demo_cell(g):
     return pick
 
 class Game:
-    def __init__(self, seed):
+    def __init__(self, seed, difficulty="normal"):
+        if difficulty not in DIFFICULTIES:
+            raise ValueError("unknown difficulty")
         self.r = random.Random("chainmail|" + seed)
         for _ in range(MAX_ROLLS):
             g = [EMPTY] * CELLS
@@ -87,7 +92,7 @@ class Game:
         else:
             g = [EMPTY] * CELLS
         self.g = g
-        self.budget = crossing(g) + SLACK
+        self.budget = crossing(g) + SLACKS[DIFFICULTIES.index(difficulty)]
         self.state = PLAYING
         self.placed = 0
         self.reason = NO_LOSS
@@ -137,11 +142,12 @@ def seeds():
 
 def write(f):
     f.write("# Chainmail Weave golden vectors from chainmail_weave_ref.py (rules authority). Do not hand-edit.\n")
-    f.write("# S <len> <seed> | N <grid 49 chars .#L> <budget> | P <cell> <status> <grid> <budget> <state> <reason> <score> <demo>\n")
+    f.write("# S <difficulty> <len> <seed> | N <grid 49 chars .#L> <budget> | P <cell> <status> <grid> <budget> <state> <reason> <score> <demo>\n")
     pick = random.Random(62351 + 1)
-    for s in seeds():
-        g = Game(s)
-        f.write("S %d %s\n" % (len(s), s))
+    for k, s in enumerate(seeds()):
+        d = DIFFICULTIES[(k + 1) % 3]
+        g = Game(s, d)
+        f.write("S %s %d %s\n" % (d, len(s), s))
         f.write("N %s %d\n" % (g.text(), g.budget))
         style = pick.randrange(3)  # 0 demo player, 1 random player, 2 mixed with bad moves
         for _ in range(60):
@@ -156,8 +162,43 @@ def write(f):
             if g.state != PLAYING and pick.random() < 0.7:
                 break
 
+def selftest(rounds=200):
+    """Rules-side property checks (the C++ test mirrors them): every round starts crossable with budget = cost +
+    slack; refusals change nothing; a link lowers the cheapest crossing by at most one and the hint ring lowers it;
+    rust never lowers it; a loss reason is set exactly when the round is lost; difficulty changes only the budget."""
+    import copy
+    for k in range(rounds):
+        seed = "self%d" % k
+        games = [Game(seed, d) for d in DIFFICULTIES]
+        base = crossing(games[1].g)
+        assert games[0].g == games[2].g and [x.budget for x in games] == [base + sl for sl in SLACKS]
+        g = games[1]
+        while g.state == PLAYING:
+            before = copy.deepcopy(g)
+            for bad in (-1, CELLS, next((i for i in range(CELLS) if g.g[i] != EMPTY), -1)):
+                st = g.place(bad)
+                assert st in (BAD_CELL, OCCUPIED) and g.g == before.g and g.budget == before.budget
+                assert g.r.getstate() == before.r.getstate()
+            c0 = crossing(g.g)
+            for i in range(CELLS):
+                if g.g[i] == EMPTY:
+                    l, r = list(g.g), list(g.g)
+                    l[i], r[i] = LINK, RUST
+                    assert c0 - 1 <= crossing(l) <= c0 and crossing(r) >= c0
+            h = g.demo()
+            l = list(g.g)
+            l[h] = LINK
+            assert crossing(l) == c0 - 1
+            assert g.place(h) == OK
+            assert (g.state == LOST) == (g.reason != NO_LOSS)
+            assert g.reason != BLOCKED or crossing(g.g) == INF
+    return rounds
+
 if __name__ == "__main__":
     import io
+    if sys.argv[1:] == ["--selftest"]:
+        print("selftest: %d rounds OK" % selftest())
+        sys.exit(0)
     buf = io.StringIO()
     write(buf)
     if len(sys.argv) == 3 and sys.argv[1] == "--check":

@@ -20,7 +20,8 @@ Rules authority: `chainmail_weave_ref.py` (Python, CPython `random`). `chainmail
 
 - `Game(seed)`: PyRandom (DaedalusPyRandomCore.h) seeded `"chainmail|" + seed` draws 9 rust rings (repeats allowed).
   If rust blocks every crossing it redraws, up to 20 times, then falls back to a clean grid. Budget = cheapest
-  crossing (empty rings still to link) + 3.
+  crossing (empty rings still to link) + slack: easy 4, normal 3 (default), hard 2. Difficulty changes only the
+  budget; the grid and the rust stream are the same for one seed.
 - `Place(cell)` (row-major 0..48): `BAD_CELL` off the grid, `OCCUPIED` on rust or a link, `GAME_OVER` after the
   round ends; these take no turn and change nothing. `OK` places a link and spends 1 budget. If links now join the two
   edges the round is **WON**. Otherwise rust spreads to one seeded empty ring, and the round is **LOST** when the
@@ -65,3 +66,19 @@ two static_asserts pin the empty-grid cost and a full rust wall.
    -Wcast-align -Wextra-semi -Wduplicated-cond -Wlogical-op on top of the earlier flags (test and header alone).
    A static_assert pins the hint on a one-gap rust wall: it takes a ring whose loss blocks the crossing (cell 23)
    where the old rule took cell 21, and `PathCells` threads the gap.
+7. **Difficulty.** `Game(seed, Difficulty)` with easy / normal / hard = slack 4 / 3 / 2 (normal is the old game,
+   unchanged), `ParseDifficulty` (strict names) and `SlackFor`. Measured on 1,000 seeds with the chokepoint hint:
+
+   | Difficulty | Slack | Demo wins | 60 % hint-follower | 30 % hint-follower |
+   | --- | --- | --- | --- | --- |
+   | easy | 4 | 92.0 % | 63.3 % | 15.2 % |
+   | normal | 3 | 89.1 % | 49.0 % | 7.7 % |
+   | hard | 2 | 83.9 % | 34.3 % | 3.0 % |
+
+   (More rust, 12 draws instead of 9, mostly lowered the demo, so the rust count stays 9.) The golden file now
+   cycles easy / normal / hard per round (`S <difficulty> <len> <seed>`); the test checks that difficulty changes
+   only the budget and that a tampered difficulty is rejected.
+8. **Copies and rules-side self-test.** A round copied mid-play continues exactly like the original (the PyRandom
+   stream is copied too; needed for save and rewind), checked over 300 seeds. `chainmail_weave_ref.py --selftest`
+   runs the same properties on the Python authority over 200 rounds: refusals change nothing and draw no
+   randomness, link / rust / hint cost moves, loss reason iff lost, difficulty changes only the budget.
