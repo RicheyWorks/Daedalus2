@@ -75,3 +75,7 @@ Notes
 ## roostcall (unreal-team, READY 59974; 'Blender items' sheet)
 
 18 assets: cabinet with bird-and-whistle marquee, 1.65 m moss-wood roost (2 x 2 cells, open front, 12 Bird_ sockets), Creature_Roostcall_GlimmerBird idle, startled (wings out, emissive flare feathers) and perch (static poses; idle and perch share the perched mesh), 0.15 m bone whistle with Hand socket, low stone yard wall straight, corner and gate, and the Warden static plus on the shared Prism segment rig. Sheet: roostcall.png.
+
+## crafting_rewards batch 1 (hephaestus, READY 62349; items 61000)
+
+8 assets: 1.8 m smelter bench (crucible, mould, shards), ingots Glowsteel, Tidebrass, Galeiron, Umbral alloy and Heartglass (glowsteel and heartglass emissive), scrap bin with scrap, reforge anvil on a stump. The Forgemaster is Mob_Forge_Forgemaster from hofstadter_hammers (same NPC, not rebuilt). Sheet: crafting_rewards.png.
