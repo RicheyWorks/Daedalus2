@@ -430,3 +430,21 @@ move t=15 act=l2 index=12 left=34 right=29 held=2,7 used=5 score=0 over=0 won=0 
 move t=16 act=r1 index=12 left=34 right=36 held=2 used=5 score=0 over=0 won=0 res=right 7: pans 34/36
 move t=17 act=l0 index=12 left=36 right=36 held=- used=5 score=6 over=1 won=1 res=left 2: pans 36/36; the beam rests level
 end  score=6 won=1 left=36 right=36
+vector tip_on_the_first_shard shards=2 cap=5 tol=1 bench=2 line=9,1 index=0 left=0 right=0 held=- used=0
+step act=l demo=l index=1 left=9 right=0 held=- used=0 score=0 over=1 won=0 res=left 9: pans 9/0; the beam tips and the shards slide off
+vector last_shard_levels shards=2 cap=5 tol=1 bench=2 line=4,4 index=1 left=4 right=0 held=- used=0
+step act=r demo=r index=2 left=4 right=4 held=- used=0 score=19 over=1 won=1 res=right 4: pans 4/4; the beam rests level
+vector last_shard_askew shards=2 cap=5 tol=1 bench=2 line=4,1 index=1 left=4 right=0 held=- used=0
+step act=r demo=r index=2 left=4 right=1 held=- used=0 score=0 over=1 won=0 res=right 1: pans 4/1; the beam settles askew
+vector bench_shard_set_right shards=3 cap=5 tol=1 bench=2 line=3,4,2 index=3 left=3 right=2 held=4 used=1
+step act=r0 demo=r0 index=3 left=3 right=6 held=- used=1 score=0 over=1 won=0 res=right 4: pans 3/6; the beam settles askew
+vector hold_sorts_the_bench shards=3 cap=5 tol=1 bench=3 line=3,7,5 index=1 left=0 right=0 held=7 used=1
+step act=hold demo=l index=2 left=0 right=0 held=7,7 used=2 score=0 over=0 won=0 res=hold 7: bench [7, 7]
+vector weigher_benches_a_heavy_shard shards=3 cap=5 tol=1 bench=2 line=9,4,5 index=0 left=0 right=0 held=- used=0
+step act=hold demo=hold index=1 left=0 right=0 held=9 used=1 score=0 over=0 won=0 res=hold 9: bench [9]
+vector weigher_sets_the_lighter_pan shards=2 cap=5 tol=0 bench=2 line=2,2 index=1 left=2 right=0 held=- used=0
+step act=r demo=r index=2 left=2 right=2 held=- used=0 score=14 over=1 won=1 res=right 2: pans 2/2; the beam rests level
+vector weigher_clears_the_bench_last shards=3 cap=5 tol=0 bench=2 line=6,1,5 index=3 left=1 right=0 held=5,6 used=2
+step act=l0 demo=r1 index=3 left=6 right=0 held=6 used=2 score=0 over=1 won=0 res=left 5: pans 6/0; the beam tips and the shards slide off
+vector score_counts_slack_and_bench shards=2 cap=6 tol=2 bench=3 line=4,4 index=1 left=4 right=0 held=- used=0
+step act=r demo=r index=2 left=4 right=4 held=- used=0 score=26 over=1 won=1 res=right 4: pans 4/4; the beam rests level
