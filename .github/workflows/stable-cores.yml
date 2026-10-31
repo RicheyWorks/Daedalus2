@@ -1,7 +1,7 @@
 name: Stable cores
 # G567: header-only C++ ports of the stable-lane minigame cores (DaedalusStable*Core.h) must replay the
 # Java-written stable_*_parity.txt line for line. G586+: new 2hot2trot games written in Java and C++ together
-# (DaedalusPilot*Core.h, pilot_*) ride the same job. Engine-free; no Unreal needed.
+# (DaedalusPilot*Core.h, pilot_*) and the Prism Almanac Daily (DaedalusPrismAlmanacCore.h, almanac_*) ride the same job. Engine-free; no Unreal needed.
 # Forge native cores (engines/forge_native/<name>/<name>.h) replay their Java golden files here too.
 on:
   pull_request:
@@ -11,6 +11,9 @@ on:
       - 'engines/unreal/**/DaedalusPilot*.h'
       - 'engines/unreal/**/DaedalusPyRandomCore.h'
       - 'engines/unreal/core-test/pilot_*'
+      - 'engines/unreal/**/DaedalusPrismAlmanac*.h'
+      - 'engines/unreal/core-test/almanac_*'
+      - 'engines/unreal/core-test/prism_fair_par_parity.txt'
       - 'engines/forge_native/**'
       - '.github/workflows/stable-cores.yml'
   push:
@@ -21,6 +24,9 @@ on:
       - 'engines/unreal/**/DaedalusPilot*.h'
       - 'engines/unreal/**/DaedalusPyRandomCore.h'
       - 'engines/unreal/core-test/pilot_*'
+      - 'engines/unreal/**/DaedalusPrismAlmanac*.h'
+      - 'engines/unreal/core-test/almanac_*'
+      - 'engines/unreal/core-test/prism_fair_par_parity.txt'
       - 'engines/forge_native/**'
   workflow_dispatch:
 permissions:
@@ -36,7 +42,7 @@ jobs:
       - name: Stable and pilot cores replay the Java parity files (sanitized, warnings as errors)
         working-directory: engines/unreal/core-test
         run: |
-          for t in stable_*_core_test.cpp pilot_*_core_test.cpp; do
+          for t in stable_*_core_test.cpp pilot_*_core_test.cpp almanac_*_core_test.cpp; do
             name="${t%_core_test.cpp}"
             ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -fno-omit-frame-pointer \
               -I../DaedalusLink/Source/DaedalusLink/Public "$t" -o "$RUNNER_TEMP/$name"
