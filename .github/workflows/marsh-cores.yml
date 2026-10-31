@@ -26,7 +26,7 @@ jobs:
       matrix:
         cxx: [g++, clang++]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and replay golden vectors (${{ matrix.cxx }}, ASan+UBSan)
         working-directory: engines/unreal/core-test
         run: |

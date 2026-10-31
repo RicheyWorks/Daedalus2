@@ -26,7 +26,7 @@ jobs:
       matrix:
         compiler: [g++, clang++]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Shardsong golden vectors + properties (sanitized, no FMA contraction)
         run: |
           ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Werror -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer engines/unreal/core-test/shardsong_core_test.cpp -o "$RUNNER_TEMP/shardsong"
@@ -35,7 +35,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Shardsong golden vectors + properties (MSVC cl /W4 /WX /fp:strict)
         shell: pwsh

@@ -22,7 +22,7 @@ jobs:
       matrix:
         compiler: [g++, clang++]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: C++ ear rule = Java golden vectors (sanitized, no FMA contraction)
         run: |
           ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Werror -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer engines/unreal/core-test/ear_rule_core_test.cpp -o "$RUNNER_TEMP/ear_rule"
@@ -31,7 +31,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ilammy/msvc-dev-cmd@v1
       - name: C++ ear rule = Java golden vectors (MSVC cl /W4 /WX /fp:strict)
         shell: pwsh

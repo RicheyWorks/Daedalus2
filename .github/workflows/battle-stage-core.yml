@@ -20,7 +20,7 @@ jobs:
       matrix:
         compiler: [g++, clang++]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Battle stage director rules (sanitized)
         run: |
           ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer engines/unreal/core-test/battle_stage_core_test.cpp -o "$RUNNER_TEMP/battle_stage"
