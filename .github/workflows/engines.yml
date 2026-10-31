@@ -25,6 +25,19 @@ permissions:
   contents: read
 
 jobs:
+  pc-job:
+    name: PC job exit status (Windows)
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: native cmd and Windows PowerShell regression fixtures
+        shell: powershell
+        run: python engines/unreal/core-test/pc_job_test.py
+
   mesh-parity:
     name: C++ mesher parity (gcc, clang)
     runs-on: ubuntu-latest
