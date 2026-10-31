@@ -62,3 +62,17 @@ octave and stays under 2 s. Every note goes through `EarSafePeak` (under 800 Hz,
 Reference: `tools/minigames/streak_jingle.py` writes `streak_jingle_golden.txt` (20 cabinets x 10 tokens x streaks
 0-9); CI regenerates it from Python and compares, and `streak_jingle_core_test.cpp` checks the C++ core against it plus
 the growth, cap, scale, ear-rule and Almanac-hook properties.
+
+## Hall chord (PROM-3, built on V2)
+
+`DaedalusHallChordCore.h` turns the cabinets being played into one slow ambient chord for the hall. Input is a list of
+(cabinet id, token) pairs; duplicates are removed and pairs are sorted by (id, token), so input order never matters
+(only the 32 lowest keys are considered). Each cabinet gives one low note: its cue kit V2 root, fifth or third, picked by
+`DaedalusPyRandomCore.h` seeded `hall|<id>|<token>`, halved until it is at most 330 Hz. Equal notes merge and add weight;
+a note within about a semitone (under 6 %) of another voice moves an octave down, then up, or is dropped. At most 8
+voices. Gain is 600 thousandths split by weight (at most 200 per voice); swell attack is 3000 + 400 ms per voice,
+release 4000 ms, period 12000 ms. An empty hall plays a quiet 110 Hz drone. Every voice goes through `EarSafePeak`
+(under 800 Hz, two soft harmonics, no sweep). Reference: `tools/minigames/hall_chord.py` writes
+`engines/unreal/core-test/hall_chord_golden.txt` (300 halls); `hall_chord_core_test.cpp` re-runs every line and checks
+order and duplicate independence, the voice cap, no semitone clash, ear safety and the gain budget; CI byte-compares
+the Python output on g++, clang++ and MSVC.
