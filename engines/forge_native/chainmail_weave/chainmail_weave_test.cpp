@@ -202,7 +202,7 @@ static void RefusalsDrawNothing() {
             b.Place(cw::kCells);
             for (int i = 0; i < cw::kCells; ++i) {
                 if (b.GetGrid().ring[i] != cw::kEmpty) {
-                    b.Place(i);  // OCCUPIED
+                    b.Place(i);  // RUSTED or OCCUPIED
                     break;
                 }
             }
@@ -337,6 +337,63 @@ static void DifficultyAndCopies() {
     std::printf("difficulty/copies: %d seeds\n", rounds);
 }
 
+// A loss is final: from every lost position (any difficulty), no sequence of the remaining links could still have
+// joined the edges, even if rust stopped spreading (brute force over all placements of the links left). And every
+// winning score is 10 + 10 x links left, within 10..10 + 10 x (budget - 1).
+static bool CanWinIgnoringRust(const cw::Grid& g, int links) {
+    if (cw::Joined(g)) {
+        return true;
+    }
+    if (links <= 0 || cw::Crossing(g) > links) {
+        return false;
+    }
+    for (int i = 0; i < cw::kCells; ++i) {
+        if (g.ring[i] == cw::kEmpty) {
+            cw::Grid h = g;
+            h.ring[i] = cw::kLink;
+            if (cw::Crossing(h) < cw::Crossing(g) && CanWinIgnoringRust(h, links - 1)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+static void LossesAreFinal() {
+    bool ok = true;
+    int lost = 0;
+    int searched = 0;
+    for (int s = 0; s < 400; ++s) {
+        const cw::Difficulty d = static_cast<cw::Difficulty>(s % 3);
+        cw::Game g("final" + std::to_string(s), d);
+        const int budget0 = g.Budget();
+        std::uint32_t pick = static_cast<std::uint32_t>(s) * 2654435761u;
+        while (g.GetState() == cw::State::Playing) {
+            pick = pick * 1103515245u + 12345u;
+            const int cell = (pick >> 16) % 3 == 0 ? static_cast<int>((pick >> 8) % cw::kCells) : g.Demo();
+            g.Place(cell);
+        }
+        if (g.GetState() == cw::State::Won) {
+            ok = ok && g.Score() == 10 + 10 * g.Budget() && g.Score() >= 10 && g.Score() <= 10 + 10 * (budget0 - 1);
+            continue;
+        }
+        ++lost;
+        ok = ok && g.Score() == 0;
+        const cw::Grid& grid = g.GetGrid();
+        if (g.Reason() == cw::LossReason::Blocked) {
+            ok = ok && cw::Crossing(grid) >= cw::kInf;
+        } else {
+            ok = ok && cw::Crossing(grid) > g.Budget();
+            if (g.Budget() <= 3) {
+                ok = ok && !CanWinIgnoringRust(grid, g.Budget());
+                ++searched;
+            }
+        }
+    }
+    Check(ok && lost > 50 && searched > 20, "every loss is final and every winning score is in bounds");
+    std::printf("losses final: %d losses, %d brute-force searches\n", lost, searched);
+}
+
 static void Edges() {
     cw::Game g("edges");
     Check(g.Place(-1) == cw::Status::BadCell && g.Place(cw::kCells) == cw::Status::BadCell && g.Placed() == 0, "bad cells");
@@ -344,7 +401,13 @@ static void Edges() {
     for (int i = 0; i < cw::kCells && rust < 0; ++i) {
         rust = g.GetGrid().ring[i] == cw::kRust ? i : -1;
     }
-    Check(rust < 0 || g.Place(rust) == cw::Status::Occupied, "rust is occupied");
+    Check(rust < 0 || g.Place(rust) == cw::Status::Rusted, "rust is refused as RUSTED");
+    {
+        cw::Game k("edges");
+        const int cell = k.Demo();
+        k.Place(cell);
+        Check(k.GetState() != cw::State::Playing || k.Place(cell) == cw::Status::Occupied, "a link is refused as OCCUPIED");
+    }
     while (g.GetState() == cw::State::Playing) {
         g.Place(g.Demo());
     }
@@ -354,7 +417,9 @@ static void Edges() {
     Check(std::memcmp(&a.GetGrid(), &b.GetGrid(), sizeof(cw::Grid)) == 0 && a.Budget() == b.Budget(), "same seed, same weave");
     Check(std::strcmp(cw::StatusName(static_cast<cw::Status>(9)), "UNKNOWN") == 0 &&
               std::strcmp(cw::StateName(static_cast<cw::State>(9)), "UNKNOWN") == 0 &&
-              std::strcmp(cw::ReasonName(static_cast<cw::LossReason>(9)), "UNKNOWN") == 0,
+              std::strcmp(cw::ReasonName(static_cast<cw::LossReason>(9)), "UNKNOWN") == 0 &&
+              std::strcmp(cw::StatusName(cw::Status::Rusted), "RUSTED") == 0 &&
+              static_cast<int>(cw::Status::GameOver) == 3 && static_cast<int>(cw::Status::Rusted) == 4,
           "unknown names");
 }
 
@@ -364,6 +429,7 @@ int main(int argc, char** argv) {
     RefusalsDrawNothing();
     CostMoves();
     DifficultyAndCopies();
+    LossesAreFinal();
     Edges();
     std::printf("%s: %d checks, %d failures\n", g_failures == 0 ? "PASS" : "FAIL", g_checks, g_failures);
     return g_failures == 0 ? EXIT_SUCCESS : EXIT_FAILURE;

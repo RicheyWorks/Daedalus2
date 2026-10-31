@@ -87,8 +87,14 @@ constexpr const char* ReasonName(LossReason r) {
     return "UNKNOWN";
 }
 
-/** Place result; stable values. Only OK takes a turn. */
-enum class Status : std::uint8_t { Ok = 0, BadCell = 1, Occupied = 2, GameOver = 3 };
+/** Place result; stable values (RUSTED was added after 0..3 and keeps them). Only OK takes a turn. */
+enum class Status : std::uint8_t {
+    Ok = 0,
+    BadCell = 1,   // off the grid
+    Occupied = 2,  // already a link
+    GameOver = 3,  // the round has ended
+    Rusted = 4     // the ring has rusted through
+};
 
 constexpr const char* StatusName(Status s) {
     switch (s) {
@@ -100,6 +106,8 @@ constexpr const char* StatusName(Status s) {
             return "OCCUPIED";
         case Status::GameOver:
             return "GAME_OVER";
+        case Status::Rusted:
+            return "RUSTED";
     }
     return "UNKNOWN";
 }
@@ -289,7 +297,10 @@ public:
         if (cell < 0 || cell >= kCells) {
             return Status::BadCell;
         }
-        if (grid_.ring[cell] != kEmpty) {
+        if (grid_.ring[cell] == kRust) {
+            return Status::Rusted;
+        }
+        if (grid_.ring[cell] == kLink) {
             return Status::Occupied;
         }
         grid_.ring[cell] = kLink;

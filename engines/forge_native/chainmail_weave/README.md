@@ -22,8 +22,8 @@ Rules authority: `chainmail_weave_ref.py` (Python, CPython `random`). `chainmail
   If rust blocks every crossing it redraws, up to 20 times, then falls back to a clean grid. Budget = cheapest
   crossing (empty rings still to link) + slack: easy 4, normal 3 (default), hard 2. Difficulty changes only the
   budget; the grid and the rust stream are the same for one seed.
-- `Place(cell)` (row-major 0..48): `BAD_CELL` off the grid, `OCCUPIED` on rust or a link, `GAME_OVER` after the
-  round ends; these take no turn and change nothing. `OK` places a link and spends 1 budget. If links now join the two
+- `Place(cell)` (row-major 0..48): `BAD_CELL` off the grid, `RUSTED` on a rusted ring, `OCCUPIED` on a link,
+  `GAME_OVER` after the round ends; these take no turn and change nothing. `OK` places a link and spends 1 budget. If links now join the two
   edges the round is **WON**. Otherwise rust spreads to one seeded empty ring, and the round is **LOST** when the
   cheapest crossing is gone or costs more than the budget left.
 - Score on a win: 10 + 10 x budget left (0 on a loss).
@@ -82,3 +82,13 @@ two static_asserts pin the empty-grid cost and a full rust wall.
    stream is copied too; needed for save and rewind), checked over 300 seeds. `chainmail_weave_ref.py --selftest`
    runs the same properties on the Python authority over 200 rounds: refusals change nothing and draw no
    randomness, link / rust / hint cost moves, loss reason iff lost, difficulty changes only the budget.
+9. **Clearer refusal.** Placing on a rusted ring now returns `RUSTED` (new stable value 4) instead of `OCCUPIED`,
+   which now means "already a link", so the UI can say why. Values 0..3 are unchanged. Python reference first,
+   golden regenerated (231 RUSTED, 68 OCCUPIED refusals).
+10. **Losses are final, scores in bounds.** Over 400 rounds across all difficulties with a mixed player (165 losses):
+    a BLOCKED loss has no crossing left, an OUT_OF_LINKS loss needs more links than remain, and for the 74 losses
+    with at most 3 links left a search over link placements (rust frozen) confirms no win was still possible. Every
+    winning score is exactly 10 + 10 x links left, within 10..10 + 10 x (budget - 1). Mutation: declaring the loss
+    one link early (need >= budget) fails the replay.
+
+Ten iterations done: PRs #1168 (1-3), #1174 (4-6), #1177 (7-8) and the 9-10 PR.
