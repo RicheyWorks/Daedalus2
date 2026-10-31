@@ -1087,6 +1087,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "spiritkite",
+      "title": "Spiritkite Weave",
+      "summary": "Fly wind lanes between sky isles for lanterns and land on the anchor before the wind runs out. Left/Right or stick: pick a lane; J/Space or pad A: fly; K or pad B: land",
+      "how_to_play": "HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the kite anchor",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"spiritkite\", Seed)",
+      "portable_tests": [
+        "desktop_spiritkite"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -1135,23 +1169,5 @@
       ]
     }
   ],
-  "python_games": [
-    {
-      "id": "spiritkite",
-      "title": "Spiritkite Weave",
-      "summary": "fly a spirit kite across Prismheart's sky isles, gather lanterns and return to the anchor.",
-      "how_to_play": "HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out.",
-      "module": "tools/minigames/spiritkite.py",
-      "start": "spiritkite.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_spiritkite.py"
-      ]
-    }
-  ]
+  "python_games": []
 }
