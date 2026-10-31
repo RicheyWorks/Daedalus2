@@ -87,3 +87,7 @@ Notes
 ## fairpar (pythagoras 60580; docs/mechanics/FAIRPAR01-fair-par.md)
 
 4 assets: 0.3 x 0.12 m Fair Par tier plaques BRONZE, SILVER, GOLD and PERFECT (emissive prism), with a heron relief and 1-4 tier pips. Screw them to the cabinet side under the marquee via SOCKET_CabinetMount, starting with the TRANS01 cabinet (translocation_plan). NONE shows no plaque. Sheet: fairpar.png. (game_items.py also carries the lane_props_r2 and chainmail_weave recipes; their kits land in their own PRs.)
+
+## lane_props_r2 (blender-team lane R2-12, PLAN.md; prism-shard-dev 62389)
+
+9 assets: 1.9 x 1.6 m trophy diorama shelf with 6 Slot_row_col sockets; Fair Par trophy dioramas BRONZE, SILVER, GOLD and PERFECT (1-3 shards, a growing pillar and orb, a halo on PERFECT); Creature_Shardling_Mascot (0.36 m, emissive crystal, Trinket_Hat/Neck/Back/HandR/HandL plus a Shoulder socket); and the Spiritkite kite tail chain Link, Bow and End (0.3 m each, chained by SOCKET_Prev to the previous SOCKET_Next for a UE physics chain). Sheet: lane_props_r2.png.
