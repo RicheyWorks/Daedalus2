@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop wall under fade.**
+  The row under
+  a post's shine
+  fade leans a
+  quarter toward
+  that fade.
+  The foot stays
+  the floor mix.
+
 - **Well wall under fade.**
   The row under
   a post's shine
