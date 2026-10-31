@@ -229,7 +229,8 @@ public:
     std::string ContrastMark() const override { return Core.Over ? "MARK WAIT" : "MARK ACT"; }
 
     void Render(Frame& F) const override {
-        const Color Mist{205, 215, 225, 255}, Gold{255, 236, 180, 255}, Sky{120, 225, 255, 255}, Rail{90, 90, 100, 255}, CarTint{200, 140, 80, 255}, OutTint{110, 170, 140, 255};
+        const Color Mist{205, 215, 225, 255}, Gold{255, 236, 180, 255}, Sky{120, 225, 255, 255}, Rail{90, 90, 100, 255}, CarTint{200, 140, 80, 255}, OutTint{110, 170, 140, 255}, Dead{200, 70, 60, 255};
+        const int Last = Core.OutLast();   // iteration 9: a carriage tagged below the last one out can never leave; it gets a red bar
         const int Sidings = Core.Diff ? Core.Diff->Sidings : 0;
 
         F.Clear(800, 600, {18, 20, 26, 255});
@@ -249,6 +250,7 @@ public:
             const double X = Left + 420 - (I + 1) * (Box + 4);
             F.AddRect(X, 118, Box, 28, I == 0 ? Gold : CarTint);
             F.AddText(X + 12, 124, std::to_string(Tag), White, 13);
+            if(Tag < Last) F.AddRect(X, 114, Box, 3, Dead);
         }
         if(HasGuide && Guide.K == shuntline::Kind::Out) F.AddRect(Left + 420 - Box - 4, 156, Box, 4, Sky);
         // Sidings: stacks growing rightward from the stop block, picked one framed in gold
@@ -260,6 +262,7 @@ public:
             for(int I = 0; I < Sd.N; ++I) {
                 F.AddRect(Left + 4 + I * (Box + 4), Y, Box, 28, CarTint);
                 F.AddText(Left + 16 + I * (Box + 4), Y + 6, std::to_string(Sd.Tag[static_cast<size_t>(I)]), White, 13);
+                if(Sd.Tag[static_cast<size_t>(I)] < Last) F.AddRect(Left + 4 + I * (Box + 4), Y - 4, Box, 3, Dead);
             }
             if(!Core.Over && S == Pick) {
                 const double W = 8 + Core.Diff->Length * (Box + 4);

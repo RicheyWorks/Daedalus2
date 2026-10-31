@@ -175,6 +175,22 @@ int main(int Argc, char** Argv) {
         Frame F2;
         T.Render(F2);
         Check(Rows(F2) == 0, "the tutorial leaves after the first move");
+        // Iteration 9: red bars equal the carriages tagged below the last one out, through a yardmaster game
+        ShuntlineGame P;
+        P.Reset(9);
+        P.SetCabinetDifficulty("hard");
+        bool DeadOk = true;
+        while(!P.GetStatus().Over && DeadOk) {
+            const auto& PC = P.CoreState();
+            int Expected = 0;
+            for(int I = PC.Index(); I < PC.Cars() && I - PC.Index() < 11; ++I) if(PC.Train[static_cast<size_t>(I)] < PC.OutLast()) ++Expected;
+            for(int S = 0; S < PC.Diff->Sidings; ++S) for(int I = 0; I < PC.SidingAt(S).N; ++I) if(PC.SidingAt(S).Tag[static_cast<size_t>(I)] < PC.OutLast()) ++Expected;
+            Frame FP;
+            P.Render(FP);
+            DeadOk = CountRects(FP, {200, 70, 60, 255}) == Expected;
+            Do(P, PC.DemoAction());
+        }
+        Check(DeadOk, "dead-carriage bars match the rule every turn");
     }
 
     ShuntlineGame X;

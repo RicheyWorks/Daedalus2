@@ -1,0 +1,164 @@
+{
+  "id": "shuntline",
+  "title": "Shuntline",
+  "realm": "prismheart_realm",
+  "status": "core + cabinet in PR; iterations in PR; dossier is iteration 10",
+  "summary": "The shunting yard behind the Prismheart arcade row, where the night goods train is made up for the valley halts. Carriages tagged for destinations arrive in a seeded order on the inbound track; the yardmaster sends each one straight out, parks it on a short siding, or pulls a parked carriage back out, and the outbound train must leave with its tags never going down. A move budget keeps the shift honest. Every train is solvable by construction; the craft is which carriages to park, on which siding, in which order. Deterministic per seed, bit-exact between the Python rules, the C++ core and the Unreal cabinet.",
+  "mechanics": [
+    {
+      "name": "Train",
+      "text": "7 / 9 / 11 carriages tagged 1..3 / 1..4 / 1..5 drawn in order. Setup redraws the train (up to 50 times) until the exact search sorts it within the move budget, so every shift can be finished.",
+      "code": "shuntline.Game.setup / shuntline::Game::Start"
+    },
+    {
+      "name": "Moves",
+      "text": "out sends the front carriage to the outbound track; s<n> shunts it onto siding n (2 / 2 / 3 sidings, each a stack of at most 3); p<n> pulls siding n's top carriage out. Every move costs one of 16 / 20 / 24.",
+      "code": "candidate_actions, Game.act / Game::Candidates, Game::Step"
+    },
+    {
+      "name": "Order",
+      "text": "The outbound tags may never go down: a carriage tagged below the last one out can never leave, whether on the inbound track or under a higher tag on a siding. Such moves are refused, not punished.",
+      "code": "out_last"
+    },
+    {
+      "name": "End of shift",
+      "text": "Every carriage out makes up the train: 10 per destination present on the outbound track plus 2 per move left. The moves running out, or no legal move left (the yard is blocked), ends the shift with 10 per destination already out.",
+      "code": "GROUP_SCORE, MOVE_BONUS"
+    },
+    {
+      "name": "Yardmaster (demo)",
+      "text": "An exact search over (inbound index, sidings, last tag out, moves left): actions in the rules' order, states pruned when more carriages remain than moves, when any carriage is tagged below the last out, or when a siding holds a lower tag under a higher one; memoised; 20,000-node budget (under 700 in practice). It makes up every seeded train; send-out-when-you-can play wins about 2 / 0 / 0 percent.",
+      "code": "solve, Game.demo_action / Game::Solve, Game::DemoAction"
+    },
+    {
+      "name": "Preview",
+      "text": "preview(move) gives the carriage moved and whether it leaves the yard, without moving it; the native sweep proves it equals the real move."
+    },
+    {
+      "name": "Guide (option 1)",
+      "text": "Practice mode marks the yardmaster's move in blue (the front carriage for out, the siding for a shunt or pull) and the hint names it. In both modes carriages that can never leave carry a red bar, and the hint says so when the front carriage is one of them."
+    },
+    {
+      "name": "Saves",
+      "text": "Text save (shared DaedalusDesktopSaveText shape): difficulty, seed, the move list of the shift, the picked siding, score, over, won. Restore replays the moves on the seeded train and refuses a save whose score or flags the replay does not reach; Python from_state checks counts, order, lengths and the end flags directly."
+    },
+    {
+      "name": "Controls",
+      "text": "Up/Down (or stick) pick a siding; Right sends the front carriage out; A / J / Space shunt it onto the picked siding; K / pad B pull that siding's top carriage out; R or pad Start restart a finished shift. Cabinet class DesktopGames/DaedalusDesktopShuntlineCore.h, registry id shuntline, save slot shuntline.dgs."
+    }
+  ],
+  "items": [
+    {
+      "item": "Goods carriage",
+      "kind": "pickup",
+      "text": "A short four-wheel van with its destination tag painted on the side; amber on the board, teal once on the outbound track, red-barred when it can never leave.",
+      "in_game": "Train[i], Outbound"
+    },
+    {
+      "item": "Inbound track",
+      "kind": "fixture",
+      "text": "The arrival road, front carriage nearest the switch.",
+      "in_game": "Index"
+    },
+    {
+      "item": "Siding",
+      "kind": "fixture",
+      "text": "A stub road with a stop block holding up to three carriages, last in first out.",
+      "in_game": "Sidings[n]"
+    },
+    {
+      "item": "Outbound track",
+      "kind": "goal",
+      "text": "The departure road where the train is made up in tag order.",
+      "in_game": "Outbound, OutLast"
+    },
+    {
+      "item": "Shift clock",
+      "kind": "HUD",
+      "text": "The MOVES counter; the cue turns to 'Moves are tight' when the carriages left nearly equal the moves left.",
+      "in_game": "Moves"
+    }
+  ],
+  "storyline": [
+    {
+      "beat": "Hook",
+      "text": "The night goods for the valley halts has to leave in station order, and the arrival road has it all jumbled; the yardmaster hands you the lamp."
+    },
+    {
+      "beat": "Teaching",
+      "text": "Three rows on the first move: out sends the front carriage, s<n> parks it and p<n> pulls it back, and the outbound tags never go down. (They leave after the first move.)"
+    },
+    {
+      "beat": "Rising",
+      "text": "Each difficulty is a longer train with more destinations: 7 carriages for 3 halts with 2 sidings, 9 for 4, then 11 for 5 with a third siding and only a little slack in the moves."
+    },
+    {
+      "beat": "Climax",
+      "text": "The last carriage couples on in order and the train is made up; every move left on the clock is the stationmaster's thanks."
+    },
+    {
+      "beat": "Failure",
+      "text": "The shift clock runs out, or the yard blocks with a low tag buried under a high one. Pad A or R brings the same train in again so the parking can be planned."
+    },
+    {
+      "beat": "Place in Prismheart",
+      "text": "The shunting yard sits at the far end of the Prismheart arcade row after the wall yard; a side craft, not a campaign gate, and made-up trains add to the arcade scoreboard."
+    }
+  ],
+  "placement": [
+    {
+      "name": "Realm row",
+      "text": "data/minigames/realm-cabinets.json, realm prismheart_realm, anchor arcade_plaza, layout row, yaw 180; seed 592316973; StartGame(\"shuntline\", 592316973), SetGameOption(0). Also placed in spawn_overlook (seed 959082488) and shattered_planet (seed 730632246) by the realm generator."
+    },
+    {
+      "name": "First frame at the realm seed",
+      "text": "normal train 3,2,2,1,3,1,4,4,4; two sidings of three, 20 moves; siding 0 picked (native == Python)."
+    },
+    {
+      "name": "Spot",
+      "text": "data/minigames/daedalus-spots.json: 'Prismheart, the shunting yard'."
+    },
+    {
+      "name": "Handoff",
+      "text": "docs/minigames/PRISMHEART-CABINET-HANDOFF.md lists the cabinet among the nineteen with its acceptance steps for codex-play-guard's editor window."
+    }
+  ],
+  "blender_items": [
+    {
+      "name": "Cab_Shuntline",
+      "kind": "cabinet",
+      "text": "Arcade cabinet shell in the shared ADaedalusDesktopArcade footprint with a signal-lamp marquee; same sockets as the other Prismheart cabinets.",
+      "priority": "1"
+    },
+    {
+      "name": "Prop_Shuntline_Carriage",
+      "kind": "prop",
+      "text": "Four-wheel goods van, ~1.8 m, five destination-tag decal variants; coupling sockets both ends.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Shuntline_Track",
+      "kind": "prop",
+      "text": "Modular narrow-gauge track: straight, switch, stop block.",
+      "priority": "2"
+    },
+    {
+      "name": "Prop_Shuntline_Signal",
+      "kind": "prop",
+      "text": "Ground signal lamp, ~1 m, red/green states.",
+      "priority": "3"
+    },
+    {
+      "name": "Prop_Shuntline_ShiftClock",
+      "kind": "prop",
+      "text": "Yard clock on a post, ~2 m, single hand.",
+      "priority": "3"
+    },
+    {
+      "name": "NPC_Shuntline_Yardmaster",
+      "kind": "NPC",
+      "text": "Yardmaster on the shared 8-bone rig (reuse Mob_Prism townsfolk base), cap and lamp, hands over the shift.",
+      "priority": "3"
+    }
+  ]
+}

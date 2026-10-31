@@ -130,6 +130,29 @@ class Rules(unittest.TestCase):
 
 
 
+class Screen(unittest.TestCase):
+    """Iterations 7 and 9: tutorial rows on the first move only; dead carriages carry a ! mark."""
+    def test_tutorial_only_on_the_first_move(self):
+        g = gm.start(2)
+        self.assertIn("OUT    out sends", g.render())
+        g.step(g.demo_action())
+        self.assertNotIn("OUT    out sends", g.render())
+
+    def test_dead_carriages_are_marked(self):
+        g = gm.start(1, "easy")
+        g.cfg = dict(g.cfg, cars=3, destinations=3, sidings=1, length=3, moves=10)
+        g.train, g.index, g.sidings, g.outbound, g.moves = [3, 1, 2], 0, [[]], [], 10
+        g.step("out")
+        screen = g.render()
+        self.assertIn("inbound:  1! 2!", screen)
+        g = gm.start(4, "hard")
+        while not g.over:
+            last = g.out_last()
+            dead = sum(1 for v in g.inbound() if v < last) + sum(1 for s in g.sidings for v in s if v < last)
+            self.assertEqual(g.render().count("!"), dead)
+            g.step(g.demo_action())
+
+
 class Saves(unittest.TestCase):
     """Iteration 5: from_state refuses saves that break the rules."""
     def bad(self, **fields):
