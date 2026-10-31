@@ -291,6 +291,10 @@ class Game(pc.PrismGame):
         for k in reversed(range(cfg["courses"])):
             lines.append(f"course {k}  |" + "".join("#" if x else "." for x in self.wall[k]) + "|" + ("  locked" if all(self.wall[k]) else ""))
         lines.append("           " + "".join("^" if c in cols else " " for c in range(cfg["width"])))
+        if not self.over and cols:   # iteration 9: where the next stone lands and which columns lock a course
+            locking = [c for c in sorted(cols) if self.preview(str(c))[2]]
+            lines.append("next %d-stone rests at %s%s" % (self.next_stone(), ",".join(str(c) for c in sorted(cols)),
+                                                          ("; locks from " + ",".join(str(c) for c in locking)) if locking else ""))
         if self.fresh():
             lines += self.tutorial()
         if self.over:

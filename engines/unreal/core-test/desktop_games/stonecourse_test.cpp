@@ -176,6 +176,26 @@ int main(int Argc, char** Argv) {
         bool Locks = false;
         T.CoreState().Preview(T.MarkerColumn(), Course, Locks);
         Check(T.HintLine().find("course " + std::to_string(Course)) != std::string::npos, "the hint names the landing course");
+        // Iteration 9: lock ticks equal the columns where the next stone would lock a course, through a mason game
+        StonecourseGame P;
+        P.Reset(9);
+        P.SetCabinetDifficulty("hard");
+        bool TicksOk = true;
+        while(!P.GetStatus().Over && TicksOk) {
+            int Expected = 0;
+            for(int Col = 0; Col < P.CoreState().Width(); ++Col) {
+                int Lands = -1;
+                bool WouldLock = false;
+                if(P.CoreState().Preview(Col, Lands, WouldLock) && WouldLock) ++Expected;
+            }
+            Frame FP;
+            P.Render(FP);
+            int Ticks = 0;
+            for(const auto& Cmd : FP.Commands) if(Cmd.Kind == Shape::Rectangle && Cmd.Tint.R == 110 && Cmd.Tint.G == 170 && Cmd.Tint.B == 140 && Cmd.B.Y == 3) ++Ticks;
+            TicksOk = Ticks == Expected;
+            Do(P, P.CoreState().DemoAction());
+        }
+        Check(TicksOk, "lock ticks match the preview every turn");
     }
 
     StonecourseGame X;

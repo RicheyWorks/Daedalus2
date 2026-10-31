@@ -133,6 +133,27 @@ class Rules(unittest.TestCase):
 
 
 
+class Screen(unittest.TestCase):
+    """Iterations 7 and 9: tutorial rows on the first turn only; the rests/locks line follows the preview."""
+    def test_tutorial_only_on_the_first_turn(self):
+        g = gm.start(2)
+        self.assertIn("SET    a column", g.render())
+        g.step(g.demo_action())
+        self.assertNotIn("SET    a column", g.render())
+
+    def test_rests_line_matches_preview(self):
+        for s in range(8):
+            g = gm.start(s, "hard")
+            while not g.over:
+                cols = g.placements()
+                if cols:
+                    locking = [c for c in cols if g.preview(str(c))[2]]
+                    want = "rests at " + ",".join(map(str, cols)) + (("; locks from " + ",".join(map(str, locking))) if locking else "")
+                    self.assertIn(want, g.render())
+                g.step(g.demo_action())
+            self.assertNotIn("rests at", g.render())
+
+
 class Saves(unittest.TestCase):
     """Iteration 5: from_state refuses saves that break the rules."""
     def bad(self, **fields):
