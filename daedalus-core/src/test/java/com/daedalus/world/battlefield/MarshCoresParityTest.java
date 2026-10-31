@@ -18,7 +18,8 @@ import org.junit.jupiter.api.Test;
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
  * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan), G591 (G504 ReedCeiling), G593 (G507
  * ReedRelease), G610 (G188 HawkDove), G611 (G183 Metapopulation), G612 (G176 ShoalHarvest), G613 (G172
- * HerdOutbreak), G614 (G163 FounderDrift) and G615 (G156 MarkRecapture); later ecology ports add a method here.
+ * HerdOutbreak), G614 (G163 FounderDrift), G615 (G156 MarkRecapture) and G616 (G142 AlleeRelease); later ecology
+ * ports add a method here.
  * Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
  * replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
  * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
@@ -507,6 +508,48 @@ class MarshCoresParityTest {
     @Test
     void markRecaptureMatchesCpp() throws IOException {
         check("marsh_mark_recapture_parity.txt", "G156 MarkRecapture", MarshCoresParityTest::markRecapture);
+    }
+
+    static List<String> alleeRelease() {
+        double[][] tunings = {{40, 40, 0.75, 30, 1.0, 150, 50}, {120, 40, 0.75, 30, 1.0, 150, 50},
+            {60, 30, 0.9, 10, 0.6, 200, 80}, {30, 25, 0.5, 40, 1.0, 100, 20}, {0, 10, 0.8, 0, 0.5, 50, 5},
+            {200, 50, 0.85, 60, 0.9, 400.5, 150}, {10, 1, 1.0, 5, 1.0, 20, 10}, {80, 35, 0.7, 20, 0.8, 120, 60}};
+        List<String> out = new ArrayList<>();
+        long seed = 1;
+        for (double[] t : tunings) {
+            AlleeRelease.Settings s = new AlleeRelease.Settings((int) t[0], (int) t[1], t[2], t[3], t[4], t[5],
+                    (int) t[6]);
+            int[][] plans = {{0, s.budget()}, {0, s.budget() / 4, 1, s.budget() / 4, 2, s.budget() / 4, 3,
+                s.budget() / 4}, {0, s.budget() / 2, s.years(), 1, 0, s.budget() + 1, 1, 0}};
+            for (int plan = 0; plan < plans.length; plan++) {
+                AlleeRelease m = AlleeRelease.marsh(s, seed);
+                StringBuilder p = new StringBuilder();
+                for (int k = 0; k + 1 < plans[plan].length; k += 2) {
+                    boolean ok = m.release(plans[plan][k], plans[plan][k + 1]);
+                    p.append(p.length() == 0 ? "" : ",").append(ok ? 1 : 0);
+                }
+                AlleeRelease.Report r = m.run();
+                long weighted = 0;
+                for (AlleeRelease.Year y : r.years()) {
+                    weighted += ((long) y.flock() * 10000 + y.released() * 1000 + y.nests() * 10 + y.fledged())
+                            * (y.index() + 1);
+                }
+                AlleeRelease.Year last = r.years().get(r.years().size() - 1);
+                out.add("budget=" + s.budget() + " years=" + s.years() + " survival=" + s.survival() + " mateHalf="
+                        + s.mateHalf() + " fledge=" + s.fledge() + " capacity=" + s.capacity() + " goal=" + s.goal()
+                        + " seed=" + seed + " plan=" + plan + " oks=" + p + " left=" + m.left() + " threshold="
+                        + m.threshold() + " g10=" + m.growth(10) + " g40=" + m.growth(40) + " outcome=" + r.outcome()
+                        + " flock=" + r.flock() + " peak=" + r.peak() + " band=" + r.band() + " lastNests="
+                        + last.nests() + " weighted=" + weighted);
+                seed++;
+            }
+        }
+        return out;
+    }
+
+    @Test
+    void alleeReleaseMatchesCpp() throws IOException {
+        check("marsh_allee_release_parity.txt", "G142 AlleeRelease", MarshCoresParityTest::alleeRelease);
     }
 
     static List<String> hawkDove() {
