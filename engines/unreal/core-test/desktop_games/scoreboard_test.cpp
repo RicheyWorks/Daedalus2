@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // The arcade host shows Status.Score. Every catalog game must report that number
 // inside the range the host already clamps. This does not read or write saves.
-// catalog-capability: scoreboard: beacon_sweep cairnwell dodge_ball driftstone dungeon emberstep emberkiln facetlock fogbell football glimmerloom glowmoss gloam_latch glowtrail ironwake lanternwild lumenpath prismcairn prismchime prismvault reedbeat riftwing roostcall shadewatch shardfall shardring shardscale sluicegate siltlane spiritkite star_shooter twinwake wardens_accord
+// catalog-capability: scoreboard: beacon_sweep cairnwell dodge_ball driftstone dungeon emberstep emberkiln facetlock fogbell football glimmerloom glowmoss gloam_latch glowtrail ironwake lanternwild lumenpath prismcairn prismchime prismvault reedbeat riftwing roostcall shadewatch shardfall shardring shardscale sluicegate siltlane spiritkite stonecourse star_shooter twinwake wardens_accord
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <string>

@@ -646,12 +646,26 @@
           "start": "StartGame(\"shardscale\", 1347419560)"
         },
         {
+          "game": "stonecourse",
+          "title": "Stonecourse",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            15.0,
+            2.5,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1556717478,
+          "option": 0,
+          "start": "StartGame(\"stonecourse\", 1556717478)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             15.0,
-            2.5,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -664,8 +678,8 @@
           "title": "BlackJackPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            15.0,
-            5.0,
+            17.5,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1136,7 +1150,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             20.0,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1145,12 +1159,26 @@
           "start": "StartGame(\"shardscale\", 738309344)"
         },
         {
+          "game": "stonecourse",
+          "title": "Stonecourse",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            20.0,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 615651405,
+          "option": 0,
+          "start": "StartGame(\"stonecourse\", 615651405)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             20.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1164,7 +1192,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             20.0,
-            2.5,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1568,7 +1596,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -25.0,
+            -26.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1582,7 +1610,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -22.5,
+            -23.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1596,7 +1624,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -20.0,
+            -21.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1610,7 +1638,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -17.5,
+            -18.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1624,7 +1652,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -15.0,
+            -16.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1638,7 +1666,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -12.5,
+            -13.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1652,7 +1680,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -10.0,
+            -11.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1666,7 +1694,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -7.5,
+            -8.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1680,7 +1708,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -5.0,
+            -6.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1694,7 +1722,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1708,7 +1736,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            0.0,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1722,7 +1750,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            2.5,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1736,7 +1764,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            5.0,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1750,7 +1778,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            7.5,
+            6.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1764,7 +1792,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            10.0,
+            8.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1778,7 +1806,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            12.5,
+            11.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1792,7 +1820,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            15.0,
+            13.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1806,7 +1834,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            17.5,
+            16.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1820,7 +1848,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            20.0,
+            18.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1834,7 +1862,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            22.5,
+            21.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1848,13 +1876,27 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            25.0,
+            23.75,
             0.0
           ],
           "yaw_deg": 180.0,
           "seed": 644661142,
           "option": 0,
           "start": "StartGame(\"shardscale\", 644661142)"
+        },
+        {
+          "game": "stonecourse",
+          "title": "Stonecourse",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            26.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 492740943,
+          "option": 0,
+          "start": "StartGame(\"stonecourse\", 492740943)"
         }
       ]
     },
