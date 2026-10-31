@@ -103,3 +103,7 @@ Notes
 ## stonecourse (unreal-team, READY 63595/63596; Blender items)
 
 15 assets: cabinet with dry-stone-wall marquee; dressed stones 0.4/0.8/1.2 m raw and locked (teal moss); 1.6 m two-wheel stone cart (6 Stone_ sockets); 1 m gravel footing with string-line pegs; 0.8 m rubble pile; Mason with apron and string line, static plus rig. Sheet: stonecourse.png.
+
+## shuntline (unreal-team, READY 63759/63760; Blender items)
+
+17 assets: cabinet with signal-lamp marquee; 1.8 m goods van with destination tags 1-5 (coupling sockets both ends); 1 m track straight, switch and stop block; ground signal red and green; 2.15 m shift clock (HandPivot); Yardmaster with cap and lamp, static plus rig. Sheet: shuntline.png.
