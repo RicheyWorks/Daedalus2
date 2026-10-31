@@ -20,6 +20,8 @@ A finished game pays shards of the game's home hue (ember, tide, verdant, gale o
 | Perfect run (a win the game marks perfect) | +2 |
 | Each new Warden seal level the run reaches for that game | +1 |
 
+Shard counts and runs stop at 999,999,999 (`COUNT_MAX`), so a full satchel always fits its save and reloads.
+
 Spending names one or more hues and a whole number of shards per hue; a short satchel refuses the whole spend and
 nothing is taken. Bad results (unknown game or difficulty, negative or non-integer score, a perfect loss) are refused.
 
@@ -27,7 +29,7 @@ nothing is taken. Bad results (unknown game or difficulty, negative or non-integ
 
 Each game keeps its best seal, in order:
 
-1. Ember: finish a game (any result).
+1. Ember: finish a game (any result). This is an attempt mark, not mastery: `mastered()` counts games at Tide or above.
 2. Tide: win.
 3. Verdant: win on normal or hard.
 4. Gale: win on hard.

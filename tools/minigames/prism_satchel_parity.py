@@ -9,6 +9,8 @@ spends in between and a set of tampered saves:
   result g=<game> d=<difficulty> score=<s> won=<0|1> perfect=<0|1> pay=<n> hue=<hue> seal=<k> new=<n> text=<satchel save>
   spend cost=<hue:n,..> ok=<0|1> text=<satchel save>
   load text=<save> ok=<0|1>
+  start text=<save>                                                            (continue from this save: the count ceiling)
+  mastery mastered=<n> heartglass=<n>
 
 DaedalusPrismSatchelCore.h reads only the inputs (game, difficulty, score, won, perfect; the cost; the save text) and must
 reproduce every output byte for byte. Run `python tools/minigames/prism_satchel_parity.py --check` to verify.
@@ -167,7 +169,17 @@ def generate():
                 ok = 0
             text = ",".join("%s:%d" % (h, cost[h]) for h in ps.HUES if h in cost)
             out.append("spend cost=%s ok=%d text=%s" % (text, ok, sat.to_text()))
-    for text in (sat.to_text(), ps.Satchel().to_text()) + BAD_SAVES:
+    out.append("mastery mastered=%d heartglass=%d" % (sat.mastered(), sat.heartglass()))
+    top = "%s;%d,0,0,0,%d;%d;" % (ps.SAVE_TAG, ps.COUNT_MAX - 1, ps.COUNT_MAX, ps.COUNT_MAX)
+    out.append("start text=%s" % top)
+    edge = ps.Satchel.from_text(top)
+    for game, d, score, won, perfect in (("shardfall", "hard", 50, True, False), ("prismvault", "easy", 0, False, False),
+                                         ("lumenpath", "normal", 100, True, False)):
+        pay, hue, seal, new = edge.record(game, d, score, won, perfect)
+        out.append("result g=%s d=%s score=%d won=%d perfect=%d pay=%d hue=%s seal=%d new=%d text=%s" % (
+            game, d, score, int(won), int(perfect), pay, hue, seal, new, edge.to_text()))
+    out.append("mastery mastered=%d heartglass=%d" % (edge.mastered(), edge.heartglass()))
+    for text in (sat.to_text(), ps.Satchel().to_text(), edge.to_text()) + BAD_SAVES:
         try:
             ps.Satchel.from_text(text)
             ok = 1
