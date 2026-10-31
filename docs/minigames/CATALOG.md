@@ -40,6 +40,7 @@ batched rebuild under the editor custodian.
 | `sluicegate` | Sluicegate | 1 |
 | `glowmoss` | Glowmoss Delve | 1 |
 | `spiritkite` | Spiritkite Weave | 1 |
+| `shardscale` | Shardscale | 1 |
 
 ## How to play
 
@@ -79,6 +80,7 @@ One original line per game, read from `HowToLine()`.
 | `sluicegate` | HOW Each turn the headgate pushes a few cells of water into the nearest open channels. Drop a gate on a dry channel to block a branch, or wait. Fill every cistern before the headgate closes; keep the water off the mill wheel. |
 | `glowmoss` | HOW Dig down the shaft one ledge at a time to gather crystals; glowmoss refills your lamp and unstable ledges drop you one row. Climb out before the light is too low to carry you back up. |
 | `spiritkite` | HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out. |
+| `shardscale` | HOW Set the next shard left or right, or hold it on the bench; set a held shard later. Never let the pans differ by more than the cap; end level within the tolerance. |
 
 ## Difficulty
 
@@ -118,6 +120,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `sluicegate` | normal |
 | `glowmoss` | normal |
 | `spiritkite` | normal |
+| `shardscale` | normal |
 
 ## Daedalus spots
 
@@ -157,6 +160,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `sluicegate` | `prismheart_realm` | Prismheart, the sluice field |
 | `glowmoss` | `prismheart_realm` | Prismheart, the glowmoss shaft |
 | `spiritkite` | `prismheart_realm` | Prismheart, the kite anchor |
+| `shardscale` | `prismheart_realm` | Prismheart, the weigh-house |
 
 ## Capabilities
 
@@ -197,6 +201,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `sluicegate` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `glowmoss` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `spiritkite` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `shardscale` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 
 ## Leaderboard feed
 
@@ -238,3 +243,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `roostcall` | Roostcall | `tools/minigames/roostcall.py` | HOW Walk up behind the glimmer-birds so they flee one step at a time; drive every bird into the roost corner before your turns run out. |
 | `emberkiln` | Emberkiln | `tools/minigames/emberkiln.py` | HOW Set a coal: the clay under it gains 2 heat and its neighbours gain 1 (stone and finished tiles only warm neighbours). A tile glazes at exactly its target and cracks past it. Glaze every tile before the coals run out. |
 | `sluicegate` | Sluicegate | `tools/minigames/sluicegate.py` | HOW Each turn the headgate pushes a few cells of water into the nearest open channels. Drop a gate (r,c) on a dry channel to block a branch, or wait. Fill every cistern before the headgate closes; keep the water off the mill wheel. |
+| `shardscale` | Shardscale | `tools/minigames/shardscale.py` | HOW Set the next shard left (l) or right (r), or hold it on the bench; set a held shard with l<n>/r<n>. Never let the pans differ by more than the cap; end level within the tolerance. |

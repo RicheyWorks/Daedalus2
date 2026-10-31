@@ -72,6 +72,8 @@ jobs:
         run: python tools/minigames/emberkiln_parity.py --check
       - name: Sluicegate parity fixture is current (engines/unreal/core-test/sluicegate_parity.txt)
         run: python tools/minigames/sluicegate_parity.py --check
+      - name: Shardscale parity fixture is current (engines/unreal/core-test/shardscale_parity.txt)
+        run: python tools/minigames/shardscale_parity.py --check
       - name: Dyevat parity fixture is current (engines/unreal/core-test/dyevat_parity.txt)
         run: python tools/minigames/dyevat_parity.py --check
       - name: Glimmerloom parity fixture is current (engines/unreal/core-test/glimmerloom_parity.txt)
