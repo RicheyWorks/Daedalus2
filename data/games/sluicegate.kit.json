@@ -1,0 +1,7764 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_Sluicegate",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: sluice-wheel marquee + water-channel side art",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_Sluicegate_M0",
+     "colour": "cabinet body",
+     "hex": "4A3A2A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_Sluicegate_M1",
+     "colour": "trim / side art panel",
+     "hex": "8AA8B0",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_Sluicegate_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "6AC8E8",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_Sluicegate_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_Sluicegate_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_Sluicegate_M5",
+     "colour": "oak wheel",
+     "hex": "6A5034",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 6,
+     "name": "Prop_Arcade_Cab_Sluicegate_M6",
+     "colour": "water channel art",
+     "hex": "3A7AC8",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_Sluicegate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "MarqWheel",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.04,
+       "centre": [
+        0,
+        -0.2,
+        1.93
+       ],
+       "slot": 5,
+       "segments": 12
+      },
+      {
+       "name": "MarqPaddle0",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.1
+       ],
+       "centre": [
+        0.15,
+        -0.2,
+        1.93
+       ],
+       "slot": 5,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "MarqPaddle1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.1
+       ],
+       "centre": [
+        0.075,
+        -0.2,
+        2.0599
+       ],
+       "slot": 5,
+       "bevel": false,
+       "rot": [
+        0,
+        -60,
+        0
+       ]
+      },
+      {
+       "name": "MarqPaddle2",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.1
+       ],
+       "centre": [
+        -0.075,
+        -0.2,
+        2.0599
+       ],
+       "slot": 5,
+       "bevel": false,
+       "rot": [
+        0,
+        -120,
+        0
+       ]
+      },
+      {
+       "name": "MarqPaddle3",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.1
+       ],
+       "centre": [
+        -0.15,
+        -0.2,
+        1.93
+       ],
+       "slot": 5,
+       "bevel": false,
+       "rot": [
+        0,
+        -180,
+        0
+       ]
+      },
+      {
+       "name": "MarqPaddle4",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.1
+       ],
+       "centre": [
+        -0.075,
+        -0.2,
+        1.8001
+       ],
+       "slot": 5,
+       "bevel": false,
+       "rot": [
+        0,
+        -240,
+        0
+       ]
+      },
+      {
+       "name": "MarqPaddle5",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.05,
+        0.1
+       ],
+       "centre": [
+        0.075,
+        -0.2,
+        1.8001
+       ],
+       "slot": 5,
+       "bevel": false,
+       "rot": [
+        0,
+        -300,
+        0
+       ]
+      },
+      {
+       "name": "SideWater-1",
+       "shape": "box",
+       "size": [
+        0.005,
+        0.5,
+        0.06
+       ],
+       "centre": [
+        -0.417,
+        0.08,
+        0.35
+       ],
+       "slot": 6,
+       "bevel": false
+      },
+      {
+       "name": "SideWater1",
+       "shape": "box",
+       "size": [
+        0.005,
+        0.5,
+        0.06
+       ],
+       "centre": [
+        0.417,
+        0.08,
+        0.35
+       ],
+       "slot": 6,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_Sluicegate_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 624,
+    "lod1_triangles": 624,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_Sluicegate": 624
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.0979
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.0979
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d58382788f9763139d7d7a255c89372b030a77bd0ec2aa15fb12730b34bff093"
+  },
+  {
+   "asset": "Prop_Sluicegate_Headgate_Open",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.2 m timber headgate with lifting wheel, open",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Wheel",
+     "SOCKET_Outflow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Headgate_Open_M0",
+     "colour": "timber",
+     "hex": "6A5034",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Headgate_Open_M1",
+     "colour": "oak board",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Sluicegate_Headgate_Open_M2",
+     "colour": "iron wheel",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Headgate_Open",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post-1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.25,
+        2.2
+       ],
+       "centre": [
+        -1.0,
+        0,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Post1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.25,
+        2.2
+       ],
+       "centre": [
+        1.0,
+        0,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Lintel",
+       "shape": "box",
+       "size": [
+        2.2,
+        0.25,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        2.3
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Board",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.1,
+        1.0
+       ],
+       "centre": [
+        0,
+        0,
+        1.4
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Spindle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 0.9,
+       "centre": [
+        0,
+        0,
+        2.49
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Wheel",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.35,
+       "r2": 0.35,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "segments": 14
+      },
+      {
+       "name": "Spoke0",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Spoke1",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Spoke2",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Spoke3",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        135
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Wheel",
+     "location": [
+      0,
+      0,
+      2.53
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.53,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Outflow",
+     "location": [
+      0,
+      -0.2,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      0.2
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Headgate_Open_00",
+     "shape": "box",
+     "size": [
+      2.2,
+      0.25,
+      2.85
+     ],
+     "centre": [
+      0,
+      0,
+      1.425
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 304,
+    "lod1_triangles": 304,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Headgate_Open": 304
+    },
+    "bounds_min": [
+     -1.1,
+     -0.3412,
+     0.0
+    ],
+    "bounds_max": [
+     1.1,
+     0.3412,
+     2.94
+    ],
+    "dimensions": [
+     2.2,
+     0.6824,
+     2.94
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1505c1fe98ce6c3d6471a97f418a3db835a2b3e1cea918149b9b0c6372370562"
+  },
+  {
+   "asset": "Prop_Sluicegate_Headgate_Closed",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.2 m timber headgate with lifting wheel, closed",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Wheel",
+     "SOCKET_Outflow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Headgate_Closed_M0",
+     "colour": "timber",
+     "hex": "6A5034",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Headgate_Closed_M1",
+     "colour": "oak board",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Sluicegate_Headgate_Closed_M2",
+     "colour": "iron wheel",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Headgate_Closed",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post-1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.25,
+        2.2
+       ],
+       "centre": [
+        -1.0,
+        0,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Post1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.25,
+        2.2
+       ],
+       "centre": [
+        1.0,
+        0,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Lintel",
+       "shape": "box",
+       "size": [
+        2.2,
+        0.25,
+        0.2
+       ],
+       "centre": [
+        0,
+        0,
+        2.3
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Board",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.1,
+        1.0
+       ],
+       "centre": [
+        0,
+        0,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Spindle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 0.9,
+       "centre": [
+        0,
+        0,
+        2.85
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Wheel",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.35,
+       "r2": 0.35,
+       "length": 0.05,
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "segments": 14
+      },
+      {
+       "name": "Spoke0",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Spoke1",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Spoke2",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        90
+       ]
+      },
+      {
+       "name": "Spoke3",
+       "shape": "box",
+       "size": [
+        0.66,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        2.5
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        135
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Wheel",
+     "location": [
+      0,
+      0,
+      2.53
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.53,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Outflow",
+     "location": [
+      0,
+      -0.2,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      0.2
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Headgate_Closed_00",
+     "shape": "box",
+     "size": [
+      2.2,
+      0.25,
+      2.85
+     ],
+     "centre": [
+      0,
+      0,
+      1.425
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 304,
+    "lod1_triangles": 304,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Headgate_Closed": 304
+    },
+    "bounds_min": [
+     -1.1,
+     -0.3412,
+     0.0
+    ],
+    "bounds_max": [
+     1.1,
+     0.3412,
+     3.3
+    ],
+    "dimensions": [
+     2.2,
+     0.6824,
+     3.3
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e97029b58b01ed92e997f50af3197860b28fe4bf386a299875fcc10516bca380"
+  },
+  {
+   "asset": "Prop_Sluicegate_Board_Stacked",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 m oak gate board, stacked",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Board_Stacked_M0",
+     "colour": "oak",
+     "hex": "6A4A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Board_Stacked_M1",
+     "colour": "iron handle",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Board_Stacked",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Board0",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.25,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Handle0",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.14,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Board1",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.25,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.095
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Handle1",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.14,
+        0.095
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Board2",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.25,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.16
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Handle2",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.14,
+        0.16
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      -0.15,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.03,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Board_Stacked_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      0.31,
+      0.195
+     ],
+     "centre": [
+      0,
+      -0.03,
+      0.0975
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Board_Stacked": 168
+    },
+    "bounds_min": [
+     -0.5,
+     -0.155,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.125,
+     0.19
+    ],
+    "dimensions": [
+     1.0,
+     0.28,
+     0.19
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "bc1a1e74a27c0bf51ac5405865fc546c00cb9063ceeb8a64a8ca0c6f7dae37b1"
+  },
+  {
+   "asset": "Prop_Sluicegate_Board_Dropped",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 m oak gate board, dropped",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Board_Dropped_M0",
+     "colour": "oak",
+     "hex": "6A4A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Board_Dropped_M1",
+     "colour": "iron handle",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Board_Dropped",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Board0",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.25,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Handle0",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0,
+        -0.14,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      -0.15,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.03,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Board_Dropped_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      0.31,
+      0.065
+     ],
+     "centre": [
+      0,
+      -0.03,
+      0.0325
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 56,
+    "lod1_triangles": 56,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Board_Dropped": 56
+    },
+    "bounds_min": [
+     -0.5,
+     -0.155,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.125,
+     0.06
+    ],
+    "dimensions": [
+     1.0,
+     0.28,
+     0.06
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "955592f6bf9a108429d9dcc1880ead74b9b0e9aace5f757f507abf5d85de59f9"
+  },
+  {
+   "asset": "Prop_Sluicegate_Cistern_Dry",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m sunken stone cistern, dry (sinks 0.31 m below ground)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Ground",
+     "SOCKET_Inflow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Cistern_Dry_M0",
+     "colour": "stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Cistern_Dry_M1",
+     "colour": "dry silt",
+     "hex": "8A7A5A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Cistern_Dry",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rim0",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.12,
+        0.12
+       ],
+       "centre": [
+        0,
+        -0.44,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Rim1",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.12,
+        0.12
+       ],
+       "centre": [
+        0,
+        0.44,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Rim2",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.76,
+        0.12
+       ],
+       "centre": [
+        -0.44,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Rim3",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.76,
+        0.12
+       ],
+       "centre": [
+        0.44,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        0.76,
+        0.76,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        -0.3
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Surface",
+       "shape": "box",
+       "size": [
+        0.76,
+        0.76,
+        0.01
+       ],
+       "centre": [
+        0,
+        0,
+        -0.28
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Ground",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Inflow",
+     "location": [
+      0,
+      -0.5,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0,
+      0.5
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Cistern_Dry_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      1.0,
+      0.43
+     ],
+     "centre": [
+      0,
+      0,
+      -0.095
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 200,
+    "lod1_triangles": 200,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Cistern_Dry": 200
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     -0.31
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.12
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.43
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1694a776cdae71ce42ef376319d4fe8eb329b087cdc13c779e254a4442d3bb31",
+   "off_centre_ok": "sunken: origin at ground level, tank below"
+  },
+  {
+   "asset": "Prop_Sluicegate_Cistern_Full",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m sunken stone cistern, full (sinks 0.31 m below ground)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Ground",
+     "SOCKET_Inflow"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Cistern_Full_M0",
+     "colour": "stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Cistern_Full_M1",
+     "colour": "water teal",
+     "hex": "2AB0A8",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Cistern_Full",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rim0",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.12,
+        0.12
+       ],
+       "centre": [
+        0,
+        -0.44,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Rim1",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.12,
+        0.12
+       ],
+       "centre": [
+        0,
+        0.44,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Rim2",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.76,
+        0.12
+       ],
+       "centre": [
+        -0.44,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Rim3",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.76,
+        0.12
+       ],
+       "centre": [
+        0.44,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        0.76,
+        0.76,
+        0.02
+       ],
+       "centre": [
+        0,
+        0,
+        -0.3
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Surface",
+       "shape": "box",
+       "size": [
+        0.76,
+        0.76,
+        0.01
+       ],
+       "centre": [
+        0,
+        0,
+        -0.06
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Ground",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Inflow",
+     "location": [
+      0,
+      -0.5,
+      0.0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.0,
+      0.5
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Cistern_Full_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      1.0,
+      0.43
+     ],
+     "centre": [
+      0,
+      0,
+      -0.095
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 200,
+    "lod1_triangles": 200,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Cistern_Full": 200
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     -0.31
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.12
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.43
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "92b7264f4e5e1976456ae451053beccdb2f11f1ecd20d456a059bd481029c391",
+   "off_centre_ok": "sunken: origin at ground level, tank below"
+  },
+  {
+   "asset": "Prop_Sluicegate_MillWheel_Idle",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.65 m undershot mill wheel on a race end wall, idle (spin about X at SOCKET_Axle)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Axle",
+     "SOCKET_Splash"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_MillWheel_Idle_M0",
+     "colour": "race end wall stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_MillWheel_Idle_M1",
+     "colour": "wheel rim",
+     "hex": "8A2A1A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Sluicegate_MillWheel_Idle_M2",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Sluicegate_MillWheel_Idle_M3",
+     "colour": "red paddles",
+     "hex": "C83A2A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_MillWheel_Idle",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "EndWall",
+       "shape": "box",
+       "size": [
+        0.4,
+        1.2,
+        2.0
+       ],
+       "centre": [
+        0.9,
+        0,
+        1.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Axle",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 1.0,
+       "centre": [
+        0.3,
+        0,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Rim",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 1.25,
+       "r2": 1.25,
+       "length": 0.08,
+       "centre": [
+        0.2,
+        0,
+        1.4
+       ],
+       "slot": 1,
+       "segments": 20
+      },
+      {
+       "name": "Hub",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.15,
+       "r2": 0.15,
+       "length": 0.4,
+       "centre": [
+        0.2,
+        0,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Paddle0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.0,
+        2.5
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.55,
+        2.35263
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -30,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle2",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.95263,
+        1.95
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -60,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle3",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        1.1,
+        1.4
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -90,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle4",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.95263,
+        0.85
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -120,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle5",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.55,
+        0.44737
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -150,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle6",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.0,
+        0.3
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -180,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle7",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -0.55,
+        0.44737
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -210,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle8",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -0.95263,
+        0.85
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -240,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle9",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -1.1,
+        1.4
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -270,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle10",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -0.95263,
+        1.95
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -300,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle11",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -0.55,
+        2.35263
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -330,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Axle",
+     "location": [
+      0.2,
+      0,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.2,
+      1.4,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Splash",
+     "location": [
+      0.2,
+      -1.0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.2,
+      0.3,
+      1.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_MillWheel_Idle_00",
+     "shape": "box",
+     "size": [
+      1.3,
+      2.6,
+      2.65
+     ],
+     "centre": [
+      0.45,
+      0,
+      1.325
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 328,
+    "lod1_triangles": 328,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_MillWheel_Idle": 328
+    },
+    "bounds_min": [
+     -0.2,
+     -1.275,
+     0.0
+    ],
+    "bounds_max": [
+     1.1,
+     1.275,
+     2.675
+    ],
+    "dimensions": [
+     1.3,
+     2.55,
+     2.675
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ffb5c4c7f1cc8a0e7ed44896c6dfcbabdaa90922d78c3d5f48dca7536e46dc51",
+   "off_centre_ok": "origin at race floor under the wheel front"
+  },
+  {
+   "asset": "Prop_Sluicegate_MillWheel_Turning",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.65 m undershot mill wheel on a race end wall, turning (spin about X at SOCKET_Axle)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Axle",
+     "SOCKET_Splash"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_MillWheel_Turning_M0",
+     "colour": "race end wall stone",
+     "hex": "8C8A88",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_MillWheel_Turning_M1",
+     "colour": "wheel rim",
+     "hex": "8A2A1A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Sluicegate_MillWheel_Turning_M2",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Sluicegate_MillWheel_Turning_M3",
+     "colour": "red paddles",
+     "hex": "C83A2A",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_MillWheel_Turning",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "EndWall",
+       "shape": "box",
+       "size": [
+        0.4,
+        1.2,
+        2.0
+       ],
+       "centre": [
+        0.9,
+        0,
+        1.0
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Axle",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 1.0,
+       "centre": [
+        0.3,
+        0,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Rim",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 1.25,
+       "r2": 1.25,
+       "length": 0.08,
+       "centre": [
+        0.2,
+        0,
+        1.4
+       ],
+       "slot": 1,
+       "segments": 20
+      },
+      {
+       "name": "Hub",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.15,
+       "r2": 0.15,
+       "length": 0.4,
+       "centre": [
+        0.2,
+        0,
+        1.4
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Paddle0",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.42095,
+        2.41627
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -22.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.87269,
+        2.06964
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -52.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle2",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        1.09059,
+        1.54358
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -82.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle3",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        1.01627,
+        0.97905
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -112.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle4",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.66964,
+        0.52731
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -142.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle5",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        0.14358,
+        0.30941
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -172.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle6",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -0.42095,
+        0.38373
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -202.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle7",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -0.87269,
+        0.73036
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -232.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle8",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -1.09059,
+        1.25642
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -262.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle9",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -1.01627,
+        1.82095
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -292.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle10",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -0.66964,
+        2.27269
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -322.5,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Paddle11",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.06,
+        0.35
+       ],
+       "centre": [
+        0.2,
+        -0.14358,
+        2.49059
+       ],
+       "slot": 3,
+       "bevel": false,
+       "rot": [
+        -352.5,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Axle",
+     "location": [
+      0.2,
+      0,
+      1.4
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.2,
+      1.4,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Splash",
+     "location": [
+      0.2,
+      -1.0,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.2,
+      0.3,
+      1.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_MillWheel_Turning_00",
+     "shape": "box",
+     "size": [
+      1.3,
+      2.6,
+      2.65
+     ],
+     "centre": [
+      0.45,
+      0,
+      1.325
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 328,
+    "lod1_triangles": 328,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_MillWheel_Turning": 328
+    },
+    "bounds_min": [
+     -0.2,
+     -1.268,
+     0.0
+    ],
+    "bounds_max": [
+     1.1,
+     1.268,
+     2.668
+    ],
+    "dimensions": [
+     1.3,
+     2.536,
+     2.668
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5c9f286232b2e9f95176a56b4e4b85082d7f61257628a8ce95b853a5585bde4e",
+   "off_centre_ok": "origin at race floor under the wheel front"
+  },
+  {
+   "asset": "Prop_Sluicegate_Channel_Straight",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m earth channel tile, straight (north = +Y)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Water"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Channel_Straight_M0",
+     "colour": "pale earth",
+     "hex": "C8B48A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Channel_Straight_M1",
+     "colour": "channel bed",
+     "hex": "8A7A5A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Sluicegate_Channel_Straight_M2",
+     "colour": "water (runtime: blue / next push lighter)",
+     "hex": "3A7AC8",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Channel_Straight",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        1.0,
+        1.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank00",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank01",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        0.0,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank02",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        -0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bed10",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.33333,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water10",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.33333,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bed11",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water11",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bed12",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        -0.33333,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water12",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        -0.33333,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bank20",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank21",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        0.0,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank22",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        -0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Water",
+     "location": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Channel_Straight_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      1.0,
+      0.3
+     ],
+     "centre": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 156,
+    "lod1_triangles": 156,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Channel_Straight": 156
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.3
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.3
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "9b8fd97b3f47b768953d7c367f5ee0bec247b8947e67b2f0695561ce5b6d1bd4"
+  },
+  {
+   "asset": "Prop_Sluicegate_Channel_Corner",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m earth channel tile, corner (north = +Y)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Water"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Channel_Corner_M0",
+     "colour": "pale earth",
+     "hex": "C8B48A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Channel_Corner_M1",
+     "colour": "channel bed",
+     "hex": "8A7A5A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Sluicegate_Channel_Corner_M2",
+     "colour": "water (runtime: blue / next push lighter)",
+     "hex": "3A7AC8",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Channel_Corner",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        1.0,
+        1.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank00",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank01",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        0.0,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank02",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        -0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank10",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.0,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bed11",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water11",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bed12",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        -0.33333,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water12",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        -0.33333,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bank20",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bed21",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.33333,
+        0.0,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water21",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.33333,
+        0.0,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bank22",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        -0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Water",
+     "location": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Channel_Corner_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      1.0,
+      0.3
+     ],
+     "centre": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 156,
+    "lod1_triangles": 156,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Channel_Corner": 156
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.3
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.3
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5afc67e7faa532c7c729c31a4635fdb57a3f3369462fa42a66bb7abfceacb9e6"
+  },
+  {
+   "asset": "Prop_Sluicegate_Channel_Tee",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m earth channel tile, tee (north = +Y)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Water"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Channel_Tee_M0",
+     "colour": "pale earth",
+     "hex": "C8B48A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Channel_Tee_M1",
+     "colour": "channel bed",
+     "hex": "8A7A5A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Sluicegate_Channel_Tee_M2",
+     "colour": "water (runtime: blue / next push lighter)",
+     "hex": "3A7AC8",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Channel_Tee",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        1.0,
+        1.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank00",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank01",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        0.0,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank02",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        -0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bed10",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.33333,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water10",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.33333,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bed11",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water11",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bed12",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        -0.33333,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water12",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        -0.33333,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bank20",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bed21",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.33333,
+        0.0,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water21",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.33333,
+        0.0,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bank22",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        -0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Water",
+     "location": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Channel_Tee_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      1.0,
+      0.3
+     ],
+     "centre": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Channel_Tee": 168
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.3
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.3
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "922b6c155e36ab3284b4653adc99e435f47211ebd47aa6ba7a9e65a5460cf4e0"
+  },
+  {
+   "asset": "Prop_Sluicegate_Channel_DeadEnd",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 x 1 m earth channel tile, deadend (north = +Y)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Water"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Sluicegate_Channel_DeadEnd_M0",
+     "colour": "pale earth",
+     "hex": "C8B48A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Sluicegate_Channel_DeadEnd_M1",
+     "colour": "channel bed",
+     "hex": "8A7A5A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Sluicegate_Channel_DeadEnd_M2",
+     "colour": "water (runtime: blue / next push lighter)",
+     "hex": "3A7AC8",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Sluicegate_Channel_DeadEnd",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Base",
+       "shape": "box",
+       "size": [
+        1.0,
+        1.0,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank00",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank01",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        0.0,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank02",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        -0.33333,
+        -0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank10",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.0,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bed11",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water11",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bed12",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        -0.33333,
+        0.105
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Water12",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.01
+       ],
+       "centre": [
+        0.0,
+        -0.33333,
+        0.2
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Bank20",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank21",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        0.0,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Bank22",
+       "shape": "box",
+       "size": [
+        0.33333,
+        0.33333,
+        0.2
+       ],
+       "centre": [
+        0.33333,
+        -0.33333,
+        0.2
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Water",
+     "location": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Sluicegate_Channel_DeadEnd_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      1.0,
+      0.3
+     ],
+     "centre": [
+      0,
+      0,
+      0.15
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 144,
+    "lod1_triangles": 144,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Sluicegate_Channel_DeadEnd": 144
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     0.0
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.3
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     0.3
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "edfe9398cdd32a0c3bdd8ca65e424f4591e5de179a1555718f7c8a020bb98bd5"
+  },
+  {
+   "asset": "Mob_Sluicegate_Gatekeeper",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): old gatekeeper with crook and board stack",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Sluicegate_Gatekeeper_M0",
+     "colour": "coat",
+     "hex": "5A5A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Sluicegate_Gatekeeper_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Sluicegate_Gatekeeper_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Sluicegate_Gatekeeper_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Sluicegate_Gatekeeper_M4",
+     "colour": "crook wood",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Mob_Sluicegate_Gatekeeper_M5",
+     "colour": "oak boards",
+     "hex": "6A4A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Sluicegate_Gatekeeper",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Crook",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 1.4,
+       "centre": [
+        -0.37,
+        -0.03,
+        0.78
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "CrookHook",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        -0.32,
+        -0.03,
+        1.47
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "BoardStack0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.4,
+        0.06
+       ],
+       "centre": [
+        0.37,
+        -0.03,
+        0.85
+       ],
+       "slot": 5,
+       "bevel": true
+      },
+      {
+       "name": "BoardStack1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.4,
+        0.06
+       ],
+       "centre": [
+        0.37,
+        -0.03,
+        0.915
+       ],
+       "slot": 5,
+       "bevel": true
+      },
+      {
+       "name": "BoardStack2",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.4,
+        0.06
+       ],
+       "centre": [
+        0.37,
+        -0.03,
+        0.98
+       ],
+       "slot": 5,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Sluicegate_Gatekeeper_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 784,
+    "lod1_triangles": 784,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Sluicegate_Gatekeeper": 784
+    },
+    "bounds_min": [
+     -0.42,
+     -0.23,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.17,
+     1.76
+    ],
+    "dimensions": [
+     0.84,
+     0.4,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "6f7ed817b1cca9b4028db21cee1b07a446e7e40b97fb6a277a462649909f9c1b"
+  },
+  {
+   "asset": "Mob_Sluicegate_Gatekeeper_Rig",
+   "kind": "Mob",
+   "seed": 20261030,
+   "frame_of": [
+    "Mob_Sluicegate_Gatekeeper_Rig_Head",
+    "Mob_Sluicegate_Gatekeeper_Rig_ArmR",
+    "Mob_Sluicegate_Gatekeeper_Rig_ArmL",
+    "Mob_Sluicegate_Gatekeeper_Rig_LegR",
+    "Mob_Sluicegate_Gatekeeper_Rig_LegL",
+    "Mob_Sluicegate_Gatekeeper_Rig_HeldR",
+    "Mob_Sluicegate_Gatekeeper_Rig_HeldL"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Hinge_Head",
+     "mover": "Mob_Sluicegate_Gatekeeper_Rig_Head",
+     "pivot_m": [
+      0,
+      0,
+      1.5
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      -10
+     ],
+     "open_ue_rotator": [
+      0.0,
+      10.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmR",
+     "mover": "Mob_Sluicegate_Gatekeeper_Rig_ArmR",
+     "pivot_m": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      -85,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      -85.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmL",
+     "mover": "Mob_Sluicegate_Gatekeeper_Rig_ArmL",
+     "pivot_m": [
+      0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegR",
+     "mover": "Mob_Sluicegate_Gatekeeper_Rig_LegR",
+     "pivot_m": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegL",
+     "mover": "Mob_Sluicegate_Gatekeeper_Rig_LegL",
+     "pivot_m": [
+      0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_HeldR",
+     "mover": "Mob_Sluicegate_Gatekeeper_Rig_HeldR",
+     "pivot_m": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_HeldL",
+     "mover": "Mob_Sluicegate_Gatekeeper_Rig_HeldL",
+     "pivot_m": [
+      0.37,
+      0,
+      0.88
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): old gatekeeper with crook and board stack",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "frame glb (UEB 48812): root hulls only; movers attach at SOCKET_Hinge_*"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Sluicegate_Gatekeeper_M0",
+     "colour": "coat",
+     "hex": "5A5A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Sluicegate_Gatekeeper_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Sluicegate_Gatekeeper_Rig",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_Head",
+     "location": [
+      0,
+      0,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmR",
+     "location": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmL",
+     "location": [
+      0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegR",
+     "location": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegL",
+     "location": [
+      0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_HeldR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_HeldL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Sluicegate_Gatekeeper_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Sluicegate_Gatekeeper_Rig": 132
+    },
+    "bounds_min": [
+     -0.215,
+     -0.135,
+     0.8
+    ],
+    "bounds_max": [
+     0.215,
+     0.135,
+     1.475
+    ],
+    "dimensions": [
+     0.43,
+     0.27,
+     0.675
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "60469df8b0d1c85d23f58f444ac6fbc945bd09e8213a7728debfb53f9621d60d"
+  },
+  {
+   "asset": "Mob_Sluicegate_Gatekeeper_Rig_Head",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Sluicegate_Gatekeeper_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Head",
+    "mover": "Mob_Sluicegate_Gatekeeper_Rig_Head",
+    "pivot_m": [
+     0,
+     0,
+     1.5
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     -10
+    ],
+    "open_ue_rotator": [
+     0.0,
+     10.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): old gatekeeper with crook and board stack",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Sluicegate_Gatekeeper_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Sluicegate_Gatekeeper_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Sluicegate_Gatekeeper_Rig_Head",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_Head)",
+     "parts": [
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.01,
+        0.13
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0.0,
+      0.0,
+      0.26
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.26,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0.0,
+      -0.15,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.1,
+      0.15
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Sluicegate_Gatekeeper_Rig SOCKET_Hinge_Head)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 120,
+    "lod1_triangles": 120,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Sluicegate_Gatekeeper_Rig_Head": 120
+    },
+    "bounds_min": [
+     -0.13,
+     -0.14,
+     0.0
+    ],
+    "bounds_max": [
+     0.13,
+     0.1136,
+     0.26
+    ],
+    "dimensions": [
+     0.26,
+     0.2536,
+     0.26
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "960921ea8e360632cfffc18b0c7583ac03d4c37bca466409f3f392ed6bb1fe40"
+  },
+  {
+   "asset": "Mob_Sluicegate_Gatekeeper_Rig_ArmR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Sluicegate_Gatekeeper_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmR",
+    "mover": "Mob_Sluicegate_Gatekeeper_Rig_ArmR",
+    "pivot_m": [
+     -0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     -85,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     -85.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): old gatekeeper with crook and board stack",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Sluicegate_Gatekeeper_M0",
+     "colour": "coat",
+     "hex": "5A5A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Sluicegate_Gatekeeper_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Sluicegate_Gatekeeper_Rig_ArmR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmR)",
+     "parts": [
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Sluicegate_Gatekeeper_Rig SOCKET_Hinge_ArmR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Sluicegate_Gatekeeper_Rig_ArmR": 84
+    },
+    "bounds_min": [
+     -0.15,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.0759,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2b7ec877ee15117a6c8799fd468c6401afa3e14a0dfa6040d55cb32f1dabe57f"
+  },
+  {
+   "asset": "Mob_Sluicegate_Gatekeeper_Rig_ArmL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Sluicegate_Gatekeeper_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmL",
+    "mover": "Mob_Sluicegate_Gatekeeper_Rig_ArmL",
+    "pivot_m": [
+     0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): old gatekeeper with crook and board stack",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Sluicegate_Gatekeeper_M0",
+     "colour": "coat",
+     "hex": "5A5A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Sluicegate_Gatekeeper_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Sluicegate_Gatekeeper_Rig_ArmL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmL)",
+     "parts": [
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Sluicegate_Gatekeeper_Rig SOCKET_Hinge_ArmL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Sluicegate_Gatekeeper_Rig_ArmL": 84
+    },
+    "bounds_min": [
+     -0.0759,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.15,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ba449db888c6e66bd479ee3a2a7c99130ba5563980b6e75ec9801459cf7d05d1"
+  },
+  {
+   "asset": "Mob_Sluicegate_Gatekeeper_Rig_LegR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Sluicegate_Gatekeeper_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegR",
+    "mover": "Mob_Sluicegate_Gatekeeper_Rig_LegR",
+    "pivot_m": [
+     -0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): old gatekeeper with crook and board stack",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Sluicegate_Gatekeeper_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Sluicegate_Gatekeeper_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Sluicegate_Gatekeeper_Rig_LegR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegR)",
+     "parts": [
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Sluicegate_Gatekeeper_Rig SOCKET_Hinge_LegR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Sluicegate_Gatekeeper_Rig_LegR": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "19780288215dd00cf80c5aa72c09ba48095f6a1417ef4be337b91411ffdb6f6f"
+  },
+  {
+   "asset": "Mob_Sluicegate_Gatekeeper_Rig_LegL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Sluicegate_Gatekeeper_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegL",
+    "mover": "Mob_Sluicegate_Gatekeeper_Rig_LegL",
+    "pivot_m": [
+     0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): old gatekeeper with crook and board stack",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Sluicegate_Gatekeeper_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Sluicegate_Gatekeeper_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Sluicegate_Gatekeeper_Rig_LegL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegL)",
+     "parts": [
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Sluicegate_Gatekeeper_Rig SOCKET_Hinge_LegL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Sluicegate_Gatekeeper_Rig_LegL": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "824549f69b27ff2676f72f171a328e040727faa5288c943294f6ab57a1bb281e"
+  },
+  {
+   "asset": "Mob_Sluicegate_Gatekeeper_Rig_HeldR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Sluicegate_Gatekeeper_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_HeldR",
+    "mover": "Mob_Sluicegate_Gatekeeper_Rig_HeldR",
+    "pivot_m": [
+     -0.37,
+     0,
+     0.88
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): old gatekeeper with crook and board stack",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Sluicegate_Gatekeeper_M4",
+     "colour": "crook wood",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Sluicegate_Gatekeeper_Rig_HeldR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_HeldR)",
+     "parts": [
+      {
+       "name": "Crook",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 1.4,
+       "centre": [
+        0.0,
+        -0.03,
+        -0.1
+       ],
+       "slot": 0,
+       "segments": 6
+      },
+      {
+       "name": "CrookHook",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.03,
+        0.03
+       ],
+       "centre": [
+        0.05,
+        -0.03,
+        0.59
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Sluicegate_Gatekeeper_Rig SOCKET_Hinge_HeldR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 32,
+    "lod1_triangles": 32,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Sluicegate_Gatekeeper_Rig_HeldR": 32
+    },
+    "bounds_min": [
+     -0.015,
+     -0.045,
+     -0.8
+    ],
+    "bounds_max": [
+     0.11,
+     -0.015,
+     0.605
+    ],
+    "dimensions": [
+     0.125,
+     0.03,
+     1.405
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "205c212ad9b9b03237aec15a6198c339d900e6b76634a649348eb67ac73e35f0"
+  },
+  {
+   "asset": "Mob_Sluicegate_Gatekeeper_Rig_HeldL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Sluicegate_Gatekeeper_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_HeldL",
+    "mover": "Mob_Sluicegate_Gatekeeper_Rig_HeldL",
+    "pivot_m": [
+     0.37,
+     0,
+     0.88
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): old gatekeeper with crook and board stack",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Sluicegate_Gatekeeper_M5",
+     "colour": "oak boards",
+     "hex": "6A4A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Sluicegate_Gatekeeper_Rig_HeldL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_HeldL)",
+     "parts": [
+      {
+       "name": "BoardStack0",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.4,
+        0.06
+       ],
+       "centre": [
+        0.0,
+        -0.03,
+        -0.03
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "BoardStack1",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.4,
+        0.06
+       ],
+       "centre": [
+        0.0,
+        -0.03,
+        0.035
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "BoardStack2",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.4,
+        0.06
+       ],
+       "centre": [
+        0.0,
+        -0.03,
+        0.1
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Sluicegate_Gatekeeper_Rig SOCKET_Hinge_HeldL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Sluicegate_Gatekeeper_Rig_HeldL": 132
+    },
+    "bounds_min": [
+     -0.03,
+     -0.23,
+     -0.06
+    ],
+    "bounds_max": [
+     0.03,
+     0.17,
+     0.13
+    ],
+    "dimensions": [
+     0.06,
+     0.4,
+     0.19
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "bb014703c54a55e29ecd49c6fc7128ddabefe9a80d39514004a7059d65c9d19c"
+  }
+ ]
+}
