@@ -223,7 +223,7 @@ class Parse(unittest.TestCase):
         catalog = json.loads(feed.CATALOG_PATH.read_text(encoding="utf-8"))
         titles = feed.load_titles(catalog)
         self.assertEqual(feed.display_name("football", titles), "Football Soccer")
-        self.assertEqual(feed.display_name("dodge_ball", titles), "Courtyard Clash")
+        self.assertEqual(feed.display_name("dodge_ball", titles), "Pebblecourt Rally")
         self.assertEqual(feed.display_name("twinwake", titles), "Twinwake Volley")
         for gid in feed.scoreboard_ids(catalog):
             name = feed.display_name(gid, titles)

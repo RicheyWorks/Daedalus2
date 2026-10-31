@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Star Shooter: difficulty options, pause menu (resume / save-and-quit / quit),
+// Lumen Barrage: difficulty options, pause menu (resume / save-and-quit / quit),
 // DGS1 save round trip and strict restore validation, seeded determinism.
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>

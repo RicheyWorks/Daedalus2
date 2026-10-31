@@ -13,7 +13,7 @@ Across every section (games, python_games, java_cabinets):
   * ids are present, unique and leaderboard-safe (the feed's ^[a-z0-9_]{1,32}$),
   * every entry has a summary, titles are unique (python games too), and no two titles collapse to the same
     leaderboard name once the feed strips punctuation (leaderboard_feed.sanitize_name).
-The old ids kept in GameAliases for save compatibility are not scanned. Stdlib only.
+Internal ids (star_shooter, dodge_ball, riftwing) and save file names are not titles and are not scanned; the old ids kept in GameAliases for save compatibility are not scanned. Stdlib only.
 """
 import json
 import pathlib
@@ -41,7 +41,7 @@ TRADEMARKS = [
     "pokemon", "ninja gaiden", "street fighter", "mortal kombat", "frogger", "centipede", "dig dug",
     "q bert", "qbert", "breakout", "arkanoid", "gradius", "r type", "robotron",
     "bomberman", "dragon quest", "dragon warrior", "final fantasy", "hydlide", "atari", "capcom",
-    "konami", "namco", "taito", "square enix", "minecraft", "roblox", "fortnite", "fifa",
+    "konami", "namco", "taito", "square enix", "minecraft", "roblox", "fortnite", "fifa", "star shooter", "clash", "riftwing",
 ]
 
 
@@ -49,6 +49,9 @@ def _pattern(name):
     parts = re.split(r"[ \-_]+", name)
     return re.compile(r"(?<![a-z0-9])" + r"[ \-_]?".join(map(re.escape, parts)) + r"(?![a-z0-9])", re.I)
 
+
+# Internal ids kept after a title-only rename so saves and cabinets stay stable.
+LEGACY_INTERNAL_IDS = {"star_shooter", "riftwing"}  # titled Lumen Barrage / Gleamwing Sentinel since 2026-10-26
 
 PATTERNS = [(t, _pattern(t)) for t in TRADEMARKS]
 
@@ -133,6 +136,8 @@ def validate(catalog, slots, pending=SAVE_SLOT_PENDING):
         else:
             titles[title.lower()] = gid
         for field in ("id", "title", "summary", "how_to_play", "daedalus_spot"):
+            if field == "id" and gid in LEGACY_INTERNAL_IDS:
+                continue
             for hit in trademark_hits(g.get(field, "")):
                 errors.append(f"'{gid}' {field} uses trademarked name '{hit}'; use an original name")
     for j in catalog.get("java_cabinets", []):

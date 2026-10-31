@@ -504,7 +504,7 @@ int main(int Argc,char** Argv) {
     SourceFixtures(Argc>1?Argv[1]:"shooters_parity.txt");
     Replay<DriftstoneGame>("Driftstone",DriftstoneGame::MaxBullets+DriftstoneGame::MaxRocks+DriftstoneGame::MaxUfos,20000);
     Replay<RiftwingGame>("Riftwing shooter",RiftwingGame::MaxBullets+RiftwingGame::MaxEnemies+RiftwingGame::MaxPowerups+1,20000);
-    Replay<StarGame>("Star shooter",StarGame::MaxBullets+StarGame::MaxEnemies+StarGame::MaxPowerups+StarGame::MaxEffects+StarGame::MaxPopups+1,20000);
+    Replay<StarGame>("Lumen Barrage",StarGame::MaxBullets+StarGame::MaxEnemies+StarGame::MaxPowerups+StarGame::MaxEffects+StarGame::MaxPopups+1,20000);
     StarLifecycle();
     SerializedHostContract();
     CombinedDeviceInput();

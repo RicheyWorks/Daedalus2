@@ -119,7 +119,7 @@ is bounded to five commands per ordinary enemy (at most 320 across the existing
 
 ### Optional Riftwing boss rehearsal
 
-Riftwing Vanguard (the Riftwing core) offers **Full run / Boss rehearsal** through the
+Gleamwing Sentinel (the Riftwing core) offers **Full run / Boss rehearsal** through the
 cabinet's existing checked mode controls. Full run remains option 0 and reaches
 the boss at 1500 real points. Option 1 starts that same 20-HP boss immediately,
 with score zero, three lives and the ordinary weapon/speed. Regular enemies,
@@ -146,7 +146,7 @@ validation, unchanged full-run 1499/1500 entry, mutual loss, retry and Driver in
 time/pause cleanup passed. No broad shooter suite or old replay proof was rerun;
 native integration and human play remain unverified.
 
-## Star Shooter
+## Lumen Barrage
 
 Preserved latest features include Easy/Medium/Hard configurations; Python ties-to-even health rounding; speed/shoot/dive scaling; normal twin and triple shots; permanent-until-reset powerups; shield hit behavior; bee/butterfly/cruiser enemy data; wave-dependent weighted groups; cruiser escorts and doubled cruiser points when escorts are killed; straight and zigzag dives with distinct points; enemies' three shot patterns; 20-second wave progression and spawn-rate floor 28; every-fifth-wave bosses; spread/ring/aimed boss patterns; 66% enrage and 33% berserk thresholds and once-only summons; boss charges/returns; 1000 boss points, cleanup of boss shots, reset of player powerups and three replacement drops; pause and source-shaped lightweight save state.
 

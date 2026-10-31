@@ -76,7 +76,7 @@ events out of gameplay and Star's paused menu. Failed switching keeps the run
 and draft choice. Native popup, focus, input and save-failure acceptance remain
 pending; this source slice does not establish runtime acceptance.
 
-Star Shooter has a native **How to play** panel, also opened with F1 or left-stick
+Lumen Barrage has a native **How to play** panel, also opened with F1 or left-stick
 click from game focus. It groups the survival goal, upgrades, playing controls,
 save/continue behavior and terminal retry at a readable size. Help pauses the
 current run and disables the cabinet beneath it. Mouse wheel, Page Up/Down or
@@ -104,7 +104,7 @@ The existing native Beacon Sweep now has **Save board**, **Continue saved board*
 **Save & Close** in its cabinet. Save & Close leaves the cabinet open if writing fails.
 Plain Close, Restart and game selection leave the previous saved board unchanged;
 Continue explicitly replaces the current board. One local slot is shared by this
-installation's Beacon Sweep cabinets, separate from Star Shooter's files.
+installation's Beacon Sweep cabinets, separate from Lumen Barrage's files.
 F5 saves and F9 continues the saved board. While paused, gamepad X saves and Y
 continues the saved board; P / Start returns to play.
 
@@ -140,7 +140,7 @@ number clues, flood reveal, optional flags, the estimated mine counter, chording
 risks, mouse/keyboard/controller controls and exact-board save/continue. The
 current board pauses beneath the guide. Resume explicitly returns to a live board;
 Return paused and dismiss keys keep it paused, including after a result. The same
-bounded scroll, held-input guard and save warning behavior serves Star Shooter.
+bounded scroll, held-input guard and save warning behavior serves Lumen Barrage.
 Help is tied to the game that opened it and closes if the active game changes;
 it cannot resume a different game. No game rules, timer or save records change.
 Native guide layout/focus, mixed input and save/continue acceptance remain pending.
@@ -278,13 +278,13 @@ trajectory. The allowance expires after six decisions and is consumed by a jump;
 accepted damage and new runs clear it. No new controls or mode are needed. Native
 input/feel acceptance remains pending.
 
-Courtyard Clash marks the current automatic throw target with side chevrons and
+Pebblecourt Rally marks the current automatic throw target with side chevrons and
 its C1/C2/C3 number in the existing readiness line. The nearest living opponent
 is selected by the unchanged throw rule. A muted cue during cooldown is a current
 snapshot; moving players and country supers can change the eventual flight. It
 adds no control or gameplay rule. Native readability/feel acceptance is pending.
 
-Courtyard Clash's country picker accepts **stick flicks** alongside keys and the
+Pebblecourt Rally's country picker accepts **stick flicks** alongside keys and the
 D-pad. Tilt vertically past 0.6 once, then center both axes within 0.3 before the
 next choice. The stick gesture that opens the picker is consumed. Match movement
 and the existing original-stick-versus-hat charge rules are retained. Native
@@ -328,7 +328,7 @@ current progress when toggled and remembers the choice on retry. Held buttons
 never replay a finished run; fresh cabinet selection starts with assist off.
 The existing footer shows the choice. Native controls and play feel are pending.
 
-Courtyard Clash supports **V / pad Y / LB: pass** to the next living teammate in
+Pebblecourt Rally supports **V / pad Y / LB: pass** to the next living teammate in
 P1/P2/P3 order, skipping knockouts. The ball travels normally; the blue-ringed
 receiver catches automatically when it comes close, then settles before another throw. Passes
 are harmless to your team and can be intercepted by opponents. Existing attack
@@ -342,7 +342,7 @@ V/Y/LB again to pass; releasing it with throw held restores automatic rethrow. A
 throw press while carrying still throws. Space/Z/J/A alone keeps its original
 catch-and-rethrow behavior. No new defense radius, cooldown or invulnerability.
 
-Courtyard Clash also uses **How to play / F1 / left-stick click** for an on-demand
+Pebblecourt Rally also uses **How to play / F1 / left-stick click** for an on-demand
 guide to shared team movement, nearest-target throws, held catch/rethrow, jumping,
 charging and the four-round flow. The existing native guide pauses play, scrolls
 with Page Up/Down or LB/RB, and clears held input. **Resume game** returns to the
@@ -350,7 +350,7 @@ same match or result; continuing a result still needs a fresh gameplay press.
 **Return paused** keeps it paused. Native layout, scroll/focus and mixed physical
 input acceptance remain pending.
 
-After Courtyard Clash's fourth round, the **tournament scorecard** declares the
+After Pebblecourt Rally's fourth round, the **tournament scorecard** declares the
 overall win, opponent win or draw from the existing cumulative match wins. Large
 counts and four-segment bars distinguish your chosen country from all opponents;
 the smaller last-match line preserves who won that match. Earlier-round results
@@ -373,11 +373,11 @@ The third dock completes the course; fresh retry retains its mode and seed.
 Endless and Three waves keep their existing rules. Native mode/controls, goal
 readability and human flight learning remain unverified.
 
-Riftwing Vanguard's ordinary ships show two basic/four chaser **health pips**, so
+Gleamwing Sentinel's ordinary ships show two basic/four chaser **health pips**, so
 surviving hits remain visible. The boss retains its separate health bar. Combat
 and scoring rules are unchanged; native cue readability remains unverified.
 
-Riftwing Vanguard offers **Boss rehearsal** beside its default Full run. The same
+Gleamwing Sentinel offers **Boss rehearsal** beside its default Full run. The same
 20-HP boss arrives immediately, with the normal starting ship and score zero;
 regular enemies still provide pressure. Full run keeps its 1500-point entry.
 Rehearsal has clear mode/result cues and retains the usual shooting, pickups,
@@ -438,7 +438,7 @@ acceptance against its latest-specific actions and repaired source defects.
 | Twinwake cabinet pilot | Smallest | Core source parity; cabinet placement and live input/exit acceptance remain |
 | Dungeon, Driftstone, Football | Small to medium | Procedural geometry and compact rules; no imported source meshes |
 | Maze, Lanternwild, Riftwing, Dodge Ball | Medium | Map/collision or boss/tournament paths and game-specific controls |
-| Ironwake, Emberstep Ascent, Star Shooter | Larger | Compound actions, bosses, animation needs; Star settings/save/menu/leaderboard |
+| Ironwake, Emberstep Ascent, Lumen Barrage | Larger | Compound actions, bosses, animation needs; Star settings/save/menu/leaderboard |
 | Original Blender production art | Separate asset work | No supplied rigs; silhouette, materials, rig/animation budgets need owner acceptance |
 | Multiplayer/world-screen cabinet | Separate runtime work | Current overlay is standalone-only and pauses its local world |
 

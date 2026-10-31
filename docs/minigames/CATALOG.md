@@ -14,10 +14,10 @@ batched rebuild under the editor custodian.
 | `driftstone` | Driftstone Patrol | 4 |
 | `football` | Football / Soccer | 3 |
 | `glowtrail` | Glowtrail Chase | 8 |
-| `riftwing` | Riftwing Vanguard | 6 |
+| `riftwing` | Gleamwing Sentinel | 6 |
 | `emberstep` | Emberstep Ascent | 5 |
-| `star_shooter` | Star Shooter | 3 |
-| `dodge_ball` | Courtyard Clash | 6 |
+| `star_shooter` | Lumen Barrage | 3 |
+| `dodge_ball` | Pebblecourt Rally | 6 |
 | `ironwake` | Ironwake Advance | 3 |
 | `lanternwild` | Lanternwild Quest | 4 |
 | `gloam_latch` | Gloam Latch | 1 |

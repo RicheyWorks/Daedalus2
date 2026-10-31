@@ -552,8 +552,8 @@ EVisibility SDaedalusDesktopArcade::GameHelpVisibility() const { return HasGameH
 
 FText SDaedalusDesktopArcade::GameHelpTitle() const
 {
-	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT("Courtyard Clash — How to play"));
-	return FText::FromString(HelpGameId == TEXT("beacon_sweep") ? TEXT("Beacon Sweep — How to play") : TEXT("Star Shooter — How to play"));
+	if (HelpGameId == TEXT("dodge_ball")) return FText::FromString(TEXT("Pebblecourt Rally — How to play"));
+	return FText::FromString(HelpGameId == TEXT("beacon_sweep") ? TEXT("Beacon Sweep — How to play") : TEXT("Lumen Barrage — How to play"));
 }
 
 FText SDaedalusDesktopArcade::GameHelpIntro() const
