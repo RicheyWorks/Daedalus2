@@ -124,6 +124,32 @@ class Rules(unittest.TestCase):
                 g.step(g.demo_action())
             self.assertFalse(g.mill is not None and g.mill in g.wet)
 
+    def test_properties_hold_under_random_actions(self):
+        """Iteration 1: random legal gates and waits on 120 fields never break the bookkeeping."""
+        import random
+        for s in range(120):
+            d = ("easy", "normal", "hard")[s % 3]
+            g = gm.start(s, d)
+            rng = random.Random(s)
+            while not g.over:
+                legal = ["wait"] + (["%d,%d" % (r, c) for r in range(g.size()) for c in range(g.size()) if g.gateable(r, c)] if g.gates_left else [])
+                a = legal[rng.randrange(len(legal))]
+                ok, reached, filled, flooded = g.preview(a)
+                self.assertTrue(ok)
+                before = (len(g.wet), g.filled, g.gates_left, g.turns)
+                res = g.step(a)
+                self.assertEqual(g.wet[before[0]:], reached, "the push is the preview, in order")
+                self.assertEqual(g.filled - before[1], filled)
+                self.assertEqual(before[2] - g.gates_left, 0 if a == "wait" else 1)
+                self.assertEqual(before[3] - g.turns, 1)
+                self.assertEqual(flooded, "floods" in res)
+                self.assertLessEqual(len(reached), g.cfg["flow"])
+                for cell in g.wet:
+                    self.assertEqual(g.field[cell[0]][cell[1]], gm.CHANNEL)
+                    self.assertNotIn(cell, g.gates)
+            mill_wet = g.mill is not None and g.mill in g.wet
+            self.assertEqual(g.won, g.filled == len(g.cisterns) and not mill_wet)
+
     def test_render_marks(self):
         g = self.field(["#.H.#", ".....", ".....", ".....", "....."], cisterns=[(4, 0)], mill=(4, 4))
         g.step("1,1")
@@ -133,6 +159,22 @@ class Rules(unittest.TestCase):
         self.assertIn("|", screen)
         self.assertIn("c", screen)
         self.assertIn("M", screen)
+
+
+
+class Balance(unittest.TestCase):
+    """Iteration 3: the gatekeeper's win rate stays inside pinned bands, so a rules change that shifts the difficulty is caught."""
+    BANDS = {"easy": (80, 98), "normal": (62, 88), "hard": (60, 86)}
+
+    def test_gatekeeper_win_rates(self):
+        for d, (low, high) in self.BANDS.items():
+            wins = 0
+            for s in range(200):
+                g = gm.start(s, d)
+                while not g.over:
+                    g.step(g.demo_action())
+                wins += g.won
+            self.assertTrue(low <= wins / 2 <= high, "%s gatekeeper win rate %.1f%% outside %d-%d" % (d, wins / 2, low, high))
 
 
 if __name__ == "__main__":
