@@ -99,3 +99,7 @@ Notes
 ## shardscale (unreal-team, READY 62842/62843; Blender items)
 
 18 assets: cabinet with balance-beam marquee; 1.4 m brass beam on stone pillar (tilt Beam/Chain/Pan about Y at SOCKET_Pivot); prism shard W1-W9 with etched weight marks; 1 m shard cart (5 Shard_ sockets); 0.8 m stone bench (3 slots); Weigher with apron, eyeglass and tongs, static plus shared Prism segment rig. Sheet: shardscale.png. (game_items.py here also carries the stonecourse, shuntline, spirit_boons and replay_notary recipes; their kits land in their own PRs.)
+
+## stonecourse (unreal-team, READY 63595/63596; Blender items)
+
+15 assets: cabinet with dry-stone-wall marquee; dressed stones 0.4/0.8/1.2 m raw and locked (teal moss); 1.6 m two-wheel stone cart (6 Stone_ sockets); 1 m gravel footing with string-line pegs; 0.8 m rubble pile; Mason with apron and string line, static plus rig. Sheet: stonecourse.png.

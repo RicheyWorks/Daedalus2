@@ -1,0 +1,5792 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_Stonecourse",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: dry-stone-wall marquee",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_Stonecourse_M0",
+     "colour": "cabinet body",
+     "hex": "4A4A44",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_Stonecourse_M1",
+     "colour": "trim / side art panel",
+     "hex": "A8A49A",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_Stonecourse_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "7ACAB0",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_Stonecourse_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_Stonecourse_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_Stonecourse_M5",
+     "colour": "dry stone",
+     "hex": "9A968A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_Stonecourse",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "MarqStone0",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.06,
+        0.06
+       ],
+       "centre": [
+        -0.25,
+        -0.18,
+        1.88
+       ],
+       "slot": 5,
+       "bevel": true
+      },
+      {
+       "name": "MarqStone1",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.06,
+        0.06
+       ],
+       "centre": [
+        -0.08,
+        -0.18,
+        1.945
+       ],
+       "slot": 5,
+       "bevel": true
+      },
+      {
+       "name": "MarqStone2",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.06,
+        0.06
+       ],
+       "centre": [
+        0.09,
+        -0.18,
+        1.88
+       ],
+       "slot": 5,
+       "bevel": true
+      },
+      {
+       "name": "MarqStone3",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.06,
+        0.06
+       ],
+       "centre": [
+        0.26,
+        -0.18,
+        1.945
+       ],
+       "slot": 5,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_Stonecourse_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 660,
+    "lod1_triangles": 660,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_Stonecourse": 660
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.06
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.06
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3a6b0e7831870077d28e72b2dd869414f9e125a6e23729416ac8d7a9de117fc0"
+  },
+  {
+   "asset": "Prop_Stonecourse_Stone_W1_Raw",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.4 m dressed wall stone (1 cell), raw",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Top",
+     "SOCKET_LeftEdge"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Stonecourse_Stone_W1_Raw_M0",
+     "colour": "dressed stone",
+     "hex": "9A968A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Stonecourse_Stone_W1_Raw_M1",
+     "colour": "teal moss",
+     "hex": "9A968A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Stonecourse_Stone_W1_Raw",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        0.38,
+        0.35,
+        0.28
+       ],
+       "centre": [
+        0,
+        0,
+        0.14
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.28
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.28,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_LeftEdge",
+     "location": [
+      -0.2,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.2,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Stonecourse_Stone_W1_Raw_00",
+     "shape": "box",
+     "size": [
+      0.38,
+      0.35,
+      0.28
+     ],
+     "centre": [
+      0,
+      0,
+      0.14
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 44,
+    "lod1_triangles": 44,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Stonecourse_Stone_W1_Raw": 44
+    },
+    "bounds_min": [
+     -0.19,
+     -0.175,
+     0.0
+    ],
+    "bounds_max": [
+     0.19,
+     0.175,
+     0.28
+    ],
+    "dimensions": [
+     0.38,
+     0.35,
+     0.28
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "06b9ea8873b2e06ea6fac20e63c0f3671849b4a09a6b36562cb528dd241e2c01"
+  },
+  {
+   "asset": "Prop_Stonecourse_Stone_W1_Locked",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.4 m dressed wall stone (1 cell), locked",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Top",
+     "SOCKET_LeftEdge"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Stonecourse_Stone_W1_Locked_M0",
+     "colour": "dressed stone",
+     "hex": "7A8A80",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Stonecourse_Stone_W1_Locked_M1",
+     "colour": "teal moss",
+     "hex": "5AA898",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Stonecourse_Stone_W1_Locked",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        0.38,
+        0.35,
+        0.28
+       ],
+       "centre": [
+        0,
+        0,
+        0.14
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Moss0",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        -0.1,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0.05,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.28
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.28,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_LeftEdge",
+     "location": [
+      -0.2,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.2,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Stonecourse_Stone_W1_Locked_00",
+     "shape": "box",
+     "size": [
+      0.38,
+      0.35,
+      0.28
+     ],
+     "centre": [
+      0,
+      0,
+      0.14
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 68,
+    "lod1_triangles": 68,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Stonecourse_Stone_W1_Locked": 68
+    },
+    "bounds_min": [
+     -0.19,
+     -0.18,
+     0.0
+    ],
+    "bounds_max": [
+     0.19,
+     0.18,
+     0.291
+    ],
+    "dimensions": [
+     0.38,
+     0.36,
+     0.291
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3929752a163294936ebb80a5c4fcb38e4ac09c65059b5f4c63bcc0a1d3871977"
+  },
+  {
+   "asset": "Prop_Stonecourse_Stone_W2_Raw",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.8 m dressed wall stone (2 cell), raw",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Top",
+     "SOCKET_LeftEdge"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Stonecourse_Stone_W2_Raw_M0",
+     "colour": "dressed stone",
+     "hex": "9A968A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Stonecourse_Stone_W2_Raw_M1",
+     "colour": "teal moss",
+     "hex": "9A968A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Stonecourse_Stone_W2_Raw",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.35,
+        0.28
+       ],
+       "centre": [
+        0,
+        0,
+        0.14
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.28
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.28,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_LeftEdge",
+     "location": [
+      -0.4,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Stonecourse_Stone_W2_Raw_00",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.35,
+      0.28
+     ],
+     "centre": [
+      0,
+      0,
+      0.14
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 44,
+    "lod1_triangles": 44,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Stonecourse_Stone_W2_Raw": 44
+    },
+    "bounds_min": [
+     -0.39,
+     -0.175,
+     0.0
+    ],
+    "bounds_max": [
+     0.39,
+     0.175,
+     0.28
+    ],
+    "dimensions": [
+     0.78,
+     0.35,
+     0.28
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2a4b99f5e8bf2673689e14c8714c40211b0a813591388bf2a8f2f94132075a0e"
+  },
+  {
+   "asset": "Prop_Stonecourse_Stone_W2_Locked",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.8 m dressed wall stone (2 cell), locked",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Top",
+     "SOCKET_LeftEdge"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Stonecourse_Stone_W2_Locked_M0",
+     "colour": "dressed stone",
+     "hex": "7A8A80",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Stonecourse_Stone_W2_Locked_M1",
+     "colour": "teal moss",
+     "hex": "5AA898",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Stonecourse_Stone_W2_Locked",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        0.78,
+        0.35,
+        0.28
+       ],
+       "centre": [
+        0,
+        0,
+        0.14
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Moss0",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        -0.3,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        -0.15,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss2",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        -0.0,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss3",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0.15,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss4",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0.3,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.28
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.28,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_LeftEdge",
+     "location": [
+      -0.4,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Stonecourse_Stone_W2_Locked_00",
+     "shape": "box",
+     "size": [
+      0.78,
+      0.35,
+      0.28
+     ],
+     "centre": [
+      0,
+      0,
+      0.14
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 104,
+    "lod1_triangles": 104,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Stonecourse_Stone_W2_Locked": 104
+    },
+    "bounds_min": [
+     -0.39,
+     -0.18,
+     0.0
+    ],
+    "bounds_max": [
+     0.39,
+     0.18,
+     0.291
+    ],
+    "dimensions": [
+     0.78,
+     0.36,
+     0.291
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a9e369609b483d0550ab39132abcf1da3dc9b79d67460890eeaa64b3159c744a"
+  },
+  {
+   "asset": "Prop_Stonecourse_Stone_W3_Raw",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.2 m dressed wall stone (3 cell), raw",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Top",
+     "SOCKET_LeftEdge"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Stonecourse_Stone_W3_Raw_M0",
+     "colour": "dressed stone",
+     "hex": "9A968A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Stonecourse_Stone_W3_Raw_M1",
+     "colour": "teal moss",
+     "hex": "9A968A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Stonecourse_Stone_W3_Raw",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        1.18,
+        0.35,
+        0.28
+       ],
+       "centre": [
+        0,
+        0,
+        0.14
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.28
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.28,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_LeftEdge",
+     "location": [
+      -0.6,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Stonecourse_Stone_W3_Raw_00",
+     "shape": "box",
+     "size": [
+      1.18,
+      0.35,
+      0.28
+     ],
+     "centre": [
+      0,
+      0,
+      0.14
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 44,
+    "lod1_triangles": 44,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Stonecourse_Stone_W3_Raw": 44
+    },
+    "bounds_min": [
+     -0.59,
+     -0.175,
+     0.0
+    ],
+    "bounds_max": [
+     0.59,
+     0.175,
+     0.28
+    ],
+    "dimensions": [
+     1.18,
+     0.35,
+     0.28
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1ea040637b3af3a658b64b24bf210b766806f437a6ce24b08d7ddcb801fc72e0"
+  },
+  {
+   "asset": "Prop_Stonecourse_Stone_W3_Locked",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.2 m dressed wall stone (3 cell), locked",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Top",
+     "SOCKET_LeftEdge"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Stonecourse_Stone_W3_Locked_M0",
+     "colour": "dressed stone",
+     "hex": "7A8A80",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Stonecourse_Stone_W3_Locked_M1",
+     "colour": "teal moss",
+     "hex": "5AA898",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Stonecourse_Stone_W3_Locked",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stone",
+       "shape": "box",
+       "size": [
+        1.18,
+        0.35,
+        0.28
+       ],
+       "centre": [
+        0,
+        0,
+        0.14
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Moss0",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        -0.5,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        -0.35,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss2",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        -0.2,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss3",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        -0.05,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss4",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0.1,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss5",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0.25,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss6",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0.4,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Moss7",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.36,
+        0.02
+       ],
+       "centre": [
+        0.55,
+        0,
+        0.281
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.28
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.28,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_LeftEdge",
+     "location": [
+      -0.6,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Stonecourse_Stone_W3_Locked_00",
+     "shape": "box",
+     "size": [
+      1.18,
+      0.35,
+      0.28
+     ],
+     "centre": [
+      0,
+      0,
+      0.14
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 140,
+    "lod1_triangles": 140,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Stonecourse_Stone_W3_Locked": 140
+    },
+    "bounds_min": [
+     -0.59,
+     -0.18,
+     0.0
+    ],
+    "bounds_max": [
+     0.6,
+     0.18,
+     0.291
+    ],
+    "dimensions": [
+     1.19,
+     0.36,
+     0.291
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "85318c396036e8ac30461763f9e2af7daf6fcb4e1a7354df75659428beeb308f"
+  },
+  {
+   "asset": "Prop_Stonecourse_Cart",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.6 m two-wheel stone cart, tilted bed, 6 Stone_ sockets",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Stone_0",
+     "SOCKET_Stone_1",
+     "SOCKET_Stone_2",
+     "SOCKET_Stone_3",
+     "SOCKET_Stone_4",
+     "SOCKET_Stone_5"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Stonecourse_Cart_M0",
+     "colour": "cart oak",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Stonecourse_Cart_M1",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Stonecourse_Cart",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bed",
+       "shape": "box",
+       "size": [
+        1.6,
+        0.8,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.55
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        -8,
+        0
+       ]
+      },
+      {
+       "name": "Axle",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.03,
+       "r2": 0.03,
+       "length": 0.9,
+       "centre": [
+        0.1,
+        0,
+        0.35
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Wheel-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.35,
+       "r2": 0.35,
+       "length": 0.06,
+       "centre": [
+        0.1,
+        -0.45,
+        0.35
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Wheel1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.35,
+       "r2": 0.35,
+       "length": 0.06,
+       "centre": [
+        0.1,
+        0.45,
+        0.35
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Shaft-1",
+       "shape": "box",
+       "size": [
+        0.9,
+        0.05,
+        0.05
+       ],
+       "centre": [
+        -1.1,
+        -0.3,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Shaft1",
+       "shape": "box",
+       "size": [
+        0.9,
+        0.05,
+        0.05
+       ],
+       "centre": [
+        -1.1,
+        0.3,
+        0.45
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Stone_0",
+     "location": [
+      -0.6,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.6,
+      0.6,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Stone_1",
+     "location": [
+      -0.36,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.36,
+      0.6,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Stone_2",
+     "location": [
+      -0.12,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.12,
+      0.6,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Stone_3",
+     "location": [
+      0.12,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.12,
+      0.6,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Stone_4",
+     "location": [
+      0.36,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.36,
+      0.6,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Stone_5",
+     "location": [
+      0.6,
+      0,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.6,
+      0.6,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Stonecourse_Cart_00",
+     "shape": "box",
+     "size": [
+      2.15,
+      0.96,
+      0.7
+     ],
+     "centre": [
+      -0.4,
+      0,
+      0.35
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Stonecourse_Cart": 264
+    },
+    "bounds_min": [
+     -1.55,
+     -0.48,
+     0.0088
+    ],
+    "bounds_max": [
+     0.7954,
+     0.48,
+     0.6912
+    ],
+    "dimensions": [
+     2.3454,
+     0.96,
+     0.6824
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ca553140300b63508b05690509c7ed8aaaac9193833d848cdfc4409a3c52af01",
+   "off_centre_ok": "shafts extend forward"
+  },
+  {
+   "asset": "Prop_Stonecourse_Footing",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1 m modular gravel footing with string-line pegs",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Course0"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Stonecourse_Footing_M0",
+     "colour": "levelled gravel",
+     "hex": "8A8478",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Stonecourse_Footing_M1",
+     "colour": "pegs",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Stonecourse_Footing_M2",
+     "colour": "string line",
+     "hex": "E8E0C8",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Stonecourse_Footing",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Gravel",
+       "shape": "box",
+       "size": [
+        1.0,
+        0.45,
+        0.08
+       ],
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "Peg-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.012,
+       "length": 0.35,
+       "centre": [
+        -0.48,
+        -0.26,
+        0.17
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "Peg1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.012,
+       "length": 0.35,
+       "centre": [
+        0.48,
+        -0.26,
+        0.17
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "String",
+       "shape": "box",
+       "size": [
+        0.96,
+        0.003,
+        0.003
+       ],
+       "centre": [
+        0,
+        -0.26,
+        0.3
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Course0",
+     "location": [
+      -0.5,
+      0,
+      0.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.5,
+      0.08,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Stonecourse_Footing_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      0.5,
+      0.35
+     ],
+     "centre": [
+      0,
+      -0.03,
+      0.175
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 64,
+    "lod1_triangles": 64,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Stonecourse_Footing": 64
+    },
+    "bounds_min": [
+     -0.5,
+     -0.273,
+     -0.005
+    ],
+    "bounds_max": [
+     0.5,
+     0.225,
+     0.345
+    ],
+    "dimensions": [
+     1.0,
+     0.498,
+     0.35
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "5954afe3108bbb8b4026cb8015597de5910330a08ab3c7259d30c4f0018e6e1f"
+  },
+  {
+   "asset": "Prop_Stonecourse_Rubble",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.8 m rubble pile (skipped stones)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Drop"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Stonecourse_Rubble_M0",
+     "colour": "broken stone",
+     "hex": "8A867A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Stonecourse_Rubble",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Rub0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.04079,
+         -0.06553
+        ],
+        [
+         0.06442,
+         -0.02503
+        ],
+        [
+         0.07101,
+         0.02503
+        ],
+        [
+         0.04442,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0.19924,
+        -0.11759,
+        0.08
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.06536,
+         -0.08737
+        ],
+        [
+         0.09911,
+         -0.03337
+        ],
+        [
+         0.08044,
+         0.03337
+        ],
+        [
+         0.06536,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        0.05868,
+        0.01403,
+        0.14
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.0511,
+         -0.06553
+        ],
+        [
+         0.07427,
+         -0.02503
+        ],
+        [
+         0.08345,
+         0.02503
+        ],
+        [
+         0.0524,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        -0.22917,
+        0.11191,
+        0.2
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub3",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.06845,
+         -0.08737
+        ],
+        [
+         0.10442,
+         -0.03337
+        ],
+        [
+         0.10312,
+         0.03337
+        ],
+        [
+         0.06906,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        -0.10114,
+        -0.16214,
+        0.08
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub4",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.04746,
+         -0.06553
+        ],
+        [
+         0.08528,
+         -0.02503
+        ],
+        [
+         0.07157,
+         0.02503
+        ],
+        [
+         0.04909,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        0.24319,
+        0.17609,
+        0.14
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub5",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.06774,
+         -0.08737
+        ],
+        [
+         0.08346,
+         -0.03337
+        ],
+        [
+         0.11288,
+         0.03337
+        ],
+        [
+         0.06251,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        -0.12198,
+        -0.09645,
+        0.2
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub6",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.03868,
+         -0.06553
+        ],
+        [
+         0.07432,
+         -0.02503
+        ],
+        [
+         0.07458,
+         0.02503
+        ],
+        [
+         0.0524,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        -0.01728,
+        0.03604,
+        0.08
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub7",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.05708,
+         -0.08737
+        ],
+        [
+         0.10208,
+         -0.03337
+        ],
+        [
+         0.10987,
+         0.03337
+        ],
+        [
+         0.05864,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        0.24979,
+        -0.03828,
+        0.14
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub8",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.05182,
+         -0.06553
+        ],
+        [
+         0.08339,
+         -0.02503
+        ],
+        [
+         0.06774,
+         0.02503
+        ],
+        [
+         0.05161,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        -0.22052,
+        0.22172,
+        0.2
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub9",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.06579,
+         -0.08737
+        ],
+        [
+         0.10029,
+         -0.03337
+        ],
+        [
+         0.10619,
+         0.03337
+        ],
+        [
+         0.06071,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        0.00583,
+        0.16998,
+        0.08
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub10",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.081
+        ],
+        [
+         0.04081,
+         -0.06553
+        ],
+        [
+         0.0637,
+         -0.02503
+        ],
+        [
+         0.07269,
+         0.02503
+        ],
+        [
+         0.04921,
+         0.06553
+        ],
+        [
+         0,
+         0.045
+        ]
+       ],
+       "centre": [
+        -0.23415,
+        0.01138,
+        0.14
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Rub11",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.108
+        ],
+        [
+         0.06187,
+         -0.08737
+        ],
+        [
+         0.10444,
+         -0.03337
+        ],
+        [
+         0.09771,
+         0.03337
+        ],
+        [
+         0.0529,
+         0.08737
+        ],
+        [
+         0,
+         0.06
+        ]
+       ],
+       "centre": [
+        -0.1699,
+        -0.14755,
+        0.2
+       ],
+       "slot": 0,
+       "segments": 7,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Drop",
+     "location": [
+      0,
+      0,
+      0.35
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.35,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Stonecourse_Rubble_00",
+     "shape": "box",
+     "size": [
+      0.8,
+      0.7,
+      0.35
+     ],
+     "centre": [
+      0,
+      0,
+      0.175
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 960,
+    "lod1_triangles": 960,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Stonecourse_Rubble": 960
+    },
+    "bounds_min": [
+     -0.3044,
+     -0.2639,
+     -0.028
+    ],
+    "bounds_max": [
+     0.3597,
+     0.303,
+     0.2874
+    ],
+    "dimensions": [
+     0.6641,
+     0.5669,
+     0.3154
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2e05819761fe50cbd21c4e5741af355adeb52c5bbfcf30d611eae95ba0997584"
+  },
+  {
+   "asset": "Mob_Stonecourse_Mason",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): mason, leather apron, hands over the string line",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Stonecourse_Mason_M0",
+     "colour": "coat",
+     "hex": "6A5A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Stonecourse_Mason_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A30",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Stonecourse_Mason_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Stonecourse_Mason_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Stonecourse_Mason_M4",
+     "colour": "leather apron",
+     "hex": "5A3A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Mob_Stonecourse_Mason_M5",
+     "colour": "string reel",
+     "hex": "E8E0C8",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Stonecourse_Mason",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Apron",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.03,
+        0.7
+       ],
+       "centre": [
+        0,
+        -0.15,
+        1.0
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "MString",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.04,
+        0.12
+       ],
+       "centre": [
+        -0.37,
+        -0.03,
+        0.8
+       ],
+       "slot": 5,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Stonecourse_Mason_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 708,
+    "lod1_triangles": 708,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Stonecourse_Mason": 708
+    },
+    "bounds_min": [
+     -0.42,
+     -0.165,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     1.76
+    ],
+    "dimensions": [
+     0.84,
+     0.3,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2d3b0e8ca066e165141fb7968aa4eb7b960801f30b827b26fcc305a98befa709"
+  },
+  {
+   "asset": "Mob_Stonecourse_Mason_Rig",
+   "kind": "Mob",
+   "seed": 20261030,
+   "frame_of": [
+    "Mob_Stonecourse_Mason_Rig_Head",
+    "Mob_Stonecourse_Mason_Rig_ArmR",
+    "Mob_Stonecourse_Mason_Rig_ArmL",
+    "Mob_Stonecourse_Mason_Rig_LegR",
+    "Mob_Stonecourse_Mason_Rig_LegL",
+    "Mob_Stonecourse_Mason_Rig_HeldR"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Hinge_Head",
+     "mover": "Mob_Stonecourse_Mason_Rig_Head",
+     "pivot_m": [
+      0,
+      0,
+      1.5
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      -10
+     ],
+     "open_ue_rotator": [
+      0.0,
+      10.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmR",
+     "mover": "Mob_Stonecourse_Mason_Rig_ArmR",
+     "pivot_m": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      -85,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      -85.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmL",
+     "mover": "Mob_Stonecourse_Mason_Rig_ArmL",
+     "pivot_m": [
+      0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegR",
+     "mover": "Mob_Stonecourse_Mason_Rig_LegR",
+     "pivot_m": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegL",
+     "mover": "Mob_Stonecourse_Mason_Rig_LegL",
+     "pivot_m": [
+      0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_HeldR",
+     "mover": "Mob_Stonecourse_Mason_Rig_HeldR",
+     "pivot_m": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): mason, leather apron, hands over the string line",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "frame glb (UEB 48812): root hulls only; movers attach at SOCKET_Hinge_*"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Stonecourse_Mason_M0",
+     "colour": "coat",
+     "hex": "6A5A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Stonecourse_Mason_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A30",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Stonecourse_Mason_M4",
+     "colour": "leather apron",
+     "hex": "5A3A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Stonecourse_Mason_Rig",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Apron",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.03,
+        0.7
+       ],
+       "centre": [
+        0,
+        -0.15,
+        1.0
+       ],
+       "slot": 2,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_Head",
+     "location": [
+      0,
+      0,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmR",
+     "location": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmL",
+     "location": [
+      0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegR",
+     "location": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegL",
+     "location": [
+      0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_HeldR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Stonecourse_Mason_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 176,
+    "lod1_triangles": 176,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Stonecourse_Mason_Rig": 176
+    },
+    "bounds_min": [
+     -0.215,
+     -0.165,
+     0.65
+    ],
+    "bounds_max": [
+     0.215,
+     0.135,
+     1.475
+    ],
+    "dimensions": [
+     0.43,
+     0.3,
+     0.825
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "42bd044bf38528823c57a9951d727235f5c0fd36f1cdc8d4a3501bea3f9b5836"
+  },
+  {
+   "asset": "Mob_Stonecourse_Mason_Rig_Head",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Stonecourse_Mason_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Head",
+    "mover": "Mob_Stonecourse_Mason_Rig_Head",
+    "pivot_m": [
+     0,
+     0,
+     1.5
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     -10
+    ],
+    "open_ue_rotator": [
+     0.0,
+     10.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): mason, leather apron, hands over the string line",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Stonecourse_Mason_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Stonecourse_Mason_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Stonecourse_Mason_Rig_Head",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_Head)",
+     "parts": [
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.01,
+        0.13
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0.0,
+      0.0,
+      0.26
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.26,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0.0,
+      -0.15,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.1,
+      0.15
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Stonecourse_Mason_Rig SOCKET_Hinge_Head)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 120,
+    "lod1_triangles": 120,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Stonecourse_Mason_Rig_Head": 120
+    },
+    "bounds_min": [
+     -0.13,
+     -0.14,
+     0.0
+    ],
+    "bounds_max": [
+     0.13,
+     0.1136,
+     0.26
+    ],
+    "dimensions": [
+     0.26,
+     0.2536,
+     0.26
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d4abc00ed9c72ec81a039be7b7150bbc8182cb37a3e0a3107db7731008d101ab"
+  },
+  {
+   "asset": "Mob_Stonecourse_Mason_Rig_ArmR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Stonecourse_Mason_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmR",
+    "mover": "Mob_Stonecourse_Mason_Rig_ArmR",
+    "pivot_m": [
+     -0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     -85,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     -85.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): mason, leather apron, hands over the string line",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Stonecourse_Mason_M0",
+     "colour": "coat",
+     "hex": "6A5A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Stonecourse_Mason_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Stonecourse_Mason_Rig_ArmR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmR)",
+     "parts": [
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Stonecourse_Mason_Rig SOCKET_Hinge_ArmR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Stonecourse_Mason_Rig_ArmR": 84
+    },
+    "bounds_min": [
+     -0.15,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.0759,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f18727350c46ee6f8dc1b126039d95445e699fe173e0a17893e4b1c517e865c8"
+  },
+  {
+   "asset": "Mob_Stonecourse_Mason_Rig_ArmL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Stonecourse_Mason_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmL",
+    "mover": "Mob_Stonecourse_Mason_Rig_ArmL",
+    "pivot_m": [
+     0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): mason, leather apron, hands over the string line",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Stonecourse_Mason_M0",
+     "colour": "coat",
+     "hex": "6A5A4A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Stonecourse_Mason_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Stonecourse_Mason_Rig_ArmL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmL)",
+     "parts": [
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Stonecourse_Mason_Rig SOCKET_Hinge_ArmL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Stonecourse_Mason_Rig_ArmL": 84
+    },
+    "bounds_min": [
+     -0.0759,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.15,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1f553ea71ffc8c6c94ff6b93dd0fb5f09dba8242eddf749321fc16c0ae455555"
+  },
+  {
+   "asset": "Mob_Stonecourse_Mason_Rig_LegR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Stonecourse_Mason_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegR",
+    "mover": "Mob_Stonecourse_Mason_Rig_LegR",
+    "pivot_m": [
+     -0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): mason, leather apron, hands over the string line",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Stonecourse_Mason_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A30",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Stonecourse_Mason_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Stonecourse_Mason_Rig_LegR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegR)",
+     "parts": [
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Stonecourse_Mason_Rig SOCKET_Hinge_LegR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Stonecourse_Mason_Rig_LegR": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "29ab83aac5b4537cdd62c849ca7259e71f5feea5a0cd4f6a3037cf65a18207f9"
+  },
+  {
+   "asset": "Mob_Stonecourse_Mason_Rig_LegL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Stonecourse_Mason_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegL",
+    "mover": "Mob_Stonecourse_Mason_Rig_LegL",
+    "pivot_m": [
+     0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): mason, leather apron, hands over the string line",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Stonecourse_Mason_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A30",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Stonecourse_Mason_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Stonecourse_Mason_Rig_LegL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegL)",
+     "parts": [
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Stonecourse_Mason_Rig SOCKET_Hinge_LegL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Stonecourse_Mason_Rig_LegL": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "0aaa62984adb5d0475cdd193b6eeff9e4ba43800d7270d00afa1734e53bf7cf2"
+  },
+  {
+   "asset": "Mob_Stonecourse_Mason_Rig_HeldR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Stonecourse_Mason_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_HeldR",
+    "mover": "Mob_Stonecourse_Mason_Rig_HeldR",
+    "pivot_m": [
+     -0.37,
+     0,
+     0.88
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): mason, leather apron, hands over the string line",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Stonecourse_Mason_M5",
+     "colour": "string reel",
+     "hex": "E8E0C8",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Stonecourse_Mason_Rig_HeldR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_HeldR)",
+     "parts": [
+      {
+       "name": "MString",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.04,
+        0.12
+       ],
+       "centre": [
+        0.0,
+        -0.03,
+        -0.08
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Stonecourse_Mason_Rig SOCKET_Hinge_HeldR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 44,
+    "lod1_triangles": 44,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Stonecourse_Mason_Rig_HeldR": 44
+    },
+    "bounds_min": [
+     -0.02,
+     -0.05,
+     -0.14
+    ],
+    "bounds_max": [
+     0.02,
+     -0.01,
+     -0.02
+    ],
+    "dimensions": [
+     0.04,
+     0.04,
+     0.12
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e9645e1e9d1fd945bca88823bf3f823da191894ffda6040bdee4ba6b93518f16"
+  }
+ ]
+}
