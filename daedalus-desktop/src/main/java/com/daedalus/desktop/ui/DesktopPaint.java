@@ -2627,6 +2627,28 @@ public final class DesktopPaint {
         return mixHex(wallHiFadeInk(shine, wall), wall, 0.5);
     }
 
+    /** Row under the tail — a quarter toward it, and only while it stays off the foot. */
+    public static Hairline wallHiRest(Layout layout, int tileRow, int tileCol,
+                                       double scaleX, double scaleY) {
+        Hairline shine = wallHiStroke(layout, tileRow, tileCol, scaleX, scaleY);
+        if (shine == null || layout == null) {
+            return null;
+        }
+        double sy = scaleY > 0 ? scaleY : 1;
+        if (bitmapPx(layout.h(tileRow), sy) <= 7) {
+            return null;
+        }
+        return new Hairline(shine.x(), shine.y() + 5 * shine.h(), shine.w(), shine.h());
+    }
+
+    /** Quarter mix from the tail back into the wall. */
+    public static String wallHiRestInk(String shine, String wall) {
+        if (shine == null || wall == null) {
+            return shine;
+        }
+        return mixHex(wallHiTailInk(shine, wall), wall, 0.5);
+    }
+
     /** Open side of the row under the shine course — a quarter toward that course. */
     public static String wallSideFadeInk(String wall, String floor, String shine) {
         if (wall == null || floor == null || shine == null) {

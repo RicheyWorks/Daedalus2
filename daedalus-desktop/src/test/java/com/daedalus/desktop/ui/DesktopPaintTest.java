@@ -861,6 +861,18 @@ class DesktopPaintTest {
                 .isEqualTo(DesktopPaint.mixHex(
                         DesktopPaint.wallHiFadeInk("#ffffff", "#000000"), "#000000", 0.5));
         assertThat(DesktopPaint.wallHiTailInk(null, "#000000")).isNull();
+        assertThat(DesktopPaint.wallHiRest(roomy, 0, 1, 1, 1))
+                .as("a 5px post has no room under the tail")
+                .isNull();
+        DesktopPaint.Hairline wallRest = DesktopPaint.wallHiRest(tall, 0, 1, 1, 1);
+        assertThat(wallRest).isNotNull();
+        assertThat(wallRest.y()).isEqualTo(tallStripe.y() + 5 * tallStripe.h());
+        assertThat(wallRest.y()).isLessThan(tallFoot.y());
+        assertThat(wallRest.x()).isEqualTo(tallStripe.x());
+        assertThat(DesktopPaint.wallHiRestInk("#ffffff", "#000000"))
+                .isEqualTo(DesktopPaint.mixHex(
+                        DesktopPaint.wallHiTailInk("#ffffff", "#000000"), "#000000", 0.5));
+        assertThat(DesktopPaint.wallHiRestInk(null, "#000000")).isNull();
         assertThat(DesktopPaint.wallHiFade(
                 DesktopPaint.Layout.fit(5, 5, 20, 20), 0, 1, 1, 1)).isNull();
         assertThat(DesktopPaint.wallFootStroke(null, 0, 1, 1, 1)).isNull();
@@ -1567,6 +1579,8 @@ class DesktopPaintTest {
         assertThat(ctrl).contains("DesktopPaint.wallHiFadeInk(shineInk, wallInk)");
         assertThat(ctrl).contains("DesktopPaint.wallHiTail(");
         assertThat(ctrl).contains("DesktopPaint.wallHiTailInk(shineInk, wallInk)");
+        assertThat(ctrl).contains("DesktopPaint.wallHiRest(");
+        assertThat(ctrl).contains("DesktopPaint.wallHiRestInk(shineInk, wallInk)");
         assertThat(ctrl).contains("DesktopPaint.catchCornerInk(shineInk, wallInk)");
         assertThat(ctrl).contains("paintWallFoot(g, DesktopPaint.wallFootStroke(");
         assertThat(ctrl).contains("DesktopPaint.wallFootCornerInk(wallInk, floorInk, leftFloor)");

@@ -10,6 +10,15 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Desktop wall under tail.**
+  The row under
+  a post's shine
+  tail leans a
+  quarter toward
+  that tail.
+  The foot stays
+  the floor mix.
+
 - **Well wall under tail.**
   The row under
   a post's shine

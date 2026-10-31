@@ -1908,7 +1908,8 @@ public class MainController {
                                             tile.tileRow(), tile.tileCol() + 1) : null,
                             DesktopPaint.wallHiCourse(mark, tile.tileRow(), tile.tileCol(), 1, 1),
                             DesktopPaint.wallHiFade(mark, tile.tileRow(), tile.tileCol(), 1, 1),
-                            DesktopPaint.wallHiTail(mark, tile.tileRow(), tile.tileCol(), 1, 1));
+                            DesktopPaint.wallHiTail(mark, tile.tileRow(), tile.tileCol(), 1, 1),
+                            DesktopPaint.wallHiRest(mark, tile.tileRow(), tile.tileCol(), 1, 1));
                     if (tile.tileRow() + 1 < DesktopPaint.EMPTY_MARK.length
                             && DesktopPaint.EMPTY_MARK[tile.tileRow() + 1]
                                     .charAt(tile.tileCol()) != '#') {
@@ -2076,6 +2077,8 @@ public class MainController {
                             DesktopPaint.wallHiFade(
                                     layout, r, c, store.scaleX(), store.scaleY()),
                             DesktopPaint.wallHiTail(
+                                    layout, r, c, store.scaleX(), store.scaleY()),
+                            DesktopPaint.wallHiRest(
                                     layout, r, c, store.scaleX(), store.scaleY()));
                     if (r + 1 < layout.tileRows()
                             && DesktopPaint.floorRole(tiles[r + 1][c]) != TileType.WALL) {
@@ -2713,7 +2716,8 @@ public class MainController {
                                             tiles[r][c + 1]) : null,
                             DesktopPaint.wallHiCourse(layout, r, c, scaleX, scaleY),
                             DesktopPaint.wallHiFade(layout, r, c, scaleX, scaleY),
-                            DesktopPaint.wallHiTail(layout, r, c, scaleX, scaleY));
+                            DesktopPaint.wallHiTail(layout, r, c, scaleX, scaleY),
+                            DesktopPaint.wallHiRest(layout, r, c, scaleX, scaleY));
                     if (r + 1 < layout.tileRows()
                             && DesktopPaint.floorRole(tiles[r + 1][c]) != TileType.WALL) {
                         paintWallFoot(g, DesktopPaint.wallFootStroke(layout, r, c, scaleX, scaleY),
@@ -3311,12 +3315,14 @@ public class MainController {
                                         String leftFloor, String rightFloor,
                                         DesktopPaint.Hairline course,
                                         DesktopPaint.Hairline fade,
-                                        DesktopPaint.Hairline tail) {
+                                        DesktopPaint.Hairline tail,
+                                        DesktopPaint.Hairline rest) {
         paintCatchShine(g, shine, shineInk, wallInk);
         if (shineInk != null && wallInk != null) {
             paintHairline(g, course, Color.web(DesktopPaint.catchCornerInk(shineInk, wallInk)));
             paintHairline(g, fade, Color.web(DesktopPaint.wallHiFadeInk(shineInk, wallInk)));
             paintHairline(g, tail, Color.web(DesktopPaint.wallHiTailInk(shineInk, wallInk)));
+            paintHairline(g, rest, Color.web(DesktopPaint.wallHiRestInk(shineInk, wallInk)));
         }
         paintWallShineSides(g, shine, shineInk, wallInk, leftFloor, rightFloor);
     }
