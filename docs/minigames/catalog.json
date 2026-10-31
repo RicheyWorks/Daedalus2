@@ -1019,6 +1019,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "sluicegate",
+      "title": "Sluicegate",
+      "summary": "Steer the headgate's water into every cistern and off the mill wheel. Arrows or stick: move the marker; J/Space or pad A: drop a gate; K or pad B: wait",
+      "how_to_play": "HOW Each turn the headgate pushes a few cells of water into the nearest open channels. Drop a gate on a dry channel to block a branch, or wait. Fill every cistern before the headgate closes; keep the water off the mill wheel.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the sluice field",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"sluicegate\", Seed)",
+      "portable_tests": [
+        "desktop_sluicegate"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [

@@ -590,12 +590,26 @@
           "start": "StartGame(\"emberkiln\", 1373470455)"
         },
         {
+          "game": "sluicegate",
+          "title": "Sluicegate",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            12.5,
+            5.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1867974357,
+          "option": 0,
+          "start": "StartGame(\"sluicegate\", 1867974357)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            12.5,
-            5.0,
+            15.0,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -609,7 +623,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             15.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1024,7 +1038,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             17.5,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1033,12 +1047,26 @@
           "start": "StartGame(\"emberkiln\", 1132167481)"
         },
         {
+          "game": "sluicegate",
+          "title": "Sluicegate",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            17.5,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 320425885,
+          "option": 0,
+          "start": "StartGame(\"sluicegate\", 320425885)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             17.5,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1052,7 +1080,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             17.5,
-            2.5,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1456,7 +1484,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -21.25,
+            -22.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1470,7 +1498,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -18.75,
+            -20.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1484,7 +1512,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -16.25,
+            -17.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1498,7 +1526,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -13.75,
+            -15.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1512,7 +1540,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -11.25,
+            -12.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1526,7 +1554,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -8.75,
+            -10.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1540,7 +1568,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -6.25,
+            -7.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1554,7 +1582,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -3.75,
+            -5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1568,7 +1596,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            -1.25,
+            -2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1582,7 +1610,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            1.25,
+            0.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1596,7 +1624,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            3.75,
+            2.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1610,7 +1638,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            6.25,
+            5.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1624,7 +1652,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            8.75,
+            7.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1638,7 +1666,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            11.25,
+            10.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1652,7 +1680,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            13.75,
+            12.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1666,7 +1694,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            16.25,
+            15.0,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1680,7 +1708,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
-            18.75,
+            17.5,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1689,12 +1717,26 @@
           "start": "StartGame(\"emberkiln\", 1270422306)"
         },
         {
+          "game": "sluicegate",
+          "title": "Sluicegate",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            0.0,
+            20.0,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 427050219,
+          "option": 0,
+          "start": "StartGame(\"sluicegate\", 427050219)"
+        },
+        {
           "game": "spiritkite",
           "title": "Spiritkite Weave",
           "host": "PythonMinigame",
           "offset_m": [
             0.0,
-            21.25,
+            22.5,
             0.0
           ],
           "yaw_deg": 180.0,
