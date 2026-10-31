@@ -38,7 +38,7 @@ jobs:
       run:
         working-directory: engines/unreal/core-test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and run with address and undefined-behavior sanitizers
         run: |
           ${{ matrix.compiler }} -std=c++17 -O1 -g -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -I../DaedalusLink/Source/DaedalusLink/Public photo_pdf_core_test.cpp -o photo_pdf_core_test
@@ -49,7 +49,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and run MSVC with warnings as errors
         shell: cmd
         run: engines\unreal\core-test\run_photo_pdf_core.cmd "%RUNNER_TEMP%\photo-pdf-object"

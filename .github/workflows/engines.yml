@@ -33,7 +33,7 @@ jobs:
       run:
         working-directory: engines/unreal/core-test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Every minigame C++ core has a parity fixture and a CI core test
         working-directory: ${{ github.workspace }}
         run: python3 tools/minigames/minigame_core_parity.py --check
@@ -222,7 +222,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: parse
         shell: pwsh
         run: |

@@ -36,7 +36,7 @@ jobs:
       matrix:
         compiler: [g++, clang++]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Ark tree cores replay the Java parity files (sanitized, warnings as errors)
         working-directory: engines/unreal/core-test
         run: |
