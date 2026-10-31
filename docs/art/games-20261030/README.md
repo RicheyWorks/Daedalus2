@@ -115,3 +115,7 @@ Notes
 ## replay_notary (disk-saver G608, READY 64064; Items RN01-RN12)
 
 18 assets: RN01 cabinet with ledger-and-seal marquee; RN02 1.8 m oak notary desk (drawer, inkwell, ledger sockets); RN03 brass seal stamp with green-wax head (Grip); RN04 candle melt pot + wax stick (Flame socket); RN05 2 x 1.2 m Tidewatch Cup leaderboard slate (runtime UI); RN06 entry scroll rolled and open; RN07/08/09 verdict seals OK, FORGED (cracked), REFUSED (ribbon); RN10 ledger closed and open; RN11 brass entry post box with slot glow; RN12 Notary Sabine, static plus shared rig (idle/reading/stamping/refusing map to the shared pose set). Sheet: replay_notary.png.
+
+## siltlane (cursor, READY 63685; list 63704 / 'Blender items')
+
+11 assets: silt course cabinet (stone-and-lane marquee), 0.3 m tan silt stone, lane posts for 2 and 3 lanes (Lane_ sockets at the lane centres), and the Overlook keeper with staff, static plus on the shared Prism segment rig (open pose: Point). Sheet: siltlane.png.
