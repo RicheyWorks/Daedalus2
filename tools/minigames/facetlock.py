@@ -41,6 +41,7 @@ def shift(board, kind, i, d):
 class Game(pc.PrismGame):
     GAME_ID, TITLE, HOW_TO_PLAY = GAME_ID, TITLE, HOW_TO_PLAY
     DIFFICULTY, DEFAULT_DIFFICULTY = DIFFICULTY, DEFAULT_DIFFICULTY
+    BOON = ("spare", 1, "Thornkin")  # Spirit Boon (hephaestus R2-9, accepted Oct 31, 2026)
     FIELDS = ("board", "moves", "solution")
 
     def target(self):

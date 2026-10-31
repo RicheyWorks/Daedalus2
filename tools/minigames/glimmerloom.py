@@ -38,6 +38,7 @@ def ints_in(xs, n, low, high):
 class Game(pc.PrismGame):
     GAME_ID, TITLE, HOW_TO_PLAY = GAME_ID, TITLE, HOW_TO_PLAY
     DIFFICULTY, DEFAULT_DIFFICULTY = DIFFICULTY, DEFAULT_DIFFICULTY
+    BOON = ("satchel", 2, "Glass Heron")  # Spirit Boon (hephaestus R2-9, accepted Oct 31, 2026)
     FIELDS = ("day", "purse", "prices", "satchel", "rumor", "moves")
 
     def setup(self):

@@ -3,6 +3,7 @@
 // seed + difficulty alone (CPython-compatible seeding) and replay every demo action byte for byte.
 //   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public glimmerloom_core_test.cpp -o glimmerloom_core_test && ./glimmerloom_core_test glimmerloom_parity.txt
 #include "DaedalusGlimmerloomCore.h"
+#include <algorithm>
 #include <cstdio>
 #include <fstream>
 #include <sstream>
@@ -64,12 +65,33 @@ int UnitChecks()
 
 } // namespace
 
+namespace {
+/** Spirit Boon levels (hephaestus R2-9): level 0 is the plain table, 1 and 2 add BoonDelta per level to Satchel. */
+int BoonChecks()
+{
+	int Fails = 0;
+	for (int I = 0; I < DifficultyCount; ++I)
+	{
+		const Difficulty& Base = Difficulties()[I];
+		if (FindDifficulty(Base.Name, 0) != &Base || FindDifficulty(Base.Name, 3) || FindDifficulty(Base.Name, -1)) { std::printf("FAIL boon lookup\n"); ++Fails; }
+		for (int L = 1; L <= 2; ++L)
+		{
+			const Difficulty* B = FindDifficulty(Base.Name, L);
+			if (!B || B->Satchel != std::max(0, Base.Satchel + BoonDelta * L)) { std::printf("FAIL boon level %d on %s\n", L, Base.Name); ++Fails; }
+			Game G;
+			if (!G.Start(7, Base.Name, L) || G.Diff != B) { std::printf("FAIL boon start %d on %s\n", L, Base.Name); ++Fails; }
+		}
+	}
+	return Fails;
+}
+}  // namespace
+
 int main(int Argc, char** Argv)
 {
 	if (Argc < 2) { std::printf("usage: glimmerloom_core_test glimmerloom_parity.txt\n"); return 2; }
 	std::ifstream In(Argv[1]);
 	if (!In) { std::printf("FAIL cannot open %s\n", Argv[1]); return 2; }
-	int Fails = UnitChecks(), Games = 0;
+	int Fails = BoonChecks() + UnitChecks(), Games = 0;
 	std::string Line; Game G; std::uint32_t Seed = 0; std::string Diff; int Turn = 0; bool Skip = false;
 	while (std::getline(In, Line))
 	{

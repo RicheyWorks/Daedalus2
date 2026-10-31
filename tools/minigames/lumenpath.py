@@ -51,6 +51,7 @@ def trace(grid, source_row):
 class Game(pc.PrismGame):
     GAME_ID, TITLE, HOW_TO_PLAY = GAME_ID, TITLE, HOW_TO_PLAY
     DIFFICULTY, DEFAULT_DIFFICULTY = DIFFICULTY, DEFAULT_DIFFICULTY
+    BOON = ("moves", 1, "Sky Lark Spirit")  # Spirit Boon (hephaestus R2-9, accepted Oct 31, 2026)
     FIELDS = ("grid", "source_row", "crystals", "moves", "lit", "best", "solution")
 
     def setup(self):
