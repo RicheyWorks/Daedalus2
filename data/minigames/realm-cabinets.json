@@ -609,7 +609,7 @@
           "host": "ADaedalusDesktopArcade",
           "offset_m": [
             15.0,
-            -2.5,
+            -3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -618,12 +618,26 @@
           "start": "StartGame(\"glowmoss\", 432649506)"
         },
         {
+          "game": "spiritkite",
+          "title": "Spiritkite Weave",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            15.0,
+            -1.25,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 1404053684,
+          "option": 0,
+          "start": "StartGame(\"spiritkite\", 1404053684)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             15.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -637,7 +651,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             15.0,
-            2.5,
+            3.75,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1089,12 +1103,26 @@
           "start": "StartGame(\"glowmoss\", 1840832750)"
         },
         {
+          "game": "spiritkite",
+          "title": "Spiritkite Weave",
+          "host": "ADaedalusDesktopArcade",
+          "offset_m": [
+            17.5,
+            3.75,
+            0.0
+          ],
+          "yaw_deg": 180.0,
+          "seed": 805200380,
+          "option": 0,
+          "start": "StartGame(\"spiritkite\", 805200380)"
+        },
+        {
           "game": "sudoku",
           "title": "SudokuPro",
           "host": "ADaedalusJavaArcade",
           "offset_m": [
-            17.5,
-            3.75,
+            20.0,
+            -1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1108,7 +1136,7 @@
           "host": "ADaedalusJavaArcade",
           "offset_m": [
             20.0,
-            0.0,
+            1.25,
             0.0
           ],
           "yaw_deg": 180.0,
@@ -1775,7 +1803,7 @@
         {
           "game": "spiritkite",
           "title": "Spiritkite Weave",
-          "host": "PythonMinigame",
+          "host": "ADaedalusDesktopArcade",
           "offset_m": [
             0.0,
             23.75,
@@ -1783,10 +1811,8 @@
           ],
           "yaw_deg": 180.0,
           "seed": 630418058,
-          "difficulty": "normal",
-          "module": "tools/minigames/spiritkite.py",
-          "start": "spiritkite.start(630418058, difficulty)",
-          "requires": "no native host yet; rules run in the Python module"
+          "option": 0,
+          "start": "StartGame(\"spiritkite\", 630418058)"
         }
       ]
     },

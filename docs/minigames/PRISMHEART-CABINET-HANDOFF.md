@@ -6,7 +6,7 @@ merged or queued on `main`; nothing here touches the editor until the custodian'
 
 ## What is ready
 
-Fifteen Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each one regenerates its game from
+Sixteen Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each one regenerates its game from
 `StartGame(id, seed)` alone with a CPython-compatible PRNG, so the Unreal cabinet, the Python rules
 (`tools/minigames/<id>.py`, prism-shard-dev's, the authority) and the web page all play the same seed identically.
 
@@ -26,9 +26,10 @@ Fifteen Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each 
 | `roostcall` | Roostcall | `DesktopGames/DaedalusDesktopRoostcallCore.h` | #1118 / #1120 |
 | `emberkiln` | Emberkiln | `DesktopGames/DaedalusDesktopEmberkilnCore.h` | #1126 |
 | `sluicegate` | Sluicegate | `DesktopGames/DaedalusDesktopSluicegateCore.h` | #1130 |
-| `glowmoss` | Glowmoss Delve | `DesktopGames/DaedalusDesktopGlowmossCore.h` | cabinet PR (core by prism-shard-dev) |
+| `glowmoss` | Glowmoss Delve | `DesktopGames/DaedalusDesktopGlowmossCore.h` | #1148 (core by prism-shard-dev) |
+| `spiritkite` | Spiritkite Weave | `DesktopGames/DaedalusDesktopSpiritkiteCore.h` | cabinet PR (core by prism-shard-dev) |
 
-All fifteen share `DesktopGames/DaedalusDesktopSaveText.h` (save text, input names, edge latches) after the #993
+All sixteen share `DesktopGames/DaedalusDesktopSaveText.h` (save text, input names, edge latches) after the #993
 beauty pass. Every cabinet has a save slot in `DaedalusDesktopSaveSlots.h` (`<id>.dgs`, manual style) and a
 fixture-replay test under `engines/unreal/core-test/desktop_games/`. Portable proof is in CI (desktop-games.yml,
 engines.yml); what it does **not** prove is the installed plugin, native class loading, PIE input, file I/O and
@@ -60,6 +61,7 @@ nothing for it.
 | `emberkiln` | 0, 16.25, 0 | 180 | `StartGame("emberkiln", 1270422306)` | 0 |
 | `sluicegate` | 0, 18.75, 0 | 180 | `StartGame("sluicegate", 427050219)` | 0 |
 | `glowmoss` | 0, 21.25, 0 | 180 | `StartGame("glowmoss", 1109382819)` | 0 |
+| `spiritkite` | 0, 23.75, 0 | 180 | `StartGame("spiritkite", 630418058)` | 0 |
 
 The same row also lists four canonical cabinets (`dungeon`, `riftwing`, `star_shooter`, `lanternwild` at
 y = −16.25 … −8.75) that already exist elsewhere; place them the same way or leave them for a later pass. Read the
@@ -98,6 +100,7 @@ reproduce them bit for bit in the portable tests. In PIE, open each cabinet and 
 | `emberkiln` | 6×6 floor, 27 coals, 30 raw tiles, tongs at (0,0); top row `## 0/3 0/2 0/2 ## 0/2`, stone at (0,0), (0,4), (1,3), (4,1), (5,0), (5,4) |
 | `sluicegate` | 8×8 field, 12 turns, 5 gates, marker on the headgate (0,4); cisterns (draw order) at (2,3), (2,1), (4,0), (2,6); mill at (7,0); top row `.#..H+##` (+ = next push) |
 | `glowmoss` | 10×4 shaft, surface start at column 2, light 11, best 44, target 35; row 0 gems 1412 (native == Python) |
+| `spiritkite` | 8 isles, wind 28, target 18, plan 6,7,2,5,4,3,1; lantern values 0,1,5,2,5,5,2,4 (native == Python) |
 
 Then per cabinet, in this order, with the evidence named in parentheses:
 1. Keyboard and pad input both act (one key press and one pad press change the frame).
