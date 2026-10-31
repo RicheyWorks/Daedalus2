@@ -1053,6 +1053,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "glowmoss",
+      "title": "Glowmoss Delve",
+      "summary": "Dig down the crystal shaft on a light budget and climb out richer. Left/Right or stick: pick the ledge; J/Space or pad A: dig; K or pad B: climb out",
+      "how_to_play": "HOW Dig down the shaft one ledge at a time to gather crystals; glowmoss refills your lamp and unstable ledges drop you one row. Climb out before the light is too low to carry you back up.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the glowmoss shaft",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"glowmoss\", Seed)",
+      "portable_tests": [
+        "desktop_glowmoss"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
@@ -1117,23 +1151,6 @@
       "default_difficulty": "normal",
       "tests": [
         "test_spiritkite.py"
-      ]
-    },
-    {
-      "id": "glowmoss",
-      "title": "Glowmoss Delve",
-      "summary": "climb down a seeded crystal shaft in Prismheart on a light budget and climb out richer.",
-      "how_to_play": "HOW Dig down the shaft one ledge at a time to gather crystals; glowmoss refills your lamp and unstable ledges drop you one row. Climb out before the light is too low to carry you back up.",
-      "module": "tools/minigames/glowmoss.py",
-      "start": "glowmoss.start(seed, difficulty)",
-      "difficulty": [
-        "easy",
-        "hard",
-        "normal"
-      ],
-      "default_difficulty": "normal",
-      "tests": [
-        "test_glowmoss.py"
       ]
     }
   ]

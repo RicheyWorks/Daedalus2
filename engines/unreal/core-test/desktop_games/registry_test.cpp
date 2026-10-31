@@ -8,7 +8,7 @@ int main() {
     int checks=0,failed=0;
     auto check=[&](bool ok,const char* what) {++checks; if(!ok) {++failed;std::cerr<<"FAIL "<<what<<'\n';}};
     std::set<std::string> ids;
-    check(Catalog().size()==30,"all thirty game families registered (fourteen canonical + beacon_sweep + fourteen Prism cabinets + siltlane)");
+    check(Catalog().size()==31,"all thirty-one game families registered (fourteen canonical + beacon_sweep + fifteen Prism cabinets + siltlane)");
     for(const Entry& e:Catalog()) {
         check(ids.insert(e.Id).second,"catalog IDs unique");
         auto game=CreateGame(e.Id); check(bool(game),"registered factory exists");

@@ -121,6 +121,10 @@
     "sluicegate": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the sluice field"
+    },
+    "glowmoss": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the glowmoss shaft"
     }
   }
 }

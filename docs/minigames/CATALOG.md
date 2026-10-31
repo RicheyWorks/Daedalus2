@@ -38,6 +38,7 @@ batched rebuild under the editor custodian.
 | `roostcall` | Roostcall | 1 |
 | `emberkiln` | Emberkiln | 1 |
 | `sluicegate` | Sluicegate | 1 |
+| `glowmoss` | Glowmoss Delve | 1 |
 
 ## How to play
 
@@ -75,6 +76,7 @@ One original line per game, read from `HowToLine()`.
 | `roostcall` | HOW Walk up behind the glimmer-birds so they flee one step at a time; drive every bird into the roost corner before your turns run out. |
 | `emberkiln` | HOW Set a coal: the clay under it gains 2 heat and its neighbours gain 1 (stone and finished tiles only warm neighbours). A tile glazes at exactly its target and cracks past it. Glaze every tile before the coals run out. |
 | `sluicegate` | HOW Each turn the headgate pushes a few cells of water into the nearest open channels. Drop a gate on a dry channel to block a branch, or wait. Fill every cistern before the headgate closes; keep the water off the mill wheel. |
+| `glowmoss` | HOW Dig down the shaft one ledge at a time to gather crystals; glowmoss refills your lamp and unstable ledges drop you one row. Climb out before the light is too low to carry you back up. |
 
 ## Difficulty
 
@@ -112,6 +114,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `roostcall` | normal |
 | `emberkiln` | normal |
 | `sluicegate` | normal |
+| `glowmoss` | normal |
 
 ## Daedalus spots
 
@@ -149,6 +152,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `roostcall` | `prismheart_realm` | Prismheart, the roost yard |
 | `emberkiln` | `prismheart_realm` | Prismheart, the ember kiln |
 | `sluicegate` | `prismheart_realm` | Prismheart, the sluice field |
+| `glowmoss` | `prismheart_realm` | Prismheart, the glowmoss shaft |
 
 ## Capabilities
 
@@ -187,6 +191,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `roostcall` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `emberkiln` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `sluicegate` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `glowmoss` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 
 ## Leaderboard feed
 
