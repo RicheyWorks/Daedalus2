@@ -81,7 +81,12 @@ int main(int Argc, char** Argv) {
 		Expect(Loss.Ok && CabinetFeat("finish", LossRun) && !CabinetFeat("win", LossRun), std::string(P.Game) + " loss is a finish");
 		const std::string Text = One.ToText();
 		const auto Back = Satchel::FromText(Text);
-		Expect(static_cast<bool>(Back) && Back->ToText() == Text && Back->SealsByGame[P.Game] == SealEmber, std::string(P.Game) + " save round trip");
+		bool EmberSaved = false;
+		if (Back) {
+			const auto Found = Back->SealsByGame.find(P.Game);
+			EmberSaved = Found != Back->SealsByGame.end() && Found->second == SealEmber;
+		}
+		Expect(static_cast<bool>(Back) && Back->ToText() == Text && EmberSaved, std::string(P.Game) + " save round trip");
 
 		Satchel Hard;
 		const long long Par = P.UmbraPar;
