@@ -133,6 +133,31 @@ class Rules(unittest.TestCase):
 
 
 
+class Saves(unittest.TestCase):
+    """Iteration 5: from_state refuses saves that break the rules."""
+    def bad(self, **fields):
+        st = gm.start(3).to_state()
+        st.update(fields)
+        with self.assertRaises(ValueError):
+            gm.Game.from_state(st)
+
+    def test_round_trip_still_works(self):
+        g = gm.start(3)
+        for _ in range(5):
+            g.step(g.demo_action())
+        self.assertEqual(gm.Game.from_state(g.to_state()).status(), g.status())
+
+    def test_bad_saves_are_refused(self):
+        g = gm.start(3)
+        w = g.width()
+        self.bad(wall=[[1] + [0] * (w - 1)] + [[0] * w for _ in range(g.cfg["courses"] - 1)])          # stone the supply never gave
+        self.bad(index=3, wall=[[0] * w, [1] + [0] * (w - 1)] + [[0] * w for _ in range(g.cfg["courses"] - 2)])   # overhang
+        self.bad(locked=1)
+        self.bad(skips_left=9)
+        self.bad(won=True)
+        self.bad(over=True)
+
+
 class Balance(unittest.TestCase):
     """Iteration 3: pinned bands. The mason finishes every wall; the gap-aware greedy stays well below it."""
     GREEDY_BANDS = {"easy": (55, 92), "normal": (50, 90), "hard": (55, 92)}

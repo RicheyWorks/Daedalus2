@@ -63,7 +63,8 @@ class Game(pc.PrismGame):
               and isinstance(g.locked, int) and g.locked == sum(1 for row in g.wall if all(row))
               and isinstance(g.skips_left, int) and 0 <= g.skips_left <= cfg["skips"]
               and sum(sum(row) for row in g.wall) <= sum(g.stones[:g.index])
-              and g.won == (g.locked == h) and (g.over or not (g.won or g.index >= cfg["supply"])))
+              and g.won == (g.locked == h) and (g.over or not (g.won or g.index >= cfg["supply"]))
+              and (not g.over or g.won or g.index >= cfg["supply"] or (g.skips_left == 0 and not g.placements())))
         if not ok:
             raise ValueError("stonecourse save does not satisfy the rules")
         return g
