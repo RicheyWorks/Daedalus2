@@ -56,6 +56,30 @@ Game Lay(const std::vector<std::string>& Rows, const std::vector<Cell>& Cisterns
 	return G;
 }
 
+/** `r,c;r,c` → cells; "-" → none. */
+std::vector<Cell> ParseCells(const std::string& Text)
+{
+	std::vector<Cell> Out;
+	if (Text == "-") return Out;
+	std::stringstream S(Text); std::string Item;
+	while (std::getline(S, Item, ';'))
+	{
+		const size_t Comma = Item.find(',');
+		Out.push_back({ std::stoi(Item.substr(0, Comma)), std::stoi(Item.substr(Comma + 1)) });
+	}
+	return Out;
+}
+
+Cell ParseAct(const std::string& Text) { return Text == "wait" ? NoCell : ParseCells(Text).front(); }
+
+std::vector<std::string> SplitRows(const std::string& Text)
+{
+	std::vector<std::string> Rows;
+	std::stringstream S(Text); std::string Row;
+	while (std::getline(S, Row, ';')) Rows.push_back(Row);
+	return Rows;
+}
+
 int UnitChecks()
 {
 	int Fails = 0; int Reached = 0, Filled = 0; std::string Text;
@@ -159,6 +183,30 @@ int main(int Argc, char** Argv)
 			++Turn;
 			const std::string Got = MoveLine(Turn, X, G, Result);
 			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL s=%u %s turn %d\n  want %s\n  got  %s\n", Seed, Diff.c_str(), Turn, Line.c_str(), Got.c_str()); ++Fails; Skip = true; }
+		}
+		else if (Line.rfind("vector ", 0) == 0)   // iteration 4: hand-set corner cases, scripted action + gatekeeper pick
+		{
+			++Games; Skip = false; Turn = 0;
+			std::vector<std::string> Rows = SplitRows(Field(Line, "field"));
+			const std::vector<Cell> Gated = ParseCells(Field(Line, "gated"));
+			const Cell HeadCell = ParseCells(Field(Line, "head")).front();
+			Rows[static_cast<size_t>(HeadCell.R)][static_cast<size_t>(HeadCell.C)] = 'H';
+			const std::string MillText = Field(Line, "mill");
+			G = Lay(Rows, ParseCells(Field(Line, "cisterns")), MillText == "-" ? NoCell : ParseCells(MillText).front(), std::stoi(Field(Line, "gates")) + static_cast<int>(Gated.size()), std::stoi(Field(Line, "turns")), std::stoi(Field(Line, "flow")));
+			G.Wet = ParseCells(Field(Line, "wet")); G.Gates = Gated; G.GatesLeft = std::stoi(Field(Line, "gates"));
+			G.Filled = 0; for (const Cell& C : G.Cisterns) if (G.IsWet(C)) ++G.Filled;
+		}
+		else if (Line.rfind("step ", 0) == 0)
+		{
+			if (Skip) continue;
+			const Cell X = ParseAct(Field(Line, "act")), Demo = ParseAct(Field(Line, "demo"));
+			const Cell Pick = G.DemoAction();
+			if (Pick != Demo) { std::printf("FAIL vector gatekeeper: want %s got %s\n  %s\n", ActName(Demo).c_str(), ActName(Pick).c_str(), Line.c_str()); ++Fails; }
+			int Reached = 0, Filled = 0; std::string Result;
+			const Game::Act R = G.Step(X, Reached, Filled, Result);
+			const std::string Tail = MoveLine(0, X, G, Result);
+			const std::string Got = "step act=" + Field(Line, "act") + " demo=" + Field(Line, "demo") + Tail.substr(Tail.find(" wet="));
+			if (R != Game::Act::Ok || Got != Line) { std::printf("FAIL vector step\n  want %s\n  got  %s\n", Line.c_str(), Got.c_str()); ++Fails; Skip = true; }
 		}
 		else if (Line.rfind("end  ", 0) == 0)
 		{

@@ -113,6 +113,31 @@ class Game(pc.PrismGame):
         self.field[mill[0]][mill[1]] = CHANNEL
         return list(mill)
 
+    @classmethod
+    def from_state(cls, state):
+        """A save is checked against the rules before it is trusted (iteration 5)."""
+        g = super().from_state(state)
+        s = g.cfg["size"]
+        cell = lambda v: isinstance(v, list) and len(v) == 2 and all(isinstance(x, int) and 0 <= x < s for x in v)  # noqa: E731
+        channel = lambda v: cell(v) and g.field[v[0]][v[1]] == CHANNEL  # noqa: E731
+        ok = (isinstance(g.field, list) and len(g.field) == s and all(isinstance(row, list) and len(row) == s and all(x in (ROCK, CHANNEL) for x in row) for row in g.field)
+              and channel(g.head) and g.head[0] == 0
+              and all(channel(c) for c in g.cisterns) and len({tuple(c) for c in g.cisterns}) == len(g.cisterns)
+              and (g.mill is None or (channel(g.mill) and g.mill not in g.cisterns))
+              and g.wet and g.wet[0] == g.head and all(channel(w) for w in g.wet) and len({tuple(w) for w in g.wet}) == len(g.wet)
+              and all(channel(x) and x not in g.wet and x not in g.cisterns and x != g.mill and x != g.head for x in g.gates)
+              and len({tuple(x) for x in g.gates}) == len(g.gates)
+              and isinstance(g.gates_left, int) and g.gates_left + len(g.gates) == g.cfg["gates"]
+              and isinstance(g.turns, int) and 0 <= g.turns <= g.cfg["turns"] and g.cfg["turns"] - g.turns >= len(g.gates)
+              and g.filled == sum(1 for c in g.cisterns if c in g.wet))
+        if ok:
+            mill_wet = g.mill is not None and g.mill in g.wet
+            done = g.filled == len(g.cisterns)
+            ok = g.won == (done and not mill_wet) and (g.over or not (mill_wet or done or g.turns <= 0))
+        if not ok:
+            raise ValueError("sluicegate save does not satisfy the rules")
+        return g
+
     def size(self):
         return self.cfg["size"]
 
