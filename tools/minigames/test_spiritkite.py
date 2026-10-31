@@ -69,5 +69,22 @@ class LandFirst(unittest.TestCase):
         self.assertTrue(g.won)
 
 
+
+class BestScorePlan(unittest.TestCase):
+    """Round 2 finding (disk-saver): the demo plays the best score (lanterns + wind left), not the most lanterns."""
+
+    def test_target_picks_the_best_scoring_trip(self):
+        d = [[0, 1, 4], [1, 0, 3], [4, 3, 0]]
+        self.assertEqual(sorted(gm.best_tour(d, [0, 3, 5], 8)[1]), [1, 2])
+        self.assertEqual(gm.best_tour(d, [0, 3, 5], 8, 3), (8, [1]))
+
+    def test_easy_seed_0_demo_reaches_37(self):
+        g = gm.Game(0, "easy")
+        g.start()
+        while not g.over:
+            g.step(g.demo_action())
+        self.assertTrue(g.won)
+        self.assertEqual(g.score, 37)
+
 if __name__ == "__main__":
     unittest.main()

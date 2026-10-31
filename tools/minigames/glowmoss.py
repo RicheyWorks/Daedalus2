@@ -118,7 +118,7 @@ def best_delve(cfg, shaft, start=None):
     rows, cols = cfg["rows"], cfg["cols"]
     layers = [dict() for _ in range(rows)]  # row -> {(col, light): (crystals, previous (row, col, light))}
     start = start or (SURFACE, cols // 2, cfg["light"])
-    best, best_at = 0, None
+    best, best_at, best_left = 0, None, -1
 
     def expand(r0, c, l, v):
         r = r0 + 1
@@ -134,8 +134,9 @@ def best_delve(cfg, shaft, start=None):
         expand(*start, 0)
     for r in range(rows):
         for (c, l), (v, _) in sorted(layers[r].items()):
-            if v > best:
-                best, best_at = v, (r, c, l)
+            left = l - climb_cost(r)  # ties keep the most light left after climbing out (it adds to a win's score)
+            if v > best or (v == best and v > 0 and left > best_left):
+                best, best_at, best_left = v, (r, c, l), left
             if r + 1 < rows:
                 expand(r, c, l, v)
     plan = []

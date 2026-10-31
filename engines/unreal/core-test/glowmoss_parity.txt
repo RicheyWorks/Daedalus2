@@ -13,19 +13,19 @@ move t=7 act=dig:0 row=6 col=0 light=5 crystals=26 score=26 path=1,1,0,0,0,0,0 h
 move t=8 act=dig:1 row=7 col=1 light=4 crystals=28 score=28 path=1,1,0,0,0,0,0,1 hint=climb over=0 won=0 res=+2
 move t=9 act=climb row=7 col=1 light=0 crystals=28 score=33 path=1,1,0,0,0,0,0,1 hint=- over=1 won=1 res=climbed out with 28 (perfect delve)
 end  score=33 won=1 perfect=1
-game s=1 d=easy code=GLOW-E-1 gems=444/325/211/435/345/122/243/253 dark=122/102/120/101/101/111/112/202 moss=001/101/101/000/001/001/001/000 unstable=000/010/000/001/010/000/000/000 best=31 target=23 plan=1,2,1,2,1,1,1 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:1
-probe c=0 best=25 plan=0,1,2,1,1,1
-probe c=1 best=22 plan=1,2,1,1,1
-probe c=2 best=21 plan=2,1,1,1
-move t=1 act=dig:1 row=0 col=1 light=9 crystals=4 score=4 path=1 hint=dig:2 over=0 won=0 res=+4
-move t=2 act=dig:2 row=1 col=2 light=10 crystals=9 score=9 path=1,2 hint=dig:1 over=0 won=0 res=+5 glowmoss
-move t=3 act=dig:1 row=2 col=1 light=7 crystals=10 score=10 path=1,2,1 hint=dig:2 over=0 won=0 res=+1
-move t=4 act=dig:2 row=4 col=2 light=9 crystals=20 score=20 path=1,2,1,2 hint=dig:1 over=0 won=0 res=+10 glowmoss crumble
-move t=5 act=dig:1 row=5 col=1 light=7 crystals=22 score=22 path=1,2,1,2,1 hint=dig:1 over=0 won=0 res=+2
-move t=6 act=dig:1 row=6 col=1 light=5 crystals=26 score=26 path=1,2,1,2,1,1 hint=dig:1 over=0 won=0 res=+4
-move t=7 act=dig:1 row=7 col=1 light=4 crystals=31 score=31 path=1,2,1,2,1,1,1 hint=climb over=0 won=0 res=+5
-move t=8 act=climb row=7 col=1 light=0 crystals=31 score=36 path=1,2,1,2,1,1,1 hint=- over=1 won=1 res=climbed out with 31 (perfect delve)
-end  score=36 won=1 perfect=1
+game s=1 d=easy code=GLOW-E-1 gems=444/325/211/435/345/122/243/253 dark=122/102/120/101/101/111/112/202 moss=001/101/101/000/001/001/001/000 unstable=000/010/000/001/010/000/000/000 best=31 target=23 plan=2,2,1,2,2,1,1 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:2
+probe c=0 best=25 plan=0,1,2,2,1,1
+probe c=1 best=22 plan=2,2,2,1,1
+probe c=2 best=21 plan=2,2,1,1
+move t=1 act=dig:2 row=0 col=2 light=12 crystals=4 score=4 path=2 hint=dig:2 over=0 won=0 res=+4 glowmoss
+move t=2 act=dig:2 row=1 col=2 light=12 crystals=9 score=9 path=2,2 hint=dig:1 over=0 won=0 res=+5 glowmoss
+move t=3 act=dig:1 row=2 col=1 light=9 crystals=10 score=10 path=2,2,1 hint=dig:2 over=0 won=0 res=+1
+move t=4 act=dig:2 row=4 col=2 light=11 crystals=20 score=20 path=2,2,1,2 hint=dig:2 over=0 won=0 res=+10 glowmoss crumble
+move t=5 act=dig:2 row=5 col=2 light=12 crystals=22 score=22 path=2,2,1,2,2 hint=dig:1 over=0 won=0 res=+2 glowmoss
+move t=6 act=dig:1 row=6 col=1 light=10 crystals=26 score=26 path=2,2,1,2,2,1 hint=dig:1 over=0 won=0 res=+4
+move t=7 act=dig:1 row=7 col=1 light=9 crystals=31 score=31 path=2,2,1,2,2,1,1 hint=climb over=0 won=0 res=+5
+move t=8 act=climb row=7 col=1 light=5 crystals=31 score=41 path=2,2,1,2,2,1,1 hint=- over=1 won=1 res=climbed out with 31 (perfect delve)
+end  score=41 won=1 perfect=1
 game s=2 d=easy code=GLOW-E-2 gems=314/513/254/512/442/245/512/532 dark=020/212/010/110/210/001/210/222 moss=001/011/000/000/000/000/010/000 unstable=001/000/000/011/000/000/000/000 best=31 target=23 plan=2,1,0,1,1,1,0 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:2
 probe c=0 best=25 plan=1,1,0,1,1,1,0
 probe c=1 best=20 plan=1,1,1,1,0
@@ -40,7 +40,7 @@ move t=7 act=dig:0 row=7 col=0 light=4 crystals=31 score=31 path=2,1,0,1,1,1,0 h
 move t=8 act=climb row=7 col=0 light=0 crystals=31 score=36 path=2,1,0,1,1,1,0 hint=- over=1 won=1 res=climbed out with 31 (perfect delve)
 end  score=36 won=1 perfect=1
 game s=3 d=easy code=GLOW-E-3 gems=342/214/443/322/124/522/255/345 dark=020/111/111/000/212/212/211/121 moss=001/111/000/110/000/010/000/100 unstable=000/000/001/100/000/100/100/000 best=30 target=22 plan=1,2,1,1,2,1,1,2 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:1
-probe c=0 best=24 plan=0,1,2,2,1,1,2
+probe c=0 best=24 plan=0,0,1,2,1,1,2
 probe c=1 best=22 plan=0,1,2,1,1,2
 probe c=2 best=18 plan=1,2,1,1,2
 move t=1 act=dig:1 row=0 col=1 light=9 crystals=4 score=4 path=1 hint=dig:2 over=0 won=0 res=+4
@@ -53,19 +53,19 @@ move t=7 act=dig:1 row=6 col=1 light=9 crystals=25 score=25 path=1,2,1,1,2,1,1 h
 move t=8 act=dig:2 row=7 col=2 light=7 crystals=30 score=30 path=1,2,1,1,2,1,1,2 hint=climb over=0 won=0 res=+5
 move t=9 act=climb row=7 col=2 light=3 crystals=30 score=38 path=1,2,1,1,2,1,1,2 hint=- over=1 won=1 res=climbed out with 30 (perfect delve)
 end  score=38 won=1 perfect=1
-game s=7 d=easy code=GLOW-E-7 gems=115/145/133/433/324/542/435/542 dark=211/020/202/212/101/211/202/112 moss=010/000/000/100/000/010/100/111 unstable=000/100/010/000/000/000/000/000 best=33 target=24 plan=2,2,1,0,0,0,0 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:2
+game s=7 d=easy code=GLOW-E-7 gems=115/145/133/433/324/542/435/542 dark=211/020/202/212/101/211/202/112 moss=010/000/000/100/000/010/100/111 unstable=000/100/010/000/000/000/000/000 best=33 target=24 plan=2,2,1,2,1,0,0 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:2
 probe c=0 best=27 plan=1,1,2,1,0,0
-probe c=1 best=23 plan=1,0,0,0,0
-probe c=2 best=20 plan=2,2,1,0,0
+probe c=1 best=23 plan=1,2,1,0,0
+probe c=2 best=20 plan=1,2,1,0,0
 move t=1 act=dig:2 row=0 col=2 light=10 crystals=5 score=5 path=2 hint=dig:2 over=0 won=0 res=+5
 move t=2 act=dig:2 row=1 col=2 light=9 crystals=10 score=10 path=2,2 hint=dig:1 over=0 won=0 res=+5
-move t=3 act=dig:1 row=3 col=1 light=8 crystals=16 score=16 path=2,2,1 hint=dig:0 over=0 won=0 res=+6 crumble
-move t=4 act=dig:0 row=4 col=0 light=6 crystals=19 score=19 path=2,2,1,0 hint=dig:0 over=0 won=0 res=+3
-move t=5 act=dig:0 row=5 col=0 light=3 crystals=24 score=24 path=2,2,1,0,0 hint=dig:0 over=0 won=0 res=+5
-move t=6 act=dig:0 row=6 col=0 light=4 crystals=28 score=28 path=2,2,1,0,0,0 hint=dig:0 over=0 won=0 res=+4 glowmoss
-move t=7 act=dig:0 row=7 col=0 light=6 crystals=33 score=33 path=2,2,1,0,0,0,0 hint=climb over=0 won=0 res=+5 glowmoss
-move t=8 act=climb row=7 col=0 light=2 crystals=33 score=40 path=2,2,1,0,0,0,0 hint=- over=1 won=1 res=climbed out with 33 (perfect delve)
-end  score=40 won=1 perfect=1
+move t=3 act=dig:1 row=3 col=1 light=8 crystals=16 score=16 path=2,2,1 hint=dig:2 over=0 won=0 res=+6 crumble
+move t=4 act=dig:2 row=4 col=2 light=6 crystals=20 score=20 path=2,2,1,2 hint=dig:1 over=0 won=0 res=+4
+move t=5 act=dig:1 row=5 col=1 light=8 crystals=24 score=24 path=2,2,1,2,1 hint=dig:0 over=0 won=0 res=+4 glowmoss
+move t=6 act=dig:0 row=6 col=0 light=9 crystals=28 score=28 path=2,2,1,2,1,0 hint=dig:0 over=0 won=0 res=+4 glowmoss
+move t=7 act=dig:0 row=7 col=0 light=11 crystals=33 score=33 path=2,2,1,2,1,0,0 hint=climb over=0 won=0 res=+5 glowmoss
+move t=8 act=climb row=7 col=0 light=7 crystals=33 score=45 path=2,2,1,2,1,0,0 hint=- over=1 won=1 res=climbed out with 33 (perfect delve)
+end  score=45 won=1 perfect=1
 game s=11 d=easy code=GLOW-E-11 gems=423/333/223/123/113/543/334/353 dark=120/100/000/122/022/020/200/022 moss=010/000/000/000/000/000/011/010 unstable=000/000/000/000/000/000/001/000 best=26 target=19 plan=0,1,2,1,0,0,1,1 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:0
 probe c=0 best=22 plan=1,2,1,0,0,1,1
 probe c=1 best=19 plan=2,1,0,0,1,1
@@ -81,8 +81,8 @@ move t=8 act=dig:1 row=7 col=1 light=7 crystals=26 score=26 path=0,1,2,1,0,0,1,1
 move t=9 act=climb row=7 col=1 light=3 crystals=26 score=34 path=0,1,2,1,0,0,1,1 hint=- over=1 won=1 res=climbed out with 26 (perfect delve)
 end  score=34 won=1 perfect=1
 game s=42 d=easy code=GLOW-E-42 gems=322/133/421/224/325/454/145/112 dark=210/101/121/022/010/020/120/222 moss=100/000/110/000/100/000/001/000 unstable=000/000/000/100/100/000/000/000 best=29 target=21 plan=0,1,0,1,2,1,2,2 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:0
-probe c=0 best=26 plan=1,1,2,2,1,2,2
-probe c=1 best=23 plan=1,2,2,1,2,2
+probe c=0 best=26 plan=1,0,1,2,1,2,2
+probe c=1 best=23 plan=0,1,2,1,2,2
 probe c=2 best=20 plan=2,2,2,2,2
 move t=1 act=dig:0 row=0 col=0 light=12 crystals=3 score=3 path=0 hint=dig:1 over=0 won=0 res=+3 glowmoss
 move t=2 act=dig:1 row=1 col=1 light=11 crystals=6 score=6 path=0,1 hint=dig:0 over=0 won=0 res=+3
@@ -94,23 +94,23 @@ move t=7 act=dig:2 row=6 col=2 light=8 crystals=27 score=27 path=0,1,0,1,2,1,2 h
 move t=8 act=dig:2 row=7 col=2 light=5 crystals=29 score=29 path=0,1,0,1,2,1,2,2 hint=climb over=0 won=0 res=+2
 move t=9 act=climb row=7 col=2 light=1 crystals=29 score=35 path=0,1,0,1,2,1,2,2 hint=- over=1 won=1 res=climbed out with 29 (perfect delve)
 end  score=35 won=1 perfect=1
-game s=1337 d=easy code=GLOW-E-1337 gems=121/334/454/345/252/112/132/313 dark=120/021/020/010/102/012/212/002 moss=010/100/000/111/000/000/001/000 unstable=000/100/101/000/001/000/000/000 best=28 target=21 plan=1,2,1,2,1,1,1,0 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:1
+game s=1337 d=easy code=GLOW-E-1337 gems=121/334/454/345/252/112/132/313 dark=120/021/020/010/102/012/212/002 moss=010/100/000/111/000/000/001/000 unstable=000/100/101/000/001/000/000/000 best=28 target=21 plan=1,2,1,2,1,0,1,0 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:1
 probe c=0 best=25 plan=1,2,1,2,1,0
-probe c=1 best=22 plan=1,2,1,1,1,0
+probe c=1 best=22 plan=1,2,1,0,1,0
 probe c=2 best=18 plan=2,1,2,1,0
 move t=1 act=dig:1 row=0 col=1 light=12 crystals=2 score=2 path=1 hint=dig:2 over=0 won=0 res=+2 glowmoss
 move t=2 act=dig:2 row=1 col=2 light=10 crystals=6 score=6 path=1,2 hint=dig:1 over=0 won=0 res=+4
 move t=3 act=dig:1 row=2 col=1 light=7 crystals=11 score=11 path=1,2,1 hint=dig:2 over=0 won=0 res=+5
 move t=4 act=dig:2 row=3 col=2 light=10 crystals=16 score=16 path=1,2,1,2 hint=dig:1 over=0 won=0 res=+5 glowmoss
-move t=5 act=dig:1 row=4 col=1 light=9 crystals=21 score=21 path=1,2,1,2,1 hint=dig:1 over=0 won=0 res=+5
-move t=6 act=dig:1 row=5 col=1 light=7 crystals=22 score=22 path=1,2,1,2,1,1 hint=dig:1 over=0 won=0 res=+1
-move t=7 act=dig:1 row=6 col=1 light=5 crystals=25 score=25 path=1,2,1,2,1,1,1 hint=dig:0 over=0 won=0 res=+3
-move t=8 act=dig:0 row=7 col=0 light=4 crystals=28 score=28 path=1,2,1,2,1,1,1,0 hint=climb over=0 won=0 res=+3
-move t=9 act=climb row=7 col=0 light=0 crystals=28 score=33 path=1,2,1,2,1,1,1,0 hint=- over=1 won=1 res=climbed out with 28 (perfect delve)
-end  score=33 won=1 perfect=1
+move t=5 act=dig:1 row=4 col=1 light=9 crystals=21 score=21 path=1,2,1,2,1 hint=dig:0 over=0 won=0 res=+5
+move t=6 act=dig:0 row=5 col=0 light=8 crystals=22 score=22 path=1,2,1,2,1,0 hint=dig:1 over=0 won=0 res=+1
+move t=7 act=dig:1 row=6 col=1 light=6 crystals=25 score=25 path=1,2,1,2,1,0,1 hint=dig:0 over=0 won=0 res=+3
+move t=8 act=dig:0 row=7 col=0 light=5 crystals=28 score=28 path=1,2,1,2,1,0,1,0 hint=climb over=0 won=0 res=+3
+move t=9 act=climb row=7 col=0 light=1 crystals=28 score=34 path=1,2,1,2,1,0,1,0 hint=- over=1 won=1 res=climbed out with 28 (perfect delve)
+end  score=34 won=1 perfect=1
 game s=2026 d=easy code=GLOW-E-2026 gems=123/414/245/332/345/342/111/412 dark=101/112/102/210/020/011/120/010 moss=000/100/100/001/000/010/000/000 unstable=000/000/000/000/000/000/010/001 best=28 target=21 plan=2,2,2,2,2,1,0,0 row=-1 col=1 light=12 crystals=0 score=0 path= hint=dig:2
 probe c=0 best=25 plan=0,1,1,2,1,0,0
-probe c=1 best=21 plan=1,1,2,1,0,0
+probe c=1 best=21 plan=2,2,2,1,0,0
 probe c=2 best=17 plan=1,2,1,0,0
 move t=1 act=dig:2 row=0 col=2 light=10 crystals=3 score=3 path=2 hint=dig:2 over=0 won=0 res=+3
 move t=2 act=dig:2 row=1 col=2 light=7 crystals=7 score=7 path=2,2 hint=dig:2 over=0 won=0 res=+4
@@ -135,10 +135,10 @@ move t=6 act=dig:0 row=5 col=0 light=6 crystals=27 score=27 path=2,1,2,1,1,0 hin
 move t=7 act=dig:1 row=6 col=1 light=5 crystals=31 score=31 path=2,1,2,1,1,0,1 hint=climb over=0 won=0 res=+4
 move t=8 act=climb row=6 col=1 light=1 crystals=31 score=37 path=2,1,2,1,1,0,1 hint=- over=1 won=1 res=climbed out with 31 (perfect delve)
 end  score=37 won=1 perfect=1
-game s=0 d=normal code=GLOW-N-0 gems=3445/3153/3145/5544/3325/5155/4131/4241/3232/5315 dark=0100/2100/0100/1210/0101/2020/0200/2201/0010/1112 moss=0100/0000/0000/0001/0000/0000/1110/0100/0000/0000 unstable=0010/0100/0000/0000/0000/0000/0000/0001/0001/0101 best=43 target=34 plan=3,2,3,3,3,3,2,2,1,0 row=-1 col=2 light=11 crystals=0 score=0 path= hint=dig:3
+game s=0 d=normal code=GLOW-N-0 gems=3445/3153/3145/5544/3325/5155/4131/4241/3232/5315 dark=0100/2100/0100/1210/0101/2020/0200/2201/0010/1112 moss=0100/0000/0000/0001/0000/0000/1110/0100/0000/0000 unstable=0010/0100/0000/0000/0000/0000/0000/0001/0001/0101 best=43 target=34 plan=3,2,3,3,3,3,2,2,3 row=-1 col=2 light=11 crystals=0 score=0 path= hint=dig:3
 probe c=0 best=23 plan=1,2,3,3,2,2
-probe c=1 best=32 plan=2,3,3,3,2,2,1,0
-probe c=2 best=28 plan=3,3,3,2,2,1,0
+probe c=1 best=32 plan=2,3,3,3,2,2,3
+probe c=2 best=28 plan=3,3,3,2,2,3
 probe c=3 best=21 plan=2,3,2,2,3
 move t=1 act=dig:3 row=0 col=3 light=10 crystals=5 score=5 path=3 hint=dig:2 over=0 won=0 res=+5
 move t=2 act=dig:2 row=1 col=2 light=9 crystals=10 score=10 path=3,2 hint=dig:3 over=0 won=0 res=+5
@@ -147,14 +147,13 @@ move t=4 act=dig:3 row=3 col=3 light=10 crystals=19 score=19 path=3,2,3,3 hint=d
 move t=5 act=dig:3 row=4 col=3 light=8 crystals=24 score=24 path=3,2,3,3,3 hint=dig:3 over=0 won=0 res=+5
 move t=6 act=dig:3 row=5 col=3 light=7 crystals=29 score=29 path=3,2,3,3,3,3 hint=dig:2 over=0 won=0 res=+5
 move t=7 act=dig:2 row=6 col=2 light=9 crystals=32 score=32 path=3,2,3,3,3,3,2 hint=dig:2 over=0 won=0 res=+3 glowmoss
-move t=8 act=dig:2 row=7 col=2 light=8 crystals=36 score=36 path=3,2,3,3,3,3,2,2 hint=dig:1 over=0 won=0 res=+4
-move t=9 act=dig:1 row=8 col=1 light=7 crystals=38 score=38 path=3,2,3,3,3,3,2,2,1 hint=dig:0 over=0 won=0 res=+2
-move t=10 act=dig:0 row=9 col=0 light=5 crystals=43 score=43 path=3,2,3,3,3,3,2,2,1,0 hint=climb over=0 won=0 res=+5
-move t=11 act=climb row=9 col=0 light=0 crystals=43 score=48 path=3,2,3,3,3,3,2,2,1,0 hint=- over=1 won=1 res=climbed out with 43 (perfect delve)
-end  score=48 won=1 perfect=1
+move t=8 act=dig:2 row=7 col=2 light=8 crystals=36 score=36 path=3,2,3,3,3,3,2,2 hint=dig:3 over=0 won=0 res=+4
+move t=9 act=dig:3 row=9 col=3 light=7 crystals=43 score=43 path=3,2,3,3,3,3,2,2,3 hint=climb over=0 won=0 res=+7 crumble
+move t=10 act=climb row=9 col=3 light=2 crystals=43 score=50 path=3,2,3,3,3,3,2,2,3 hint=- over=1 won=1 res=climbed out with 43 (perfect delve)
+end  score=50 won=1 perfect=1
 game s=1 d=normal code=GLOW-N-1 gems=2243/1455/2152/5222/3121/1515/4223/2133/3124/5113 dark=2122/2121/0222/2200/1102/1020/0202/2002/2122/2110 moss=0001/0000/1000/0000/1100/0000/0010/0010/0000/0000 unstable=1000/0000/1000/0001/0000/0000/0000/0000/0000/0000 best=35 target=28 plan=2,1,0,0,1,2,2,3,3 row=-1 col=2 light=11 crystals=0 score=0 path= hint=dig:2
-probe c=0 best=31 plan=1,0,0,1,1,2,3,3
-probe c=1 best=27 plan=0,0,1,1,2,3,3
+probe c=0 best=31 plan=1,0,0,1,2,2,3,3
+probe c=1 best=27 plan=0,0,1,2,2,3,3
 probe c=2 best=22 plan=1,0,1,2,2,3,3
 probe c=3 best=19 plan=2,1,2,2,3,3
 move t=1 act=dig:2 row=0 col=2 light=8 crystals=4 score=4 path=2 hint=dig:1 over=0 won=0 res=+4
@@ -181,7 +180,7 @@ move t=5 act=dig:2 row=4 col=2 light=6 crystals=21 score=21 path=1,0,1,1,2 hint=
 move t=6 act=dig:1 row=5 col=1 light=3 crystals=24 score=24 path=1,0,1,1,2,1 hint=climb over=0 won=0 res=+3
 move t=7 act=climb row=5 col=1 light=0 crystals=24 score=29 path=1,0,1,1,2,1 hint=- over=1 won=1 res=climbed out with 24 (perfect delve)
 end  score=29 won=1 perfect=1
-game s=3 d=normal code=GLOW-N-3 gems=5423/4452/3243/2551/5523/2554/5331/2152/4544/3514 dark=1211/0120/2220/0022/0111/2112/1202/0010/1221/1022 moss=0000/0000/0000/0010/0001/0000/0101/0001/0000/0000 unstable=0100/0000/1001/0000/0000/1000/0000/0000/0010/0000 best=28 target=22 plan=1,2,2,3,2,1 row=-1 col=2 light=11 crystals=0 score=0 path= hint=dig:1
+game s=3 d=normal code=GLOW-N-3 gems=5423/4452/3243/2551/5523/2554/5331/2152/4544/3514 dark=1211/0120/2220/0022/0111/2112/1202/0010/1221/1022 moss=0000/0000/0000/0010/0001/0000/0101/0001/0000/0000 unstable=0100/0000/1001/0000/0000/1000/0000/0000/0010/0000 best=28 target=22 plan=1,2,2,3,2,3,3 row=-1 col=2 light=11 crystals=0 score=0 path= hint=dig:1
 probe c=0 best=26 plan=0,1,2,3,2,3,3,3
 probe c=1 best=24 plan=2,2,3,2,3,3,3
 probe c=2 best=23 plan=2,3,2,2,3,2
@@ -190,10 +189,11 @@ move t=1 act=dig:1 row=1 col=1 light=8 crystals=8 score=8 path=1 hint=dig:2 over
 move t=2 act=dig:2 row=2 col=2 light=5 crystals=12 score=12 path=1,2 hint=dig:2 over=0 won=0 res=+4
 move t=3 act=dig:2 row=3 col=2 light=5 crystals=17 score=17 path=1,2,2 hint=dig:3 over=0 won=0 res=+5 glowmoss
 move t=4 act=dig:3 row=4 col=3 light=6 crystals=20 score=20 path=1,2,2,3 hint=dig:2 over=0 won=0 res=+3 glowmoss
-move t=5 act=dig:2 row=5 col=2 light=4 crystals=25 score=25 path=1,2,2,3,2 hint=dig:1 over=0 won=0 res=+5
-move t=6 act=dig:1 row=6 col=1 light=4 crystals=28 score=28 path=1,2,2,3,2,1 hint=climb over=0 won=0 res=+3 glowmoss
-move t=7 act=climb row=6 col=1 light=0 crystals=28 score=33 path=1,2,2,3,2,1 hint=- over=1 won=1 res=climbed out with 28 (perfect delve)
-end  score=33 won=1 perfect=1
+move t=5 act=dig:2 row=5 col=2 light=4 crystals=25 score=25 path=1,2,2,3,2 hint=dig:3 over=0 won=0 res=+5
+move t=6 act=dig:3 row=6 col=3 light=4 crystals=26 score=26 path=1,2,2,3,2,3 hint=dig:3 over=0 won=0 res=+1 glowmoss
+move t=7 act=dig:3 row=7 col=3 light=6 crystals=28 score=28 path=1,2,2,3,2,3,3 hint=climb over=0 won=0 res=+2 glowmoss
+move t=8 act=climb row=7 col=3 light=2 crystals=28 score=35 path=1,2,2,3,2,3,3 hint=- over=1 won=1 res=climbed out with 28 (perfect delve)
+end  score=35 won=1 perfect=1
 game s=7 d=normal code=GLOW-N-7 gems=3344/3142/1225/5144/3425/1114/5233/1153/3111/5315 dark=1120/1112/0120/0201/2111/2011/0002/2100/2222/1201 moss=0000/1000/1010/0010/0000/0000/0000/0000/0010/1000 unstable=0000/0000/0100/0000/0000/0010/0000/0000/0000/0010 best=31 target=24 plan=3,2,3,2,3,2,2 row=-1 col=2 light=11 crystals=0 score=0 path= hint=dig:3
 probe c=0 best=24 plan=1,2,2,3,3,2,2
 probe c=1 best=24 plan=2,2,3,3,2,2,2
@@ -256,21 +256,21 @@ move t=8 act=dig:2 row=8 col=2 light=5 crystals=35 score=35 path=2,2,2,2,1,2,3,2
 move t=9 act=dig:1 row=9 col=1 light=5 crystals=36 score=36 path=2,2,2,2,1,2,3,2,1 hint=climb over=0 won=0 res=+1 glowmoss
 move t=10 act=climb row=9 col=1 light=0 crystals=36 score=41 path=2,2,2,2,1,2,3,2,1 hint=- over=1 won=1 res=climbed out with 36 (perfect delve)
 end  score=41 won=1 perfect=1
-game s=2026 d=normal code=GLOW-N-2026 gems=4343/4443/1141/3412/4351/3344/2543/4133/4121/1155 dark=0112/2121/0202/1100/2002/2102/1100/1002/1011/1222 moss=0000/0000/0000/0000/0100/0000/0010/0001/0110/0011 unstable=0000/0000/0000/1100/0011/0000/0111/0010/0000/0000 best=37 target=29 plan=2,2,2,3,2,2,2,2 row=-1 col=2 light=11 crystals=0 score=0 path= hint=dig:2
-probe c=0 best=33 plan=1,2,3,2,2,2,2
-probe c=1 best=29 plan=2,3,2,2,2,2
-probe c=2 best=25 plan=3,2,2,2,2
+game s=2026 d=normal code=GLOW-N-2026 gems=4343/4443/1141/3412/4351/3344/2543/4133/4121/1155 dark=0112/2121/0202/1100/2002/2102/1100/1002/1011/1222 moss=0000/0000/0000/0000/0100/0000/0010/0001/0110/0011 unstable=0000/0000/0000/1100/0011/0000/0111/0010/0000/0000 best=37 target=29 plan=2,1,2,1,2,2,2,2 row=-1 col=2 light=11 crystals=0 score=0 path= hint=dig:2
+probe c=0 best=33 plan=1,2,1,2,2,2,2
+probe c=1 best=29 plan=2,1,2,2,2,2
+probe c=2 best=25 plan=1,2,2,2,2
 probe c=3 best=23 plan=2,2,2,2
-move t=1 act=dig:2 row=0 col=2 light=9 crystals=4 score=4 path=2 hint=dig:2 over=0 won=0 res=+4
-move t=2 act=dig:2 row=1 col=2 light=6 crystals=8 score=8 path=2,2 hint=dig:2 over=0 won=0 res=+4
-move t=3 act=dig:2 row=2 col=2 light=5 crystals=12 score=12 path=2,2,2 hint=dig:3 over=0 won=0 res=+4
-move t=4 act=dig:3 row=3 col=3 light=4 crystals=14 score=14 path=2,2,2,3 hint=dig:2 over=0 won=0 res=+2
-move t=5 act=dig:2 row=5 col=2 light=3 crystals=23 score=23 path=2,2,2,3,2 hint=dig:2 over=0 won=0 res=+9 crumble
-move t=6 act=dig:2 row=7 col=2 light=5 crystals=30 score=30 path=2,2,2,3,2,2 hint=dig:2 over=0 won=0 res=+7 glowmoss crumble
-move t=7 act=dig:2 row=8 col=2 light=6 crystals=32 score=32 path=2,2,2,3,2,2,2 hint=dig:2 over=0 won=0 res=+2 glowmoss
-move t=8 act=dig:2 row=9 col=2 light=6 crystals=37 score=37 path=2,2,2,3,2,2,2,2 hint=climb over=0 won=0 res=+5 glowmoss
-move t=9 act=climb row=9 col=2 light=1 crystals=37 score=43 path=2,2,2,3,2,2,2,2 hint=- over=1 won=1 res=climbed out with 37 (perfect delve)
-end  score=43 won=1 perfect=1
+move t=1 act=dig:2 row=0 col=2 light=9 crystals=4 score=4 path=2 hint=dig:1 over=0 won=0 res=+4
+move t=2 act=dig:1 row=1 col=1 light=7 crystals=8 score=8 path=2,1 hint=dig:2 over=0 won=0 res=+4
+move t=3 act=dig:2 row=2 col=2 light=6 crystals=12 score=12 path=2,1,2 hint=dig:1 over=0 won=0 res=+4
+move t=4 act=dig:1 row=4 col=1 light=7 crystals=19 score=19 path=2,1,2,1 hint=dig:2 over=0 won=0 res=+7 glowmoss crumble
+move t=5 act=dig:2 row=5 col=2 light=6 crystals=23 score=23 path=2,1,2,1,2 hint=dig:2 over=0 won=0 res=+4
+move t=6 act=dig:2 row=7 col=2 light=8 crystals=30 score=30 path=2,1,2,1,2,2 hint=dig:2 over=0 won=0 res=+7 glowmoss crumble
+move t=7 act=dig:2 row=8 col=2 light=9 crystals=32 score=32 path=2,1,2,1,2,2,2 hint=dig:2 over=0 won=0 res=+2 glowmoss
+move t=8 act=dig:2 row=9 col=2 light=9 crystals=37 score=37 path=2,1,2,1,2,2,2,2 hint=climb over=0 won=0 res=+5 glowmoss
+move t=9 act=climb row=9 col=2 light=4 crystals=37 score=46 path=2,1,2,1,2,2,2,2 hint=- over=1 won=1 res=climbed out with 37 (perfect delve)
+end  score=46 won=1 perfect=1
 game s=65535 d=normal code=GLOW-N-65535 gems=1254/3435/5342/4323/5322/2334/1133/5444/4331/3114 dark=2110/2012/1021/1112/1201/1121/1122/0120/0221/0220 moss=0000/0110/1000/0100/0011/0010/1000/0000/0011/0011 unstable=0000/0000/0100/0000/0000/0000/0000/0100/1100/0000 best=38 target=30 plan=2,1,0,1,0,1,0,0,0 row=-1 col=2 light=11 crystals=0 score=0 path= hint=dig:2
 probe c=0 best=33 plan=1,0,1,0,1,0,0,0
 probe c=1 best=29 plan=0,1,0,1,0,0,0
@@ -287,9 +287,9 @@ move t=8 act=dig:0 row=7 col=0 light=7 crystals=31 score=31 path=2,1,0,1,0,1,0,0
 move t=9 act=dig:0 row=9 col=0 light=6 crystals=38 score=38 path=2,1,0,1,0,1,0,0,0 hint=climb over=0 won=0 res=+7 crumble
 move t=10 act=climb row=9 col=0 light=1 crystals=38 score=44 path=2,1,0,1,0,1,0,0,0 hint=- over=1 won=1 res=climbed out with 38 (perfect delve)
 end  score=44 won=1 perfect=1
-game s=0 d=hard code=GLOW-H-0 gems=51355/11311/25514/34333/35231/22115/12352/33445/32543/25125/14353/51452 dark=00100/02021/01012/01102/12102/20000/22112/02102/20010/12201/21012/21020 moss=00000/00001/00100/00000/00000/00000/00100/01000/01100/00000/00000/10100 unstable=01000/00000/10100/10000/00000/00000/10000/00000/01010/00100/00000/00000 best=45 target=38 plan=3,2,2,1,1,2,1,1,1,0 row=-1 col=2 light=10 crystals=0 score=0 path= hint=dig:3
+game s=0 d=hard code=GLOW-H-0 gems=51355/11311/25514/34333/35231/22115/12352/33445/32543/25125/14353/51452 dark=00100/02021/01012/01102/12102/20000/22112/02102/20010/12201/21012/21020 moss=00000/00001/00100/00000/00000/00000/00100/01000/01100/00000/00000/10100 unstable=01000/00000/10100/10000/00000/00000/10000/00000/01010/00100/00000/00000 best=45 target=38 plan=3,2,2,1,1,2,1,2,3,3,2 row=-1 col=2 light=10 crystals=0 score=0 path= hint=dig:3
 probe c=0 best=36 plan=1,2,1,1,2,1,1,2,2
-probe c=1 best=37 plan=2,1,1,2,1,1,1,0
+probe c=1 best=37 plan=2,1,1,2,1,2,3,3,2
 probe c=2 best=27 plan=3,3,2,2,1,1,2,2
 probe c=3 best=24 plan=3,2,2,1,1,2,2
 probe c=4 best=21 plan=3,2,1,1,2,2
@@ -299,12 +299,13 @@ move t=3 act=dig:2 row=3 col=2 light=10 crystals=16 score=16 path=3,2,2 hint=dig
 move t=4 act=dig:1 row=4 col=1 light=7 crystals=21 score=21 path=3,2,2,1 hint=dig:1 over=0 won=0 res=+5
 move t=5 act=dig:1 row=5 col=1 light=6 crystals=23 score=23 path=3,2,2,1,1 hint=dig:2 over=0 won=0 res=+2
 move t=6 act=dig:2 row=6 col=2 light=7 crystals=26 score=26 path=3,2,2,1,1,2 hint=dig:1 over=0 won=0 res=+3 glowmoss
-move t=7 act=dig:1 row=7 col=1 light=7 crystals=29 score=29 path=3,2,2,1,1,2,1 hint=dig:1 over=0 won=0 res=+3 glowmoss
-move t=8 act=dig:1 row=9 col=1 light=9 crystals=36 score=36 path=3,2,2,1,1,2,1,1 hint=dig:1 over=0 won=0 res=+7 glowmoss crumble
-move t=9 act=dig:1 row=10 col=1 light=7 crystals=40 score=40 path=3,2,2,1,1,2,1,1,1 hint=dig:0 over=0 won=0 res=+4
-move t=10 act=dig:0 row=11 col=0 light=7 crystals=45 score=45 path=3,2,2,1,1,2,1,1,1,0 hint=climb over=0 won=0 res=+5 glowmoss
-move t=11 act=climb row=11 col=0 light=1 crystals=45 score=51 path=3,2,2,1,1,2,1,1,1,0 hint=- over=1 won=1 res=climbed out with 45 (perfect delve)
-end  score=51 won=1 perfect=1
+move t=7 act=dig:1 row=7 col=1 light=7 crystals=29 score=29 path=3,2,2,1,1,2,1 hint=dig:2 over=0 won=0 res=+3 glowmoss
+move t=8 act=dig:2 row=8 col=2 light=9 crystals=34 score=34 path=3,2,2,1,1,2,1,2 hint=dig:3 over=0 won=0 res=+5 glowmoss
+move t=9 act=dig:3 row=9 col=3 light=8 crystals=36 score=36 path=3,2,2,1,1,2,1,2,3 hint=dig:3 over=0 won=0 res=+2
+move t=10 act=dig:3 row=10 col=3 light=6 crystals=41 score=41 path=3,2,2,1,1,2,1,2,3,3 hint=dig:2 over=0 won=0 res=+5
+move t=11 act=dig:2 row=11 col=2 light=8 crystals=45 score=45 path=3,2,2,1,1,2,1,2,3,3,2 hint=climb over=0 won=0 res=+4 glowmoss
+move t=12 act=climb row=11 col=2 light=2 crystals=45 score=52 path=3,2,2,1,1,2,1,2,3,3,2 hint=- over=1 won=1 res=climbed out with 45 (perfect delve)
+end  score=52 won=1 perfect=1
 game s=1 d=hard code=GLOW-H-1 gems=31422/13353/51355/43213/14134/51245/54353/13223/24531/15424/24442/54423 dark=11022/21211/12211/20101/11011/00221/22201/10211/10211/12222/21112/21202 moss=00010/00000/00001/01010/00000/00000/10000/00001/01000/00000/00001/00000 unstable=00001/00100/10000/00101/00000/01000/00000/00011/00000/00000/00000/00000 best=34 target=29 plan=2,2,1,1,0,0,1,1 row=-1 col=2 light=10 crystals=0 score=0 path= hint=dig:2
 probe c=0 best=18 plan=1,2,1,1,0
 probe c=1 best=20 plan=2,1,1,0,0
@@ -335,7 +336,7 @@ move t=5 act=dig:1 row=5 col=1 light=3 crystals=25 score=25 path=2,1,2,2,1 hint=
 move t=6 act=climb row=5 col=1 light=0 crystals=25 score=30 path=2,1,2,2,1 hint=- over=1 won=1 res=climbed out with 25 (perfect delve)
 end  score=30 won=1 perfect=1
 game s=3 d=hard code=GLOW-H-3 gems=44514/12234/23342/54511/54443/52131/54551/11251/14324/54421/44342/21321 dark=01101/00021/01100/22201/00212/01020/22002/22222/10101/10112/01100/00120 moss=00000/01100/01000/00100/00000/00000/00000/00000/01100/10010/00100/00000 unstable=01000/00000/00001/00110/00000/01001/00100/00000/00100/00100/00000/10001 best=45 target=38 plan=2,2,3,2,3,2,1,0,0,0 row=-1 col=2 light=10 crystals=0 score=0 path= hint=dig:2
-probe c=0 best=39 plan=1,1,2,3,2,1,0,1,0
+probe c=0 best=39 plan=1,1,2,3,2,1,0,0,0
 probe c=1 best=37 plan=1,2,3,2,1,0,0,0
 probe c=2 best=32 plan=2,2,2,1,0,0,0
 probe c=3 best=5 plan=3,2

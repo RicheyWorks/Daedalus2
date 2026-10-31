@@ -70,6 +70,11 @@ int UnitChecks()
 	if (Full.Best != 8 || Full.Order != std::vector<int>{ 2, 1 }) { std::printf("FAIL full tour\n"); ++Fails; }
 	if (Half.Best != 3 || Half.Order != std::vector<int>{ 1 }) { std::printf("FAIL half tour\n"); ++Fails; }
 	if (None.Best != 0 || !None.Order.empty()) { std::printf("FAIL empty tour\n"); ++Fails; }
+	// Triangle 0-1 (1), 1-2 (3), 0-2 (4), wind 8: most lanterns is both isles (score 8 + 0 wind), but with target 3
+	// isle 1 alone scores 3 + 6 = 9, so the best-score plan is { 1 } (spiritkite.best_tour with a target).
+	const Matrix Tri = Shortest(3, { { 0, 1, 1 }, { 1, 2, 3 }, { 0, 2, 4 } });
+	const Tour TopTour = BestTour(Tri, Values, 8, 3);
+	if (TopTour.Best != 8 || TopTour.Order != std::vector<int>{ 1 }) { std::printf("FAIL best-score tour\n"); ++Fails; }
 
 	Game G; std::string Res;
 	if (G.Start(0, "mythic")) { std::printf("FAIL unknown difficulty accepted\n"); ++Fails; }

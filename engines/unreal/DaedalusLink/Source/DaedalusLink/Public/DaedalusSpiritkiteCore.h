@@ -79,7 +79,9 @@ inline Matrix Shortest(int N, const std::vector<Lane>& Lanes)
 struct Tour { int Best = 0; std::vector<int> Order; };
 
 /** Best lantern total and visit order for a round trip from the anchor within Wind (spiritkite.best_tour). Exact. */
-inline Tour BestTour(const Matrix& Dist, const std::vector<int>& Values, int Wind)
+/** With Target >= 0 the order is the best-score trip instead (lanterns + wind left, lanterns >= Target; first in scan
+ *  order on ties), as spiritkite.best_tour(dist, values, wind, target). Best stays the most lanterns. */
+inline Tour BestTour(const Matrix& Dist, const std::vector<int>& Values, int Wind, int Target = -1)
 {
 	const int N = static_cast<int>(Values.size());
 	const int Full = 1 << N;
@@ -88,6 +90,7 @@ inline Tour BestTour(const Matrix& Dist, const std::vector<int>& Values, int Win
 	Cost[1][0] = 0;
 	Tour Result;
 	int BestSet = 1, BestEnd = Anchor;
+	int Top = -1, TopSet = 0, TopEnd = -1;
 	for (int S = 1; S < Full; S += 2)
 	{
 		for (int V = 0; V < N; ++V)
@@ -99,6 +102,8 @@ inline Tour BestTour(const Matrix& Dist, const std::vector<int>& Values, int Win
 				int Value = 0;
 				for (int I = 0; I < N; ++I) if ((S >> I) & 1) Value += Values[static_cast<size_t>(I)];
 				if (Value > Result.Best) { Result.Best = Value; BestSet = S; BestEnd = V; }
+				const int Score = Value + Wind - C - Dist[static_cast<size_t>(V)][Anchor];
+				if (Target >= 0 && Value >= Target && Score > Top) { Top = Score; TopSet = S; TopEnd = V; }
 			}
 			for (int U = 0; U < N; ++U)
 			{
@@ -113,6 +118,7 @@ inline Tour BestTour(const Matrix& Dist, const std::vector<int>& Values, int Win
 			}
 		}
 	}
+	if (TopEnd >= 0) { BestSet = TopSet; BestEnd = TopEnd; }
 	for (int S = BestSet, V = BestEnd; V > Anchor;)
 	{
 		Result.Order.push_back(V);
@@ -173,7 +179,7 @@ struct Game
 		Restore();
 		const Tour Best = BestTour(Dist, Values, Diff->Wind);
 		Target = std::max(1, static_cast<int>(std::ceil(Best.Best * Diff->Share)));
-		Plan = Best.Order;
+		Plan = BestTour(Dist, Values, Diff->Wind, Target).Order;  // best score, not most lanterns
 		At = Anchor; Wind = Diff->Wind;
 		Gathered.assign(1, Anchor);
 		Trail.assign(1, Anchor);
