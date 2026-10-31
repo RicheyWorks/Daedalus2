@@ -71,6 +71,29 @@ class Game(pc.PrismGame):
             return f"banked {pot}"
         raise ValueError("use draw or bank")
 
+    def check_rules(self):
+        """A loaded bag must be what this round's draws left (Round 2 finding, art-master-flex 1)."""
+        cfg = self.cfg
+        full = sorted(list(cfg["values"]) + [0] * cfg["cracked"])
+        if not (isinstance(self.bag, list) and all(pc.is_count(v) for v in self.bag) and isinstance(self.history, list)
+                and all(pc.is_count(v) for v in self.history) and pc.is_count(self.round) and pc.is_count(self.pot)
+                and pc.is_count(self.cracks)):
+            raise ValueError("shardfall save fields have the wrong shape")
+        drawn = list(full)
+        for v in self.bag:
+            if v not in drawn:
+                raise ValueError("shardfall bag holds shards the seam never had")
+            drawn.remove(v)
+        if self.cracks != drawn.count(0) or self.pot != sum(drawn) or self.cracks >= BUST_AT and not self.over:
+            raise ValueError("shardfall pot and cracks do not match the shards drawn")
+        if not 1 <= self.round <= cfg["rounds"] or len(self.history) != self.round - (0 if self.over else 1):
+            raise ValueError("shardfall round does not match the banked history")
+        if self.won != (self.over and self.score >= cfg["target"]):
+            raise ValueError("shardfall result does not match the score")
+
+    def rescore(self):
+        return sum(self.history)
+
     def risk(self):
         cracked = self.bag.count(0)
         return cracked / len(self.bag) if self.bag and self.cracks >= BUST_AT - 1 else 0.0

@@ -52,5 +52,20 @@ class Rules(unittest.TestCase):
                 self.assertTrue(2 <= sum(s["cost"].values()) <= 4)
 
 
+class SaveChecks(unittest.TestCase):
+    """Round 2 finding (prometheus 1): the score must fit the spirits summoned (10-25 each, steps of 5)."""
+
+    def test_tampered_score_and_summons_are_rejected(self):
+        g = gm.start(1, "normal")
+        while not g.summoned:
+            g.step(g.demo_action())
+        for edit in ({"score": 9999}, {"score": g.score + 1}, {"summoned": g.summoned + ["Nobody"]}, {"summoned": []}):
+            st = g.to_state()
+            st.update(edit)
+            with self.assertRaises(ValueError, msg=edit):
+                gm.Game.from_state(st)
+        self.assertEqual(gm.Game.from_state(g.to_state()).score, g.score)
+
+
 if __name__ == "__main__":
     unittest.main()
