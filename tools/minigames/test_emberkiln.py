@@ -187,9 +187,28 @@ class Saves(unittest.TestCase):
         self.bad(over=True)
 
 
+class CrossTest(unittest.TestCase):
+    """Blender Team cross-test (2026-10-30), finding 1: the hint lost floors an exact search wins. Stoker v2 wins them."""
+    def test_named_seeds_are_won(self):
+        for d, seeds in (("easy", (0, 8, 12, 18)), ("normal", (6, 27, 31, 33))):
+            for s in seeds:
+                g = gm.start(s, d)
+                while not g.over:
+                    g.step(g.demo_action())
+                self.assertTrue(g.won, "%s seed %d" % (d, s))
+
+    def test_search_and_greedy_agree_on_legality(self):
+        g = gm.start(3, "hard")
+        while not g.over:
+            a = g.demo_action()
+            r, c = g.parse_cell(a)
+            self.assertEqual(g.preview(r, c)[1], 0, "the stoker never cracks a tile")
+            g.step(a)
+
+
 class Balance(unittest.TestCase):
     """Iteration 3: the stoker's win rate stays inside pinned bands, so a rules change that shifts the difficulty is caught."""
-    BANDS = {"easy": (65, 90), "normal": (70, 95), "hard": (70, 95)}
+    BANDS = {"easy": (95, 100), "normal": (97, 100), "hard": (97, 100)}
 
     def test_stoker_win_rates(self):
         for d, (low, high) in self.BANDS.items():
