@@ -71,7 +71,7 @@ One original line per game, read from `HowToLine()`.
 | `prismcairn` | HOW Take one or more shards, up to the limit, from one cairn each turn; lift the last shard to win the round, best of three. |
 | `prismvault` | HOW Weigh equal groups of shards on the balance to find the hollow one, then name it before the weighings run out. |
 | `shardfall` | HOW Draw shards to grow the pot or bank it; a second cracked shard collapses the seam and loses the pot; reach the target by the last round. |
-| `siltlane` | HOW Switch lanes so the drifting silt passes you. |
+| `siltlane` | HOW Switch lanes so the drifting silt passes you. Clear eight stones, or five on the two-lane practice. |
 | `shadewatch` | HOW Each turn flare one lane, kindle light or spend 3 light on a nova; keep the creeping shades from reaching the heart until the vigil ends. |
 | `glimmerloom` | HOW Buy and sell hued shards as market prices drift, heed the Warden's rumor, then rest; end the last day with a purse at or above the target. |
 | `prismchime` | HOW Tap a chime to ring it: its charge pulses along its facing and it gains one; a chime that fills to four peals and charges both neighbours. Light every chime before your taps run out. |
@@ -153,7 +153,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `prismcairn` | `prismheart_realm` | Prismheart, the cairn field |
 | `prismvault` | `prismheart_realm` | Prismheart, the balance chamber |
 | `shardfall` | `prismheart_realm` | Prismheart, the glowing seam |
-| `siltlane` | `spawn_overlook` | Spawn overlook, the silt course |
+| `siltlane` | `spawn_overlook` | Spawn overlook, the silt course beside the dock |
 | `shadewatch` | `prismheart_realm` | Prismheart, the watch lanes |
 | `glimmerloom` | `prismheart_realm` | Prismheart, the Glimmerloom market |
 | `prismchime` | `prismheart_realm` | Prismheart, the chime ring |

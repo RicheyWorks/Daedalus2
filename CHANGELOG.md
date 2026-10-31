@@ -10,6 +10,8 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Siltlane host lines.** The hint and the cue are public so the desktop test can read them. The rules are unchanged.
+- **Siltlane iterations.** Forty checked improvements on the native C++ core: a clear target (easy six, normal eight, hard ten; practice four, five and six), easy stones that miss the occupied lane, hard stones that start one row closer, a loss that freezes the runner, and a golden parity fixture the engines job replays. The cabinet note names the stones still to clear. The home spot is Spawn overlook, the silt course beside the dock.
 - **Minigame core parity.** One check lists every catalog minigame that has a native C++ core and fails when its parity fixture, core test, or CI run is missing. Game rules are unchanged. Shardfall Gamble already draws its key hint and contrast mark; the catalog now records those marks.
 - **Catalog fields.** One test walks every desktop cabinet and checks the score hook, how-to line, access marks, difficulty, and Daedalus placement are present. The four Prism cabinets that already draw those marks are recorded in the catalog.
 - **Siltlane.** A lane runner in the desktop C++ core. Option 0 is three lanes and option 1 is a two-lane practice. Left and right switch lanes so drifting silt can pass; standing in a stone's lane ends the run. Easy drifts slowly and hard drifts quickly. The opening score stays clear, and a cream hint, a cyan switch cue, and the access plate sit on the bottom edge. The cabinet stands at Spawn overlook, the silt course.

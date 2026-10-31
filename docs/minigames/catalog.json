@@ -788,7 +788,7 @@
       "id": "siltlane",
       "title": "Siltlane",
       "summary": "Switch lanes so the drifting silt passes you. Left/Right or stick: change lane",
-      "how_to_play": "HOW Switch lanes so the drifting silt passes you.",
+      "how_to_play": "HOW Switch lanes so the drifting silt passes you. Clear eight stones, or five on the two-lane practice.",
       "difficulty": [
         "easy",
         "normal",
@@ -796,7 +796,7 @@
       ],
       "default_difficulty": "normal",
       "daedalus_realm": "spawn_overlook",
-      "daedalus_spot": "Spawn overlook, the silt course",
+      "daedalus_spot": "Spawn overlook, the silt course beside the dock",
       "host": "ADaedalusDesktopArcade",
       "start": "StartGame(\"siltlane\", Seed)",
       "portable_tests": [
