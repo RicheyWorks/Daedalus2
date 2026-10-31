@@ -98,6 +98,30 @@ class Rules(unittest.TestCase):
             greedy += h.won
         self.assertLess(greedy, 40)
 
+    def test_properties_hold_under_random_actions(self):
+        """Iteration 1: random legal actions on 90 walls never break support, locking or the counters."""
+        import random
+        for s in range(90):
+            d = ("easy", "normal", "hard")[s % 3]
+            g = gm.start(s, d)
+            rng = random.Random(s)
+            while not g.over:
+                legal = [str(c) for c in g.placements()] + (["skip"] if g.skips_left > 0 else [])
+                a = legal[rng.randrange(len(legal))]
+                legal_ok, course, locks = g.preview(a)
+                self.assertTrue(legal_ok)
+                before = (g.index, g.locked, g.skips_left)
+                g.step(a)
+                self.assertEqual(g.index - before[0], 1)
+                self.assertEqual(g.skips_left, before[2] - (1 if a == "skip" else 0))
+                self.assertEqual(g.locked - before[1], 1 if (a != "skip" and locks) else 0)
+                for k in range(1, g.cfg["courses"]):
+                    for c in range(g.width()):
+                        if g.wall[k][c]:
+                            self.assertEqual(g.wall[k - 1][c], 1, "no overhang")
+                self.assertEqual(g.locked, sum(1 for row in g.wall if all(row)))
+            self.assertEqual(g.won, g.locked == g.cfg["courses"])
+
     def test_render_marks(self):
         g = gm.start(2)
         screen = g.render()
@@ -106,6 +130,31 @@ class Rules(unittest.TestCase):
         g.step(g.demo_action())
         self.assertNotIn("SET    a column", g.render())
         self.assertIn("#", g.render())
+
+
+
+class Balance(unittest.TestCase):
+    """Iteration 3: pinned bands. The mason finishes every wall; the gap-aware greedy stays well below it."""
+    GREEDY_BANDS = {"easy": (55, 92), "normal": (50, 90), "hard": (55, 92)}
+
+    def test_mason_finishes_every_wall(self):
+        for d in gm.DIFFICULTY:
+            for s in range(60):
+                g = gm.start(s, d)
+                while not g.over:
+                    g.step(g.demo_action())
+                self.assertTrue(g.won, "%s seed %d" % (d, s))
+
+    def test_greedy_win_rates(self):
+        for d, (low, high) in self.GREEDY_BANDS.items():
+            wins = 0
+            for s in range(120):
+                g = gm.start(s, d)
+                while not g.over:
+                    g.step(g.greedy_pick())
+                wins += g.won
+            rate = wins / 1.2
+            self.assertTrue(low <= rate <= high, "%s greedy win rate %.1f%% outside %d-%d" % (d, rate, low, high))
 
 
 if __name__ == "__main__":
