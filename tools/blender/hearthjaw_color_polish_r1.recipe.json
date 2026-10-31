@@ -1,0 +1,240 @@
+{
+  "schema": "daedalus.hearthjaw-color-proposal.v1",
+  "source_only": true,
+  "namespace": "hearthjaw-color-polish-r1",
+  "color_space": "scene_linear_RGBA_float32",
+  "allowed_targets": [
+    "Principled BSDF.inputs.Base Color",
+    "material.diffuse_color"
+  ],
+  "palette_srgb_hex": {
+    "M_Eco_sky_stem": "#6E4328",
+    "M_Eco_sky_leaf": "#176A3A",
+    "M_Eco_sky_leafLight": "#6AAA45",
+    "M_Eco_sky_flower": "#C84C18",
+    "M_Eco_sky_gill": "#F2D59B",
+    "M_Eco_sky_glow": "#2DAF9A",
+    "M_Eco_sky_root": "#382B20"
+  },
+  "job_root": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\jobs\\sky_hearthjaw",
+  "inputs": {
+    "scene": {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\inspection\\hearthjaw-camera-r2\\hearthjaw_inspection_r2.blend",
+      "bytes": 176016,
+      "sha256": "cf1335f0df6baa1f39951be7a0a24d2749e88a7d977328db8e20f9b451e177d3"
+    },
+    "receipt": {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\inspection\\hearthjaw-camera-r2\\hearthjaw_inspection_r2.receipt.json",
+      "bytes": 742573,
+      "sha256": "127a1a272147ff553e8d8a2ebb5c9101c8fb1668cc8684b000c6c160e2155224"
+    },
+    "image": {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\inspection\\hearthjaw-camera-r2\\hearthjaw_inspection_r2.png",
+      "bytes": 2481124,
+      "sha256": "042c0560accd773b2c07dfe1fc762e405ef7efe8085477a82af1d1718e3888a1"
+    },
+    "manifest": {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\jobs\\sky_hearthjaw\\Realm_Ecology_Manifest.json",
+      "bytes": 57616,
+      "sha256": "e066a45792b71927803d906f539519fcb8884486356e25980d466ebe49d97eb9"
+    }
+  },
+  "source_pins": [
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\hearthjaw-camera-source\\tools\\blender\\hearthjaw_inspection_camera_r1.py",
+      "bytes": 10958,
+      "sha256": "c035f66188ca4f0e9b873861e5b8656223989fcd079cd8715e45273a3d177bbb"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\hearthjaw-camera-source\\tools\\blender\\hearthjaw_inspection_camera_r1.recipe.json",
+      "bytes": 5002,
+      "sha256": "4da06be276a72e9bfbb0ffe44c00576d556378000a619ed724de38dce3c4ea5c"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\hearthjaw-camera-source\\tools\\blender\\hearthjaw_inspection_camera_r1_test.py",
+      "bytes": 11106,
+      "sha256": "eeda9fc7a52f974e589d37cd703799b007d9704a11cff251ab475eaed03c27b3"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\hearthjaw-camera-source\\tools\\blender\\hearthjaw_inspection_camera_r1_blender.py",
+      "bytes": 30233,
+      "sha256": "6d5ff10c57516ed56a52edd804e0db7f5f6bd26a570d36ba3726b9e49b657c2f"
+    },
+    {
+      "path": "C:\\Users\\730ri\\Documents\\Codex\\2026-10-13\\task-3\\hearthjaw-camera-source\\tools\\blender\\hearthjaw_inspection_camera_r1_blender_test.py",
+      "bytes": 20275,
+      "sha256": "6be7933f7e2c4366b57666a3dc636537b191d2f869032dd71da573093c1ea9c6"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\realm_ecology_pack.py",
+      "bytes": 44629,
+      "sha256": "113d3d7f03ef56b87bcfd1d1c764633e1e3b47915dbd771d6e0d966bbcf980aa"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\ecology_families_sky.py",
+      "bytes": 29078,
+      "sha256": "3b637f5ae85b308e8637b9186f28b5d5d16ff651fe0dad3484e18b40796756a4"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\ecology_families_city.py",
+      "bytes": 31186,
+      "sha256": "b4d504447042c1217695a578103184fddb19a25f193a194739e12ab927d04889"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\ecology_families_wild.py",
+      "bytes": 29095,
+      "sha256": "d34f75e8f22f07e5605076c2023bfdfbd601410a2d0eb4566a36e85ecaae94c2"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\premium_transit_pack.py",
+      "bytes": 20609,
+      "sha256": "97214ea27d2a923d0343cd654e99ecba75ab53495d2dc9fa513b200a82d99f33"
+    },
+    {
+      "path": "C:\\Users\\730ri\\projects\\Daedalus2\\tools\\blender\\package_realm_ecology.py",
+      "bytes": 78246,
+      "sha256": "a4faa4dc6e7ad4912110051a44051392f0dec43eea367d8db40ef7489dd43c65"
+    }
+  ],
+  "stages": [
+    {
+      "index": 0,
+      "asset_id": "Prop_Eco_sky_hearthjaw_G0",
+      "object_name": "Display_Prop_Eco_sky_hearthjaw_G0",
+      "glb": {
+        "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\jobs\\sky_hearthjaw\\sky\\modules\\Prop_Eco_sky_hearthjaw_G0\\Prop_Eco_sky_hearthjaw_G0.glb",
+        "bytes": 24016,
+        "sha256": "2f6b3dbf28182c8ed95ead4354a9370c92571faded034ff9a5e2284f316d7448"
+      },
+      "roles": [
+        "M_Eco_sky_leaf",
+        "M_Eco_sky_flower",
+        "M_Eco_sky_root"
+      ],
+      "material_slots": [
+        "M_Eco_sky_leaf",
+        "M_Eco_sky_flower",
+        "M_Eco_sky_root"
+      ],
+      "primitive_materials": [
+        0,
+        1,
+        2
+      ],
+      "object_sha256": "8213d6325c4a53c4f0342f56c0eb1770fee51529625fe3e2f9182d83ef256270",
+      "material_sha256": [
+        "8e178cddee01d10c05fc7410474cc8dd7b6ed440fdf314f4677c65e0c910a395",
+        "17d730122f2ba652684228ed4706e773af4713a08a0d278fb2e552745a031249",
+        "dba1120fb655ffa24d6495e54f32b9216f509ea83cd37c84243a2161ae8175d1"
+      ]
+    },
+    {
+      "index": 1,
+      "asset_id": "Prop_Eco_sky_hearthjaw_G1",
+      "object_name": "Display_Prop_Eco_sky_hearthjaw_G1",
+      "glb": {
+        "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\jobs\\sky_hearthjaw\\sky\\modules\\Prop_Eco_sky_hearthjaw_G1\\Prop_Eco_sky_hearthjaw_G1.glb",
+        "bytes": 47040,
+        "sha256": "71d4f48171d7f3fb01c4e8b975c8c0eda40c0fafeb80afa78f9db4fdd7665b86"
+      },
+      "roles": [
+        "M_Eco_sky_stem",
+        "M_Eco_sky_leaf",
+        "M_Eco_sky_leafLight",
+        "M_Eco_sky_flower",
+        "M_Eco_sky_gill",
+        "M_Eco_sky_glow",
+        "M_Eco_sky_root"
+      ],
+      "material_slots": [
+        "M_Eco_sky_stem",
+        "M_Eco_sky_leaf.001",
+        "M_Eco_sky_leafLight",
+        "M_Eco_sky_flower.001",
+        "M_Eco_sky_gill",
+        "M_Eco_sky_glow",
+        "M_Eco_sky_root.001"
+      ],
+      "primitive_materials": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "object_sha256": "4d7af7e97dee83e8f3ac91890ab6fd70b25932449fe2b7803a3dc6763bbebd2b",
+      "material_sha256": [
+        "cf5b17d2c307ea9d7ae33eabedee0d6b586a368471699768d100b324062991ba",
+        "6d2917a3fb7a1f2b9ed6300860f90520a47adca7fb65b3162f3acbe74e1eb1c2",
+        "2deba29f012adbf79e983f19ae65238cf209c4dcf8d71f30273926bc24cef140",
+        "96b5c9c0e38cc691ccce411f5abdb6152f0064cb316f98f8afee239c5d762fe4",
+        "0874c3a11daf169fbe5b3476e2135e8e8a1c77237c6c9148f8025b22acc46d03",
+        "14d70efbeea51e4974a83a51a15b52fa230cbacd8ede4b55711a9d10269a518d",
+        "1bf56cbcf6ce89bde3a5ef21dd23c496e591596760ab735f4fedbff2c45d87d8"
+      ]
+    },
+    {
+      "index": 2,
+      "asset_id": "Prop_Eco_sky_hearthjaw_G2",
+      "object_name": "Display_Prop_Eco_sky_hearthjaw_G2",
+      "glb": {
+        "path": "C:\\Users\\730ri\\projects\\Daedalus2\\artifacts\\ecology\\sky-botanical-pilot-r1\\jobs\\sky_hearthjaw\\sky\\modules\\Prop_Eco_sky_hearthjaw_G2\\Prop_Eco_sky_hearthjaw_G2.glb",
+        "bytes": 72684,
+        "sha256": "f5bb8f426b37ed32cd5ee744841ee39d30c5622d5f23606e286018b144312c33"
+      },
+      "roles": [
+        "M_Eco_sky_stem",
+        "M_Eco_sky_leaf",
+        "M_Eco_sky_leafLight",
+        "M_Eco_sky_flower",
+        "M_Eco_sky_gill",
+        "M_Eco_sky_glow",
+        "M_Eco_sky_root"
+      ],
+      "material_slots": [
+        "M_Eco_sky_stem.001",
+        "M_Eco_sky_leaf.002",
+        "M_Eco_sky_leafLight.001",
+        "M_Eco_sky_flower.002",
+        "M_Eco_sky_gill.001",
+        "M_Eco_sky_glow.001",
+        "M_Eco_sky_root.002"
+      ],
+      "primitive_materials": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "object_sha256": "6a047362b2d7d55dd675d8b4868cfa1faa4ba018f40dab7c72c0821d813fcc48",
+      "material_sha256": [
+        "c589a5b887e49c18c545c3a7e25dcafa447644c6210071e34314d98f9e084473",
+        "de8ee897dbacafe3876ebaa21c8302512229f2ac1f2df20cac2c722214b0e331",
+        "b530bc94a47da838fc25aceaf81c9ba601e7ec5ed2175c196b75b08b7e634412",
+        "e6a346eacca89fbfd86552f5d82a72b0e37e98bfb672bb25c398c6a44986d301",
+        "b470820e84eccae3a0e65ec3c8f7c63255806c4a6cd405ccd3c29ad21f77b9c2",
+        "82cbfd88d527465f962a4b3b0f95e87eea6bab4448197015e569eded5ebd1fa7",
+        "e7dff82af9ce31db0f18cc3cd261d900b9a9660e4e30aacbc89b42d0631afe78"
+      ]
+    }
+  ],
+  "observed_baseline": "R2 closer framing is readable; personally inspected PNG remains pale. Source factors are already strong; no lighting, gamma or material-cause diagnosis.",
+  "palette_intent": "Single warm orange flower / green leaf / gold gill / teal Base Color variant; deeper root and bronze stem. Numeric pigment proposal only; glow emission retained.",
+  "preserve": "Every noncolor field, full node graph, BSDF weights/emission, stage slot count/order, geometry/transforms/UVs, nonplant objects, world/lights, camera, AgX/exposure/gamma and render settings. No canonical or shared material mutation.",
+  "future_application_boundary": "Separate unimplemented COPY-only admission must reobserve current ownership and bound records, isolate fresh-copy plant-owned slots, then prove color-only preservation. No output directory or assets are created.",
+  "actual": {
+    "author": null,
+    "application": null,
+    "export": null,
+    "render": null,
+    "native": null,
+    "quality": null
+  },
+  "render_authorized": false,
+  "runtime_ready": false
+}
