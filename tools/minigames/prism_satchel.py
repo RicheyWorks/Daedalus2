@@ -8,8 +8,8 @@ umbra). Spending shards is checked (never below zero).
 
 Warden Trials rank each game's best run with seals, in order: Ember (finish a game), Tide (win), Verdant (win on
 normal or hard), Gale (win on hard), Umbra (win on hard at the game's par) and Heartglass (win on hard at the
-game's heartglass par, or a perfect run where the game has one). Pars are placeholders until the Fair Par lane
-(pythagoras) calibrates them; changing a par changes the parity fixture.
+game's heartglass par, or a perfect run where the game has one). Pars come from the Fair Par table (pythagoras,
+FAIRPAR02); changing a par changes the parity fixture.
 
 All math is integer; nothing is random. The save is a short text line, strictly parsed. Python is the rules
 authority; DaedalusPrismSatchelCore.h must match it byte for byte (prism_satchel_parity.txt).
@@ -25,19 +25,21 @@ PERFECT_BONUS = 2
 SAVE_TAG = "PRISMSATCHEL1"
 SAVE_MAX = 4096  # characters; anything longer is not a satchel
 
-# game id -> (home hue, score divisor, umbra par, heartglass par or "perfect"); pars are hard-difficulty win scores.
+# game id -> (home hue, score divisor, umbra par, heartglass par or "perfect"). Pars are the Fair Par table
+# (engines/unreal/core-test/prism_fair_par_parity.txt, docs/mechanics/FAIRPAR02) on hard: umbra = silver, heartglass = gold;
+# where hard has no par (silver 0: the bot never wins) normal is used. test_prism_satchel pins this against the table.
 PAYOUTS = {
-    "shardring": ("tide", 60, 45, 200),
-    "lumenpath": ("ember", 50, 140, 190),
-    "wardens_accord": ("tide", 15, 55, 65),
+    "shardring": ("tide", 60, 188, 215),
+    "lumenpath": ("ember", 50, 140, 180),
+    "wardens_accord": ("tide", 15, 60, 65),
     "facetlock": ("gale", 40, 130, 160),
-    "prismvault": ("umbra", 40, 100, 100),
-    "shardfall": ("ember", 12, 32, 42),
-    "prismcairn": ("verdant", 35, 100, 105),
-    "spiritkite": ("gale", 8, 26, 32),
-    "shadewatch": ("umbra", 40, 140, 180),
-    "glimmerloom": ("tide", 50, 110, 140),
-    "glowmoss": ("verdant", 12, 45, "perfect"),
+    "prismvault": ("umbra", 40, 100, 200),
+    "shardfall": ("ember", 12, 34, 38),
+    "prismcairn": ("verdant", 35, 105, 105),
+    "spiritkite": ("gale", 8, 22, 25),
+    "shadewatch": ("umbra", 40, 148, 163),
+    "glimmerloom": ("tide", 50, 120, 135),
+    "glowmoss": ("verdant", 12, 29, "perfect"),
 }
 
 

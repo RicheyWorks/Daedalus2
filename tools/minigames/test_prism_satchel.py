@@ -21,6 +21,22 @@ class PayoutTable(unittest.TestCase):
             self.assertGreater(div, 0, game)
             self.assertTrue(heart == "perfect" or heart >= umbra > 0, game)
 
+    def test_pars_follow_the_fair_par_table(self):
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "engines", "unreal", "core-test",
+                            "prism_fair_par_parity.txt")
+        rows = {}
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                if line.startswith("game="):
+                    f = dict(kv.split("=", 1) for kv in line.split())
+                    rows[(f["game"], f["difficulty"])] = (int(f["silver"]), int(f["gold"]))
+        for game, (_, _, umbra, heart) in ps.PAYOUTS.items():
+            silver, gold = rows[(game, "hard")]
+            if silver == 0:
+                silver, gold = rows[(game, "normal")]
+            self.assertEqual(umbra, silver, game)
+            self.assertEqual(heart, "perfect" if game == "glowmoss" else gold, game)
+
     def test_every_hue_is_some_games_home(self):
         self.assertEqual({p[0] for p in ps.PAYOUTS.values()}, set(ps.HUES))
 
@@ -40,9 +56,9 @@ class Record(unittest.TestCase):
 
     def test_seal_ladder(self):
         self.assertEqual(ps.seal_for("shardfall", "normal", 0, True), SEAL["verdant"])
-        self.assertEqual(ps.seal_for("shardfall", "hard", 31, True), SEAL["gale"])
-        self.assertEqual(ps.seal_for("shardfall", "hard", 32, True), SEAL["umbra"])
-        self.assertEqual(ps.seal_for("shardfall", "hard", 42, True), SEAL["heartglass"])
+        self.assertEqual(ps.seal_for("shardfall", "hard", 33, True), SEAL["gale"])
+        self.assertEqual(ps.seal_for("shardfall", "hard", 34, True), SEAL["umbra"])
+        self.assertEqual(ps.seal_for("shardfall", "hard", 38, True), SEAL["heartglass"])
         self.assertEqual(ps.seal_for("glowmoss", "hard", 999, True), SEAL["umbra"])
         self.assertEqual(ps.seal_for("glowmoss", "hard", 0, True, True), SEAL["heartglass"])
 

@@ -38,22 +38,24 @@ Each game keeps its best seal, in order:
 
 ## Payout table
 
-Pars are placeholders taken from demo-run medians on hard. The Fair Par lane (pythagoras) will calibrate them. Changing a
+Pars come from the Fair Par table (pythagoras; `engines/unreal/core-test/prism_fair_par_parity.txt`, docs/mechanics/FAIRPAR02)
+on hard: umbra par = silver, heartglass par = gold. Prismcairn hard has no par (the bot never wins), so it uses normal.
+Glowmoss keeps Heartglass for a perfect run. `test_prism_satchel.py` pins the table against the Fair Par file. Changing a
 par or divisor changes the parity fixture, so regenerate it in the same PR and keep the C++ table in sync.
 
 | Game | Home hue | Score divisor | Umbra par | Heartglass par |
 | --- | --- | --- | --- | --- |
 | facetlock | gale | 40 | 130 | 160 |
-| glimmerloom | tide | 50 | 110 | 140 |
-| glowmoss | verdant | 12 | 45 | perfect |
-| lumenpath | ember | 50 | 140 | 190 |
-| prismcairn | verdant | 35 | 100 | 105 |
-| prismvault | umbra | 40 | 100 | 100 |
-| shadewatch | umbra | 40 | 140 | 180 |
-| shardfall | ember | 12 | 32 | 42 |
-| shardring | tide | 60 | 45 | 200 |
-| spiritkite | gale | 8 | 26 | 32 |
-| wardens_accord | tide | 15 | 55 | 65 |
+| glimmerloom | tide | 50 | 120 | 135 |
+| glowmoss | verdant | 12 | 29 | perfect |
+| lumenpath | ember | 50 | 140 | 180 |
+| prismcairn | verdant | 35 | 105 | 105 |
+| prismvault | umbra | 40 | 100 | 200 |
+| shadewatch | umbra | 40 | 148 | 163 |
+| shardfall | ember | 12 | 34 | 38 |
+| shardring | tide | 60 | 188 | 215 |
+| spiritkite | gale | 8 | 22 | 25 |
+| wardens_accord | tide | 15 | 60 | 65 |
 
 ## Save
 
