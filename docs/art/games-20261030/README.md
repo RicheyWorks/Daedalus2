@@ -107,3 +107,7 @@ Notes
 ## shuntline (unreal-team, READY 63759/63760; Blender items)
 
 17 assets: cabinet with signal-lamp marquee; 1.8 m goods van with destination tags 1-5 (coupling sockets both ends); 1 m track straight, switch and stop block; ground signal red and green; 2.15 m shift clock (HandPivot); Yardmaster with cap and lamp, static plus rig. Sheet: shuntline.png.
+
+## spirit_boons (hephaestus, READY 62885; items 62869)
+
+21 assets: boon charms for the 7 spirits (Cinder Wisp, Mere Sprite, Thornkin, Sky Lark Spirit, Hollow Moth, Glass Heron, Lantern Newt), levels 1 and 2; cabinet boon badge; pending-ACK tag; Moth challenge card; Moth try counter; Creature_SpiritBoons_HollowMoth_Rival and _Freed (emissive); moth flight dust VFX placeholder. Sheet: spirit_boons.png.

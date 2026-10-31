@@ -1,0 +1,5501 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_SpiritBoons_Charm_CinderWisp_L1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, CinderWisp, level 1",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_CinderWisp_L1_M0",
+     "colour": "charm CinderWisp",
+     "hex": "FF6A1A",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_CinderWisp_L1_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_CinderWisp_L1_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "FF6A1A",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_CinderWisp_L1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_CinderWisp_L1_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 124,
+    "lod1_triangles": 124,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_CinderWisp_L1": 124
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "6b39200096657352fb8e61935ecb819218b6a1b35c9a7f136692594466ff1c5d"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_CinderWisp_L2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, CinderWisp, level 2",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_CinderWisp_L2_M0",
+     "colour": "charm CinderWisp",
+     "hex": "FF6A1A",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_CinderWisp_L2_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_CinderWisp_L2_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "FF6A1A",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_CinderWisp_L2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_CinderWisp_L2_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_CinderWisp_L2": 168
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "af1e7da141ad47030f8bc88101c7e10e85c89f584e2ed8d6213c5ac04acf7a98"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_MereSprite_L1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, MereSprite, level 1",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_MereSprite_L1_M0",
+     "colour": "charm MereSprite",
+     "hex": "3AB0C8",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_MereSprite_L1_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_MereSprite_L1_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "3AB0C8",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_MereSprite_L1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_MereSprite_L1_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 124,
+    "lod1_triangles": 124,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_MereSprite_L1": 124
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2d663394baa97e36eaf3c80dba32f3dfccc84b7a949d5c6544ebb73304187f5f"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_MereSprite_L2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, MereSprite, level 2",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_MereSprite_L2_M0",
+     "colour": "charm MereSprite",
+     "hex": "3AB0C8",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_MereSprite_L2_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_MereSprite_L2_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "3AB0C8",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_MereSprite_L2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_MereSprite_L2_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_MereSprite_L2": 168
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "752af3f9b5a5bf1ce33d4503ac2214eaf231e886fef6c0a6a7862aa57ddbe847"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_Thornkin_L1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, Thornkin, level 1",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_Thornkin_L1_M0",
+     "colour": "charm Thornkin",
+     "hex": "5AA03A",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_Thornkin_L1_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_Thornkin_L1_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "5AA03A",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_Thornkin_L1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_Thornkin_L1_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 124,
+    "lod1_triangles": 124,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_Thornkin_L1": 124
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "7bee1055bfc49309662476d90532ec1c9e5cf2a0ff61b09deeee4c14fd3e3bbd"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_Thornkin_L2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, Thornkin, level 2",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_Thornkin_L2_M0",
+     "colour": "charm Thornkin",
+     "hex": "5AA03A",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_Thornkin_L2_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_Thornkin_L2_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "5AA03A",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_Thornkin_L2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_Thornkin_L2_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_Thornkin_L2": 168
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "8b7ae4af415021722b848f1e60cd1b35a2e78880cc6eb2bc701fc6555a986824"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, SkyLarkSpirit, level 1",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L1_M0",
+     "colour": "charm SkyLarkSpirit",
+     "hex": "A8C8E8",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L1_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L1_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "A8C8E8",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_SkyLarkSpirit_L1_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 124,
+    "lod1_triangles": 124,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_SkyLarkSpirit_L1": 124
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ac4b89853c96620fbd542592ea1b70b7af147c0f346a215464a5a9a37379493b"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, SkyLarkSpirit, level 2",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L2_M0",
+     "colour": "charm SkyLarkSpirit",
+     "hex": "A8C8E8",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L2_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L2_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "A8C8E8",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_SkyLarkSpirit_L2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_SkyLarkSpirit_L2_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_SkyLarkSpirit_L2": 168
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "74446dfdd8689500f8ef7965b73a9de2820fb59f8ed71ef7f01f4fcbf703553a"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_HollowMoth_L1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, HollowMoth, level 1",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_HollowMoth_L1_M0",
+     "colour": "charm HollowMoth",
+     "hex": "8A7AA8",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_HollowMoth_L1_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_HollowMoth_L1_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "8A7AA8",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_HollowMoth_L1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_HollowMoth_L1_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 124,
+    "lod1_triangles": 124,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_HollowMoth_L1": 124
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ff301f95616e36f7e9a7cbad7f57306379048e85c9ab4833fc9f92f35b29ba35"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_HollowMoth_L2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, HollowMoth, level 2",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_HollowMoth_L2_M0",
+     "colour": "charm HollowMoth",
+     "hex": "8A7AA8",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_HollowMoth_L2_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_HollowMoth_L2_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "8A7AA8",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_HollowMoth_L2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_HollowMoth_L2_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_HollowMoth_L2": 168
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "434a3da12929d220160ea542a12695c224d31767f6f16db96d9da861b3ebda9a"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_GlassHeron_L1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, GlassHeron, level 1",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_GlassHeron_L1_M0",
+     "colour": "charm GlassHeron",
+     "hex": "D0E8F0",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_GlassHeron_L1_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_GlassHeron_L1_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "D0E8F0",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_GlassHeron_L1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_GlassHeron_L1_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 124,
+    "lod1_triangles": 124,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_GlassHeron_L1": 124
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e068d915976fb5ca248e132f1487d60d126ade77d7436fbf26ef6839621272ff"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_GlassHeron_L2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, GlassHeron, level 2",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_GlassHeron_L2_M0",
+     "colour": "charm GlassHeron",
+     "hex": "D0E8F0",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_GlassHeron_L2_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_GlassHeron_L2_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "D0E8F0",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_GlassHeron_L2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_GlassHeron_L2_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_GlassHeron_L2": 168
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "506b30f6a12ce8f66793c0bbbce1780a34f49fa169790273c88cd13af4894eee"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_LanternNewt_L1",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, LanternNewt, level 1",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_LanternNewt_L1_M0",
+     "colour": "charm LanternNewt",
+     "hex": "FFB84A",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_LanternNewt_L1_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_LanternNewt_L1_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "FFB84A",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_LanternNewt_L1",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_LanternNewt_L1_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 124,
+    "lod1_triangles": 124,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_LanternNewt_L1": 124
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "31a173edef23ea5e11cd695b74dd93f3b46c71ddbeeb67ea0fd139474f602de5"
+  },
+  {
+   "asset": "Prop_SpiritBoons_Charm_LanternNewt_L2",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "70 mm boon charm, LanternNewt, level 2",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Hang",
+     "SOCKET_Icon"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_Charm_LanternNewt_L2_M0",
+     "colour": "charm LanternNewt",
+     "hex": "FFB84A",
+     "roughness": 0.35,
+     "metallic": 0.6,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_Charm_LanternNewt_L2_M1",
+     "colour": "silver loop",
+     "hex": "D0D4DC",
+     "roughness": 0.25,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_Charm_LanternNewt_L2_M2",
+     "colour": "boon gem (emissive)",
+     "hex": "FFB84A",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_Charm_LanternNewt_L2",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Disc",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.035,
+       "r2": 0.035,
+       "length": 0.008,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "segments": 14
+      },
+      {
+       "name": "Loop",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.004,
+       "centre": [
+        0,
+        0,
+        0.08
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Gem0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Gem1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0045,
+         0.002
+        ],
+        [
+         0.0045,
+         0.01875
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        0.012,
+        -0.006,
+        0.03
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Hang",
+     "location": [
+      0,
+      0,
+      0.085
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.085,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Icon",
+     "location": [
+      0,
+      -0.006,
+      0.04
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.04,
+      0.006
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_Charm_LanternNewt_L2_00",
+     "shape": "box",
+     "size": [
+      0.07,
+      0.012,
+      0.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_Charm_LanternNewt_L2": 168
+    },
+    "bounds_min": [
+     -0.035,
+     -0.0099,
+     0.0059
+    ],
+    "bounds_max": [
+     0.035,
+     0.004,
+     0.088
+    ],
+    "dimensions": [
+     0.07,
+     0.0139,
+     0.0821
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "41bb8d5aae7ddcfb9987be8d941906950d5e26f2e3cf56cd32b8baba08fdb0ab"
+  },
+  {
+   "asset": "Prop_SpiritBoons_BoonBadge",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.18 x 0.12 m UI panel: cabinet boon badge (active boon + delta)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Wall",
+     "SOCKET_UI_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_BoonBadge_M0",
+     "colour": "frame",
+     "hex": "B08A4A",
+     "roughness": 0.5,
+     "metallic": 0.7,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_BoonBadge_M1",
+     "colour": "UI face (runtime UI over this)",
+     "hex": "2A2440",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_BoonBadge_M2",
+     "colour": "bolts",
+     "hex": "B08A4A",
+     "roughness": 0.4,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_BoonBadge",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        0.18,
+        0.06,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Face",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.01,
+        0.04
+       ],
+       "centre": [
+        0,
+        -0.031,
+        0.06
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Bolt-1-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        -0.065,
+        -0.031,
+        0.025
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt-11",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        -0.065,
+        -0.031,
+        0.095
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt1-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        0.065,
+        -0.031,
+        0.025
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt11",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        0.065,
+        -0.031,
+        0.095
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Wall",
+     "location": [
+      0,
+      0.03,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -0.03
+     ]
+    },
+    {
+     "name": "SOCKET_UI_Face",
+     "location": [
+      0,
+      -0.037,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      0.037
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_BoonBadge_00",
+     "shape": "box",
+     "size": [
+      0.18,
+      0.06,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 136,
+    "lod1_triangles": 136,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_BoonBadge": 136
+    },
+    "bounds_min": [
+     -0.09,
+     -0.036,
+     0.0
+    ],
+    "bounds_max": [
+     0.09,
+     0.03,
+     0.12
+    ],
+    "dimensions": [
+     0.18,
+     0.066,
+     0.12
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "bbde97b0e6782f55ca1080b04b18d09080503ebc2e4e65893f0473d911f3b506"
+  },
+  {
+   "asset": "Prop_SpiritBoons_PendingAckTag",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.14 x 0.06 m UI panel: boon pending owner ACK",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Wall",
+     "SOCKET_UI_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_PendingAckTag_M0",
+     "colour": "frame",
+     "hex": "3A3A40",
+     "roughness": 0.5,
+     "metallic": 0.7,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_PendingAckTag_M1",
+     "colour": "UI face (runtime UI over this)",
+     "hex": "C8A040",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_PendingAckTag_M2",
+     "colour": "bolts",
+     "hex": "B08A4A",
+     "roughness": 0.4,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_PendingAckTag",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.06,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Face",
+       "shape": "box",
+       "size": [
+        0.06,
+        0.01,
+        -0.02
+       ],
+       "centre": [
+        0,
+        -0.031,
+        0.03
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Bolt-1-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        -0.045,
+        -0.031,
+        0.025
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt-11",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        -0.045,
+        -0.031,
+        0.035
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt1-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        0.045,
+        -0.031,
+        0.025
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt11",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        0.045,
+        -0.031,
+        0.035
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Wall",
+     "location": [
+      0,
+      0.03,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -0.03
+     ]
+    },
+    {
+     "name": "SOCKET_UI_Face",
+     "location": [
+      0,
+      -0.037,
+      0.03
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.03,
+      0.037
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_PendingAckTag_00",
+     "shape": "box",
+     "size": [
+      0.14,
+      0.06,
+      0.06
+     ],
+     "centre": [
+      0,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 136,
+    "lod1_triangles": 136,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_PendingAckTag": 136
+    },
+    "bounds_min": [
+     -0.07,
+     -0.036,
+     0.0
+    ],
+    "bounds_max": [
+     0.07,
+     0.03,
+     0.06
+    ],
+    "dimensions": [
+     0.14,
+     0.066,
+     0.06
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "0b2c51d5c7d7a352f19cc84215de477096c4b7f25441a951fc215cfd711d10b2"
+  },
+  {
+   "asset": "Prop_SpiritBoons_MothChallengeCard",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.30 x 0.42 m UI panel: Hollow Moth challenge: cabinet, mark, perfect-run flag",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Wall",
+     "SOCKET_UI_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_MothChallengeCard_M0",
+     "colour": "frame",
+     "hex": "6A5A8A",
+     "roughness": 0.5,
+     "metallic": 0.7,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_MothChallengeCard_M1",
+     "colour": "UI face (runtime UI over this)",
+     "hex": "1E1A2A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_MothChallengeCard_M2",
+     "colour": "bolts",
+     "hex": "B08A4A",
+     "roughness": 0.4,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_MothChallengeCard",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.06,
+        0.42
+       ],
+       "centre": [
+        0,
+        0,
+        0.21
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Face",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.34
+       ],
+       "centre": [
+        0,
+        -0.031,
+        0.21
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Bolt-1-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        -0.125,
+        -0.031,
+        0.025
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt-11",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        -0.125,
+        -0.031,
+        0.395
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt1-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        0.125,
+        -0.031,
+        0.025
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt11",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        0.125,
+        -0.031,
+        0.395
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Wall",
+     "location": [
+      0,
+      0.03,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -0.03
+     ]
+    },
+    {
+     "name": "SOCKET_UI_Face",
+     "location": [
+      0,
+      -0.037,
+      0.21
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.21,
+      0.037
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_MothChallengeCard_00",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.06,
+      0.42
+     ],
+     "centre": [
+      0,
+      0,
+      0.21
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 136,
+    "lod1_triangles": 136,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_MothChallengeCard": 136
+    },
+    "bounds_min": [
+     -0.15,
+     -0.036,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.03,
+     0.42
+    ],
+    "dimensions": [
+     0.3,
+     0.066,
+     0.42
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "917499201a8170416197388780bcfc70abdaf208bcba531df84765646e87e82b"
+  },
+  {
+   "asset": "Prop_SpiritBoons_MothTryCounter",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.20 x 0.10 m UI panel: moth tries left (3)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Wall",
+     "SOCKET_UI_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_MothTryCounter_M0",
+     "colour": "frame",
+     "hex": "6A5A8A",
+     "roughness": 0.5,
+     "metallic": 0.7,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_SpiritBoons_MothTryCounter_M1",
+     "colour": "UI face (runtime UI over this)",
+     "hex": "1E1A2A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_SpiritBoons_MothTryCounter_M2",
+     "colour": "bolts",
+     "hex": "B08A4A",
+     "roughness": 0.4,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_MothTryCounter",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        0.2,
+        0.06,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Face",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.01,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.031,
+        0.05
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Bolt-1-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        -0.075,
+        -0.031,
+        0.025
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt-11",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        -0.075,
+        -0.031,
+        0.075
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt1-1",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        0.075,
+        -0.031,
+        0.025
+       ],
+       "slot": 2,
+       "segments": 6
+      },
+      {
+       "name": "Bolt11",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.01,
+       "centre": [
+        0.075,
+        -0.031,
+        0.075
+       ],
+       "slot": 2,
+       "segments": 6
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Wall",
+     "location": [
+      0,
+      0.03,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -0.03
+     ]
+    },
+    {
+     "name": "SOCKET_UI_Face",
+     "location": [
+      0,
+      -0.037,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05,
+      0.037
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_MothTryCounter_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.06,
+      0.1
+     ],
+     "centre": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 136,
+    "lod1_triangles": 136,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_MothTryCounter": 136
+    },
+    "bounds_min": [
+     -0.1,
+     -0.036,
+     0.0
+    ],
+    "bounds_max": [
+     0.1,
+     0.03,
+     0.1
+    ],
+    "dimensions": [
+     0.2,
+     0.066,
+     0.1
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "33d74a1277ba815da3491cea00630cf3b446bbdab1a879abfe530560f45b14a4"
+  },
+  {
+   "asset": "Creature_SpiritBoons_HollowMoth_Rival",
+   "kind": "Creature",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.0 m Hollow Moth rival (secret, after 3 Heartglass seals)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Perch",
+     "SOCKET_Head"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Creature_SpiritBoons_HollowMoth_Rival_M0",
+     "colour": "moth body",
+     "hex": "3A3448",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Creature_SpiritBoons_HollowMoth_Rival_M1",
+     "colour": "wings",
+     "hex": "6A5A7A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Creature_SpiritBoons_HollowMoth_Rival_M2",
+     "colour": "antennae",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Creature_SpiritBoons_HollowMoth_Rival",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.07,
+       "r2": 0.042,
+       "length": 0.42,
+       "centre": [
+        0,
+        0,
+        0.42
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.07
+        ],
+        [
+         0.0495,
+         -0.0495
+        ],
+        [
+         0.07,
+         -0.0
+        ],
+        [
+         0.0495,
+         0.0495
+        ],
+        [
+         0,
+         0.07
+        ]
+       ],
+       "centre": [
+        0,
+        -0.238,
+        0.42
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Wing-10",
+       "shape": "box",
+       "size": [
+        0.448,
+        0.28,
+        0.014
+       ],
+       "centre": [
+        -0.252,
+        0.028,
+        0.448
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        10,
+        -10
+       ]
+      },
+      {
+       "name": "Wing-11",
+       "shape": "box",
+       "size": [
+        0.448,
+        0.21,
+        0.014
+       ],
+       "centre": [
+        -0.252,
+        0.238,
+        0.448
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        10,
+        -25
+       ]
+      },
+      {
+       "name": "Wing10",
+       "shape": "box",
+       "size": [
+        0.448,
+        0.28,
+        0.014
+       ],
+       "centre": [
+        0.252,
+        0.028,
+        0.448
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        -10,
+        10
+       ]
+      },
+      {
+       "name": "Wing11",
+       "shape": "box",
+       "size": [
+        0.448,
+        0.21,
+        0.014
+       ],
+       "centre": [
+        0.252,
+        0.238,
+        0.448
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        -10,
+        25
+       ]
+      },
+      {
+       "name": "Antenna-1",
+       "shape": "box",
+       "size": [
+        0.007,
+        0.168,
+        0.007
+       ],
+       "centre": [
+        -0.042,
+        -0.35,
+        0.504
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        25,
+        0,
+        -20
+       ]
+      },
+      {
+       "name": "Antenna1",
+       "shape": "box",
+       "size": [
+        0.007,
+        0.168,
+        0.007
+       ],
+       "centre": [
+        0.042,
+        -0.35,
+        0.504
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        25,
+        0,
+        20
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Perch",
+     "location": [
+      0,
+      0,
+      0.35
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.35,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      -0.28,
+      0.448
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.448,
+      0.28
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Creature_SpiritBoons_HollowMoth_Rival_00",
+     "shape": "box",
+     "size": [
+      0.98,
+      0.63,
+      0.56
+     ],
+     "centre": [
+      0,
+      0,
+      0.42
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 176,
+    "lod1_triangles": 176,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Creature_SpiritBoons_HollowMoth_Rival": 176
+    },
+    "bounds_min": [
+     -0.4974,
+     -0.4241,
+     0.35
+    ],
+    "bounds_max": [
+     0.4974,
+     0.4269,
+     0.5427
+    ],
+    "dimensions": [
+     0.9948,
+     0.851,
+     0.1927
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3f48925d628b213ef87b0e0075905d922c97b01bdb3dbd75ccb6922dda7c8367"
+  },
+  {
+   "asset": "Creature_SpiritBoons_HollowMoth_Freed",
+   "kind": "Creature",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.6 m freed Hollow Moth (joins the boon tally)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Perch",
+     "SOCKET_Head"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Creature_SpiritBoons_HollowMoth_Freed_M0",
+     "colour": "moth body",
+     "hex": "3A3448",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Creature_SpiritBoons_HollowMoth_Freed_M1",
+     "colour": "wings (emissive)",
+     "hex": "C8B8FF",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 2,
+     "name": "Creature_SpiritBoons_HollowMoth_Freed_M2",
+     "colour": "antennae",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Creature_SpiritBoons_HollowMoth_Freed",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Body",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.04,
+       "r2": 0.024,
+       "length": 0.24,
+       "centre": [
+        0,
+        0,
+        0.24
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.04
+        ],
+        [
+         0.02828,
+         -0.02828
+        ],
+        [
+         0.04,
+         -0.0
+        ],
+        [
+         0.02828,
+         0.02828
+        ],
+        [
+         0,
+         0.04
+        ]
+       ],
+       "centre": [
+        0,
+        -0.136,
+        0.24
+       ],
+       "slot": 0,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Wing-10",
+       "shape": "box",
+       "size": [
+        0.256,
+        0.16,
+        0.008
+       ],
+       "centre": [
+        -0.144,
+        0.016,
+        0.256
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        10,
+        -10
+       ]
+      },
+      {
+       "name": "Wing-11",
+       "shape": "box",
+       "size": [
+        0.256,
+        0.12,
+        0.008
+       ],
+       "centre": [
+        -0.144,
+        0.136,
+        0.256
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        10,
+        -25
+       ]
+      },
+      {
+       "name": "Wing10",
+       "shape": "box",
+       "size": [
+        0.256,
+        0.16,
+        0.008
+       ],
+       "centre": [
+        0.144,
+        0.016,
+        0.256
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        -10,
+        10
+       ]
+      },
+      {
+       "name": "Wing11",
+       "shape": "box",
+       "size": [
+        0.256,
+        0.12,
+        0.008
+       ],
+       "centre": [
+        0.144,
+        0.136,
+        0.256
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        -10,
+        25
+       ]
+      },
+      {
+       "name": "Antenna-1",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.096,
+        0.004
+       ],
+       "centre": [
+        -0.024,
+        -0.2,
+        0.288
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        25,
+        0,
+        -20
+       ]
+      },
+      {
+       "name": "Antenna1",
+       "shape": "box",
+       "size": [
+        0.004,
+        0.096,
+        0.004
+       ],
+       "centre": [
+        0.024,
+        -0.2,
+        0.288
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        25,
+        0,
+        20
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Perch",
+     "location": [
+      0,
+      0,
+      0.2
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.2,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      -0.16,
+      0.256
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.256,
+      0.16
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Creature_SpiritBoons_HollowMoth_Freed_00",
+     "shape": "box",
+     "size": [
+      0.56,
+      0.36,
+      0.32
+     ],
+     "centre": [
+      0,
+      0,
+      0.24
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 176,
+    "lod1_triangles": 176,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Creature_SpiritBoons_HollowMoth_Freed": 176
+    },
+    "bounds_min": [
+     -0.2842,
+     -0.2424,
+     0.2
+    ],
+    "bounds_max": [
+     0.2842,
+     0.2439,
+     0.3101
+    ],
+    "dimensions": [
+     0.5684,
+     0.4863,
+     0.1101
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "6ceeb343fe00231436c9f79088df5dbab13b773dd857cec4136a219bc5f83946"
+  },
+  {
+   "asset": "Prop_SpiritBoons_MothFlightFX",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "VFX placeholder: moth-dust trail (FLEW_OFF)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Origin"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_SpiritBoons_MothFlightFX_M0",
+     "colour": "moth dust (emissive, additive)",
+     "hex": "C8B8FF",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_SpiritBoons_MothFlightFX",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Dust0",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        -0.27135,
+        0.08944,
+        0.2621
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        46.5029,
+        8.0735,
+        0
+       ]
+      },
+      {
+       "name": "Dust1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        -0.2932,
+        -0.08878,
+        0.61541
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        1.959,
+        11.0399,
+        0
+       ]
+      },
+      {
+       "name": "Dust2",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        0.26005,
+        -0.08608,
+        0.06452
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        66.1352,
+        89.7194,
+        0
+       ]
+      },
+      {
+       "name": "Dust3",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        -0.08937,
+        0.01845,
+        0.69915
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        3.6684,
+        72.7189,
+        0
+       ]
+      },
+      {
+       "name": "Dust4",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        -0.01071,
+        -0.06504,
+        0.7608
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        86.1899,
+        17.0365,
+        0
+       ]
+      },
+      {
+       "name": "Dust5",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        0.19743,
+        0.02783,
+        0.53636
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        78.921,
+        78.8282,
+        0
+       ]
+      },
+      {
+       "name": "Dust6",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        -0.00322,
+        0.02403,
+        0.42483
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        85.7259,
+        53.3941,
+        0
+       ]
+      },
+      {
+       "name": "Dust7",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        -0.17802,
+        -0.08014,
+        0.77943
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        55.626,
+        59.4591,
+        0
+       ]
+      },
+      {
+       "name": "Dust8",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        -0.25948,
+        -0.00156,
+        0.6965
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        29.3795,
+        61.748,
+        0
+       ]
+      },
+      {
+       "name": "Dust9",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        0.14723,
+        0.02823,
+        0.19485
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        64.6355,
+        71.5187,
+        0
+       ]
+      },
+      {
+       "name": "Dust10",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        0.17466,
+        0.07481,
+        0.49042
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        31.1026,
+        68.023,
+        0
+       ]
+      },
+      {
+       "name": "Dust11",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        0.0285,
+        -0.0285,
+        0.35255
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        65.4062,
+        87.8443,
+        0
+       ]
+      },
+      {
+       "name": "Dust12",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        -0.12014,
+        0.03089,
+        0.40912
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        53.8175,
+        11.6771,
+        0
+       ]
+      },
+      {
+       "name": "Dust13",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.03,
+        0.003
+       ],
+       "centre": [
+        0.26272,
+        0.09792,
+        0.43543
+       ],
+       "slot": 0,
+       "bevel": false,
+       "rot": [
+        30.7885,
+        42.9404,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Origin",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_SpiritBoons_MothFlightFX_00",
+     "shape": "box",
+     "size": [
+      0.65,
+      0.22,
+      0.83
+     ],
+     "centre": [
+      0,
+      0,
+      0.4
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_SpiritBoons_MothFlightFX": 168
+    },
+    "bounds_min": [
+     -0.3083,
+     -0.1038,
+     0.0495
+    ],
+    "bounds_max": [
+     0.2798,
+     0.1116,
+     0.7991
+    ],
+    "dimensions": [
+     0.5881,
+     0.2154,
+     0.7496
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "062c18536ab92c1c796055adb1705e2adf591755e1d5b6da6cfd2f1545930024",
+   "off_centre_ok": "VFX placeholder"
+  }
+ ]
+}
