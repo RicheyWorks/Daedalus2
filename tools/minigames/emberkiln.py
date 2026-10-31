@@ -33,6 +33,8 @@ STONE, GLAZED, CRACKED = 0, -1, -2   # target codes beside the firing targets 2.
 TARGETS = (2, 3, 4)
 COAL_HEAT, SPREAD_HEAT = 2, 1
 GLAZE_SCORE, CRACK_SCORE, COAL_BONUS = 5, -3, 2
+MAX_USEFUL = COAL_HEAT + 4 * SPREAD_HEAT   # the most heat one coal can put into raw clay
+SEARCH_NODES = 20000                       # stoker search budget per pick (same in the C++ core)
 NEIGHBOURS = ((-1, 0), (0, 1), (1, 0), (0, -1))
 
 
@@ -166,23 +168,118 @@ class Game(pc.PrismGame):
         s = self.size()
         return sum(1 for r in range(s) for c in range(s) if self.preview(r, c)[1] == 0)
 
-    def demo_action(self):
-        """Stoker: the coal that cracks nothing and glazes most, then raises most heat; ties by row, column.
+    def outcome(self, r, c):
+        """(useful heat, glazes, cracks, new target rows, new heat rows) for a coal at r,c; None off the floor."""
+        if not self.inside(r, c):
+            return None
+        target = [row[:] for row in self.target]
+        heat = [row[:] for row in self.heat]
+        useful = glazes = cracks = 0
+        for (dr, dc), amount in (((0, 0), COAL_HEAT),) + tuple((d, SPREAD_HEAT) for d in NEIGHBOURS):
+            rr, cc = r + dr, c + dc
+            if not self.inside(rr, cc) or target[rr][cc] <= 0:
+                continue
+            heat[rr][cc] += amount
+            if heat[rr][cc] == target[rr][cc]:
+                target[rr][cc] = GLAZED
+                useful += amount
+                glazes += 1
+            elif heat[rr][cc] > target[rr][cc]:
+                target[rr][cc] = CRACKED
+                cracks += 1
+            else:
+                useful += amount
+        return useful, glazes, cracks, target, heat
 
-        If every placement cracks something, the one that cracks least and glazes most.
+    def demo_action(self):
+        """Stoker v2: a bounded exact search for a crack-free glazing of the whole floor; useful-heat greedy as fallback.
+
+        The search orders coals by the heat they put into raw clay (most first, ties by row then column), prunes
+        states whose remaining need exceeds what the coals left can deliver, memoises visited floors and stops after
+        SEARCH_NODES nodes. When it finds a line, its first coal is the pick; otherwise the greedy pick is used:
+        fewest cracks, most useful heat, most glazes, row, column. Deterministic and identical in the C++ core.
         """
+        found = self.search()
+        if found is not None:
+            return "%d,%d" % found
+        return "%d,%d" % self.greedy_pick()
+
+    def greedy_pick(self):
         s = self.size()
         best = None
         for r in range(s):
             for c in range(s):
-                p = self.preview(r, c)
-                if p is None:
-                    continue
-                glazes, cracks, raised = p
-                key = (cracks, -glazes, -raised, r, c)
+                useful, glazes, cracks, _, _ = self.outcome(r, c)
+                key = (cracks, -useful, -glazes, r, c)
                 if best is None or key < best[0]:
                     best = (key, (r, c))
-        return "%d,%d" % best[1] if best else "0,0"
+        return best[1]
+
+    def _moves(self, target, heat):
+        """Crack-free, useful coals from a flat (target, heat) floor, most useful heat first, then row, column."""
+        s = self.size()
+        out = []
+        for r in range(s):
+            for c in range(s):
+                nt, nh, useful, cracks = list(target), list(heat), 0, 0
+                for (dr, dc), amount in (((0, 0), COAL_HEAT),) + tuple((d, SPREAD_HEAT) for d in NEIGHBOURS):
+                    rr, cc = r + dr, c + dc
+                    if not self.inside(rr, cc):
+                        continue
+                    i = rr * s + cc
+                    if nt[i] <= 0:
+                        continue
+                    nh[i] += amount
+                    if nh[i] == nt[i]:
+                        nt[i] = GLAZED
+                        useful += amount
+                    elif nh[i] > nt[i]:
+                        cracks += 1
+                    else:
+                        useful += amount
+                if cracks or useful == 0:
+                    continue
+                out.append((-useful, r, c, tuple(nt), tuple(nh)))
+        out.sort()
+        return out
+
+    def search(self):
+        """First coal of a crack-free line that glazes every raw tile within the coals left, or None (bounded)."""
+        memo = {}
+        nodes = [0]
+
+        def rec(target, heat, coals):
+            key = (target, heat, coals)
+            if key in memo:
+                return memo[key]
+            nodes[0] += 1
+            if nodes[0] > SEARCH_NODES:
+                return None
+            if all(t <= 0 for t in target):
+                memo[key] = True
+                return True
+            need = sum(t - h for t, h in zip(target, heat) if t > 0)
+            if coals <= 0 or need > MAX_USEFUL * coals:
+                memo[key] = False
+                return False
+            for _, _, _, nt, nh in self._moves(target, heat):
+                sub = rec(nt, nh, coals - 1)
+                if sub:
+                    memo[key] = True
+                    return True
+                if nodes[0] > SEARCH_NODES:
+                    return None
+            memo[key] = False
+            return False
+
+        target = tuple(t for row in self.target for t in row)
+        heat = tuple(h for row in self.heat for h in row)
+        for _, r, c, nt, nh in self._moves(target, heat):
+            if rec(nt, nh, self.coals - 1):
+                return (r, c)
+            if nodes[0] > SEARCH_NODES:
+                return None
+        return None
 
     def render(self):
         s = self.size()

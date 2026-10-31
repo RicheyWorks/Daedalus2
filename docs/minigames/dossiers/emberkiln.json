@@ -27,7 +27,7 @@
     },
     {
       "name": "Stoker (demo)",
-      "text": "For every cell, preview the coal and rank by (cracks, -glazes, -raised); ties by row then column. So it never cracks when a safe coal exists, glazes as many tiles as it can, and otherwise warms the most raw tiles. Wins about 77 / 84 / 84 percent; coal budgets sit at the 70th percentile of what it needs, so a player who plans the spread wins more often, and a careless one cracks.",
+      "text": "Stoker v2 (cross-test fix): a bounded exact search for a crack-free glazing of the whole floor, coals ordered by the heat they put into raw clay, states pruned when the remaining need exceeds 6 per coal left, memoised, 20,000-node budget per pick; useful-heat greedy when the budget runs out. Wins about 99.7 / 100 / 100 percent; identical in the C++ core, so the Guide's pick is always a winning line when one is within reach.",
       "code": "Game.demo_action / Game::DemoAction"
     },
     {

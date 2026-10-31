@@ -12,9 +12,12 @@
 // coals lose. The whole floor is allocation-free: fixed MaxSize x MaxSize arrays, noexcept throughout.
 #pragma once
 #include "DaedalusPyRandomCore.h"
+#include <algorithm>
 #include <array>
 #include <cstdint>
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace daedalus { namespace emberkiln {
 
@@ -24,6 +27,8 @@ inline const char* Title() { return "Emberkiln"; }
 constexpr int MaxSize = 9;
 constexpr int CoalHeat = 2, SpreadHeat = 1;
 constexpr int GlazeScore = 5, CrackScore = -3, CoalBonus = 2;
+constexpr int MaxUseful = CoalHeat + 4 * SpreadHeat;   // the most heat one coal can put into raw clay
+constexpr int SearchNodes = 20000;                      // stoker search budget per pick (same in the Python rules)
 /** Tile codes beside the firing targets 2..4 (emberkiln.STONE / GLAZED / CRACKED). */
 constexpr int Stone = 0, Glazed = -1, Cracked = -2;
 constexpr int Targets[] = { 2, 3, 4 };
@@ -49,7 +54,7 @@ constexpr int NeighbourDR[] = { -1, 0, 1, 0 };
 constexpr int NeighbourDC[] = { 0, 1, 0, -1 };
 
 /** What one coal would do (Game.preview): tiles that glaze, tiles that crack, raw tiles merely warmed. */
-struct Outcome { int Glazes = 0, Cracks = 0, Raised = 0; };
+struct Outcome { int Glazes = 0, Cracks = 0, Raised = 0, Useful = 0; };   // Useful = heat that lands in raw clay (glazing or warming)
 
 struct Game
 {
@@ -128,9 +133,9 @@ struct Game
 		{
 			if (!Inside(Y) || !IsRaw(Y)) return;
 			const int After = HeatAt(Y) + Amount, T = TargetAt(Y);
-			if (After == T) ++Out.Glazes;
+			if (After == T) { ++Out.Glazes; Out.Useful += Amount; }
 			else if (After > T) ++Out.Cracks;
-			else ++Out.Raised;
+			else { ++Out.Raised; Out.Useful += Amount; }
 		};
 		Consider(X, CoalHeat);
 		for (int N = 0; N < 4; ++N) Consider({ X.R + NeighbourDR[N], X.C + NeighbourDC[N] }, SpreadHeat);
@@ -181,32 +186,122 @@ struct Game
 	}
 
 	/**
-	 * Game.demo_action, the stoker: the coal that cracks least, then glazes most, then warms most raw tiles;
-	 * ties by row, then column.
+	 * Game.demo_action, stoker v2: a bounded exact search for a crack-free glazing of the whole floor (coals ordered
+	 * by useful heat, then row, column; remaining-need bound; memo; SearchNodes budget), else the greedy pick:
+	 * fewest cracks, most useful heat, most glazes, row, column. Deterministic and identical to the Python rules.
 	 */
-	Cell DemoAction() const noexcept
+	Cell DemoAction() const
 	{
-		Cell Best{ 0, 0 }; int BestKey[3] = { 0, 0, 0 }; bool Found = false;
+		Cell Found;
+		if (Search(Found)) return Found;
+		return GreedyPick();
+	}
+
+	Cell GreedyPick() const noexcept
+	{
+		Cell Best{ 0, 0 }; int BestKey[3] = { 0, 0, 0 }; bool Have = false;
 		for (int R = 0; R < Size(); ++R)
 			for (int C = 0; C < Size(); ++C)
 			{
 				Outcome O;
 				Preview({ R, C }, O);
-				const int Key[3] = { O.Cracks, -O.Glazes, -O.Raised };
-				if (!Found || KeyBefore(Key, BestKey))
+				const int Key[3] = { O.Cracks, -O.Useful, -O.Glazes };
+				if (!Have || KeyBefore(Key, BestKey))
 				{
-					Found = true; Best = { R, C };
+					Have = true; Best = { R, C };
 					for (int K = 0; K < 3; ++K) BestKey[K] = Key[K];
 				}
 			}
 		return Best;
 	}
 
-	/** Lexicographic "strictly less" on the stoker's three-part key. */
+	/** Lexicographic "strictly less" on a three-part key. */
 	static bool KeyBefore(const int* A, const int* B) noexcept
 	{
 		for (int K = 0; K < 3; ++K) if (A[K] != B[K]) return A[K] < B[K];
 		return false;
+	}
+
+	/** A flat floor for the search: one byte per cell for the target code (+3 so it is non-negative) and one for heat. */
+	using Flat = std::string;
+	Flat Flatten() const
+	{
+		Flat F; F.reserve(static_cast<size_t>(Size() * Size() * 2));
+		for (int R = 0; R < Size(); ++R) for (int C = 0; C < Size(); ++C) F.push_back(static_cast<char>(TargetAt({ R, C }) + 3));
+		for (int R = 0; R < Size(); ++R) for (int C = 0; C < Size(); ++C) F.push_back(static_cast<char>(HeatAt({ R, C })));
+		return F;
+	}
+	struct Move { int Useful, R, C; Flat After; };
+	/** Game._moves: crack-free, useful coals from a flat floor, most useful heat first, then row, column. */
+	void Moves(const Flat& F, std::vector<Move>& Out) const
+	{
+		Out.clear();
+		const int S = Size(); const size_t Cells = static_cast<size_t>(S * S);
+		for (int R = 0; R < S; ++R)
+			for (int C = 0; C < S; ++C)
+			{
+				Flat After = F; int Useful = 0, Cracks = 0;
+				const auto Apply = [&](int RR, int CC, int Amount)
+				{
+					if (RR < 0 || RR >= S || CC < 0 || CC >= S) return;
+					const size_t I = static_cast<size_t>(RR * S + CC);
+					const int T = static_cast<int>(After[I]) - 3;
+					if (T <= 0) return;
+					const int H = static_cast<int>(After[Cells + I]) + Amount;
+					After[Cells + I] = static_cast<char>(H);
+					if (H == T) { After[I] = static_cast<char>(Glazed + 3); Useful += Amount; }
+					else if (H > T) ++Cracks;
+					else Useful += Amount;
+				};
+				Apply(R, C, CoalHeat);
+				for (int N = 0; N < 4; ++N) Apply(R + NeighbourDR[N], C + NeighbourDC[N], SpreadHeat);
+				if (Cracks || Useful == 0) continue;
+				Out.push_back({ Useful, R, C, After });
+			}
+		std::stable_sort(Out.begin(), Out.end(), [](const Move& A, const Move& B) { return A.Useful != B.Useful ? A.Useful > B.Useful : A.R != B.R ? A.R < B.R : A.C < B.C; });
+	}
+	/** Game.search: the first coal of a crack-free line that glazes every raw tile within the coals left. */
+	bool Search(Cell& First) const
+	{
+		std::unordered_map<Flat, bool> Memo;
+		int Nodes = 0;
+		std::vector<Move> Top;
+		Moves(Flatten(), Top);
+		for (const Move& M : Top)
+		{
+			const int Result = Recurse(M.After, Coals - 1, Memo, Nodes);
+			if (Result == 1) { First = { M.R, M.C }; return true; }
+			if (Nodes > SearchNodes) return false;
+		}
+		return false;
+	}
+	/** 1 = a winning line exists, 0 = none, -1 = the budget ran out (same bookkeeping as the Python rec). */
+	int Recurse(const Flat& F, int CoalsLeft, std::unordered_map<Flat, bool>& Memo, int& Nodes) const
+	{
+		Flat Key = F; Key.push_back(static_cast<char>(CoalsLeft));
+		const auto Found = Memo.find(Key);
+		if (Found != Memo.end()) return Found->second ? 1 : 0;
+		++Nodes;
+		if (Nodes > SearchNodes) return -1;
+		const size_t Cells = static_cast<size_t>(Size() * Size());
+		bool AnyRaw = false; int Need = 0;
+		for (size_t I = 0; I < Cells; ++I)
+		{
+			const int T = static_cast<int>(F[I]) - 3;
+			if (T > 0) { AnyRaw = true; Need += T - static_cast<int>(F[Cells + I]); }
+		}
+		if (!AnyRaw) { Memo[Key] = true; return 1; }
+		if (CoalsLeft <= 0 || Need > MaxUseful * CoalsLeft) { Memo[Key] = false; return 0; }
+		std::vector<Move> Next;
+		Moves(F, Next);
+		for (const Move& M : Next)
+		{
+			const int Sub = Recurse(M.After, CoalsLeft - 1, Memo, Nodes);
+			if (Sub == 1) { Memo[Key] = true; return 1; }
+			if (Nodes > SearchNodes) return -1;
+		}
+		Memo[Key] = false;
+		return 0;
 	}
 
 	/** Parity text: one digit per cell, rows joined by ';'. Glazed is 9, cracked 8, stone 0. */
