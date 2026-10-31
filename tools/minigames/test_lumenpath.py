@@ -56,6 +56,22 @@ class SaveChecks(unittest.TestCase):
         while not g.over:
             g.step(g.demo_action())
             self.assertEqual(lp.Game.from_state(g.to_state()).score, g.score)
+class HintRecovers(unittest.TestCase):
+    """Round 2 finding (prometheus 2): the hint clears a stray mirror before setting the solution."""
+
+    def test_hint_clears_a_wrong_mirror_and_still_wins(self):
+        won = 0
+        for seed in range(40):
+            g = lp.start(seed, "normal")
+            mine = {(r, c) for r, c, _ in g.solution}
+            n = len(g.grid)
+            stray = next((i, j) for i in range(n) for j in range(n) if g.grid[i][j] == "." and (i, j) not in mine)
+            g.step(stray)
+            self.assertEqual(g.demo_action(), stray)
+            while not g.over:
+                g.step(g.demo_action())
+            won += g.won
+        self.assertGreaterEqual(won, 36)
 
 
 if __name__ == "__main__":

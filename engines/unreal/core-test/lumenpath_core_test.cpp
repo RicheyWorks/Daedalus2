@@ -58,6 +58,21 @@ int UnitChecks()
 	if (G.Toggle(99, 0, Gained) != Game::Act::BadCell) { std::printf("FAIL out-of-range cell accepted\n"); ++Fails; }
 	const Cell K = G.Crystals.front();
 	if (G.Toggle(K.first, K.second, Gained) != Game::Act::BadCell) { std::printf("FAIL crystal cell accepted a mirror\n"); ++Fails; }
+	// Round 2 (prometheus 2): a stray mirror off the solution is the hint's first target, so the hint can undo it.
+	for (std::uint32_t Seed = 0; Seed < 20; ++Seed)
+	{
+		Game H; H.Start(Seed, "normal");
+		Cell Stray{ -1, -1 };
+		for (int I = 0; I < H.Size() && Stray.first < 0; ++I)
+			for (int J = 0; J < H.Size() && Stray.first < 0; ++J)
+			{
+				bool Mine = false;
+				for (const Mirror& M : H.Solution) Mine = Mine || (M.R == I && M.C == J);
+				if (!Mine && H.Grid[static_cast<size_t>(I)][static_cast<size_t>(J)] == '.') Stray = { I, J };
+			}
+		H.Toggle(Stray.first, Stray.second, Gained);
+		if (!H.Over && H.DemoAction() != Stray) { std::printf("FAIL seed %u: hint does not clear the stray mirror first\n", Seed); ++Fails; }
+	}
 	return Fails;
 }
 
