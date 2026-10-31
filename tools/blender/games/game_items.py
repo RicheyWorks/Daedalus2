@@ -1146,6 +1146,55 @@ def crafting_rewards_2():
     return out
 
 
+# ================================================================ fairpar plaque (pythagoras 60580; docs/mechanics/FAIRPAR01-fair-par.md)
+FAIRPAR_TIERS = [("Bronze", "B07A3A", 0.9, False), ("Silver", "D0D4DC", 1.0, False), ("Gold", "F2C740", 1.0, False), ("Perfect", "C8A6FF", 0.0, True)]
+
+
+@game("fairpar")
+def fairpar():
+    """Fair Par tier plaque for the marsh cabinets (first: TRANS01 / translocation_plan). NONE shows no plaque."""
+    out = []
+    for t, hx, met, glow in FAIRPAR_TIERS:
+        P = [K.box("Backing", (0.3, 0.02, 0.12), (0, 0, 0.06), 0), K.box("Plate", (0.27, 0.006, 0.095), (0, -0.013, 0.06), 1, bevel=False), K.box("Heron", (0.03, 0.004, 0.06), (-0.1, -0.017, 0.06), 2, bevel=False)]
+        P += [K.box("Pip%d" % k, (0.018, 0.004, 0.018), (0.02 + 0.03 * k, -0.017, 0.06), 2, bevel=False, rot=(0, 45, 0)) for k in range(FAIRPAR_TIERS.index((t, hx, met, glow)) + 1)]
+        out.append(simple("Prop_FairPar_Plaque_" + t, P, [("dark oak backing", "3A2A1E", 0.8), ("tier plate " + t.lower() + (" (emissive)" if glow else ""), hx, 0.3, met, glow), ("relief (heron + tier pips)", "1A1A22", 0.6)],
+                          [K.socket("CabinetMount", (0, 0.01, 0.06)), K.socket("Label", (0.05, -0.017, 0.06))], "0.3 x 0.12 m Fair Par tier plaque, %s (screw to the cabinet side under the marquee)" % t.upper(), (0.3, 0.02, 0.12), (0, 0, 0.06)))
+    return out
+
+
+# ================================================================ round 2 lane props (blender-team R2-12 / PLAN.md: Trophy Shelf, Shardling Mascot, kite tail chain)
+@game("lane_props_r2")
+def lane_props_r2():
+    out = []
+    # Trophy diorama shelf: 4 slots, one diorama per Fair Par tier
+    P = [K.box("Side%d" % s, (0.05, 0.35, 1.6), (s * 0.95, 0, 0.8), 0) for s in (-1, 1)] + [K.box("Shelf%d" % k, (1.9, 0.35, 0.04), (0, 0, 0.1 + 0.5 * k), 0) for k in range(4)] + [K.box("Back", (1.9, 0.02, 1.6), (0, 0.165, 0.8), 1, bevel=False)]
+    S = [K.socket("Floor", (0, 0, 0))] + [K.socket("Slot_%d_%d" % (k, j), (-0.475 + 0.95 * j, 0, 0.12 + 0.5 * k)) for k in range(3) for j in range(2)]
+    out.append(simple("Prop_Trophy_Shelf", P, [("shelf wood", WOOD, 0.75), ("back panel", "2A3A4A", 0.9)], S, "1.9 x 1.6 m trophy diorama shelf, 6 slots (Slot_row_col)", (1.95, 0.35, 1.6), (0, 0, 0.8)))
+    for t, hx, met, glow in FAIRPAR_TIERS:
+        i = FAIRPAR_TIERS.index((t, hx, met, glow))
+        P = [K.lathe("Base", [(0, 0), (0.17, 0), (0.15, 0.05), (0, 0.05)], (0, 0, 0), 0, 12), K.box("Nameplate", (0.12, 0.004, 0.025), (0, -0.155, 0.025), 1, bevel=False, rot=(-20, 0, 0))]
+        P += [crystal("Shard%d" % k, (0.09 * math.cos(k * 2.1), 0.09 * math.sin(k * 2.1), 0.05), 0.12 + 0.04 * i, 1, (0, 15 * (k - 1), 0)) for k in range(min(3, i + 1))]
+        P += [K.cyl("Pillar", "z", 0.03, 0.03, 0.1 + 0.04 * i, (0, 0, 0.1 + 0.02 * i), 2, 8), ball("Orb", (0, 0, 0.19 + 0.04 * i), 0.045, 1, 8)]
+        if t == "Perfect": P += [K.lathe("Halo", [(0.08, 0), (0.09, 0.005), (0.08, 0.01), (0.07, 0.005)], (0, 0, 0.27 + 0.04 * i), 1, 16)]
+        out.append(simple("Prop_Trophy_Diorama_" + t, P, [("diorama base", "2A2A30", 0.5, 0.6), (t.lower() + " finish" + (" (emissive)" if glow else ""), hx, 0.3, met, glow), ("pillar", "E8E4D8", 0.6)],
+                          [K.socket("Shelf", (0, 0, 0)), K.socket("Nameplate", (0, -0.16, 0.025))], "0.34 m Fair Par trophy diorama, %s tier" % t.upper(), (0.34, 0.34, 0.33 + 0.04 * i), (0, 0, (0.33 + 0.04 * i) / 2)))
+    # Shardling mascot: crystal creature with trinket sockets
+    P = [crystal("Body", (0, 0, 0.06), 0.3, 0), ball("Belly", (0, -0.02, 0.14), 0.07, 1, 8)] + [K.box("Eye%d" % s, (0.025, 0.01, 0.035), (s * 0.03, -0.055, 0.25), 2, bevel=False) for s in (-1, 1)]
+    P += [K.cyl("Leg%d" % s, "z", 0.018, 0.015, 0.06, (s * 0.04, 0, 0.03), 3, 6) for s in (-1, 1)] + [K.cyl("Arm%d" % s, "x", 0.012, 0.01, 0.07, (s * 0.085, 0, 0.17), 3, 6, rot=(0, s * 30, 0)) for s in (-1, 1)]
+    S = [K.socket("Floor", (0, 0, 0)), K.socket("Trinket_Hat", (0, 0, 0.36)), K.socket("Trinket_Neck", (0, -0.05, 0.2)), K.socket("Trinket_Back", (0, 0.05, 0.18)), K.socket("Trinket_HandR", (-0.12, 0, 0.13)), K.socket("Trinket_HandL", (0.12, 0, 0.13)), K.socket("Shoulder", (0, 0, 0))]
+    out.append(simple("Creature_Shardling_Mascot", P, [("prism crystal (emissive)", "8AD0FF", 0.15, 0.0, True), ("belly facet", "C8A6FF", 0.2), ("eyes", BLACK, 0.4), ("limbs", "5A6A8A", 0.5)], S,
+                      "0.36 m Shardling mascot (static), 5 Trinket_ sockets for satchel trinkets; rides a player shoulder via SOCKET_Shoulder", (0.26, 0.12, 0.36), (0, 0, 0.18)))
+    out[-1]["kind"] = "Creature"
+    # Kite tail chain: links chain head-to-tail via SOCKET_Next (physics chain in UE, one constraint per link)
+    for nm, hx, w in (("Link", "FF6B2E", 0.1), ("Bow", "338CFF", 0.22), ("End", "FFF299", 0.14)):
+        P = [K.cyl("Cord", "z", 0.004, 0.004, 0.3, (0, 0, -0.15), 0, 4)]
+        P += [K.box("BowA", (w / 2, 0.005, 0.07), (-w / 4, 0, -0.15), 1, bevel=False, rot=(0, 20, 0)), K.box("BowB", (w / 2, 0.005, 0.07), (w / 4, 0, -0.15), 1, bevel=False, rot=(0, -20, 0))] if nm != "End" else [K.lathe("Tassel", [(0, 0), (0.05, -0.02), (0.02, -0.14), (0, -0.14)], (0, 0, -0.16), 1, 8)]
+        S = [K.socket("Prev", (0, 0, 0))] + ([K.socket("Next", (0, 0, -0.3))] if nm != "End" else [])
+        out.append(simple("Prop_Spiritkite_Tail_" + nm, P, [("tail cord", ROPE, 0.9), ("ribbon " + nm.lower(), hx, 0.9)], S, "0.3 m kite tail %s: hang from the previous link's SOCKET_Next (origin = SOCKET_Prev at the top)" % nm.lower(), (max(w, 0.1), 0.02, 0.3), (0, 0, -0.15)))
+        out[-1]["off_centre_ok"] = "origin at the top attach point; the link hangs below"
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)
