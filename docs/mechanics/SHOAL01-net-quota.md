@@ -67,3 +67,17 @@ Every roll is a splitmix hash of (seed, year). `Settings.DEFAULT = (1000, 0.6, 0
   lesson as CENSUS01's lower-bound quota.
 - Assets: `Mob_Silverfin_Shoal` (instanced fish school, scalar Density), `Prop_Harbour_Ledger` (quota/share dial
   board) and a `Prop_Fishing_Skiff`, with reuse of the SHORE01 kelp and harbour kit (see UNREAL-QUEUE / BLENDER-ASKS).
+  board) and a `Prop_Fishing_Skiff`, with reuse of the SHORE01 kelp and harbour kit (see UNREAL-QUEUE / BLENDER-ASKS).
+
+## Native C++ core (G612)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshShoalHarvestCore.h` (namespace
+`daedalus::marsh`) is a header-only C++17 port of this core: `ShoalHarvest::Msy`, `MsyEffort` and the seeded `Run`
+under QUOTA or EFFORT (shoal and catch per year, final shoal, total and mean catch, outcome, WETLAND/BARE band), plus
+`ShoalHarvestSettings::Valid`. It uses the standard library only (no Unreal headers). The Java class stays the rules
+authority. `MarshCoresParityTest.shoalHarvest` writes 32 golden vectors (8 tunings x {MSY quota, MSY effort, half
+quota, take-all effort}) to `engines/unreal/core-test/marsh_shoal_harvest_parity.txt`, and
+`marsh_shoal_harvest_core_test.cpp` replays them exactly: the core uses only + - * / and min/max in Java's order, so
+every double (including a year-weighted checksum over all years) must match bit for bit. CI runs this in
+`.github/workflows/marsh-cores.yml`. See [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md). No Fair Par cabinet reads
+this core, so the par guard is unchanged.
