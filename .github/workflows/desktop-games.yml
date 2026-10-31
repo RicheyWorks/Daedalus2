@@ -1,10 +1,10 @@
 name: Desktop Python game ports
 on:
   pull_request:
-    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "docs/desktop-games-sources.json", "tools/minigames/**", "docs/minigames/**", "docs/REALMS.md", "data/minigames/**", ".github/workflows/desktop-games.yml"]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "docs/desktop-games-sources.json", "tools/minigames/**", "engines/unreal/core-test/fair_par_guard.txt", "docs/minigames/**", "docs/REALMS.md", "data/minigames/**", ".github/workflows/desktop-games.yml"]
   push:
     branches: [main]
-    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "tools/minigames/**", "docs/minigames/**", "docs/REALMS.md", "data/minigames/**", ".github/workflows/desktop-games.yml"]
+    paths: ["engines/unreal/DaedalusLink/Source/DaedalusLink/**Desktop*", "engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DesktopGames/**", "engines/unreal/core-test/desktop_games/**", "tools/minigames/**", "engines/unreal/core-test/fair_par_guard.txt", "docs/minigames/**", "docs/REALMS.md", "data/minigames/**", ".github/workflows/desktop-games.yml"]
 permissions:
   contents: read
 concurrency:
@@ -82,6 +82,8 @@ jobs:
         run: python tools/minigames/glowmoss_parity.py --check
       - name: Prismheart Fair Par fixture is current (engines/unreal/core-test/prism_fair_par_parity.txt)
         run: python tools/minigames/fair_par.py --check
+      - name: Fair Par regression guard (no par may move from the hand-kept engines/unreal/core-test/fair_par_guard.txt)
+        run: python tools/minigames/fair_par.py --guard
       - name: Prism Satchel parity fixture is current (engines/unreal/core-test/prism_satchel_parity.txt)
         run: python tools/minigames/prism_satchel_parity.py --check
       - name: Wardens' Accord parity fixture is current (engines/unreal/core-test/wardens_accord_parity.txt)

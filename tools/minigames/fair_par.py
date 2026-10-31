@@ -32,6 +32,7 @@ import wardens_accord  # noqa: E402
 
 FIXTURE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "engines", "unreal", "core-test",
                        "prism_fair_par_parity.txt")
+GUARD = os.path.join(os.path.dirname(FIXTURE), "fair_par_guard.txt")  # G607: hand-kept pars, never written here
 WIN_PERCENT = (40, 10)
 TIERS = ("NONE", "BRONZE", "SILVER", "GOLD")
 DIFFICULTIES = ("easy", "normal", "hard")
@@ -267,11 +268,47 @@ def lines(seeds=SEEDS):
     return out
 
 
+def read_guard(path=GUARD):
+    """{(game, difficulty): (bronze, silver, gold)} from the prism= rows of the hand-kept guard file."""
+    out = {}
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            if line.startswith("prism="):
+                d = dict(kv.split("=", 1) for kv in line.split())
+                out[(d["prism"], d["difficulty"])] = (int(d["bronze"]), int(d["silver"]), int(d["gold"]))
+    return out
+
+
+def guard_diffs(rows, guard):
+    """One message per par that moved, per missing row and per stale guard row; empty when the guard holds."""
+    msgs, seen = [], set()
+    for r in rows:
+        key = (r["game"], r["difficulty"])
+        seen.add(key)
+        if key not in guard:
+            msgs.append("%s %s: no guard row (add it to fair_par_guard.txt)" % key)
+            continue
+        for name, want, got in zip(TIERS[1:], guard[key], (r["bronze"], r["silver"], r["gold"])):
+            if want != got:
+                msgs.append("%s %s: %s par moved %d -> %d" % (key[0], key[1], name.lower(), want, got))
+    msgs += ["%s %s: guard row has no game" % k for k in sorted(set(guard) - seen)]
+    return msgs
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--guard", action="store_true", help="fail if any par moved from fair_par_guard.txt")
     a = ap.parse_args(argv)
+    if a.guard:
+        msgs = guard_diffs(table(), read_guard())
+        for m in msgs:
+            print("PAR GUARD: " + m)
+        if msgs:
+            print("A rule change moved these pars. If intended, edit engines/unreal/core-test/fair_par_guard.txt in "
+                  "the same PR and say why (docs/mechanics/FAIRPAR03-par-guard.md).")
+        return 1 if msgs else 0
     body = "\n".join(lines()) + "\n"
     if a.write:
         with open(FIXTURE, "w", encoding="utf-8", newline="\n") as f:
