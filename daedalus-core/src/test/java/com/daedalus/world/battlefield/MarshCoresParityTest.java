@@ -16,11 +16,11 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
- * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan), G591 (G504 ReedCeiling) and G593 (G507
- * ReedRelease); later ecology ports add a method here. Each engines/unreal/core-test/marsh_*_parity.txt is written
- * from this class (run with -Dmarsh.parity.write=true) and replayed by the matching marsh_*_core_test.cpp against its
- * DaedalusMarsh*Core.h. Doubles are printed with Double.toString (shortest round-trip form), so C++ can compare them
- * with a tolerance.
+ * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan), G591 (G504 ReedCeiling), G593 (G507
+ * ReedRelease) and G610 (G188 HawkDove); later ecology ports add a method here. Each
+ * engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
+ * replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
+ * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
  */
 class MarshCoresParityTest {
 
@@ -312,6 +312,42 @@ class MarshCoresParityTest {
     @Test
     void craneSpreadMatchesCpp() throws IOException {
         check("marsh_crane_spread_parity.txt", "G200 CraneSpread", MarshCoresParityTest::craneSpread);
+    }
+
+    static List<String> hawkDove() {
+        double[][] tunings = {{40, 4, 10, 10, 6, 60}, {60, 4, 10, 10, 10, 80}, {50, 6, 4, 10, 8, 70},
+            {30, 2, 12, 5, 5, 60}, {80, 5, 5, 8, 6, 55}, {40, 3, 0, 4, 4, 50}, {2, 4, 10, 10, 3, 20},
+            {25, 4, 10, 10, 6, 1}};
+        List<String> out = new ArrayList<>();
+        long seed = 1;
+        for (double[] t : tunings) {
+            HawkDove.Settings s = new HawkDove.Settings((int) t[0], t[1], t[2], t[3], (int) t[4], (int) t[5]);
+            int n = s.herd();
+            for (int start : new int[] {0, n / 4, n / 2, n}) {
+                HawkDove ridge = HawkDove.ridge(s, seed);
+                HawkDove.Report r = ridge.run(start);
+                StringBuilder b = new StringBuilder("herd=" + n + " value=" + s.value() + " cost=" + s.cost()
+                        + " base=" + s.base() + " rounds=" + s.rounds() + " seasons=" + s.seasons() + " seed=" + seed
+                        + " start=" + start + " ess=" + ridge.ess() + " payHawk=" + ridge.expectedPayoff(true, 0.3)
+                        + " payDove=" + ridge.expectedPayoff(false, 0.3) + " outcome=" + r.outcome() + " hawks="
+                        + r.hawks() + " late=" + r.lateHawks() + " band=" + r.band());
+                int[] picks = {1, (s.seasons() + 1) / 2, s.seasons()};
+                for (int k = 0; k < picks.length; k++) {
+                    HawkDove.Season q = r.seasons().get(picks[k] - 1);
+                    b.append(" s").append(k).append('=').append(q.index()).append(" h").append(k).append('=')
+                            .append(q.hawks()).append(" hp").append(k).append('=').append(q.hawkPayoff())
+                            .append(" dp").append(k).append('=').append(q.dovePayoff());
+                }
+                out.add(b.toString());
+                seed++;
+            }
+        }
+        return out;
+    }
+
+    @Test
+    void hawkDoveMatchesCpp() throws IOException {
+        check("marsh_hawk_dove_parity.txt", "G188 HawkDove", MarshCoresParityTest::hawkDove);
     }
 
     @Test
