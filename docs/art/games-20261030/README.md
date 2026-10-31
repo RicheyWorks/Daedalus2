@@ -79,3 +79,7 @@ Notes
 ## crafting_rewards batch 1 (hephaestus, READY 62349; items 61000)
 
 8 assets: 1.8 m smelter bench (crucible, mould, shards), ingots Glowsteel, Tidebrass, Galeiron, Umbral alloy and Heartglass (glowsteel and heartglass emissive), scrap bin with scrap, reforge anvil on a stump. The Forgemaster is Mob_Forge_Forgemaster from hofstadter_hammers (same NPC, not rebuilt). Sheet: crafting_rewards.png.
+
+## crafting_rewards batch 2 (hephaestus, READY 62349; items 61072)
+
+10 assets: 1.4 m stone quench trough, 1 m heat gauge with SOFT / TEMPERED / PERFECT / CRACKED bands (runtime heat column), 1.6 m commission board (3 rows), 40 mm Forge Mark token (icon source), hallmark stamp decal plates PLAIN, BRONZE, SILVER, GOLD and PRISM, and the finish tint material set (7 swatches, slot = seal index: none, ember, tide, verdant, gale, umbra, heartglass). Sheet: crafting_rewards_2.png.
