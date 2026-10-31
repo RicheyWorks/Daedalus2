@@ -13,17 +13,20 @@ namespace
 {
 	UStaticMesh* SparkMesh()
 	{
-		static UStaticMesh* M = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Sphere.Sphere"));
-		return M;
+		static TWeakObjectPtr<UStaticMesh> M; // weak: a raw static is invisible to GC and can dangle once no component references the asset
+		if (!M.IsValid()) { M = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Sphere.Sphere")); }
+		return M.Get();
 	}
 
 	/** The unlit emissive glow import_world_package.py makes (parameters Color, Intensity); the engine's lit basic
 	 * material when a project hasn't imported yet, so a shiny still shows its sparks. */
 	UMaterialInterface* SparkMaterial()
 	{
-		static UMaterialInterface* M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Daedalus/Art/Materials/M_DaedalusGlow.M_DaedalusGlow"));
-		static UMaterialInterface* Fallback = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
-		return M ? M : Fallback;
+		static TWeakObjectPtr<UMaterialInterface> M; // weak: a raw static is invisible to GC and can dangle once no component references the asset
+		if (!M.IsValid()) { M = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Daedalus/Art/Materials/M_DaedalusGlow.M_DaedalusGlow")); }
+		static TWeakObjectPtr<UMaterialInterface> Fallback; // weak: a raw static is invisible to GC and can dangle once no component references the asset
+		if (!Fallback.IsValid()) { Fallback = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial")); }
+		return M.IsValid() ? M.Get() : Fallback.Get();
 	}
 }
 
