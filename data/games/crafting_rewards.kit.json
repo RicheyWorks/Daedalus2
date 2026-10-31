@@ -1,0 +1,2179 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Forge_SmelterBench",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.8 m forge smelter bench with crucible, mould and shards",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Crucible",
+     "SOCKET_Mould",
+     "SOCKET_Player"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Forge_SmelterBench_M0",
+     "colour": "bench oak",
+     "hex": "5A4030",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Forge_SmelterBench_M1",
+     "colour": "iron crucible / mould",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Forge_SmelterBench_M2",
+     "colour": "molten (emissive)",
+     "hex": "FF6A1A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Forge_SmelterBench_M3",
+     "colour": "prism shards (emissive)",
+     "hex": "C8A6FF",
+     "roughness": 0.15,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Forge_SmelterBench",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Top",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.8,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.9
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg-1-1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.1,
+        0.85
+       ],
+       "centre": [
+        -0.8,
+        -0.3,
+        0.425
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg-11",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.1,
+        0.85
+       ],
+       "centre": [
+        -0.8,
+        0.3,
+        0.425
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg1-1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.1,
+        0.85
+       ],
+       "centre": [
+        0.8,
+        -0.3,
+        0.425
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg11",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.1,
+        0.85
+       ],
+       "centre": [
+        0.8,
+        0.3,
+        0.425
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Crucible",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.4,
+        0.35
+       ],
+       "centre": [
+        -0.4,
+        0.05,
+        1.125
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Melt",
+       "shape": "box",
+       "size": [
+        0.32,
+        0.32,
+        0.02
+       ],
+       "centre": [
+        -0.4,
+        0.05,
+        1.29
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Mould",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.2,
+        0.06
+       ],
+       "centre": [
+        0.4,
+        -0.15,
+        0.98
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Shard0",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0252,
+         0.0112
+        ],
+        [
+         0.0252,
+         0.105
+        ],
+        [
+         0,
+         0.14
+        ]
+       ],
+       "centre": [
+        0.3,
+        0.2,
+        0.95
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        -20,
+        0
+       ]
+      },
+      {
+       "name": "Shard1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0252,
+         0.0112
+        ],
+        [
+         0.0252,
+         0.105
+        ],
+        [
+         0,
+         0.14
+        ]
+       ],
+       "centre": [
+        0.42,
+        0.2,
+        0.95
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Shard2",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.0252,
+         0.0112
+        ],
+        [
+         0.0252,
+         0.105
+        ],
+        [
+         0,
+         0.14
+        ]
+       ],
+       "centre": [
+        0.54,
+        0.2,
+        0.95
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        20,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Crucible",
+     "location": [
+      -0.4,
+      0.05,
+      1.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.4,
+      1.3,
+      -0.05
+     ]
+    },
+    {
+     "name": "SOCKET_Mould",
+     "location": [
+      0.4,
+      -0.15,
+      1.01
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.4,
+      1.01,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Player",
+     "location": [
+      0,
+      -0.9,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.9
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Forge_SmelterBench_00",
+     "shape": "box",
+     "size": [
+      1.8,
+      0.8,
+      1.3
+     ],
+     "centre": [
+      0,
+      0,
+      0.65
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 452,
+    "lod1_triangles": 452,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Forge_SmelterBench": 452
+    },
+    "bounds_min": [
+     -0.9,
+     -0.4,
+     0.0
+    ],
+    "bounds_max": [
+     0.9,
+     0.4,
+     1.3
+    ],
+    "dimensions": [
+     1.8,
+     0.8,
+     1.3
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d4deb0788245f57d76577266d2b821cd18751171fba340e901a993fa0e7ae2df"
+  },
+  {
+   "asset": "Prop_Forge_Ingot_Glowsteel",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.2 m ingot: glowsteel",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Forge_Ingot_Glowsteel_M0",
+     "colour": "glowsteel (emissive)",
+     "hex": "FFB84A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Forge_Ingot_Glowsteel_M1",
+     "colour": "forge stamp",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Forge_Ingot_Glowsteel",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ingot",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.06,
+         0.05
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Stamp",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.004,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.042,
+        0.025
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Forge_Ingot_Glowsteel_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.1,
+      0.05
+     ],
+     "centre": [
+      0,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 40,
+    "lod1_triangles": 40,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Forge_Ingot_Glowsteel": 40
+    },
+    "bounds_min": [
+     -0.0495,
+     -0.0495,
+     0.0
+    ],
+    "bounds_max": [
+     0.0495,
+     0.0495,
+     0.05
+    ],
+    "dimensions": [
+     0.099,
+     0.099,
+     0.05
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2e710675e5f77a3f9aa3c54bfc678e8e2838333bde9d1e3c2fbc3deb183d2bfc"
+  },
+  {
+   "asset": "Prop_Forge_Ingot_Tidebrass",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.2 m ingot: tidebrass",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Forge_Ingot_Tidebrass_M0",
+     "colour": "tidebrass",
+     "hex": "3AB0A0",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Forge_Ingot_Tidebrass_M1",
+     "colour": "forge stamp",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Forge_Ingot_Tidebrass",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ingot",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.06,
+         0.05
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Stamp",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.004,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.042,
+        0.025
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Forge_Ingot_Tidebrass_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.1,
+      0.05
+     ],
+     "centre": [
+      0,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 40,
+    "lod1_triangles": 40,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Forge_Ingot_Tidebrass": 40
+    },
+    "bounds_min": [
+     -0.0495,
+     -0.0495,
+     0.0
+    ],
+    "bounds_max": [
+     0.0495,
+     0.0495,
+     0.05
+    ],
+    "dimensions": [
+     0.099,
+     0.099,
+     0.05
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "3e3a2a7b2e250f1ac8c77be2e8620a2296ed58fa5edb50e9ca873a37c5059266"
+  },
+  {
+   "asset": "Prop_Forge_Ingot_Galeiron",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.2 m ingot: galeiron",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Forge_Ingot_Galeiron_M0",
+     "colour": "galeiron",
+     "hex": "A8C0D0",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Forge_Ingot_Galeiron_M1",
+     "colour": "forge stamp",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Forge_Ingot_Galeiron",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ingot",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.06,
+         0.05
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Stamp",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.004,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.042,
+        0.025
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Forge_Ingot_Galeiron_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.1,
+      0.05
+     ],
+     "centre": [
+      0,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 40,
+    "lod1_triangles": 40,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Forge_Ingot_Galeiron": 40
+    },
+    "bounds_min": [
+     -0.0495,
+     -0.0495,
+     0.0
+    ],
+    "bounds_max": [
+     0.0495,
+     0.0495,
+     0.05
+    ],
+    "dimensions": [
+     0.099,
+     0.099,
+     0.05
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1323b559786c8d0688029c24af50a2b2c701d7cf9f2923872cbd3f6ae0d72cbb"
+  },
+  {
+   "asset": "Prop_Forge_Ingot_Umbral",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.2 m ingot: umbral alloy",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Forge_Ingot_Umbral_M0",
+     "colour": "umbral alloy",
+     "hex": "4A3A6A",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Forge_Ingot_Umbral_M1",
+     "colour": "forge stamp",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Forge_Ingot_Umbral",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ingot",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.06,
+         0.05
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Stamp",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.004,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.042,
+        0.025
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Forge_Ingot_Umbral_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.1,
+      0.05
+     ],
+     "centre": [
+      0,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 40,
+    "lod1_triangles": 40,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Forge_Ingot_Umbral": 40
+    },
+    "bounds_min": [
+     -0.0495,
+     -0.0495,
+     0.0
+    ],
+    "bounds_max": [
+     0.0495,
+     0.0495,
+     0.05
+    ],
+    "dimensions": [
+     0.099,
+     0.099,
+     0.05
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f9772d1b0eff1a7f7457be1b5845e473af6d67e2166046531990d73e70e7a855"
+  },
+  {
+   "asset": "Prop_Forge_Ingot_Heartglass",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.2 m ingot: heartglass",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Forge_Ingot_Heartglass_M0",
+     "colour": "heartglass (emissive)",
+     "hex": "FF6A9A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Forge_Ingot_Heartglass_M1",
+     "colour": "forge stamp",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Forge_Ingot_Heartglass",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Ingot",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.07,
+         0
+        ],
+        [
+         0.06,
+         0.05
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 4,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Stamp",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.004,
+        0.02
+       ],
+       "centre": [
+        0,
+        -0.042,
+        0.025
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        -20,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Forge_Ingot_Heartglass_00",
+     "shape": "box",
+     "size": [
+      0.2,
+      0.1,
+      0.05
+     ],
+     "centre": [
+      0,
+      0,
+      0.025
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 40,
+    "lod1_triangles": 40,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Forge_Ingot_Heartglass": 40
+    },
+    "bounds_min": [
+     -0.0495,
+     -0.0495,
+     0.0
+    ],
+    "bounds_max": [
+     0.0495,
+     0.0495,
+     0.05
+    ],
+    "dimensions": [
+     0.099,
+     0.099,
+     0.05
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "0ae17934256cadbb9992ba177e1b65ea887cb8455646cb3199afd25a3836115c"
+  },
+  {
+   "asset": "Prop_Forge_ScrapBin",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.7 m scrap bin (Salvage pool)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Top"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Forge_ScrapBin_M0",
+     "colour": "iron bin",
+     "hex": "3A3A40",
+     "roughness": 0.6,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Forge_ScrapBin_M1",
+     "colour": "bands",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Forge_ScrapBin_M2",
+     "colour": "scrap",
+     "hex": "8A6A4A",
+     "roughness": 0.7,
+     "metallic": 0.7,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Forge_ScrapBin",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bin",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.5,
+        0.6
+       ],
+       "centre": [
+        0,
+        0,
+        0.3
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Band0",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.52,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.1
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Band1",
+       "shape": "box",
+       "size": [
+        0.72,
+        0.52,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Scrap0",
+       "shape": "box",
+       "size": [
+        0.10339,
+        0.04953,
+        0.02
+       ],
+       "centre": [
+        -0.05262,
+        -0.16683,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        -0.6237,
+        -6.1425,
+        118.9172
+       ]
+      },
+      {
+       "name": "Scrap1",
+       "shape": "box",
+       "size": [
+        0.08265,
+        0.09874,
+        0.02
+       ],
+       "centre": [
+        0.04249,
+        0.15506,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        9.9063,
+        -5.3386,
+        16.0505
+       ]
+      },
+      {
+       "name": "Scrap2",
+       "shape": "box",
+       "size": [
+        0.14012,
+        0.03133,
+        0.02
+       ],
+       "centre": [
+        -0.06545,
+        0.10124,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        -27.0395,
+        -21.3466,
+        98.8115
+       ]
+      },
+      {
+       "name": "Scrap3",
+       "shape": "box",
+       "size": [
+        0.17571,
+        0.04195,
+        0.02
+       ],
+       "centre": [
+        -0.22225,
+        -0.09902,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        -29.8038,
+        0.4484,
+        96.8805
+       ]
+      },
+      {
+       "name": "Scrap4",
+       "shape": "box",
+       "size": [
+        0.14319,
+        0.03139,
+        0.02
+       ],
+       "centre": [
+        -0.10388,
+        0.15591,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        14.7578,
+        9.6584,
+        169.0414
+       ]
+      },
+      {
+       "name": "Scrap5",
+       "shape": "box",
+       "size": [
+        0.1334,
+        0.03795,
+        0.02
+       ],
+       "centre": [
+        -0.12204,
+        -0.09781,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        -11.6613,
+        28.4966,
+        1.4098
+       ]
+      },
+      {
+       "name": "Scrap6",
+       "shape": "box",
+       "size": [
+        0.11347,
+        0.04873,
+        0.02
+       ],
+       "centre": [
+        -0.00926,
+        -0.1425,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        6.5724,
+        -1.6819,
+        130.1974
+       ]
+      },
+      {
+       "name": "Scrap7",
+       "shape": "box",
+       "size": [
+        0.16333,
+        0.03091,
+        0.02
+       ],
+       "centre": [
+        -0.2486,
+        -0.06439,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        15.7795,
+        27.1828,
+        134.6893
+       ]
+      },
+      {
+       "name": "Scrap8",
+       "shape": "box",
+       "size": [
+        0.17745,
+        0.05295,
+        0.02
+       ],
+       "centre": [
+        -0.00985,
+        -0.15958,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        26.2684,
+        24.4346,
+        93.9789
+       ]
+      },
+      {
+       "name": "Scrap9",
+       "shape": "box",
+       "size": [
+        0.09342,
+        0.04563,
+        0.02
+       ],
+       "centre": [
+        -0.15749,
+        0.07909,
+        0.6
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        11.7615,
+        -14.6508,
+        7.7846
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Top",
+     "location": [
+      0,
+      0,
+      0.62
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.62,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Forge_ScrapBin_00",
+     "shape": "box",
+     "size": [
+      0.72,
+      0.52,
+      0.66
+     ],
+     "centre": [
+      0,
+      0,
+      0.33
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 188,
+    "lod1_triangles": 188,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Forge_ScrapBin": 188
+    },
+    "bounds_min": [
+     -0.36,
+     -0.26,
+     0.0
+    ],
+    "bounds_max": [
+     0.36,
+     0.26,
+     0.6555
+    ],
+    "dimensions": [
+     0.72,
+     0.52,
+     0.6555
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "687f4d2153577a2d6589c3962eebe939119528b30b479a7f81af935d02f603e0"
+  },
+  {
+   "asset": "Prop_Forge_ReforgeAnvil",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.8 m reforge anvil on a stump",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Strike",
+     "SOCKET_Player"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Forge_ReforgeAnvil_M0",
+     "colour": "oak stump",
+     "hex": "5A4030",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Forge_ReforgeAnvil_M1",
+     "colour": "anvil iron",
+     "hex": "2A2A30",
+     "roughness": 0.45,
+     "metallic": 0.85,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Forge_ReforgeAnvil_M2",
+     "colour": "reforge rune (emissive)",
+     "hex": "8AD0FF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Forge_ReforgeAnvil",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Stump",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.5,
+        0.5
+       ],
+       "centre": [
+        0,
+        0,
+        0.25
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Waist",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.18,
+        0.15
+       ],
+       "centre": [
+        0,
+        0,
+        0.575
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Face",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.22,
+        0.14
+       ],
+       "centre": [
+        0.05,
+        0,
+        0.72
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Horn",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0.3
+        ],
+        [
+         0.09,
+         0.0
+        ],
+        [
+         0,
+         0.0
+        ]
+       ],
+       "centre": [
+        -0.25,
+        0,
+        0.72
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ],
+       "rot": [
+        0,
+        -90,
+        0
+       ]
+      },
+      {
+       "name": "Rune",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.004,
+        0.05
+       ],
+       "centre": [
+        0.05,
+        -0.112,
+        0.72
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Strike",
+     "location": [
+      0.05,
+      0,
+      0.79
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.79,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Player",
+     "location": [
+      0,
+      -0.8,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.8
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Forge_ReforgeAnvil_00",
+     "shape": "box",
+     "size": [
+      0.85,
+      0.5,
+      0.79
+     ],
+     "centre": [
+      -0.05,
+      0,
+      0.395
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 188,
+    "lod1_triangles": 188,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Forge_ReforgeAnvil": 188
+    },
+    "bounds_min": [
+     -0.55,
+     -0.25,
+     0.0
+    ],
+    "bounds_max": [
+     0.35,
+     0.25,
+     0.81
+    ],
+    "dimensions": [
+     0.9,
+     0.5,
+     0.81
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "70bbd4706fdecf16ca3b831230a8de6ebd6e7c05a2a0405609cf9b6033bf573d",
+   "off_centre_ok": "anvil horn overhangs one side"
+  }
+ ]
+}
