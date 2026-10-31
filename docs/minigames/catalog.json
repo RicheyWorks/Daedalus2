@@ -1155,6 +1155,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "stonecourse",
+      "title": "Stonecourse",
+      "summary": "Lay the supply into a dry-stone wall with no overhang and lock every course. Left/Right or stick: move the marker; J/Space or pad A: set the stone; K or pad B: skip it",
+      "how_to_play": "HOW Set the next stone at a column (it lands on the lowest course that supports it fully) or skip it. Lock every course with no gaps before the supply runs out.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the wall yard",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"stonecourse\", Seed)",
+      "portable_tests": [
+        "desktop_stonecourse"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [

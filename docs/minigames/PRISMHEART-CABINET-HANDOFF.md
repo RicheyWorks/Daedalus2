@@ -6,7 +6,7 @@ merged or queued on `main`; nothing here touches the editor until the custodian'
 
 ## What is ready
 
-Seventeen Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each one regenerates its game from
+Eighteen Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Each one regenerates its game from
 `StartGame(id, seed)` alone with a CPython-compatible PRNG, so the Unreal cabinet, the Python rules
 (`tools/minigames/<id>.py`, prism-shard-dev's, the authority) and the web page all play the same seed identically.
 
@@ -28,9 +28,10 @@ Seventeen Prismheart minigames are native `ADaedalusDesktopArcade` cabinets. Eac
 | `sluicegate` | Sluicegate | `DesktopGames/DaedalusDesktopSluicegateCore.h` | #1130 |
 | `glowmoss` | Glowmoss Delve | `DesktopGames/DaedalusDesktopGlowmossCore.h` | #1148 (core by prism-shard-dev) |
 | `spiritkite` | Spiritkite Weave | `DesktopGames/DaedalusDesktopSpiritkiteCore.h` | #1152 (core by prism-shard-dev) |
-| `shardscale` | Shardscale | `DesktopGames/DaedalusDesktopShardscaleCore.h` | core + cabinet PR |
+| `shardscale` | Shardscale | `DesktopGames/DaedalusDesktopShardscaleCore.h` | #1164 |
+| `stonecourse` | Stonecourse | `DesktopGames/DaedalusDesktopStonecourseCore.h` | core + cabinet PR |
 
-All seventeen share `DesktopGames/DaedalusDesktopSaveText.h` (save text, input names, edge latches) after the #993
+All eighteen share `DesktopGames/DaedalusDesktopSaveText.h` (save text, input names, edge latches) after the #993
 beauty pass. Every cabinet has a save slot in `DaedalusDesktopSaveSlots.h` (`<id>.dgs`, manual style) and a
 fixture-replay test under `engines/unreal/core-test/desktop_games/`. Portable proof is in CI (desktop-games.yml,
 engines.yml); what it does **not** prove is the installed plugin, native class loading, PIE input, file I/O and
@@ -47,23 +48,24 @@ nothing for it.
 
 | id | offset (x, y, z) m | yaw | `StartGame` | option |
 |---|---|---|---|---|
-| `shardring` | 0, −15, 0 | 180 | `StartGame("shardring", 2061739538)` | 0 |
-| `lumenpath` | 0, −12.5, 0 | 180 | `StartGame("lumenpath", 2037330375)` | 0 |
-| `wardens_accord` | 0, −10, 0 | 180 | `StartGame("wardens_accord", 450290639)` | 0 |
-| `facetlock` | 0, −7.5, 0 | 180 | `StartGame("facetlock", 1644454135)` | 0 |
-| `prismcairn` | 0, −5, 0 | 180 | `StartGame("prismcairn", 557933909)` | 0 |
-| `prismvault` | 0, −2.5, 0 | 180 | `StartGame("prismvault", 895410454)` | 0 |
-| `shardfall` | 0, 0, 0 | 180 | `StartGame("shardfall", 242191464)` | 0 |
-| `shadewatch` | 0, 2.5, 0 | 180 | `StartGame("shadewatch", 1433643621)` | 0 |
-| `glimmerloom` | 0, 5, 0 | 180 | `StartGame("glimmerloom", 1712892515)` | 0 |
-| `prismchime` | 0, 7.5, 0 | 180 | `StartGame("prismchime", 113376713)` | 0 |
-| `fogbell` | 0, 10, 0 | 180 | `StartGame("fogbell", 404876817)` | 0 |
-| `roostcall` | 0, 12.5, 0 | 180 | `StartGame("roostcall", 1603034746)` | 0 |
-| `emberkiln` | 0, 15, 0 | 180 | `StartGame("emberkiln", 1270422306)` | 0 |
-| `sluicegate` | 0, 17.5, 0 | 180 | `StartGame("sluicegate", 427050219)` | 0 |
-| `glowmoss` | 0, 20, 0 | 180 | `StartGame("glowmoss", 1109382819)` | 0 |
-| `spiritkite` | 0, 22.5, 0 | 180 | `StartGame("spiritkite", 630418058)` | 0 |
-| `shardscale` | 0, 25, 0 | 180 | `StartGame("shardscale", 644661142)` | 0 |
+| `shardring` | 0, −16.25, 0 | 180 | `StartGame("shardring", 2061739538)` | 0 |
+| `lumenpath` | 0, −13.75, 0 | 180 | `StartGame("lumenpath", 2037330375)` | 0 |
+| `wardens_accord` | 0, −11.25, 0 | 180 | `StartGame("wardens_accord", 450290639)` | 0 |
+| `facetlock` | 0, −8.75, 0 | 180 | `StartGame("facetlock", 1644454135)` | 0 |
+| `prismcairn` | 0, −6.25, 0 | 180 | `StartGame("prismcairn", 557933909)` | 0 |
+| `prismvault` | 0, −3.75, 0 | 180 | `StartGame("prismvault", 895410454)` | 0 |
+| `shardfall` | 0, −1.25, 0 | 180 | `StartGame("shardfall", 242191464)` | 0 |
+| `shadewatch` | 0, 1.25, 0 | 180 | `StartGame("shadewatch", 1433643621)` | 0 |
+| `glimmerloom` | 0, 3.75, 0 | 180 | `StartGame("glimmerloom", 1712892515)` | 0 |
+| `prismchime` | 0, 6.25, 0 | 180 | `StartGame("prismchime", 113376713)` | 0 |
+| `fogbell` | 0, 8.75, 0 | 180 | `StartGame("fogbell", 404876817)` | 0 |
+| `roostcall` | 0, 11.25, 0 | 180 | `StartGame("roostcall", 1603034746)` | 0 |
+| `emberkiln` | 0, 13.75, 0 | 180 | `StartGame("emberkiln", 1270422306)` | 0 |
+| `sluicegate` | 0, 16.25, 0 | 180 | `StartGame("sluicegate", 427050219)` | 0 |
+| `glowmoss` | 0, 18.75, 0 | 180 | `StartGame("glowmoss", 1109382819)` | 0 |
+| `spiritkite` | 0, 21.25, 0 | 180 | `StartGame("spiritkite", 630418058)` | 0 |
+| `shardscale` | 0, 23.75, 0 | 180 | `StartGame("shardscale", 644661142)` | 0 |
+| `stonecourse` | 0, 26.25, 0 | 180 | `StartGame("stonecourse", 492740943)` | 0 |
 
 The same row also lists four canonical cabinets (`dungeon`, `riftwing`, `star_shooter`, `lanternwild` at
 y = −16.25 … −8.75) that already exist elsewhere; place them the same way or leave them for a later pass. Read the
@@ -104,6 +106,7 @@ reproduce them bit for bit in the portable tests. In PIE, open each cabinet and 
 | `glowmoss` | 10×4 shaft, surface start at column 2, light 11, best 44, target 35; row 0 gems 1412 (native == Python) |
 | `spiritkite` | 8 isles, wind 28, target 18, plan 6,7,2,5,4,3,1; lantern values 0,1,5,2,5,5,2,4 (native == Python) |
 | `shardscale` | 10 shards 1,5,2,1,5,1,2,4,5,7, cap 5, tolerance 1, bench 2, hand on the cart's first shard (native == Python) |
+| `stonecourse` | 8-wide wall, 5 courses, 26 stones 2,1,1,2,2,2,1,2,2,3,3,3,3,2,1,2,3,2,2,3,1,1,3,3,3,3, 3 skips, marker at column 0 (native == Python) |
 
 Then per cabinet, in this order, with the evidence named in parentheses:
 1. Keyboard and pad input both act (one key press and one pad press change the frame).
