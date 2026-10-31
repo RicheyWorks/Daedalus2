@@ -86,6 +86,10 @@ int UnitChecks()
 	Game G; std::string Res;
 	if (G.Start(0, "mythic")) { std::printf("FAIL unknown difficulty accepted\n"); ++Fails; }
 	if (!G.Start(1, "hard") || G.Cells.Unstable.size() != 12 || G.Col != 2 || G.Light != 10 || G.Target < 1 || G.Target > G.Best) { std::printf("FAIL hard start\n"); ++Fails; }
+	{
+		Game Fresh; Fresh.Start(5, "normal"); std::string R0;
+		if (Fresh.Step({ Kind::Climb, 0 }, R0) != Game::Act::DigFirst || Fresh.Over) { std::printf("FAIL climb before the first dig accepted\n"); ++Fails; }
+	}
 	if (G.Step({ Kind::Dig, G.Col + 2 }, Res) != Game::Act::OutOfReach) { std::printf("FAIL far dig accepted\n"); ++Fails; }
 	G.Row = G.Diff->Rows - 1;
 	if (G.Step({ Kind::Dig, G.Col }, Res) != Game::Act::Floor || G.Hint().K != Kind::Climb) { std::printf("FAIL dig through the floor\n"); ++Fails; }
@@ -108,7 +112,8 @@ int UnitChecks()
 	if (G.Step({ Kind::Dig, G.Col }, Res) != Game::Act::Ok || Res != "the lamp gutters out" || !G.Over || G.Won) { std::printf("FAIL guttering\n"); ++Fails; }
 	if (G.Step({ Kind::Climb, 0 }, Res) != Game::Act::GameOver) { std::printf("FAIL move after game over\n"); ++Fails; }
 	G.Start(4, "normal");
-	if (G.Step({ Kind::Climb, 0 }, Res) != Game::Act::Ok || Res != "climbed out with 0" || G.Won || G.Score != 0) { std::printf("FAIL empty climb\n"); ++Fails; }
+	if (G.Step({ Kind::Climb, 0 }, Res) != Game::Act::DigFirst || G.Over) { std::printf("FAIL empty climb is refused\n"); ++Fails; }
+	if (G.Step({ Kind::Dig, G.Col }, Res) != Game::Act::Ok || G.Step({ Kind::Climb, 0 }, Res) != Game::Act::Ok || Res.rfind("climbed out with ", 0) != 0 || G.Won || G.Score != G.Crystals) { std::printf("FAIL short climb\n"); ++Fails; }
 	G.Start(5, "easy");
 	while (!G.Over) G.Step(G.DemoAction(), Res);
 	if (!G.Won || !G.Perfect || G.Score != G.Crystals + G.Light + PerfectBonus) { std::printf("FAIL perfect delve bonus\n"); ++Fails; }

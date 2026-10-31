@@ -141,6 +141,11 @@ int main(int Argc, char** Argv) {
         SpiritkiteGame Home;
         Home.Reset(730);
         Press(Home, "land");
+        Check(!Home.CoreState().Over, "B before the first flight is refused (fly first)");
+        Press(Home, "fly");
+        Home.PickLaneTo(0);
+        Press(Home, "fly");
+        Press(Home, "land");
         Check(Home.CoreState().Over && !Home.CoreState().Won && Home.LastResultText().rfind("landed with", 0) == 0, "B lands at once on the anchor (short of the target)");
         Check(Home.HintLine().find("short of the target") != std::string::npos, "the hint names the short landing");
         SpiritkiteGame Away;
@@ -190,6 +195,9 @@ int main(int Argc, char** Argv) {
     Check(X.GetStatus().Over && !X.GetStatus().Won, "flying the first lane forever loses the kite");
     Check(!X.Fly() && !X.Land() && !X.Nudge(1) && X.ContrastMark() == "MARK WAIT" && X.ActionCue() == "CUE Retry", "a finished flight refuses lanes, landing and picks");
     Check(X.SourceKeyDown(8) && !X.GetStatus().Over && X.CoreState().At == 0, "R strings a new sky");
+    Press(X, "fly");
+    X.PickLaneTo(0);
+    Press(X, "fly");
     Press(X, "land");
     Check(X.SourceControllerButton(1) && !X.GetStatus().Over, "pad Start restarts a finished flight");
     Check(!X.SourceControllerButton(1), "pad Start is not consumed mid-game");

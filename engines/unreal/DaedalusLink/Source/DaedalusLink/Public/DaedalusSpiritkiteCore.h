@@ -137,7 +137,7 @@ struct Game
 	int Score = 0; bool Over = false, Won = false;
 	pyrandom::PyRandom Rng;
 
-	enum class Act { Ok, NotAnchor, NoLane, GameOver };
+	enum class Act { Ok, NotAnchor, NoLane, GameOver, FlyFirst };
 
 	int Isles() const { return static_cast<int>(Values.size()); }
 
@@ -216,6 +216,7 @@ struct Game
 		if (A.K == Kind::Land)
 		{
 			if (At != Anchor) return Act::NotAnchor;
+			if (Trail.size() == 1) return Act::FlyFirst;  // spiritkite.act: "fly first" (Round 2, disk-saver 1)
 			const bool Reached = Lanterns() >= Target;
 			Score = Lanterns() + (Reached ? Wind : 0);
 			Over = true; Won = Reached;

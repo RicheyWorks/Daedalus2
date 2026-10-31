@@ -77,6 +77,10 @@ int UnitChecks()
 	G.Lanes = Line; G.Values = Values; G.Restore(); G.Target = 3; G.Wind = 5;
 	if (G.Step({ Kind::Fly, 2 }, Res) != Game::Act::NoLane || G.Step({ Kind::Fly, 9 }, Res) != Game::Act::NoLane) { std::printf("FAIL missing lane accepted\n"); ++Fails; }
 	if (G.Step({ Kind::Fly, 1 }, Res) != Game::Act::Ok || Res != "+3" || G.Wind != 3 || G.Score != 3) { std::printf("FAIL fly\n"); ++Fails; }
+	{
+		Game Fresh; Fresh.Start(1, "normal"); std::string R0;
+		if (Fresh.Step({ Kind::Land, 0 }, R0) != Game::Act::FlyFirst || Fresh.Over) { std::printf("FAIL land before flying accepted\n"); ++Fails; }
+	}
 	if (G.Step({ Kind::Land, 0 }, Res) != Game::Act::NotAnchor) { std::printf("FAIL land away from anchor\n"); ++Fails; }
 	if (G.Step({ Kind::Fly, 0 }, Res) != Game::Act::Ok || Res != "+0") { std::printf("FAIL fly home\n"); ++Fails; }
 	if (G.Step({ Kind::Land, 0 }, Res) != Game::Act::Ok || !G.Over || !G.Won || G.Score != 3 + 1 || Res != "landed with 3") { std::printf("FAIL land\n"); ++Fails; }
