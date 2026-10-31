@@ -203,6 +203,9 @@ class WebUiPaintPinTest {
                     .contains("if (h > 6)")
                     .contains("g.fillStyle = halfMix(halfMix(corner, wall), wall);")
                     .contains("g.fillRect(x + 1, y + 5, span, 1)")
+                    .contains("if (h > 7)")
+                    .contains("g.fillStyle = halfMix(halfMix(halfMix(corner, wall), wall), wall);")
+                    .contains("g.fillRect(x + 1, y + 6, span, 1)")
                     .contains("paintWallHi(g, geom, r, col, mixHex(hi, COLORS.unseen, 0.28 * edge), wallInk)")
                     .contains("paintWallHi(g, geom, r, col, mixHex(lampHi, COLORS.unseen, 0.28 * edge), wallInk)");
         }
