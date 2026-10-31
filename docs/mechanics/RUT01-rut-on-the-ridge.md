@@ -63,3 +63,15 @@ Every roll is a splitmix hash of (seed, season, bull, round, salt). `Settings.DE
 - Assets: `Anim_Hornback_Clash` and `Anim_Hornback_Display` (fight and bluff clips on the staged `Mob_Lab_Hornback`),
   and `Prop_Ridge_Cairn` (the ridge-top marker), with reuse of the regrowth meadow kit (see UNREAL-QUEUE /
   BLENDER-ASKS).
+
+## Native C++ core (G610)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshHawkDoveCore.h` (namespace `daedalus::marsh`)
+is a header-only C++17 port of this core: `HawkDove::Ess`, `ExpectedPayoff` and the seeded `Run` (seasons, hawk
+share, late-season mean, outcome, BARE/MEADOW band), plus `HawkDoveSettings::Valid`. It uses the standard library
+only (no Unreal headers). The Java class stays the rules authority. `MarshCoresParityTest.hawkDove` writes 32 golden
+vectors (8 tunings x 4 starting hawk counts) to `engines/unreal/core-test/marsh_hawk_dove_parity.txt`, and
+`marsh_hawk_dove_core_test.cpp` replays them. Outcomes and hawk shares must match exactly; payoff means are compared
+to 1e-12 relative, and an absent strategy's payoff must be NaN on both sides. CI runs this in
+`.github/workflows/marsh-cores.yml`. See [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md). No Fair Par cabinet
+reads this core, so the par guard is unchanged.
