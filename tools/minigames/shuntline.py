@@ -131,7 +131,7 @@ class Game(pc.PrismGame):
               and isinstance(g.moves, int) and 0 <= g.moves <= cfg["moves"]
               and g.index <= cfg["moves"] - g.moves <= g.index + len(g.outbound)
               and g.won == (len(g.outbound) == cfg["cars"])
-              and (g.over or not (g.won or g.moves <= 0 or not g.actions())))
+              and g.over == (g.won or g.moves <= 0 or not g.actions()))
         if not ok:
             raise ValueError("shuntline save does not satisfy the rules")
         return g

@@ -130,6 +130,30 @@ class Rules(unittest.TestCase):
 
 
 
+class Saves(unittest.TestCase):
+    """Iteration 5: from_state refuses saves that break the rules."""
+    def bad(self, **fields):
+        st = gm.start(3).to_state()
+        st.update(fields)
+        with self.assertRaises(ValueError):
+            gm.Game.from_state(st)
+
+    def test_round_trip_still_works(self):
+        g = gm.start(3)
+        for _ in range(5):
+            g.step(g.demo_action())
+        self.assertEqual(gm.Game.from_state(g.to_state()).status(), g.status())
+
+    def test_bad_saves_are_refused(self):
+        g = gm.start(3)
+        self.bad(outbound=[1])                             # a carriage that never left the inbound track
+        self.bad(index=2, outbound=[g.train[1], g.train[0]] if g.train[1] > g.train[0] else [9, 1])   # order goes down / wrong tags
+        self.bad(index=1, sidings=[[g.train[0]], []], moves=g.cfg["moves"])   # a shunt that cost no move
+        self.bad(moves=99)
+        self.bad(won=True)
+        self.bad(over=True)
+
+
 class Balance(unittest.TestCase):
     """Iteration 3: pinned bands. The yardmaster makes up every train; send-out-when-you-can play stays near zero."""
     NAIVE_BANDS = {"easy": (0, 15), "normal": (0, 10), "hard": (0, 8)}
