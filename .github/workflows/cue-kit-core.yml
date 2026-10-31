@@ -6,6 +6,9 @@ on:
       - 'engines/unreal/**/DaedalusEarRuleCore.h'
       - 'engines/unreal/core-test/cue_kit_core_test.cpp'
       - 'engines/unreal/core-test/cue_kit_golden.txt'
+      - 'engines/unreal/core-test/cue_kit_golden_v2.txt'
+      - 'engines/unreal/**/DaedalusPyRandomCore.h'
+      - 'tools/minigames/cue_kit.py'
       - '.github/workflows/cue-kit-core.yml'
   push:
     branches: [main]
@@ -14,6 +17,9 @@ on:
       - 'engines/unreal/**/DaedalusEarRuleCore.h'
       - 'engines/unreal/core-test/cue_kit_core_test.cpp'
       - 'engines/unreal/core-test/cue_kit_golden.txt'
+      - 'engines/unreal/core-test/cue_kit_golden_v2.txt'
+      - 'engines/unreal/**/DaedalusPyRandomCore.h'
+      - 'tools/minigames/cue_kit.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -29,6 +35,10 @@ jobs:
         run: |
           ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Werror -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer engines/unreal/core-test/cue_kit_core_test.cpp -o "$RUNNER_TEMP/cue_kit"
           "$RUNNER_TEMP/cue_kit" engines/unreal/core-test/cue_kit_golden.txt
+      - name: V2 golden matches the Python rules reference
+        run: |
+          python3 tools/minigames/cue_kit.py --write "$RUNNER_TEMP/cue_kit_golden_v2.txt"
+          cmp "$RUNNER_TEMP/cue_kit_golden_v2.txt" engines/unreal/core-test/cue_kit_golden_v2.txt
   msvc:
     runs-on: windows-latest
     timeout-minutes: 15
