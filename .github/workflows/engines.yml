@@ -83,7 +83,7 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test && ./glowmoss_core_test glowmoss_parity.txt
       - name: Glowmoss Delve core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public glowmoss_core_test.cpp -o glowmoss_core_test_clang && ./glowmoss_core_test_clang glowmoss_parity.txt
-      - name: Prismheart Fair Par (DaedalusPrismFairParCore.h replays prism_fair_par_parity.txt through the Prismheart cores; G607 par guard: fair_par_guard.txt)
+      - name: Prismheart Fair Par (DaedalusPrismFairParCore.h replays prism_fair_par_parity.txt through the Prismheart cores; G607 par guard fair_par_guard.txt)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public prism_fair_par_core_test.cpp -o prism_fair_par_core_test && ./prism_fair_par_core_test prism_fair_par_parity.txt fair_par_guard.txt
       - name: Prismheart Fair Par, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prism_fair_par_core_test.cpp -o prism_fair_par_core_test_clang && ./prism_fair_par_core_test_clang prism_fair_par_parity.txt fair_par_guard.txt
