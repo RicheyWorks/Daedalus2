@@ -44,6 +44,30 @@ inline const Difficulty* FindDifficulty(const std::string& Name)
 	return nullptr;
 }
 
+constexpr int BoonDelta = 2;  // Spirit Boon (Mere Sprite): wind +2 per level (hephaestus R2-9; level 2 = 5+ summons)
+/** FindDifficulty with a Spirit Boon level 0..2 applied to Wind (PrismGame boon, floor 0). Nullptr on a bad level. */
+inline const Difficulty* FindDifficulty(const std::string& Name, int Boon)
+{
+	if (Boon == 0) return FindDifficulty(Name);
+	if (Boon < 0 || Boon > 2) return nullptr;
+	struct Boosted { Difficulty Table[2][DifficultyCount]; };
+	static const Boosted B = [] {
+		Boosted Out{};
+		for (int L = 0; L < 2; ++L)
+			for (int I = 0; I < DifficultyCount; ++I)
+			{
+				Out.Table[L][I] = Difficulties()[I];
+				Out.Table[L][I].Wind = std::max(0, Out.Table[L][I].Wind + BoonDelta * (L + 1));
+			}
+		return Out;
+	}();
+	for (int I = 0; I < DifficultyCount; ++I)
+	{
+		if (Name == B.Table[Boon - 1][I].Name) return &B.Table[Boon - 1][I];
+	}
+	return nullptr;
+}
+
 constexpr int Inf = 1000000000;
 constexpr int Anchor = 0;
 constexpr int GridSpan = 10;  // isle coordinates are randint(0, 9)
@@ -148,9 +172,9 @@ struct Game
 	int Isles() const { return static_cast<int>(Values.size()); }
 
 	/** PrismGame.start + Game.setup. False on an unknown difficulty. */
-	bool Start(std::uint32_t Seed, const std::string& DifficultyName)
+	bool Start(std::uint32_t Seed, const std::string& DifficultyName, int Boon = 0)
 	{
-		Diff = FindDifficulty(DifficultyName);
+		Diff = FindDifficulty(DifficultyName, Boon);
 		if (!Diff) return false;
 		Rng.Seed(std::string(GameId()) + ":" + std::to_string(Seed) + ":" + DifficultyName);
 		Score = 0; Over = Won = false;

@@ -41,6 +41,30 @@ inline const Difficulty* FindDifficulty(const std::string& Name)
 	return nullptr;
 }
 
+constexpr int BoonDelta = 1;  // Spirit Boon (Cinder Wisp): light +1 per level (hephaestus R2-9; level 2 = 5+ summons)
+/** FindDifficulty with a Spirit Boon level 0..2 applied to Light (PrismGame boon, floor 0). Nullptr on a bad level. */
+inline const Difficulty* FindDifficulty(const std::string& Name, int Boon)
+{
+	if (Boon == 0) return FindDifficulty(Name);
+	if (Boon < 0 || Boon > 2) return nullptr;
+	struct Boosted { Difficulty Table[2][DifficultyCount]; };
+	static const Boosted B = [] {
+		Boosted Out{};
+		for (int L = 0; L < 2; ++L)
+			for (int I = 0; I < DifficultyCount; ++I)
+			{
+				Out.Table[L][I] = Difficulties()[I];
+				Out.Table[L][I].Light = std::max(0, Out.Table[L][I].Light + BoonDelta * (L + 1));
+			}
+		return Out;
+	}();
+	for (int I = 0; I < DifficultyCount; ++I)
+	{
+		if (Name == B.Table[Boon - 1][I].Name) return &B.Table[Boon - 1][I];
+	}
+	return nullptr;
+}
+
 constexpr int Surface = -1;
 constexpr int Reach = 1;  // a dig lands at most this many columns left or right
 constexpr int MaxDark = 2;
@@ -193,9 +217,9 @@ struct Game
 	enum class Act { Ok, Floor, OutOfReach, GameOver, DigFirst };
 
 	/** PrismGame.start + Game.setup. False on an unknown difficulty. */
-	bool Start(std::uint32_t Seed, const std::string& DifficultyName)
+	bool Start(std::uint32_t Seed, const std::string& DifficultyName, int Boon = 0)
 	{
-		Diff = FindDifficulty(DifficultyName);
+		Diff = FindDifficulty(DifficultyName, Boon);
 		if (!Diff) return false;
 		Rng.Seed(std::string(GameId()) + ":" + std::to_string(Seed) + ":" + DifficultyName);
 		Score = 0; Over = Won = false;
