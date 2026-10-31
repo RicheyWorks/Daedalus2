@@ -22,10 +22,10 @@ SLACKS = [4, 3, 2]    # per difficulty; the grid and rust stream do not depend o
 INF = 10 ** 6
 PLAYING, WON, LOST = range(3)
 STATE = ["PLAYING", "WON", "LOST"]
-OK, BAD_CELL, OCCUPIED, GAME_OVER = range(4)
+OK, BAD_CELL, OCCUPIED, GAME_OVER, RUSTED = range(5)
 NO_LOSS, OUT_OF_LINKS, BLOCKED = range(3)
 REASON = ["NONE", "OUT_OF_LINKS", "BLOCKED"]
-STATUS = ["OK", "BAD_CELL", "OCCUPIED", "GAME_OVER"]
+STATUS = ["OK", "BAD_CELL", "OCCUPIED", "GAME_OVER", "RUSTED"]  # OCCUPIED = already a link
 
 def nbrs(i):
     r, c = divmod(i, N)
@@ -106,7 +106,9 @@ class Game:
             return GAME_OVER
         if not (0 <= i < CELLS):
             return BAD_CELL
-        if self.g[i] != EMPTY:
+        if self.g[i] == RUST:
+            return RUSTED
+        if self.g[i] == LINK:
             return OCCUPIED
         self.g[i] = LINK
         self.budget -= 1
@@ -177,7 +179,7 @@ def selftest(rounds=200):
             before = copy.deepcopy(g)
             for bad in (-1, CELLS, next((i for i in range(CELLS) if g.g[i] != EMPTY), -1)):
                 st = g.place(bad)
-                assert st in (BAD_CELL, OCCUPIED) and g.g == before.g and g.budget == before.budget
+                assert st in (BAD_CELL, OCCUPIED, RUSTED) and g.g == before.g and g.budget == before.budget
                 assert g.r.getstate() == before.r.getstate()
             c0 = crossing(g.g)
             for i in range(CELLS):
