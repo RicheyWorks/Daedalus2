@@ -55,3 +55,7 @@ Notes
 ## golf / Tidelinks Golf (disk-saver, READY 59158; TG01-TG13)
 
 26 assets: cabinet with dune and flag (TG01), tee box with hole plate (TG02), 10 m fairway plus a rough-edge variant (TG03), 20 m green with cup, pin and numbered flag (TG04), 20 m tidal pool band (TG05), OOB stake (TG06), 8 clubs (driver, 3-wood, 5/7/9-iron, wedge, chip, putter) each with a Grip socket, plus an 8-slot rack (TG07), 42.7 mm ball with Trail socket (TG08), 4 m wind sock (TG09), scorecard slate (TG10), verdict pennants masterful, steady and rough (TG11), caddies safe, bold and lay-up (TG12), Greenkeeper Talwyn (TG13). TG08: Prop_Sport_Golf_Ball appears on main only as a data entry in data/sports/throwables-v1.json, with no mesh found, so the ball is built here. All figures are static, rigs pending. Sheet: golf.png.
+
+## fogbell (unreal-team, READY 59509/59510; 'Blender items' sheet)
+
+17 assets: cabinet with bell and lantern marquee, 2.4 m punt with bow lantern, dock lantern lit and unlit, bell gantry, 1.2 m fog bell (origin at the swing pivot; hang at the gantry's BellHang socket), 9-mark tide gauge, and the Harbourmaster and Lantern-bearer, each static plus on the shared Prism segment rig (Rig_* movers, 6 poses). Sheet: fogbell.png.

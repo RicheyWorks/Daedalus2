@@ -804,7 +804,7 @@ POSES = {"Idle": {}, "Point": {"ArmR": (-85, 0, 0), "Head": (0, 0, -10)}, "Shrug
 
 def seg_of(p):
     n = p["name"]; x, y, z = p["centre"]
-    if n in ("Torso", "Pelvis", "Belt", "CoatTail"):
+    if n in ("Torso", "Pelvis", "Belt", "CoatTail", "Apron"):
         return None
     if n.startswith(("Head", "Eye")) or z > 1.55:
         return "Head"
@@ -909,6 +909,63 @@ def rigs_posepreview():
             a = "%s_Pose_%s" % (M["asset"], pose)
             out.append(A(a, parts, [], [K.socket("Floor", (0, 0, 0))], [], "pose preview " + pose))
             out[-1]["materials"] = [dict(m, name=m["name"].replace(M["asset"], a)) for m in M["materials"]]
+    return out
+
+
+
+# ================================================================ fogbell (unreal-team, READY 59509/59510; 'Blender items' sheet)
+@game("fogbell")
+def fogbell():
+    G = "Prop_Fogbell_"; out = []
+    top = [K.lathe("MarqBell", [(0, 0.14), (0.04, 0.13), (0.06, 0.06), (0.08, 0.0), (0, 0.0)], (-0.2, 0.05, 2.08), 5, 10), K.cyl("MarqLantern", "z", 0.04, 0.04, 0.1, (0.2, 0.05, 2.13), 6, 8)]
+    out.append(cabinet("Prop_Arcade_Cab_Fogbell", "3A4A58", "C8CCD4", "FFC870", top, [("bell bronze", "A07A3A", 0.35, 0.9), ("lantern (emissive)", "FFB84A", 0.2, 0.0, True)], "bell-and-lantern marquee"))
+    a = G + "Ferry"; P = [K.box("Hull", (1.0, 2.4, 0.3), (0, 0, 0.15), 0), K.box("Floor", (0.9, 2.3, 0.03), (0, 0, 0.2), 1, bevel=False)]
+    P += [K.box("Side%d" % s, (0.05, 2.4, 0.2), (s * 0.5, 0, 0.35), 0) for s in (-1, 1)] + [K.box("Seat", (0.9, 0.3, 0.05), (0, 0.3, 0.4), 1), K.cyl("BowPost", "z", 0.025, 0.025, 0.6, (0, -1.15, 0.6), 1, 6)]
+    P += [K.cyl("BowLantern", "z", 0.06, 0.06, 0.14, (0, -1.15, 0.97), 2, 8), K.cyl("BowLanternCap", "z", 0.02, 0.08, 0.05, (0, -1.15, 1.06), 3, 8)]
+    out.append(simple(a, P, [("punt timber", "6A5034", 0.85), ("boards", WOOD, 0.8), ("lantern glass (emissive)", "FFB84A", 0.2, 0.0, True), ("iron", "2A2A30", 0.5, 0.8)],
+                      [K.socket("Waterline", (0, 0, 0.12)), K.socket("Seat", (0, 0.3, 0.43)), K.socket("Pole", (0, 1.0, 0.25)), K.socket("BowLantern", (0, -1.15, 0.97))], "2.4 m flat-bottomed punt, one seat row, bow lantern", (1.05, 2.4, 1.09), (0, 0, 0.545)))
+    for st, glow in (("Lit", True), ("Unlit", False)):
+        a = G + "DockLantern_" + st; P = [K.box("Post", (0.15, 0.15, 1.8), (0, 0, 0.9), 0), K.box("Arm", (0.05, 0.4, 0.05), (0, -0.2, 1.7), 1), K.cyl("Glass", "z", 0.08, 0.08, 0.2, (0, -0.38, 1.5), 2, 8), K.lathe("Hood", [(0, 0.08), (0.13, 0.0), (0.02, 0.0)], (0, -0.38, 1.6), 1, 8)]
+        out.append(simple(a, P, [("dock post", "5A4030", 0.9), ("iron", "2A2A30", 0.5, 0.8), ("lantern glass" + (" (emissive amber)" if glow else ""), "FFB84A" if glow else "6A6050", 0.2, 0.0, glow)],
+                          [K.socket("Floor", (0, 0, 0)), K.socket("Light", (0, -0.38, 1.5))], "1.8 m dock post with hooded lantern, %s" % st.lower(), (0.26, 0.6, 1.8), (0, -0.2, 0.9)))
+    a = G + "BellGantry"; P = [K.box("Leg%d" % s, (0.15, 0.15, 2.4), (s * 0.9, 0, 1.2), 0) for s in (-1, 1)] + [K.box("Beam", (2.0, 0.18, 0.18), (0, 0, 2.45), 0)] + [K.box("Brace%d" % s, (0.6, 0.08, 0.08), (s * 0.68, 0, 2.15), 0, rot=(0, s * 40, 0)) for s in (-1, 1)]
+    out.append(simple(a, P, [("oak", "5A4030", 0.85)], [K.socket("Floor", (0, 0, 0)), K.socket("BellHang", (0, 0, 2.36))], "2.5 m bell gantry; hang Prop_Fogbell_Bell at BellHang", (2.0, 0.18, 2.54), (0, 0, 1.27)))
+    a = G + "Bell"; P = [K.lathe("Bell", [(0, 1.1), (0.18, 1.08), (0.3, 0.85), (0.38, 0.2), (0.5, 0.0), (0.44, 0.0), (0, 0.05)], (0, 0, -1.2), 0, 16), K.box("Yoke", (0.3, 0.12, 0.12), (0, 0, -0.05), 1), ball("Clapper", (0, 0, -1.05), 0.07, 1, 8)]
+    out.append(simple(a, P, [("bell bronze", "A07A3A", 0.35, 0.9), ("iron yoke / clapper", "2A2A30", 0.5, 0.8)], [K.socket("Swing", (0, 0, 0)), K.socket("Clapper", (0, 0, -1.05)), K.socket("Rope", (0.3, 0, -0.1))],
+                      "1.2 m quay fog bell; origin at Swing pivot (top), swings about X", (1.0, 1.0, 1.2), (0, 0, -0.6)))
+    out[-1]["off_centre_ok"] = "origin is the swing pivot at the top of the yoke (hangs from the gantry BellHang)"
+    a = G + "TideGauge"; P = [K.box("Post", (0.14, 0.1, 2.2), (0, 0, 1.1), 0)] + [K.box("Mark%d" % k, (0.1 if k % 2 else 0.14, 0.01, 0.025), (0.02, -0.055, 0.3 + 0.2 * k), 1, bevel=False) for k in range(9)]
+    out.append(simple(a, P, [("painted post", "E8E4D8", 0.7), ("marks", "1A1A22", 0.6)], [K.socket("Floor", (0, 0, 0))] + [K.socket("Mark_%d" % k, (0.02, -0.06, 0.3 + 0.2 * k)) for k in range(9)], "2.2 m tide gauge, 9 marks", (0.14, 0.11, 2.2), (0, 0, 1.1)))
+    hm = npc("Mob_Fogbell_Harbourmaster", "2A3A5A", "3A3A48", [K.cyl("HCap", "z", 0.14, 0.14, 0.06, (0, -0.01, 1.77), 4, 10), K.box("HBellRope", (0.02, 0.02, 0.3), (-0.37, 0, 0.75), 5, bevel=False)], [("cap navy", "1A2438", 0.8), ("rope", ROPE, 0.95)], "Harbourmaster")
+    lb = npc("Mob_Fogbell_LanternBearer", "6A5A3A", "3A3A2A", [K.cyl("LGlass", "z", 0.05, 0.05, 0.12, (-0.37, -0.02, 0.72), 4, 8), K.box("LHandle", (0.02, 0.02, 0.1), (-0.37, -0.02, 0.83), 5, bevel=False)], [("lantern (emissive)", "FFB84A", 0.2, 0.0, True), ("iron", "2A2A30", 0.5, 0.8)], "Lantern-bearer")
+    out += [hm, lb] + rig_npc(hm) + rig_npc(lb)
+    return out
+
+
+# ================================================================ emberkiln (unreal-team, READY 60203; 'Blender items' sheet)
+@game("emberkiln")
+def emberkiln():
+    G = "Prop_Emberkiln_"; out = []
+    top = [K.box("MarqMouth", (0.3, 0.03, 0.16), (0, -0.17, 1.93), 5, bevel=False), K.box("EmberStrip", (0.8, 0.02, 0.03), (0, -0.27, 0.92), 5, bevel=False), K.lathe("MarqDome", [(0, 0), (0.3, 0), (0.2, 0.12), (0, 0.18)], (0, 0.05, 2.06), 6, 10)]
+    out.append(cabinet("Prop_Arcade_Cab_Emberkiln", "5A2A1A", "C87A4A", "FF8A3A", top, [("ember glow (emissive)", "FF6A1A", 0.3, 0.0, True), ("brick", "8A4A30", 0.9)], "kiln-mouth marquee + ember glow strip"))
+    a = G + "Kiln"; P = [K.lathe("Dome", [(0, 2.5), (0.5, 2.4), (1.0, 2.0), (1.25, 1.2), (1.3, 0.0), (0, 0.0)], (0, 0, 0), 0, 14), K.box("DoorFrame", (0.9, 0.2, 1.0), (0, -1.25, 0.55), 1),
+                         K.box("Mouth", (0.7, 0.05, 0.8), (0, -1.36, 0.5), 2, bevel=False), K.box("TileFloor", (0.6, 0.05, 0.02), (0, -1.33, 0.12), 3, bevel=False), K.cyl("Flue", "z", 0.15, 0.12, 0.5, (0, 0, 2.6), 0, 8),
+                         K.box("Door", (0.75, 0.06, 0.85), (0.45, -1.55, 0.5), 1, rot=(0, 0, 70))]
+    out.append(simple(a, P, [("brick", "8A4A30", 0.9), ("iron door / frame", "2A2A30", 0.5, 0.8), ("kiln interior (emissive)", "FF6A1A", 0.4, 0.0, True), ("fired tiles", "C87A4A", 0.8)],
+                      [K.socket("Floor", (0, 0, 0)), K.socket("Mouth", (0, -1.4, 0.5)), K.socket("Flue", (0, 0, 2.85))], "2.85 m brick beehive kiln, open firing door, emissive interior", (2.6, 2.9, 2.85), (0, -0.15, 1.425)))
+    for st, hx in (("Plain", "2A2A30"), ("Scorched", "6A2A1A")):
+        a = G + "Tongs_" + st; P = [K.box("ArmA", (0.03, 0.03, 1.1), (-0.025, 0, 0.6), 0, rot=(0, 2, 0)), K.box("ArmB", (0.03, 0.03, 1.1), (0.025, 0, 0.6), 0, rot=(0, -2, 0)), K.cyl("Rivet", "y", 0.02, 0.02, 0.07, (0, 0, 0.9), 0, 8),
+                                    K.box("JawA", (0.05, 0.04, 0.1), (-0.04, 0, 0.05), 1), K.box("JawB", (0.05, 0.04, 0.1), (0.04, 0, 0.05), 1)]
+        out.append(simple(a, P, [("iron", "2A2A30", 0.5, 0.8), ("tip" + (" (scorched)" if st == "Scorched" else ""), hx, 0.6, 0.6)], [K.socket("Grip", (0, 0, 1.1)), K.socket("Jaw", (0, 0, 0.03))], "1.2 m kiln tongs, %s tip" % st.lower(), (0.13, 0.04, 1.15), (0, 0, 0.575)))
+    a = G + "CoalHopper"; P = [K.box("Bin", (0.9, 0.7, 0.6), (0, 0, 0.5), 0), K.box("Chute", (0.4, 0.4, 0.06), (0, -0.45, 0.25), 0, rot=(-35, 0, 0))] + [K.box("Leg%d%d" % (sx, sy), (0.08, 0.08, 0.3), (sx * 0.38, sy * 0.28, 0.15), 0) for sx in (-1, 1) for sy in (-1, 1)]
+    R = K.rng(SEED, a); P += [rock("Coal%d" % k, (R.uniform(-0.35, 0.35), R.uniform(-0.25, 0.25), 0.82), 0.06, 1, k) for k in range(10)]
+    out.append(simple(a, P, [("wood", "6A5034", 0.85), ("charcoal", "1A1A1E", 0.95)], [K.socket("Floor", (0, 0, 0)), K.socket("Chute", (0, -0.6, 0.15)), K.socket("CoalTop", (0, 0, 0.82))], "1 m wooden charcoal hopper", (0.9, 0.9, 0.88), (0, -0.05, 0.44)))
+    for st, hx in (("Raw", "B8865A"), ("Glazed", "2AA8A0"), ("Cracked", "8A6A4A")):
+        a = G + "Tile_" + st; P = [K.box("Tile", (0.4, 0.4, 0.03), (0, 0, 0.015), 0)]
+        if st == "Cracked": P += [K.box("Crack%d" % k, (0.3, 0.008, 0.004), (0.02 * k, 0.03 * k, 0.031), 1, bevel=False, rot=(0, 0, 35 - 50 * k)) for k in range(2)]
+        out.append(simple(a, P, [("clay " + st.lower(), hx, 0.35 if st == "Glazed" else 0.9), ("crack", "1A1A1A", 0.9)], [K.socket("Base", (0, 0, 0))], "0.4 m clay tile, %s" % st.lower(), (0.4, 0.4, 0.035), (0, 0, 0.0175)))
+    st_ = npc("Mob_Emberkiln_Stoker", "6A4A2A", "3A2A1A", [K.box("Apron", (0.38, 0.03, 0.7), (0, -0.15, 1.0), 4), K.box("STongs", (0.03, 0.03, 0.9), (-0.37, -0.03, 0.6), 5)], [("leather apron", "5A3A22", 0.8), ("iron tongs", "2A2A30", 0.5, 0.8)], "Master stoker, leather apron")
+    out += [st_] + rig_npc(st_)
     return out
 
 

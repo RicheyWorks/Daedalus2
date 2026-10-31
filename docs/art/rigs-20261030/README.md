@@ -1,6 +1,6 @@
 ﻿# Rigs 2026-10-30 (blender-team; Buffffff 59376 and the Prismheart fun-round lane)
 
-Headless segment rigs for the figures that were flagged "rig pending". Built by `tools/blender/games/game_items.py --game rigs_20261030` using the kit frame/mover split (`K.split_movers`). Everything is staged NOT READY in `bot-team/staging/games-20261030/rigs_20261030` (35 assets).
+Headless segment rigs for the figures that were flagged "rig pending". Built by `tools/blender/games/game_items.py --game rigs_20261030` using the kit frame/mover split (`K.split_movers`). Everything is staged NOT READY in `bot-team/staging/games-20261030/rigs_20261030` (60 assets, 35 with socket sidecars).
 
 **Shared Prism humanoid rig.** The root frame (torso and pelvis) carries `SOCKET_Hinge_<Part>` at each pivot. The movers are Head, ArmR, ArmL, LegR, LegL and a held prop (HeldR or HeldL), for 8 parts with the root.
 - Rigged: Navigator Wren, Prismchime Warden, Railwright Ossian, Dockmother Imelda, Greenkeeper Talwyn, and the Safe, Bold and LayUp caddies.

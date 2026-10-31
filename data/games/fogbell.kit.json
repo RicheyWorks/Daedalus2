@@ -1,0 +1,7665 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_Fogbell",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: bell-and-lantern marquee",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_Fogbell_M0",
+     "colour": "cabinet body",
+     "hex": "3A4A58",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_Fogbell_M1",
+     "colour": "trim / side art panel",
+     "hex": "C8CCD4",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_Fogbell_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "FFC870",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_Fogbell_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_Fogbell_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_Fogbell_M5",
+     "colour": "bell bronze",
+     "hex": "A07A3A",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 6,
+     "name": "Prop_Arcade_Cab_Fogbell_M6",
+     "colour": "lantern (emissive)",
+     "hex": "FFB84A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_Fogbell",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "MarqBell",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0.14
+        ],
+        [
+         0.04,
+         0.13
+        ],
+        [
+         0.06,
+         0.06
+        ],
+        [
+         0.08,
+         0.0
+        ],
+        [
+         0,
+         0.0
+        ]
+       ],
+       "centre": [
+        -0.2,
+        0.05,
+        2.08
+       ],
+       "slot": 5,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "MarqLantern",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.04,
+       "r2": 0.04,
+       "length": 0.1,
+       "centre": [
+        0.2,
+        0.05,
+        2.13
+       ],
+       "slot": 6,
+       "segments": 8
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_Fogbell_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 608,
+    "lod1_triangles": 608,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_Fogbell": 608
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.22
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.22
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d7ab5b55f9ed73debe3e8c88915533341b9cdbb16c900edf76c793bf75532066"
+  },
+  {
+   "asset": "Prop_Fogbell_Ferry",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.4 m flat-bottomed punt, one seat row, bow lantern",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Waterline",
+     "SOCKET_Seat",
+     "SOCKET_Pole",
+     "SOCKET_BowLantern"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Fogbell_Ferry_M0",
+     "colour": "punt timber",
+     "hex": "6A5034",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Fogbell_Ferry_M1",
+     "colour": "boards",
+     "hex": "8A6440",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Fogbell_Ferry_M2",
+     "colour": "lantern glass (emissive)",
+     "hex": "FFB84A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Fogbell_Ferry_M3",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Fogbell_Ferry",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Hull",
+       "shape": "box",
+       "size": [
+        1.0,
+        2.4,
+        0.3
+       ],
+       "centre": [
+        0,
+        0,
+        0.15
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Floor",
+       "shape": "box",
+       "size": [
+        0.9,
+        2.3,
+        0.03
+       ],
+       "centre": [
+        0,
+        0,
+        0.2
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Side-1",
+       "shape": "box",
+       "size": [
+        0.05,
+        2.4,
+        0.2
+       ],
+       "centre": [
+        -0.5,
+        0,
+        0.35
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Side1",
+       "shape": "box",
+       "size": [
+        0.05,
+        2.4,
+        0.2
+       ],
+       "centre": [
+        0.5,
+        0,
+        0.35
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Seat",
+       "shape": "box",
+       "size": [
+        0.9,
+        0.3,
+        0.05
+       ],
+       "centre": [
+        0,
+        0.3,
+        0.4
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "BowPost",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.6,
+       "centre": [
+        0,
+        -1.15,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 6
+      },
+      {
+       "name": "BowLantern",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.06,
+       "length": 0.14,
+       "centre": [
+        0,
+        -1.15,
+        0.97
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "BowLanternCap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02,
+       "r2": 0.08,
+       "length": 0.05,
+       "centre": [
+        0,
+        -1.15,
+        1.06
+       ],
+       "slot": 3,
+       "segments": 8
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Waterline",
+     "location": [
+      0,
+      0,
+      0.12
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.12,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Seat",
+     "location": [
+      0,
+      0.3,
+      0.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.43,
+      -0.3
+     ]
+    },
+    {
+     "name": "SOCKET_Pole",
+     "location": [
+      0,
+      1.0,
+      0.25
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.25,
+      -1.0
+     ]
+    },
+    {
+     "name": "SOCKET_BowLantern",
+     "location": [
+      0,
+      -1.15,
+      0.97
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.97,
+      1.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Fogbell_Ferry_00",
+     "shape": "box",
+     "size": [
+      1.05,
+      2.4,
+      1.09
+     ],
+     "centre": [
+      0,
+      0,
+      0.545
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Fogbell_Ferry": 264
+    },
+    "bounds_min": [
+     -0.525,
+     -1.23,
+     0.0
+    ],
+    "bounds_max": [
+     0.525,
+     1.2,
+     1.085
+    ],
+    "dimensions": [
+     1.05,
+     2.43,
+     1.085
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4b6eddfb8f4621901ae0ffe8466482e707c6e48e0e3fe1ad3a991aab93a027df"
+  },
+  {
+   "asset": "Prop_Fogbell_DockLantern_Lit",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.8 m dock post with hooded lantern, lit",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Light"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Fogbell_DockLantern_Lit_M0",
+     "colour": "dock post",
+     "hex": "5A4030",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Fogbell_DockLantern_Lit_M1",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Fogbell_DockLantern_Lit_M2",
+     "colour": "lantern glass (emissive amber)",
+     "hex": "FFB84A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Fogbell_DockLantern_Lit",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.15,
+        1.8
+       ],
+       "centre": [
+        0,
+        0,
+        0.9
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Arm",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.4,
+        0.05
+       ],
+       "centre": [
+        0,
+        -0.2,
+        1.7
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Glass",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        0,
+        -0.38,
+        1.5
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Hood",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0.08
+        ],
+        [
+         0.13,
+         0.0
+        ],
+        [
+         0.02,
+         0.0
+        ]
+       ],
+       "centre": [
+        0,
+        -0.38,
+        1.6
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.38,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.5,
+      0.38
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Fogbell_DockLantern_Lit_00",
+     "shape": "box",
+     "size": [
+      0.26,
+      0.6,
+      1.8
+     ],
+     "centre": [
+      0,
+      -0.2,
+      0.9
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 160,
+    "lod1_triangles": 160,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Fogbell_DockLantern_Lit": 160
+    },
+    "bounds_min": [
+     -0.13,
+     -0.51,
+     0.0
+    ],
+    "bounds_max": [
+     0.13,
+     0.075,
+     1.8
+    ],
+    "dimensions": [
+     0.26,
+     0.585,
+     1.8
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "ca9dd7aad9cf9bcb421c5f94f09db6e6272c0efbe421f3a001190e5fb4e3c41f"
+  },
+  {
+   "asset": "Prop_Fogbell_DockLantern_Unlit",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.8 m dock post with hooded lantern, unlit",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Light"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Fogbell_DockLantern_Unlit_M0",
+     "colour": "dock post",
+     "hex": "5A4030",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Fogbell_DockLantern_Unlit_M1",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Fogbell_DockLantern_Unlit_M2",
+     "colour": "lantern glass",
+     "hex": "6A6050",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Fogbell_DockLantern_Unlit",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.15,
+        1.8
+       ],
+       "centre": [
+        0,
+        0,
+        0.9
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Arm",
+       "shape": "box",
+       "size": [
+        0.05,
+        0.4,
+        0.05
+       ],
+       "centre": [
+        0,
+        -0.2,
+        1.7
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Glass",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.08,
+       "length": 0.2,
+       "centre": [
+        0,
+        -0.38,
+        1.5
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Hood",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0.08
+        ],
+        [
+         0.13,
+         0.0
+        ],
+        [
+         0.02,
+         0.0
+        ]
+       ],
+       "centre": [
+        0,
+        -0.38,
+        1.6
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Light",
+     "location": [
+      0,
+      -0.38,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.5,
+      0.38
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Fogbell_DockLantern_Unlit_00",
+     "shape": "box",
+     "size": [
+      0.26,
+      0.6,
+      1.8
+     ],
+     "centre": [
+      0,
+      -0.2,
+      0.9
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 160,
+    "lod1_triangles": 160,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Fogbell_DockLantern_Unlit": 160
+    },
+    "bounds_min": [
+     -0.13,
+     -0.51,
+     0.0
+    ],
+    "bounds_max": [
+     0.13,
+     0.075,
+     1.8
+    ],
+    "dimensions": [
+     0.26,
+     0.585,
+     1.8
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "439b47d458c9ed1b422c0b0eee01e0be2968e698b8e3b5df54947ca6dc31c488"
+  },
+  {
+   "asset": "Prop_Fogbell_BellGantry",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.5 m bell gantry; hang Prop_Fogbell_Bell at BellHang",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_BellHang"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Fogbell_BellGantry_M0",
+     "colour": "oak",
+     "hex": "5A4030",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Fogbell_BellGantry",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Leg-1",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.15,
+        2.4
+       ],
+       "centre": [
+        -0.9,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg1",
+       "shape": "box",
+       "size": [
+        0.15,
+        0.15,
+        2.4
+       ],
+       "centre": [
+        0.9,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Beam",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.18,
+        0.18
+       ],
+       "centre": [
+        0,
+        0,
+        2.45
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Brace-1",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.08,
+        0.08
+       ],
+       "centre": [
+        -0.68,
+        0,
+        2.15
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        -40,
+        0
+       ]
+      },
+      {
+       "name": "Brace1",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.08,
+        0.08
+       ],
+       "centre": [
+        0.68,
+        0,
+        2.15
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        40,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_BellHang",
+     "location": [
+      0,
+      0,
+      2.36
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      2.36,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Fogbell_BellGantry_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      0.18,
+      2.54
+     ],
+     "centre": [
+      0,
+      0,
+      1.27
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 220,
+    "lod1_triangles": 220,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Fogbell_BellGantry": 220
+    },
+    "bounds_min": [
+     -1.0,
+     -0.09,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     0.09,
+     2.54
+    ],
+    "dimensions": [
+     2.0,
+     0.18,
+     2.54
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "255c873592548b0708c324f7f95c025da4e3416996ff9b7ac3f3334523fb1c05"
+  },
+  {
+   "asset": "Prop_Fogbell_Bell",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "1.2 m quay fog bell; origin at Swing pivot (top), swings about X",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Swing",
+     "SOCKET_Clapper",
+     "SOCKET_Rope"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Fogbell_Bell_M0",
+     "colour": "bell bronze",
+     "hex": "A07A3A",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Fogbell_Bell_M1",
+     "colour": "iron yoke / clapper",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Fogbell_Bell",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Bell",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         1.1
+        ],
+        [
+         0.18,
+         1.08
+        ],
+        [
+         0.3,
+         0.85
+        ],
+        [
+         0.38,
+         0.2
+        ],
+        [
+         0.5,
+         0.0
+        ],
+        [
+         0.44,
+         0.0
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        -1.2
+       ],
+       "slot": 0,
+       "segments": 16,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Yoke",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.12,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        -0.05
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Clapper",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.07
+        ],
+        [
+         0.0495,
+         -0.0495
+        ],
+        [
+         0.07,
+         -0.0
+        ],
+        [
+         0.0495,
+         0.0495
+        ],
+        [
+         0,
+         0.07
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        -1.05
+       ],
+       "slot": 1,
+       "segments": 8,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Swing",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Clapper",
+     "location": [
+      0,
+      0,
+      -1.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      -1.05,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Rope",
+     "location": [
+      0.3,
+      0,
+      -0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.3,
+      -0.1,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Fogbell_Bell_00",
+     "shape": "box",
+     "size": [
+      1.0,
+      1.0,
+      1.2
+     ],
+     "centre": [
+      0,
+      0,
+      -0.6
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 340,
+    "lod1_triangles": 340,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Fogbell_Bell": 340
+    },
+    "bounds_min": [
+     -0.5,
+     -0.5,
+     -1.2
+    ],
+    "bounds_max": [
+     0.5,
+     0.5,
+     0.01
+    ],
+    "dimensions": [
+     1.0,
+     1.0,
+     1.21
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1dee3942e6127f652f1d773459e5fb1611ffc64eaf4efc51dc8b6014c8091936",
+   "off_centre_ok": "origin is the swing pivot at the top of the yoke (hangs from the gantry BellHang)"
+  },
+  {
+   "asset": "Prop_Fogbell_TideGauge",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.2 m tide gauge, 9 marks",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Mark_0",
+     "SOCKET_Mark_1",
+     "SOCKET_Mark_2",
+     "SOCKET_Mark_3",
+     "SOCKET_Mark_4",
+     "SOCKET_Mark_5",
+     "SOCKET_Mark_6",
+     "SOCKET_Mark_7",
+     "SOCKET_Mark_8"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Fogbell_TideGauge_M0",
+     "colour": "painted post",
+     "hex": "E8E4D8",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Fogbell_TideGauge_M1",
+     "colour": "marks",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Fogbell_TideGauge",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.1,
+        2.2
+       ],
+       "centre": [
+        0,
+        0,
+        1.1
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Mark0",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0.02,
+        -0.055,
+        0.3
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark1",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0.02,
+        -0.055,
+        0.5
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark2",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0.02,
+        -0.055,
+        0.7
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark3",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0.02,
+        -0.055,
+        0.9
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark4",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0.02,
+        -0.055,
+        1.1
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark5",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0.02,
+        -0.055,
+        1.3
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark6",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0.02,
+        -0.055,
+        1.5
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark7",
+       "shape": "box",
+       "size": [
+        0.1,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0.02,
+        -0.055,
+        1.7
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Mark8",
+       "shape": "box",
+       "size": [
+        0.14,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0.02,
+        -0.055,
+        1.9
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Mark_0",
+     "location": [
+      0.02,
+      -0.06,
+      0.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.02,
+      0.3,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Mark_1",
+     "location": [
+      0.02,
+      -0.06,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.02,
+      0.5,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Mark_2",
+     "location": [
+      0.02,
+      -0.06,
+      0.7
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.02,
+      0.7,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Mark_3",
+     "location": [
+      0.02,
+      -0.06,
+      0.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.02,
+      0.9,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Mark_4",
+     "location": [
+      0.02,
+      -0.06,
+      1.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.02,
+      1.1,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Mark_5",
+     "location": [
+      0.02,
+      -0.06,
+      1.3
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.02,
+      1.3,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Mark_6",
+     "location": [
+      0.02,
+      -0.06,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.02,
+      1.5,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Mark_7",
+     "location": [
+      0.02,
+      -0.06,
+      1.7
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.02,
+      1.7,
+      0.06
+     ]
+    },
+    {
+     "name": "SOCKET_Mark_8",
+     "location": [
+      0.02,
+      -0.06,
+      1.9
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.02,
+      1.9,
+      0.06
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Fogbell_TideGauge_00",
+     "shape": "box",
+     "size": [
+      0.14,
+      0.11,
+      2.2
+     ],
+     "centre": [
+      0,
+      0,
+      1.1
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 152,
+    "lod1_triangles": 152,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Fogbell_TideGauge": 152
+    },
+    "bounds_min": [
+     -0.07,
+     -0.06,
+     0.0
+    ],
+    "bounds_max": [
+     0.09,
+     0.05,
+     2.2
+    ],
+    "dimensions": [
+     0.16,
+     0.11,
+     2.2
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "bab15d6b15f19eecf0be2cd3f03116528b6fd15b3d0d0f9e035b7338171fb110"
+  },
+  {
+   "asset": "Mob_Fogbell_Harbourmaster",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Harbourmaster",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_Harbourmaster_M0",
+     "colour": "coat",
+     "hex": "2A3A5A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_Harbourmaster_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Fogbell_Harbourmaster_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Fogbell_Harbourmaster_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Fogbell_Harbourmaster_M4",
+     "colour": "cap navy",
+     "hex": "1A2438",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Mob_Fogbell_Harbourmaster_M5",
+     "colour": "rope",
+     "hex": "B89A6A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_Harbourmaster",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "HCap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.06,
+       "centre": [
+        0,
+        -0.01,
+        1.77
+       ],
+       "slot": 4,
+       "segments": 10
+      },
+      {
+       "name": "HBellRope",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.75
+       ],
+       "slot": 5,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Fogbell_Harbourmaster_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 668,
+    "lod1_triangles": 668,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_Harbourmaster": 668
+    },
+    "bounds_min": [
+     -0.42,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     1.8
+    ],
+    "dimensions": [
+     0.84,
+     0.285,
+     1.8
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "94438749ddb1730082c8b2d6bf33e1b027dd7074cbd0d867ea31a4c725bcbd22"
+  },
+  {
+   "asset": "Mob_Fogbell_LanternBearer",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Lantern-bearer",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_LanternBearer_M0",
+     "colour": "coat",
+     "hex": "6A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_LanternBearer_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Fogbell_LanternBearer_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_Fogbell_LanternBearer_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_Fogbell_LanternBearer_M4",
+     "colour": "lantern (emissive)",
+     "hex": "FFB84A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 5,
+     "name": "Mob_Fogbell_LanternBearer_M5",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_LanternBearer",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "LGlass",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.05,
+       "r2": 0.05,
+       "length": 0.12,
+       "centre": [
+        -0.37,
+        -0.02,
+        0.72
+       ],
+       "slot": 4,
+       "segments": 8
+      },
+      {
+       "name": "LHandle",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        -0.37,
+        -0.02,
+        0.83
+       ],
+       "slot": 5,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Fogbell_LanternBearer_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 660,
+    "lod1_triangles": 660,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_LanternBearer": 660
+    },
+    "bounds_min": [
+     -0.42,
+     -0.15,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     1.76
+    ],
+    "dimensions": [
+     0.84,
+     0.285,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "19d4798d90b612e110bb557a296ed62d9b2aa07493f8903051f49de24883afe2"
+  },
+  {
+   "asset": "Mob_Fogbell_Harbourmaster_Rig",
+   "kind": "Mob",
+   "seed": 20261030,
+   "frame_of": [
+    "Mob_Fogbell_Harbourmaster_Rig_Head",
+    "Mob_Fogbell_Harbourmaster_Rig_ArmR",
+    "Mob_Fogbell_Harbourmaster_Rig_ArmL",
+    "Mob_Fogbell_Harbourmaster_Rig_LegR",
+    "Mob_Fogbell_Harbourmaster_Rig_LegL",
+    "Mob_Fogbell_Harbourmaster_Rig_HeldR"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Hinge_Head",
+     "mover": "Mob_Fogbell_Harbourmaster_Rig_Head",
+     "pivot_m": [
+      0,
+      0,
+      1.5
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      -10
+     ],
+     "open_ue_rotator": [
+      0.0,
+      10.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmR",
+     "mover": "Mob_Fogbell_Harbourmaster_Rig_ArmR",
+     "pivot_m": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      -85,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      -85.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmL",
+     "mover": "Mob_Fogbell_Harbourmaster_Rig_ArmL",
+     "pivot_m": [
+      0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegR",
+     "mover": "Mob_Fogbell_Harbourmaster_Rig_LegR",
+     "pivot_m": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegL",
+     "mover": "Mob_Fogbell_Harbourmaster_Rig_LegL",
+     "pivot_m": [
+      0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_HeldR",
+     "mover": "Mob_Fogbell_Harbourmaster_Rig_HeldR",
+     "pivot_m": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Harbourmaster",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "frame glb (UEB 48812): root hulls only; movers attach at SOCKET_Hinge_*"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_Harbourmaster_M0",
+     "colour": "coat",
+     "hex": "2A3A5A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_Harbourmaster_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_Harbourmaster_Rig",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_Head",
+     "location": [
+      0,
+      0,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmR",
+     "location": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmL",
+     "location": [
+      0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegR",
+     "location": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegL",
+     "location": [
+      0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_HeldR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Fogbell_Harbourmaster_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_Harbourmaster_Rig": 132
+    },
+    "bounds_min": [
+     -0.215,
+     -0.135,
+     0.8
+    ],
+    "bounds_max": [
+     0.215,
+     0.135,
+     1.475
+    ],
+    "dimensions": [
+     0.43,
+     0.27,
+     0.675
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "0eab1dccfbf86996d39343a2e285f55d81942755873c91a80e7beeff12fe6786"
+  },
+  {
+   "asset": "Mob_Fogbell_Harbourmaster_Rig_Head",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_Harbourmaster_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Head",
+    "mover": "Mob_Fogbell_Harbourmaster_Rig_Head",
+    "pivot_m": [
+     0,
+     0,
+     1.5
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     -10
+    ],
+    "open_ue_rotator": [
+     0.0,
+     10.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Harbourmaster",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_Harbourmaster_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_Harbourmaster_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_Fogbell_Harbourmaster_M4",
+     "colour": "cap navy",
+     "hex": "1A2438",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_Harbourmaster_Rig_Head",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_Head)",
+     "parts": [
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.01,
+        0.13
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "HCap",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.14,
+       "r2": 0.14,
+       "length": 0.06,
+       "centre": [
+        0.0,
+        -0.01,
+        0.27
+       ],
+       "slot": 2,
+       "segments": 10
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0.0,
+      0.0,
+      0.26
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.26,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0.0,
+      -0.15,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.1,
+      0.15
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_Harbourmaster_Rig SOCKET_Hinge_Head)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 156,
+    "lod1_triangles": 156,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_Harbourmaster_Rig_Head": 156
+    },
+    "bounds_min": [
+     -0.14,
+     -0.1431,
+     0.0
+    ],
+    "bounds_max": [
+     0.14,
+     0.1231,
+     0.3
+    ],
+    "dimensions": [
+     0.28,
+     0.2662,
+     0.3
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c59b5c50a1bd48d634f075f6af5be1cecf1425313a2e7d88ee1d5ab0d617ec5a"
+  },
+  {
+   "asset": "Mob_Fogbell_Harbourmaster_Rig_ArmR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_Harbourmaster_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmR",
+    "mover": "Mob_Fogbell_Harbourmaster_Rig_ArmR",
+    "pivot_m": [
+     -0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     -85,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     -85.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Harbourmaster",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_Harbourmaster_M0",
+     "colour": "coat",
+     "hex": "2A3A5A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_Harbourmaster_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_Harbourmaster_Rig_ArmR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmR)",
+     "parts": [
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_Harbourmaster_Rig SOCKET_Hinge_ArmR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_Harbourmaster_Rig_ArmR": 84
+    },
+    "bounds_min": [
+     -0.15,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.0759,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a26928c4691704c1dae137c62d65fb825bc1c7a5e81aee32660f5de66009cec6"
+  },
+  {
+   "asset": "Mob_Fogbell_Harbourmaster_Rig_ArmL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_Harbourmaster_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmL",
+    "mover": "Mob_Fogbell_Harbourmaster_Rig_ArmL",
+    "pivot_m": [
+     0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Harbourmaster",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_Harbourmaster_M0",
+     "colour": "coat",
+     "hex": "2A3A5A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_Harbourmaster_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_Harbourmaster_Rig_ArmL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmL)",
+     "parts": [
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_Harbourmaster_Rig SOCKET_Hinge_ArmL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_Harbourmaster_Rig_ArmL": 84
+    },
+    "bounds_min": [
+     -0.0759,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.15,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "be946fa015f23641956d2aa17c90bd5caf32205a0af8d2d13a07f95cb0760a9c"
+  },
+  {
+   "asset": "Mob_Fogbell_Harbourmaster_Rig_LegR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_Harbourmaster_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegR",
+    "mover": "Mob_Fogbell_Harbourmaster_Rig_LegR",
+    "pivot_m": [
+     -0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Harbourmaster",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_Harbourmaster_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_Harbourmaster_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_Harbourmaster_Rig_LegR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegR)",
+     "parts": [
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_Harbourmaster_Rig SOCKET_Hinge_LegR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_Harbourmaster_Rig_LegR": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "8ef8a2a4a868e6aa97cb50bffc4da726fe7bc1f5bd7c4975e1b9af16fb5b9f9c"
+  },
+  {
+   "asset": "Mob_Fogbell_Harbourmaster_Rig_LegL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_Harbourmaster_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegL",
+    "mover": "Mob_Fogbell_Harbourmaster_Rig_LegL",
+    "pivot_m": [
+     0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Harbourmaster",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_Harbourmaster_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A48",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_Harbourmaster_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_Harbourmaster_Rig_LegL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegL)",
+     "parts": [
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_Harbourmaster_Rig SOCKET_Hinge_LegL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_Harbourmaster_Rig_LegL": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2956c9a131d44b0dd2de55f0046488220f0ece6b110f5d7dced0d0d197e17672"
+  },
+  {
+   "asset": "Mob_Fogbell_Harbourmaster_Rig_HeldR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_Harbourmaster_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_HeldR",
+    "mover": "Mob_Fogbell_Harbourmaster_Rig_HeldR",
+    "pivot_m": [
+     -0.37,
+     0,
+     0.88
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Harbourmaster",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_Harbourmaster_M5",
+     "colour": "rope",
+     "hex": "B89A6A",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_Harbourmaster_Rig_HeldR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_HeldR)",
+     "parts": [
+      {
+       "name": "HBellRope",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0.0,
+        0.0,
+        -0.13
+       ],
+       "slot": 0,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_Harbourmaster_Rig SOCKET_Hinge_HeldR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 12,
+    "lod1_triangles": 12,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_Harbourmaster_Rig_HeldR": 12
+    },
+    "bounds_min": [
+     -0.01,
+     -0.01,
+     -0.28
+    ],
+    "bounds_max": [
+     0.01,
+     0.01,
+     0.02
+    ],
+    "dimensions": [
+     0.02,
+     0.02,
+     0.3
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "432cc822ce89b96bb973e4b822073d3a6f9d6b898e7c706843917c95ee2ace0d"
+  },
+  {
+   "asset": "Mob_Fogbell_LanternBearer_Rig",
+   "kind": "Mob",
+   "seed": 20261030,
+   "frame_of": [
+    "Mob_Fogbell_LanternBearer_Rig_Head",
+    "Mob_Fogbell_LanternBearer_Rig_ArmR",
+    "Mob_Fogbell_LanternBearer_Rig_ArmL",
+    "Mob_Fogbell_LanternBearer_Rig_LegR",
+    "Mob_Fogbell_LanternBearer_Rig_LegL",
+    "Mob_Fogbell_LanternBearer_Rig_HeldR"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Hinge_Head",
+     "mover": "Mob_Fogbell_LanternBearer_Rig_Head",
+     "pivot_m": [
+      0,
+      0,
+      1.5
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      -10
+     ],
+     "open_ue_rotator": [
+      0.0,
+      10.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmR",
+     "mover": "Mob_Fogbell_LanternBearer_Rig_ArmR",
+     "pivot_m": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      -85,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      -85.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmL",
+     "mover": "Mob_Fogbell_LanternBearer_Rig_ArmL",
+     "pivot_m": [
+      0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegR",
+     "mover": "Mob_Fogbell_LanternBearer_Rig_LegR",
+     "pivot_m": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegL",
+     "mover": "Mob_Fogbell_LanternBearer_Rig_LegL",
+     "pivot_m": [
+      0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_HeldR",
+     "mover": "Mob_Fogbell_LanternBearer_Rig_HeldR",
+     "pivot_m": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Lantern-bearer",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "frame glb (UEB 48812): root hulls only; movers attach at SOCKET_Hinge_*"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_LanternBearer_M0",
+     "colour": "coat",
+     "hex": "6A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_LanternBearer_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_LanternBearer_Rig",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_Head",
+     "location": [
+      0,
+      0,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmR",
+     "location": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmL",
+     "location": [
+      0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegR",
+     "location": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegL",
+     "location": [
+      0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_HeldR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_Fogbell_LanternBearer_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_LanternBearer_Rig": 132
+    },
+    "bounds_min": [
+     -0.215,
+     -0.135,
+     0.8
+    ],
+    "bounds_max": [
+     0.215,
+     0.135,
+     1.475
+    ],
+    "dimensions": [
+     0.43,
+     0.27,
+     0.675
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2048aa1fbf1343e2c1617e3bd26ed8f805026b51b313a18a899ff7ad09f461a8"
+  },
+  {
+   "asset": "Mob_Fogbell_LanternBearer_Rig_Head",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_LanternBearer_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Head",
+    "mover": "Mob_Fogbell_LanternBearer_Rig_Head",
+    "pivot_m": [
+     0,
+     0,
+     1.5
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     -10
+    ],
+    "open_ue_rotator": [
+     0.0,
+     10.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Lantern-bearer",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_LanternBearer_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_LanternBearer_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_LanternBearer_Rig_Head",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_Head)",
+     "parts": [
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.01,
+        0.13
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0.0,
+      0.0,
+      0.26
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.26,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0.0,
+      -0.15,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.1,
+      0.15
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_LanternBearer_Rig SOCKET_Hinge_Head)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 120,
+    "lod1_triangles": 120,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_LanternBearer_Rig_Head": 120
+    },
+    "bounds_min": [
+     -0.13,
+     -0.14,
+     0.0
+    ],
+    "bounds_max": [
+     0.13,
+     0.1136,
+     0.26
+    ],
+    "dimensions": [
+     0.26,
+     0.2536,
+     0.26
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e9542163d4f4c4545d7075dc7b4fb30cf4018bde20f4ff71755884509f8622bb"
+  },
+  {
+   "asset": "Mob_Fogbell_LanternBearer_Rig_ArmR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_LanternBearer_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmR",
+    "mover": "Mob_Fogbell_LanternBearer_Rig_ArmR",
+    "pivot_m": [
+     -0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     -85,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     -85.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Lantern-bearer",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_LanternBearer_M0",
+     "colour": "coat",
+     "hex": "6A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_LanternBearer_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_LanternBearer_Rig_ArmR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmR)",
+     "parts": [
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_LanternBearer_Rig SOCKET_Hinge_ArmR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_LanternBearer_Rig_ArmR": 84
+    },
+    "bounds_min": [
+     -0.15,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.0759,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "009b4955a5c31cc8749aca98d4c076ab03b3143483b220aefc7e0c65bf67b929"
+  },
+  {
+   "asset": "Mob_Fogbell_LanternBearer_Rig_ArmL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_LanternBearer_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmL",
+    "mover": "Mob_Fogbell_LanternBearer_Rig_ArmL",
+    "pivot_m": [
+     0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Lantern-bearer",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_LanternBearer_M0",
+     "colour": "coat",
+     "hex": "6A5A3A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_LanternBearer_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_LanternBearer_Rig_ArmL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmL)",
+     "parts": [
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_LanternBearer_Rig SOCKET_Hinge_ArmL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_LanternBearer_Rig_ArmL": 84
+    },
+    "bounds_min": [
+     -0.0759,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.15,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "09d5182fd080fea7fcfa3debb44140774353aee52101f3cc9d0e38c3992b0e64"
+  },
+  {
+   "asset": "Mob_Fogbell_LanternBearer_Rig_LegR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_LanternBearer_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegR",
+    "mover": "Mob_Fogbell_LanternBearer_Rig_LegR",
+    "pivot_m": [
+     -0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Lantern-bearer",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_LanternBearer_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_LanternBearer_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_LanternBearer_Rig_LegR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegR)",
+     "parts": [
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_LanternBearer_Rig SOCKET_Hinge_LegR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_LanternBearer_Rig_LegR": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a9dda81c7b48f20113251ce04b49ace9300dba483b55da32f61589dc12591062"
+  },
+  {
+   "asset": "Mob_Fogbell_LanternBearer_Rig_LegL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_LanternBearer_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegL",
+    "mover": "Mob_Fogbell_LanternBearer_Rig_LegL",
+    "pivot_m": [
+     0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Lantern-bearer",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_LanternBearer_M1",
+     "colour": "accent / trousers",
+     "hex": "3A3A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_LanternBearer_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_LanternBearer_Rig_LegL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegL)",
+     "parts": [
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_LanternBearer_Rig SOCKET_Hinge_LegL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_LanternBearer_Rig_LegL": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "dea9700cc1bc8cbc16910a7d6570f08003b67e124253d00eb13765dff68b9dda"
+  },
+  {
+   "asset": "Mob_Fogbell_LanternBearer_Rig_HeldR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_Fogbell_LanternBearer_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_HeldR",
+    "mover": "Mob_Fogbell_LanternBearer_Rig_HeldR",
+    "pivot_m": [
+     -0.37,
+     0,
+     0.88
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): Lantern-bearer",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_Fogbell_LanternBearer_M4",
+     "colour": "lantern (emissive)",
+     "hex": "FFB84A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 1,
+     "name": "Mob_Fogbell_LanternBearer_M5",
+     "colour": "iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_Fogbell_LanternBearer_Rig_HeldR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_HeldR)",
+     "parts": [
+      {
+       "name": "LGlass",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.05,
+       "r2": 0.05,
+       "length": 0.12,
+       "centre": [
+        0.0,
+        -0.02,
+        -0.16
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "LHandle",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.02,
+        0.1
+       ],
+       "centre": [
+        0.0,
+        -0.02,
+        -0.05
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_Fogbell_LanternBearer_Rig SOCKET_Hinge_HeldR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 40,
+    "lod1_triangles": 40,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_Fogbell_LanternBearer_Rig_HeldR": 40
+    },
+    "bounds_min": [
+     -0.05,
+     -0.07,
+     -0.22
+    ],
+    "bounds_max": [
+     0.05,
+     0.03,
+     0.0
+    ],
+    "dimensions": [
+     0.1,
+     0.1,
+     0.22
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "83926a12c408ab0f33b80dc0d4262d66cea7c2225e76ff154689f53c01cfc0df"
+  }
+ ]
+}
