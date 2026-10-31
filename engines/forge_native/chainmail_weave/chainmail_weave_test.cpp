@@ -230,6 +230,39 @@ static void CostMoves() {
         }
     }
     Check(ok, "links lower the crossing by at most one, rust never lowers it, the demo ring lowers it");
+    // PathCells: a real crossing (left to right, adjacent, no rust) whose empty rings number exactly the cost.
+    bool path_ok = true;
+    int paths = 0;
+    for (int s = 0; s < 300; ++s) {
+        cw::Game g("p" + std::to_string(s));
+        while (g.GetState() == cw::State::Playing) {
+            const cw::Grid& grid = g.GetGrid();
+            int path[cw::kCells] = {};
+            const int n = cw::PathCells(grid, path);
+            const int cost = cw::Crossing(grid);
+            int empties = 0;
+            bool good = n > 0 && path[0] % cw::kN == 0 && path[n - 1] % cw::kN == cw::kN - 1;
+            for (int k = 0; k < n && good; ++k) {
+                good = grid.ring[path[k]] != cw::kRust;
+                empties += grid.ring[path[k]] == cw::kEmpty ? 1 : 0;
+                if (k > 0) {
+                    const int d = path[k] - path[k - 1];
+                    good = good && (d == cw::kN || d == -cw::kN || ((d == 1 || d == -1) && path[k] / cw::kN == path[k - 1] / cw::kN));
+                }
+            }
+            path_ok = path_ok && good && empties == cost;
+            ++paths;
+            g.Place(g.Demo());
+        }
+    }
+    Check(path_ok, "PathCells gives a real cheapest crossing");
+    cw::Grid wall{};
+    for (int r = 0; r < cw::kN; ++r) {
+        wall.ring[r * cw::kN + 2] = cw::kRust;
+    }
+    int none[cw::kCells] = {};
+    Check(cw::PathCells(wall, none) == 0, "PathCells is empty when rust cuts every crossing");
+    std::printf("paths: %d cheapest crossings checked\n", paths);
     std::printf("cost moves: %d single-ring changes checked\n", checked);
 }
 
@@ -253,7 +286,7 @@ static void Invariants() {
         demo_wins += g.GetState() == cw::State::Won ? 1 : 0;
     }
     Check(ok, "every round starts crossable and ends");
-    Check(demo_wins > 700, "the demo wins most rounds");
+    Check(demo_wins > 850, "the chokepoint demo wins most rounds");
     std::printf("invariants: 1000 rounds, demo won %d\n", demo_wins);
 }
 

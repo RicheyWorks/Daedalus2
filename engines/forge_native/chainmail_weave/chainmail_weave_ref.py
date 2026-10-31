@@ -57,6 +57,24 @@ def crossing(g):
     d = dist_from(g, 0)
     return min(d[r * N + N - 1] for r in range(N))
 
+def demo_cell(g):
+    """The hint: among empty rings on a cheapest crossing, the chokepoint (the one whose rusting would raise the
+    cheapest crossing most; a ring whose loss blocks every crossing counts highest), earliest row-major on ties.
+    -1 when no crossing exists."""
+    a, b = dist_from(g, 0), dist_from(g, N - 1)
+    best = crossing(g)
+    if best >= INF:
+        return -1
+    pick, harm = -1, -1
+    for i in range(CELLS):
+        if g[i] == EMPTY and a[i] + b[i] - cost(g, i) == best:
+            h = list(g)
+            h[i] = RUST
+            hv = crossing(h)
+            if hv > harm:
+                pick, harm = i, hv
+    return pick
+
 class Game:
     def __init__(self, seed):
         self.r = random.Random("chainmail|" + seed)
@@ -105,15 +123,7 @@ class Game:
         return 10 + 10 * self.budget if self.state == WON else 0
 
     def demo(self):
-        """Earliest (row-major) empty ring on a cheapest crossing; -1 when none."""
-        a, b = dist_from(self.g, 0), dist_from(self.g, N - 1)
-        best = crossing(self.g)
-        if best >= INF:
-            return -1
-        for i in range(CELLS):
-            if self.g[i] == EMPTY and a[i] + b[i] - cost(self.g, i) == best:
-                return i
-        return -1
+        return demo_cell(self.g)
 
     def text(self):
         return "".join(".#L"[x] for x in self.g)
