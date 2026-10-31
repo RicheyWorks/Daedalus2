@@ -81,3 +81,18 @@ Every roll is a splitmix hash of (seed, session, hare, salt). `Settings.DEFAULT 
   BLENDER-ASKS).
 - The G119 board is staged (see ISLES01): use `SOCKET_Peg_00`..`39` with `Prop_Census_Peg` as the M / C / R tally and
   `SOCKET_Text` for the Chapman count and band.
+
+## Native C++ core (G615)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshMarkRecaptureCore.h` (namespace
+`daedalus::marsh`) is a header-only C++17 port of this core: `MarkRecapture::Plan`, `CatchChance` and the seeded
+two-session `Run`; the `Census` estimates (Lincoln-Petersen, Chapman, Seber variance, 95% band, error, verdict, quota,
+greedy quota, MEADOW/SCRUB band); and `MarkRecaptureSettings::Valid`. It uses the standard library only (no Unreal
+headers). Where Java throws on impossible counts, the C++ estimators return NaN. The Java class stays the rules
+authority. `MarshCoresParityTest.markRecapture` writes 24 golden vectors (8 tunings x {unplanned even split, a
+quarter/three-quarter split, an over-budget plan that is refused}) to
+`engines/unreal/core-test/marsh_mark_recapture_parity.txt`, and `marsh_mark_recapture_core_test.cpp` replays them.
+From the same counts every estimate matches exactly (only + - * / and sqrt). The catch chance calls `pow`, so at
+least 22 of 24 censuses must replay exactly (24 of 24 do with g++/glibc). CI runs this in
+`.github/workflows/marsh-cores.yml`. See [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md). No Fair Par cabinet reads
+this core, so the par guard is unchanged.
