@@ -110,6 +110,32 @@ class Rules(unittest.TestCase):
             greedy += g.won
         self.assertLess(greedy, 20, "lighter-pan greedy without the bench loses most lines")
 
+    def test_properties_hold_under_random_actions(self):
+        """Iteration 1: random legal actions on 150 lines never break the bookkeeping."""
+        import random
+        for s in range(150):
+            d = ("easy", "normal", "hard")[s % 3]
+            g = gm.start(s, d)
+            rng = random.Random(s)
+            while not g.over:
+                acts = g.actions()
+                a = acts[rng.randrange(len(acts))]
+                legal, after, tips, ends = g.preview(a)
+                self.assertTrue(legal)
+                before = (g.index, g.bench_used, len(g.held))
+                res = g.step(a)
+                self.assertEqual(g.diff(), after)
+                self.assertEqual(tips, g.tipped)
+                self.assertEqual(g.index - before[0], 1 if a[1] == "next" else 0)
+                self.assertEqual(g.bench_used - before[1], 1 if a[0] == "hold" else 0)
+                self.assertEqual(g.left + g.right + sum(g.held), sum(g.line[:g.index]))
+                self.assertEqual(g.held, sorted(g.held))
+                self.assertLessEqual(len(g.held), g.cfg["bench"])
+                self.assertTrue(g.tipped or abs(g.diff()) <= g.cfg["cap"])
+                if tips:
+                    self.assertIn("tips", res)
+            self.assertEqual(g.won, not g.tipped and g.remaining() == 0 and abs(g.diff()) <= g.cfg["tolerance"])
+
     def test_render_marks(self):
         g = self.line([3, 4, 2])
         self.assertIn("SET    l / r", g.render())
@@ -118,6 +144,31 @@ class Rules(unittest.TestCase):
         self.assertNotIn("SET    l / r", screen)
         self.assertIn("beam: L", screen)
         self.assertIn("left 3 right 0 diff +3", screen)
+
+
+
+class Balance(unittest.TestCase):
+    """Iteration 3: pinned bands. The weigher always levels; lighter-pan greedy without the bench stays rare, so a rules
+    change that makes lines trivially greedy-solvable (or impossible) is caught."""
+    GREEDY_BANDS = {"easy": (3, 30), "normal": (0, 20), "hard": (0, 12)}
+
+    def test_weigher_levels_every_line(self):
+        for d in gm.DIFFICULTY:
+            for s in range(100):
+                g = gm.start(s, d)
+                while not g.over:
+                    g.step(g.demo_action())
+                self.assertTrue(g.won, "%s seed %d" % (d, s))
+
+    def test_greedy_win_rates(self):
+        for d, (low, high) in self.GREEDY_BANDS.items():
+            wins = 0
+            for s in range(200):
+                g = gm.start(s, d)
+                while not g.over:
+                    g.step(L if g.diff() <= 0 else R)
+                wins += g.won
+            self.assertTrue(low <= wins / 2 <= high, "%s greedy win rate %.1f%% outside %d-%d" % (d, wins / 2, low, high))
 
 
 if __name__ == "__main__":
