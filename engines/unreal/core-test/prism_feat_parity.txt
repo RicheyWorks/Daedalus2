@@ -1,0 +1,37 @@
+# prism-feat-v1
+# RESET clears the satchel. RECORD game difficulty score won perfect.
+# FEAT names a cabinet feat of the last run, or a cross-game seal feat.
+# SAVE then LOAD must keep those seals.
+RESET
+RECORD facetlock easy 0 0 0
+FEAT finish 1
+FEAT win 0
+FEAT hard_win 0
+FEAT par 0
+FEAT perfect 0
+SAVE
+LOAD
+FEAT finish 1
+RESET
+RECORD facetlock hard 130 1 0
+FEAT hard_win 1
+FEAT par 1
+FEAT perfect 0
+FEAT one_mastered 1
+FEAT three_mastered 0
+FEAT one_heartglass 0
+RESET
+RECORD glowmoss hard 1 1 1
+FEAT perfect 1
+FEAT one_heartglass 1
+RESET
+RECORD facetlock hard 130 1 0
+RECORD glimmerloom hard 120 1 0
+RECORD lumenpath hard 140 1 0
+FEAT three_mastered 1
+SAVE
+LOAD
+FEAT three_mastered 1
+RESET
+RECORD not_a_game easy 0 0 0
+FEAT finish 0

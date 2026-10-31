@@ -10,6 +10,7 @@ under the `_migration/` portfolios.
 
 ### Added
 
+- **Prism Feat ledger.** Five checks per Prismheart cabinet (finish, win, hard win, par, perfect) and three seal counts across games. One test replays those feats and round-trips every cabinet save. Game rules are unchanged.
 - **Siltlane host lines.** The hint and the cue are public so the desktop test can read them. The rules are unchanged.
 - **Siltlane iterations.** Forty checked improvements on the native C++ core: a clear target (easy six, normal eight, hard ten; practice four, five and six), easy stones that miss the occupied lane, hard stones that start one row closer, a loss that freezes the runner, and a golden parity fixture the engines job replays. The cabinet note names the stones still to clear. The home spot is Spawn overlook, the silt course beside the dock.
 - **Minigame core parity.** One check lists every catalog minigame that has a native C++ core and fails when its parity fixture, core test, or CI run is missing. Game rules are unchanged. Shardfall Gamble already draws its key hint and contrast mark; the catalog now records those marks.
