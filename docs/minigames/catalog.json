@@ -1121,6 +1121,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shardscale",
+      "title": "Shardscale",
+      "summary": "Set a line of shards on a balance beam without letting it tip; end level. Up/Down or stick: pick the shard in hand; Left/Right: set it on a pan; J/Space or pad A: bench the next shard",
+      "how_to_play": "HOW Set the next shard left or right, or hold it on the bench; set a held shard later. Never let the pans differ by more than the cap; end level within the tolerance.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the weigh-house",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shardscale\", Seed)",
+      "portable_tests": [
+        "desktop_shardscale"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [

@@ -55,5 +55,15 @@ class Rules(unittest.TestCase):
         self.assertGreaterEqual(sum(gm.demo(s, "easy").won for s in range(30)), 25)
 
 
+class ParseErrors(unittest.TestCase):
+    """Round 2 self-test: typos get the help line, never a Python error."""
+
+    def test_bad_lines_give_the_help_line(self):
+        for line in ("", "   ", "flare", "flare x", "flare -1", "flare \u0661", "kindle 2", "nova now", "zz"):
+            with self.assertRaisesRegex(ValueError, "use flare <lane>, kindle or nova", msg=repr(line)):
+                gm.Game.parse(line)
+        self.assertEqual(gm.Game.parse("flare 2"), ("flare", 2))
+
+
 if __name__ == "__main__":
     unittest.main()

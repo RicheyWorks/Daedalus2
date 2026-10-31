@@ -233,5 +233,18 @@ class Properties(unittest.TestCase):
             self.assertGreater(sim.win_rate("greedy", d, 60), sim.win_rate("random", d, 60), d)
 
 
+class SeedCodeLimits(unittest.TestCase):
+    """Round 2 finding (art-master-flex 2): codes are ASCII 1-9 digits, like the native ParseSeedCode."""
+
+    def test_odd_codes_are_refused(self):
+        for bad in ("GLOW-N-\u0661\u0662", "GLOW-N-99999999999999999999", "GLOW-N-1234567890", "GLOW-N-", "GLOW-N--5"):
+            with self.assertRaises(ValueError, msg=bad):
+                gm.parse_seed_code(bad)
+        for bad in (-5, 10 ** 9, 1.5, True):
+            with self.assertRaises(ValueError, msg=repr(bad)):
+                gm.seed_code(bad, "normal")
+        self.assertEqual(gm.parse_seed_code(gm.seed_code(999999999, "hard")), (999999999, "hard"))
+
+
 if __name__ == "__main__":
     unittest.main()

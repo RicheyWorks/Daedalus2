@@ -20,6 +20,8 @@ INF = 10 ** 6
 PLAYING, WON, LOST = range(3)
 STATE = ["PLAYING", "WON", "LOST"]
 OK, BAD_CELL, OCCUPIED, GAME_OVER = range(4)
+NO_LOSS, OUT_OF_LINKS, BLOCKED = range(3)
+REASON = ["NONE", "OUT_OF_LINKS", "BLOCKED"]
 STATUS = ["OK", "BAD_CELL", "OCCUPIED", "GAME_OVER"]
 
 def nbrs(i):
@@ -55,6 +57,24 @@ def crossing(g):
     d = dist_from(g, 0)
     return min(d[r * N + N - 1] for r in range(N))
 
+def demo_cell(g):
+    """The hint: among empty rings on a cheapest crossing, the chokepoint (the one whose rusting would raise the
+    cheapest crossing most; a ring whose loss blocks every crossing counts highest), earliest row-major on ties.
+    -1 when no crossing exists."""
+    a, b = dist_from(g, 0), dist_from(g, N - 1)
+    best = crossing(g)
+    if best >= INF:
+        return -1
+    pick, harm = -1, -1
+    for i in range(CELLS):
+        if g[i] == EMPTY and a[i] + b[i] - cost(g, i) == best:
+            h = list(g)
+            h[i] = RUST
+            hv = crossing(h)
+            if hv > harm:
+                pick, harm = i, hv
+    return pick
+
 class Game:
     def __init__(self, seed):
         self.r = random.Random("chainmail|" + seed)
@@ -70,6 +90,7 @@ class Game:
         self.budget = crossing(g) + SLACK
         self.state = PLAYING
         self.placed = 0
+        self.reason = NO_LOSS
 
     def won(self):
         d = dist_from([x if x == LINK else RUST for x in self.g], 0)
@@ -92,23 +113,17 @@ class Game:
         if empties:
             self.g[empties[self.r.randrange(len(empties))]] = RUST
         need = crossing(self.g)
-        if self.budget <= 0 or need == INF or need > self.budget:
-            self.state = LOST
+        if need == INF:
+            self.state, self.reason = LOST, BLOCKED
+        elif self.budget <= 0 or need > self.budget:
+            self.state, self.reason = LOST, OUT_OF_LINKS
         return OK
 
     def score(self):
         return 10 + 10 * self.budget if self.state == WON else 0
 
     def demo(self):
-        """Earliest (row-major) empty ring on a cheapest crossing; -1 when none."""
-        a, b = dist_from(self.g, 0), dist_from(self.g, N - 1)
-        best = crossing(self.g)
-        if best >= INF:
-            return -1
-        for i in range(CELLS):
-            if self.g[i] == EMPTY and a[i] + b[i] - cost(self.g, i) == best:
-                return i
-        return -1
+        return demo_cell(self.g)
 
     def text(self):
         return "".join(".#L"[x] for x in self.g)
@@ -122,7 +137,7 @@ def seeds():
 
 def write(f):
     f.write("# Chainmail Weave golden vectors from chainmail_weave_ref.py (rules authority). Do not hand-edit.\n")
-    f.write("# S <len> <seed> | N <grid 49 chars .#L> <budget> | P <cell> <status> <grid> <budget> <state> <score> <demo>\n")
+    f.write("# S <len> <seed> | N <grid 49 chars .#L> <budget> | P <cell> <status> <grid> <budget> <state> <reason> <score> <demo>\n")
     pick = random.Random(62351 + 1)
     for s in seeds():
         g = Game(s)
@@ -137,7 +152,7 @@ def write(f):
             else:
                 mv = pick.choice([g.demo(), g.demo(), pick.randrange(CELLS), -1, CELLS])
             st = g.place(mv)
-            f.write("P %d %s %s %d %s %d %d\n" % (mv, STATUS[st], g.text(), g.budget, STATE[g.state], g.score(), g.demo()))
+            f.write("P %d %s %s %d %s %s %d %d\n" % (mv, STATUS[st], g.text(), g.budget, STATE[g.state], REASON[g.reason], g.score(), g.demo()))
             if g.state != PLAYING and pick.random() < 0.7:
                 break
 

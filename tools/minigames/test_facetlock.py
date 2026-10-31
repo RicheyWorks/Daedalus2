@@ -38,5 +38,19 @@ class Rules(unittest.TestCase):
             gm.start(1).step(("x", 0, 1))
 
 
+class ParseErrors(unittest.TestCase):
+    """Round 2 self-test: the move syntax is on screen and typos get it back."""
+
+    def test_bad_lines_give_the_move_syntax(self):
+        for line in ("", "r", "r 0", "r x 1", "r 0 2", "q 0 1", "r 0 1 1", "c \u0661 1"):
+            with self.assertRaisesRegex(ValueError, "use r\\|c <index>", msg=repr(line)):
+                gm.Game.parse(line)
+        self.assertEqual(gm.Game.parse("c 2 +1"), ("c", 2, 1))
+        self.assertEqual(gm.Game.parse("r 0 -1"), ("r", 0, -1))
+
+    def test_render_shows_the_goal_and_move_syntax(self):
+        self.assertIn("move: r <row> +1|-1 or c <col> +1|-1", gm.start(3, "normal").render())
+
+
 if __name__ == "__main__":
     unittest.main()

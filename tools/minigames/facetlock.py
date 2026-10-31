@@ -93,12 +93,17 @@ class Game(pc.PrismGame):
         lines += [f"{i}  " + " ".join(r) for i, r in enumerate(self.board)]
         if self.over:
             lines.append("WON: the vault lock opens" if self.won else "LOST: the lock seals")
+        else:
+            lines.append("goal: row 0 all %s, row 1 all %s ... | move: r <row> +1|-1 or c <col> +1|-1" % (MARKS[0], MARKS[1]))
         return "\n".join(lines)
 
     @staticmethod
     def parse(line):
-        kind, i, d = line.split()
-        return (kind, int(i), int(d))
+        """r|c <index> +1|-1; anything else gets the move syntax back, never a Python error (Round 2 self-test)."""
+        parts = line.split()
+        if len(parts) == 3 and parts[0] in ("r", "c") and parts[1].isascii() and parts[1].isdigit() and parts[2] in ("1", "+1", "-1"):
+            return (parts[0], int(parts[1]), int(parts[2]))
+        raise ValueError("use r|c <index> +1|-1")
 
 
 def start(seed=0, difficulty=DEFAULT_DIFFICULTY):

@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <istream>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -37,14 +38,23 @@ static std::string Text(const cw::Grid& g) {
     return s;
 }
 
-static void Golden(const char* path) {
-    std::ifstream f(path);
-    Check(f.good(), std::string("open golden file ") + path);
+struct Replay {
     int problems = 0;
-    auto expect = [&problems](bool ok, const std::string& what) {
+    int rounds = 0;
+    int moves = 0;
+    int wins = 0;
+    int losses = 0;
+    int blocked = 0;
+};
+
+// Replays a fixture stream. `quiet` suppresses messages (used for the tampered-fixture self-test).
+static Replay ReplayGolden(std::istream& f, bool quiet) {
+    Replay out;
+    int& problems = out.problems;
+    auto expect = [&problems, quiet](bool ok, const std::string& what) {
         if (!ok) {
             ++problems;
-            if (problems <= 20) {
+            if (!quiet && problems <= 20) {
                 std::printf("FAIL: %s\n", what.c_str());
             }
         }
@@ -54,10 +64,10 @@ static void Golden(const char* path) {
     std::unique_ptr<cw::Game> game;
     bool have_seed = false;
     int line_no = 0;
-    int rounds = 0;
-    int moves = 0;
-    int wins = 0;
-    int losses = 0;
+    int& rounds = out.rounds;
+    int& moves = out.moves;
+    int& wins = out.wins;
+    int& losses = out.losses;
     while (std::getline(f, line)) {
         ++line_no;
         if (!line.empty() && line.back() == '\r') {
@@ -100,8 +110,9 @@ static void Golden(const char* path) {
             std::string status;
             std::string grid;
             std::string state;
+            std::string reason;
             std::string extra;
-            in >> cell >> status >> grid >> budget >> state >> score >> demo;
+            in >> cell >> status >> grid >> budget >> state >> reason >> score >> demo;
             expect(!in.fail() && !(in >> extra), "malformed P " + where);
             const cw::Grid before = game->GetGrid();
             const int budget_before = game->Budget();
@@ -110,21 +121,149 @@ static void Golden(const char* path) {
             expect(Text(game->GetGrid()) == grid, "grid " + where);
             expect(game->Budget() == budget && state == cw::StateName(game->GetState()), "budget/state " + where);
             expect(game->Score() == score && game->Demo() == demo, "score/demo " + where);
+            expect(reason == cw::ReasonName(game->Reason()), "loss reason " + where);
+            expect((game->GetState() == cw::State::Lost) == (game->Reason() != cw::LossReason::None), "reason iff lost " + where);
             if (st != cw::Status::Ok) {
                 expect(std::memcmp(&before, &game->GetGrid(), sizeof before) == 0 && game->Budget() == budget_before,
                        "refusal changed the round " + where);
             } else if (game->GetState() != cw::State::Playing) {
                 wins += game->GetState() == cw::State::Won ? 1 : 0;
                 losses += game->GetState() == cw::State::Lost ? 1 : 0;
+                out.blocked += game->Reason() == cw::LossReason::Blocked ? 1 : 0;
             }
             ++moves;
         } else {
             expect(false, "unknown row " + where);
         }
     }
-    expect(rounds > 300 && wins > 20 && losses > 20, "coverage");
-    Check(problems == 0, "golden fixture replays with no problems");
-    std::printf("golden: %d rounds, %d placements, %d wins, %d losses, %d problems\n", rounds, moves, wins, losses, problems);
+    expect(rounds > 300 && wins > 20 && losses > 20 && out.blocked > 0, "coverage");
+    return out;
+}
+
+static std::string Slurp(const char* path) {
+    std::ifstream f(path, std::ios::binary);
+    std::ostringstream s;
+    s << f.rdbuf();
+    return s.str();
+}
+
+static void Golden(const char* path) {
+    const std::string text = Slurp(path);
+    Check(!text.empty(), std::string("read golden file ") + path);
+    std::istringstream in(text);
+    const Replay r = ReplayGolden(in, false);
+    Check(r.problems == 0, "golden fixture replays with no problems");
+    std::printf("golden: %d rounds, %d placements, %d wins, %d losses (%d blocked), %d problems\n", r.rounds, r.moves,
+                r.wins, r.losses, r.blocked, r.problems);
+    // Self-test: tampered copies of the fixture must be rejected, so a passing replay means something.
+    const std::size_t p = text.find("\nP ");
+    const std::size_t n = text.find("\nN ");
+    struct Tamper {
+        const char* name;
+        std::string body;
+    };
+    std::string flip_grid = text;
+    flip_grid[n + 3] = flip_grid[n + 3] == '.' ? '#' : '.';
+    std::string flip_status = text;
+    const std::size_t ok = text.find(" OK ", p);
+    flip_status.replace(ok, 4, " OCCUPIED ");
+    std::string flip_reason = text;
+    const std::size_t lost = text.find(" OUT_OF_LINKS ");
+    flip_reason.replace(lost, 14, " BLOCKED ");
+    std::string extra_token = text;
+    extra_token.insert(text.find('\n', p + 1), " 7");
+    std::string unknown_row = text + "Q nonsense\n";
+    const Tamper tampers[] = {{"grid", flip_grid}, {"status", flip_status}, {"reason", flip_reason},
+                              {"trailing token", extra_token}, {"unknown row", unknown_row}};
+    for (const Tamper& t : tampers) {
+        std::istringstream tin(t.body);
+        Check(ReplayGolden(tin, true).problems > 0, std::string("tampered fixture rejected: ") + t.name);
+    }
+}
+
+// Refusals must not draw randomness: interleaving bad moves leaves every later grid identical.
+static void RefusalsDrawNothing() {
+    bool ok = true;
+    for (int s = 0; s < 200; ++s) {
+        cw::Game a("r" + std::to_string(s));
+        cw::Game b("r" + std::to_string(s));
+        while (a.GetState() == cw::State::Playing) {
+            const int cell = a.Demo();
+            b.Place(-1);
+            b.Place(cw::kCells);
+            for (int i = 0; i < cw::kCells; ++i) {
+                if (b.GetGrid().ring[i] != cw::kEmpty) {
+                    b.Place(i);  // OCCUPIED
+                    break;
+                }
+            }
+            ok = ok && a.Place(cell) == cw::Status::Ok && b.Place(cell) == cw::Status::Ok;
+            ok = ok && std::memcmp(&a.GetGrid(), &b.GetGrid(), sizeof(cw::Grid)) == 0 && a.Budget() == b.Budget();
+        }
+        ok = ok && a.GetState() == b.GetState() && a.Reason() == b.Reason();
+    }
+    Check(ok, "refusals draw no randomness and change nothing");
+}
+
+// Crossing cost moves the right way: a link on an empty ring lowers it by at most one, rust never lowers it.
+static void CostMoves() {
+    bool ok = true;
+    int checked = 0;
+    for (int s = 0; s < 300; ++s) {
+        cw::Game g("c" + std::to_string(s));
+        const cw::Grid base = g.GetGrid();
+        const int c0 = cw::Crossing(base);
+        for (int i = 0; i < cw::kCells; ++i) {
+            if (base.ring[i] != cw::kEmpty) {
+                continue;
+            }
+            cw::Grid l = base;
+            l.ring[i] = cw::kLink;
+            cw::Grid r = base;
+            r.ring[i] = cw::kRust;
+            const int cl = cw::Crossing(l);
+            const int cr = cw::Crossing(r);
+            ok = ok && cl <= c0 && cl >= c0 - 1 && cr >= c0;
+            // The demo ring is exactly one that lowers the cost.
+            ok = ok && (i != cw::DemoCell(base) || cl == c0 - 1);
+            ++checked;
+        }
+    }
+    Check(ok, "links lower the crossing by at most one, rust never lowers it, the demo ring lowers it");
+    // PathCells: a real crossing (left to right, adjacent, no rust) whose empty rings number exactly the cost.
+    bool path_ok = true;
+    int paths = 0;
+    for (int s = 0; s < 300; ++s) {
+        cw::Game g("p" + std::to_string(s));
+        while (g.GetState() == cw::State::Playing) {
+            const cw::Grid& grid = g.GetGrid();
+            int path[cw::kCells] = {};
+            const int n = cw::PathCells(grid, path);
+            const int cost = cw::Crossing(grid);
+            int empties = 0;
+            bool good = n > 0 && path[0] % cw::kN == 0 && path[n - 1] % cw::kN == cw::kN - 1;
+            for (int k = 0; k < n && good; ++k) {
+                good = grid.ring[path[k]] != cw::kRust;
+                empties += grid.ring[path[k]] == cw::kEmpty ? 1 : 0;
+                if (k > 0) {
+                    const int d = path[k] - path[k - 1];
+                    good = good && (d == cw::kN || d == -cw::kN || ((d == 1 || d == -1) && path[k] / cw::kN == path[k - 1] / cw::kN));
+                }
+            }
+            path_ok = path_ok && good && empties == cost;
+            ++paths;
+            g.Place(g.Demo());
+        }
+    }
+    Check(path_ok, "PathCells gives a real cheapest crossing");
+    cw::Grid wall{};
+    for (int r = 0; r < cw::kN; ++r) {
+        wall.ring[r * cw::kN + 2] = cw::kRust;
+    }
+    int none[cw::kCells] = {};
+    Check(cw::PathCells(wall, none) == 0, "PathCells is empty when rust cuts every crossing");
+    std::printf("paths: %d cheapest crossings checked\n", paths);
+    std::printf("cost moves: %d single-ring changes checked\n", checked);
 }
 
 // Every seed starts crossable within budget; the demo never wastes a link and wins most rounds.
@@ -147,7 +286,7 @@ static void Invariants() {
         demo_wins += g.GetState() == cw::State::Won ? 1 : 0;
     }
     Check(ok, "every round starts crossable and ends");
-    Check(demo_wins > 700, "the demo wins most rounds");
+    Check(demo_wins > 850, "the chokepoint demo wins most rounds");
     std::printf("invariants: 1000 rounds, demo won %d\n", demo_wins);
 }
 
@@ -167,13 +306,16 @@ static void Edges() {
     cw::Game b("same");
     Check(std::memcmp(&a.GetGrid(), &b.GetGrid(), sizeof(cw::Grid)) == 0 && a.Budget() == b.Budget(), "same seed, same weave");
     Check(std::strcmp(cw::StatusName(static_cast<cw::Status>(9)), "UNKNOWN") == 0 &&
-              std::strcmp(cw::StateName(static_cast<cw::State>(9)), "UNKNOWN") == 0,
+              std::strcmp(cw::StateName(static_cast<cw::State>(9)), "UNKNOWN") == 0 &&
+              std::strcmp(cw::ReasonName(static_cast<cw::LossReason>(9)), "UNKNOWN") == 0,
           "unknown names");
 }
 
 int main(int argc, char** argv) {
     Golden(argc > 1 ? argv[1] : "chainmail_weave_golden.txt");
     Invariants();
+    RefusalsDrawNothing();
+    CostMoves();
     Edges();
     std::printf("%s: %d checks, %d failures\n", g_failures == 0 ? "PASS" : "FAIL", g_checks, g_failures);
     return g_failures == 0 ? EXIT_SUCCESS : EXIT_FAILURE;

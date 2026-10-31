@@ -57,6 +57,17 @@ class Game(pc.PrismGame):
         value = size * 5 + (5 if len(keys) == 2 else 0)
         return {"name": self.rng.choice(NAMES), "cost": cost, "value": value}
 
+    def check_rules(self):
+        """Every summon is worth 10-25 in steps of 5, so the score must fit the summon count (Round 2 finding, prometheus 1).
+        The save keeps names only, so this bounds the score rather than replaying it."""
+        n = len(self.summoned) if isinstance(self.summoned, list) else -1
+        if n < 0 or not all(isinstance(x, str) and x in NAMES for x in self.summoned):
+            raise ValueError("wardens summoned list has unknown spirits")
+        if self.score % 5 or not 10 * n <= self.score <= 25 * n:
+            raise ValueError("wardens score does not fit the spirits summoned")
+        if self.won != (self.score >= self.cfg["target"]) or (self.won and not self.over):
+            raise ValueError("wardens result does not match the score")
+
     def affordable(self, i):
         return all(self.pouch[h] >= n for h, n in self.spirits[i]["cost"].items())
 

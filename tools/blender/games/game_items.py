@@ -969,6 +969,183 @@ def emberkiln():
     return out
 
 
+# ---------------------------------------------------------------- forge kit (hephaestus games)
+def ui_panel(a, w, h, note, face_hex="141A22", frame_hex="3A3A40", wall=True):
+    """Wall-hung UI backing panel; runtime UI draws over SOCKET_UI_Face. wall=True: origin at the back-bottom (mount on wall)."""
+    P = [K.box("Frame", (w, 0.06, h), (0, 0, h / 2), 0), K.box("Face", (w - 0.08, 0.01, h - 0.08), (0, -0.031, h / 2), 1, bevel=False)]
+    P += [K.cyl("Bolt%d%d" % (sx, sz), "y", 0.015, 0.015, 0.01, (sx * (w / 2 - 0.025), -0.031, h / 2 + sz * (h / 2 - 0.025)), 2, 6) for sx in (-1, 1) for sz in (-1, 1)]
+    return simple(a, P, [("frame", frame_hex, 0.5, 0.7), ("UI face (runtime UI over this)", face_hex, 0.9), ("bolts", "B08A4A", 0.4, 0.9)], [K.socket("Wall", (0, 0.03, 0)), K.socket("UI_Face", (0, -0.037, h / 2))],
+                  "%.2f x %.2f m UI panel: %s" % (w, h, note), (w, 0.06, h), (0, 0, h / 2))
+
+
+def hammer(a, head_hex, note, head=(0.22, 0.1, 0.1), extra=(), extra_mats=()):
+    hx, hy, hz = head; L = 0.45
+    P = [K.cyl("Haft", "z", 0.018, 0.015, L, (0, 0, L / 2), 0, 8), K.cyl("Grip", "z", 0.021, 0.021, 0.14, (0, 0, 0.08), 1, 8), K.box("Head", head, (0, 0, L + hz / 2 - 0.01), 2)] + list(extra)
+    return simple(a, P, [("ash haft", WOOD, 0.7), ("leather grip", "4A2E1A", 0.8), ("head", head_hex, 0.35, 0.9)] + list(extra_mats),
+                  [K.socket("Grip", (0, 0, 0.08)), K.socket("Strike", (hx / 2, 0, L + hz / 2 - 0.01)), K.socket("Spark", (hx / 2 + 0.02, 0, L + hz / 2 - 0.01))],
+                  "%.2f m forge hammer: %s" % (L + hz, note), (max(hx, 0.05), max(hy, 0.05), L + hz), (0, 0, (L + hz) / 2))
+
+
+# ================================================================ hofstadter_hammers (hephaestus, READY 60513; Items sheet)
+@game("hofstadter_hammers")
+def hofstadter_hammers():
+    G = "Prop_HofstadterHammers_"; out = []
+    top = [K.box("MarqAnvil", (0.34, 0.1, 0.07), (0, -0.05, 2.1), 5), K.box("MarqAnvilFoot", (0.14, 0.1, 0.06), (0, -0.05, 2.04), 5), K.box("MarqSlot", (0.16, 0.02, 0.07), (0.3, -0.17, 1.93), 6, bevel=False)]
+    out.append(cabinet("Prop_Arcade_Cab_HofstadterHammers", "3A2A22", "B08A4A", "FF9A3A", top, [("anvil iron", "2A2A30", 0.45, 0.85), ("slot 36 plate (emissive)", "FFD08A", 0.3, 0.0, True)], "Forge Cabinet, slot 36: anvil marquee + slot plate"))
+    out.append(ui_panel(G + "SlotScreen36", 0.6, 0.45, "slot 36 title card + prompt screen (fits the cabinet SOCKET_Screen)", "1A1410", "2A2A30"))
+    out[-1]["off_centre_ok"] = "screen card; origin bottom-centre of the card"
+    out.append(hammer(G + "Hammer_Q", "C8A040", "the Q hammer: brass cross-peen, Q glyph", extra=[K.box("QGlyph", (0.004, 0.06, 0.06), (0.111, 0, 0.49), 3, bevel=False)], extra_mats=[("glyph (emissive)", "FFC870", 0.3, 0.0, True)]))
+    out.append(hammer(G + "Hammer_Conway", "6A8AA0", "the Conway hammer: blued steel, twin faces, C glyph", head=(0.26, 0.09, 0.09),
+                      extra=[K.cyl("FaceA", "x", 0.05, 0.05, 0.03, (-0.14, 0, 0.485), 2, 8), K.cyl("FaceB", "x", 0.05, 0.05, 0.03, (0.14, 0, 0.485), 2, 8), K.box("CGlyph", (0.004, 0.05, 0.05), (0.156, 0, 0.485), 3, bevel=False)],
+                      extra_mats=[("glyph (emissive)", "8AD0FF", 0.3, 0.0, True)]))
+    out[-1]["off_centre_ok"] = "hammer origin at the grip end"; out[-2]["off_centre_ok"] = "hammer origin at the grip end"
+    out.append(ui_panel(G + "StrikeReadout", 1.2, 0.4, "strikes heard so far + rule text"))
+    out.append(ui_panel(G + "ScorePanel", 0.6, 0.5, "points, streak, best streak (x5 bonus)"))
+    fm = npc("Mob_Forge_Forgemaster", "4A3A2A", "2A2A30", [K.box("Apron", (0.4, 0.03, 0.75), (0, -0.15, 1.0), 4), K.cyl("FHammer", "z", 0.015, 0.015, 0.4, (-0.37, -0.03, 0.7), 5, 6), K.box("FHammerHead", (0.16, 0.07, 0.07), (-0.37, -0.03, 0.92), 5)],
+             [("leather apron", "5A3A22", 0.8), ("iron", "2A2A30", 0.5, 0.8)], "Forgemaster of Hephaestus Island (Turned / Slipped lines); shared with crafting_rewards")
+    out += [fm] + rig_npc(fm)
+    return out
+
+
+# ================================================================ sluicegate (unreal-team, READY 61066/61067; 'Blender items' sheet)
+def channel(a, kind):
+    """1 m modular earth channel tile on a 3 x 3 grid; water fill is its own slot (runtime toggles wet / next)."""
+    cells = {"Straight": {(1, 0), (1, 1), (1, 2)}, "Corner": {(1, 1), (1, 2), (2, 1)}, "Tee": {(1, 0), (1, 1), (1, 2), (2, 1)}, "DeadEnd": {(1, 1), (1, 2)}}[kind]
+    c = 1 / 3; P = [K.box("Base", (1.0, 1.0, 0.1), (0, 0, 0.05), 0, bevel=False)]
+    for i in range(3):
+        for j in range(3):
+            x, y = (i - 1) * c, (1 - j) * c
+            if (i, j) in cells:
+                P += [K.box("Bed%d%d" % (i, j), (c, c, 0.01), (x, y, 0.105), 1, bevel=False), K.box("Water%d%d" % (i, j), (c, c, 0.01), (x, y, 0.2), 2, bevel=False)]
+            else:
+                P += [K.box("Bank%d%d" % (i, j), (c, c, 0.2), (x, y, 0.2), 0, bevel=False)]
+    return simple(a, P, [("pale earth", "C8B48A", 0.95), ("channel bed", "8A7A5A", 0.95), ("water (runtime: blue / next push lighter)", "3A7AC8", 0.1)], [K.socket("Base", (0, 0, 0)), K.socket("Water", (0, 0, 0.2))],
+                  "1 x 1 m earth channel tile, %s (north = +Y)" % kind.lower(), (1.0, 1.0, 0.3), (0, 0, 0.15))
+
+
+@game("sluicegate")
+def sluicegate():
+    G = "Prop_Sluicegate_"; out = []
+    top = [K.cyl("MarqWheel", "y", 0.14, 0.14, 0.04, (0, -0.2, 1.93), 5, 12)] + [K.box("MarqPaddle%d" % k, (0.03, 0.05, 0.1), (0.15 * math.cos(k * math.pi / 3), -0.2, 1.93 + 0.15 * math.sin(k * math.pi / 3)), 5, bevel=False, rot=(0, -k * 60, 0)) for k in range(6)]
+    top += [K.box("SideWater%d" % s, (0.005, 0.5, 0.06), (s * 0.417, 0.08, 0.35), 6, bevel=False) for s in (-1, 1)]
+    out.append(cabinet("Prop_Arcade_Cab_Sluicegate", "4A3A2A", "8AA8B0", "6AC8E8", top, [("oak wheel", "6A5034", 0.8), ("water channel art", "3A7AC8", 0.2)], "sluice-wheel marquee + water-channel side art"))
+    for st in ("Open", "Closed"):
+        lift = 0.9 if st == "Open" else 0.0
+        P = [K.box("Post%d" % s, (0.2, 0.25, 2.2), (s * 1.0, 0, 1.1), 0) for s in (-1, 1)] + [K.box("Lintel", (2.2, 0.25, 0.2), (0, 0, 2.3), 0), K.box("Board", (1.8, 0.1, 1.0), (0, 0, 0.5 + lift), 1),
+             K.cyl("Spindle", "z", 0.03, 0.03, 0.9, (0, 0, 2.4 + 0.45 - lift * 0.4), 2, 8), K.cyl("Wheel", "z", 0.35, 0.35, 0.05, (0, 0, 2.5), 2, 14)]
+        P += [K.box("Spoke%d" % k, (0.66, 0.03, 0.03), (0, 0, 2.5), 2, bevel=False, rot=(0, 0, k * 45)) for k in range(4)]
+        out.append(simple(G + "Headgate_" + st, P, [("timber", "6A5034", 0.85), ("oak board", "8A6440", 0.8), ("iron wheel", "2A2A30", 0.5, 0.8)],
+                          [K.socket("Floor", (0, 0, 0)), K.socket("Wheel", (0, 0, 2.53)), K.socket("Outflow", (0, -0.2, 0.1))], "2.2 m timber headgate with lifting wheel, %s" % st.lower(), (2.2, 0.25, 2.85), (0, 0, 1.425)))
+    for st in ("Stacked", "Dropped"):
+        n = 3 if st == "Stacked" else 1
+        P = sum([[K.box("Board%d" % k, (1.0, 0.25, 0.06), (0, 0, 0.03 + 0.065 * k), 0), K.box("Handle%d" % k, (0.2, 0.03, 0.03), (0, -0.14, 0.03 + 0.065 * k), 1, bevel=False)] for k in range(n)], [])
+        out.append(simple(G + "Board_" + st, P, [("oak", "6A4A2A", 0.8), ("iron handle", "2A2A30", 0.5, 0.8)], [K.socket("Floor", (0, 0, 0)), K.socket("Grip", (0, -0.15, 0.03))],
+                          "1 m oak gate board, %s" % st.lower(), (1.0, 0.31, 0.065 * n), (0, -0.03, 0.0325 * n)))
+    for st, hx in (("Dry", "8A7A5A"), ("Full", "2AB0A8")):
+        P = [K.box("Rim%d" % k, (1.0 if k < 2 else 0.12, 0.12 if k < 2 else 0.76, 0.12), ((0, 0, -0.44, 0.44)[k], (-0.44, 0.44, 0, 0)[k], 0.06), 0) for k in range(4)] + [K.box("Floor", (0.76, 0.76, 0.02), (0, 0, -0.3), 0, bevel=False),
+             K.box("Surface", (0.76, 0.76, 0.01), (0, 0, -0.06 if st == "Full" else -0.28), 1, bevel=False)]
+        out.append(simple(G + "Cistern_" + st, P, [("stone", STONE, 0.9), ("water teal" if st == "Full" else "dry silt", hx, 0.1 if st == "Full" else 0.95)], [K.socket("Ground", (0, 0, 0)), K.socket("Inflow", (0, -0.5, 0.0))],
+                          "1 x 1 m sunken stone cistern, %s (sinks 0.31 m below ground)" % st.lower(), (1.0, 1.0, 0.43), (0, 0, -0.095)))
+        out[-1]["off_centre_ok"] = "sunken: origin at ground level, tank below"
+    for st, ang in (("Idle", 0), ("Turning", 22.5)):
+        P = [K.box("EndWall", (0.4, 1.2, 2.0), (0.9, 0, 1.0), 0), K.cyl("Axle", "x", 0.06, 0.06, 1.0, (0.3, 0, 1.4), 2, 8), K.cyl("Rim", "x", 1.25, 1.25, 0.08, (0.2, 0, 1.4), 1, 20), K.cyl("Hub", "x", 0.15, 0.15, 0.4, (0.2, 0, 1.4), 2, 10)]
+        P += [K.box("Paddle%d" % k, (0.5, 0.06, 0.35), (0.2, 1.1 * math.sin(math.radians(k * 30 + ang)), 1.4 + 1.1 * math.cos(math.radians(k * 30 + ang))), 3, bevel=False, rot=(-(k * 30 + ang), 0, 0)) for k in range(12)]
+        out.append(simple(G + "MillWheel_" + st, P, [("race end wall stone", STONE, 0.9), ("wheel rim", "8A2A1A", 0.7), ("iron", "2A2A30", 0.5, 0.8), ("red paddles", "C83A2A", 0.7)],
+                          [K.socket("Floor", (0, 0, 0)), K.socket("Axle", (0.2, 0, 1.4)), K.socket("Splash", (0.2, -1.0, 0.3))], "2.65 m undershot mill wheel on a race end wall, %s (spin about X at SOCKET_Axle)" % st.lower(), (1.3, 2.6, 2.65), (0.45, 0, 1.325)))
+        out[-1]["off_centre_ok"] = "origin at race floor under the wheel front"
+    for kind in ("Straight", "Corner", "Tee", "DeadEnd"):
+        out.append(channel(G + "Channel_" + kind, kind))
+    gk = npc("Mob_Sluicegate_Gatekeeper", "5A5A4A", "3A3A2A", [K.cyl("Crook", "z", 0.015, 0.015, 1.4, (-0.37, -0.03, 0.78), 4, 6), K.box("CrookHook", (0.12, 0.03, 0.03), (-0.32, -0.03, 1.47), 4, bevel=False)] +
+             [K.box("BoardStack%d" % k, (0.06, 0.4, 0.06), (0.37, -0.03, 0.85 + 0.065 * k), 5) for k in range(3)], [("crook wood", WOOD, 0.7), ("oak boards", "6A4A2A", 0.8)], "old gatekeeper with crook and board stack")
+    out += [gk] + rig_npc(gk)
+    return out
+
+
+# ================================================================ roostcall (unreal-team, READY 59974; 'Blender items' sheet)
+@game("roostcall")
+def roostcall():
+    G = "Prop_Roostcall_"; out = []
+    top = [ball("MarqBird", (-0.15, -0.18, 1.93), 0.07, 5, 8), K.cyl("MarqWhistle", "x", 0.015, 0.012, 0.18, (0.15, -0.18, 1.93), 6, 8)]
+    out.append(cabinet("Prop_Arcade_Cab_Roostcall", "3A4A3A", "A8C890", "FFC86A", top, [("prism feathers (emissive)", "FFB84A", 0.3, 0.0, True), ("bone", "E8E0C8", 0.6)], "bird-and-whistle marquee"))
+    P = [K.box("Post%d%d" % (sx, sy), (0.1, 0.1, 1.6), (sx * 0.9, sy * 0.9, 0.8), 0) for sx in (-1, 1) for sy in (-1, 1)] + [K.box("TopBack", (1.9, 0.1, 0.1), (0, 0.9, 1.6), 0)] + [K.box("TopSide%d" % s, (0.1, 1.9, 0.1), (s * 0.9, 0, 1.6), 0) for s in (-1, 1)]
+    P += [K.cyl("Perch%d" % k, "x", 0.025, 0.025, 1.8, (0, 0.5 - 0.5 * k, 0.6 + 0.35 * k), 0, 6) for k in range(3)] + [K.box("Moss%d" % k, (0.3, 0.12, 0.04), (-0.6 + 0.6 * k, 0.9, 1.67), 1) for k in range(3)]
+    S = [K.socket("Floor", (0, 0, 0))] + [K.socket("Bird_%d_%d" % (k, j), (-0.6 + 0.4 * j, 0.5 - 0.5 * k, 0.625 + 0.35 * k)) for k in range(3) for j in range(4)]
+    out.append(simple(G + "Roost", P, [("moss-wood", "5A4A30", 0.9), ("moss", "5A8A3A", 0.95)], S, "2 x 2 cell moss-wood perch frame, 1.65 m, open front, 12 perched-bird sockets", (1.9, 1.9, 1.67), (0, 0, 0.835)))
+    for pose, glow in (("Idle", False), ("Startled", True), ("Perch", False)):
+        b = bird("Creature_Roostcall_GlimmerBird_" + pose, "8AA8C8", "C8A6FF", "E8B040", 0.85, "prism-feathered glimmer-bird" + (", flare (emissive feather variant)" if glow else ""), "glide" if pose == "Startled" else "perch")
+        if glow: b["materials"][1] = K.material(b["asset"], 1, "flare feathers (emissive)", "FFB84A", 0.3, 0.0, True)
+        b["kind"] = "Creature"; out.append(b)
+    P = [K.cyl("Body", "x", 0.012, 0.009, 0.13, (0, 0, 0.012), 0, 8), K.box("Fipple", (0.02, 0.004, 0.006), (-0.045, -0.011, 0.012), 1, bevel=False), K.cyl("Cord", "z", 0.003, 0.003, 0.25, (0.07, 0, 0.13), 1, 4)]
+    out.append(simple(G + "Whistle", P, [("bone", "E8E0C8", 0.6), ("cord", ROPE, 0.95)], [K.socket("Hand", (0, 0, 0.012)), K.socket("Mouth", (-0.065, 0, 0.012))], "0.15 m bone whistle on a cord", (0.15, 0.03, 0.26), (0, 0, 0.13)))
+    out[-1]["off_centre_ok"] = "hand-held; origin at the grip"
+    for kind in ("Straight", "Corner", "Gate"):
+        if kind == "Straight": P = [K.box("Wall", (1.0, 0.3, 0.5), (0, 0, 0.25), 0)]
+        elif kind == "Corner": P = [K.box("WallA", (0.65, 0.3, 0.5), (-0.175, 0, 0.25), 0), K.box("WallB", (0.3, 0.65, 0.5), (0, 0.175, 0.25), 0)]
+        else: P = [K.box("Pier%d" % s, (0.25, 0.3, 0.7), (s * 0.375, 0, 0.35), 0) for s in (-1, 1)] + [K.box("GateBar%d" % k, (0.5, 0.04, 0.05), (0, 0, 0.2 + 0.2 * k), 1) for k in range(2)]
+        P += [rock("Cap%d" % k, (-0.3 + 0.3 * k, 0, 0.5 if kind != "Gate" else 0.7), 0.08, 0, k) for k in range(3 if kind == "Straight" else 1)]
+        out.append(simple(G + "YardWall_" + kind, P, [("stone", STONE, 0.9), ("gate wood", WOOD, 0.8)], [K.socket("Floor", (0, 0, 0))], "1 m low stone yard wall, %s" % kind.lower(), (1.0, 0.65 if kind == "Corner" else 0.3, 0.8), (0, 0.175 if kind == "Corner" else 0, 0.4)))
+    wd = npc("Mob_Roostcall_Warden", "4A5A3A", "3A3A2A", [K.cyl("WWhistle", "x", 0.012, 0.009, 0.13, (-0.37, -0.05, 0.88), 4, 8), K.box("WSatchel", (0.15, 0.08, 0.18), (0.25, -0.12, 0.95), 5)], [("bone", "E8E0C8", 0.6), ("satchel", "6A5034", 0.85)], "roost-warden who hands over the whistle")
+    out += [wd] + rig_npc(wd)
+    return out
+
+
+# ================================================================ crafting_rewards (hephaestus, READY 62349; batch 1 = 61000, batch 2 = 61072)
+INGOTS = [("Glowsteel", "FFB84A", True), ("Tidebrass", "3AB0A0", False), ("Galeiron", "A8C0D0", False), ("Umbral", "4A3A6A", False), ("Heartglass", "FF6A9A", True)]
+
+
+def ingot(a, hx, glow, note):
+    P = [K.lathe("Ingot", [(0, 0), (0.07, 0), (0.06, 0.05), (0, 0.05)], (0, 0, 0), 0, 4, rot=(0, 0, 45)), K.box("Stamp", (0.04, 0.004, 0.02), (0, -0.042, 0.025), 1, bevel=False, rot=(-20, 0, 0))]
+    return simple(a, P, [(note + (" (emissive)" if glow else ""), hx, 0.3, 0.0 if glow else 0.9, glow), ("forge stamp", "2A2A30", 0.5, 0.8)], [K.socket("Floor", (0, 0, 0)), K.socket("Grip", (0, 0, 0.05))], "0.2 m ingot: " + note, (0.2, 0.1, 0.05), (0, 0, 0.025))
+
+
+@game("crafting_rewards")
+def crafting_rewards():
+    """Batch 1 (hephaestus 61000). The Forgemaster is Mob_Forge_Forgemaster from hofstadter_hammers (same NPC; not rebuilt)."""
+    G = "Prop_Forge_"; out = []
+    P = [K.box("Top", (1.8, 0.8, 0.1), (0, 0, 0.9), 0)] + [K.box("Leg%d%d" % (sx, sy), (0.1, 0.1, 0.85), (sx * 0.8, sy * 0.3, 0.425), 0) for sx in (-1, 1) for sy in (-1, 1)]
+    P += [K.box("Crucible", (0.4, 0.4, 0.35), (-0.4, 0.05, 1.125), 1), K.box("Melt", (0.32, 0.32, 0.02), (-0.4, 0.05, 1.29), 2, bevel=False), K.box("Mould", (0.5, 0.2, 0.06), (0.4, -0.15, 0.98), 1)]
+    P += [crystal("Shard%d" % k, (0.3 + 0.12 * k, 0.2, 0.95), 0.14, 3, (0, 20 * k - 20, 0)) for k in range(3)]
+    out.append(simple(G + "SmelterBench", P, [("bench oak", "5A4030", 0.85), ("iron crucible / mould", "2A2A30", 0.5, 0.8), ("molten (emissive)", "FF6A1A", 0.3, 0.0, True), ("prism shards (emissive)", "C8A6FF", 0.15, 0.0, True)],
+                      [K.socket("Floor", (0, 0, 0)), K.socket("Crucible", (-0.4, 0.05, 1.3)), K.socket("Mould", (0.4, -0.15, 1.01)), K.socket("Player", (0, -0.9, 0))], "1.8 m forge smelter bench with crucible, mould and shards", (1.8, 0.8, 1.3), (0, 0, 0.65)))
+    for n, hx, glow in INGOTS:
+        out.append(ingot(G + "Ingot_" + n, hx, glow, n.lower() + (" alloy" if n == "Umbral" else "")))
+    P = [K.box("Bin", (0.7, 0.5, 0.6), (0, 0, 0.3), 0)] + [K.box("Band%d" % k, (0.72, 0.52, 0.04), (0, 0, 0.1 + 0.4 * k), 1, bevel=False) for k in range(2)]
+    R = K.rng(SEED, "scrap"); P += [K.box("Scrap%d" % k, (R.uniform(0.06, 0.18), R.uniform(0.03, 0.1), 0.02), (R.uniform(-0.25, 0.25), R.uniform(-0.17, 0.17), 0.6), 2, bevel=False, rot=(R.uniform(-30, 30), R.uniform(-30, 30), R.uniform(0, 180))) for k in range(10)]
+    out.append(simple(G + "ScrapBin", P, [("iron bin", "3A3A40", 0.6, 0.8), ("bands", "2A2A30", 0.5, 0.8), ("scrap", "8A6A4A", 0.7, 0.7)], [K.socket("Floor", (0, 0, 0)), K.socket("Top", (0, 0, 0.62))], "0.7 m scrap bin (Salvage pool)", (0.72, 0.52, 0.66), (0, 0, 0.33)))
+    P = [K.box("Stump", (0.5, 0.5, 0.5), (0, 0, 0.25), 0), K.box("Waist", (0.22, 0.18, 0.15), (0, 0, 0.575), 1), K.box("Face", (0.6, 0.22, 0.14), (0.05, 0, 0.72), 1), K.lathe("Horn", [(0, 0.3), (0.09, 0.0), (0, 0.0)], (-0.25, 0, 0.72), 1, 8, rot=(0, -90, 0)),
+         K.box("Rune", (0.3, 0.004, 0.05), (0.05, -0.112, 0.72), 2, bevel=False)]
+    out.append(simple(G + "ReforgeAnvil", P, [("oak stump", "5A4030", 0.85), ("anvil iron", "2A2A30", 0.45, 0.85), ("reforge rune (emissive)", "8AD0FF", 0.3, 0.0, True)],
+                      [K.socket("Floor", (0, 0, 0)), K.socket("Strike", (0.05, 0, 0.79)), K.socket("Player", (0, -0.8, 0))], "0.8 m reforge anvil on a stump", (0.85, 0.5, 0.79), (-0.05, 0, 0.395)))
+    out[-1]["off_centre_ok"] = "anvil horn overhangs one side"
+    return out
+
+
+@game("crafting_rewards_2")
+def crafting_rewards_2():
+    """Batch 2 (hephaestus 61072)."""
+    G = "Prop_Forge_"; out = []
+    P = [K.box("Wall%d" % k, (1.4 if k < 2 else 0.08, 0.08 if k < 2 else 0.44, 0.5), ((0, 0, -0.66, 0.66)[k], (-0.26, 0.26, 0, 0)[k], 0.3), 0) for k in range(4)] + [K.box("Bottom", (1.4, 0.6, 0.06), (0, 0, 0.08), 0), K.box("Water", (1.24, 0.44, 0.01), (0, 0, 0.48), 1, bevel=False)]
+    P += [K.box("Leg%d" % s, (0.1, 0.6, 0.05), (s * 0.55, 0, 0.025), 0) for s in (-1, 1)]
+    out.append(simple(G + "QuenchTrough", P, [("stone", STONE, 0.9), ("quench water", "3A6A8A", 0.1)], [K.socket("Floor", (0, 0, 0)), K.socket("Quench", (0, 0, 0.48)), K.socket("Steam", (0, 0, 0.55))], "1.4 m stone quench trough", (1.4, 0.6, 0.55), (0, 0, 0.275)))
+    P = [K.box("Frame", (0.3, 0.06, 1.0), (0, 0, 0.5), 0), K.box("Tube", (0.08, 0.02, 0.85), (0, -0.04, 0.5), 1, bevel=False)]
+    for k, (n, hx, z0, z1) in enumerate((("Soft", "6A8AC8", 0.075, 0.4), ("Tempered", "E8C040", 0.4, 0.6), ("Perfect", "FFF0A0", 0.6, 0.7), ("Cracked", "C83A2A", 0.7, 0.925))):
+        P += [K.box("Band" + n, (0.1, 0.005, z1 - z0), (0.1, -0.033, (z0 + z1) / 2), 2 + k, bevel=False)]
+    out.append(simple(G + "HeatGauge", P, [("iron frame", "2A2A30", 0.5, 0.8), ("heat column (runtime fill)", "FF6A1A", 0.3, 0.0, True), ("band SOFT", "6A8AC8", 0.6), ("band TEMPERED", "E8C040", 0.6), ("band PERFECT (emissive)", "FFF0A0", 0.3, 0.0, True), ("band CRACKED", "C83A2A", 0.6)],
+                      [K.socket("Wall", (0, 0.03, 0)), K.socket("HeatBase", (0, -0.05, 0.075)), K.socket("HeatTop", (0, -0.05, 0.925))], "1 m heat gauge, bands SOFT / TEMPERED / PERFECT / CRACKED bottom to top", (0.3, 0.06, 1.0), (0, 0, 0.5)))
+    b = tick_board(G + "CommissionBoard", 1, 3, "Forgemaster's board, three daily commissions", 1.6, 1.0)
+    out.append(b)
+    P = [K.cyl("Coin", "y", 0.02, 0.02, 0.004, (0, 0, 0.02), 0, 16), K.box("Mark", (0.016, 0.0045, 0.016), (0, -0.002, 0.02), 1, bevel=False, rot=(0, 45, 0))]
+    out.append(simple(G + "MarkToken", P, [("forge bronze", "B07A3A", 0.35, 0.9), ("anvil mark (emissive)", "FFB84A", 0.3, 0.0, True)], [K.socket("Base", (0, 0, 0))], "40 mm Forge Mark token (also the icon source)", (0.04, 0.006, 0.04), (0, 0, 0.02)))
+    for t, hx, glow in (("Plain", "8A8A8A", False), ("Bronze", "B07A3A", False), ("Silver", "D0D4DC", False), ("Gold", "F2C740", False), ("Prism", "C8A6FF", True)):
+        P = [K.cyl("Disc", "z", 0.03, 0.03, 0.002, (0, 0, 0.001), 0, 16), K.box("Glyph", (0.03, 0.03, 0.001), (0, 0, 0.0025), 1, bevel=False, rot=(0, 0, 45))]
+        out.append(simple(G + "Hallmark_" + t, P, [("hallmark " + t.lower(), hx, 0.3, 0.9 if t not in ("Plain", "Prism") else 0.0, glow), ("relief", "1A1A22", 0.6)], [K.socket("Decal", (0, 0, 0))], "60 mm hallmark stamp decal plate, %s tier" % t.upper(), (0.06, 0.06, 0.003), (0, 0, 0.0015)))
+    tints = [("None", "B0B0B0", False), ("Ember", "FF6A1A", False), ("Tide", "2AB0A8", False), ("Verdant", "5AB04A", False), ("Gale", "A8C8E8", False), ("Umbra", "4A3A6A", False), ("Heartglass", "FF6A9A", True)]
+    P = [K.box("Swatch%d" % k, (0.1, 0.1, 0.02), (-0.33 + 0.11 * k, 0, 0.01), k) for k in range(7)]
+    out.append(simple(G + "FinishTints", P, [("finish " + n.lower() + (" (emissive)" if g else ""), hx, 0.35, 0.6, g) for n, hx, g in tints], [K.socket("Base", (0, 0, 0))],
+                      "material set: 7 hallmark finish tint swatches (none, ember, tide, verdant, gale, umbra, heartglass), slot = seal index", (0.76, 0.1, 0.02), (0, 0, 0.01)))
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)

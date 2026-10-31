@@ -43,5 +43,27 @@ class Rules(unittest.TestCase):
         self.assertTrue(g.over and not g.won)
 
 
+class SaveChecks(unittest.TestCase):
+    """Round 2 findings (art-master-flex 1, prometheus-style tamper): bag, pot, cracks, rounds and score are checked."""
+
+    def tampered(self, **edit):
+        g = gm.start(4, "normal")
+        g.act("draw")
+        st = g.to_state()
+        st.update(edit)
+        return st
+
+    def test_each_tamper_is_rejected(self):
+        for edit in ({"bag": [5] * 12 + [0, 0]}, {"pot": 30}, {"cracks": 1}, {"round": 3}, {"history": [9]},
+                     {"score": 9999}, {"bag": "x"}, {"won": True, "over": True}):
+            with self.assertRaises(ValueError, msg=edit):
+                gm.Game.from_state(self.tampered(**edit))
+
+    def test_reordered_bag_of_the_right_shards_still_loads(self):
+        st = self.tampered()
+        st["bag"] = sorted(st["bag"])
+        gm.Game.from_state(st)
+
+
 if __name__ == "__main__":
     unittest.main()
