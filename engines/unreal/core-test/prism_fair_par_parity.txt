@@ -8,9 +8,9 @@ game=spiritkite difficulty=hard seeds=400 bronze=1 silver=22 gold=25 bronzeHit=2
 game=glimmerloom difficulty=easy seeds=400 bronze=1 silver=167 gold=205 bronzeHit=582 silverHit=242 goldHit=62 winMedian=159 botWin=582 demoWin=817 demoMedian=187 separated=true
 game=glimmerloom difficulty=normal seeds=400 bronze=1 silver=157 gold=185 bronzeHit=302 silverHit=125 goldHit=32 winMedian=152 botWin=302 demoWin=555 demoMedian=142 separated=true
 game=glimmerloom difficulty=hard seeds=400 bronze=1 silver=120 gold=135 bronzeHit=207 silverHit=87 goldHit=22 winMedian=117 botWin=207 demoWin=310 demoMedian=0 separated=true
-game=lumenpath difficulty=easy seeds=400 bronze=1 silver=190 gold=230 bronzeHit=880 silverHit=435 goldHit=145 winMedian=180 botWin=880 demoWin=1000 demoMedian=210 separated=true
-game=lumenpath difficulty=normal seeds=400 bronze=1 silver=160 gold=190 bronzeHit=830 silverHit=350 goldHit=122 winMedian=150 botWin=830 demoWin=1000 demoMedian=170 separated=true
-game=lumenpath difficulty=hard seeds=400 bronze=1 silver=140 gold=180 bronzeHit=745 silverHit=302 goldHit=75 winMedian=130 botWin=745 demoWin=1000 demoMedian=150 separated=true
+game=lumenpath difficulty=easy seeds=400 bronze=1 silver=210 gold=230 bronzeHit=465 silverHit=232 goldHit=145 winMedian=200 botWin=465 demoWin=1000 demoMedian=210 separated=true
+game=lumenpath difficulty=normal seeds=400 bronze=1 silver=180 gold=200 bronzeHit=385 silverHit=167 goldHit=45 winMedian=170 botWin=385 demoWin=1000 demoMedian=170 separated=true
+game=lumenpath difficulty=hard seeds=400 bronze=1 silver=160 gold=190 bronzeHit=312 silverHit=142 goldHit=40 winMedian=150 botWin=312 demoWin=1000 demoMedian=150 separated=true
 game=wardens_accord difficulty=easy seeds=400 bronze=1 silver=50 gold=55 bronzeHit=1000 silverHit=457 goldHit=192 winMedian=45 botWin=1000 demoWin=1000 demoMedian=45 separated=true
 game=wardens_accord difficulty=normal seeds=400 bronze=1 silver=60 gold=65 bronzeHit=835 silverHit=337 goldHit=127 winMedian=55 botWin=835 demoWin=947 demoMedian=55 separated=true
 game=wardens_accord difficulty=hard seeds=400 bronze=1 silver=60 gold=65 bronzeHit=220 silverHit=120 goldHit=47 winMedian=60 botWin=220 demoWin=440 demoMedian=0 separated=true

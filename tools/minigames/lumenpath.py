@@ -123,6 +123,12 @@ class Game(pc.PrismGame):
         return 10 * (self.best - start) + (20 * self.moves if self.won else 0)
 
     def demo_action(self):
+        """Clear any mirror off the solution first (Round 2 finding, prometheus 2), then set the solution mirrors."""
+        mine = {(r, c) for r, c, _ in self.solution}
+        for i, row in enumerate(self.grid):
+            for j, ch in enumerate(row):
+                if ch in "/\\" and (i, j) not in mine:
+                    return (i, j)
         for r, c, m in self.solution:
             if self.grid[r][c] != m:
                 return (r, c)

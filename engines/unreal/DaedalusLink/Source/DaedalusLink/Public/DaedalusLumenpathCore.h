@@ -161,9 +161,20 @@ struct Game
 		return Act::Ok;
 	}
 
-	/** lumenpath.Game.demo_action: the first solution mirror not yet set, else the first toggleable cell. */
+	/** lumenpath.Game.demo_action: a mirror off the solution first (cleared by toggling), then the first solution mirror
+	 *  not yet set, else the first toggleable cell. */
 	Cell DemoAction() const
 	{
+		const int Rows = Size();
+		for (int I = 0; I < Rows; ++I)
+			for (int J = 0; J < Rows; ++J)
+			{
+				const char Ch = Grid[static_cast<size_t>(I)][static_cast<size_t>(J)];
+				if (Ch != '/' && Ch != '\\') continue;
+				bool Mine = false;
+				for (const Mirror& M : Solution) Mine = Mine || (M.R == I && M.C == J);
+				if (!Mine) return { I, J };
+			}
 		for (const Mirror& M : Solution) if (Grid[static_cast<size_t>(M.R)][static_cast<size_t>(M.C)] != M.M) return { M.R, M.C };
 		const int N = Size();
 		for (int I = 0; I < N; ++I) for (int J = 0; J < N; ++J) { const char Ch = Grid[static_cast<size_t>(I)][static_cast<size_t>(J)]; if (Ch == '.' || Ch == '/' || Ch == '\\') return { I, J }; }
