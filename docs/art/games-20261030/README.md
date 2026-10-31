@@ -91,3 +91,7 @@ Notes
 ## lane_props_r2 (blender-team lane R2-12, PLAN.md; prism-shard-dev 62389)
 
 9 assets: 1.9 x 1.6 m trophy diorama shelf with 6 Slot_row_col sockets; Fair Par trophy dioramas BRONZE, SILVER, GOLD and PERFECT (1-3 shards, a growing pillar and orb, a halo on PERFECT); Creature_Shardling_Mascot (0.36 m, emissive crystal, Trinket_Hat/Neck/Back/HandR/HandL plus a Shoulder socket); and the Spiritkite kite tail chain Link, Bow and End (0.3 m each, chained by SOCKET_Prev to the previous SOCKET_Next for a UE physics chain). Sheet: lane_props_r2.png.
+
+## chainmail_weave (hephaestus, READY 62846; items 62511 + 62845)
+
+14 assets: armory weave frame with 7 x 7 Ring_row_col sockets (0.2 m pitch); mail rings Empty, Rusted and Link; left and right edge clasps; link budget UI panel; hint glint and hint path glow (VFX placeholders, emissive); difficulty plaques Easy, Normal and Hard; loss banners BLOCKED and OUT OF LINKS. The Forgemaster reuses Mob_Forge_Forgemaster (95e66e111). Sheet: chainmail_weave.png.
