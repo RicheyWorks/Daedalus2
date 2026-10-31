@@ -46,3 +46,19 @@ musical rules (`BuildKit`) as V1, so the ear-rule limits and cue shapes are unch
 `tools/minigames/cue_kit.py`, which writes `cue_kit_golden_v2.txt`; CI regenerates it from Python and checks the C++ core
 matches it line for line. V1 (`MakeKit(KitSeed(...))`, `cue_kit_golden.txt`) is kept frozen and unchanged for anything
 already pinned to it; new cabinet wiring should use V2.
+
+## Streak jingle (slice 3, idea PROM-2)
+
+`DaedalusStreakJingleCore.h` (opt-in, on top of cue kit V2). A cabinet's win jingle gains one short note for every day
+of the player's daily streak, up to 8, then plays the kit's V2 win cue, so a long run is audible across the hall; a
+broken streak falls back to the plain win cue. The streak count is the Daily Almanac's `almanac::Streak(cleared,
+today)` (`DaedalusPrismAlmanacCore.h`); `JingleForAlmanac(game, token, cleared, today)` wires the two together.
+
+The eight added notes are drawn once from `PyRandom("jingle|<game>|<token>")`: a scale degree 0-4, then each next a
+different degree 0-4. Because they are drawn up front, day N+1's jingle is day N's plus one note: it grows and never
+reshuffles. Added notes are half the kit note length + 30 ms with half the gap; the jingle still ends on the root's
+octave and stays under 2 s. Every note goes through `EarSafePeak` (under 800 Hz, soft, two harmonics, no sweep).
+
+Reference: `tools/minigames/streak_jingle.py` writes `streak_jingle_golden.txt` (20 cabinets x 10 tokens x streaks
+0-9); CI regenerates it from Python and compares, and `streak_jingle_core_test.cpp` checks the C++ core against it plus
+the growth, cap, scale, ear-rule and Almanac-hook properties.

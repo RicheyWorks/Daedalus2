@@ -1,0 +1,61 @@
+name: Prismheart streak jingle core
+on:
+  pull_request:
+    paths:
+      - 'engines/unreal/**/DaedalusStreakJingleCore.h'
+      - 'engines/unreal/**/DaedalusEarRuleCore.h'
+      - 'engines/unreal/core-test/streak_jingle_core_test.cpp'
+      - 'engines/unreal/core-test/streak_jingle_golden.txt'
+      - 'engines/unreal/**/DaedalusCueKitCore.h'
+      - 'engines/unreal/**/DaedalusPrismAlmanacCore.h'
+      - 'tools/minigames/streak_jingle.py'
+      - 'engines/unreal/**/DaedalusPyRandomCore.h'
+      - 'tools/minigames/cue_kit.py'
+      - '.github/workflows/streak-jingle-core.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'engines/unreal/**/DaedalusStreakJingleCore.h'
+      - 'engines/unreal/**/DaedalusEarRuleCore.h'
+      - 'engines/unreal/core-test/streak_jingle_core_test.cpp'
+      - 'engines/unreal/core-test/streak_jingle_golden.txt'
+      - 'engines/unreal/**/DaedalusCueKitCore.h'
+      - 'engines/unreal/**/DaedalusPrismAlmanacCore.h'
+      - 'tools/minigames/streak_jingle.py'
+      - 'engines/unreal/**/DaedalusPyRandomCore.h'
+      - 'tools/minigames/cue_kit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Streak jingle golden vectors + properties (sanitized, no FMA contraction)
+        run: |
+          ${{ matrix.compiler }} -std=c++17 -O1 -Wall -Wextra -Werror -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer engines/unreal/core-test/streak_jingle_core_test.cpp -o "$RUNNER_TEMP/streak_jingle"
+          "$RUNNER_TEMP/streak_jingle" engines/unreal/core-test/streak_jingle_golden.txt
+      - name: Golden matches the Python rules reference
+        run: |
+          python3 tools/minigames/streak_jingle.py --write "$RUNNER_TEMP/streak_jingle_golden.txt"
+          cmp "$RUNNER_TEMP/streak_jingle_golden.txt" engines/unreal/core-test/streak_jingle_golden.txt
+  msvc:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Streak jingle golden vectors + properties (MSVC cl /W4 /WX /fp:strict)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $out = Join-Path $env:RUNNER_TEMP 'streak_jingle'
+          New-Item -ItemType Directory -Force $out | Out-Null
+          cl /nologo /std:c++17 /EHsc /W4 /WX /fp:strict engines/unreal/core-test/streak_jingle_core_test.cpp "/Fo$out\streak_jingle.obj" "/Fe$out\streak_jingle.exe"
+          if ($LASTEXITCODE) { throw "cl failed ($LASTEXITCODE)" }
+          & "$out\streak_jingle.exe" engines/unreal/core-test/streak_jingle_golden.txt
+          if ($LASTEXITCODE) { throw "streak_jingle_core_test failed ($LASTEXITCODE)" }
