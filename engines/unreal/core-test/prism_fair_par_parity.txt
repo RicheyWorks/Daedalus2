@@ -26,6 +26,12 @@ game=shardfall difficulty=hard seeds=400 bronze=1 silver=34 gold=38 bronzeHit=60
 game=prismcairn difficulty=easy seeds=400 bronze=1 silver=105 gold=105 bronzeHit=545 silverHit=292 goldHit=292 winMedian=105 botWin=545 demoWin=1000 demoMedian=105 separated=false
 game=prismcairn difficulty=normal seeds=400 bronze=1 silver=105 gold=105 bronzeHit=285 silverHit=117 goldHit=117 winMedian=100 botWin=285 demoWin=1000 demoMedian=105 separated=false
 game=prismcairn difficulty=hard seeds=400 bronze=1 silver=0 gold=0 bronzeHit=0 silverHit=0 goldHit=0 winMedian=0 botWin=0 demoWin=1000 demoMedian=105 separated=false
+game=shadewatch difficulty=easy seeds=400 bronze=1 silver=115 gold=125 bronzeHit=830 silverHit=372 goldHit=125 winMedian=110 botWin=830 demoWin=962 demoMedian=120 separated=true
+game=shadewatch difficulty=normal seeds=400 bronze=1 silver=129 gold=144 bronzeHit=457 silverHit=237 goldHit=80 winMedian=129 botWin=457 demoWin=792 demoMedian=134 separated=true
+game=shadewatch difficulty=hard seeds=400 bronze=1 silver=148 gold=163 bronzeHit=140 silverHit=75 goldHit=25 winMedian=148 botWin=140 demoWin=495 demoMedian=0 separated=true
+game=shardring difficulty=easy seeds=400 bronze=1 silver=289 gold=330 bronzeHit=145 silverHit=60 goldHit=15 winMedian=285 botWin=145 demoWin=687 demoMedian=287 separated=true
+game=shardring difficulty=normal seeds=400 bronze=1 silver=242 gold=264 bronzeHit=32 silverHit=15 goldHit=5 winMedian=233 botWin=32 demoWin=347 demoMedian=0 separated=true
+game=shardring difficulty=hard seeds=400 bronze=1 silver=188 gold=215 bronzeHit=22 silverHit=10 goldHit=2 winMedian=183 botWin=22 demoWin=202 demoMedian=0 separated=true
 hash run=0 u=0.578865250385359 pick=5
 hash run=1 u=0.2257281665523796 pick=4
 hash run=2 u=0.88656220536723 pick=1

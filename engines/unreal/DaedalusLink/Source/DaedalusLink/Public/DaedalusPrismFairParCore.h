@@ -15,6 +15,7 @@
 #include "DaedalusLumenpathCore.h"
 #include "DaedalusPrismcairnCore.h"
 #include "DaedalusPrismvaultCore.h"
+#include "DaedalusShadewatchCore.h"
 #include "DaedalusShardfallCore.h"
 #include "DaedalusSpiritkiteCore.h"
 #include "DaedalusWardensAccordCore.h"
@@ -30,8 +31,11 @@ constexpr int Seeds = 400;
 constexpr std::int64_t BotSeed = 600;
 constexpr int StepLimit = 500;
 constexpr int WinPercent[2] = { 40, 10 };
-constexpr int GameCount = 9; // G603: glowmoss, spiritkite, glimmerloom; G604: lumenpath, wardens_accord, facetlock;
-                              // G605: prismvault, shardfall, prismcairn
+constexpr int GameCount = 11; // G603: glowmoss, spiritkite, glimmerloom; G604: lumenpath, wardens_accord, facetlock;
+                               // G605: prismvault, shardfall, prismcairn; G606: shadewatch, shardring
+// Shardring (last) has no PRNG port: its core takes every random choice from an Oracle, so its pars are Python-only.
+// Table() replays the first ReplayCount games; the test checks the shardring rows for shape and tier order only.
+constexpr int ReplayCount = GameCount - 1;
 
 enum class Tier { None, Bronze, Silver, Gold };
 
@@ -239,6 +243,17 @@ inline int PrismcairnRound(std::uint32_t Seed, const char* Difficulty, bool Demo
 	return G.Won ? G.Score : 0;
 }
 
+// --- G606: Shadewatch (salt 16). Shardring is fixture-only (see ReplayCount). ---
+inline shadewatch::Action ShadewatchBot(const shadewatch::Game& G, int Run, int K)
+{
+	if (FollowDemo(Run, K)) return G.DemoAction();
+	std::vector<shadewatch::Action> Options;
+	for (int I = 0; I < static_cast<int>(G.Lanes.size()); ++I) Options.push_back({ shadewatch::Kind::Flare, I });
+	Options.push_back({ shadewatch::Kind::Kindle, 0 });
+	if (G.Light >= shadewatch::NovaCost) Options.push_back({ shadewatch::Kind::Nova, 0 });
+	return Options[static_cast<size_t>(Pick(BotSeed, Run, K, 16, static_cast<int>(Options.size()) - 1))];
+}
+
 // One round: final score if won, else 0. Demo = the game's own DemoAction(). Returns -1 on a refused move.
 template <class GameT, class BotT>
 int PlayRound(std::uint32_t Seed, const char* Difficulty, BotT Bot)
@@ -281,15 +296,15 @@ inline Row Calibrate(const std::string& Game, const std::string& Difficulty, con
 	return R;
 }
 
-// The whole par table (GameCount games x easy/normal/hard), in fair_par.py order. Ok false if any round refused a move.
+// The replayable par table (ReplayCount games x easy/normal/hard), in fair_par.py order. Ok false if any round refused a move.
 inline std::vector<Row> Table(bool& Ok, int SeedCount = Seeds)
 {
 	static const char* const Diffs[3] = { "easy", "normal", "hard" };
-	static const char* const Names[GameCount] = { "glowmoss", "spiritkite", "glimmerloom", "lumenpath", "wardens_accord", "facetlock",
-		"prismvault", "shardfall", "prismcairn" };
+	static const char* const Names[ReplayCount] = { "glowmoss", "spiritkite", "glimmerloom", "lumenpath", "wardens_accord", "facetlock",
+		"prismvault", "shardfall", "prismcairn", "shadewatch" };
 	std::vector<Row> Out;
 	Ok = true;
-	for (int Gi = 0; Gi < GameCount; ++Gi)
+	for (int Gi = 0; Gi < ReplayCount; ++Gi)
 		for (const char* D : Diffs)
 		{
 			std::vector<int> S, De;
@@ -306,7 +321,8 @@ inline std::vector<Row> Table(bool& Ok, int SeedCount = Seeds)
 				else if (Gi == 5) { A = FacetlockRound(U, D, false); B = FacetlockRound(U, D, true); }
 				else if (Gi == 6) { A = PrismvaultRound(U, D, false); B = PrismvaultRound(U, D, true); }
 				else if (Gi == 7) { A = ShardfallRound(U, D, false); B = ShardfallRound(U, D, true); }
-				else { A = PrismcairnRound(U, D, false); B = PrismcairnRound(U, D, true); }
+				else if (Gi == 8) { A = PrismcairnRound(U, D, false); B = PrismcairnRound(U, D, true); }
+				else { A = PlayRound<shadewatch::Game>(U, D, ShadewatchBot); B = PlayRound<shadewatch::Game>(U, D, Demo); }
 				Ok = Ok && A >= 0 && B >= 0;
 				S.push_back(std::max(0, A)); De.push_back(std::max(0, B));
 			}
