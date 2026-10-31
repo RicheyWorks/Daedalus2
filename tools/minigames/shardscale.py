@@ -182,6 +182,9 @@ class Game(pc.PrismGame):
                  f"next: {coming or '-'}   bench: {' '.join(str(w) for w in self.held) or '-'} ({len(self.held)}/{cfg['bench']})   left to place: {self.remaining()}"]
         tilt = max(-cfg["cap"], min(cfg["cap"], self.diff()))
         lines.append("beam: " + "L" + "=" * (cfg["cap"] + tilt) + "^" + "=" * (cfg["cap"] - tilt) + "R")
+        if not self.over and self.index < cfg["shards"]:   # iteration 9: where the next shard may safely go
+            safe = [side for side, a in (("left", ("left", "next")), ("right", ("right", "next"))) if not self.preview(a)[2]]
+            lines.append("next shard %d fits: %s" % (self.line[self.index], " and ".join(safe) if safe else "neither pan (bench it)"))
         if self.fresh():
             lines += self.tutorial()
         if self.over:

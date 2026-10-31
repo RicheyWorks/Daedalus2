@@ -147,6 +147,27 @@ class Rules(unittest.TestCase):
 
 
 
+class Screen(unittest.TestCase):
+    """Iterations 7 and 9: tutorial rows on the first turn only; the fit line follows the preview."""
+    def test_tutorial_only_on_the_first_turn(self):
+        g = gm.start(2)
+        self.assertIn("SET    l / r", g.render())
+        g.step(g.demo_action())
+        self.assertNotIn("SET    l / r", g.render())
+
+    def test_fit_line_matches_preview(self):
+        for s in range(10):
+            g = gm.start(s, "hard")
+            while not g.over:
+                if g.index < g.cfg["shards"]:
+                    left_ok = not g.preview(L)[2]
+                    right_ok = not g.preview(R)[2]
+                    want = "left and right" if left_ok and right_ok else "left" if left_ok else "right" if right_ok else "neither pan (bench it)"
+                    self.assertIn("fits: " + want, g.render())
+                g.step(g.demo_action())
+            self.assertNotIn("fits:", g.render())
+
+
 class Saves(unittest.TestCase):
     """Iteration 5: from_state refuses saves that break the rules."""
     def bad(self, **fields):
