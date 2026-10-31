@@ -59,3 +59,7 @@ Notes
 ## fogbell (unreal-team, READY 59509/59510; 'Blender items' sheet)
 
 17 assets: cabinet with bell and lantern marquee, 2.4 m punt with bow lantern, dock lantern lit and unlit, bell gantry, 1.2 m fog bell (origin at the swing pivot; hang at the gantry's BellHang socket), 9-mark tide gauge, and the Harbourmaster and Lantern-bearer, each static plus on the shared Prism segment rig (Rig_* movers, 6 poses). Sheet: fogbell.png.
+
+## emberkiln (unreal-team, READY 60202/60203; 'Blender items' sheet)
+
+13 assets: cabinet, kiln, tongs plain and scorched, coal hopper, tile raw, glazed and cracked, and the Stoker static plus on the shared Prism segment rig (Rig_* movers, 6 poses). Sheet: emberkiln.png.
