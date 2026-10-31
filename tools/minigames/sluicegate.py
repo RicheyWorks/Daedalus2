@@ -35,6 +35,7 @@ ROCK, CHANNEL = 0, 1
 CISTERN_SCORE, GATE_BONUS, TURN_BONUS = 10, 3, 1
 NEIGHBOURS = ((-1, 0), (0, 1), (1, 0), (0, -1))
 MIN_CISTERN_DISTANCE, MIN_MILL_DISTANCE = 2, 3
+MAX_ATTEMPTS = 40   # fields drawn before setup gives up on finding a wheel the idle flow threatens
 CISTERN_SLACK = 3   # cisterns sit at least this many turns (or a third of the budget) inside the headgate's budget
 
 
@@ -44,6 +45,26 @@ class Game(pc.PrismGame):
     FIELDS = ("field", "head", "cisterns", "mill", "wet", "gates", "gates_left", "filled", "turns")
 
     def setup(self):
+        """Draw fields until one has a mill wheel placed where doing nothing loses (v2: cross-test fix).
+
+        Each attempt draws the field, carves a channel into a cramped one, seeds the cisterns and looks for a mill
+        whose dead end the idle flow reaches (or where idle flow leaves a cistern dry anyway). A field with no such
+        mill is thrown away and the next is drawn, so waiting every turn never wins and every field has a wheel.
+        """
+        for _ in range(MAX_ATTEMPTS):
+            self._draw_field()
+            dist = self._distances(set())
+            far = sorted(cell for cell, d in dist.items() if MIN_CISTERN_DISTANCE <= d <= self.cfg["turns"] - self.cistern_slack())
+            self.cisterns = []
+            while len(self.cisterns) < min(self.cfg["cisterns"], len(far)):
+                cell = list(far[self.rng.randrange(len(far))])
+                if cell not in self.cisterns:
+                    self.cisterns.append(cell)
+            self.mill = self._place_mill(dist)
+            if self.mill is not None and len(self.cisterns) == self.cfg["cisterns"]:
+                return
+
+    def _draw_field(self):
         s = self.cfg["size"]
         pct = self.cfg["channel_pct"]
         self.field = [[CHANNEL if self.rng.randrange(100) < pct else ROCK for _ in range(s)] for _ in range(s)]
@@ -61,12 +82,17 @@ class Game(pc.PrismGame):
                     r, c = r + dr, c + dc
                     self.field[r][c] = CHANNEL
             dist = self._distances(set())
-        far = sorted(cell for cell, d in dist.items() if MIN_CISTERN_DISTANCE <= d <= self.cfg["turns"] - self.cistern_slack())
-        while len(self.cisterns) < min(self.cfg["cisterns"], len(far)):
-            cell = list(far[self.rng.randrange(len(far))])
-            if cell not in self.cisterns:
-                self.cisterns.append(cell)
-        self.mill = self._place_mill(dist)
+
+    def _idle_flow_wins(self, mill):
+        """True when waiting every turn fills every cistern before the flow reaches `mill` (a channel cell)."""
+        saved_mill, saved_field = self.mill, self.field[mill[0]][mill[1]]
+        self.mill = list(mill)
+        self.field[mill[0]][mill[1]] = CHANNEL
+        try:
+            won, _, _, _ = self.rollout()
+        finally:
+            self.mill, self.field[mill[0]][mill[1]] = saved_mill, saved_field
+        return won
 
     def _place_mill(self, dist):
         """The mill wheel sits in a dead end: a channel cell with exactly one channel neighbour, three or more steps from
@@ -107,7 +133,8 @@ class Game(pc.PrismGame):
                     around = [(r + dr, c + dc) for dr, dc in NEIGHBOURS if self.inside(r + dr, c + dc) and self.field[r + dr][c + dc] == CHANNEL]
                     if len(around) == 2 and all(a in dist for a in around) and all(throat_ok(a) for a in around):
                         candidates.append((r, c))
-        if not candidates:   # a field with no dry corner for a wheel: pure routing, nothing to flood
+        candidates = [cell for cell in candidates if not self._idle_flow_wins(cell)]
+        if not candidates:   # no wheel the idle flow would reach: the caller draws another field
             return None
         mill = candidates[self.rng.randrange(len(candidates))]
         self.field[mill[0]][mill[1]] = CHANNEL

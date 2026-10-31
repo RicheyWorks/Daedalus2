@@ -17,7 +17,7 @@
     },
     {
       "name": "Mill wheel",
-      "text": "A dead end at least 3 steps out whose single throat is neither cistern nor headgate and can be gated without cutting any cistern off; if no such cell exists one is carved from rock beside a fitting throat, then a two-throat pocket, else no mill. One gate on the throat always keeps the wheel dry.",
+      "text": "A dead end at least 3 steps out whose single throat is neither cistern nor headgate and can be gated without cutting any cistern off; if no such cell exists one is carved from rock beside a fitting throat, then a two-throat pocket, else no mill. One gate on the throat always keeps the wheel dry. Setup v2 (cross-test fix): the wheel is placed only where the idle flow would reach it, and setup draws up to 40 fields until such a wheel exists, so waiting every turn never wins and every field has a mill.",
       "code": "Game._place_mill / Game::PlaceMill"
     },
     {
@@ -37,7 +37,7 @@
     },
     {
       "name": "Gatekeeper (demo)",
-      "text": "For waiting and for every gateable cell, play the rest of the flow with no more gates and rank the ending: won, then not flooded, then more cisterns filled, then fewer turns used; ties by row then column, waiting as the baseline. Wins about 91 / 76 / 74 percent; a player who plans two gates ahead does better.",
+      "text": "For waiting and for every gateable cell, play the rest of the flow with no more gates and rank the ending: won, then not flooded, then more cisterns filled, then fewer turns used; ties by row then column, waiting as the baseline. Wins about 84 / 66 / 65 percent; waiting every turn wins 0; a player who plans two gates ahead does better.",
       "code": "Game.rollout, Game.demo_action / Game::Rollout, Game::DemoAction"
     },
     {

@@ -39,6 +39,7 @@ class Rules(unittest.TestCase):
                     self.assertIn(tuple(c), dist, "every cistern is reachable")
                     self.assertLessEqual(dist[tuple(c)], cfg["turns"] - g.cistern_slack())
                 self.assertGreaterEqual(len(dist), g.min_reach())
+                self.assertIsNotNone(g.mill, "every field has a mill wheel (cross-test finding 4)")
                 if g.mill is not None:
                     self.assertNotIn(g.mill, g.cisterns)
                     throats = [(g.mill[0] + dr, g.mill[1] + dc) for dr, dc in gm.NEIGHBOURS
@@ -206,9 +207,21 @@ class Saves(unittest.TestCase):
         self.bad(turns=0, over=False)
 
 
+class CrossTest(unittest.TestCase):
+    """Blender Team cross-test (2026-10-30): waiting every turn must never win, and every field must have a mill."""
+    def test_idle_flow_never_wins(self):
+        for d in gm.DIFFICULTY:
+            for s in list(range(120)) + [191, 193, 282]:
+                g = gm.start(s, d)
+                self.assertIsNotNone(g.mill, "%s seed %d has no mill" % (d, s))
+                while not g.over:
+                    g.step("wait")
+                self.assertFalse(g.won, "%s seed %d: waiting every turn wins" % (d, s))
+
+
 class Balance(unittest.TestCase):
     """Iteration 3: the gatekeeper's win rate stays inside pinned bands, so a rules change that shifts the difficulty is caught."""
-    BANDS = {"easy": (80, 98), "normal": (62, 88), "hard": (60, 86)}
+    BANDS = {"easy": (72, 95), "normal": (55, 80), "hard": (52, 78)}
 
     def test_gatekeeper_win_rates(self):
         for d, (low, high) in self.BANDS.items():
