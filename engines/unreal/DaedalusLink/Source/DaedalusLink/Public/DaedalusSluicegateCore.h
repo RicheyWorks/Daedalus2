@@ -29,6 +29,7 @@ constexpr int MaxSize = 12;
 constexpr int Rock = 0, Channel = 1;
 constexpr int CisternScore = 10, GateBonus = 3, TurnBonus = 1;
 constexpr int MinCisternDistance = 2, MinMillDistance = 3, CisternSlack = 3;
+constexpr int MaxAttempts = 40;   // fields drawn before setup gives up on finding a wheel the idle flow threatens
 
 struct Difficulty { const char* Name; int Size; int Cisterns; int Gates; int Flow; int Turns; int ChannelPct; };
 inline const Difficulty* Difficulties()
@@ -118,13 +119,44 @@ struct Game
 		return M;
 	}
 
-	/** PrismGame.start + Game.setup. False on an unknown difficulty. */
+	/**
+	 * PrismGame.start + Game.setup: draw fields until one has a mill the idle flow threatens (v2, cross-test fix), so
+	 * waiting every turn never wins and every field has a wheel. False on an unknown difficulty.
+	 */
 	bool Start(std::uint32_t Seed, const std::string& DifficultyName)
 	{
 		Diff = FindDifficulty(DifficultyName);
 		if (!Diff || Diff->Size > MaxSize) return false;
 		Rng.Seed(std::string(GameId()) + ":" + std::to_string(Seed) + ":" + DifficultyName);
 		Score = 0; Over = Won = false;
+		for (int Attempt = 0; Attempt < MaxAttempts; ++Attempt)
+		{
+			DrawField();
+			DistanceMap Dist;
+			Distances(CellMask{}, Dist);
+			std::vector<Cell> Far;   // row-major, like Python's sorted()
+			for (int R = 0; R < Diff->Size; ++R)
+				for (int C = 0; C < Diff->Size; ++C)
+				{
+					const int D = Dist[static_cast<size_t>(R)][static_cast<size_t>(C)];
+					if (D >= MinCisternDistance && D <= Diff->Turns - SlackTurns()) Far.push_back({ R, C });
+				}
+			Cisterns.clear();
+			const int Want = std::min(Diff->Cisterns, static_cast<int>(Far.size()));
+			while (static_cast<int>(Cisterns.size()) < Want)
+			{
+				const Cell X = Far[Rng.RandRange(static_cast<std::uint32_t>(Far.size()))];
+				if (!IsCistern(X)) Cisterns.push_back(X);
+			}
+			Mill = PlaceMill(Dist);
+			if (Mill != NoCell && static_cast<int>(Cisterns.size()) == Diff->Cisterns) return true;
+		}
+		return true;
+	}
+
+	/** Game._draw_field: the channel/rock field, the headgate, and a carved channel when the reach is cramped. */
+	void DrawField()
+	{
 		const int S = Diff->Size;
 		for (int R = 0; R < S; ++R)
 			for (int C = 0; C < S; ++C)
@@ -136,7 +168,7 @@ struct Game
 		Cisterns.clear(); Filled = 0; Mill = NoCell;
 		DistanceMap Dist;
 		Distances(CellMask{}, Dist);
-		while (Reached(Dist) < MinReach())   // a cramped field gets a wandering channel carved from the headgate
+		while (Reached(Dist) < MinReach())
 		{
 			Cell X = Head;
 			for (int Step = 0; Step < 2 * S; ++Step)
@@ -147,21 +179,18 @@ struct Game
 			}
 			Distances(CellMask{}, Dist);
 		}
-		std::vector<Cell> Far;   // row-major, like Python's sorted()
-		for (int R = 0; R < S; ++R)
-			for (int C = 0; C < S; ++C)
-			{
-				const int D = Dist[static_cast<size_t>(R)][static_cast<size_t>(C)];
-				if (D >= MinCisternDistance && D <= Diff->Turns - SlackTurns()) Far.push_back({ R, C });
-			}
-		const int Want = std::min(Diff->Cisterns, static_cast<int>(Far.size()));
-		while (static_cast<int>(Cisterns.size()) < Want)
-		{
-			const Cell X = Far[Rng.RandRange(static_cast<std::uint32_t>(Far.size()))];
-			if (!IsCistern(X)) Cisterns.push_back(X);
-		}
-		Mill = PlaceMill(Dist);
-		return true;
+	}
+
+	/** Game._idle_flow_wins: does waiting every turn fill every cistern before the flow reaches `MillCell`? */
+	bool IdleFlowWins(Cell MillCell)
+	{
+		const Cell SavedMill = Mill;
+		int& Tile = Field[static_cast<size_t>(MillCell.R)][static_cast<size_t>(MillCell.C)];
+		const int SavedTile = Tile;
+		Mill = MillCell; Tile = Channel;
+		const bool IdleWon = Rollout(NoCell).Won;
+		Mill = SavedMill; Tile = SavedTile;
+		return IdleWon;
 	}
 
 	static int Reached(const DistanceMap& Dist) noexcept
@@ -172,7 +201,7 @@ struct Game
 	}
 
 	/** Game._place_mill: a dead end three or more steps out whose throat can be gated without cutting a cistern off. */
-	Cell PlaceMill(const DistanceMap& Dist)
+	Cell PlaceMill(const DistanceMap& Dist)   // not const: IdleFlowWins carves and restores the candidate cell
 	{
 		const int S = Size();
 		const auto ThroatOk = [&](Cell Throat)
@@ -219,8 +248,10 @@ struct Game
 					if (IsChannel(X) || ChannelNeighbours(X, Around) != 2) continue;
 					if (DistAt(Around[0]) >= 0 && DistAt(Around[1]) >= 0 && ThroatOk(Around[0]) && ThroatOk(Around[1])) Candidates.push_back(X);
 				}
-		if (Candidates.empty()) return NoCell;   // pure routing, nothing to flood
-		const Cell M = Candidates[Rng.RandRange(static_cast<std::uint32_t>(Candidates.size()))];
+		std::vector<Cell> Threatened;   // only wheels the idle flow would reach (or fields idle flow loses anyway)
+		for (const Cell& X : Candidates) if (!IdleFlowWins(X)) Threatened.push_back(X);
+		if (Threatened.empty()) return NoCell;   // the caller draws another field
+		const Cell M = Threatened[Rng.RandRange(static_cast<std::uint32_t>(Threatened.size()))];
 		Field[static_cast<size_t>(M.R)][static_cast<size_t>(M.C)] = Channel;
 		return M;
 	}
