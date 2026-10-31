@@ -33,9 +33,9 @@ prism=prismvault difficulty=hard bronze=1 silver=100 gold=200
 prism=shardfall difficulty=easy bronze=1 silver=44 gold=50
 prism=shardfall difficulty=normal bronze=1 silver=43 gold=48
 prism=shardfall difficulty=hard bronze=1 silver=34 gold=38
-prism=prismcairn difficulty=easy bronze=1 silver=100 gold=105
-prism=prismcairn difficulty=normal bronze=1 silver=100 gold=105
-prism=prismcairn difficulty=hard bronze=1 silver=105 gold=105
+prism=prismcairn difficulty=easy bronze=1 silver=105 gold=105
+prism=prismcairn difficulty=normal bronze=1 silver=105 gold=105
+prism=prismcairn difficulty=hard bronze=1 silver=0 gold=0
 prism=shadewatch difficulty=easy bronze=1 silver=115 gold=125
 prism=shadewatch difficulty=normal bronze=1 silver=129 gold=144
 prism=shadewatch difficulty=hard bronze=1 silver=148 gold=163

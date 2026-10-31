@@ -209,23 +209,17 @@ def demo_round(start, seed, difficulty):
     return g.score if g.won else 0
 
 
-def calibrate(scores, demo=()):
+def calibrate(scores):
     """([bronze, silver, gold], hits per mille of all rounds, median winning score). Bronze is any win (par 1);
-    silver and gold use the FairPar integer rank rule on the bot's winning rounds, or on the demo's when the bot
-    never wins (G609), else 0. G609: when silver would equal gold, silver drops to the best winning score below
-    gold, so the middle medal exists whenever the winners scored at least two different values."""
+    silver and gold use the FairPar integer rank rule on the winning rounds; 0 when the bot never wins."""
     n = len(scores)
     won = sorted(v for v in scores if v > 0)
-    source = won or sorted(v for v in demo if v > 0)
-    w = len(source)
+    w = len(won)
     pars = [1]
     for p in WIN_PERCENT:
-        pars.append(source[w - max(1, (w * p + 99) // 100)] if w else 0)
-    below = [v for v in source if v < pars[2]]
-    if w and pars[1] >= pars[2] and below:
-        pars[1] = below[-1]
+        pars.append(won[w - max(1, (w * p + 99) // 100)] if w else 0)
     hits = [sum(1 for v in scores if v >= par and v > 0) * 1000 // n for par in pars]
-    return pars, hits, won[(len(won) - 1) // 2] if won else 0
+    return pars, hits, won[(w - 1) // 2] if w else 0
 
 
 def won_min(scores):
@@ -250,14 +244,13 @@ def table(seeds=SEEDS):
         for d in DIFFICULTIES:
             scores = [bot_round(start, bot, s, d) for s in range(seeds)]
             demo = [demo_round(start, s, d) for s in range(seeds)]
-            pars, hits, median = calibrate(scores, demo)
+            pars, hits, median = calibrate(scores)
             wins = sum(1 for v in scores if v > 0)
             demo_wins = sum(1 for v in demo if v > 0)
             rows.append({"game": game, "difficulty": d, "seeds": seeds, "bronze": pars[0], "silver": pars[1],
                          "gold": pars[2], "hits": hits, "median": median, "botWin": wins * 1000 // seeds,
                          "demoWin": demo_wins * 1000 // seeds, "demoMedian": sorted(demo)[(seeds - 1) // 2],
-                         "separated": 0 < won_min(scores) < pars[1] < pars[2],
-                         "parFrom": "bot" if wins else "demo" if demo_wins else "none"})
+                         "separated": 0 < won_min(scores) < pars[1] < pars[2]})
     return rows
 
 
@@ -266,10 +259,10 @@ def lines(seeds=SEEDS):
            "prism_fair_par_core_test.cpp."]
     for r in table(seeds):
         out.append("game=%s difficulty=%s seeds=%d bronze=%d silver=%d gold=%d bronzeHit=%d silverHit=%d goldHit=%d "
-                   "winMedian=%d botWin=%d demoWin=%d demoMedian=%d separated=%s parFrom=%s" % (
+                   "winMedian=%d botWin=%d demoWin=%d demoMedian=%d separated=%s" % (
                        r["game"], r["difficulty"], r["seeds"], r["bronze"], r["silver"], r["gold"], r["hits"][0],
                        r["hits"][1], r["hits"][2], r["median"], r["botWin"], r["demoWin"], r["demoMedian"],
-                       "true" if r["separated"] else "false", r["parFrom"]))
+                       "true" if r["separated"] else "false"))
     for run in range(4):
         out.append("hash run=%d u=%r pick=%d" % (run, uniform(41, run, 2, 3), pick(41, run, 1, 0, 6)))
     return out

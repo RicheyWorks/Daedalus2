@@ -65,8 +65,6 @@ int main(int argc, char** argv)
 		Check(Tag + " medians and win rates", Int(H, "winMedian") == R.WinMedian && Int(H, "botWin") == R.BotWin
 			&& Int(H, "demoWin") == R.DemoWin && Int(H, "demoMedian") == R.DemoMedian);
 		Check(Tag + " separated", (Field(H, "separated") == "true") == R.Separated);
-		Check(Tag + " par source", Field(H, "parFrom") == R.ParFrom);
-		Check(Tag + " gold reachable when anyone wins", (R.BotWin == 0 && R.DemoWin == 0) || (R.Gold > 0 && TierOf(R, true, R.Gold) == Tier::Gold));
 		Check(Tag + " tiers", TierOf(R, false, 999) == Tier::None && TierOf(R, true, R.Bronze) == Tier::Bronze
 			&& (R.Gold == 0 || TierOf(R, true, R.Gold) == Tier::Gold) && (R.Silver == 0 || R.Silver == R.Gold || TierOf(R, true, R.Silver) == Tier::Silver));
 	}

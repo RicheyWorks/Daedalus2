@@ -78,14 +78,5 @@ class FairParTest(unittest.TestCase):
         del moved[(game, diff)]
         self.assertIn("no guard row", fp.guard_diffs(rows, moved)[0])
 
-    def test_g609_demo_fallback_and_silver_step(self):
-        # The bot never wins, so the demo's wins set the pars and gold is reachable.
-        self.assertEqual(fp.calibrate([0, 0, 0], [105, 105, 105])[0], [1, 105, 105])
-        # Silver drops below gold when the winners scored two different values.
-        self.assertEqual(fp.calibrate([100] * 7 + [105] * 3)[0], [1, 100, 105])
-        for r in fp.table(60):
-            if r["botWin"] or r["demoWin"]:
-                self.assertEqual(fp.tier([r["bronze"], r["silver"], r["gold"]], r["gold"]), "GOLD")
-
 if __name__ == "__main__":
     unittest.main()

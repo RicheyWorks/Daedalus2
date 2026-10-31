@@ -1,37 +1,37 @@
 # Prismheart Fair Par golden vectors: written by tools/minigames/fair_par.py, replayed by prism_fair_par_core_test.cpp.
-game=glowmoss difficulty=easy seeds=400 bronze=1 silver=28 gold=33 bronzeHit=505 silverHit=252 goldHit=65 winMedian=27 botWin=505 demoWin=1000 demoMedian=38 separated=true parFrom=bot
-game=glowmoss difficulty=normal seeds=400 bronze=1 silver=32 gold=38 bronzeHit=137 silverHit=60 goldHit=15 winMedian=31 botWin=137 demoWin=1000 demoMedian=42 separated=true parFrom=bot
-game=glowmoss difficulty=hard seeds=400 bronze=1 silver=29 gold=39 bronzeHit=45 silverHit=20 goldHit=5 winMedian=25 botWin=45 demoWin=1000 demoMedian=41 separated=true parFrom=bot
-game=spiritkite difficulty=easy seeds=400 bronze=1 silver=22 gold=28 bronzeHit=587 silverHit=290 goldHit=67 winMedian=21 botWin=587 demoWin=1000 demoMedian=23 separated=true parFrom=bot
-game=spiritkite difficulty=normal seeds=400 bronze=1 silver=22 gold=29 bronzeHit=187 silverHit=80 goldHit=20 winMedian=20 botWin=187 demoWin=1000 demoMedian=24 separated=true parFrom=bot
-game=spiritkite difficulty=hard seeds=400 bronze=1 silver=22 gold=25 bronzeHit=20 silverHit=12 goldHit=2 winMedian=22 botWin=20 demoWin=1000 demoMedian=24 separated=true parFrom=bot
-game=glimmerloom difficulty=easy seeds=400 bronze=1 silver=167 gold=205 bronzeHit=582 silverHit=242 goldHit=62 winMedian=159 botWin=582 demoWin=817 demoMedian=187 separated=true parFrom=bot
-game=glimmerloom difficulty=normal seeds=400 bronze=1 silver=157 gold=185 bronzeHit=302 silverHit=125 goldHit=32 winMedian=152 botWin=302 demoWin=555 demoMedian=142 separated=true parFrom=bot
-game=glimmerloom difficulty=hard seeds=400 bronze=1 silver=120 gold=135 bronzeHit=207 silverHit=87 goldHit=22 winMedian=117 botWin=207 demoWin=310 demoMedian=0 separated=true parFrom=bot
-game=lumenpath difficulty=easy seeds=400 bronze=1 silver=190 gold=230 bronzeHit=880 silverHit=435 goldHit=145 winMedian=180 botWin=880 demoWin=1000 demoMedian=210 separated=true parFrom=bot
-game=lumenpath difficulty=normal seeds=400 bronze=1 silver=160 gold=190 bronzeHit=830 silverHit=350 goldHit=122 winMedian=150 botWin=830 demoWin=1000 demoMedian=170 separated=true parFrom=bot
-game=lumenpath difficulty=hard seeds=400 bronze=1 silver=140 gold=180 bronzeHit=745 silverHit=302 goldHit=75 winMedian=130 botWin=745 demoWin=1000 demoMedian=150 separated=true parFrom=bot
-game=wardens_accord difficulty=easy seeds=400 bronze=1 silver=50 gold=55 bronzeHit=1000 silverHit=457 goldHit=192 winMedian=45 botWin=1000 demoWin=1000 demoMedian=45 separated=true parFrom=bot
-game=wardens_accord difficulty=normal seeds=400 bronze=1 silver=60 gold=65 bronzeHit=835 silverHit=337 goldHit=127 winMedian=55 botWin=835 demoWin=947 demoMedian=55 separated=true parFrom=bot
-game=wardens_accord difficulty=hard seeds=400 bronze=1 silver=60 gold=65 bronzeHit=220 silverHit=120 goldHit=47 winMedian=60 botWin=220 demoWin=440 demoMedian=0 separated=true parFrom=bot
-game=facetlock difficulty=easy seeds=400 bronze=1 silver=140 gold=160 bronzeHit=515 silverHit=322 goldHit=85 winMedian=140 botWin=515 demoWin=1000 demoMedian=140 separated=true parFrom=bot
-game=facetlock difficulty=normal seeds=400 bronze=1 silver=140 gold=170 bronzeHit=275 silverHit=145 goldHit=32 winMedian=140 botWin=275 demoWin=1000 demoMedian=150 separated=true parFrom=bot
-game=facetlock difficulty=hard seeds=400 bronze=1 silver=130 gold=160 bronzeHit=115 silverHit=70 goldHit=25 winMedian=130 botWin=115 demoWin=1000 demoMedian=130 separated=true parFrom=bot
-game=prismvault difficulty=easy seeds=400 bronze=1 silver=150 gold=250 bronzeHit=427 silverHit=427 goldHit=75 winMedian=150 botWin=427 demoWin=1000 demoMedian=150 separated=false parFrom=bot
-game=prismvault difficulty=normal seeds=400 bronze=1 silver=150 gold=250 bronzeHit=297 silverHit=150 goldHit=45 winMedian=150 botWin=297 demoWin=1000 demoMedian=100 separated=true parFrom=bot
-game=prismvault difficulty=hard seeds=400 bronze=1 silver=100 gold=200 bronzeHit=235 silverHit=235 goldHit=35 winMedian=100 botWin=235 demoWin=1000 demoMedian=100 separated=false parFrom=bot
-game=shardfall difficulty=easy seeds=400 bronze=1 silver=44 gold=50 bronzeHit=327 silverHit=142 goldHit=40 winMedian=43 botWin=327 demoWin=975 demoMedian=43 separated=true parFrom=bot
-game=shardfall difficulty=normal seeds=400 bronze=1 silver=43 gold=48 bronzeHit=62 silverHit=32 goldHit=7 winMedian=43 botWin=62 demoWin=590 demoMedian=41 separated=true parFrom=bot
-game=shardfall difficulty=hard seeds=400 bronze=1 silver=34 gold=38 bronzeHit=60 silverHit=27 goldHit=10 winMedian=33 botWin=60 demoWin=400 demoMedian=0 separated=true parFrom=bot
-game=prismcairn difficulty=easy seeds=400 bronze=1 silver=100 gold=105 bronzeHit=545 silverHit=545 goldHit=292 winMedian=105 botWin=545 demoWin=1000 demoMedian=105 separated=false parFrom=bot
-game=prismcairn difficulty=normal seeds=400 bronze=1 silver=100 gold=105 bronzeHit=285 silverHit=285 goldHit=117 winMedian=100 botWin=285 demoWin=1000 demoMedian=105 separated=false parFrom=bot
-game=prismcairn difficulty=hard seeds=400 bronze=1 silver=105 gold=105 bronzeHit=0 silverHit=0 goldHit=0 winMedian=0 botWin=0 demoWin=1000 demoMedian=105 separated=false parFrom=demo
-game=shadewatch difficulty=easy seeds=400 bronze=1 silver=115 gold=125 bronzeHit=830 silverHit=372 goldHit=125 winMedian=110 botWin=830 demoWin=962 demoMedian=120 separated=true parFrom=bot
-game=shadewatch difficulty=normal seeds=400 bronze=1 silver=129 gold=144 bronzeHit=457 silverHit=237 goldHit=80 winMedian=129 botWin=457 demoWin=792 demoMedian=134 separated=true parFrom=bot
-game=shadewatch difficulty=hard seeds=400 bronze=1 silver=148 gold=163 bronzeHit=140 silverHit=75 goldHit=25 winMedian=148 botWin=140 demoWin=495 demoMedian=0 separated=true parFrom=bot
-game=shardring difficulty=easy seeds=400 bronze=1 silver=289 gold=330 bronzeHit=145 silverHit=60 goldHit=15 winMedian=285 botWin=145 demoWin=687 demoMedian=287 separated=true parFrom=bot
-game=shardring difficulty=normal seeds=400 bronze=1 silver=242 gold=264 bronzeHit=32 silverHit=15 goldHit=5 winMedian=233 botWin=32 demoWin=347 demoMedian=0 separated=true parFrom=bot
-game=shardring difficulty=hard seeds=400 bronze=1 silver=188 gold=215 bronzeHit=22 silverHit=10 goldHit=2 winMedian=183 botWin=22 demoWin=202 demoMedian=0 separated=true parFrom=bot
+game=glowmoss difficulty=easy seeds=400 bronze=1 silver=28 gold=33 bronzeHit=505 silverHit=252 goldHit=65 winMedian=27 botWin=505 demoWin=1000 demoMedian=38 separated=true
+game=glowmoss difficulty=normal seeds=400 bronze=1 silver=32 gold=38 bronzeHit=137 silverHit=60 goldHit=15 winMedian=31 botWin=137 demoWin=1000 demoMedian=42 separated=true
+game=glowmoss difficulty=hard seeds=400 bronze=1 silver=29 gold=39 bronzeHit=45 silverHit=20 goldHit=5 winMedian=25 botWin=45 demoWin=1000 demoMedian=41 separated=true
+game=spiritkite difficulty=easy seeds=400 bronze=1 silver=22 gold=28 bronzeHit=587 silverHit=290 goldHit=67 winMedian=21 botWin=587 demoWin=1000 demoMedian=23 separated=true
+game=spiritkite difficulty=normal seeds=400 bronze=1 silver=22 gold=29 bronzeHit=187 silverHit=80 goldHit=20 winMedian=20 botWin=187 demoWin=1000 demoMedian=24 separated=true
+game=spiritkite difficulty=hard seeds=400 bronze=1 silver=22 gold=25 bronzeHit=20 silverHit=12 goldHit=2 winMedian=22 botWin=20 demoWin=1000 demoMedian=24 separated=true
+game=glimmerloom difficulty=easy seeds=400 bronze=1 silver=167 gold=205 bronzeHit=582 silverHit=242 goldHit=62 winMedian=159 botWin=582 demoWin=817 demoMedian=187 separated=true
+game=glimmerloom difficulty=normal seeds=400 bronze=1 silver=157 gold=185 bronzeHit=302 silverHit=125 goldHit=32 winMedian=152 botWin=302 demoWin=555 demoMedian=142 separated=true
+game=glimmerloom difficulty=hard seeds=400 bronze=1 silver=120 gold=135 bronzeHit=207 silverHit=87 goldHit=22 winMedian=117 botWin=207 demoWin=310 demoMedian=0 separated=true
+game=lumenpath difficulty=easy seeds=400 bronze=1 silver=190 gold=230 bronzeHit=880 silverHit=435 goldHit=145 winMedian=180 botWin=880 demoWin=1000 demoMedian=210 separated=true
+game=lumenpath difficulty=normal seeds=400 bronze=1 silver=160 gold=190 bronzeHit=830 silverHit=350 goldHit=122 winMedian=150 botWin=830 demoWin=1000 demoMedian=170 separated=true
+game=lumenpath difficulty=hard seeds=400 bronze=1 silver=140 gold=180 bronzeHit=745 silverHit=302 goldHit=75 winMedian=130 botWin=745 demoWin=1000 demoMedian=150 separated=true
+game=wardens_accord difficulty=easy seeds=400 bronze=1 silver=50 gold=55 bronzeHit=1000 silverHit=457 goldHit=192 winMedian=45 botWin=1000 demoWin=1000 demoMedian=45 separated=true
+game=wardens_accord difficulty=normal seeds=400 bronze=1 silver=60 gold=65 bronzeHit=835 silverHit=337 goldHit=127 winMedian=55 botWin=835 demoWin=947 demoMedian=55 separated=true
+game=wardens_accord difficulty=hard seeds=400 bronze=1 silver=60 gold=65 bronzeHit=220 silverHit=120 goldHit=47 winMedian=60 botWin=220 demoWin=440 demoMedian=0 separated=true
+game=facetlock difficulty=easy seeds=400 bronze=1 silver=140 gold=160 bronzeHit=515 silverHit=322 goldHit=85 winMedian=140 botWin=515 demoWin=1000 demoMedian=140 separated=true
+game=facetlock difficulty=normal seeds=400 bronze=1 silver=140 gold=170 bronzeHit=275 silverHit=145 goldHit=32 winMedian=140 botWin=275 demoWin=1000 demoMedian=150 separated=true
+game=facetlock difficulty=hard seeds=400 bronze=1 silver=130 gold=160 bronzeHit=115 silverHit=70 goldHit=25 winMedian=130 botWin=115 demoWin=1000 demoMedian=130 separated=true
+game=prismvault difficulty=easy seeds=400 bronze=1 silver=150 gold=250 bronzeHit=427 silverHit=427 goldHit=75 winMedian=150 botWin=427 demoWin=1000 demoMedian=150 separated=false
+game=prismvault difficulty=normal seeds=400 bronze=1 silver=150 gold=250 bronzeHit=297 silverHit=150 goldHit=45 winMedian=150 botWin=297 demoWin=1000 demoMedian=100 separated=true
+game=prismvault difficulty=hard seeds=400 bronze=1 silver=100 gold=200 bronzeHit=235 silverHit=235 goldHit=35 winMedian=100 botWin=235 demoWin=1000 demoMedian=100 separated=false
+game=shardfall difficulty=easy seeds=400 bronze=1 silver=44 gold=50 bronzeHit=327 silverHit=142 goldHit=40 winMedian=43 botWin=327 demoWin=975 demoMedian=43 separated=true
+game=shardfall difficulty=normal seeds=400 bronze=1 silver=43 gold=48 bronzeHit=62 silverHit=32 goldHit=7 winMedian=43 botWin=62 demoWin=590 demoMedian=41 separated=true
+game=shardfall difficulty=hard seeds=400 bronze=1 silver=34 gold=38 bronzeHit=60 silverHit=27 goldHit=10 winMedian=33 botWin=60 demoWin=400 demoMedian=0 separated=true
+game=prismcairn difficulty=easy seeds=400 bronze=1 silver=105 gold=105 bronzeHit=545 silverHit=292 goldHit=292 winMedian=105 botWin=545 demoWin=1000 demoMedian=105 separated=false
+game=prismcairn difficulty=normal seeds=400 bronze=1 silver=105 gold=105 bronzeHit=285 silverHit=117 goldHit=117 winMedian=100 botWin=285 demoWin=1000 demoMedian=105 separated=false
+game=prismcairn difficulty=hard seeds=400 bronze=1 silver=0 gold=0 bronzeHit=0 silverHit=0 goldHit=0 winMedian=0 botWin=0 demoWin=1000 demoMedian=105 separated=false
+game=shadewatch difficulty=easy seeds=400 bronze=1 silver=115 gold=125 bronzeHit=830 silverHit=372 goldHit=125 winMedian=110 botWin=830 demoWin=962 demoMedian=120 separated=true
+game=shadewatch difficulty=normal seeds=400 bronze=1 silver=129 gold=144 bronzeHit=457 silverHit=237 goldHit=80 winMedian=129 botWin=457 demoWin=792 demoMedian=134 separated=true
+game=shadewatch difficulty=hard seeds=400 bronze=1 silver=148 gold=163 bronzeHit=140 silverHit=75 goldHit=25 winMedian=148 botWin=140 demoWin=495 demoMedian=0 separated=true
+game=shardring difficulty=easy seeds=400 bronze=1 silver=289 gold=330 bronzeHit=145 silverHit=60 goldHit=15 winMedian=285 botWin=145 demoWin=687 demoMedian=287 separated=true
+game=shardring difficulty=normal seeds=400 bronze=1 silver=242 gold=264 bronzeHit=32 silverHit=15 goldHit=5 winMedian=233 botWin=32 demoWin=347 demoMedian=0 separated=true
+game=shardring difficulty=hard seeds=400 bronze=1 silver=188 gold=215 bronzeHit=22 silverHit=10 goldHit=2 winMedian=183 botWin=22 demoWin=202 demoMedian=0 separated=true
 hash run=0 u=0.578865250385359 pick=5
 hash run=1 u=0.2257281665523796 pick=4
 hash run=2 u=0.88656220536723 pick=1

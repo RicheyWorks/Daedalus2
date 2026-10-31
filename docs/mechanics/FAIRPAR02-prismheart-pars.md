@@ -16,9 +16,7 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
 
 1. These cabinets already have a win target, so **BRONZE is any win**. A lost round scores 0 and earns no tier.
 2. **SILVER and GOLD** are the scores reached by at least 40 % and 10 % of the bot's *winning* rounds, using the
-   integer rank rule from FairPar.java. G609: when the bot never wins, the demo's wins set silver and gold
-   (`parFrom=demo` in the fixture), so gold stays reachable. When silver would equal gold, silver drops to the
-   best winning score below gold, so the middle medal exists whenever winners scored two or more values.
+   integer rank rule from FairPar.java.
 3. **The casual bots** are careful but random:
    - Glowmoss: dig a random ledge that still leaves light to climb out; climb out once the target is met.
    - Spiritkite: fly random lanes that keep a way home; head home once the target is met; then land.
@@ -61,9 +59,9 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
 | shardfall | easy | 32.7 % | 44 | 50 | 327 / 142 / 40 | 43 | 97.5 % | 43 | yes |
 | shardfall | normal | 6.2 % | 43 | 48 | 62 / 32 / 7 | 43 | 59.0 % | 41 | yes |
 | shardfall | hard | 6.0 % | 34 | 38 | 60 / 27 / 10 | 33 | 40.0 % | 0 | yes |
-| prismcairn | easy | 54.5 % | 100 | 105 | 545 / 545 / 292 | 105 | 100.0 % | 105 | no |
-| prismcairn | normal | 28.5 % | 100 | 105 | 285 / 285 / 117 | 100 | 100.0 % | 105 | no |
-| prismcairn | hard | 0.0 % | 105 (demo) | 105 (demo) | 0 / 0 / 0 | 0 | 100.0 % | 105 | no |
+| prismcairn | easy | 54.5 % | 105 | 105 | 545 / 292 / 292 | 105 | 100.0 % | 105 | no |
+| prismcairn | normal | 28.5 % | 105 | 105 | 285 / 117 / 117 | 100 | 100.0 % | 105 | no |
+| prismcairn | hard | 0.0 % | 0 | 0 | 0 / 0 / 0 | 0 | 100.0 % | 105 | no |
 | shadewatch | easy | 83.0 % | 115 | 125 | 830 / 372 / 125 | 110 | 96.2 % | 120 | yes |
 | shadewatch | normal | 45.7 % | 129 | 144 | 457 / 237 / 80 | 129 | 79.2 % | 134 | yes |
 | shadewatch | hard | 14.0 % | 148 | 163 | 140 / 75 / 25 | 148 | 49.5 % | 0 | yes |
@@ -101,9 +99,13 @@ PLAN.md asks: Glowmoss Delve, Spiritkite Weave and Glimmerloom Ledger, each on e
 - **Shardring is the harshest**: casual play wins 14.5 % / 3 % / 2 %, and the greedy helper only 69 % / 35 % / 20 %.
   The normal and hard pars rest on 13 and 9 winning rounds, so they are low-confidence. The ring fills up too fast
   for casual play; worth a look by the game's owner.
-- **G609 (hephaestus round 2 findings):** Prismcairn hard used to cap every win at Bronze (no casual wins, so silver
-  and gold were 0); its pars now come from the demo, and 105 is Gold. Prismcairn easy and normal now have a silver
-  step (100 / 105), though with only two possible winning scores every win is at least Silver. Shadewatch pars rising
-  with difficulty is intended: hard runs 28 turns against easy's 20, and every turn survived, shade burned and heart
-  kept scores, so a raw score is not comparable across difficulties. Pars are per difficulty, and the Satchel and
-  Almanac read the row for the difficulty played.
+- **G609 (hephaestus round 2 findings).** Shadewatch pars rising with difficulty is intended: hard runs 28 turns
+  against easy's 20, and every turn survived, shade burned and heart kept scores, so a raw score is not comparable
+  across difficulties. Pars are per difficulty, and the Satchel and Almanac read the row for the difficulty played.
+  The other two findings move pars, so they are held for a follow-up landed together with the Prism Almanac's
+  regenerated parity file (2hot2trot), which reads this fixture:
+  - Prismcairn hard caps every win at Bronze (silver/gold 0); the planned fix takes pars from the demo's wins when
+    the bot never wins (105/105).
+  - Silver equals gold on Prismcairn easy and normal (105/105); the planned fix drops silver to the best winning
+    score below gold (100/105).
+  Until then the Almanac plays uncalibrated Prismcairn hard one difficulty easier, as designed.

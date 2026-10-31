@@ -46,7 +46,6 @@ struct Row
 	int Hits[3] = { 0, 0, 0 }; // per mille of all rounds
 	int WinMedian = 0, BotWin = 0, DemoWin = 0, DemoMedian = 0;
 	bool Separated = false;
-	std::string ParFrom = "none"; // G609: "bot", or "demo" when the bot never won, or "none"
 };
 
 inline double Uniform(std::int64_t Seed, int Run, int Pick, int Salt)
@@ -276,14 +275,8 @@ inline Row Calibrate(const std::string& Game, const std::string& Difficulty, con
 	for (int V : Scores) if (V > 0) Won.push_back(V);
 	std::sort(Won.begin(), Won.end());
 	const int W = static_cast<int>(Won.size());
-	// G609: pars come from the demo's wins when the bot never wins; silver drops below gold when they would tie.
-	std::vector<int> Source = Won;
-	if (Source.empty()) { for (int V : Demo) if (V > 0) Source.push_back(V); std::sort(Source.begin(), Source.end()); }
-	const int Sw = static_cast<int>(Source.size());
 	int Pars[3] = { 1, 0, 0 };
-	for (int T = 0; T < 2; ++T) Pars[T + 1] = Sw ? Source[static_cast<size_t>(Sw - std::max(1, (Sw * WinPercent[T] + 99) / 100))] : 0;
-	if (Sw && Pars[1] >= Pars[2])
-		for (int V : Source) if (V < Pars[2]) Pars[1] = V;
+	for (int T = 0; T < 2; ++T) Pars[T + 1] = W ? Won[static_cast<size_t>(W - std::max(1, (W * WinPercent[T] + 99) / 100))] : 0;
 	R.Bronze = Pars[0]; R.Silver = Pars[1]; R.Gold = Pars[2];
 	for (int T = 0; T < 3; ++T)
 	{
@@ -300,7 +293,6 @@ inline Row Calibrate(const std::string& Game, const std::string& Difficulty, con
 	R.DemoWin = DemoWins * 1000 / static_cast<int>(D.size());
 	R.DemoMedian = D[static_cast<size_t>((D.size() - 1) / 2)];
 	R.Separated = W > 0 && 0 < Won.front() && Won.front() < R.Silver && R.Silver < R.Gold;
-	R.ParFrom = W ? "bot" : Sw ? "demo" : "none";
 	return R;
 }
 
