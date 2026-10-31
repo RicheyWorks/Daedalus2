@@ -20,16 +20,22 @@ class PrismGame:
     DIFFICULTY = {}
     DEFAULT_DIFFICULTY = "normal"
     FIELDS = ()
+    BOON = None  # (DIFFICULTY setting, delta per level, spirit): the Spirit Boon this game accepts (hephaestus R2-9)
 
-    def __init__(self, seed=0, difficulty=None):
+    def __init__(self, seed=0, difficulty=None, boon=0):
         difficulty = difficulty or self.DEFAULT_DIFFICULTY
         if difficulty not in self.DIFFICULTY:
             raise ValueError(f"unknown difficulty '{difficulty}'")
-        self.seed, self.difficulty = seed, difficulty
+        if type(boon) is not int or boon not in BOON_LEVELS or (boon and self.BOON is None):
+            raise ValueError(f"bad Spirit Boon level {boon!r}")
+        self.seed, self.difficulty, self.boon = seed, difficulty, boon
         self.start()
 
     def start(self):
         self.cfg = dict(self.DIFFICULTY[self.difficulty])
+        if self.boon:
+            key, delta, _ = self.BOON
+            self.cfg[key] = max(0, self.cfg[key] + delta * self.boon)
         self.rng = random.Random(f"{self.GAME_ID}:{self.seed}:{self.difficulty}")
         self.score, self.over, self.won = 0, False, False
         self.setup()
@@ -68,6 +74,8 @@ class PrismGame:
     def to_state(self):
         st = self.status()
         st.update({"v": 1, "seed": self.seed, "difficulty": self.difficulty})
+        if self.boon:
+            st["boon"] = self.boon  # only boosted runs carry it, so older saves are unchanged
         v, internal, gauss = self.rng.getstate()
         st["rng"] = [v, list(internal), gauss]
         return json.loads(json.dumps(st))
@@ -85,7 +93,10 @@ class PrismGame:
         if not is_count(state["score"]) or not isinstance(state["over"], bool) or not isinstance(state["won"], bool):
             raise ValueError(f"{cls.GAME_ID} save score must be a whole number >= 0 and over/won true or false")
         rng_state = check_rng_state(state["rng"])
-        g = cls(state["seed"], state["difficulty"])
+        boon = state.get("boon", 0)
+        if type(boon) is not int or boon not in BOON_LEVELS or (boon and cls.BOON is None):
+            raise ValueError(f"{cls.GAME_ID} save has a bad Spirit Boon level")
+        g = cls(state["seed"], state["difficulty"], boon)
         for k in ("score", "over", "won") + tuple(cls.FIELDS):
             setattr(g, k, copy.deepcopy(state[k]))
         try:
@@ -110,6 +121,7 @@ class PrismGame:
         """Hook: rebuild derived (non-saved) fields after from_state."""
 
 
+BOON_LEVELS = (0, 1, 2)  # Spirit Boons: none, summoned 1-4 times, 5+ times (doubled)
 MT_WORDS = 624  # Mersenne Twister state words; random.getstate() adds the position as word 625
 RNG_VERSION = 3
 

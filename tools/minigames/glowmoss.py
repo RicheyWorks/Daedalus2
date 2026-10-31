@@ -152,6 +152,7 @@ def best_delve(cfg, shaft, start=None):
 class Game(pc.PrismGame):
     GAME_ID, TITLE, HOW_TO_PLAY = GAME_ID, TITLE, HOW_TO_PLAY
     DIFFICULTY, DEFAULT_DIFFICULTY = DIFFICULTY, DEFAULT_DIFFICULTY
+    BOON = ("light", 1, "Cinder Wisp")  # Spirit Boon (hephaestus R2-9, accepted Oct 31, 2026)
     FIELDS = ("gems", "dark", "moss", "unstable", "row", "col", "light", "crystals", "best", "target", "plan", "path",
               "perfect")
 
@@ -285,6 +286,10 @@ def check_save(state):
     cfg = DIFFICULTY.get(state.get("difficulty"))
     if cfg is None:
         raise ValueError(f"unknown difficulty {state.get('difficulty')!r}")
+    boon = state.get("boon", 0)
+    if type(boon) is not int or boon not in pc.BOON_LEVELS:
+        raise ValueError(f"save has a bad Spirit Boon level {boon!r}")
+    cfg = dict(cfg, light=cfg["light"] + Game.BOON[1] * boon)  # Cinder Wisp boon: a bigger lamp
     for name, low, high in (("gems", MIN_GEMS, MAX_GEMS), ("dark", 0, MAX_DARK), ("moss", 0, 1), ("unstable", 0, 1)):
         rows = state.get(name)
         if (not isinstance(rows, list) or len(rows) != cfg["rows"]

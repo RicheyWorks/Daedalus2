@@ -84,6 +84,7 @@ def best_tour(dist, values, wind, target=None):
 class Game(pc.PrismGame):
     GAME_ID, TITLE, HOW_TO_PLAY = GAME_ID, TITLE, HOW_TO_PLAY
     DIFFICULTY, DEFAULT_DIFFICULTY = DIFFICULTY, DEFAULT_DIFFICULTY
+    BOON = ("wind", 2, "Mere Sprite")  # Spirit Boon (hephaestus R2-9, accepted Oct 31, 2026)
     FIELDS = ("lanes", "values", "at", "wind", "gathered", "target", "plan", "trail")
 
     def setup(self):
