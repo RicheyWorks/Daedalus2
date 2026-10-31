@@ -8,12 +8,17 @@
 // its octave. Every note becomes an earrule::CallSpec through EarSafePeak (DaedalusEarRuleCore.h): base and peak under
 // 800 Hz, two soft harmonics, low brightness, no sweeps. Generated, never sampled from existing tunes.
 //
-// Determinism: FNV-1a 64 of the game id, SplitMix64 defined here, no floating point in the rules, no heap.
-// Checked by engines/unreal/core-test/cue_kit_core_test.cpp against cue_kit_golden.txt.
+// Rulesets. V1 (frozen, cue_kit_golden.txt): FNV-1a 64 of the game id, SplitMix64 defined here, no heap.
+// V2 (team standard, cue_kit_golden_v2.txt): the same musical rules drawn from DaedalusPyRandomCore.h (CPython
+// random.Random) seeded with the string "cuekit|<game>|<token>", so tools/minigames/cue_kit.py (the rules reference)
+// and the C++ core give identical kits. Seeding V2 allocates once; building a kit does not.
+// Checked by engines/unreal/core-test/cue_kit_core_test.cpp.
 #pragma once
 #include "DaedalusEarRuleCore.h"
+#include "DaedalusPyRandomCore.h"
 
 #include <cstdint>
+#include <string>
 
 namespace daedalus { namespace cuekit {
 
@@ -82,29 +87,46 @@ inline void Add(Phrase& P, int Hz, int Ms, int Gap) { if (P.Count < MaxNotes) { 
 
 /** Builds a cabinet's kit. Start: three notes inside the scale. Good: two or three notes stepping up the scale. Miss: two
  *  gently falling notes (one to three scale steps down, held longer). Win: four notes ending on the octave. */
-inline Kit MakeKit(std::uint64_t Seed)
+/** The musical rules, drawing every choice from Below(N) in [0, N); shared by V1 and V2. */
+template <typename DrawT> Kit BuildKit(DrawT&& Below)
 {
-	Rng R(Seed);
 	Kit K;
-	K.Root = RootHz[R.Below(Roots)];
-	K.NoteMs = 90 + 10 * R.Below(7);  // 90-150 ms
-	K.GapMs = 20 + 10 * R.Below(3);   // 20-40 ms
+	K.Root = RootHz[Below(Roots)];
+	K.NoteMs = 90 + 10 * Below(7);  // 90-150 ms
+	K.GapMs = 20 + 10 * Below(3);   // 20-40 ms
 	Phrase& S = K.Cues[0];
-	for (int I = 0; I < 3; ++I) detail::Add(S, K.StepHz(R.Below(Degrees - 1)), K.NoteMs, K.GapMs);
+	for (int I = 0; I < 3; ++I) detail::Add(S, K.StepHz(Below(Degrees - 1)), K.NoteMs, K.GapMs);
 	Phrase& G = K.Cues[1];
-	const int GN = 2 + R.Below(2);
-	const int D0 = R.Below(Degrees - GN + 1);
+	const int GN = 2 + Below(2);
+	const int D0 = Below(Degrees - GN + 1);
 	for (int I = 0; I < GN; ++I) detail::Add(G, K.StepHz(D0 + I), K.NoteMs, K.GapMs);  // stepwise up
 	Phrase& M = K.Cues[2];
-	const int Top = 2 + R.Below(3);           // degree 2-4
-	const int Drop = 1 + R.Below(Top < 3 ? Top : 3);
+	const int Top = 2 + Below(3);           // degree 2-4
+	const int Drop = 1 + Below(Top < 3 ? Top : 3);
 	detail::Add(M, K.StepHz(Top), K.NoteMs + 40, K.GapMs);
 	detail::Add(M, K.StepHz(Top - Drop), K.NoteMs + 120, 0);
 	Phrase& W = K.Cues[3];
-	int WD = R.Below(3);
-	for (int I = 0; I < 3; ++I) { detail::Add(W, K.StepHz(WD), K.NoteMs, K.GapMs); WD += 1 + R.Below(2); if (WD > Degrees - 2) WD = Degrees - 2; }
+	int WD = Below(3);
+	for (int I = 0; I < 3; ++I) { detail::Add(W, K.StepHz(WD), K.NoteMs, K.GapMs); WD += 1 + Below(2); if (WD > Degrees - 2) WD = Degrees - 2; }
 	detail::Add(W, K.StepHz(Degrees - 1), K.NoteMs * 2, 0);
 	return K;
+}
+/** V1 kit (frozen). */
+inline Kit MakeKit(std::uint64_t Seed)
+{
+	Rng R(Seed);
+	return BuildKit([&R](int N) { return R.Below(N); });
+}
+/** V2 seed string: "cuekit|<game>|<token>". */
+inline std::string KitSeedV2(const char* GameId, std::uint64_t TokenId)
+{
+	return std::string("cuekit|") + (GameId ? GameId : "") + "|" + std::to_string(TokenId);
+}
+/** V2 kit: identical rules, draws from CPython-compatible random.Random(seed string).randrange. */
+inline Kit MakeKitV2(const char* GameId, std::uint64_t TokenId)
+{
+	pyrandom::PyRandom P(KitSeedV2(GameId, TokenId));
+	return BuildKit([&P](int N) { return static_cast<int>(P.Below(static_cast<std::uint32_t>(N))); });
 }
 
 /** A cue of a kit. Streak: the win cue preceded by one rising scale note per streak day (up to 8; days < 1 = win). */

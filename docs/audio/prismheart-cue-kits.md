@@ -37,3 +37,12 @@ Golden vectors for 20 cabinet ids x 30 tokens (every cue, plus streak cues for 3
 50,000 kits (in scale, under 800 Hz, soft, good rises, miss falls gently, win ends on the octave, streak length and
 clamping, no leap past an octave); every listed cabinet gets a different kit; roots spread evenly over tokens; FNV-1a
 and SplitMix64 reference values.
+
+## Ruleset V2 (team PRNG, slice 2)
+
+PLAN.md asks every Prismheart lane to draw randomness from `DaedalusPyRandomCore.h` (CPython-compatible
+`random.Random`). V2 does that: `MakeKitV2(gameId, tokenId)` seeds `PyRandom("cuekit|<game>|<token>")` and runs the same
+musical rules (`BuildKit`) as V1, so the ear-rule limits and cue shapes are unchanged. The rules reference is
+`tools/minigames/cue_kit.py`, which writes `cue_kit_golden_v2.txt`; CI regenerates it from Python and checks the C++ core
+matches it line for line. V1 (`MakeKit(KitSeed(...))`, `cue_kit_golden.txt`) is kept frozen and unchanged for anything
+already pinned to it; new cabinet wiring should use V2.
