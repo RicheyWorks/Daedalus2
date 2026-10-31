@@ -20,6 +20,8 @@ INF = 10 ** 6
 PLAYING, WON, LOST = range(3)
 STATE = ["PLAYING", "WON", "LOST"]
 OK, BAD_CELL, OCCUPIED, GAME_OVER = range(4)
+NO_LOSS, OUT_OF_LINKS, BLOCKED = range(3)
+REASON = ["NONE", "OUT_OF_LINKS", "BLOCKED"]
 STATUS = ["OK", "BAD_CELL", "OCCUPIED", "GAME_OVER"]
 
 def nbrs(i):
@@ -70,6 +72,7 @@ class Game:
         self.budget = crossing(g) + SLACK
         self.state = PLAYING
         self.placed = 0
+        self.reason = NO_LOSS
 
     def won(self):
         d = dist_from([x if x == LINK else RUST for x in self.g], 0)
@@ -92,8 +95,10 @@ class Game:
         if empties:
             self.g[empties[self.r.randrange(len(empties))]] = RUST
         need = crossing(self.g)
-        if self.budget <= 0 or need == INF or need > self.budget:
-            self.state = LOST
+        if need == INF:
+            self.state, self.reason = LOST, BLOCKED
+        elif self.budget <= 0 or need > self.budget:
+            self.state, self.reason = LOST, OUT_OF_LINKS
         return OK
 
     def score(self):
@@ -122,7 +127,7 @@ def seeds():
 
 def write(f):
     f.write("# Chainmail Weave golden vectors from chainmail_weave_ref.py (rules authority). Do not hand-edit.\n")
-    f.write("# S <len> <seed> | N <grid 49 chars .#L> <budget> | P <cell> <status> <grid> <budget> <state> <score> <demo>\n")
+    f.write("# S <len> <seed> | N <grid 49 chars .#L> <budget> | P <cell> <status> <grid> <budget> <state> <reason> <score> <demo>\n")
     pick = random.Random(62351 + 1)
     for s in seeds():
         g = Game(s)
@@ -137,7 +142,7 @@ def write(f):
             else:
                 mv = pick.choice([g.demo(), g.demo(), pick.randrange(CELLS), -1, CELLS])
             st = g.place(mv)
-            f.write("P %d %s %s %d %s %d %d\n" % (mv, STATUS[st], g.text(), g.budget, STATE[g.state], g.score(), g.demo()))
+            f.write("P %d %s %s %d %s %s %d %d\n" % (mv, STATUS[st], g.text(), g.budget, STATE[g.state], REASON[g.reason], g.score(), g.demo()))
             if g.state != PLAYING and pick.random() < 0.7:
                 break
 

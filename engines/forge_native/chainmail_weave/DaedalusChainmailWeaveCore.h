@@ -32,6 +32,21 @@ enum Ring : std::uint8_t { kEmpty = 0, kRust = 1, kLink = 2 };
 /** Round state; stable values. */
 enum class State : std::uint8_t { Playing = 0, Won = 1, Lost = 2 };
 
+/** Why a round was lost; stable values. None while playing or after a win. */
+enum class LossReason : std::uint8_t { None = 0, OutOfLinks = 1, Blocked = 2 };
+
+constexpr const char* ReasonName(LossReason r) {
+    switch (r) {
+        case LossReason::None:
+            return "NONE";
+        case LossReason::OutOfLinks:
+            return "OUT_OF_LINKS";  // a crossing exists but costs more links than are left
+        case LossReason::Blocked:
+            return "BLOCKED";  // rust has cut every crossing
+    }
+    return "UNKNOWN";
+}
+
 /** Place result; stable values. Only OK takes a turn. */
 enum class Status : std::uint8_t { Ok = 0, BadCell = 1, Occupied = 2, GameOver = 3 };
 
@@ -183,8 +198,12 @@ public:
             grid_.ring[empties[rng_.RandRange(static_cast<std::uint32_t>(n))]] = kRust;
         }
         const int need = Crossing(grid_);
-        if (budget_ <= 0 || need >= kInf || need > budget_) {
+        if (need >= kInf) {
             state_ = State::Lost;
+            reason_ = LossReason::Blocked;
+        } else if (budget_ <= 0 || need > budget_) {
+            state_ = State::Lost;
+            reason_ = LossReason::OutOfLinks;
         }
         return Status::Ok;
     }
@@ -194,6 +213,7 @@ public:
     int Budget() const { return budget_; }
     int Placed() const { return placed_; }
     State GetState() const { return state_; }
+    LossReason Reason() const { return reason_; }
     const Grid& GetGrid() const { return grid_; }
 
 private:
@@ -202,6 +222,7 @@ private:
     int budget_ = 0;
     int placed_ = 0;
     State state_ = State::Playing;
+    LossReason reason_ = LossReason::None;
 };
 
 namespace detail {

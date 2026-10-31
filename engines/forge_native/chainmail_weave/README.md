@@ -14,7 +14,7 @@ Rules authority: `chainmail_weave_ref.py` (Python, CPython `random`). `chainmail
 | `DaedalusChainmailWeaveCore.h` | Header-only C++17 core: `Game(seed)`, `Place`, `Demo`, `Score`, plus constexpr `Crossing` / `DemoCell` / `Joined` |
 | `chainmail_weave_ref.py` | Rules reference and golden writer (`--check` verifies the file is current) |
 | `chainmail_weave_golden.txt` | 308 seeded rounds, 2,897 placements (demo, random and mixed players, bad moves included) |
-| `chainmail_weave_test.cpp` | Replays the golden file (full grid, budget, state, score and demo move after every placement), invariants over 1,000 rounds, edges |
+| `chainmail_weave_test.cpp` | Replays the golden file (full grid, budget, state, loss reason, score and demo move after every placement), tampered-fixture self-test, invariants, property checks, edges |
 
 ## Rules
 
@@ -42,3 +42,14 @@ python chainmail_weave_ref.py --check chainmail_weave_golden.txt
 
 Mutation-checked: a larger slack and rust drawn from the wrong end of the empty list both fail the golden replay;
 two static_asserts pin the empty-grid cost and a full rust wall.
+
+## Iteration log
+
+1. **Loss reason.** `LossReason` (NONE, OUT_OF_LINKS, BLOCKED) and `Game::Reason()`, so the result screen can say
+   "rust cut every path" vs "ran out of links". Added to the Python reference and the golden file (column after the
+   state); the test checks a reason is set exactly when the round is lost. Golden: 15 blocked, 151 out-of-links losses.
+2. **Property checks.** Refusals (off-grid, occupied) interleaved with every demo move leave the grid, budget and
+   outcome identical over 200 rounds, so a refusal never draws randomness. Over 12,210 single-ring changes, a link
+   lowers the cheapest crossing by at most one, rust never lowers it, and the demo ring always lowers it.
+3. **Fixture self-test.** The replay is now a function over a stream; five tampered copies of the golden file (a grid
+   cell, a status, a loss reason, a trailing token, an unknown row) must each be rejected.
