@@ -1189,6 +1189,40 @@
         "source_keys"
       ],
       "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
+    },
+    {
+      "id": "shuntline",
+      "title": "Shuntline",
+      "summary": "Sort the train onto the outbound track with short sidings and a move budget. Up/Down or stick: pick a siding; Right: send out; J/Space or pad A: shunt; K or pad B: pull",
+      "how_to_play": "HOW Right sends the front carriage to the outbound track; A shunts it onto the picked siding; B pulls that siding's top carriage out. The outbound order may never go down. Clear the inbound track within the moves.",
+      "difficulty": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "default_difficulty": "normal",
+      "daedalus_realm": "prismheart_realm",
+      "daedalus_spot": "Prismheart, the shunting yard",
+      "host": "ADaedalusDesktopArcade",
+      "start": "StartGame(\"shuntline\", Seed)",
+      "portable_tests": [
+        "desktop_shuntline"
+      ],
+      "option_count": 2,
+      "capabilities": [
+        "action_cue",
+        "contrast_mark",
+        "difficulty",
+        "focus_freeze",
+        "fresh_pad_replay",
+        "hints",
+        "key_hint",
+        "options",
+        "save_restore",
+        "scoreboard",
+        "source_keys"
+      ],
+      "native_status": "source-only; native compile and play acceptance wait for the batched rebuild"
     }
   ],
   "java_cabinets": [
