@@ -115,6 +115,13 @@ class Game(pc.PrismGame):
                 self.finish(False)
         return gained
 
+    def rescore(self):
+        """10 per crystal lit past the mirror-free start; a win adds 20 per move left (Round 2 finding, prometheus 1)."""
+        bare = ["".join(ch if ch in "*#" else "." for ch in row) for row in self.grid]
+        on = set(trace(bare, self.source_row))
+        start = sum(1 for r, c in self.crystals if (r, c) in on)
+        return 10 * (self.best - start) + (20 * self.moves if self.won else 0)
+
     def demo_action(self):
         for r, c, m in self.solution:
             if self.grid[r][c] != m:

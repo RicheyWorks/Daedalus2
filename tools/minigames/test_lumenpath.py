@@ -42,5 +42,21 @@ class Lumenpath(kit.GameContract, unittest.TestCase):
             g.step((r, c))
 
 
+class SaveChecks(unittest.TestCase):
+    """Round 2 finding (prometheus 1): the saved score is recomputed on load."""
+
+    def test_tampered_score_is_rejected(self):
+        st = lp.start(1, "normal").to_state()
+        st["score"] = 9999
+        with self.assertRaises(ValueError):
+            lp.Game.from_state(st)
+
+    def test_mid_game_and_won_saves_reload(self):
+        g = lp.start(4, "hard")
+        while not g.over:
+            g.step(g.demo_action())
+            self.assertEqual(lp.Game.from_state(g.to_state()).score, g.score)
+
+
 if __name__ == "__main__":
     unittest.main()
