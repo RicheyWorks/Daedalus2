@@ -260,5 +260,16 @@ class SurfaceClimb(unittest.TestCase):
         self.assertTrue(g.won)
 
 
+
+class TieBreak(unittest.TestCase):
+    """Round 2 finding (art-master-flex): best-delve ties keep the most light left, so the demo scores the most."""
+
+    def test_easy_seed_1_demo_reaches_41(self):
+        g = gm.Game(1, "easy")
+        g.start()
+        while not g.over:
+            g.step(g.demo_action())
+        self.assertEqual(g.score, 41)
+
 if __name__ == "__main__":
     unittest.main()

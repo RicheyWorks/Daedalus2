@@ -41,14 +41,19 @@ def shortest(n, lanes):
     return d
 
 
-def best_tour(dist, values, wind):
-    """(best lantern total, visit order) for a round trip from isle 0 within wind."""
+def best_tour(dist, values, wind, target=None):
+    """(best lantern total, visit order) for a round trip from isle 0 within wind.
+
+    With a target, the order is the round trip with the best score instead: lanterns + wind left, among trips that
+    gather at least the target (ties keep the first in scan order). The lantern total returned is unchanged.
+    """
     n = len(values)
     full = 1 << n
     cost = [[INF] * n for _ in range(full)]
     prev = [[-1] * n for _ in range(full)]
     cost[1][0] = 0
     best, best_key = 0, (1, 0)
+    top, top_key = -1, None
     for s in range(full):
         if not s & 1:
             continue
@@ -60,6 +65,8 @@ def best_tour(dist, values, wind):
                 val = sum(values[i] for i in range(n) if (s >> i) & 1)
                 if val > best:
                     best, best_key = val, (s, v)
+                if target is not None and val >= target and val + wind - c - dist[v][0] > top:
+                    top, top_key = val + wind - c - dist[v][0], (s, v)
             for u in range(n):
                 if (s >> u) & 1:
                     continue
@@ -67,7 +74,7 @@ def best_tour(dist, values, wind):
                 t = s | (1 << u)
                 if nc < cost[t][u] and nc <= wind:
                     cost[t][u], prev[t][u] = nc, v
-    order, (s, v) = [], best_key
+    order, (s, v) = [], (top_key if top_key is not None else best_key)
     while v > 0:
         order.append(v)
         s, v = s & ~(1 << v), prev[s][v]
@@ -91,9 +98,9 @@ class Game(pc.PrismGame):
         self.lanes = [[a, b, 1 + round(math.dist(pts[a], pts[b]) / 2)] for a, b in sorted(lanes)]
         self.values = [0] + [self.rng.randint(1, 6) for _ in range(n - 1)]
         self.restore()
-        best, order = best_tour(self.dist, self.values, self.cfg["wind"])
+        best, _ = best_tour(self.dist, self.values, self.cfg["wind"])
         self.target = max(1, math.ceil(best * self.cfg["share"]))
-        self.plan = order
+        self.plan = best_tour(self.dist, self.values, self.cfg["wind"], self.target)[1]  # best score, not most lanterns
         self.at, self.wind, self.gathered, self.trail = 0, self.cfg["wind"], [0], [0]
 
     def restore(self):
