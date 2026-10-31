@@ -141,6 +141,9 @@ int main(int Argc, char** Argv) {
         GlowmossGame Out;
         Out.Reset(730);
         Press(Out, "climb");
+        Check(!Out.CoreState().Over, "B before the first dig is refused (dig first)");
+        Press(Out, "dig");
+        Press(Out, "climb");
         Check(Out.CoreState().Over && !Out.CoreState().Won && Out.LastResultText().rfind("climbed out", 0) == 0, "B climbs out at once (short of the target)");
         Check(Out.HintLine().find("short of the target") != std::string::npos, "the hint names the short climb");
     }
@@ -185,6 +188,7 @@ int main(int Argc, char** Argv) {
     Check(X.GetStatus().Over, "digging straight down then climbing ends the delve");
     Check(!X.Dig() && !X.Climb() && !X.Nudge(1) && X.ContrastMark() == "MARK WAIT" && X.ActionCue() == "CUE Retry", "a finished delve refuses digs, climbs and picks");
     Check(X.SourceKeyDown(8) && !X.GetStatus().Over && X.CoreState().Row == daedalus::glowmoss::Surface, "R opens a new shaft");
+    Press(X, "dig");
     Press(X, "climb");
     Check(X.SourceControllerButton(1) && !X.GetStatus().Over, "pad Start restarts a finished delve");
     Check(!X.SourceControllerButton(1), "pad Start is not consumed mid-game");

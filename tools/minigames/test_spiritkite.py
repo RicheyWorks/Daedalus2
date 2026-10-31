@@ -48,9 +48,25 @@ class Rules(unittest.TestCase):
 
     def test_land_short_of_target_loses(self):
         g = gm.start(4)
+        j = min(g.adj[0])
+        g.step(("fly", j))
+        g.step(("fly", 0))
         g.step(("land", 0))
         self.assertTrue(g.over and not g.won)
-        self.assertEqual(g.score, 0)
+        self.assertEqual(g.score, g.lanterns())
+
+
+class LandFirst(unittest.TestCase):
+    """Round 2 finding (disk-saver 1): landing before flying is refused and the round goes on."""
+
+    def test_land_before_flying_is_refused(self):
+        g = gm.start(1, "normal")
+        with self.assertRaisesRegex(ValueError, "fly first"):
+            g.act(("land", 0))
+        self.assertFalse(g.over)
+        while not g.over:
+            g.step(g.demo_action())
+        self.assertTrue(g.won)
 
 
 if __name__ == "__main__":

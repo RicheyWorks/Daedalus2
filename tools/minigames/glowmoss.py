@@ -181,6 +181,8 @@ class Game(pc.PrismGame):
         if kind == "hint":
             return self.hint_text()
         if kind == "climb":
+            if not self.path and self.best > 0:
+                raise ValueError("dig first: climbing out now ends the delve with nothing")
             won = self.crystals >= self.target
             self.light -= climb_cost(self.row)
             self.perfect = won and self.crystals == self.best

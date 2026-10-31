@@ -185,7 +185,7 @@ struct Game
 	int Score = 0; bool Over = false, Won = false, Perfect = false;
 	pyrandom::PyRandom Rng;
 
-	enum class Act { Ok, Floor, OutOfReach, GameOver };
+	enum class Act { Ok, Floor, OutOfReach, GameOver, DigFirst };
 
 	/** PrismGame.start + Game.setup. False on an unknown difficulty. */
 	bool Start(std::uint32_t Seed, const std::string& DifficultyName)
@@ -225,6 +225,7 @@ struct Game
 		if (Over) return Act::GameOver;
 		if (A.K == Kind::Climb)
 		{
+			if (Path.empty() && Best > 0) return Act::DigFirst;  // glowmoss.act: "dig first" (Round 2, 2hot2trot 3)
 			const bool Reached = Crystals >= Target;
 			Light -= ClimbCost(Row);
 			Perfect = Reached && Crystals == Best;

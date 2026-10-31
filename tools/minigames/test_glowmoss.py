@@ -89,9 +89,10 @@ class Rules(unittest.TestCase):
 
     def test_climb_short_of_target_loses(self):
         g = gm.start(4)
-        self.assertEqual(g.step(("climb", 0)), "climbed out with 0")
+        g.step(("dig", g.col))
+        self.assertTrue(g.step(("climb", 0)).startswith("climbed out with "))
         self.assertTrue(g.over and not g.won)
-        self.assertEqual(g.score, 0)
+        self.assertEqual(g.score, g.crystals)
 
 
     def test_hint_follows_the_best_delve(self):
@@ -166,6 +167,7 @@ class Rules(unittest.TestCase):
         g = gm.demo(5, "easy")
         self.assertIn("WON (perfect delve)", g.render())
         g = gm.start(4)
+        g.step(("dig", g.col))
         g.step(("climb", 0))
         self.assertIn("short of the target", g.render())
 
@@ -218,7 +220,7 @@ class Properties(unittest.TestCase):
             for s in self.SEEDS:
                 g = gm.start(s, d)
                 while not g.over:
-                    if g.row + 1 >= g.cfg["rows"] or rng.random() < 0.1:
+                    if g.path and (g.row + 1 >= g.cfg["rows"] or rng.random() < 0.1):
                         g.step(("climb", 0))
                         break
                     g.step(("dig", rng.choice(list(gm.dig_cols(g.col, g.cfg["cols"])))))
@@ -244,6 +246,18 @@ class SeedCodeLimits(unittest.TestCase):
             with self.assertRaises(ValueError, msg=repr(bad)):
                 gm.seed_code(bad, "normal")
         self.assertEqual(gm.parse_seed_code(gm.seed_code(999999999, "hard")), (999999999, "hard"))
+class SurfaceClimb(unittest.TestCase):
+    """Round 2 finding (2hot2trot 3): a climb before the first dig is refused and the delve goes on."""
+
+    def test_climb_before_first_dig_is_refused(self):
+        g = gm.start(5, "normal")
+        with self.assertRaisesRegex(ValueError, "dig first"):
+            g.act(("climb", 0))
+        self.assertFalse(g.over)
+        g.step(g.demo_action())
+        while not g.over:
+            g.step(g.demo_action())
+        self.assertTrue(g.won)
 
 
 if __name__ == "__main__":

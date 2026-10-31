@@ -115,6 +115,8 @@ class Game(pc.PrismGame):
         if kind == "land":
             if self.at != 0:
                 raise ValueError("land only on the anchor isle 0")
+            if len(self.trail) == 1:
+                raise ValueError("fly first: the kite has not left the anchor isle")
             self.score = self.lanterns() + (self.wind if self.lanterns() >= self.target else 0)
             self.finish(self.lanterns() >= self.target)
             return f"landed with {self.lanterns()}"
