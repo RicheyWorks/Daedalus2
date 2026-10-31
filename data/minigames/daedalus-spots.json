@@ -125,6 +125,10 @@
     "glowmoss": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the glowmoss shaft"
+    },
+    "spiritkite": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the kite anchor"
     }
   }
 }
