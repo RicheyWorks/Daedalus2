@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 /**
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
  * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan), G591 (G504 ReedCeiling), G593 (G507
- * ReedRelease), G610 (G188 HawkDove), G611 (G183 Metapopulation), G612 (G176 ShoalHarvest) and G613 (G172
- * HerdOutbreak); later ecology ports add a method here.
+ * ReedRelease), G610 (G188 HawkDove), G611 (G183 Metapopulation), G612 (G176 ShoalHarvest), G613 (G172
+ * HerdOutbreak) and G614 (G163 FounderDrift); later ecology ports add a method here.
  * Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
  * replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
  * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
@@ -433,6 +433,48 @@ class MarshCoresParityTest {
     @Test
     void herdOutbreakMatchesCpp() throws IOException {
         check("marsh_herd_outbreak_parity.txt", "G172 HerdOutbreak", MarshCoresParityTest::herdOutbreak);
+    }
+
+    static List<String> founderDrift() {
+        double[][] tunings = {{20, 20, 20, 40, 40, 0.2}, {10, 30, 15, 20, 30, 1.5}, {40, 24, 12, 30, 0, 0.0},
+            {6, 6, 30, 10, 60, 3.0}, {2, 2, 8, 5, 8, 0.5}, {16, 40, 10, 25, 5, 0.8}, {30, 30, 1, 12, 3, 2.0},
+            {12, 12, 25, 16, 100, 1.0}};
+        List<String> out = new ArrayList<>();
+        long seed = 1;
+        for (double[] t : tunings) {
+            FounderDrift.Settings s = new FounderDrift.Settings((int) t[0], (int) t[1], (int) t[2], (int) t[3],
+                    (int) t[4], t[5]);
+            for (int plan = 0; plan < 3; plan++) {
+                FounderDrift d = FounderDrift.aviary(s, seed);
+                int mid = (s.generations() + 1) / 2;
+                boolean breedOk = plan == 0 || d.breed(mid, plan == 1 ? 1 : 2, plan == 1 ? 1 : 3);
+                boolean migOk = d.migrants(plan == 2 ? 2 : 0);
+                boolean badOk = d.breed(s.generations() + 1, 1, 1) || d.breed(1, 0, 1) || d.migrants(-1);
+                FounderDrift.Report r = d.run();
+                long weighted = 0;
+                for (FounderDrift.Generation g : r.generations()) {
+                    weighted += ((long) g.alleles() * 1000 + g.migrants() * 100 + g.males() * 10 + g.females())
+                            * g.index();
+                }
+                FounderDrift.Generation first = r.generations().get(0);
+                FounderDrift.Generation last = r.generations().get(r.generations().size() - 1);
+                out.add("founders=" + s.founders() + " capacity=" + s.capacity() + " generations=" + s.generations()
+                        + " loci=" + s.loci() + " migrantPool=" + s.migrantPool() + " lethal=" + s.lethal() + " seed="
+                        + seed + " plan=" + plan + " breedOk=" + (breedOk ? 1 : 0) + " migOk=" + (migOk ? 1 : 0)
+                        + " badOk=" + (badOk ? 1 : 0) + " ne=" + FounderDrift.effectiveSize(3, 7) + " hm="
+                        + FounderDrift.harmonicMean(List.of(20.0, 2.0, 20.0)) + " expected=" + r.expected()
+                        + " outcome=" + r.outcome() + " h0=" + r.founderDiversity() + " retained=" + r.retained()
+                        + " survival=" + r.survival(0.8) + " d1=" + first.diversity() + " a1=" + first.alleles()
+                        + " dl=" + last.diversity() + " al=" + last.alleles() + " weighted=" + weighted);
+                seed++;
+            }
+        }
+        return out;
+    }
+
+    @Test
+    void founderDriftMatchesCpp() throws IOException {
+        check("marsh_founder_drift_parity.txt", "G163 FounderDrift", MarshCoresParityTest::founderDrift);
     }
 
     static List<String> hawkDove() {

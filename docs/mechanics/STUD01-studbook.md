@@ -76,3 +76,19 @@ Every roll is a splitmix hash of (seed, generation, chick, locus, salt). `Settin
   band showing lineage), and reuse of `Mob_Sky_Crane` and the aviary (see UNREAL-QUEUE / BLENDER-ASKS).
 - `Mob_Sky_Crane` is staged (see CRANE01). `Prop_Leg_Band` attaches at the crane's `SOCKET_LegBand` on bone `Leg_L`
   (from `Mob_Sky_Crane.sockets.json`); colour it by founder lineage.
+
+## Native C++ core (G614)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshFounderDriftCore.h` (namespace
+`daedalus::marsh`) is a header-only C++17 port of this core: `FounderDrift::Breed`, `Migrants`, `EffectiveSize`,
+`HarmonicMean`, `ExpectedRetained` and the seeded Wright-Fisher `Run` (per-generation cocks, hens, migrants, gene
+diversity and distinct alleles; founder diversity, retained share, outcome), plus `Inbreeding` and `Survival` on the
+report and `FounderDriftSettings::Valid`. It uses the standard library only (no Unreal headers). `Report.marsh(...)`
+stays Java-only because AlleeRelease is not ported. The Java class stays the rules authority.
+`MarshCoresParityTest.founderDrift` writes 24 golden vectors (8 tunings x {default plan, a 1+1 bottleneck in the
+middle generation, a 2+3 bottleneck plus 2 migrants a generation}) to
+`engines/unreal/core-test/marsh_founder_drift_parity.txt`, and `marsh_founder_drift_core_test.cpp` replays them.
+Every allele draw is an integer, so plan acceptance, outcomes, allele counts and a generation-weighted checksum
+match exactly on all 24. Diversity is a sum of p squared, which Java adds up in HashMap order and C++ in sorted order,
+and survival calls `exp`, so those compare to 1e-12. CI runs this in `.github/workflows/marsh-cores.yml`. See
+[NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md). No Fair Par cabinet reads this core, so the par guard is unchanged.
