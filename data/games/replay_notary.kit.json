@@ -1,0 +1,6430 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_Arcade_Cab_ReplayNotary",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.86 x 0.89 x 2.06 m upright arcade cabinet: RN01: ledger-and-seal marquee, customs house",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Screen",
+     "SOCKET_Marquee",
+     "SOCKET_Player1",
+     "SOCKET_CoinSlot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_Arcade_Cab_ReplayNotary_M0",
+     "colour": "cabinet body",
+     "hex": "3A2A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_Arcade_Cab_ReplayNotary_M1",
+     "colour": "trim / side art panel",
+     "hex": "B08A4A",
+     "roughness": 0.45,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_Arcade_Cab_ReplayNotary_M2",
+     "colour": "marquee + buttons (emissive)",
+     "hex": "FFD08A",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 3,
+     "name": "Prop_Arcade_Cab_ReplayNotary_M3",
+     "colour": "screen",
+     "hex": "1A2A40",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Prop_Arcade_Cab_ReplayNotary_M4",
+     "colour": "black fittings",
+     "hex": "1A1A22",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Prop_Arcade_Cab_ReplayNotary_M5",
+     "colour": "ledger leather",
+     "hex": "5A2A1A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 6,
+     "name": "Prop_Arcade_Cab_ReplayNotary_M6",
+     "colour": "green wax",
+     "hex": "2A7A3A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_Arcade_Cab_ReplayNotary",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Plinth",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.89,
+        0.1
+       ],
+       "centre": [
+        0,
+        0,
+        0.05
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "Lower",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.595,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.1,
+        0.525
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Deck",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.38,
+        0.08
+       ],
+       "centre": [
+        0,
+        -0.25,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true,
+       "rot": [
+        -12,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Upper",
+       "shape": "box",
+       "size": [
+        0.8,
+        0.51,
+        0.85
+       ],
+       "centre": [
+        0,
+        0.15,
+        1.375
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Bezel",
+       "shape": "box",
+       "size": [
+        0.7,
+        0.03,
+        0.6
+       ],
+       "centre": [
+        0,
+        -0.12,
+        1.33
+       ],
+       "slot": 4,
+       "bevel": false
+      },
+      {
+       "name": "Screen",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.02,
+        0.48
+       ],
+       "centre": [
+        0,
+        -0.135,
+        1.33
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "MarqueeBox",
+       "shape": "box",
+       "size": [
+        0.84,
+        0.4,
+        0.26
+       ],
+       "centre": [
+        0,
+        0.05,
+        1.93
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Marquee",
+       "shape": "box",
+       "size": [
+        0.74,
+        0.02,
+        0.18
+       ],
+       "centre": [
+        0,
+        -0.155,
+        1.93
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "SideL",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        -0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "SideR",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.6375,
+        1.9
+       ],
+       "centre": [
+        0.415,
+        0.08,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Stick",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.012,
+       "r2": 0.012,
+       "length": 0.08,
+       "centre": [
+        -0.2,
+        -0.3,
+        1.05
+       ],
+       "slot": 4,
+       "segments": 6
+      },
+      {
+       "name": "StickBall",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.025
+        ],
+        [
+         0.01768,
+         -0.01768
+        ],
+        [
+         0.025,
+         -0.0
+        ],
+        [
+         0.01768,
+         0.01768
+        ],
+        [
+         0,
+         0.025
+        ]
+       ],
+       "centre": [
+        -0.2,
+        -0.3,
+        1.1
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "CoinDoor",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.02,
+        0.3
+       ],
+       "centre": [
+        0,
+        -0.255,
+        0.45
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Btn0",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.02,
+        -0.28,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.1,
+        -0.29,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "Btn2",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.022,
+       "r2": 0.022,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.3,
+        1.03
+       ],
+       "slot": 2,
+       "segments": 8
+      },
+      {
+       "name": "MarqLedger",
+       "shape": "box",
+       "size": [
+        0.24,
+        0.12,
+        0.05
+       ],
+       "centre": [
+        -0.12,
+        -0.12,
+        2.07
+       ],
+       "slot": 5,
+       "bevel": true
+      },
+      {
+       "name": "MarqSeal",
+       "shape": "cyl",
+       "axis": "y",
+       "r1": 0.05,
+       "r2": 0.05,
+       "length": 0.02,
+       "centre": [
+        0.18,
+        -0.18,
+        1.93
+       ],
+       "slot": 6,
+       "segments": 12
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Screen",
+     "location": [
+      0,
+      -0.15,
+      1.33
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.33,
+      0.15
+     ]
+    },
+    {
+     "name": "SOCKET_Marquee",
+     "location": [
+      0,
+      -0.17,
+      1.93
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.93,
+      0.17
+     ]
+    },
+    {
+     "name": "SOCKET_Player1",
+     "location": [
+      0,
+      -0.75,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.75
+     ]
+    },
+    {
+     "name": "SOCKET_CoinSlot",
+     "location": [
+      0,
+      -0.27,
+      0.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.5,
+      0.27
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_Arcade_Cab_ReplayNotary_00",
+     "shape": "box",
+     "size": [
+      0.86,
+      0.89,
+      2.06
+     ],
+     "centre": [
+      0,
+      0.02,
+      1.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 572,
+    "lod1_triangles": 572,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_Arcade_Cab_ReplayNotary": 572
+    },
+    "bounds_min": [
+     -0.43,
+     -0.445,
+     0.0
+    ],
+    "bounds_max": [
+     0.43,
+     0.445,
+     2.095
+    ],
+    "dimensions": [
+     0.86,
+     0.89,
+     2.095
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "e00940a787448919593ba57657c10db3c2e272a0120c9ea324c6ee1ff15beba9"
+  },
+  {
+   "asset": "Prop_ReplayNotary_Desk",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN02: 1.8 x 0.9 x 0.8 m notary desk (Sabine)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_DrawerL",
+     "SOCKET_DrawerR",
+     "SOCKET_Inkwell",
+     "SOCKET_Ledger",
+     "SOCKET_Sitter"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_Desk_M0",
+     "colour": "heavy oak",
+     "hex": "5A3A22",
+     "roughness": 0.75,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_Desk_M1",
+     "colour": "brass pulls",
+     "hex": "B08A4A",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ReplayNotary_Desk_M2",
+     "colour": "inkwell glass",
+     "hex": "1A1A2A",
+     "roughness": 0.1,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_ReplayNotary_Desk_M3",
+     "colour": "green blotter",
+     "hex": "2A4A3A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_Desk",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Top",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.9,
+        0.06
+       ],
+       "centre": [
+        0,
+        0,
+        0.77
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pedestal-1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.8,
+        0.74
+       ],
+       "centre": [
+        -0.62,
+        0,
+        0.37
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pedestal1",
+       "shape": "box",
+       "size": [
+        0.5,
+        0.8,
+        0.74
+       ],
+       "centre": [
+        0.62,
+        0,
+        0.37
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Drawer-1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.02,
+        0.15
+       ],
+       "centre": [
+        -0.62,
+        -0.41,
+        0.6
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Drawer1",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.02,
+        0.15
+       ],
+       "centre": [
+        0.62,
+        -0.41,
+        0.6
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Inkwell",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.035,
+       "r2": 0.03,
+       "length": 0.05,
+       "centre": [
+        0.7,
+        -0.25,
+        0.825
+       ],
+       "slot": 2,
+       "segments": 10
+      },
+      {
+       "name": "Blotter",
+       "shape": "box",
+       "size": [
+        0.6,
+        0.4,
+        0.005
+       ],
+       "centre": [
+        0,
+        -0.1,
+        0.8025
+       ],
+       "slot": 3,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_DrawerL",
+     "location": [
+      0.62,
+      -0.42,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.62,
+      0.6,
+      0.42
+     ]
+    },
+    {
+     "name": "SOCKET_DrawerR",
+     "location": [
+      -0.62,
+      -0.42,
+      0.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.62,
+      0.6,
+      0.42
+     ]
+    },
+    {
+     "name": "SOCKET_Inkwell",
+     "location": [
+      0.7,
+      -0.25,
+      0.85
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.7,
+      0.85,
+      0.25
+     ]
+    },
+    {
+     "name": "SOCKET_Ledger",
+     "location": [
+      0,
+      -0.1,
+      0.805
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.805,
+      0.1
+     ]
+    },
+    {
+     "name": "SOCKET_Sitter",
+     "location": [
+      0,
+      0.8,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      -0.8
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_Desk_00",
+     "shape": "box",
+     "size": [
+      1.8,
+      0.9,
+      0.85
+     ],
+     "centre": [
+      0,
+      0,
+      0.425
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 268,
+    "lod1_triangles": 268,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_Desk": 268
+    },
+    "bounds_min": [
+     -0.9,
+     -0.45,
+     0.0
+    ],
+    "bounds_max": [
+     0.9,
+     0.45,
+     0.85
+    ],
+    "dimensions": [
+     1.8,
+     0.9,
+     0.85
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "89d340f6e81f6663f70725b20b6de95374478b809198c7c2e45625e2686d3d54"
+  },
+  {
+   "asset": "Prop_ReplayNotary_SealStamp",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN03: 12.5 cm brass wax seal stamp, green-wax head",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Face",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_SealStamp_M0",
+     "colour": "green wax seal head",
+     "hex": "2A7A3A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_SealStamp_M1",
+     "colour": "brass",
+     "hex": "B08A4A",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ReplayNotary_SealStamp_M2",
+     "colour": "turned wood handle",
+     "hex": "5A3A22",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_SealStamp",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Head",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.025,
+       "r2": 0.025,
+       "length": 0.02,
+       "centre": [
+        0,
+        0,
+        0.01
+       ],
+       "slot": 0,
+       "segments": 12
+      },
+      {
+       "name": "Neck",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.01,
+       "r2": 0.014,
+       "length": 0.04,
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Handle",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.012,
+         0
+        ],
+        [
+         0.02,
+         0.04
+        ],
+        [
+         0.016,
+         0.06
+        ],
+        [
+         0,
+         0.065
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Face",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.1,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_SealStamp_00",
+     "shape": "box",
+     "size": [
+      0.05,
+      0.05,
+      0.125
+     ],
+     "centre": [
+      0,
+      0,
+      0.0625
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 168,
+    "lod1_triangles": 168,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_SealStamp": 168
+    },
+    "bounds_min": [
+     -0.025,
+     -0.025,
+     0.0
+    ],
+    "bounds_max": [
+     0.025,
+     0.025,
+     0.125
+    ],
+    "dimensions": [
+     0.05,
+     0.05,
+     0.125
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "59d987a30853b43675b7381d58edd5b1e0f6ca3cb6b88035692f802d9684a540"
+  },
+  {
+   "asset": "Prop_ReplayNotary_WaxMeltSet",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN04: 10 cm candle melt pot + green wax stick",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Flame",
+     "SOCKET_Melt"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_WaxMeltSet_M0",
+     "colour": "melt pot iron",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_WaxMeltSet_M1",
+     "colour": "candle",
+     "hex": "E8E0C8",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ReplayNotary_WaxMeltSet_M2",
+     "colour": "green sealing wax",
+     "hex": "2A7A3A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Prop_ReplayNotary_WaxMeltSet_M3",
+     "colour": "flame (emissive, FX placeholder)",
+     "hex": "FFB84A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_WaxMeltSet",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Pot",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.05,
+         0
+        ],
+        [
+         0.05,
+         0.05
+        ],
+        [
+         0.045,
+         0.05
+        ],
+        [
+         0.04,
+         0.02
+        ],
+        [
+         0,
+         0.02
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 12,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Candle",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.03,
+       "centre": [
+        0,
+        0,
+        0.015
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Flame",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.008,
+         0.01
+        ],
+        [
+         0,
+         0.03
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0.03
+       ],
+       "slot": 3,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "WaxStick",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.008,
+       "r2": 0.008,
+       "length": 0.12,
+       "centre": [
+        0.1,
+        0,
+        0.008
+       ],
+       "slot": 2,
+       "segments": 8
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Flame",
+     "location": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.045,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Melt",
+     "location": [
+      0,
+      0,
+      0.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.05,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_WaxMeltSet_00",
+     "shape": "box",
+     "size": [
+      0.22,
+      0.1,
+      0.06
+     ],
+     "centre": [
+      0.06,
+      0,
+      0.03
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 228,
+    "lod1_triangles": 228,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_WaxMeltSet": 228
+    },
+    "bounds_min": [
+     -0.05,
+     -0.05,
+     0
+    ],
+    "bounds_max": [
+     0.16,
+     0.05,
+     0.06
+    ],
+    "dimensions": [
+     0.21,
+     0.1,
+     0.06
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "86ec50a4f80200c9af812d355cbd8b786ac4b20dc0b3b95a38895afa7926a850",
+   "off_centre_ok": "wax stick lies beside the pot"
+  },
+  {
+   "asset": "Prop_ReplayNotary_LeaderboardSlate",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "2.0 x 1.2 m board: RN05: Tidewatch Cup notarised scores (runtime UI)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Tick0",
+     "SOCKET_UI_Face"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_LeaderboardSlate_M0",
+     "colour": "wood frame",
+     "hex": "8A6440",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_LeaderboardSlate_M1",
+     "colour": "board",
+     "hex": "1E2A24",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ReplayNotary_LeaderboardSlate_M2",
+     "colour": "chalk ticks",
+     "hex": "E8E8E0",
+     "roughness": 0.95,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_LeaderboardSlate",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Frame",
+       "shape": "box",
+       "size": [
+        2.0,
+        0.06,
+        1.2
+       ],
+       "centre": [
+        0,
+        0,
+        1.6
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Face",
+       "shape": "box",
+       "size": [
+        1.9,
+        0.01,
+        1.1
+       ],
+       "centre": [
+        0,
+        -0.031,
+        1.6
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Leg-1",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        1.0
+       ],
+       "centre": [
+        -0.9,
+        0,
+        0.5
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Leg1",
+       "shape": "box",
+       "size": [
+        0.07,
+        0.07,
+        1.0
+       ],
+       "centre": [
+        0.9,
+        0,
+        0.5
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Tick0",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.004,
+        0.12
+       ],
+       "centre": [
+        -0.9,
+        -0.037,
+        2.05
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Tick1",
+       "shape": "box",
+       "size": [
+        0.006,
+        0.004,
+        0.06
+       ],
+       "centre": [
+        0.9,
+        -0.037,
+        2.05
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row0",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.004,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.037,
+        1.95
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row1",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.004,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.037,
+        1.84375
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row2",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.004,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.037,
+        1.7375
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row3",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.004,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.037,
+        1.63125
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row4",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.004,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.037,
+        1.525
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row5",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.004,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.037,
+        1.41875
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row6",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.004,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.037,
+        1.3125
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Row7",
+       "shape": "box",
+       "size": [
+        1.8,
+        0.004,
+        0.006
+       ],
+       "centre": [
+        0,
+        -0.037,
+        1.20625
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Tick0",
+     "location": [
+      -0.9,
+      -0.04,
+      2.05
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.9,
+      2.05,
+      0.04
+     ]
+    },
+    {
+     "name": "SOCKET_UI_Face",
+     "location": [
+      0,
+      -0.04,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.04
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_LeaderboardSlate_00",
+     "shape": "box",
+     "size": [
+      2.0,
+      0.08,
+      2.2
+     ],
+     "centre": [
+      0,
+      0,
+      1.1
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 264,
+    "lod1_triangles": 264,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_LeaderboardSlate": 264
+    },
+    "bounds_min": [
+     -1.0,
+     -0.039,
+     0.0
+    ],
+    "bounds_max": [
+     1.0,
+     0.035,
+     2.2
+    ],
+    "dimensions": [
+     2.0,
+     0.074,
+     2.2
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "f1a48d233da9c79da575825acbf5a15ec166e5911e5dedb64b495e57627930bc"
+  },
+  {
+   "asset": "Prop_ReplayNotary_EntryScroll_Rolled",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN06: 30 cm entry scroll, rolled (pooled ~10)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_EntryScroll_Rolled_M0",
+     "colour": "paper",
+     "hex": "E8DCC0",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_EntryScroll_Rolled_M1",
+     "colour": "red ribbon",
+     "hex": "8A2A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ReplayNotary_EntryScroll_Rolled_M2",
+     "colour": "entry line (runtime text)",
+     "hex": "2A2A2A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_EntryScroll_Rolled",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Roll",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.02,
+       "r2": 0.02,
+       "length": 0.3,
+       "centre": [
+        0,
+        0,
+        0.02
+       ],
+       "slot": 0,
+       "segments": 10
+      },
+      {
+       "name": "Ribbon",
+       "shape": "box",
+       "size": [
+        0.02,
+        0.045,
+        0.045
+       ],
+       "centre": [
+        0,
+        0,
+        0.02
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.02,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_EntryScroll_Rolled_00",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.045,
+      0.045
+     ],
+     "centre": [
+      0,
+      0,
+      0.02
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 48,
+    "lod1_triangles": 48,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_EntryScroll_Rolled": 48
+    },
+    "bounds_min": [
+     -0.15,
+     -0.0225,
+     -0.0025
+    ],
+    "bounds_max": [
+     0.15,
+     0.0225,
+     0.0425
+    ],
+    "dimensions": [
+     0.3,
+     0.045,
+     0.045
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "6ffd028a30908f6ea68aa44abdc71485f84352a2e76c5715fb4b7bf69a87641a"
+  },
+  {
+   "asset": "Prop_ReplayNotary_EntryScroll_Open",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN06: 30 cm entry scroll, open (pooled ~10)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Grip"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_EntryScroll_Open_M0",
+     "colour": "paper",
+     "hex": "E8DCC0",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_EntryScroll_Open_M1",
+     "colour": "red ribbon",
+     "hex": "8A2A2A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ReplayNotary_EntryScroll_Open_M2",
+     "colour": "entry line (runtime text)",
+     "hex": "2A2A2A",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_EntryScroll_Open",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Sheet",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.22,
+        0.003
+       ],
+       "centre": [
+        0,
+        0,
+        0.0015
+       ],
+       "slot": 0,
+       "bevel": false
+      },
+      {
+       "name": "End-1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.3,
+       "centre": [
+        0,
+        -0.11,
+        0.015
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "End1",
+       "shape": "cyl",
+       "axis": "x",
+       "r1": 0.015,
+       "r2": 0.015,
+       "length": 0.3,
+       "centre": [
+        0,
+        0.11,
+        0.015
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Line",
+       "shape": "box",
+       "size": [
+        0.24,
+        0.01,
+        0.001
+       ],
+       "centre": [
+        0,
+        0,
+        0.0035
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Grip",
+     "location": [
+      0,
+      0,
+      0.02
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.02,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_EntryScroll_Open_00",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.25,
+      0.03
+     ],
+     "centre": [
+      0,
+      0,
+      0.02
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 80,
+    "lod1_triangles": 80,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_EntryScroll_Open": 80
+    },
+    "bounds_min": [
+     -0.15,
+     -0.125,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.125,
+     0.03
+    ],
+    "dimensions": [
+     0.3,
+     0.25,
+     0.03
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2342253727c12a880eb789e01c13ee37692ca0dc816980096dd939fad916ec50"
+  },
+  {
+   "asset": "Prop_ReplayNotary_VerdictSeal_Ok",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN07: 4.4 cm verdict seal, OK",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_VerdictSeal_Ok_M0",
+     "colour": "ok wax",
+     "hex": "2A7A3A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_VerdictSeal_Ok_M1",
+     "colour": "relief",
+     "hex": "1A1A1A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_VerdictSeal_Ok",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Seal",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.022,
+         0.004
+        ],
+        [
+         0.018,
+         0.008
+        ],
+        [
+         0,
+         0.008
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 14,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Mark",
+       "shape": "box",
+       "size": [
+        0.015,
+        0.015,
+        0.001
+       ],
+       "centre": [
+        0,
+        0,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_VerdictSeal_Ok_00",
+     "shape": "box",
+     "size": [
+      0.044,
+      0.044,
+      0.009
+     ],
+     "centre": [
+      0,
+      0,
+      0.0045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 148,
+    "lod1_triangles": 148,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_VerdictSeal_Ok": 148
+    },
+    "bounds_min": [
+     -0.022,
+     -0.0214,
+     0
+    ],
+    "bounds_max": [
+     0.022,
+     0.0214,
+     0.009
+    ],
+    "dimensions": [
+     0.044,
+     0.0428,
+     0.009
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "940a75a014a027431e129edd25f158fd62e0ab7acd826c4971fc3c0c2bc27d61"
+  },
+  {
+   "asset": "Prop_ReplayNotary_VerdictSeal_Forged",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN08: 4.4 cm verdict seal, FORGED",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_VerdictSeal_Forged_M0",
+     "colour": "forged wax",
+     "hex": "A82A2A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_VerdictSeal_Forged_M1",
+     "colour": "relief / cracks",
+     "hex": "1A1A1A",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_VerdictSeal_Forged",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Seal",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.022,
+         0.004
+        ],
+        [
+         0.018,
+         0.008
+        ],
+        [
+         0,
+         0.008
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 14,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Mark",
+       "shape": "box",
+       "size": [
+        0.015,
+        0.015,
+        0.001
+       ],
+       "centre": [
+        0,
+        0,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "Crack0",
+       "shape": "box",
+       "size": [
+        0.035,
+        0.002,
+        0.002
+       ],
+       "centre": [
+        0,
+        0,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Crack1",
+       "shape": "box",
+       "size": [
+        0.035,
+        0.002,
+        0.002
+       ],
+       "centre": [
+        0,
+        0,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        60
+       ]
+      },
+      {
+       "name": "Crack2",
+       "shape": "box",
+       "size": [
+        0.035,
+        0.002,
+        0.002
+       ],
+       "centre": [
+        0,
+        0,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        120
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_VerdictSeal_Forged_00",
+     "shape": "box",
+     "size": [
+      0.044,
+      0.044,
+      0.009
+     ],
+     "centre": [
+      0,
+      0,
+      0.0045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 184,
+    "lod1_triangles": 184,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_VerdictSeal_Forged": 184
+    },
+    "bounds_min": [
+     -0.022,
+     -0.0214,
+     0
+    ],
+    "bounds_max": [
+     0.022,
+     0.0214,
+     0.0095
+    ],
+    "dimensions": [
+     0.044,
+     0.0428,
+     0.0095
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1ad770725b1269efb503944d49828196283531cba450ffbfb1ea3c4925d2b138"
+  },
+  {
+   "asset": "Prop_ReplayNotary_VerdictSeal_Refused",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN09: 4.4 cm verdict seal, REFUSED",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_VerdictSeal_Refused_M0",
+     "colour": "refused wax",
+     "hex": "8A8A8A",
+     "roughness": 0.5,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_VerdictSeal_Refused_M1",
+     "colour": "relief / refusal ribbon",
+     "hex": "C8C8C8",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_VerdictSeal_Refused",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Seal",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         0
+        ],
+        [
+         0.02,
+         0
+        ],
+        [
+         0.022,
+         0.004
+        ],
+        [
+         0.018,
+         0.008
+        ],
+        [
+         0,
+         0.008
+        ]
+       ],
+       "centre": [
+        0,
+        0,
+        0
+       ],
+       "slot": 0,
+       "segments": 14,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Mark",
+       "shape": "box",
+       "size": [
+        0.015,
+        0.015,
+        0.001
+       ],
+       "centre": [
+        0,
+        0,
+        0.0085
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        45
+       ]
+      },
+      {
+       "name": "RibbonTail-1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.05,
+        0.001
+       ],
+       "centre": [
+        -0.01,
+        0.035,
+        0.002
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        -15
+       ]
+      },
+      {
+       "name": "RibbonTail1",
+       "shape": "box",
+       "size": [
+        0.012,
+        0.05,
+        0.001
+       ],
+       "centre": [
+        0.01,
+        0.035,
+        0.002
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        0,
+        15
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_VerdictSeal_Refused_00",
+     "shape": "box",
+     "size": [
+      0.044,
+      0.044,
+      0.009
+     ],
+     "centre": [
+      0,
+      0,
+      0.0045
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 172,
+    "lod1_triangles": 172,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_VerdictSeal_Refused": 172
+    },
+    "bounds_min": [
+     -0.0223,
+     -0.0214,
+     0
+    ],
+    "bounds_max": [
+     0.0223,
+     0.0607,
+     0.009
+    ],
+    "dimensions": [
+     0.0446,
+     0.0821,
+     0.009
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2788d5a819d3de66f4c24e77c223c34e4fc25523d8b8d58411b443ba59ee9ea6"
+  },
+  {
+   "asset": "Prop_ReplayNotary_Ledger_Closed",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN10: 40 x 30 x 8 cm tournament ledger, closed",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Page"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_Ledger_Closed_M0",
+     "colour": "ledger leather",
+     "hex": "5A2A1A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_Ledger_Closed_M1",
+     "colour": "pages (runtime entries)",
+     "hex": "E8DCC0",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_Ledger_Closed",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Cover",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.4,
+        0.08
+       ],
+       "centre": [
+        0,
+        0,
+        0.04
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pages",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.38,
+        0.065
+       ],
+       "centre": [
+        0.008,
+        0,
+        0.04
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Spine",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.4,
+        0.085
+       ],
+       "centre": [
+        -0.15,
+        0,
+        0.0425
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Page",
+     "location": [
+      0,
+      0,
+      0.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.08,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_Ledger_Closed_00",
+     "shape": "box",
+     "size": [
+      0.31,
+      0.4,
+      0.085
+     ],
+     "centre": [
+      0,
+      0,
+      0.04
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_Ledger_Closed": 100
+    },
+    "bounds_min": [
+     -0.165,
+     -0.2,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.2,
+     0.085
+    ],
+    "dimensions": [
+     0.315,
+     0.4,
+     0.085
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "07d9304c276601dc71f6e0d5e24dd355249e83b7bbe851df116737848c5e802a"
+  },
+  {
+   "asset": "Prop_ReplayNotary_Ledger_Open",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN10: 40 x 30 x 8 cm tournament ledger, open",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Base",
+     "SOCKET_Page"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_Ledger_Open_M0",
+     "colour": "ledger leather",
+     "hex": "5A2A1A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_Ledger_Open_M1",
+     "colour": "pages (runtime entries)",
+     "hex": "E8DCC0",
+     "roughness": 0.9,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_Ledger_Open",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "CoverL",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.4,
+        0.01
+       ],
+       "centre": [
+        -0.15,
+        0,
+        0.005
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        4,
+        0
+       ]
+      },
+      {
+       "name": "CoverR",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.4,
+        0.01
+       ],
+       "centre": [
+        0.15,
+        0,
+        0.005
+       ],
+       "slot": 0,
+       "bevel": true,
+       "rot": [
+        0,
+        -4,
+        0
+       ]
+      },
+      {
+       "name": "PagesL",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.38,
+        0.03
+       ],
+       "centre": [
+        -0.145,
+        0,
+        0.025
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        4,
+        0
+       ]
+      },
+      {
+       "name": "PagesR",
+       "shape": "box",
+       "size": [
+        0.28,
+        0.38,
+        0.03
+       ],
+       "centre": [
+        0.145,
+        0,
+        0.025
+       ],
+       "slot": 1,
+       "bevel": false,
+       "rot": [
+        0,
+        -4,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Base",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Page",
+     "location": [
+      0,
+      0,
+      0.045
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.045,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_Ledger_Open_00",
+     "shape": "box",
+     "size": [
+      0.6,
+      0.4,
+      0.05
+     ],
+     "centre": [
+      0,
+      0,
+      0.04
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 112,
+    "lod1_triangles": 112,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_Ledger_Open": 112
+    },
+    "bounds_min": [
+     -0.2999,
+     -0.2,
+     -0.0104
+    ],
+    "bounds_max": [
+     0.2999,
+     0.2,
+     0.0497
+    ],
+    "dimensions": [
+     0.5998,
+     0.4,
+     0.0601
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "a4eae7fa837155e136ee23bb8b36c66c6f4f889730b5183a4e2fbe7049aec119"
+  },
+  {
+   "asset": "Prop_ReplayNotary_EntryPostBox",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "RN11: 0.4 x 0.3 x 1.24 m brass entry post box, slot glows when a scroll arrives",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Slot"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_ReplayNotary_EntryPostBox_M0",
+     "colour": "iron post",
+     "hex": "2A2A30",
+     "roughness": 0.5,
+     "metallic": 0.8,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_ReplayNotary_EntryPostBox_M1",
+     "colour": "brass box",
+     "hex": "B08A4A",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_ReplayNotary_EntryPostBox_M2",
+     "colour": "slot glow (emissive on arrival)",
+     "hex": "FFD08A",
+     "roughness": 0.2,
+     "metallic": 0.0,
+     "glow": true
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_ReplayNotary_EntryPostBox",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Post",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.12,
+        0.8
+       ],
+       "centre": [
+        0,
+        0.05,
+        0.4
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Box",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.3,
+        0.4
+       ],
+       "centre": [
+        0,
+        0,
+        1.0
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Cap",
+       "shape": "box",
+       "size": [
+        0.44,
+        0.34,
+        0.04
+       ],
+       "centre": [
+        0,
+        0,
+        1.22
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Slot",
+       "shape": "box",
+       "size": [
+        0.22,
+        0.01,
+        0.025
+       ],
+       "centre": [
+        0,
+        -0.152,
+        1.08
+       ],
+       "slot": 2,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Slot",
+     "location": [
+      0,
+      -0.16,
+      1.08
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.08,
+      0.16
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_ReplayNotary_EntryPostBox_00",
+     "shape": "box",
+     "size": [
+      0.44,
+      0.34,
+      1.24
+     ],
+     "centre": [
+      0,
+      0,
+      0.62
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 144,
+    "lod1_triangles": 144,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_ReplayNotary_EntryPostBox": 144
+    },
+    "bounds_min": [
+     -0.22,
+     -0.17,
+     0.0
+    ],
+    "bounds_max": [
+     0.22,
+     0.17,
+     1.24
+    ],
+    "dimensions": [
+     0.44,
+     0.34,
+     1.24
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "2d00ecb1fd58b46b552776eb9ad7110d0254c3b15bb64d2457220966b765dbec"
+  },
+  {
+   "asset": "Mob_ReplayNotary_Sabine",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_ReplayNotary_Sabine_M0",
+     "colour": "coat",
+     "hex": "2A3A2A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_ReplayNotary_Sabine_M1",
+     "colour": "accent / trousers",
+     "hex": "3A2A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Mob_ReplayNotary_Sabine_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 3,
+     "name": "Mob_ReplayNotary_Sabine_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 4,
+     "name": "Mob_ReplayNotary_Sabine_M4",
+     "colour": "ledger leather",
+     "hex": "5A2A1A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 5,
+     "name": "Mob_ReplayNotary_Sabine_M5",
+     "colour": "brass stamp",
+     "hex": "B08A4A",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_ReplayNotary_Sabine",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0,
+        -0.01,
+        1.63
+       ],
+       "slot": 2,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        -0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        -0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        -0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.11,
+        0,
+        0.6
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.11,
+        0,
+        0.21
+       ],
+       "slot": 1,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.11,
+        -0.04,
+        0.04
+       ],
+       "slot": 3,
+       "bevel": true
+      },
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.31,
+        0,
+        1.17
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.37,
+        0,
+        0.88
+       ],
+       "slot": 2,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        1.65
+       ],
+       "slot": 3,
+       "bevel": false
+      },
+      {
+       "name": "SLedger",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.3,
+        0.4
+       ],
+       "centre": [
+        0.39,
+        -0.02,
+        0.95
+       ],
+       "slot": 4,
+       "bevel": true
+      },
+      {
+       "name": "SStamp",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02,
+       "r2": 0.02,
+       "length": 0.1,
+       "centre": [
+        -0.37,
+        -0.03,
+        0.82
+       ],
+       "slot": 5,
+       "segments": 8
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0,
+      0,
+      1.76
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.76,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0,
+      -0.15,
+      1.6
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.6,
+      0.15
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_ReplayNotary_Sabine_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 692,
+    "lod1_triangles": 692,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_ReplayNotary_Sabine": 692
+    },
+    "bounds_min": [
+     -0.42,
+     -0.17,
+     0.0
+    ],
+    "bounds_max": [
+     0.42,
+     0.135,
+     1.76
+    ],
+    "dimensions": [
+     0.84,
+     0.305,
+     1.76
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "466864bddcb711e323db7c4959fbd3fbfdee9a408eec0990ea883a20b4684b91"
+  },
+  {
+   "asset": "Mob_ReplayNotary_Sabine_Rig",
+   "kind": "Mob",
+   "seed": 20261030,
+   "frame_of": [
+    "Mob_ReplayNotary_Sabine_Rig_Head",
+    "Mob_ReplayNotary_Sabine_Rig_ArmR",
+    "Mob_ReplayNotary_Sabine_Rig_ArmL",
+    "Mob_ReplayNotary_Sabine_Rig_LegR",
+    "Mob_ReplayNotary_Sabine_Rig_LegL",
+    "Mob_ReplayNotary_Sabine_Rig_HeldR",
+    "Mob_ReplayNotary_Sabine_Rig_HeldL"
+   ],
+   "hinges": [
+    {
+     "socket": "SOCKET_Hinge_Head",
+     "mover": "Mob_ReplayNotary_Sabine_Rig_Head",
+     "pivot_m": [
+      0,
+      0,
+      1.5
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      -10
+     ],
+     "open_ue_rotator": [
+      0.0,
+      10.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmR",
+     "mover": "Mob_ReplayNotary_Sabine_Rig_ArmR",
+     "pivot_m": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      -85,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      -85.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_ArmL",
+     "mover": "Mob_ReplayNotary_Sabine_Rig_ArmL",
+     "pivot_m": [
+      0.27,
+      0,
+      1.43
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegR",
+     "mover": "Mob_ReplayNotary_Sabine_Rig_LegR",
+     "pivot_m": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_LegL",
+     "mover": "Mob_ReplayNotary_Sabine_Rig_LegL",
+     "pivot_m": [
+      0.11,
+      0,
+      0.82
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_HeldR",
+     "mover": "Mob_ReplayNotary_Sabine_Rig_HeldR",
+     "pivot_m": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "socket": "SOCKET_Hinge_HeldL",
+     "mover": "Mob_ReplayNotary_Sabine_Rig_HeldL",
+     "pivot_m": [
+      0.37,
+      0,
+      0.88
+     ],
+     "open_blender_euler_deg": [
+      0,
+      0,
+      0
+     ],
+     "open_ue_rotator": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "frame glb (UEB 48812): root hulls only; movers attach at SOCKET_Hinge_*"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_ReplayNotary_Sabine_M0",
+     "colour": "coat",
+     "hex": "2A3A2A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_ReplayNotary_Sabine_M1",
+     "colour": "accent / trousers",
+     "hex": "3A2A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_ReplayNotary_Sabine_Rig",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Torso",
+       "shape": "box",
+       "size": [
+        0.42,
+        0.26,
+        0.55
+       ],
+       "centre": [
+        0,
+        0,
+        1.2
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Pelvis",
+       "shape": "box",
+       "size": [
+        0.4,
+        0.26,
+        0.16
+       ],
+       "centre": [
+        0,
+        0,
+        0.88
+       ],
+       "slot": 1,
+       "bevel": true
+      },
+      {
+       "name": "Belt",
+       "shape": "box",
+       "size": [
+        0.43,
+        0.27,
+        0.05
+       ],
+       "centre": [
+        0,
+        0,
+        0.97
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Floor",
+     "location": [
+      0,
+      0,
+      0
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_Head",
+     "location": [
+      0,
+      0,
+      1.5
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      1.5,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmR",
+     "location": [
+      -0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_ArmL",
+     "location": [
+      0.27,
+      0,
+      1.43
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.27,
+      1.43,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegR",
+     "location": [
+      -0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_LegL",
+     "location": [
+      0.11,
+      0,
+      0.82
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.11,
+      0.82,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_HeldR",
+     "location": [
+      -0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.37,
+      0.88,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Hinge_HeldL",
+     "location": [
+      0.37,
+      0,
+      0.88
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.37,
+      0.88,
+      0.0
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Mob_ReplayNotary_Sabine_00",
+     "shape": "box",
+     "size": [
+      0.5,
+      0.35,
+      1.78
+     ],
+     "centre": [
+      0,
+      0,
+      0.89
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 132,
+    "lod1_triangles": 132,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_ReplayNotary_Sabine_Rig": 132
+    },
+    "bounds_min": [
+     -0.215,
+     -0.135,
+     0.8
+    ],
+    "bounds_max": [
+     0.215,
+     0.135,
+     1.475
+    ],
+    "dimensions": [
+     0.43,
+     0.27,
+     0.675
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "1ded3fbafa7a0507d3c7404f038dba7e6a5db83bb6ea5e75bf5312bad25303d1"
+  },
+  {
+   "asset": "Mob_ReplayNotary_Sabine_Rig_Head",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_ReplayNotary_Sabine_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_Head",
+    "mover": "Mob_ReplayNotary_Sabine_Rig_Head",
+    "pivot_m": [
+     0,
+     0,
+     1.5
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     -10
+    ],
+    "open_ue_rotator": [
+     0.0,
+     10.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_ReplayNotary_Sabine_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_ReplayNotary_Sabine_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_ReplayNotary_Sabine_Rig_Head",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_Head)",
+     "parts": [
+      {
+       "name": "Head",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.13
+        ],
+        [
+         0.09192,
+         -0.09192
+        ],
+        [
+         0.13,
+         -0.0
+        ],
+        [
+         0.09192,
+         0.09192
+        ],
+        [
+         0,
+         0.13
+        ]
+       ],
+       "centre": [
+        0.0,
+        -0.01,
+        0.13
+       ],
+       "slot": 0,
+       "segments": 10,
+       "caps": [
+        true,
+        true
+       ]
+      },
+      {
+       "name": "Eye-1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        -0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Eye1",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.01,
+        0.03
+       ],
+       "centre": [
+        0.045,
+        -0.135,
+        0.15
+       ],
+       "slot": 1,
+       "bevel": false
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_Head",
+     "location": [
+      0.0,
+      0.0,
+      0.26
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.26,
+      0.0
+     ]
+    },
+    {
+     "name": "SOCKET_Speak",
+     "location": [
+      0.0,
+      -0.15,
+      0.1
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.0,
+      0.1,
+      0.15
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_ReplayNotary_Sabine_Rig SOCKET_Hinge_Head)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 120,
+    "lod1_triangles": 120,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_ReplayNotary_Sabine_Rig_Head": 120
+    },
+    "bounds_min": [
+     -0.13,
+     -0.14,
+     0.0
+    ],
+    "bounds_max": [
+     0.13,
+     0.1136,
+     0.26
+    ],
+    "dimensions": [
+     0.26,
+     0.2536,
+     0.26
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "4a41081954e97e8af017d1245c492abad43abc45d433d530dc38c25a00dce096"
+  },
+  {
+   "asset": "Mob_ReplayNotary_Sabine_Rig_ArmR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_ReplayNotary_Sabine_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmR",
+    "mover": "Mob_ReplayNotary_Sabine_Rig_ArmR",
+    "pivot_m": [
+     -0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     -85,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     -85.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_ReplayNotary_Sabine_M0",
+     "colour": "coat",
+     "hex": "2A3A2A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_ReplayNotary_Sabine_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_ReplayNotary_Sabine_Rig_ArmR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmR)",
+     "parts": [
+      {
+       "name": "Arm-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        -0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        -12,
+        0
+       ]
+      },
+      {
+       "name": "Hand-1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        -0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandR",
+     "location": [
+      -0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      -0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_ReplayNotary_Sabine_Rig SOCKET_Hinge_ArmR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_ReplayNotary_Sabine_Rig_ArmR": 84
+    },
+    "bounds_min": [
+     -0.15,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.0759,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "c009f77dfc8a691aa91e9f346dbfb1dcb3f8b0df43d224b3df3d5c32be4c13de"
+  },
+  {
+   "asset": "Mob_ReplayNotary_Sabine_Rig_ArmL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_ReplayNotary_Sabine_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_ArmL",
+    "mover": "Mob_ReplayNotary_Sabine_Rig_ArmL",
+    "pivot_m": [
+     0.27,
+     0,
+     1.43
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_ReplayNotary_Sabine_M0",
+     "colour": "coat",
+     "hex": "2A3A2A",
+     "roughness": 0.85,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_ReplayNotary_Sabine_M2",
+     "colour": "skin",
+     "hex": "D9A982",
+     "roughness": 0.7,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_ReplayNotary_Sabine_Rig_ArmL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_ArmL)",
+     "parts": [
+      {
+       "name": "Arm1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.06,
+       "r2": 0.05,
+       "length": 0.55,
+       "centre": [
+        0.04,
+        0.0,
+        -0.26
+       ],
+       "slot": 0,
+       "segments": 8,
+       "rot": [
+        0,
+        12,
+        0
+       ]
+      },
+      {
+       "name": "Hand1",
+       "shape": "lathe",
+       "profile": [
+        [
+         0,
+         -0.05
+        ],
+        [
+         0.03536,
+         -0.03536
+        ],
+        [
+         0.05,
+         -0.0
+        ],
+        [
+         0.03536,
+         0.03536
+        ],
+        [
+         0,
+         0.05
+        ]
+       ],
+       "centre": [
+        0.1,
+        0.0,
+        -0.55
+       ],
+       "slot": 1,
+       "segments": 6,
+       "caps": [
+        true,
+        true
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_HandL",
+     "location": [
+      0.1,
+      0.0,
+      -0.55
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.1,
+      -0.55,
+      0.0
+     ]
+    }
+   ],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_ReplayNotary_Sabine_Rig SOCKET_Hinge_ArmL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 84,
+    "lod1_triangles": 84,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_ReplayNotary_Sabine_Rig_ArmL": 84
+    },
+    "bounds_min": [
+     -0.0759,
+     -0.06,
+     -0.6
+    ],
+    "bounds_max": [
+     0.15,
+     0.06,
+     0.0194
+    ],
+    "dimensions": [
+     0.2259,
+     0.12,
+     0.6194
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "06679d5ab2d2734f61a35711cbe02ebe2fe68d5448fa73f4cf47121ff9fea199"
+  },
+  {
+   "asset": "Mob_ReplayNotary_Sabine_Rig_LegR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_ReplayNotary_Sabine_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegR",
+    "mover": "Mob_ReplayNotary_Sabine_Rig_LegR",
+    "pivot_m": [
+     -0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_ReplayNotary_Sabine_M1",
+     "colour": "accent / trousers",
+     "hex": "3A2A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_ReplayNotary_Sabine_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_ReplayNotary_Sabine_Rig_LegR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegR)",
+     "parts": [
+      {
+       "name": "Thigh-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin-1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot-1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_ReplayNotary_Sabine_Rig SOCKET_Hinge_LegR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_ReplayNotary_Sabine_Rig_LegR": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "d4bf9b7eec81fc1f04c6e7fb55f7b9db976457ee05079ab817174cc538e92999"
+  },
+  {
+   "asset": "Mob_ReplayNotary_Sabine_Rig_LegL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_ReplayNotary_Sabine_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_LegL",
+    "mover": "Mob_ReplayNotary_Sabine_Rig_LegL",
+    "pivot_m": [
+     0.11,
+     0,
+     0.82
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_ReplayNotary_Sabine_M1",
+     "colour": "accent / trousers",
+     "hex": "3A2A22",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Mob_ReplayNotary_Sabine_M3",
+     "colour": "dark (boots, eyes)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_ReplayNotary_Sabine_Rig_LegL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_LegL)",
+     "parts": [
+      {
+       "name": "Thigh1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.08,
+       "r2": 0.07,
+       "length": 0.42,
+       "centre": [
+        0.0,
+        0.0,
+        -0.22
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Shin1",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.065,
+       "r2": 0.055,
+       "length": 0.38,
+       "centre": [
+        0.0,
+        0.0,
+        -0.61
+       ],
+       "slot": 0,
+       "segments": 8
+      },
+      {
+       "name": "Boot1",
+       "shape": "box",
+       "size": [
+        0.12,
+        0.22,
+        0.08
+       ],
+       "centre": [
+        0.0,
+        -0.04,
+        -0.78
+       ],
+       "slot": 1,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_ReplayNotary_Sabine_Rig SOCKET_Hinge_LegL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 100,
+    "lod1_triangles": 100,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_ReplayNotary_Sabine_Rig_LegL": 100
+    },
+    "bounds_min": [
+     -0.08,
+     -0.15,
+     -0.82
+    ],
+    "bounds_max": [
+     0.08,
+     0.08,
+     -0.01
+    ],
+    "dimensions": [
+     0.16,
+     0.23,
+     0.81
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "655e2673806d65c70459af3812f3c707a7e276a69cb6a4f59c80d1e921f79a3e"
+  },
+  {
+   "asset": "Mob_ReplayNotary_Sabine_Rig_HeldR",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_ReplayNotary_Sabine_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_HeldR",
+    "mover": "Mob_ReplayNotary_Sabine_Rig_HeldR",
+    "pivot_m": [
+     -0.37,
+     0,
+     0.88
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_ReplayNotary_Sabine_M5",
+     "colour": "brass stamp",
+     "hex": "B08A4A",
+     "roughness": 0.35,
+     "metallic": 0.9,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_ReplayNotary_Sabine_Rig_HeldR",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_HeldR)",
+     "parts": [
+      {
+       "name": "SStamp",
+       "shape": "cyl",
+       "axis": "z",
+       "r1": 0.02,
+       "r2": 0.02,
+       "length": 0.1,
+       "centre": [
+        0.0,
+        -0.03,
+        -0.06
+       ],
+       "slot": 0,
+       "segments": 8
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_ReplayNotary_Sabine_Rig SOCKET_Hinge_HeldR)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 28,
+    "lod1_triangles": 28,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_ReplayNotary_Sabine_Rig_HeldR": 28
+    },
+    "bounds_min": [
+     -0.02,
+     -0.05,
+     -0.11
+    ],
+    "bounds_max": [
+     0.02,
+     -0.01,
+     -0.01
+    ],
+    "dimensions": [
+     0.04,
+     0.04,
+     0.1
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "fbf7da5f5ab87a27d6d5aa8203bfe6cac17d73591e35502fecfacf923cf39392"
+  },
+  {
+   "asset": "Mob_ReplayNotary_Sabine_Rig_HeldL",
+   "kind": "Mob",
+   "seed": 20261030,
+   "mover_of": "Mob_ReplayNotary_Sabine_Rig",
+   "hinge": {
+    "socket": "SOCKET_Hinge_HeldL",
+    "mover": "Mob_ReplayNotary_Sabine_Rig_HeldL",
+    "pivot_m": [
+     0.37,
+     0,
+     0.88
+    ],
+    "open_blender_euler_deg": [
+     0,
+     0,
+     0
+    ],
+    "open_ue_rotator": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "spec": {
+    "size_m": "~1.78 m NPC placeholder (static, rig pending): RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_Floor",
+     "SOCKET_Head",
+     "SOCKET_HandR",
+     "SOCKET_HandL",
+     "SOCKET_Speak"
+    ],
+    "status": "NOT READY",
+    "rig": "Prism segment rig (root + Head, ArmR, ArmL, LegR, LegL, Held)",
+    "poses": {
+     "Idle": {},
+     "Point": {
+      "ArmR": [
+       -85,
+       0,
+       0
+      ],
+      "Head": [
+       0,
+       0,
+       -10
+      ]
+     },
+     "Shrug": {
+      "ArmR": [
+       0,
+       -30,
+       0
+      ],
+      "ArmL": [
+       0,
+       30,
+       0
+      ],
+      "Head": [
+       0,
+       12,
+       0
+      ]
+     },
+     "Cheer": {
+      "ArmR": [
+       0,
+       -135,
+       0
+      ],
+      "ArmL": [
+       0,
+       135,
+       0
+      ],
+      "Head": [
+       -15,
+       0,
+       0
+      ]
+     },
+     "Chalk": {
+      "ArmR": [
+       -70,
+       0,
+       -20
+      ],
+      "Head": [
+       10,
+       0,
+       0
+      ]
+     },
+     "Scold": {
+      "ArmL": [
+       -75,
+       0,
+       15
+      ],
+      "Head": [
+       -8,
+       0,
+       8
+      ],
+      "ArmR": [
+       0,
+       -10,
+       0
+      ]
+     }
+    },
+    "open_pose": "Point",
+    "split": "mover glb (UEB 48812): origin = hinge pivot"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Mob_ReplayNotary_Sabine_M4",
+     "colour": "ledger leather",
+     "hex": "5A2A1A",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Mob_ReplayNotary_Sabine_Rig_HeldL",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "mover; origin at the hinge pivot (frame SOCKET_Hinge_HeldL)",
+     "parts": [
+      {
+       "name": "SLedger",
+       "shape": "box",
+       "size": [
+        0.04,
+        0.3,
+        0.4
+       ],
+       "centre": [
+        0.02,
+        -0.02,
+        0.07
+       ],
+       "slot": 0,
+       "bevel": true
+      }
+     ]
+    }
+   ],
+   "sockets": [],
+   "collision": [],
+   "off_centre_ok": "origin is the hinge pivot, not the bottom centre (attach at Mob_ReplayNotary_Sabine_Rig SOCKET_Hinge_HeldL)",
+   "nanite": true,
+   "predicted": {
+    "triangles": 44,
+    "lod1_triangles": 44,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Mob_ReplayNotary_Sabine_Rig_HeldL": 44
+    },
+    "bounds_min": [
+     0.0,
+     -0.17,
+     -0.13
+    ],
+    "bounds_max": [
+     0.04,
+     0.13,
+     0.27
+    ],
+    "dimensions": [
+     0.04,
+     0.3,
+     0.4
+    ],
+    "collision_tris": 0
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "77615e63d8569696dd4991170d5fda075743b8fbd1509e656f89b74e6553b5ca"
+  }
+ ]
+}

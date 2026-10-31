@@ -111,3 +111,7 @@ Notes
 ## spirit_boons (hephaestus, READY 62885; items 62869)
 
 21 assets: boon charms for the 7 spirits (Cinder Wisp, Mere Sprite, Thornkin, Sky Lark Spirit, Hollow Moth, Glass Heron, Lantern Newt), levels 1 and 2; cabinet boon badge; pending-ACK tag; Moth challenge card; Moth try counter; Creature_SpiritBoons_HollowMoth_Rival and _Freed (emissive); moth flight dust VFX placeholder. Sheet: spirit_boons.png.
+
+## replay_notary (disk-saver G608, READY 64064; Items RN01-RN12)
+
+18 assets: RN01 cabinet with ledger-and-seal marquee; RN02 1.8 m oak notary desk (drawer, inkwell, ledger sockets); RN03 brass seal stamp with green-wax head (Grip); RN04 candle melt pot + wax stick (Flame socket); RN05 2 x 1.2 m Tidewatch Cup leaderboard slate (runtime UI); RN06 entry scroll rolled and open; RN07/08/09 verdict seals OK, FORGED (cracked), REFUSED (ribbon); RN10 ledger closed and open; RN11 brass entry post box with slot glow; RN12 Notary Sabine, static plus shared rig (idle/reading/stamping/refusing map to the shared pose set). Sheet: replay_notary.png.
