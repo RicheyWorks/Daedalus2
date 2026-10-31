@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.daedalus</groupId>
+        <artifactId>daedalus-parent</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>daedalus-maze-game</artifactId>
+    <name>Daedalus :: Maze Game (Labyrinth Run)</name>
+    <description>
+        Standalone playable maze game on top of daedalus-core. Pure deterministic
+        rules (seed, difficulty, par, stars, share code, daily seed). Depends only
+        on daedalus-core: no Spring, Redis, Docker or JavaFX.
+    </description>
+
+    <properties>
+        <!-- Coverage ratchet: measured 97% instruction on 2026-10-31 (PR1 rules);
+             floor three points under, per the repo convention. -->
+        <jacoco.check.minimum>0.94</jacoco.check.minimum>
+        <jacoco.check.ceiling>0.97</jacoco.check.ceiling>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.daedalus</groupId>
+            <artifactId>daedalus-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
