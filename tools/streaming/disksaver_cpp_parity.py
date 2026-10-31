@@ -2,8 +2,9 @@
 """Golden outputs for the C++17 ports of the DiskSaver minigame cores (G573 batch 1, G574 batch 2, G575 batch 3, G576 batch 4, G577 batch 5, G578 batch 6, G579 batch 7, G580 batch 8;
 G581 seed spec draws from tools/streaming/disksaver_seed_spec.py;
 G590 Gantry Sweep from tools/streaming/gantry_sweep_parity.py;
-G590 Gantry Sweep from tools/streaming/gantry_sweep_parity.py;
-G598 Buddy Berths from tools/streaming/tidelinks_golf_parity.py).
+G597 Buddy Berths from tools/streaming/buddy_berths_parity.py;
+G598 Tidelinks Golf from tools/streaming/tidelinks_golf_parity.py;
+G608 Replay Notary from tools/streaming/replay_notary_parity.py).
 
 Each game's Python tool lays out the puzzle (its seeded layout stays in Python: the C++ side
 never reimplements Python's random) and then plays a fixed set of move lists through the real
@@ -60,6 +61,7 @@ import disksaver_seed_spec as dss  # noqa: E402
 import gantry_sweep_parity as gsp  # noqa: E402
 import buddy_berths_parity as bbp  # noqa: E402
 import tidelinks_golf_parity as tgp  # noqa: E402
+import replay_notary_parity as rnp  # noqa: E402
 import ebb_eviction as ee  # noqa: E402
 import harbour_cryptogram as hc  # noqa: E402
 import last_crate as lc  # noqa: E402
@@ -2061,7 +2063,8 @@ GAMES = {"manifest_match": mm_lines, "twin_pilots": tp_lines, "quayside_shove": 
          "caulking_check": cc_lines, "seed_spec": dss.lines,
          "gantry_sweep": gsp.lines,
          "buddy_berths": bbp.lines,
-         "tidelinks_golf": tgp.lines}
+         "tidelinks_golf": tgp.lines,
+         "replay_notary": rnp.lines}
 
 
 def texts():
