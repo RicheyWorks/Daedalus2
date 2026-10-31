@@ -49,6 +49,25 @@ Locations are in Unreal units (cm) with Z up. Rotations are `[pitch, yaw, roll]`
 - A command can be a Python generator. It is then stepped once per editor tick until it returns, so it can
   wait for the editor (a screenshot being written, Play starting) without freezing it.
 
+The Python lifecycle API `bridge.stop()` runs on the thread that started the bridge (the editor thread).
+It closes suspended generators and resolves pending replies with `code: "BRIDGE_STOPPED"`:
+
+- `dispatched: false, effects: "none"`: the queued command did not run.
+- `dispatched: true, effects: "unknown"`: earlier changes or already-dispatched remote work may remain.
+  Inspect the editor before retrying. Generator cleanup is cooperative; it does not cancel native work or
+  roll back changes. A failing cleanup adds `cleanup_error` to that job's reply and other jobs still settle.
+
+If removing the tick callback or closing the listener fails, pending jobs still settle. The failed handle
+is retained and restart is refused until an owner-thread `stop()` retry successfully removes it.
+
+A stop requested inside a command closes its suspended generator after the current pump unwinds. A
+command that completes before that boundary retains its completed reply. Old listener connections cannot
+enqueue work after a stop/start cycle. Completed and interrupted async replies remain queryable after
+`bridge.start()` in the same module, subject to the existing one-hour retention; restarting the editor or
+reloading the module loses these in-memory records. Interrupted dispatched `request_id` replies are replayed
+within the existing bounded replay cache, rather than silently repeating partial changes. Shutdown does
+not launch or restart the editor.
+
 ## Adding commands from your project
 
 ```python
