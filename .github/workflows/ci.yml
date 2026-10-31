@@ -51,7 +51,11 @@ jobs:
       # on linux file locks.
       - name: Plugin host shutdown on Windows
         shell: bash
-        run: mvn -B -ntp -pl daedalus-server -am test -Dtest=PluginHostShutdownTest -Dsurefire.failIfNoSpecifiedTests=false
+        # Upstream modules are only dependencies here (Build & test runs their
+        # tests and Checkstyle); skip their test compile and checks.
+        run: |
+          mvn -B -ntp install -pl daedalus-plugin-runtime,daedalus-wallet -am -Dmaven.test.skip=true -Dcheckstyle.skip=true -Djacoco.skip=true -Dspotbugs.skip=true
+          mvn -B -ntp -pl daedalus-server test -Dtest=PluginHostShutdownTest -Dsurefire.failIfNoSpecifiedTests=false -Dcheckstyle.skip=true
       - name: Minimal Unreal packaging fixture scope guards
         run: python -m unittest discover -s tools/unreal/packaging-witness -p test_prepare_fixture.py -v
       - name: Unattended ingestion checkpoint and refusal guards
