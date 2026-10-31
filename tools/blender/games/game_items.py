@@ -1195,6 +1195,50 @@ def lane_props_r2():
     return out
 
 
+# ================================================================ chainmail_weave (hephaestus, READY 62846; items 62511 + 62845)
+def torus(name, c, R, r, slot, axis="y", seg=12):
+    """Ring as a lathe of an offset circle profile (closed loop), revolved about Z then turned to face -Y."""
+    prof = [(R + r * math.cos(2 * math.pi * k / 6), r * math.sin(2 * math.pi * k / 6)) for k in range(7)]
+    return K.lathe(name, prof, c, slot, seg, rot=(90, 0, 0) if axis == "y" else (0, 0, 0))
+
+
+@game("chainmail_weave")
+def chainmail_weave():
+    G = "Prop_ChainmailWeave_"; out = []
+    P = [K.box("FrameTop", (1.6, 0.08, 0.08), (0, 0, 1.9), 0), K.box("FrameBot", (1.6, 0.08, 0.08), (0, 0, 0.3), 0)] + [K.box("FrameSide%d" % s, (0.08, 0.08, 1.68), (s * 0.76, 0, 1.1), 0) for s in (-1, 1)]
+    P += [K.box("Foot%d" % s, (0.12, 0.5, 0.06), (s * 0.76, 0, 0.03), 0) for s in (-1, 1)] + [K.box("Upright%d" % s, (0.08, 0.08, 0.3), (s * 0.76, 0, 0.18), 0) for s in (-1, 1)]
+    S = [K.socket("Floor", (0, 0, 0))] + [K.socket("Ring_%d_%d" % (r, c), (-0.6 + 0.2 * c, -0.05, 1.7 - 0.2 * r)) for r in range(7) for c in range(7)]
+    out.append(simple(G + "WeaveFrame", P, [("armory oak", "4A3424", 0.8)], S, "1.6 x 1.94 m armory weave frame, 7 x 7 Ring_row_col sockets at 0.2 m pitch", (1.6, 0.5, 1.94), (0, 0, 0.97)))
+    for nm, hx, rough, met, glow in (("Empty", "8A8A92", 0.4, 0.9, False), ("Rusted", "8A4A2A", 0.95, 0.3, False), ("Link", "D0D4DC", 0.25, 1.0, False)):
+        P = [torus("Ring", (0, 0, 0), 0.06, 0.012, 0)]
+        if nm == "Rusted": P += [rock("Flake%d" % k, (0.06 * math.cos(k * 2.0), -0.01, 0.06 * math.sin(k * 2.0)), 0.018, 1, k) for k in range(4)]
+        if nm == "Link": P += [K.box("Rivet", (0.02, 0.03, 0.02), (0.06, 0, 0), 1)]
+        out.append(simple(G + "Ring_" + nm, P, [(nm.lower() + " ring", hx, rough, met), ("rust" if nm == "Rusted" else "rivet", "6A2A1A" if nm == "Rusted" else "B08A4A", 0.9 if nm == "Rusted" else 0.4, 0.3 if nm == "Rusted" else 0.9)],
+                          [K.socket("Grid", (0, 0, 0))], "0.14 m mail ring, %s (origin = grid centre; hang at the frame's Ring_ socket)" % nm.lower(), (0.15, 0.03, 0.15), (0, 0, 0)))
+        out[-1]["off_centre_ok"] = "ring origin is its centre (grid socket)"
+    for side in ("Left", "Right"):
+        sx = -1 if side == "Left" else 1
+        P = [K.box("Plate", (0.06, 0.04, 1.4), (0, 0, 0.7), 0)] + [K.box("Hook%d" % k, (0.05, 0.03, 0.03), (-sx * 0.05, -0.01, 0.1 + 0.2 * k), 1) for k in range(7)]
+        out.append(simple(G + "EdgeClasp_" + side, P, [("brass clasp plate", "B08A4A", 0.35, 0.9), ("hooks", "2A2A30", 0.5, 0.8)], [K.socket("Mount", (0, 0.02, 0)), K.socket("Glow", (0, -0.03, 0.7))],
+                          "1.4 m %s edge clasp, 7 hooks facing the weave" % side.lower(), (0.13, 0.04, 1.4), (-sx * 0.035, 0, 0.7)))
+        out[-1]["off_centre_ok"] = "hooks face the grid"
+    out.append(ui_panel(G + "BudgetCounter", 0.4, 0.25, "links left this round"))
+    P = [K.lathe("Glint", [(0, 0.04), (0.012, 0.0), (0, -0.04)], (0, 0, 0), 0, 4), K.lathe("GlintX", [(0, 0.04), (0.012, 0.0), (0, -0.04)], (0, 0, 0), 0, 4, rot=(0, 90, 0))]
+    out.append(simple(G + "HintGlint", P, [("glint (emissive, additive)", "FFF0A0", 0.1, 0.0, True)], [K.socket("Ring", (0, 0, 0))], "0.08 m four-point hint glint card mesh (VFX placeholder)", (0.08, 0.024, 0.08), (0, 0, 0)))
+    out[-1]["off_centre_ok"] = "VFX centred on the ring"
+    P = [K.box("Glow", (0.2, 0.01, 0.06), (0.1, 0, 0), 0, bevel=False)]
+    out.append(simple(G + "HintPathGlow", P, [("path glow (emissive, additive)", "8AD0FF", 0.1, 0.0, True)], [K.socket("From", (0, 0, 0)), K.socket("To", (0.2, 0, 0))], "0.2 m hint path glow strip (one cell step; chain From/To along PathCells)", (0.2, 0.01, 0.06), (0.1, 0, 0)))
+    out[-1]["off_centre_ok"] = "strip starts at the From ring"
+    for d, hx in (("Easy", "5AB04A"), ("Normal", "E8C040"), ("Hard", "C83A2A")):
+        out.append(ui_panel(G + "DifficultyPlaque_" + d, 0.3, 0.1, "difficulty " + d.upper(), hx, "3A2A1E"))
+    for b, hx in (("Blocked", "8A4A2A"), ("OutOfLinks", "4A4A52")):
+        P = [K.cyl("Rod", "x", 0.015, 0.015, 1.3, (0, 0, 0.5), 0, 8), K.box("Cloth", (1.2, 0.01, 0.4), (0, 0, 0.28), 1, bevel=False)] + [K.box("Tail%d" % s, (0.3, 0.01, 0.15), (s * 0.45, 0, 0.02), 1, bevel=False) for s in (-1, 1)]
+        out.append(simple(G + "LossBanner_" + b, P, [("banner rod", "2A2A30", 0.5, 0.8), ("banner cloth (runtime text: %s)" % ("BLOCKED" if b == "Blocked" else "OUT OF LINKS"), hx, 0.95)],
+                          [K.socket("Hang", (0, 0, 0.5)), K.socket("Text", (0, -0.01, 0.3))], "1.3 m loss banner, %s" % b, (1.3, 0.03, 0.56), (0, 0, 0.23)))
+        out[-1]["off_centre_ok"] = "hangs from the rod"
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)

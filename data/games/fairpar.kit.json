@@ -1,0 +1,1035 @@
+{
+ "schema": "blender-kit/v1/set",
+ "assets": [
+  {
+   "asset": "Prop_FairPar_Plaque_Bronze",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.3 x 0.12 m Fair Par tier plaque, BRONZE (screw to the cabinet side under the marquee)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_CabinetMount",
+     "SOCKET_Label"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_FairPar_Plaque_Bronze_M0",
+     "colour": "dark oak backing",
+     "hex": "3A2A1E",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_FairPar_Plaque_Bronze_M1",
+     "colour": "tier plate bronze",
+     "hex": "B07A3A",
+     "roughness": 0.3,
+     "metallic": 0.9,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_FairPar_Plaque_Bronze_M2",
+     "colour": "relief (heron + tier pips)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_FairPar_Plaque_Bronze",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Backing",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plate",
+       "shape": "box",
+       "size": [
+        0.27,
+        0.006,
+        0.095
+       ],
+       "centre": [
+        0,
+        -0.013,
+        0.06
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Heron",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.004,
+        0.06
+       ],
+       "centre": [
+        -0.1,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Pip0",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.02,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_CabinetMount",
+     "location": [
+      0,
+      0.01,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      -0.01
+     ]
+    },
+    {
+     "name": "SOCKET_Label",
+     "location": [
+      0.05,
+      -0.017,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.06,
+      0.017
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_FairPar_Plaque_Bronze_00",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.02,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 80,
+    "lod1_triangles": 80,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_FairPar_Plaque_Bronze": 80
+    },
+    "bounds_min": [
+     -0.15,
+     -0.019,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.01,
+     0.12
+    ],
+    "dimensions": [
+     0.3,
+     0.029,
+     0.12
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "876d533e3b53cde56dbdb531d7680bda2eefbe754257defda1b2238e1f61278b"
+  },
+  {
+   "asset": "Prop_FairPar_Plaque_Silver",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.3 x 0.12 m Fair Par tier plaque, SILVER (screw to the cabinet side under the marquee)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_CabinetMount",
+     "SOCKET_Label"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_FairPar_Plaque_Silver_M0",
+     "colour": "dark oak backing",
+     "hex": "3A2A1E",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_FairPar_Plaque_Silver_M1",
+     "colour": "tier plate silver",
+     "hex": "D0D4DC",
+     "roughness": 0.3,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_FairPar_Plaque_Silver_M2",
+     "colour": "relief (heron + tier pips)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_FairPar_Plaque_Silver",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Backing",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plate",
+       "shape": "box",
+       "size": [
+        0.27,
+        0.006,
+        0.095
+       ],
+       "centre": [
+        0,
+        -0.013,
+        0.06
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Heron",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.004,
+        0.06
+       ],
+       "centre": [
+        -0.1,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Pip0",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.02,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      },
+      {
+       "name": "Pip1",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.05,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_CabinetMount",
+     "location": [
+      0,
+      0.01,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      -0.01
+     ]
+    },
+    {
+     "name": "SOCKET_Label",
+     "location": [
+      0.05,
+      -0.017,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.06,
+      0.017
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_FairPar_Plaque_Silver_00",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.02,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 92,
+    "lod1_triangles": 92,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_FairPar_Plaque_Silver": 92
+    },
+    "bounds_min": [
+     -0.15,
+     -0.019,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.01,
+     0.12
+    ],
+    "dimensions": [
+     0.3,
+     0.029,
+     0.12
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "b400c35b668e98fe473554be087e3ae6ceca1c5920b6a7994adb80c6c8701cc5"
+  },
+  {
+   "asset": "Prop_FairPar_Plaque_Gold",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.3 x 0.12 m Fair Par tier plaque, GOLD (screw to the cabinet side under the marquee)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_CabinetMount",
+     "SOCKET_Label"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_FairPar_Plaque_Gold_M0",
+     "colour": "dark oak backing",
+     "hex": "3A2A1E",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_FairPar_Plaque_Gold_M1",
+     "colour": "tier plate gold",
+     "hex": "F2C740",
+     "roughness": 0.3,
+     "metallic": 1.0,
+     "glow": false
+    },
+    {
+     "slot": 2,
+     "name": "Prop_FairPar_Plaque_Gold_M2",
+     "colour": "relief (heron + tier pips)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_FairPar_Plaque_Gold",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Backing",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plate",
+       "shape": "box",
+       "size": [
+        0.27,
+        0.006,
+        0.095
+       ],
+       "centre": [
+        0,
+        -0.013,
+        0.06
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Heron",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.004,
+        0.06
+       ],
+       "centre": [
+        -0.1,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Pip0",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.02,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      },
+      {
+       "name": "Pip1",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.05,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      },
+      {
+       "name": "Pip2",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.08,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_CabinetMount",
+     "location": [
+      0,
+      0.01,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      -0.01
+     ]
+    },
+    {
+     "name": "SOCKET_Label",
+     "location": [
+      0.05,
+      -0.017,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.06,
+      0.017
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_FairPar_Plaque_Gold_00",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.02,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 104,
+    "lod1_triangles": 104,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_FairPar_Plaque_Gold": 104
+    },
+    "bounds_min": [
+     -0.15,
+     -0.019,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.01,
+     0.12
+    ],
+    "dimensions": [
+     0.3,
+     0.029,
+     0.12
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "75f5de340e6ad3b425745a3ff5d5baf86ad5039c1704252fb42c1915cca953d0"
+  },
+  {
+   "asset": "Prop_FairPar_Plaque_Perfect",
+   "kind": "Prop",
+   "seed": 20261030,
+   "spec": {
+    "size_m": "0.3 x 0.12 m Fair Par tier plaque, PERFECT (screw to the cabinet side under the marquee)",
+    "tri_cap": 8000,
+    "sockets": [
+     "SOCKET_CabinetMount",
+     "SOCKET_Label"
+    ],
+    "status": "NOT READY"
+   },
+   "materials": [
+    {
+     "slot": 0,
+     "name": "Prop_FairPar_Plaque_Perfect_M0",
+     "colour": "dark oak backing",
+     "hex": "3A2A1E",
+     "roughness": 0.8,
+     "metallic": 0.0,
+     "glow": false
+    },
+    {
+     "slot": 1,
+     "name": "Prop_FairPar_Plaque_Perfect_M1",
+     "colour": "tier plate perfect (emissive)",
+     "hex": "C8A6FF",
+     "roughness": 0.3,
+     "metallic": 0.0,
+     "glow": true
+    },
+    {
+     "slot": 2,
+     "name": "Prop_FairPar_Plaque_Perfect_M2",
+     "colour": "relief (heron + tier pips)",
+     "hex": "1A1A22",
+     "roughness": 0.6,
+     "metallic": 0.0,
+     "glow": false
+    }
+   ],
+   "objects": [
+    {
+     "name": "Prop_FairPar_Plaque_Perfect",
+     "parent": null,
+     "pivot": [
+      0,
+      0,
+      0
+     ],
+     "role": "root",
+     "parts": [
+      {
+       "name": "Backing",
+       "shape": "box",
+       "size": [
+        0.3,
+        0.02,
+        0.12
+       ],
+       "centre": [
+        0,
+        0,
+        0.06
+       ],
+       "slot": 0,
+       "bevel": true
+      },
+      {
+       "name": "Plate",
+       "shape": "box",
+       "size": [
+        0.27,
+        0.006,
+        0.095
+       ],
+       "centre": [
+        0,
+        -0.013,
+        0.06
+       ],
+       "slot": 1,
+       "bevel": false
+      },
+      {
+       "name": "Heron",
+       "shape": "box",
+       "size": [
+        0.03,
+        0.004,
+        0.06
+       ],
+       "centre": [
+        -0.1,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false
+      },
+      {
+       "name": "Pip0",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.02,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      },
+      {
+       "name": "Pip1",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.05,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      },
+      {
+       "name": "Pip2",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.08,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      },
+      {
+       "name": "Pip3",
+       "shape": "box",
+       "size": [
+        0.018,
+        0.004,
+        0.018
+       ],
+       "centre": [
+        0.11,
+        -0.017,
+        0.06
+       ],
+       "slot": 2,
+       "bevel": false,
+       "rot": [
+        0,
+        45,
+        0
+       ]
+      }
+     ]
+    }
+   ],
+   "sockets": [
+    {
+     "name": "SOCKET_CabinetMount",
+     "location": [
+      0,
+      0.01,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0,
+      0.06,
+      -0.01
+     ]
+    },
+    {
+     "name": "SOCKET_Label",
+     "location": [
+      0.05,
+      -0.017,
+      0.06
+     ],
+     "parent": null,
+     "forward": [
+      0,
+      -1,
+      0
+     ],
+     "location_gltf": [
+      0.05,
+      0.06,
+      0.017
+     ]
+    }
+   ],
+   "collision": [
+    {
+     "name": "UCX_Prop_FairPar_Plaque_Perfect_00",
+     "shape": "box",
+     "size": [
+      0.3,
+      0.02,
+      0.12
+     ],
+     "centre": [
+      0,
+      0,
+      0.06
+     ],
+     "parent": null,
+     "tris": 12,
+     "convex": true
+    }
+   ],
+   "nanite": true,
+   "predicted": {
+    "triangles": 116,
+    "lod1_triangles": 116,
+    "lod1_ratio": 1.0,
+    "objects": {
+     "Prop_FairPar_Plaque_Perfect": 116
+    },
+    "bounds_min": [
+     -0.15,
+     -0.019,
+     0.0
+    ],
+    "bounds_max": [
+     0.15,
+     0.01,
+     0.12
+    ],
+    "dimensions": [
+     0.3,
+     0.029,
+     0.12
+    ],
+    "collision_tris": 12
+   },
+   "schema": "blender-kit/v1",
+   "axes": "metres; Blender Z up; origin bottom centre; front = Blender -Y; glTF +Y up; stock UE glTF Interchange maps UE = 100 * (x_b, -y_b, z_b) (UEB 48725), so the front lands on UE +Y; decided (buffffff 48769): no export rotation, face it with actor/component yaw -90 at placement (like the UE mannequin); assets whose UE attach code needs mesh +X forward get revisited one by one",
+   "status": "STAGED NOT READY",
+   "unreal": {
+    "nanite": "on by default on the UE side (unreal-epic-boss)",
+    "sockets": "native SOCKET_ empties survive stock glTF Interchange (position); the <Asset>.sockets.json sidecar rotation is authoritative (PR227): plain [0, 0, 0], attach +X along barrel/shaft, +Z up",
+    "collision": "UCX_/USP_ children are kept by stock glTF Interchange (UEB fixture A/B PASS)"
+   },
+   "export": {
+    "format": "GLB",
+    "export_yup": true,
+    "export_apply": true,
+    "export_extras": true,
+    "export_animations": false
+   },
+   "recipe_sha256": "6a369d7d75991375915d5ea824bfc833c9c7c27fb81a4e284092a8e985fb5512"
+  }
+ ]
+}

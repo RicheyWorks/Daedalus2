@@ -83,3 +83,7 @@ Notes
 ## crafting_rewards batch 2 (hephaestus, READY 62349; items 61072)
 
 10 assets: 1.4 m stone quench trough, 1 m heat gauge with SOFT / TEMPERED / PERFECT / CRACKED bands (runtime heat column), 1.6 m commission board (3 rows), 40 mm Forge Mark token (icon source), hallmark stamp decal plates PLAIN, BRONZE, SILVER, GOLD and PRISM, and the finish tint material set (7 swatches, slot = seal index: none, ember, tide, verdant, gale, umbra, heartglass). Sheet: crafting_rewards_2.png.
+
+## fairpar (pythagoras 60580; docs/mechanics/FAIRPAR01-fair-par.md)
+
+4 assets: 0.3 x 0.12 m Fair Par tier plaques BRONZE, SILVER, GOLD and PERFECT (emissive prism), with a heron relief and 1-4 tier pips. Screw them to the cabinet side under the marquee via SOCKET_CabinetMount, starting with the TRANS01 cabinet (translocation_plan). NONE shows no plaque. Sheet: fairpar.png. (game_items.py also carries the lane_props_r2 and chainmail_weave recipes; their kits land in their own PRs.)
