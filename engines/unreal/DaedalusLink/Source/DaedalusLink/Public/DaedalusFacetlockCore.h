@@ -6,6 +6,7 @@
 // tools/minigames/facetlock_parity.py.
 #pragma once
 #include "DaedalusPyRandomCore.h"
+#include <algorithm>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -26,6 +27,30 @@ constexpr int DifficultyCount = 3;
 inline const Difficulty* FindDifficulty(const std::string& Name)
 {
 	for (int I = 0; I < DifficultyCount; ++I) if (Name == Difficulties()[I].Name) return &Difficulties()[I];
+	return nullptr;
+}
+
+constexpr int BoonDelta = 1;  // Spirit Boon (Thornkin): spare +1 per level (hephaestus R2-9; level 2 = 5+ summons)
+/** FindDifficulty with a Spirit Boon level 0..2 applied to Spare (PrismGame boon, floor 0). Nullptr on a bad level. */
+inline const Difficulty* FindDifficulty(const std::string& Name, int Boon)
+{
+	if (Boon == 0) return FindDifficulty(Name);
+	if (Boon < 0 || Boon > 2) return nullptr;
+	struct Boosted { Difficulty Table[2][DifficultyCount]; };
+	static const Boosted B = [] {
+		Boosted Out{};
+		for (int L = 0; L < 2; ++L)
+			for (int I = 0; I < DifficultyCount; ++I)
+			{
+				Out.Table[L][I] = Difficulties()[I];
+				Out.Table[L][I].Spare = std::max(0, Out.Table[L][I].Spare + BoonDelta * (L + 1));
+			}
+		return Out;
+	}();
+	for (int I = 0; I < DifficultyCount; ++I)
+	{
+		if (Name == B.Table[Boon - 1][I].Name) return &B.Table[Boon - 1][I];
+	}
 	return nullptr;
 }
 
@@ -56,9 +81,9 @@ struct Game
 	std::vector<std::string> Target() const { std::vector<std::string> T; for (int R = 0; R < Diff->Size; ++R) T.push_back(std::string(static_cast<size_t>(Diff->Size), Marks()[R])); return T; }
 	bool Solved() const { return Board == Target(); }
 
-	bool Start(std::uint32_t Seed, const std::string& DifficultyName)
+	bool Start(std::uint32_t Seed, const std::string& DifficultyName, int Boon = 0)
 	{
-		Diff = FindDifficulty(DifficultyName);
+		Diff = FindDifficulty(DifficultyName, Boon);
 		if (!Diff) return false;
 		Rng.Seed(std::string(GameId()) + ":" + std::to_string(Seed) + ":" + DifficultyName);
 		Score = 0; Over = Won = false;
