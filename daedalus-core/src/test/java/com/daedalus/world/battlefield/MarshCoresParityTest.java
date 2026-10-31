@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
  * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan), G591 (G504 ReedCeiling), G593 (G507
  * ReedRelease), G610 (G188 HawkDove), G611 (G183 Metapopulation), G612 (G176 ShoalHarvest), G613 (G172
- * HerdOutbreak) and G614 (G163 FounderDrift); later ecology ports add a method here.
+ * HerdOutbreak), G614 (G163 FounderDrift) and G615 (G156 MarkRecapture); later ecology ports add a method here.
  * Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
  * replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
  * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
@@ -475,6 +475,38 @@ class MarshCoresParityTest {
     @Test
     void founderDriftMatchesCpp() throws IOException {
         check("marsh_founder_drift_parity.txt", "G163 FounderDrift", MarshCoresParityTest::founderDrift);
+    }
+
+    static List<String> markRecapture() {
+        double[][] tunings = {{240, 60, 0.012, 0, 1, 0}, {240, 60, 0.012, 0.3, 1, 0}, {500, 80, 0.01, 0, 0.5, 0.1},
+            {150, 40, 0.03, 0.1, 1.8, 0.2}, {80, 20, 0.05, 1, 1, 0}, {1, 2, 0.5, 0, 1, 0}, {300, 100, 0.002, 0, 3, 0},
+            {1000, 50, 0.02, 0.05, 0.8, 0.3}};
+        List<String> out = new ArrayList<>();
+        long seed = 1;
+        for (double[] t : tunings) {
+            MarkRecapture.Settings s = new MarkRecapture.Settings((int) t[0], (int) t[1], t[2], t[3], t[4], t[5]);
+            int[][] plans = {{0, 0}, {s.traps() / 4, s.traps() - s.traps() / 4}, {s.traps(), 1}};
+            for (int[] p : plans) {
+                MarkRecapture refuge = MarkRecapture.refuge(s, seed);
+                boolean ok = p[0] == 0 || refuge.plan(p[0], p[1]);
+                MarkRecapture.Census c = refuge.run();
+                out.add("population=" + s.population() + " traps=" + s.traps() + " perTrap=" + s.perTrap()
+                        + " tagLoss=" + s.tagLoss() + " trapResponse=" + s.trapResponse() + " turnover="
+                        + s.turnover() + " seed=" + seed + " first=" + p[0] + " second=" + p[1] + " planOk="
+                        + (ok ? 1 : 0) + " chance10=" + refuge.catchChance(10) + " marked=" + c.marked() + " caught="
+                        + c.caught() + " recaptured=" + c.recaptured() + " lp=" + c.lincolnPetersen() + " chapman="
+                        + c.chapman() + " variance=" + c.variance() + " low=" + c.low() + " high=" + c.high()
+                        + " verdict=" + c.verdict() + " quota=" + c.quota(0.2) + " greedy=" + c.greedyQuota(0.2)
+                        + " band=" + c.band(0.2));
+                seed++;
+            }
+        }
+        return out;
+    }
+
+    @Test
+    void markRecaptureMatchesCpp() throws IOException {
+        check("marsh_mark_recapture_parity.txt", "G156 MarkRecapture", MarshCoresParityTest::markRecapture);
     }
 
     static List<String> hawkDove() {
