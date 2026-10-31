@@ -31,3 +31,7 @@ _migration/
 node_modules/
 
 engines/unreal/pcg-ecology/out/
+
+# team link wake config: local only, holds a webhook url and key
+relay-webhook*.json
+!relay-webhook.template.json
