@@ -31,6 +31,7 @@ LIGHT_MAX, NOVA_COST, NOVA_REACH = 5, 3, 2
 class Game(pc.PrismGame):
     GAME_ID, TITLE, HOW_TO_PLAY = GAME_ID, TITLE, HOW_TO_PLAY
     DIFFICULTY, DEFAULT_DIFFICULTY = DIFFICULTY, DEFAULT_DIFFICULTY
+    BOON = ("hearts", 1, "Lantern Newt")  # Spirit Boon (hephaestus R2-9, accepted Oct 31, 2026)
     FIELDS = ("lanes", "hearts", "light", "turn", "burned")
 
     def setup(self):
