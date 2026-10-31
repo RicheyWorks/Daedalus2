@@ -71,3 +71,7 @@ Notes
 ## sluicegate (unreal-team, READY 61066/61067; 'Blender items' sheet)
 
 18 assets: cabinet with sluice-wheel marquee and water-channel side art, 2.2 m headgate open and closed, 1 m oak board stacked and dropped, sunken 1 x 1 m cistern dry and full (teal), 2.65 m undershot mill wheel idle and turning (spin about X at SOCKET_Axle), earth channel tiles straight, corner, tee and dead end (3 x 3 grid, water slot for runtime wet/next), and the Gatekeeper with crook and board stack, static plus on the shared Prism segment rig. Sheet: sluicegate.png. (game_items.py in this commit also carries the roostcall and crafting_rewards recipes; their kits land in their own PRs.)
+
+## roostcall (unreal-team, READY 59974; 'Blender items' sheet)
+
+18 assets: cabinet with bird-and-whistle marquee, 1.65 m moss-wood roost (2 x 2 cells, open front, 12 Bird_ sockets), Creature_Roostcall_GlimmerBird idle, startled (wings out, emissive flare feathers) and perch (static poses; idle and perch share the perched mesh), 0.15 m bone whistle with Hand socket, low stone yard wall straight, corner and gate, and the Warden static plus on the shared Prism segment rig. Sheet: roostcall.png.
