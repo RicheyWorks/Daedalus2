@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 /**
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
  * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan), G591 (G504 ReedCeiling), G593 (G507
- * ReedRelease), G610 (G188 HawkDove), G611 (G183 Metapopulation) and G612 (G176 ShoalHarvest); later ecology ports
- * add a method here.
+ * ReedRelease), G610 (G188 HawkDove), G611 (G183 Metapopulation), G612 (G176 ShoalHarvest) and G613 (G172
+ * HerdOutbreak); later ecology ports add a method here.
  * Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
  * replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
  * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
@@ -394,6 +394,45 @@ class MarshCoresParityTest {
     @Test
     void shoalHarvestMatchesCpp() throws IOException {
         check("marsh_shoal_harvest_parity.txt", "G176 ShoalHarvest", MarshCoresParityTest::shoalHarvest);
+    }
+
+    static List<String> herdOutbreak() {
+        double[][] tunings = {{200, 2.5, 150, 60}, {200, 2.5, 50, 60}, {120, 4.0, 200, 40}, {300, 1.5, 100, 80},
+            {80, 0.8, 10, 30}, {50, 6.0, 49, 20}, {2, 1.0, 1, 5}, {150, 3.0, 90, 1}};
+        List<String> out = new ArrayList<>();
+        long seed = 1;
+        for (double[] t : tunings) {
+            HerdOutbreak.Settings s = new HerdOutbreak.Settings((int) t[0], t[1], (int) t[2], (int) t[3]);
+            for (int plan = 0; plan < 3; plan++) {
+                HerdOutbreak h = HerdOutbreak.herd(s, seed);
+                int vacc = plan == 0 ? 0 : (int) Math.ceil(h.threshold() * s.herd() * (plan == 1 ? 0.5 : 1.2));
+                boolean vaccOk = h.vaccinate(vacc);
+                boolean fenceOk = plan == 2 ? h.fence(3, 0.4) : h.fence(-1, 0.5);
+                HerdOutbreak.Report r = h.run();
+                long weighted = 0;
+                for (HerdOutbreak.Generation g : r.generations()) {
+                    weighted += (long) (g.sick() * 1000 + g.susceptible()) * g.index();
+                }
+                int gens = r.generations().size();
+                HerdOutbreak.Generation first = gens == 0 ? null : r.generations().get(0);
+                HerdOutbreak.Generation last = gens == 0 ? null : r.generations().get(gens - 1);
+                out.add("herd=" + s.herd() + " r0=" + s.r0() + " doses=" + s.doses() + " generations="
+                        + s.generations() + " seed=" + seed + " plan=" + plan + " vacc=" + vacc + " vaccOk="
+                        + (vaccOk ? 1 : 0) + " fenceOk=" + (fenceOk ? 1 : 0) + " threshold=" + h.threshold()
+                        + " final=" + HerdOutbreak.finalSize(s.r0()) + " outcome=" + r.outcome() + " sick=" + r.sick()
+                        + " share=" + r.share() + " vaccinated=" + r.vaccinated() + " band=" + r.band() + " gens="
+                        + gens + " firstSick=" + (first == null ? 0 : first.sick()) + " lastIndex="
+                        + (last == null ? 0 : last.index()) + " lastLeft=" + (last == null ? 0 : last.susceptible())
+                        + " weighted=" + weighted);
+                seed++;
+            }
+        }
+        return out;
+    }
+
+    @Test
+    void herdOutbreakMatchesCpp() throws IOException {
+        check("marsh_herd_outbreak_parity.txt", "G172 HerdOutbreak", MarshCoresParityTest::herdOutbreak);
     }
 
     static List<String> hawkDove() {

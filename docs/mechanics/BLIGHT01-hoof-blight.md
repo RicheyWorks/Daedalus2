@@ -66,3 +66,17 @@ Every roll is a splitmix hash of (seed, week, animal). `Settings.DEFAULT = (200,
   threshold logic shows up in ISLES01 and CRANE01: a process that cannot replace itself dies out.
 - Assets: `Prop_Vaccine_Kit` (herder's dosing satchel), `Prop_Quarantine_Fence` (hurdle fence section, tileable), a
   sick-Hornback material variant, and reuse of the staged `Mob_Lab_Hornback` + `Prop_Lab_HornbackTrough_Wood` (G03) (see UNREAL-QUEUE / BLENDER-ASKS).
+
+## Native C++ core (G613)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshHerdOutbreakCore.h` (namespace
+`daedalus::marsh`) is a header-only C++17 port of this core: `HerdOutbreak::Vaccinate`, `Fence`, `Threshold`,
+`FinalSize` and the seeded Reed-Frost `Run` (newly sick and still-susceptible per generation, total sick, share,
+outcome, MEADOW/SCRUB band), plus `HerdOutbreakSettings::Valid`. It uses the standard library only (no Unreal headers).
+The Java class stays the rules authority. `MarshCoresParityTest.herdOutbreak` writes 24 golden vectors (8 tunings x
+{no plan, vaccinate half the threshold, vaccinate 1.2x the threshold plus a 0.4 fence from generation 3}) to
+`engines/unreal/core-test/marsh_herd_outbreak_parity.txt`, and `marsh_herd_outbreak_core_test.cpp` replays them:
+plan acceptance and every count exactly, the final size to 1e-12, plus a generation-weighted checksum. The core calls
+`pow` (infection chance) and `exp` (final size), so at least 22 of 24 runs must replay exactly (24 of 24 do with
+g++/glibc). CI runs this in `.github/workflows/marsh-cores.yml`. See [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md).
+No Fair Par cabinet reads this core, so the par guard is unchanged.
