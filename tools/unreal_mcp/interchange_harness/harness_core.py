@@ -174,6 +174,11 @@ def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=N
         raise PlanError("checkpoint path required before any import (imports are not undoable)")
     if not test_root.startswith("/Game/"):
         raise PlanError("destination must be a /Game content path")
+    expect = (profile or {}).get("expect", {})
+    if "convex_elems" in expect:
+        count = expect["convex_elems"]
+        if type(count) is not int or count < 0:
+            raise PlanError("expect.convex_elems must be a non-negative integer")
     with open(glb_path, "rb") as fh:
         data = fh.read()
     digest = hashlib.sha256(data).hexdigest()
@@ -212,7 +217,7 @@ def build_plan(glb_path, test_root, asset, sha256=None, nbytes=None, overrides=N
         "glb": summary,
         "sockets": socket_plan(glb_path),
         "lod1": lod1_plan(glb_path),
-        "expect": (profile or {}).get("expect", {}),
+        "expect": expect,
     }
     if not nanite:
         plan["nanite_reason"] = ov.get("nanite_reason", "per-asset override")
@@ -303,7 +308,21 @@ def evaluate(plan, done, facts, before_identity=None, save_passes=None):
                                    and bool(facts.get("nanite")) == bool(plan["options"]["build_nanite"]))
     if not plan["options"].get("generate_collision", True):
         checks["no_simple_collision"] = checks["mesh_found"] and facts.get("simple_collision_count") == 0
-    if plan["glb"]["ucx"] and plan["options"]["collision_from_ucx"]:
+    if "convex_elems" in exp:
+        expected = exp["convex_elems"]
+        collision = facts.get("collision")
+        observed = collision.get("convex") if isinstance(collision, dict) else None
+        checks["convex_exact"] = (type(expected) is int and expected >= 0
+                                  and type(observed) is int and observed >= 0 and observed == expected)
+        if plan["glb"]["ucx"] and plan["options"]["collision_from_ucx"]:
+            checks["ucx_convex"] = type(observed) is int and observed >= len(plan["glb"]["ucx"])
+        if not checks["convex_exact"]:
+            if type(expected) is not int or expected < 0:
+                notes.append("expect.convex_elems must be a non-negative integer")
+            else:
+                value = str(observed) if type(observed) is int else "missing or non-integer"
+                notes.append("exact convex count mismatch: expected %d, observed %s" % (expected, value))
+    elif plan["glb"]["ucx"] and plan["options"]["collision_from_ucx"]:
         checks["ucx_convex"] = (facts.get("collision", {}).get("convex", 0) >= len(plan["glb"]["ucx"]))
     want = {s["name"] for s in plan["sockets"]["sockets"]}
     if want:
