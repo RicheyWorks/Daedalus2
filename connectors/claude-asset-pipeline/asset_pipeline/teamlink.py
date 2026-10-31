@@ -74,6 +74,18 @@ class Broker:
         self.buckets = {}       # name -> [tokens, last time]
         self.locks = {}         # lock name -> {holder, note, at (clock), ttl}
         self.since = clock()
+        self.listeners = []     # callables(m) run after each new message (the waker); never block
+        self.rpath = os.path.join(folder, "receipts.jsonl")   # sidecar: log.jsonl's format is unchanged
+        self.receipts = {}      # (me, id) -> {delivered_at, read_at}
+        if os.path.exists(self.rpath):
+            with open(self.rpath, encoding="utf-8") as f:
+                for line in f:
+                    try:
+                        r = json.loads(line)
+                        k = (r["me"], int(r["id"]))
+                        self.receipts.setdefault(k, {"delivered_at": None, "read_at": None})[r["event"] + "_at"] = r["at"]
+                    except (ValueError, KeyError, TypeError):
+                        continue
         if os.path.exists(self.path):
             with open(self.path, encoding="utf-8") as f:
                 for line in f:
@@ -229,7 +241,12 @@ class Broker:
             self._append(m)
             self.seen[str(frm)] = (self.clock(), self.seen.get(str(frm), (0, ""))[1])
             self.cond.notify_all()
-            return m["id"]
+        for fn in list(self.listeners):
+            try:
+                fn(m)
+            except Exception:   # a listener (the waker) must never break a send
+                pass
+        return m["id"]
 
     def _since(self, after):
         """Messages after id `after`, without scanning the whole log (ids are 1, 2, 3... in order)."""
@@ -263,8 +280,45 @@ class Broker:
             if (me, mid) in self.acked:
                 return False
             self.acked.add((me, mid))
+            self._receipt(me, mid, "read")
         self.send(me, target["from"], "ack", {"id": mid, "type": target["type"]}, reply_to=mid)
         return True
+
+    def _receipt(self, me, mid, event):
+        """First delivered / read time for (me, id), kept in receipts.jsonl. Call with self.cond held."""
+        r = self.receipts.setdefault((me, mid), {"delivered_at": None, "read_at": None})
+        if r[event + "_at"]:
+            return
+        at = datetime.datetime.fromtimestamp(self.clock()).isoformat(timespec="seconds")
+        r[event + "_at"] = at
+        with open(self.rpath, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"id": mid, "me": me, "event": event, "at": at}) + "\n")
+
+    def mark_delivered(self, me, msgs):
+        """A poll (/wait, /pending, /inbox, /stream) handed these to `me`: stamp delivered_at on the ones
+        addressed to `me` by name (broadcasts and acks are not tracked)."""
+        with self.cond:
+            for m in msgs:
+                if m.get("to") == me and m.get("type") != "ack":
+                    self._receipt(me, m["id"], "delivered")
+        return msgs
+
+    def receipt_view(self, mid=None, me=None, frm=None, limit=200):
+        """Receipts by message id, by addressee, or for what a sender sent."""
+        with self.cond:
+            if mid is not None:
+                m = next((x for x in self.messages if x["id"] == mid), None)
+                ms = [m] if m else []
+            else:
+                ms = [x for x in self.messages if x.get("type") != "ack" and x.get("to") not in ("*", None)
+                      and (me is None or x["to"] == me) and (frm is None or x["from"] == frm)][-limit:]
+            out = []
+            for m in ms:
+                r = self.receipts.get((m["to"], m["id"]), {})
+                out.append({"id": m["id"], "from": m["from"], "to": m["to"], "type": m["type"], "sent_at": m["ts"],
+                            "delivered_at": r.get("delivered_at"),
+                            "read_at": r.get("read_at") or ((m["to"], m["id"]) in self.acked and "acked" or None)})
+            return out
 
     def pending(self, me):
         with self.cond:
@@ -407,6 +461,37 @@ def make_handler(broker):
                 raise ValueError("message too big (max %d bytes)" % MAX_BODY)
             return json.loads(self.rfile.read(n).decode("utf-8") or "{}")
 
+        def _stream(self, q):
+            """Server-sent events: one `data:` line per message for `me`, the moment it lands. Keepalive comments
+            every 15 s. ?after=ID resumes (or the Last-Event-ID header); ?max_s=N ends the stream after N s."""
+            me = q["me"]
+            topics = [t for t in q.get("topics", "").split(",") if t] or None
+            after = int(q.get("after") or self.headers.get("Last-Event-ID") or broker.last)
+            max_s = float(q.get("max_s", 0))
+            stop = time.monotonic() + max_s if max_s > 0 else None
+            self.send_response(200)
+            self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+            self.send_header("Cache-Control", "no-cache")
+            self.end_headers()
+            try:
+                self.wfile.write((": team link stream for %s after %d\n\n" % (me, after)).encode("utf-8"))
+                self.wfile.flush()
+                while stop is None or time.monotonic() < stop:
+                    left = 15.0 if stop is None else max(0.0, min(15.0, stop - time.monotonic()))
+                    got, last = broker.wait(me, after, left, topics)
+                    if got:
+                        broker.mark_delivered(me, got)
+                        for m in got:
+                            self.wfile.write(("id: %d\nevent: message\ndata: %s\n\n"
+                                              % (m["id"], json.dumps(m, ensure_ascii=False))).encode("utf-8"))
+                        after = got[-1]["id"]
+                    else:
+                        self.wfile.write(b": keepalive\n\n")
+                    self.wfile.flush()
+            except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError, OSError):
+                pass
+            return None
+
         def do_GET(self):
             path, q = self._q()
             try:
@@ -433,13 +518,25 @@ def make_handler(broker):
                 if path == "/wait":
                     topics = [t for t in q.get("topics", "").split(",") if t] or None
                     got, last = broker.wait(q["me"], int(q.get("after", 0)), float(q.get("timeout", 25)), topics)
+                    broker.mark_delivered(q["me"], got)
                     return self._out(200, {"messages": got, "last": last})
                 if path == "/pending-summary":
                     return self._out(200, broker.pending_summary(q["me"]))
                 if path == "/pending":
-                    return self._out(200, {"messages": broker.pending(q["me"])})
+                    return self._out(200, {"messages": broker.mark_delivered(q["me"], broker.pending(q["me"]))})
                 if path == "/inbox":
-                    return self._out(200, {"messages": broker.inbox(q["me"])})
+                    return self._out(200, {"messages": broker.mark_delivered(q["me"], broker.inbox(q["me"]))})
+                if path == "/stream":
+                    return self._stream(q)
+                if path == "/receipts":
+                    mid = int(q["id"]) if q.get("id") else None
+                    if mid is None and not q.get("me") and not q.get("from"):
+                        raise KeyError("id, me or from")
+                    return self._out(200, {"receipts": broker.receipt_view(mid, q.get("me"), q.get("from"),
+                                                                           int(q.get("limit", 200)))})
+                if path == "/wake-status":
+                    w = getattr(broker, "waker", None)
+                    return self._out(200, w.status() if w else {"enabled": False})
                 if path == "/locks":
                     return self._out(200, broker.lock_table())
                 if path == "/presence":
@@ -451,7 +548,7 @@ def make_handler(broker):
                                            "uptime_s": round(max(0, time.time() - broker.since), 3),
                                            "since": datetime.datetime.fromtimestamp(broker.since).isoformat(timespec="seconds")})
                 return self._out(404, {"error": "no such path", "paths": ["/send", "/wait", "/ack", "/pending", "/inbox",
-                                                                          "/lock", "/unlock", "/locks",
+                                                                          "/lock", "/unlock", "/locks", "/stream", "/receipts",
                                                                           "/heartbeat", "/presence", "/log", "/health"]})
             except KeyError as e:
                 return self._out(400, {"error": "missing %s" % e})
@@ -585,10 +682,180 @@ class FileBridge:
             time.sleep(every)
 
 
-def serve(folder=DEFAULT_DIR, port=PORT, ready=None, bus_json=None, files=True):
+class Waker:
+    """Token-efficient wake for Grok bots (off unless `serve --wake-config PATH`).
+
+    The broker itself watches the log, so an idle bot spends no model tokens polling. A bot is woken only for
+    must-act types (default need, question), never for notes, FYIs, acks, receipts or statuses. Everything queued
+    for a bot is folded into ONE wake: a one-line digest with message ids and a pointer, never a body. A bot gets at
+    most one wake per `min_interval_s` (default 300); what arrives meanwhile goes into the next wake, and what the
+    bot acks before then is dropped.
+
+    The config (the local relay-webhook.json, gitignored, never in the repo) is read from disk at each wake, so
+    edits apply without a restart. Its url, key and header values are never logged, printed or returned:
+
+        {"url": ..., "key": ..., "header": "Authorization", "prefix": "Bearer ",
+         "routes": {"BOT": {} or {"url": ..., "key": ...}, ...},     # who can be woken (list of names also fine)
+         "overrides": {...same shape as routes...},
+         "wake": {"types": ["need", "question"], "min_interval_s": 300, "grok_to_grok": true, "skip": []}}
+
+    `grok_to_grok` false: a must-act message from one routed bot to another does not wake. `skip`: bots whose
+    own relay already wakes them (no double wake)."""
+
+    DEFAULTS = {"types": ["need", "question"], "min_interval_s": 300.0, "grok_to_grok": True, "skip": [],
+                "tick_s": 1.0, "retry_s": 60.0}
+
+    def __init__(self, broker, config_path, clock=time.time, post=None, log=None):
+        self.broker = broker
+        self.path = config_path
+        self.clock = clock
+        self.post = post or self._http_post
+        self.log = log or (lambda line: print(line, flush=True))
+        self.lock = threading.Lock()
+        self.queue = {}         # bot -> [(id, from, type)]
+        self.last_wake = {}     # bot -> clock time
+        self.next_try = {}      # bot -> clock time (after a failed post)
+        self.sent = 0
+        self.failed = 0
+        broker.listeners.append(self.on_message)
+        broker.waker = self
+
+    def config(self):
+        try:
+            with open(self.path, encoding="utf-8") as f:
+                c = json.load(f)
+        except (OSError, ValueError):
+            return None
+        return c if isinstance(c, dict) else None
+
+    @staticmethod
+    def _names(c, key):
+        v = c.get(key) or {}
+        return {str(k): (v[k] if isinstance(v, dict) and isinstance(v[k], dict) else {}) for k in v}
+
+    def rules(self, c):
+        w = dict(self.DEFAULTS, **(c.get("wake") or {}))
+        routes = self._names(c, "routes")
+        for k, v in self._names(c, "overrides").items():
+            routes[k] = dict(routes.get(k, {}), **v)
+        w["types"] = {str(t).lower() for t in w["types"]}
+        w["skip"] = {str(b) for b in w["skip"]}
+        return w, routes
+
+    def wants(self, m, c=None):
+        """True when `m` should (eventually) wake its addressee."""
+        c = c if c is not None else self.config()
+        if not c:
+            return False
+        w, routes = self.rules(c)
+        to, frm = m.get("to"), m.get("from")
+        if str(m.get("type", "")).lower() not in w["types"] or to not in routes or to in w["skip"] or to == frm:
+            return False
+        if frm in routes and not w["grok_to_grok"]:
+            return False
+        return True
+
+    def on_message(self, m):
+        if self.wants(m):
+            with self.lock:
+                self.queue.setdefault(m["to"], []).append((m["id"], m["from"], str(m["type"]).lower()))
+
+    @staticmethod
+    def digest(bot, items):
+        ids = ",".join(str(i) for i, _, _ in items)
+        who = {}
+        for _, frm, kind in items:
+            who.setdefault(kind, [])
+            if frm not in who[kind]:
+                who[kind].append(frm)
+        kinds = "; ".join("%s from %s" % (k, ",".join(v)) for k, v in sorted(who.items()))
+        return "%d must-act on team link for %s: ids %s (%s). GET /pending?me=%s" % (len(items), bot, ids, kinds, bot)
+
+    def tick(self):
+        """Send the wakes that are due. Returns [(bot, ids)] sent."""
+        c = self.config()
+        if not c:
+            return []
+        w, routes = self.rules(c)
+        now = self.clock()
+        out = []
+        with self.lock:
+            due = []
+            for bot, items in list(self.queue.items()):
+                with self.broker.cond:
+                    items = [x for x in items if (bot, x[0]) not in self.broker.acked]
+                if not items or bot in w["skip"] or bot not in routes:
+                    self.queue.pop(bot, None)
+                    continue
+                self.queue[bot] = items
+                if now - self.last_wake.get(bot, -1e18) >= float(w["min_interval_s"]) and now >= self.next_try.get(bot, 0):
+                    due.append((bot, items))
+        for bot, items in due:
+            text = self.digest(bot, items)
+            payload = {"source": "bot-team-link", "wake": True, "bot": bot, "ids": [i for i, _, _ in items],
+                       "messages": [{"id": items[-1][0], "ts": datetime.datetime.fromtimestamp(now).isoformat(timespec="seconds"),
+                                     "from": "team-link", "to": bot, "type": "wake", "text": text}]}
+            r = routes[bot]
+            target = {k: r.get(k, c.get(k)) for k in ("url", "key", "header", "prefix")}
+            try:
+                ok = bool(self.post(target, payload))
+                err = "" if ok else "refused"
+            except Exception as e:   # never echo the exception text: it can carry the url
+                ok, err = False, type(e).__name__
+            with self.lock:
+                if ok:
+                    self.last_wake[bot] = now
+                    self.sent += 1
+                    left = [x for x in self.queue.get(bot, []) if x not in items]
+                    if left:
+                        self.queue[bot] = left
+                    else:
+                        self.queue.pop(bot, None)
+                    out.append((bot, [i for i, _, _ in items]))
+                else:
+                    self.failed += 1
+                    self.next_try[bot] = now + float(w["retry_s"])
+            self.log("wake %s ids %s: %s" % (bot, ",".join(str(i) for i, _, _ in items), "sent" if ok else "failed " + err))
+        return out
+
+    @staticmethod
+    def _http_post(target, payload):
+        if not target.get("url"):
+            return False
+        req = urllib.request.Request(target["url"], data=json.dumps(payload).encode("utf-8"), method="POST",
+                                     headers={"Content-Type": "application/json"})
+        if target.get("key"):
+            req.add_header(target.get("header") or "Authorization", (target.get("prefix") or "") + target["key"])
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return 200 <= resp.status < 300
+
+    def status(self):
+        """For GET /wake-status: counts and times only, never a url or key."""
+        c = self.config()
+        w = self.rules(c)[0] if c else self.DEFAULTS
+        with self.lock:
+            return {"enabled": True, "config_ok": c is not None, "types": sorted(w["types"]),
+                    "min_interval_s": float(w["min_interval_s"]), "grok_to_grok": bool(w["grok_to_grok"]),
+                    "skip": sorted(w["skip"]), "sent": self.sent, "failed": self.failed,
+                    "queued": {b: [i for i, _, _ in v] for b, v in self.queue.items()},
+                    "last_wake": {b: datetime.datetime.fromtimestamp(t).isoformat(timespec="seconds")
+                                  for b, t in self.last_wake.items()}}
+
+    def run(self):
+        while True:
+            try:
+                self.tick()
+            except Exception as e:
+                self.log("waker tick error %s" % type(e).__name__)
+            time.sleep(float(((self.config() or {}).get("wake") or {}).get("tick_s", self.DEFAULTS["tick_s"])))
+
+
+def serve(folder=DEFAULT_DIR, port=PORT, ready=None, bus_json=None, files=True, wake_config=None):
     broker = Broker(folder)
     if files:   # sandboxed bots talk through files; the bridge runs beside the HTTP server
         threading.Thread(target=FileBridge(broker, folder).run, daemon=True).start()
+    if wake_config:   # off by default; the config stays local (relay-webhook.json, gitignored)
+        threading.Thread(target=Waker(broker, wake_config).run, daemon=True).start()
     server = ThreadingHTTPServer(("127.0.0.1", port), make_handler(broker))
     server.daemon_threads = True
     if bus_json:   # discovery for the Blender team's client (BUS-SCHEMA: art\BUS.json)
@@ -735,6 +1002,8 @@ def main(argv=None):
     s.add_argument("--port", type=int, default=PORT)
     s.add_argument("--bus-json", default=os.path.join(os.path.dirname(DEFAULT_DIR), "art", "BUS.json"),
                    help="where to write {url} for clients to find the broker ('' for none)")
+    s.add_argument("--wake-config", default=None,
+                   help="local relay-webhook.json: turns on the must-act waker (off without it)")
     for name in ("send", "wait", "pending", "presence", "ping", "log", "inbox", "claim", "release", "locks", "watch", "ack", "doctor"):
         p = sub.add_parser(name)
         p.add_argument("--me", default="unreal-team")
@@ -765,7 +1034,7 @@ def main(argv=None):
             p.add_argument("--minutes", type=float, default=30)
     a = ap.parse_args(argv)
     if a.cmd == "serve":
-        serve(a.folder, a.port, bus_json=a.bus_json or None)
+        serve(a.folder, a.port, bus_json=a.bus_json or None, wake_config=a.wake_config)
         return 0
     link = Link(a.me, a.port)
     if a.cmd == "doctor":

@@ -9,6 +9,8 @@ on:
       - 'connectors/claude-asset-pipeline/harness/teamlink_doctor_test.py'
       - 'connectors/claude-asset-pipeline/teamlink.ps1'
       - 'connectors/claude-asset-pipeline/harness/teamlink_watch_test.py'
+      - 'connectors/claude-asset-pipeline/harness/teamlink_fastpoll_test.py'
+      - 'docs/TEAMLINK.md'
       - '.github/workflows/team-handoff.yml'
   workflow_dispatch:
 permissions:
@@ -33,4 +35,7 @@ jobs:
         working-directory: connectors/claude-asset-pipeline
 
       - run: python harness/teamlink_watch_test.py
+        working-directory: connectors/claude-asset-pipeline
+
+      - run: python harness/teamlink_fastpoll_test.py
         working-directory: connectors/claude-asset-pipeline

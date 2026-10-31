@@ -31,6 +31,36 @@ One small broker on Richmond's PC at `127.0.0.1:9890`. It uses only the Python s
 in `bot-team\link\log.jsonl`. QUEUE.md stays the official record. The link is how each team hears about a change
 the moment it happens, and how each team knows the other one is alive.
 
+## Fast delivery, receipts and the must-act waker (2026-10-31)
+
+All old endpoints, `log.jsonl` and the outbox/inbox JSONL file bridge are unchanged.
+
+- **SSE**: `GET /stream?me=NAME&after=ID&topics=a,b&max_s=N`, `text/event-stream`. One `id:`/`data:` event per message
+  the moment it lands (well under a second), a keepalive comment every 15 s, resume with `after` or `Last-Event-ID`.
+  `GET /wait` (long-poll, <= 55 s) still works, and so does plain `GET /pending?me=`.
+- **Receipts**: kept in a sidecar `receipts.jsonl` (`{id, me, event: delivered|read, at}`), so `log.jsonl` keeps its
+  format. `delivered_at` is stamped the first time `/wait`, `/pending`, `/inbox` or `/stream` hands a message to the
+  bot it is addressed to by name; `read_at` when that bot acks it. `GET /receipts?id=N`, `?me=NAME` (what NAME got)
+  or `?from=NAME` (what NAME sent) -> `{receipts: [{id, from, to, type, sent_at, delivered_at, read_at}]}`.
+  Broadcasts (`to: "*"`) and acks are not tracked.
+- **Waker** (off unless `serve --wake-config PATH`): the broker's own thread wakes a Grok bot through its webhook, so
+  idle polling costs zero model tokens. Token rules:
+  - only must-act types wake (`need`, `question` by default); notes, FYIs, acks, receipts, statuses and broadcasts never do;
+  - everything queued for a bot goes out as ONE wake: one line, ids and a pointer, no bodies, e.g.
+    `3 must-act on team link for BOT: ids 41,42,44 (need from claude; question from codex). GET /pending?me=BOT`;
+  - at most one wake per bot per `min_interval_s` (default 300); later arrivals wait for the next wake, and messages
+    acked before then are dropped; a failed post retries after `retry_s` (60).
+  - `GET /wake-status`: counts, queue and last-wake times; never a url or key.
+
+  The config is the local `relay-webhook.json` (gitignored; never commit, log or post it). It is re-read at each wake:
+
+      {"url": ..., "key": ..., "header": "Authorization", "prefix": "Bearer ",
+       "routes": {"BOT": {}, "OTHER": {"url": ..., "key": ...}}, "overrides": {...},
+       "wake": {"types": ["need", "question"], "min_interval_s": 300, "grok_to_grok": true, "skip": []}}
+
+  `routes`/`overrides` name the bots that can be woken (a per-bot entry may carry its own url/key). `grok_to_grok`
+  false stops wakes for must-act messages between routed bots; `skip` lists bots whose own relay already wakes them.
+
 ## Names
 
 The two teams go by `blender-team` and `unreal-team`. `*` means everyone. Other names are allowed; Richmond's tools
