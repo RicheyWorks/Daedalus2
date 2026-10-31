@@ -98,6 +98,28 @@ class Rules(unittest.TestCase):
             naive_wins += h.won
         self.assertLess(naive_wins, 15)
 
+    def test_properties_hold_under_random_moves(self):
+        """Iteration 1: random legal moves on 120 trains never break the order, the lengths or the counters."""
+        import random
+        for s in range(120):
+            d = ("easy", "normal", "hard")[s % 3]
+            g = gm.start(s, d)
+            rng = random.Random(s)
+            while not g.over:
+                acts = g.actions()
+                a = acts[rng.randrange(len(acts))]
+                legal, car, leaves = g.preview(a)
+                self.assertTrue(legal)
+                before = (len(g.outbound), g.moves, g.index)
+                g.step(a)
+                self.assertEqual(g.moves, before[1] - 1)
+                self.assertEqual(len(g.outbound) - before[0], 1 if leaves else 0)
+                self.assertEqual(g.index - before[2], 0 if a[0] == "p" else 1)
+                self.assertTrue(all(x <= y for x, y in zip(g.outbound, g.outbound[1:])))
+                self.assertTrue(all(len(sd) <= g.cfg["length"] for sd in g.sidings))
+                self.assertEqual(len(g.outbound) + sum(len(sd) for sd in g.sidings), g.index)
+            self.assertEqual(g.won, len(g.outbound) == g.cfg["cars"])
+
     def test_render_marks(self):
         g = gm.start(2)
         screen = g.render()
@@ -105,6 +127,35 @@ class Rules(unittest.TestCase):
         self.assertIn("inbound:", screen)
         g.step(g.demo_action())
         self.assertNotIn("OUT    out sends", g.render())
+
+
+
+class Balance(unittest.TestCase):
+    """Iteration 3: pinned bands. The yardmaster makes up every train; send-out-when-you-can play stays near zero."""
+    NAIVE_BANDS = {"easy": (0, 15), "normal": (0, 10), "hard": (0, 8)}
+
+    @staticmethod
+    def naive(g):
+        acts = g.actions()
+        return "out" if "out" in acts else next((x for x in acts if x[0] == "p"), acts[0])
+
+    def test_yardmaster_makes_up_every_train(self):
+        for d in gm.DIFFICULTY:
+            for s in range(100):
+                g = gm.start(s, d)
+                while not g.over:
+                    g.step(g.demo_action())
+                self.assertTrue(g.won, "%s seed %d" % (d, s))
+
+    def test_naive_win_rates(self):
+        for d, (low, high) in self.NAIVE_BANDS.items():
+            wins = 0
+            for s in range(200):
+                g = gm.start(s, d)
+                while not g.over:
+                    g.step(self.naive(g))
+                wins += g.won
+            self.assertTrue(low <= wins / 2 <= high, "%s naive win rate %.1f%% outside %d-%d" % (d, wins / 2, low, high))
 
 
 if __name__ == "__main__":
