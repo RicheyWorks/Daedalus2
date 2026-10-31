@@ -41,6 +41,13 @@ jobs:
         run: g++ -std=c++17 -O2 -Wall -Wextra -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
       - name: clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public mesh_core_test.cpp -o mesh_core_test && ./mesh_core_test isle8.mesh.txt
+      - name: Shardstead worker reaction pulses (gcc, clang)
+        run: |
+          set -euo pipefail
+          g++ -std=c++17 -O2 -Wall -Wextra -Werror shardstead_worker_activity_pulse_test.cpp -o shardstead_worker_activity_pulse_gcc
+          ./shardstead_worker_activity_pulse_gcc
+          clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror shardstead_worker_activity_pulse_test.cpp -o shardstead_worker_activity_pulse_clang
+          ./shardstead_worker_activity_pulse_clang
       - name: battlefield ecology DBE 1 reader (ADR-061)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public ecology_core_test.cpp -o ecology_core_test && ./ecology_core_test
       - name: Kennel Isle TONIC 1 trough core (request, reply parser, trough, effect ledger; fixtures from docs/contracts/tonic-v1)
