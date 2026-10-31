@@ -5,6 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class FairParTest {
@@ -99,5 +106,40 @@ class FairParTest {
         assertTrue(d.gold() <= 1 && d.bronze() > 0);
         assertThrows(IllegalArgumentException.class, () -> FairPar.reedCeiling(ReedCeiling.Settings.DEFAULT,
                 new double[0], 5, 40, 17, 10, 1));
+    }
+
+    /**
+     * G607 par regression guard: the marsh par board must equal the hand-kept rows in fair_par_guard.txt, which no
+     * tool rewrites. A rule change that moves a par fails here, naming the par; edit the guard row on purpose.
+     */
+    @Test
+    void parGuardHolds() throws IOException {
+        Path guard = Path.of("..", "engines", "unreal", "core-test", "fair_par_guard.txt");
+        Map<String, FairPar.Pars> table = FairPar.marshTable();
+        List<String> moved = new ArrayList<>();
+        int rows = 0;
+        for (String line : Files.readAllLines(guard, StandardCharsets.UTF_8)) {
+            if (!line.startsWith("marsh=")) {
+                continue;
+            }
+            rows++;
+            String[] f = line.split(" ");
+            String id = f[0].substring("marsh=".length());
+            FairPar.Pars p = table.get(id);
+            if (p == null) {
+                moved.add(id + ": guard row has no cabinet");
+                continue;
+            }
+            double[] got = {p.bronze(), p.silver(), p.gold()};
+            for (int t = 0; t < 3; t++) {
+                String want = f[t + 1].substring(f[t + 1].indexOf('=') + 1);
+                if (!want.equals(Double.toString(got[t]))) {
+                    moved.add(id + ": " + f[t + 1].substring(0, f[t + 1].indexOf('=')) + " par moved " + want
+                            + " -> " + got[t]);
+                }
+            }
+        }
+        assertEquals(FairPar.MARSH_CABINETS.size(), rows, "one guard row per marsh cabinet");
+        assertEquals(List.of(), moved, "PAR GUARD (edit fair_par_guard.txt only on purpose)");
     }
 }

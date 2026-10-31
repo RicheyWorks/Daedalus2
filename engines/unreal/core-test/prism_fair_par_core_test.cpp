@@ -2,8 +2,9 @@
 // Prismheart Fair Par parity: DaedalusPrismFairParCore.h must replay the whole par table in prism_fair_par_parity.txt
 // (written by tools/minigames/fair_par.py) exactly, by playing the casual bot and the demo through the C++ cores of
 // every Prismheart game but Shardring (Oracle-fed, no PRNG port: its rows are checked for shape and tier order), and
-// match the bot hash vectors bit for bit.
-//   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prism_fair_par_core_test.cpp -o prism_fair_par_core_test && ./prism_fair_par_core_test prism_fair_par_parity.txt
+// match the bot hash vectors bit for bit. G607: with a second argument (fair_par_guard.txt, hand-kept) it also
+// fails and names every par that moved from the guard, so a rule change cannot shift a par by a fixture regen alone.
+//   g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public prism_fair_par_core_test.cpp -o prism_fair_par_core_test && ./prism_fair_par_core_test prism_fair_par_parity.txt fair_par_guard.txt
 #include "DaedalusPrismFairParCore.h"
 #include <cstdio>
 #include <cstdlib>
@@ -79,6 +80,31 @@ int main(int argc, char** argv)
 			&& Int(H, "silverHit") >= Int(H, "goldHit") && Int(H, "botWin") == Int(H, "bronzeHit"));
 		Check(Tag + " tiers", TierOf(R, false, 999) == Tier::None && TierOf(R, true, R.Bronze) == Tier::Bronze
 			&& (R.Gold == 0 || TierOf(R, true, R.Gold) == Tier::Gold));
+	}
+	if (argc > 2)
+	{
+		std::ifstream G(argv[2]);
+		std::vector<std::string> Guard;
+		for (std::string L; std::getline(G, L);)
+		{
+			if (!L.empty() && L.back() == '\r') L.pop_back();
+			if (L.rfind("prism=", 0) == 0) Guard.push_back(L);
+		}
+		Check("guard has one row per game and difficulty", Guard.size() == 3 * GameCount);
+		for (size_t I = 0; I < Guard.size() && I < Rows.size(); ++I)
+		{
+			const std::string& W = Guard[I];
+			const std::string& H = Rows[I];
+			const std::string Tag = Field(W, "prism") + " " + Field(W, "difficulty");
+			Check("par guard " + Tag + " row order", Field(W, "prism") == Field(H, "game") && Field(W, "difficulty") == Field(H, "difficulty"));
+			// Replayed games are compared with the live C++ table; Shardring (fixture-only) with its fixture row.
+			for (const char* K : { "bronze", "silver", "gold" })
+			{
+				const int Got = I < Table.size() ? (std::string(K) == "bronze" ? Table[I].Bronze : std::string(K) == "silver" ? Table[I].Silver : Table[I].Gold) : Int(H, K);
+				if (Int(W, K) != Got) std::printf("PAR GUARD: %s: %s par moved %d -> %d\n", Tag.c_str(), K, Int(W, K), Got);
+				Check("par guard " + Tag + " " + K, Int(W, K) == Got);
+			}
+		}
 	}
 	std::printf("%s prism fair par core: %d/%d checks passed\n", Passed == Total ? "OK" : "FAIL", Passed, Total);
 	return Passed == Total ? 0 : 1;

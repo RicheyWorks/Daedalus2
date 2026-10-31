@@ -65,5 +65,18 @@ class FairParTest(unittest.TestCase):
                          ("glowmoss", "spiritkite", "glimmerloom"))
 
 
+    def test_par_guard_holds_and_catches_a_moved_par(self):
+        guard = fp.read_guard()
+        rows = fp.table()
+        self.assertEqual(len(guard), len(rows))
+        self.assertEqual(fp.guard_diffs(rows, guard), [])
+        moved = dict(guard)
+        game, diff = rows[0]["game"], rows[0]["difficulty"]
+        b, s, g = moved[(game, diff)]
+        moved[(game, diff)] = (b, s + 1, g)
+        self.assertEqual(fp.guard_diffs(rows, moved), ["%s %s: silver par moved %d -> %d" % (game, diff, s + 1, s)])
+        del moved[(game, diff)]
+        self.assertIn("no guard row", fp.guard_diffs(rows, moved)[0])
+
 if __name__ == "__main__":
     unittest.main()
