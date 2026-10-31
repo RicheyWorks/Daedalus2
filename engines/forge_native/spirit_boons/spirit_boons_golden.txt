@@ -1,0 +1,3677 @@
+# Spirit Boons golden vectors from spirit_boons_ref.py (rules authority). Do not hand-edit.
+# T <7 counts> | A <spirit> <count> <status> <7 counts> | Q <game> <moth 0/1> <status> <n> [<spirit> <key> <delta>]...
+T 0 0 0 0 0 0 0
+A 0 0 BAD_COUNT 0 0 0 0 0 0 0
+A 5 1 OK 0 0 0 0 0 1 0
+A 2 999999 OK 0 0 999999 0 0 1 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 1 1 1 1 1 1 1
+A 8 2 BAD_SPIRIT 1 1 1 1 1 1 1
+A 1 999999 OVERFLOW 1 1 1 1 1 1 1
+A 0 0 BAD_COUNT 1 1 1 1 1 1 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 4 4 4 4 4 4 4
+A 1 999999 OVERFLOW 4 4 4 4 4 4 4
+A 0 999999 OVERFLOW 4 4 4 4 4 4 4
+A 2 -1 BAD_COUNT 4 4 4 4 4 4 4
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 5 5 5 5 5 5 5
+A 6 1 OK 5 5 5 5 5 5 6
+A 2 -1 BAD_COUNT 5 5 5 5 5 5 6
+A 0 -1 BAD_COUNT 5 5 5 5 5 5 6
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 999999 999999 999999 999999 999999 999999 999999
+A 3 1 OVERFLOW 999999 999999 999999 999999 999999 999999 999999
+A 6 999999 OVERFLOW 999999 999999 999999 999999 999999 999999 999999
+A 1 3 OVERFLOW 999999 999999 999999 999999 999999 999999 999999
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 0 0 0 0 9 0 0
+A 6 999999 OK 0 0 0 0 9 0 999999
+A 1 -1 BAD_COUNT 0 0 0 0 9 0 999999
+A -2 0 BAD_SPIRIT 0 0 0 0 9 0 999999
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 6 0 6 43 1 1 0
+A 2 -1 BAD_COUNT 6 0 6 43 1 1 0
+A 0 3 OK 9 0 6 43 1 1 0
+A 0 2 OK 11 0 6 43 1 1 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 0 4 0 0 4 0 0
+A 5 2 OK 0 4 0 0 4 2 0
+A 2 999999 OK 0 4 999999 0 4 2 0
+A 5 3 OK 0 4 999999 0 4 5 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 5 4 6 6 0 0 0
+A 1 0 BAD_COUNT 5 4 6 6 0 0 0
+A 2 1 OK 5 4 7 6 0 0 0
+A 1 10 OK 5 14 7 6 0 0 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+T 0 5 1 0 6 6 1
+A 4 1 OK 0 5 1 0 7 6 1
+A 0 999999 OK 999999 5 1 0 7 6 1
+A 2 0 BAD_COUNT 999999 5 1 0 7 6 1
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 0 6 16 47 0 0 0
+A 6 1 OK 0 6 16 47 0 0 1
+A 1 2 OK 0 8 16 47 0 0 1
+A 6 0 BAD_COUNT 0 8 16 47 0 0 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 2 0 6 6 0 4 5
+A 0 -1 BAD_COUNT 2 0 6 6 0 4 5
+A 0 1 OK 3 0 6 6 0 4 5
+A 7 999999 BAD_SPIRIT 3 0 6 6 0 4 5
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+T 4 2 0 2 0 0 0
+A 1 1 OK 4 3 0 2 0 0 0
+A 1 3 OK 4 6 0 2 0 0 0
+A 6 1 OK 4 6 0 2 0 0 1
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 1 1 0 1 0 6 2
+A 5 3 OK 1 1 0 1 0 9 2
+A 2 0 BAD_COUNT 1 1 0 1 0 9 2
+A 3 1 OK 1 1 0 2 0 9 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 0 6 5 2 0 1 1
+A 0 999999 OK 999999 6 5 2 0 1 1
+A 2 1 OK 999999 6 6 2 0 1 1
+A -2 999999 BAD_SPIRIT 999999 6 6 2 0 1 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+T 0 0 1 0 5 26 1
+A 6 0 BAD_COUNT 0 0 1 0 5 26 1
+A 4 2 OK 0 0 1 0 7 26 1
+A 2 10 OK 0 0 11 0 7 26 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 2 1 5 28 5 0 5
+A 1 1 OK 2 2 5 28 5 0 5
+A 1 5 OK 2 7 5 28 5 0 5
+A 6 0 BAD_COUNT 2 7 5 28 5 0 5
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 0 5 44 0 5 19 0
+A 2 -1 BAD_COUNT 0 5 44 0 5 19 0
+A 4 999999 OVERFLOW 0 5 44 0 5 19 0
+A 4 999999 OVERFLOW 0 5 44 0 5 19 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 5 44 5 2 2 0 0
+A 6 3 OK 5 44 5 2 2 0 3
+A 2 6 OK 5 44 11 2 2 0 3
+A 5 9 OK 5 44 11 2 2 9 3
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 4 30 5 26 2 0 39
+A 4 999999 OVERFLOW 4 30 5 26 2 0 39
+A 5 3 OK 4 30 5 26 2 3 39
+A 0 0 BAD_COUNT 4 30 5 26 2 3 39
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 50 0 5 0 0 0 1
+A 4 1 OK 50 0 5 0 1 0 1
+A 1 4 OK 50 4 5 0 1 0 1
+A 4 999999 OVERFLOW 50 4 5 0 1 0 1
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 5 1 0 0 1 30 5
+A 4 999999 OVERFLOW 5 1 0 0 1 30 5
+A 3 1 OK 5 1 0 1 1 30 5
+A 1 0 BAD_COUNT 5 1 0 1 1 30 5
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 0 16 5 1 0 4 0
+A 4 2 OK 0 16 5 1 2 4 0
+A 0 0 BAD_COUNT 0 16 5 1 2 4 0
+A 3 5 OK 0 16 5 6 2 4 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+T 0 2 1 0 3 2 2
+A 6 0 BAD_COUNT 0 2 1 0 3 2 2
+A 3 3 OK 0 2 1 3 3 2 2
+A 5 1 OK 0 2 1 3 3 3 2
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 1 0 31 6 2 1 0
+A 3 1 OK 1 0 31 7 2 1 0
+A 3 4 OK 1 0 31 11 2 1 0
+A 6 999999 OK 1 0 31 11 2 1 999999
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 4 42 0 0 6 1 9
+A 1 1 OK 4 43 0 0 6 1 9
+A 0 3 OK 7 43 0 0 6 1 9
+A 3 -1 BAD_COUNT 7 43 0 0 6 1 9
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 0 5 6 2 4 6 0
+A 3 2 OK 0 5 6 4 4 6 0
+A 2 1 OK 0 5 7 4 4 6 0
+A 6 5 OK 0 5 7 4 4 6 5
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 2 0 0 5 6 0 0
+A 4 0 BAD_COUNT 2 0 0 5 6 0 0
+A 5 1 OK 2 0 0 5 6 1 0
+A 4 3 OK 2 0 0 5 9 1 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 5 1 1 0 1 0 0
+A 3 1 OK 5 1 1 1 1 0 0
+A 8 0 BAD_SPIRIT 5 1 1 1 1 0 0
+A 6 -1 BAD_COUNT 5 1 1 1 1 0 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 5 0 6 6 6 2 1
+A 0 1 OK 6 0 6 6 6 2 1
+A 2 1 OK 6 0 7 6 6 2 1
+A 7 2 BAD_SPIRIT 6 0 7 6 6 2 1
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+T 4 2 5 0 0 0 0
+A 1 1 OK 4 3 5 0 0 0 0
+A 6 0 BAD_COUNT 4 3 5 0 0 0 0
+A 5 999999 OK 4 3 5 0 0 999999 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 0 0 0 6 0 42 0
+A 4 2 OK 0 0 0 6 2 42 0
+A 6 0 BAD_COUNT 0 0 0 6 2 42 0
+A 5 1 OK 0 0 0 6 2 43 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+T 7 2 0 17 0 0 1
+A 4 1 OK 7 2 0 17 1 0 1
+A 6 0 BAD_COUNT 7 2 0 17 1 0 1
+A 6 999999 OVERFLOW 7 2 0 17 1 0 1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+T 0 4 4 1 6 4 5
+A 4 1 OK 0 4 4 1 7 4 5
+A 5 0 BAD_COUNT 0 4 4 1 7 4 5
+A 4 2 OK 0 4 4 1 9 4 5
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 4 15 5 41 2 0 4
+A 3 -1 BAD_COUNT 4 15 5 41 2 0 4
+A 4 -1 BAD_COUNT 4 15 5 41 2 0 4
+A 4 0 BAD_COUNT 4 15 5 41 2 0 4
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 0 1 0 0 0 5 0
+A 6 1 OK 0 1 0 0 0 5 1
+A 2 1 OK 0 1 1 0 0 5 1
+A 1 1 OK 0 2 1 0 0 5 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 2 0 5 0 0 33 0
+A 3 999999 OK 2 0 5 999999 0 33 0
+A 6 999999 OK 2 0 5 999999 0 33 999999
+A 2 1 OK 2 0 6 999999 0 33 999999
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 45 0 5 2 2 1 2
+A 5 3 OK 45 0 5 2 2 4 2
+A 0 2 OK 47 0 5 2 2 4 2
+A 1 1 OK 47 1 5 2 2 4 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+T 6 4 0 25 2 4 0
+A 6 1 OK 6 4 0 25 2 4 1
+A 2 3 OK 6 4 3 25 2 4 1
+A 4 1 OK 6 4 3 25 3 4 1
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 0 0 4 0 15 5 0
+A 3 3 OK 0 0 4 3 15 5 0
+A 1 2 OK 0 2 4 3 15 5 0
+A 4 1 OK 0 2 4 3 16 5 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 1 1 35 6 4 2 0
+A 0 1 OK 2 1 35 6 4 2 0
+A 8 1 BAD_SPIRIT 2 1 35 6 4 2 0
+A 6 1 OK 2 1 35 6 4 2 1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 1 0 4 4 5 23 0
+A 0 4 OK 5 0 4 4 5 23 0
+A 8 2 BAD_SPIRIT 5 0 4 4 5 23 0
+A 4 3 OK 5 0 4 4 8 23 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 5 6 5 5 1 4 4
+A 5 3 OK 5 6 5 5 1 7 4
+A 0 2 OK 7 6 5 5 1 7 4
+A 1 3 OK 7 9 5 5 1 7 4
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+T 4 4 1 1 2 2 0
+A 4 0 BAD_COUNT 4 4 1 1 2 2 0
+A 3 1 OK 4 4 1 2 2 2 0
+A 4 -1 BAD_COUNT 4 4 1 2 2 2 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 0 5 4 0 0 4 0
+A 6 1 OK 0 5 4 0 0 4 1
+A 1 8 OK 0 13 4 0 0 4 1
+A 0 -1 BAD_COUNT 0 13 4 0 0 4 1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 2 5 4 0 1 4 16
+A 0 -1 BAD_COUNT 2 5 4 0 1 4 16
+A 6 999999 OVERFLOW 2 5 4 0 1 4 16
+A 4 999999 OVERFLOW 2 5 4 0 1 4 16
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 5 2 0 16 0 6 5
+A 0 1 OK 6 2 0 16 0 6 5
+A 5 999999 OVERFLOW 6 2 0 16 0 6 5
+A 4 1 OK 6 2 0 16 1 6 5
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+T 4 0 0 0 0 5 0
+A 7 999999 BAD_SPIRIT 4 0 0 0 0 5 0
+A 4 1 OK 4 0 0 0 1 5 0
+A 6 6 OK 4 0 0 0 1 5 6
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 5 5 1 0 32 2 6
+A 5 0 BAD_COUNT 5 5 1 0 32 2 6
+A 4 2 OK 5 5 1 0 34 2 6
+A 6 0 BAD_COUNT 5 5 1 0 34 2 6
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 2 6 0 2 0 0 4
+A 0 999999 OVERFLOW 2 6 0 2 0 0 4
+A 3 3 OK 2 6 0 5 0 0 4
+A 5 -1 BAD_COUNT 2 6 0 5 0 0 4
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 0 37 0 5 36 6 6
+A 2 -1 BAD_COUNT 0 37 0 5 36 6 6
+A 5 1 OK 0 37 0 5 36 7 6
+A 2 1 OK 0 37 1 5 36 7 6
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 1 2 4 1 2 1 4
+A 4 9 OK 1 2 4 1 11 1 4
+A 1 2 OK 1 4 4 1 11 1 4
+A 5 1 OK 1 4 4 1 11 2 4
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 6 0 0 0 5 0 0
+A 3 2 OK 6 0 0 2 5 0 0
+A 3 0 BAD_COUNT 6 0 0 2 5 0 0
+A 9 3 BAD_SPIRIT 6 0 0 2 5 0 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 0 2 0 1 4 17 30
+A 2 3 OK 0 2 3 1 4 17 30
+A 4 1 OK 0 2 3 1 5 17 30
+A 0 3 OK 3 2 3 1 5 17 30
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 5 5 2 6 6 5 0
+A 6 1 OK 5 5 2 6 6 5 1
+A 5 3 OK 5 5 2 6 6 8 1
+A -1 4 BAD_SPIRIT 5 5 2 6 6 8 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+T 0 1 2 4 11 5 0
+A 5 -1 BAD_COUNT 0 1 2 4 11 5 0
+A 3 999999 OVERFLOW 0 1 2 4 11 5 0
+A 2 1 OK 0 1 3 4 11 5 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 5 17 0 1 4 4 0
+A 5 2 OK 5 17 0 1 4 6 0
+A 1 1 OK 5 18 0 1 4 6 0
+A 2 0 BAD_COUNT 5 18 0 1 4 6 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+T 5 0 2 0 4 1 49
+A -2 999999 BAD_SPIRIT 5 0 2 0 4 1 49
+A 3 2 OK 5 0 2 2 4 1 49
+A 2 999999 OVERFLOW 5 0 2 2 4 1 49
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 6 6 2 0 6 0 4
+A 2 1 OK 6 6 3 0 6 0 4
+A 4 1 OK 6 6 3 0 7 0 4
+A 6 1 OK 6 6 3 0 7 0 5
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 1 0 6 1 40 0 0
+A 5 -1 BAD_COUNT 1 0 6 1 40 0 0
+A 8 -1 BAD_SPIRIT 1 0 6 1 40 0 0
+A 0 6 OK 7 0 6 1 40 0 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 5 4 1 0 0 23 1
+A 3 1 OK 5 4 1 1 0 23 1
+A 1 4 OK 5 8 1 1 0 23 1
+A 5 -1 BAD_COUNT 5 8 1 1 0 23 1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+T 0 1 0 0 0 1 0
+A -2 1 BAD_SPIRIT 0 1 0 0 0 1 0
+A 2 2 OK 0 1 2 0 0 1 0
+A 0 7 OK 7 1 2 0 0 1 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 0 0 1 0 0 1 7
+A 1 2 OK 0 2 1 0 0 1 7
+A 2 2 OK 0 2 3 0 0 1 7
+A 3 9 OK 0 2 3 9 0 1 7
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+T 0 0 5 1 6 46 6
+A 2 999999 OVERFLOW 0 0 5 1 6 46 6
+A 2 3 OK 0 0 8 1 6 46 6
+A 5 2 OK 0 0 8 1 6 48 6
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 2 1 6 6 2 0 1
+A 4 0 BAD_COUNT 2 1 6 6 2 0 1
+A 8 0 BAD_SPIRIT 2 1 6 6 2 0 1
+A 5 999999 OK 2 1 6 6 2 999999 1
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 0 0 2 5 6 0 5
+A 1 1 OK 0 1 2 5 6 0 5
+A 4 1 OK 0 1 2 5 7 0 5
+A 4 -1 BAD_COUNT 0 1 2 5 7 0 5
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 4 4 0 11 0 6 4
+A 5 3 OK 4 4 0 11 0 9 4
+A 0 3 OK 7 4 0 11 0 9 4
+A 1 3 OK 7 7 0 11 0 9 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 44 6 6 0 4 1 2
+A 6 1 OK 44 6 6 0 4 1 3
+A 5 0 BAD_COUNT 44 6 6 0 4 1 3
+A 3 1 OK 44 6 6 1 4 1 3
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 4 5 0 0 6 0 0
+A 4 1 OK 4 5 0 0 7 0 0
+A 4 999999 OVERFLOW 4 5 0 0 7 0 0
+A 4 0 BAD_COUNT 4 5 0 0 7 0 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 0 6 5 0 0 2 0
+A 0 3 OK 3 6 5 0 0 2 0
+A 3 1 OK 3 6 5 1 0 2 0
+A 0 0 BAD_COUNT 3 6 5 1 0 2 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+T 24 0 1 6 30 4 0
+A 5 1 OK 24 0 1 6 30 5 0
+A 3 10 OK 24 0 1 16 30 5 0
+A 1 1 OK 24 1 1 16 30 5 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+T 5 4 5 1 5 0 5
+A 3 2 OK 5 4 5 3 5 0 5
+A 2 3 OK 5 4 8 3 5 0 5
+A 5 1 OK 5 4 8 3 5 1 5
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 0 5 0 6 0 0 0
+A 0 -1 BAD_COUNT 0 5 0 6 0 0 0
+A 4 1 OK 0 5 0 6 1 0 0
+A 1 1 OK 0 6 0 6 1 0 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 1 5 5 5 6 6 6
+A 2 1 OK 1 5 6 5 6 6 6
+A 0 999999 OVERFLOW 1 5 6 5 6 6 6
+A 6 1 OK 1 5 6 5 6 6 7
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 0 2 5 5 0 1 0
+A 1 -1 BAD_COUNT 0 2 5 5 0 1 0
+A 0 1 OK 1 2 5 5 0 1 0
+A 0 999999 OVERFLOW 1 2 5 5 0 1 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+T 5 6 5 0 27 0 1
+A 0 0 BAD_COUNT 5 6 5 0 27 0 1
+A 5 1 OK 5 6 5 0 27 1 1
+A 6 3 OK 5 6 5 0 27 1 4
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 0 0 2 4 0 5 39
+A 5 0 BAD_COUNT 0 0 2 4 0 5 39
+A 1 3 OK 0 3 2 4 0 5 39
+A 3 999999 OVERFLOW 0 3 2 4 0 5 39
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 2 18 4 4 1 0 4
+A 6 1 OK 2 18 4 4 1 0 5
+A 0 3 OK 5 18 4 4 1 0 5
+A 1 -1 BAD_COUNT 5 18 4 4 1 0 5
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 41 11 1 4 5 4 2
+A 4 999999 OVERFLOW 41 11 1 4 5 4 2
+A 5 8 OK 41 11 1 4 5 12 2
+A 6 1 OK 41 11 1 4 5 12 3
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 0 0 4 0 6 4 0
+A 0 999999 OK 999999 0 4 0 6 4 0
+A 0 2 OVERFLOW 999999 0 4 0 6 4 0
+A 1 3 OK 999999 3 4 0 6 4 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 2 0 0 0 0 0 0
+A 0 1 OK 3 0 0 0 0 0 0
+A 3 -1 BAD_COUNT 3 0 0 0 0 0 0
+A 2 1 OK 3 0 1 0 0 0 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 4 6 5 0 6 0 2
+A 5 0 BAD_COUNT 4 6 5 0 6 0 2
+A 1 999999 OVERFLOW 4 6 5 0 6 0 2
+A 0 999999 OVERFLOW 4 6 5 0 6 0 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 6 0 4 1 0 22 42
+A 6 2 OK 6 0 4 1 0 22 44
+A 2 1 OK 6 0 5 1 0 22 44
+A 3 -1 BAD_COUNT 6 0 5 1 0 22 44
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 5 1 47 4 4 1 5
+A 5 999999 OVERFLOW 5 1 47 4 4 1 5
+A 5 1 OK 5 1 47 4 4 2 5
+A 5 0 BAD_COUNT 5 1 47 4 4 2 5
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 7 6 0 0 5 4 5
+A 1 -1 BAD_COUNT 7 6 0 0 5 4 5
+A 1 2 OK 7 8 0 0 5 4 5
+A 3 2 OK 7 8 0 2 5 4 5
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+T 0 5 1 1 0 0 0
+A 4 2 OK 0 5 1 1 2 0 0
+A 6 0 BAD_COUNT 0 5 1 1 2 0 0
+A 0 2 OK 2 5 1 1 2 0 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 2 6 6 6 11 2 0
+A 3 1 OK 2 6 6 7 11 2 0
+A 5 1 OK 2 6 6 7 11 3 0
+A 6 10 OK 2 6 6 7 11 3 10
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 5 2 0 5 24 12 1
+A 3 1 OK 5 2 0 6 24 12 1
+A 1 1 OK 5 3 0 6 24 12 1
+A 2 0 BAD_COUNT 5 3 0 6 24 12 1
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 6 2 1 5 6 1 4
+A 0 1 OK 7 2 1 5 6 1 4
+A 5 1 OK 7 2 1 5 6 2 4
+A 3 -1 BAD_COUNT 7 2 1 5 6 2 4
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 0 0 0 0 5 0 6
+A 2 1 OK 0 0 1 0 5 0 6
+A 5 1 OK 0 0 1 0 5 1 6
+A -1 0 BAD_SPIRIT 0 0 1 0 5 1 6
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 0 0 0 0 2 0 6
+A 6 2 OK 0 0 0 0 2 0 8
+A 2 1 OK 0 0 1 0 2 0 8
+A 6 2 OK 0 0 1 0 2 0 10
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 5 6 0 6 2 0 4
+A 1 -1 BAD_COUNT 5 6 0 6 2 0 4
+A 2 2 OK 5 6 2 6 2 0 4
+A 2 -1 BAD_COUNT 5 6 2 6 2 0 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+T 46 0 1 0 0 2 22
+A 4 0 BAD_COUNT 46 0 1 0 0 2 22
+A 2 1 OK 46 0 2 0 0 2 22
+A 6 1 OK 46 0 2 0 0 2 23
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 3 6 0 23 6 6 1
+A 0 999999 OVERFLOW 3 6 0 23 6 6 1
+A 6 -1 BAD_COUNT 3 6 0 23 6 6 1
+A 7 4 BAD_SPIRIT 3 6 0 23 6 6 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 5 0 0 5 2 0 0
+A 6 4 OK 5 0 0 5 2 0 4
+A 5 -1 BAD_COUNT 5 0 0 5 2 0 4
+A 0 999999 OVERFLOW 5 0 0 5 2 0 4
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+T 1 5 39 4 0 2 2
+A 6 3 OK 1 5 39 4 0 2 5
+A 4 999999 OK 1 5 39 4 999999 2 5
+A 6 0 BAD_COUNT 1 5 39 4 999999 2 5
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 4 0 0 0 4 41 43
+A 4 0 BAD_COUNT 4 0 0 0 4 41 43
+A 6 1 OK 4 0 0 0 4 41 44
+A 1 0 BAD_COUNT 4 0 0 0 4 41 44
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 0 0 0 1 2 0 5
+A 3 6 OK 0 0 0 7 2 0 5
+A 2 3 OK 0 0 3 7 2 0 5
+A 3 -1 BAD_COUNT 0 0 3 7 2 0 5
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 5 2 6 0 6 5 5
+A 4 1 OK 5 2 6 0 7 5 5
+A -1 2 BAD_SPIRIT 5 2 6 0 7 5 5
+A 6 1 OK 5 2 6 0 7 5 6
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 0 0 0 6 0 5 2
+A 6 2 OK 0 0 0 6 0 5 4
+A 6 -1 BAD_COUNT 0 0 0 6 0 5 4
+A 3 2 OK 0 0 0 8 0 5 4
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+T 0 0 1 45 0 2 5
+A 4 1 OK 0 0 1 45 1 2 5
+A 5 -1 BAD_COUNT 0 0 1 45 1 2 5
+A 5 3 OK 0 0 1 45 1 5 5
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 4 6 6 0 5 1 2
+A 6 1 OK 4 6 6 0 5 1 3
+A 0 0 BAD_COUNT 4 6 6 0 5 1 3
+A 0 8 OK 12 6 6 0 5 1 3
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 0 5 4 6 4 1 2
+A 4 10 OK 0 5 4 6 14 1 2
+A 2 8 OK 0 5 12 6 14 1 2
+A 4 1 OK 0 5 12 6 15 1 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 16 30 0 0 6 0 1
+A 3 5 OK 16 30 0 5 6 0 1
+A 5 0 BAD_COUNT 16 30 0 5 6 0 1
+A 2 1 OK 16 30 1 5 6 0 1
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+T 2 5 3 5 0 4 47
+A 0 7 OK 9 5 3 5 0 4 47
+A 0 -1 BAD_COUNT 9 5 3 5 0 4 47
+A 4 7 OK 9 5 3 5 7 4 47
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 6 1 25 0 6 2 5
+A 3 3 OK 6 1 25 3 6 2 5
+A 5 3 OK 6 1 25 3 6 5 5
+A 2 999999 OVERFLOW 6 1 25 3 6 5 5
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 4 2 4 5 0 0 2
+A 1 1 OK 4 3 4 5 0 0 2
+A 3 0 BAD_COUNT 4 3 4 5 0 0 2
+A 0 999999 OVERFLOW 4 3 4 5 0 0 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 0 0 5 0 1 0 0
+A 3 -1 BAD_COUNT 0 0 5 0 1 0 0
+A 6 2 OK 0 0 5 0 1 0 2
+A 6 3 OK 0 0 5 0 1 0 5
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 1 5 0 2 6 4 4
+A 5 9 OK 1 5 0 2 6 13 4
+A 0 -1 BAD_COUNT 1 5 0 2 6 13 4
+A 1 1 OK 1 6 0 2 6 13 4
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 6 5 0 0 5 11 0
+A 6 9 OK 6 5 0 0 5 11 9
+A 5 3 OK 6 5 0 0 5 14 9
+A 3 1 OK 6 5 0 1 5 14 9
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 2 0 1 0 0 33 0
+A 5 0 BAD_COUNT 2 0 1 0 0 33 0
+A 5 999999 OVERFLOW 2 0 1 0 0 33 0
+A 5 -1 BAD_COUNT 2 0 1 0 0 33 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 6 1 0 2 1 4 0
+A 1 3 OK 6 4 0 2 1 4 0
+A 5 999999 OVERFLOW 6 4 0 2 1 4 0
+A 3 -1 BAD_COUNT 6 4 0 2 1 4 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 1 5 0 0 2 4 5
+A -1 3 BAD_SPIRIT 1 5 0 0 2 4 5
+A 3 0 BAD_COUNT 1 5 0 0 2 4 5
+A 6 1 OK 1 5 0 0 2 4 6
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 6 13 1 0 0 0 4
+A 1 -1 BAD_COUNT 6 13 1 0 0 0 4
+A 1 1 OK 6 14 1 0 0 0 4
+A -1 1 BAD_SPIRIT 6 14 1 0 0 0 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 0 4 2 1 5 1 1
+A 5 2 OK 0 4 2 1 5 3 1
+A 0 3 OK 3 4 2 1 5 3 1
+A 4 3 OK 3 4 2 1 8 3 1
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+T 6 5 0 21 0 0 1
+A 4 1 OK 6 5 0 21 1 0 1
+A 1 3 OK 6 8 0 21 1 0 1
+A 2 -1 BAD_COUNT 6 8 0 21 1 0 1
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 10 21 5 1 1 6 5
+A 0 3 OK 13 21 5 1 1 6 5
+A 3 -1 BAD_COUNT 13 21 5 1 1 6 5
+A 4 3 OK 13 21 5 1 4 6 5
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+T 36 5 0 45 5 5 2
+A 0 2 OK 38 5 0 45 5 5 2
+A 1 0 BAD_COUNT 38 5 0 45 5 5 2
+A 0 1 OK 39 5 0 45 5 5 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 13 2 1 2 0 2 5
+A 4 -1 BAD_COUNT 13 2 1 2 0 2 5
+A 1 0 BAD_COUNT 13 2 1 2 0 2 5
+A 1 0 BAD_COUNT 13 2 1 2 0 2 5
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 5 2 6 6 4 0 6
+A 0 1 OK 6 2 6 6 4 0 6
+A 6 999999 OVERFLOW 6 2 6 6 4 0 6
+A 0 2 OK 8 2 6 6 4 0 6
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+T 2 0 28 6 5 4 1
+A 2 -1 BAD_COUNT 2 0 28 6 5 4 1
+A 8 -1 BAD_SPIRIT 2 0 28 6 5 4 1
+A 6 1 OK 2 0 28 6 5 4 2
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 0 3 6 24 5 0 5
+A 0 3 OK 3 3 6 24 5 0 5
+A 6 999999 OVERFLOW 3 3 6 24 5 0 5
+A 7 2 BAD_SPIRIT 3 3 6 24 5 0 5
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 14 5 5 4 4 5 0
+A 2 3 OK 14 5 8 4 4 5 0
+A 5 3 OK 14 5 8 4 4 8 0
+A 2 3 OK 14 5 11 4 4 8 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 1 1 6 2 1 13 6
+A 6 1 OK 1 1 6 2 1 13 7
+A 5 -1 BAD_COUNT 1 1 6 2 1 13 7
+A 1 1 OK 1 2 6 2 1 13 7
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 0 2 6 2 0 6 0
+A 6 1 OK 0 2 6 2 0 6 1
+A 1 -1 BAD_COUNT 0 2 6 2 0 6 1
+A 2 0 BAD_COUNT 0 2 6 2 0 6 1
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 4 2 0 26 0 13 5
+A 1 -1 BAD_COUNT 4 2 0 26 0 13 5
+A 5 1 OK 4 2 0 26 0 14 5
+A 3 999999 OVERFLOW 4 2 0 26 0 14 5
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 4 15 1 6 0 1 0
+A 3 1 OK 4 15 1 7 0 1 0
+A 5 1 OK 4 15 1 7 0 2 0
+A 4 1 OK 4 15 1 7 1 2 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 0 26 2 1 0 5 5
+A 6 2 OK 0 26 2 1 0 5 7
+A 5 10 OK 0 26 2 1 0 15 7
+A 4 1 OK 0 26 2 1 1 15 7
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+T 1 0 5 23 5 0 0
+A 6 4 OK 1 0 5 23 5 0 4
+A 5 1 OK 1 0 5 23 5 1 4
+A 4 999999 OVERFLOW 1 0 5 23 5 1 4
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 0 1 20 1 0 43 6
+A 1 1 OK 0 2 20 1 0 43 6
+A 5 3 OK 0 2 20 1 0 46 6
+A 3 0 BAD_COUNT 0 2 20 1 0 46 6
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 5 4 1 0 0 4 6
+A 0 -1 BAD_COUNT 5 4 1 0 0 4 6
+A 2 1 OK 5 4 2 0 0 4 6
+A 0 2 OK 7 4 2 0 0 4 6
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 0 0 1 0 6 5 5
+A 9 6 BAD_SPIRIT 0 0 1 0 6 5 5
+A 6 1 OK 0 0 1 0 6 5 6
+A -2 1 BAD_SPIRIT 0 0 1 0 6 5 6
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 44 0 0 0 4 0 6
+A 3 3 OK 44 0 0 3 4 0 6
+A 1 1 OK 44 1 0 3 4 0 6
+A 5 3 OK 44 1 0 3 4 3 6
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 5 0 2 5 0 0 6
+A 4 1 OK 5 0 2 5 1 0 6
+A 5 0 BAD_COUNT 5 0 2 5 1 0 6
+A 6 999999 OVERFLOW 5 0 2 5 1 0 6
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+T 1 4 2 1 5 24 4
+A 5 3 OK 1 4 2 1 5 27 4
+A 5 10 OK 1 4 2 1 5 37 4
+A 1 2 OK 1 6 2 1 5 37 4
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 4 1 36 1 47 4 2
+A 3 5 OK 4 1 36 6 47 4 2
+A 1 1 OK 4 2 36 6 47 4 2
+A 4 2 OK 4 2 36 6 49 4 2
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 5 1 6 1 0 1 5
+A 1 2 OK 5 3 6 1 0 1 5
+A 4 999999 OK 5 3 6 1 999999 1 5
+A 5 1 OK 5 3 6 1 999999 2 5
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+T 4 31 2 2 0 5 33
+A 0 2 OK 6 31 2 2 0 5 33
+A 5 1 OK 6 31 2 2 0 6 33
+A 5 2 OK 6 31 2 2 0 8 33
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 1 18 2 0 18 12 6
+A 8 1 BAD_SPIRIT 1 18 2 0 18 12 6
+A 0 2 OK 3 18 2 0 18 12 6
+A 4 1 OK 3 18 2 0 19 12 6
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 2 0 4 5 1 0 2
+A 3 2 OK 2 0 4 7 1 0 2
+A 0 1 OK 3 0 4 7 1 0 2
+A 0 1 OK 4 0 4 7 1 0 2
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 1 5 4 0 1 0 4
+A 0 999999 OVERFLOW 1 5 4 0 1 0 4
+A 0 -1 BAD_COUNT 1 5 4 0 1 0 4
+A 6 2 OK 1 5 4 0 1 0 6
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 4 4 0 18 2 6 4
+A 3 1 OK 4 4 0 19 2 6 4
+A 5 2 OK 4 4 0 19 2 8 4
+A 6 999999 OVERFLOW 4 4 0 19 2 8 4
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 2 0 0 5 0 0 0
+A 4 2 OK 2 0 0 5 2 0 0
+A -2 0 BAD_SPIRIT 2 0 0 5 2 0 0
+A 3 2 OK 2 0 0 7 2 0 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 6 2 2 5 4 4 6
+A 3 1 OK 6 2 2 6 4 4 6
+A 8 2 BAD_SPIRIT 6 2 2 6 4 4 6
+A 4 1 OK 6 2 2 6 5 4 6
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 26 6 4 5 0 6 2
+A 4 0 BAD_COUNT 26 6 4 5 0 6 2
+A 2 10 OK 26 6 14 5 0 6 2
+A 4 1 OK 26 6 14 5 1 6 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 0 0 1 0 0 4 27
+A 3 1 OK 0 0 1 1 0 4 27
+A 4 3 OK 0 0 1 1 3 4 27
+A 4 -1 BAD_COUNT 0 0 1 1 3 4 27
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 4 0 0 1 0 2 0
+A 1 -1 BAD_COUNT 4 0 0 1 0 2 0
+A 0 2 OK 6 0 0 1 0 2 0
+A 1 1 OK 6 1 0 1 0 2 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 6 2 6 2 0 5 0
+A 5 -1 BAD_COUNT 6 2 6 2 0 5 0
+A 4 1 OK 6 2 6 2 1 5 0
+A 6 3 OK 6 2 6 2 1 5 3
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 2 0 6 40 0 1 1
+A 2 -1 BAD_COUNT 2 0 6 40 0 1 1
+A 0 0 BAD_COUNT 2 0 6 40 0 1 1
+A 0 9 OK 11 0 6 40 0 1 1
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 1 0 5 0 2 6 0
+A 5 -1 BAD_COUNT 1 0 5 0 2 6 0
+A 0 1 OK 2 0 5 0 2 6 0
+A 0 6 OK 8 0 5 0 2 6 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 1 6 4 6 0 2 0
+A 2 2 OK 1 6 6 6 0 2 0
+A 6 999999 OK 1 6 6 6 0 2 999999
+A 9 1 BAD_SPIRIT 1 6 6 6 0 2 999999
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+T 1 1 6 50 4 0 1
+A 4 1 OK 1 1 6 50 5 0 1
+A 1 3 OK 1 4 6 50 5 0 1
+A 6 -1 BAD_COUNT 1 4 6 50 5 0 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+T 2 2 40 39 0 4 14
+A 1 1 OK 2 3 40 39 0 4 14
+A 2 -1 BAD_COUNT 2 3 40 39 0 4 14
+A 0 6 OK 8 3 40 39 0 4 14
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 0 0 0 6 2 0 5
+A 0 0 BAD_COUNT 0 0 0 6 2 0 5
+A 6 7 OK 0 0 0 6 2 0 12
+A 1 -1 BAD_COUNT 0 0 0 6 2 0 12
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 34 4 5 2 30 6 0
+A 0 3 OK 37 4 5 2 30 6 0
+A 5 8 OK 37 4 5 2 30 14 0
+A 4 -1 BAD_COUNT 37 4 5 2 30 14 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 5 1 1 0 36 4 47
+A 6 1 OK 5 1 1 0 36 4 48
+A 4 3 OK 5 1 1 0 39 4 48
+A 2 2 OK 5 1 3 0 39 4 48
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 4 0 0 1 0 6 0
+A 0 0 BAD_COUNT 4 0 0 1 0 6 0
+A 5 1 OK 4 0 0 1 0 7 0
+A 5 -1 BAD_COUNT 4 0 0 1 0 7 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 26 0 0 5 1 5 0
+A 6 2 OK 26 0 0 5 1 5 2
+A 4 2 OK 26 0 0 5 3 5 2
+A 5 2 OK 26 0 0 5 3 7 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+T 0 5 0 0 0 0 6
+A -2 2 BAD_SPIRIT 0 5 0 0 0 0 6
+A 2 1 OK 0 5 1 0 0 0 6
+A 6 1 OK 0 5 1 0 0 0 7
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 2 6 2 5 2 5 0
+A 8 3 BAD_SPIRIT 2 6 2 5 2 5 0
+A 6 2 OK 2 6 2 5 2 5 2
+A 3 8 OK 2 6 2 13 2 5 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 0 0 2 6 4 1 0
+A 2 999999 OVERFLOW 0 0 2 6 4 1 0
+A 9 1 BAD_SPIRIT 0 0 2 6 4 1 0
+A 0 999999 OK 999999 0 2 6 4 1 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 4 6 0 0 0 4 0
+A 3 1 OK 4 6 0 1 0 4 0
+A 5 1 OK 4 6 0 1 0 5 0
+A 4 0 BAD_COUNT 4 6 0 1 0 5 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 5 1 0 6 2 0 4
+A 4 0 BAD_COUNT 5 1 0 6 2 0 4
+A 0 1 OK 6 1 0 6 2 0 4
+A 4 1 OK 6 1 0 6 3 0 4
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+T 0 1 9 0 5 6 4
+A 7 -1 BAD_SPIRIT 0 1 9 0 5 6 4
+A 4 999999 OVERFLOW 0 1 9 0 5 6 4
+A 1 2 OK 0 3 9 0 5 6 4
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 2 0 0 0 0 1 5
+A 2 3 OK 2 0 3 0 0 1 5
+A 2 9 OK 2 0 12 0 0 1 5
+A 2 2 OK 2 0 14 0 0 1 5
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+T 5 43 2 4 21 1 0
+A 6 2 OK 5 43 2 4 21 1 2
+A 4 3 OK 5 43 2 4 24 1 2
+A 0 1 OK 6 43 2 4 24 1 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 1 4 4 1 6 2 6
+A 4 3 OK 1 4 4 1 9 2 6
+A 1 2 OK 1 6 4 1 9 2 6
+A 0 2 OK 3 6 4 1 9 2 6
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 4 36 0 0 5 0 0
+A 5 -1 BAD_COUNT 4 36 0 0 5 0 0
+A 0 3 OK 7 36 0 0 5 0 0
+A 3 6 OK 7 36 0 6 5 0 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+T 5 0 4 0 6 6 2
+A 6 -1 BAD_COUNT 5 0 4 0 6 6 2
+A 6 1 OK 5 0 4 0 6 6 3
+A 1 1 OK 5 1 4 0 6 6 3
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 0 5 6 1 5 23 2
+A 8 1 BAD_SPIRIT 0 5 6 1 5 23 2
+A 3 0 BAD_COUNT 0 5 6 1 5 23 2
+A 8 -1 BAD_SPIRIT 0 5 6 1 5 23 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 35 4 2 6 0 0 5
+A 0 5 OK 40 4 2 6 0 0 5
+A 3 1 OK 40 4 2 7 0 0 5
+A 3 10 OK 40 4 2 17 0 0 5
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 0 0 1 2 0 4 6
+A 5 3 OK 0 0 1 2 0 7 6
+A 3 2 OK 0 0 1 4 0 7 6
+A 5 999999 OVERFLOW 0 0 1 4 0 7 6
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 0 42 1 0 41 4 2
+A 2 999999 OVERFLOW 0 42 1 0 41 4 2
+A 5 9 OK 0 42 1 0 41 13 2
+A 4 2 OK 0 42 1 0 43 13 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 0 0 0 45 5 0 0
+A 5 1 OK 0 0 0 45 5 1 0
+A 4 1 OK 0 0 0 45 6 1 0
+A 0 3 OK 3 0 0 45 6 1 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 0 1 2 1 4 4 0
+A 3 3 OK 0 1 2 4 4 4 0
+A 0 999999 OK 999999 1 2 4 4 4 0
+A 1 1 OK 999999 2 2 4 4 4 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 6 50 0 1 2 0 1
+A 1 1 OK 6 51 0 1 2 0 1
+A 5 -1 BAD_COUNT 6 51 0 1 2 0 1
+A 4 999999 OVERFLOW 6 51 0 1 2 0 1
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 1 6 4 1 4 0 5
+A 2 1 OK 1 6 5 1 4 0 5
+A -2 0 BAD_SPIRIT 1 6 5 1 4 0 5
+A 0 1 OK 2 6 5 1 4 0 5
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 5 2 44 0 4 1 2
+A 0 1 OK 6 2 44 0 4 1 2
+A 1 3 OK 6 5 44 0 4 1 2
+A 3 3 OK 6 5 44 3 4 1 2
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+T 6 4 42 2 36 5 0
+A 3 -1 BAD_COUNT 6 4 42 2 36 5 0
+A 3 1 OK 6 4 42 3 36 5 0
+A 7 2 BAD_SPIRIT 6 4 42 3 36 5 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 5 6 0 0 2 0 6
+A 4 6 OK 5 6 0 0 8 0 6
+A 1 2 OK 5 8 0 0 8 0 6
+A 0 999999 OVERFLOW 5 8 0 0 8 0 6
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 0 5 4 1 5 4 0
+A 0 3 OK 3 5 4 1 5 4 0
+A 3 0 BAD_COUNT 3 5 4 1 5 4 0
+A 1 1 OK 3 6 4 1 5 4 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 4 1 6 5 5 0 6
+A 3 9 OK 4 1 6 14 5 0 6
+A 5 1 OK 4 1 6 14 5 1 6
+A 5 3 OK 4 1 6 14 5 4 6
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 20 0 1 2 6 1 5
+A 3 999999 OVERFLOW 20 0 1 2 6 1 5
+A 1 2 OK 20 2 1 2 6 1 5
+A 0 3 OK 23 2 1 2 6 1 5
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 1 4 0 4 0 6 2
+A 2 2 OK 1 4 2 4 0 6 2
+A 4 3 OK 1 4 2 4 3 6 2
+A 6 1 OK 1 4 2 4 3 6 3
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+T 1 0 2 4 6 0 5
+A 0 2 OK 3 0 2 4 6 0 5
+A -1 3 BAD_SPIRIT 3 0 2 4 6 0 5
+A 6 3 OK 3 0 2 4 6 0 8
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 0 0 0 0 0 0 0
+A 0 2 OK 2 0 0 0 0 0 0
+A 1 3 OK 2 3 0 0 0 0 0
+A 6 0 BAD_COUNT 2 3 0 0 0 0 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 2 2 5 5 4 1 5
+A 1 3 OK 2 5 5 5 4 1 5
+A 4 1 OK 2 5 5 5 5 1 5
+A 5 -1 BAD_COUNT 2 5 5 5 5 1 5
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 0 0 6 5 38 2 0
+A 0 9 OK 9 0 6 5 38 2 0
+A 0 3 OK 12 0 6 5 38 2 0
+A 2 -1 BAD_COUNT 12 0 6 5 38 2 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 5 2 1 0 12 17 0
+A 6 999999 OK 5 2 1 0 12 17 999999
+A 4 0 BAD_COUNT 5 2 1 0 12 17 999999
+A 6 -1 BAD_COUNT 5 2 1 0 12 17 999999
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 27 4 5 4 5 23 1
+A 6 2 OK 27 4 5 4 5 23 3
+A 5 0 BAD_COUNT 27 4 5 4 5 23 3
+A 6 0 BAD_COUNT 27 4 5 4 5 23 3
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 7 6 4 5 2 8 48
+A -1 0 BAD_SPIRIT 7 6 4 5 2 8 48
+A 0 3 OK 10 6 4 5 2 8 48
+A 3 -1 BAD_COUNT 10 6 4 5 2 8 48
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 0 0 6 4 0 7 6
+A 1 -1 BAD_COUNT 0 0 6 4 0 7 6
+A 2 0 BAD_COUNT 0 0 6 4 0 7 6
+A 4 999999 OK 0 0 6 4 999999 7 6
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 5 0 0 0 0 0 2
+A 1 -1 BAD_COUNT 5 0 0 0 0 0 2
+A 4 3 OK 5 0 0 0 3 0 2
+A 6 2 OK 5 0 0 0 3 0 4
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+T 0 4 1 0 5 15 0
+A 4 3 OK 0 4 1 0 8 15 0
+A 1 1 OK 0 5 1 0 8 15 0
+A 4 2 OK 0 5 1 0 10 15 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 0 1 0 1 0 5 4
+A 5 1 OK 0 1 0 1 0 6 4
+A 5 10 OK 0 1 0 1 0 16 4
+A 4 8 OK 0 1 0 1 8 16 4
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+T 0 0 2 4 2 0 38
+A 2 1 OK 0 0 3 4 2 0 38
+A 3 0 BAD_COUNT 0 0 3 4 2 0 38
+A 2 3 OK 0 0 6 4 2 0 38
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 6 0 2 1 5 4 0
+A 6 -1 BAD_COUNT 6 0 2 1 5 4 0
+A 6 1 OK 6 0 2 1 5 4 1
+A 8 3 BAD_SPIRIT 6 0 2 1 5 4 1
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 4 1 5 0 2 6 0
+A 2 1 OK 4 1 6 0 2 6 0
+A 2 999999 OVERFLOW 4 1 6 0 2 6 0
+A 1 1 OK 4 2 6 0 2 6 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+T 6 2 0 1 2 1 2
+A 1 1 OK 6 3 0 1 2 1 2
+A 6 1 OK 6 3 0 1 2 1 3
+A 3 -1 BAD_COUNT 6 3 0 1 2 1 3
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 29 0 0 2 6 0 5
+A 1 0 BAD_COUNT 29 0 0 2 6 0 5
+A 4 3 OK 29 0 0 2 9 0 5
+A 6 1 OK 29 0 0 2 9 0 6
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 0 1 0 14 0 0 6
+A 5 1 OK 0 1 0 14 0 1 6
+A 0 2 OK 2 1 0 14 0 1 6
+A 3 999999 OVERFLOW 2 1 0 14 0 1 6
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 14 5 0 30 6 2 0
+A 6 1 OK 14 5 0 30 6 2 1
+A 4 3 OK 14 5 0 30 9 2 1
+A 3 3 OK 14 5 0 33 9 2 1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 1 4 0 9 38 0 0
+A 5 9 OK 1 4 0 9 38 9 0
+A 1 -1 BAD_COUNT 1 4 0 9 38 9 0
+A 2 2 OK 1 4 2 9 38 9 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+T 1 0 0 4 5 2 5
+A 4 1 OK 1 0 0 4 6 2 5
+A 0 5 OK 6 0 0 4 6 2 5
+A 0 999999 OVERFLOW 6 0 0 4 6 2 5
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 4 1 0 2 0 0 1
+A 6 1 OK 4 1 0 2 0 0 2
+A 0 1 OK 5 1 0 2 0 0 2
+A 4 2 OK 5 1 0 2 2 0 2
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+T 0 1 2 5 5 1 6
+A 4 -1 BAD_COUNT 0 1 2 5 5 1 6
+A 2 1 OK 0 1 3 5 5 1 6
+A 2 3 OK 0 1 6 5 5 1 6
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 5 2 4 0 2 0 4
+A 5 2 OK 5 2 4 0 2 2 4
+A 1 6 OK 5 8 4 0 2 2 4
+A 5 3 OK 5 8 4 0 2 5 4
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 1 0 0 0 1 6 1
+A 9 3 BAD_SPIRIT 1 0 0 0 1 6 1
+A 2 0 BAD_COUNT 1 0 0 0 1 6 1
+A 2 999999 OK 1 0 999999 0 1 6 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+T 0 6 0 0 1 0 19
+A 3 -1 BAD_COUNT 0 6 0 0 1 0 19
+A 3 7 OK 0 6 0 7 1 0 19
+A 5 1 OK 0 6 0 7 1 1 19
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 2 4 18 0 6 0 1
+A 0 -1 BAD_COUNT 2 4 18 0 6 0 1
+A 4 0 BAD_COUNT 2 4 18 0 6 0 1
+A 5 3 OK 2 4 18 0 6 3 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+T 0 0 1 5 22 0 4
+A 6 1 OK 0 0 1 5 22 0 5
+A 1 -1 BAD_COUNT 0 0 1 5 22 0 5
+A 4 6 OK 0 0 1 5 28 0 5
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 2 2 4 4 2 0 5
+A 1 0 BAD_COUNT 2 2 4 4 2 0 5
+A 4 -1 BAD_COUNT 2 2 4 4 2 0 5
+A 5 -1 BAD_COUNT 2 2 4 4 2 0 5
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 4 0 0 1 5 6 5
+A 2 -1 BAD_COUNT 4 0 0 1 5 6 5
+A 3 0 BAD_COUNT 4 0 0 1 5 6 5
+A 1 4 OK 4 4 0 1 5 6 5
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 44 0 0 0 1 0 0
+A 6 0 BAD_COUNT 44 0 0 0 1 0 0
+A 2 10 OK 44 0 10 0 1 0 0
+A 2 -1 BAD_COUNT 44 0 10 0 1 0 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+T 6 0 2 2 6 1 1
+A 4 2 OK 6 0 2 2 8 1 1
+A 0 1 OK 7 0 2 2 8 1 1
+A 2 3 OK 7 0 5 2 8 1 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 5 23 4 50 6 6 0
+A 5 -1 BAD_COUNT 5 23 4 50 6 6 0
+A 4 0 BAD_COUNT 5 23 4 50 6 6 0
+A 3 3 OK 5 23 4 53 6 6 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 5 4 6 0 0 6 0
+A 8 0 BAD_SPIRIT 5 4 6 0 0 6 0
+A 4 3 OK 5 4 6 0 3 6 0
+A 4 2 OK 5 4 6 0 5 6 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 4 0 2 0 5 6 1
+A 5 2 OK 4 0 2 0 5 8 1
+A 6 -1 BAD_COUNT 4 0 2 0 5 8 1
+A 4 2 OK 4 0 2 0 7 8 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 1 5 6 0 1 4 1
+A 0 1 OK 2 5 6 0 1 4 1
+A 5 1 OK 2 5 6 0 1 5 1
+A 5 999999 OVERFLOW 2 5 6 0 1 5 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 1 0 9 0 4 6 2
+A 4 -1 BAD_COUNT 1 0 9 0 4 6 2
+A 2 0 BAD_COUNT 1 0 9 0 4 6 2
+A 0 2 OK 3 0 9 0 4 6 2
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 4 4 6 6 2 0 6
+A 0 10 OK 14 4 6 6 2 0 6
+A 6 0 BAD_COUNT 14 4 6 6 2 0 6
+A 2 7 OK 14 4 13 6 2 0 6
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 0 0 0 46 1 13 6
+A 5 2 OK 0 0 0 46 1 15 6
+A 6 999999 OVERFLOW 0 0 0 46 1 15 6
+A 2 2 OK 0 0 2 46 1 15 6
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+T 6 0 0 5 4 5 5
+A 2 -1 BAD_COUNT 6 0 0 5 4 5 5
+A 3 3 OK 6 0 0 8 4 5 5
+A 5 3 OK 6 0 0 8 4 8 5
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 0 4 2 4 0 13 1
+A 0 -1 BAD_COUNT 0 4 2 4 0 13 1
+A 0 3 OK 3 4 2 4 0 13 1
+A 4 3 OK 3 4 2 4 3 13 1
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 0 5 1 16 4 30 5
+A 3 2 OK 0 5 1 18 4 30 5
+A 3 1 OK 0 5 1 19 4 30 5
+A 0 1 OK 1 5 1 19 4 30 5
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+T 6 0 0 0 0 0 0
+A 1 0 BAD_COUNT 6 0 0 0 0 0 0
+A 6 1 OK 6 0 0 0 0 0 1
+A 2 3 OK 6 0 3 0 0 0 1
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 0 0 0 2 0 1 0
+A 2 1 OK 0 0 1 2 0 1 0
+A 2 1 OK 0 0 2 2 0 1 0
+A 1 999999 OK 0 999999 2 2 0 1 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 6 0 0 5 6 2 5
+A 2 1 OK 6 0 1 5 6 2 5
+A 1 2 OK 6 2 1 5 6 2 5
+A 2 1 OK 6 2 2 5 6 2 5
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 0 2 6 6 0 23 0
+A 6 1 OK 0 2 6 6 0 23 1
+A 1 6 OK 0 8 6 6 0 23 1
+A 4 -1 BAD_COUNT 0 8 6 6 0 23 1
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+T 31 42 1 0 0 1 31
+A 0 1 OK 32 42 1 0 0 1 31
+A 4 999999 OK 32 42 1 0 999999 1 31
+A 1 -1 BAD_COUNT 32 42 1 0 999999 1 31
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 6 0 0 0 6 6 2
+A 1 1 OK 6 1 0 0 6 6 2
+A 5 3 OK 6 1 0 0 6 9 2
+A 9 4 BAD_SPIRIT 6 1 0 0 6 9 2
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 6 1 0 0 0 4 5
+A 6 2 OK 6 1 0 0 0 4 7
+A 5 2 OK 6 1 0 0 0 6 7
+A 0 2 OK 8 1 0 0 0 6 7
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+T 36 0 1 0 0 5 0
+A 5 1 OK 36 0 1 0 0 6 0
+A 2 1 OK 36 0 2 0 0 6 0
+A 6 1 OK 36 0 2 0 0 6 1
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 2 2 1 2 6 25 4
+A 9 -1 BAD_SPIRIT 2 2 1 2 6 25 4
+A 2 1 OK 2 2 2 2 6 25 4
+A 0 0 BAD_COUNT 2 2 2 2 6 25 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 5 6 0 4 2 0 2
+A 3 999999 OVERFLOW 5 6 0 4 2 0 2
+A 1 0 BAD_COUNT 5 6 0 4 2 0 2
+A 0 2 OK 7 6 0 4 2 0 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 6 0 17 5 0 2 6
+A 1 10 OK 6 10 17 5 0 2 6
+A 5 1 OK 6 10 17 5 0 3 6
+A 0 3 OK 9 10 17 5 0 3 6
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+T 0 0 4 0 2 2 2
+A 1 1 OK 0 1 4 0 2 2 2
+A 5 0 BAD_COUNT 0 1 4 0 2 2 2
+A 3 999999 OK 0 1 4 999999 2 2 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 2 0 2 6 6 5 0
+A 2 999999 OVERFLOW 2 0 2 6 6 5 0
+A 4 1 OK 2 0 2 6 7 5 0
+A 5 999999 OVERFLOW 2 0 2 6 7 5 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+T 4 12 6 6 4 2 2
+A 4 -1 BAD_COUNT 4 12 6 6 4 2 2
+A 1 999999 OVERFLOW 4 12 6 6 4 2 2
+A 6 2 OK 4 12 6 6 4 2 4
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 0 0 1 9 4 6 0
+A 6 3 OK 0 0 1 9 4 6 3
+A 2 0 BAD_COUNT 0 0 1 9 4 6 3
+A 6 1 OK 0 0 1 9 4 6 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 0 2 30 1 0 2 5
+A 2 0 BAD_COUNT 0 2 30 1 0 2 5
+A 0 1 OK 1 2 30 1 0 2 5
+A 5 1 OK 1 2 30 1 0 3 5
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 0 1 44 2 0 2 2
+A 5 1 OK 0 1 44 2 0 3 2
+A 0 1 OK 1 1 44 2 0 3 2
+A 4 -1 BAD_COUNT 1 1 44 2 0 3 2
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+T 25 0 22 6 7 34 0
+A 6 999999 OK 25 0 22 6 7 34 999999
+A 6 1 OVERFLOW 25 0 22 6 7 34 999999
+A 6 6 OVERFLOW 25 0 22 6 7 34 999999
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 12 1 0 2 2 0 6
+A 1 -1 BAD_COUNT 12 1 0 2 2 0 6
+A 1 1 OK 12 2 0 2 2 0 6
+A 1 1 OK 12 3 0 2 2 0 6
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 1 0 17 6 0 32 4
+A 3 1 OK 1 0 17 7 0 32 4
+A 3 0 BAD_COUNT 1 0 17 7 0 32 4
+A 5 3 OK 1 0 17 7 0 35 4
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 5 0 0 4 6 4 0
+A 2 1 OK 5 0 1 4 6 4 0
+A 0 -1 BAD_COUNT 5 0 1 4 6 4 0
+A 4 2 OK 5 0 1 4 8 4 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 0 0 2 5 5 1 2
+A 5 1 OK 0 0 2 5 5 2 2
+A 2 0 BAD_COUNT 0 0 2 5 5 2 2
+A 2 -1 BAD_COUNT 0 0 2 5 5 2 2
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 25 0 1 0 5 0 1
+A 5 3 OK 25 0 1 0 5 3 1
+A 3 -1 BAD_COUNT 25 0 1 0 5 3 1
+A 6 0 BAD_COUNT 25 0 1 0 5 3 1
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 1 6 5 0 31 5 1
+A 5 1 OK 1 6 5 0 31 6 1
+A 4 1 OK 1 6 5 0 32 6 1
+A 8 10 BAD_SPIRIT 1 6 5 0 32 6 1
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 5 4 0 2 23 1 1
+A 1 1 OK 5 5 0 2 23 1 1
+A 5 -1 BAD_COUNT 5 5 0 2 23 1 1
+A 2 3 OK 5 5 3 2 23 1 1
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 4 6 5 5 47 0 1
+A 3 1 OK 4 6 5 6 47 0 1
+A 3 1 OK 4 6 5 7 47 0 1
+A 1 3 OK 4 9 5 7 47 0 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 0 1 5 4 1 0 2
+A 2 0 BAD_COUNT 0 1 5 4 1 0 2
+A 7 1 BAD_SPIRIT 0 1 5 4 1 0 2
+A 2 1 OK 0 1 6 4 1 0 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 0 5 1 0 1 1 5
+A 4 1 OK 0 5 1 0 2 1 5
+A 8 1 BAD_SPIRIT 0 5 1 0 2 1 5
+A 3 1 OK 0 5 1 1 2 1 5
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 0 6 1 1 4 2 0
+A 2 1 OK 0 6 2 1 4 2 0
+A 0 2 OK 2 6 2 1 4 2 0
+A 1 -1 BAD_COUNT 2 6 2 1 4 2 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 0 1 6 6 0 0 5
+A 0 0 BAD_COUNT 0 1 6 6 0 0 5
+A 2 1 OK 0 1 7 6 0 0 5
+A 4 0 BAD_COUNT 0 1 7 6 0 0 5
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+T 6 0 0 0 34 0 4
+A 4 999999 OVERFLOW 6 0 0 0 34 0 4
+A 2 1 OK 6 0 1 0 34 0 4
+A 0 999999 OVERFLOW 6 0 1 0 34 0 4
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 4 5 4 0 1 0 4
+A 2 1 OK 4 5 5 0 1 0 4
+A 3 4 OK 4 5 5 4 1 0 4
+A 5 3 OK 4 5 5 4 1 3 4
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 6 6 0 4 0 4 4
+A 2 3 OK 6 6 3 4 0 4 4
+A 6 8 OK 6 6 3 4 0 4 12
+A 3 3 OK 6 6 3 7 0 4 12
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 6 0 4 0 0 0 10
+A 0 3 OK 9 0 4 0 0 0 10
+A 5 1 OK 9 0 4 0 0 1 10
+A 6 4 OK 9 0 4 0 0 1 14
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 1 4 43 0 5 0 49
+A 3 2 OK 1 4 43 2 5 0 49
+A 1 0 BAD_COUNT 1 4 43 2 5 0 49
+A 2 0 BAD_COUNT 1 4 43 2 5 0 49
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 1 0 5 5 4 6 4
+A 0 3 OK 4 0 5 5 4 6 4
+A 6 -1 BAD_COUNT 4 0 5 5 4 6 4
+A 0 1 OK 5 0 5 5 4 6 4
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+T 5 0 0 5 0 30 4
+A 5 1 OK 5 0 0 5 0 31 4
+A 0 0 BAD_COUNT 5 0 0 5 0 31 4
+A 1 999999 OK 5 999999 0 5 0 31 4
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+T 1 0 5 0 0 0 2
+A 6 2 OK 1 0 5 0 0 0 4
+A 1 0 BAD_COUNT 1 0 5 0 0 0 4
+A 4 3 OK 1 0 5 0 3 0 4
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+T 2 0 1 0 0 0 33
+A 5 8 OK 2 0 1 0 0 8 33
+A 1 1 OK 2 1 1 0 0 8 33
+A 5 1 OK 2 1 1 0 0 9 33
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 0 0 5 0 0 37 4
+A 2 3 OK 0 0 8 0 0 37 4
+A 6 2 OK 0 0 8 0 0 37 6
+A 3 1 OK 0 0 8 1 0 37 6
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 0 5 0 5 0 5 0
+A 5 3 OK 0 5 0 5 0 8 0
+A 2 -1 BAD_COUNT 0 5 0 5 0 8 0
+A 1 1 OK 0 6 0 5 0 8 0
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 0 2 6 1 1 4 1
+A 1 3 OK 0 5 6 1 1 4 1
+A 0 2 OK 2 5 6 1 1 4 1
+A 3 10 OK 2 5 6 11 1 4 1
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 1 6 6 6 4 2 4
+A 1 2 OK 1 8 6 6 4 2 4
+A 1 3 OK 1 11 6 6 4 2 4
+A 0 1 OK 2 11 6 6 4 2 4
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 0 2 36 0 4 4 0
+A 8 2 BAD_SPIRIT 0 2 36 0 4 4 0
+A 3 2 OK 0 2 36 2 4 4 0
+A 2 -1 BAD_COUNT 0 2 36 2 4 4 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+T 2 0 10 5 5 6 0
+A 5 2 OK 2 0 10 5 5 8 0
+A 6 0 BAD_COUNT 2 0 10 5 5 8 0
+A 0 1 OK 3 0 10 5 5 8 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 6 0 1 11 0 2 1
+A 4 1 OK 6 0 1 11 1 2 1
+A 3 1 OK 6 0 1 12 1 2 1
+A 6 0 BAD_COUNT 6 0 1 12 1 2 1
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 4 4 0 6 26 1 5
+A 0 1 OK 5 4 0 6 26 1 5
+A 6 3 OK 5 4 0 6 26 1 8
+A 2 999999 OK 5 4 999999 6 26 1 8
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 2
+Q shadewatch 1 OK 1 6 hearts 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 0 6 4 0 2 0 1
+A 4 1 OK 0 6 4 0 3 0 1
+A 4 1 OK 0 6 4 0 4 0 1
+A 2 -1 BAD_COUNT 0 6 4 0 4 0 1
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+T 5 2 0 5 2 0 5
+A 6 1 OK 5 2 0 5 2 0 6
+A 2 3 OK 5 2 3 5 2 0 6
+A 5 999999 OK 5 2 3 5 2 999999 6
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+T 37 2 5 4 48 0 37
+A 4 2 OK 37 2 5 4 50 0 37
+A 3 -1 BAD_COUNT 37 2 5 4 50 0 37
+A 6 1 OK 37 2 5 4 50 0 38
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 0 5 6 0 1 4 6
+A 2 0 BAD_COUNT 0 5 6 0 1 4 6
+A 2 1 OK 0 5 7 0 1 4 6
+A 0 10 OK 10 5 7 0 1 4 6
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+T 0 41 0 6 2 5 0
+A 0 1 OK 1 41 0 6 2 5 0
+A 3 1 OK 1 41 0 7 2 5 0
+A 2 3 OK 1 41 3 7 2 5 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 0 2 6 0 2 0 1
+A 5 2 OK 0 2 6 0 2 2 1
+A 3 9 OK 0 2 6 9 2 2 1
+A 5 9 OK 0 2 6 9 2 11 1
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 0 0 0 5 1 0 4
+A 6 1 OK 0 0 0 5 1 0 5
+A 1 3 OK 0 3 0 5 1 0 5
+A 3 999999 OVERFLOW 0 3 0 5 1 0 5
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q glowmoss 0 OK 0
+Q glowmoss 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 5 0 6 49 1 0 2
+A 2 0 BAD_COUNT 5 0 6 49 1 0 2
+A 4 0 BAD_COUNT 5 0 6 49 1 0 2
+A 0 2 OK 7 0 6 49 1 0 2
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+T 2 6 0 2 0 4 5
+A -1 0 BAD_SPIRIT 2 6 0 2 0 4 5
+A 3 7 OK 2 6 0 9 0 4 5
+A 4 1 OK 2 6 0 9 1 4 5
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 0 5 0 0 0 1 1
+A 5 0 BAD_COUNT 0 5 0 0 0 1 1
+A 6 0 BAD_COUNT 0 5 0 0 0 1 1
+A 8 1 BAD_SPIRIT 0 5 0 0 0 1 1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+T 7 0 5 4 14 0 1
+A 5 0 BAD_COUNT 7 0 5 4 14 0 1
+A -1 0 BAD_SPIRIT 7 0 5 4 14 0 1
+A 1 7 OK 7 7 5 4 14 0 1
+Q shadewatch 0 OK 1 6 hearts 1
+Q shadewatch 1 OK 1 6 hearts 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 4 0 0 5 1 0 6
+A 4 999999 OVERFLOW 4 0 0 5 1 0 6
+A 6 -1 BAD_COUNT 4 0 0 5 1 0 6
+A 2 3 OK 4 0 3 5 1 0 6
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+T 5 0 2 13 4 11 0
+A 0 -1 BAD_COUNT 5 0 2 13 4 11 0
+A 4 2 OK 5 0 2 13 6 11 0
+A 1 -1 BAD_COUNT 5 0 2 13 6 11 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+T 0 0 42 1 2 6 0
+A 2 1 OK 0 0 43 1 2 6 0
+A 0 3 OK 3 0 43 1 2 6 0
+A 1 999999 OK 3 999999 43 1 2 6 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 2 5 0 5 5 5 9
+A 5 1 OK 2 5 0 5 5 6 9
+A 7 1 BAD_SPIRIT 2 5 0 5 5 6 9
+A 0 1 OK 3 5 0 5 5 6 9
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 2 0 2 1 0 10 25
+A 2 2 OK 2 0 4 1 0 10 25
+A 3 -1 BAD_COUNT 2 0 4 1 0 10 25
+A 8 999999 BAD_SPIRIT 2 0 4 1 0 10 25
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+T 0 28 33 6 5 0 2
+A 1 1 OK 0 29 33 6 5 0 2
+A 4 3 OK 0 29 33 6 8 0 2
+A 5 3 OK 0 29 33 6 8 3 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+T 1 6 5 10 4 2 1
+A 5 -1 BAD_COUNT 1 6 5 10 4 2 1
+A 6 999999 OVERFLOW 1 6 5 10 4 2 1
+A 1 999999 OVERFLOW 1 6 5 10 4 2 1
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 6 4 0 5 0 4 47
+A 1 0 BAD_COUNT 6 4 0 5 0 4 47
+A 4 999999 OK 6 4 0 5 999999 4 47
+A 3 0 BAD_COUNT 6 4 0 5 999999 4 47
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q facetlock 0 OK 0
+Q facetlock 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+T 2 0 4 1 6 0 40
+A 4 -1 BAD_COUNT 2 0 4 1 6 0 40
+A 4 -1 BAD_COUNT 2 0 4 1 6 0 40
+A 0 999999 OVERFLOW 2 0 4 1 6 0 40
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 2 1 0 4 0 0 0
+A 5 3 OK 2 1 0 4 0 3 0
+A 4 2 OK 2 1 0 4 2 3 0
+A 6 1 OK 2 1 0 4 2 3 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+T 2 2 2 0 1 47 6
+A 0 1 OK 3 2 2 0 1 47 6
+A 1 1 OK 3 3 2 0 1 47 6
+A 4 0 BAD_COUNT 3 3 2 0 1 47 6
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q glimmerloom 0 OK 1 5 satchel 4
+Q glimmerloom 1 OK 1 5 satchel 4
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+T 4 6 0 0 0 6 4
+A 9 3 BAD_SPIRIT 4 6 0 0 0 6 4
+A 2 1 OK 4 6 1 0 0 6 4
+A 1 1 OK 4 7 1 0 0 6 4
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+T 45 1 6 4 1 0 0
+A 4 3 OK 45 1 6 4 4 0 0
+A 5 2 OK 45 1 6 4 4 2 0
+A 3 2 OK 45 1 6 6 4 2 0
+Q spiritkite 0 OK 1 1 wind 2
+Q spiritkite 1 OK 1 1 wind 2
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q facetlock 0 OK 1 2 spare 2
+Q facetlock 1 OK 1 2 spare 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -1
+T 2 5 31 0 4 6 0
+A 2 1 OK 2 5 32 0 4 6 0
+A 1 2 OK 2 7 32 0 4 6 0
+A 5 6 OK 2 7 32 0 4 12 0
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+T 6 6 26 4 0 22 2
+A 3 3 OK 6 6 26 7 0 22 2
+A 0 1 OK 7 6 26 7 0 22 2
+A 5 999999 OVERFLOW 7 6 26 7 0 22 2
+Q spiritkite 0 OK 1 1 wind 4
+Q spiritkite 1 OK 1 1 wind 4
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q shardfall 0 OK 0
+Q shardfall 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+T 5 0 4 0 6 2 0
+A 6 0 BAD_COUNT 5 0 4 0 6 2 0
+A 5 3 OK 5 0 4 0 6 5 0
+A 4 999999 OVERFLOW 5 0 4 0 6 5 0
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q lumenpath 0 OK 0
+Q lumenpath 1 OK 0
+Q facetlock 0 OK 1 2 spare 1
+Q facetlock 1 OK 1 2 spare 1
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+T 5 0 1 5 1 0 0
+A 3 2 OK 5 0 1 7 1 0 0
+A 3 1 OK 5 0 1 8 1 0 0
+A 0 3 OK 8 0 1 8 1 0 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 0 0 0 4 0 0 0
+A 2 0 BAD_COUNT 0 0 0 4 0 0 0
+A 4 2 OK 0 0 0 4 2 0 0
+A 0 1 OK 1 0 0 4 2 0 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q - 0 UNKNOWN_GAME 0
+Q - 1 UNKNOWN_GAME 0
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+T 4 0 0 1 18 2 5
+A 3 999999 OVERFLOW 4 0 0 1 18 2 5
+A 1 2 OK 4 2 0 1 18 2 5
+A 3 1 OK 4 2 0 2 18 2 5
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q glowmoss 0 OK 1 0 light 1
+Q glowmoss 1 OK 1 0 light 1
+Q lumenpath 0 OK 1 3 moves 1
+Q lumenpath 1 OK 1 3 moves 1
+T 6 2 1 6 4 1 0
+A 4 0 BAD_COUNT 6 2 1 6 4 1 0
+A 1 2 OK 6 4 1 6 4 1 0
+A 3 2 OK 6 4 1 8 4 1 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q Glowmoss 0 UNKNOWN_GAME 0
+Q Glowmoss 1 UNKNOWN_GAME 0
+Q shardring 0 OK 0
+Q shardring 1 OK 0
+T 18 0 6 20 4 5 6
+A 0 3 OK 21 0 6 20 4 5 6
+A 3 3 OK 21 0 6 23 4 5 6
+A 0 0 BAD_COUNT 21 0 6 23 4 5 6
+Q prismcairn 0 OK 0
+Q prismcairn 1 OK 0
+Q unknown_cabinet 0 UNKNOWN_GAME 0
+Q unknown_cabinet 1 UNKNOWN_GAME 0
+Q lumenpath 0 OK 1 3 moves 2
+Q lumenpath 1 OK 1 3 moves 2
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+T 0 0 0 2 0 0 21
+A 4 999999 OK 0 0 0 2 999999 0 21
+A 2 0 BAD_COUNT 0 0 0 2 999999 0 21
+A 4 1 OVERFLOW 0 0 0 2 999999 0 21
+Q spiritkite 0 OK 0
+Q spiritkite 1 OK 0
+Q wardens_accord 0 OK 0
+Q wardens_accord 1 OK 0
+Q glimmerloom 0 OK 0
+Q glimmerloom 1 OK 0
+Q shardfall 0 OK 0
+Q shardfall 1 OK 1 4 cracked -2
+T 6 49 5 29 4 1 0
+A 2 2 OK 6 49 7 29 4 1 0
+A 2 2 OK 6 49 9 29 4 1 0
+A 2 1 OK 6 49 10 29 4 1 0
+Q glimmerloom 0 OK 1 5 satchel 2
+Q glimmerloom 1 OK 1 5 satchel 2
+Q shadewatch 0 OK 0
+Q shadewatch 1 OK 0
+Q prismvault 0 OK 0
+Q prismvault 1 OK 0
+Q glowmoss 0 OK 1 0 light 2
+Q glowmoss 1 OK 1 0 light 2
+T 0 0 -1 0 0 0 0
+A 0 1 BAD_TALLY 0 0 -1 0 0 0 0
+Q glowmoss 1 BAD_TALLY 0
