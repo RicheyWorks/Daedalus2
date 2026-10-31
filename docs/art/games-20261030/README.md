@@ -95,3 +95,7 @@ Notes
 ## chainmail_weave (hephaestus, READY 62846; items 62511 + 62845)
 
 14 assets: armory weave frame with 7 x 7 Ring_row_col sockets (0.2 m pitch); mail rings Empty, Rusted and Link; left and right edge clasps; link budget UI panel; hint glint and hint path glow (VFX placeholders, emissive); difficulty plaques Easy, Normal and Hard; loss banners BLOCKED and OUT OF LINKS. The Forgemaster reuses Mob_Forge_Forgemaster (95e66e111). Sheet: chainmail_weave.png.
+
+## shardscale (unreal-team, READY 62842/62843; Blender items)
+
+18 assets: cabinet with balance-beam marquee; 1.4 m brass beam on stone pillar (tilt Beam/Chain/Pan about Y at SOCKET_Pivot); prism shard W1-W9 with etched weight marks; 1 m shard cart (5 Shard_ sockets); 0.8 m stone bench (3 slots); Weigher with apron, eyeglass and tongs, static plus shared Prism segment rig. Sheet: shardscale.png. (game_items.py here also carries the stonecourse, shuntline, spirit_boons and replay_notary recipes; their kits land in their own PRs.)

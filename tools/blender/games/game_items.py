@@ -1239,6 +1239,162 @@ def chainmail_weave():
     return out
 
 
+# ================================================================ shardscale (unreal-team, READY 62842/62843; 'Blender items')
+@game("shardscale")
+def shardscale():
+    G = "Prop_Shardscale_"; out = []
+    top = [K.box("MarqBeam", (0.5, 0.03, 0.03), (0, -0.18, 2.0), 5), K.cyl("MarqPillar", "z", 0.02, 0.02, 0.12, (0, -0.18, 1.93), 5, 6)] + [K.cyl("MarqPan%d" % s, "z", 0.06, 0.04, 0.02, (s * 0.22, -0.18, 1.9), 5, 8) for s in (-1, 1)]
+    out.append(cabinet("Prop_Arcade_Cab_Shardscale", "3A3A4A", "B08A4A", "C8A6FF", top, [("brass", "B08A4A", 0.35, 0.9)], "balance-beam marquee"))
+    P = [K.box("Plinth", (0.4, 0.4, 0.1), (0, 0, 0.05), 0), K.cyl("Pillar", "z", 0.1, 0.08, 1.2, (0, 0, 0.7), 0, 10), K.box("Fulcrum", (0.12, 0.1, 0.1), (0, 0, 1.33), 1)]
+    piv = (0, 0, 1.36)
+    mov = [K.box("Beam", (1.4, 0.05, 0.05), (0, 0, 1.36), 1)]
+    for sd in (-1, 1):
+        mov += [K.box("Chain%d" % sd, (0.01, 0.01, 0.4), (sd * 0.68, 0, 1.16), 1, bevel=False), K.lathe("Pan%d" % sd, [(0, 0), (0.16, 0.0), (0.18, 0.05), (0.17, 0.05), (0, 0.01)], (sd * 0.68, 0, 0.94), 1, 12)]
+    out.append(simple(G + "Beam", P + mov, [("stone pillar", STONE, 0.9), ("brass beam + pans", "B08A4A", 0.35, 0.9)],
+                      [K.socket("Floor", (0, 0, 0)), K.socket("Pivot", piv), K.socket("PanL", (0.68, 0, 0.96)), K.socket("PanR", (-0.68, 0, 0.96))], "1.4 m brass balance beam on a stone pillar; tilt the Beam/Chain/Pan parts about Y at SOCKET_Pivot", (1.4, 0.4, 1.39), (0, 0, 0.695)))
+    for w in range(1, 10):
+        hx = "%02X%02X%02X" % (200 - 10 * w, 166 - 8 * w, 255 - 6 * w)
+        P = [crystal("Shard", (0, 0, 0), 0.2, 0)] + [K.box("Etch%d" % k, (0.007, 0.004, 0.012), (-0.012 + 0.012 * (k % 3), -0.033, 0.05 + 0.02 * (k // 3)), 1, bevel=False) for k in range(w)]
+        out.append(simple(G + "Shard_W%d" % w, P, [("prism shard (emissive)", hx, 0.15, 0.0, True), ("etched weight marks", "1A1A22", 0.6)], [K.socket("Base", (0, 0, 0)), K.socket("Grip", (0, 0, 0.1))], "0.2 m cut prism shard, weight %d (etched)" % w, (0.08, 0.08, 0.2), (0, 0, 0.1)))
+    P = [K.box("Bed", (1.0, 0.5, 0.06), (0, 0, 0.45), 0, rot=(-10, 0, 0))] + [K.box("Rail%d" % s, (1.0, 0.03, 0.08), (0, s * 0.25, 0.5), 0) for s in (-1, 1)] + [K.cyl("Wheel%d%d" % (a, b), "x", 0.15, 0.15, 0.05, (a * 0.45, b * 0.2, 0.15), 1, 12) for a in (-1, 1) for b in (-1, 1)]
+    P += [K.box("Axle%d" % a, (0.04, 0.45, 0.04), (a * 0.45, 0, 0.15), 1) for a in (-1, 1)] + [K.box("Post%d%d" % (a, b), (0.05, 0.05, 0.3), (a * 0.45, b * 0.2, 0.3), 0) for a in (-1, 1) for b in (-1, 1)]
+    out.append(simple(G + "Cart", P, [("cart wood", WOOD, 0.8), ("iron wheels", "2A2A30", 0.5, 0.8)], [K.socket("Floor", (0, 0, 0))] + [K.socket("Shard_%d" % k, (-0.4 + 0.2 * k, 0, 0.5)) for k in range(5)], "1 m shard cart, tilted tray, 5 Shard_ sockets (next five in order)", (1.05, 0.55, 0.55), (0, 0, 0.275)))
+    P = [K.box("Shelf", (0.8, 0.3, 0.12), (0, 0, 0.6), 0)] + [K.box("Leg%d" % s, (0.12, 0.25, 0.54), (s * 0.3, 0, 0.27), 0) for s in (-1, 1)] + [K.box("Slot%d" % k, (0.18, 0.18, 0.01), (-0.25 + 0.25 * k, 0, 0.665), 1, bevel=False) for k in range(3)]
+    out.append(simple(G + "Bench", P, [("stone", STONE, 0.9), ("slot recess", "3A3A3A", 0.9)], [K.socket("Floor", (0, 0, 0))] + [K.socket("Slot_%d" % k, (-0.25 + 0.25 * k, 0, 0.67)) for k in range(3)], "0.8 m stone bench, 3 recessed slots", (0.8, 0.3, 0.67), (0, 0, 0.335)))
+    wg = npc("Mob_Shardscale_Weigher", "5A4A6A", "3A3A2A", [K.box("Apron", (0.4, 0.03, 0.7), (0, -0.15, 1.0), 4), K.box("WTongs", (0.03, 0.03, 0.4), (-0.37, -0.03, 0.7), 5), K.cyl("HeadEyeglass", "y", 0.03, 0.03, 0.01, (0.045, -0.14, 1.65), 5, 8)], [("apron", "8A7A5A", 0.85), ("brass tongs", "B08A4A", 0.35, 0.9)], "master weigher, apron and eyeglass, hands over the tongs")
+    out += [wg] + rig_npc(wg)
+    return out
+
+
+# ================================================================ stonecourse (unreal-team, READY 63595/63596; 'Blender items')
+@game("stonecourse")
+def stonecourse():
+    G = "Prop_Stonecourse_"; out = []
+    top = [K.box("MarqStone%d" % k, (0.12 + 0.06 * (k % 2), 0.06, 0.06), (-0.25 + 0.17 * k, -0.18, 1.88 + 0.065 * (k % 2)), 5) for k in range(4)]
+    out.append(cabinet("Prop_Arcade_Cab_Stonecourse", "4A4A44", "A8A49A", "7ACAB0", top, [("dry stone", "9A968A", 0.9)], "dry-stone-wall marquee"))
+    for wd in (1, 2, 3):
+        for st, hx in (("Raw", "9A968A"), ("Locked", "5AA898")):
+            L = 0.4 * wd; R = K.rng(SEED, "st%d" % wd)
+            P = [K.box("Stone", (L - 0.02, 0.35, 0.28), (0, 0, 0.14), 0)] + ([K.box("Moss%d" % k, (0.1, 0.36, 0.02), (-L / 2 + 0.1 + k * 0.15, 0, 0.281), 1, bevel=False) for k in range(int(L / 0.15))] if st == "Locked" else [])
+            out.append(simple(G + "Stone_W%d_%s" % (wd, st), P, [("dressed stone", "9A968A" if st == "Raw" else "7A8A80", 0.9), ("teal moss", hx, 0.95)], [K.socket("Floor", (0, 0, 0)), K.socket("Top", (0, 0, 0.28)), K.socket("LeftEdge", (-L / 2, 0, 0))],
+                              "%.1f m dressed wall stone (%d cell), %s" % (L, wd, st.lower()), (L - 0.02, 0.35, 0.28), (0, 0, 0.14)))
+    P = [K.box("Bed", (1.6, 0.8, 0.06), (0, 0, 0.55), 0, rot=(0, -8, 0)), K.cyl("Axle", "y", 0.03, 0.03, 0.9, (0.1, 0, 0.35), 1, 8)] + [K.cyl("Wheel%d" % s, "y", 0.35, 0.35, 0.06, (0.1, s * 0.45, 0.35), 0, 14) for s in (-1, 1)] + [K.box("Shaft%d" % s, (0.9, 0.05, 0.05), (-1.1, s * 0.3, 0.45), 0) for s in (-1, 1)]
+    out.append(simple(G + "Cart", P, [("cart oak", WOOD, 0.8), ("iron", "2A2A30", 0.5, 0.8)], [K.socket("Floor", (0, 0, 0))] + [K.socket("Stone_%d" % k, (-0.6 + 0.24 * k, 0, 0.6)) for k in range(6)], "1.6 m two-wheel stone cart, tilted bed, 6 Stone_ sockets", (2.15, 0.96, 0.7), (-0.4, 0, 0.35)))
+    out[-1]["off_centre_ok"] = "shafts extend forward"
+    P = [K.box("Gravel", (1.0, 0.45, 0.08), (0, 0, 0.04), 0, bevel=False)] + [K.cyl("Peg%d" % s, "z", 0.015, 0.012, 0.35, (s * 0.48, -0.26, 0.17), 1, 6) for s in (-1, 1)] + [K.box("String", (0.96, 0.003, 0.003), (0, -0.26, 0.3), 2, bevel=False)]
+    out.append(simple(G + "Footing", P, [("levelled gravel", "8A8478", 0.95), ("pegs", WOOD, 0.8), ("string line", "E8E0C8", 0.9)], [K.socket("Floor", (0, 0, 0)), K.socket("Course0", (-0.5, 0, 0.08))], "1 m modular gravel footing with string-line pegs", (1.0, 0.5, 0.35), (0, -0.03, 0.175)))
+    R = K.rng(SEED, "rubble"); P = [rock("Rub%d" % k, (R.uniform(-0.3, 0.3), R.uniform(-0.25, 0.25), 0.08 + 0.06 * (k % 3)), 0.09 + 0.03 * (k % 2), 0, k) for k in range(12)]
+    out.append(simple(G + "Rubble", P, [("broken stone", "8A867A", 0.95)], [K.socket("Floor", (0, 0, 0)), K.socket("Drop", (0, 0, 0.35))], "0.8 m rubble pile (skipped stones)", (0.8, 0.7, 0.35), (0, 0, 0.175)))
+    ms = npc("Mob_Stonecourse_Mason", "6A5A4A", "3A3A30", [K.box("Apron", (0.4, 0.03, 0.7), (0, -0.15, 1.0), 4), K.box("MString", (0.04, 0.04, 0.12), (-0.37, -0.03, 0.8), 5)], [("leather apron", "5A3A22", 0.8), ("string reel", "E8E0C8", 0.9)], "mason, leather apron, hands over the string line")
+    out += [ms] + rig_npc(ms)
+    return out
+
+
+# ================================================================ shuntline (unreal-team, READY 63759/63760; 'Blender items')
+@game("shuntline")
+def shuntline():
+    G = "Prop_Shuntline_"; out = []
+    top = [K.box("MarqLampBox", (0.12, 0.08, 0.2), (0, -0.18, 1.93), 4)] + [K.cyl("MarqLamp%d" % k, "y", 0.03, 0.03, 0.02, (0, -0.225, 1.97 - 0.08 * k), 5 + k, 8) for k in range(2)]
+    out.append(cabinet("Prop_Arcade_Cab_Shuntline", "2A3A2A", "C8A040", "FFC870", top, [("lamp red (emissive)", "FF3A2A", 0.2, 0.0, True), ("lamp green (emissive)", "3AFF6A", 0.2, 0.0, True)], "signal-lamp marquee"))
+    for k, hx in enumerate(("C8402A", "2A6AC8", "3A9A4A", "C8A02A", "8A4AA8")):
+        P = [K.box("Body", (0.9, 1.6, 0.9), (0, 0, 0.85), 0), K.box("Roof", (1.0, 1.7, 0.06), (0, 0, 1.32), 1), K.box("Chassis", (0.8, 1.7, 0.12), (0, 0, 0.36), 2)]
+        P += [K.cyl("Wheel%d%d" % (a, b), "x", 0.15, 0.15, 0.06, (a * 0.38, b * 0.5, 0.15), 2, 10) for a in (-1, 1) for b in (-1, 1)] + [K.box("Buffer%d" % b, (0.5, 0.08, 0.06), (0, b * 0.88, 0.4), 2) for b in (-1, 1)]
+        P += [K.box("Tag%d" % s, (0.005, 0.4, 0.3), (s * 0.453, 0, 0.9), 3, bevel=False) for s in (-1, 1)] + [K.box("TagPip%d%d" % (s, j), (0.006, 0.05, 0.05), (s * 0.456, -0.12 + 0.06 * j, 0.9), 4, bevel=False) for s in (-1, 1) for j in range(k + 1)]
+        out.append(simple(G + "Carriage_Dest%d" % (k + 1), P, [("van body", "6A5034", 0.8), ("roof", "3A3A3A", 0.7), ("chassis + wheels", "2A2A30", 0.5, 0.8), ("destination tag %d" % (k + 1), hx, 0.6), ("tag pips", "E8E4D8", 0.6)],
+                          [K.socket("Rail", (0, 0, 0)), K.socket("CouplingFront", (0, -0.92, 0.4)), K.socket("CouplingRear", (0, 0.92, 0.4))], "1.8 m four-wheel goods van, destination tag %d (runtime: amber / teal / red bar)" % (k + 1), (1.0, 1.84, 1.35), (0, 0, 0.675)))
+    def rails(L, x0=0, ang=0, pre=""):
+        return [K.box(pre + "Rail%d" % s, (0.04, L, 0.06), (x0 + s * 0.3, 0, 0.13), 1, rot=(0, 0, ang)) for s in (-1, 1)]
+    for kind in ("Straight", "Switch", "StopBlock"):
+        P = [K.box("Sleeper%d" % k, (0.9, 0.12, 0.08), (0, -0.4 + 0.2 * k, 0.04), 0) for k in range(5)] + rails(1.0)
+        if kind == "Switch": P += [K.box("Branch%d" % s, (0.04, 1.0, 0.06), (0.15 + s * 0.3, 0.05, 0.135), 1, rot=(0, 0, -14)) for s in (-1, 1)] + [K.box("Lever", (0.04, 0.04, 0.4), (-0.6, 0, 0.2), 2, rot=(20, 0, 0))]
+        if kind == "StopBlock": P += [K.box("Block", (0.8, 0.25, 0.4), (0, 0.38, 0.3), 2), K.box("BlockPad", (0.6, 0.04, 0.12), (0, 0.24, 0.4), 3)]
+        out.append(simple(G + "Track_" + kind, P, [("sleepers", "4A3A2A", 0.9), ("rail steel", "6A6A72", 0.4, 0.9), ("timber / lever", "8A2A1A", 0.7), ("buffer pad", "C8A040", 0.6)],
+                          [K.socket("Floor", (0, 0, 0)), K.socket("In", (0, -0.5, 0.16)), K.socket("Out", (0, 0.5, 0.16))] + ([K.socket("OutBranch", (0.27, 0.5, 0.16))] if kind == "Switch" else []), "1 m narrow-gauge track, %s" % kind.lower(), (1.0, 1.0, 0.5), (0, 0, 0.25)))
+        out[-1]["off_centre_ok"] = "track tile"
+    for stt, hx in (("Red", "FF3A2A"), ("Green", "3AFF6A")):
+        P = [K.cyl("Post", "z", 0.04, 0.04, 0.8, (0, 0, 0.4), 0, 8), K.box("Head", (0.2, 0.12, 0.25), (0, 0, 0.9), 0), K.cyl("Lamp", "y", 0.06, 0.06, 0.02, (0, -0.065, 0.9), 1, 10)]
+        out.append(simple(G + "Signal_" + stt, P, [("black iron", "1A1A22", 0.5, 0.7), ("lamp %s (emissive)" % stt.lower(), hx, 0.15, 0.0, True)], [K.socket("Floor", (0, 0, 0)), K.socket("Light", (0, -0.08, 0.9))], "1 m ground signal lamp, %s" % stt.lower(), (0.2, 0.15, 1.03), (0, 0, 0.515)))
+    P = [K.cyl("Post", "z", 0.05, 0.05, 1.7, (0, 0, 0.85), 0, 8), K.cyl("Face", "y", 0.25, 0.25, 0.08, (0, 0, 1.9), 0, 16), K.cyl("Dial", "y", 0.22, 0.22, 0.005, (0, -0.043, 1.9), 1, 16), K.box("Hand", (0.02, 0.004, 0.18), (0, -0.048, 1.98), 2, bevel=False)]
+    out.append(simple(G + "ShiftClock", P, [("iron", "2A2A30", 0.5, 0.8), ("dial", "E8E4D8", 0.6), ("hand", "1A1A22", 0.5)], [K.socket("Floor", (0, 0, 0)), K.socket("HandPivot", (0, -0.05, 1.9)), K.socket("UI_Face", (0, -0.05, 1.9))], "2.15 m yard clock on a post, single hand (rotate about Y at HandPivot)", (0.5, 0.1, 2.15), (0, 0, 1.075)))
+    ym = npc("Mob_Shuntline_Yardmaster", "2A3A4A", "2A2A30", [K.cyl("HCap", "z", 0.14, 0.14, 0.06, (0, -0.01, 1.77), 4, 10)] + lantern("YLamp", (-0.37, -0.03, 0.6), 5, 4), [("cap", "1A2438", 0.8), ("lamp glass (emissive)", "FFB84A", 0.2, 0.0, True)], "yardmaster with cap and lamp")
+    out += [ym] + rig_npc(ym)
+    return out
+
+
+# ================================================================ spirit_boons (hephaestus, READY 62885; items 62869)
+SPIRITS = [("CinderWisp", "FF6A1A"), ("MereSprite", "3AB0C8"), ("Thornkin", "5AA03A"), ("SkyLarkSpirit", "A8C8E8"), ("HollowMoth", "8A7AA8"), ("GlassHeron", "D0E8F0"), ("LanternNewt", "FFB84A")]
+
+
+def moth(a, hx, glow, note, s=1.0):
+    P = [K.cyl("Body", "y", 0.05 * s, 0.03 * s, 0.3 * s, (0, 0, 0.3 * s), 0, 8), ball("Head", (0, -0.17 * s, 0.3 * s), 0.05 * s, 0, 8)]
+    P += [K.box("Wing%d%d" % (sd, k), (0.32 * s, 0.2 * s - 0.05 * k * s, 0.01 * s), (sd * 0.18 * s, 0.02 * s + 0.15 * k * s, 0.32 * s), 1, bevel=False, rot=(0, -sd * 10, sd * (10 + 15 * k))) for sd in (-1, 1) for k in range(2)]
+    P += [K.box("Antenna%d" % sd, (0.005 * s, 0.12 * s, 0.005 * s), (sd * 0.03 * s, -0.25 * s, 0.36 * s), 2, bevel=False, rot=(25, 0, sd * 20)) for sd in (-1, 1)]
+    return simple(a, P, [("moth body", "3A3448", 0.8), ("wings" + (" (emissive)" if glow else ""), hx, 0.6, 0.0, glow), ("antennae", "1A1A22", 0.6)], [K.socket("Perch", (0, 0, 0.25 * s)), K.socket("Head", (0, -0.2 * s, 0.32 * s))],
+                  "%.1f m %s" % (0.7 * s, note), (0.7 * s, 0.45 * s, 0.4 * s), (0, 0, 0.3 * s))
+
+
+@game("spirit_boons")
+def spirit_boons():
+    G = "Prop_SpiritBoons_"; out = []
+    for nm, hx in SPIRITS:
+        for lv in (1, 2):
+            P = [K.cyl("Disc", "y", 0.035, 0.035, 0.008, (0, 0, 0.04), 0, 14), K.cyl("Loop", "y", 0.008, 0.008, 0.004, (0, 0, 0.08), 1, 8)] + [crystal("Gem%d" % k, (-0.012 * (lv - 1) + 0.024 * k, -0.006, 0.03), 0.025, 2) for k in range(lv)]
+            out.append(simple(G + "Charm_%s_L%d" % (nm, lv), P, [("charm " + nm, hx, 0.35, 0.6), ("silver loop", "D0D4DC", 0.25, 1.0), ("boon gem (emissive)", hx, 0.15, 0.0, True)], [K.socket("Hang", (0, 0, 0.085)), K.socket("Icon", (0, -0.006, 0.04))],
+                              "70 mm boon charm, %s, level %d" % (nm, lv), (0.07, 0.012, 0.09), (0, 0, 0.045)))
+    out.append(ui_panel(G + "BoonBadge", 0.18, 0.12, "cabinet boon badge (active boon + delta)", "2A2440", "B08A4A"))
+    out.append(ui_panel(G + "PendingAckTag", 0.14, 0.06, "boon pending owner ACK", "C8A040", "3A3A40"))
+    out.append(ui_panel(G + "MothChallengeCard", 0.3, 0.42, "Hollow Moth challenge: cabinet, mark, perfect-run flag", "1E1A2A", "6A5A8A"))
+    out.append(ui_panel(G + "MothTryCounter", 0.2, 0.1, "moth tries left (3)", "1E1A2A", "6A5A8A"))
+    out.append(moth("Creature_SpiritBoons_HollowMoth_Rival", "6A5A7A", False, "Hollow Moth rival (secret, after 3 Heartglass seals)", 1.4))
+    out[-1]["kind"] = "Creature"
+    out.append(moth("Creature_SpiritBoons_HollowMoth_Freed", "C8B8FF", True, "freed Hollow Moth (joins the boon tally)", 0.8))
+    out[-1]["kind"] = "Creature"
+    R = K.rng(SEED, "mothfx"); P = [K.box("Dust%d" % k, (0.03, 0.03, 0.003), (R.uniform(-0.3, 0.3), R.uniform(-0.1, 0.1), R.uniform(0, 0.8)), 0, bevel=False, rot=(R.uniform(0, 90), R.uniform(0, 90), 0)) for k in range(14)]
+    out.append(simple(G + "MothFlightFX", P, [("moth dust (emissive, additive)", "C8B8FF", 0.1, 0.0, True)], [K.socket("Origin", (0, 0, 0))], "VFX placeholder: moth-dust trail (FLEW_OFF)", (0.65, 0.22, 0.83), (0, 0, 0.4)))
+    out[-1]["off_centre_ok"] = "VFX placeholder"
+    return out
+
+
+# ================================================================ replay_notary (disk-saver G608, READY 64064; Items RN01-RN12)
+@game("replay_notary")
+def replay_notary():
+    G = "Prop_ReplayNotary_"; out = []
+    top = [K.box("MarqLedger", (0.24, 0.12, 0.05), (-0.12, -0.12, 2.07), 5), K.cyl("MarqSeal", "y", 0.05, 0.05, 0.02, (0.18, -0.18, 1.93), 6, 12)]
+    out.append(cabinet("Prop_Arcade_Cab_ReplayNotary", "3A2A22", "B08A4A", "FFD08A", top, [("ledger leather", "5A2A1A", 0.8), ("green wax", "2A7A3A", 0.5)], "RN01: ledger-and-seal marquee, customs house"))
+    P = [K.box("Top", (1.8, 0.9, 0.06), (0, 0, 0.77), 0)] + [K.box("Pedestal%d" % s, (0.5, 0.8, 0.74), (s * 0.62, 0, 0.37), 0) for s in (-1, 1)] + [K.box("Drawer%d" % s, (0.4, 0.02, 0.15), (s * 0.62, -0.41, 0.6), 1) for s in (-1, 1)]
+    P += [K.cyl("Inkwell", "z", 0.035, 0.03, 0.05, (0.7, -0.25, 0.825), 2, 10), K.box("Blotter", (0.6, 0.4, 0.005), (0, -0.1, 0.8025), 3, bevel=False)]
+    out.append(simple(G + "Desk", P, [("heavy oak", "5A3A22", 0.75), ("brass pulls", "B08A4A", 0.35, 0.9), ("inkwell glass", "1A1A2A", 0.1), ("green blotter", "2A4A3A", 0.9)],
+                      [K.socket("Floor", (0, 0, 0)), K.socket("DrawerL", (0.62, -0.42, 0.6)), K.socket("DrawerR", (-0.62, -0.42, 0.6)), K.socket("Inkwell", (0.7, -0.25, 0.85)), K.socket("Ledger", (0, -0.1, 0.805)), K.socket("Sitter", (0, 0.8, 0))], "RN02: 1.8 x 0.9 x 0.8 m notary desk (Sabine)", (1.8, 0.9, 0.85), (0, 0, 0.425)))
+    P = [K.cyl("Head", "z", 0.025, 0.025, 0.02, (0, 0, 0.01), 0, 12), K.cyl("Neck", "z", 0.01, 0.014, 0.04, (0, 0, 0.04), 1, 8), K.lathe("Handle", [(0, 0), (0.012, 0), (0.02, 0.04), (0.016, 0.06), (0, 0.065)], (0, 0, 0.06), 2, 10)]
+    out.append(simple(G + "SealStamp", P, [("green wax seal head", "2A7A3A", 0.5), ("brass", "B08A4A", 0.35, 0.9), ("turned wood handle", "5A3A22", 0.7)], [K.socket("Face", (0, 0, 0)), K.socket("Grip", (0, 0, 0.1))], "RN03: 12.5 cm brass wax seal stamp, green-wax head", (0.05, 0.05, 0.125), (0, 0, 0.0625)))
+    P = [K.lathe("Pot", [(0, 0), (0.05, 0), (0.05, 0.05), (0.045, 0.05), (0.04, 0.02), (0, 0.02)], (0, 0, 0), 0, 12), K.cyl("Candle", "z", 0.015, 0.015, 0.03, (0, 0, 0.015), 1, 8), K.lathe("Flame", [(0, 0), (0.008, 0.01), (0, 0.03)], (0, 0, 0.03), 3, 6),
+         K.cyl("WaxStick", "x", 0.008, 0.008, 0.12, (0.1, 0, 0.008), 2, 8)]
+    out.append(simple(G + "WaxMeltSet", P, [("melt pot iron", "2A2A30", 0.5, 0.8), ("candle", "E8E0C8", 0.7), ("green sealing wax", "2A7A3A", 0.5), ("flame (emissive, FX placeholder)", "FFB84A", 0.2, 0.0, True)],
+                      [K.socket("Floor", (0, 0, 0)), K.socket("Flame", (0, 0, 0.045)), K.socket("Melt", (0, 0, 0.05))], "RN04: 10 cm candle melt pot + green wax stick", (0.22, 0.1, 0.06), (0.06, 0, 0.03)))
+    out[-1]["off_centre_ok"] = "wax stick lies beside the pot"
+    out.append(tick_board(G + "LeaderboardSlate", 1, 8, "RN05: Tidewatch Cup notarised scores (runtime UI)", 2.0, 1.2))
+    for st in ("Rolled", "Open"):
+        P = ([K.cyl("Roll", "x", 0.02, 0.02, 0.3, (0, 0, 0.02), 0, 10), K.box("Ribbon", (0.02, 0.045, 0.045), (0, 0, 0.02), 1, bevel=False)] if st == "Rolled" else
+             [K.box("Sheet", (0.3, 0.22, 0.003), (0, 0, 0.0015), 0, bevel=False)] + [K.cyl("End%d" % s, "x", 0.015, 0.015, 0.3, (0, s * 0.11, 0.015), 0, 8) for s in (-1, 1)] + [K.box("Line", (0.24, 0.01, 0.001), (0, 0, 0.0035), 2, bevel=False)])
+        out.append(simple(G + "EntryScroll_" + st, P, [("paper", "E8DCC0", 0.9), ("red ribbon", "8A2A2A", 0.8), ("entry line (runtime text)", "2A2A2A", 0.9)], [K.socket("Base", (0, 0, 0)), K.socket("Grip", (0, 0, 0.02))],
+                          "RN06: 30 cm entry scroll, %s (pooled ~10)" % st.lower(), (0.3, 0.25 if st == "Open" else 0.045, 0.045 if st == "Rolled" else 0.03), (0, 0, 0.02)))
+    for rn, st, hx, extra in (("RN07", "Ok", "2A7A3A", []), ("RN08", "Forged", "A82A2A", [K.box("Crack%d" % k, (0.035, 0.002, 0.002), (0, 0, 0.0085), 1, bevel=False, rot=(0, 0, 60 * k)) for k in range(3)]),
+                               ("RN09", "Refused", "8A8A8A", [K.box("RibbonTail%d" % s, (0.012, 0.05, 0.001), (s * 0.01, 0.035, 0.002), 1, bevel=False, rot=(0, 0, s * 15)) for s in (-1, 1)])):
+        P = [K.lathe("Seal", [(0, 0), (0.02, 0), (0.022, 0.004), (0.018, 0.008), (0, 0.008)], (0, 0, 0), 0, 14), K.box("Mark", (0.015, 0.015, 0.001), (0, 0, 0.0085), 1, bevel=False, rot=(0, 0, 45))] + extra
+        out.append(simple(G + "VerdictSeal_" + st, P, [("%s wax" % st.lower(), hx, 0.5), ("relief" + (" / refusal ribbon" if st == "Refused" else " / cracks" if st == "Forged" else ""), "1A1A1A" if st != "Refused" else "C8C8C8", 0.6)], [K.socket("Base", (0, 0, 0))],
+                          "%s: 4.4 cm verdict seal, %s" % (rn, st.upper()), (0.044, 0.044, 0.009), (0, 0, 0.0045)))
+    for st in ("Closed", "Open"):
+        if st == "Closed": P = [K.box("Cover", (0.3, 0.4, 0.08), (0, 0, 0.04), 0), K.box("Pages", (0.28, 0.38, 0.065), (0.008, 0, 0.04), 1, bevel=False), K.box("Spine", (0.03, 0.4, 0.085), (-0.15, 0, 0.0425), 0)]
+        else: P = [K.box("CoverL", (0.3, 0.4, 0.01), (-0.15, 0, 0.005), 0, rot=(0, 4, 0)), K.box("CoverR", (0.3, 0.4, 0.01), (0.15, 0, 0.005), 0, rot=(0, -4, 0)), K.box("PagesL", (0.28, 0.38, 0.03), (-0.145, 0, 0.025), 1, bevel=False, rot=(0, 4, 0)), K.box("PagesR", (0.28, 0.38, 0.03), (0.145, 0, 0.025), 1, bevel=False, rot=(0, -4, 0))]
+        out.append(simple(G + "Ledger_" + st, P, [("ledger leather", "5A2A1A", 0.8), ("pages (runtime entries)", "E8DCC0", 0.9)], [K.socket("Base", (0, 0, 0)), K.socket("Page", (0, 0, 0.08 if st == "Closed" else 0.045))],
+                          "RN10: 40 x 30 x 8 cm tournament ledger, %s" % st.lower(), (0.6 if st == "Open" else 0.31, 0.4, 0.085 if st == "Closed" else 0.05), (0, 0, 0.04)))
+    P = [K.box("Post", (0.12, 0.12, 0.8), (0, 0.05, 0.4), 0), K.box("Box", (0.4, 0.3, 0.4), (0, 0, 1.0), 1), K.box("Cap", (0.44, 0.34, 0.04), (0, 0, 1.22), 1), K.box("Slot", (0.22, 0.01, 0.025), (0, -0.152, 1.08), 2, bevel=False)]
+    out.append(simple(G + "EntryPostBox", P, [("iron post", "2A2A30", 0.5, 0.8), ("brass box", "B08A4A", 0.35, 0.9), ("slot glow (emissive on arrival)", "FFD08A", 0.2, 0.0, True)], [K.socket("Floor", (0, 0, 0)), K.socket("Slot", (0, -0.16, 1.08))], "RN11: 0.4 x 0.3 x 1.24 m brass entry post box, slot glows when a scroll arrives", (0.44, 0.34, 1.24), (0, 0, 0.62)))
+    sb = npc("Mob_ReplayNotary_Sabine", "2A3A2A", "3A2A22", [K.box("SLedger", (0.04, 0.3, 0.4), (0.39, -0.02, 0.95), 4), K.cyl("SStamp", "z", 0.02, 0.02, 0.1, (-0.37, -0.03, 0.82), 5, 8)], [("ledger leather", "5A2A1A", 0.8), ("brass stamp", "B08A4A", 0.35, 0.9)], "RN12: Notary Sabine, ledger keeper, quest giver q_replay_notary")
+    out += [sb] + rig_npc(sb)
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)
