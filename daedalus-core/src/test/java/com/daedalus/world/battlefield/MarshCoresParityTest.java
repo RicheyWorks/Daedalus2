@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 /**
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
  * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan), G591 (G504 ReedCeiling), G593 (G507
- * ReedRelease) and G610 (G188 HawkDove); later ecology ports add a method here. Each
- * engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
+ * ReedRelease), G610 (G188 HawkDove) and G611 (G183 Metapopulation); later ecology ports add a method here.
+ * Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
  * replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
  * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
  */
@@ -312,6 +312,48 @@ class MarshCoresParityTest {
     @Test
     void craneSpreadMatchesCpp() throws IOException {
         check("marsh_crane_spread_parity.txt", "G200 CraneSpread", MarshCoresParityTest::craneSpread);
+    }
+
+    static List<String> metapopulation() {
+        double[][] tunings = {{100, 0.5, 0.1, 200, 80}, {60, 0.3, 0.2, 120, 30}, {40, 1.2, 0.05, 90, 5},
+            {80, 0.15, 0.2, 100, 60}, {50, 0.0, 0.3, 40, 50}, {30, 2.0, 1.0, 30, 30}, {2, 0.8, 0.1, 25, 1},
+            {120, 0.6, 0.12, 1, 60}};
+        int[][] plans = {{}, {10, 20}, {5, 10, 30, 15}};
+        List<String> out = new ArrayList<>();
+        long seed = 1;
+        for (double[] t : tunings) {
+            Metapopulation.Settings s = new Metapopulation.Settings((int) t[0], t[1], t[2], (int) t[3], (int) t[4]);
+            for (int[] plan : plans) {
+                Metapopulation v = Metapopulation.valley(s, seed);
+                StringBuilder p = new StringBuilder();
+                for (int k = 0; k + 1 < plan.length; k += 2) {
+                    boolean ok = v.plough(plan[k], plan[k + 1]);
+                    p.append(p.length() == 0 ? "" : ",").append(plan[k]).append(':').append(plan[k + 1]).append(':')
+                            .append(ok ? 1 : 0);
+                }
+                Metapopulation.Report r = v.run();
+                long sum = 0;
+                for (Metapopulation.Year y : r.years()) {
+                    sum += (long) y.occupied() * (y.index() + 1);
+                }
+                Metapopulation.Year last = r.years().get(r.years().size() - 1);
+                Metapopulation.Year mid = r.years().get(r.years().size() / 2);
+                out.add("patches=" + s.patches() + " colonize=" + s.colonize() + " extinction=" + s.extinction()
+                        + " years=" + s.years() + " start=" + s.start() + " seed=" + seed + " plough="
+                        + (p.length() == 0 ? "-" : p) + " eq20=" + v.equilibrium(0.2) + " threshold="
+                        + v.ploughThreshold() + " outcome=" + r.outcome() + " occupancy=" + r.occupancy() + " late="
+                        + r.lateMean() + " band=" + r.band() + " first=" + r.years().get(0).occupied() + " midIndex="
+                        + mid.index() + " mid=" + mid.occupied() + " last=" + last.occupied() + " ploughed="
+                        + last.ploughed() + " weighted=" + sum);
+                seed++;
+            }
+        }
+        return out;
+    }
+
+    @Test
+    void metapopulationMatchesCpp() throws IOException {
+        check("marsh_metapopulation_parity.txt", "G183 Metapopulation", MarshCoresParityTest::metapopulation);
     }
 
     static List<String> hawkDove() {

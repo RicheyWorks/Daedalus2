@@ -66,3 +66,17 @@ Every roll is a splitmix hash of (seed, year, patch). `Settings.DEFAULT = (100, 
   (too few to replace themselves) and ISLES01 (arrival against extinction), here across patches instead of islands.
 - Assets: `Mob_Ember_Fritillary` (butterfly, Idle/Flutter, instanced over a patch), `Prop_Field_Furrows` (ploughed
   patch decal/mesh), and reuse of the regrowth meadow and BEE01 bramble kit (see UNREAL-QUEUE / BLENDER-ASKS).
+
+## Native C++ core (G611)
+
+`engines/unreal/DaedalusLink/Source/DaedalusLink/Public/DaedalusMarshMetapopulationCore.h` (namespace
+`daedalus::marsh`) is a header-only C++17 port of this core: `Metapopulation::Plough`, `Equilibrium`,
+`PloughThreshold` and the seeded `Run` (occupied and ploughed patches per year, late-years mean, outcome,
+MEADOW/SCRUB band), plus `MetapopulationSettings::Valid`. It uses the standard library only (no Unreal headers). The
+Java class stays the rules authority. `MarshCoresParityTest.metapopulation` writes 24 golden vectors (8 tunings x 3
+plough plans) to `engines/unreal/core-test/marsh_metapopulation_parity.txt`, and `marsh_metapopulation_core_test.cpp`
+replays them: plough results and patch counts exactly, and the late mean to 1e-12. Each case also carries a
+year-weighted checksum of every year's count. The only libm call is `pow` in the colonisation chance, so at least
+22 of 24 runs must replay exactly (24 of 24 do with g++/glibc). CI runs this in `.github/workflows/marsh-cores.yml`.
+See [NATIVE-PORT-PATTERN.md](NATIVE-PORT-PATTERN.md). No Fair Par cabinet reads this core, so the par guard is
+unchanged.
