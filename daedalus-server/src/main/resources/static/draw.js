@@ -171,8 +171,12 @@
           g.fillStyle = halfMix(sideInk, fade);
           g.fillRect(sx, y + 4, 1, 1);
           if (span > 3) {
-            g.fillStyle = sideInk;
-            g.fillRect(sx, y + 5, 1, span - 3);
+            g.fillStyle = halfMix(sideInk, halfMix(fade, wallInk));
+            g.fillRect(sx, y + 5, 1, 1);
+            if (span > 4) {
+              g.fillStyle = sideInk;
+              g.fillRect(sx, y + 6, 1, span - 4);
+            }
           }
         } else {
           g.fillStyle = sideInk;
