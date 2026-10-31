@@ -17,7 +17,8 @@ import org.junit.jupiter.api.Test;
 /**
  * Java = C++ golden vectors for the marsh-lane ecology cores: G570 (port of G202 DroughtOdds), G583 (G200
  * CraneSpread), G585 (G194 CraneCohorts), G589 (G251 TranslocationPlan), G591 (G504 ReedCeiling), G593 (G507
- * ReedRelease), G610 (G188 HawkDove) and G611 (G183 Metapopulation); later ecology ports add a method here.
+ * ReedRelease), G610 (G188 HawkDove), G611 (G183 Metapopulation) and G612 (G176 ShoalHarvest); later ecology ports
+ * add a method here.
  * Each engines/unreal/core-test/marsh_*_parity.txt is written from this class (run with -Dmarsh.parity.write=true) and
  * replayed by the matching marsh_*_core_test.cpp against its DaedalusMarsh*Core.h. Doubles are printed with
  * Double.toString (shortest round-trip form), so C++ can compare them with a tolerance.
@@ -354,6 +355,45 @@ class MarshCoresParityTest {
     @Test
     void metapopulationMatchesCpp() throws IOException {
         check("marsh_metapopulation_parity.txt", "G183 Metapopulation", MarshCoresParityTest::metapopulation);
+    }
+
+    static List<String> shoalHarvest() {
+        double[][] tunings = {{1000, 0.6, 0.5, 50, 0.05}, {1000, 0.6, 0.0, 50, 0.05}, {500, 0.3, 0.2, 80, 0.1},
+            {2000, 1.0, 0.9, 40, 0.0}, {800, 0.8, 0.3, 60, 0.2}, {1, 0.05, 0.1, 30, 0.05}, {300, 0.45, 0.6, 1, 0.05},
+            {1200, 0.9, 0.4, 100, 0.08}};
+        List<String> out = new ArrayList<>();
+        long seed = 1;
+        for (double[] t : tunings) {
+            ShoalHarvest.Settings s = new ShoalHarvest.Settings(t[0], t[1], t[2], (int) t[3], t[4]);
+            ShoalHarvest h = ShoalHarvest.shoal(s, seed);
+            Object[][] plays = {{ShoalHarvest.Rule.QUOTA, h.msy()}, {ShoalHarvest.Rule.EFFORT, h.msyEffort()},
+                {ShoalHarvest.Rule.QUOTA, h.msy() / 2}, {ShoalHarvest.Rule.EFFORT, 1.0}};
+            for (Object[] p : plays) {
+                ShoalHarvest.Rule rule = (ShoalHarvest.Rule) p[0];
+                double level = (double) p[1];
+                ShoalHarvest.Report r = ShoalHarvest.shoal(s, seed).run(rule, level);
+                double weighted = 0;
+                for (ShoalHarvest.Year y : r.years()) {
+                    weighted += (y.shoal() + y.catchTonnes()) * (y.index() + 1);
+                }
+                ShoalHarvest.Year mid = r.years().get(r.years().size() / 2);
+                ShoalHarvest.Year last = r.years().get(r.years().size() - 1);
+                out.add("capacity=" + s.capacity() + " growth=" + s.growth() + " noise=" + s.noise() + " years="
+                        + s.years() + " collapse=" + s.collapse() + " seed=" + seed + " rule=" + rule + " level="
+                        + level + " msy=" + h.msy() + " msyEffort=" + h.msyEffort() + " outcome=" + r.outcome()
+                        + " shoal=" + r.shoal() + " total=" + r.total() + " mean=" + r.meanCatch() + " band="
+                        + r.band() + " b0=" + r.years().get(0).shoal() + " c0=" + r.years().get(0).catchTonnes()
+                        + " midIndex=" + mid.index() + " bm=" + mid.shoal() + " cm=" + mid.catchTonnes() + " bl="
+                        + last.shoal() + " cl=" + last.catchTonnes() + " weighted=" + weighted);
+            }
+            seed++;
+        }
+        return out;
+    }
+
+    @Test
+    void shoalHarvestMatchesCpp() throws IOException {
+        check("marsh_shoal_harvest_parity.txt", "G176 ShoalHarvest", MarshCoresParityTest::shoalHarvest);
     }
 
     static List<String> hawkDove() {
