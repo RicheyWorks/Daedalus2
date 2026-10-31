@@ -1,0 +1,24 @@
+{
+  "schema": "daedalus.sky-farm-greenhouse.recipe.v1",
+  "asset_id": "Bld_SkyFarm_GreenhouseBay_R1",
+  "revision": 1,
+  "units": "metres",
+  "width": 6.0,
+  "length": 8.0,
+  "eave_height": 2.7,
+  "ridge_height": 3.7,
+  "aisle_width": 1.4,
+  "bed_width": 1.6,
+  "bed_length": 6.2,
+  "bed_height": 0.48,
+  "path_apron": 1.0,
+  "plants_per_bed": 12,
+  "world_binding": null,
+  "catalogue_reference": {
+    "asset": "Bld_Orr_Greenhouse_Day",
+    "bytes": 13572,
+    "sha256": "181518bc4f0342da24d640e991158dc68f27c13e4310a8338f0cfc4cda46b30d",
+    "reuse_decision": "Existing full 9.244m-high opaque/emissive building preserved; this separate low open-ended modular growing bay supplies explicit aisle clearance. No existing geometry replaced."
+  },
+  "render": {"width": 1100, "height": 825, "samples": 24, "threads": 2}
+}
