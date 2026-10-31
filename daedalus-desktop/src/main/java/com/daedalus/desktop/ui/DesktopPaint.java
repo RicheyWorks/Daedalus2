@@ -2665,6 +2665,14 @@ public final class DesktopPaint {
         return mixHex(wallFootInk(wall, floor), wallHiTailInk(shine, wall), 0.5);
     }
 
+    /** Open side of the row under the tail — a quarter toward that tail. */
+    public static String wallSideRestInk(String wall, String floor, String shine) {
+        if (wall == null || floor == null || shine == null) {
+            return wallFootInk(wall, floor);
+        }
+        return mixHex(wallFootInk(wall, floor), wallHiRestInk(shine, wall), 0.5);
+    }
+
     /** Row under the post shine — half the catch, half the wall, same as the vault lip. */
     public static Hairline wallHiFeather(Hairline shine) {
         if (shine == null) {
