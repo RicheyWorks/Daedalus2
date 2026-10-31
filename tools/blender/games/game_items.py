@@ -1395,6 +1395,26 @@ def replay_notary():
     return out
 
 
+# ================================================================ siltlane (cursor, READY 63685; list 63704 / 'Blender items')
+@game("siltlane")
+def siltlane():
+    G = "Prop_Siltlane_"; out = []
+    top = [rock("MarqStone%d" % k, (-0.2 + 0.2 * k, -0.18, 1.93), 0.05, 5, k) for k in range(3)] + [K.box("MarqLane%d" % k, (0.012, 0.02, 0.2), (-0.1 + 0.2 * k, -0.17, 1.93), 6, bevel=False) for k in range(2)]
+    out.append(cabinet("Prop_Arcade_Cab_Siltlane", "2A3A44", "8AA8B0", "6AE8E8", top, [("silt tan", "C8A878", 0.9), ("lane posts", "4A3A2A", 0.8)], "silt course cabinet, Spawn overlook beside the dock"))
+    P = [rock("Stone", (0, 0, 0.13), 0.15, 0, 3), rock("Cap", (0.03, -0.02, 0.22), 0.06, 1, 5)]
+    out.append(simple(G + "SiltStone", P, [("tan silt stone", "C8A878", 0.95), ("damp silt", "9A7A58", 0.9)], [K.socket("Base", (0, 0, 0)), K.socket("Top", (0, 0, 0.27))], "0.3 m rounded tan silt stone", (0.3, 0.3, 0.27), (0, 0, 0.135)))
+    for n in (2, 3):
+        P = []
+        for k in range(n + 1):
+            x = (k - n / 2) * 0.8
+            P += [K.cyl("Post%d" % k, "z", 0.05, 0.045, 0.6, (x, 0, 0.3), 0, 8), K.box("Band%d" % k, (0.11, 0.11, 0.05), (x, 0, 0.5), 1)]
+        S = [K.socket("Floor", (0, 0, 0))] + [K.socket("Lane_%d" % k, ((k + 0.5 - n / 2) * 0.8, 0, 0)) for k in range(n)]
+        out.append(simple(G + "LanePosts_%dLane" % n, P, [("weathered post", "4A3A2A", 0.85), ("cyan lane band", "6AE8E8", 0.4)], S, "%d-lane marker posts (0.8 m lanes, %d posts, Lane_ sockets at lane centres)" % (n, n + 1), (0.8 * n + 0.1, 0.1, 0.6), (0, 0, 0.3)))
+    kp = npc("Mob_Siltlane_OverlookKeeper", "5A6A7A", "3A3A40", [K.cyl("KStaff", "z", 0.015, 0.015, 1.2, (-0.37, -0.03, 0.7), 4, 6)], [("staff", WOOD, 0.8)], "overlook keeper, points at the lanes (rules unchanged)")
+    out += [kp] + rig_npc(kp)
+    return out
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--game", required=True); ap.add_argument("--kit", required=True); o = ap.parse_args()
     M_ = GAMES[o.game](); os.makedirs(os.path.dirname(os.path.abspath(o.kit)), exist_ok=True); K.write(M_, o.kit)
