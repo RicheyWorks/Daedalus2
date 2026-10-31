@@ -67,3 +67,7 @@ Notes
 ## hofstadter_hammers (hephaestus, READY 60513; Items sheet)
 
 11 assets: Forge Cabinet slot 36 (anvil marquee, slot plate), slot 36 screen card, the Q hammer (brass) and the Conway hammer (blued twin-face), strike readout and score/streak UI backing panels (runtime UI over SOCKET_UI_Face), and Mob_Forge_Forgemaster static plus on the shared Prism segment rig (also used by crafting_rewards). Sheet: hofstadter_hammers.png.
+
+## sluicegate (unreal-team, READY 61066/61067; 'Blender items' sheet)
+
+18 assets: cabinet with sluice-wheel marquee and water-channel side art, 2.2 m headgate open and closed, 1 m oak board stacked and dropped, sunken 1 x 1 m cistern dry and full (teal), 2.65 m undershot mill wheel idle and turning (spin about X at SOCKET_Axle), earth channel tiles straight, corner, tee and dead end (3 x 3 grid, water slot for runtime wet/next), and the Gatekeeper with crook and board stack, static plus on the shared Prism segment rig. Sheet: sluicegate.png. (game_items.py in this commit also carries the roostcall and crafting_rewards recipes; their kits land in their own PRs.)
