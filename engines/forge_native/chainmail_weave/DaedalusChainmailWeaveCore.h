@@ -24,8 +24,48 @@ inline constexpr int kN = 7;
 inline constexpr int kCells = kN * kN;
 inline constexpr int kRustDraws = 9;
 inline constexpr int kMaxRolls = 20;
-inline constexpr int kSlack = 3;
+inline constexpr int kSlack = 3;  // normal
+
 inline constexpr int kInf = 1000000;
+
+/** Difficulty; stable values. Only the link budget changes: the grid and the rust stream are the same. */
+enum class Difficulty : std::uint8_t { Easy = 0, Normal = 1, Hard = 2 };
+
+/** Budget slack per difficulty: easy 4, normal 3, hard 2. */
+constexpr int SlackFor(Difficulty d) { return d == Difficulty::Easy ? 4 : d == Difficulty::Hard ? 2 : kSlack; }
+
+constexpr const char* DifficultyName(Difficulty d) {
+    switch (d) {
+        case Difficulty::Easy:
+            return "easy";
+        case Difficulty::Normal:
+            return "normal";
+        case Difficulty::Hard:
+            return "hard";
+    }
+    return "unknown";
+}
+
+/** Parse "easy" / "normal" / "hard" into *out; false (out untouched) for anything else or a null pointer. */
+constexpr bool ParseDifficulty(const char* text, Difficulty* out) {
+    if (text == nullptr || out == nullptr) {
+        return false;
+    }
+    for (int k = 0; k < 3; ++k) {
+        const Difficulty d = static_cast<Difficulty>(k);
+        const char* a = DifficultyName(d);
+        const char* b = text;
+        while (*a != '\0' && *a == *b) {
+            ++a;
+            ++b;
+        }
+        if (*a == '\0' && *b == '\0') {
+            *out = d;
+            return true;
+        }
+    }
+    return false;
+}
 
 enum Ring : std::uint8_t { kEmpty = 0, kRust = 1, kLink = 2 };
 
@@ -223,7 +263,8 @@ constexpr int PathCells(const Grid& g, int (&out)[kCells]) {
 /** One round. Copyable; carries its own PyRandom stream. */
 class Game {
 public:
-    explicit Game(const std::string& seed) : rng_(std::string("chainmail|") + seed) {
+    explicit Game(const std::string& seed, Difficulty difficulty = Difficulty::Normal)
+        : rng_(std::string("chainmail|") + seed), difficulty_(difficulty) {
         bool found = false;
         for (int roll = 0; roll < kMaxRolls && !found; ++roll) {
             Grid g{};
@@ -238,7 +279,7 @@ public:
         if (!found) {
             grid_ = Grid{};
         }
-        budget_ = Crossing(grid_) + kSlack;
+        budget_ = Crossing(grid_) + SlackFor(difficulty_);
     }
 
     Status Place(int cell) {
@@ -285,10 +326,12 @@ public:
     int Placed() const { return placed_; }
     State GetState() const { return state_; }
     LossReason Reason() const { return reason_; }
+    Difficulty GetDifficulty() const { return difficulty_; }
     const Grid& GetGrid() const { return grid_; }
 
 private:
     daedalus::pyrandom::PyRandom rng_;
+    Difficulty difficulty_ = Difficulty::Normal;
     Grid grid_{};
     int budget_ = 0;
     int placed_ = 0;
@@ -323,6 +366,8 @@ constexpr bool HintTakesChokepoint() {
 }
 }  // namespace detail
 
+static_assert(SlackFor(Difficulty::Easy) == 4 && SlackFor(Difficulty::Normal) == 3 && SlackFor(Difficulty::Hard) == 2,
+              "easy gets the most slack");
 static_assert(detail::HintTakesChokepoint(), "the hint links the chokepoint first");
 static_assert(detail::EmptyGridCosts(), "an empty grid needs one full row of links");
 static_assert(detail::RustWallBlocks(), "a full rust column blocks every crossing");
