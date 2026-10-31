@@ -162,6 +162,25 @@ class Rules(unittest.TestCase):
 
 
 
+class Screen(unittest.TestCase):
+    """Iterations 7 and 9: tutorial rows on the first push only; + marks exactly the next push."""
+    def test_tutorial_only_on_the_first_push(self):
+        g = gm.start(2)
+        self.assertIn("FLOW   the headgate", g.render())
+        g.step("wait")
+        self.assertNotIn("FLOW   the headgate", g.render())
+
+    def test_plus_marks_the_next_push(self):
+        g = gm.start(4, "easy")
+        while not g.over:
+            upcoming = g.preview("wait")[1]
+            grid = g.render().split("\n")[1:1 + g.size()]
+            marked = [[r, c] for r in range(g.size()) for c in range(g.size()) if grid[r][c] == "+"]
+            expected = [cell for cell in upcoming if cell not in g.cisterns and cell != g.mill]
+            self.assertEqual(sorted(marked), sorted(expected))
+            g.step(g.demo_action())
+
+
 class Saves(unittest.TestCase):
     """Iteration 5: from_state refuses saves that break the rules."""
     def bad(self, **fields):

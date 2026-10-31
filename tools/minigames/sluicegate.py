@@ -275,6 +275,15 @@ class Game(pc.PrismGame):
             self.wet, self.turns = saved
         return won, flooded, filled, self.turns - turns
 
+    def tutorial(self):
+        """First-push teaching rows for the screen (iteration 7)."""
+        return ["FLOW   the headgate pushes %d cells a turn into the nearest open channels (+ marks the next push)" % self.cfg["flow"],
+                "GATE   r,c drops a gate (|) on a dry channel to block a branch; wait lets the water run",
+                "GOAL   fill every cistern (c -> C) before the headgate closes; keep the water off the mill (M)"]
+
+    def fresh(self):
+        return self.turns == self.cfg["turns"] and not self.over
+
     def demo_action(self):
         """Gatekeeper: try every gate (and waiting) with a no-more-gates rollout; keep the one that ends best.
 
@@ -300,6 +309,7 @@ class Game(pc.PrismGame):
 
     def render(self):
         s = self.size()
+        upcoming = [] if self.over else self.preview("wait")[1]   # the next push, marked + (iteration 9)
         rows = []
         for r in range(s):
             row = ""
@@ -315,12 +325,16 @@ class Game(pc.PrismGame):
                     row += "H"
                 elif cell in self.wet:
                     row += "~"
+                elif cell in upcoming:
+                    row += "+"
                 elif self.field[r][c] == CHANNEL:
                     row += "."
                 else:
                     row += "#"
             rows.append(row)
         lines = [f"{TITLE} [{self.difficulty}] turns {self.turns} gates {self.gates_left} filled {self.filled}/{len(self.cisterns)} score {self.score}"] + rows
+        if self.fresh():
+            lines += self.tutorial()
         if self.over:
             lines.append("WON: every cistern brims" if self.won else "LOST: " + ("the mill wheel floods" if self.mill is not None and self.mill in self.wet else "the water never came"))
         return "\n".join(lines)
