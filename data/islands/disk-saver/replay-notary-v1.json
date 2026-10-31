@@ -1,0 +1,15 @@
+{
+  "v": 1,
+  "quest": "q_replay_notary",
+  "lore": "Notary Sabine keeps the tournament ledger in the harbour customs house. No score goes on her board until she has laid the course from its seed and replayed the card or crane order herself, and she seals each one with green wax.",
+  "hook": {"core": "DaedalusDiskSaverReplayNotaryCore.h", "field": "status", "values": ["ok", "forged", "refused", "bad"],
+           "entry": "notary1|game|seed|plan|claim", "games": ["gantry-calm", "gantry-rush", "gantry-spread", "gantry-storm", "berths", "golf"],
+           "replays": ["DaedalusDiskSaverGantrySweepCore.h", "DaedalusDiskSaverBuddyBerthsCore.h", "DaedalusDiskSaverTidelinksGolfCore.h"],
+           "leaderboard": "a score is shown only for ok; forged shows the replayed score beside the claim",
+           "bad": ["long", "fields", "version", "game", "seed", "claim", "plan"]},
+  "npc": {"name": "Notary Sabine", "lines": {
+    "ok": "Replayed and sealed. That score is yours, and anyone may replay it to check.",
+    "forged": "The card is real, but it does not score what you wrote. I have entered what it scores.",
+    "refused": "The course itself refuses this card. I have written down its reason; read it and play again.",
+    "bad": "I cannot even read this entry. Write it out again in the ledger's own form."}}
+}
