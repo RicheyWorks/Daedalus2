@@ -137,6 +137,10 @@
     "stonecourse": {
       "realm": "prismheart_realm",
       "spot": "Prismheart, the wall yard"
+    },
+    "shuntline": {
+      "realm": "prismheart_realm",
+      "spot": "Prismheart, the shunting yard"
     }
   }
 }

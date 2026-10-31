@@ -42,6 +42,7 @@ batched rebuild under the editor custodian.
 | `spiritkite` | Spiritkite Weave | 1 |
 | `shardscale` | Shardscale | 1 |
 | `stonecourse` | Stonecourse | 1 |
+| `shuntline` | Shuntline | 1 |
 
 ## How to play
 
@@ -83,6 +84,7 @@ One original line per game, read from `HowToLine()`.
 | `spiritkite` | HOW Fly the kite along wind lanes between sky isles to gather lanterns, then land on the anchor isle before the wind runs out. |
 | `shardscale` | HOW Set the next shard left or right, or hold it on the bench; set a held shard later. Never let the pans differ by more than the cap; end level within the tolerance. |
 | `stonecourse` | HOW Set the next stone at a column (it lands on the lowest course that supports it fully) or skip it. Lock every course with no gaps before the supply runs out. |
+| `shuntline` | HOW Right sends the front carriage to the outbound track; A shunts it onto the picked siding; B pulls that siding's top carriage out. The outbound order may never go down. Clear the inbound track within the moves. |
 
 ## Difficulty
 
@@ -124,6 +126,7 @@ Every cabinet defaults to normal. Easy and hard are the other accepted names. Th
 | `spiritkite` | normal |
 | `shardscale` | normal |
 | `stonecourse` | normal |
+| `shuntline` | normal |
 
 ## Daedalus spots
 
@@ -165,6 +168,7 @@ One home spot per cabinet, from `data/minigames/daedalus-spots.json`. The realm 
 | `spiritkite` | `prismheart_realm` | Prismheart, the kite anchor |
 | `shardscale` | `prismheart_realm` | Prismheart, the weigh-house |
 | `stonecourse` | `prismheart_realm` | Prismheart, the wall yard |
+| `shuntline` | `prismheart_realm` | Prismheart, the shunting yard |
 
 ## Capabilities
 
@@ -207,6 +211,7 @@ Read from each core's overrides, plus behavior proven by a portable test that de
 | `spiritkite` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `shardscale` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 | `stonecourse` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
+| `shuntline` | yes |  | yes | yes |  |  | yes | yes | yes | yes | yes | yes | yes | yes |
 
 ## Leaderboard feed
 
@@ -250,3 +255,4 @@ Pure-Python rules modules (stdlib, seeded). Difficulty: easy, normal (default), 
 | `sluicegate` | Sluicegate | `tools/minigames/sluicegate.py` | HOW Each turn the headgate pushes a few cells of water into the nearest open channels. Drop a gate (r,c) on a dry channel to block a branch, or wait. Fill every cistern before the headgate closes; keep the water off the mill wheel. |
 | `shardscale` | Shardscale | `tools/minigames/shardscale.py` | HOW Set the next shard left (l) or right (r), or hold it on the bench; set a held shard with l<n>/r<n>. Never let the pans differ by more than the cap; end level within the tolerance. |
 | `stonecourse` | Stonecourse | `tools/minigames/stonecourse.py` | HOW Set the next stone at a column (it lands on the lowest course that supports it fully) or skip it. Lock every course with no gaps before the supply runs out. |
+| `shuntline` | Shuntline | `tools/minigames/shuntline.py` | HOW out sends the front carriage to the outbound track; s<n> shunts it onto siding n; p<n> pulls siding n's top carriage out. The outbound order may never go down. Clear the inbound track within the moves. |

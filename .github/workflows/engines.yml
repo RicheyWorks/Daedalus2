@@ -151,6 +151,10 @@ jobs:
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public stonecourse_core_test.cpp -o stonecourse_core_test && ./stonecourse_core_test stonecourse_parity.txt
       - name: Stonecourse core, clang
         run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public stonecourse_core_test.cpp -o stonecourse_core_test_clang && ./stonecourse_core_test_clang stonecourse_parity.txt
+      - name: Shuntline core (DaedalusShuntlineCore.h regenerates shuntline_parity.txt from seed with CPython-compatible seeding)
+        run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public shuntline_core_test.cpp -o shuntline_core_test && ./shuntline_core_test shuntline_parity.txt
+      - name: Shuntline core, clang
+        run: clang++ -std=c++17 -O2 -Wall -Wextra -Wshadow -Werror -I../DaedalusLink/Source/DaedalusLink/Public shuntline_core_test.cpp -o shuntline_core_test_clang && ./shuntline_core_test_clang shuntline_parity.txt
       - name: Dyevat core (DaedalusDyevatCore.h regenerates dyevat_parity.txt from seed with CPython-compatible seeding)
         run: g++ -std=c++17 -O1 -Wall -Wextra -Wshadow -Werror -fsanitize=address,undefined -I../DaedalusLink/Source/DaedalusLink/Public dyevat_core_test.cpp -o dyevat_core_test && ./dyevat_core_test dyevat_parity.txt
       - name: Dyevat core, clang

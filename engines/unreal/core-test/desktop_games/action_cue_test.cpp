@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Short action chips beside the hint line. The chip names the immediate action
 // and stays out of score, movement, and saved status text.
-// catalog-capability: action_cue: beacon_sweep cairnwell dodge_ball driftstone dungeon emberkiln facetlock fogbell glimmerloom glowmoss gloam_latch lanternwild lumenpath prismcairn prismchime prismvault reedbeat riftwing roostcall shadewatch shardfall shardring shardscale sluicegate siltlane spiritkite stonecourse twinwake wardens_accord
+// catalog-capability: action_cue: beacon_sweep cairnwell dodge_ball driftstone dungeon emberkiln facetlock fogbell glimmerloom glowmoss gloam_latch lanternwild lumenpath prismcairn prismchime prismvault reedbeat riftwing roostcall shadewatch shardfall shardring shardscale shuntline sluicegate siltlane spiritkite stonecourse twinwake wardens_accord
 #include "DesktopGames/DaedalusDesktopGameRegistry.h"
 #include <iostream>
 #include <stdexcept>
@@ -82,6 +82,10 @@ void PrismvaultCues() {
     PrismvaultGame G;G.Reset(730);
     Expect(G,"CUE Load the pans","a fresh vault cues loading the pans");
 }
+void ShuntlineCues() {
+    ShuntlineGame G;G.Reset(730);
+    Expect(G,"CUE Shunt or send","a fresh yard cues the first move");
+}
 void StonecourseCues() {
     StonecourseGame G;G.Reset(730);
     Expect(G,"CUE Set a stone","a fresh wall cues the first stone");
@@ -157,7 +161,7 @@ void LanternwildCues() {
 }
 
 int main() {
-    try { BeaconCues();CairnwellCues();FacetlockCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();LumenpathCues();PrismcairnCues();PrismvaultCues();ReedbeatCues();RiftwingCues();RoostcallCues();EmberkilnCues();SluicegateCues();GlowmossCues();SpiritkiteCues();ShardscaleCues();StonecourseCues();FogbellCues();PrismchimeCues();GlimmerloomCues();ShadewatchCues();ShardfallCues();ShardringCues();TwinwakeCues();WardensAccordCues(); }
+    try { BeaconCues();CairnwellCues();FacetlockCues();DriftstoneCues();DungeonCues();DodgeCues();GloamLatchCues();LanternwildCues();LumenpathCues();PrismcairnCues();PrismvaultCues();ReedbeatCues();RiftwingCues();RoostcallCues();EmberkilnCues();SluicegateCues();GlowmossCues();SpiritkiteCues();ShardscaleCues();StonecourseCues();ShuntlineCues();FogbellCues();PrismchimeCues();GlimmerloomCues();ShadewatchCues();ShardfallCues();ShardringCues();TwinwakeCues();WardensAccordCues(); }
     catch(const std::exception& E) { std::cerr<<"EX "<<E.what()<<'\n';return 1; }
     if(Failed) { std::cerr<<Failed<<" failed of "<<Checks<<'\n';return 1; }
     std::cout<<Checks<<" checks passed\n";
