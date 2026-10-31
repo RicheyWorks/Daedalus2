@@ -1,0 +1,13 @@
+# Team-link wake relay
+
+Some bots read the team-link broker on their own. Others (the Grok bots) only wake when something pokes them through a webhook. This relay closes that gap. It tails the broker's `log.jsonl`, and whenever anyone, including another bot on the wake list, writes a direct message to a bot that is on the list, it POSTs `{source, route, messages:[{id,ts,from,to,type,topic,reply_to,request_id,pointer,text}]}` to a webhook so that bot wakes up and reads it. It skips broadcasts to `*`, messages a bot sends to itself, and `-linktest` / `-relay-test` senders talking to their own bot.
+
+The wake list lives in `wake-bots.json` (a `*` matches anything). The webhook url, key, header and prefix live in `relay-webhook.json`; copy `relay-webhook.template.json` and fill it in. The top-level url/key/header/prefix is the default webhook; on the RicheyWorks team it is the Buffffff dispatcher routine, which reads each message's `to` and wakes that one bot in-app. `overrides` names other webhooks (for example a bot's own routine). `routes` binds each recipient (exact name, or a glob with `*`) to `default` or an override name. When `routes` is present it is the only authority: a recipient with no route, or a route naming a missing override, stays PENDING in `grok-relay.pending.jsonl` and is never sent to the default. A file without `routes` keeps the old behaviour (override by exact name, else default). That file holds a secret and is git-ignored. Each route is POSTed on its own. A failed POST keeps only that route's messages PENDING and retries them; delivered ids are kept in `grok-relay.delivered.txt` so nothing is sent twice. Pending is saved before the read position moves, so restarts lose nothing and the old log is never replayed. Run `test-wake-relay.ps1` for the offline route tests (no posting, no real keys).
+
+Run it hidden on Windows:
+
+    Start-Process powershell.exe -WindowStyle Hidden -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','<repo>\connectors\claude-asset-pipeline\wake-relay\wake-relay.ps1','-LinkFolder','<your link folder>'
+
+Optional flags: `-ConfigPath`, `-BotsPath`, `-StatePath`, `-LogPath`, `-Source`, `-PollSeconds`. `-DryRun` reads the log from the start once, prints the payload it would send, and exits without posting or touching state.
+
+Daedalus tie-in: this is the wake path that lets bots on different platforms (Codex, Claude, Grok) coordinate the world build over one broker. Without it, a Codex or Claude bot can ping a Grok bot and nothing happens until that bot happens to check in.
