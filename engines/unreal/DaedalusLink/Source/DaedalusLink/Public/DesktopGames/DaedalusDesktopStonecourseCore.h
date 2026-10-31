@@ -274,6 +274,14 @@ public:
             F.AddRect(GridLeft + Marker * Cell + 3, Y + 3, Size * Cell - 6, Cell - 6, Rests ? Ghost : Color{160, 70, 60, 255});
             F.AddRect(GridLeft + Marker * Cell, GridBottom + 6, Size * Cell, 4, Gold);
         }
+        // Iteration 9: a green tick under every column where the next stone would lock a course
+        if(!Core.Over) {
+            for(int C = 0; C < W; ++C) {
+                int Lands = -1;
+                bool WouldLock = false;
+                if(Core.Preview(C, Lands, WouldLock) && WouldLock) F.AddRect(GridLeft + C * Cell + Cell * 0.35, GridBottom + 22, Cell * 0.3, 3, LockedTint);
+            }
+        }
         if(HasGuide && Guide >= 0) F.AddRect(GridLeft + Guide * Cell + Cell * 0.3, GridBottom + 14, Cell * 0.4, 4, Sky);
         if(HasGuide && Guide == stonecourse::Skip) F.AddText(600, 240, "GUIDE: skip this stone", Sky, 13);
 
