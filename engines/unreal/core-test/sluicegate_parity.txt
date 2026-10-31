@@ -290,3 +290,23 @@ move t=5 act=wait wet=0,4;1,4;1,5;2,4;1,3;3,4;3,5;3,3;3,6;3,2;2,6 gates=1,2;4,5;
 move t=6 act=wait wet=0,4;1,4;1,5;2,4;1,3;3,4;3,5;3,3;3,6;3,2;2,6;4,2;3,1 gates=1,2;4,5;4,3;3,7 left=2 filled=3 turns=9 score=30 over=0 won=0 res=wait: 2 cells wet, 1 filled
 move t=7 act=wait wet=0,4;1,4;1,5;2,4;1,3;3,4;3,5;3,3;3,6;3,2;2,6;4,2;3,1;5,2;2,1 gates=1,2;4,5;4,3;3,7 left=2 filled=5 turns=8 score=64 over=1 won=1 res=wait: 2 cells wet, 2 filled; every cistern brims
 end  score=64 won=1 filled=5 turns=8
+vector push_east_then_south size=5 turns=10 gates=4 flow=2 head=0,2 mill=- cisterns=4,4 field=.....;.....;.....;.....;..... wet=0,2 gated=-
+step act=wait demo=wait wet=0,2;0,3;1,2 gates=- left=4 filled=0 turns=9 score=0 over=0 won=0 res=wait: 2 cells wet, 0 filled
+vector gate_turns_the_flow size=5 turns=10 gates=4 flow=2 head=0,2 mill=- cisterns=4,4 field=.....;.....;.....;.....;..... wet=0,2 gated=-
+step act=0,3 demo=wait wet=0,2;1,2;0,1 gates=0,3 left=3 filled=0 turns=9 score=0 over=0 won=0 res=0,3: 2 cells wet, 0 filled
+vector second_push_walks_the_wet_list size=5 turns=9 gates=4 flow=2 head=0,2 mill=- cisterns=4,4 field=.....;.....;.....;.....;..... wet=0,2;0,3;1,2 gated=-
+step act=wait demo=wait wet=0,2;0,3;1,2;0,1;0,4 gates=- left=4 filled=0 turns=8 score=0 over=0 won=0 res=wait: 2 cells wet, 0 filled
+vector cistern_fills_and_wins size=3 turns=4 gates=3 flow=1 head=0,0 mill=- cisterns=2,0 field=.##;.##;.## wet=0,0;1,0 gated=-
+step act=wait demo=wait wet=0,0;1,0;2,0 gates=- left=3 filled=1 turns=3 score=22 over=1 won=1 res=wait: 1 cells wet, 1 filled; every cistern brims
+vector mill_floods size=3 turns=5 gates=2 flow=2 head=0,0 mill=1,0 cisterns=1,1 field=..#;..#;### wet=0,0 gated=-
+step act=wait demo=0,1 wet=0,0;0,1;1,0 gates=- left=2 filled=0 turns=4 score=0 over=1 won=0 res=wait: 2 cells wet, 0 filled; the mill wheel floods
+vector headgate_closes size=3 turns=1 gates=2 flow=2 head=0,0 mill=- cisterns=2,2 field=..#;..#;##. wet=0,0;0,1 gated=-
+step act=wait demo=wait wet=0,0;0,1;1,0;1,1 gates=- left=2 filled=0 turns=0 score=0 over=1 won=0 res=wait: 2 cells wet, 0 filled; the headgate closes
+vector channel_runs_dry size=3 turns=9 gates=2 flow=2 head=0,0 mill=- cisterns=2,0 field=..#;###;... wet=0,0;0,1 gated=-
+step act=wait demo=wait wet=0,0;0,1 gates=- left=2 filled=0 turns=8 score=0 over=1 won=0 res=wait: 0 cells wet, 0 filled; the channel runs dry
+vector flood_and_fill_together_lose size=3 turns=5 gates=2 flow=2 head=0,0 mill=0,1 cisterns=1,0 field=...;...;... wet=0,0 gated=-
+step act=wait demo=wait wet=0,0;0,1;1,0 gates=- left=2 filled=1 turns=4 score=10 over=1 won=0 res=wait: 2 cells wet, 1 filled; the mill wheel floods
+vector gatekeeper_gates_the_throat size=3 turns=6 gates=3 flow=1 head=0,1 mill=2,2 cisterns=2,0 field=#.#;...;.#. wet=0,1 gated=-
+step act=wait demo=1,2 wet=0,1;1,1 gates=- left=3 filled=0 turns=5 score=0 over=0 won=0 res=wait: 1 cells wet, 0 filled
+vector gatekeeper_waits_when_safe size=3 turns=6 gates=3 flow=1 head=0,1 mill=- cisterns=2,1 field=#.#;#.#;#.# wet=0,1 gated=-
+step act=wait demo=wait wet=0,1;1,1 gates=- left=3 filled=0 turns=5 score=0 over=0 won=0 res=wait: 1 cells wet, 0 filled

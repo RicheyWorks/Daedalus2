@@ -162,6 +162,31 @@ class Rules(unittest.TestCase):
 
 
 
+class Saves(unittest.TestCase):
+    """Iteration 5: from_state refuses saves that break the rules."""
+    def bad(self, **fields):
+        st = gm.start(3).to_state()
+        st.update(fields)
+        with self.assertRaises(ValueError):
+            gm.Game.from_state(st)
+
+    def test_round_trip_still_works(self):
+        g = gm.start(3)
+        for _ in range(4):
+            g.step(g.demo_action())
+        self.assertEqual(gm.Game.from_state(g.to_state()).status(), g.status())
+
+    def test_bad_saves_are_refused(self):
+        g = gm.start(3)
+        self.bad(wet=[[9, 9]])
+        self.bad(wet=[list(g.head), list(g.head)])
+        self.bad(gates=[list(g.head)], gates_left=g.gates_left - 1)
+        self.bad(gates_left=0)
+        self.bad(filled=1)
+        self.bad(won=True)
+        self.bad(turns=0, over=False)
+
+
 class Balance(unittest.TestCase):
     """Iteration 3: the gatekeeper's win rate stays inside pinned bands, so a rules change that shifts the difficulty is caught."""
     BANDS = {"easy": (80, 98), "normal": (62, 88), "hard": (60, 86)}
