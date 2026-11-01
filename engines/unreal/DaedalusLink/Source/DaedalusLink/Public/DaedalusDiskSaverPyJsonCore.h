@@ -82,7 +82,11 @@ struct Object {
     std::string Dump(bool Compact = false) const {
         std::vector<std::pair<std::string, std::string>> F = Fields;
         std::stable_sort(F.begin(), F.end(), [](const std::pair<std::string, std::string>& A, const std::pair<std::string, std::string>& B) {
-            return A.first < B.first;
+            // Unsigned bytes: well-formed UTF-8 is in Unicode code-point order, which is Python 3 sort_keys.
+            // A signed char would place bytes above 0x7F before ASCII.
+            return std::lexicographical_compare(
+                A.first.begin(), A.first.end(), B.first.begin(), B.first.end(),
+                [](char X, char Y) { return static_cast<unsigned char>(X) < static_cast<unsigned char>(Y); });
         });
         std::string Out = "{";
         for (std::size_t K = 0; K < F.size(); ++K) {
