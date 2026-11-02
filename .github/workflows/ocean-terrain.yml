@@ -37,7 +37,7 @@ jobs:
       - name: Chunk edits and empty records survive separate JVM restart and writer exclusion
         shell: bash
         run: python tools/ocean/check_store.py --java "$(command -v java)" --classpath daedalus-core/target/classes --probe tools/ocean/OceanStoreProbe.java --directory "$RUNNER_TEMP/ocean-store" --output "$RUNNER_TEMP/ocean-store-proof.json"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ocean-sector-${{ matrix.os }}
           path: |
